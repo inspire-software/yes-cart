@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
@@ -23,7 +25,6 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Map;
 
@@ -39,6 +40,7 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
 
     private static final long serialVersionUID = 20100313L;
 
+    private static final Logger LOG = LoggerFactory.getLogger(RemoveAllSkuFromCartCommandImpl.class);
 
     /**
      * Construct sku command.
@@ -69,8 +71,7 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
                            final String skuCode,
                            final Map<String, Object> parameters) {
         if(!shoppingCart.removeCartItem(skuCode)) {
-            ShopCodeContext.getLog(this).warn("Cannot remove all skus with code {} from cart",
-                    skuCode);
+            LOG.warn("Cannot remove all skus with code {} from cart", skuCode);
 
         } else  {
             recalculatePricesInCart(shoppingCart);

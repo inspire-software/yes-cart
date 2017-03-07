@@ -18,6 +18,8 @@ package org.yes.cart.payment.impl;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.SerializationUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
@@ -27,7 +29,6 @@ import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.service.payment.PaymentLocaleTranslator;
 import org.yes.cart.service.payment.impl.PaymentLocaleTranslatorImpl;
 import org.yes.cart.util.HttpParamsUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -43,6 +44,8 @@ import java.util.UUID;
  */
 public class RobokassaPaymentGatewayImpl extends AbstractRobokassaPaymentGatewayImpl
         implements PaymentGatewayExternalForm {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RobokassaPaymentGatewayImpl.class);
 
     // robokassa bypath parameters, that will be restored at call back
     static final String SHP_ORDER_ID = "SHP_ORDER_ID";
@@ -116,10 +119,10 @@ public class RobokassaPaymentGatewayImpl extends AbstractRobokassaPaymentGateway
         final String md5 = DigestUtils.md5Hex(toCheck);
 
         if (signatureValue.equalsIgnoreCase(md5)) {
-            ShopCodeContext.getLog(this).debug("Signature is valid");
+            LOG.debug("Signature is valid");
             return CallbackResult.OK;
         } else {
-            ShopCodeContext.getLog(this).debug("Signature is not valid");
+            LOG.debug("Signature is not valid");
         }
         return CallbackResult.FAILED;
 

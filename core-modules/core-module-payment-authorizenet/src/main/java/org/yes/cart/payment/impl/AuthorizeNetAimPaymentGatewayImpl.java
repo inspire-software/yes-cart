@@ -18,11 +18,12 @@ package org.yes.cart.payment.impl;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 
 /**
@@ -33,6 +34,8 @@ import org.yes.cart.util.ShopCodeContext;
  * Time: 14:12:54
  */
 public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPaymentGatewayImpl implements PaymentGatewayInternalForm {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AuthorizeNetAimPaymentGatewayImpl.class);
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             true, true, true, true,
@@ -227,16 +230,15 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
             payment.setTransactionReferenceId(transTez.getTarget().getTransactionId());
             payment.setTransactionAuthorizationCode(transTez.getTarget().getAuthorizationCode());
 
-            final Logger log = ShopCodeContext.getLog(this);
-            if (log.isDebugEnabled()) {
-                log.debug(payment.getTransactionOperation() + " transaction response code was : "
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(payment.getTransactionOperation() + " transaction response code was : "
                         + transTez.getReasonResponseCode().getResponseCode().getCode()
                         + " - "
                         + transTez.getReasonResponseCode().getResponseCode().getDescription()
                 );
             }
         } catch (Throwable th) {
-            ShopCodeContext.getLog(this).error("Can not execute transaction. Client exception : " + payment, th);
+            LOG.error(Markers.alert(), "Can not execute transaction. Client exception : " + payment, th);
             payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
             payment.setPaymentProcessorBatchSettlement(false);
             payment.setTransactionOperationResultMessage(th.getMessage());

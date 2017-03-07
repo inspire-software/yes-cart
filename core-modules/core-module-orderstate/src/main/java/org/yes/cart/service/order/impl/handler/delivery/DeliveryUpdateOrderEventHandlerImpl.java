@@ -18,6 +18,7 @@ package org.yes.cart.service.order.impl.handler.delivery;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -28,8 +29,6 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.*;
 import org.yes.cart.service.order.impl.OrderEventImpl;
-import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -43,6 +42,8 @@ import java.util.Map;
  * Time: 17:23
  */
 public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, ApplicationContextAware {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DeliveryUpdateOrderEventHandlerImpl.class);
 
     private OrderStateManager orderStateManager = null;
     private ApplicationContext applicationContext;
@@ -91,12 +92,10 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
 
         synchronized (OrderEventHandler.syncMonitor) {
 
-            final Logger log = ShopCodeContext.getLog(this);
-
             final CustomerOrder customerOrder = orderEvent.getCustomerOrder();
             final OrderDeliveryStatusUpdate update = (OrderDeliveryStatusUpdate) orderEvent.getParams().get("update");
 
-            log.info("Received delivery update for order {}, status {}:\n{}",
+            LOG.info("Received delivery update for order {}, status {}:\n{}",
                     new Object[] { customerOrder.getOrdernum(), customerOrder.getOrderStatus(), update });
 
             if (update != null) {
@@ -250,7 +249,7 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
                         delivery.setDeliveryConfirmed(confirmed);
                     }
 
-                    log.info("Attempting to auto-progress delivery {}. Status: {}",
+                    LOG.info("Attempting to auto-progress delivery {}. Status: {}",
                             customerOrder.getOrdernum(), delivery.getDeliveryStatus());
 
                     // Only transition orders that are in progress to avoid breaking the order state flow
@@ -273,7 +272,7 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
                             // We are sending updates, so we are packing the order be it part or full.
                             getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_RELEASE_TO_PACK, customerOrder, delivery));
 
-                            log.info("Delivery {} was pending allocation, reservation was voided and delivery released to pack. Status: {}",
+                            LOG.info("Delivery {} was pending allocation, reservation was voided and delivery released to pack. Status: {}",
                                     customerOrder.getOrdernum(), delivery.getDeliveryStatus());
 
                         }
@@ -284,7 +283,7 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
                             // We are sending updates, so we are packing the order be it part or full.
                             getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_RELEASE_TO_PACK, customerOrder, delivery));
 
-                            log.info("Delivery {} was allocated, delivery released to pack. Status: {}",
+                            LOG.info("Delivery {} was allocated, delivery released to pack. Status: {}",
                                     customerOrder.getOrdernum(), delivery.getDeliveryStatus());
 
                         }
@@ -298,14 +297,14 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
                             // PACK->READY (payment taken)
                             getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_RELEASE_TO_SHIPMENT, customerOrder, delivery));
 
-                            log.info("Delivery {} was in packing, all lines updated, releasing to shipment to take payment. Status: {}",
+                            LOG.info("Delivery {} was in packing, all lines updated, releasing to shipment to take payment. Status: {}",
                                     customerOrder.getOrdernum(), delivery.getDeliveryStatus());
 
                             if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS.equals(delivery.getDeliveryStatus())) {
                                 // READY->SHIPPED
                                 getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_SHIPMENT_COMPLETE, customerOrder, delivery));
 
-                                log.info("Delivery {} was in shipping (payment successful), marking as complete. Status: {}",
+                                LOG.info("Delivery {} was in shipping (payment successful), marking as complete. Status: {}",
                                         customerOrder.getOrdernum(), delivery.getDeliveryStatus());
 
                             } // else something is wrong with payment, so we leave for manual handling
@@ -316,7 +315,7 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
 
                 }
 
-                log.info("Finished delivery update for order {}, status {}:\n{}",
+                LOG.info("Finished delivery update for order {}, status {}:\n{}",
                         new Object[]{customerOrder.getOrdernum(), customerOrder.getOrderStatus(), update});
 
                 return true; // Return true to indicate that we want to save changes.
@@ -366,7 +365,7 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
                     final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
                     if (selected == null) {
-                        ShopCodeContext.getLog(this).warn(
+                        LOG.error(
                                 "Warehouse is not found for delivery detail {}:{}",
                                 orderDelivery.getDeliveryNum(), det.getProductSkuCode()
                         );

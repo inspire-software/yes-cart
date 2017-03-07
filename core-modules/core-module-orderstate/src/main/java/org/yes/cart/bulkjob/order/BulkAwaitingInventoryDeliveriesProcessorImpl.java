@@ -17,6 +17,7 @@
 package org.yes.cart.bulkjob.order;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkjob.cron.AbstractLastRunDependentProcessorImpl;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
@@ -27,7 +28,7 @@ import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -47,6 +48,8 @@ import java.util.List;
  */
 public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRunDependentProcessorImpl
         implements BulkAwaitingInventoryDeliveriesProcessorInternal {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BulkAwaitingInventoryDeliveriesProcessorImpl.class);
 
     private static final String LAST_RUN_PREF = "JOB_DELWAITINV_LR";
 
@@ -76,39 +79,37 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
     @Override
     protected boolean doRun(final Date lastRun) {
 
-        final Logger log = ShopCodeContext.getLog(this);
+        LOG.info("Check orders awaiting allocation start date");
 
-        log.info("Check orders awaiting allocation start date");
-
-        final int allocWaiting = processAwaitingOrders(log, null,
+        final int allocWaiting = processAwaitingOrders(null,
                 CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT,
                 OrderStateManager.EVT_PROCESS_ALLOCATION);
 
-        log.info("Transitioned {} deliveries awaiting allocation", allocWaiting);
+        LOG.info("Transitioned {} deliveries awaiting allocation", allocWaiting);
 
-        log.info("Check orders awaiting preorder start date");
+        LOG.info("Check orders awaiting preorder start date");
 
-        final int dateWaiting = processAwaitingOrders(log, null,
+        final int dateWaiting = processAwaitingOrders(null,
                 CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                 OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT);
 
 
-        log.info("Transitioned {} deliveries awaiting preorder start date", dateWaiting);
+        LOG.info("Transitioned {} deliveries awaiting preorder start date", dateWaiting);
 
-        log.info("Check orders awaiting inventory");
+        LOG.info("Check orders awaiting inventory");
 
         final int inventoryWaiting;
         final List<String> skuChanged = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
         if (skuChanged.isEmpty()) {
             inventoryWaiting = 0;
         } else {
-            inventoryWaiting = processAwaitingOrders(log, null,
+            inventoryWaiting = processAwaitingOrders(null,
                     CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                     OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY);
         }
-        log.info("Transitioned {} deliveries awaiting inventory", inventoryWaiting);
+        LOG.info("Transitioned {} deliveries awaiting inventory", inventoryWaiting);
 
-        log.info("Check orders awaiting preorder start date ... completed");
+        LOG.info("Check orders awaiting preorder start date ... completed");
 
         return true;
     }
@@ -123,8 +124,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
      *
      * @return quantity of processed deliveries
      */
-    int processAwaitingOrders(final Logger log,
-                              final List<String> productSkus,
+    int processAwaitingOrders(final List<String> productSkus,
                               final String status,
                               final String event) {
 
@@ -145,17 +145,17 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
                 } catch (OrderException oexp) {
 
-                    log.warn("Cannot process delivery " + deliveryId + ", caused: " + oexp.getMessage());
+                    LOG.warn("Cannot process delivery " + deliveryId + ", caused: " + oexp.getMessage());
 
                 } catch (Exception exp) {
 
-                    log.error("Cannot process delivery " + deliveryId, exp);
+                    LOG.error(Markers.alert(), "Cannot process delivery " + deliveryId, exp);
 
                 }
 
             }
         } catch (Exception exp){
-            log.error(exp.getMessage(), exp);
+            LOG.error(exp.getMessage(), exp);
         }
 
         return cnt;
@@ -165,15 +165,13 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
     @Override
     public void processDeliveryEvent(final String event, final long deliveryId) throws OrderException {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         final CustomerOrderDelivery delivery = customerOrderService.findDelivery(deliveryId);
 
         if (delivery != null && orderStateManager.fireTransition(
                     new OrderEventImpl(event, delivery.getCustomerOrder(), delivery))) {
 
-                customerOrderService.update(delivery.getCustomerOrder());
-                log.info("Updated customer order {} delivery {}", delivery.getCustomerOrder().getOrdernum(), delivery.getDeliveryNum());
+            customerOrderService.update(delivery.getCustomerOrder());
+            LOG.info("Updated customer order {} delivery {}", delivery.getCustomerOrder().getOrdernum(), delivery.getDeliveryNum());
 
         }
     }

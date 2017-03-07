@@ -19,8 +19,12 @@ package org.yes.cart.payment.impl;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
-import org.yes.cart.payment.dto.*;
+import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.payment.dto.PaymentAddress;
+import org.yes.cart.payment.dto.PaymentGatewayFeature;
+import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.service.payment.PaymentLocaleTranslator;
@@ -28,11 +32,9 @@ import org.yes.cart.service.payment.impl.PaymentLocaleTranslatorImpl;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -44,6 +46,8 @@ import java.util.UUID;
  */
 public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGatewayImpl
         implements PaymentGatewayExternalForm {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PostFinancePaymentGatewayImpl.class);
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             false, false, false, true,
@@ -123,10 +127,10 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
             final String signature = copyHttpParamsAndRemoveSignature(params, sorted);
             final String verify = sha1sign(sorted, getParameterValue(PF_SHA_OUT));
             if (verify.equals(signature)) {
-                ShopCodeContext.getLog(this).debug("Signature is valid");
+                LOG.debug("Signature is valid");
                 return sorted.get("ORDERID");
             } else {
-                ShopCodeContext.getLog(this).warn("Signature is not valid");
+                LOG.warn("Signature is not valid");
             }
 
         }
@@ -158,10 +162,10 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
             final String signature = copyHttpParamsAndRemoveSignature(params, sorted);
             final String verify = sha1sign(sorted, getParameterValue(PF_SHA_OUT));
             if (verify.equals(signature)) {
-                ShopCodeContext.getLog(this).debug("Signature is valid");
+                LOG.debug("Signature is valid");
                 statusRes = sorted.get("STATUS");
             } else {
-                ShopCodeContext.getLog(this).warn("Signature is not valid");
+                LOG.warn("Signature is not valid");
             }
 
         }
@@ -173,9 +177,8 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
                         || "91".equalsIgnoreCase(statusRes));
 
 
-        final Logger log = ShopCodeContext.getLog(this);
-        if (log.isDebugEnabled()) {
-            log.debug(HttpParamsUtils.stringify("PostFinance callback", callbackResult));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(HttpParamsUtils.stringify("PostFinance callback", callbackResult));
         }
 
         if (success) {

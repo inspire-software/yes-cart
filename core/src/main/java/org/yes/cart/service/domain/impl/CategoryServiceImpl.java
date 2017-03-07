@@ -18,13 +18,14 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.util.DomainApiUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
 
@@ -34,6 +35,8 @@ import java.util.*;
  * Time: 14:12:54
  */
 public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implements CategoryService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CategoryServiceImpl.class);
 
     private final GenericDAO<Category, Long> categoryDao;
 
@@ -336,7 +339,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
                     if (category == null) {
                         // could have happened if import created some reassignments and we loose path to root
                         catsIt.remove();
-                        ShopCodeContext.getLog(this).warn("Found orphan category {}", currentCatId);
+                        LOG.warn("Found orphan category {}", currentCatId);
                         break;
                     }
                 }

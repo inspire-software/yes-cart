@@ -18,12 +18,12 @@ package org.yes.cart.bulkjob.product;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -40,6 +40,8 @@ import java.util.List;
  * Time: 15:30
  */
 public class ProductsPassedAvailabilityDateIndexProcessorImpl implements ProductsPassedAvailabilityDateIndexProcessorInternal {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ProductsPassedAvailabilityDateIndexProcessorImpl.class);
 
     private final ProductService productService;
     private final NodeService nodeService;
@@ -63,16 +65,14 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
     @Override
     public void run() {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         final String nodeId = getNodeId();
 
         if (isLuceneIndexDisabled()) {
-            log.info("Reindexing discontinued products on {} ... disabled", nodeId);
+            LOG.info("Reindexing discontinued products on {} ... disabled", nodeId);
             return;
         }
 
-        log.info("Reindexing discontinued products on {}", nodeId);
+        LOG.info("Reindexing discontinued products on {}", nodeId);
 
         final List<Long> discontinued = self().findDiscontinuedProductsIds();
 
@@ -86,7 +86,7 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
 
                 toIndex = fromIndex + batchSize > discontinued.size() ? discontinued.size() : fromIndex + batchSize;
                 final List<Long> pkBatch = discontinued.subList(fromIndex, toIndex);
-                log.info("Reindexing discontinued products {}  ... so far reindexed {}", pkBatch, fromIndex);
+                LOG.info("Reindexing discontinued products {}  ... so far reindexed {}", pkBatch, fromIndex);
 
                 self().reindexBatch(pkBatch);
 
@@ -98,9 +98,9 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
 
         }
 
-        log.info("Reindexing discontinued products on {}, reindexed {}", nodeId, discontinued != null ? discontinued.size() : 0);
+        LOG.info("Reindexing discontinued products on {}, reindexed {}", nodeId, discontinued != null ? discontinued.size() : 0);
 
-        log.info("Reindexing discontinued on {} ... completed", nodeId);
+        LOG.info("Reindexing discontinued on {} ... completed", nodeId);
 
     }
 

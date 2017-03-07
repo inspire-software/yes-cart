@@ -20,9 +20,10 @@ import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.module.SimpleModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.*;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerializer;
 
 import java.io.IOException;
@@ -34,6 +35,8 @@ import java.text.MessageFormat;
  * Time: 10:10
  */
 public class ShoppingCartStateSerializerJacksonImpl implements ShoppingCartStateSerializer {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartStateSerializerJacksonImpl.class);
 
     private final ObjectMapper mapper;
 
@@ -59,7 +62,7 @@ public class ShoppingCartStateSerializerJacksonImpl implements ShoppingCartState
             return mapper.readValue(bytes, ShoppingCartImpl.class);
         } catch (IOException exception) {
             final String errMsg = "Unable to convert bytes assembled from tuple into object";
-            ShopCodeContext.getLog(this).error(errMsg, exception);
+            LOG.error(errMsg, exception);
             return null;
         }
 
@@ -72,7 +75,7 @@ public class ShoppingCartStateSerializerJacksonImpl implements ShoppingCartState
         try {
             return mapper.writeValueAsBytes(shoppingCart);
         } catch (IOException ioe) {
-            ShopCodeContext.getLog(this).error(
+            LOG.error(
                     MessageFormat.format("Unable to serialize object {0}", shoppingCart),
                     ioe
             );

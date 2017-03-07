@@ -22,6 +22,8 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.yes.cart.constants.AttributeNamesKeys;
@@ -40,7 +42,6 @@ import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 
 import java.io.Serializable;
@@ -55,6 +56,8 @@ import java.util.*;
  */
 @Aspect
 public class RegistrationAspect extends BaseNotificationAspect {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RegistrationAspect.class);
 
     private final HashHelper passwordHashHelper;
 
@@ -180,7 +183,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
         sendNotification(registrationMessage);
 
-        ShopCodeContext.getLog(this).info("Person message was send to queue {}", registrationMessage);
+        LOG.info("Person message was send to queue {}", registrationMessage);
 
         return pjp.proceed();
     }

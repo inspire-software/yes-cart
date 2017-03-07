@@ -19,6 +19,7 @@ package org.yes.cart.payment.impl;
 import com.liqpay.LiqPay;
 import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
@@ -27,7 +28,7 @@ import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.util.HttpParamsUtils;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -45,6 +46,8 @@ import java.util.UUID;
  */
 public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
         implements PaymentGatewayExternalForm {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LiqPayPaymentGatewayImpl.class);
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             false, false, false, true,
@@ -127,10 +130,10 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
                     sender_phone);
 
             if (signature.equals(validSignature)) {
-                ShopCodeContext.getLog(this).debug("Signature is valid");
+                LOG.debug("Signature is valid");
                 return order_id;
             } else {
-                ShopCodeContext.getLog(this).debug("Signature is not valid");
+                LOG.debug("Signature is not valid");
             }
 
         }
@@ -175,10 +178,10 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
                     sender_phone);
 
             if (validSignature.equals(signature)) {
-                ShopCodeContext.getLog(this).debug("Signature is valid");
+                LOG.debug("Signature is valid");
                 statusRes = status;
             } else {
-                ShopCodeContext.getLog(this).debug("Signature is not valid");
+                LOG.debug("Signature is not valid");
             }
 
         }
@@ -190,9 +193,8 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
                   || "sandbox".equalsIgnoreCase(statusRes));
 
 
-        final Logger log = ShopCodeContext.getLog(this);
-        if (log.isDebugEnabled()) {
-            log.debug(HttpParamsUtils.stringify("LiqPay callback", callbackResult));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(HttpParamsUtils.stringify("LiqPay callback", callbackResult));
         }
 
         if (success) {
@@ -335,9 +337,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
             final HashMap res = api.api("payment/refund", params);
             success = "ok".equals(res.get("result"));
         } catch (Exception exp) {
-            final Logger log = ShopCodeContext.getLog(this);
-            log.error("LiqPayPaymentGatewayImpl#refund failed for {}", payment.getOrderNumber());
-            log.error("LiqPayPaymentGatewayImpl#refund failed cause:", exp);
+            LOG.error(Markers.alert(), "LiqPayPaymentGatewayImpl#refund failed for " + payment.getOrderNumber(), exp);
         }
         payment.setTransactionOperation(REFUND);
         payment.setPaymentProcessorResult(success ? Payment.PAYMENT_STATUS_OK : Payment.PAYMENT_STATUS_FAILED);

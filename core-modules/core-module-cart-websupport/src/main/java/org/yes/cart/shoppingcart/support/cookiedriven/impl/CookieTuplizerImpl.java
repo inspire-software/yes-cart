@@ -17,12 +17,13 @@
 package org.yes.cart.shoppingcart.support.cookiedriven.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.support.CartDetuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizer;
 import org.yes.cart.shoppingcart.support.impl.AbstractCryptedTuplizerImpl;
-import org.yes.cart.util.ShopCodeContext;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +56,8 @@ import java.util.regex.Pattern;
 public class CookieTuplizerImpl extends AbstractCryptedTuplizerImpl implements CartTuplizer<HttpServletRequest, HttpServletResponse> {
 
     private static final long serialVersionUID = 20100116L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(CookieTuplizerImpl.class);
 
     private static final Cookie[] EMPTY_COOKIES = new Cookie[0];
 
@@ -92,7 +95,7 @@ public class CookieTuplizerImpl extends AbstractCryptedTuplizerImpl implements C
 
         if (this.tuplizerSetting.key == null || this.tuplizerSetting.expiry == null) {
             final String errMsg = "cookie tuplizer misconfigured";
-            ShopCodeContext.getLog(this).error(errMsg);
+            LOG.error(errMsg);
             throw new RuntimeException(errMsg);
         }
 
@@ -224,9 +227,9 @@ public class CookieTuplizerImpl extends AbstractCryptedTuplizerImpl implements C
             // This block will be useful for monitoring issues when cart overflows header buffer,
             // so that admins can be proactive and increase the size
             if (sizeInBytes > tuplizerSetting.headerMax) {
-                ShopCodeContext.getLog(this).error("Cookie size ({}) exceeds allowed header size ({})", sizeInBytes, tuplizerSetting.headerMax);
+                LOG.error("Cookie size ({}) exceeds allowed header size ({})", sizeInBytes, tuplizerSetting.headerMax);
             } else {
-                ShopCodeContext.getLog(this).warn("Cookie size ({}) exceeds 75% of allowed header size ({})", sizeInBytes, tuplizerSetting.headerMax);
+                LOG.warn("Cookie size ({}) exceeds 75% of allowed header size ({})", sizeInBytes, tuplizerSetting.headerMax);
             }
         }
         return assembleCookiesForObject(oldCookies, split(valueForCookies));

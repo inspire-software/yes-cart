@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.payment.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -27,7 +29,6 @@ import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Map;
 
@@ -39,6 +40,8 @@ import java.util.Map;
  * Time: 10:18
  */
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade, ApplicationContextAware {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PaymentProcessFacadeImpl.class);
 
     private final CustomerOrderService customerOrderService;
 
@@ -72,11 +75,11 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade, Applicati
         if (getOrderStateManager().fireTransition(orderEvent)
                 && !CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus())) {
 
-            ShopCodeContext.getLog(this).info("PaymentProcessFacadeImpl#pay payment(s) for order {} was successful", orderNumber);
+            LOG.info("PaymentProcessFacadeImpl#pay payment(s) for order {} was successful", orderNumber);
             customerOrderService.update(order);
             return true;
         } else {
-            ShopCodeContext.getLog(this).info("PaymentProcessFacadeImpl#pay payment(s) for order {} has failed", orderNumber);
+            LOG.info("PaymentProcessFacadeImpl#pay payment(s) for order {} has failed", orderNumber);
             customerOrderService.update(order);
             return false;
 

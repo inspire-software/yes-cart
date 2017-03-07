@@ -20,6 +20,8 @@ import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -32,11 +34,13 @@ import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.MailService;
+import org.yes.cart.service.domain.ProductSkuService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.theme.ThemeService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -51,6 +55,8 @@ import java.util.Map;
  */
 @Aspect
 public class PaymentAspect extends BaseNotificationAspect {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PaymentAspect.class);
 
     private final ProductSkuService productSkuService;
 
@@ -192,7 +198,7 @@ public class PaymentAspect extends BaseNotificationAspect {
         final Shop pgShop = order.getShop().getMaster() != null ? order.getShop().getMaster() : order.getShop();
         final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(order.getPgLabel(), pgShop.getCode());
         if (gateway == null) {
-            ShopCodeContext.getLog(this).error("Cannot send payment email because gateway {} is not resolved for {}, could it be disabled?", order.getPgLabel(), order.getShop().getCode());
+            LOG.error("Cannot send payment email because gateway {} is not resolved for {}, could it be disabled?", order.getPgLabel(), order.getShop().getCode());
             return;
         }
 
@@ -225,7 +231,7 @@ public class PaymentAspect extends BaseNotificationAspect {
                 adminMap.put(StandardMessageListener.PAYMENTS, payments);
                 sendNotification(adminMap);
             } else {
-                ShopCodeContext.getLog(this).warn("Shop admin e-mail is not setup for: {}", order.getShop().getCode());
+                LOG.warn("Shop admin e-mail is not setup for: {}", order.getShop().getCode());
             }
         }
 

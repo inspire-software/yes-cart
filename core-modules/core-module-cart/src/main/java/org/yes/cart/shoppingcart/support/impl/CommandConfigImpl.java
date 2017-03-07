@@ -17,7 +17,7 @@
 package org.yes.cart.shoppingcart.support.impl;
 
 import org.slf4j.Logger;
-import org.yes.cart.util.ShopCodeContext;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.support.CommandConfig;
 
 import java.util.HashSet;
@@ -31,6 +31,8 @@ import java.util.Set;
  */
 public class CommandConfigImpl implements CommandConfig {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CommandConfigImpl.class);
+
     /**
      * Temporally fields will be removed from parameter maps
      */
@@ -40,9 +42,8 @@ public class CommandConfigImpl implements CommandConfig {
     public void setCmdKeys(final List<String> cmdKeys) {
         this.cmdKeys.addAll(cmdKeys);
 
-        final Logger log = ShopCodeContext.getLog(this);
         for (final String cmd : cmdKeys) {
-            log.info("Configured key to be command: {}", cmd);
+            LOG.info("Configured key to be command: {}", cmd);
         }
 
     }
@@ -50,9 +51,8 @@ public class CommandConfigImpl implements CommandConfig {
     public void setCmdInternalKeys(final List<String> cmdKeys) {
         this.cmdInternalKeys.addAll(cmdKeys);
 
-        final Logger log = ShopCodeContext.getLog(this);
         for (final String cmd : cmdKeys) {
-            log.info("Configured key to be internal command: {}", cmd);
+            LOG.info("Configured key to be internal command: {}", cmd);
         }
 
     }

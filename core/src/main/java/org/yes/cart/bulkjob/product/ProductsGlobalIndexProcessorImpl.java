@@ -18,13 +18,13 @@ package org.yes.cart.bulkjob.product;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.ShopCodeContext;
 
 /**
  * This is a full product reindex job that allows to ensure that indexes are in full sync
@@ -38,6 +38,8 @@ import org.yes.cart.util.ShopCodeContext;
  * Time: 15:30
  */
 public class ProductsGlobalIndexProcessorImpl implements Runnable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ProductsGlobalIndexProcessorImpl.class);
 
     public static final long INDEX_PING_INTERVAL = 15000L;
 
@@ -61,12 +63,10 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
     @Override
     public void run() {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         final String nodeId = getNodeId();
 
         if (isLuceneIndexDisabled()) {
-            log.info("Reindexing all products on {} ... disabled", nodeId);
+            LOG.info("Reindexing all products on {} ... disabled", nodeId);
             return;
         }
 
@@ -75,25 +75,25 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
 
             final int batchSize = getBatchSize();
 
-            log.info("Reindexing all products on {}", nodeId);
+            LOG.info("Reindexing all products on {}", nodeId);
 
             productService.reindexProducts(batchSize, false);
 
-            log.info("Reindexing all SKU on {}", nodeId);
+            LOG.info("Reindexing all SKU on {}", nodeId);
 
             productService.reindexProductsSku(batchSize);
 
-            log.info("Flushing product caches {}", nodeId);
+            LOG.info("Flushing product caches {}", nodeId);
 
             productCacheHelper.flushBundleCaches();
 
         } else {
 
-            log.info("Reindexing all products on {} is already in progress ... skipping", nodeId);
+            LOG.info("Reindexing all products on {} is already in progress ... skipping", nodeId);
 
         }
 
-        log.info("Reindexing all on {} ... completed", nodeId);
+        LOG.info("Reindexing all on {} ... completed", nodeId);
 
     }
 

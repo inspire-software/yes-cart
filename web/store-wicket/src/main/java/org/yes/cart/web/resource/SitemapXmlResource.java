@@ -16,6 +16,8 @@
 
 package org.yes.cart.web.resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.seo.SitemapXmlService;
 
@@ -27,6 +29,8 @@ import java.io.UnsupportedEncodingException;
  * Time: 3:49 PM
  */
 public class SitemapXmlResource extends AbstractDynamicResource {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SitemapXmlResource.class);
 
     private final SitemapXmlService sitemapXmlService;
 
@@ -49,7 +53,7 @@ public class SitemapXmlResource extends AbstractDynamicResource {
                 try {
                     return sitemap.getBytes("UTF-8");
                 } catch (UnsupportedEncodingException e) {
-                    ShopCodeContext.getLog(this).error(e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                 }
             }
 

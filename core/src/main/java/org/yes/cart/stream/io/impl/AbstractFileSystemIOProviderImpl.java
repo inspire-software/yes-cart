@@ -17,8 +17,9 @@
 package org.yes.cart.stream.io.impl;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.stream.io.FileSystemIOProvider;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +31,8 @@ import java.util.Map;
  * Time: 19:50
  */
 public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOProvider {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractFileSystemIOProviderImpl.class);
 
     /**
      * Resolve file system path by given uri.
@@ -92,7 +95,7 @@ public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOPr
         if (!file.getParentFile().exists()) {
             // ensure we create all dirs necessary
             if (!file.getParentFile().mkdirs()) {
-                ShopCodeContext.getLog(this).error("Unable to create directory {}", file.getParent());
+                LOG.error("Unable to create directory {}", file.getParent());
             }
         }
 
@@ -108,7 +111,7 @@ public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOPr
 
         if (file.exists()) {
             if (!file.delete()) {
-                ShopCodeContext.getLog(this).error("Unable to delete file {}", file.getAbsolutePath());
+                LOG.error("Unable to delete file {}", file.getAbsolutePath());
             }
         }
 

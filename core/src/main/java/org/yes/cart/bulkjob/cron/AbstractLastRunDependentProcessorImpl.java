@@ -17,9 +17,9 @@
 package org.yes.cart.bulkjob.cron;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,6 +36,8 @@ import java.util.Date;
  * Time: 15:42
  */
 public abstract class AbstractLastRunDependentProcessorImpl implements Runnable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractLastRunDependentProcessorImpl.class);
 
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
@@ -56,8 +58,6 @@ public abstract class AbstractLastRunDependentProcessorImpl implements Runnable 
     @Override
     public final void run() {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         final Date now = new Date();
 
         final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
@@ -70,7 +70,7 @@ public abstract class AbstractLastRunDependentProcessorImpl implements Runnable 
                 try {
                     lastRun = dateFormat.parse(pref);
                 } catch (ParseException e) {
-                    log.error("Unable to parse last job run date {} using format {}", pref, DATE_FORMAT);
+                    LOG.error("Unable to parse last job run date {} using format {}", pref, DATE_FORMAT);
                 }
             }
             lastRunInitialised = true;

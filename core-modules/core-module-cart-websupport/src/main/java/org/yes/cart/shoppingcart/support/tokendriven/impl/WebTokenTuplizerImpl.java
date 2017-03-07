@@ -16,8 +16,9 @@
 
 package org.yes.cart.shoppingcart.support.tokendriven.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.shoppingcart.support.CartDetuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizer;
@@ -33,6 +34,8 @@ import javax.servlet.http.HttpServletResponse;
  * Time: 23:14
  */
 public class WebTokenTuplizerImpl implements CartTuplizer<HttpServletRequest, HttpServletResponse> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(WebTokenTuplizerImpl.class);
 
     private final TuplizerSetting tuplizerSetting;
 
@@ -56,8 +59,8 @@ public class WebTokenTuplizerImpl implements CartTuplizer<HttpServletRequest, Ht
         this.tuplizerSetting = new TuplizerSetting(cookieName, expirySeconds, cookiePath);
 
         if (this.tuplizerSetting.key == null || this.tuplizerSetting.expiry == null) {
-            final String errMsg = "cookie tuplizer misconfigured";
-            ShopCodeContext.getLog(this).error(errMsg);
+            final String errMsg = "cookie tuplizer misconfiguration, key or expiry is null";
+            LOG.error(errMsg);
             throw new RuntimeException(errMsg);
         }
 

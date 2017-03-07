@@ -18,10 +18,11 @@ package org.yes.cart.service.vo.impl;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.dto.DtoImageService;
 import org.yes.cart.service.vo.VoIOSupport;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.io.IOException;
 import java.net.FileNameMap;
@@ -37,6 +38,8 @@ import java.util.regex.Pattern;
  * Time: 23:11
  */
 public class VoIOSupportImpl implements VoIOSupport {
+
+    private static final Logger LOG = LoggerFactory.getLogger(VoIOSupportImpl.class);
 
     private final DtoImageService dtoImageService;
     private final SystemService systemService;
@@ -164,8 +167,7 @@ public class VoIOSupportImpl implements VoIOSupport {
 
             return getBase64String(contentType, content);
         } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error(
-                    "Error retrieving image data for " + code + "/" + fileName + ", caused by: " + exp.getMessage(), exp);
+            LOG.error("Error retrieving image data for " + code + "/" + fileName + ", caused by: " + exp.getMessage(), exp);
             return null;
         }
     }

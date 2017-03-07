@@ -16,6 +16,8 @@
 
 package org.yes.cart.promotion.impl.action;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
@@ -30,7 +32,6 @@ import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -45,7 +46,9 @@ import java.util.regex.Pattern;
  */
 public class OrderGiftPromotionAction extends AbstractOrderPromotionAction implements PromotionAction {
 
-    // Ration allows to specify what 1 unit of context equates to items quantity
+    private static final Logger LOG = LoggerFactory.getLogger(OrderGiftPromotionAction.class);
+
+    // Ratio allows to specify what 1 unit of context equates to items quantity
     // i.e. Gift "ABC : 2" - 1 gift for every two quantity of items
     private static final Pattern RATIO_PATTERN = Pattern.compile("(.*)(( (=|~) )((\\d*)\\.?(\\d*)))");
 
@@ -90,7 +93,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
             if (multiplier.compareTo(BigDecimal.ONE) == 0) {
                 return minimal;
             }
-            return minimal.divide(multiplier).setScale(2, RoundingMode.HALF_UP);
+            return minimal.divide(multiplier, 2, RoundingMode.HALF_UP);
         }
         return BigDecimal.ZERO;
     }
@@ -111,8 +114,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
                     cart.getCurrencyCode(),
                     BigDecimal.ONE, false, null);
         } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error(
-                    "Unable top find price for gift for promotion action context: {}", sku);
+            LOG.error("Unable to find price for gift for promotion action context: {}", sku);
         }
         return null;
     }

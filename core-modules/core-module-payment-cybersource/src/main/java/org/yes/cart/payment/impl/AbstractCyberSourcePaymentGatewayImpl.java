@@ -18,6 +18,7 @@ package org.yes.cart.payment.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentMiscParam;
@@ -27,7 +28,6 @@ import org.yes.cart.payment.service.ConfigurablePaymentGateway;
 import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
 import org.yes.cart.util.HttpParamsUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -40,6 +40,8 @@ import java.util.Map;
  
  */
 public abstract class AbstractCyberSourcePaymentGatewayImpl implements ConfigurablePaymentGateway, PaymentGateway {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractCyberSourcePaymentGatewayImpl.class);
 
     private PaymentGatewayParameterService paymentGatewayParameterService;
 
@@ -154,9 +156,8 @@ public abstract class AbstractCyberSourcePaymentGatewayImpl implements Configura
         payment.setCardType(params.get("ccType"));
         payment.setShopperIpAddress(params.get(PaymentMiscParam.CLIENT_IP));
 
-        final Logger log = ShopCodeContext.getLog(this);
-        if (log.isDebugEnabled()) {
-            log.debug(HttpParamsUtils.stringify("Payment prototype from map", parametersMap));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(HttpParamsUtils.stringify("Payment prototype from map", parametersMap));
         }
 
 

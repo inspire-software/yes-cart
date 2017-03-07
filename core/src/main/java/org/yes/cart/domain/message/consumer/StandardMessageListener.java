@@ -17,6 +17,8 @@
 package org.yes.cart.domain.message.consumer;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
@@ -25,7 +27,7 @@ import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -41,6 +43,8 @@ import java.util.Map;
  * Time: 4:12 PM
  */
 public class StandardMessageListener implements Runnable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(StandardMessageListener.class);
 
     /**
      * Shop code.  Shop code context variable.
@@ -220,7 +224,7 @@ public class StandardMessageListener implements Runnable {
                 mailService.create(mail);
 
             } catch (Exception e) {
-                ShopCodeContext.getLog(this).error(
+                LOG.error(Markers.alert(),
                         MessageFormat.format(
                                 "Cant compose or send email template {0} with locale {1} folder {2} to {3}",
                                 map.get(TEMPLATE_NAME),
@@ -232,7 +236,7 @@ public class StandardMessageListener implements Runnable {
             }
 
         } catch(ClassCastException cce) {
-            ShopCodeContext.getLog(this).error("Class cast exception ", cce);
+            LOG.error("Class cast exception " + cce.getMessage(), cce);
 
         }
 

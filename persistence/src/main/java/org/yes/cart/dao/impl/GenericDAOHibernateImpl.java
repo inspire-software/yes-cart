@@ -44,13 +44,15 @@ import org.hibernate.search.util.impl.HibernateHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
-import org.yes.cart.dao.*;
+import org.yes.cart.dao.CriteriaTuner;
+import org.yes.cart.dao.EntityFactory;
+import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
+import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entityindexer.IndexFilter;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -66,7 +68,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GenericDAOHibernateImpl<T, PK extends Serializable>
         implements GenericFullTextSearchCapableDAO<T, PK> {
 
-    private final Logger LOG = LoggerFactory.getLogger(GenericDAOHibernateImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GenericDAOHibernateImpl.class);
 
     private final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
 
@@ -274,7 +276,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                 return rez.get(0);
             }
             default: {
-                ShopCodeContext.getLog(this).error("#findSingleByQuery has more than one result for {}, [{}]", hsqlQuery, parameters);
+                LOG.error("#findSingleByQuery has more than one result for {}, [{}]", hsqlQuery, parameters);
                 return rez.get(0);
             }
         }
@@ -795,7 +797,6 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                         fullTextSession.getSearchFactory().optimize(getPersistentClass());
                     }
                 } catch (Exception exp) {
-                    LOG.error("Error during indexing", exp);
                     LOGFTQ.error("Error during indexing", exp);
                 } finally {
                     asyncRunningState.set(COMPLETED);

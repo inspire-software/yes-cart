@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.order.impl.handler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
@@ -24,7 +26,6 @@ import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -37,6 +38,7 @@ import java.util.Map;
  */
 public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl implements OrderEventHandler {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CancelOrderEventHandlerImpl.class);
 
     private final WarehouseService warehouseService;
     private final SkuWarehouseService skuWarehouseService;
@@ -127,7 +129,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
                     final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
                     if (selected == null) {
-                        ShopCodeContext.getLog(this).warn(
+                        LOG.warn(
                                 "Warehouse is not found for delivery detail {}:{}",
                                 delivery.getDeliveryNum(), det.getProductSkuCode()
                         );
@@ -137,7 +139,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
                             // this delivery was not completed, so can just void reservation
                             final BigDecimal rem = skuWarehouseService.voidReservation(selected, skuCode, toCredit);
                             if (MoneyUtils.isFirstBiggerThanSecond(rem, BigDecimal.ZERO)) {
-                                ShopCodeContext.getLog(this).warn(
+                                LOG.warn(
                                         "Could not void all reservation {}:{}",
                                         delivery.getDeliveryNum(), det.getProductSkuCode()
                                 );
@@ -146,7 +148,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
                             // this delivery is completed, so need to credit qty
                             final BigDecimal rem = skuWarehouseService.credit(selected, skuCode, toCredit);
                             if (MoneyUtils.isFirstBiggerThanSecond(rem, BigDecimal.ZERO)) {
-                                ShopCodeContext.getLog(this).warn(
+                                LOG.warn(
                                         "Could not credit all reservation {}:{}",
                                         delivery.getDeliveryNum(), det.getProductSkuCode()
                                 );

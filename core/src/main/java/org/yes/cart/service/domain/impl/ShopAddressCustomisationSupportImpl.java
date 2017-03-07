@@ -18,11 +18,12 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
 
@@ -32,6 +33,8 @@ import java.util.*;
  * Time: 12:27
  */
 public class ShopAddressCustomisationSupportImpl implements AddressCustomisationSupport {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShopAddressCustomisationSupportImpl.class);
 
     private final AddressService addressService;
     private final CountryService countryService;
@@ -175,7 +178,7 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
             supported = shop.getSupportedBillingCountriesAsList();
         }
         if (supported.isEmpty()) {
-            ShopCodeContext.getLog(this).warn("No '{}' countries configured for shop {}", addressType, shopCode);
+            LOG.warn("No '{}' countries configured for shop {}", addressType, shopCode);
             return Collections.emptyList();
         }
         return countryService.findByCriteria(Restrictions.in("countryCode", supported));

@@ -16,8 +16,9 @@
 
 package org.yes.cart.bulkjob.cron;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.ShopCodeContext;
 
 /**
  * User: denispavlov
@@ -25,6 +26,8 @@ import org.yes.cart.util.ShopCodeContext;
  * Time: 10:00
  */
 public class PausableProcessorWrapperImpl implements Runnable, PausableProcessor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PausableProcessorWrapperImpl.class);
 
     private Runnable processor;
     private SystemService systemService;
@@ -48,7 +51,7 @@ public class PausableProcessorWrapperImpl implements Runnable, PausableProcessor
 
         final String paused = systemService.getAttributeValue(pausePreferenceKey);
         if (Boolean.valueOf(paused)) {
-            ShopCodeContext.getLog(this).debug("Job is PAUSED (pause key: {})", this.pausePreferenceKey);
+            LOG.debug("Job is PAUSED (pause key: {})", this.pausePreferenceKey);
             return;
         }
 

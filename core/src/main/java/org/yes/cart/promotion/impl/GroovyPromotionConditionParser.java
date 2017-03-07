@@ -18,11 +18,13 @@ package org.yes.cart.promotion.impl;
 
 import groovy.lang.GroovyClassLoader;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.promotion.PromotionCondition;
 import org.yes.cart.promotion.PromotionConditionParser;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 /**
  * Groovy backed promotion parser. promotion.getEligibilityCondition() is assumed to be
@@ -33,6 +35,8 @@ import org.yes.cart.util.ShopCodeContext;
  * Time: 8:47 AM
  */
 public class GroovyPromotionConditionParser implements PromotionConditionParser {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GroovyPromotionConditionParser.class);
 
     private final GroovyClassLoader gcl = new GroovyClassLoader();
 
@@ -49,7 +53,7 @@ public class GroovyPromotionConditionParser implements PromotionConditionParser 
 
             condition = (PromotionCondition) cl.newInstance();
         } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error("Unable to create class for promo: " + promotion.getCode(), exp);
+            LOG.error(Markers.alert(), "Unable to create class for promo: " + promotion.getCode() + ", cause: " + exp.getMessage(), exp);
             condition = new NullPromotionCondition(promotion.getPromotionId(), promotion.getCode());
         }
 

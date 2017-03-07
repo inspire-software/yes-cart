@@ -14,34 +14,34 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.context;
+package org.yes.cart.util.log;
 
-import ch.qos.logback.classic.LoggerContext;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 
 /**
  * User: denispavlov
- * Date: 10/06/2015
- * Time: 13:48
+ * Date: 07/03/2017
+ * Time: 16:09
  */
-public class LogbackJMXContextListener implements ServletContextListener {
+public class Markers {
 
-    public void contextDestroyed(ServletContextEvent sce) {
-        LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-        try {
-            if (lc != null) {
-                lc.stop();
-            }
-        } catch (Exception exp) {
-            // Do nothing, no more logs
-        }
+    /**
+     * Marker for event that triggers alert message for admin.
+     *
+     * @return alert marker
+     */
+    public static Marker alert() {
+        return MarkerFactory.getMarker("alert");
     }
 
-    public void contextInitialized(ServletContextEvent sce) {
-
+    /**
+     * Marker for event that has to be emailed.
+     *
+     * @return email marker
+     */
+    public static Marker email() {
+        return MarkerFactory.getMarker("email");
     }
+
 }
-

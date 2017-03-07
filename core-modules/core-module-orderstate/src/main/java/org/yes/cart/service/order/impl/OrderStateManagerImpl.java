@@ -17,10 +17,10 @@
 package org.yes.cart.service.order.impl;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.service.order.*;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +30,8 @@ import java.util.Map;
  * Time: 14:12:54
  */
 public class OrderStateManagerImpl implements OrderStateManager {
+
+    private static final Logger LOG = LoggerFactory.getLogger(OrderStateManagerImpl.class);
 
     private final Map<String, OrderEventHandler> handlers;
 
@@ -61,31 +63,29 @@ public class OrderStateManagerImpl implements OrderStateManager {
     public boolean fireTransition(final OrderEvent orderEvent) throws OrderException {
         final OrderEventHandler handler = handlers.get(orderEvent.getEventId());
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         if (handler == null) {
 
-            log.warn("No handler registered for event {}", orderEvent);
+            LOG.warn("No handler registered for event {}", orderEvent);
 
         } else {
             fireEventListeners(beforeListenersMap, orderEvent);
             boolean result;
             try {
 
-                log.debug("{} ... handling", orderEvent);
+                LOG.info("{} ... handling", orderEvent);
 
                 result = handler.handle(orderEvent);
                 orderEvent.getRuntimeParams().put("handled", result);
 
-                log.debug("{} ... handled={}", orderEvent, result);
+                LOG.info("{} ... handled={}", orderEvent, result);
 
                 fireEventListeners(afterListenersMap, orderEvent);
                 return result;
             } catch (OrderException e) {
                 if (e instanceof org.yes.cart.service.order.OrderItemAllocationException) {
-                    log.warn("Can't handle event " + orderEvent + ", because of " + e.getMessage());
+                    LOG.warn("Can't handle event " + orderEvent + ", because of " + e.getMessage());
                 } else {
-                    log.error("Can't handle event " + orderEvent + ", because of " + e.getMessage(), e);
+                    LOG.error(Markers.alert(), "Can't handle event " + orderEvent + ", because of " + e.getMessage(), e);
                 }
                 orderEvent.getRuntimeParams().put("handledException", e);
                 fireEventListeners(afterListenersMap, orderEvent);

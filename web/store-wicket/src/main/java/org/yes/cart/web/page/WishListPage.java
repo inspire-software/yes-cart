@@ -27,11 +27,12 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.customer.wishlist.WishListView;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
@@ -52,6 +53,8 @@ import org.yes.cart.web.support.util.HttpUtil;
  */
 @RequireHttps
 public class WishListPage extends AbstractWebPage {
+
+    private static final Logger LOG = LoggerFactory.getLogger(WishListPage.class);
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String WISHLIST_PANEL = "wishlistView";
@@ -113,7 +116,7 @@ public class WishListPage extends AbstractWebPage {
             try {
                 safePublicKey = HttpUtil.encodeUtf8UriParam(publicKey);
             } catch (Exception exp) {
-                ShopCodeContext.getLog(this).error(exp.getMessage(), exp);
+                LOG.error(exp.getMessage(), exp);
             }
         }
 

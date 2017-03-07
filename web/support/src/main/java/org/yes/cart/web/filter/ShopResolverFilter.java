@@ -18,6 +18,7 @@ package org.yes.cart.web.filter;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
@@ -44,6 +45,8 @@ import java.util.List;
  * filter redirect to default url.
  */
 public class ShopResolverFilter extends AbstractFilter implements Filter, ServletContextAware {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShopResolverFilter.class);
 
     private final ShopService shopService;
     private final SystemService systemService;
@@ -72,17 +75,15 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
 
         if (shop == null) {
             final String url = systemService.getDefaultShopURL();
-            final Logger log = ShopCodeContext.getLog(this);
-            if (log.isInfoEnabled()) {
-                log.info("Shop can not be resolved. For server name [" + serverDomainName + "] Redirect to : [" + url + "]");
+            if (LOG.isWarnEnabled()) {
+                LOG.warn("Shop can not be resolved. For server name [" + serverDomainName + "] Redirect to : [" + url + "]");
             }
             ((HttpServletResponse) servletResponse).sendRedirect(url);
             return null;
         } else if (shop.isDisabled()) {
             final String url = systemService.getDefaultShopURL();
-            final Logger log = ShopCodeContext.getLog(this);
-            if (log.isWarnEnabled()) {
-                log.warn("Shop is disabled. For server name [" + serverDomainName + "] Redirect to : [" + url + "]" );
+            if (LOG.isWarnEnabled()) {
+                LOG.warn("Shop is disabled. For server name [" + serverDomainName + "] Redirect to : [" + url + "]" );
             }
             ((HttpServletResponse) servletResponse).sendRedirect(url);
             return null;
@@ -121,10 +122,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
             try {
                 return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
             } catch (/*MalformedURL*/Exception e) {
-                final Logger log = ShopCodeContext.getLog(this);
-                if (log.isErrorEnabled()) {
-                    log.error("Wrong URL for path : " + newServletPath, e);
-                }
+                LOG.error("Wrong URL for path : " + newServletPath, e);
             }
         }
 

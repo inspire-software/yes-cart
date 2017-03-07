@@ -18,6 +18,8 @@ package org.yes.cart.web.service.rest;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -31,7 +33,6 @@ import org.yes.cart.domain.ro.*;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.CustomerOrderComparator;
 import org.yes.cart.web.service.rest.impl.AddressSupportMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
@@ -54,6 +55,8 @@ import java.util.regex.Pattern;
 @Controller
 @RequestMapping("/customer")
 public class CustomerController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CustomerController.class);
 
     @Autowired
     private CustomerServiceFacade customerServiceFacade;
@@ -2255,7 +2258,7 @@ public class CustomerController {
             try {
                 since = new SimpleDateFormat(DATE).parse(date);
             } catch (ParseException e) {
-                ShopCodeContext.getLog(this).warn("Invalid date {} using now", date);
+                LOG.warn("Invalid date {} using now", date);
             }
         }
 

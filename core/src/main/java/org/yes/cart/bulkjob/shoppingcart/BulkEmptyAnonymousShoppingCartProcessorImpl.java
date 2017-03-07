@@ -19,6 +19,7 @@ package org.yes.cart.bulkjob.shoppingcart;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -26,7 +27,6 @@ import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Date;
 
@@ -39,6 +39,8 @@ import java.util.Date;
  * Time: 12:47
  */
 public class BulkEmptyAnonymousShoppingCartProcessorImpl implements Runnable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BulkEmptyAnonymousShoppingCartProcessorImpl.class);
 
     private static final long MS_IN_DAY = 86400000L;
 
@@ -60,12 +62,10 @@ public class BulkEmptyAnonymousShoppingCartProcessorImpl implements Runnable {
     @Override
     public void run() {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         final Date lastModification =
                 new Date(System.currentTimeMillis() - determineExpiryInMs());
 
-        log.info("Look up all ShoppingCartStates not modified since {}", lastModification);
+        LOG.info("Look up all ShoppingCartStates not modified since {}", lastModification);
 
         final ResultsIterator<ShoppingCartState> abandoned = this.shoppingCartStateService.findByModificationPrior(lastModification, true);
 
@@ -78,16 +78,16 @@ public class BulkEmptyAnonymousShoppingCartProcessorImpl implements Runnable {
 
                 final String guid = scs.getGuid();
 
-                log.debug("Removing empty anonymous cart for {}, guid {}", scs.getCustomerEmail(), guid);
+                LOG.debug("Removing empty anonymous cart for {}, guid {}", scs.getCustomerEmail(), guid);
                 this.shoppingCartStateService.delete(scs);
-                log.debug("Removed empty anonymous cart for {}, guid {}", scs.getCustomerEmail(), guid);
+                LOG.debug("Removed empty anonymous cart for {}, guid {}", scs.getCustomerEmail(), guid);
 
                 final CustomerOrder tempOrder = this.customerOrderService.findByReference(guid);
                 if (tempOrder != null && CustomerOrder.ORDER_STATUS_NONE.equals(tempOrder.getOrderStatus())) {
-                    log.debug("Removing temporary order for cart guid {}", guid);
+                    LOG.debug("Removing temporary order for cart guid {}", guid);
                     this.customerOrderService.delete(tempOrder);
                     removedOrders++;
-                    log.debug("Removed temporary order for cart guid {}", guid);
+                    LOG.debug("Removed temporary order for cart guid {}", guid);
                 }
 
                 if (++count % this.batchSize == 0 ) {
@@ -98,17 +98,17 @@ public class BulkEmptyAnonymousShoppingCartProcessorImpl implements Runnable {
 
             }
 
-            log.info("Removed {} carts and {} temporary orders", count, removedOrders);
+            LOG.info("Removed {} carts and {} temporary orders", count, removedOrders);
 
         } finally {
             try {
                 abandoned.close();
             } catch (Exception exp) {
-                log.error("Processing empty anonymous baskets exception, error closing iterator: " + exp.getMessage(), exp);
+                LOG.error("Processing empty anonymous baskets exception, error closing iterator: " + exp.getMessage(), exp);
             }
         }
 
-        log.info("Processing empty anonymous baskets ... completed");
+        LOG.info("Processing empty anonymous baskets ... completed");
 
     }
 

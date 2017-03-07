@@ -5,9 +5,9 @@ import org.apache.fop.apps.io.ResourceResolverFactory;
 import org.apache.xmlgraphics.io.ResourceResolver;
 import org.apache.xmlgraphics.io.TempResourceResolver;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.report.ReportDescriptor;
 import org.yes.cart.report.ReportGenerator;
-import org.yes.cart.util.ShopCodeContext;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -28,6 +28,7 @@ import java.util.Map;
  */
 public abstract class AbstractFopReportGenerator implements ReportGenerator {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractFopReportGenerator.class);
 
     /**
      * {@inheritDoc}
@@ -39,10 +40,8 @@ public abstract class AbstractFopReportGenerator implements ReportGenerator {
                                final String lang,
                                final OutputStream outputStream) {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         if (data == null || data instanceof Collection && ((Collection) data).isEmpty()) {
-            log.debug("No data, no report will be generated");
+            LOG.debug("No data, no report will be generated");
             return;
 
         }
@@ -51,7 +50,7 @@ public abstract class AbstractFopReportGenerator implements ReportGenerator {
 
             final InputStream config = getFopUserConfigInputStream(descriptor, parameters, data, lang);
             if (config == null) {
-                log.error("FOP config file not  found, " +
+                LOG.error("FOP config file not  found, " +
                         "please put the fop-userconfig.xml file into the classpath of the  server, UTF-8 characters won't be displayed correctly");
                 return;
             }
@@ -70,7 +69,7 @@ public abstract class AbstractFopReportGenerator implements ReportGenerator {
 
             final Source xsltfile = getXsltFile(descriptor, parameters, data, lang);
             if (xsltfile == null) {
-                log.error("Unable to read XSLT-FO file for {} in {}", descriptor, lang);
+                LOG.error("Unable to read XSLT-FO file for {} in {}", descriptor, lang);
                 return;
             }
 
@@ -101,7 +100,7 @@ public abstract class AbstractFopReportGenerator implements ReportGenerator {
 
 
         } catch (Exception exp) {
-            log.error("Unable to generate report for " + descriptor + " in " + lang, exp);
+            LOG.error("Unable to generate report for " + descriptor + " in " + lang, exp);
         }
 
     }
@@ -194,7 +193,7 @@ public abstract class AbstractFopReportGenerator implements ReportGenerator {
         try {
             return new URI("");
         } catch (URISyntaxException e) {
-            ShopCodeContext.getLog(this).error("Unable to set blank URI for reports root", e);
+            LOG.error("Unable to set blank URI for reports root", e);
             return null;
         }
     }

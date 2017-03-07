@@ -25,6 +25,7 @@ import org.yes.cart.cluster.node.Node;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.util.log.Markers;
 import org.yes.cart.web.service.ws.WebServiceInboundChannel;
 import org.yes.cart.web.service.ws.WsMessage;
 import org.yes.cart.web.service.ws.client.WsClientAbstractFactory;
@@ -111,18 +112,16 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
                     blacklist(yesNode.getId());
 
                     if (LOG.isErrorEnabled()) {
-                        LOG.error("Cannot send message [" + message + "] to  url ["
-                                + yesNode.getId() + ":" + yesNode.getChannel()
-                                + "] . Blacklisting this node",
+                        LOG.error(Markers.alert(), "Cannot send message [" + message + "] to  url ["
+                                + yesNode.getId() + "] . Blacklisting this node",
                                 wse);
                     }
 
                 } else {
 
                     if (LOG.isErrorEnabled()) {
-                        LOG.error("Cannot send message [" + message + "] to  url ["
-                                + yesNode.getId() + ":" + yesNode.getChannel()
-                                + "] . Exception occurred during ws call",
+                        LOG.error(Markers.alert(), "Cannot send message [" + message + "] to  url ["
+                                + yesNode.getId() + "] . Exception occurred during ws call",
                                 wse);
                     }
 
@@ -131,9 +130,8 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
             } catch (Exception e) {
 
                 if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot send message [" + message + "] to  url ["
-                            + yesNode.getId() + ":" + yesNode.getChannel()
-                            + "] . Exception occurred during ws call",
+                    LOG.error(Markers.alert(), "Cannot send message [" + message + "] to  url ["
+                            + yesNode.getId() + "] . Exception occurred during ws call",
                             e);
                 }
 

@@ -18,11 +18,11 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -37,6 +37,8 @@ import java.util.*;
 public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl {
 
     private static final long serialVersionUID = 20100122L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(AddSkuToWishListEventCommandImpl.class);
 
     private final CustomerService customerService;
     private final CustomerWishListService customerWishListService;
@@ -83,7 +85,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
             try {
                 return new BigDecimal((String) strQty);
             } catch (Exception exp) {
-                ShopCodeContext.getLog(this).error("Invalid quantity in add to cart command", exp);
+                LOG.error("Invalid quantity in add to cart command", exp);
             }
         }
         return BigDecimal.ONE; // if no parameter specified assume 1 unit
@@ -152,11 +154,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
             // recalculatePrice(shoppingCart, null);
             // markDirty(shoppingCart);
 
-            final Logger log = ShopCodeContext.getLog(this);
-            if (log.isDebugEnabled()) {
-                log.debug("Added one item of sku code {} to wishlist",
-                        productSku.getCode());
-            }
+            LOG.debug("Added one item of sku code {} to wishlist", productSku.getCode());
         }
     }
 

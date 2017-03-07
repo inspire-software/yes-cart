@@ -17,14 +17,15 @@
 package org.yes.cart.bulkimport.service.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.bulkimport.model.ImportDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkcommon.service.DataDescriptorResolver;
 import org.yes.cart.bulkcommon.service.DataDescriptorTuplizer;
+import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.domain.entity.DataDescriptor;
 import org.yes.cart.domain.entity.DataGroup;
 import org.yes.cart.service.domain.DataDescriptorService;
 import org.yes.cart.service.domain.DataGroupService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -37,6 +38,8 @@ import java.util.Map;
  * Time: 13:58
  */
 public class ImportDataDescriptorResolverImpl implements DataDescriptorResolver<ImportDescriptor> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ImportDataDescriptorResolverImpl.class);
 
     private final DataGroupService dataGroupService;
     private final DataDescriptorService dataDescriptorService;
@@ -125,6 +128,6 @@ public class ImportDataDescriptorResolverImpl implements DataDescriptorResolver<
 
         this.tuplizers.add(importDescriptorDataDescriptorTuplizer);
 
-        ShopCodeContext.getLog(this).info("Registered data import descriptor tuplizer: {}", importDescriptorDataDescriptorTuplizer);
+        LOG.info("Registered data import descriptor tuplizer: {}", importDescriptorDataDescriptorTuplizer);
     }
 }

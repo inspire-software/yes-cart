@@ -17,6 +17,7 @@
 package org.yes.cart.service.order.impl.handler;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.Shop;
@@ -27,7 +28,6 @@ import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.PGDisabledException;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
-import org.yes.cart.util.ShopCodeContext;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -35,6 +35,8 @@ import org.yes.cart.util.ShopCodeContext;
  * Time: 14:12:54
  */
 public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShipmentCompleteOrderEventHandlerImpl.class);
 
     private final PaymentProcessorFactory paymentProcessorFactory;
 
@@ -53,8 +55,6 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
     public boolean handle(final OrderEvent orderEvent) throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
 
-            final Logger log = ShopCodeContext.getLog(this);
-
             final CustomerOrder order = orderEvent.getCustomerOrder();
             final CustomerOrderDelivery thisDelivery = orderEvent.getCustomerOrderDelivery();
 
@@ -67,7 +67,7 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
 
                 // online capture should be done before shipping in progress
-                processDeliveryStates(orderEvent, log);
+                processDeliveryStates(orderEvent);
                 return true;
 
             } else {
@@ -76,11 +76,11 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
 
                 if (Payment.PAYMENT_STATUS_OK.equals(result)) {
                     // payment was ok so continue
-                    if (log.isInfoEnabled()) {
-                        log.info("Funds captured for delivery {}", thisDelivery.getDeliveryNum());
+                    if (LOG.isInfoEnabled()) {
+                        LOG.info("Funds captured for delivery {}", thisDelivery.getDeliveryNum());
                     }
 
-                    processDeliveryStates(orderEvent, log);
+                    processDeliveryStates(orderEvent);
                     return true;
 
 
@@ -96,7 +96,7 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
         }
     }
 
-    private void processDeliveryStates(final OrderEvent orderEvent, final Logger log) {
+    private void processDeliveryStates(final OrderEvent orderEvent) {
 
         orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED);
         for (CustomerOrderDelivery delivery : orderEvent.getCustomerOrder().getDelivery()) {
@@ -106,8 +106,8 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
             }
         }
         orderEvent.getCustomerOrder().setOrderStatus(CustomerOrder.ORDER_STATUS_COMPLETED);
-        if (log.isInfoEnabled()) {
-            log.info("Order {} completed ", orderEvent.getCustomerOrder().getOrdernum());
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Order {} completed ", orderEvent.getCustomerOrder().getOrdernum());
         }
     }
 

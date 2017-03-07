@@ -18,10 +18,11 @@ package org.yes.cart.shoppingcart.support.impl;
 
 import org.apache.commons.codec.binary.Base64InputStream;
 import org.apache.commons.codec.binary.Base64OutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.support.CartDetuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizationException;
-import org.yes.cart.util.ShopCodeContext;
 
 import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
@@ -44,6 +45,8 @@ import java.text.MessageFormat;
 public abstract class AbstractCryptedTuplizerImpl {
 
     private static final long serialVersionUID = 20100116L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractCryptedTuplizerImpl.class);
 
     private final Cipher desCipher;
     private final Cipher desUnCipher;
@@ -75,7 +78,7 @@ public abstract class AbstractCryptedTuplizerImpl {
             desUnCipher = Cipher.getInstance(cipherName);
             desUnCipher.init(Cipher.DECRYPT_MODE, secretKey);
         } catch (Exception ike) {
-            ShopCodeContext.getLog(this).error(ike.getMessage(), ike);
+            LOG.error(ike.getMessage(), ike);
             throw new RuntimeException("Unable to load Cipher for CookieTuplizer", ike);
         }
 
@@ -103,7 +106,7 @@ public abstract class AbstractCryptedTuplizerImpl {
                 objectOutputStream.flush();
                 objectOutputStream.close();
             } catch (Throwable ioe) {
-                ShopCodeContext.getLog(this).error(
+                LOG.error(
                         MessageFormat.format("Unable to serialize object {0}", serializable),
                         ioe
                 );
@@ -117,7 +120,7 @@ public abstract class AbstractCryptedTuplizerImpl {
                     base64EncoderStream.close();
                     byteArrayOutputStream.close();
                 } catch (IOException e) {
-                    ShopCodeContext.getLog(this).error("Can not close stream", e);
+                    LOG.error("Can not close stream", e);
                 }
             }
         }
@@ -152,10 +155,10 @@ public abstract class AbstractCryptedTuplizerImpl {
             try {
                 desUnCipher.init(Cipher.DECRYPT_MODE, secretKey); //reinit
             } catch (InvalidKeyException e) {
-                ShopCodeContext.getLog(this).error("Cant reinit desUnCipher", exception);
+                LOG.error("Cant reinit desUnCipher", exception);
             }
             final String errMsg = "Unable to convert bytes assembled from tuple into object";
-            ShopCodeContext.getLog(this).error(errMsg, exception);
+            LOG.error(errMsg, exception);
             throw new CartDetuplizationException(errMsg, exception);
         } finally {
             try {
@@ -166,7 +169,7 @@ public abstract class AbstractCryptedTuplizerImpl {
                 base64DecoderStream.close();
                 byteArrayInputStream.close();
             } catch (IOException ioe) { // leave this one silent as we have the object.
-                ShopCodeContext.getLog(this).error("Unable to close object stream", ioe);
+                LOG.error("Unable to close object stream", ioe);
             }
 
         }

@@ -16,10 +16,11 @@
 
 package org.yes.cart.promotion.impl.action;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.promotion.PromotionAction;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -31,6 +32,8 @@ import java.util.Map;
  */
 public class OrderNonSaleDiscountPromotionAction extends AbstractOrderPromotionAction implements PromotionAction {
 
+    private static final Logger LOG = LoggerFactory.getLogger(OrderNonSaleDiscountPromotionAction.class);
+
     /** {@inheritDoc} */
     public BigDecimal testDiscountValue(final Map<String, Object> context) {
         return getDiscountValue(getRawPromotionActionContext(context));
@@ -40,7 +43,7 @@ public class OrderNonSaleDiscountPromotionAction extends AbstractOrderPromotionA
         try {
             return new BigDecimal(ctx).movePointLeft(2);
         } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error("Unable top parse discount for promotion action context: {}", ctx);
+            LOG.error("Unable to parse discount for promotion action context: {}", ctx);
         }
         return BigDecimal.ZERO;
     }

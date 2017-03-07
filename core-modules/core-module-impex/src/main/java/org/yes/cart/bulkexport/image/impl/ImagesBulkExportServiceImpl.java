@@ -18,6 +18,7 @@ package org.yes.cart.bulkexport.image.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.yes.cart.bulkcommon.service.ExportService;
 import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
@@ -27,7 +28,6 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -40,6 +40,8 @@ import java.util.Date;
  * Time: 12:52
  */
 public class ImagesBulkExportServiceImpl extends AbstractExportService implements ExportService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ImagesBulkExportServiceImpl.class);
 
     private final ImageExportDomainObjectStrategy[] strategies;
 
@@ -132,11 +134,9 @@ public class ImagesBulkExportServiceImpl extends AbstractExportService implement
                   final String imageExportDescriptorName,
                   final CsvExportDescriptor imageExportDescriptor, final String fileToExport) throws Exception {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         final String msgInfoImp = MessageFormat.format("export file : {0}", fileToExport);
         statusListener.notifyMessage(msgInfoImp);
-        log.info(msgInfoImp);
+        LOG.info(msgInfoImp);
 
         final String select = imageExportDescriptor.getSelectSql();
 
@@ -145,7 +145,7 @@ public class ImagesBulkExportServiceImpl extends AbstractExportService implement
                 imageExportDescriptor.getSelectSql(),
                 imageExportDescriptorName);
         statusListener.notifyMessage(info);
-        log.info(info);
+        LOG.info(info);
 
         for (final ImageExportDomainObjectStrategy domainStrategy : strategies) {
             if (domainStrategy.supports(select)) {

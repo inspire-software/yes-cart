@@ -19,6 +19,8 @@ package org.yes.cart.service.domain.impl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
@@ -28,7 +30,6 @@ import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategy;
 import org.yes.cart.service.image.ImageNameStrategyResolver;
 import org.yes.cart.stream.io.IOProvider;
-import org.yes.cart.util.ShopCodeContext;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -49,9 +50,9 @@ import java.util.Properties;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ImageServiceImpl
-        extends BaseGenericServiceImpl<SeoImage>
-        implements ImageService {
+public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implements ImageService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ImageServiceImpl.class);
 
     private String allowedSizes;
 
@@ -217,7 +218,7 @@ public class ImageServiceImpl
             return bos.toByteArray();
 
         } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error("Unable to resize image " + filename, exp);
+            LOG.error("Unable to resize image " + filename, exp);
         }
 
         return new byte[0];
@@ -372,8 +373,7 @@ public class ImageServiceImpl
             return ioProvider.read(original, ctx);
 
         } catch (IOException ioe) {
-            ShopCodeContext.getLog(this).error("Unable to resize image {} to {}", original, resized);
-            ShopCodeContext.getLog(this).error(ioe.getMessage(), ioe);
+            LOG.error("Unable to resize image " + original + " to " + resized + ", caused by: " + ioe.getMessage(), ioe);
             return new byte[0];
         }
     }

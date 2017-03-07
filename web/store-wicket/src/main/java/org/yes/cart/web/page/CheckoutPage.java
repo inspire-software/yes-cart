@@ -34,6 +34,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
@@ -49,7 +51,6 @@ import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.service.order.PlaceOrderDisabledException;
 import org.yes.cart.service.order.SkuUnavailableException;
 import org.yes.cart.shoppingcart.*;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.cart.ShoppingCartPaymentVerificationView;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
 import org.yes.cart.web.page.component.customer.auth.GuestPanel;
@@ -87,6 +88,8 @@ import java.util.Map;
 public class CheckoutPage extends AbstractWebPage {
 
     private static final long serialVersionUID = 20101107L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(CheckoutPage.class);
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     public static final String NAVIGATION_THREE_FRAGMENT = "threeStepNavigationFragment";
@@ -319,14 +322,14 @@ public class CheckoutPage extends AbstractWebPage {
 
         } catch (PlaceOrderDisabledException checkoutDisabled) {
 
-            ShopCodeContext.getLog(this).warn(checkoutDisabled.getMessage());
+            LOG.warn(checkoutDisabled.getMessage());
 
             setResponsePage(ShoppingCartPage.class, new PageParameters().set(ERROR, "1"));
 
 
         } catch (CouponCodeInvalidException invalidCoupon) {
 
-            ShopCodeContext.getLog(this).warn(invalidCoupon.getMessage());
+            LOG.warn(invalidCoupon.getMessage());
 
             setResponsePage(ShoppingCartPage.class, new PageParameters()
                             .set(ERROR, ERROR_COUPON)
@@ -334,7 +337,7 @@ public class CheckoutPage extends AbstractWebPage {
 
         } catch (SkuUnavailableException skuUnavailable) {
 
-            ShopCodeContext.getLog(this).warn(skuUnavailable.getMessage());
+            LOG.warn(skuUnavailable.getMessage());
 
             setResponsePage(ShoppingCartPage.class, new PageParameters()
                     .set(ERROR, ERROR_SKU)
@@ -342,7 +345,7 @@ public class CheckoutPage extends AbstractWebPage {
 
         } catch (OrderAssemblyException assembly) {
 
-            ShopCodeContext.getLog(this).error(assembly.getMessage(), assembly);
+            LOG.error(assembly.getMessage(), assembly);
 
             setResponsePage(ShoppingCartPage.class, new PageParameters().set(ERROR, "1"));
 

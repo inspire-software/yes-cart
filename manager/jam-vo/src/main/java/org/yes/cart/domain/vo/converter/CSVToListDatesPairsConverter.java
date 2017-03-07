@@ -18,9 +18,10 @@ package org.yes.cart.domain.vo.converter;
 import com.inspiresoftware.lib.dto.geda.adapter.BeanFactory;
 import com.inspiresoftware.lib.dto.geda.adapter.ValueConverter;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,6 +36,8 @@ import java.util.List;
  * Time: 09:55
  */
 public class CSVToListDatesPairsConverter implements ValueConverter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CSVToListDatesPairsConverter.class);
 
     @Override
     public Object convertToDto(final Object object, final BeanFactory beanFactory) {
@@ -61,7 +64,7 @@ public class CSVToListDatesPairsConverter implements ValueConverter {
                         );
                     }
                 } catch (ParseException pe) {
-                    ShopCodeContext.getLog(this).error(pe.getMessage() + ": " + object, pe);
+                    LOG.error(pe.getMessage() + ": " + object, pe);
                 }
 
             }

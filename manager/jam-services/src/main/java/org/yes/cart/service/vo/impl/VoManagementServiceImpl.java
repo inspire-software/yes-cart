@@ -19,6 +19,8 @@ package org.yes.cart.service.vo.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContext;
@@ -34,7 +36,6 @@ import org.yes.cart.service.dto.ManagementService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoManagementService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,6 +49,8 @@ import java.util.Map;
  * Time: 09:00
  */
 public class VoManagementServiceImpl implements VoManagementService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(VoManagementServiceImpl.class);
 
     private final ManagementService managementService;
     private final DtoShopService shopService;
@@ -88,7 +91,7 @@ public class VoManagementServiceImpl implements VoManagementService {
         try {
             return getByEmailInternal(currentManager);
         } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error(exp.getMessage(), exp);
+            LOG.error(exp.getMessage(), exp);
             return null;
         }
 
@@ -327,7 +330,7 @@ public class VoManagementServiceImpl implements VoManagementService {
                         }
                     }
                 } catch (Exception e) {
-                    ShopCodeContext.getLog(this).error("Unable to retrieve roles for {}", username);
+                    LOG.error("Unable to retrieve roles for {}", username);
                 }
             }
         }

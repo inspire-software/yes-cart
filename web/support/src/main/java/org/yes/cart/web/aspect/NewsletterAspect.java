@@ -20,6 +20,8 @@ import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Shop;
@@ -31,7 +33,6 @@ import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 
 import java.io.Serializable;
@@ -46,6 +47,8 @@ import java.util.Set;
  */
 @Aspect
 public class NewsletterAspect extends BaseNotificationAspect {
+
+    private static final Logger LOG = LoggerFactory.getLogger(NewsletterAspect.class);
 
     private final MailService mailService;
 
@@ -113,7 +116,7 @@ public class NewsletterAspect extends BaseNotificationAspect {
 
         sendNotification(registrationMessage);
 
-        ShopCodeContext.getLog(this).info("Newsletter message was send to queue {}", registrationMessage);
+        LOG.info("Newsletter message was send to queue {}", registrationMessage);
 
         return pjp.proceed();
     }

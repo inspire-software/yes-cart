@@ -1,5 +1,7 @@
 package org.yes.cart.service.vo.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO;
 import org.yes.cart.domain.dto.ProductTypeAttrDTO;
@@ -16,7 +18,6 @@ import org.yes.cart.service.dto.DtoProductTypeService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoProductTypeService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
 
@@ -26,6 +27,8 @@ import java.util.*;
  * Time: 12:48
  */
 public class VoProductTypeServiceImpl implements VoProductTypeService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(VoProductTypeServiceImpl.class);
 
     private final DtoProductTypeService dtoProductTypeService;
     private final DtoProdTypeAttributeViewGroupService dtoProdTypeAttributeViewGroupService;
@@ -202,7 +205,7 @@ public class VoProductTypeServiceImpl implements VoProductTypeService {
                         asm.assembleDto(dto, item.getFirst());
                         dtoProductTypeAttrService.update(dto);
                     } else {
-                        ShopCodeContext.getLog(this).warn("Update skipped for inexistent ID {}", item.getFirst().getProductTypeAttrId());
+                        LOG.warn("Update skipped for inexistent ID {}", item.getFirst().getProductTypeAttrId());
                     }
                 } else {
                     // insert mode

@@ -16,8 +16,9 @@
 
 package org.yes.cart.promotion.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.promotion.PromotionCondition;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Map;
 
@@ -31,6 +32,8 @@ import java.util.Map;
  * Time: 9:36 AM
  */
 public class NullPromotionCondition implements PromotionCondition {
+
+    private static final Logger LOG = LoggerFactory.getLogger(NullPromotionCondition.class);
 
     private final long promotionId;
     private final String promotionCode;
@@ -53,7 +56,7 @@ public class NullPromotionCondition implements PromotionCondition {
 
     /** {@inheritDoc} */
     public boolean isEligible(final Map<String, Object> context) {
-        ShopCodeContext.getLog(this).warn("Null condition invoked for promo: " + promotionCode);
+        LOG.warn("Null condition invoked for promo: " + promotionCode);
         return false;
     }
 }

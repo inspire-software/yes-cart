@@ -18,12 +18,13 @@ package org.yes.cart.orderexport.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.orderexport.OrderAutoExportProcessor;
 import org.yes.cart.orderexport.OrderExporter;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.util.*;
 
@@ -33,6 +34,8 @@ import java.util.*;
  * Time: 08:56
  */
 public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(OrderAutoExportProcessorImpl.class);
 
     private final CustomerOrderService customerOrderService;
 
@@ -45,9 +48,7 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
     @Override
     public void run() {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
-        log.info("Auto export processor start");
+        LOG.info("Auto export processor start");
 
         final List<Long> eligible = this.customerOrderService.findEligibleForExportOrderIds();
         for (final Long customerOrderId : eligible) {
@@ -55,19 +56,17 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
                 proxy().processSingleOrder(customerOrderId);
             } catch (Exception exp) {
                 proxy().markFailedOrder(customerOrderId, exp.getMessage());
-                log.error("Failed to auto export order: " + customerOrderId, exp);
+                LOG.error(Markers.alert(), "Failed to auto export order: " + customerOrderId, exp);
             }
         }
 
-        log.info("Auto export processor finished ... {} orders", eligible.size());
+        LOG.info("Auto export processor finished ... {} orders", eligible.size());
 
     }
 
     /** {@inheritDoc} */
     @Override
     public void processSingleOrder(final Long customerOrderId) {
-
-        final Logger log = ShopCodeContext.getLog(this);
 
         final CustomerOrder customerOrder = customerOrderService.findById(customerOrderId);
 
@@ -84,14 +83,14 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
         final Map<String, String> audit = new HashMap<String, String>();
 
         if (eligibleDeliveries.isEmpty()) {
-            log.warn("Auto export for order {} in {} has no eligible deliveries. at least one delivery must be marked as eligible.",
+            LOG.warn("Auto export for order {} in {} has no eligible deliveries. at least one delivery must be marked as eligible.",
                     customerOrder.getOrdernum(), customerOrder.getOrderStatus());
         } else {
 
             final Set<OrderExporter> exporters = determineApplicableExporters(customerOrder, eligibleDeliveries);
             if (!exporters.isEmpty()) {
 
-                log.debug("Order {} in {} is eligible for auto export", customerOrder.getOrdernum(), customerOrder.getOrderStatus());
+                LOG.info("Order {} in {} is eligible for auto export", customerOrder.getOrdernum(), customerOrder.getOrderStatus());
                 for (final OrderExporter exporter : exporters) {
 
                     final OrderExporter.ExportResult result = exporter.export(customerOrder, eligibleDeliveries);
@@ -110,12 +109,12 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
                         delivery.setLastExportDate(new Date());
                         delivery.setLastExportDeliveryStatus(delivery.getDeliveryStatus());
                         delivery.setLastExportStatus(null); // No status - OK
-                        log.debug("Delivery {} exported", delivery.getDeliveryNum());
+                        LOG.info("Delivery {} exported", delivery.getDeliveryNum());
                     } else {
-                        log.debug("Delivery {} is not exported (possibly no valid exporter?)", delivery.getDeliveryNum());
+                        LOG.info("Delivery {} is not exported (possibly no valid exporter?)", delivery.getDeliveryNum());
                     }
                 } else {
-                    log.debug("Delivery {} was marked as blocked", delivery.getDeliveryNum());
+                    LOG.info("Delivery {} was marked as blocked", delivery.getDeliveryNum());
                 }
 
             }
@@ -128,12 +127,12 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
                 customerOrder.setLastExportDate(new Date());
                 customerOrder.setLastExportOrderStatus(customerOrder.getOrderStatus());
                 customerOrder.setLastExportStatus(null); // No status - OK
-                log.debug("Order {} exported", customerOrder.getOrdernum());
+                LOG.info("Order {} exported", customerOrder.getOrdernum());
             } else {
-                log.debug("Order {} is not exported (possibly no valid exporter?)", customerOrder.getOrdernum());
+                LOG.info("Order {} is not exported (possibly no valid exporter?)", customerOrder.getOrdernum());
             }
         } else {
-            log.debug("Order {} was marked as blocked", customerOrder.getOrdernum());
+            LOG.info("Order {} was marked as blocked", customerOrder.getOrdernum());
         }
         for (final Map.Entry<String, String> auditEntry : audit.entrySet()) {
             customerOrder.putValue(auditEntry.getKey(), auditEntry.getValue(), "AUDITEXPORT");

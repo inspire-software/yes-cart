@@ -25,13 +25,14 @@ import org.apache.ws.security.WSSecurityEngineResult;
 import org.apache.ws.security.WSUsernameTokenPrincipal;
 import org.apache.ws.security.handler.WSHandlerConstants;
 import org.apache.ws.security.handler.WSHandlerResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,8 @@ import java.util.Map;
  * Time: 12:09 AM
  */
 public class BackdoorAuthenticationInInterceptor extends WSS4JInInterceptor implements InitializingBean {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BackdoorAuthenticationInInterceptor.class);
 
     private AuthenticationManager authenticationManager;
 
@@ -98,7 +101,7 @@ public class BackdoorAuthenticationInInterceptor extends WSS4JInInterceptor impl
                             Authentication authentication = new UsernamePasswordAuthenticationToken(principal.getName(), principal.getPassword());
                             authentication = authenticationManager.authenticate(authentication);
                             if (!authentication.isAuthenticated()) {
-                                ShopCodeContext.getLog(this).warn("User {} is not authentic.", principal.getName());
+                                LOG.warn("User {} is not authentic.", principal.getName());
                             }
                             SecurityContextHolder.getContext().setAuthentication(authentication);
                         }
@@ -106,7 +109,7 @@ public class BackdoorAuthenticationInInterceptor extends WSS4JInInterceptor impl
                 }
             }
         } catch (RuntimeException ex) {
-            ShopCodeContext.getLog(this).error(ex.getMessage(), ex);
+            LOG.error(ex.getMessage(), ex);
             throw ex;
         }
     }

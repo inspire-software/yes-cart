@@ -89,7 +89,7 @@
             <div [hidden]="shopAliasForm.controls['alias'].valid || shopAliasForm.controls['alias'].pristine" class="alert alert-danger">
               <div [hidden]="!shopAliasForm.controls['alias'].hasError('checking')">
                 {{ 'REMOTE_CHECK' | translate }}
-              </div>
+              </div>CC
               <div [hidden]="!shopAliasForm.controls['alias'].hasError('DUPLICATE')">
                 {{ 'UNIQUE_REQUIRED' | translate }}
               </div>

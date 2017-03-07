@@ -16,10 +16,11 @@
 
 package org.yes.cart.service.async.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobStatusImpl;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.util.ExceptionUtil;
 
 import java.util.UUID;
@@ -35,6 +36,8 @@ import java.util.UUID;
  * Time: 9:50 AM
  */
 public class JobStatusListenerImpl implements JobStatusListener {
+
+    private static final Logger LOG = LoggerFactory.getLogger(JobStatusListenerImpl.class);
 
     private static final int REPORT_MAX_CHARS = 80000;
     private static final int MSG_TIMEOUT = 60000;
@@ -116,7 +119,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         append(report, "INFO: ", message, "\n");
-        ShopCodeContext.getLog(this).info(message);
+        LOG.info(message);
         notifyPing();
     }
 
@@ -126,7 +129,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         append(report, "WARNING: ", warning, "\n");
-        ShopCodeContext.getLog(this).warn(warning);
+        LOG.warn(warning);
         notifyPing();
         warn++;
     }
@@ -137,7 +140,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         append(report, "ERROR: ", error, "\n");
-        ShopCodeContext.getLog(this).error(error);
+        LOG.error(error);
         notifyPing();
         err++;
     }
@@ -155,7 +158,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
         }
         this.result = err > 0 ? JobStatus.Completion.ERROR : JobStatus.Completion.OK;
         this.pingMsg = null; // we have completed the job, clear ping message
-        ShopCodeContext.getLog(this).info(result.name());
+        LOG.info(result.name());
         notifyPing();
     }
 

@@ -2,13 +2,14 @@ package org.yes.cart.report.impl;
 
 import org.apache.xmlgraphics.io.ResourceResolver;
 import org.apache.xmlgraphics.io.TempResourceResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.report.ReportDescriptor;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.theme.ThemeService;
-import org.yes.cart.util.ShopCodeContext;
 
 import javax.servlet.ServletContext;
 import javax.xml.transform.Source;
@@ -23,6 +24,8 @@ import java.util.Map;
  * Time: 12:27
  */
 public abstract class AbstractThemeAwareFopReportGenerator extends AbstractFopReportGenerator implements ServletContextAware {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractThemeAwareFopReportGenerator.class);
 
     private final ThemeService themeService;
     private final ShopService shopService;
@@ -54,7 +57,7 @@ public abstract class AbstractThemeAwareFopReportGenerator extends AbstractFopRe
                     themeService, contentService, servletContext
             ).getResource((URI) null);
         } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error("Unable to load report template URI fop-userconfig.xml", exp);
+            LOG.error("Unable to load report template URI fop-userconfig.xml", exp);
             return null;
         }
 
@@ -77,7 +80,7 @@ public abstract class AbstractThemeAwareFopReportGenerator extends AbstractFopRe
                     themeService, contentService, servletContext
             ).getResource((URI) null));
         } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error("Unable to load report template URI " + descriptor.getReportId(), exp);
+            LOG.error("Unable to load report template URI " + descriptor.getReportId(), exp);
             return null;
         }
 

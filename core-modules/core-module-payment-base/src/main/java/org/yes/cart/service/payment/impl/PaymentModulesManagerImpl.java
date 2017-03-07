@@ -17,6 +17,8 @@
 package org.yes.cart.service.payment.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.Shop;
@@ -42,6 +44,8 @@ import java.util.*;
  * Time: 14:12:54
  */
 public class PaymentModulesManagerImpl implements PaymentModulesManager {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PaymentModulesManagerImpl.class);
 
     private final ServiceLocator serviceLocator;
 
@@ -311,7 +315,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
             }
         }
 
-        ShopCodeContext.getLog(this).error("Payment gateway {} not found", paymentGatewayLabel);
+        LOG.error("Payment gateway {} not found", paymentGatewayLabel);
 
         return null;
     }
@@ -327,7 +331,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
 
             paymentModulesMap.put(label, paymentModule);
 
-            ShopCodeContext.getLog(this).info("Registering payment module {}", label);
+            LOG.info("Registering payment module {}", label);
 
         } else if (!existing.equals(paymentModule)) {
             throw new RuntimeException("Duplicate binding detected for payment module with label: " + label);

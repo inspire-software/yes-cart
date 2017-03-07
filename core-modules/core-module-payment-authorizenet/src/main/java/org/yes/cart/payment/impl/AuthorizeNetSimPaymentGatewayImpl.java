@@ -21,14 +21,14 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.*;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.util.HttpParamsUtils;
-import org.yes.cart.util.ShopCodeContext;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
@@ -42,6 +42,7 @@ import java.util.*;
  */
 public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPaymentGatewayImpl implements PaymentGatewayExternalForm {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AuthorizeNetSimPaymentGatewayImpl.class);
 
     /**
      * merchant defined MD5 Hash key
@@ -245,7 +246,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
             final MessageDigest digest = MessageDigest.getInstance("MD5");
             return new String(Hex.encodeHex(digest.digest(sign.toString().getBytes(charset)))).toUpperCase();
         } catch (NoSuchAlgorithmException e) {
-            ShopCodeContext.getLog(this).error("MD5 not available", e);
+            LOG.error("MD5 not available", e);
             return "MD5 not available";
         }
     }
@@ -256,10 +257,10 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     public String restoreOrderGuid(final Map privateCallBackParameters) {
 
         if (isValid(privateCallBackParameters)) {
-            ShopCodeContext.getLog(this).debug("Signature is valid");
+            LOG.debug("Signature is valid");
             return HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID));
         } else {
-            ShopCodeContext.getLog(this).debug("Signature is not valid");
+            LOG.debug("Signature is not valid");
         }
         return null;
     }
@@ -279,10 +280,10 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         */
         String responseCode = null;
         if (isValid(callbackResult)) {
-            ShopCodeContext.getLog(this).debug("Signature is valid");
+            LOG.debug("Signature is valid");
             responseCode = callbackResult.get("x_response_code");
         } else {
-            ShopCodeContext.getLog(this).debug("Signature is not valid");
+            LOG.debug("Signature is not valid");
         }
         if ("1".equals(responseCode)) {
             return CallbackResult.OK;

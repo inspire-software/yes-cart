@@ -19,10 +19,11 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -45,6 +46,8 @@ import java.util.*;
 public class ShoppingCartImpl implements MutableShoppingCart {
 
     private static final long serialVersionUID =  20110509L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartImpl.class);
 
     @JsonProperty
     private List<CartItemImpl> items = new ArrayList<CartItemImpl>();
@@ -80,7 +83,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
 
     private AmountCalculationStrategy getCalculationStrategy() {
         if (calculationStrategy == null) {
-            ShopCodeContext.getLog(this).error("Cart amount calculation strategy is not configured. Please configure \"calculationStrategy\" and set it to cart");
+            LOG.error("Cart amount calculation strategy is not configured. Please configure \"calculationStrategy\" and set it to cart");
             throw new RuntimeException("Cart amount calculation strategy is not configured. Please configure \"calculationStrategy\" and set it to cart");
         }
         return calculationStrategy;
@@ -807,7 +810,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     /** {@inheritDoc} */
     public Total getTotal() {
         if (total == null) {
-            ShopCodeContext.getLog(this).error("Total requested before cart was recalculated - revise page flow to ensure that recalculation happens");
+            LOG.error("Total requested before cart was recalculated - revise page flow to ensure that recalculation happens");
             total = new TotalImpl();
         }
         return total;

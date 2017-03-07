@@ -33,6 +33,7 @@ import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.cluster.node.*;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.util.log.Markers;
 
 import javax.servlet.ServletContext;
 import java.io.Serializable;
@@ -189,7 +190,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
 
             } catch (Exception e) {
 
-                LOG.error("Error sending message: " + message, e);
+                LOG.error(Markers.alert(), "Error sending message: " + message, e);
 
             }
 
@@ -200,7 +201,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
 
             } catch (Exception e) {
 
-                LOG.error("Error sending message: " + message, e);
+                LOG.error(Markers.alert(), "Error sending message: " + message, e);
 
             }
         }
@@ -276,8 +277,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
                         }
 
                     } catch (Exception e) {
-                        LOG.error("Sending HELLO to all members from: {}", node.getId());
-                        LOG.error(e.getMessage(), e);
+                        LOG.error(Markers.alert(), "Failed sending HELLO to all members from: " + node.getId() + ", cause: " + e.getMessage(), e);
                     }
                 }
             }
@@ -511,8 +511,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
             jChannel.send(null, new BasicMessageImpl(node.getId(), "BYE", node));
             Thread.sleep(100L); // give some time for message to be sent
         } catch (Exception exp) {
-            LOG.error("Could not send BYE message from node: {}", node.getId());
-            LOG.error(exp.getMessage(), exp);
+            LOG.error(Markers.alert(), "Could not send BYE message from node: " + node.getId() + ", cause: " + exp.getMessage(), exp);
         }
         jChannel.close();
 

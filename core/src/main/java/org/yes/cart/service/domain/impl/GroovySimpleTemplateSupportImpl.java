@@ -17,10 +17,12 @@
 package org.yes.cart.service.domain.impl;
 
 import groovy.text.SimpleTemplateEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.service.domain.TemplateSupport;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -31,6 +33,8 @@ import java.util.Map;
  * Time: 18:08
  */
 public class GroovySimpleTemplateSupportImpl implements TemplateSupport {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GroovySimpleTemplateSupportImpl.class);
 
     private final Cache TEMPLATE_CACHE;
     private final SimpleTemplateEngine engine = new SimpleTemplateEngine();
@@ -64,7 +68,7 @@ public class GroovySimpleTemplateSupportImpl implements TemplateSupport {
 
             } catch (Exception cnfe) {
 
-                ShopCodeContext.getLog(this).error("Unable to process template: " + cnfe.getMessage() + "\n" + template, cnfe);
+                LOG.error(Markers.alert(), "Unable to process template: " + cnfe.getMessage() + "\n" + template, cnfe);
 
             }
 

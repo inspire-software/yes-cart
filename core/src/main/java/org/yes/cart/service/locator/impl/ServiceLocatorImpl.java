@@ -16,9 +16,10 @@
 
 package org.yes.cart.service.locator.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.service.locator.InstantiationStrategy;
 import org.yes.cart.service.locator.ServiceLocator;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
 import java.util.Map;
@@ -33,6 +34,7 @@ import java.util.Map;
  */
 public class ServiceLocatorImpl implements ServiceLocator {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceLocatorImpl.class);
 
     private final Map<String, InstantiationStrategy> protocolStrategyMap;
 
@@ -90,7 +92,7 @@ public class ServiceLocatorImpl implements ServiceLocator {
                                     final String loginName,
                                     final String password) {
 
-        ShopCodeContext.getLog(this).debug("Get {} as {}", serviceUrl, iface.getName());
+        LOG.debug("Get {} as {}", serviceUrl, iface.getName());
 
         try {
             return getInstantiationStrategy(serviceUrl).getInstance(serviceUrl, iface, loginName, password);

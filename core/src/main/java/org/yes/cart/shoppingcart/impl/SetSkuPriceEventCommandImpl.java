@@ -18,11 +18,11 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -37,6 +37,8 @@ import java.util.Map;
 public class SetSkuPriceEventCommandImpl extends AbstractCartCommandImpl {
 
     private static final long serialVersionUID = 20100122L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(SetSkuPriceEventCommandImpl.class);
 
     /**
      * Construct sku command.
@@ -69,16 +71,14 @@ public class SetSkuPriceEventCommandImpl extends AbstractCartCommandImpl {
             try {
                 offer = new BigDecimal(price);
             } catch (Exception exp) {
-                final Logger log = ShopCodeContext.getLog(this);
-                log.error("Can not set price {} for product sku dto with code {}", price, skuCode);
+                LOG.error("Can not set price {} for product sku dto with code {}", price, skuCode);
                 return;
             }
 
             final String auth = (String) parameters.get(CMD_SETPRICE_P_AUTH);
 
             if (StringUtils.isBlank(auth)) {
-                final Logger log = ShopCodeContext.getLog(this);
-                log.error("Can not set price {} for product sku dto with code {} because no auth code supplied", price, skuCode);
+                LOG.error("Can not set price {} for product sku dto with code {} because no auth code supplied", price, skuCode);
                 return;
             }
 
@@ -91,8 +91,7 @@ public class SetSkuPriceEventCommandImpl extends AbstractCartCommandImpl {
                 if (MoneyUtils.isFirstBiggerThanSecond(item.getSalePrice(), offer)) {
 
                     if (!shoppingCart.setProductSkuOffer(skuCode, offer, auth)) {
-                        ShopCodeContext.getLog(this).warn("Can not set price to sku with code {} ",
-                                skuCode);
+                        LOG.warn("Can not set price to sku with code {} ", skuCode);
                     } else {
 
                         recalculate(shoppingCart);
@@ -104,8 +103,7 @@ public class SetSkuPriceEventCommandImpl extends AbstractCartCommandImpl {
                     // Use case whereby we override the price upwards
                     if (!(shoppingCart.setProductSkuPrice(skuCode, offer, offer) &&
                             shoppingCart.setProductSkuOffer(skuCode, offer, auth))) {
-                        ShopCodeContext.getLog(this).warn("Can not set price to sku with code {} ",
-                                skuCode);
+                        LOG.warn("Can not set price to sku with code {} ", skuCode);
                     } else {
 
                         recalculate(shoppingCart);
@@ -117,8 +115,7 @@ public class SetSkuPriceEventCommandImpl extends AbstractCartCommandImpl {
 
             } else {
 
-                final Logger log = ShopCodeContext.getLog(this);
-                log.warn("Can not locate product sku dto with code {} in cart {}", skuCode, shoppingCart.getGuid());
+                LOG.warn("Can not locate product sku dto with code {} in cart {}", skuCode, shoppingCart.getGuid());
 
             }
 

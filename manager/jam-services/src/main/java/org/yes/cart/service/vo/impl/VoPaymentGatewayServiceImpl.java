@@ -17,6 +17,7 @@
 package org.yes.cart.service.vo.impl;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.misc.MutablePair;
@@ -31,7 +32,6 @@ import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoPaymentGatewayService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
 
@@ -41,6 +41,8 @@ import java.util.*;
  * Time: 17:47
  */
 public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(VoPaymentGatewayServiceImpl.class);
 
     private static final String DEFAULT_SHOP_CODE = "DEFAULT";
 
@@ -352,7 +354,6 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
                 voAssemblySupport.with(VoPaymentGatewayParameter.class, PaymentGatewayParameter.class);
 
         Map<Long, PaymentGatewayParameter> existing = mapAvById((List) getPaymentGatewayParameters(pg, shopCode));
-        final Logger logger = ShopCodeContext.getLog(this);
 
         for (final MutablePair<VoPaymentGatewayParameter, Boolean> item : vo) {
             if (item.getFirst().getPaymentGatewayParameterId() > 0L && !pg.getLabel().equals(item.getFirst().getPgLabel())) {
@@ -363,23 +364,23 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
                 // delete mode
                 final PaymentGatewayParameter param = existing.get(item.getFirst().getPaymentGatewayParameterId());
                 if (param != null) {
-                    logger.info("Removing PG({}/{}) for {}, value was {}",
+                    LOG.info("Removing PG({}/{}) for {}, value was {}",
                             new Object[]{shopCode, param.getPgLabel(), param.getLabel(), param.getValue()});
                     param.setValue("");
                     pg.updateParameter(param);
                 } else {
-                    logger.warn("Update skipped for inexistent ID {}", item.getFirst().getPaymentGatewayParameterId());
+                    LOG.warn("Update skipped for inexistent ID {}", item.getFirst().getPaymentGatewayParameterId());
                 }
             } else if (item.getFirst().getPaymentGatewayParameterId() > 0L) {
                 // update mode
                 final PaymentGatewayParameter param = existing.get(item.getFirst().getPaymentGatewayParameterId());
                 if (param != null) {
-                    logger.info("Updating PG({}/{}) for {}, value was {}, now {}",
+                    LOG.info("Updating PG({}/{}) for {}, value was {}, now {}",
                             new Object[]{shopCode, param.getPgLabel(), param.getLabel(), param.getValue(), item.getFirst().getValue()});
                     param.setValue(item.getFirst().getValue());
                     pg.updateParameter(param);
                 } else {
-                    logger.warn("Update skipped for inexistent ID {}", item.getFirst().getPaymentGatewayParameterId());
+                    LOG.warn("Update skipped for inexistent ID {}", item.getFirst().getPaymentGatewayParameterId());
                 }
             } else {
                 // insert mode
@@ -393,15 +394,15 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
                     final boolean duplicate = createPaymentGatewayParameter(pg, all, name, label, name, value);
                     if (duplicate) {
-                        logger.warn("Update skipped because create mode detected duplicate label {}", label);
+                        LOG.warn("Update skipped because create mode detected duplicate label {}", label);
                     } else {
-                        logger.info("Creating PG({}/{}) for {}, value {}",
+                        LOG.info("Creating PG({}/{}) for {}, value {}",
                                 new Object[]{shopCode, pg.getLabel(), label, value});
                     }
 
                 } else {
 
-                    logger.warn("Update skipped because create mode is not allowed for shops");
+                    LOG.warn("Update skipped because create mode is not allowed for shops");
 
                 }
 
@@ -469,7 +470,6 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
             throw new AccessDeniedException("Access is denied");
         }
 
-        final Logger logger = ShopCodeContext.getLog(this);
         if (systemSettings) {
 
             if (disabled) {
@@ -505,11 +505,11 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
                     if (duplicate) {
 
-                        logger.debug("Copy default skipped for label {}/{} because detected duplicate", shopCode, shopLabel);
+                        LOG.debug("Copy default skipped for label {}/{} because detected duplicate", shopCode, shopLabel);
 
                     } else {
 
-                        logger.info("Copy default label {}/{} with value {}", new Object[] { shopCode, shopLabel, defParam.getValue() });
+                        LOG.info("Copy default label {}/{} with value {}", new Object[] { shopCode, shopLabel, defParam.getValue() });
 
                     }
 
@@ -520,7 +520,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
         }
 
-        logger.warn("PG{} on {} is {}", new Object[] { pgLabel, shopCode, disabled ? "DISABLED" : "ENABLED" });
+        LOG.warn("PG{} on {} is {}", new Object[] { pgLabel, shopCode, disabled ? "DISABLED" : "ENABLED" });
 
     }
 

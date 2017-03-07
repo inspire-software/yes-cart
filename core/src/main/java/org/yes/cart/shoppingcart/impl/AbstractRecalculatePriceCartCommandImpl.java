@@ -16,16 +16,16 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 
 /**
  * Abstract cart prices recalculation command.
@@ -34,6 +34,8 @@ import java.text.MessageFormat;
 public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20100313L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractRecalculatePriceCartCommandImpl.class);
 
     private final PriceService priceService;
 
@@ -75,7 +77,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
         if (shoppingCart.getShoppingContext().getShopId() == 0L) {
 
-            ShopCodeContext.getLog(this).error("Can not recalculate price because the shop id is 0");
+            LOG.error("Can not recalculate price because the shop id is 0");
 
         } else {
 
@@ -113,7 +115,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
         if (shoppingCart.getShoppingContext().getShopId() == 0L) {
 
-            ShopCodeContext.getLog(this).error("Can not recalculate price because the shop id is 0");
+            LOG.error("Can not recalculate price because the shop id is 0");
 
         } else {
 
@@ -175,8 +177,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
                 MoneyUtils.minPositive(skuPrice.getSalePriceForCalculation(), skuPrice.getRegularPrice()),
                 skuPrice.getRegularPrice()
         )) {
-            ShopCodeContext.getLog(this).warn(MessageFormat.format("Can not set price to sku with code {0} ",
-                    skuCode));
+            LOG.warn("Can not set price to sku with code {}", skuCode);
 
         }
     }

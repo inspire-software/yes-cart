@@ -16,12 +16,13 @@
 
 package org.yes.cart.promotion.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.promotion.*;
 import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,8 @@ import java.util.Map;
  * Time: 8:15 AM
  */
 public class PromotionContextFactoryImpl implements PromotionContextFactory {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PromotionContextFactoryImpl.class);
 
     private final ShopService shopService;
     private final PromotionService promotionService;
@@ -64,12 +67,12 @@ public class PromotionContextFactoryImpl implements PromotionContextFactory {
                 if (action != null) {
                     ctx.addPromotion(promotion, condition, action);
                 } else {
-                    ShopCodeContext.getLog(this).warn(
+                    LOG.warn(
                             "No action mapping for promotion: {}, type: {}, action {}",
-                            new Object[] { promotion.getCode(), promotion.getPromoType(), promotion.getPromoAction() });
+                            new Object[]{promotion.getCode(), promotion.getPromoType(), promotion.getPromoAction()});
                 }
             } else {
-                ShopCodeContext.getLog(this).warn(
+                LOG.warn(
                         "No action mapping for promotion: {}, type: {}", promotion.getCode(), promotion.getPromoType());
             }
         }

@@ -19,6 +19,8 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -26,7 +28,7 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.shoppingcart.DeliveryTimeEstimationVisitor;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,6 +40,8 @@ import java.util.*;
  * Time: 07:36
  */
 public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimationVisitor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DeliveryTimeEstimationVisitorImpl.class);
 
     private final WarehouseService warehouseService;
 
@@ -192,7 +196,7 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
                         dates.put(date, date2);
                     }
                 } catch (ParseException pe) {
-                    ShopCodeContext.getLog(this).error(pe.getMessage() + ", sla: " + sla.getCarrierslaId(), pe);
+                    LOG.error(Markers.alert(), "Error reading excluded dates: " + pe.getMessage() + ", sla: " + sla.getGuid(), pe);
                 }
             }
 

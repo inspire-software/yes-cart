@@ -16,12 +16,13 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.shoppingcart.DeliveryCostCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -33,6 +34,8 @@ import java.util.Set;
  * Time: 6:07 PM
  */
 public class DefaultDeliveryCostCalculationStrategy implements DeliveryCostCalculationStrategy {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultDeliveryCostCalculationStrategy.class);
 
     private final CarrierSlaService carrierSlaService;
 
@@ -64,7 +67,7 @@ public class DefaultDeliveryCostCalculationStrategy implements DeliveryCostCalcu
                     final DeliveryCostCalculationStrategy strategy = subStrategies.get(carrierSla.getSlaType());
                     if (strategy == null) {
 
-                        ShopCodeContext.getLog(this).error("CarrierSla.slaType [{}] is not mapped to DeliveryCostCalculationStrategy", carrierSla.getSlaType());
+                        LOG.error("CarrierSla.slaType [{}] is not mapped to DeliveryCostCalculationStrategy", carrierSla.getSlaType());
 
                     } else {
 

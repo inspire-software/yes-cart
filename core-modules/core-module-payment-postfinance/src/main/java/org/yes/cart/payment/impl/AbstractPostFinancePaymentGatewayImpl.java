@@ -18,15 +18,14 @@ package org.yes.cart.payment.impl;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.ConfigurablePaymentGateway;
 import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
-import org.yes.cart.util.ShopCodeContext;
 
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -39,6 +38,8 @@ import java.util.Map;
  * Time: 14:43
  */
 public abstract class AbstractPostFinancePaymentGatewayImpl implements ConfigurablePaymentGateway, PaymentGateway {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractPostFinancePaymentGatewayImpl.class);
 
     private PaymentGatewayParameterService paymentGatewayParameterService;
 
@@ -167,7 +168,7 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
             final MessageDigest digest = MessageDigest.getInstance("SHA-1");
             return new String(Hex.encodeHex(digest.digest(all.toString().getBytes(charset)))).toUpperCase();
         } catch (NoSuchAlgorithmException e) {
-            ShopCodeContext.getLog(this).error("SHA-1 not available", e);
+            LOG.error("SHA-1 not available", e);
             return "SHA-1 not available";
         }
 

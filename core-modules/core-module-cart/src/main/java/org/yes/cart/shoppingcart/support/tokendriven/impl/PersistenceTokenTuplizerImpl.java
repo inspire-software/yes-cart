@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart.support.tokendriven.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.support.CartDetuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizationException;
@@ -31,6 +33,8 @@ import java.util.Map;
  * Time: 23:14
  */
 public class PersistenceTokenTuplizerImpl implements CartTuplizer<Map, Map> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PersistenceTokenTuplizerImpl.class);
 
     private final TuplizerSetting tuplizerSetting;
 
@@ -50,8 +54,8 @@ public class PersistenceTokenTuplizerImpl implements CartTuplizer<Map, Map> {
         this.tuplizerSetting = new TuplizerSetting(expirySeconds);
 
         if (this.tuplizerSetting.expiry == null) {
-            final String errMsg = "persistence tuplizer misconfigured";
-            ShopCodeContext.getLog(this).error(errMsg);
+            final String errMsg = "persistence tuplizer misconfiguration, expiry is null";
+            LOG.error(errMsg);
             throw new RuntimeException(errMsg);
         }
 

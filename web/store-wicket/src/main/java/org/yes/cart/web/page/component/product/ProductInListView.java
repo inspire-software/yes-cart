@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
@@ -33,7 +34,6 @@ import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
@@ -50,6 +50,8 @@ import java.math.BigDecimal;
  * Time: 11:43 AM
  */
 public class ProductInListView extends BaseComponent {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ProductInListView.class);
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String PRODUCT_LINK_SKU = "productLinkSku";
@@ -195,15 +197,13 @@ public class ProductInListView extends BaseComponent {
 
     private String getDefaultImage(final String width, final String height, final String lang) {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         final String result = attributableImageService.getImageURI(
                 product, getWicketUtil().getHttpServletRequest().getContextPath(), lang, width, height, product.getDefaultImage()
         );
 
-        if (log.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
 
-            log.debug("Default image is [" + product.getDefaultImage() + "]  result is [" + result + "]");
+            LOG.debug("Default image is [" + product.getDefaultImage() + "]  result is [" + result + "]");
 
         }
 

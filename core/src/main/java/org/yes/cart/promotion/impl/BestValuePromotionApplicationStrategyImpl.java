@@ -17,6 +17,8 @@
 package org.yes.cart.promotion.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.promotion.PromoTriplet;
 import org.yes.cart.promotion.PromotionApplicationStrategy;
@@ -24,7 +26,7 @@ import org.yes.cart.promotion.PromotionCondition;
 import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -36,6 +38,7 @@ import java.util.*;
  */
 public class BestValuePromotionApplicationStrategyImpl implements PromotionApplicationStrategy {
 
+    private static final Logger LOG = LoggerFactory.getLogger(BestValuePromotionApplicationStrategyImpl.class);
 
     private final PromotionCouponService promotionCouponService;
 
@@ -107,8 +110,7 @@ public class BestValuePromotionApplicationStrategyImpl implements PromotionAppli
 
                 }
             } catch (Exception exp) {
-                ShopCodeContext.getLog(this).error("Unable to apply promotions {}", promoBucket);
-                ShopCodeContext.getLog(this).error("Unable to apply promotions", exp);
+                LOG.error(Markers.alert(), "Unable to apply promotions: " + promoBucket + ", cause: " + exp.getMessage(), exp);
             }
         }
 

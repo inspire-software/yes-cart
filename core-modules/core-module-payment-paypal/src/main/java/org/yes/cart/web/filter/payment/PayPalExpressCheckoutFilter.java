@@ -17,6 +17,7 @@
 package org.yes.cart.web.filter.payment;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.payment.PaymentGatewayPayPalExpressCheckout;
@@ -31,6 +32,7 @@ import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 import org.yes.cart.web.support.request.IPResolver;
 import org.yes.cart.web.support.util.HttpUtil;
 
@@ -59,6 +61,8 @@ import java.util.Map;
  */
 public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilter implements Filter {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PayPalExpressCheckoutFilter.class);
+
     private final PaymentProcessorFactory paymentProcessorFactory;
 
     private final CustomerOrderService customerOrderService;
@@ -86,14 +90,12 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
     @Override
     public ServletRequest doBefore(ServletRequest servletRequest, ServletResponse servletResponse) throws IOException, ServletException {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         final String callbackDump = HttpUtil.dumpRequest((HttpServletRequest) servletRequest);
 
         if (isCallerIpAllowed(servletRequest)) {
 
-            if (log.isDebugEnabled()) {
-                log.debug(callbackDump);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(callbackDump);
             }
 
             final Map parameters = servletRequest.getParameterMap();
@@ -124,7 +126,7 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
                 // setExpressCheckoutMethod will redirect customer to login to paypal and authorise the payment
                 final String redirectUrl = paymentGatewayExternalForm.setExpressCheckoutMethod(payment, String.valueOf(customerOrder.getId()));
 
-                ShopCodeContext.getLog(this).info("Pay pal filter user will be redirected to {}", redirectUrl);
+                LOG.info("Pay pal filter user will be redirected to {}", redirectUrl);
 
                 // Send redirect to paypal for customer to login and authorise payment
                 ((HttpServletResponse) servletResponse).sendRedirect(
@@ -168,8 +170,8 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
 
                     } catch (OrderException e) {
 
-                        log.error("Transition failed during payment call back for " + getPaymentGatewayLabel() + " payment gateway" , e);
-                        log.error(callbackDump);
+                        LOG.error("Transition failed during payment call back for " + getPaymentGatewayLabel() + " payment gateway", e);
+                        LOG.error(callbackDump);
 
                         // Send 500, so that PG know that there was an issue and may resend the update
                         ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -178,8 +180,8 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
 
                 } else {
 
-                    log.error("Transition failed during payment call back for " + getPaymentGatewayLabel() + " payment gateway: orderGuid verification failed");
-                    log.error(callbackDump);
+                    LOG.error("Transition failed during payment call back for " + getPaymentGatewayLabel() + " payment gateway: orderGuid verification failed");
+                    LOG.error(callbackDump);
 
                     // Send 500, so that PG know that there was an issue and may resend the update
                     ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -191,9 +193,9 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
 
         } else {
 
-            if (log.isWarnEnabled()) {
-                log.warn("Received payment gateway callback from unauthorised IP {}", ipResolver.resolve((HttpServletRequest) servletRequest));
-                log.warn(callbackDump);
+            if (LOG.isWarnEnabled()) {
+                LOG.warn(Markers.alert(), "Received payment gateway callback from unauthorised IP {}", ipResolver.resolve((HttpServletRequest) servletRequest));
+                LOG.warn(callbackDump);
             }
             // Send forbidden to notify PG that this is a security issue and not error of any kind
             ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_FORBIDDEN);

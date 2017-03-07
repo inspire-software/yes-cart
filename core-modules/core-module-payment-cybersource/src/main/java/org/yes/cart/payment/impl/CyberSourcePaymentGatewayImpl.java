@@ -22,6 +22,7 @@ import com.cybersource.ws.client.FaultException;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentAddress;
@@ -31,7 +32,7 @@ import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -52,6 +53,8 @@ import java.util.UUID;
  * Time: 14:12:54
  */
 public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGatewayImpl implements PaymentGatewayInternalForm {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CyberSourcePaymentGatewayImpl.class);
 
     private static final String CS_MERCHANT_ID = "merchantID";
     private static final String CS_KEYS_DIRECTORY = "keysDirectory";
@@ -171,9 +174,8 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      * {@inheritDoc}
      */
     public Payment authorize(final Payment payment) {
-        final Logger log = ShopCodeContext.getLog(this);
-        if (log.isDebugEnabled()) {
-            log.debug("Authorize " + payment);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Authorize " + payment);
         }
 
         final HashMap<String, String> request = new HashMap<String, String>();
@@ -302,9 +304,8 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      */
     public Payment reverseAuthorization(final Payment payment) {
 
-        final Logger log = ShopCodeContext.getLog(this);
-        if (log.isDebugEnabled()) {
-            log.debug("Reverse authorization " + payment);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Reverse authorization " + payment);
         }
 
         final HashMap<String, String> request = new HashMap<String, String>();
@@ -329,9 +330,8 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      */
     public Payment capture(final Payment payment) {
 
-        final Logger log = ShopCodeContext.getLog(this);
-        if (log.isDebugEnabled()) {
-            log.debug("Capture " + payment);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Capture " + payment);
         }
 
         final HashMap<String, String> request = new HashMap<String, String>();
@@ -362,9 +362,8 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      * {@inheritDoc}
      */
     public Payment voidCapture(final Payment payment) {
-        final Logger log = ShopCodeContext.getLog(this);
-        if (log.isDebugEnabled()) {
-            log.debug("Void capture " + payment);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Void capture " + payment);
         }
 
         final HashMap<String, String> request = new HashMap<String, String>();
@@ -387,9 +386,8 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      * {@inheritDoc}
      */
     public Payment refund(final Payment payment) {
-        final Logger log = ShopCodeContext.getLog(this);
-        if (log.isDebugEnabled()) {
-            log.debug("Credit on prev auth " + payment);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Credit on prev auth " + payment);
         }
 
         final HashMap<String, String> request = new HashMap<String, String>();
@@ -425,16 +423,15 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(operation);
 
-        final Logger log = ShopCodeContext.getLog(this);
         try {
-            if (log.isDebugEnabled()) {
-                log.debug(HttpParamsUtils.stringify("Cybersource request:", request));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(HttpParamsUtils.stringify("Cybersource request:", request));
             }
 
             final Map<String, String> reply = Client.runTransaction(request, getProperties());
 
-            if (log.isDebugEnabled()) {
-                log.debug(HttpParamsUtils.stringify("Cybersource response:", reply));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(HttpParamsUtils.stringify("Cybersource response:", reply));
             }
 
             /*
@@ -458,12 +455,12 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
             payment.setTransactionOperationResultMessage(ERROR_CODE_DESC_MAP.get(reply.get("reasonCode")));
 
         } catch (ClientException e) {
-            ShopCodeContext.getLog(this).error("Can not execute transaction. Client exception : " + payment, e);
+            LOG.error(Markers.alert(), "Can not execute transaction. Client exception : " + payment, e);
             payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
             payment.setPaymentProcessorBatchSettlement(false);
             payment.setTransactionOperationResultMessage(e.getMessage());
         } catch (FaultException e) {
-            ShopCodeContext.getLog(this).error("Can not execute transaction. Fault exception : " + payment, e);
+            LOG.error(Markers.alert(), "Can not execute transaction. Fault exception : " + payment, e);
             payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
             payment.setTransactionOperationResultMessage(e.getMessage());
         }

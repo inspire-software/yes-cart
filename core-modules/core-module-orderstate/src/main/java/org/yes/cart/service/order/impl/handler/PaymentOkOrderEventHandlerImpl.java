@@ -17,6 +17,7 @@
 package org.yes.cart.service.order.impl.handler;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -27,7 +28,6 @@ import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -43,6 +43,8 @@ import java.util.*;
  * Time: 14:12:54
  */
 public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl implements OrderEventHandler, ApplicationContextAware {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PaymentOkOrderEventHandlerImpl.class);
 
     private OrderStateManager orderStateManager = null;
     private ApplicationContext applicationContext;
@@ -93,9 +95,8 @@ public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImp
 
                         final String eventId = deliveryGroupEvent.getValue();
 
-                        final Logger log = ShopCodeContext.getLog(this);
-                        if (log.isInfoEnabled()) {
-                            log.info(MessageFormat.format("Delivery {0} for order {1} event {2}",
+                        if (LOG.isInfoEnabled()) {
+                            LOG.info(MessageFormat.format("Delivery {0} for order {1} event {2}",
                                     delivery.getDeliveryNum(), order.getOrdernum(), eventId));
                         }
                         final OrderEvent deliveryEvent = new OrderEventImpl(orderEvent, eventId, order, delivery);

@@ -6,8 +6,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.dto.Payment;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,6 +24,8 @@ import java.util.*;
  * Time: 08:29
  */
 public abstract class AbstractPayPalNVPPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImpl {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractPayPalNVPPaymentGatewayImpl.class);
 
     protected static final String EQ = "=";
     protected static final String AND = "&";
@@ -111,7 +114,7 @@ public abstract class AbstractPayPalNVPPaymentGatewayImpl extends AbstractPayPal
 
         } catch (Exception exp) {
 
-            ShopCodeContext.getLog(this).error(exp.getMessage(), exp);
+            LOG.error(Markers.alert(), "Paypal transaction failed: " + exp.getMessage(), exp);
 
             payment.setTransactionReferenceId(UUID.randomUUID().toString());
             payment.setTransactionAuthorizationCode("");
@@ -148,7 +151,7 @@ public abstract class AbstractPayPalNVPPaymentGatewayImpl extends AbstractPayPal
                     String value = URLDecoder.decode(stInternalTokenizer.nextToken(), "UTF-8");
                     nvp.put(key.toUpperCase(), value);
                 } catch (UnsupportedEncodingException e) {
-                    ShopCodeContext.getLog(this).error("Unable to decode NVP payload " + pPayload, e);
+                    LOG.error("Unable to decode NVP payload " + pPayload, e);
                 }
             }
         }
@@ -190,10 +193,8 @@ public abstract class AbstractPayPalNVPPaymentGatewayImpl extends AbstractPayPal
 
     private String performPayPalApiCall(final String endpoint, final String callParams) throws IOException {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
-        if (log.isDebugEnabled()) {
-            log.debug("PayPal NPV call:\n{}", callParams.replace('&', '\n'));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("PayPal NPV call:\n{}", callParams.replace('&', '\n'));
         }
 
         final StringBuilder respBuilder = new StringBuilder();
@@ -211,8 +212,8 @@ public abstract class AbstractPayPalNVPPaymentGatewayImpl extends AbstractPayPal
         while (((_line = rd.readLine()) != null)) {
             respBuilder.append(_line);
         }
-        if (log.isDebugEnabled()) {
-            log.debug("PayPal NPV response:\n{}", respBuilder.toString().replace('&', '\n'));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("PayPal NPV response:\n{}", respBuilder.toString().replace('&', '\n'));
         }
         return respBuilder.toString();
     }

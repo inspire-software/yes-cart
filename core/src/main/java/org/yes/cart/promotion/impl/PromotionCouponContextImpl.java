@@ -16,6 +16,8 @@
 
 package org.yes.cart.promotion.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.entity.PromotionCoupon;
@@ -24,10 +26,7 @@ import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.shoppingcart.impl.TotalImpl;
-import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -36,6 +35,8 @@ import java.util.*;
  * Time: 15:37
  */
 public class PromotionCouponContextImpl implements PromotionCouponContext {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PromotionCouponContextImpl.class);
 
     private final PromotionCouponService promotionCouponService;
     private final PromotionConditionParser promotionConditionParser;
@@ -109,9 +110,9 @@ public class PromotionCouponContextImpl implements PromotionCouponContext {
                         }
 
                     } else {
-                        ShopCodeContext.getLog(this).warn(
+                        LOG.warn(
                                 "No action mapping for promotion: {}, type: {}, action {}",
-                                new Object[] { promotion.getCode(), promotion.getPromoType(), promotion.getPromoAction() });
+                                new Object[]{promotion.getCode(), promotion.getPromoType(), promotion.getPromoAction()});
                     }
                 }
             }

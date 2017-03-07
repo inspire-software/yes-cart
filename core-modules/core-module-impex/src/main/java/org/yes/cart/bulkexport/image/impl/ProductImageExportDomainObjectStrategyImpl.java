@@ -18,6 +18,8 @@ package org.yes.cart.bulkexport.image.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
@@ -27,7 +29,6 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -40,6 +41,8 @@ import java.util.Set;
  * Time: 21:52
  */
 public class ProductImageExportDomainObjectStrategyImpl extends AbstractImageExportDomainObjectStrategyImpl<Product> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ProductImageExportDomainObjectStrategyImpl.class);
 
     private final GenericDAO<Product, Long> productDao;
 
@@ -75,7 +78,7 @@ public class ProductImageExportDomainObjectStrategyImpl extends AbstractImageExp
                     "Access denied during export image for product : {0}",
                     next.getProductId()
             );
-            ShopCodeContext.getLog(this).debug(message, ade);  // debug only, no error
+            LOG.debug(message, ade);  // debug only, no error
             return null;
 
         }

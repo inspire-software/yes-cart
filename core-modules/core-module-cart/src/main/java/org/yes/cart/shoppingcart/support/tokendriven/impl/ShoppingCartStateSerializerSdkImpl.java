@@ -16,8 +16,9 @@
 
 package org.yes.cart.shoppingcart.support.tokendriven.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerializer;
 
 import java.io.*;
@@ -30,6 +31,7 @@ import java.text.MessageFormat;
  */
 public class ShoppingCartStateSerializerSdkImpl implements ShoppingCartStateSerializer {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartStateSerializerSdkImpl.class);
 
     /** {@inheritDoc} */
     @Override
@@ -45,7 +47,7 @@ public class ShoppingCartStateSerializerSdkImpl implements ShoppingCartStateSeri
 
         } catch (Exception exception) {
             final String errMsg = "Unable to convert bytes assembled from tuple into object";
-            ShopCodeContext.getLog(this).error(errMsg, exception);
+            LOG.error(errMsg, exception);
             return null;
         } finally {
             try {
@@ -54,7 +56,7 @@ public class ShoppingCartStateSerializerSdkImpl implements ShoppingCartStateSeri
                 }
                 byteArrayInputStream.close();
             } catch (IOException ioe) { // leave this one silent as we have the object.
-                ShopCodeContext.getLog(this).error("Unable to close object stream", ioe);
+                LOG.error("Unable to close object stream", ioe);
             }
 
         }
@@ -77,7 +79,7 @@ public class ShoppingCartStateSerializerSdkImpl implements ShoppingCartStateSeri
             return byteArrayOutputStream.toByteArray();
 
         } catch (Throwable ioe) {
-            ShopCodeContext.getLog(this).error(
+            LOG.error(
                     MessageFormat.format("Unable to serialize object {0}", shoppingCart),
                     ioe
             );
@@ -88,7 +90,7 @@ public class ShoppingCartStateSerializerSdkImpl implements ShoppingCartStateSeri
                 }
                 byteArrayOutputStream.close();
             } catch (IOException e) {
-                ShopCodeContext.getLog(this).error("Can not close stream", e);
+                LOG.error("Can not close stream", e);
             }
         }
         return null;

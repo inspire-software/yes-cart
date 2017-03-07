@@ -18,6 +18,7 @@ package org.yes.cart.bulkjob.promotion;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerShop;
@@ -26,7 +27,7 @@ import org.yes.cart.promotion.PromotionContext;
 import org.yes.cart.promotion.PromotionContextFactory;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 /**
  * Runnable that scans all customers with respect to all Shops they are
@@ -37,6 +38,8 @@ import org.yes.cart.util.ShopCodeContext;
  * Time: 09:18
  */
 public class BulkCustomerTagProcessorImpl implements Runnable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BulkCustomerTagProcessorImpl.class);
 
     private final ShopService shopService;
     private final CustomerService customerService;
@@ -56,9 +59,7 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
     @Override
     public void run() {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
-        log.info("Processing tagging for customer");
+        LOG.info("Processing tagging for customer");
 
         final ResultsIterator<Customer> customerIterator = customerService.getGenericDao().findAllIterator();
 
@@ -72,7 +73,7 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
                 final Customer customer = customerIterator.next();
                 final String tagsBefore = customer.getTag();
 
-                log.debug("Processing tagging for customer {} with tags {}", customer.getEmail(), tagsBefore);
+                LOG.debug("Processing tagging for customer {} with tags {}", customer.getEmail(), tagsBefore);
 
                 for (final CustomerShop customerShop : customer.getShops()) {
 
@@ -90,11 +91,11 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
 
                 if (!StringUtils.equals(tagsBefore, customer.getTag())) {
                     customerService.update(customer);
-                    log.debug("Tags changed for customer {} with tags {} to {}",
+                    LOG.debug("Tags changed for customer {} with tags {} to {}",
                             new Object[] { customer.getEmail(), tagsBefore, customer.getTag() });
                     updated++;
                 } else {
-                    log.debug("No tag change for customer {} with tags {}", customer.getEmail(), tagsBefore);
+                    LOG.debug("No tag change for customer {} with tags {}", customer.getEmail(), tagsBefore);
                 }
 
                 if (++count % this.batchSize == 0 ) {
@@ -105,20 +106,20 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
 
             }
 
-            log.info("Processed tagging for {} customers, updated {}", count, updated);
+            LOG.info("Processed tagging for {} customers, updated {}", count, updated);
 
         } catch (Exception exp){
-            log.error("Processing tagging for customer exception " + exp.getMessage(), exp);
+            LOG.error(Markers.alert(), "Processing tagging for customer exception " + exp.getMessage(), exp);
             throw new RuntimeException(exp);  // exception will make the transaction rollback anyway
         } finally {
             try {
                 customerIterator.close();
             } catch (Exception exp) {
-                log.error("Processing tagging for customer exception, error closing iterator: " + exp.getMessage(), exp);
+                LOG.error("Processing tagging for customer exception, error closing iterator: " + exp.getMessage(), exp);
             }
         }
 
-        log.info("Processing tagging for customer ... completed");
+        LOG.info("Processing tagging for customer ... completed");
 
     }
 

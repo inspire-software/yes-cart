@@ -21,7 +21,7 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.UrlResourceStream;
 import org.apache.wicket.util.string.StringList;
 import org.slf4j.Logger;
-import org.yes.cart.util.ShopCodeContext;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 import java.net.URL;
@@ -34,6 +34,8 @@ import java.util.List;
  * Time: 9:13 AM
  */
 public class MultiWebApplicationPath   implements IResourcePath {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MultiWebApplicationPath.class);
 
     /** The list of urls in the path */
     private final List<String> webappPaths = new ArrayList<String>();
@@ -79,24 +81,22 @@ public class MultiWebApplicationPath   implements IResourcePath {
     {
         if (!webappPaths.isEmpty()) {
 
-            final Logger log = ShopCodeContext.getLog(this);
-
             for (final String path : webappPaths) {
                 try {
                     final URL url = servletContext.getResource(path + pathname);
                     if (url != null) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("Retrieving web resource: {}{}", path, pathname);
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Retrieving web resource: {}{}", path, pathname);
                         }
 
                         return new UrlResourceStream(url);
                     }
-                    if (log.isDebugEnabled()) {
-                        log.debug("Lookup resource: {}{}", path, pathname);
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Lookup resource: {}{}", path, pathname);
                     }
                 } catch (Exception ex) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("File couldn't be found: {}{}", path, pathname);
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("File couldn't be found: {}{}", path, pathname);
                     }
                 }
             }
@@ -107,18 +107,18 @@ public class MultiWebApplicationPath   implements IResourcePath {
                     try {
                         final URL url = servletContext.getResource(path + resourceName);
                         if (url != null) {
-                            if (log.isDebugEnabled()) {
-                                log.debug("Retrieving web resource: {}{}", path, resourceName);
+                            if (LOG.isDebugEnabled()) {
+                                LOG.debug("Retrieving web resource: {}{}", path, resourceName);
                             }
 
                             return new UrlResourceStream(url);
                         }
-                        if (log.isDebugEnabled()) {
-                            log.debug("Lookup resource: {}{}", path, resourceName);
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Lookup resource: {}{}", path, resourceName);
                         }
                     } catch (Exception ex) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("File couldn't be found: {}{}", path, resourceName);
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("File couldn't be found: {}{}", path, resourceName);
                         }
                     }
                 }

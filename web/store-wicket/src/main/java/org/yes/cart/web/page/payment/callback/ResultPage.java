@@ -22,11 +22,11 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
@@ -52,6 +52,8 @@ import java.util.Map;
  * Time: 11:50 AM
  */
 public class ResultPage extends AbstractWebPage {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ResultPage.class);
 
     @SpringBean(name = StorefrontServiceSpringKeys.CHECKOUT_SERVICE_FACADE)
     private CheckoutServiceFacade checkoutServiceFacade;
@@ -86,9 +88,8 @@ public class ResultPage extends AbstractWebPage {
 
         final PageParameters params = getPageParameters();
 
-        final Logger log = ShopCodeContext.getLog(this);
-        if (log.isDebugEnabled()) {
-            log.debug(HttpUtil.dumpRequest((HttpServletRequest) getRequest().getContainerRequest()));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(HttpUtil.dumpRequest((HttpServletRequest) getRequest().getContainerRequest()));
         }
 
         // Status gives preliminary result from return URL, which can be sent as "status" or "hint"

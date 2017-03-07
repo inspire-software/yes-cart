@@ -21,6 +21,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGateway;
@@ -31,6 +32,7 @@ import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
@@ -38,7 +40,6 @@ import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
-import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -62,6 +63,8 @@ import java.util.Collections;
 public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
     private static final long serialVersionUID = 20110323L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(AuthorizeNetSimPaymentOkPage.class);
 
     private static final String ORDER_GUID = "orderGuid";     // correspond to  AuthorizeNetSimPaymentGatewayImpl
 
@@ -104,14 +107,12 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
         executeHttpPostedCommands();
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         final HttpServletRequest httpServletRequest = wicketUtil.getHttpServletRequest();
 
         final String callbackDump = HttpUtil.dumpRequest(httpServletRequest);
 
-        if (log.isDebugEnabled()) {
-            log.debug(callbackDump);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(callbackDump);
         }
 
         try {
@@ -125,8 +126,8 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
         } catch (OrderException e) {
 
-            log.error("Transition failed during payment call back for authorizeNetSimPaymentGatewayLabel payment gateway" , e);
-            log.error(HttpUtil.dumpRequest(httpServletRequest));
+            LOG.error("Transition failed during payment call back for authorizeNetSimPaymentGatewayLabel payment gateway" , e);
+            LOG.error(HttpUtil.dumpRequest(httpServletRequest));
 
         }
 

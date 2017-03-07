@@ -17,15 +17,14 @@
 package org.yes.cart.service.order.impl.listener;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderStateAfterTransitionListener;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -34,6 +33,8 @@ import java.util.Set;
  * Time: 11:26
  */
 public class OrderAutoExportListenerImpl implements OrderStateAfterTransitionListener {
+
+    private static final Logger LOG = LoggerFactory.getLogger(OrderAutoExportListenerImpl.class);
 
     private String orderEligibilityType;
     private String deliveryEligibilityType;
@@ -56,10 +57,9 @@ public class OrderAutoExportListenerImpl implements OrderStateAfterTransitionLis
 
                 if (isValidDeliveryState(delivery)) {
 
-                    final Logger log = ShopCodeContext.getLog(this);
-                    if (log.isDebugEnabled()) {
-                        log.debug("OrderEvent {} is eligible for auto export {}/{}",
-                                new Object[] { orderEvent, orderEligibilityType, deliveryEligibilityType });
+                    if (LOG.isInfoEnabled()) {
+                        LOG.info("OrderEvent {} is eligible for auto export {}/{}",
+                                new Object[]{orderEvent, orderEligibilityType, deliveryEligibilityType});
                     }
 
                     order.setEligibleForExport(orderEligibilityType);

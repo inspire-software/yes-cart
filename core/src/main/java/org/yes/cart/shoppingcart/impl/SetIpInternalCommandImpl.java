@@ -17,10 +17,11 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Map;
 
@@ -30,6 +31,8 @@ import java.util.Map;
  * Time: 10:48
  */
 public class SetIpInternalCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SetIpInternalCommandImpl.class);
 
     public SetIpInternalCommandImpl(final ShoppingCartCommandRegistry registry) {
         super(registry);
@@ -49,7 +52,7 @@ public class SetIpInternalCommandImpl extends AbstractCartCommandImpl implements
 
                 if (StringUtils.isBlank(oldIp) || !oldIp.equals(newIp)) {
 
-                    ShopCodeContext.getLog(this).debug("Cart {} is accessed from IP {}", shoppingCart.getGuid(), newIp);
+                    LOG.debug("Cart {} is accessed from IP {}", shoppingCart.getGuid(), newIp);
 
                     shoppingCart.getShoppingContext().setResolvedIp(newIp);
                     shoppingCart.markDirty();

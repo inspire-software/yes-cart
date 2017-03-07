@@ -19,12 +19,12 @@ package org.yes.cart.bulkjob.customer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Date;
 
@@ -36,6 +36,8 @@ import java.util.Date;
  * Time: 17:56
  */
 public class BulkExpiredGuestsProcessorImpl implements Runnable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BulkExpiredGuestsProcessorImpl.class);
 
     private static final long MS_IN_DAY = 86400000L;
 
@@ -55,12 +57,10 @@ public class BulkExpiredGuestsProcessorImpl implements Runnable {
     @Override
     public void run() {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         final Date lastModification =
                 new Date(System.currentTimeMillis() - determineExpiryInMs());
 
-        log.info("Look up all Guest accounts created before {}", lastModification);
+        LOG.info("Look up all Guest accounts created before {}", lastModification);
 
         final ResultsIterator<Customer> expired = this.customerService.findGuestsBefore(lastModification);
 
@@ -72,9 +72,9 @@ public class BulkExpiredGuestsProcessorImpl implements Runnable {
 
                 final String guid = guest.getGuid();
 
-                log.debug("Removing expired guest {}, guid {}", guest.getGuestEmail(), guid);
+                LOG.debug("Removing expired guest {}, guid {}", guest.getGuestEmail(), guid);
                 this.customerService.delete(guest);
-                log.debug("Removed expired guest {}, guid {}", guest.getGuestEmail(), guid);
+                LOG.debug("Removed expired guest {}, guid {}", guest.getGuestEmail(), guid);
 
                 if (++count % this.batchSize == 0 ) {
                     //flush a batch of updates and release memory:
@@ -84,17 +84,17 @@ public class BulkExpiredGuestsProcessorImpl implements Runnable {
 
             }
 
-            log.info("Removed {} guest account(s)", count);
+            LOG.info("Removed {} guest account(s)", count);
 
         } finally {
             try {
                 expired.close();
             } catch (Exception exp) {
-                log.error("Processing expired guest accounts exception, error closing iterator: " + exp.getMessage(), exp);
+                LOG.error("Processing expired guest accounts exception, error closing iterator: " + exp.getMessage(), exp);
             }
         }
 
-        log.info("Processing expired guest ... completed");
+        LOG.info("Processing expired guest ... completed");
 
     }
 

@@ -22,7 +22,7 @@ import org.apache.wicket.request.mapper.MountedMapper;
 import org.apache.wicket.request.mapper.parameter.IPageParametersEncoder;
 import org.apache.wicket.util.ClassProvider;
 import org.slf4j.Logger;
-import org.yes.cart.util.ShopCodeContext;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.web.theme.WicketPagesMounter;
 
 import java.util.HashMap;
@@ -35,6 +35,8 @@ import java.util.Map;
  * Time: 4:18 PM
  */
 public class WicketPagesMounterImpl implements WicketPagesMounter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(WicketPagesMounterImpl.class);
 
     private final IPageParametersEncoder encoder;
     private final String loginUrl;
@@ -58,8 +60,6 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
     /** {@inheritDoc} */
     public void mountPages(final WebApplication webApplication) {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         for (Map.Entry<String, Map<String, Class<IRequestablePage>>> pageMappingEntry : pageMapping.entrySet()) {
             final String url = pageMappingEntry.getKey();
             final Map<String, Class<IRequestablePage>> pages = pageMappingEntry.getValue();
@@ -67,16 +67,16 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
             if (pages.size() == 1) {
                 // there is only default mapping for this url
                 classProvider = ClassProvider.of(pages.entrySet().iterator().next().getValue());
-                if (log.isInfoEnabled()) {
-                    log.info("Mounting url '{}' to page '{}'", url, classProvider.get().getCanonicalName());
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("Mounting url '{}' to page '{}'", url, classProvider.get().getCanonicalName());
                 }
             } else {
                 // more than one mapping - need a theme dependent class provider
                 classProvider = new ThemePageProvider(pages);
-                if (log.isInfoEnabled()) {
-                    log.info("Mounting url '{}' to pages:", url);
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("Mounting url '{}' to pages:", url);
                     for (final Map.Entry<String, Class<IRequestablePage>> entry : pages.entrySet()) {
-                        log.info("theme: '{}', page: '{}'", entry.getKey(), entry.getValue());
+                        LOG.info("theme: '{}', page: '{}'", entry.getKey(), entry.getValue());
                     }
                 }
             }
@@ -87,13 +87,13 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
             }
             if (loginUrl.equals(url)) {
                 loginPage = classProvider;
-                if (log.isInfoEnabled()) {
-                    log.info("This is a login url");
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("This is a login url");
                 }
             } else if ("/".equals(url)) {
                 homePage = classProvider;
-                if (log.isInfoEnabled()) {
-                    log.info("This is a home url");
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("This is a home url");
                 }
             }
             pageByUri.put(url, classProvider);

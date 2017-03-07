@@ -17,6 +17,8 @@
 package org.yes.cart.service.cluster.impl;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.cluster.node.NodeService;
@@ -33,7 +35,6 @@ import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.cluster.ClusterService;
 import org.yes.cart.service.cluster.ReindexService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +43,8 @@ import java.util.Map;
  * User: denispavlov
  */
 public class ReindexServiceImpl extends SingletonJobRunner implements ReindexService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ReindexServiceImpl.class);
 
     private final ClusterService clusterService;
 
@@ -190,7 +193,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
                     listener.notifyCompleted();
                 } catch (Throwable trw) {
-                    ShopCodeContext.getLog(this).error(trw.getMessage(), trw);
+                    LOG.error(trw.getMessage(), trw);
                     listener.notifyError(trw.getMessage());
                     listener.notifyCompleted();
                 } finally {

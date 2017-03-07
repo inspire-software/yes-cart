@@ -18,6 +18,8 @@ package org.yes.cart.payment.impl;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.yes.cart.payment.PaymentGatewayPayPalExpressCheckout;
 import org.yes.cart.payment.dto.*;
@@ -26,7 +28,7 @@ import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -42,7 +44,7 @@ import java.util.UUID;
  */
 public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPaymentGatewayImpl implements PaymentGatewayPayPalExpressCheckout {
 
-
+    private static final Logger LOG = LoggerFactory.getLogger(PayPalExpressCheckoutPaymentGatewayImpl.class);
 
     protected static final String PP_SUBMIT_BTN = "PP_SUBMIT_BTN";
 
@@ -219,7 +221,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
 
         } catch (Exception exp) {
 
-            ShopCodeContext.getLog(this).error(exp.getMessage(), exp);
+            LOG.error(Markers.alert(), "Paypal express transaction failed: " + exp.getMessage(), exp);
 
         }
 
@@ -420,7 +422,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
 
         } catch (IOException e) {
 
-            ShopCodeContext.getLog(this).error("Payment failed", e);
+            LOG.error("Payment failed: " + e.getMessage(), e);
 
         }
 

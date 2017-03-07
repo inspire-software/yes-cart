@@ -17,13 +17,14 @@
 package org.yes.cart.bulkjob.order;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.order.impl.handler.delivery.OrderDeliveryStatusUpdate;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,6 +44,8 @@ import java.util.List;
  */
 public class OrderDeliveryInfoUpdateProcessorImpl implements OrderDeliveryInfoUpdateProcessorInternal {
 
+    private static final Logger LOG = LoggerFactory.getLogger(OrderDeliveryInfoUpdateProcessorImpl.class);
+
     private final CustomerOrderService customerOrderService;
     private final OrderStateManager orderStateManager;
 
@@ -59,9 +62,7 @@ public class OrderDeliveryInfoUpdateProcessorImpl implements OrderDeliveryInfoUp
     public void run() {
 
 
-        final Logger log = ShopCodeContext.getLog(this);
-
-        log.info("Process delivery info updates");
+        LOG.info("Process delivery info updates");
 
         for (final Iterator<OrderDeliveryStatusUpdate> dataFeed : dataFeeds) {
 
@@ -75,7 +76,7 @@ public class OrderDeliveryInfoUpdateProcessorImpl implements OrderDeliveryInfoUp
 
                 } catch (Exception exp) {
 
-                    log.error("Cannot process delivery update: " + update, exp);
+                    LOG.error(Markers.alert(), "Cannot process delivery update: " + update, exp);
 
                 }
 
@@ -83,7 +84,7 @@ public class OrderDeliveryInfoUpdateProcessorImpl implements OrderDeliveryInfoUp
 
         }
 
-        log.info("Process delivery info updates ... completed");
+        LOG.info("Process delivery info updates ... completed");
 
     }
 

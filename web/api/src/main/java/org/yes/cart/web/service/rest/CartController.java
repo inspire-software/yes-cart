@@ -20,6 +20,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -38,7 +40,6 @@ import org.yes.cart.service.order.*;
 import org.yes.cart.service.payment.PaymentProcessFacade;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.support.CommandConfig;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.rest.impl.AddressSupportMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
@@ -58,6 +59,8 @@ import java.util.*;
  */
 @Controller
 public class CartController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CartController.class);
 
     @Autowired
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
@@ -389,7 +392,7 @@ public class CartController {
                 if (!commandConfig.isInternalCommandKey(entry.getKey())) {
                     safe.put(entry.getKey(), entry.getValue());
                 } else {
-                    ShopCodeContext.getLog(this).warn("Received internal command request {} ... skipping", entry.getKey());
+                    LOG.warn("Received internal command request {} ... skipping", entry.getKey());
                 }
             }
 
@@ -2530,7 +2533,7 @@ public class CartController {
 
         } catch (PlaceOrderDisabledException checkoutDisabled) {
 
-            ShopCodeContext.getLog(this).warn(checkoutDisabled.getMessage());
+            LOG.warn(checkoutDisabled.getMessage());
 
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);
@@ -2541,7 +2544,7 @@ public class CartController {
 
         } catch (CouponCodeInvalidException invalidCoupon) {
 
-            ShopCodeContext.getLog(this).warn(invalidCoupon.getMessage());
+            LOG.warn(invalidCoupon.getMessage());
 
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);
@@ -2552,7 +2555,7 @@ public class CartController {
 
         } catch (SkuUnavailableException skuUnavailable) {
 
-            ShopCodeContext.getLog(this).warn(skuUnavailable.getMessage());
+            LOG.warn(skuUnavailable.getMessage());
 
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);
@@ -2563,7 +2566,7 @@ public class CartController {
 
         } catch (OrderAssemblyException assembly) {
 
-            ShopCodeContext.getLog(this).error(assembly.getMessage(), assembly);
+            LOG.error(assembly.getMessage(), assembly);
 
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);

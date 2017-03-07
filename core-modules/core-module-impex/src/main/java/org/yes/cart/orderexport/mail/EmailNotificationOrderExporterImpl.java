@@ -18,6 +18,8 @@ package org.yes.cart.orderexport.mail;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -35,7 +37,6 @@ import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.theme.ThemeService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -49,6 +50,7 @@ import java.util.*;
  */
 public class EmailNotificationOrderExporterImpl implements OrderExporter {
 
+    private static final Logger LOG = LoggerFactory.getLogger(EmailNotificationOrderExporterImpl.class);
 
     private final TaskExecutor taskExecutor;
     private final ThemeService themeService;
@@ -144,7 +146,7 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
             try {
                 props.load(new StringReader(suppliersMap));
             } catch (IOException e) {
-                ShopCodeContext.getLog(this).error(e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
             }
         }
         return props;

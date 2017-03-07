@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
@@ -25,7 +26,6 @@ import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Map;
 
@@ -40,6 +40,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractRecalculatePric
 
     private static final long serialVersionUID = 20100313L;
 
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractSkuCartCommandImpl.class);
 
     /**
      * Construct abstract sku command.
@@ -68,9 +69,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractRecalculatePric
                 final ProductSku productSku = getProductService().getProductSkuByCode(skuCode);
                 execute(shoppingCart, productSku, skuCode, parameters);
             } catch (Exception e) {
-                final Logger log = ShopCodeContext.getLog(this);
-                log.error("Can not retrieve product sku dto with code {}", skuCode, e);
-                log.error(e.getMessage(), e);
+                LOG.error("Error processing command for " + skuCode + ", caused: " + e.getMessage(), e);
             }
         }
     }

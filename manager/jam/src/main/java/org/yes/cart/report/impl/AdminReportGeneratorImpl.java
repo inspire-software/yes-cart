@@ -17,11 +17,11 @@
 package org.yes.cart.report.impl;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.report.ReportDescriptor;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.theme.ThemeService;
-import org.yes.cart.util.ShopCodeContext;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -37,6 +37,8 @@ import java.util.Map;
  * Time: 21:13
  */
 public class AdminReportGeneratorImpl extends AbstractThemeAwareFopReportGenerator {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AdminReportGeneratorImpl.class);
 
     public AdminReportGeneratorImpl(final ThemeService themeService,
                                     final ShopService shopService,
@@ -79,22 +81,21 @@ public class AdminReportGeneratorImpl extends AbstractThemeAwareFopReportGenerat
             }
 
         } catch (Exception e) {
-            ShopCodeContext.getLog(this).error("Cannot create xml ", e);
+            LOG.error("Cannot create xml ", e);
 
         } finally {
             if (os != null) {
                 try {
                     os.close();
                 } catch (IOException e) {
-                    ShopCodeContext.getLog(this).error("Cannot close file", e);
+                    LOG.error("Cannot close file", e);
                 }
             }
 
         }
 
-        final Logger logger = ShopCodeContext.getLog(this);
-        if (logger.isDebugEnabled()) {
-            logger.debug("Report XML ==================================\n\n" + new String(bytesOut.toByteArray(), Charset.forName("UTF-8")));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Report XML ==================================\n\n" + new String(bytesOut.toByteArray(), Charset.forName("UTF-8")));
         }
 
         return new StreamSource(new ByteArrayInputStream(bytesOut.toByteArray()));

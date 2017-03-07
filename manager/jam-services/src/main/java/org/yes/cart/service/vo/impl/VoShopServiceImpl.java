@@ -19,6 +19,8 @@ package org.yes.cart.service.vo.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
@@ -47,7 +49,6 @@ import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoIOSupport;
 import org.yes.cart.service.vo.VoShopService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -56,6 +57,8 @@ import java.util.*;
  * Created by iazarnyi on 1/19/16.
  */
 public class VoShopServiceImpl implements VoShopService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(VoShopServiceImpl.class);
 
     private final DtoShopService dtoShopService;
     private final DtoShopUrlService dtoShopUrlService;
@@ -719,7 +722,7 @@ public class VoShopServiceImpl implements VoShopService {
         String previewURLTemplate = systemService.getPreviewShopURLTemplate();
         if (previewURLTemplate == null) {
             previewURLTemplate = "http://{primaryShopURL}:8080/";
-            ShopCodeContext.getLog(this).error("Preview shop URL template is not configured, using '{}'", previewURLTemplate);
+            LOG.warn("Preview shop URL template is not configured, using '{}'", previewURLTemplate);
         }
 
         String primary = null;
@@ -738,7 +741,7 @@ public class VoShopServiceImpl implements VoShopService {
         String previewURICss = systemService.getPreviewShopURICss();
         if (previewURICss == null) {
             previewURICss = "yes-shop/wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css";
-            ShopCodeContext.getLog(this).error("Preview shop URI CSS is not configured, using '{}'", previewURICss);
+            LOG.warn("Preview shop URI CSS is not configured, using '{}'", previewURICss);
         }
         voShopUrl.setPreviewCss(voShopUrl.getPreviewUrl() + previewURICss);
 

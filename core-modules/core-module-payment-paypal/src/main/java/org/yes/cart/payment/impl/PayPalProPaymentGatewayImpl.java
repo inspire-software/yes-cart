@@ -19,6 +19,7 @@ package org.yes.cart.payment.impl;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
@@ -29,7 +30,7 @@ import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -42,6 +43,8 @@ import java.util.UUID;
  * Time: 08:29
  */
 public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGatewayImpl implements PaymentGatewayInternalForm {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PayPalProPaymentGatewayImpl.class);
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             true, true, true, false,
@@ -292,7 +295,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
             }
         } catch (Exception exp) {
 
-            ShopCodeContext.getLog(this).error(exp.getMessage(), exp);
+            LOG.error(Markers.alert(), "Paypal pro transaction failed: " + exp.getMessage(), exp);
 
             payment.setTransactionReferenceId(UUID.randomUUID().toString());
             payment.setTransactionAuthorizationCode("");
@@ -349,9 +352,8 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
         payment.setCardType(params.get("ccType"));
         payment.setShopperIpAddress(params.get(PaymentMiscParam.CLIENT_IP));
 
-        final Logger log = ShopCodeContext.getLog(this);
-        if (log.isDebugEnabled()) {
-            log.debug(HttpParamsUtils.stringify("Payment prototype from map", parametersMap));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(HttpParamsUtils.stringify("Payment prototype from map", parametersMap));
         }
 
 

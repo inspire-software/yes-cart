@@ -17,6 +17,8 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
@@ -26,7 +28,6 @@ import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ContentServiceTemplateSupport;
 import org.yes.cart.util.DomainApiUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
 
@@ -35,6 +36,8 @@ import java.util.*;
  * Date: 15-June-2013
  */
 public class ContentServiceImpl extends BaseGenericServiceImpl<Category> implements ContentService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ContentServiceImpl.class);
 
     private final GenericDAO<Category, Long> categoryDao;
 
@@ -362,7 +365,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
                     if (category == null) {
                         // could have happened if import created some reassignments and we loose path to root
                         catsIt.remove();
-                        ShopCodeContext.getLog(this).warn("Found orphan content {}", currentCatId);
+                        LOG.warn("Found orphan content {}", currentCatId);
                         break;
                     }
                 }

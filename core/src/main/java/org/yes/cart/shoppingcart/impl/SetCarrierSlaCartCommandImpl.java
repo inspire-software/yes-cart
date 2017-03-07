@@ -18,11 +18,12 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +36,8 @@ import java.util.Map;
 public class SetCarrierSlaCartCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20100313L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(SetCarrierSlaCartCommandImpl.class);
 
     /**
      * Construct command.
@@ -82,7 +85,7 @@ public class SetCarrierSlaCartCommandImpl extends AbstractCartCommandImpl implem
                 if (!selection.isEmpty()) {
 
                     for (final Map.Entry<String, Long> slaSelection : selection.entrySet()) {
-                        ShopCodeContext.getLog(this).debug("Set carrier sla to {} for '{}'", slaSelection.getValue(), slaSelection.getKey());
+                        LOG.debug("Set carrier sla to {} for '{}'", slaSelection.getValue(), slaSelection.getKey());
                         if (slaSelection.getValue() <= 0L) {
                             shoppingCart.getOrderInfo().putCarrierSlaId(slaSelection.getKey(), null);
                         } else {

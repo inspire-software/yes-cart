@@ -16,11 +16,13 @@
 
 package org.yes.cart.domain.message.consumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.mail.MailComposer;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +40,8 @@ import java.util.Map;
  * Time: 14:12:54
  */
 public class CustomerRegistrationMessageListener implements Runnable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CustomerRegistrationMessageListener.class);
 
     private final MailService mailService;
 
@@ -66,14 +70,14 @@ public class CustomerRegistrationMessageListener implements Runnable {
     public void run() {
 
         try {
-            ShopCodeContext.getLog(this).info("CustomerRegistrationMessageListener#onMessage response :" + objectMessage);
+            LOG.info("CustomerRegistrationMessageListener#onMessage response :" + objectMessage);
 
             if (objectMessage.getMailTemplatePathChain() != null) {
                 processMessage(objectMessage);
             }
 
         } catch (Exception e) {
-            ShopCodeContext.getLog(this).error("Can not process " + objectMessage, e);
+            LOG.error(Markers.alert(), "Can not process " + objectMessage, e);
             throw new RuntimeException(e); //rollback message
         }
     }
@@ -150,7 +154,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
                         mailService.create(adminMail);
                     }
                 } else {
-                    ShopCodeContext.getLog(this).error("requireNotificationEmails parameter is empty");
+                    LOG.error("requireNotificationEmails parameter is empty");
                 }
             }
 

@@ -17,12 +17,13 @@
 package org.yes.cart.bulkjob.mail;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.mail.JavaMailSenderFactory;
 import org.yes.cart.service.mail.MailComposer;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
@@ -34,6 +35,8 @@ import java.util.Map;
  * Time: 13:56
  */
 public class BulkMailProcessorImpl implements Runnable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BulkMailProcessorImpl.class);
 
     private final MailService mailService;
     private final MailComposer mailComposer;
@@ -54,9 +57,7 @@ public class BulkMailProcessorImpl implements Runnable {
     @Override
     public void run() {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
-        log.info("Bulk send mail");
+        LOG.info("Bulk send mail");
 
         final Map<String, Integer> exceptionsThresholdsByShop = new HashMap<String, Integer>();
 
@@ -64,7 +65,7 @@ public class BulkMailProcessorImpl implements Runnable {
         Mail mail = mailService.findOldestMail(lastFailedEmailId);
         while (mail != null) {
 
-            log.info("Preparing mail object {}/{} for {} with subject {}",
+            LOG.info("Preparing mail object {}/{} for {} with subject {}",
                     new Object[] { mail.getMailId(), mail.getShopCode(), mail.getRecipients(), mail.getSubject() });
 
             final String shopCode = mail.getShopCode();
@@ -76,12 +77,12 @@ public class BulkMailProcessorImpl implements Runnable {
             int exceptionsThreshold = exceptionsThresholdsByShop.get(shopCode);
             if (exceptionsThreshold <= 0) {
                 lastFailedEmailId = mail.getMailId();
-                log.info("Skipping send mail as exception threshold is exceeded for shop {}", shopCode);
+                LOG.info("Skipping send mail as exception threshold is exceeded for shop {}", shopCode);
             } else {
 
                 final JavaMailSender javaMailSender = javaMailSenderFactory.getJavaMailSender(shopCode);
                 if (javaMailSender == null) {
-                    log.info("No mail sender configured for {}", shopCode);
+                    LOG.info("No mail sender configured for {}", shopCode);
                     lastFailedEmailId = mail.getMailId();
                 } else {
 
@@ -92,10 +93,10 @@ public class BulkMailProcessorImpl implements Runnable {
                         mailComposer.convertMessage(mail, mimeMessage);
                         javaMailSender.send(mimeMessage);
                         sent = true;
-                        log.info("Sent mail to {} with subject {}", mail.getRecipients(), mail.getSubject());
+                        LOG.info("Sent mail to {} with subject {}", mail.getRecipients(), mail.getSubject());
                         mailService.delete(mail);
                     } catch (Exception exp) {
-                        log.error("Unable to send mail " + mail.getMailId() + " for shop " + shopCode, exp);
+                        LOG.error(Markers.alert(), "Unable to send mail " + mail.getMailId() + " for shop " + shopCode, exp);
                         lastFailedEmailId = mail.getMailId();
                         exceptionsThresholdsByShop.put(shopCode, exceptionsThreshold - 1);
 
@@ -115,7 +116,7 @@ public class BulkMailProcessorImpl implements Runnable {
 
         }
 
-        log.info("Bulk send mail ... completed");
+        LOG.info("Bulk send mail ... completed");
 
     }
 

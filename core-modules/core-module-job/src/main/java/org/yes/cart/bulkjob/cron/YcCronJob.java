@@ -20,9 +20,10 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.util.log.Markers;
 
 /**
  * Generic job contained to run Runnable jobs.
@@ -37,7 +38,7 @@ import org.yes.cart.cluster.node.NodeService;
  */
 public class YcCronJob extends QuartzJobBean implements StatefulJob {
 
-    private final Logger log = ShopCodeContext.getLog(this);
+    private static final Logger LOG = LoggerFactory.getLogger(YcCronJob.class);
 
     /** {@inheritDoc} */
     @Override
@@ -50,19 +51,19 @@ public class YcCronJob extends QuartzJobBean implements StatefulJob {
         final String nodeId = nodeService.getCurrentNode().getId();
         final long start = getTimeNow();
 
-        log.info("Starting job {} on {}", jobName, nodeId);
+        LOG.info("Starting job {} on {}", jobName, nodeId);
 
         try {
             job.run();
 
             final long sec = getExecutionTimeInSeconds(start);
-            log.info("Finished job {} on {} in {}s, next run {}", new Object[]{ jobName, nodeId, sec, context.getNextFireTime() });
+            LOG.info("Finished job {} on {} in {}s, next run {}", new Object[]{ jobName, nodeId, sec, context.getNextFireTime() });
 
         } catch (Throwable thw) {
 
             final long sec = getExecutionTimeInSeconds(start);
-            log.error("Terminated job {} on {} in {}s, next run {}", new Object[] { jobName, nodeId, sec, context.getNextFireTime() });
-            log.error(thw.getMessage(), thw);
+            LOG.error("Terminated job {} on {} in {}s, next run {}", new Object[] { jobName, nodeId, sec, context.getNextFireTime() });
+            LOG.error(Markers.alert(), "Job " + jobName + " finished in error, cause: " + thw.getMessage(), thw);
 
         }
 

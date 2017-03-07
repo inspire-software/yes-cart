@@ -17,6 +17,7 @@
 package org.yes.cart.bulkjob.images;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,7 +36,6 @@ import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategy;
 import org.yes.cart.stream.io.FileSystemIOProvider;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.client.AsyncContextFactory;
 
 import java.io.File;
@@ -49,6 +49,8 @@ import java.util.*;
  * Time: 14:36
  */
 public class LocalFileShareImageVaultProcessorImpl implements Runnable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LocalFileShareImageVaultProcessorImpl.class);
 
     public static final long INDEX_GET_READY_TIMEOUT = 5000L;
     public static final long INDEX_PING_INTERVAL = 15000L;
@@ -91,19 +93,17 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
         final String imgVault = systemService.getImageRepositoryDirectory();
 
-        final Logger log = ShopCodeContext.getLog(this);
-
-        log.info("Scanning imagevault {}", imgVault);
+        LOG.info("Scanning imagevault {}", imgVault);
 
         final File imageVault = ioProvider.resolveFileFromUri(imgVault, Collections.EMPTY_MAP);
         if (imageVault == null || !imageVault.exists()) {
-            log.info("Scanning imagevault {} failed because either this is not a local file system path or directory does not exist", imgVault);
+            LOG.info("Scanning imagevault {} failed because either this is not a local file system path or directory does not exist", imgVault);
             return;
         }
 
         final File configProps = new File(imageVault, "config.properties");
         if (!configProps.exists()) {
-            log.info("Configuration file is missing... skipping");
+            LOG.info("Configuration file is missing... skipping");
             return;
         }
 
@@ -111,7 +111,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
         try {
             configuration.load(new FileInputStream(configProps));
         } catch (IOException e) {
-            log.info("Configuration file is corrupt... skipping", e);
+            LOG.info("Configuration file is corrupt... skipping", e);
             return;
         }
 
@@ -124,7 +124,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
             if (shopAuth.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(new RunAsUserAuthentication(user, pass, shopAuth.getAuthorities()));
 
-                final int reattached = scanRoot(log, imageVault);
+                final int reattached = scanRoot(imageVault);
 
                 final boolean reindex = Boolean.valueOf(configuration.getProperty("config.reindex"));
 
@@ -143,7 +143,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
                                 JobStatus reindexStatus = reindexService.getIndexJobStatus(reindexCtx, indexToken);
                                 if (reindexStatus.getState() == JobStatus.State.FINISHED) {
 
-                                    log.info("Re-indexed products ... completed [{}]", new Object[]{ reindexStatus.getCompletion()});
+                                    LOG.info("Re-indexed products ... completed [{}]", new Object[]{ reindexStatus.getCompletion()});
 
                                     clusterService.evictAllCache(cacheCtx);
                                     Thread.sleep(WARMUP_GET_READY_TIMEOUT);
@@ -159,7 +159,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
                 }
 
             } else {
-                log.warn("Invalid credentials for image vault scanner");
+                LOG.warn("Invalid credentials for image vault scanner");
             }
 
         } finally {
@@ -167,11 +167,11 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
             SecurityContextHolder.clearContext();
         }
 
-        log.info("Scanning imagevault ... completed");
+        LOG.info("Scanning imagevault ... completed");
 
     }
 
-    private int scanRoot(final Logger log, final File imageVault) {
+    private int scanRoot(final File imageVault) {
 
         final Set<String> scanned = new HashSet<String>();
         int count = 0;
@@ -188,7 +188,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
             if (dir.exists()) {
 
-                count += scanRootDirectory(dir, strategy, log);
+                count += scanRootDirectory(dir, strategy);
 
             }
 
@@ -196,11 +196,11 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
         return count;
     }
 
-    private int scanRootDirectory(final File dir, final ImageNameStrategy strategy, final Logger log) {
+    private int scanRootDirectory(final File dir, final ImageNameStrategy strategy) {
 
-        final JobStatusListener statusListener = new JobStatusListenerLoggerWrapperImpl(log);
+        final JobStatusListener statusListener = new JobStatusListenerLoggerWrapperImpl(LOG);
 
-        log.info("Scanning imagevault directory {}", dir.getAbsolutePath());
+        LOG.info("Scanning imagevault directory {}", dir.getAbsolutePath());
 
         final File[] letters = dir.listFiles();
         if (letters == null) {
@@ -218,7 +218,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
             // Only look at single letter directories at top level
             if (letter.getName().length() == 1) {
 
-                log.info("Scanning imagevault directory {}% {}", letterProgress, letter.getAbsolutePath());
+                LOG.info("Scanning imagevault directory {}% {}", letterProgress, letter.getAbsolutePath());
 
                 final File[] codes = letter.listFiles();
                 if (codes == null) {
@@ -227,7 +227,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
                 for (final File code : codes) {
 
-                    log.info("Scanning imagevault directory {}% {}", letterProgress, code.getAbsolutePath());
+                    LOG.info("Scanning imagevault directory {}% {}", letterProgress, code.getAbsolutePath());
 
                     final File[] images = code.listFiles();
                     if (images == null) {
@@ -236,7 +236,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
                     for (final File image : images) {
 
-                        log.info("Evaluating file {}% {}", letterProgress, image.getAbsolutePath());
+                        LOG.info("Evaluating file {}% {}", letterProgress, image.getAbsolutePath());
 
                         final String fileName = image.getName();
                         final String objectCode = code.getName();
@@ -251,9 +251,9 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
                         }
 
                         if (!success) {
-                            log.debug("Skipped file {}", image.getAbsolutePath());
+                            LOG.debug("Skipped file {}", image.getAbsolutePath());
                         } else {
-                            log.info("Reattached file {}", image.getAbsolutePath());
+                            LOG.info("Reattached file {}", image.getAbsolutePath());
                             count++;
                         }
                     }
@@ -265,9 +265,9 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
         }
 
         if (count > 0) {
-            log.info("Scanning imagevault directory 100% {} ... all images were attached", dir.getAbsolutePath());
+            LOG.info("Scanning imagevault directory 100% {} ... all images were attached", dir.getAbsolutePath());
         } else {
-            log.info("Scanning imagevault directory 100% {} ... reattached {} images", dir.getAbsolutePath(), count);
+            LOG.info("Scanning imagevault directory 100% {} ... reattached {} images", dir.getAbsolutePath(), count);
         }
 
         return count;

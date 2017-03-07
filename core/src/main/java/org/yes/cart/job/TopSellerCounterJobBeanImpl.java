@@ -19,9 +19,9 @@ package org.yes.cart.job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.yes.cart.service.domain.ShopTopSellerService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Date;
 
@@ -32,6 +32,8 @@ import java.util.Date;
  */
 public class TopSellerCounterJobBeanImpl extends QuartzJobBean {
 
+    private static final Logger LOG = LoggerFactory.getLogger(TopSellerCounterJobBeanImpl.class);
+
     private ShopTopSellerService shopTopSellerService;
 
     private int calculationPeriodInDays = 10;
@@ -40,10 +42,9 @@ public class TopSellerCounterJobBeanImpl extends QuartzJobBean {
      * {@inheritDoc}
      */
     protected void executeInternal(final JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        final Logger log = ShopCodeContext.getLog(this);
-        log.info("TopSellerCounterJobBeanImpl start at {}", new Date());
+        LOG.info("TopSellerCounterJobBeanImpl start at {}", new Date());
         shopTopSellerService.updateTopSellers (calculationPeriodInDays);
-        log.info("TopSellerCounterJobBeanImpl   end at {}", new Date());
+        LOG.info("TopSellerCounterJobBeanImpl   end at {}", new Date());
     }
 
     /**

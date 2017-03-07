@@ -17,6 +17,8 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
@@ -24,7 +26,6 @@ import org.yes.cart.bulkexport.csv.CsvExportTuple;
 import org.yes.cart.bulkexport.model.ExportColumn;
 import org.yes.cart.bulkexport.model.ExportDescriptor;
 import org.yes.cart.domain.entity.Identifiable;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,6 +38,8 @@ import java.util.List;
  * Time: 12:07
  */
 public class CsvExportTupleImpl implements CsvExportTuple {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CsvExportTupleImpl.class);
 
     private final Object data;
 
@@ -67,7 +70,7 @@ public class CsvExportTupleImpl implements CsvExportTuple {
         try {
             rawValue = PropertyUtils.getNestedProperty(getData(), property);
         } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error("Unable to read property: " + property, exp);
+            LOG.error("Unable to read property: " + property, exp);
         }
         return rawValue;
     }

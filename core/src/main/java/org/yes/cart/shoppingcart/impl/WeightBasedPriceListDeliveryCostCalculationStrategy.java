@@ -17,6 +17,8 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.CarrierSla;
@@ -29,11 +31,12 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -41,6 +44,8 @@ import java.util.*;
  * Time: 6:07 PM
  */
 public class WeightBasedPriceListDeliveryCostCalculationStrategy implements DeliveryCostCalculationStrategy {
+
+    private static final Logger LOG = LoggerFactory.getLogger(WeightBasedPriceListDeliveryCostCalculationStrategy.class);
 
     private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
 
@@ -212,7 +217,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
                         weight = weight.add(kg.multiply(cartItem.getQty()));
                     }
                 } catch (Exception exp) {
-                    ShopCodeContext.getLog(this).error("Product {} does not have valid weight");
+                    LOG.error("Product {} does not have valid weight");
                 }
 
                 try {
@@ -222,7 +227,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
                         volume = volume.add(m3.multiply(cartItem.getQty()));
                     }
                 } catch (Exception exp) {
-                    ShopCodeContext.getLog(this).error("Product {} does not have valid volume");
+                    LOG.error("Product {} does not have valid volume");
                 }
 
             }

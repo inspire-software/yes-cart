@@ -26,6 +26,8 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
@@ -51,7 +53,6 @@ import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.payment.PaymentModulesManager;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -61,9 +62,10 @@ import java.util.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DtoCustomerOrderServiceImpl
-        extends AbstractDtoServiceImpl<CustomerOrderDTO, CustomerOrderDTOImpl, CustomerOrder>
+public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<CustomerOrderDTO, CustomerOrderDTOImpl, CustomerOrder>
         implements DtoCustomerOrderService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DtoCustomerOrderServiceImpl.class);
 
     protected final Assembler orderDeliveryDetailAssembler;
     protected final Assembler orderDetailAssembler;
@@ -139,7 +141,7 @@ public class DtoCustomerOrderServiceImpl
                 transitionService.transitionOrder(
                         OrderStateManager.EVT_PAYMENT_CONFIRMED, orderNum, null, Collections.emptyMap());
             } catch (OrderException e) {
-                ShopCodeContext.getLog(this).error(
+                LOG.error(
                         MessageFormat.format(
                                 "Cannot confirm payment for order with number [ {0} ] ",
                                 orderNum
@@ -182,7 +184,7 @@ public class DtoCustomerOrderServiceImpl
                 transitionService.transitionOrder(
                         OrderStateManager.EVT_CANCEL_WITH_REFUND, orderNum, null, Collections.emptyMap());
             } catch (OrderException e) {
-                ShopCodeContext.getLog(this).error(
+                LOG.error(
                         MessageFormat.format(
                                 "Order with number [ {0} ] cannot be canceled ",
                                 orderNum
@@ -197,7 +199,7 @@ public class DtoCustomerOrderServiceImpl
                 transitionService.transitionOrder(
                         OrderStateManager.EVT_REFUND_PROCESSED, orderNum, null, Collections.emptyMap());
             } catch (OrderException e) {
-                ShopCodeContext.getLog(this).error(
+                LOG.error(
                         MessageFormat.format(
                                 "Order with number [ {0} ] cannot be canceled ",
                                 orderNum
@@ -245,7 +247,7 @@ public class DtoCustomerOrderServiceImpl
                             put("forceManualProcessingMessage", message);
                         }});
             } catch (OrderException e) {
-                ShopCodeContext.getLog(this).error(
+                LOG.error(
                         MessageFormat.format(
                                 "Order with number [ {0} ] cannot be canceled ",
                                 orderNum
@@ -364,7 +366,7 @@ public class DtoCustomerOrderServiceImpl
 
         } catch (OrderException e) {
 
-            ShopCodeContext.getLog(this).error(
+            LOG.error(
                     MessageFormat.format(
                             "Order with number [ {0} ] delivery number [ {1} ] in [ {2} ] can not be transited to  [ {3} ] status ",
                             orderNum, deliveryNum, delivery.getDeliveryStatus(), currentStatus
@@ -431,7 +433,7 @@ public class DtoCustomerOrderServiceImpl
 
         } catch (OrderException e) {
 
-            ShopCodeContext.getLog(this).error(
+            LOG.error(
                     MessageFormat.format(
                             "Order with number [ {0} ] delivery number [ {1} ] in [ {2} ] can not be transited to  [ {3} ] status ",
                             orderNum, deliveryNum, delivery.getDeliveryStatus(), currentStatus
@@ -471,7 +473,7 @@ public class DtoCustomerOrderServiceImpl
             final Shop pgShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
             final PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel(), pgShop.getCode());
             if (paymentGateway == null) {
-                ShopCodeContext.getLog(this).error("Cannot determine capture less/more because gateway {} is not resolved for shop {}, could it be disabled?", customerOrder.getPgLabel(), customerOrder.getShop().getCode());
+                LOG.error("Cannot determine capture less/more because gateway {} is not resolved for shop {}, could it be disabled?", customerOrder.getPgLabel(), customerOrder.getShop().getCode());
             }
 
             final List<CustomerOrderDeliveryDTO> rez = new ArrayList<CustomerOrderDeliveryDTO>(customerOrder.getDelivery().size());
@@ -493,7 +495,7 @@ public class DtoCustomerOrderServiceImpl
             return rez;
 
         } else {
-            ShopCodeContext.getLog(this).warn("Customer order not found. Order number is " + orderNum);
+            LOG.warn("Customer order not found. Order number is " + orderNum);
         }
         return Collections.emptyList();
 
@@ -533,7 +535,7 @@ public class DtoCustomerOrderServiceImpl
 
             return rez;
         } else {
-            ShopCodeContext.getLog(this).warn("Customer order not found. Order num is " + orderNum);
+            LOG.warn("Customer order not found. Order num is " + orderNum);
         }
         return Collections.emptyList();
 

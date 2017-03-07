@@ -17,10 +17,11 @@
 package org.yes.cart.report.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.report.ReportPair;
 import org.yes.cart.report.ReportWorker;
 import org.yes.cart.service.vo.VoPaymentService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,6 +34,8 @@ import java.util.Map;
  * Time: 10:29
  */
 public class PaymentReportWorker implements ReportWorker {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PaymentReportWorker.class);
 
     private final VoPaymentService paymentService;
 
@@ -72,7 +75,7 @@ public class PaymentReportWorker implements ReportWorker {
         try {
             return (List) paymentService.getFiltered(filter.length() > 0 ? filter.toString() : null, Integer.MAX_VALUE);
         } catch (Exception e) {
-            ShopCodeContext.getLog(this).error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
             return Collections.emptyList();
         }
     }

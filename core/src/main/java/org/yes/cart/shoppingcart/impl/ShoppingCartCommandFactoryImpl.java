@@ -16,8 +16,9 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.*;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
 
@@ -32,6 +33,8 @@ import java.util.*;
 public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactory, ShoppingCartCommandRegistry {
 
     private static final long serialVersionUID = 20100122L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartCommandFactoryImpl.class);
 
     private final ShoppingCartCommandConfigurationProvider configurationProvider;
 
@@ -49,9 +52,9 @@ public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactor
         final ConfigurableShoppingCartCommand mapped = commandByKey.get(command.getCmdKey());
         if (mapped != command) {
             if (mapped != null) {
-                ShopCodeContext.getLog(this).warn("Replacing command impl for: {} with {}", command.getCmdKey(), command);
+                LOG.warn("Replacing command impl for: {} with {}", command.getCmdKey(), command);
             } else {
-                ShopCodeContext.getLog(this).info("Adding command impl for: {} with {}", command.getCmdKey(), command);
+                LOG.info("Adding command impl for: {} with {}", command.getCmdKey(), command);
             }
             command.configure(this.configurationProvider);
             commandByKey.put(command.getCmdKey(), command);

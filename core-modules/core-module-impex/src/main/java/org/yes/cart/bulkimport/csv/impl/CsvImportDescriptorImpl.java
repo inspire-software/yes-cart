@@ -17,13 +17,14 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportFile;
 import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportContext;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.io.Serializable;
 import java.util.*;
@@ -34,6 +35,8 @@ import java.util.*;
  * Time: 12:06 PM
  */
 public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CsvImportDescriptorImpl.class);
 
     private CsvImportFile importFileDescriptor;
 
@@ -127,11 +130,11 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
                 try {
                     entityTypeClass = Class.forName(entityType);
                 } catch (ClassNotFoundException e) {
-                    ShopCodeContext.getLog(this).error("Unable to work out entity type for descriptor {}", this);
+                    LOG.error("Unable to work out entity type for descriptor {}", this);
                     entityTypeClass = Object.class;
                 }
             } else {
-                ShopCodeContext.getLog(this).error("Entity type is not specified for descriptor {}", this);
+                LOG.error("Entity type is not specified for descriptor {}", this);
                 entityTypeClass = Object.class;
             }
         }

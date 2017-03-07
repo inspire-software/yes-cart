@@ -17,8 +17,9 @@
 package org.yes.cart.shoppingcart.support.headerdriven.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.shoppingcart.support.CartDetuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizer;
@@ -53,6 +54,8 @@ public class RequestHeaderTuplizerImpl extends AbstractCryptedTuplizerImpl imple
 
     private static final long serialVersionUID = 20100116L;
 
+    private static final Logger LOG = LoggerFactory.getLogger(RequestHeaderTuplizerImpl.class);
+
     private static final Map<String, String> EMPTY_HEADERS = new HashMap<String, String>();
 
     private static final Map<String, Pattern> PATTERNS_CACHE = new HashMap<String, Pattern>();
@@ -85,7 +88,7 @@ public class RequestHeaderTuplizerImpl extends AbstractCryptedTuplizerImpl imple
 
         if (this.tuplizerSetting.key == null) {
             final String errMsg = "header tuplizer misconfigured";
-            ShopCodeContext.getLog(this).error(errMsg);
+            LOG.error(errMsg);
             throw new RuntimeException(errMsg);
         }
 
@@ -175,9 +178,9 @@ public class RequestHeaderTuplizerImpl extends AbstractCryptedTuplizerImpl imple
             // This block will be useful for monitoring issues when cart overflows header buffer,
             // so that admins can be proactive and increase the size
             if (sizeInBytes > tuplizerSetting.headerMax) {
-                ShopCodeContext.getLog(this).error("Header size ({}) exceeds allowed header size ({})", sizeInBytes, tuplizerSetting.headerMax);
+                LOG.error("Header size ({}) exceeds allowed header size ({})", sizeInBytes, tuplizerSetting.headerMax);
             } else {
-                ShopCodeContext.getLog(this).warn("Header size ({}) exceeds 75% of allowed header size ({})", sizeInBytes, tuplizerSetting.headerMax);
+                LOG.warn("Header size ({}) exceeds 75% of allowed header size ({})", sizeInBytes, tuplizerSetting.headerMax);
             }
         }
         return assembleHeadersForObject(split(valueForCookies));

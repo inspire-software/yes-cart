@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.order.impl.handler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.entity.Product;
@@ -27,7 +29,6 @@ import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -39,6 +40,8 @@ import java.util.Map;
  * Time: 14:12:54
  */
 public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ProcessAllocationOrderEventHandlerImpl.class);
 
     private final WarehouseService warehouseService;
 
@@ -118,7 +121,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
                     final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
                     if (selected == null) {
-                        ShopCodeContext.getLog(this).warn(
+                        LOG.error(
                                 "Warehouse is not found for delivery detail {}:{}",
                                 orderDelivery.getDeliveryNum(), det.getProductSkuCode()
                         );

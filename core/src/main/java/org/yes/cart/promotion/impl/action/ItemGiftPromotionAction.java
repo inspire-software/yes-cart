@@ -16,6 +16,8 @@
 
 package org.yes.cart.promotion.impl.action;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
@@ -29,7 +31,6 @@ import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -43,6 +44,8 @@ import java.util.regex.Pattern;
  * Time: 8:15 AM
  */
 public class ItemGiftPromotionAction extends AbstractItemPromotionAction implements PromotionAction {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ItemGiftPromotionAction.class);
 
     // Ration allows to specify what 1 unit of context equates to items quantity
     // i.e. Gift "ABC : 2" - 1 gift for every two quantity of items
@@ -88,7 +91,7 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
             if (multiplier.compareTo(BigDecimal.ONE) == 0) {
                 return minimal;
             }
-            return minimal.divide(multiplier).setScale(2, RoundingMode.HALF_UP);
+            return minimal.divide(multiplier, 2, RoundingMode.HALF_UP);
         }
         return BigDecimal.ZERO;
     }
@@ -108,8 +111,7 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
                     cart.getCurrencyCode(),
                     BigDecimal.ONE, false, null);
         } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error(
-                    "Unable top find price for gift for promotion action context: {}", sku);
+            LOG.error("Unable to find price for gift for promotion action context: {}", sku);
         }
         return null;
     }

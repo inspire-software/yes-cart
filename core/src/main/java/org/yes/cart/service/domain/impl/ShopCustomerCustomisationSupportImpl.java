@@ -18,6 +18,8 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueCustomer;
@@ -29,7 +31,6 @@ import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerCustomisationSupport;
 import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
 
@@ -39,6 +40,8 @@ import java.util.*;
  * Time: 12:40
  */
 public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisationSupport {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCustomerCustomisationSupportImpl.class);
 
     private static final String GUEST_TYPE = AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST;
 
@@ -130,7 +133,7 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
 
         final Set<String> types = getCustomerTypes(shop, true);
         if (!types.contains(customerType)) {
-            ShopCodeContext.getLog(this).warn("SHOP_CUSTOMER_TYPES does not contain '{}' customer type", customerType);
+            LOG.warn("SHOP_CUSTOMER_TYPES does not contain '{}' customer type", customerType);
             return Collections.emptyList();
         }
 

@@ -16,10 +16,11 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandConfigurationProvider;
 import org.yes.cart.shoppingcart.ShoppingCartCommandConfigurationVisitor;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +32,8 @@ import java.util.Set;
  * Time: 07:37
  */
 public class ShoppingCartCommandConfigurationProviderImpl implements ShoppingCartCommandConfigurationProvider<MutableShoppingCart> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartCommandConfigurationProviderImpl.class);
 
     private final Map<String, ShoppingCartCommandConfigurationVisitor<MutableShoppingCart>> providers =
             new HashMap<String, ShoppingCartCommandConfigurationVisitor<MutableShoppingCart>>();
@@ -72,7 +75,7 @@ public class ShoppingCartCommandConfigurationProviderImpl implements ShoppingCar
              * {@inheritDoc}
              */
             public void visit(final MutableShoppingCart cart, final Object ... args) {
-                ShopCodeContext.getLog(this).error("Unknown ShoppingCartCommandConfigurationVisitor {} using NOOP", id);
+                LOG.error("Unknown ShoppingCartCommandConfigurationVisitor {} using NOOP", id);
             }
         };
     }

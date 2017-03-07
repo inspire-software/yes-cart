@@ -17,12 +17,13 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkexport.csv.CsvExportColumn;
 import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
 import org.yes.cart.bulkexport.csv.CsvExportFile;
 import org.yes.cart.bulkexport.model.ExportColumn;
 import org.yes.cart.bulkexport.model.ExportContext;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.io.Serializable;
 import java.util.*;
@@ -34,6 +35,7 @@ import java.util.*;
  */
 public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializable {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CsvExportDescriptorImpl.class);
 
     private CsvExportFile exportFileDescriptor;
 
@@ -86,11 +88,11 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
                 try {
                     entityTypeClass = Class.forName(entityType);
                 } catch (ClassNotFoundException e) {
-                    ShopCodeContext.getLog(this).error("Unable to work out entity type for descriptor {}", this);
+                    LOG.error("Unable to work out entity type for descriptor {}", this);
                     entityTypeClass = Object.class;
                 }
             } else {
-                ShopCodeContext.getLog(this).error("Entity type is not specified for descriptor {}", this);
+                LOG.error("Entity type is not specified for descriptor {}", this);
                 entityTypeClass = Object.class;
             }
         }

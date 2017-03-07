@@ -18,6 +18,8 @@ package org.yes.cart.report.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.Shop;
@@ -27,7 +29,6 @@ import org.yes.cart.report.ReportWorker;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.federation.ShopFederationStrategy;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,6 +41,8 @@ import java.util.Map;
  * Time: 13:52
  */
 public class DeliveryReportWorker implements ReportWorker {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DeliveryReportWorker.class);
 
     private final CustomerOrderService customerOrderService;
     private final ShopService shopService;
@@ -80,7 +83,7 @@ public class DeliveryReportWorker implements ReportWorker {
                 return (List) Collections.singletonList(new Pair(order, order.getDelivery()));
             }
         } catch (Exception e) {
-            ShopCodeContext.getLog(this).error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
         return Collections.emptyList();
 

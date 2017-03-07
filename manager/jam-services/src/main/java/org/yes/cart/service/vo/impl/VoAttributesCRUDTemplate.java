@@ -17,6 +17,8 @@
 package org.yes.cart.service.vo.impl;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.misc.MutablePair;
@@ -26,7 +28,6 @@ import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.GenericAttrValueService;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoIOSupport;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
 
@@ -36,6 +37,8 @@ import java.util.*;
  * Time: 14:50
  */
 public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends AttrValueDTO> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(VoAttributesCRUDTemplate.class);
 
     private final Class<V> voClass;
     private final Class<D> dtoClass;
@@ -152,7 +155,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
             }
 
             if (skipAttributesInView(item.getFirst().getAttribute().getCode())) {
-                ShopCodeContext.getLog(this).warn("Attribute {} value cannot be updated using general AV update ... skipped", item.getFirst().getAttribute().getCode());
+                LOG.warn("Attribute {} value cannot be updated using general AV update ... skipped", item.getFirst().getAttribute().getCode());
                 continue;
             }
 
@@ -185,7 +188,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                     asm.assembleDto(dto, item.getFirst());
                     genericAttrValueService.updateEntityAttributeValue(dto);
                 } else {
-                    ShopCodeContext.getLog(this).warn("Update skipped for inexistent ID {}", item.getFirst().getAttrvalueId());
+                    LOG.warn("Update skipped for inexistent ID {}", item.getFirst().getAttrvalueId());
                 }
             } else {
                 // insert mode

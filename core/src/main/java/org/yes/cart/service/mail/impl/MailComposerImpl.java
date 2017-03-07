@@ -30,7 +30,6 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.mail.MailComposerTemplateSupport;
 import org.yes.cart.service.mail.MailTemplateResourcesProvider;
-import org.yes.cart.util.ShopCodeContext;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -54,7 +53,7 @@ import java.util.regex.Pattern;
  */
 public class MailComposerImpl implements MailComposer {
 
-    private final Logger LOG = LoggerFactory.getLogger(MailComposerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MailComposerImpl.class);
 
     private static final String ATTACHMENT_PREFIX = "attachment:";
     private static final String ATTACHMENT_SUFFIX = ";";
@@ -182,7 +181,7 @@ public class MailComposerImpl implements MailComposer {
 
                 } else {
 
-                    ShopCodeContext.getLog(this).error("Invalid attachment in model. Attachments must be of type 'byte[]'");
+                    LOG.error("Invalid attachment in model. Attachments must be of type 'byte[]'");
 
                 }
 
@@ -294,7 +293,7 @@ public class MailComposerImpl implements MailComposer {
             final String[] contentTypeAndFile = key.substring(ATTACHMENT_PREFIX.length()).split(ATTACHMENT_SUFFIX);
             return new Pair<String, String>(contentTypeAndFile[0], contentTypeAndFile[1]);
         } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error("Invalid attachment key {} ... attachment is skipped", key);
+            LOG.error("Invalid attachment key {} ... attachment is skipped", key);
             return null;
         }
     }

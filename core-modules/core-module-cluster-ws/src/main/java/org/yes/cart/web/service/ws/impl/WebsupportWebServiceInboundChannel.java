@@ -17,18 +17,16 @@
 package org.yes.cart.web.service.ws.impl;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.yes.cart.cluster.node.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.node.RspMessage;
-import org.yes.cart.cluster.node.impl.BasicMessageImpl;
 import org.yes.cart.cluster.node.impl.RspMessageImpl;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.WebServiceInboundChannel;
 import org.yes.cart.web.service.ws.WsMessage;
 
 import javax.jws.WebService;
 import javax.xml.ws.BindingType;
-import java.io.Serializable;
 
 /**
  * User: denispavlov
@@ -40,13 +38,15 @@ import java.io.Serializable;
 @BindingType(value=javax.xml.ws.soap.SOAPBinding.SOAP11HTTP_MTOM_BINDING)
 public class WebsupportWebServiceInboundChannel implements WebServiceInboundChannel {
 
+    private static final Logger LOG = LoggerFactory.getLogger(WebsupportWebServiceInboundChannel.class);
+
     private NodeService nodeService;
 
     /**
      * {@inheritDoc}
      */
     public void ping() {
-        ShopCodeContext.getLog(this).debug("Ping on {}", nodeService.getCurrentNode().getId());
+        LOG.info("Ping on {}", nodeService.getCurrentNode().getId());
     }
 
     /**

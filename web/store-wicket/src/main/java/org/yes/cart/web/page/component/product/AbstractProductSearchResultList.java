@@ -24,10 +24,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -45,6 +45,8 @@ import java.util.List;
  * Time: 11:06 AM
  */
 public abstract class AbstractProductSearchResultList extends BaseComponent {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractProductSearchResultList.class);
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     protected final static String NAME = "name";
@@ -178,13 +180,11 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
 
     private String getDefaultImage(final ProductSearchResultDTO product, final String width, final String height, final String locale) {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         final String result = productImageService.getImageURI(
                 product, getWicketUtil().getHttpServletRequest().getContextPath(), locale, width, height, product.getDefaultImage()
         );
 
-        log.debug("Default image is [{}] result is [{}]", product.getDefaultImage(), result);
+        LOG.debug("Default image is [{}] result is [{}]", product.getDefaultImage(), result);
 
         return  result;
     }

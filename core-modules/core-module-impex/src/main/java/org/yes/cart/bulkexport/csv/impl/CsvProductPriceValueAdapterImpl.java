@@ -16,6 +16,8 @@
 
 package org.yes.cart.bulkexport.csv.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkcommon.model.ExtensibleValueAdapter;
 import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
@@ -23,7 +25,6 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 
@@ -33,6 +34,8 @@ import java.math.BigDecimal;
  * Time: 22:23
  */
 public class CsvProductPriceValueAdapterImpl implements ValueAdapter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CsvProductPriceValueAdapterImpl.class);
 
     private final PriceService priceService;
     private final ShopService shopService;
@@ -74,7 +77,7 @@ public class CsvProductPriceValueAdapterImpl implements ValueAdapter {
                 return price.getRegularPrice().toPlainString();
             }
         } else {
-            ShopCodeContext.getLog(this).warn("Unable to determine price since export descriptor does not specify valid shop code");
+            LOG.warn("Unable to determine price since export descriptor does not specify valid shop code");
         }
         return null;
     }

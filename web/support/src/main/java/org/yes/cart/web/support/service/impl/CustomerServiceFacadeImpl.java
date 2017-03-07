@@ -18,13 +18,14 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import java.util.*;
@@ -35,6 +36,8 @@ import java.util.*;
  * Time: 7:03 PM
  */
 public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CustomerServiceFacadeImpl.class);
 
     private static final String GUEST_TYPE = AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST;
 
@@ -137,7 +140,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         final Shop configShop = registrationShop.getMaster() != null ? registrationShop.getMaster() : registrationShop;
         final Set<String> types = customerCustomisationSupport.getCustomerTypes(configShop, false);
         if (!types.contains(customerType)) {
-            ShopCodeContext.getLog(this).warn("SHOP_CUSTOMER_TYPES does not contain '{}' customer type or registrationData does not have 'customerType'", customerType);
+            LOG.warn("SHOP_CUSTOMER_TYPES does not contain '{}' customer type or registrationData does not have 'customerType'", customerType);
             return null;
         }
 
@@ -154,7 +157,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
                 StringUtils.isBlank(customer.getFirstname()) ||
                 StringUtils.isBlank(customer.getLastname()) ||
                 StringUtils.isBlank(customer.getCustomerType())) {
-            ShopCodeContext.getLog(this).warn("Missing required registration data, please check that registration details have sufficient data");
+            LOG.warn("Missing required registration data, please check that registration details have sufficient data");
             return null;
         }
 
@@ -204,13 +207,13 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
                     } else {
 
-                        ShopCodeContext.getLog(this).warn("Registration data contains unknown attribute: {}", attrVal.getKey());
+                        LOG.warn("Registration data contains unknown attribute: {}", attrVal.getKey());
 
                     }
 
                 } else {
 
-                    ShopCodeContext.getLog(this).warn("Registration data contains attribute that is not allowed: {}", attrVal.getKey());
+                    LOG.warn("Registration data contains attribute that is not allowed: {}", attrVal.getKey());
 
                 }
 
@@ -227,7 +230,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
         final Set<String> types = customerCustomisationSupport.getCustomerTypes(registrationShop, true);
         if (!types.contains(customerType)) {
-            ShopCodeContext.getLog(this).warn("SHOP_CHECKOUT_ENABLE_GUEST is not enabled");
+            LOG.warn("SHOP_CHECKOUT_ENABLE_GUEST is not enabled");
             return null;
         }
 
@@ -246,7 +249,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
                 StringUtils.isBlank(customer.getGuestEmail()) ||
                 StringUtils.isBlank(customer.getFirstname()) ||
                 StringUtils.isBlank(customer.getLastname())) {
-            ShopCodeContext.getLog(this).warn("Missing required guest data, please check that registration details have sufficient data");
+            LOG.warn("Missing required guest data, please check that registration details have sufficient data");
             return null;
         }
 
@@ -349,7 +352,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
                     if (readonly.contains(entry.getKey())) {
 
-                        ShopCodeContext.getLog(this).warn("Profile data contains attribute that is read only: {}", entry.getKey());
+                        LOG.warn("Profile data contains attribute that is read only: {}", entry.getKey());
 
                     } else {
 
@@ -359,7 +362,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
                 } else {
 
-                    ShopCodeContext.getLog(this).warn("Profile data contains attribute that is not allowed: {}", entry.getKey());
+                    LOG.warn("Profile data contains attribute that is not allowed: {}", entry.getKey());
 
                 }
 

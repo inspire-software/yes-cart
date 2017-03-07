@@ -17,6 +17,7 @@
 package org.yes.cart.web.theme.impl;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.NavigationContext;
@@ -42,7 +43,9 @@ import java.util.Set;
  */
 public class WicketCentralViewProviderImpl implements WicketCentralViewProvider {
 
-    public static enum CategoryType { ANY, CATEGORY, CONTENT }
+    private static final Logger LOG = LoggerFactory.getLogger(WicketCentralViewProviderImpl.class);
+
+    public enum CategoryType { ANY, CATEGORY, CONTENT }
 
     private static final String DEFAULT_PANEL = "default";
 
@@ -79,7 +82,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
 
                     CategoryType type = categoryTypeMap.get(clz);
                     if (type == null) {
-                        ShopCodeContext.getLog(this).warn("No category type is specified for panel class {}", clz.getCanonicalName());
+                        LOG.warn("No category type is specified for panel class {}", clz.getCanonicalName());
                         type = CategoryType.ANY;
                     }
 
@@ -87,9 +90,8 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
                         case CATEGORY:
                             //check is this category allowed to open in this shop
                             if (!isCategoryVisibleInShop(categoryId)) {
-                                final Logger log = ShopCodeContext.getLog(this);
-                                if (log.isWarnEnabled()) {
-                                    log.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
+                                if (LOG.isWarnEnabled()) {
+                                    LOG.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
                                 }
                                 clz = getDefaultPanel();
                             }
@@ -97,9 +99,8 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
                         case CONTENT:
                             //check is this content is allowed to open in this shop
                             if (!isContentVisibleInShop(categoryId)) {
-                                final Logger log = ShopCodeContext.getLog(this);
-                                if (log.isWarnEnabled()) {
-                                    log.warn("Can not access content {} from shop {}", categoryId, ShopCodeContext.getShopId());
+                                if (LOG.isWarnEnabled()) {
+                                    LOG.warn("Can not access content {} from shop {}", categoryId, ShopCodeContext.getShopId());
                                 }
                                 clz = getDefaultPanel();
                             }
@@ -108,9 +109,8 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
                         default:
                             //check is this category/content allowed to open in this shop
                             if (!isCategoryVisibleInShop(categoryId) && !isContentVisibleInShop(categoryId)) {
-                                final Logger log = ShopCodeContext.getLog(this);
-                                if (log.isWarnEnabled()) {
-                                    log.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
+                                if (LOG.isWarnEnabled()) {
+                                    LOG.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
                                 }
                                 clz = getDefaultPanel();
                             }
@@ -122,7 +122,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
 
             } else {
 
-                ShopCodeContext.getLog(this).warn("Can not create instance of panel for label {}", rendererLabel);
+                LOG.warn("Can not create instance of panel for label {}", rendererLabel);
                 clz = getDefaultPanel();
 
             }
@@ -133,7 +133,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
 
         } catch (Exception e) {
 
-            ShopCodeContext.getLog(this).error(MessageFormat.format("Can not create instance of panel for label {0}", rendererLabel), e);
+            LOG.error(MessageFormat.format("Can not create instance of panel for label {0}", rendererLabel), e);
             return new EmptyCentralView(wicketComponentId, navigationContext);
 
         }

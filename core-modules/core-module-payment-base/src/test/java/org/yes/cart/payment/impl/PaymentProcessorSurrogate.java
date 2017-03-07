@@ -17,6 +17,7 @@
 package org.yes.cart.payment.impl;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGateway;
@@ -27,7 +28,6 @@ import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.payment.impl.PaymentProcessorImpl;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -43,6 +43,8 @@ import java.util.UUID;
  * Time: 14:12:54
  */
 public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PaymentProcessorSurrogate.class);
 
     private final CustomerOrderPaymentService customerOrderPaymentService;
 
@@ -124,18 +126,17 @@ public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
             final List<CustomerOrderPayment> paymentsToCapture =
                     determineOpenAuthorisations(order.getOrdernum(), isMultiplePaymentsSupports ? orderShipmentNumber : order.getOrdernum());
 
-            final Logger log = ShopCodeContext.getLog(this);
-            log.debug("Attempting to capture funds for Order num {} Shipment num {}", order.getOrdernum(), orderShipmentNumber);
+            LOG.debug("Attempting to capture funds for Order num {} Shipment num {}", order.getOrdernum(), orderShipmentNumber);
 
             if (paymentsToCapture.size() > 1) {
-                log.warn( //must be only one record
+                LOG.warn( //must be only one record
                         MessageFormat.format(
                                 "Payment gateway {0} with features {1}. Found {2} records to capture, but expected 1 only. Order num {3} Shipment num {4}",
                                 getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), paymentsToCapture.size(), order.getOrdernum(), orderShipmentNumber
                         )
                 );
             } else if (paymentsToCapture.isEmpty()) {
-                log.debug( //this could be a single payment PG and it was already captured
+                LOG.debug( //this could be a single payment PG and it was already captured
                         MessageFormat.format(
                                 "Payment gateway {0} with features {1}. Found 0 records to capture, possibly already captured all payments. Order num {2} Shipment num {3}",
                                 getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), order.getOrdernum(), orderShipmentNumber
@@ -180,7 +181,7 @@ public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                     payment.setPaymentProcessorBatchSettlement(false);
                     payment.setTransactionOperationResultMessage(th.getMessage());
-                    ShopCodeContext.getLog(this).error("Cannot capture " + payment, th);
+                    LOG.error("Cannot capture " + payment, th);
 
                 } finally {
                     final CustomerOrderPayment captureOrderPayment = new CustomerOrderPaymentEntity();
@@ -250,7 +251,7 @@ public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
                     }
                     paymentResult = payment.getPaymentProcessorResult();
                 } catch (Throwable th) {
-                    ShopCodeContext.getLog(this).error(
+                    LOG.error(
                             MessageFormat.format(
                                     "Can not perform roll back operation on payment record {0} payment {1}",
                                     customerOrderPayment.getCustomerOrderPaymentId(),
@@ -276,9 +277,7 @@ public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
 
             return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
         }
-        ShopCodeContext.getLog(this).warn("Can refund canceled order  {}",
-                order.getOrdernum()
-        );
+        LOG.warn("Cannot refund canceled order  {}", order.getOrdernum());
         return Payment.PAYMENT_STATUS_FAILED;
     }
 

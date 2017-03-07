@@ -18,8 +18,8 @@ package org.yes.cart.service.locator.impl;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.service.locator.InstantiationStrategy;
-import org.yes.cart.util.ShopCodeContext;
 
 import javax.xml.XMLConstants;
 
@@ -29,6 +29,8 @@ import javax.xml.XMLConstants;
  * Time: 14:12:54
  */
 public class WebServiceInstantiationStrategyImpl implements InstantiationStrategy {
+
+    private static final Logger LOG = LoggerFactory.getLogger(WebServiceInstantiationStrategyImpl.class);
 
     private static final String NAMESPACE_URI = XMLConstants.NULL_NS_URI; // TODO is separate namespace needed ?
 
@@ -40,10 +42,7 @@ public class WebServiceInstantiationStrategyImpl implements InstantiationStrateg
                              final String loginName,
                              final String password)  {
     //TODO use login & password
-        final Logger log = ShopCodeContext.getLog(this);
-        if(log.isDebugEnabled()) {
-            log.debug("Get {} as {}", serviceUrl, iface.getName());
-        }
+        LOG.debug("Get {} as {}", serviceUrl, iface.getName());
 
         try {
             /*final QName qname = new QName(NAMESPACE_URI, getServiceName(serviceUrl));

@@ -3,6 +3,7 @@ package org.yes.cart.service.async.impl;
 import org.slf4j.Logger;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
+import org.yes.cart.util.log.Markers;
 
 /**
  * User: denispavlov
@@ -55,7 +56,7 @@ public class JobStatusListenerLoggerWrapperImpl implements JobStatusListener {
 
     /** {@inheritDoc} */
     public void notifyError(final String error, final Exception exp) {
-        logger.error(error, exp);
+        logger.error(Markers.alert(), error, exp);
     }
 
     /** {@inheritDoc} */

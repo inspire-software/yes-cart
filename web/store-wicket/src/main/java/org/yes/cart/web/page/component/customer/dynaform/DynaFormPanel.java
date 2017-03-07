@@ -27,13 +27,13 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
@@ -55,6 +55,7 @@ import java.util.Map;
  */
 public class DynaFormPanel extends BaseComponent {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DynaFormPanel.class);
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String FORM = "form";
@@ -103,12 +104,11 @@ public class DynaFormPanel extends BaseComponent {
 
             @Override
             protected void onSubmit() {
-                final Logger log = ShopCodeContext.getLog(this);
-                log.debug("Attributes will be updated for customer [{}]", customer.getEmail());
+                LOG.debug("Attributes will be updated for customer [{}]", customer.getEmail());
 
                 final Map<String, String> values = new HashMap<String, String>();
                 for (Pair<? extends AttrValue, Boolean> av : attrValueCollection) {
-                    log.debug("Attribute with code [{}] has value [{}], readonly [{}]",
+                    LOG.debug("Attribute with code [{}] has value [{}], readonly [{}]",
                             new Object[] {
                                     av.getFirst().getAttribute().getCode(),
                                     av.getFirst().getVal(),

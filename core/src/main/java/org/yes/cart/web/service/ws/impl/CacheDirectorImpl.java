@@ -16,11 +16,12 @@
 package org.yes.cart.web.service.ws.impl;
 
 import net.sf.ehcache.statistics.LiveCacheStatistics;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.CacheDirector;
 
 import java.util.*;
@@ -33,6 +34,8 @@ import java.util.*;
  * Time: 9:50 AM
  */
 public class CacheDirectorImpl implements CacheDirector {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CacheDirectorImpl.class);
 
     private Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache;
 
@@ -167,7 +170,7 @@ public class CacheDirectorImpl implements CacheDirector {
 
                     } else {
 
-                        ShopCodeContext.getLog(this).warn("The [" + cacheStrategy.getSecond() + "] cache eviction strategy not supported");
+                        LOG.warn("The [" + cacheStrategy.getSecond() + "] cache eviction strategy not supported");
 
                     }
 

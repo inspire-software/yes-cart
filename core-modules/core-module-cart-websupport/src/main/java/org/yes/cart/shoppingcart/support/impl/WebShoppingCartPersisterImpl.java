@@ -16,9 +16,10 @@
 
 package org.yes.cart.shoppingcart.support.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.TargetSource;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.shoppingcart.support.CartTuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizer;
 import org.yes.cart.shoppingcart.support.ShoppingCartPersister;
@@ -33,6 +34,8 @@ import java.text.MessageFormat;
  * Time: 9:04 PM
  */
 public class WebShoppingCartPersisterImpl implements ShoppingCartPersister<HttpServletRequest, HttpServletResponse> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(WebShoppingCartPersisterImpl.class);
 
     private final TargetSource tuplizerPool;
 
@@ -61,17 +64,17 @@ public class WebShoppingCartPersisterImpl implements ShoppingCartPersister<HttpS
             try {
                 tuplizer.tuplize(httpServletRequest, httpServletResponse, shoppingCart);
             } catch (CartTuplizationException e) {
-                ShopCodeContext.getLog(this).error(MessageFormat.format("Unable to create cookies from {0} cart", shoppingCart), e);
+                LOG.error(MessageFormat.format("Unable to create cookies from {0} cart", shoppingCart), e);
             }
 
         } catch (Exception e) {
-            ShopCodeContext.getLog(this).error("Can process request", e);
+            LOG.error("Can process request", e);
         } finally {
             if (tuplizer != null) {
                 try {
                     tuplizerPool.releaseTarget(tuplizer);
                 } catch (Exception e) {
-                    ShopCodeContext.getLog(this).error("Can return object to pool ", e);
+                    LOG.error("Can return object to pool ", e);
                 }
             }
         }

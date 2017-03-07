@@ -30,6 +30,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -39,14 +40,13 @@ import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.shoppingcart.support.ShoppingCartPersister;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
-import org.yes.cart.shoppingcart.support.ShoppingCartPersister;
 import org.yes.cart.web.util.WicketUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +59,8 @@ import java.util.*;
  * Time: 10:22 AM
  */
 public class AbstractWebPage extends WebPage {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractWebPage.class);
 
     public static final String FEEDBACK = "feedback";
     public static final String FOOTER = "footer";
@@ -178,8 +180,7 @@ public class AbstractWebPage extends WebPage {
                 }
             }
         });
-        final Logger log = ShopCodeContext.getLog(this);
-        log.warn("Page {} is stateful because of the following components: {}", getClass().getCanonicalName(), statefulComponentIds);
+        LOG.warn("Page {} is stateful because of the following components: {}", getClass().getCanonicalName(), statefulComponentIds);
     }
 
 
@@ -214,7 +215,7 @@ public class AbstractWebPage extends WebPage {
 
         } catch (Exception exp) {
 
-            ShopCodeContext.getLog(this).error("Could not execute shopping cart command", exp);
+            LOG.error("Could not execute shopping cart command", exp);
 
         }
 

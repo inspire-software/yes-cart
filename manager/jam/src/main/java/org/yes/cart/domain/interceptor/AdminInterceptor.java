@@ -19,6 +19,8 @@ package org.yes.cart.domain.interceptor;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.type.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -35,7 +37,6 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.utils.RunAsUserAuthentication;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.CacheDirector;
 import org.yes.cart.web.service.ws.client.AsyncContextFactory;
 
@@ -50,6 +51,8 @@ import java.util.*;
  * Delegate cache eviction to shops in case if operation was performed on a cacheable entity.
  */
 public class AdminInterceptor extends AuditInterceptor implements ApplicationContextAware {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AdminInterceptor.class);
 
     private ApplicationContext applicationContext;
     private NodeService nodeService;
@@ -145,8 +148,7 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
                     }
 
                     if (threadContext == null) {
-                        ShopCodeContext.getLog(this)
-                                .debug("Cannot invalidate cache for entity [" + entityName + "] pk value =  [" + pk + "] - no async context ");
+                        LOG.debug("Cannot invalidate cache for entity [" + entityName + "] pk value =  [" + pk + "] - no async context ");
                         return;
                     }
 
@@ -174,7 +176,7 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
 
 
                 } catch (Exception exp) {
-                    ShopCodeContext.getLog(this).error("Unable to perform cache eviction: " + exp.getMessage(), exp);
+                    LOG.error("Unable to perform cache eviction: " + exp.getMessage(), exp);
                 } finally {
                     SecurityContextHolder.clearContext();
                 }

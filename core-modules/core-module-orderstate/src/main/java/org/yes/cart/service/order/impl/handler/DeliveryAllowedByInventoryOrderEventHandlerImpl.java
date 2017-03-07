@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.order.impl.handler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
@@ -32,9 +34,10 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DeliveryAllowedByInventoryOrderEventHandlerImpl
-        extends ProcessAllocationOrderEventHandlerImpl
+public class DeliveryAllowedByInventoryOrderEventHandlerImpl extends ProcessAllocationOrderEventHandlerImpl
         implements OrderEventHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DeliveryAllowedByInventoryOrderEventHandlerImpl.class);
 
     private final ProductService productService;
 
@@ -76,7 +79,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl
                         final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
                         if (selected == null) {
-                            ShopCodeContext.getLog(this).warn(
+                            LOG.warn(
                                     "Warehouse is not found for delivery detail {}:{}",
                                     orderDelivery.getDeliveryNum(), det.getProductSkuCode()
                             );
@@ -88,7 +91,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl
                                 det.getProductSkuCode()
                         );
                         if (stock == null || !stock.isAvailableToAllocate(det.getQty())) {
-                            ShopCodeContext.getLog(this).debug(
+                            LOG.info(
                                     "Not enough stock for delivery detail {}:{}",
                                     orderDelivery.getDeliveryNum(), det.getProductSkuCode()
                             );

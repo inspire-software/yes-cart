@@ -18,6 +18,7 @@ package org.yes.cart.web.filter;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
@@ -56,6 +57,8 @@ import java.util.Date;
  * Time: 8:07:27 AM
  */
 public class ImageFilter extends AbstractFilter implements Filter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ImageFilter.class);
 
     private static final String ETAG = "ETag";
 
@@ -126,9 +129,8 @@ public class ImageFilter extends AbstractFilter implements Filter {
             httpServletResponse.sendError(HttpServletResponse.SC_NOT_MODIFIED);
             // use the same date we sent when we created the ETag the first time through
             httpServletResponse.setHeader(LAST_MODIFIED, httpServletRequest.getHeader(IF_MODIFIED_SINCE));
-            final Logger log = ShopCodeContext.getLog(this);
-            if (log.isDebugEnabled()) {
-                log.debug("ETag the same, will return 304");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("ETag the same, will return 304");
             }
         } else {
 

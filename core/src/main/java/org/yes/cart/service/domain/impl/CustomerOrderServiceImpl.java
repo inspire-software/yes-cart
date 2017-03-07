@@ -17,6 +17,8 @@
 package org.yes.cart.service.domain.impl;
 
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
@@ -26,7 +28,6 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -37,6 +38,8 @@ import java.util.*;
  * Time: 14:12:54
  */
 public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrder> implements CustomerOrderService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CustomerOrderServiceImpl.class);
 
     private final OrderAssembler orderAssembler;
 
@@ -233,7 +236,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
                 // This can only happen if they did not click come back to site from the external payment site
                 // Meanwhile the callback happened and updated the order
 
-                ShopCodeContext.getLog(this).warn(
+                LOG.warn(
                         MessageFormat.format(
                                 "Order {0} with {1} cart guid has {2} order status instead of 1 - ORDER_STATUS_NONE",
                                 customerOrderToDelete.getCustomerorderId(),

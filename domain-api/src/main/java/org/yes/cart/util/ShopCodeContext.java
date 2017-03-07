@@ -19,6 +19,7 @@ package org.yes.cart.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -55,6 +56,7 @@ public class ShopCodeContext {
      */
     public static void setShopCode(final String currentShopCode) {
         shopCode.set(currentShopCode);
+        MDC.put("shopCode", getShopCode());
     }
 
     /**
@@ -86,34 +88,8 @@ public class ShopCodeContext {
     public static void clear() {
         shopId.set(0L);
         shopCode.set("DEFAULT");
+        MDC.put("shopCode", getShopCode());
     }
 
-
-
-    /**
-     * This is a faster way to get loggers since we keep references in a concurrent
-     * hash map as opposed to synchronised look ups offered by slf4j API.
-     *
-     * @return get code specific logger to separate shop streams in
-     *         multistore environment
-     * @param context calling object
-     */
-    public static Logger getLog(final Object context) {
-        final String code = getLogKey(context);
-        if (!LOGS.containsKey(code)) {
-            final Logger log = LoggerFactory.getLogger(code);
-            LOGS.put(code, log);
-            return log;
-        }
-        return LOGS.get(code);
-    }
-
-    static String getLogKey(final Object context) {
-        // 1m calls == 0.547s Intel 64 mac Hot Spot 1_6_22
-        // return new StringBuilder(getShopCode()).append('.').append(context.getClass().getCanonicalName()).toString();
-
-        // 1m calls == 0.48s Intel 64 mac Hot Spot 1_6_22
-        return getShopCode().concat(".").concat(context.getClass().getName());
-    }
 
 }

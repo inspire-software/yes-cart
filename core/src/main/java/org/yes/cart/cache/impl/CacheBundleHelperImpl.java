@@ -16,10 +16,11 @@
 
 package org.yes.cart.cache.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.cache.CacheBundleHelper;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Collections;
 import java.util.Set;
@@ -30,6 +31,8 @@ import java.util.Set;
  * Time: 12:19
  */
 public class CacheBundleHelperImpl implements CacheBundleHelper {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CacheBundleHelperImpl.class);
 
     private CacheManager cacheManager;
     private Set<String> caches = Collections.emptySet();
@@ -52,7 +55,7 @@ public class CacheBundleHelperImpl implements CacheBundleHelper {
         if(cache != null) {
             cache.clear();
         } else {
-            ShopCodeContext.getLog(this).warn("Cache {} does not exist", cacheName);
+            LOG.warn("Cache {} does not exist", cacheName);
         }
 
     }

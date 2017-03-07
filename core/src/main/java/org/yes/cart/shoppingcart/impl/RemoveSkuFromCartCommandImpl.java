@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.PriceService;
@@ -25,7 +27,6 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -41,6 +42,8 @@ import java.util.Map;
 public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
 
     private static final long serialVersionUID = 20100313L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(RemoveSkuFromCartCommandImpl.class);
 
     private final ProductQuantityStrategy productQuantityStrategy;
 
@@ -93,8 +96,7 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
         if (productSku != null) {
             if(!shoppingCart.removeCartItemQuantity(productSku.getCode(),
                     getQuantityValue(productSku, shoppingCart.getProductSkuQuantity(productSku.getCode())))) {
-                ShopCodeContext.getLog(this).warn("Can not remove one sku with code {} from cart",
-                        productSku.getCode());
+                LOG.warn("Can not remove one sku with code {} from cart", productSku.getCode());
             }
 
             recalculatePricesInCart(shoppingCart);
@@ -102,8 +104,7 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
         } else {
             if(!shoppingCart.removeCartItemQuantity(skuCode,
                     getQuantityValue(null, shoppingCart.getProductSkuQuantity(skuCode)))) {
-                ShopCodeContext.getLog(this).warn("Can not remove one sku with code {} from cart",
-                        skuCode);
+                LOG.warn("Can not remove one sku with code {} from cart", skuCode);
             }
 
             recalculatePricesInCart(shoppingCart);

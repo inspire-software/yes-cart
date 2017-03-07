@@ -34,6 +34,8 @@ import org.apache.wicket.util.ClassProvider;
 import org.apache.wicket.util.file.IResourceFinder;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.locator.ResourceStreamLocator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.yes.cart.service.misc.LanguageService;
@@ -61,11 +63,10 @@ import java.util.List;
  * Date: 7/10/11
  * Time: 9:02 AM
  */
-public class StorefrontApplication
-        extends AuthenticatedWebApplication
-        implements
-        IResourceFinder,
-        IRequestCycleProvider {
+public class StorefrontApplication extends AuthenticatedWebApplication
+        implements IResourceFinder, IRequestCycleProvider {
+
+    private static final Logger LOG = LoggerFactory.getLogger(StorefrontApplication.class);
 
     private SpringComponentInjector springComponentInjector;
 
@@ -228,10 +229,10 @@ public class StorefrontApplication
         homePageProvider = mounter.getHomePageProvider();
 
         if (loginPageProvider == null) {
-            ShopCodeContext.getLog(this).error("No login page class was mounted");
+            LOG.error("No login page class was mounted");
         }
         if (homePageProvider == null) {
-            ShopCodeContext.getLog(this).error("No home page class was mounted");
+            LOG.error("No home page class was mounted");
         }
 
     }

@@ -18,6 +18,7 @@ package org.yes.cart.bulkjob.bulkimport;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,6 +38,7 @@ import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 import org.yes.cart.web.service.ws.client.AsyncContextFactory;
 
 import java.io.File;
@@ -112,6 +114,8 @@ import java.util.regex.Pattern;
  */
 public class LocalFileShareImportListenerImpl implements Runnable {
 
+    private static final Logger LOG = LoggerFactory.getLogger(LocalFileShareImportListenerImpl.class);
+
     private static final String FS_PREF = "JOB_LOCAL_FILE_IMPORT_FS_ROOT";
     public static final long INDEX_GET_READY_TIMEOUT = 5000L;
     public static final long INDEX_PING_INTERVAL = 15000L;
@@ -148,13 +152,11 @@ public class LocalFileShareImportListenerImpl implements Runnable {
     @Override
     public void run() {
 
-        final Logger defaultLog = ShopCodeContext.getLog(this);
-
-        defaultLog.info("Local file share listener");
+        LOG.info("Local file share listener");
 
         final String fsRoot = systemService.getAttributeValue(FS_PREF);
         if (StringUtils.isBlank(fsRoot)) {
-            defaultLog.error("{} is not set... terminating", FS_PREF);
+            LOG.error("{} is not set... terminating", FS_PREF);
             return;
         }
 
@@ -162,21 +164,21 @@ public class LocalFileShareImportListenerImpl implements Runnable {
         final boolean exists = root.exists();
         final boolean readableDir = exists && root.canRead() && root.isDirectory();
         if (!readableDir) {
-            defaultLog.error("{} location '{}' is invalid (exists: {}, readable: {})  ... terminating",
+            LOG.error("{} location '{}' is invalid (exists: {}, readable: {})  ... terminating",
                     new Object[]{FS_PREF, root.getAbsolutePath(), exists ? "yes" : "no", "no"});
             return;
         }
 
-        defaultLog.info("{} location '{}'... ",
+        LOG.info("{} location '{}'... ",
                 new Object[]{FS_PREF, root.getAbsolutePath()});
 
-        runRootScan(defaultLog, root);
+        runRootScan(root);
 
-        defaultLog.info("Local file share listener ... completed");
+        LOG.info("Local file share listener ... completed");
 
     }
 
-    private void runRootScan(final Logger log, final File root) {
+    private void runRootScan(final File root) {
 
         final File[] shopDirs = root.listFiles();
 
@@ -185,27 +187,27 @@ public class LocalFileShareImportListenerImpl implements Runnable {
             SecurityContextHolder.getContext().setAuthentication(global);
 
             final String importDirPath = importDirectorService.getImportDirectory();
-            log.info("Detected import directory root {}", importDirPath);
+            LOG.info("Detected import directory root {}", importDirPath);
 
             final List<Map<String, String>> importGroupsMap = importDirectorService.getImportGroups("en");
             final Set<String> importGroupNames = new HashSet<String>();
             for (final Map<String, String> group : importGroupsMap) {
                 importGroupNames.add(group.get("name"));
             }
-            log.info("Detected import groups: {}", StringUtils.join(importGroupNames, ","));
+            LOG.info("Detected import groups: {}", StringUtils.join(importGroupNames, ","));
 
 
             try {
 
                 for (final File shopDir : shopDirs) {
 
-                    runShopRootScan(log, shopDir, importDirPath, importGroupNames);
+                    runShopRootScan(shopDir, importDirPath, importGroupNames);
 
                 }
 
             } catch (Exception exp) {
 
-                log.error("Encountered fatal error: " + exp.getMessage() + "... stopping scheduled task", exp);
+                LOG.error(Markers.alert(), "Encountered fatal error: " + exp.getMessage() + "... stopping scheduled auto import", exp);
 
             } finally {
 
@@ -216,7 +218,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
         }
     }
 
-    private void runShopRootScan(final Logger defaultLog, final File shopDir, final String importDirPath, final Set<String> importGroupNames) {
+    private void runShopRootScan(final File shopDir, final String importDirPath, final Set<String> importGroupNames) {
 
         final Shop shop = shopService.getShopByCode(shopDir.getName());
         if (shop != null) {
@@ -224,29 +226,24 @@ public class LocalFileShareImportListenerImpl implements Runnable {
             ShopCodeContext.setShopCode(shop.getCode());
             ShopCodeContext.setShopId(shop.getShopId());
 
-            final Logger shopLog = ShopCodeContext.getLog(this);
-
             try {
 
-                defaultLog.info("Scanning processed directory for shop {}", shop.getCode());
-                shopLog.info("Scanning processed directory");
+                LOG.info("Scanning processed directory for shop {}", shop.getCode());
 
-                final File config = ensureDirectoryExists(defaultLog, shopLog, shopDir, shop, "config");
+                final File config = ensureDirectoryExists(shopDir, shop, "config");
                 final File configProps = new File(config, "config.properties");
                 if (!configProps.exists()) {
-                    defaultLog.info("Configuration file is missing for shop {} ... skipping", shop.getCode());
-                    shopLog.info("Configuration file is missing ... skipping");
+                    LOG.info("Configuration file is missing for shop {} ... skipping", shop.getCode());
                     return;
                 }
 
-                final Map<Pattern, Map<String, String>> patternGroupMap = loadShopAutoImportConfigurations(shopLog, configProps, importGroupNames);
+                final Map<Pattern, Map<String, String>> patternGroupMap = loadShopAutoImportConfigurations(configProps, importGroupNames);
 
-                final File processed = ensureDirectoryExists(defaultLog, shopLog, shopDir, shop, "processed");
+                final File processed = ensureDirectoryExists(shopDir, shop, "processed");
 
                 final File[] readyForImport = processed.listFiles();
                 if (readyForImport == null || readyForImport.length == 0) {
-                    defaultLog.info("No new files to import for shop {}", shop.getCode());
-                    shopLog.info("No new files to import for shop {}", shop.getCode());
+                    LOG.info("No new files to import for shop {}", shop.getCode());
                     return;
                 }
 
@@ -256,8 +253,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                 int count = 1;
                 for (final File toImport : prioritiseProcessedFiles(readyForImport)) {
 
-                    defaultLog.info("Processing file {} of {}", count, total);
-                    shopLog.info("Processing file {} of {}", count, total);
+                    LOG.info("Processing file {} of {}", count, total);
                     count++;
 
                     final String timestamp = format.format(new Date());
@@ -265,8 +261,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                     final File targetDirectory = new File(importDirPath + File.separator + PRINCIPAL + timestamp);
                     targetDirectory.mkdirs();
 
-                    defaultLog.info("Moving file to '{}' for shop {}", targetDirectory.getAbsolutePath(), shop.getCode());
-                    shopLog.info("Moving file to '{}' for shop {}", targetDirectory.getAbsolutePath(), shop.getCode());
+                    LOG.info("Moving file to '{}' for shop {}", targetDirectory.getAbsolutePath(), shop.getCode());
 
                     Map<String, String> groupData = null;
                     for (final Map.Entry<Pattern, Map<String, String>> group : patternGroupMap.entrySet()) {
@@ -277,15 +272,13 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                     }
 
                     if (groupData == null) {
-                        defaultLog.warn("Importing '{}' for shop {} ... skipping (no valid import group)", toImport.getAbsolutePath(), shop.getCode());
-                        shopLog.warn("Importing '{}' for shop {} ... skipping (no valid import group)", toImport.getAbsolutePath(), shop.getCode());
+                        LOG.warn("Importing '{}' for shop {} ... skipping (no valid import group)", toImport.getAbsolutePath(), shop.getCode());
                         continue;
                     }
 
                     final String groupName = groupData.get("group");
 
-                    defaultLog.info("Importing '{}' for shop {} using group {}", new Object[] { toImport.getAbsolutePath(), shop.getCode(), groupName });
-                    shopLog.info("Importing '{}' for shop {} using group {}", new Object[] { toImport.getAbsolutePath(), shop.getCode(), groupName });
+                    LOG.info("Importing '{}' for shop {} using group {}", new Object[] { toImport.getAbsolutePath(), shop.getCode(), groupName });
 
                     final String destination = moveFileToImportDirectory(toImport, targetDirectory);
 
@@ -309,8 +302,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                             final long msImport = (finishImport - startImport);
                             final long secImport = msImport > 0 ? msImport / 1000 : 0;
 
-                            defaultLog.info("Importing '{}' for shop {} using group {} ... completed [{}] in {}s", new Object[] { toImport.getAbsolutePath(), shop.getCode(), groupName, importStatus.getCompletion(), secImport });
-                            shopLog.info("Importing '{}' for shop {} using group {} ... completed [{}] in {}s", new Object[]{ toImport.getAbsolutePath(), shop.getCode(), groupName, importStatus.getCompletion(), secImport });
+                            LOG.info("Importing '{}' for shop {} using group {} ... completed [{}] in {}s", new Object[] { toImport.getAbsolutePath(), shop.getCode(), groupName, importStatus.getCompletion(), secImport });
 
                             final AsyncContext cacheCtx = createCtx(AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
                             clusterService.evictAllCache(cacheCtx);
@@ -322,8 +314,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
                                     final long startIndex = getTimeNow();
 
-                                    defaultLog.info("Re-indexed products for shop {} using group {} ... starting", new Object[] { shop.getCode(), groupName });
-                                    shopLog.info("Re-indexed products for shop {} using group {} ... starting", new Object[]{shop.getCode(), groupName});
+                                    LOG.info("Re-indexed products for shop {} using group {} ... starting", new Object[] { shop.getCode(), groupName });
 
                                     final AsyncContext reindexCtx = createCtx(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS);
                                     Thread.sleep(INDEX_GET_READY_TIMEOUT); // let cache invalidation run before index
@@ -337,8 +328,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                                             final long msIndex = (finishIndex - startIndex);
                                             final long secIndex = msIndex > 0 ? msIndex / 1000 : 0;
 
-                                            defaultLog.info("Re-indexed products for shop {} using group {} ... completed [{}] in {}s", new Object[] { shop.getCode(), groupName, reindexStatus.getCompletion(), secIndex });
-                                            shopLog.info("Re-indexed products for shop {} using group {} ... completed [{}] in {}s", new Object[] { shop.getCode(), groupName, reindexStatus.getCompletion(), secIndex });
+                                            LOG.info("Re-indexed products for shop {} using group {} ... completed [{}] in {}s", new Object[] { shop.getCode(), groupName, reindexStatus.getCompletion(), secIndex });
 
                                             clusterService.evictAllCache(cacheCtx);
                                             Thread.sleep(WARMUP_GET_READY_TIMEOUT);
@@ -354,8 +344,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
 
                         } else {
-                            defaultLog.warn("Invalid credentials for '{}' for shop {} using group {}", new Object[]{user, shop.getCode(), groupName});
-                            shopLog.warn("Invalid credentials for '{}' for shop {} using group {}", new Object[]{user, shop.getCode(), groupName});
+                            LOG.warn("Invalid credentials for '{}' for shop {} using group {}", new Object[]{user, shop.getCode(), groupName});
                         }
 
                     } finally {
@@ -366,8 +355,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
                 }
             } catch (Exception exp) {
-                defaultLog.error("Failed import configuration " + shop.getCode(), exp);
-                shopLog.error("Failed import configuration " + shop.getCode(), exp);
+                LOG.error("Failed import configuration " + shop.getCode(), exp);
             } finally {
                 ShopCodeContext.clear();
             }
@@ -379,7 +367,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
         return System.currentTimeMillis();
     }
 
-    private Map<Pattern, Map<String, String>> loadShopAutoImportConfigurations(final Logger shopLog, final File configProps, final Set<String> importGroupNames) throws IOException {
+    private Map<Pattern, Map<String, String>> loadShopAutoImportConfigurations(final File configProps, final Set<String> importGroupNames) throws IOException {
 
         final Properties configuration = new Properties();
         configuration.load(new FileInputStream(configProps));
@@ -392,25 +380,25 @@ public class LocalFileShareImportListenerImpl implements Runnable {
             if (StringUtils.isBlank(cfgGroup)) {
                 break;  // finished as there are not more configs (by convention)
             } else if (!importGroupNames.contains(cfgGroup)) {
-                shopLog.warn("Configuration {} is not a valid import group ... skipping", cfgGroup);
+                LOG.warn("Configuration {} is not a valid import group ... skipping", cfgGroup);
                 continue;
             }
 
             final String cfgRegex = configuration.getProperty("config." + i + ".regex");
             if (StringUtils.isBlank(cfgRegex)) {
-                shopLog.warn("Configuration {} has no regex ... skipping", cfgGroup);
+                LOG.warn("Configuration {} has no regex ... skipping", cfgGroup);
                 continue;
             }
 
             final String cfgUser = configuration.getProperty("config." + i + ".user");
             if (StringUtils.isBlank(cfgUser)) {
-                shopLog.warn("Configuration {} has no user ... skipping", cfgGroup);
+                LOG.warn("Configuration {} has no user ... skipping", cfgGroup);
                 continue;
             }
 
             final String cfgPass = configuration.getProperty("config." + i + ".pass");
             if (StringUtils.isBlank(cfgPass)) {
-                shopLog.warn("Configuration {} has no password ... skipping", cfgGroup);
+                LOG.warn("Configuration {} has no password ... skipping", cfgGroup);
                 continue;
             }
 
@@ -427,10 +415,10 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
                 patternGroupMap.put(regex, data);
 
-                shopLog.info("Configuration {} has regex {}", cfgGroup, cfgRegex);
+                LOG.info("Configuration {} has regex {}", cfgGroup, cfgRegex);
 
             } catch (Exception exp) {
-                shopLog.warn("Configuration {} has INVALID regex {} ... skipping", cfgGroup, cfgRegex);
+                LOG.warn("Configuration {} has INVALID regex {} ... skipping", cfgGroup, cfgRegex);
             }
         }
         return patternGroupMap;
@@ -482,19 +470,17 @@ public class LocalFileShareImportListenerImpl implements Runnable {
     /**
      * Ensure that directory exists, so that we can scan it.
      *
-     * @param defaultLog current log
      * @param shopDir root of shop import directory structure
      * @param shop shop instance
      * @param dirname name of directory under shop dir
      *
      * @return directory
      */
-    protected File ensureDirectoryExists(final Logger defaultLog, final Logger shopLog, final File shopDir, final Shop shop, final String dirname) throws IOException {
+    protected File ensureDirectoryExists(final File shopDir, final Shop shop, final String dirname) throws IOException {
 
         final File dir = new File(shopDir, dirname);
         if (!dir.exists()) {
-            defaultLog.info("Proactively creating '{}' sub directory for shop {}", dir.getAbsolutePath(), shop.getCode());
-            shopLog.info("Proactively creating '{}' sub directory for shop {}", dir.getAbsolutePath(), shop.getCode());
+            LOG.info("Proactively creating '{}' sub directory for shop {}", dir.getAbsolutePath(), shop.getCode());
             if (!dir.mkdirs()) {
                 throw new IOException("Failed to create '" +
                         dir.getAbsolutePath() + "' sub directory for shop " + shop.getCode());

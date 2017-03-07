@@ -19,9 +19,10 @@ package org.yes.cart.payment.impl;
 import com.paypal.ipn.IPNMessage;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
-import org.yes.cart.payment.dto.PaymentAddress;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
@@ -31,7 +32,6 @@ import org.yes.cart.service.payment.impl.PaymentLocaleTranslatorImpl;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -46,6 +46,7 @@ import java.util.UUID;
  */
 public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImpl implements PaymentGatewayExternalForm {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PayPalButtonPaymentGatewayImpl.class);
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             false, false, false, true,
@@ -114,14 +115,14 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
 
         final IPNMessage ipn = createIPNMessage(privateCallBackParameters);
         if (ipn.validate()) {
-            ShopCodeContext.getLog(this).debug("Signature is valid");
+            LOG.debug("Signature is valid");
             final String invoice = ipn.getIpnValue("invoice");
             if (StringUtils.isBlank(invoice)) {
                 return ipn.getIpnValue("custom");
             }
             return invoice;
         } else {
-            ShopCodeContext.getLog(this).debug("Signature is not valid");
+            LOG.debug("Signature is not valid");
         }
         return null;
     }
@@ -136,7 +137,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
         final IPNMessage ipn = createIPNMessage(request);
         if (ipn.validate()) {
 
-            ShopCodeContext.getLog(this).debug("Signature is valid");
+            LOG.debug("Signature is valid");
 
             final String paymentStatus = ipn.getIpnValue("payment_status");
 
@@ -144,7 +145,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
 
             return settled ? CallbackResult.OK : CallbackResult.UNSETTLED;
         } else {
-            ShopCodeContext.getLog(this).debug("Signature is not valid");
+            LOG.debug("Signature is not valid");
         }
         return CallbackResult.FAILED;
 

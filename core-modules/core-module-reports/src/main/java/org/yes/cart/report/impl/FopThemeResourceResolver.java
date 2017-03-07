@@ -4,10 +4,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.xmlgraphics.io.Resource;
 import org.apache.xmlgraphics.io.ResourceResolver;
 import org.apache.xmlgraphics.io.TempResourceResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.theme.ThemeService;
-import org.yes.cart.util.ShopCodeContext;
 
 import javax.servlet.ServletContext;
 import java.io.ByteArrayInputStream;
@@ -24,6 +25,8 @@ import java.util.List;
  * Time: 15:38
  */
 public class FopThemeResourceResolver implements TempResourceResolver, ResourceResolver {
+
+    private static final Logger LOG = LoggerFactory.getLogger(FopThemeResourceResolver.class);
 
     private final Shop shop;
     private final String language;
@@ -71,7 +74,7 @@ public class FopThemeResourceResolver implements TempResourceResolver, ResourceR
             final String curi = shop.getCode().concat("_report_").concat(contentSuffix != null ? contentSuffix : uri.toString());
             final String content = contentService.getContentBody(curi, language);
             if (StringUtils.isNotBlank(content)) {
-                ShopCodeContext.getLog(this).debug("Using shop specific report template file {}", curi);
+                LOG.debug("Using shop specific report template file {}", curi);
                 return new Resource(new ByteArrayInputStream(content.getBytes(Charset.forName("UTF-8"))));
             }
 
@@ -83,15 +86,15 @@ public class FopThemeResourceResolver implements TempResourceResolver, ResourceR
             try {
                 final InputStream stream = servletContext.getResourceAsStream(configFile);
                 if (stream != null) {
-                    ShopCodeContext.getLog(this).debug("Using theme specific report template file {}", configFile);
+                    LOG.debug("Using theme specific report template file {}", configFile);
                     return new Resource(stream);
                 }
             } catch (Exception mue) {
-                ShopCodeContext.getLog(this).error("Unable to load report template file " + configFile, mue);
+                LOG.error("Unable to load report template file " + configFile, mue);
             }
         }
 
-        ShopCodeContext.getLog(this).debug("No report template for {}", uri);
+        LOG.debug("No report template for {}", uri);
         return null;
 
     }

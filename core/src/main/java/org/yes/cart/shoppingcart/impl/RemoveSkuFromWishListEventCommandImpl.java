@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductSku;
@@ -26,7 +27,6 @@ import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.List;
 import java.util.Map;
@@ -41,6 +41,8 @@ import java.util.Map;
 public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartCommandImpl {
 
     private static final long serialVersionUID = 20100122L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(RemoveSkuFromWishListEventCommandImpl.class);
 
     private final CustomerService customerService;
     private final CustomerWishListService customerWishListService;
@@ -82,7 +84,7 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
             try {
                 return Long.valueOf((String) strId);
             } catch (Exception exp) {
-                ShopCodeContext.getLog(this).error("Invalid item id in remove from wish list command", exp);
+                LOG.error("Invalid item id in remove from wish list command", exp);
             }
         } else if (strId instanceof Number) {
             return ((Number) strId).longValue();
@@ -114,11 +116,7 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
                 // recalculatePrice(shoppingCart, null);
                 // markDirty(shoppingCart);
 
-                final Logger log = ShopCodeContext.getLog(this);
-                if (log.isDebugEnabled()) {
-                    log.debug("Removed one item of sku code {} from wishlist",
-                            productSku.getCode());
-                }
+                LOG.debug("Removed one item of sku code {} from wishlist", productSku.getCode());
             }
         }
     }

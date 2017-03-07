@@ -16,11 +16,13 @@
 
 package org.yes.cart.domain.message.consumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.mail.MailComposer;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +33,8 @@ import java.util.Map;
  * Time: 14:12:54
  */
 public class ManagerRegistrationMessageListener implements Runnable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ManagerRegistrationMessageListener.class);
 
     private final MailService mailService;
 
@@ -62,7 +66,7 @@ public class ManagerRegistrationMessageListener implements Runnable {
         try {
             processMessage(objectMessage);
         } catch (Exception e) {
-            ShopCodeContext.getLog(this).error("Can not process " + objectMessage, e);
+            LOG.error(Markers.alert(), "Can not process " + objectMessage, e);
             throw new RuntimeException(e); //rollback message
         }
 

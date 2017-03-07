@@ -17,9 +17,9 @@
 package org.yes.cart.service.order.impl.handler;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
-import org.yes.cart.util.ShopCodeContext;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -27,6 +27,8 @@ import org.yes.cart.util.ShopCodeContext;
  * Time: 14:12:54
  */
 public abstract class AbstractOrderEventHandlerImpl implements OrderEventHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractOrderEventHandlerImpl.class);
 
     /**
      * Get transition target.
@@ -36,9 +38,8 @@ public abstract class AbstractOrderEventHandlerImpl implements OrderEventHandler
     protected abstract String getTransitionTarget(final OrderEvent orderEvent);
 
     protected void handleInternal(final OrderEvent orderEvent) {
-        final Logger log = ShopCodeContext.getLog(this);
-        if (log.isInfoEnabled()) {
-            log.info("Order {} transition from {} to {} state",
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Order {} transition from {} to {} state",
                     new Object[]{
                             orderEvent.getCustomerOrder().getOrdernum(),
                             orderEvent.getCustomerOrder().getOrderStatus(),

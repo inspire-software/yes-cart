@@ -34,6 +34,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
@@ -64,6 +66,8 @@ import java.util.Map;
  * Time: 18:01
  */
 public class AddressForm extends Form<Address> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AddressForm.class);
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String FIELDS = "fields";
@@ -146,7 +150,7 @@ public class AddressForm extends Form<Address> {
                 final Object val = PropertyUtils.getProperty(address, av.getAttribute().getVal());
                 av.setVal(val != null ? String.valueOf(val) : null);
             } catch (Exception e) {
-                ShopCodeContext.getLog(this).error("Unable to get address property for {}, prop {}", av.getAttribute(), av.getAttribute().getVal());
+                LOG.error("Unable to get address property for {}, prop {}", av.getAttribute(), av.getAttribute().getVal());
             }
         }
 
@@ -230,7 +234,7 @@ public class AddressForm extends Form<Address> {
                         try {
                             PropertyUtils.setProperty(addr, value.getAttribute().getVal(), value.getVal());
                         }  catch (Exception e) {
-                            ShopCodeContext.getLog(this).error("Unable to set address property for {}, prop {}", value.getAttribute(), value.getAttribute().getVal());
+                            LOG.error("Unable to set address property for {}, prop {}", value.getAttribute(), value.getAttribute().getVal());
                         }
                     }
 

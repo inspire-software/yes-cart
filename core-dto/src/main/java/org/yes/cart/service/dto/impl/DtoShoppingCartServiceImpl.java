@@ -19,6 +19,8 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.domain.CustomerOrderService;
@@ -28,7 +30,6 @@ import org.yes.cart.service.order.OrderDisassembler;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -40,6 +41,8 @@ import java.util.Map;
  * Time: 17:31
  */
 public class DtoShoppingCartServiceImpl implements DtoShoppingCartService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DtoShoppingCartServiceImpl.class);
 
     private final DtoFactory dtoFactory;
     private final AdaptersRepository adaptersRepository;
@@ -76,7 +79,7 @@ public class DtoShoppingCartServiceImpl implements DtoShoppingCartService {
                 cartRepository.storeShoppingCart(cart);
                 return fillDTO(cart);
             } catch (OrderAssemblyException e) {
-                ShopCodeContext.getLog(this).error(e.getMessage(), e);
+                LOG.error("Unable to create shopping cart for: " + ref + ", cause: " + e.getMessage(), e);
             }
         }
         return null;

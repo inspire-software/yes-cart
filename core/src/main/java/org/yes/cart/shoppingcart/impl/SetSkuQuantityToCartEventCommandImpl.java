@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
@@ -27,7 +29,6 @@ import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -43,6 +44,8 @@ import java.util.Map;
 public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartCommandImpl {
 
     private static final long serialVersionUID = 20110312L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(SetSkuQuantityToCartEventCommandImpl.class);
 
     private final ProductQuantityStrategy productQuantityStrategy;
 
@@ -89,7 +92,7 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
                     return qty.setScale(0, BigDecimal.ROUND_CEILING);
                 }
             } catch (Exception exp) {
-                ShopCodeContext.getLog(this).error("Invalid quantity in add to cart command", exp);
+                LOG.error("Invalid quantity in add to cart command", exp);
             }
         }
         if (productSku != null) {
@@ -116,18 +119,14 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
             ).getValue(shoppingCart.getCurrentLocale());
             shoppingCart.setProductSkuToCart(productSku.getCode(), skuName, validQuantity);
             recalculatePricesInCart(shoppingCart);
-            ShopCodeContext.getLog(this).debug("Set product sku with code {} to qty {}",
-                    productSku.getCode(),
-                    validQuantity);
+            LOG.debug("Set product sku with code {} to qty {}", productSku.getCode(), validQuantity);
             markDirty(shoppingCart);
         } else if (determineSkuPrice(shoppingCart, skuCode, BigDecimal.ONE) != null) {
             // if we have no product for SKU, make sure we have price for this SKU
             final BigDecimal validQuantity = getQuantityValue(parameters, null, shoppingCart.getProductSkuQuantity(skuCode));
             shoppingCart.setProductSkuToCart(skuCode, skuCode, validQuantity);
             recalculatePricesInCart(shoppingCart);
-            ShopCodeContext.getLog(this).debug("Set product sku with code {} to qty {}",
-                    skuCode,
-                    validQuantity);
+            LOG.debug("Set product sku with code {} to qty {}", skuCode, validQuantity);
             markDirty(shoppingCart);
         }
     }

@@ -18,6 +18,8 @@ package org.yes.cart.bulkexport.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.bulkcommon.service.DataDescriptorResolver;
 import org.yes.cart.bulkcommon.service.ExportDirectorService;
@@ -43,7 +45,6 @@ import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.client.AsyncContextFactory;
 
 import java.io.File;
@@ -58,6 +59,8 @@ import java.util.*;
  * Time: 11:56
  */
 public class ExportDirectorImplService extends SingletonJobRunner implements ExportDirectorService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ExportDirectorImplService.class);
 
     private final String pathToExportDirectory;
 
@@ -129,7 +132,7 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
         final String rootPath = resolveExportDirectory();
         final String absFile = resolveExportFile((String) ctx.getAttribute(AsyncContext.USERNAME), fileName);
 
-        return doJob(new JobContextImpl(async, new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(logSize, timeout), ShopCodeContext.getLog(this)),
+        return doJob(new JobContextImpl(async, new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(logSize, timeout), LOG),
                 new HashMap<String, Object>() {{
                     put(JobContextKeys.EXPORT_DESCRIPTOR_GROUP, descriptorGroup);
                     put(JobContextKeys.EXPORT_FILE, absFile);
@@ -176,7 +179,7 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
                     listener.notifyCompleted();
                 } catch (Throwable trw) {
                     // something very, very wrong
-                    ShopCodeContext.getLog(this).error(trw.getMessage(), trw);
+                    LOG.error(trw.getMessage(), trw);
                     listener.notifyError(trw.getMessage());
                     listener.notifyMessage("Export Job was terminated. Error: " + trw.getMessage());
                     listener.notifyCompleted();

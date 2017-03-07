@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -24,7 +26,6 @@ import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.shoppingcart.DeliveryCostCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,6 +36,8 @@ import java.util.Set;
  * Time: 6:07 PM
  */
 public class ExternalDeliveryCostCalculationStrategy implements DeliveryCostCalculationStrategy, ApplicationContextAware {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ExternalDeliveryCostCalculationStrategy.class);
 
     private final CarrierSlaService carrierSlaService;
     private ApplicationContext applicationContext;
@@ -65,7 +68,7 @@ public class ExternalDeliveryCostCalculationStrategy implements DeliveryCostCalc
 
                     } else {
 
-                        ShopCodeContext.getLog(this).error("CarrierSla.script [{}] is not a bean of type DeliveryCostCalculationStrategy", carrierSla.getScript());
+                        LOG.error("CarrierSla.script [{}] is not a bean of type DeliveryCostCalculationStrategy", carrierSla.getScript());
 
                     }
 

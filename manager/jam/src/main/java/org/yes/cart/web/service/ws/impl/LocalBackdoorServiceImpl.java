@@ -17,10 +17,11 @@
 package org.yes.cart.web.service.ws.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ObjectUtil;
 import org.yes.cart.web.service.ws.BackdoorService;
 
@@ -35,6 +36,8 @@ import java.util.List;
 public class LocalBackdoorServiceImpl implements BackdoorService {
 
     private static final long serialVersionUID = 20130820L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(LocalBackdoorServiceImpl.class);
 
     private ProductService productService;
 
@@ -147,7 +150,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
 
         } catch (Exception e) {
             final String msg = "Cant parse query : " + query + " Error : " + e.getMessage();
-            ShopCodeContext.getLog(this).warn(msg);
+            LOG.warn(msg);
             return Collections.singletonList(new Object[]{msg});
         }
 
@@ -174,7 +177,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
             return Collections.EMPTY_LIST;
         } catch (Exception e) {
             final String msg = "Cant parse query : " + query + " Error : " + e.getMessage();
-            ShopCodeContext.getLog(this).warn(msg);
+            LOG.warn(msg);
             return Collections.singletonList(new Object[]{msg});
         }
 

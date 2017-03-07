@@ -17,14 +17,15 @@
 package org.yes.cart.web.filter;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.TargetSource;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.shoppingcart.support.CartDetuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizer;
+import org.yes.cart.web.application.ApplicationDirector;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletException;
@@ -43,6 +44,8 @@ import java.util.Map;
  * Time: 6:13:57 PM
  */
 public class ShoppingCartFilter extends AbstractFilter implements Filter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartFilter.class);
 
     private final TargetSource tuplizerPool;
 
@@ -84,9 +87,9 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
                     cart = restored;
                 }
             } catch (CartDetuplizationException e) {
-                ShopCodeContext.getLog(this).warn("Cart not restored from cookies");
+                LOG.warn("Cart not restored from cookies");
             } catch (Exception e) {
-                ShopCodeContext.getLog(this).error("Cart not restored from cookies", e);
+                LOG.error("Cart not restored from cookies", e);
             }
             if (cart == null) {
                 cart = new ShoppingCartImpl();
@@ -97,13 +100,13 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
             request.setAttribute("ShoppingCart", cart);
 
         } catch (Exception e) {
-            ShopCodeContext.getLog(this).error("Can process request", e);
+            LOG.error("Can process request", e);
         } finally {
             if (tuplizer != null) {
                 try {
                     tuplizerPool.releaseTarget(tuplizer);
                 } catch (Exception e) {
-                    ShopCodeContext.getLog(this).error("Can return object to pool ", e);
+                    LOG.error("Can return object to pool ", e);
                 }
             }
         }

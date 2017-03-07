@@ -1,11 +1,27 @@
+/*
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.report.impl;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.report.ReportDescriptor;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.theme.ThemeService;
-import org.yes.cart.util.ShopCodeContext;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -21,6 +37,8 @@ import java.util.Map;
  * Time: 21:13
  */
 public class WebReportGeneratorImpl extends AbstractThemeAwareFopReportGenerator {
+
+    private static final Logger LOG = LoggerFactory.getLogger(WebReportGeneratorImpl.class);
 
     public WebReportGeneratorImpl(final ThemeService themeService,
                                   final ShopService shopService,
@@ -63,22 +81,21 @@ public class WebReportGeneratorImpl extends AbstractThemeAwareFopReportGenerator
             }
 
         } catch (Exception e) {
-            ShopCodeContext.getLog(this).error("Cannot create xml ", e);
+            LOG.error("Cannot create xml ", e);
 
         } finally {
             if (os != null) {
                 try {
                     os.close();
                 } catch (IOException e) {
-                    ShopCodeContext.getLog(this).error("Cannot close file", e);
+                    LOG.error("Cannot close file", e);
                 }
             }
 
         }
 
-        final Logger logger = ShopCodeContext.getLog(this);
-        if (logger.isDebugEnabled()) {
-            logger.debug("Report XML ==================================\n\n" + new String(bytesOut.toByteArray(), Charset.forName("UTF-8")));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Report XML ==================================\n\n" + new String(bytesOut.toByteArray(), Charset.forName("UTF-8")));
         }
 
         return new StreamSource(new ByteArrayInputStream(bytesOut.toByteArray()));
