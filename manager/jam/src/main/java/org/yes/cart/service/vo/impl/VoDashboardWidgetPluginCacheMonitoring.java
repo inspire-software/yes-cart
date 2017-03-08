@@ -108,6 +108,11 @@ public class VoDashboardWidgetPluginCacheMonitoring implements VoDashboardWidget
         dashboardWidgetService.registerWidgetPlugin(this);
     }
 
+    /**
+     * Spring IoC.
+     *
+     * @param asyncContextFactory async context factory
+     */
     public void setAsyncContextFactory(AsyncContextFactory asyncContextFactory) {
         this.asyncContextFactory = asyncContextFactory;
     }

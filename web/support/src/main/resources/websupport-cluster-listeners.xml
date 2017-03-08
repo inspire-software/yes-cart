@@ -79,6 +79,18 @@
         <property name="entityOperationCache" ref="evictionConfig"/>
         <property name="cacheManager" ref="cacheManager"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="skipEvictAll">
+            <set>
+                <value>alertDirector-alertsStorage</value>
+            </set>
+        </property>
     </bean>
+
+    <bean id="alertDirector" class="org.yes.cart.web.service.ws.impl.WsAlertDirectorImpl">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="alertTurboFilter" class="org.yes.cart.util.log.AlertTurboFilter"/>
 
 </beans>

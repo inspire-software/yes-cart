@@ -127,10 +127,20 @@ public class VoDashboardWidgetPluginReindex implements VoDashboardWidgetPlugin {
         dashboardWidgetService.registerWidgetPlugin(this);
     }
 
+    /**
+     * Spring IoC.
+     *
+     * @param productService product service
+     */
     public void setProductService(final ProductService productService) {
         this.productService = productService;
     }
 
+    /**
+     * Spring IoC.
+     *
+     * @param asyncContextFactory async context factory
+     */
     public void setAsyncContextFactory(AsyncContextFactory asyncContextFactory) {
         this.asyncContextFactory = asyncContextFactory;
     }

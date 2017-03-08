@@ -26,12 +26,10 @@
                   </div>
                 </div>
               </div>
-              <a>
-                <div class="panel-footer">
-                  <div *ngFor="let alert of widgets.Alerts.data" title="{{ alert.first }}: {{ alert.second }}">{{ ('DASHBOARD_ALERTS_' + alert.first) | translate: { value: alert.second } }}</div>
-                  <div class="clearfix"></div>
-                </div>
-              </a>
+              <div class="panel-footer" style="max-height: 200px;overflow-y: auto; overflow-x: hidden">
+                <div *ngFor="let alert of widgets.Alerts.data" title="{{ alert.first }}: {{ alert.second }}">{{ alert.first | translate: { value: alert.second } }}</div>
+                <div class="clearfix"></div>
+              </div>
             </div>
           </div>
 

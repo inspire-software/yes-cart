@@ -16,13 +16,13 @@
 
 package org.yes.cart.web.service.ws.impl;
 
-import org.yes.cart.web.service.ws.CacheDirector;
+import org.yes.cart.web.service.ws.AlertDirector;
 
 /**
  * User: denispavlov
- * Date: 19/09/2014
- * Time: 13:04
+ * Date: 07/03/2017
+ * Time: 20:35
  */
-public class LocalCacheDirectorImpl extends CacheDirectorImpl implements CacheDirector {
+public class LocalAlertDirectorImpl extends AlertDirectorImpl implements AlertDirector {
 
 }

@@ -635,7 +635,7 @@
   "DASHBOARD_CUSTOMERS_THIS_MONTH": "В этом месяце",
   "DASHBOARD_PG_CALLBACK": "Управление подтверждений с ПШ",
   "DASHBOARD_ALERTS": "Внимание",
-  "DASHBOARD_ALERTS_mailQueue": "Очередь почты не пуста ({{value}})",
+  "mailQueue": "Очередь почты не пуста ({{value}})",
 
   "REPORT_reportAvailableStock" : "Отчет инвентаризации",
   "REPORT_reportPayments" : "Отчет по оплатам",

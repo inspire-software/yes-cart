@@ -29,7 +29,7 @@ import java.util.List;
  */
 public interface CacheDirector {
 
-    public interface EntityOperation {
+    interface EntityOperation {
 
         String CREATE = "Create";
         String DELETE = "Delete";
@@ -50,8 +50,10 @@ public interface CacheDirector {
 
     /**
      * Evict all caches, which are represent in getCacheInfo list.
+     *
+     * @param force if true will remove all caches, if false will skip the evict all list setting
      */
-    void evictAllCache();
+    void evictAllCache(boolean force);
 
     /**
      * Evict specific cache.

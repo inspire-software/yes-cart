@@ -66,7 +66,8 @@ public class WsCacheDirectorImpl extends CacheDirectorImpl implements CacheDirec
         nodeService.subscribe("CacheDirector.evictAllCache", new MessageListener() {
             @Override
             public Serializable onMessageReceived(final Message message) {
-                WsCacheDirectorImpl.this.evictAllCache();
+                final Boolean force = (Boolean) message.getPayload();
+                WsCacheDirectorImpl.this.evictAllCache(force != null && force);
                 return "OK";
             }
         });

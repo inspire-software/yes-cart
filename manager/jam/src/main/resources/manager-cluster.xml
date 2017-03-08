@@ -56,7 +56,18 @@
     <bean id="localCacheDirector" class="org.yes.cart.web.service.ws.impl.LocalCacheDirectorImpl">
         <property name="entityOperationCache" ref="evictionConfig"/>
         <property name="cacheManager" ref="cacheManager"/>
+        <property name="skipEvictAll">
+            <set>
+                <value>alertDirector-alertsStorage</value>
+            </set>
+        </property>
     </bean>
+
+    <bean id="localAlertDirector" class="org.yes.cart.web.service.ws.impl.LocalAlertDirectorImpl">
+        <property name="cacheManager" ref="cacheManager"/>
+    </bean>
+
+    <bean id="alertTurboFilter" class="org.yes.cart.util.log.AlertTurboFilter"/>
 
     <bean id="webAppManagerAsyncContextFactory" class="org.yes.cart.web.service.ws.client.WebAppManagerAsyncContextFactory">
         <constructor-arg index="0" ref="managerService"/>
@@ -66,6 +77,7 @@
         <constructor-arg index="0" ref="nodeService"/>
         <constructor-arg index="1" ref="localBackdoorService"/>
         <constructor-arg index="2" ref="localCacheDirector"/>
+        <constructor-arg index="3" ref="localAlertDirector"/>
     </bean>
 
     <bean id="productIndexExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">

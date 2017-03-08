@@ -13,16 +13,37 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package org.yes.cart.web.service.ws;
 
-package org.yes.cart.web.service.ws.impl;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.util.ShopCodeContext;
 
-import org.yes.cart.web.service.ws.CacheDirector;
+import java.util.List;
 
 /**
  * User: denispavlov
- * Date: 19/09/2014
- * Time: 13:04
+ * Date: 07/03/2017
+ * Time: 19:58
  */
-public class LocalCacheDirectorImpl extends CacheDirectorImpl implements CacheDirector {
+public interface AlertDirector {
+
+    /**
+     * Send alert to queue
+     *
+     * @param alert alert key=> message, value => shop code (see {@link ShopCodeContext#getShopCode()})
+     */
+    void publish(Pair<String, String> alert);
+
+    /**
+     * Get alerts as pair where key=> message, value => shop code (see {@link ShopCodeContext#getShopCode()})
+     *
+     * @return alerts
+     */
+    List<Pair<String, String>> getAlerts();
+
+    /**
+     * Clear alerts
+     */
+    void clear();
 
 }

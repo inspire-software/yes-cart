@@ -77,7 +77,6 @@ public interface ClusterService {
      * Reindex all products.
      *
      * @param context web service context
-     * @return quantity product in index.
      */
     void reindexAllProductsSku(AsyncContext context);
 
@@ -188,5 +187,13 @@ public interface ClusterService {
      * @param name name of cache to evict
      */
     Map<String, Boolean> disableStats(AsyncContext context, String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Get platform alerts
+     *
+     * @param context web service context
+     * @return list of alerts
+     */
+    List<Pair<String, String>> getAlerts(AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 }

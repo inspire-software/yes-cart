@@ -29,6 +29,7 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.cluster.ClusterService;
+import org.yes.cart.web.service.ws.AlertDirector;
 import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.CacheDirector;
 
@@ -42,13 +43,16 @@ public class ClusterServiceImpl implements ClusterService {
     private final NodeService nodeService;
     private final BackdoorService localBackdoorService;
     private final CacheDirector localCacheDirector;
+    private final AlertDirector localAlertDirector;
 
     public ClusterServiceImpl(final NodeService nodeService,
                               final BackdoorService localBackdoorService,
-                              final CacheDirector localCacheDirector) {
+                              final CacheDirector localCacheDirector,
+                              final AlertDirector localAlertDirector) {
         this.nodeService = nodeService;
         this.localBackdoorService = localBackdoorService;
         this.localCacheDirector = localCacheDirector;
+        this.localAlertDirector = localAlertDirector;
     }
 
     /**
@@ -431,6 +435,9 @@ public class ClusterServiceImpl implements ClusterService {
      */
     public Map<String, Boolean> evictAllCache(final AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
+        final Boolean force = context.getAttribute("force");
+        final boolean doForcefully = force != null && force;
+
         final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
         for (final Node node : cluster) {
@@ -441,7 +448,7 @@ public class ClusterServiceImpl implements ClusterService {
                 nodeService.getCurrentNodeId(),
                 targets,
                 "CacheDirector.evictAllCache",
-                null,
+                doForcefully,
                 context
         );
 
@@ -458,7 +465,7 @@ public class ClusterServiceImpl implements ClusterService {
 
         }
 
-        localCacheDirector.evictAllCache();
+        localCacheDirector.evictAllCache(doForcefully);
         evicts.put(nodeService.getCurrentNodeId(), Boolean.TRUE);
 
         return evicts;
@@ -584,4 +591,39 @@ public class ClusterServiceImpl implements ClusterService {
 
     }
 
+    @Override
+    public List<Pair<String, String>> getAlerts(final AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+
+        final List<Node> cluster = nodeService.getSfNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            targets.add(node.getId());
+        }
+
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                "AlertDirector.getAlerts",
+                null,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        final List<Pair<String, String>> alerts = new ArrayList<Pair<String, String>>(150);
+        alerts.addAll(localAlertDirector.getAlerts());
+        if (CollectionUtils.isNotEmpty(message.getResponses())) {
+
+            for (final Message response : message.getResponses()) {
+
+                alerts.addAll((List) response.getPayload());
+
+            }
+
+        }
+
+        return alerts;
+
+    }
 }

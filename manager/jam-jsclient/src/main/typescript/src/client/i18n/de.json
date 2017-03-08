@@ -635,7 +635,7 @@
   "DASHBOARD_CUSTOMERS_THIS_MONTH": "This month",
   "DASHBOARD_PG_CALLBACK": "Verwalten von PG-Rückrufen",
   "DASHBOARD_ALERTS": "Achtung",
-  "DASHBOARD_ALERTS_mailQueue": "Die Mail-Warteschlange ist nicht leer ({{value}})",
+  "mailQueue": "Die Mail-Warteschlange ist nicht leer ({{value}})",
 
   "REPORT_reportAvailableStock" : "Inventory report",
   "REPORT_reportPayments" : "Payments report",

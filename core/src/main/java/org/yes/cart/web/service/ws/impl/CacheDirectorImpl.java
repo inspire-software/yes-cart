@@ -41,6 +41,8 @@ public class CacheDirectorImpl implements CacheDirector {
 
     private CacheManager cacheManager;
 
+    private Set<String> skipEvictAll = Collections.emptySet();
+
     /**
      * {@inheritDoc}
      */
@@ -88,6 +90,9 @@ public class CacheDirectorImpl implements CacheDirector {
         return rez;
     }
 
+    Set<String> getSkipEvictAll() {
+        return skipEvictAll;
+    }
 
     CacheManager getCacheManager() {
         return cacheManager;
@@ -96,11 +101,13 @@ public class CacheDirectorImpl implements CacheDirector {
     /**
      * {@inheritDoc}
      */
-    public void evictAllCache() {
+    public void evictAllCache(final boolean force) {
         final CacheManager cm = getCacheManager();
         for (String cacheName : cm.getCacheNames()) {
-            final Cache cache = cm.getCache(cacheName);
-            cache.clear();
+            if (force || !this.skipEvictAll.contains(cacheName)) {
+                final Cache cache = cm.getCache(cacheName);
+                cache.clear();
+            }
         }
     }
 
@@ -211,4 +218,8 @@ public class CacheDirectorImpl implements CacheDirector {
         this.cacheManager = cacheManager;
     }
 
+    /** IoC. Set cachecs that should not be evicted during evict all.  */
+    public void setSkipEvictAll(final Set<String> skipEvictAll) {
+        this.skipEvictAll = skipEvictAll;
+    }
 }

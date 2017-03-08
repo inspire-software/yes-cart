@@ -114,7 +114,16 @@ public class WsCacheDirectorImplTest {
         for (CacheInfoDTOImpl cacheInfoDTO : rez) {
             assertTrue(cacheInfoDTO.getCacheSize() > 0);
         }
-        cacheDirector.evictAllCache();
+        cacheDirector.evictAllCache(false);
+        rez = cacheDirector.getCacheInfo();
+        for (CacheInfoDTOImpl cacheInfoDTO : rez) {
+            if (cacheDirector.getSkipEvictAll().contains(cacheInfoDTO.getCacheName())) {
+                assertTrue(cacheInfoDTO.getCacheSize() > 0);
+            } else {
+                assertEquals(0, cacheInfoDTO.getCacheSize());
+            }
+        }
+        cacheDirector.evictAllCache(true);
         rez = cacheDirector.getCacheInfo();
         for (CacheInfoDTOImpl cacheInfoDTO : rez) {
             assertEquals(0, cacheInfoDTO.getCacheSize());
