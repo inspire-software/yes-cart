@@ -77,7 +77,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
             }
 
         } catch (Exception e) {
-            LOG.error(Markers.alert(), "Can not process " + objectMessage, e);
+            LOG.error(Markers.alert(), "Customer registration email error " + objectMessage + ", cause: " + e.getMessage(), e);
             throw new RuntimeException(e); //rollback message
         }
     }

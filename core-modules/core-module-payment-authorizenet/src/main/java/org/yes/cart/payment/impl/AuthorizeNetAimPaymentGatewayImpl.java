@@ -238,7 +238,8 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
                 );
             }
         } catch (Throwable th) {
-            LOG.error(Markers.alert(), "Can not execute transaction. Client exception : " + payment, th);
+            LOG.error(Markers.alert(), "AuthNET transaction [" + payment.getOrderNumber() + "] failed, cause: " + th.getMessage(), th);
+            LOG.error("AuthNET transaction failed, payment: " + payment, th);
             payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
             payment.setPaymentProcessorBatchSettlement(false);
             payment.setTransactionOperationResultMessage(th.getMessage());

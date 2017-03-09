@@ -66,7 +66,7 @@ public class ManagerRegistrationMessageListener implements Runnable {
         try {
             processMessage(objectMessage);
         } catch (Exception e) {
-            LOG.error(Markers.alert(), "Can not process " + objectMessage, e);
+            LOG.error(Markers.alert(), "Manager registration email error " + objectMessage + ", cause: " + e.getMessage(), e);
             throw new RuntimeException(e); //rollback message
         }
 

@@ -113,9 +113,8 @@ public abstract class AbstractPayPalNVPPaymentGatewayImpl extends AbstractPayPal
             }
 
         } catch (Exception exp) {
-
-            LOG.error(Markers.alert(), "Paypal transaction failed: " + exp.getMessage(), exp);
-
+            LOG.error(Markers.alert(), "PayPal transaction [" + payment.getOrderNumber() + "] failed, cause: " + exp.getMessage(), exp);
+            LOG.error("PayPal transaction failed, payment: " + payment, exp);
             payment.setTransactionReferenceId(UUID.randomUUID().toString());
             payment.setTransactionAuthorizationCode("");
             payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);

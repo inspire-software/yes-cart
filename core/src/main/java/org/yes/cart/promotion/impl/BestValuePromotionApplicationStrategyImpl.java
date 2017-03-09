@@ -110,7 +110,7 @@ public class BestValuePromotionApplicationStrategyImpl implements PromotionAppli
 
                 }
             } catch (Exception exp) {
-                LOG.error(Markers.alert(), "Unable to apply promotions: " + promoBucket + ", cause: " + exp.getMessage(), exp);
+                LOG.error(Markers.alert(), "Unable to apply best value promotions: " + promoBucket + ", cause: " + exp.getMessage(), exp);
             }
         }
 

@@ -221,7 +221,8 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
 
         } catch (Exception exp) {
 
-            LOG.error(Markers.alert(), "Paypal express transaction failed: " + exp.getMessage(), exp);
+            LOG.error(Markers.alert(), "PayPal Express transaction [" + payment.getOrderNumber() + "] failed, cause: " + exp.getMessage(), exp);
+            LOG.error("PayPal Express transaction failed, payment: " + payment, exp);
 
         }
 

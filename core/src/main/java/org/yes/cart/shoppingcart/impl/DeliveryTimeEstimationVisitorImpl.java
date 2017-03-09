@@ -196,7 +196,7 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
                         dates.put(date, date2);
                     }
                 } catch (ParseException pe) {
-                    LOG.error(Markers.alert(), "Error reading excluded dates: " + pe.getMessage() + ", sla: " + sla.getGuid(), pe);
+                    LOG.error(Markers.alert(), "Error reading excluded dates during delivery time estimation: " + pe.getMessage() + ", sla: " + sla.getGuid(), pe);
                 }
             }
 

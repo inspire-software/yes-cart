@@ -109,7 +109,7 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
             LOG.info("Processed tagging for {} customers, updated {}", count, updated);
 
         } catch (Exception exp){
-            LOG.error(Markers.alert(), "Processing tagging for customer exception " + exp.getMessage(), exp);
+            LOG.error(Markers.alert(), "Processing tagging for customer error: " + exp.getMessage(), exp);
             throw new RuntimeException(exp);  // exception will make the transaction rollback anyway
         } finally {
             try {

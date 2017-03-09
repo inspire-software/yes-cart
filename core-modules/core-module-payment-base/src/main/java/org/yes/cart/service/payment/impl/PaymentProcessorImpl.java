@@ -329,8 +329,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                     payment.setPaymentProcessorBatchSettlement(false);
                     payment.setTransactionOperationResultMessage(th.getMessage());
-                    LOG.error(Markers.alert(), "Cannot capture " + payment, th);
-
+                    LOG.error(Markers.alert(), "CAPTURE transaction [" + payment.getTransactionReferenceId() + "] failed, cause: " + th.getMessage());
+                    LOG.error("CAPTURE transaction [" + payment + "] failed, cause: " + payment, th);
                 } finally {
                     final CustomerOrderPayment captureOrderPayment = new CustomerOrderPaymentEntity();
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);

@@ -44,12 +44,21 @@ public class AlertTurboFilter extends TurboFilter implements ApplicationContextA
         }
 
         if(marker != null && marker.contains("alert") && ALERTS != null) {
-            ALERTS.publish(
-                    new Pair<String, String>(
-                        MessageFormatter.arrayFormat(format, params).getMessage(),
-                        ShopCodeContext.getShopCode()
-                    )
-            );
+            if (params == null || params.length == 0) {
+                ALERTS.publish(
+                        new Pair<String, String>(
+                                format,
+                                ShopCodeContext.getShopCode()
+                        )
+                );
+            } else {
+                ALERTS.publish(
+                        new Pair<String, String>(
+                                MessageFormatter.arrayFormat(format, params).getMessage(),
+                                ShopCodeContext.getShopCode()
+                        )
+                );
+            }
         }
 
         return FilterReply.NEUTRAL;

@@ -337,7 +337,8 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
             final HashMap res = api.api("payment/refund", params);
             success = "ok".equals(res.get("result"));
         } catch (Exception exp) {
-            LOG.error(Markers.alert(), "LiqPayPaymentGatewayImpl#refund failed for " + payment.getOrderNumber(), exp);
+            LOG.error(Markers.alert(), "LiqPay transaction [" + payment.getOrderNumber() + "] failed, cause: " + exp.getMessage(), exp);
+            LOG.error("LiqPay transaction failed, payment: " + payment, exp);
         }
         payment.setTransactionOperation(REFUND);
         payment.setPaymentProcessorResult(success ? Payment.PAYMENT_STATUS_OK : Payment.PAYMENT_STATUS_FAILED);

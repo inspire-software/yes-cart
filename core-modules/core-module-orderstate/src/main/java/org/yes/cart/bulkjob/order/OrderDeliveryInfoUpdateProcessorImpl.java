@@ -76,7 +76,7 @@ public class OrderDeliveryInfoUpdateProcessorImpl implements OrderDeliveryInfoUp
 
                 } catch (Exception exp) {
 
-                    LOG.error(Markers.alert(), "Cannot process delivery update: " + update, exp);
+                    LOG.error(Markers.alert(), "Delivery update processor failed for: " + update, exp);
 
                 }
 

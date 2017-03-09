@@ -207,7 +207,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
             } catch (Exception exp) {
 
-                LOG.error(Markers.alert(), "Encountered fatal error: " + exp.getMessage() + "... stopping scheduled auto import", exp);
+                LOG.error(Markers.alert(), "Auto import failure: " + exp.getMessage(), exp);
 
             } finally {
 

@@ -73,7 +73,7 @@ public class GroovyGStringTemplateSupportImpl implements TemplateSupport {
 
             } catch (Exception cnfe) {
 
-                LOG.error(Markers.alert(), "Unable to process template: " + cnfe.getMessage() + "\n" + template, cnfe);
+                LOG.error(Markers.alert(), "Unable to process groovy template: " + cnfe.getMessage() + "\n" + template, cnfe);
 
             }
 

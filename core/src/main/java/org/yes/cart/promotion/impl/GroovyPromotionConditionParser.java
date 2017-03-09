@@ -53,7 +53,7 @@ public class GroovyPromotionConditionParser implements PromotionConditionParser 
 
             condition = (PromotionCondition) cl.newInstance();
         } catch (Exception exp) {
-            LOG.error(Markers.alert(), "Unable to create class for promo: " + promotion.getCode() + ", cause: " + exp.getMessage(), exp);
+            LOG.error(Markers.alert(), "Unable to create groovy class for promo: " + promotion.getCode() + ", cause: " + exp.getMessage(), exp);
             condition = new NullPromotionCondition(promotion.getPromotionId(), promotion.getCode());
         }
 

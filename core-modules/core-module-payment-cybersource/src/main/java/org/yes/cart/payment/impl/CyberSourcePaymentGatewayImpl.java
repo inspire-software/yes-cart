@@ -455,12 +455,14 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
             payment.setTransactionOperationResultMessage(ERROR_CODE_DESC_MAP.get(reply.get("reasonCode")));
 
         } catch (ClientException e) {
-            LOG.error(Markers.alert(), "Can not execute transaction. Client exception : " + payment, e);
+            LOG.error(Markers.alert(), "CyberSource transaction [" + payment.getOrderNumber() + "] failed, cause: " + e.getMessage(), e);
+            LOG.error("CyberSource transaction failed, payment: " + payment, e);
             payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
             payment.setPaymentProcessorBatchSettlement(false);
             payment.setTransactionOperationResultMessage(e.getMessage());
         } catch (FaultException e) {
-            LOG.error(Markers.alert(), "Can not execute transaction. Fault exception : " + payment, e);
+            LOG.error(Markers.alert(), "CyberSource transaction [" + payment.getOrderNumber() + "] failed, cause: " + e.getMessage(), e);
+            LOG.error("CyberSource transaction failed, payment: " + payment, e);
             payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
             payment.setTransactionOperationResultMessage(e.getMessage());
         }

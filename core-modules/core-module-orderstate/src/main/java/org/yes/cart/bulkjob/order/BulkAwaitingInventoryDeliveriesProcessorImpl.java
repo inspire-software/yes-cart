@@ -149,7 +149,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
                 } catch (Exception exp) {
 
-                    LOG.error(Markers.alert(), "Cannot process delivery " + deliveryId, exp);
+                    LOG.error(Markers.alert(), "Awaiting delivery processor failed for: " + deliveryId, exp);
 
                 }
 

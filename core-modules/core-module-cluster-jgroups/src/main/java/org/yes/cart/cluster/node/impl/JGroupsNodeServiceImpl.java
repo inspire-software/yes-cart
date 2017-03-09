@@ -190,7 +190,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
 
             } catch (Exception e) {
 
-                LOG.error(Markers.alert(), "Error sending message: " + message, e);
+                LOG.error(Markers.alert(), "Node message failure [" + message + "] from " + node.getId() + ", cause: " + e.getMessage(), e);
 
             }
 
@@ -201,7 +201,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
 
             } catch (Exception e) {
 
-                LOG.error(Markers.alert(), "Error sending message: " + message, e);
+                LOG.error(Markers.alert(), "Node message failure [" + message + "] from " + node.getId() + ", cause: " + e.getMessage(), e);
 
             }
         }
@@ -277,7 +277,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
                         }
 
                     } catch (Exception e) {
-                        LOG.error(Markers.alert(), "Failed sending HELLO to all members from: " + node.getId() + ", cause: " + e.getMessage(), e);
+                        LOG.error(Markers.alert(), "Node message failure [HELLO] from " + node.getId() + ", cause: " + e.getMessage(), e);
                     }
                 }
             }
@@ -510,8 +510,8 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
         try {
             jChannel.send(null, new BasicMessageImpl(node.getId(), "BYE", node));
             Thread.sleep(100L); // give some time for message to be sent
-        } catch (Exception exp) {
-            LOG.error(Markers.alert(), "Could not send BYE message from node: " + node.getId() + ", cause: " + exp.getMessage(), exp);
+        } catch (Exception e) {
+            LOG.error(Markers.alert(), "Node message failure [BYE] from " + node.getId() + ", cause: " + e.getMessage(), e);
         }
         jChannel.close();
 

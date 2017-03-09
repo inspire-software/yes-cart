@@ -226,11 +226,12 @@ public class StandardMessageListener implements Runnable {
             } catch (Exception e) {
                 LOG.error(Markers.alert(),
                         MessageFormat.format(
-                                "Cant compose or send email template {0} with locale {1} folder {2} to {3}",
+                                "Cannot compose or send email template {0} with locale {1} theme {2} to {3}, cause: {4}",
                                 map.get(TEMPLATE_NAME),
                                 map.get(LOCALE),
                                 map.get(TEMPLATE_FOLDER),
-                                map.get(CUSTOMER_EMAIL)
+                                map.get(CUSTOMER_EMAIL),
+                                e.getMessage()
                         ),
                         e);
             }

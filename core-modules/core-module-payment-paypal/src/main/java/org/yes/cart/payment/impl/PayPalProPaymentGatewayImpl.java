@@ -295,7 +295,8 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
             }
         } catch (Exception exp) {
 
-            LOG.error(Markers.alert(), "Paypal pro transaction failed: " + exp.getMessage(), exp);
+            LOG.error(Markers.alert(), "PayPal Pro transaction [" + payment.getOrderNumber() + "] failed, cause: " + exp.getMessage(), exp);
+            LOG.error("PayPal Pro transaction failed, payment: " + payment, exp);
 
             payment.setTransactionReferenceId(UUID.randomUUID().toString());
             payment.setTransactionAuthorizationCode("");

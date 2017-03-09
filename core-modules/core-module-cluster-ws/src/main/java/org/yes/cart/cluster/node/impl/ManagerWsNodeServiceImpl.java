@@ -112,7 +112,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
                     blacklist(yesNode.getId());
 
                     if (LOG.isErrorEnabled()) {
-                        LOG.error(Markers.alert(), "Cannot send message [" + message + "] to  url ["
+                        LOG.error(Markers.alert(), "Node message failure [" + message + "] to  url ["
                                 + yesNode.getId() + "] . Blacklisting this node",
                                 wse);
                     }
@@ -120,7 +120,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
                 } else {
 
                     if (LOG.isErrorEnabled()) {
-                        LOG.error(Markers.alert(), "Cannot send message [" + message + "] to  url ["
+                        LOG.error(Markers.alert(), "Node message failure [" + message + "] to  url ["
                                 + yesNode.getId() + "] . Exception occurred during ws call",
                                 wse);
                     }
@@ -130,7 +130,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
             } catch (Exception e) {
 
                 if (LOG.isErrorEnabled()) {
-                    LOG.error(Markers.alert(), "Cannot send message [" + message + "] to  url ["
+                    LOG.error(Markers.alert(), "Node message failure [" + message + "] to  url ["
                             + yesNode.getId() + "] . Exception occurred during ws call",
                             e);
                 }
