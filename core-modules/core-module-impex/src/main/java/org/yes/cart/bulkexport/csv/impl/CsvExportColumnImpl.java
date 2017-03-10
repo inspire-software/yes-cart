@@ -22,6 +22,7 @@ import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkexport.csv.CsvExportColumn;
 import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
 import org.yes.cart.bulkexport.model.ExportDescriptor;
+import org.yes.cart.bulkexport.model.ExportTuple;
 
 import java.io.Serializable;
 import java.util.regex.Matcher;
@@ -116,12 +117,12 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
-    public String getValue(final Object rawValue, final ValueAdapter adapter) {
+    public String getValue(final Object rawValue, final ValueAdapter adapter, final ExportTuple tuple) {
         if (getValueConstant() != null) {
             return getValueConstant();
         } else if (rawValue != null) {
 
-            final String strValue = (String) adapter.fromRaw(rawValue, ImpExColumn.STRING, this);
+            final String strValue = (String) adapter.fromRaw(rawValue, ImpExColumn.STRING, this, tuple);
 
             if (strValue != null) {
                 if (getPattern() != null) {

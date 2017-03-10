@@ -66,9 +66,9 @@ public class CsvImportTupleImpl implements CsvImportTuple {
             rawValue = line[colIndex];
         }
         if (rawValue != null && column.getGroupCount(rawValue) > 1) {
-            return column.getValues(rawValue, valueAdapter);
+            return column.getValues(rawValue, valueAdapter, this);
         }
-        return column.getValue(rawValue, valueAdapter);
+        return column.getValue(rawValue, valueAdapter, this);
     }
 
     /** {@inheritDoc} */

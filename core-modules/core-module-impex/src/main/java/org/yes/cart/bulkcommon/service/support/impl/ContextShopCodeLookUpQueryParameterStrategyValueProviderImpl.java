@@ -16,10 +16,12 @@
 
 package org.yes.cart.bulkcommon.service.support.impl;
 
+import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ImpExDescriptor;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkcommon.service.support.LookUpQueryParameterStrategyValueProvider;
+import org.yes.cart.bulkexport.csv.impl.CsvAsIsValueAdapter;
 
 /**
  * User: denispavlov
@@ -27,6 +29,8 @@ import org.yes.cart.bulkcommon.service.support.LookUpQueryParameterStrategyValue
  * Time: 12:22
  */
 public class ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl implements LookUpQueryParameterStrategyValueProvider {
+
+    private final ValueAdapter asIs = new CsvAsIsValueAdapter();
 
     /**
      * {@inheritDoc}
@@ -38,6 +42,13 @@ public class ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl implem
                                       final ValueAdapter adapter,
                                       final String queryTemplate) {
 
-        return descriptor.getContext().getShopCode();
+        if (descriptor.getContext().getShopCode() != null) {
+            return descriptor.getContext().getShopCode();
+        }
+        if (descriptor.getContext().getShopCodeColumn() != null) {
+            final ImpExColumn column = descriptor.getColumn(descriptor.getContext().getShopCodeColumn());
+            return tuple.getColumnValue(column, asIs);
+        }
+        return null;
     }
 }

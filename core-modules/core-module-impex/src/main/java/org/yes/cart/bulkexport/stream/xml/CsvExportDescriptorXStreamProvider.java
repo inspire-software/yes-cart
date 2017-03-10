@@ -68,6 +68,7 @@ public class CsvExportDescriptorXStreamProvider implements XStreamProvider<CsvEx
             xStream.aliasField("context", CsvExportDescriptorImpl.class, "context");
             xStream.addDefaultImplementation(CsvExportContextImpl.class, ExportContext.class);
             xStream.aliasField("shop-code", CsvExportContextImpl.class, "shopCode");
+            xStream.aliasField("shop-code-column", CsvExportContextImpl.class, "shopCodeColumn");
 
             xStream.aliasField("select-sql", CsvExportDescriptorImpl.class, "selectSql");
 

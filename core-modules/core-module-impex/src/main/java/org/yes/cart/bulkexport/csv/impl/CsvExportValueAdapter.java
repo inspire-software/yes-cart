@@ -19,6 +19,7 @@ package org.yes.cart.bulkexport.csv.impl;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.yes.cart.bulkcommon.model.ImpExColumn;
+import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkcommon.model.impl.AbstractExtensibleValueAdapter;
 
@@ -35,7 +36,7 @@ public class CsvExportValueAdapter extends AbstractExtensibleValueAdapter implem
         this.extendedConversionService = extendedConversionService;
     }
 
-    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn) {
+    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
 
         if (requiredType == null) {
             return rawValue;
@@ -43,7 +44,7 @@ public class CsvExportValueAdapter extends AbstractExtensibleValueAdapter implem
 
         final ValueAdapter specific = getTypeSpecific(impExColumn.getDataType());
         if (specific != null) {
-            return specific.fromRaw(rawValue, requiredType, impExColumn);
+            return specific.fromRaw(rawValue, requiredType, impExColumn, tuple);
         }
 
         return this.extendedConversionService.convert(rawValue,

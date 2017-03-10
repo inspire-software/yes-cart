@@ -35,9 +35,11 @@ public interface ImportColumn extends ImpExColumn {
      *
      * @param rawValue the whole value from cell
      * @param adapter value adapter
+     * @param tuple tuple
+     *
      * @return value
      */
-    Object getValue(String rawValue, ValueAdapter adapter);
+    Object getValue(String rawValue, ValueAdapter adapter, ImportTuple tuple);
 
 
     /**
@@ -45,9 +47,11 @@ public interface ImportColumn extends ImpExColumn {
      *
      * @param rawValue the whole value from cell
      * @param adapter value adapter
+     * @param tuple tuple
+     *
      * @return field value as string array
      */
-    List getValues(String rawValue, ValueAdapter adapter);
+    List getValues(String rawValue, ValueAdapter adapter, ImportTuple tuple);
 
     /**
      * Column index from csv file

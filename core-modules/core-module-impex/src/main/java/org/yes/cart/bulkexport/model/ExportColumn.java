@@ -33,9 +33,11 @@ public interface ExportColumn extends ImpExColumn {
      *
      * @param rawValue the whole value from property
      * @param adapter value adapter
+     * @param tuple tuple
+     *
      * @return value
      */
-    String getValue(Object rawValue, ValueAdapter adapter);
+    String getValue(Object rawValue, ValueAdapter adapter, ExportTuple tuple);
 
     /**
      * Column header for csv file

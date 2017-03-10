@@ -27,7 +27,8 @@ import org.yes.cart.service.domain.ShopService;
  * Date: 11/06/2015
  * Time: 12:22
  */
-public class ContextShopLookUpQueryParameterStrategyValueProviderImpl implements LookUpQueryParameterStrategyValueProvider {
+public class ContextShopLookUpQueryParameterStrategyValueProviderImpl extends ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl
+        implements LookUpQueryParameterStrategyValueProvider {
 
     private final ShopService shopService;
 
@@ -45,7 +46,11 @@ public class ContextShopLookUpQueryParameterStrategyValueProviderImpl implements
                                       final ValueAdapter adapter,
                                       final String queryTemplate) {
 
-        return shopService.getShopByCode(descriptor.getContext().getShopCode());
+        final String code = (String) super.getPlaceholderValue(placeholder, descriptor, masterObject, tuple, adapter, queryTemplate);
+        if (code != null) {
+            return shopService.getShopByCode(descriptor.getContext().getShopCode());
+        }
+        return null;
 
     }
 }

@@ -26,6 +26,7 @@ import org.yes.cart.bulkimport.model.ImportContext;
 public class CsvImportContextImpl implements ImportContext {
 
     private String shopCode;
+    private String shopCodeColumn;
 
     /**
      * {@inheritDoc}
@@ -42,4 +43,21 @@ public class CsvImportContextImpl implements ImportContext {
     public void setShopCode(final String shopCode) {
         this.shopCode = shopCode;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getShopCodeColumn() {
+        return shopCodeColumn;
+    }
+
+    /**
+     * Set column name in this descriptor that contains shopCode string value.
+     *
+     * @param shopCodeColumn index
+     */
+    public void setShopCodeColumn(final String shopCodeColumn) {
+        this.shopCodeColumn = shopCodeColumn;
+    }
+
 }

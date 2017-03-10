@@ -29,9 +29,10 @@ public interface ValueAdapter {
      * @param rawValue raw value
      * @param requiredType required data type
      * @param impExColumn impex column
+     * @param tuple current tuple
      *
      * @return value in correct type
      */
-    Object fromRaw(Object rawValue, String requiredType, ImpExColumn impExColumn);
+    Object fromRaw(Object rawValue, String requiredType, ImpExColumn impExColumn, ImpExTuple tuple);
 
 }

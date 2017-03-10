@@ -17,12 +17,12 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.bulkcommon.model.ImpExDescriptor;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
-import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
+import org.yes.cart.bulkexport.model.ExportTuple;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
+import org.yes.cart.bulkimport.model.ImportTuple;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -124,14 +124,14 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
-    public List getValues(final String rawValue, final ValueAdapter adapter) {
+    public List getValues(final String rawValue, final ValueAdapter adapter, final ImportTuple tuple) {
         List result = new ArrayList();
         if (getPattern() != null) {
             Matcher matcher = getPattern().matcher(rawValue);
             if (matcher.find()) {
                 int groupCount = getGroupCount(rawValue);
                 for (int i = 0; i < groupCount; i++) {
-                    result.add(adapter.fromRaw(matcher.group(i + 1).trim(), getDataType(), this));
+                    result.add(adapter.fromRaw(matcher.group(i + 1).trim(), getDataType(), this, tuple));
                 }
             }
         }
@@ -141,40 +141,40 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
-    public Object getValue(final Object rawValue, final ValueAdapter adapter) {
+    public Object getValue(final Object rawValue, final ValueAdapter adapter, final ExportTuple tuple) {
         final String value;
         if (rawValue == null) {
             value = null;
         } else {
             value = String.valueOf(rawValue);
         }
-        return getValue(value, adapter);
+        return getValue(value, adapter, tuple);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Object getValue(final String rawValue, final ValueAdapter adapter) {
+    public Object getValue(final String rawValue, final ValueAdapter adapter, final ImportTuple tuple) {
         if (getValueConstant() != null) {
-            return adapter.fromRaw(getValueConstant(), getDataType(), this);
+            return adapter.fromRaw(getValueConstant(), getDataType(), this, tuple);
         } else if (rawValue != null) {
             if (getPattern() != null) {
                 Matcher matcher = getPattern().matcher(rawValue);
                 if (StringUtils.isBlank(getValueRegExTemplate())) {
                     if (matcher.find()) {
-                        return adapter.fromRaw(matcher.group(getValueRegExGroup()).trim(), getDataType(), this);
+                        return adapter.fromRaw(matcher.group(getValueRegExGroup()).trim(), getDataType(), this, tuple);
                     } else {
                         return null;
                     }
                 } else {
                     if (matcher.matches()) {
-                        return adapter.fromRaw(matcher.replaceFirst(getValueRegExTemplate()).trim(), getDataType(), this);
+                        return adapter.fromRaw(matcher.replaceFirst(getValueRegExTemplate()).trim(), getDataType(), this, tuple);
                     } else {
                         return null;
                     }
                 }
             }
-            return adapter.fromRaw(rawValue, getDataType(), this);
+            return adapter.fromRaw(rawValue, getDataType(), this, tuple);
         }
         return null;
 

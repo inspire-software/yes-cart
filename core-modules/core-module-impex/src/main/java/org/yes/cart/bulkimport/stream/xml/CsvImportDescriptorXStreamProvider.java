@@ -69,6 +69,7 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
             xStream.aliasField("context", CsvImportDescriptorImpl.class, "context");
             xStream.addDefaultImplementation(CsvImportContextImpl.class, ImportContext.class);
             xStream.aliasField("shop-code", CsvImportContextImpl.class, "shopCode");
+            xStream.aliasField("shop-code-column", CsvImportContextImpl.class, "shopCodeColumn");
 
             /*
                 "import-directory" is resolved by the ImportDirectorService and set programmatically, since we

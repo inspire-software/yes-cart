@@ -16,6 +16,8 @@
 
 package org.yes.cart.bulkcommon.model;
 
+import org.yes.cart.bulkexport.model.ExportTuple;
+
 /**
  * Single import/export column description.
  * <p/>
@@ -82,14 +84,16 @@ public interface ImpExColumn {
      *
      * @param rawValue the whole value from property
      * @param adapter value adapter
+     * @param tuple tuple
+     *
      * @return value
      */
-    Object getValue(Object rawValue, ValueAdapter adapter);
+    Object getValue(Object rawValue, ValueAdapter adapter, ExportTuple tuple);
 
     /**
      * In case if column has reg exp.
      *
-     * @param value the whole value from {@link #getValue(Object, ValueAdapter)}
+     * @param value the whole value from {@link #getValue(Object, ValueAdapter, ExportTuple)}
      * @return matched groups or 0 if column has not reg exp.
      */
     int getGroupCount(String value);

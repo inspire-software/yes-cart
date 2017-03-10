@@ -30,4 +30,11 @@ public interface ImpExContext {
      */
     String getShopCode();
 
+    /**
+     * Get shop context column name (dynamic lookup).
+     *
+     * @return name of column that holds shop code
+     */
+    String getShopCodeColumn();
+
 }

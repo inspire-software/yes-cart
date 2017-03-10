@@ -61,7 +61,7 @@ public class CsvExportTupleImpl implements CsvExportTuple {
     /** {@inheritDoc} */
     public Object getColumnValue(final ExportColumn column, final ValueAdapter adapter) {
         final Object rawValue = getObjectValue(column);
-        return column.getValue(rawValue, adapter);
+        return column.getValue(rawValue, adapter, this);
     }
 
     private Object getObjectValue(final ExportColumn column) {

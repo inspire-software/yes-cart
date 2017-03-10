@@ -17,6 +17,7 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.yes.cart.bulkcommon.model.ImpExColumn;
+import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 
 /**
@@ -29,7 +30,7 @@ public class CsvAsIsValueAdapter implements ValueAdapter {
     /**
      * {@inheritDoc}
      */
-    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn) {
+    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
         return rawValue;
     }
 }

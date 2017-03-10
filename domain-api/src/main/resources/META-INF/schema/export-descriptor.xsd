@@ -70,7 +70,10 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="shop-code" type="xs:string" minOccurs="0"/>
+            <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element name="shop-code" type="xs:string" minOccurs="0"/>
+                <xs:element name="shop-code-column" type="xs:string" minOccurs="0"/>
+            </xs:choice>
         </xs:sequence>
     </xs:complexType>
 

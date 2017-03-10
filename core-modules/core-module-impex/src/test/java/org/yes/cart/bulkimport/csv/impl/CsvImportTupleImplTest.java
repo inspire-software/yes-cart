@@ -40,14 +40,14 @@ public class CsvImportTupleImplTest {
         final ImportColumn column = mockery.mock(ImportColumn.class, "column");
         final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
 
-        mockery.checking(new Expectations() {{
-            allowing(column).getColumnIndex(); will(returnValue(0));
-            allowing(column).getValue("A'''BC", adapter); will(returnValue("A'''BC"));
-            allowing(column).getGroupCount("A'''BC"); will(returnValue(1));
-        }});
-
         final String[] line = new String[] { "A'''BC", "123" };
         final CsvImportTupleImpl tuple = new CsvImportTupleImpl("file", 1, line);
+
+        mockery.checking(new Expectations() {{
+            allowing(column).getColumnIndex(); will(returnValue(0));
+            allowing(column).getValue("A'''BC", adapter, tuple); will(returnValue("A'''BC"));
+            allowing(column).getGroupCount("A'''BC"); will(returnValue(1));
+        }});
 
         assertEquals(tuple.getColumnValue(column, adapter), "A'''BC");
 
@@ -61,13 +61,13 @@ public class CsvImportTupleImplTest {
         final ImportColumn column = mockery.mock(ImportColumn.class, "column");
         final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
 
-        mockery.checking(new Expectations() {{
-            allowing(column).getColumnIndex(); will(returnValue(-1));
-            allowing(column).getValue(null, adapter); will(returnValue("const"));
-        }});
-
         final String[] line = new String[] { "val1", "val2" };
         final CsvImportTupleImpl tuple = new CsvImportTupleImpl("file", 1, line);
+
+        mockery.checking(new Expectations() {{
+            allowing(column).getColumnIndex(); will(returnValue(-1));
+            allowing(column).getValue(null, adapter, tuple); will(returnValue("const"));
+        }});
 
         assertEquals(tuple.getColumnValue(column, adapter), "const");
 
