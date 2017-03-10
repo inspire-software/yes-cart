@@ -19,6 +19,8 @@ package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.security.access.AccessDeniedException;
@@ -67,6 +69,8 @@ import java.util.*;
  * {@link ImportDescriptor}. At this moment rows in cell are split by comma by default.
  */
 public class CsvBulkImportServiceImpl extends AbstractImportService implements ImportService, CsvImportServiceSingleFile {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CsvBulkImportServiceImpl.class);
 
     private GenericDAO<Object, Long> genericDAO;
 
@@ -368,32 +372,35 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 final boolean insert = objectAndState != null ? objectAndState.getSecond() : false;
 
                 fillEntityFields(tuple, object, insert, descriptor.getColumns(ImpExColumn.FIELD));
-                fillEntityForeignKeys(tuple, object, insert, descriptor.getColumns(ImpExColumn.FK_FIELD), masterObject, descriptor, entityCache);
+                final boolean skip = fillEntityForeignKeys(tuple, object, insert, descriptor.getColumns(ImpExColumn.FK_FIELD), masterObject, descriptor, entityCache);
 
-                /*
-                    Note: for correct data federation processing we need ALL-OR-NOTHING update for all import.
-                          Once validation fails we fail the whole import with a rollback. Necessary to facilitate
-                          objects with complex relationships to shop (e.g. products, SKU)
-                 */
+                if (!skip) {
 
-                if (masterObject == null) {
-                    // No need to validate sub imports
-                    // Preliminary validation - not always applicable for transient object (e.g. products need category assignments)
-                    validateAccessBeforeUpdate(object, descriptor.getEntityTypeClass());
+                    /*
+                        Note: for correct data federation processing we need ALL-OR-NOTHING update for all import.
+                              Once validation fails we fail the whole import with a rollback. Necessary to facilitate
+                              objects with complex relationships to shop (e.g. products, SKU)
+                     */
+
+                    if (masterObject == null) {
+                        // No need to validate sub imports
+                        // Preliminary validation - not always applicable for transient object (e.g. products need category assignments)
+                        validateAccessBeforeUpdate(object, descriptor.getEntityTypeClass());
+                    }
+                    genericDAO.saveOrUpdate(object);
+                    performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
+                            descriptor.getColumns(ImpExColumn.SLAVE_INLINE_FIELD), entityCache);
+                    performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
+                            descriptor.getColumns(ImpExColumn.SLAVE_TUPLE_FIELD), entityCache);
+
+                    if (masterObject == null) {
+                        // No need to validate sub imports
+                        // This validation is after sub imports to facilitate objects with complex relationships to shop (e.g. products)
+                        validateAccessAfterUpdate(object, descriptor.getEntityTypeClass());
+                    }
+
+                    genericDAO.flushClear();
                 }
-                genericDAO.saveOrUpdate(object);
-                performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
-                        descriptor.getColumns(ImpExColumn.SLAVE_INLINE_FIELD), entityCache);
-                performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
-                        descriptor.getColumns(ImpExColumn.SLAVE_TUPLE_FIELD), entityCache);
-
-                if (masterObject == null) {
-                    // No need to validate sub imports
-                    // This validation is after sub imports to facilitate objects with complex relationships to shop (e.g. products)
-                    validateAccessAfterUpdate(object, descriptor.getEntityTypeClass());
-                }
-
-                genericDAO.flushClear();
 
             }
             statusListener.notifyPing("Importing tuple: " + tuple.getSourceId()); // make sure we do not time out
@@ -568,17 +575,19 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      * @param importDescriptor import descriptor
      * @param entityCache      runtime cache
      *
+     * @return true if this tuple should be skipped
+     *
      * @throws Exception in case if something wrong with reflection (IntrospectionException,
      *                   InvocationTargetException,
      *                   IllegalAccessException)
      */
-    private void fillEntityForeignKeys(final ImportTuple tuple,
-                                       final Object object,
-                                       final boolean insert,
-                                       final Collection<ImportColumn> importColumns,
-                                       final Object masterObject,
-                                       final ImportDescriptor importDescriptor,
-                                       final Map<String, Pair<Object, Boolean>> entityCache) throws Exception {
+    private boolean fillEntityForeignKeys(final ImportTuple tuple,
+                                          final Object object,
+                                          final boolean insert,
+                                          final Collection<ImportColumn> importColumns,
+                                          final Object masterObject,
+                                          final ImportDescriptor importDescriptor,
+                                          final Map<String, Pair<Object, Boolean>> entityCache) throws Exception {
 
         ImportColumn currentColumn = null;
         final Class clz = object.getClass();
@@ -602,6 +611,11 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 } else {
                     final Pair<Object, Boolean> singleObjectValueAndState = getEntity(tuple, importColumn, masterObject, importDescriptor, entityCache);
                     singleObjectValue = singleObjectValueAndState != null ? singleObjectValueAndState.getFirst() : null;
+                    if (singleObjectValueAndState != null && singleObjectValueAndState.getSecond() && currentColumn.isSkipUpdateForUnresolved()) {
+                        // This is new FK object and we should skip this tuple and not abort with exception
+                        LOG.warn("Skipped tuple because foreign key is not found {}", tuple);
+                        return true;
+                    }
                 }
                 propertyDescriptor = new PropertyDescriptor(importColumn.getName(), clz);
                 final Object oldValue = propertyDescriptor.getReadMethod().invoke(object);
@@ -619,6 +633,9 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 }
 
             }
+
+            return false; // Do not skip
+
         } catch (Exception exp) {
 
             final String propName = propertyDescriptor != null ? propertyDescriptor.getName() : null;
@@ -646,7 +663,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      * @param importDescriptor import descriptor
      * @param entityCache      runtime cache
      *
-     * @return new or existing entity
+     * @return new or existing entity first => object, second => isNew flag
+     *
      * @throws ClassNotFoundException in case if entity interface is wrong.
      */
     private Pair<Object, Boolean> getEntity(final ImportTuple tuple,

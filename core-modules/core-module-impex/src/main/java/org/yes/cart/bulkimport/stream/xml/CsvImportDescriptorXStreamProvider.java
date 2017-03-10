@@ -105,6 +105,7 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
             xStream.aliasField("use-master-object", CsvImportColumnImpl.class, "useMasterObject");
             xStream.aliasField("insert-only", CsvImportColumnImpl.class, "insertOnly");
             xStream.aliasField("update-only", CsvImportColumnImpl.class, "updateOnly");
+            xStream.aliasField("update-skip-unresolved", CsvImportColumnImpl.class, "skipUpdateForUnresolved");
             xStream.aliasField("import-descriptor", CsvImportColumnImpl.class, "descriptor");
             xStream.aliasField("entity-type", CsvImportColumnImpl.class, "entityType");
 

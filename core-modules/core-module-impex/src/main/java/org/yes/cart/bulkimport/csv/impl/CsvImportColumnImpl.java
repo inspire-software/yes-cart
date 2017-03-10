@@ -58,6 +58,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     private boolean useMasterObject;
     private boolean insertOnly;
     private boolean updateOnly;
+    private boolean skipUpdateForUnresolved;
 
     private String language;
 
@@ -370,14 +371,32 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
         this.insertOnly = insertOnly;
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public boolean isUpdateOnly() {
         return updateOnly;
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public void setUpdateOnly(final boolean updateOnly) {
         this.updateOnly = updateOnly;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isSkipUpdateForUnresolved() {
+        return skipUpdateForUnresolved;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSkipUpdateForUnresolved(final boolean skipUpdateForUnresolved) {
+        this.skipUpdateForUnresolved = skipUpdateForUnresolved;
     }
 
     /**

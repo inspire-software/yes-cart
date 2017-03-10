@@ -181,6 +181,7 @@
             <xs:element name="use-master-object" type="xs:boolean" minOccurs="0"/>
             <xs:element name="insert-only" type="xs:boolean" minOccurs="0"/>
             <xs:element name="update-only" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="update-skip-unresolved" type="xs:boolean" minOccurs="0"/>
             <xs:element name="import-descriptor" type="ImportDescriptorType" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>

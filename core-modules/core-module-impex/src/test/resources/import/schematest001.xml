@@ -128,6 +128,7 @@
             <entity-type>org.yes.cart.domain.entity.Etype</entity-type>
             <name>etype</name>
             <lookup-query>select b from EtypeEntity b where b.businesstype = 'String'</lookup-query>
+            <update-skip-unresolved>true</update-skip-unresolved>
         </column-descriptor>
 
     </import-columns>

@@ -87,6 +87,21 @@ public interface ImportColumn extends ImpExColumn {
     void setUpdateOnly(boolean updateOnly);
 
 
+    /**
+     * Boolean flag to indicate if update should be skipped if FK entity is not resolved.
+     *
+     * @return true if skip unresolved FK's.
+     */
+    boolean isSkipUpdateForUnresolved();
+
+    /**
+     * Set skip unresolved FK flag.
+     *
+     * @param skipUpdateForUnresolved flag.
+     */
+    void setSkipUpdateForUnresolved(boolean skipUpdateForUnresolved);
+
+
 
     /**
      * Get included import descriptor for complex fields.

@@ -1021,4 +1021,45 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     }
 
 
+
+
+    @Test
+    public void testDoImportWithSkipUnresolvedForeignKeys() throws Exception {
+
+        final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
+
+        mockery.checking(new Expectations() {{
+            allowing(listener).notifyPing();
+            allowing(listener).notifyPing(with(any(String.class)));
+            allowing(listener).notifyMessage(with(any(String.class)));
+        }});
+
+
+        Set<String> importedFilesSet = new HashSet<String>();
+
+        bulkImportService.doImport(createContext("src/test/resources/import/skipfktest001a.xml", listener, importedFilesSet));
+
+        try {
+            ResultSet rs;
+
+            rs = getConnection().getConnection().createStatement().executeQuery(
+                    "select GUID, CODE, MANUFACTURER_CODE, BRAND_ID, PRODUCTTYPE_ID, " +
+                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM from TPRODUCT where code='ASIMO-SKIP'");
+            assertFalse(rs.next()); // No rows
+            rs.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+
+        }
+
+        importedFilesSet.clear();
+
+        mockery.assertIsSatisfied();
+
+    }
+
+
 }
