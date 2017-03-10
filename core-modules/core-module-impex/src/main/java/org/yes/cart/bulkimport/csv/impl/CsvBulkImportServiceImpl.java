@@ -19,8 +19,6 @@ package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.security.access.AccessDeniedException;
@@ -69,8 +67,6 @@ import java.util.*;
  * {@link ImportDescriptor}. At this moment rows in cell are split by comma by default.
  */
 public class CsvBulkImportServiceImpl extends AbstractImportService implements ImportService, CsvImportServiceSingleFile {
-
-    private static final Logger LOG = LoggerFactory.getLogger(CsvBulkImportServiceImpl.class);
 
     private GenericDAO<Object, Long> genericDAO;
 
@@ -374,7 +370,11 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 fillEntityFields(tuple, object, insert, descriptor.getColumns(ImpExColumn.FIELD));
                 final boolean skip = fillEntityForeignKeys(tuple, object, insert, descriptor.getColumns(ImpExColumn.FK_FIELD), masterObject, descriptor, entityCache);
 
-                if (!skip) {
+                if (skip) {
+
+                    statusListener.notifyWarning("Skipping tuple: " + tuple);
+
+                } else {
 
                     /*
                         Note: for correct data federation processing we need ALL-OR-NOTHING update for all import.
@@ -612,9 +612,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                     final Pair<Object, Boolean> singleObjectValueAndState = getEntity(tuple, importColumn, masterObject, importDescriptor, entityCache);
                     singleObjectValue = singleObjectValueAndState != null ? singleObjectValueAndState.getFirst() : null;
                     if (singleObjectValueAndState != null && singleObjectValueAndState.getSecond() && currentColumn.isSkipUpdateForUnresolved()) {
-                        // This is new FK object and we should skip this tuple and not abort with exception
-                        LOG.warn("Skipped tuple because foreign key is not found {}", tuple);
-                        return true;
+                        return true; // This is new FK object and we should skip this tuple and not abort with exception
                     }
                 }
                 propertyDescriptor = new PropertyDescriptor(importColumn.getName(), clz);

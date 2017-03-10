@@ -1032,6 +1032,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listener).notifyPing();
             allowing(listener).notifyPing(with(any(String.class)));
             allowing(listener).notifyMessage(with(any(String.class)));
+            allowing(listener).notifyWarning(with(aStringStartingWith("Skipping tuple:")));
         }});
 
 
