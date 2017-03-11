@@ -117,6 +117,17 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
                 final boolean allowDeliveryTransitions = CustomerOrder.ORDER_STATUS_IN_PROGRESS.equals(customerOrder.getOrderStatus()) ||
                         CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED.equals(customerOrder.getOrderStatus());
 
+
+                if (update.getAdditionalData() != null) {
+                    for (final Map.Entry<String, Pair<String, String>> data : update.getAdditionalData().entrySet()) {
+                        if (data.getValue() != null) {
+                            customerOrder.putValue(data.getKey(), data.getValue().getFirst(), data.getValue().getSecond());
+                        } else {
+                            customerOrder.putValue(data.getKey(), null, null);
+                        }
+                    }
+                }
+
                 for (final CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
 
                     Date estimatedMin = null;
