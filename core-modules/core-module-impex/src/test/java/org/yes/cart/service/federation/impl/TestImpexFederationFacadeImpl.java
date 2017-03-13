@@ -38,6 +38,13 @@ public class TestImpexFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    public boolean isCurrentUser(final String role) {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public boolean isShopAccessibleByCurrentManager(final String shopCode) {
         return true;
     }

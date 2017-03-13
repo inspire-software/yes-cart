@@ -23,6 +23,7 @@ import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
 import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Result;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
@@ -77,6 +78,8 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
 
         final List<VoCustomerOrderInfo> results = new ArrayList<>();
 
+        final boolean removeSupplierDetails = !isSupplierDetailsViewable();
+
         Map<String, String> pgNames = Collections.emptyMap();
         int start = 0;
         do {
@@ -97,6 +100,10 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
                 vo.setOrderStatusNextOptions(determineOrderStatusNextOptions(vo));
                 vo.setOrderPaymentStatus(determinePaymentStatus(vo));
 
+                if (removeSupplierDetails) {
+                    removeOrderDetails(vo, "SUPPLIER");
+                }
+
                 results.add(vo);
             }
             start++;
@@ -110,6 +117,8 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
     public List<VoCustomerOrderInfo> getFiltered(final String lang, final String filter, final List<String> statuses, final int max) throws Exception {
 
         final List<VoCustomerOrderInfo> results = new ArrayList<>();
+
+        final boolean removeSupplierDetails = !isSupplierDetailsViewable();
 
         Map<String, String> pgNames = Collections.emptyMap();
         int start = 0;
@@ -130,6 +139,10 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
                 vo.setPgName(pgNames.get(vo.getPgLabel()));
                 vo.setOrderStatusNextOptions(determineOrderStatusNextOptions(vo));
                 vo.setOrderPaymentStatus(determinePaymentStatus(vo));
+
+                if (removeSupplierDetails) {
+                    removeOrderDetails(vo, "SUPPLIER");
+                }
 
                 results.add(vo);
             }
@@ -175,6 +188,40 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
         // no balance, no payment
         return "pt.none";
 
+    }
+
+    private boolean isSupplierDetailsViewable() {
+        return federationFacade.isCurrentUserSystemAdmin() || federationFacade.isCurrentUser("ROLE_SMSHOPADMIN");
+    }
+
+    private void removeOrderDetails(final VoCustomerOrderInfo vo, final String displayValue) {
+        final Iterator<MutablePair<String, MutablePair<String, String>>> it = vo.getAllValues().iterator();
+        while (it.hasNext()) {
+            final MutablePair<String, MutablePair<String, String>> next = it.next();
+            if (displayValue.equals(next.getSecond().getSecond())) {
+                it.remove();
+            }
+        }
+    }
+
+    private void removeAllDetails(final VoCustomerOrder vo, final String displayValue) {
+
+        removeOrderDetails(vo, displayValue);
+
+        for (final VoCustomerOrderLine line : vo.getLines()) {
+            removeLineDetails(line, displayValue);
+        }
+
+    }
+
+    private void removeLineDetails(final VoCustomerOrderLine vo, final String displayValue) {
+        final Iterator<MutablePair<String, MutablePair<String, String>>> it = vo.getAllValues().iterator();
+        while (it.hasNext()) {
+            final MutablePair<String, MutablePair<String, String>> next = it.next();
+            if (displayValue.equals(next.getSecond().getSecond())) {
+                it.remove();
+            }
+        }
     }
 
     private List<String> determineOrderStatusNextOptions(final VoCustomerOrderInfo vo) {
@@ -228,6 +275,11 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
             }
 
             vo.setPayments(voAssemblySupport.assembleVos(VoPayment.class, CustomerOrderPayment.class, customerOrderPaymentService.findBy(vo.getOrdernum(), null, (String) null, (String) null)));
+
+            final boolean removeSupplierDetails = !isSupplierDetailsViewable();
+            if (removeSupplierDetails) {
+                removeAllDetails(vo, "SUPPLIER");
+            }
 
             return vo;
 

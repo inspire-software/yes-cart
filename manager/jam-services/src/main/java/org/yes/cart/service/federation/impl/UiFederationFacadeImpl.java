@@ -52,6 +52,13 @@ public class UiFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    public boolean isCurrentUser(final String role) {
+        return shopFederationStrategy.isCurrentUser(role);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public boolean isShopAccessibleByCurrentManager(final String shopCode) {
         return shopFederationStrategy.isShopAccessibleByCurrentManager(shopCode);
     }

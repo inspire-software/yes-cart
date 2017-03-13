@@ -112,6 +112,26 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     return flags;
   }
 
+  getCustomValuesExclude(allValues: Pair<string, Pair<string, string>>[], exclude:string[]):Pair<string, Pair<string, string>>[] {
+    let vals:Pair<string, Pair<string, string>>[] = [];
+    allValues.forEach(_pair => {
+      if (_pair.second.second == null || exclude.indexOf(_pair.second.second) == -1) {
+        vals.push(_pair);
+      }
+    });
+    return vals;
+  }
+
+  getCustomValuesInclude(allValues: Pair<string, Pair<string, string>>[], include:string[]):Pair<string, Pair<string, string>>[] {
+    let vals:Pair<string, Pair<string, string>>[] = [];
+    allValues.forEach(_pair => {
+      if (_pair.second.second != null && include.indexOf(_pair.second.second) != -1) {
+        vals.push(_pair);
+      }
+    });
+    return vals;
+  }
+
   getPromotions(codes:string[]):PromotionVO[] {
     let promos:PromotionVO[] = [];
     if (codes != null) {
