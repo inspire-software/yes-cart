@@ -763,31 +763,35 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                                 .setFetchSize(batchSize)
                                 .scroll(ScrollMode.FORWARD_ONLY);
 
-                        while (results.next()) {
+                        try {
+                            while (results.next()) {
 
-                            final T entity = (T) HibernateHelper.unproxy(results.get(0));
+                                final T entity = (T) HibernateHelper.unproxy(results.get(0));
 
-                            if (filter != null && filter.skipIndexing(entity)) {
-                                continue; // skip this object
-                            }
+                                if (filter != null && filter.skipIndexing(entity)) {
+                                    continue; // skip this object
+                                }
 
-                            if (entityIndexingInterceptor != null) {
-                                if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onUpdate(entity)) {
+                                if (entityIndexingInterceptor != null) {
+                                    if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onUpdate(entity)) {
+                                        fullTextSession.index(entity);
+                                    }
+                                } else {
                                     fullTextSession.index(entity);
                                 }
-                            } else {
-                                fullTextSession.index(entity);
-                            }
-                            index++;
+                                index++;
 
-                            if (index % batchSize == 0) {
-                                fullTextSession.flushToIndexes(); //apply changes to indexes
-                                fullTextSession.clear(); //clear since the queue is processed
-                                if (log.isInfoEnabled()) {
-                                    log.info("Indexed {} items of {} class", index, persistentClass);
+                                if (index % batchSize == 0) {
+                                    fullTextSession.flushToIndexes(); //apply changes to indexes
+                                    fullTextSession.clear(); //clear since the queue is processed
+                                    if (log.isInfoEnabled()) {
+                                        log.info("Indexed {} items of {} class", index, persistentClass);
+                                    }
                                 }
+                                currentIndexingCount.compareAndSet(index - 1, index);
                             }
-                            currentIndexingCount.compareAndSet(index - 1, index);
+                        } finally {
+                            results.close();
                         }
                         fullTextSession.flushToIndexes(); //apply changes to indexes
                         fullTextSession.clear(); //clear since the queue is processed
