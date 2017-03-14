@@ -4,6 +4,7 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
+        <th>{{ 'CODE' | translate }}</th>
         <th>{{ 'NAME' | translate }}</th>
         <th>{{ 'DESCRIPTION' | translate }}</th>
       </tr>
@@ -11,6 +12,7 @@
       <tbody>
       <tr *ngFor="let row of filteredCentres; let i = index" class="{{row == selectedCentre ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
           <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.description}}&nbsp;</a></td>
         </template>
