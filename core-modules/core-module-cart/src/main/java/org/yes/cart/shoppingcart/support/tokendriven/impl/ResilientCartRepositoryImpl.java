@@ -95,7 +95,7 @@ public class ResilientCartRepositoryImpl implements CartRepository {
 
                 if (cachedCart instanceof MutableShoppingCart) {
                     // if need to invalidate and it is mutable - then invalidate
-                    ((MutableShoppingCart) cachedCart).getShoppingContext().setCustomerEmail(null);
+                    invalidateLogin((MutableShoppingCart) cachedCart);
                     storeAsynchronously(cachedCart);
                     return cachedCart;
                 } else {
@@ -133,7 +133,7 @@ public class ResilientCartRepositoryImpl implements CartRepository {
 
                     if (dbCart instanceof MutableShoppingCart) {
                         // if need to invalidate and it is mutable - then invalidate
-                        ((MutableShoppingCart) dbCart).getShoppingContext().setCustomerEmail(null);
+                        invalidateLogin((MutableShoppingCart) dbCart);
                         storeAsynchronously(dbCart);
                     } else {
                         // Otherwise if we cannot invalidate - remove the whole cart
@@ -194,6 +194,12 @@ public class ResilientCartRepositoryImpl implements CartRepository {
         }
         return null;
 
+    }
+
+    private void invalidateLogin(final MutableShoppingCart shoppingCart) {
+        shoppingCart.getShoppingContext().setCustomerEmail(null);
+        shoppingCart.getShoppingContext().setCustomerShopId(shoppingCart.getShoppingContext().getShopId());
+        shoppingCart.getShoppingContext().setCustomerShopCode(shoppingCart.getShoppingContext().getShopCode());
     }
 
     /** {@inheritDoc} */
