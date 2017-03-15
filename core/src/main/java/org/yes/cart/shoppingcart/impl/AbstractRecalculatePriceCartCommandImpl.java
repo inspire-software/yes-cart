@@ -90,7 +90,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
             for (final CartItem cartItem : shoppingCart.getCartItemList()) {
 
-                setProductSkuPrice(shoppingCart, customerShopId, masterShopId, cartItem.getProductSkuCode(), cartItem.getQty(), policy);
+                setProductSkuPrice(shoppingCart, customerShopId, fallbackShopId, cartItem.getProductSkuCode(), cartItem.getQty(), policy);
 
             }
 
@@ -130,7 +130,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
                     null,
                     skuCode,
                     customerShopId,
-                    masterShopId,
+                    fallbackShopId,
                     shoppingCart.getCurrencyCode(),
                     qty,
                     false,
