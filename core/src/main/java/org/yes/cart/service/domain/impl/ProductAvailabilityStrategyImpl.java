@@ -90,6 +90,20 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
                 qty);
     }
 
+    /** {@inheritDoc} */
+    public ProductAvailabilityModel getAvailabilityModel(final long shopId, final String skuCode) {
+
+        final List<Warehouse> warehouses = warehouseService.getByShopId(shopId, false);
+        final Map<String, BigDecimal> qty = skuWarehouseService.getProductSkuAvailableToSellQuantity(skuCode, warehouses);
+        final boolean availableNow = true;
+
+        return new ProductAvailabilityModelImpl(
+                skuCode,
+                Product.AVAILABILITY_STANDARD,
+                availableNow,
+                qty);
+    }
+
     private boolean isAvailableNow(final int availability, final Date from, final Date to) {
         final Date now = new Date();
         if (availability == Product.AVAILABILITY_PREORDER) {

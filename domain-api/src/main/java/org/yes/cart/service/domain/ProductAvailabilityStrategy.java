@@ -57,5 +57,13 @@ public interface ProductAvailabilityStrategy {
      */
     ProductAvailabilityModel getAvailabilityModel(final long shopId, final ProductSku sku);
 
+    /**
+     *
+     * @param shopId shop PK
+     * @param skuCode SKU code (not product code)
+     * @return availability of this sku
+     */
+    ProductAvailabilityModel getAvailabilityModel(final long shopId, final String skuCode);
+
 
 }

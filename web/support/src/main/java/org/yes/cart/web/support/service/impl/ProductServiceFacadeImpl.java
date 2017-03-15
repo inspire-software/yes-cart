@@ -331,6 +331,15 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    public ProductAvailabilityModel getProductAvailability(final String skuCode, final long shopId) {
+
+        return productAvailabilityStrategy.getAvailabilityModel(shopId, skuCode);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public ProductQuantityModel getProductQuantity(final BigDecimal cartQty, final Product product) {
 
         return productQuantityStrategy.getQuantityModel(cartQty, product);

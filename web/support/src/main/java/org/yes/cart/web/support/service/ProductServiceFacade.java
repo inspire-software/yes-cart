@@ -248,6 +248,16 @@ public interface ProductServiceFacade {
     ProductAvailabilityModel getProductAvailability(ProductSku product, long shopId);
 
     /**
+     * Get product availability.
+     *
+     * @param skuCode SKU code (not product code)
+     * @param shopId  current shop
+     *
+     * @return availability model
+     */
+    ProductAvailabilityModel getProductAvailability(String skuCode, long shopId);
+
+    /**
      * Quantity model.
      *
      * @param cartQty quantity of given sku in cart
