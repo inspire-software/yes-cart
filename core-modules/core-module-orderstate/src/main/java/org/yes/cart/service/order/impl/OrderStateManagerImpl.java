@@ -83,7 +83,7 @@ public class OrderStateManagerImpl implements OrderStateManager {
                 return result;
             } catch (OrderException e) {
                 if (e instanceof org.yes.cart.service.order.OrderItemAllocationException) {
-                    LOG.warn("Can't handle event " + orderEvent + ", because of " + e.getMessage());
+                    LOG.warn(Markers.alert(), e.getMessage());
                 } else {
                     LOG.error(Markers.alert(), "Order state transition failed for event " + orderEvent + ", cause: " + e.getMessage(), e);
                 }
