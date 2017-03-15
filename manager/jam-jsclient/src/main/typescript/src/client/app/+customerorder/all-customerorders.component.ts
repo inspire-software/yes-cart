@@ -39,12 +39,12 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     { first: 'os.waiting.payment', second: true },
     { first: 'os.waiting', second: true },
     { first: 'os.in.progress', second: true },
-    { first: 'os.cancelled', second: false },
-    { first: 'os.cancelled.waiting.payment', second: false },
-    { first: 'os.returned', second: false },
-    { first: 'os.returned.waiting.payment', second: false },
+    { first: 'os.cancelled', second: true },
+    { first: 'os.cancelled.waiting.payment', second: true },
+    { first: 'os.returned', second: true },
+    { first: 'os.returned.waiting.payment', second: true },
     { first: 'os.partially.shipped', second: true },
-    { first: 'os.completed', second: false },
+    { first: 'os.completed', second: true },
   ];
 
   private static _open:string[] = [
