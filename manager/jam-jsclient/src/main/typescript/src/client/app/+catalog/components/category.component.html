@@ -112,6 +112,20 @@
       <tab heading="{{ 'TAB_SEO' | translate }}"  (select)="tabSelected('SEO')">
         <div class="panel-body">
 
+          <div class="row" *ngIf="category.categoryId > 0">
+            <div class="col-lg-9">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'SEO_URI' | translate }}</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">/category/</div>
+                    <input class="form-control" placeholder="{{ 'SEO_URI' | translate }}" type="text" value="{{ category.categoryId }}" readonly="readonly"/>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
           <div class="row">
             <div class="col-lg-9">
               <fieldset>
