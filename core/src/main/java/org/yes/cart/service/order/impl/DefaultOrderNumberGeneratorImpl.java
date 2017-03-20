@@ -16,12 +16,14 @@
 
 package org.yes.cart.service.order.impl;
 
+import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.order.OrderNumberGenerator;
 
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -35,10 +37,9 @@ import java.util.Date;
  */
 public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
 
-    private final GenericDAO<CustomerOrder, Long> customerOrderDao ;
-
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMddHHmmss");
-    private static long orderSequence;
+    private final GenericDAO<CustomerOrder, Long> customerOrderDao;
+    private AtomicInteger orderSequence = new AtomicInteger();
+    private Date lastCheck;
 
     /**
      * Construct order number generator service.
@@ -46,7 +47,8 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
      */
     public DefaultOrderNumberGeneratorImpl(final GenericDAO<CustomerOrder, Long> customerOrderDao) {
         this.customerOrderDao = customerOrderDao;
-        orderSequence = -1;
+        orderSequence.set(0);
+        lastCheck = null;
     }
 
     /**
@@ -54,7 +56,16 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
      */
     DefaultOrderNumberGeneratorImpl() {
         customerOrderDao = null;
-        orderSequence = 0;
+        orderSequence.set(0);
+        lastCheck = null;
+    }
+
+    void setLastCheck(final Date lastCheck) {
+        this.lastCheck = lastCheck;
+    }
+
+    Calendar now() {
+        return Calendar.getInstance();
     }
 
     /**
@@ -63,17 +74,54 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
      * @return Generated order number.
      */
     public synchronized String getNextOrderNumber() {
-        final String datePart = dateFormat.format(new Date()); //TODO: V2 get from time machine
-        return datePart + '-' + getOrderSequence();
+
+        final Calendar now = now();
+        final String datePart = datePart(now);
+        final String sequencePart = getOrderSequence(now);
+        return datePart + '-' + sequencePart;
+
     }
 
-    private  long getOrderSequence() {
-        if (DefaultOrderNumberGeneratorImpl.orderSequence == -1) {
-           DefaultOrderNumberGeneratorImpl.orderSequence = Long.valueOf(
-                   String.valueOf(customerOrderDao.getScalarResultByNamedQuery("ORDERS.COUNT")));
+    String datePart(final Calendar calendar) {
+
+        final long year = calendar.get(Calendar.YEAR);
+        final long mth = calendar.get(Calendar.MONTH) + 1;
+        final long day = calendar.get(Calendar.DAY_OF_MONTH);
+        final long hour = calendar.get(Calendar.HOUR_OF_DAY);
+        final long min = calendar.get(Calendar.MINUTE);
+        final long sec = calendar.get(Calendar.SECOND);
+
+        final long time = (year % 100) * 10000000000l + mth * 100000000l + day * 1000000l + hour * 10000l + min * 100 + sec;
+
+        return String.valueOf(time);
+
+    }
+
+    private String getOrderSequence(final Calendar calendar) {
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        if (lastCheck == null || lastCheck.before(calendar.getTime())) {
+            synchronized (DefaultOrderNumberGeneratorImpl.class) {
+                if (lastCheck == null || lastCheck.before(calendar.getTime())) {
+                    // Restart count for current month
+                    orderSequence.set(
+                            customerOrderDao.findCountByCriteria(
+                                    Restrictions.ge("orderTimestamp", calendar.getTime()),
+                                    Restrictions.ne("orderStatus", CustomerOrder.ORDER_STATUS_NONE)
+                            )
+                    );
+                    lastCheck = calendar.getTime();
+                }
+            }
         }
-        DefaultOrderNumberGeneratorImpl.orderSequence ++;
-        return DefaultOrderNumberGeneratorImpl.orderSequence;
+
+        return String.valueOf(orderSequence.incrementAndGet());
+
     }
 
 }
