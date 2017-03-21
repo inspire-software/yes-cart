@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.MailPart;
 import org.yes.cart.domain.misc.Pair;
@@ -487,11 +486,7 @@ public class MailComposerImpl implements MailComposer {
 
         }
 
-        if (model.get("root") instanceof CustomerOrder) {
-            mail.setSubject(((CustomerOrder)model.get("root")).getOrdernum() + ": " + prop.getProperty("subject"));
-        } else {
-            mail.setSubject(prop.getProperty("subject"));
-        }
+        mail.setSubject(prop.getProperty("subject"));
 
         if (from == null) {
             mail.setFrom(prop.getProperty("from"));
