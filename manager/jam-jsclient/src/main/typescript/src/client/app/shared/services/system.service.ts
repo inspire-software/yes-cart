@@ -101,7 +101,7 @@ export class SystemService {
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/cache/' + name, options)
+    return this.http.delete(this._serviceBaseUrl + '/cache/' + name + '/', options)
       .map(res => <CacheInfoVO[]> res.json())
       .catch(this.handleError);
   }
@@ -119,7 +119,7 @@ export class SystemService {
 
     let path = stats ? 'statson/' : 'statsoff/';
 
-    return this.http.post(this._serviceBaseUrl + '/cache/' + path + name, null, options)
+    return this.http.post(this._serviceBaseUrl + '/cache/' + path + name + '/', null, options)
       .map(res => <CacheInfoVO[]> res.json())
       .catch(this.handleError);
   }
@@ -143,7 +143,7 @@ export class SystemService {
    * @returns {Observable<R>}
    */
   getIndexJobStatus(token:string) {
-    return this.http.get(this._serviceBaseUrl + '/index/status/' + token)
+    return this.http.get(this._serviceBaseUrl + '/index/status/' + token + '/')
       .map(res => <JobStatusVO> res.json())
       .catch(this.handleError);
   }

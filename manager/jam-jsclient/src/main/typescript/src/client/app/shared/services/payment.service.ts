@@ -121,7 +121,7 @@ export class PaymentService {
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
-    let _path = shopCode != null ? ('/gateways/configure/' + pgLabel + '/' + shopCode) : ('/gateways/configure/'  + pgLabel);
+    let _path = shopCode != null ? ('/gateways/configure/' + pgLabel + '/' + shopCode + '/') : ('/gateways/configure/'  + pgLabel + '/');
 
     return this.http.post(this._serviceBaseUrl + _path , body, options)
       .map(res => <PaymentGatewayParameterVO[]> res.json())

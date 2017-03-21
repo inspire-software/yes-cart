@@ -59,7 +59,7 @@ export class ImpexService {
     let body = fileName;
     let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._serviceBaseUrl + '/impex/import/' + group, body, options)
+    return this.http.post(this._serviceBaseUrl + '/impex/import/' + group + '/', body, options)
       .map(res => <string> res.text())
       .catch(this.handleError);
   }
@@ -82,7 +82,7 @@ export class ImpexService {
     let body = fileName;
     let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._serviceBaseUrl + '/impex/export/' + group, body, options)
+    return this.http.post(this._serviceBaseUrl + '/impex/export/' + group + '/', body, options)
       .map(res => <string> res.text())
       .catch(this.handleError);
   }

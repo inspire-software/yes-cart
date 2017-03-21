@@ -67,7 +67,7 @@ export class AttributeService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllAttributes(groupCode:string) {
-    return this.http.get(this._serviceBaseUrl + '/attribute/all/' + groupCode)
+    return this.http.get(this._serviceBaseUrl + '/attribute/all/' + groupCode + '/')
       .map(res => <AttributeVO[]> res.json())
       .catch(this.handleError);
   }
