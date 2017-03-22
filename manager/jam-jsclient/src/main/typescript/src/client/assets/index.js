@@ -37,7 +37,7 @@
   System.import('<%= BOOTSTRAP_MODULE %>')
     .catch(function (e) {
       console.error(e,
-        'Report this error at https://github.com/mgechev/angular2-seed/issues');
+        'Report this error at http://www.inspire-software.com/jira/browse/YC');
     });
   </script>
   <% } %>
