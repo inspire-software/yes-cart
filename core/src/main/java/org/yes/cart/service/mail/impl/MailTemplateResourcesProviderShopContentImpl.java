@@ -78,27 +78,62 @@ public class MailTemplateResourcesProviderShopContentImpl implements MailTemplat
                               final String templateName,
                               final String resourceFilename) throws IOException {
 
-        final String uri = shopCode.concat("_mail_").concat(templateName).concat("_").concat(resourceFilename);
+        final String templateUri = shopCode.concat("_mail_").concat(templateName).concat("_").concat(resourceFilename);
 
-        final Long contentId = contentService.findContentIdBySeoUri(uri);
+        final byte[] templateSpecific = getResource(templateUri, locale);
+        if (templateSpecific == null) {
+            final String globalUri = shopCode.concat("_mail_").concat(resourceFilename);
+            return getResource(globalUri, locale);
+        }
+        return templateSpecific;
+
+    }
+
+    private byte[] getResource(final String contentFullUri,
+                               final String locale) throws IOException {
+
+        final Long contentId = contentService.findContentIdBySeoUri(contentFullUri);
 
         if (contentId != null) {
 
             final Category content = contentService.getById(contentId);
 
-            final String imageValue = content.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_IMAGE);
+            // Locale specific
+            final String imageValueLocale = content.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_IMAGE + "_" + locale);
+            if (StringUtils.isNotBlank(imageValueLocale)) {
 
+                final String path = systemService.getImageRepositoryDirectory();
+
+                if (imageService.isImageInRepository(imageValueLocale, contentFullUri, Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path)) {
+                    return imageService.imageToByteArray(imageValueLocale, contentFullUri, Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path);
+                }
+
+                if (imageService.isImageInRepository(imageValueLocale, content.getGuid(), Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path)) {
+                    return imageService.imageToByteArray(imageValueLocale, content.getGuid(), Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path);
+                }
+
+            }
+
+            // Default
+            final String imageValue = content.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_IMAGE);
             if (StringUtils.isNotBlank(imageValue)) {
 
                 final String path = systemService.getImageRepositoryDirectory();
 
-                return imageService.imageToByteArray(imageValue, uri, Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path);
+                if (imageService.isImageInRepository(imageValue, contentFullUri, Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path)) {
+                    return imageService.imageToByteArray(imageValue, contentFullUri, Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path);
+                }
+
+                if (imageService.isImageInRepository(imageValue, content.getGuid(), Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path)) {
+                    return imageService.imageToByteArray(imageValue, content.getGuid(), Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path);
+                }
 
             }
 
         }
 
         return null;
+
     }
 
 

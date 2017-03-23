@@ -77,12 +77,12 @@ public class MailTemplateResourcesProviderThemeImpl implements MailTemplateResou
                               final String templateName,
                               final String resourceFilename) throws IOException {
 
-        for (final String mailTemplate : mailTemplateChain) {
-            final InputStream streamLocale = servletContext.getResourceAsStream(mailTemplate + templateName + "/resources_" + locale + "/" + resourceFilename);
+        for (final String mailTheme : mailTemplateChain) {
+            final InputStream streamLocale = servletContext.getResourceAsStream(mailTheme + templateName + "/resources_" + locale + "/" + resourceFilename);
             if (streamLocale != null) {
                 return IOUtils.toByteArray(streamLocale);
             }
-            final InputStream stream = servletContext.getResourceAsStream(mailTemplate + templateName + "/resources/" + resourceFilename);
+            final InputStream stream = servletContext.getResourceAsStream(mailTheme + templateName + "/resources/" + resourceFilename);
             if (stream != null) {
                 return IOUtils.toByteArray(stream);
             }
