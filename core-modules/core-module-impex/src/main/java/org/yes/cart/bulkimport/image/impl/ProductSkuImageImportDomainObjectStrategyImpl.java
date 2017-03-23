@@ -62,7 +62,7 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
     @Override
     public boolean doImageImport(final JobStatusListener statusListener, final String fileName, final String code, final String suffix, final String locale) {
 
-        final ProductSku productSku = productSkuService.getProductSkuBySkuCode(code);
+        final ProductSku productSku = productSkuService.findProductSkuBySkuCode(code);
 
         if (productSku == null) {
             final String warn = MessageFormat.format("product sku with code {0} not found.", code);
