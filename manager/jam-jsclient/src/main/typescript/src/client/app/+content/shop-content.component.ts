@@ -274,7 +274,9 @@ export class ShopContentComponent implements OnInit, OnDestroy {
                   this.getFilteredContents();
                 });
               } else {
-                this.contentFilter = rez.guid;
+                if (this.contentFilter == null || this.contentFilter == '') {
+                  this.contentFilter = rez.guid;
+                }
                 this.getFilteredContents();
               }
           }

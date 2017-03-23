@@ -232,7 +232,6 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
               _sub.unsubscribe();
               let pk = this.customerEdit.customerId;
               LogUtil.debug('AllCustomersComponent customer changed', rez);
-              this.customerFilter = '#' + rez.email;
               this.changed = false;
               this.selectedCustomer = rez;
               this.customerEdit = null;
@@ -247,6 +246,7 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
                   this.getFilteredCustomers();
                 });
               } else {
+                this.customerFilter = '#' + rez.email;
                 this.getFilteredCustomers();
               }
           }
