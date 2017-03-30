@@ -24,7 +24,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
 import java.util.Collection;
 import java.util.List;

@@ -20,7 +20,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Seo;
-import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;

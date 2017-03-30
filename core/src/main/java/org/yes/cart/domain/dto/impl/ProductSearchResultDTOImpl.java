@@ -19,8 +19,8 @@ package org.yes.cart.domain.dto.impl;
 import org.apache.commons.lang.ObjectUtils;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
-import org.yes.cart.domain.entityindexer.StoredAttributes;
-import org.yes.cart.domain.entityindexer.impl.StoredAttributesImpl;
+import org.yes.cart.domain.entity.StoredAttributes;
+import org.yes.cart.domain.entity.impl.StoredAttributesImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 

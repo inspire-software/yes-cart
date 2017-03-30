@@ -18,8 +18,10 @@ package org.yes.cart.web.support.util;
 
 import org.yes.cart.domain.entity.bridge.SkuPriceBridge;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.query.impl.SearchUtil;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,7 +67,7 @@ public class ProductSortingUtils {
         });
         put("basePrice", new SupportedSorting("byPrice", null) {
             public String resolveSortField(final long shopId, final String language, final String currency) {
-                final Pair<String, String> priceSort = SKU_PRICE_BRIDGE.objectToString(shopId, currency, null);
+                final Pair<String, String> priceSort = SearchUtil.priceToFacetPair(shopId, currency, BigDecimal.ZERO);
                 return priceSort.getFirst();
             }
         });

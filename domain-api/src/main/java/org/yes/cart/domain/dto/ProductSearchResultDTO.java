@@ -18,7 +18,7 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.domain.entity.Identifiable;
-import org.yes.cart.domain.entityindexer.StoredAttributes;
+import org.yes.cart.domain.entity.StoredAttributes;
 
 import java.math.BigDecimal;
 import java.util.Date;

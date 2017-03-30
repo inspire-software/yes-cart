@@ -29,9 +29,10 @@ import org.yes.cart.cluster.node.MessageListener;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.service.WarmUpService;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
+import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.query.impl.AsIsAnalyzer;
+import org.yes.cart.search.dao.IndexBuilder;
+import org.yes.cart.search.query.impl.AsIsAnalyzer;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.utils.impl.ObjectUtil;
@@ -105,7 +106,7 @@ public class BackdoorServiceImpl implements BackdoorService {
         if (isLuceneIndexDisabled()) {
             return INDEX_DISABLED_STATUS;
         }
-        final GenericFullTextSearchCapableDAO.FTIndexState state = productService.getProductsFullTextIndexState();
+        final IndexBuilder.FTIndexState state = productService.getProductsFullTextIndexState();
         if (state.isFullTextSearchReindexCompleted()) {
             flushCache();
             return new Object[] { INDEX_DONE_STATUS, state.getLastIndexCount() };
@@ -120,7 +121,7 @@ public class BackdoorServiceImpl implements BackdoorService {
         if (isLuceneIndexDisabled()) {
             return INDEX_DISABLED_STATUS;
         }
-        final GenericFullTextSearchCapableDAO.FTIndexState state = productService.getProductsSkuFullTextIndexState();
+        final IndexBuilder.FTIndexState state = productService.getProductsSkuFullTextIndexState();
         if (state.isFullTextSearchReindexCompleted()) {
             flushCache();
             return new Object[] { INDEX_DONE_STATUS, state.getLastIndexCount() };
@@ -432,8 +433,8 @@ public class BackdoorServiceImpl implements BackdoorService {
     }
 
     @SuppressWarnings("unchecked")
-    private GenericFullTextSearchCapableDAO<Product, Long> getGenericDao() {
-        return (GenericFullTextSearchCapableDAO) productService.getGenericDao();
+    private GenericFTSCapableDAO<Product, Long, Object> getGenericDao() {
+        return (GenericFTSCapableDAO) productService.getGenericDao();
     }
 
     private int getProductIndexBatchSize() {

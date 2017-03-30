@@ -23,11 +23,11 @@ import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.bridge.support.NavigatableAttributesSupport;
-import org.yes.cart.domain.entityindexer.StoredAttributes;
-import org.yes.cart.domain.entityindexer.impl.StoredAttributesImpl;
+import org.yes.cart.domain.entity.StoredAttributes;
+import org.yes.cart.domain.entity.impl.StoredAttributesImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
 import java.util.*;
 

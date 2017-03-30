@@ -25,13 +25,13 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.bridge.BigDecimalBridge;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
-import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.PriceNavigation;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
-import org.yes.cart.domain.queryobject.NavigationContext;
-import org.yes.cart.domain.queryobject.impl.FilteredNavigationRecordRequestImpl;
+import org.yes.cart.search.PriceNavigation;
+import org.yes.cart.search.SearchQueryFactory;
+import org.yes.cart.search.dto.FilteredNavigationRecord;
+import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
+import org.yes.cart.search.dto.NavigationContext;
+import org.yes.cart.search.dto.impl.FilteredNavigationRecordRequestImpl;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
@@ -60,13 +60,13 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
 
     private final BigDecimalBridge moneyBridge = new BigDecimalBridge(Constants.DEFAULT_SCALE);
 
-    public PriceFilteredNavigationSupportImpl(final LuceneQueryFactory luceneQueryFactory,
+    public PriceFilteredNavigationSupportImpl(final SearchQueryFactory searchQueryFactory,
                                               final ProductService productService,
                                               final CategoryService categoryService,
                                               final ShopService shopService,
                                               final PriceService priceService,
                                               final PriceNavigation priceNavigation) {
-        super(luceneQueryFactory, productService);
+        super(searchQueryFactory, productService);
         this.categoryService = categoryService;
         this.shopService = shopService;
         this.priceService = priceService;
@@ -120,7 +120,7 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
             final FilteredNavigationRecordRequest request = new FilteredNavigationRecordRequestImpl("priceFacet", priceFacet, rangeValues);
 
             final Map<String, List<Pair<String, Integer>>> counts =
-                    getProductService().findFilteredNavigationRecords(navigationContext.getProductQuery(), Collections.singletonList(request));
+                    getProductService().findFilteredNavigationRecords(navigationContext, Collections.singletonList(request));
 
             final List<Pair<String, Integer>> rangeCounts = counts.get("priceFacet");
 

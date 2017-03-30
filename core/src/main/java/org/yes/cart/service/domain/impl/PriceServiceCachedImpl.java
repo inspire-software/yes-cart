@@ -24,7 +24,7 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
+import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.service.domain.PriceService;
 
 import java.math.BigDecimal;

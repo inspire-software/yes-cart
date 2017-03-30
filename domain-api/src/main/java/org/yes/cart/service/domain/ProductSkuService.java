@@ -16,12 +16,12 @@
 
 package org.yes.cart.service.domain;
 
-import org.apache.lucene.search.Query;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.search.dto.NavigationContext;
 
 import java.util.Collection;
 import java.util.List;
@@ -62,11 +62,11 @@ public interface ProductSkuService extends GenericService<ProductSku> {
     /**
      * Get the all products SKU, that match the given query
      *
-     * @param query         lucene query
+     * @param navigationContext         navigation context
      *
      * @return list of products SKU
      */
-    List<ProductSkuSearchResultDTO> getProductSkuSearchResultDTOByQuery(Query query);
+    List<ProductSkuSearchResultDTO> getProductSkuSearchResultDTOByQuery(NavigationContext navigationContext);
 
 
     /**

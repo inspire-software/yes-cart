@@ -22,7 +22,7 @@ import org.hibernate.search.bridge.LuceneOptions;
 import org.hibernate.search.bridge.TwoWayFieldBridge;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
 import java.util.Map;
 

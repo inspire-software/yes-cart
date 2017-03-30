@@ -31,11 +31,11 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.PriceNavigation;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
-import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.search.SearchQueryFactory;
+import org.yes.cart.search.PriceNavigation;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.dto.FilteredNavigationRecord;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.domain.ro.*;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.page.component.filterednavigation.AttributeFilteredNavigationSupport;
@@ -74,7 +74,7 @@ public class SearchController {
     @Autowired
     private CurrencySymbolService currencySymbolService;
     @Autowired
-    private LuceneQueryFactory luceneQueryFactory;
+    private SearchQueryFactory searchQueryFactory;
     @Autowired
     private BrandFilteredNavigationSupport brandsFilteredNavigationSupport;
     @Autowired
@@ -797,7 +797,7 @@ public class SearchController {
             mapParams.putAll(result.getSearch().getParameters());
         }
 
-        return luceneQueryFactory.getFilteredNavigationQueryChain(
+        return searchQueryFactory.getFilteredNavigationQueryChain(
                 shopId,
                 currentCategoriesIds.getFirst(),
                 currentCategoriesIds.getSecond(),

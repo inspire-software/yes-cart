@@ -19,7 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
+import org.yes.cart.search.dto.FilteredNavigationRecord;
 
 import java.math.BigDecimal;
 import java.util.List;

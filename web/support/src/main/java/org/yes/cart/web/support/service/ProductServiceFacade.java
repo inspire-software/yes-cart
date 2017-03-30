@@ -20,14 +20,12 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.queryobject.NavigationContext;
-import org.yes.cart.service.domain.ShoppingCartCalculator;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.ProductPriceModel;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 

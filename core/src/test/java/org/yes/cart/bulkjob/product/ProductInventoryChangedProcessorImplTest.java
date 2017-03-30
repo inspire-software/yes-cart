@@ -25,9 +25,9 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.search.SearchQueryFactory;
+import org.yes.cart.search.dto.NavigationContext;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
@@ -38,9 +38,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
@@ -56,7 +54,7 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
         final WarehouseService warehouseService = ctx().getBean("warehouseService", WarehouseService.class);
         final ProductService productService = ctx().getBean("productService", ProductService.class);
         final SkuWarehouseService skuWarehouseService = ctx().getBean("skuWarehouseService", SkuWarehouseService.class);
-        final LuceneQueryFactory luceneQueryFactory = ctx().getBean("luceneQueryFactory", LuceneQueryFactory.class);
+        final SearchQueryFactory searchQueryFactory = ctx().getBean("luceneQueryFactory", SearchQueryFactory.class);
 
         final List<Warehouse> warehouses = warehouseService.getByShopId(10L, false);
 
@@ -72,11 +70,11 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
 
         productService.reindexProduct(product.getId());
 
-        final NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, null, false,
+        final NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, null, false,
                 Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD, (List) Arrays.asList("9998")));
 
         List<ProductSearchResultDTO> rez = productService.getProductSearchResultDTOByQuery(
-                context.getProductQuery(), 0, 1, null, false).getResults();
+                context, 0, 1, null, false).getResults();
         assertNotNull(rez);
         assertEquals(1, rez.size());
 
@@ -151,7 +149,7 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
         mgr.getCache("productService-productSearchResultDTOByQuery").clear();
         mgr.getCache("productSkuService-productSkuSearchResultDTOByQuery").clear();
 
-        rez = productService.getProductSearchResultDTOByQuery(context.getProductQuery(), 0, 1, null, false).getResults();
+        rez = productService.getProductSearchResultDTOByQuery(context, 0, 1, null, false).getResults();
         assertNotNull(rez);
         assertEquals(0, rez.size());
 
@@ -227,7 +225,7 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
         mgr.getCache("productService-productSearchResultDTOByQuery").clear();
         mgr.getCache("productSkuService-productSkuSearchResultDTOByQuery").clear();
 
-        rez = productService.getProductSearchResultDTOByQuery(context.getProductQuery(), 0, 1, null, false).getResults();
+        rez = productService.getProductSearchResultDTOByQuery(context, 0, 1, null, false).getResults();
         assertNotNull(rez);
         assertEquals(1, rez.size());
 

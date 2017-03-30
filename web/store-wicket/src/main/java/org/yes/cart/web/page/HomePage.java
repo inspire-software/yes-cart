@@ -26,8 +26,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.search.SearchQueryFactory;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.page.component.AbstractCentralView;
 import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsView;
@@ -64,7 +64,7 @@ public class HomePage extends AbstractWebPage {
     private WicketCentralViewProvider wicketCentralViewProvider;
 
     @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
-    private LuceneQueryFactory luceneQueryFactory;
+    private SearchQueryFactory searchQueryFactory;
 
     @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_SERVICE_FACADE)
     private CategoryServiceFacade categoryServiceFacade;
@@ -106,7 +106,7 @@ public class HomePage extends AbstractWebPage {
 
         final Pair<List<Long>, Boolean> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, browsingShopId);
 
-        final NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(
+        final NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(
                 browsingShopId,
                 currentCategoriesIds.getFirst(),
                 currentCategoriesIds.getSecond(),

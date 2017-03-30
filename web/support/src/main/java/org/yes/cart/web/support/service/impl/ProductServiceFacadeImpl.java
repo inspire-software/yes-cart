@@ -28,9 +28,9 @@ import org.yes.cart.domain.entity.impl.ProductPriceModelImpl;
 import org.yes.cart.domain.entity.impl.ProductPromotionModelImpl;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.SearchQueryFactory;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
@@ -54,7 +54,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     private final ProductService productService;
     private final ProductSkuService productSkuService;
     private final ProductAssociationService productAssociationService;
-    private final LuceneQueryFactory luceneQueryFactory;
+    private final SearchQueryFactory searchQueryFactory;
     private final ProductAvailabilityStrategy productAvailabilityStrategy;
     private final ProductQuantityStrategy productQuantityStrategy;
     private final PricingPolicyProvider pricingPolicyProvider;
@@ -68,7 +68,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     public ProductServiceFacadeImpl(final ProductService productService,
                                     final ProductSkuService productSkuService,
                                     final ProductAssociationService productAssociationService,
-                                    final LuceneQueryFactory luceneQueryFactory,
+                                    final SearchQueryFactory searchQueryFactory,
                                     final ProductAvailabilityStrategy productAvailabilityStrategy,
                                     final ProductQuantityStrategy productQuantityStrategy,
                                     final PricingPolicyProvider pricingPolicyProvider,
@@ -81,7 +81,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         this.productService = productService;
         this.productSkuService = productSkuService;
         this.productAssociationService = productAssociationService;
-        this.luceneQueryFactory = luceneQueryFactory;
+        this.searchQueryFactory = searchQueryFactory;
         this.productAvailabilityStrategy = productAvailabilityStrategy;
         this.productQuantityStrategy = productQuantityStrategy;
         this.pricingPolicyProvider = pricingPolicyProvider;
@@ -156,12 +156,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         if (productIds != null && !productIds.isEmpty()) {
 
-            final NavigationContext assoc = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, null, false,
+            final NavigationContext assoc = searchQueryFactory.getFilteredNavigationQueryChain(shopId, null, false,
                     Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
                             (List) Arrays.asList(productIds)));
 
             return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
-                    assoc.getProductQuery(), 0, productIds.size(), null, false).getResults());
+                    assoc, 0, productIds.size(), null, false).getResults());
         }
 
         return Collections.emptyList();
@@ -182,12 +182,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         final int limit = categoryServiceFacade.getFeaturedListSizeConfig(categoryId, shopId);
 
-        final NavigationContext featured = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, categories, false,
+        final NavigationContext featured = searchQueryFactory.getFilteredNavigationQueryChain(shopId, categories, false,
                 Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD,
                         (List) Arrays.asList("true")));
 
         return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
-                featured.getProductQuery(), 0, limit, null, false).getResults());
+                featured, 0, limit, null, false).getResults());
     }
 
     /**
@@ -204,12 +204,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         } else {
             newArrivalCats = null;
         }
-        final NavigationContext newarrival = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, newArrivalCats, false,
+        final NavigationContext newarrival = searchQueryFactory.getFilteredNavigationQueryChain(shopId, newArrivalCats, false,
                 Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
                         (List) Arrays.asList(ProductSearchQueryBuilder.TAG_NEWARRIVAL)));
 
         return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
-                newarrival.getProductQuery(), 0, limit, null, true).getResults());
+                newarrival, 0, limit, null, true).getResults());
     }
 
     /**
@@ -227,12 +227,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         final int limit = categoryServiceFacade.getFeaturedListSizeConfig(categoryId, shopId);
 
-        final NavigationContext tagged = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, categories, false,
+        final NavigationContext tagged = searchQueryFactory.getFilteredNavigationQueryChain(shopId, categories, false,
                 Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
                         (List) Arrays.asList(tag)));
 
         return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
-                tagged.getProductQuery(), 0, limit, null, false).getResults());
+                tagged, 0, limit, null, false).getResults());
     }
 
     /**
@@ -251,12 +251,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 productIdsForCategory = productIds.subList(productIds.size() - limit, productIds.size());
             }
 
-            final NavigationContext recent = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, null, false,
+            final NavigationContext recent = searchQueryFactory.getFilteredNavigationQueryChain(shopId, null, false,
                     Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
                             (List) Arrays.asList(productIdsForCategory)));
 
             return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
-                    recent.getProductQuery(), 0, limit, null, false).getResults());
+                    recent, 0, limit, null, false).getResults());
 
         }
 
@@ -273,15 +273,15 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                                       final boolean descendingSort) {
 
         final ProductSearchResultPageDTO result = productService.getProductSearchResultDTOByQuery(
-                context.getProductQuery(), firstResult, maxResults, sortFieldName, descendingSort
+                context, firstResult, maxResults, sortFieldName, descendingSort
         ).copy(); // MUST BE COPY for each search as we are setting relevant SKU list
 
         if (!result.getResults().isEmpty()) {
 
-            final NavigationContext skuContext = luceneQueryFactory.getSkuSnowBallQuery(context, result.getResults());
+            final NavigationContext skuContext = searchQueryFactory.getSkuSnowBallQuery(context, result.getResults());
 
             final List<ProductSkuSearchResultDTO> skus = productSkuService.getProductSkuSearchResultDTOByQuery(
-                    skuContext.getProductSkuQuery()
+                    skuContext
             );
             // Need list of skus to maintain priority order
             final Map<Long, List<ProductSkuSearchResultDTO>> skuMap = new HashMap<Long, List<ProductSkuSearchResultDTO>>();

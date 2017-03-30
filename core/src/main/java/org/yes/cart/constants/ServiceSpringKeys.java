@@ -216,12 +216,12 @@ public interface ServiceSpringKeys {
     /* ######### UTILS ####################################### */
 
     /**
-     * {@link org.yes.cart.domain.query.impl.PriceNavigationImpl} bean key.
+     * {@link org.yes.cart.search.PriceNavigation} bean key.
      */
     String PRICE_NAVIGATION = "priceNavigation";
 
     /**
-     * {@link org.yes.cart.domain.query.impl.LuceneQueryFactoryImpl} bean key.
+     * {@link org.yes.cart.search.SearchQueryFactory} bean key.
      */
     String LUCENE_QUERY_FACTORY = "luceneQueryFactory";
 

@@ -16,20 +16,20 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.apache.lucene.search.Query;
 import org.hibernate.criterion.Criterion;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
+import org.yes.cart.search.dao.IndexBuilder;
+import org.yes.cart.search.dto.FilteredNavigationRecord;
+import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.ProductService;
 
 import java.util.List;
@@ -161,24 +161,24 @@ public class ProductServiceCachedImpl implements ProductService {
      * {@inheritDoc}
      */
     @Cacheable(value = "productService-productSearchResultDTOByQuery")
-    public ProductSearchResultPageDTO getProductSearchResultDTOByQuery(final Query query, final int firstResult, final int maxResults, final String sortFieldName, final boolean reverse) {
-        return productService.getProductSearchResultDTOByQuery(query, firstResult, maxResults, sortFieldName, reverse);
+    public ProductSearchResultPageDTO getProductSearchResultDTOByQuery(final NavigationContext navigationContext, final int firstResult, final int maxResults, final String sortFieldName, final boolean reverse) {
+        return productService.getProductSearchResultDTOByQuery(navigationContext, firstResult, maxResults, sortFieldName, reverse);
     }
 
 
     /**
      * {@inheritDoc}
      */
-    public Map<String, List<Pair<String, Integer>>> findFilteredNavigationRecords(final Query baseQuery, final List<FilteredNavigationRecordRequest> request) {
-        return productService.findFilteredNavigationRecords(baseQuery, request);
+    public Map<String, List<Pair<String, Integer>>> findFilteredNavigationRecords(final NavigationContext baseNavigationContext, final List<FilteredNavigationRecordRequest> request) {
+        return productService.findFilteredNavigationRecords(baseNavigationContext, request);
     }
 
     /**
      * {@inheritDoc}
      */
     @Cacheable(value = "productService-productQtyByQuery")
-    public int getProductQty(final Query query) {
-        return productService.getProductQty(query);
+    public int getProductQty(final NavigationContext navigationContext) {
+        return productService.getProductQty(navigationContext);
     }
 
 
@@ -326,14 +326,14 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
-    public GenericFullTextSearchCapableDAO.FTIndexState getProductsFullTextIndexState() {
+    public IndexBuilder.FTIndexState getProductsFullTextIndexState() {
         return productService.getProductsFullTextIndexState();
     }
 
     /**
      * {@inheritDoc}
      */
-    public GenericFullTextSearchCapableDAO.FTIndexState getProductsSkuFullTextIndexState() {
+    public IndexBuilder.FTIndexState getProductsSkuFullTextIndexState() {
         return productService.getProductsSkuFullTextIndexState();
     }
 

@@ -27,6 +27,7 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.ProductSkuService;
 
 import java.util.Collection;
@@ -71,8 +72,8 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
      * {@inheritDoc}
      */
     @Cacheable(value = "productSkuService-productSkuSearchResultDTOByQuery")
-    public List<ProductSkuSearchResultDTO> getProductSkuSearchResultDTOByQuery(final Query query) {
-        return productSkuService.getProductSkuSearchResultDTOByQuery(query);
+    public List<ProductSkuSearchResultDTO> getProductSkuSearchResultDTOByQuery(final NavigationContext navigationContext) {
+        return productSkuService.getProductSkuSearchResultDTOByQuery(navigationContext);
     }
 
     /**

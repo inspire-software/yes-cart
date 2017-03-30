@@ -20,12 +20,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
-import org.yes.cart.domain.queryobject.NavigationContext;
-import org.yes.cart.domain.queryobject.impl.FilteredNavigationRecordRequestImpl;
+import org.yes.cart.search.SearchQueryFactory;
+import org.yes.cart.search.dto.FilteredNavigationRecord;
+import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
+import org.yes.cart.search.dto.NavigationContext;
+import org.yes.cart.search.dto.impl.FilteredNavigationRecordRequestImpl;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.page.component.filterednavigation.BrandFilteredNavigationSupport;
 
@@ -40,9 +40,9 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
 
     private final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
 
-    public BrandFilteredNavigationSupportImpl(final LuceneQueryFactory luceneQueryFactory,
+    public BrandFilteredNavigationSupportImpl(final SearchQueryFactory searchQueryFactory,
                                               final ProductService productService) {
-        super(luceneQueryFactory, productService);
+        super(searchQueryFactory, productService);
     }
 
     /**
@@ -62,7 +62,7 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
             final FilteredNavigationRecordRequest request = new FilteredNavigationRecordRequestImpl("brandFacet", ProductSearchQueryBuilder.BRAND_FIELD);
 
             final Map<String, List<Pair<String, Integer>>> counts =
-                    getProductService().findFilteredNavigationRecords(navigationContext.getProductQuery(), Collections.singletonList(request));
+                    getProductService().findFilteredNavigationRecords(navigationContext, Collections.singletonList(request));
 
 
             final List<Pair<String, Integer>> rangeCounts = new ArrayList<Pair<String, Integer>>(counts.get("brandFacet"));

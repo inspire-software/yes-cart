@@ -25,16 +25,16 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
-import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
+import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
-import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.search.SearchQueryFactory;
+import org.yes.cart.search.dto.FilteredNavigationRecord;
+import org.yes.cart.search.dto.NavigationContext;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.BrandService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
@@ -52,12 +52,12 @@ import static org.junit.Assert.*;
 public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
     private ProductService productService;
-    private LuceneQueryFactory luceneQueryFactory;
+    private SearchQueryFactory searchQueryFactory;
 
     @Before
     public void setUp() {
         productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
-        luceneQueryFactory = (LuceneQueryFactory) ctx().getBean(ServiceSpringKeys.LUCENE_QUERY_FACTORY);
+        searchQueryFactory = (SearchQueryFactory) ctx().getBean(ServiceSpringKeys.LUCENE_QUERY_FACTORY);
 
         super.setUp();
     }
@@ -240,11 +240,11 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                ((GenericFullTextSearchCapableDAO) productService.getGenericDao()).fullTextSearchReindex(false, 1000);
+                ((GenericFTSCapableDAO) productService.getGenericDao()).fullTextSearchReindex(false, 1000);
 
-                NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L), false, null);
+                NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L), false, null);
                 final ProductSearchResultPageDTO searchRes = productService.getProductSearchResultDTOByQuery(
-                        context.getProductQuery(),
+                        context,
                         0,
                         100,
                         ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD,
@@ -262,11 +262,11 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                ((GenericFullTextSearchCapableDAO) productService.getGenericDao()).fullTextSearchReindex(false, 1000);
+                ((GenericFTSCapableDAO) productService.getGenericDao()).fullTextSearchReindex(false, 1000);
 
-                NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L), true, null);
+                NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L), true, null);
                 final ProductSearchResultPageDTO searchRes = productService.getProductSearchResultDTOByQuery(
-                        context.getProductQuery(),
+                        context,
                         0,
                         100,
                         ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD,

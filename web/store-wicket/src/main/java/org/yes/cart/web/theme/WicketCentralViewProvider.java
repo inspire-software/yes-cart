@@ -17,7 +17,7 @@
 package org.yes.cart.web.theme;
 
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.web.page.component.AbstractCentralView;
 
 /**

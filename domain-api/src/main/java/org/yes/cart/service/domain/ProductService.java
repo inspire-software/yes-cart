@@ -16,16 +16,16 @@
 
 package org.yes.cart.service.domain;
 
-import org.apache.lucene.search.Query;
 import org.yes.cart.dao.CriteriaTuner;
-import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
+import org.yes.cart.search.dao.IndexBuilder;
+import org.yes.cart.search.dto.FilteredNavigationRecord;
+import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
+import org.yes.cart.search.dto.NavigationContext;
 
 import java.util.List;
 import java.util.Map;
@@ -241,14 +241,14 @@ public interface ProductService extends GenericService<Product> {
     /**
      * Get the all products , that match the given query
      *
-     * @param query         lucene query
-     * @param firstResult   index of first result
-     * @param maxResults    quantity results to return
-     * @param sortFieldName sort field name
-     * @param reverse       reverse the search result if true
+     * @param navigationContext navigation context
+     * @param firstResult       index of first result
+     * @param maxResults        quantity results to return
+     * @param sortFieldName     sort field name
+     * @param reverse           reverse the search result if true
      * @return list of products
      */
-    ProductSearchResultPageDTO getProductSearchResultDTOByQuery(Query query,
+    ProductSearchResultPageDTO getProductSearchResultDTOByQuery(NavigationContext navigationContext,
                                                                 int firstResult,
                                                                 int maxResults,
                                                                 String sortFieldName,
@@ -257,21 +257,21 @@ public interface ProductService extends GenericService<Product> {
     /**
      * Create filter navigation records counts.
      *
-     * @param baseQuery base query for current given context
-     * @param request   request for filtered navigation
+     * @param baseNavigationContext base navigation context
+     * @param request               request for filtered navigation
      *
      * @return list of facets with values and their counts
      */
-    Map<String, List<Pair<String, Integer>>> findFilteredNavigationRecords(Query baseQuery,
+    Map<String, List<Pair<String, Integer>>> findFilteredNavigationRecords(NavigationContext baseNavigationContext,
                                                                            List<FilteredNavigationRecordRequest> request);
 
     /**
      * Get the quantity of products in particular category.
      *
-     * @param query lucene query
+     * @param navigationContext navigation context
      * @return quantity of products
      */
-    int getProductQty(Query query);
+    int getProductQty(NavigationContext navigationContext);
 
     /**
      * Full count of products on the system.
@@ -284,12 +284,12 @@ public interface ProductService extends GenericService<Product> {
     /**
      * @return state of full text index.
      */
-    GenericFullTextSearchCapableDAO.FTIndexState getProductsFullTextIndexState();
+    IndexBuilder.FTIndexState getProductsFullTextIndexState();
 
     /**
      * @return state of full text index.
      */
-    GenericFullTextSearchCapableDAO.FTIndexState getProductsSkuFullTextIndexState();
+    IndexBuilder.FTIndexState getProductsSkuFullTextIndexState();
 
     /**
      * Reindex the products.

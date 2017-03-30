@@ -24,7 +24,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.ShopSearchSupportService;
+import org.yes.cart.search.ShopSearchSupportService;
 import org.yes.cart.service.domain.CategoryRankDisplayNameComparator;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;

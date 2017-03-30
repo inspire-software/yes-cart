@@ -29,32 +29,32 @@
     <import resource="cache-config.xml"/>
     <import resource="core-cronjob.xml"/>
 
-    <bean id="priceNavigation" class="org.yes.cart.domain.query.impl.PriceNavigationImpl"/>
+    <bean id="priceNavigation" class="org.yes.cart.search.query.impl.PriceNavigationImpl"/>
 
-    <bean id="attributeLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.AttributeSearchQueryBuilder"/>
-    <bean id="attributeSkuLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.AttributeSkuSearchQueryBuilder"/>
-    <bean id="featuredProductLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.FeaturedProductSearchQueryBuilder"/>
-    <bean id="keywordProductLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.KeywordProductSearchQueryBuilder"/>
-    <bean id="keywordProductSkuLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.KeywordProductSkuSearchQueryBuilder"/>
-    <bean id="priceLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.PriceSearchQueryBuilder">
+    <bean id="attributeLuceneQueryBuilder" class="org.yes.cart.search.query.impl.AttributeSearchQueryBuilder"/>
+    <bean id="attributeSkuLuceneQueryBuilder" class="org.yes.cart.search.query.impl.AttributeSkuSearchQueryBuilder"/>
+    <bean id="featuredProductLuceneQueryBuilder" class="org.yes.cart.search.query.impl.FeaturedProductSearchQueryBuilder"/>
+    <bean id="keywordProductLuceneQueryBuilder" class="org.yes.cart.search.query.impl.KeywordProductSearchQueryBuilder"/>
+    <bean id="keywordProductSkuLuceneQueryBuilder" class="org.yes.cart.search.query.impl.KeywordProductSkuSearchQueryBuilder"/>
+    <bean id="priceLuceneQueryBuilder" class="org.yes.cart.search.query.impl.PriceSearchQueryBuilder">
         <constructor-arg index="0" ref="priceNavigation"/>
     </bean>
-    <bean id="brandLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductBrandSearchQueryBuilder"/>
-    <bean id="productCategoryLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductCategorySearchQueryBuilder"/>
-    <bean id="productCategoryIncludingParentsLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductCategoryIncludingParentsSearchQueryBuilder"/>
-    <bean id="productShopLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopSearchQueryBuilder"/>
-    <bean id="productShopInStockLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopInStockSearchQueryBuilder"/>
-    <bean id="productShopHasPriceLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopHasPriceSearchQueryBuilder"/>
-    <bean id="productIdLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductIdSearchQueryBuilder"/>
-    <bean id="productCodeLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductSkuCodeSearchQueryBuilder"/>
-    <bean id="productSkuIdLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductSkuIdSearchQueryBuilder"/>
-    <bean id="productTagLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductTagSearchQueryBuilder"/>
-    <bean id="noopLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.NoopProductSearchQueryBuilder"/>
+    <bean id="brandLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductBrandSearchQueryBuilder"/>
+    <bean id="productCategoryLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductCategorySearchQueryBuilder"/>
+    <bean id="productCategoryIncludingParentsLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductCategoryIncludingParentsSearchQueryBuilder"/>
+    <bean id="productShopLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductShopSearchQueryBuilder"/>
+    <bean id="productShopInStockLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductShopInStockSearchQueryBuilder"/>
+    <bean id="productShopHasPriceLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductShopHasPriceSearchQueryBuilder"/>
+    <bean id="productIdLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductIdSearchQueryBuilder"/>
+    <bean id="productCodeLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductSkuCodeSearchQueryBuilder"/>
+    <bean id="productSkuIdLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductSkuIdSearchQueryBuilder"/>
+    <bean id="productTagLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductTagSearchQueryBuilder"/>
+    <bean id="noopLuceneQueryBuilder" class="org.yes.cart.search.query.impl.NoopProductSearchQueryBuilder"/>
 
-    <bean id="luceneQueryFactory" class="org.yes.cart.domain.query.impl.LuceneQueryFactoryImpl">
+    <bean id="luceneQueryFactory" class="org.yes.cart.search.query.impl.SearchQueryFactoryImpl">
         <constructor-arg index="0" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
         <constructor-arg index="1" type="org.yes.cart.service.domain.ProductService" ref="productService"/>
-        <constructor-arg index="2" type="org.yes.cart.domain.query.ShopSearchSupportService" ref="shopSearchSupportService"/>
+        <constructor-arg index="2" type="org.yes.cart.search.ShopSearchSupportService" ref="shopSearchSupportService"/>
         <constructor-arg index="3">
             <map>
                 <!-- Direct sku from URL or in code -->
@@ -111,7 +111,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="shopSearchSupportService" class="org.yes.cart.domain.query.impl.ShopSearchSupportServiceImpl">
+    <bean id="shopSearchSupportService" class="org.yes.cart.search.impl.ShopSearchSupportServiceImpl">
         <constructor-arg index="0" ref="shopService"/>
         <constructor-arg index="1" ref="categoryService"/>
     </bean>
@@ -220,8 +220,8 @@
             <bean parent="txProxyTemplate">
                 <property name="target">
                     <bean class="org.yes.cart.service.domain.impl.ProductServiceImpl">
-                        <constructor-arg index="0" type="org.yes.cart.dao.GenericFullTextSearchCapableDAO" ref="productDao"/>
-                        <constructor-arg index="1" type="org.yes.cart.dao.GenericFullTextSearchCapableDAO" ref="productSkuDao"/>
+                        <constructor-arg index="0" type="org.yes.cart.dao.GenericFTSCapableDAO" ref="productDao"/>
+                        <constructor-arg index="1" type="org.yes.cart.dao.GenericFTSCapableDAO" ref="productSkuDao"/>
                         <constructor-arg index="2" type="org.yes.cart.service.domain.ProductSkuService" ref="productSkuService"/>
                         <constructor-arg index="3" type="org.yes.cart.service.domain.ProductTypeAttrService" ref="productTypeAttrService"/>
                         <constructor-arg index="4" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
@@ -240,8 +240,8 @@
             <bean parent="txProxyTemplate">
                 <property name="target">
                     <bean class="org.yes.cart.service.domain.impl.ProductSkuServiceImpl">
-                        <constructor-arg index="0" type="org.yes.cart.dao.GenericFullTextSearchCapableDAO" ref="productSkuDao"/>
-                        <constructor-arg index="1" type="org.yes.cart.dao.GenericFullTextSearchCapableDAO" ref="productDao"/>
+                        <constructor-arg index="0" type="org.yes.cart.dao.GenericFTSCapableDAO" ref="productSkuDao"/>
+                        <constructor-arg index="1" type="org.yes.cart.dao.GenericFTSCapableDAO" ref="productDao"/>
                         <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="skuPriceDao"/>
                     </bean>
                 </property>
@@ -495,7 +495,7 @@
             <bean parent="txProxyTemplate">
                 <property name="target">
                     <bean class="org.yes.cart.service.domain.impl.PriceServiceImpl">
-                        <constructor-arg index="0" type="org.yes.cart.domain.query.PriceNavigation" ref="priceNavigation"/>
+                        <constructor-arg index="0" type="org.yes.cart.search.PriceNavigation" ref="priceNavigation"/>
                         <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="skuPriceDao"/>
                     </bean>
                 </property>

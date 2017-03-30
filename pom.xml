@@ -27,6 +27,7 @@
     <modules>
         <module>payment-api</module>
         <module>domain-api</module>
+        <module>search</module>
         <module>persistence</module>
         <module>core-modules</module>
         <module>core</module>

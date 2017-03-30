@@ -29,7 +29,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.bridge.support.ShopWarehouseRelationshipSupport;
 import org.yes.cart.domain.entity.bridge.support.SkuWarehouseRelationshipSupport;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;

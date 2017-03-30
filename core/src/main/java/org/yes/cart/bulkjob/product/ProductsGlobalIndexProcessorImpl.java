@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
+import org.yes.cart.search.dao.IndexBuilder;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
 
@@ -70,7 +70,7 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
             return;
         }
 
-        final GenericFullTextSearchCapableDAO.FTIndexState state = productService.getProductsFullTextIndexState();
+        final IndexBuilder.FTIndexState state = productService.getProductsFullTextIndexState();
         if (!state.isFullTextSearchReindexInProgress()) {
 
             final int batchSize = getBatchSize();

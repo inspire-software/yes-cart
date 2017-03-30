@@ -17,19 +17,19 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.lucene.search.Query;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
+import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.dto.impl.ProductSkuSearchResultDTOImpl;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.SkuWarehouse;
-import org.yes.cart.domain.entityindexer.impl.StoredAttributesImpl;
+import org.yes.cart.domain.entity.impl.StoredAttributesImpl;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.ProductSkuService;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ import java.util.List;
 public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> implements ProductSkuService {
 
 
-    private final GenericFullTextSearchCapableDAO<Product, Long> productDao;
+    private final GenericFTSCapableDAO<Product, Long, Object> productDao;
     private final GenericDAO<SkuPrice, Long> skuPriceDao;
 
 
@@ -54,8 +54,8 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * @param productSkuDao sku dao
      * @param productDao    product dao
      */
-    public ProductSkuServiceImpl(final GenericFullTextSearchCapableDAO<ProductSku, Long> productSkuDao,
-                                 final GenericFullTextSearchCapableDAO<Product, Long> productDao,
+    public ProductSkuServiceImpl(final GenericFTSCapableDAO<ProductSku, Long, Object> productSkuDao,
+                                 final GenericFTSCapableDAO<Product, Long, Object> productDao,
                                  final GenericDAO<SkuPrice, Long> skuPriceDao) {
         super(productSkuDao);
         this.productDao = productDao;
@@ -89,10 +89,10 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
-    public List<ProductSkuSearchResultDTO> getProductSkuSearchResultDTOByQuery(final Query query) {
+    public List<ProductSkuSearchResultDTO> getProductSkuSearchResultDTOByQuery(final NavigationContext context) {
 
-        final Pair<List<Object[]>, Integer> searchRez = ((GenericFullTextSearchCapableDAO) getGenericDao()).fullTextSearch(
-                query,
+        final Pair<List<Object[]>, Integer> searchRez = ((GenericFTSCapableDAO) getGenericDao()).fullTextSearch(
+                context.getProductSkuQuery(),
                 0,
                 -1, /* no limit */
                 null,

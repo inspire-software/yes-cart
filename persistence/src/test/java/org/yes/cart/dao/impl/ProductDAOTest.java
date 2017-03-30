@@ -24,13 +24,13 @@ import org.junit.Test;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
+import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.*;
-import org.yes.cart.domain.query.SearchQueryBuilder;
-import org.yes.cart.domain.query.impl.ProductShopInStockSearchQueryBuilder;
-import org.yes.cart.domain.query.impl.ProductSkuCodeSearchQueryBuilder;
+import org.yes.cart.search.query.SearchQueryBuilder;
+import org.yes.cart.search.query.impl.ProductShopInStockSearchQueryBuilder;
+import org.yes.cart.search.query.impl.ProductSkuCodeSearchQueryBuilder;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -44,8 +44,8 @@ import static org.junit.Assert.*;
  */
 public class ProductDAOTest extends AbstractTestDAO {
 
-    private GenericFullTextSearchCapableDAO<Product, Long> productDao;
-    private GenericFullTextSearchCapableDAO<ProductSku, Long> productSkuDao;
+    private GenericFTSCapableDAO<Product, Long, Object> productDao;
+    private GenericFTSCapableDAO<ProductSku, Long, Object> productSkuDao;
     private GenericDAO<Brand, Long> brandDao;
     private GenericDAO<ProductType, Long> productTypeDao;
     private GenericDAO<ProductCategory, Long> productCategoryDao;
@@ -56,8 +56,8 @@ public class ProductDAOTest extends AbstractTestDAO {
 
     @Before
     public void setUp()  {
-        productDao = (GenericFullTextSearchCapableDAO<Product, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO);
-        productSkuDao = (GenericFullTextSearchCapableDAO<ProductSku, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_SKU_DAO);
+        productDao = (GenericFTSCapableDAO<Product, Long, Object>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO);
+        productSkuDao = (GenericFTSCapableDAO<ProductSku, Long, Object>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_SKU_DAO);
         brandDao = (GenericDAO<Brand, Long>) ctx().getBean(DaoServiceBeanKeys.BRAND_DAO);
         productTypeDao = (GenericDAO<ProductType, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_TYPE_DAO);
         productCategoryDao = (GenericDAO<ProductCategory, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_CATEGORY_DAO);

@@ -25,11 +25,11 @@ import org.yes.cart.domain.entity.ProductTypeAttr;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
-import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
-import org.yes.cart.domain.queryobject.NavigationContext;
-import org.yes.cart.domain.queryobject.impl.FilteredNavigationRecordRequestImpl;
+import org.yes.cart.search.SearchQueryFactory;
+import org.yes.cart.search.dto.FilteredNavigationRecord;
+import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
+import org.yes.cart.search.dto.NavigationContext;
+import org.yes.cart.search.dto.impl.FilteredNavigationRecordRequestImpl;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductTypeAttrService;
 import org.yes.cart.web.page.component.filterednavigation.AttributeFilteredNavigationSupport;
@@ -47,10 +47,10 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
     private final ProductTypeAttrService productTypeAttrService;
 
-    public AttributeFilteredNavigationSupportImpl(final LuceneQueryFactory luceneQueryFactory,
+    public AttributeFilteredNavigationSupportImpl(final SearchQueryFactory searchQueryFactory,
                                                   final ProductService productService,
                                                   final ProductTypeAttrService productTypeAttrService) {
-        super(luceneQueryFactory, productService);
+        super(searchQueryFactory, productService);
         this.productTypeAttrService = productTypeAttrService;
     }
 
@@ -116,7 +116,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
             final List<FilteredNavigationRecord> allNavigationRecordsTemplates =
                     getProductService().getDistinctAttributeValues(locale, productTypeId);
             final Map<String, List<Pair<String, Integer>>> facets =
-                    getProductService().findFilteredNavigationRecords(navigationContext.getProductQuery(), requests);
+                    getProductService().findFilteredNavigationRecords(navigationContext, requests);
 
             for (final FilteredNavigationRecord recordTemplate : allNavigationRecordsTemplates) {
 

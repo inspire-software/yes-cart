@@ -24,7 +24,7 @@ import org.apache.wicket.markup.repeater.data.GridView;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.page.component.data.SortableCategoryDataProvider;
 import org.yes.cart.web.support.constants.WebParametersKeys;

@@ -30,6 +30,11 @@
             <artifactId>domain-api</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>search</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>net.sf.ehcache</groupId>

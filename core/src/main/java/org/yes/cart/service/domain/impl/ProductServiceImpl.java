@@ -18,7 +18,6 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.lucene.search.Query;
 import org.hibernate.Hibernate;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
@@ -28,15 +27,14 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
+import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
 import org.yes.cart.domain.dto.impl.ProductSearchResultPageDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
-import org.yes.cart.domain.entityindexer.IndexFilter;
-import org.yes.cart.domain.entityindexer.impl.StoredAttributesImpl;
+import org.yes.cart.domain.entity.impl.StoredAttributesImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.i18n.impl.NonI18NModel;
@@ -45,10 +43,13 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.range.DisplayValue;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
-import org.yes.cart.domain.queryobject.impl.FilteredNavigationRecordImpl;
+import org.yes.cart.search.dao.IndexBuilder;
+import org.yes.cart.search.dto.FilteredNavigationRecord;
+import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
+import org.yes.cart.search.dto.NavigationContext;
+import org.yes.cart.search.dto.impl.FilteredNavigationRecordImpl;
+import org.yes.cart.search.entityindexer.IndexFilter;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
@@ -64,8 +65,8 @@ import java.util.*;
  */
 public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implements ProductService {
 
-    private final GenericFullTextSearchCapableDAO<Product, Long> productDao;
-    private final GenericFullTextSearchCapableDAO<ProductSku, Long> productSkuDao;
+    private final GenericFTSCapableDAO<Product, Long, Object> productDao;
+    private final GenericFTSCapableDAO<ProductSku, Long, Object> productSkuDao;
     private final ProductSkuService productSkuService;
     private final ProductTypeAttrService productTypeAttrService;
     private final AttributeService attributeService;
@@ -86,8 +87,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param productTypeAttrDao product type attributes need to work with range navigation
      * @param shopCategoryRelationshipSupport shop product category relationship support
      */
-    public ProductServiceImpl(final GenericFullTextSearchCapableDAO<Product, Long> productDao,
-                              final GenericFullTextSearchCapableDAO<ProductSku, Long> productSkuDao,
+    public ProductServiceImpl(final GenericFTSCapableDAO<Product, Long, Object> productDao,
+                              final GenericFTSCapableDAO<ProductSku, Long, Object> productSkuDao,
                               final ProductSkuService productSkuService,
                               final ProductTypeAttrService productTypeAttrService,
                               final AttributeService attributeService,
@@ -478,14 +479,14 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public ProductSearchResultPageDTO getProductSearchResultDTOByQuery(final Query query,
+    public ProductSearchResultPageDTO getProductSearchResultDTOByQuery(final NavigationContext navigationContext,
                                                                        final int firstResult,
                                                                        final int maxResults,
                                                                        final String sortFieldName,
                                                                        final boolean reverse) {
 
         final Pair<List<Object[]>, Integer> searchRez = productDao.fullTextSearch(
-                query,
+                navigationContext.getProductQuery(),
                 firstResult,
                 maxResults,
                 sortFieldName,
@@ -552,15 +553,15 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public Map<String, List<Pair<String, Integer>>> findFilteredNavigationRecords(final Query baseQuery, final List<FilteredNavigationRecordRequest> request) {
-        return productDao.fullTextSearchNavigation(baseQuery, request);
+    public Map<String, List<Pair<String, Integer>>> findFilteredNavigationRecords(final NavigationContext baseNavigationContext, final List<FilteredNavigationRecordRequest> request) {
+        return productDao.fullTextSearchNavigation(baseNavigationContext.getProductQuery(), request);
     }
 
     /**
      * {@inheritDoc}
      */
-    public int getProductQty(final Query query) {
-        return productDao.fullTextSearchCount(query);
+    public int getProductQty(final NavigationContext navigationContext) {
+        return productDao.fullTextSearchCount(navigationContext.getProductQuery());
     }
 
 
@@ -667,7 +668,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      *
      * @param locale        locale
      * @param productTypeId product type id
-     * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
+     * @return list of {@link FilteredNavigationRecord}
      */
     List<FilteredNavigationRecord> getSingleValueNavigationRecords(final String locale, final long productTypeId) {
         List<Object[]> list;
@@ -711,7 +712,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      *
      * @param locale        locale
      * @param productTypeId product type id
-     * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
+     * @return list of {@link FilteredNavigationRecord}
      */
     List<FilteredNavigationRecord> getRangeValueNavigationRecords(final String locale, final long productTypeId) {
 
@@ -992,14 +993,14 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public GenericFullTextSearchCapableDAO.FTIndexState getProductsFullTextIndexState() {
+    public IndexBuilder.FTIndexState getProductsFullTextIndexState() {
         return productDao.getFullTextIndexState();
     }
 
     /**
      * {@inheritDoc}
      */
-    public GenericFullTextSearchCapableDAO.FTIndexState getProductsSkuFullTextIndexState() {
+    public IndexBuilder.FTIndexState getProductsSkuFullTextIndexState() {
         return productSkuDao.getFullTextIndexState();
     }
 

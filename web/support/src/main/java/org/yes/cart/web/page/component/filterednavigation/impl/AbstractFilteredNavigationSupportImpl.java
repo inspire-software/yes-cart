@@ -16,7 +16,7 @@
 
 package org.yes.cart.web.page.component.filterednavigation.impl;
 
-import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.search.SearchQueryFactory;
 import org.yes.cart.service.domain.ProductService;
 
 /**
@@ -26,17 +26,17 @@ import org.yes.cart.service.domain.ProductService;
  */
 public class AbstractFilteredNavigationSupportImpl {
 
-    private final LuceneQueryFactory luceneQueryFactory;
+    private final SearchQueryFactory searchQueryFactory;
     private final ProductService productService;
 
-    public AbstractFilteredNavigationSupportImpl(final LuceneQueryFactory luceneQueryFactory,
+    public AbstractFilteredNavigationSupportImpl(final SearchQueryFactory searchQueryFactory,
                                                  final ProductService productService) {
-        this.luceneQueryFactory = luceneQueryFactory;
+        this.searchQueryFactory = searchQueryFactory;
         this.productService = productService;
     }
 
-    public LuceneQueryFactory getLuceneQueryFactory() {
-        return luceneQueryFactory;
+    public SearchQueryFactory getSearchQueryFactory() {
+        return searchQueryFactory;
     }
 
     public ProductService getProductService() {

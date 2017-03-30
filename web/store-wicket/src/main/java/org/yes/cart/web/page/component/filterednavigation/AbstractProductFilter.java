@@ -24,8 +24,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
-import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.search.dto.FilteredNavigationRecord;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -140,7 +140,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
     }
 
     /**
-     * Adapt list of  {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord} into ugly
+     * Adapt list of  {@link FilteredNavigationRecord} into ugly
      * list of attribute name - list of attributes values pair .
      *
      * @param records navigation records

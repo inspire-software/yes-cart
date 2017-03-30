@@ -25,7 +25,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.web.page.component.data.SortableProductDataProvider;
 import org.yes.cart.web.page.component.filterednavigation.AttributeProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.BrandProductFilter;

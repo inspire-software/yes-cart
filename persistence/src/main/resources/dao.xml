@@ -305,10 +305,47 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="productDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+    <bean id="productFts" class="org.yes.cart.search.dao.impl.GenericFTSHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductEntity</value></constructor-arg>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="productIndexBuilder" class="org.yes.cart.search.dao.impl.IndexBuilderHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductEntity</value></constructor-arg>
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="indexExecutor">
+            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+                <description>
+                    Thread pool (1) for product indexing since they may be slow. We only need
+                    one thread for this as we only anticipate one thread to be reindexing all
+                    products.
+                </description>
+                <property name="corePoolSize" value="1"/>
+                <property name="maxPoolSize" value="1"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="productDaoBase" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductEntity</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="productDao" class="org.yes.cart.dao.impl.GenericFTSCapableDAOImpl">
+        <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="productDaoBase"/>
+        <constructor-arg type="org.yes.cart.search.dao.GenericFTS" ref="productFts"/>
+        <constructor-arg type="org.yes.cart.search.dao.IndexBuilder" ref="productIndexBuilder"/>
+    </bean>
+
+    <bean id="productSkuFts" class="org.yes.cart.search.dao.impl.GenericFTSHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductSkuEntity</value></constructor-arg>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="productSkuIndexBuilder" class="org.yes.cart.search.dao.impl.IndexBuilderHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductSkuEntity</value></constructor-arg>
+        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="indexExecutor">
             <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
                 <description>
@@ -322,27 +359,16 @@
         </property>
     </bean>
 
-    <bean id="prodTypeAttributeViewGroupDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProdTypeAttributeViewGroupEntity</value></constructor-arg>
-        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
-    <bean id="productSkuDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+    <bean id="productSkuDaoBase" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductSkuEntity</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
-        <property name="indexExecutor">
-            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-                <description>
-                    Thread pool (1) for product indexing since they may be slow. We only need
-                    one thread for this as we only anticipate one thread to be reindexing all
-                    products.
-                </description>
-                <property name="corePoolSize" value="1"/>
-                <property name="maxPoolSize" value="1"/>
-            </bean>
-        </property>
+    </bean>
+
+    <bean id="productSkuDao" class="org.yes.cart.dao.impl.GenericFTSCapableDAOImpl">
+        <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="productSkuDaoBase"/>
+        <constructor-arg type="org.yes.cart.search.dao.GenericFTS" ref="productSkuFts"/>
+        <constructor-arg type="org.yes.cart.search.dao.IndexBuilder" ref="productSkuIndexBuilder"/>
     </bean>
 
     <bean  id="productTypeDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
@@ -353,6 +379,12 @@
 
     <bean id="productTypeAttrDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductTypeAttrEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="prodTypeAttributeViewGroupDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProdTypeAttributeViewGroupEntity</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>

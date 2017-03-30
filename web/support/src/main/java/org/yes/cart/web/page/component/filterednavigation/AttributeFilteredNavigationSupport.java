@@ -16,8 +16,8 @@
 
 package org.yes.cart.web.page.component.filterednavigation;
 
-import org.yes.cart.domain.queryobject.NavigationContext;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
+import org.yes.cart.search.dto.NavigationContext;
+import org.yes.cart.search.dto.FilteredNavigationRecord;
 
 import java.util.List;
 

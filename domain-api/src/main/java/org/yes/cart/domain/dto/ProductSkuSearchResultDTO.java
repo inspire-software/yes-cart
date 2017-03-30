@@ -17,11 +17,7 @@
 package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
-import org.yes.cart.domain.entityindexer.StoredAttributes;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Map;
+import org.yes.cart.domain.entity.StoredAttributes;
 
 /**
  * Represent product from search result. The whole entity usage id overhead.

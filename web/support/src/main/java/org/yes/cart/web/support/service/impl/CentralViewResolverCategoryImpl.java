@@ -20,9 +20,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.ShopSearchSupportService;
-import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.search.SearchQueryFactory;
+import org.yes.cart.search.ShopSearchSupportService;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -50,18 +50,18 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
     private final CategoryService categoryService;
     private final ShopSearchSupportService shopSearchSupportService;
     private final ProductService productService;
-    private final LuceneQueryFactory luceneQueryFactory;
+    private final SearchQueryFactory searchQueryFactory;
 
     public CentralViewResolverCategoryImpl(final ShopService shopService,
                                            final CategoryService categoryService,
                                            final ShopSearchSupportService shopSearchSupportService,
                                            final ProductService productService,
-                                           final LuceneQueryFactory luceneQueryFactory) {
+                                           final SearchQueryFactory searchQueryFactory) {
         this.shopService = shopService;
         this.categoryService = categoryService;
         this.shopSearchSupportService = shopSearchSupportService;
         this.productService = productService;
-        this.luceneQueryFactory = luceneQueryFactory;
+        this.searchQueryFactory = searchQueryFactory;
     }
 
     /**
@@ -108,9 +108,9 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
                 }
 
                 // shopId will be used for inStock check, because we have category IDs will always look in those
-                final NavigationContext hasProducts = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, catIds.getFirst(), catIds.getSecond(), null);
+                final NavigationContext hasProducts = searchQueryFactory.getFilteredNavigationQueryChain(shopId, catIds.getFirst(), catIds.getSecond(), null);
 
-                if (productService.getProductQty(hasProducts.getProductQuery()) > 0) {
+                if (productService.getProductQty(hasProducts) > 0) {
 
                     final String searchTemplate = shopService.getShopCategorySearchTemplate(shopId, categoryId);
                     if (StringUtils.isNotBlank(searchTemplate)) {

@@ -21,14 +21,14 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.bridge.support.SkuPriceRelationshipSupport;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.query.impl.SearchUtil;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
 
@@ -44,8 +44,6 @@ import java.util.*;
  * Time: 16:13:01
  * */
 public class SkuPriceBridge implements FieldBridge {
-
-    private final BigDecimalBridge moneyBridge = new BigDecimalBridge(Constants.DEFAULT_SCALE);
 
     /** {@inheritDoc} */
     public void set(final String proposedFiledName, final Object value, final Document document, final LuceneOptions luceneOptions) {
@@ -102,7 +100,7 @@ public class SkuPriceBridge implements FieldBridge {
                     for (final Map.Entry<String, SkuPrice> currency : shop.getValue().entrySet()) {
 
                         BigDecimal price = MoneyUtils.minPositive(currency.getValue().getRegularPrice(), currency.getValue().getSalePrice());
-                        Pair<String, String> rez = objectToString(shop.getKey(), currency.getKey(), price);
+                        Pair<String, String> rez = SearchUtil.priceToFacetPair(shop.getKey(), currency.getKey(), price);
 
                         Field facetField = new Field(
                                 rez.getFirst(),
@@ -121,7 +119,7 @@ public class SkuPriceBridge implements FieldBridge {
 
                                 if (!subShop.isB2BStrictPriceActive()) {
 
-                                    rez = objectToString(subShop.getShopId(), currency.getKey(), price);
+                                    rez = SearchUtil.priceToFacetPair(subShop.getShopId(), currency.getKey(), price);
 
                                     Field subFacetField = new Field(
                                             rez.getFirst(),
@@ -177,21 +175,6 @@ public class SkuPriceBridge implements FieldBridge {
             }
 
         }
-    }
-
-
-    /**
-     * Create index value for given shop currency and price.
-     *
-     * @param shopId shop id
-     * @param currency currency code
-     * @param regularPrice regular price
-     *
-     * @return pair where first is field name and second is the string representation of price. Field has format facet_price_shopid_currency.
-     *         All digital value will be left padded according to formatter.
-     */
-    public Pair<String, String> objectToString(final long shopId, final String currency, final BigDecimal regularPrice) {
-        return new Pair<String, String>("facet_price_" + shopId + "_" + currency, moneyBridge.objectToString(regularPrice));
     }
 
     private SkuPriceRelationshipSupport getSkuPriceRelationshipSupport() {

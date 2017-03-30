@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -92,7 +93,7 @@ public class ProductSorter extends BaseComponent {
      *
      * @param sortOrder sort order see {@link org.yes.cart.web.support.constants.WebParametersKeys#SORT}
      *                  and {@link org.yes.cart.web.support.constants.WebParametersKeys#SORT_REVERSE}
-     * @param sortField sort by filed see {@link org.yes.cart.domain.query.ProductSearchQueryBuilder}
+     * @param sortField sort by filed see {@link ProductSearchQueryBuilder}
      * @param id        link id
      * @return product sort link
      */

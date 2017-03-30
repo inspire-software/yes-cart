@@ -19,6 +19,7 @@ package org.yes.cart.domain.entity.bridge;
 import org.hibernate.search.bridge.ParameterizedBridge;
 import org.hibernate.search.bridge.StringBridge;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.search.query.impl.SearchUtil;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -49,13 +50,9 @@ public class BigDecimalBridge implements StringBridge, ParameterizedBridge {
      */
     public String objectToString(final Object bigDecimalPriceObject) {
         if (bigDecimalPriceObject instanceof BigDecimal) {
-            BigDecimal bigDecimal = (BigDecimal) bigDecimalPriceObject;
-            long toIndex = bigDecimal.movePointRight(scale).longValue();
-            final String str = String.valueOf(toIndex);
-            if (str.length() >= Constants.MONEY_FORMAT_TOINDEX.length()) {
-                return str;
-            }
-            return Constants.MONEY_FORMAT_TOINDEX.substring(0, Constants.MONEY_FORMAT_TOINDEX.length() - str.length()).concat(str);
+
+            return SearchUtil.decimalToString((BigDecimal) bigDecimalPriceObject, scale);
+
         }
         return null;
     }

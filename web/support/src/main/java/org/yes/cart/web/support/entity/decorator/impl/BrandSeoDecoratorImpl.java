@@ -18,7 +18,7 @@ package org.yes.cart.web.support.entity.decorator.impl;
 
 import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.domain.entity.Seo;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
 /**
  * User: denispavlov

@@ -21,9 +21,9 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.ShopSearchSupportService;
-import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.search.SearchQueryFactory;
+import org.yes.cart.search.ShopSearchSupportService;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -62,9 +62,9 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
 
-        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, luceneQueryFactory);
+        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
             put("someparam", "1");
@@ -82,9 +82,9 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
 
-        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, luceneQueryFactory);
+        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
             put(WebParametersKeys.CATEGORY_ID, "abc");
@@ -102,9 +102,9 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
 
-        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, luceneQueryFactory);
+        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
             one(shopService).getShopCategoryTemplate(2L, 10L);
@@ -139,9 +139,9 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
 
-        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, luceneQueryFactory);
+        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
             one(shopService).getShopCategoryTemplate(2L, 10L);
@@ -176,9 +176,9 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
 
-        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, luceneQueryFactory);
+        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
             one(shopService).getShopCategoryTemplate(2L, 10L);
@@ -213,17 +213,16 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
         final NavigationContext hasProducts = context.mock(NavigationContext.class, "hasProducts");
 
-        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, luceneQueryFactory);
+        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
             one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
             one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), true, null); will(returnValue(hasProducts));
-            one(hasProducts).getProductQuery();
-            one(productService).getProductQty(null); will(returnValue(0));
+            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), true, null); will(returnValue(hasProducts));
+            one(productService).getProductQty(hasProducts); will(returnValue(0));
             one(categoryService).isCategoryHasChildren(10L); will(returnValue(false));
         }});
 
@@ -255,17 +254,16 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
         final NavigationContext hasProducts = context.mock(NavigationContext.class, "hasProducts");
 
-        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, luceneQueryFactory);
+        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
             one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
             one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), false)));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), false, null); will(returnValue(hasProducts));
-            one(hasProducts).getProductQuery();
-            one(productService).getProductQty(null); will(returnValue(0));
+            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), false, null); will(returnValue(hasProducts));
+            one(productService).getProductQty(hasProducts); will(returnValue(0));
             one(categoryService).isCategoryHasChildren(10L); will(returnValue(true));
         }});
 
@@ -298,17 +296,16 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
         final NavigationContext hasProducts = context.mock(NavigationContext.class, "hasProducts");
 
-        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, luceneQueryFactory);
+        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
             one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
             one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), true, null); will(returnValue(hasProducts));
-            one(hasProducts).getProductQuery();
-            one(productService).getProductQty(null); will(returnValue(1));
+            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), true, null); will(returnValue(hasProducts));
+            one(productService).getProductQty(hasProducts); will(returnValue(1));
             one(shopService).getShopCategorySearchTemplate(11L, 10L); will(returnValue(null));
         }});
 
@@ -341,23 +338,17 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
         final NavigationContext hasProducts = context.mock(NavigationContext.class, "hasProducts");
 
-        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, luceneQueryFactory);
+        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
-            one(shopService).getShopCategoryTemplate(11L, 10L);
-            will(returnValue(" "));
-            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L);
-            will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), false)));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), false, null);
-            will(returnValue(hasProducts));
-            one(hasProducts).getProductQuery();
-            one(productService).getProductQty(null);
-            will(returnValue(1));
-            one(shopService).getShopCategorySearchTemplate(11L, 10L);
-            will(returnValue(" "));
+            one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
+            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), false)));
+            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), false, null); will(returnValue(hasProducts));
+            one(productService).getProductQty(hasProducts); will(returnValue(1));
+            one(shopService).getShopCategorySearchTemplate(11L, 10L); will(returnValue(" "));
         }});
 
         try {
@@ -389,23 +380,17 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
         final NavigationContext hasProducts = context.mock(NavigationContext.class, "hasProducts");
 
-        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, luceneQueryFactory);
+        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
-            one(shopService).getShopCategoryTemplate(11L, 10L);
-            will(returnValue(" "));
-            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L);
-            will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), true, null);
-            will(returnValue(hasProducts));
-            one(hasProducts).getProductQuery();
-            one(productService).getProductQty(null);
-            will(returnValue(1));
-            one(shopService).getShopCategorySearchTemplate(11L, 10L);
-            will(returnValue("prodtypesearch"));
+            one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
+            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
+            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), true, null); will(returnValue(hasProducts));
+            one(productService).getProductQty(hasProducts); will(returnValue(1));
+            one(shopService).getShopCategorySearchTemplate(11L, 10L); will(returnValue("prodtypesearch"));
         }});
 
         try {
