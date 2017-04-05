@@ -359,7 +359,7 @@ public class DtoCustomerServiceImpl
                     criteria.add(Restrictions.le("createdTimestamp", to));
                 }
 
-                order.add(Order.asc("createdTimestamp"));
+                order.add(Order.desc("createdTimestamp"));
 
             } else {
 
@@ -370,12 +370,14 @@ public class DtoCustomerServiceImpl
                         Restrictions.ilike("customerType", filter, MatchMode.EXACT),
                         Restrictions.ilike("pricingPolicy", filter, MatchMode.EXACT)
                 ));
+                order.add(Order.desc("createdTimestamp"));
                 order.add(Order.asc("lastname"));
                 order.add(Order.asc("email"));
 
             }
 
         } else {
+            order.add(Order.desc("createdTimestamp"));
             order.add(Order.asc("lastname"));
             order.add(Order.asc("email"));
         }

@@ -613,7 +613,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         Arrays.sort(ORDER_STATUS);
     }
 
-    private final static Order[] ORDERS_ORDER = new Order[] { Order.asc("orderTimestamp"), Order.asc("ordernum") };
+    private final static Order[] ORDERS_ORDER = new Order[] { Order.desc("orderTimestamp"), Order.desc("ordernum") };
 
     @Override
     public List<CustomerOrderDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
