@@ -23,12 +23,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.search.query.ProductSearchQueryBuilder;
-import org.yes.cart.search.query.SearchQueryBuilder;
 import org.yes.cart.search.SearchQueryFactory;
 import org.yes.cart.search.ShopSearchSupportService;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.dto.impl.LuceneNavigationContextImpl;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.query.SearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
 
@@ -100,13 +100,13 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
             return null;
         }
 
-        BooleanQuery booleanQuery = new BooleanQuery();
+        final BooleanQuery.Builder booleanQuery = new BooleanQuery.Builder();
 
         for (final Query query : allQueries) {
             booleanQuery.add(query, with);
         }
 
-        return booleanQuery;
+        return booleanQuery.build();
 
     }
 
@@ -117,7 +117,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
                                                             final String param,
                                                             final Object value) {
 
-        final BooleanQuery snowball = new BooleanQuery();
+        final BooleanQuery.Builder snowball = new BooleanQuery.Builder();
 
         final Map<String, List<String>> navigationParameters = new HashMap<String, List<String>>(navigationContext.getFilterParameters());
 
@@ -150,7 +150,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
                     navigationContext.getCategories(),
                     navigationContext.isIncludeSubCategories(),
                     navigationParameters,
-                    snowball,
+                    snowball.build(),
                     navigationContext.getProductSkuQuery()
         );
     }
@@ -161,7 +161,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
     public NavigationContext<Query> getSkuSnowBallQuery(final NavigationContext<Query> navigationContext,
                                                         final List<ProductSearchResultDTO> products) {
 
-        final BooleanQuery snowball = new BooleanQuery();
+        final BooleanQuery.Builder snowball = new BooleanQuery.Builder();
 
         final Map<String, List<String>> navigationParameters = new HashMap<String, List<String>>(navigationContext.getFilterParameters());
 
@@ -191,7 +191,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
                 navigationContext.isIncludeSubCategories(),
                 navigationParameters,
                 navigationContext.getProductQuery(),
-                snowball
+                snowball.build()
         );
     }
 

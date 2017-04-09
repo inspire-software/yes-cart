@@ -14,22 +14,27 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.search.entityindexer;
+package org.yes.cart.search.dao;
+
+import org.apache.lucene.document.Document;
+import org.yes.cart.domain.misc.Pair;
+
+import java.io.Serializable;
 
 /**
- *
- * Reindex product in background.
- *
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 5/5/12
- * Time: 12:00 PM
+ * User: denispavlov
+ * Date: 06/04/2017
+ * Time: 17:08
  */
-public interface ProductIndexer {
+public interface LuceneDocumentAdapter<T, PK extends Serializable> {
 
     /**
-     * Add given product's pk  to reindexing.
-     * @param productPkValue product primary key value.
+     * Adapt entity to Lucene document.
+     *
+     * @param entity entity to adapt
+     *
+     * @return lucene document
      */
-    void submitIndexTask(Long productPkValue);
+    Pair<PK, Document[]> toDocument(T entity);
 
 }

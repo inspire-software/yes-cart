@@ -16,9 +16,8 @@
 
 package org.yes.cart.dao;
 
-import org.yes.cart.search.dao.IndexBuilder;
-import org.yes.cart.search.entityindexer.IndexFilter;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.search.dao.IndexBuilder;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 
 import java.io.Serializable;
@@ -46,15 +45,6 @@ public interface GenericFTSCapableDAO<T, PK extends Serializable, FTQ> extends G
      * @param batchSize batch size for re-indexing
      */
     void fullTextSearchReindex(boolean async, int batchSize);
-
-    /**
-     * Force reindex the all entities.
-     *
-     * @param async true if async required
-     * @param batchSize batch size for re-indexing
-     * @param filter indexing filter
-     */
-    void fullTextSearchReindex(boolean async, int batchSize, IndexFilter<T> filter);
 
     /**
      * Force reindex given entity.

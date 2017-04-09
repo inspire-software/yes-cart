@@ -18,9 +18,8 @@ package org.yes.cart.web.service.ws.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.cache.CacheBundleHelper;
@@ -267,7 +266,7 @@ public class BackdoorServiceImpl implements BackdoorService {
      */
     public List<Object[]> luceneQuery(final String luceneQuery) {
 
-        final QueryParser queryParser = new QueryParser(Version.LUCENE_31, "", new AsIsAnalyzer(false));
+        final QueryParser queryParser = new QueryParser("", new AsIsAnalyzer(false));
 
         try {
 

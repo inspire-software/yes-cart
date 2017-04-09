@@ -19,7 +19,8 @@ package org.yes.cart.domain.entity.bridge;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Fieldable;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexableField;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.hibernate.search.bridge.TwoWayFieldBridge;
 import org.yes.cart.constants.Constants;
@@ -106,13 +107,13 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
                             final String rez = objectToString(qty.getKey(), sku.getCode(), qty.getValue());
 
                             // Compacted
-                            document.add(new Field(
-                                    proposedFiledName,
-                                    rez,
-                                    Field.Store.YES,
-                                    Field.Index.NOT_ANALYZED,
-                                    luceneOptions.getTermVector()
-                            ));
+//                            document.add(new Field(
+//                                    proposedFiledName,
+//                                    rez,
+//                                    Field.Store.YES,
+//                                    Field.Index.NOT_ANALYZED,
+//                                    luceneOptions.getTermVector()
+//                            ));
 
                         }
 
@@ -133,21 +134,28 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
 
             for (final Long shop : availableIn) {
 
-                // out of stock stock items have -50% boost, preorder gives +25% boost
-                final boolean hasStock = always || skuStock;
-                final float boost = (hasStock ? 1.0f : 0.5f) + (preorder ? 0.25f : 0f);
-
                 // Fill in PK's of shops where we have this in stock.
                 final Field inStock = new Field(
                         ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD,
                         String.valueOf(shop),
-                        Field.Store.NO,
-                        Field.Index.NOT_ANALYZED,
-                        luceneOptions.getTermVector()
+                        TextField.TYPE_NOT_STORED
                 );
-                inStock.setBoost(boost);
+                // TODO: fix this with FunctionScoreQuery
+//                inStock.setBoost(boost);
 
                 document.add(inStock);
+
+                // out of stock stock items 0, preorder +1 and in stock is +1
+                final boolean hasStock = always || skuStock;
+                final int state = (hasStock ? 1 : 0) + (preorder ? 1 : 0);
+
+                final Field inStockState = new Field(
+                        ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD,
+                        String.valueOf(state),
+                        TextField.TYPE_NOT_STORED
+                );
+
+                document.add(inStockState);
 
             }
 
@@ -157,9 +165,9 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
     /** {@inheritDoc} */
     @Override
     public Object get(final String name, final Document document) {
-        final Fieldable[] fields = document.getFieldables(name);
+        final IndexableField[] fields = document.getFields(name);
         final Map<Long, Map<String, BigDecimal>> qty = new HashMap<Long, Map<String, BigDecimal>>();
-        for (final Fieldable field : fields) {
+        for (final IndexableField field : fields) {
             final String raw = field.stringValue();
             final int posSkuStart = raw.indexOf('_');
             final int posSkuEnd = raw.lastIndexOf('_');

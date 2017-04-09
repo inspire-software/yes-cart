@@ -214,7 +214,7 @@ public class GenericFTSHibernateImpl<PK extends Serializable>
         FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, getPersistentClass());
         if (sortFieldName != null) {
             Sort sort = new Sort(
-                    new SortField(sortFieldName, SortField.STRING, reverse));
+                    new SortField(sortFieldName, SortField.Type.STRING_VAL, reverse));
             fullTextQuery.setSort(sort);
         }
         fullTextQuery.setFirstResult(firstResult);
@@ -278,19 +278,19 @@ public class GenericFTSHibernateImpl<PK extends Serializable>
 
                 if (hasMultivalue) {
                     indexReader = fullTextSession.getSearchFactory().getIndexReaderAccessor().open(getPersistentClass());
-                    CachingWrapperFilter baseQueryFilter = new CachingWrapperFilter(new QueryWrapperFilter(query));
-                    try {
-                        DocIdSet docIdSet = baseQueryFilter.getDocIdSet(indexReader);
-                        if (docIdSet instanceof FixedBitSet) {
-                            baseBitSet = (FixedBitSet) docIdSet;
-                        } else {
-                            baseBitSet = new FixedBitSet(1);
-                        }
-                    } catch (IOException e) {
-                        LOGFTQ.error("Unable to create base query bit set for query {} and faceting request {}", query, facetingRequest);
-                        LOGFTQ.error("Stacktrace:", e);
-                        baseBitSet = new FixedBitSet(1);
-                    }
+//                    CachingWrapperFilter baseQueryFilter = new CachingWrapperFilter(new QueryWrapperFilter(query));
+//                    try {
+//                        DocIdSet docIdSet = baseQueryFilter.getDocIdSet(indexReader);
+//                        if (docIdSet instanceof FixedBitSet) {
+//                            baseBitSet = (FixedBitSet) docIdSet;
+//                        } else {
+//                            baseBitSet = new FixedBitSet(1);
+//                        }
+//                    } catch (IOException e) {
+//                        LOGFTQ.error("Unable to create base query bit set for query {} and faceting request {}", query, facetingRequest);
+//                        LOGFTQ.error("Stacktrace:", e);
+//                        baseBitSet = new FixedBitSet(1);
+//                    }
                 }
 
                 for (final FilteredNavigationRecordRequest facetingRequestItem : facetingRequest) {
@@ -306,23 +306,23 @@ public class GenericFTSHibernateImpl<PK extends Serializable>
                         // Multivalue black magic
                         for (final Facet facet : facets) {
 
-                            final org.apache.lucene.search.Query facetQuery = new TermQuery(new Term(facet.getFieldName(), facet.getValue()));
-                            try {
-                                CachingWrapperFilter filter = new CachingWrapperFilter(new QueryWrapperFilter(facetQuery));
-                                DocIdSet docIdSet = filter.getDocIdSet(indexReader);
-                                if (docIdSet instanceof FixedBitSet) {
-                                    FixedBitSet filterBitSet = (FixedBitSet) docIdSet;
-                                    filterBitSet.and(baseBitSet);
-                                    long count = filterBitSet.cardinality();
-                                    if (count > 0L) {
-                                        LOGFTQ.debug("Has facet: {}", facet);
-                                        facetsPairs.add(new Pair<String, Integer>(facet.getValue(), (int) count));
-                                    }
-                                }
-                            } catch (IOException e) {
-                                LOGFTQ.error("Unable to create filter query bit set for query {} and faceting query {}", query, facetQuery);
-                                LOGFTQ.error("Stacktrace:", e);
-                            }
+//                            final org.apache.lucene.search.Query facetQuery = new TermQuery(new Term(facet.getFieldName(), facet.getValue()));
+//                            try {
+//                                CachingWrapperFilter filter = new CachingWrapperFilter(new QueryWrapperFilter(facetQuery));
+//                                DocIdSet docIdSet = filter.getDocIdSet(indexReader);
+//                                if (docIdSet instanceof FixedBitSet) {
+//                                    FixedBitSet filterBitSet = (FixedBitSet) docIdSet;
+//                                    filterBitSet.and(baseBitSet);
+//                                    long count = filterBitSet.cardinality();
+//                                    if (count > 0L) {
+//                                        LOGFTQ.debug("Has facet: {}", facet);
+//                                        facetsPairs.add(new Pair<String, Integer>(facet.getValue(), (int) count));
+//                                    }
+//                                }
+//                            } catch (IOException e) {
+//                                LOGFTQ.error("Unable to create filter query bit set for query {} and faceting query {}", query, facetQuery);
+//                                LOGFTQ.error("Stacktrace:", e);
+//                            }
 
                         }
                     } else {

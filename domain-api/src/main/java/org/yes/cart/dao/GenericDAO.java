@@ -100,7 +100,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @return single entity   or null if not found
      */
-    <T> T findSingleByNamedQuery(String namedQueryName, Object... parameters);
+    T findSingleByNamedQuery(String namedQueryName, Object... parameters);
 
     /**
      * Find single entity, that returned by named query.
@@ -110,7 +110,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @return single entity   or null if not found
      */
-    <T> T findSingleByNamedQueryCached(String namedQueryName, Object... parameters);
+    T findSingleByNamedQueryCached(String namedQueryName, Object... parameters);
 
     /**
      * Find by hsql query.

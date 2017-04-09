@@ -16,10 +16,8 @@
 
 package org.yes.cart.search.query.impl;
 
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
-import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.util.Version;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -36,12 +34,12 @@ public class AsIsAnalyzerImplTest {
     private static final String[] FIELDS = {"productCategory.category", "attribute.attribute", "attribute.val"};
 
     @Test
-    public void testThatQueryIsNotTransformedByAnalyzerWithMultipleFieldsQueryParser() throws ParseException {
-        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_31, FIELDS, new AsIsAnalyzer(false));
+    public void testThatQueryIsNotTransformedByAnalyzerWithMultipleFieldsQueryParser() throws Exception {
+        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(FIELDS, new AsIsAnalyzer(false));
         Query query = queryParser.parse(LUCENE_QUERY);
         assertEquals(LUCENE_QUERY, query.toString());
 
-        queryParser = new MultiFieldQueryParser(Version.LUCENE_31, FIELDS, new AsIsAnalyzer(true));
+        queryParser = new MultiFieldQueryParser(FIELDS, new AsIsAnalyzer(true));
         query = queryParser.parse(LUCENE_QUERY);
         assertEquals(LUCENE_QUERY_LOWERCASE, query.toString());
 

@@ -55,7 +55,7 @@ public class ProductSkuCodeSearchQueryBuilderTest {
 
         final Query query = new ProductSkuCodeSearchQueryBuilder().createStrictQuery(10L, "sku.code", "ABC 1");
         assertNotNull(query);
-        assertEquals("sku.code:ABC 1", query.toString());
+        assertEquals("(sku.code:ABC 1)^1.0", query.toString());
 
     }
 
@@ -64,7 +64,7 @@ public class ProductSkuCodeSearchQueryBuilderTest {
 
         final Query query = new ProductSkuCodeSearchQueryBuilder().createStrictQuery(10L, "sku.code", Arrays.asList("ABC 1", "ABC 2", "ABC 3"));
         assertNotNull(query);
-        assertEquals("sku.code:ABC 1 sku.code:ABC 2 sku.code:ABC 3", query.toString());
+        assertEquals("(sku.code:ABC 1)^1.0 (sku.code:ABC 2)^1.0 (sku.code:ABC 3)^1.0", query.toString());
 
     }
 
@@ -97,7 +97,7 @@ public class ProductSkuCodeSearchQueryBuilderTest {
 
         final Query query = new ProductSkuCodeSearchQueryBuilder().createRelaxedQuery(10L, "sku.code", "ABC 1");
         assertNotNull(query);
-        assertEquals("sku.code:ABC 1", query.toString());
+        assertEquals("(sku.code:ABC 1)^1.0", query.toString());
 
 
     }
@@ -107,7 +107,7 @@ public class ProductSkuCodeSearchQueryBuilderTest {
 
         final Query query = new ProductSkuCodeSearchQueryBuilder().createRelaxedQuery(10L, "sku.code", Arrays.asList("ABC 1", "ABC 2", "ABC 3"));
         assertNotNull(query);
-        assertEquals("sku.code:ABC 1 sku.code:ABC 2 sku.code:ABC 3", query.toString());
+        assertEquals("(sku.code:ABC 1)^1.0 (sku.code:ABC 2)^1.0 (sku.code:ABC 3)^1.0", query.toString());
 
     }
 

@@ -54,7 +54,7 @@ public class ProductTagSearchQueryBuilderTest {
 
         final Query query = new ProductTagSearchQueryBuilder().createStrictQuery(10L, "tag", "tag1");
         assertNotNull(query);
-        assertEquals("tag:tag1^2.5", query.toString());
+        assertEquals("(tag:tag1)^2.5", query.toString());
 
     }
 
@@ -63,7 +63,7 @@ public class ProductTagSearchQueryBuilderTest {
 
         final Query query = new ProductTagSearchQueryBuilder().createStrictQuery(10L, "tag", new SimpleDateFormat("yyyyMMddHHmmss").parse("20141118001700"));
         assertNotNull(query);
-        assertEquals("tag:newarrival^2.5 createdTimestamp:[201411180000 TO *}^2.0", query.toString());
+        assertEquals("(tag:newarrival)^2.5 (createdTimestamp:[201411180000 TO *})^2.0", query.toString());
 
     }
 
@@ -88,7 +88,7 @@ public class ProductTagSearchQueryBuilderTest {
 
         final Query query = new ProductTagSearchQueryBuilder().createRelaxedQuery(10L, "tag", "tag1");
         assertNotNull(query);
-        assertEquals("tag:tag1^2.5", query.toString());
+        assertEquals("(tag:tag1)^2.5", query.toString());
 
 
     }
@@ -98,7 +98,7 @@ public class ProductTagSearchQueryBuilderTest {
 
         final Query query = new ProductTagSearchQueryBuilder().createRelaxedQuery(10L, "tag", new SimpleDateFormat("yyyyMMddHHmmss").parse("20141118001700"));
         assertNotNull(query);
-        assertEquals("tag:newarrival^2.5 createdTimestamp:[201411180000 TO *}^2.0", query.toString());
+        assertEquals("(tag:newarrival)^2.5 (createdTimestamp:[201411180000 TO *})^2.0", query.toString());
 
     }
 

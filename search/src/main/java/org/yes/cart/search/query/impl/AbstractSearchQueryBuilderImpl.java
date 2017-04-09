@@ -18,10 +18,7 @@ package org.yes.cart.search.query.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.FuzzyQuery;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.TermRangeQuery;
+import org.apache.lucene.search.*;
 import org.yes.cart.search.query.SearchQueryBuilder;
 
 /**
@@ -39,12 +36,17 @@ public abstract class AbstractSearchQueryBuilderImpl implements SearchQueryBuild
      *
      * @param field field name
      * @param value value
-     * @param minimumSimilarity similarity (e.g. 0.5f for 10 letter word requires 5 letter match)
+     * @param maxEdits max number of mismatches (between 0 <= X <= 2, where 0 is exact)
      *
      * @return fuzzy query
      */
-    protected Query createFuzzyQuery(final String field, final String value, final float minimumSimilarity) {
-        return new FuzzyQuery(new Term(field, value), minimumSimilarity);
+    protected Query createFuzzyQuery(final String field, final String value, final int maxEdits) {
+        // If the search value is less than 3 char then fuzzy does not make sense
+        if (maxEdits <= 0 || value.length() < 3) {
+            return new TermQuery(new Term(field, value));
+        }
+        // 2 edits is the maximum supported in Lucene 6.5.x
+        return new FuzzyQuery(new Term(field, value), maxEdits > 2 ? 2 : maxEdits);
     }
 
     /**
@@ -52,15 +54,14 @@ public abstract class AbstractSearchQueryBuilderImpl implements SearchQueryBuild
      *
      * @param field field name
      * @param value value
-     * @param minimumSimilarity similarity (e.g. 0.5f for 10 letter word requires 5 letter match)
+     * @param maxEdits max number of mismatches (between 0 <= X <= 2, where 0 is exact)
      * @param boost importance of this criteria (default 1.0f)
      *
      * @return fuzzy query with boost
      */
-    protected Query createFuzzyQuery(final String field, final String value, final float minimumSimilarity, final float boost) {
-        final Query query = createFuzzyQuery(field, value, minimumSimilarity);
-        query.setBoost(boost);
-        return query;
+    protected Query createFuzzyQuery(final String field, final String value, final int maxEdits, final float boost) {
+        final Query query = createFuzzyQuery(field, value, maxEdits);
+        return new BoostQuery(query, boost);
     }
 
     /**
@@ -86,8 +87,7 @@ public abstract class AbstractSearchQueryBuilderImpl implements SearchQueryBuild
      */
     protected Query createTermQuery(final String field, final String value, final float boost) {
         final Query query = createTermQuery(field, value);
-        query.setBoost(boost);
-        return query;
+        return new BoostQuery(query, boost);
     }
 
     /**
@@ -100,7 +100,7 @@ public abstract class AbstractSearchQueryBuilderImpl implements SearchQueryBuild
      * @return range query
      */
     protected Query createRangeQuery(final String field, final String low, final String high) {
-        return new TermRangeQuery(field, low, high, true, false);
+        return TermRangeQuery.newStringRange(field, low, high, true, false);
     }
 
     /**
@@ -115,8 +115,7 @@ public abstract class AbstractSearchQueryBuilderImpl implements SearchQueryBuild
      */
     protected Query createRangeQuery(final String field, final String low, final String high, final float boost) {
         final Query query = createRangeQuery(field, low, high);
-        query.setBoost(boost);
-        return query;
+        return new BoostQuery(query, boost);
     }
 
     /**

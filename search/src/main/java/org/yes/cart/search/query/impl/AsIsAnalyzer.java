@@ -16,19 +16,16 @@
 
 package org.yes.cart.search.query.impl;
 
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.LowerCaseFilter;
-import org.apache.lucene.analysis.ReusableAnalyzerBase;
-import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.util.Version;
-
-import java.io.Reader;
+import org.apache.lucene.analysis.core.UnicodeWhitespaceTokenizer;
 
 /**
  * User: iazarny@yahoo.com Igor Azarny
  * Date: 2/3/12
  * Time: 12:59 PM
  */
-public class AsIsAnalyzer extends ReusableAnalyzerBase {
+public class AsIsAnalyzer extends Analyzer {
 
     private final boolean toLowerCase;
 
@@ -41,15 +38,13 @@ public class AsIsAnalyzer extends ReusableAnalyzerBase {
         this.toLowerCase = toLowerCase;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    protected TokenStreamComponents createComponents(final String fieldName, final Reader aReader) {
-        if (toLowerCase) {
-            final Tokenizer asIsTokenizer = new AsIsTokenizer(Version.LUCENE_31, aReader);
-            return new TokenStreamComponents(asIsTokenizer, new LowerCaseFilter(Version.LUCENE_31, asIsTokenizer));
-        } else {
-            return new TokenStreamComponents(new AsIsTokenizer(Version.LUCENE_31, aReader));
-        }
-    }
 
+    @Override
+    protected TokenStreamComponents createComponents(final String fieldName) {
+        if (toLowerCase) {
+            final UnicodeWhitespaceTokenizer tokenizer = new UnicodeWhitespaceTokenizer();
+            return new TokenStreamComponents(tokenizer, new LowerCaseFilter(tokenizer));
+        }
+        return new TokenStreamComponents(new UnicodeWhitespaceTokenizer());
+    }
 }

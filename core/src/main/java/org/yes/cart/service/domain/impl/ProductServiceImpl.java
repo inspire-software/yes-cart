@@ -48,7 +48,6 @@ import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.dto.impl.FilteredNavigationRecordImpl;
-import org.yes.cart.search.entityindexer.IndexFilter;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
@@ -1039,17 +1038,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     public void reindexProducts(final Long shopId, final int batchSize) {
         final Set<Long> categories = shopCategoryRelationshipSupport.getShopCategoriesIds(shopId);
-        productDao.fullTextSearchReindex(true, batchSize, new IndexFilter<Product>() {
-            @Override
-            public boolean skipIndexing(final Product entity) {
-                for (final ProductCategory pcat : entity.getProductCategory()) {
-                    if (categories.contains(pcat.getCategory().getCategoryId())) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        });
+        productDao.fullTextSearchReindex(true, batchSize);
     }
 
 
@@ -1058,17 +1047,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     public void reindexProductsSku(final Long shopId, final int batchSize) {
         final Set<Long> categories = shopCategoryRelationshipSupport.getShopCategoriesIds(shopId);
-        productSkuDao.fullTextSearchReindex(true, batchSize, new IndexFilter<ProductSku>() {
-            @Override
-            public boolean skipIndexing(final ProductSku entity) {
-                for (final ProductCategory pcat : entity.getProduct().getProductCategory()) {
-                    if (categories.contains(pcat.getCategory().getCategoryId())) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        });
+        productSkuDao.fullTextSearchReindex(true, batchSize);
     }
 
     /**

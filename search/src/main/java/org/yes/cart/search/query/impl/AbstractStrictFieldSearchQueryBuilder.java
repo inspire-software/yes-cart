@@ -51,11 +51,14 @@ public abstract class AbstractStrictFieldSearchQueryBuilder extends AbstractSear
         if (value instanceof Collection) {
             final Collection singleValues = (Collection) value;
             if (singleValues.size() > 1) {
-                final BooleanQuery aggregatedQuery = new BooleanQuery();
+
+                final BooleanQuery.Builder aggregatedQuery = new BooleanQuery.Builder();
+
                 for (final Object singleValue : singleValues) {
                     aggregatedQuery.add(createTermQuery(field, escapeValue(singleValue), boost), BooleanClause.Occur.SHOULD);
                 }
-                return aggregatedQuery;
+                return aggregatedQuery.build();
+
             } else if (singleValues.size() == 1) {
                 return createTermQuery(field, escapeValue(singleValues.iterator().next()), boost);
             } else {

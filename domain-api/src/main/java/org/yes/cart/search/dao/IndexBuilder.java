@@ -16,8 +16,6 @@
 
 package org.yes.cart.search.dao;
 
-import org.yes.cart.search.entityindexer.IndexFilter;
-
 import java.io.Serializable;
 
 /**
@@ -28,7 +26,7 @@ import java.io.Serializable;
  * Date: 10/01/2017
  * Time: 10:30
  */
-public interface IndexBuilder<T, PK extends Serializable, FTQ> {
+public interface IndexBuilder<T, PK extends Serializable> {
 
     interface FTIndexState {
 
@@ -67,15 +65,6 @@ public interface IndexBuilder<T, PK extends Serializable, FTQ> {
      * @param batchSize batch size for re-indexing
      */
     void fullTextSearchReindex(boolean async, int batchSize);
-
-    /**
-     * Force reindex the all entities.
-     *
-     * @param async true if async required
-     * @param batchSize batch size for re-indexing
-     * @param filter indexing filter
-     */
-    void fullTextSearchReindex(boolean async, int batchSize, IndexFilter<T> filter);
 
     /**
      * Force reindex given entity.

@@ -54,7 +54,7 @@ public class ProductIdSearchQueryBuilderTest {
 
         final Query query = new ProductIdSearchQueryBuilder().createStrictQuery(10L, "productId", "1");
         assertNotNull(query);
-        assertEquals("productId:1", query.toString());
+        assertEquals("(productId:1)^1.0", query.toString());
 
     }
 
@@ -63,7 +63,7 @@ public class ProductIdSearchQueryBuilderTest {
 
         final Query query = new ProductIdSearchQueryBuilder().createStrictQuery(10L, "productId", Arrays.asList("1", "2", "3"));
         assertNotNull(query);
-        assertEquals("productId:1 productId:2 productId:3", query.toString());
+        assertEquals("(productId:1)^1.0 (productId:2)^1.0 (productId:3)^1.0", query.toString());
 
     }
 
@@ -96,7 +96,7 @@ public class ProductIdSearchQueryBuilderTest {
 
         final Query query = new ProductIdSearchQueryBuilder().createRelaxedQuery(10L, "productId", "1");
         assertNotNull(query);
-        assertEquals("productId:1", query.toString());
+        assertEquals("(productId:1)^1.0", query.toString());
 
 
     }
@@ -106,7 +106,7 @@ public class ProductIdSearchQueryBuilderTest {
 
         final Query query = new ProductIdSearchQueryBuilder().createRelaxedQuery(10L, "productId", Arrays.asList("1", "2", "3"));
         assertNotNull(query);
-        assertEquals("productId:1 productId:2 productId:3", query.toString());
+        assertEquals("(productId:1)^1.0 (productId:2)^1.0 (productId:3)^1.0", query.toString());
 
     }
 

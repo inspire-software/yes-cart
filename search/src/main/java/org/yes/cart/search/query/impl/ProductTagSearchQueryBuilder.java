@@ -46,12 +46,12 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
             final SimpleDateFormat toMinutes = getDateFormat();
             final String fromDate = toMinutes.format((Date) value);
 
-            BooleanQuery aggregateQuery = new BooleanQuery();
+            final BooleanQuery.Builder aggregateQuery = new BooleanQuery.Builder();
 
             aggregateQuery.add(createTermQuery(PRODUCT_TAG_FIELD, TAG_NEWARRIVAL, 2.5f), BooleanClause.Occur.SHOULD);
             aggregateQuery.add(createRangeQuery(PRODUCT_CREATED_FIELD, fromDate, null, 2f), BooleanClause.Occur.SHOULD);
 
-            return aggregateQuery;
+            return aggregateQuery.build();
 
         }
 

@@ -46,24 +46,24 @@ public class AttributeSearchQueryBuilder extends AbstractSearchQueryBuilderImpl 
         if (searchValue.contains(Constants.RANGE_NAVIGATION_DELIMITER)) { // value range navigation
             final String[] attrValues = StringUtils.splitByWholeSeparatorPreserveAllTokens(searchValue, Constants.RANGE_NAVIGATION_DELIMITER);
 
-            final BooleanQuery aggregatedQuery = new BooleanQuery();
+            final BooleanQuery.Builder aggregatedQuery = new BooleanQuery.Builder();
 
             final String searchValueLo = attrValues[0].length() > 0 ? escapeValue(attrValues[0]) : null;
             final String searchValueHi = attrValues[1].length() > 0 ? escapeValue(attrValues[1]) : null;
 
             aggregatedQuery.add(createRangeQuery("facet_" + escapedParameter, searchValueLo, searchValueHi, 3.5f), BooleanClause.Occur.MUST);
 
-            return aggregatedQuery;
+            return aggregatedQuery.build();
 
         }
 
-        final BooleanQuery aggregatedQuery = new BooleanQuery();
+        final BooleanQuery.Builder aggregatedQuery = new BooleanQuery.Builder();
 
         final String ftSearchValue = escapeValue(searchValue);
 
         aggregatedQuery.add(createTermQuery("facet_" + escapedParameter, ftSearchValue, 3.5f), BooleanClause.Occur.MUST);
 
-        return aggregatedQuery;
+        return aggregatedQuery.build();
 
     }
 

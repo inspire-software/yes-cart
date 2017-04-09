@@ -14,22 +14,25 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.search.entityindexer.impl;
+package org.yes.cart.search.dao;
 
-import org.yes.cart.search.entityindexer.ProductIndexer;
+import org.yes.cart.domain.misc.Pair;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 5/6/12
- * Time: 9:10 AM
+ * User: denispavlov
+ * Date: 31/03/2017
+ * Time: 08:36
  */
-public class EmptyProductIndexerImpl implements ProductIndexer {
-    /** {@inheritDoc} */
+public interface DocumentAdapter<T, PK, D> {
 
-    public void submitIndexTask(final Long productPkValue) {
-
-        //doing nothing
-
-    }
+    /**
+     * Adapet persistent entity into an index document object.
+     *
+     * @param entity entity to adapt
+     *
+     * @return pair of primary key and document. if document is null this denotes that
+     *         this entity should not be indexed (or removed from index)
+     */
+    Pair<PK, D> adapt(T entity);
 
 }

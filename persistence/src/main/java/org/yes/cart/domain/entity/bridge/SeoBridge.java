@@ -34,42 +34,42 @@ public class SeoBridge implements FieldBridge {
 
     public void set(final String name, final Object value, final Document document, final LuceneOptions luceneOptions) {
         
-        if (value instanceof Seo) {
-            
-            final Seo seo = (Seo) value;
-
-
-            document.add(new Field(
-                    ProductSearchQueryBuilder.CATEGORY_SEO_URI_FIELD,
-                    seo.getUri(),
-                    luceneOptions.getStore(),
-                    Field.Index.NOT_ANALYZED,
-                    luceneOptions.getTermVector()
-            ));
-            document.add(new Field(
-                    ProductSearchQueryBuilder.CATEGORY_SEO_TITLE_FIELD,
-                    seo.getTitle(),
-                    luceneOptions.getStore(),
-                    Field.Index.NOT_ANALYZED,
-                    luceneOptions.getTermVector()
-            ));
-            document.add(new Field(
-                    ProductSearchQueryBuilder.CATEGORY_SEO_METAKEYWORDS_FIELD,
-                    seo.getMetakeywords(),
-                    luceneOptions.getStore(),
-                    Field.Index.NOT_ANALYZED,
-                    luceneOptions.getTermVector()
-            ));
-            document.add(new Field(
-                    ProductSearchQueryBuilder.CATEGORY_SEO_METADESCRIPTION_FIELD,
-                    seo.getMetadescription(),
-                    luceneOptions.getStore(),
-                    Field.Index.NOT_ANALYZED,
-                    luceneOptions.getTermVector()
-            ));
-
-            
-        }
+//        if (value instanceof Seo) {
+//
+//            final Seo seo = (Seo) value;
+//
+//
+//            document.add(new Field(
+//                    ProductSearchQueryBuilder.CATEGORY_SEO_URI_FIELD,
+//                    seo.getUri(),
+//                    luceneOptions.getStore(),
+//                    Field.Index.NOT_ANALYZED,
+//                    luceneOptions.getTermVector()
+//            ));
+//            document.add(new Field(
+//                    ProductSearchQueryBuilder.CATEGORY_SEO_TITLE_FIELD,
+//                    seo.getTitle(),
+//                    luceneOptions.getStore(),
+//                    Field.Index.NOT_ANALYZED,
+//                    luceneOptions.getTermVector()
+//            ));
+//            document.add(new Field(
+//                    ProductSearchQueryBuilder.CATEGORY_SEO_METAKEYWORDS_FIELD,
+//                    seo.getMetakeywords(),
+//                    luceneOptions.getStore(),
+//                    Field.Index.NOT_ANALYZED,
+//                    luceneOptions.getTermVector()
+//            ));
+//            document.add(new Field(
+//                    ProductSearchQueryBuilder.CATEGORY_SEO_METADESCRIPTION_FIELD,
+//                    seo.getMetadescription(),
+//                    luceneOptions.getStore(),
+//                    Field.Index.NOT_ANALYZED,
+//                    luceneOptions.getTermVector()
+//            ));
+//
+//
+//        }
         
     }
 }

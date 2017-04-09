@@ -14,22 +14,25 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.search.entityindexer;
+package org.yes.cart.search.dao.entity;
+
+import org.apache.lucene.document.Document;
+import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.search.dao.LuceneDocumentAdapter;
 
 /**
  * User: denispavlov
- * Date: 24/11/2014
- * Time: 20:30
+ * Date: 07/04/2017
+ * Time: 14:22
  */
-public interface IndexFilter<T> {
+public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<ProductSku, Long> {
 
     /**
-     * Skip index if this method returns true.
-     *
-     * @param entity entity to check.
-     *
-     * @return if returns true then reindexing should be skipped for this entity
+     * {@inheritDoc}
      */
-    boolean skipIndexing(T entity);
-
+    @Override
+    public Pair<Long, Document[]> toDocument(final ProductSku entity) {
+        return null;
+    }
 }

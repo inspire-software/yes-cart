@@ -44,116 +44,116 @@ public class AttributeValueBridge implements FieldBridge {
      */
     public void set(final String name, final Object value, final Document document, final LuceneOptions luceneOptions) {
 
-        if (value instanceof Collection) {
-
-            final NavigatableAttributesSupport support = getNavigatableAttributesSupport();
-            final Set<String> navAttrs = support.getAllNavigatableAttributeCodes();
-            final Set<String> searchAttrs = support.getAllSearchableAttributeCodes();
-            final Set<String> searchPrimaryAttrs = support.getAllSearchablePrimaryAttributeCodes();
-            final Set<String> storeAttrs = support.getAllStorableAttributeCodes();
-
-            StoredAttributes storedAttributes = null;
-
-            for (Object obj : (Collection) value) {
-                final AttrValue attrValue = (AttrValue) obj;
-
-                if (attrValue.getAttribute() == null) {
-                    continue; // skip invalid ones
-                }
-
-                final String code = attrValue.getAttribute().getCode();
-
-                final boolean navigation = navAttrs.contains(code);
-                final boolean search = navigation || searchAttrs.contains(code);
-                final boolean searchPrimary = searchPrimaryAttrs.contains(code);
-
-                // Only keep searcheable and navigatable attributes in index
-                if (search) {
-                    if (StringUtils.isNotBlank(attrValue.getVal())) {
-
-                        if (searchPrimary) {
-
-                            final List<String> searchValues = getSearchValue(attrValue);
-
-                            // primary search should only exist in primary search exact match
-                            for (final String searchValue : searchValues) {
-                                final Field prime = new Field(
-                                        ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD,
-                                        searchValue,
-                                        Field.Store.NO,
-                                        Field.Index.NOT_ANALYZED,
-                                        luceneOptions.getTermVector()
-                                );
-                                prime.setBoost(2f);
-                                document.add(prime);
-                            }
-
-                        } else {
-
-                            final List<String> searchValues = getSearchValue(attrValue);
-
-                            for (final String searchValue : searchValues) {
-
-                                // searchable and navigatable terms for global search tokenised
-                                final Field searchTokens = new Field(
-                                        ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCH_FIELD,
-                                        searchValue,
-                                        Field.Store.NO,
-                                        Field.Index.ANALYZED,
-                                        luceneOptions.getTermVector()
-                                );
-                                document.add(searchTokens);
-
-                                // searchable and navigatable terms for global search full phrase
-                                final Field searchPhrase = new Field(
-                                        ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD,
-                                        searchValue,
-                                        Field.Store.NO,
-                                        Field.Index.NOT_ANALYZED,
-                                        luceneOptions.getTermVector()
-                                );
-                                searchPhrase.setBoost(1.2f); // +20% for full phrases
-                                document.add(searchPhrase);
-                            }
-
-                        }
-
-                    }
-                }
-
-                if (navigation) {
-                    // strict attribute navigation only for filtered navigation
-                    document.add(new Field(
-                            "facet_" + code,
-                            cleanFacetValue(attrValue.getVal()),
-                            Field.Store.NO,
-                            Field.Index.NOT_ANALYZED,
-                            luceneOptions.getTermVector()
-                    ));
-                }
-
-                final boolean stored = storeAttrs.contains(code);
-
-                if (stored) {
-                    if (storedAttributes == null) {
-                        storedAttributes = new StoredAttributesImpl();
-                    }
-                    storedAttributes.putValue(code, attrValue.getVal(), attrValue.getDisplayVal());
-                }
-
-            }
-
-            if (storedAttributes != null && !storedAttributes.getAllValues().isEmpty()) {
-                document.add(new Field(
-                        ProductSearchQueryBuilder.ATTRIBUTE_VALUE_STORE_FIELD,
-                        storedAttributes.toString(),
-                        Field.Store.YES,
-                        Field.Index.NOT_ANALYZED,
-                        Field.TermVector.NO
-                ));
-            }
-
-        }
+//        if (value instanceof Collection) {
+//
+//            final NavigatableAttributesSupport support = getNavigatableAttributesSupport();
+//            final Set<String> navAttrs = support.getAllNavigatableAttributeCodes();
+//            final Set<String> searchAttrs = support.getAllSearchableAttributeCodes();
+//            final Set<String> searchPrimaryAttrs = support.getAllSearchablePrimaryAttributeCodes();
+//            final Set<String> storeAttrs = support.getAllStorableAttributeCodes();
+//
+//            StoredAttributes storedAttributes = null;
+//
+//            for (Object obj : (Collection) value) {
+//                final AttrValue attrValue = (AttrValue) obj;
+//
+//                if (attrValue.getAttribute() == null) {
+//                    continue; // skip invalid ones
+//                }
+//
+//                final String code = attrValue.getAttribute().getCode();
+//
+//                final boolean navigation = navAttrs.contains(code);
+//                final boolean search = navigation || searchAttrs.contains(code);
+//                final boolean searchPrimary = searchPrimaryAttrs.contains(code);
+//
+//                // Only keep searcheable and navigatable attributes in index
+//                if (search) {
+//                    if (StringUtils.isNotBlank(attrValue.getVal())) {
+//
+//                        if (searchPrimary) {
+//
+//                            final List<String> searchValues = getSearchValue(attrValue);
+//
+//                            // primary search should only exist in primary search exact match
+//                            for (final String searchValue : searchValues) {
+//                                final Field prime = new Field(
+//                                        ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD,
+//                                        searchValue,
+//                                        Field.Store.NO,
+//                                        Field.Index.NOT_ANALYZED,
+//                                        luceneOptions.getTermVector()
+//                                );
+//                                prime.setBoost(2f);
+//                                document.add(prime);
+//                            }
+//
+//                        } else {
+//
+//                            final List<String> searchValues = getSearchValue(attrValue);
+//
+//                            for (final String searchValue : searchValues) {
+//
+//                                // searchable and navigatable terms for global search tokenised
+//                                final Field searchTokens = new Field(
+//                                        ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCH_FIELD,
+//                                        searchValue,
+//                                        Field.Store.NO,
+//                                        Field.Index.ANALYZED,
+//                                        luceneOptions.getTermVector()
+//                                );
+//                                document.add(searchTokens);
+//
+//                                // searchable and navigatable terms for global search full phrase
+//                                final Field searchPhrase = new Field(
+//                                        ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD,
+//                                        searchValue,
+//                                        Field.Store.NO,
+//                                        Field.Index.NOT_ANALYZED,
+//                                        luceneOptions.getTermVector()
+//                                );
+//                                searchPhrase.setBoost(1.2f); // +20% for full phrases
+//                                document.add(searchPhrase);
+//                            }
+//
+//                        }
+//
+//                    }
+//                }
+//
+//                if (navigation) {
+//                    // strict attribute navigation only for filtered navigation
+//                    document.add(new Field(
+//                            "facet_" + code,
+//                            cleanFacetValue(attrValue.getVal()),
+//                            Field.Store.NO,
+//                            Field.Index.NOT_ANALYZED,
+//                            luceneOptions.getTermVector()
+//                    ));
+//                }
+//
+//                final boolean stored = storeAttrs.contains(code);
+//
+//                if (stored) {
+//                    if (storedAttributes == null) {
+//                        storedAttributes = new StoredAttributesImpl();
+//                    }
+//                    storedAttributes.putValue(code, attrValue.getVal(), attrValue.getDisplayVal());
+//                }
+//
+//            }
+//
+//            if (storedAttributes != null && !storedAttributes.getAllValues().isEmpty()) {
+//                document.add(new Field(
+//                        ProductSearchQueryBuilder.ATTRIBUTE_VALUE_STORE_FIELD,
+//                        storedAttributes.toString(),
+//                        Field.Store.YES,
+//                        Field.Index.NOT_ANALYZED,
+//                        Field.TermVector.NO
+//                ));
+//            }
+//
+//        }
 
     }
 

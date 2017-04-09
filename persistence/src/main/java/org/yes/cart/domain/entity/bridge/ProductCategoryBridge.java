@@ -76,19 +76,19 @@ public class ProductCategoryBridge implements FieldBridge {
 
                 addCategory(document, luceneOptions, category, support);
 
-                for (final Shop shop : shops) {
-
-                    if (support.getShopCategoriesIds(shop.getShopId()).contains(category.getCategoryId())) {
-                        document.add(new Field(
-                                ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD,
-                                String.valueOf(shop.getShopId()),
-                                Field.Store.NO,
-                                Field.Index.NOT_ANALYZED,
-                                luceneOptions.getTermVector()
-                        ));
-                    }
-
-                }
+//                for (final Shop shop : shops) {
+//
+//                    if (support.getShopCategoriesIds(shop.getShopId()).contains(category.getCategoryId())) {
+//                        document.add(new Field(
+//                                ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD,
+//                                String.valueOf(shop.getShopId()),
+//                                Field.Store.NO,
+//                                Field.Index.NOT_ANALYZED,
+//                                luceneOptions.getTermVector()
+//                        ));
+//                    }
+//
+//                }
 
             }
 
@@ -101,17 +101,17 @@ public class ProductCategoryBridge implements FieldBridge {
                              final Category category,
                              final ShopCategoryRelationshipSupport support) {
 
-        document.add(new Field(
-                ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD,
-                String.valueOf(category.getCategoryId()),
-                Field.Store.NO,
-                Field.Index.NOT_ANALYZED,
-                luceneOptions.getTermVector()
-        ));
-
-        addCategoryName(document, luceneOptions, category);
-
-        addCategoryParentIds(document, luceneOptions, category, support);
+//        document.add(new Field(
+//                ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD,
+//                String.valueOf(category.getCategoryId()),
+//                Field.Store.NO,
+//                Field.Index.NOT_ANALYZED,
+//                luceneOptions.getTermVector()
+//        ));
+//
+//        addCategoryName(document, luceneOptions, category);
+//
+//        addCategoryParentIds(document, luceneOptions, category, support);
 
     }
 
@@ -119,28 +119,28 @@ public class ProductCategoryBridge implements FieldBridge {
                                  final LuceneOptions luceneOptions,
                                  final Category category) {
 
-        document.add(new Field(
-                ProductSearchQueryBuilder.PRODUCT_CATEGORYNAME_FIELD,
-                category.getName(),
-                Field.Store.NO,
-                Field.Index.NOT_ANALYZED,
-                luceneOptions.getTermVector()
-        ));
-
-        document.add(new Field(
-                ProductSearchQueryBuilder.PRODUCT_CATEGORYNAME_STEM_FIELD,
-                category.getName(),
-                Field.Store.NO,
-                Field.Index.ANALYZED,
-                luceneOptions.getTermVector()
-        ));
-
-        displayNameBridge.set(
-                ProductSearchQueryBuilder.PRODUCT_CATEGORYNAME_FIELD,
-                category.getDisplayName(),
-                document,
-                luceneOptions
-        );
+//        document.add(new Field(
+//                ProductSearchQueryBuilder.PRODUCT_CATEGORYNAME_FIELD,
+//                category.getName(),
+//                Field.Store.NO,
+//                Field.Index.NOT_ANALYZED,
+//                luceneOptions.getTermVector()
+//        ));
+//
+//        document.add(new Field(
+//                ProductSearchQueryBuilder.PRODUCT_CATEGORYNAME_STEM_FIELD,
+//                category.getName(),
+//                Field.Store.NO,
+//                Field.Index.ANALYZED,
+//                luceneOptions.getTermVector()
+//        ));
+//
+//        displayNameBridge.set(
+//                ProductSearchQueryBuilder.PRODUCT_CATEGORYNAME_FIELD,
+//                category.getDisplayName(),
+//                document,
+//                luceneOptions
+//        );
 
     }
 
@@ -149,23 +149,23 @@ public class ProductCategoryBridge implements FieldBridge {
                                       final Category category,
                                       final ShopCategoryRelationshipSupport support) {
 
-        document.add(new Field(
-                ProductSearchQueryBuilder.PRODUCT_CATEGORY_INC_PARENTS_FIELD,
-                String.valueOf(category.getCategoryId()),
-                Field.Store.NO,
-                Field.Index.NOT_ANALYZED,
-                luceneOptions.getTermVector()
-        ));
-
-        final Set<Long> parentIds = support.getCategoryParentsIds(category.getCategoryId());
-        for (final Long parentId : parentIds) {
-
-            final Category parent = support.getCategoryById(parentId);
-
-            addCategoryName(document, luceneOptions, parent);
-
-            addCategoryParentIds(document, luceneOptions, parent, support);
-        }
+//        document.add(new Field(
+//                ProductSearchQueryBuilder.PRODUCT_CATEGORY_INC_PARENTS_FIELD,
+//                String.valueOf(category.getCategoryId()),
+//                Field.Store.NO,
+//                Field.Index.NOT_ANALYZED,
+//                luceneOptions.getTermVector()
+//        ));
+//
+//        final Set<Long> parentIds = support.getCategoryParentsIds(category.getCategoryId());
+//        for (final Long parentId : parentIds) {
+//
+//            final Category parent = support.getCategoryById(parentId);
+//
+//            addCategoryName(document, luceneOptions, parent);
+//
+//            addCategoryParentIds(document, luceneOptions, parent, support);
+//        }
 
     }
 

@@ -23,6 +23,8 @@ import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.entity.AttrValueProductSku;
 import org.yes.cart.service.misc.LanguageService;
 
+import java.util.List;
+
 
 /**
  * Handle both product and product sku image url to code resolving.
@@ -66,14 +68,19 @@ public class ProductImageNameStrategyImpl extends AbstractImageNameStrategyImpl 
 
         final String val = resolveFileName(url);
 
-        final String productCode =
-                attrValueEntityProductDao.findSingleByNamedQuery("PRODUCT.CODE.BY.IMAGE.NAME", val, ATTR_CODE_LIKE);
-        if (productCode != null) {
-            return productCode;
+        final List<String> productCode =
+                (List) attrValueEntityProductDao.findQueryObjectByNamedQuery("PRODUCT.CODE.BY.IMAGE.NAME", val, ATTR_CODE_LIKE);
+        if (productCode != null && !productCode.isEmpty()) {
+            return productCode.get(0);
         }
 
-        return attrValueEntityProductSkuDao.findSingleByNamedQuery("SKU.CODE.BY.IMAGE.NAME", val, ATTR_CODE_LIKE);
+        final List<String> skuCode =
+                (List) attrValueEntityProductSkuDao.findQueryObjectByNamedQuery("SKU.CODE.BY.IMAGE.NAME", val, ATTR_CODE_LIKE);
+        if (skuCode != null && !skuCode.isEmpty()) {
+            return skuCode.get(0);
+        }
 
+        return null;
     }
 
 }

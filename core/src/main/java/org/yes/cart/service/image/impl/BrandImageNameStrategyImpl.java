@@ -22,6 +22,8 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueBrand;
 import org.yes.cart.service.misc.LanguageService;
 
+import java.util.List;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -54,13 +56,14 @@ public class BrandImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
 
         final String val = resolveFileName(url);
 
-        final Object[] nameAndGuid = attrValueBrandDao.findSingleByNamedQuery("BRAND.NAME.AND.GUID.BY.IMAGE.NAME", val, ATTR_CODE_LIKE);
+        final List<Object[]> nameAndGuid = (List) attrValueBrandDao.findQueryObjectByNamedQuery("BRAND.NAME.AND.GUID.BY.IMAGE.NAME", val, ATTR_CODE_LIKE);
 
-        if (nameAndGuid != null && nameAndGuid.length == 2) {
-            if (nameAndGuid[0] instanceof String) {
-                return (String) nameAndGuid[0];
-            } else if (nameAndGuid[1] instanceof String) {
-                return (String) nameAndGuid[1];
+        if (nameAndGuid != null && !nameAndGuid.isEmpty()) {
+            final Object[] nameAndGuidPair = nameAndGuid.get(0);
+            if (nameAndGuidPair[0] instanceof String) {
+                return (String) nameAndGuidPair[0];
+            } else if (nameAndGuidPair[1] instanceof String) {
+                return (String) nameAndGuidPair[1];
             }
         }
 

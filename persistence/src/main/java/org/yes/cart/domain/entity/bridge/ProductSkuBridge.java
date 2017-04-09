@@ -39,51 +39,51 @@ public class ProductSkuBridge implements FieldBridge {
      */
     public void set(final String name, final Object value, final Document document, final LuceneOptions luceneOptions) {
 
-        if (value instanceof Collection) {
-
-            final Collection<ProductSku> skus = (Collection<ProductSku>) value;
-
-            document.add(new Field(
-                    "multisku",
-                    skus.size() > 1 ? "true" : "false",
-                    Field.Store.YES,
-                    Field.Index.NOT_ANALYZED,
-                    luceneOptions.getTermVector()
-            ));
-
-
-            for (final ProductSku sku : skus) {
-
-                document.add(new Field(
-                        "sku.code",
-                        sku.getCode(),
-                        Field.Store.NO,
-                        Field.Index.NOT_ANALYZED,
-                        luceneOptions.getTermVector()
-                ));
-
-                document.add(new Field(
-                        "sku.code_stem",
-                        sku.getCode(),
-                        Field.Store.NO,
-                        Field.Index.ANALYZED,
-                        luceneOptions.getTermVector()
-                ));
-
-                document.add(new Field(
-                        "sku.skuId",
-                        String.valueOf(sku.getSkuId()),
-                        Field.Store.NO,
-                        Field.Index.NOT_ANALYZED,
-                        luceneOptions.getTermVector()
-                ));
-
-
-                skuPriceBridge.set("", sku, document, luceneOptions);
-                attributeValueBridge.set("attribute", sku.getAttributes(), document, luceneOptions);
-
-            }
-        }
+//        if (value instanceof Collection) {
+//
+//            final Collection<ProductSku> skus = (Collection<ProductSku>) value;
+//
+//            document.add(new Field(
+//                    "multisku",
+//                    skus.size() > 1 ? "true" : "false",
+//                    Field.Store.YES,
+//                    Field.Index.NOT_ANALYZED,
+//                    luceneOptions.getTermVector()
+//            ));
+//
+//
+//            for (final ProductSku sku : skus) {
+//
+//                document.add(new Field(
+//                        "sku.code",
+//                        sku.getCode(),
+//                        Field.Store.NO,
+//                        Field.Index.NOT_ANALYZED,
+//                        luceneOptions.getTermVector()
+//                ));
+//
+//                document.add(new Field(
+//                        "sku.code_stem",
+//                        sku.getCode(),
+//                        Field.Store.NO,
+//                        Field.Index.ANALYZED,
+//                        luceneOptions.getTermVector()
+//                ));
+//
+//                document.add(new Field(
+//                        "sku.skuId",
+//                        String.valueOf(sku.getSkuId()),
+//                        Field.Store.NO,
+//                        Field.Index.NOT_ANALYZED,
+//                        luceneOptions.getTermVector()
+//                ));
+//
+//
+//                skuPriceBridge.set("", sku, document, luceneOptions);
+//                attributeValueBridge.set("attribute", sku.getAttributes(), document, luceneOptions);
+//
+//            }
+//        }
     }
 
     /**

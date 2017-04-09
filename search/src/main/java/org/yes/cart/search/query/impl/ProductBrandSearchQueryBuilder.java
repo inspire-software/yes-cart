@@ -40,11 +40,14 @@ public class ProductBrandSearchQueryBuilder extends AbstractSearchQueryBuilderIm
         if (value instanceof Collection) {
             final Collection<String> brands = (Collection) value;
             if (brands.size() > 1) {
-                final BooleanQuery aggregatedQuery = new BooleanQuery();
+
+                final BooleanQuery.Builder aggregatedQuery = new BooleanQuery.Builder();
+
                 for (final String brand : brands) {
                     aggregatedQuery.add(createTermQuery(BRAND_FIELD, escapeValue(brand.toLowerCase()), 3.5f), BooleanClause.Occur.SHOULD);
                 }
-                return aggregatedQuery;
+                return aggregatedQuery.build();
+
             } else if (brands.size() > 1) {
                 return createTermQuery(BRAND_FIELD, escapeValue(brands.iterator().next().toLowerCase()), 3.5f);
             } else {
@@ -62,11 +65,14 @@ public class ProductBrandSearchQueryBuilder extends AbstractSearchQueryBuilderIm
         if (searchValue.contains(Constants.RANGE_NAVIGATION_DELIMITER)) { // value range navigation
             final String[] brands = StringUtils.split(searchValue, Constants.RANGE_NAVIGATION_DELIMITER);
             if (brands.length > 1) {
-                final BooleanQuery aggregatedQuery = new BooleanQuery();
+
+                final BooleanQuery.Builder aggregatedQuery = new BooleanQuery.Builder();
+
                 for (final String brand : brands) {
                     aggregatedQuery.add(createTermQuery(BRAND_FIELD, escapeValue(brand.toLowerCase()), 3.5f), BooleanClause.Occur.SHOULD);
                 }
-                return aggregatedQuery;
+                return aggregatedQuery.build();
+
             } else if (brands.length == 1) {
                 return createTermQuery(BRAND_FIELD, escapeValue(brands[0].toLowerCase()), 3.5f);
             } else {
@@ -84,13 +90,16 @@ public class ProductBrandSearchQueryBuilder extends AbstractSearchQueryBuilderIm
         if (value instanceof Collection) {
             final Collection<String> brands = (Collection) value;
             if (brands.size() > 1) {
-                final BooleanQuery aggregatedQuery = new BooleanQuery();
+
+                final BooleanQuery.Builder aggregatedQuery = new BooleanQuery.Builder();
+
                 for (final String brand : brands) {
-                    aggregatedQuery.add(createFuzzyQuery(BRAND_FIELD, escapeValue(brand.toLowerCase()), 0.7f, 2.5f), BooleanClause.Occur.SHOULD);
+                    aggregatedQuery.add(createFuzzyQuery(BRAND_FIELD, escapeValue(brand.toLowerCase()), 2, 2.5f), BooleanClause.Occur.SHOULD);
                 }
-                return aggregatedQuery;
+                return aggregatedQuery.build();
+
             } else if (brands.size() == 1) {
-                return createFuzzyQuery(BRAND_FIELD, escapeValue(brands.iterator().next().toLowerCase()), 0.7f, 2.5f);
+                return createFuzzyQuery(BRAND_FIELD, escapeValue(brands.iterator().next().toLowerCase()), 2, 2.5f);
             } else {
                 return null;
             }
@@ -106,17 +115,20 @@ public class ProductBrandSearchQueryBuilder extends AbstractSearchQueryBuilderIm
         if (searchValue.contains(Constants.RANGE_NAVIGATION_DELIMITER)) { // value range navigation
             final String[] brands = StringUtils.split(searchValue, Constants.RANGE_NAVIGATION_DELIMITER);
             if (brands.length > 1) {
-                final BooleanQuery aggregatedQuery = new BooleanQuery();
+
+                final BooleanQuery.Builder aggregatedQuery = new BooleanQuery.Builder();
+
                 for (final String brand : brands) {
-                    aggregatedQuery.add(createFuzzyQuery(BRAND_FIELD, escapeValue(brand.toLowerCase()), 0.7f, 2.5f), BooleanClause.Occur.SHOULD);
+                    aggregatedQuery.add(createFuzzyQuery(BRAND_FIELD, escapeValue(brand.toLowerCase()), 2, 2.5f), BooleanClause.Occur.SHOULD);
                 }
-                return aggregatedQuery;
+                return aggregatedQuery.build();
+
             } else if (brands.length == 1) {
-                return createFuzzyQuery(BRAND_FIELD, escapeValue(brands[0].toLowerCase()), 0.7f, 2.5f);
+                return createFuzzyQuery(BRAND_FIELD, escapeValue(brands[0].toLowerCase()), 2, 2.5f);
             } else {
                 return null;
             }
         }
-        return createFuzzyQuery(BRAND_FIELD, escapeValue(searchValue.toLowerCase()), 0.7f, 2.5f);
+        return createFuzzyQuery(BRAND_FIELD, escapeValue(searchValue.toLowerCase()), 2, 2.5f);
     }
 }

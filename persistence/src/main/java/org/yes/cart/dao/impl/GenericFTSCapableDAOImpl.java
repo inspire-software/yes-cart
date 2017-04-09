@@ -24,7 +24,6 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.GenericFTS;
 import org.yes.cart.search.dao.IndexBuilder;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
-import org.yes.cart.search.entityindexer.IndexFilter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
 
     private GenericDAO<T, PK> genericDAO;
     private GenericFTS<PK, org.apache.lucene.search.Query> genericFTS;
-    private IndexBuilder<T, PK, org.apache.lucene.search.Query> indexBuilder;
+    private IndexBuilder<T, PK> indexBuilder;
 
 
     /**
@@ -55,263 +54,365 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
     @SuppressWarnings("unchecked")
     public GenericFTSCapableDAOImpl(final GenericDAO<T, PK> genericDAO,
                                     final GenericFTS<PK, org.apache.lucene.search.Query> genericFTS,
-                                    final IndexBuilder<T, PK, org.apache.lucene.search.Query> indexBuilder) {
+                                    final IndexBuilder<T, PK> indexBuilder) {
         this.genericDAO = genericDAO;
         this.genericFTS = genericFTS;
         this.indexBuilder = indexBuilder;
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public EntityFactory getEntityFactory() {
         return genericDAO.getEntityFactory();
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public <I> I getEntityIdentifier(final Object entity) {
         return genericDAO.getEntityIdentifier(entity);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public T findById(final PK id, final boolean lock) {
         return genericDAO.findById(id, lock);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public T findById(final PK id) {
         return genericDAO.findById(id);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<T> findAll() {
         return genericDAO.findAll();
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public ResultsIterator<T> findAllIterator() {
         return genericDAO.findAllIterator();
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<T> findByExample(final T exampleInstance, final String[] excludeProperty) {
         return genericDAO.findByExample(exampleInstance, excludeProperty);
     }
 
-    @Override
-    public <T1> T1 findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
+    /**
+     * {@inheritDoc}
+     */
+    public T findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
         return genericDAO.findSingleByNamedQuery(namedQueryName, parameters);
     }
 
-    @Override
-    public <T1> T1 findSingleByNamedQueryCached(final String namedQueryName, final Object... parameters) {
+    /**
+     * {@inheritDoc}
+     */
+    public T findSingleByNamedQueryCached(final String namedQueryName, final Object... parameters) {
         return genericDAO.findSingleByNamedQueryCached(namedQueryName, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<Object> findByQuery(final String hsqlQuery, final Object... parameters) {
         return genericDAO.findByQuery(hsqlQuery, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public ResultsIterator<Object> findByQueryIterator(final String hsqlQuery, final Object... parameters) {
         return genericDAO.findByQueryIterator(hsqlQuery, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public Object findSingleByQuery(final String hsqlQuery, final Object... parameters) {
         return genericDAO.findSingleByQuery(hsqlQuery, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public Object getScalarResultByNamedQuery(final String namedQueryName, final Object... parameters) {
         return genericDAO.getScalarResultByNamedQuery(namedQueryName, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public Object getScalarResultByNamedQueryWithInit(final String namedQueryName, final Object... parameters) {
         return genericDAO.getScalarResultByNamedQueryWithInit(namedQueryName, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<T> findByNamedQuery(final String namedQueryName, final Object... parameters) {
         return genericDAO.findByNamedQuery(namedQueryName, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public ResultsIterator<T> findByNamedQueryIterator(final String namedQueryName, final Object... parameters) {
         return genericDAO.findByNamedQueryIterator(namedQueryName, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<T> findByNamedQueryForUpdate(final String namedQueryName, final int timeout, final Object... parameters) {
         return genericDAO.findByNamedQueryForUpdate(namedQueryName, timeout, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<T> findByNamedQueryCached(final String namedQueryName, final Object... parameters) {
         return genericDAO.findByNamedQueryCached(namedQueryName, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<Object> findQueryObjectByNamedQuery(final String namedQueryName, final Object... parameters) {
         return genericDAO.findQueryObjectByNamedQuery(namedQueryName, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public ResultsIterator<Object> findQueryObjectByNamedQueryIterator(final String namedQueryName, final Object... parameters) {
         return genericDAO.findQueryObjectByNamedQueryIterator(namedQueryName, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<Object> findQueryObjectRangeByNamedQuery(final String namedQueryName, final int firstResult, final int maxResults, final Object... parameters) {
         return genericDAO.findQueryObjectRangeByNamedQuery(namedQueryName, firstResult, maxResults, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<Object[]> findQueryObjectsByNamedQuery(final String namedQueryName, final Object... parameters) {
         return genericDAO.findQueryObjectsByNamedQuery(namedQueryName, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<Object[]> findQueryObjectsRangeByNamedQuery(final String namedQueryName, final int firstResult, final int maxResults, final Object... parameters) {
         return genericDAO.findQueryObjectsRangeByNamedQuery(namedQueryName, firstResult, maxResults, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<T> findRangeByNamedQuery(final String namedQueryName, final int firstResult, final int maxResults, final Object... parameters) {
         return genericDAO.findRangeByNamedQuery(namedQueryName, firstResult, maxResults, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<T> findByCriteria(final Criterion... criterion) {
         return genericDAO.findByCriteria(criterion);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion... criterion) {
         return genericDAO.findByCriteria(firstResult, maxResults, criterion);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion[] criterion, final Order[] order) {
         return genericDAO.findByCriteria(firstResult, maxResults, criterion, order);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public int findCountByCriteria(final Criterion... criterion) {
         return genericDAO.findCountByCriteria(criterion);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
         return genericDAO.findByCriteria(criteriaTuner, criterion);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final int firstResult, final int maxResults, final Criterion... criterion) {
         return genericDAO.findByCriteria(criteriaTuner, firstResult, maxResults, criterion);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final int firstResult, final int maxResults, final Criterion[] criterion, final Order[] order) {
         return genericDAO.findByCriteria(criteriaTuner, firstResult, maxResults, criterion, order);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
         return genericDAO.findCountByCriteria(criteriaTuner, criterion);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public T findSingleByCriteria(final Criterion... criterion) {
         return genericDAO.findSingleByCriteria(criterion);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public T findSingleByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
         return genericDAO.findSingleByCriteria(criteriaTuner, criterion);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public T findUniqueByCriteria(final int firstResult, final Criterion... criterion) {
         return genericDAO.findUniqueByCriteria(firstResult, criterion);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public T create(final T entity) {
         return genericDAO.create(entity);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public T update(final T entity) {
         return genericDAO.update(entity);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public T saveOrUpdate(final T entity) {
         return genericDAO.saveOrUpdate(entity);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public void delete(final Object entity) {
         genericDAO.delete(entity);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public void refresh(final Object entity) {
         genericDAO.refresh(entity);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public void evict(final Object entity) {
         genericDAO.evict(entity);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public int executeNativeUpdate(final String nativeQuery) {
         return genericDAO.executeNativeUpdate(nativeQuery);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List executeNativeQuery(final String nativeQuery) {
         return genericDAO.executeNativeQuery(nativeQuery);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List executeHsqlQuery(final String hsql) {
         return genericDAO.executeHsqlQuery(hsql);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public int executeHsqlUpdate(final String hsql, final Object... parameters) {
         return genericDAO.executeHsqlUpdate(hsql, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public int executeUpdate(final String namedQueryName, final Object... parameters) {
         return genericDAO.executeUpdate(namedQueryName, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public int executeNativeUpdate(final String nativeQuery, final Object... parameters) {
         return genericDAO.executeNativeUpdate(nativeQuery, parameters);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public void flushClear() {
         genericDAO.flushClear();
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public void flush() {
         genericDAO.flush();
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public void clear() {
         genericDAO.clear();
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<T> fullTextSearch(final org.apache.lucene.search.Query query) {
         final List<PK> pks = genericFTS.fullTextSearch(query);
         final List<T> entities = new ArrayList<T>();
@@ -326,7 +427,9 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
         return entities;
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public List<T> fullTextSearch(final org.apache.lucene.search.Query query, final int firstResult, final int maxResults, final String sortFieldName, final boolean reverse) {
         final List<PK> pks = genericFTS.fullTextSearch(query, firstResult, maxResults, sortFieldName, reverse);
         final List<T> entities = new ArrayList<T>();
@@ -341,43 +444,53 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
         return entities;
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public Pair<List<Object[]>, Integer> fullTextSearch(final org.apache.lucene.search.Query query, final int firstResult, final int maxResults, final String sortFieldName, final boolean reverse, final String... fields) {
         return genericFTS.fullTextSearch(query, firstResult, maxResults, sortFieldName, reverse, fields);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, List<Pair<String, Integer>>> fullTextSearchNavigation(final org.apache.lucene.search.Query query, final List<FilteredNavigationRecordRequest> facetingRequest) {
         return genericFTS.fullTextSearchNavigation(query, facetingRequest);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public int fullTextSearchCount(final org.apache.lucene.search.Query query) {
         return genericFTS.fullTextSearchCount(query);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public IndexBuilder.FTIndexState getFullTextIndexState() {
         return indexBuilder.getFullTextIndexState();
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public void fullTextSearchReindex(final boolean async, final int batchSize) {
         indexBuilder.fullTextSearchReindex(async, batchSize);
     }
 
-    @Override
-    public void fullTextSearchReindex(final boolean async, final int batchSize, final IndexFilter<T> filter) {
-        indexBuilder.fullTextSearchReindex(async, batchSize, filter);
-    }
-
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public void fullTextSearchReindex(final PK primaryKey) {
         indexBuilder.fullTextSearchReindex(primaryKey);
     }
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public void fullTextSearchReindex(final PK primaryKey, final boolean purgeOnly) {
         indexBuilder.fullTextSearchReindex(primaryKey, purgeOnly);
     }
+
 }

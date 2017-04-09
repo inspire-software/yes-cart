@@ -22,6 +22,8 @@ import org.yes.cart.domain.entity.AttrValueBrand;
 import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.service.misc.LanguageService;
 
+import java.util.List;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -52,10 +54,10 @@ public class ShopImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
 
         final String val = resolveFileName(url);
 
-        final String code = attrValueShopDao.findSingleByNamedQuery("SHOP.CODE.BY.IMAGE.NAME", val);
+        final List<String> code = (List) attrValueShopDao.findQueryObjectByNamedQuery("SHOP.CODE.BY.IMAGE.NAME", val);
 
-        if (code != null) {
-            return code;
+        if (code != null && !code.isEmpty()) {
+            return code.get(0);
         }
 
         return null;

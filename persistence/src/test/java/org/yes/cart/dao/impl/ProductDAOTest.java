@@ -255,7 +255,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 final SearchQueryBuilder inStockQueryBuilder = new ProductShopInStockSearchQueryBuilder();
                 final Query queryInStock = inStockQueryBuilder.createStrictQuery(10L, null, 10L);
 
-                BooleanQuery skuInStockQuery = new BooleanQuery();
+                final BooleanQuery.Builder skuInStockQuery = new BooleanQuery.Builder();
                 skuInStockQuery.add(queryBySku, BooleanClause.Occur.MUST);
                 skuInStockQuery.add(queryInStock, BooleanClause.Occur.MUST);
 

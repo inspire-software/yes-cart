@@ -51,7 +51,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, "query", "SearchWord");
         assertNotNull(query);
-        assertEquals("(name:SearchWord~0.6^3.0 displayName:SearchWord~0.6^3.0 sku.code:SearchWord~0.8^10.0 sku.manufacturerCode:SearchWord~0.8^10.0 attribute.attrvalsearchprimary:SearchWord^15.0 attribute.attrvalsearchphrase:searchword~0.65^4.0)", query.toString());
+        assertEquals("((name:SearchWord~2)^3.0 (displayName:SearchWord~2)^3.0 (sku.code:SearchWord~2)^10.0 (sku.manufacturerCode:SearchWord~2)^10.0 (attribute.attrvalsearchprimary:SearchWord)^15.0 (attribute.attrvalsearchphrase:searchword~2)^4.0)", query.toString());
 
     }
 
@@ -60,7 +60,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, "query", "Search, Word");
         assertNotNull(query);
-        assertEquals("(name:Search, Word~0.6^3.0 displayName:Search, Word~0.6^3.0 sku.code:Search, Word~0.8^10.0 sku.manufacturerCode:Search, Word~0.8^10.0 attribute.attrvalsearchprimary:Search, Word^15.0 attribute.attrvalsearchphrase:search, word~0.65^4.0) (name:search~0.6^2.0 displayName:search~0.6^2.0 sku.code:search~0.8^10.0 sku.manufacturerCode:search~0.8^10.0 attribute.attrvalsearch:search~0.65^4.0) (name:word~0.6^2.0 displayName:word~0.6^2.0 sku.code:word~0.8^10.0 sku.manufacturerCode:word~0.8^10.0 attribute.attrvalsearch:word~0.65^4.0)", query.toString());
+        assertEquals("((name:Search, Word~2)^3.0 (displayName:Search, Word~2)^3.0 (sku.code:Search, Word~2)^10.0 (sku.manufacturerCode:Search, Word~2)^10.0 (attribute.attrvalsearchprimary:Search, Word)^15.0 (attribute.attrvalsearchphrase:search, word~2)^4.0) ((name:search~2)^2.0 (displayName:search~2)^2.0 (sku.code:search~2)^10.0 (sku.manufacturerCode:search~2)^10.0 (attribute.attrvalsearch:search~2)^4.0) ((name:word~2)^2.0 (displayName:word~2)^2.0 (sku.code:word~2)^10.0 (sku.manufacturerCode:word~2)^10.0 (attribute.attrvalsearch:word~2)^4.0)", query.toString());
 
     }
 
@@ -87,7 +87,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, "query", "SearchWord");
         assertNotNull(query);
-        assertEquals("(name:searchword~0.5^2.0 displayName:searchword~0.5^2.0 sku.code:searchword~0.7^10.0 sku.manufacturerCode:searchword~0.7^10.0 sku.code_stem:searchword~0.75 sku.manufacturerCode_stem:searchword~0.75 attribute.attrvalsearch:searchword^4.0)", query.toString());
+        assertEquals("((name:searchword~2)^2.0 (displayName:searchword~2)^2.0 (sku.code:searchword~2)^10.0 (sku.manufacturerCode:searchword~2)^10.0 (sku.code_stem:searchword~1)^1.0 (sku.manufacturerCode_stem:searchword~1)^1.0 (attribute.attrvalsearch:searchword)^4.0)", query.toString());
 
     }
 
@@ -96,7 +96,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, "query", "Search, Word");
         assertNotNull(query);
-        assertEquals("(name:search~0.5^2.0 displayName:search~0.5^2.0 sku.code:search~0.7^10.0 sku.manufacturerCode:search~0.7^10.0 sku.code_stem:search~0.75 sku.manufacturerCode_stem:search~0.75 attribute.attrvalsearch:search^4.0) (name:word~0.5^2.0 displayName:word~0.5^2.0 sku.code:word~0.7^10.0 sku.manufacturerCode:word~0.7^10.0 sku.code_stem:word~0.75 sku.manufacturerCode_stem:word~0.75 attribute.attrvalsearch:word^4.0)", query.toString());
+        assertEquals("((name:search~2)^2.0 (displayName:search~2)^2.0 (sku.code:search~2)^10.0 (sku.manufacturerCode:search~2)^10.0 (sku.code_stem:search~1)^1.0 (sku.manufacturerCode_stem:search~1)^1.0 (attribute.attrvalsearch:search)^4.0) ((name:word~2)^2.0 (displayName:word~2)^2.0 (sku.code:word~2)^10.0 (sku.manufacturerCode:word~2)^10.0 (sku.code_stem:word~1)^1.0 (sku.manufacturerCode_stem:word~1)^1.0 (attribute.attrvalsearch:word)^4.0)", query.toString());
 
     }
 

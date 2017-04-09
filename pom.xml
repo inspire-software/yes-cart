@@ -66,8 +66,7 @@
         <!-- Core frameworks globals versions -->
         <hibernate.core.version>4.2.0.Final</hibernate.core.version>
         <hibernate.search.version>4.2.0.Final</hibernate.search.version>
-        <lucene.version>3.6.2</lucene.version>
-        <!--<lucene.version>4.3.0</lucene.version>-->
+        <lucene.version>6.5.0</lucene.version>
         <cxf.version>2.5.2</cxf.version>
         <spring-security.version>3.1.4.RELEASE</spring-security.version>
         <spring.version>3.2.3.RELEASE</spring.version>
@@ -96,8 +95,8 @@
         <!--<blazeds.version>4.0.0.14931</blazeds.version>-->
         <!--<spring-flex.version>1.5.2.RELEASE</spring-flex.version>-->
 
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

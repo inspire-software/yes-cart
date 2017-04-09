@@ -30,7 +30,6 @@ import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.dao.impl.ResultsIteratorImpl;
 import org.yes.cart.search.dao.IndexBuilder;
-import org.yes.cart.search.entityindexer.IndexFilter;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -42,11 +41,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Time: 11:12:54
  */
 public class IndexBuilderHibernateImpl<T, PK extends Serializable>
-        implements IndexBuilder<T, PK, org.apache.lucene.search.Query> {
+        implements IndexBuilder<T, PK> {
 
     private static final Logger LOG = LoggerFactory.getLogger(IndexBuilderHibernateImpl.class);
 
-    private final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
+    private static final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
 
     private final Class<T> persistentClass;
     private final boolean persistentClassIndexble;
@@ -178,13 +177,6 @@ public class IndexBuilderHibernateImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     public void fullTextSearchReindex(final boolean async, final int batchSize) {
-        fullTextSearchReindex(async, batchSize, null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void fullTextSearchReindex(final boolean async, final int batchSize, final IndexFilter<T> indexFilter) {
 
         final boolean runAsync = async && this.indexExecutor != null;
 
@@ -193,9 +185,9 @@ public class IndexBuilderHibernateImpl<T, PK extends Serializable>
         if (asyncRunningState.compareAndSet(IDLE, RUNNING)) {  // If we are idle we can start
 
             if (runAsync) {
-                this.indexExecutor.execute(createIndexingRunnable(true, batchSize, indexFilter)); // async
+                this.indexExecutor.execute(createIndexingRunnable(true, batchSize)); // async
             } else {
-                createIndexingRunnable(false, batchSize, indexFilter).run(); // sync
+                createIndexingRunnable(false, batchSize).run(); // sync
             }
 
         } else if (!runAsync) {
@@ -210,7 +202,7 @@ public class IndexBuilderHibernateImpl<T, PK extends Serializable>
 
     }
 
-    private Runnable createIndexingRunnable(final boolean async, final int batchSize, final IndexFilter<T> filter) {
+    private Runnable createIndexingRunnable(final boolean async, final int batchSize) {
         return new Runnable() {
             @Override
             public void run() {
@@ -228,9 +220,6 @@ public class IndexBuilderHibernateImpl<T, PK extends Serializable>
                         FullTextSession fullTextSession = Search.getFullTextSession(async ? sessionFactory.openSession() : sessionFactory.getCurrentSession());
                         fullTextSession.setFlushMode(FlushMode.MANUAL);
                         fullTextSession.setCacheMode(CacheMode.IGNORE);
-                        if (filter == null) {  // only purge global full reindex because this clears all entries
-                            fullTextSession.purgeAll(getPersistentClass());
-                        }
                         ScrollableResults results = fullTextSession.createCriteria(persistentClass)
                                 .setFetchSize(batchSize)
                                 .scroll(ScrollMode.FORWARD_ONLY);
@@ -239,10 +228,6 @@ public class IndexBuilderHibernateImpl<T, PK extends Serializable>
                             while (results.next()) {
 
                                 final T entity = (T) HibernateHelper.unproxy(results.get(0));
-
-                                if (filter != null && filter.skipIndexing(entity)) {
-                                    continue; // skip this object
-                                }
 
                                 if (entityIndexingInterceptor != null) {
                                     if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onUpdate(entity)) {

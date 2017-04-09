@@ -36,32 +36,32 @@ public class DisplayNameBridge implements TwoWayFieldBridge/*FieldBridge*/ {
     /** {@inheritDoc} */
     public void set(final String name, final Object value, final Document document, final LuceneOptions luceneOptions) {
 
-        if (value instanceof String) {
-            if (ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_FIELD.equals(name)
-                    || ProductSearchQueryBuilder.PRODUCT_CATEGORYNAME_FIELD.equals(name)) {
-                final I18NModel model = new StringI18NModel((String) value);
-                for (String displayName : model.getAllValues().values()) {
-                    // add all names to index
-                    luceneOptions.addFieldToDocument(name, displayName, document);
-                    // stems
-                    document.add(new Field(
-                            name + "_stem",
-                            displayName,
-                            Field.Store.NO,
-                            Field.Index.ANALYZED,
-                            luceneOptions.getTermVector()
-                    ));
-                }
-            } else if (ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_ASIS_FIELD.equals(name)) {
-                luceneOptions.addFieldToDocument(name, (String) value, document);
-            } else if (ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_SORT_FIELD.equals(name)) {
-                final I18NModel model = new StringI18NModel((String) value);
-                for (Map.Entry<String, String> displayName : model.getAllValues().entrySet()) {
-                    // add all sort names to index
-                    luceneOptions.addFieldToDocument(name + displayName.getKey(), displayName.getValue(), document);
-                }
-            }
-        }
+//        if (value instanceof String) {
+//            if (ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_FIELD.equals(name)
+//                    || ProductSearchQueryBuilder.PRODUCT_CATEGORYNAME_FIELD.equals(name)) {
+//                final I18NModel model = new StringI18NModel((String) value);
+//                for (String displayName : model.getAllValues().values()) {
+//                    // add all names to index
+//                    luceneOptions.addFieldToDocument(name, displayName, document);
+//                    // stems
+//                    document.add(new Field(
+//                            name + "_stem",
+//                            displayName,
+//                            Field.Store.NO,
+//                            Field.Index.ANALYZED,
+//                            luceneOptions.getTermVector()
+//                    ));
+//                }
+//            } else if (ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_ASIS_FIELD.equals(name)) {
+//                luceneOptions.addFieldToDocument(name, (String) value, document);
+//            } else if (ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_SORT_FIELD.equals(name)) {
+//                final I18NModel model = new StringI18NModel((String) value);
+//                for (Map.Entry<String, String> displayName : model.getAllValues().entrySet()) {
+//                    // add all sort names to index
+//                    luceneOptions.addFieldToDocument(name + displayName.getKey(), displayName.getValue(), document);
+//                }
+//            }
+//        }
     }
 
     /** {@inheritDoc} */

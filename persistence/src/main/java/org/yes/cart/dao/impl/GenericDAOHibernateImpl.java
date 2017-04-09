@@ -157,7 +157,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public <T> T findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
+    public T findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
         List<T> rez = (List<T>) this.findByNamedQuery(namedQueryName, parameters);
         if (!rez.isEmpty()) {
             return rez.get(0);
@@ -169,7 +169,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public <T> T findSingleByNamedQueryCached(final String namedQueryName, final Object... parameters) {
+    public T findSingleByNamedQueryCached(final String namedQueryName, final Object... parameters) {
         List<T> rez = (List<T>) this.findByNamedQueryCached(namedQueryName, parameters);
         if (!rez.isEmpty()) {
             return rez.get(0);
