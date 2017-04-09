@@ -228,6 +228,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
         this.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_BY, null);
         this.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_DATE, null);
         this.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_REMARKS_ID, null);
+        this.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID, null);
         final Iterator<Map.Entry<String, String>> details = getDetailsInternal().entrySet().iterator();
         while (details.hasNext()) {
             final Map.Entry<String, String> detail = details.next();

@@ -103,6 +103,7 @@
                   <tr *ngFor="let delivery of customerorder.deliveries" class="{{delivery == selectedDelivery ? 'active' : ''}}">
                     <th colspan="5">
                       {{ 'CUSTOMERORDER_DELIVERY_' + delivery.deliveryGroup | translate }}: <a class="{{ isDeliveryHasNextOption(delivery) ? 'js-click' : 'disabled' }} " (click)="onSelectDeliveryRow(delivery)">{{ delivery.deliveryNum }}</a> ( {{ delivery.carrierSlaName }} {{delivery.refNo}} )
+                      <template [ngIf]="customerorder.requestedDeliveryDate"><br/><i class="fa fa-user"></i> {{ customerorder.requestedDeliveryDate | ycdate }}</template>
                       <template [ngIf]="delivery.deliveryGuaranteed"><br/><i class="fa fa-calendar-check-o"></i> {{ delivery.deliveryGuaranteed | ycdate }}</template>
                       <template [ngIf]="delivery.deliveryEstimatedMin"><br/><i class="fa fa-calendar"></i> {{ delivery.deliveryEstimatedMin | ycdate }}</template><template [ngIf]="delivery.deliveryEstimatedMax"> - {{ delivery.deliveryEstimatedMax | ycdate }}</template>
                       <template [ngIf]="delivery.deliveryConfirmed"><br/><i class="fa fa-check-square-o"></i> {{ delivery.deliveryConfirmed | ycdate }}</template>

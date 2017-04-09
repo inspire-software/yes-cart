@@ -338,6 +338,19 @@ public interface CustomerOrderDTO extends Identifiable {
      */
     void setB2bRemarks(String b2bRemarks);
 
+    /**
+     * Requested delivery date by customer.
+     *
+     * @return requested delivery date
+     */
+    Date getRequestedDeliveryDate();
+
+    /**
+     * Requested delivery date by customer
+     *
+     * @param requestedDeliveryDate requested delivery date
+     */
+    void setRequestedDeliveryDate(Date requestedDeliveryDate);
 
     /**
      * Is order will be delivered in several shipments.

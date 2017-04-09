@@ -511,6 +511,19 @@ public interface CustomerOrder extends Auditable {
      */
     void setB2bRemarks(String b2bRemarks);
 
+    /**
+     * Requested delivery date by customer.
+     *
+     * @return requested delivery date
+     */
+    Date getRequestedDeliveryDate();
+
+    /**
+     * Requested delivery date by customer
+     *
+     * @param requestedDeliveryDate requested delivery date
+     */
+    void setRequestedDeliveryDate(Date requestedDeliveryDate);
 
     /**
      * Get Customer.

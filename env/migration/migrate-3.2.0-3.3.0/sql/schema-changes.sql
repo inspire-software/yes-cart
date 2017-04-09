@@ -705,3 +705,10 @@ create index SKU_SCCODE on TSKU (SUPPLIER_CATALOG_CODE);
 
 alter table TCUSTOMERORDER add column STORED_ATTRIBUTES longtext;
 -- alter table TCUSTOMERORDER add column STORED_ATTRIBUTES varchar(4000);
+
+--
+-- YC-781 Allow customer to specify requested delivery date
+--
+
+alter table TCUSTOMERORDER add column REQUESTED_DELIVERY_DATE datetime;
+-- alter table TCUSTOMERORDER add column REQUESTED_DELIVERY_DATE timestamp;

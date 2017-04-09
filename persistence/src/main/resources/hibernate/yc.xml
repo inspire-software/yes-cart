@@ -2066,7 +2066,7 @@
             </column>
         </property>
 
-
+        <property name="requestedDeliveryDate" column="REQUESTED_DELIVERY_DATE" type="timestamp"/>
         <property name="orderTimestamp" column="ORDER_TIMESTAMP" type="timestamp" not-null="true"/>
         <property name="orderIp" column="ORDER_IP" type="string" length="45"/>
 

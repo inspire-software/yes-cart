@@ -335,6 +335,7 @@
         BILLING_ADDRESS varchar(255),
         SHIPPING_ADDRESS varchar(255),
         MULTIPLE_SHIPMENT smallint default 0,
+        REQUESTED_DELIVERY_DATE timestamp,
         ORDER_TIMESTAMP timestamp not null,
         ORDER_IP varchar(45),
         STORED_ATTRIBUTES varchar(4000),

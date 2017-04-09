@@ -327,6 +327,7 @@
         BILLING_ADDRESS varchar(255) comment 'Address composed for billing',
         SHIPPING_ADDRESS varchar(255) comment 'Shipping address',
         MULTIPLE_SHIPMENT bit default 0 comment 'Wait for all skus in case of not all available.',
+        REQUESTED_DELIVERY_DATE datetime,
         ORDER_TIMESTAMP datetime not null,
         ORDER_IP varchar(45),
         STORED_ATTRIBUTES longtext,
