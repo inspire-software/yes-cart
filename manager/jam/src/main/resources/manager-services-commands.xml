@@ -87,6 +87,7 @@
 
     <bean id="setCarrierSlaCmd" class="org.yes.cart.shoppingcart.impl.SetCarrierSlaCartCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
+        <constructor-arg index="1" ref="deliveryTimeEstimationVisitor"/>
         <property name="priority" value="41"/>
     </bean>
 

@@ -1024,6 +1024,7 @@
 
     <bean id="deliveryTimeEstimationVisitor" class="org.yes.cart.shoppingcart.impl.DeliveryTimeEstimationVisitorImpl">
         <constructor-arg index="0" ref="warehouseService"/>
+        <constructor-arg index="1" ref="carrierSlaService"/>
     </bean>
 
     <bean id="taxProvider" class="org.yes.cart.shoppingcart.impl.TaxProviderImpl">

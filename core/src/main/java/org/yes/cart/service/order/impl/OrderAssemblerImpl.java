@@ -309,6 +309,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
         customerOrder.setOrderMessage(shoppingCart.getOrderMessage());
         customerOrder.setB2bRemarks(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_REMARKS_ID));
+
         final long requestedDate = NumberUtils.toLong(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID), 0);
         if (requestedDate > System.currentTimeMillis()) {
             customerOrder.setRequestedDeliveryDate(new Date(requestedDate));

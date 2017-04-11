@@ -18,6 +18,7 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.ProductPriceModelImpl;
@@ -151,6 +152,14 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                 // Check if this SLA is available for given supplier (empty supplier could be for ALWAYS+Digital, so need to allow all SLA for those TODO: revise for YC-668)
                 if (StringUtils.isNotBlank(supplier) && !carrierSla.getSupportedFulfilmentCentresAsList().contains(supplier)) {
                     slaIt.remove();
+                    continue;
+                }
+
+                // Exclusions based on customer type
+                final String customerType = shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_TYPE);
+                if (StringUtils.isNotBlank(customerType) && carrierSla.getExcludeCustomerTypesAsList().contains(customerType)) {
+                    slaIt.remove();
+                    continue;
                 }
 
                 // We use the same logic to determine regional availability for for shipping. All CarrierSla must have
@@ -158,8 +167,9 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                 // unavailable for this country/region.
                 // For R(Free) and (E)External just use price 1.00. The actual delivery cost are calculated by specific
                 // DeliveryCostCalculationStrategy, so this is just availability in region marker.
-                else if (!isSlaAvailable(shoppingCart, supplier, carrierSla.getCarrierslaId())) {
+                if (!isSlaAvailable(shoppingCart, supplier, carrierSla.getCarrierslaId())) {
                     slaIt.remove(); // No price defined, so must not be available for given cart state
+                    continue;
                 }
             }
             if (carrier.getCarrierSla().isEmpty()) {

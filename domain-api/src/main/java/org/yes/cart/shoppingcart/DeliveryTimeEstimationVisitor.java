@@ -40,4 +40,14 @@ public interface DeliveryTimeEstimationVisitor {
      */
     void visit(CustomerOrderDelivery delivery);
 
+    /**
+     * Visit shopping cart and evaluate delivery time options.
+     *
+     * Populates {@link OrderInfo#getDetails()} with delivery time information for given
+     * carrier sla selection.
+     *
+     * @param shoppingCart shopping cart
+     */
+    void visit(MutableShoppingCart shoppingCart);
+
 }

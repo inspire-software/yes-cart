@@ -158,6 +158,11 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                             deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryConfirmed",
                                     Collections.<String, Object>singletonMap("date", df.format(delivery.getDeliveryConfirmed())));
                             showDeliveryTime = true;
+                        } else if (delivery.getRequestedDeliveryDate() != null) {
+                            final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
+                            deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryRequested",
+                                    Collections.<String, Object>singletonMap("date", df.format(delivery.getRequestedDeliveryDate())));
+                            showDeliveryTime = true;
                         } else if (delivery.getDeliveryGuaranteed() != null) {
                             final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
                             deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryGuaranteed",

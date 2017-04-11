@@ -58,6 +58,8 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     private Date deliveryGuaranteed;
     private Date deliveryConfirmed;
 
+    private Date requestedDeliveryDate;
+
     private String eligibleForExport;
     private boolean blockExport;
     private Date lastExportDate;
@@ -213,6 +215,14 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
 
     public void setDeliveryConfirmed(final Date deliveryConfirmed) {
         this.deliveryConfirmed = deliveryConfirmed;
+    }
+
+    public Date getRequestedDeliveryDate() {
+        return requestedDeliveryDate;
+    }
+
+    public void setRequestedDeliveryDate(final Date requestedDeliveryDate) {
+        this.requestedDeliveryDate = requestedDeliveryDate;
     }
 
     public String getEligibleForExport() {

@@ -214,6 +214,34 @@ public interface CarrierSlaDTO extends Identifiable, Codable {
     void setGuaranteed(boolean guaranteed);
 
     /**
+     * Flag to set named date delivery (customer can pick dates).
+     *
+     * @return true if customer can choose date
+     */
+    boolean isNamedDay();
+
+    /**
+     * Flag to set named date delivery (customer can pick dates).
+     *
+     * @param namedDay named day
+     */
+    void setNamedDay(boolean namedDay);
+
+    /**
+     * Customer types exclusions (CSV).
+     *
+     * @return exclude customer types
+     */
+    String getExcludeCustomerTypes();
+
+    /**
+     * Customer types exclusions.
+     *
+     * @param excludeCustomerTypes exclude customer types CSV
+     */
+    void setExcludeCustomerTypes(String excludeCustomerTypes);
+
+    /**
      * Is billing address not required for this order.
      *
      * @return true is  address not required for this order.

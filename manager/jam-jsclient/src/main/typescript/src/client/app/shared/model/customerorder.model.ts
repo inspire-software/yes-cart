@@ -155,6 +155,8 @@ export interface CustomerOrderDeliveryInfoVO {
   deliveryGuaranteed : Date;
   deliveryConfirmed : Date;
 
+  requestedDeliveryDate : Date;
+
   eligibleForExport : string;
   blockExport : boolean;
   lastExportDate : Date;

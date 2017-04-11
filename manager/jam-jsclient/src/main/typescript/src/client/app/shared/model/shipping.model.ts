@@ -66,6 +66,8 @@ export interface CarrierSlaVO {
   excludeWeekDays : string[];
   excludeDates : Pair<Date, Date>[];
   guaranteed : boolean;
+  namedDay : boolean;
+  excludeCustomerTypes : string;
 
   slaType : string;
   script : string;

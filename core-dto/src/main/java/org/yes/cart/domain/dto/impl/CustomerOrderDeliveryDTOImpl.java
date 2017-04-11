@@ -139,6 +139,8 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     @DtoField(value = "lastExportDeliveryStatus", readOnly = true)
     private String lastExportDeliveryStatus;
 
+    @DtoField(value = "requestedDeliveryDate", readOnly = true)
+    private Date requestedDeliveryDate;
 
     /** {@inheritDoc} */
     public String getShippingAddress() {
@@ -458,6 +460,16 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     /** {@inheritDoc} */
     public void setDeliveryConfirmed(final Date deliveryConfirmed) {
         this.deliveryConfirmed = deliveryConfirmed;
+    }
+
+    /** {@inheritDoc} */
+    public Date getRequestedDeliveryDate() {
+        return requestedDeliveryDate;
+    }
+
+    /** {@inheritDoc} */
+    public void setRequestedDeliveryDate(final Date requestedDeliveryDate) {
+        this.requestedDeliveryDate = requestedDeliveryDate;
     }
 
     /** {@inheritDoc} */

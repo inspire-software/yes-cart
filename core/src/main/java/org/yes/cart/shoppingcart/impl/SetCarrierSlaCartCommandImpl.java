@@ -21,6 +21,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Address;
+import org.yes.cart.shoppingcart.DeliveryTimeEstimationVisitor;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
@@ -39,13 +40,18 @@ public class SetCarrierSlaCartCommandImpl extends AbstractCartCommandImpl implem
 
     private static final Logger LOG = LoggerFactory.getLogger(SetCarrierSlaCartCommandImpl.class);
 
+    private final DeliveryTimeEstimationVisitor deliveryTimeEstimationVisitor;
+
     /**
      * Construct command.
      *
      * @param registry shopping cart command registry
+     * @param deliveryTimeEstimationVisitor visitor for estimating available delivery time
      */
-    public SetCarrierSlaCartCommandImpl(final ShoppingCartCommandRegistry registry) {
+    public SetCarrierSlaCartCommandImpl(final ShoppingCartCommandRegistry registry,
+                                        final DeliveryTimeEstimationVisitor deliveryTimeEstimationVisitor) {
         super(registry);
+        this.deliveryTimeEstimationVisitor = deliveryTimeEstimationVisitor;
     }
 
     /**
@@ -105,6 +111,10 @@ public class SetCarrierSlaCartCommandImpl extends AbstractCartCommandImpl implem
                         shoppingCart.getShoppingContext().setCountryCode(null);
                         shoppingCart.getShoppingContext().setStateCode(null);
                     }
+
+                    // if this is named delivery determine available dates
+                    this.deliveryTimeEstimationVisitor.visit(shoppingCart);
+
                     recalculate(shoppingCart);
                     markDirty(shoppingCart);
                 }

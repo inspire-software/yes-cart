@@ -700,7 +700,7 @@ public interface AttributeNamesKeys {
         String ORDER_INFO_B2B_ORDER_REMARKS_ID = "b2bRemarks";
         String ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID = "b2bRemarksLine";
 
-        String ORDER_INFO_REQUESTED_DELIVERY_DATE_ID = "requestedDeliveryDate";
+        String ORDER_INFO_REQUESTED_DELIVERY_DATE_ID = "deliveryDate";
 
         String ORDER_INFO_B2B_APPROVED_BY = "b2bApprovedBy";
         String ORDER_INFO_B2B_APPROVED_DATE = "b2bApprovedDate";

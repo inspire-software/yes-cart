@@ -81,6 +81,9 @@ public class DeliveryRO implements Serializable {
     @DtoField(value = "deliveryGuaranteed", readOnly = true)
     private Date deliveryGuaranteed;
 
+    @DtoField(value = "requestedDeliveryDate", readOnly = true)
+    private Date requestedDeliveryDate;
+
     private CartTotalRO total;
 
     @DtoCollection(
@@ -229,6 +232,15 @@ public class DeliveryRO implements Serializable {
 
     public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
         this.deliveryGuaranteed = deliveryGuaranteed;
+    }
+
+    @XmlAttribute(name = "requested-delivery-date")
+    public Date getRequestedDeliveryDate() {
+        return requestedDeliveryDate;
+    }
+
+    public void setRequestedDeliveryDate(final Date requestedDeliveryDate) {
+        this.requestedDeliveryDate = requestedDeliveryDate;
     }
 
     public CartTotalRO getTotal() {

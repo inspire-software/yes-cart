@@ -61,6 +61,12 @@ public class VoCarrierSla {
     @DtoField(value = "guaranteed")
     private boolean guaranteed;
 
+    @DtoField(value = "namedDay")
+    private boolean namedDay;
+
+    @DtoField(value = "excludeCustomerTypes")
+    private String excludeCustomerTypes;
+
     @DtoField(value = "slaType")
     private String slaType;
 
@@ -158,6 +164,22 @@ public class VoCarrierSla {
 
     public void setGuaranteed(final boolean guaranteed) {
         this.guaranteed = guaranteed;
+    }
+
+    public boolean isNamedDay() {
+        return namedDay;
+    }
+
+    public void setNamedDay(final boolean namedDay) {
+        this.namedDay = namedDay;
+    }
+
+    public String getExcludeCustomerTypes() {
+        return excludeCustomerTypes;
+    }
+
+    public void setExcludeCustomerTypes(final String excludeCustomerTypes) {
+        this.excludeCustomerTypes = excludeCustomerTypes;
     }
 
     public String getSlaType() {

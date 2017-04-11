@@ -23,7 +23,8 @@
                 <label class="radio"><input type="radio" wicket:id="shippingLabel">
                     <span wicket:id="shippingName">[line 1]</span>
                 </label>
-                <span wicket:id="shippingInfo"></span>
+                <wicket:container wicket:id="shippingInfo">[shopping info]</wicket:container>
+                <wicket:container wicket:id="namedDayEditor">[named date picker]</wicket:container>
             </div>
         </div>
 
@@ -38,6 +39,28 @@
             </div>
         </div>
     </form>
+
+    <wicket:fragment wicket:id="namedDayFragmentEmpty">
+
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="namedDayFragment">
+        <div class="row">
+            <div class="col-xs-offset-1 col-xs-10">
+                <div class="form-group">
+                    <div class="input-group date">
+                        <input type="text" wicket:id="namedDaySelection" class="form-control" autocomplete="off" readonly/>
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <wicket:container wicket:id="namedDaySelectionConfig">[date picker config]</wicket:container>
+    </wicket:fragment>
+
 </wicket:panel>
 </body>
 </html>

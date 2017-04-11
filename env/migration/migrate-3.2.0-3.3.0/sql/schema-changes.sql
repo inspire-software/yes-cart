@@ -712,3 +712,8 @@ alter table TCUSTOMERORDER add column STORED_ATTRIBUTES longtext;
 
 alter table TCUSTOMERORDER add column REQUESTED_DELIVERY_DATE datetime;
 -- alter table TCUSTOMERORDER add column REQUESTED_DELIVERY_DATE timestamp;
+alter table TCUSTOMERORDERDELIVERY add column REQUESTED_DELIVERY_DATE datetime;
+-- alter table TCUSTOMERORDERDELIVERY add column REQUESTED_DELIVERY_DATE timestamp;
+alter table TCARRIERSLA add column EXCLUDED_CT varchar(255);
+alter table TCARRIERSLA add column NAMEDDAY bit not null default 0;
+-- alter table TCARRIERSLA add column NAMEDDAY smallint not null DEFAULT 0;
