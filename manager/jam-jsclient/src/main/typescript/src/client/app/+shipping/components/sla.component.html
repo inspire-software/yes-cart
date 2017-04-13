@@ -41,6 +41,10 @@
                   </div>
                 </div>
                 <div>
+                  <input formControlName="namedDay" name="namedDay" type="checkbox" [(ngModel)]="sla.namedDay">
+                  <label>{{ 'CARRIERSLA_NAMEDDAY' | translate }}</label>
+                </div>
+                <div>
                   <input formControlName="guaranteed" name="guaranteed" type="checkbox" [(ngModel)]="sla.guaranteed">
                   <label>{{ 'CARRIERSLA_GUARANTEED' | translate }}</label>
                 </div>
@@ -57,10 +61,6 @@
                   <div [hidden]="slaForm.controls['maxDays'].valid || slaForm.controls['maxDays'].pristine" class="alert alert-danger">
                     {{ 'NUM_REQUIRED' | translate }}
                   </div>
-                </div>
-                <div>
-                  <input formControlName="namedDay" name="namedDay" type="checkbox" [(ngModel)]="sla.namedDay">
-                  <label>{{ 'CARRIERSLA_NAMEDDAY' | translate }}</label>
                 </div>
               </fieldset>
             </div>

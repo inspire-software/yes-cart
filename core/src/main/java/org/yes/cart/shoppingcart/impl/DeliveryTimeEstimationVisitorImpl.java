@@ -28,7 +28,6 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.WarehouseService;
-import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.DeliveryTimeEstimationVisitor;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
@@ -43,6 +42,8 @@ import java.util.*;
 public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimationVisitor {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeliveryTimeEstimationVisitorImpl.class);
+
+    private static final int MAX_NAMED_DAY_IF_NOT_SET = 60; // +60days upfront for customer to choose by default
 
     private final WarehouseService warehouseService;
     private final CarrierSlaService carrierSlaService;
@@ -132,12 +133,17 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
         }
 
         final String suffix = sla.getCarrierslaId() + (ff != null ? ff.getCode() : "");
+        final String requestedDateKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + suffix;
         final String minKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + "Min" + suffix;
         final String maxKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + "Max" + suffix;
         final String excludedDatesKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + "DExcl" + suffix;
         final String excludedWeekdaysKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + "WExcl" + suffix;
 
+        // Get existing selection, so that we can check it against valid dates later
+        long requestedDate = NumberUtils.toLong(shoppingCart.getOrderInfo().getDetailByKey(requestedDateKey));
+
         // Ensure we clean up any old data
+        shoppingCart.getOrderInfo().putDetail(requestedDateKey, null);
         shoppingCart.getOrderInfo().putDetail(minKey, null);
         shoppingCart.getOrderInfo().putDetail(maxKey, null);
         shoppingCart.getOrderInfo().putDetail(excludedDatesKey, null);
@@ -155,7 +161,6 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
         minDeliveryTime.set(Calendar.MILLISECOND, 0);
 
         Calendar maxDeliveryTime = Calendar.getInstance();
-        maxDeliveryTime.setTime(minDeliveryTime.getTime());
 
         if (ff != null && ff.getDefaultBackorderStockLeadTime() > 0) {
             for (final CartItem item : shoppingCart.getCartItemList()) {
@@ -170,45 +175,61 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
         final Map<Date, Date> slaExcludedDates = getCarrierSlaExcludedDates(sla);
 
         final int minDays = sla.getMinDays() != null ? sla.getMinDays() : 0;
-        final int maxDays = sla.getMaxDays() != null ? sla.getMaxDays() : 0;
+        final int maxDays = sla.getMaxDays() != null ? sla.getMaxDays() : MAX_NAMED_DAY_IF_NOT_SET;
 
         if (minDays > 0) {
             minDeliveryTime.add(Calendar.DAY_OF_YEAR, minDays);
-            skipWeekdayExclusions(sla, minDeliveryTime);
-            skipDatesExclusions(sla, minDeliveryTime, slaExcludedDates);
         }
+
+        // Set hard lower limit, before skipping exclusions
+        maxDeliveryTime.setTime(minDeliveryTime.getTime());
+
+        skipWeekdayExclusions(sla, minDeliveryTime);
+        skipDatesExclusions(sla, minDeliveryTime, slaExcludedDates);
 
         Date min = minDeliveryTime.getTime();
 
-        if (maxDays > minDays) {
-            maxDeliveryTime.add(Calendar.DAY_OF_YEAR, maxDays - minDays + 60);  // +60days upfront for customer to choose
+        // Ensure we are not below lower limit before we check exclusions
+        if (requestedDate < min.getTime()) {
+            requestedDate = min.getTime();
         }
-        skipWeekdayExclusions(sla, maxDeliveryTime);
+
+        if (maxDays > minDays) {
+            maxDeliveryTime.add(Calendar.DAY_OF_YEAR, maxDays - minDays);
+        } else {
+            maxDeliveryTime.add(Calendar.DAY_OF_YEAR, 1); // Misconfiguration - just show one day
+        }
+        // We want a hard limit on max, so we do not skip beyond maxDays
+        // skipWeekdayExclusions(sla, maxDeliveryTime);
 
         Date max = maxDeliveryTime.getTime();
 
-        // Save possible ranges min, max and excluded as long values
-        shoppingCart.getOrderInfo().putDetail(minKey, String.valueOf(min.getTime()));
-        shoppingCart.getOrderInfo().putDetail(maxKey, String.valueOf(max.getTime()));
-
         final Map<Date, Date> exclusions = sla.getExcludeDatesAsMap();
-        if (!exclusions.isEmpty()) {
+        if (!exclusions.isEmpty() || !sla.getExcludeWeekDaysAsList().isEmpty()) {
 
             final StringBuilder exclusionsInMinMax = new StringBuilder();
 
             minDeliveryTime.setTime(min);
+            Date lastValidDate = min;
+
             while (minDeliveryTime.getTime().before(max)) {
 
                 minDeliveryTime.add(Calendar.DAY_OF_YEAR, 1);
 
                 Date date = minDeliveryTime.getTime();
 
+                skipWeekdayExclusions(sla, minDeliveryTime);
                 skipDatesExclusions(sla, minDeliveryTime, exclusions);
 
                 if (date.getTime() != minDeliveryTime.getTime().getTime()) {
                     // we skipped
                     final Calendar excluded = Calendar.getInstance();
                     excluded.setTime(date);
+
+                    // Ensure requested date is not in exclusion range and if it is set the first day after the exclusion
+                    if (date.getTime() <= requestedDate && requestedDate < minDeliveryTime.getTime().getTime()) {
+                        requestedDate = minDeliveryTime.getTime().getTime();
+                    }
 
                     do {
 
@@ -219,19 +240,42 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
                         excluded.add(Calendar.DAY_OF_YEAR, 1);
 
                     } while (excluded.getTime().before(minDeliveryTime.getTime()));
+                } else {
+                    // This date is not excluded
+                    lastValidDate = date;
                 }
 
             }
 
+            // Save excluded dates as long values
             if (exclusionsInMinMax.length() > 0) {
                 shoppingCart.getOrderInfo().putDetail(excludedDatesKey, exclusionsInMinMax.toString());
             }
 
+            // Save excluded week days as long values
             if (StringUtils.isNotBlank(sla.getExcludeWeekDays())) {
                 shoppingCart.getOrderInfo().putDetail(excludedWeekdaysKey, sla.getExcludeWeekDays());
             }
+
+            // Tailing exclusions
+            if (lastValidDate.before(max)) {
+                max = lastValidDate;
+            }
+            if (requestedDate > lastValidDate.getTime()) {
+                requestedDate = lastValidDate.getTime();
+            }
+
         }
 
+        // Ensure we are not above upper limit after we checked exclusions
+        if (requestedDate > max.getTime()) {
+            requestedDate = max.getTime();
+        }
+
+        // Save possible min - max range and preselect requested date, since this is named delivery
+        shoppingCart.getOrderInfo().putDetail(requestedDateKey, String.valueOf(requestedDate));
+        shoppingCart.getOrderInfo().putDetail(minKey, String.valueOf(min.getTime()));
+        shoppingCart.getOrderInfo().putDetail(maxKey, String.valueOf(max.getTime()));
 
     }
 
@@ -249,33 +293,47 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
             final CarrierSla sla = customerOrderDelivery.getCarrierSla();
 
             Calendar minDeliveryTime = now();
-            if (sla.isNamedDay() && customerOrderDelivery.getRequestedDeliveryDate() != null && customerOrderDelivery.getRequestedDeliveryDate().after(minDeliveryTime.getTime())) {
-                minDeliveryTime.setTime(customerOrderDelivery.getRequestedDeliveryDate()); // Set named day if we have a selection
-            }
 
             minDeliveryTime.set(Calendar.HOUR_OF_DAY, 0);
             minDeliveryTime.set(Calendar.MINUTE, 0);
             minDeliveryTime.set(Calendar.SECOND, 0);
             minDeliveryTime.set(Calendar.MILLISECOND, 0);
 
+            // Honour warehouse lead inventory
             skipInventoryLeadTime(customerOrderDelivery, warehouseByCode, minDeliveryTime);
+
+            boolean namedDay = sla.isNamedDay();
 
             final Map<Date, Date> slaExcludedDates = getCarrierSlaExcludedDates(sla);
 
             final int minDays = sla.getMinDays() != null ? sla.getMinDays() : 0;
-            final int maxDays = sla.getMaxDays() != null ? sla.getMaxDays() : 0;
+            final int maxDays = sla.getMaxDays() != null ? sla.getMaxDays() : (namedDay ? MAX_NAMED_DAY_IF_NOT_SET : 0);
 
+            // Ensure delivery lead time
             if (minDays > 0) {
                 minDeliveryTime.add(Calendar.DAY_OF_YEAR, minDays);
-                skipWeekdayExclusions(sla, minDeliveryTime);
-                skipDatesExclusions(sla, minDeliveryTime, slaExcludedDates);
             }
+
+            // For named days ensure that requested date is not below lower limit
+            if (namedDay && customerOrderDelivery.getRequestedDeliveryDate() != null && !customerOrderDelivery.getRequestedDeliveryDate().before(minDeliveryTime.getTime())) {
+                minDeliveryTime.setTime(customerOrderDelivery.getRequestedDeliveryDate()); // Set named day if we have a selection
+                minDeliveryTime.set(Calendar.HOUR_OF_DAY, 0);
+                minDeliveryTime.set(Calendar.MINUTE, 0);
+                minDeliveryTime.set(Calendar.SECOND, 0);
+                minDeliveryTime.set(Calendar.MILLISECOND, 0);
+            }
+
+            // Process exclusions to ensure that we do not set excluded day (For named day this should not make any changes
+            // since we already checked it, this is just to ensure we do not have manual tampering with data)
+            skipWeekdayExclusions(sla, minDeliveryTime);
+            skipDatesExclusions(sla, minDeliveryTime, slaExcludedDates);
 
             Date guaranteed = null;
             Date min = null;
             Date max = null;
 
-            if (sla.isGuaranteed()) {
+            // Named day assumes that it is guaranteed
+            if (sla.isGuaranteed() || namedDay) {
                 if (CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(customerOrderDelivery.getDeliveryGroup())) {
                     // guarantee is only for in stock items
                     guaranteed = minDeliveryTime.getTime();
@@ -339,14 +397,15 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
 
     protected void skipWeekdayExclusions(final CarrierSla sla, final Calendar date) {
 
-        if (StringUtils.isNotBlank(sla.getExcludeWeekDays())) {
-            final List<String> excluded = new ArrayList<String>(Arrays.asList(StringUtils.split(sla.getExcludeWeekDays(), ',')));
+        final List<Integer> skip = sla.getExcludeWeekDaysAsList();
+        if (!skip.isEmpty()) {
+            final List<Integer> excluded = new ArrayList<Integer>(skip);
             while (!excluded.isEmpty()) {
                 final int dayOfWeek = date.get(Calendar.DAY_OF_WEEK);
-                final Iterator<String> itExluded = excluded.iterator();
+                final Iterator<Integer> itExluded = excluded.iterator();
                 boolean removed = false;
                 while (itExluded.hasNext()) {
-                    if (NumberUtils.toInt(itExluded.next()) == dayOfWeek) {
+                    if (Integer.valueOf(dayOfWeek).equals(itExluded.next())) {
                         date.add(Calendar.DAY_OF_YEAR, 1); // This date is excluded
                         itExluded.remove();
                         removed = true;

@@ -30,10 +30,7 @@ import org.yes.cart.shoppingcart.MutableOrderInfo;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -186,7 +183,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         calendar.setTime(df.parse("2017-02-07"));
 
         context.checking(new Expectations() {{
-            allowing(sla).getExcludeWeekDays(); will(returnValue(""));
+            allowing(sla).getExcludeWeekDaysAsList(); will(returnValue(Collections.emptyList()));
         }});
 
         new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
@@ -205,7 +202,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final Calendar calendar = Calendar.getInstance();
 
         context.checking(new Expectations() {{
-            allowing(sla).getExcludeWeekDays(); will(returnValue("1,7"));
+            allowing(sla).getExcludeWeekDaysAsList(); will(returnValue(Arrays.asList(1,7)));
         }});
 
         calendar.setTime(df.parse("2017-02-06"));
@@ -792,7 +789,9 @@ public class DeliveryTimeEstimationVisitorImplTest {
         context.checking(new Expectations() {{
             allowing(carrierSlaService).findById(123L); will(returnValue(sla));
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue(null));
             // expectations:
+            one(orderInfo).putDetail("deliveryDate0", null);
             one(orderInfo).putDetail("deliveryDateMin0", null);
             one(orderInfo).putDetail("deliveryDateMax0", null);
             one(orderInfo).putDetail("deliveryDateDExcl0", null);
@@ -830,7 +829,9 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(carrierSlaService).findById(123L); will(returnValue(sla));
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
             allowing(warehouse).getCode(); will(returnValue("ABC"));
+            allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
             // expectations:
+            one(orderInfo).putDetail("deliveryDate0ABC", null);
             one(orderInfo).putDetail("deliveryDateMin0ABC", null);
             one(orderInfo).putDetail("deliveryDateMax0ABC", null);
             one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
@@ -844,7 +845,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
     }
 
     @Test
-    public void testDetermineDeliveryAvailableTimeRangeNamedNoFfExclusions1() throws Exception {
+    public void testDetermineDeliveryAvailableTimeRangeNamedNoFfExclusionsSkipFromStart() throws Exception {
 
         final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
 
@@ -857,7 +858,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setNamedDay(true);
         sla.setGuaranteed(true);
         sla.setMinDays(1);
-        sla.setMaxDays(5);
+        sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(df.parse("2017-02-07"));
@@ -872,29 +873,29 @@ public class DeliveryTimeEstimationVisitorImplTest {
         context.checking(new Expectations() {{
             allowing(carrierSlaService).findById(123L); will(returnValue(sla));
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue(null));
             // expectations:
+            one(orderInfo).putDetail("deliveryDate0", null);
             one(orderInfo).putDetail("deliveryDateMin0", null);
             one(orderInfo).putDetail("deliveryDateMax0", null);
             one(orderInfo).putDetail("deliveryDateDExcl0", null);
             one(orderInfo).putDetail("deliveryDateWExcl0", null);
-            one(orderInfo).putDetail("deliveryDateMin0", "1487376000000");
-            one(orderInfo).putDetail("deliveryDateMax0", "1491951600000");
+            one(orderInfo).putDetail("deliveryDate0", "1487376000000"); // Sat 18th Feb (this is min)
+            one(orderInfo).putDetail("deliveryDateMin0", "1487376000000"); // Sat 18th Feb (since we skip)
+            one(orderInfo).putDetail("deliveryDateMax0", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            one(orderInfo).putDetail("deliveryDateDExcl0", "1487462400000"); // Sun 19th Feb Thu+Sun between 18th and 22nd
             one(orderInfo).putDetail("deliveryDateWExcl0", "1,5");
         }});
 
 
         visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, null);
 
-        // Verify the dates min/max
-        assertEquals(df.parse("2017-02-18"), new Date(1487376000000L));
-        assertEquals(df.parse("2017-04-12"), new Date(1491951600000L));
-
         this.context.assertIsSatisfied();
 
     }
 
     @Test
-    public void testDetermineDeliveryAvailableTimeRangeNamedNoFfExclusions2() throws Exception {
+    public void testDetermineDeliveryAvailableTimeRangeNamedNoFfExclusionsSkipMiddle() throws Exception {
 
         final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
 
@@ -907,7 +908,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setNamedDay(true);
         sla.setGuaranteed(true);
         sla.setMinDays(1);
-        sla.setMaxDays(5);
+        sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(df.parse("2017-02-07"));
@@ -922,31 +923,74 @@ public class DeliveryTimeEstimationVisitorImplTest {
         context.checking(new Expectations() {{
             allowing(carrierSlaService).findById(123L); will(returnValue(sla));
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue(null));
             // expectations:
+            one(orderInfo).putDetail("deliveryDate0", null);
             one(orderInfo).putDetail("deliveryDateMin0", null);
             one(orderInfo).putDetail("deliveryDateMax0", null);
             one(orderInfo).putDetail("deliveryDateDExcl0", null);
             one(orderInfo).putDetail("deliveryDateWExcl0", null);
-            one(orderInfo).putDetail("deliveryDateMin0", "1486598400000");
-            one(orderInfo).putDetail("deliveryDateMax0", "1491951600000");
-            one(orderInfo).putDetail("deliveryDateDExcl0", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000");
+            one(orderInfo).putDetail("deliveryDate0", "1486598400000");  // Thu 9th Feb  (this is min)
+            one(orderInfo).putDetail("deliveryDateMin0", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fri 17th Feb  Sun 19th Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000");
             one(orderInfo).putDetail("deliveryDateWExcl0", "1");
         }});
 
 
         visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, null);
 
-        // Verify the dates min/max
-        assertEquals(df.parse("2017-02-09"), new Date(1486598400000L));
-        assertEquals(df.parse("2017-04-12"), new Date(1491951600000L));
-        // Verify exclusions
-        assertEquals(df.parse("2017-02-10"), new Date(1486684800000L));
-        assertEquals(df.parse("2017-02-11"), new Date(1486771200000L));
-        assertEquals(df.parse("2017-02-12"), new Date(1486857600000L));
-        assertEquals(df.parse("2017-02-13"), new Date(1486944000000L));
-        assertEquals(df.parse("2017-02-14"), new Date(1487030400000L));
-        assertEquals(df.parse("2017-02-15"), new Date(1487116800000L));
-        assertEquals(df.parse("2017-02-17"), new Date(1487289600000L));
+        this.context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedNoFfExclusionsSkipMiddleInvalidRequested() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue("1486771200000")); // Sat 11th Feb
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0", null);
+            one(orderInfo).putDetail("deliveryDateMin0", null);
+            one(orderInfo).putDetail("deliveryDateMax0", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0", null);
+            one(orderInfo).putDetail("deliveryDate0", "1487203200000");  // Thu 16th Feb  (this first available after 11th)
+            one(orderInfo).putDetail("deliveryDateMin0", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fir 17th Feb  Sun 19th Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000");
+            one(orderInfo).putDetail("deliveryDateWExcl0", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, null);
 
         this.context.assertIsSatisfied();
 
@@ -955,7 +999,164 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
 
     @Test
-    public void testDetermineDeliveryAvailableTimeRangeNamedExclusions1() throws Exception {
+    public void testDetermineDeliveryAvailableTimeRangeNamedNoFfExclusionsSkipMiddleInvalidRequestedLastExcluded() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17,2017-02-22");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue("1487721600000")); // Wed 22nd Feb
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0", null);
+            one(orderInfo).putDetail("deliveryDateMin0", null);
+            one(orderInfo).putDetail("deliveryDateMax0", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0", null);
+            one(orderInfo).putDetail("deliveryDate0", "1487635200000");  // Thu 21st Feb  (adjusted to be in range)
+            one(orderInfo).putDetail("deliveryDateMin0", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0", "1487635200000"); // Tue 21st Feb (7th + 15days max, 22nd exluded)
+            // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fri 17th Feb  Sun 19th Feb  Wed 22nd Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000,1487721600000");
+            one(orderInfo).putDetail("deliveryDateWExcl0", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, null);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedNoFfExclusionsSkipMiddleInvalidRequestedAfterLast() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17,2017-02-22");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue("1490400000000")); // Sat 25th Mar
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0", null);
+            one(orderInfo).putDetail("deliveryDateMin0", null);
+            one(orderInfo).putDetail("deliveryDateMax0", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0", null);
+            one(orderInfo).putDetail("deliveryDate0", "1487635200000");  // Thu 21st Feb  (adjusted to be in range)
+            one(orderInfo).putDetail("deliveryDateMin0", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0", "1487635200000"); // Tue 21st Feb (7th + 15days max, 22nd exluded)
+            // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fri 17th Feb  Sun 19th Feb  Wed 22nd Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000,1487721600000");
+            one(orderInfo).putDetail("deliveryDateWExcl0", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, null);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedNoFfExclusionsSkipMiddleValidRequested() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue("1487376000000")); // Sat 18th Feb
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0", null);
+            one(orderInfo).putDetail("deliveryDateMin0", null);
+            one(orderInfo).putDetail("deliveryDateMax0", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0", null);
+            one(orderInfo).putDetail("deliveryDate0", "1487376000000");  // Thu 18th Feb  (selection preserved)
+            one(orderInfo).putDetail("deliveryDateMin0", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fri 17th Feb  Sun 19th Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000");
+            one(orderInfo).putDetail("deliveryDateWExcl0", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, null);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedExclusionsSkipFromStart() throws Exception {
 
         final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
 
@@ -969,7 +1170,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setNamedDay(true);
         sla.setGuaranteed(true);
         sla.setMinDays(1);
-        sla.setMaxDays(5);
+        sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(df.parse("2017-02-07"));
@@ -986,29 +1187,29 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
             allowing(warehouse).getCode(); will(returnValue("ABC"));
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
+            allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
             // expectations:
+            one(orderInfo).putDetail("deliveryDate0ABC", null);
             one(orderInfo).putDetail("deliveryDateMin0ABC", null);
             one(orderInfo).putDetail("deliveryDateMax0ABC", null);
             one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
             one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMin0ABC", "1487376000000");
-            one(orderInfo).putDetail("deliveryDateMax0ABC", "1491951600000");
+            one(orderInfo).putDetail("deliveryDate0ABC", "1487376000000"); // Sat 18th Feb (this is min)
+            one(orderInfo).putDetail("deliveryDateMin0ABC", "1487376000000"); // Sat 18th Feb (since we skip)
+            one(orderInfo).putDetail("deliveryDateMax0ABC", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", "1487462400000"); // Sun 19th Feb Thu+Sun between 18th and 22nd
             one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1,5");
         }});
 
 
         visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, warehouse);
 
-        // Verify the dates min/max
-        assertEquals(df.parse("2017-02-18"), new Date(1487376000000L));
-        assertEquals(df.parse("2017-04-12"), new Date(1491951600000L));
-
         this.context.assertIsSatisfied();
 
     }
 
     @Test
-    public void testDetermineDeliveryAvailableTimeRangeNamedExclusions2() throws Exception {
+    public void testDetermineDeliveryAvailableTimeRangeNamedExclusionsSkipMiddle() throws Exception {
 
         final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
 
@@ -1022,7 +1223,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setNamedDay(true);
         sla.setGuaranteed(true);
         sla.setMinDays(1);
-        sla.setMaxDays(5);
+        sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(df.parse("2017-02-07"));
@@ -1039,31 +1240,78 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
             allowing(warehouse).getCode(); will(returnValue("ABC"));
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
+            allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
             // expectations:
+            one(orderInfo).putDetail("deliveryDate0ABC", null);
             one(orderInfo).putDetail("deliveryDateMin0ABC", null);
             one(orderInfo).putDetail("deliveryDateMax0ABC", null);
             one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
             one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMin0ABC", "1486598400000");
-            one(orderInfo).putDetail("deliveryDateMax0ABC", "1491951600000");
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000");
+            one(orderInfo).putDetail("deliveryDate0ABC", "1486598400000");  // Thu 9th Feb  (this is min)
+            one(orderInfo).putDetail("deliveryDateMin0ABC", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0ABC", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            // 10th-15th + 17th + Sun between 8th and 22nd>    Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fir 17th Feb  Sun 19th Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000");
             one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
         }});
 
 
         visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, warehouse);
 
-        // Verify the dates min/max
-        assertEquals(df.parse("2017-02-09"), new Date(1486598400000L));
-        assertEquals(df.parse("2017-04-12"), new Date(1491951600000L));
-        // Verify exclusions
-        assertEquals(df.parse("2017-02-10"), new Date(1486684800000L));
-        assertEquals(df.parse("2017-02-11"), new Date(1486771200000L));
-        assertEquals(df.parse("2017-02-12"), new Date(1486857600000L));
-        assertEquals(df.parse("2017-02-13"), new Date(1486944000000L));
-        assertEquals(df.parse("2017-02-14"), new Date(1487030400000L));
-        assertEquals(df.parse("2017-02-15"), new Date(1487116800000L));
-        assertEquals(df.parse("2017-02-17"), new Date(1487289600000L));
+        this.context.assertIsSatisfied();
+
+    }
+
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedExclusionsSkipMiddleInvalidRequested() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(warehouse).getCode(); will(returnValue("ABC"));
+            allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
+            allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue("1486771200000")); // Sat 11th Feb
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDate0ABC", "1487203200000");  // Thu 16th Feb  (this first available after 11th)
+            one(orderInfo).putDetail("deliveryDateMin0ABC", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0ABC", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            // 10th-15th + 17th + Sun between 8th and 22nd>    Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fir 17th Feb  Sun 19th Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000");
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, warehouse);
 
         this.context.assertIsSatisfied();
 
@@ -1071,8 +1319,64 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
 
 
+
     @Test
-    public void testDetermineDeliveryAvailableTimeRangeNamedExclusions1Lead() throws Exception {
+    public void testDetermineDeliveryAvailableTimeRangeNamedExclusionsSkipMiddleValidRequested() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(warehouse).getCode(); will(returnValue("ABC"));
+            allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
+            allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue("1487376000000")); // Sat 18th Feb
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDate0ABC", "1487376000000");  // Thu 18th Feb  (selection preserved)
+            one(orderInfo).putDetail("deliveryDateMin0ABC", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0ABC", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            // 10th-15th + 17th + Sun between 8th and 22nd>    Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fir 17th Feb  Sun 19th Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000");
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, warehouse);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedExclusionsLeadSkipFromStart() throws Exception {
 
         final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
 
@@ -1088,7 +1392,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setNamedDay(true);
         sla.setGuaranteed(true);
         sla.setMinDays(1);
-        sla.setMaxDays(5);
+        sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(df.parse("2017-02-07"));
@@ -1108,29 +1412,30 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(bucket1).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
             allowing(warehouse).getCode(); will(returnValue("ABC"));
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(10));
+            allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
             // expectations:
+            one(orderInfo).putDetail("deliveryDate0ABC", null);
             one(orderInfo).putDetail("deliveryDateMin0ABC", null);
             one(orderInfo).putDetail("deliveryDateMax0ABC", null);
             one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
             one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMin0ABC", "1487376000000");
-            one(orderInfo).putDetail("deliveryDateMax0ABC", "1491951600000");
+            one(orderInfo).putDetail("deliveryDate0ABC", "1487376000000"); // Sat 18th Feb (this is min)
+            one(orderInfo).putDetail("deliveryDateMin0ABC", "1487376000000"); // Sat 18th Feb (since we skip)
+            one(orderInfo).putDetail("deliveryDateMax0ABC", "1488585600000"); // Sat 4th Mar (7th + 10days lead + 15days max)
+            // Thu+Sun between 18th and 22nd >                 Sun 19th Feb  Thu 23rd Feb  Sun 26th Feb  Thu 2nd Mar
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", "1487462400000,1487808000000,1488067200000,1488412800000");
             one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1,5");
         }});
 
 
         visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, warehouse);
 
-        // Verify the dates min/max
-        assertEquals(df.parse("2017-02-18"), new Date(1487376000000L));
-        assertEquals(df.parse("2017-04-12"), new Date(1491951600000L));
-
         this.context.assertIsSatisfied();
 
     }
 
     @Test
-    public void testDetermineDeliveryAvailableTimeRangeNamedExclusions2Lead() throws Exception {
+    public void testDetermineDeliveryAvailableTimeRangeNamedExclusionsLeadSkipMiddle() throws Exception {
 
         final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
 
@@ -1146,7 +1451,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setNamedDay(true);
         sla.setGuaranteed(true);
         sla.setMinDays(1);
-        sla.setMaxDays(5);
+        sla.setMaxDays(60);
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(df.parse("2017-02-07"));
@@ -1166,31 +1471,23 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(bucket1).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
             allowing(warehouse).getCode(); will(returnValue("ABC"));
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(15));
+            allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
             // expectations:
+            one(orderInfo).putDetail("deliveryDate0ABC", null);
             one(orderInfo).putDetail("deliveryDateMin0ABC", null);
             one(orderInfo).putDetail("deliveryDateMax0ABC", null);
             one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
             one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMin0ABC", "1487808000000");
-            one(orderInfo).putDetail("deliveryDateMax0ABC", "1491951600000");
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", "1489104000000,1489190400000,1489276800000,1489363200000,1489449600000,1489536000000,1489708800000");
+            one(orderInfo).putDetail("deliveryDate0ABC", "1487808000000");  // Thu 23rd Feb  (this is min)
+            one(orderInfo).putDetail("deliveryDateMin0ABC", "1487808000000");  // Thu 23rd Feb (15+1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0ABC", "1492815600000"); // Fri Apr 21st (22nd + 60days max)
+            // 10th-15th + 17th + Sun between 23rd and 21st>   Sun 26th Feb  Sun 5th Mar   Fri 10th Mar  Sat 11th Mar  Sun 12th Mar  Mon 13th Mar  Tue 14th Mar  Wed 15th Mar  Fri 17th Mar  Sun 19th Mar  Sun 26th Mar  Sun 1st Apr   Sun 8th Apr   Sun 15th Apr  Sun 23rd Apr
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", "1488067200000,1488672000000,1489104000000,1489190400000,1489276800000,1489363200000,1489449600000,1489536000000,1489708800000,1489881600000,1490486400000,1491087600000,1491692400000,1492297200000,1492902000000");
             one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
         }});
 
 
         visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, warehouse);
-
-        // Verify the dates min/max
-        assertEquals(df.parse("2017-02-23"), new Date(1487808000000L));
-        assertEquals(df.parse("2017-04-12"), new Date(1491951600000L));
-        // Verify exclusions
-        assertEquals(df.parse("2017-03-10"), new Date(1489104000000L));
-        assertEquals(df.parse("2017-03-11"), new Date(1489190400000L));
-        assertEquals(df.parse("2017-03-12"), new Date(1489276800000L));
-        assertEquals(df.parse("2017-03-13"), new Date(1489363200000L));
-        assertEquals(df.parse("2017-03-14"), new Date(1489449600000L));
-        assertEquals(df.parse("2017-03-15"), new Date(1489536000000L));
-        assertEquals(df.parse("2017-03-17"), new Date(1489708800000L));
 
         this.context.assertIsSatisfied();
 

@@ -30,10 +30,11 @@ public interface Promotion extends Auditable, Codable, Taggable {
     String TYPE_ITEM            = "I";
     String TYPE_CUSTOMER_TAG    = "C";
 
-    String ACTION_FIXED_AMOUNT_OFF  = "F";
-    String ACTION_PERCENT_DISCOUNT  = "P";
-    String ACTION_GIFT              = "G";
-    String ACTION_TAG               = "T";
+    String ACTION_FIXED_AMOUNT_OFF           = "F";
+    String ACTION_PERCENT_DISCOUNT           = "P";
+    String ACTION_PERCENT_DISCOUNT_NON_SALE  = "S";
+    String ACTION_GIFT                       = "G";
+    String ACTION_TAG                        = "T";
 
     /**
      * @return promotion PK

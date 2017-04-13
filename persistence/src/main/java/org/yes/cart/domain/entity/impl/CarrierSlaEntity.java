@@ -137,7 +137,7 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         if (excludeWeekDaysList == null) {
             if (excludeWeekDays != null) {
                 final List<Integer> days = new ArrayList<Integer>(7);
-                for (final String day : Arrays.asList(StringUtils.split(excludeCustomerTypes, ','))) {
+                for (final String day : Arrays.asList(StringUtils.split(excludeWeekDays, ','))) {
                     days.add(NumberUtils.toInt(day));
                 }
                 excludeWeekDaysList = Collections.unmodifiableList(days);
