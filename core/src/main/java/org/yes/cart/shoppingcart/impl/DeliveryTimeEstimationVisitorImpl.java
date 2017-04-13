@@ -314,19 +314,39 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
                 minDeliveryTime.add(Calendar.DAY_OF_YEAR, minDays);
             }
 
-            // For named days ensure that requested date is not below lower limit
-            if (namedDay && customerOrderDelivery.getRequestedDeliveryDate() != null && !customerOrderDelivery.getRequestedDeliveryDate().before(minDeliveryTime.getTime())) {
-                minDeliveryTime.setTime(customerOrderDelivery.getRequestedDeliveryDate()); // Set named day if we have a selection
-                minDeliveryTime.set(Calendar.HOUR_OF_DAY, 0);
-                minDeliveryTime.set(Calendar.MINUTE, 0);
-                minDeliveryTime.set(Calendar.SECOND, 0);
-                minDeliveryTime.set(Calendar.MILLISECOND, 0);
-            }
-
             // Process exclusions to ensure that we do not set excluded day (For named day this should not make any changes
             // since we already checked it, this is just to ensure we do not have manual tampering with data)
             skipWeekdayExclusions(sla, minDeliveryTime);
             skipDatesExclusions(sla, minDeliveryTime, slaExcludedDates);
+
+            // For named days ensure that requested date is valid
+            if (namedDay) {
+                // It must set and not before the lower limit
+                if (customerOrderDelivery.getRequestedDeliveryDate() != null && !customerOrderDelivery.getRequestedDeliveryDate().before(minDeliveryTime.getTime())) {
+
+                    final Calendar checkRequested = Calendar.getInstance();
+                    checkRequested.setTime(customerOrderDelivery.getRequestedDeliveryDate());
+                    checkRequested.set(Calendar.HOUR_OF_DAY, 0);
+                    checkRequested.set(Calendar.MINUTE, 0);
+                    checkRequested.set(Calendar.SECOND, 0);
+                    checkRequested.set(Calendar.MILLISECOND, 0);
+
+                    // Attempt to skip exclusion to see if the date changes
+                    skipWeekdayExclusions(sla, checkRequested);
+                    skipDatesExclusions(sla, checkRequested, slaExcludedDates);
+
+                    if (customerOrderDelivery.getRequestedDeliveryDate().getTime() == checkRequested.getTime().getTime()) {
+                        // We have not changed the date so it is valid, for named date we do not estimate
+                        return;
+                    }
+
+                    // else the requested date is invalid, so we use the next available after the exclusions
+                    minDeliveryTime.setTime(checkRequested.getTime());
+
+                }
+
+                // else requested date is less than minimal
+            }
 
             Date guaranteed = null;
             Date min = null;
