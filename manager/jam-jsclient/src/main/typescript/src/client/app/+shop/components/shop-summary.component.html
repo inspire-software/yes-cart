@@ -174,14 +174,6 @@
           <div class="col-xs-7 col-md-8"><i class="fa {{ shopSummary.checkoutEnableQuanityPicker.second ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></div>
         </div>
         <div class="row block-margin-spacer">
-          <div class="col-xs-5 col-md-4"><strong>{{ shopSummary.taxEnableShow.first }}</strong></div>
-          <div class="col-xs-7 col-md-8">
-            <i class="fa {{ shopSummary.taxEnableShow.second ? 'fa-check text-success' : 'fa-remove text-danger' }}" title="{{ shopSummary.taxEnableShow.first }}"></i>
-            <i class="fa {{ shopSummary.taxEnableShowNet.second ? 'fa-circle-o' : 'fa-circle' }} text-info" [hidden]="!shopSummary.taxEnableShow.second" title="{{ shopSummary.taxEnableShowNet.first }}"></i>
-            <i class="fa {{ shopSummary.taxEnableShowAmount.second ? 'fa-dollar' : 'fa-percent' }} text-info" [hidden]="!shopSummary.taxEnableShow.second" title="{{ shopSummary.taxEnableShowAmount.first }}"></i>
-          </div>
-        </div>
-        <div class="row block-margin-spacer">
           <div class="col-xs-5 col-md-4"><strong>{{ shopSummary.searchInSubCatsEnable.first }}</strong></div>
           <div class="col-xs-7 col-md-8"><i class="fa {{ shopSummary.searchInSubCatsEnable.second ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></div>
           <div class="clearfix"></div>
@@ -221,6 +213,14 @@
                 <tr>
                   <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}"><i class="fa fa-dollar"></i> {{ shopSummary.customerTypesSeeTax.first }}</td>
                   <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ (shopSummary.customerTypesSeeTax.second.length == 0 || isTypeEnabled(type.first, shopSummary.customerTypesSeeTax.second)) ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></td>
+                </tr>
+                <tr>
+                  <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}"><i class="fa fa-dollar"></i> {{ shopSummary.customerTypesSeeNetPrice.first }}</td>
+                  <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ (shopSummary.customerTypesSeeNetPrice.second.length == 0 || isTypeEnabled(type.first, shopSummary.customerTypesSeeNetPrice.second)) ? 'fa-circle-o' : 'fa-circle' }}"></i></td>
+                </tr>
+                <tr>
+                  <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}"><i class="fa fa-dollar"></i> {{ shopSummary.customerTypesSeeTaxAmount.first }}</td>
+                  <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ (shopSummary.customerTypesSeeTaxAmount.second.length == 0 || isTypeEnabled(type.first, shopSummary.customerTypesSeeTaxAmount.second)) ? 'fa-dollar' : 'fa-percent' }}"></i></td>
                 </tr>
                 <tr>
                   <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}"><i class="fa fa-dollar"></i> {{ shopSummary.customerTypesChangeTaxView.first }}</td>

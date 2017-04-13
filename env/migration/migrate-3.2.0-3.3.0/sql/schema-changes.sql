@@ -717,3 +717,18 @@ alter table TCUSTOMERORDERDELIVERY add column REQUESTED_DELIVERY_DATE datetime;
 alter table TCARRIERSLA add column EXCLUDED_CT varchar(255);
 alter table TCARRIERSLA add column NAMEDDAY bit not null default 0;
 -- alter table TCARRIERSLA add column NAMEDDAY smallint not null DEFAULT 0;
+
+--
+-- YC-782 Tax options per customer type
+--
+
+delete from TSHOPATTRVALUE where CODE = 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_TYPES';
+delete from TATTRIBUTE where CODE = 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_TYPES';
+
+delete from TSHOPATTRVALUE where CODE in ('SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO', 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET', 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT') and VAL = 'false';
+update TSHOPATTRVALUE set VAL = 'B2G,B2C,B2B,B2E' where CODE in ('SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO', 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET', 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT') and VAL = 'true';
+
+update TATTRIBUTE set name = 'Tax: Enable price tax information for customer types (CSV)', ETYPE_ID = 1004 where CODE = 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO';
+update TATTRIBUTE set name = 'Tax: Show net prices for customer types (CSV)', ETYPE_ID = 1004 where CODE = 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET';
+update TATTRIBUTE set name = 'Tax: Show tax amount for customer types (CSV)', ETYPE_ID = 1004 where CODE = 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT';
+

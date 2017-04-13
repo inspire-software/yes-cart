@@ -399,11 +399,6 @@ public interface AttributeNamesKeys {
         String SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO = "SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO";
 
         /**
-         * Setting for whether to show prices with tax information for given customer type (blank, means always)
-         */
-        String SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES = "SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_TYPES";
-
-        /**
          * Setting for whether to allow customer of specified types to manipulate tax options
          */
         String SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES = "SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE";

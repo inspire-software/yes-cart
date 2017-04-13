@@ -311,8 +311,6 @@ public class VoShopServiceImpl implements VoShopService {
 
             addCheckoutConfig(summary, lang, attrsMap);
 
-            addTaxConfig(summary, lang, attrsMap);
-
             addCustomerConfig(summary, lang, attrsMap, attrsMapSub);
 
             addEmailTemplatesBasicSettings(summary, lang, attrsMap);
@@ -408,7 +406,11 @@ public class VoShopServiceImpl implements VoShopService {
 
         // Tax information is at Master level
         final MutablePair<String, List<String>> seeTax =
-                getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES, lang);
+                getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO, lang);
+        final MutablePair<String, List<String>> seeNetPrice =
+                getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET, lang);
+        final MutablePair<String, List<String>> seeTaxAmount =
+                getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT, lang);
         final MutablePair<String, List<String>> changeTax =
                 getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES, lang);
 
@@ -435,6 +437,8 @@ public class VoShopServiceImpl implements VoShopService {
         additionalTypes.addAll(approveRegister.getSecond());
         additionalTypes.addAll(notifyRegister.getSecond());
         additionalTypes.addAll(seeTax.getSecond());
+        additionalTypes.addAll(seeNetPrice.getSecond());
+        additionalTypes.addAll(seeTaxAmount.getSecond());
         additionalTypes.addAll(changeTax.getSecond());
         additionalTypes.addAll(rfq.getSecond());
         additionalTypes.addAll(approve.getSecond());
@@ -458,6 +462,8 @@ public class VoShopServiceImpl implements VoShopService {
         summary.setCustomerTypesRequireRegistrationApproval(approveRegister);
         summary.setCustomerTypesRequireRegistrationNotification(notifyRegister);
         summary.setCustomerTypesSeeTax(seeTax);
+        summary.setCustomerTypesSeeNetPrice(seeNetPrice);
+        summary.setCustomerTypesSeeTaxAmount(seeTaxAmount);
         summary.setCustomerTypesChangeTaxView(changeTax);
         summary.setCustomerTypesRfq(rfq);
         summary.setCustomerTypesOrderApproval(approve);
@@ -467,15 +473,6 @@ public class VoShopServiceImpl implements VoShopService {
         summary.setCustomerTypesB2BOrderForm(orderForm);
         summary.setCustomerTypesShoppingLists(shoppingLists);
         summary.setCustomerTypesAddressBookDisabled(addressBookDisabled);
-    }
-
-    protected void addTaxConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
-        summary.setTaxEnableShow(getBooleanShopAttributeConfig(
-                attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO, lang, false));
-        summary.setTaxEnableShowNet(getBooleanShopAttributeConfig(
-                attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET, lang, false));
-        summary.setTaxEnableShowAmount(getBooleanShopAttributeConfig(
-                attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT, lang, false));
     }
 
     protected void addCheckoutConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
