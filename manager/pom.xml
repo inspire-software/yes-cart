@@ -25,7 +25,6 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.yes</groupId>
     <artifactId>manager</artifactId>
     <packaging>pom</packaging>
     <name>Yes cart Admin modules</name>
