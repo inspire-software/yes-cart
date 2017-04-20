@@ -19,6 +19,8 @@ package org.yes.cart.web.support.seo.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.service.domain.CategoryService;
@@ -32,6 +34,8 @@ import org.yes.cart.web.support.seo.BookmarkService;
  * Time: 5:52 PM
  */
 public class BookmarkServiceImpl implements BookmarkService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BookmarkServiceImpl.class);
 
     private final Cache CATEGORY_DECODE_CACHE;
     private final Cache CATEGORY_ENCODE_CACHE;
@@ -99,6 +103,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                 CATEGORY_ENCODE_CACHE.put(bookmark, bookmark);
                 CATEGORY_DECODE_CACHE.put(bookmark, existingCategoryId.toString());
                 seoData = bookmark;
+                LOG.trace("Saving category bookmark {} is SEO for {}", bookmark, existingCategoryId);
             }
 
             if (seoData == null) {
@@ -111,11 +116,14 @@ public class BookmarkServiceImpl implements BookmarkService {
                         CATEGORY_ENCODE_CACHE.put(categorySeoUri, categorySeoUri);
                         CATEGORY_DECODE_CACHE.put(categorySeoUri, bookmark);
                         seoData = categorySeoUri;
+                        LOG.trace("Saving category bookmark {} is PK for {}", bookmark, categorySeoUri);
                     } // else This is may be a numeric SEO uri
 
                 }
             }
         }
+
+        LOG.trace("Category bookmark {} resolves to {}", bookmark, seoData);
 
         return seoData;
     }
@@ -131,7 +139,10 @@ public class BookmarkServiceImpl implements BookmarkService {
             final String seo = saveBookmarkForCategory(uri);
             if (seo != null) {
                 id = getStringFromValueWrapper(CATEGORY_DECODE_CACHE.get(seo));
+                LOG.trace("Category URI {} resolves to {} after bookmarking", uri, id);
             }
+        } else {
+            LOG.trace("Category URI {} resolves to {}", uri, id);
         }
 
         return id;
@@ -154,6 +165,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                 CONTENT_ENCODE_CACHE.put(bookmark, bookmark);
                 CONTENT_DECODE_CACHE.put(bookmark, existingContentId.toString());
                 seoData = bookmark;
+                LOG.trace("Saving content bookmark {} is SEO for {}", bookmark, existingContentId);
             }
 
             if (seoData == null) {
@@ -166,10 +178,13 @@ public class BookmarkServiceImpl implements BookmarkService {
                         CONTENT_ENCODE_CACHE.put(contentSeoUri, contentSeoUri);
                         CONTENT_DECODE_CACHE.put(contentSeoUri, bookmark);
                         seoData = contentSeoUri;
+                        LOG.trace("Saving content bookmark {} is PK for {}", bookmark, contentSeoUri);
                     } // else This is may be a numeric SEO uri
                 }
             }
         }
+
+        LOG.trace("Content bookmark {} resolves to {}", bookmark, seoData);
 
         return seoData;
     }
@@ -185,7 +200,10 @@ public class BookmarkServiceImpl implements BookmarkService {
             final String seo = saveBookmarkForContent(uri);
             if (seo != null) {
                 id = getStringFromValueWrapper(CONTENT_DECODE_CACHE.get(seo));
+                LOG.trace("Content URI {} resolves to {} after bookmarking", uri, id);
             }
+        } else {
+            LOG.trace("Content URI {} resolves to {}", uri, id);
         }
 
         return id;
@@ -208,6 +226,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                 PRODUCT_ENCODE_CACHE.put(bookmark, bookmark);
                 PRODUCT_DECODE_CACHE.put(bookmark, existingProductId.toString());
                 seoData = bookmark;
+                LOG.trace("Saving product bookmark {} is SEO for {}", bookmark, existingProductId);
             }
 
             if (seoData == null) {
@@ -215,15 +234,18 @@ public class BookmarkServiceImpl implements BookmarkService {
                 if (productId > 0L) {
                     final String productSeoUri = productService.findSeoUriByProductId(productId);
                     if (StringUtils.isNotBlank(productSeoUri)) {
-                        // This is a valid category and contentSeoUri will be either SEO URI or productId as String
+                        // This is a valid product and productSeoUri will be either SEO URI or productId as String
                         PRODUCT_ENCODE_CACHE.put(bookmark, productSeoUri);
                         PRODUCT_ENCODE_CACHE.put(productSeoUri, productSeoUri);
                         PRODUCT_DECODE_CACHE.put(productSeoUri, bookmark);
                         seoData = productSeoUri;
+                        LOG.trace("Saving product bookmark {} is PK for {}", bookmark, productSeoUri);
                     }
                 }
             }
         }
+
+        LOG.trace("Product bookmark {} resolves to {}", bookmark, seoData);
 
         return seoData;
 
@@ -240,7 +262,10 @@ public class BookmarkServiceImpl implements BookmarkService {
             final String seo = saveBookmarkForProduct(uri);
             if (seo != null) {
                 id = getStringFromValueWrapper(PRODUCT_DECODE_CACHE.get(seo));
+                LOG.trace("Product URI {} resolves to {} after bookmarking", uri, id);
             }
+        } else {
+            LOG.trace("Product URI {} resolves to {}", uri, id);
         }
 
         return id;
@@ -264,6 +289,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                 SKU_ENCODE_CACHE.put(bookmark, bookmark);
                 SKU_DECODE_CACHE.put(bookmark, existingSkuId.toString());
                 seoData = bookmark;
+                LOG.trace("Saving SKU bookmark {} is SEO for {}", bookmark, existingSkuId);
             }
 
             if (seoData == null) {
@@ -271,15 +297,18 @@ public class BookmarkServiceImpl implements BookmarkService {
                 if (skuId > 0L) {
                     final String productSkuUri = productService.findSeoUriByProductSkuId(skuId);
                     if (StringUtils.isNotBlank(productSkuUri)) {
-                        // This is a valid category and contentSeoUri will be either SEO URI or skuId as String
+                        // This is a valid SKU and productSkuUri will be either SEO URI or skuId as String
                         SKU_ENCODE_CACHE.put(bookmark, productSkuUri);
                         SKU_ENCODE_CACHE.put(productSkuUri, productSkuUri);
                         SKU_DECODE_CACHE.put(productSkuUri, bookmark);
                         seoData = productSkuUri;
+                        LOG.trace("Saving SKU bookmark {} is PK for {}", bookmark, productSkuUri);
                     }
                 }
             }
         }
+
+        LOG.trace("SKU bookmark {} resolves to {}", bookmark, seoData);
 
         return seoData;
 
@@ -296,9 +325,11 @@ public class BookmarkServiceImpl implements BookmarkService {
             final String seo = saveBookmarkForSku(uri);
             if (seo != null) {
                 id = getStringFromValueWrapper(SKU_DECODE_CACHE.get(seo));
+                LOG.trace("SKU URI {} resolves to {} after bookmarking", uri, id);
             }
+        } else {
+            LOG.trace("SKU URI {} resolves to {}", uri, id);
         }
-
 
         return id;
 
