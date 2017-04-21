@@ -66,10 +66,8 @@
                 <value>productSkuService-productSkuBySkuCode</value>
                 <value>skuWarehouseService-productSkusOnWarehouse</value>
                 <value>skuWarehouseService-productOnWarehouse</value>
-                <value>web.bookmarkService-seoProductDecode</value>
-                <value>web.bookmarkService-seoProductEncode</value>
-                <value>web.bookmarkService-seoSkuDecode</value>
-                <value>web.bookmarkService-seoSkuEncode</value>
+                <value>web.bookmarkService-seoProduct</value>
+                <value>web.bookmarkService-seoSku</value>
             </set>
         </property>
     </bean>
