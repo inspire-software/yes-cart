@@ -257,27 +257,27 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   }
 
   protected onSearchRate() {
-    this.taxesFilter = '%20';
+    this.taxesFilter = '%';
     this.searchHelpTaxShow = false;
   }
 
   protected onSearchType() {
-    this.taxesFilter = '-keyword';
+    this.taxesFilter = '-';
     this.searchHelpTaxShow = false;
   }
 
   protected onSearchLocation() {
-    this.taxesFilter = '@location';
+    this.taxesFilter = '@';
     this.searchHelpTaxConfigShow = false;
   }
 
   protected onSearchSKU() {
-    this.taxesFilter = '#SKU';
+    this.taxesFilter = '#';
     this.searchHelpTaxConfigShow = false;
   }
 
   protected onSearchSKUExact() {
-    this.taxesFilter = '!SKU';
+    this.taxesFilter = '!';
     this.searchHelpTaxConfigShow = false;
   }
 

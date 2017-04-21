@@ -120,12 +120,12 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
 
   protected onSearchCodeExact() {
     this.searchHelpShow = false;
-    this.typeFilter = '!keyword';
+    this.typeFilter = '!';
   }
 
   protected onSearchCode() {
     this.searchHelpShow = false;
-    this.typeFilter = '#code';
+    this.typeFilter = '#';
   }
 
 

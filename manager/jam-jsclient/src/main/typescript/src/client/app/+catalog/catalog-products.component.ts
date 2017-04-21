@@ -188,17 +188,22 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
   protected onSearchCodeExact() {
     this.searchHelpShow = false;
-    this.productFilter = '!code';
+    this.productFilter = '!';
   }
 
   protected onSearchCode() {
     this.searchHelpShow = false;
-    this.productFilter = '#tag';
+    this.productFilter = '#';
   }
 
   protected onSearchType() {
     this.searchHelpShow = false;
-    this.productFilter = '?keyword';
+    this.productFilter = '?';
+  }
+
+  protected onSearchCategories() {
+    this.searchHelpShow = false;
+    this.productFilter = '^';
   }
 
   protected onSearchDate() {

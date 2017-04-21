@@ -165,12 +165,12 @@ export class ShopContentComponent implements OnInit, OnDestroy {
 
 
   protected onSearchParent() {
-    this.contentFilter = '^keyword';
+    this.contentFilter = '^';
     this.searchHelpShow = false;
   }
 
   protected onSearchURI() {
-    this.contentFilter = '@uri';
+    this.contentFilter = '@';
     this.searchHelpShow = false;
   }
 

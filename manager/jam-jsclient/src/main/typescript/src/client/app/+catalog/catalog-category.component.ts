@@ -129,12 +129,12 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
 
 
   protected onSearchParent() {
-    this.categoryFilter = '^keyword';
+    this.categoryFilter = '^';
     this.searchHelpShow = false;
   }
 
   protected onSearchURI() {
-    this.categoryFilter = '@uri';
+    this.categoryFilter = '@';
     this.searchHelpShow = false;
   }
 

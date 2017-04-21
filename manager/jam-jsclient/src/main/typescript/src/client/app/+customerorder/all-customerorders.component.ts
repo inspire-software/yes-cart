@@ -250,22 +250,22 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onSearchNumber() {
     this.searchHelpShow = false;
-    this.customerorderFilter = '#ordernumber';
+    this.customerorderFilter = '#';
   }
 
   protected onSearchCustomer() {
     this.searchHelpShow = false;
-    this.customerorderFilter = '?customer';
+    this.customerorderFilter = '?';
   }
 
   protected onSearchAddress() {
     this.searchHelpShow = false;
-    this.customerorderFilter = '@address';
+    this.customerorderFilter = '@';
   }
 
   protected onSearchReserved() {
     this.searchHelpShow = false;
-    this.customerorderFilter = '!SKU';
+    this.customerorderFilter = '!';
   }
 
   protected onSearchDate() {

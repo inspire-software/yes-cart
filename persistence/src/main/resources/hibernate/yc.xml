@@ -3275,6 +3275,12 @@
        ]]>
     </query>
 
+    <query name="CATEGORY.IDS.BY.NAME.OR.GUID">
+        <![CDATA[
+                  select c.categoryId from CategoryEntity c  where c.guid like ?1 or c.name like ?1
+       ]]>
+    </query>
+
 
     <query name="PRODUCT.BY.SEO.URI">
         <![CDATA[

@@ -719,6 +719,7 @@
   "SEARCH_HELP_PRODUCT_EXACT": "To search for exact SKU (code, PIM code, barcode or manufacturer code): Format: '!SKU'",
   "SEARCH_HELP_PRODUCT_CODE": "To search only code, manufacturer code, PIM code or tag. Format: '#tag'",
   "SEARCH_HELP_PRODUCT_TYPE": "To search only by brand or product type. Format: '?keyword'",
+  "SEARCH_HELP_PRODUCT_CATEGORY": "To search only by category name or code. Format: '^keyword'",
 
   "SEARCH_HELP_PRODUCT_TYPE_DEFAULT": "Default product type search is by code, name and description",
   "SEARCH_HELP_PRODUCT_TYPE_EXACT": "To search for exact code (code or name): Format: '!keyword'",
