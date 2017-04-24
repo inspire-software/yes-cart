@@ -224,7 +224,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
 
   protected onSearchCode() {
-    this.promotionFilter = '#code';
+    this.promotionFilter = '#';
     this.searchHelpShow = false;
   }
 
@@ -234,7 +234,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   }
 
   protected onSearchCondition() {
-    this.promotionFilter = '?shoppingCartItem.productSkuCode';
+    this.promotionFilter = '?';
     this.searchHelpShow = false;
   }
 

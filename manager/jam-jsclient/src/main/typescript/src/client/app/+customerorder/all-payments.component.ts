@@ -143,17 +143,17 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
 
   protected onSearchNumber() {
     this.searchHelpShow = false;
-    this.paymentFilter = '#reference';
+    this.paymentFilter = '#';
   }
 
   protected onSearchCustomer() {
     this.searchHelpShow = false;
-    this.paymentFilter = '?keyword';
+    this.paymentFilter = '?';
   }
 
   protected onSearchDetails() {
     this.searchHelpShow = false;
-    this.paymentFilter = '@keyword';
+    this.paymentFilter = '@';
   }
 
   protected onSearchDate() {

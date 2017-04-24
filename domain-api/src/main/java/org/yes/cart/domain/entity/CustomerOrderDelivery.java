@@ -338,7 +338,7 @@ public interface CustomerOrderDelivery extends Auditable {
     /**
      * Delivery remarks (could be used for third party integrations or in JAM)
      *
-     * @param deliveryRemarks
+     * @param deliveryRemarks remarks
      */
     void setDeliveryRemarks(String deliveryRemarks);
 
@@ -399,6 +399,21 @@ public interface CustomerOrderDelivery extends Auditable {
      * @param delivered confirmed delivery date
      */
     void setDeliveryConfirmed(Date delivered);
+
+
+    /**
+     * Requested delivery date by customer.
+     *
+     * @return requested delivery date
+     */
+    Date getRequestedDeliveryDate();
+
+    /**
+     * Requested delivery date by customer
+     *
+     * @param requestedDeliveryDate requested delivery date
+     */
+    void setRequestedDeliveryDate(Date requestedDeliveryDate);
 
 
     /**

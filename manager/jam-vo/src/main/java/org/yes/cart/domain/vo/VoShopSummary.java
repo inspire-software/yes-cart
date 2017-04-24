@@ -91,6 +91,8 @@ public class VoShopSummary {
     private MutablePair<String, List<String>> customerTypesRequireRegistrationApproval;
     private MutablePair<String, List<String>> customerTypesRequireRegistrationNotification;
     private MutablePair<String, List<String>> customerTypesSeeTax;
+    private MutablePair<String, List<String>> customerTypesSeeNetPrice;
+    private MutablePair<String, List<String>> customerTypesSeeTaxAmount;
     private MutablePair<String, List<String>> customerTypesChangeTaxView;
     private MutablePair<String, List<String>> customerTypesRfq;
     private MutablePair<String, List<String>> customerTypesOrderApproval;
@@ -317,30 +319,6 @@ public class VoShopSummary {
         this.checkoutEnableQuanityPicker = checkoutEnableQuanityPicker;
     }
 
-    public MutablePair<String, Boolean> getTaxEnableShow() {
-        return taxEnableShow;
-    }
-
-    public void setTaxEnableShow(final MutablePair<String, Boolean> taxEnableShow) {
-        this.taxEnableShow = taxEnableShow;
-    }
-
-    public MutablePair<String, Boolean> getTaxEnableShowNet() {
-        return taxEnableShowNet;
-    }
-
-    public void setTaxEnableShowNet(final MutablePair<String, Boolean> taxEnableShowNet) {
-        this.taxEnableShowNet = taxEnableShowNet;
-    }
-
-    public MutablePair<String, Boolean> getTaxEnableShowAmount() {
-        return taxEnableShowAmount;
-    }
-
-    public void setTaxEnableShowAmount(final MutablePair<String, Boolean> taxEnableShowAmount) {
-        this.taxEnableShowAmount = taxEnableShowAmount;
-    }
-
     public MutablePair<String, Boolean> getSearchInSubCatsEnable() {
         return searchInSubCatsEnable;
     }
@@ -475,6 +453,22 @@ public class VoShopSummary {
 
     public void setCustomerTypesSeeTax(final MutablePair<String, List<String>> customerTypesSeeTax) {
         this.customerTypesSeeTax = customerTypesSeeTax;
+    }
+
+    public MutablePair<String, List<String>> getCustomerTypesSeeNetPrice() {
+        return customerTypesSeeNetPrice;
+    }
+
+    public void setCustomerTypesSeeNetPrice(final MutablePair<String, List<String>> customerTypesSeeNetPrice) {
+        this.customerTypesSeeNetPrice = customerTypesSeeNetPrice;
+    }
+
+    public MutablePair<String, List<String>> getCustomerTypesSeeTaxAmount() {
+        return customerTypesSeeTaxAmount;
+    }
+
+    public void setCustomerTypesSeeTaxAmount(final MutablePair<String, List<String>> customerTypesSeeTaxAmount) {
+        this.customerTypesSeeTaxAmount = customerTypesSeeTaxAmount;
     }
 
     public MutablePair<String, List<String>> getCustomerTypesChangeTaxView() {

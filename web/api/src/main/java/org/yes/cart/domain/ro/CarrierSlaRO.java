@@ -65,6 +65,11 @@ public class CarrierSlaRO implements Serializable {
     @DtoField(value = "guaranteed", readOnly = true)
     private boolean guaranteed;
 
+    @DtoField(value = "namedDay", readOnly = true)
+    private boolean namedDay;
+
+    @DtoField(value = "excludeCustomerTypes", readOnly = true)
+    private String excludeCustomerTypes;
 
     @DtoField(value = "slaType", readOnly = true)
     private String slaType;
@@ -166,6 +171,24 @@ public class CarrierSlaRO implements Serializable {
 
     public void setGuaranteed(final boolean guaranteed) {
         this.guaranteed = guaranteed;
+    }
+
+    @XmlAttribute(name = "named-day")
+    public boolean isNamedDay() {
+        return namedDay;
+    }
+
+    public void setNamedDay(final boolean namedDay) {
+        this.namedDay = namedDay;
+    }
+
+    @XmlElement(name = "exclude-customer-types")
+    public String getExcludeCustomerTypes() {
+        return excludeCustomerTypes;
+    }
+
+    public void setExcludeCustomerTypes(final String excludeCustomerTypes) {
+        this.excludeCustomerTypes = excludeCustomerTypes;
     }
 
     @XmlAttribute(name = "sla-type")

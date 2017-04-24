@@ -58,6 +58,12 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     @DtoField(value = "guaranteed")
     private boolean guaranteed;
 
+    @DtoField(value = "namedDay")
+    private boolean namedDay;
+
+    @DtoField(value = "excludeCustomerTypes")
+    private String excludeCustomerTypes;
+
     @DtoField(value = "slaType")
     private String slaType;
 
@@ -249,6 +255,34 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
      */
     public void setGuaranteed(final boolean guaranteed) {
         this.guaranteed = guaranteed;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isNamedDay() {
+        return namedDay;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setNamedDay(final boolean namedDay) {
+        this.namedDay = namedDay;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getExcludeCustomerTypes() {
+        return excludeCustomerTypes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setExcludeCustomerTypes(final String excludeCustomerTypes) {
+        this.excludeCustomerTypes = excludeCustomerTypes;
     }
 
     /**

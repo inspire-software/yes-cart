@@ -17,12 +17,17 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Carrier;
+import org.yes.cart.util.log.Markers;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -30,6 +35,8 @@ import java.util.List;
  * Time: 9:10 AM
  */
 public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, java.io.Serializable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CarrierSlaEntity.class);
 
     private long carrierslaId;
     private long version;
@@ -41,10 +48,14 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     private Integer maxDays;
     private Integer minDays;
     private String excludeWeekDays;
+    private List<Integer> excludeWeekDaysList;
     private String excludeDates;
     private boolean guaranteed;
+    private boolean namedDay;
     private String slaType;
     private String script;
+    private String excludeCustomerTypes;
+    private List<String> excludeCustomerTypesList;
     private String supportedPaymentGateways;
     private List<String> supportedPaymentGatewaysAsList;
     private String supportedFulfilmentCentres;
@@ -119,6 +130,24 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
 
     public void setExcludeWeekDays(final String excludeWeekDays) {
         this.excludeWeekDays = excludeWeekDays;
+        this.excludeWeekDaysList = null;
+    }
+
+    public List<Integer> getExcludeWeekDaysAsList() {
+        if (excludeWeekDaysList == null) {
+            if (excludeWeekDays != null) {
+                final List<Integer> days = new ArrayList<Integer>(7);
+                for (final String day : Arrays.asList(StringUtils.split(excludeWeekDays, ','))) {
+                    days.add(NumberUtils.toInt(day));
+                }
+                excludeWeekDaysList = Collections.unmodifiableList(days);
+            } else {
+                excludeWeekDaysList = Collections.emptyList();
+            }
+
+        }
+        return excludeWeekDaysList;
+
     }
 
     public String getExcludeDates() {
@@ -129,6 +158,36 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.excludeDates = excludeDates;
     }
 
+    public Map<Date, Date> getExcludeDatesAsMap() {
+
+        final Map<Date, Date> dates = new HashMap<Date, Date>();
+        if (StringUtils.isNotBlank(getExcludeDates())) {
+
+            final SimpleDateFormat df = new SimpleDateFormat(Constants.DEFAULT_IMPORT_DATE_FORMAT);
+            final String[] all = StringUtils.split(getExcludeDates(), ',');
+            for (final String range : all) {
+                try {
+                    final int rangePos = range.indexOf(':');
+                    if (rangePos == -1) {
+                        final Date date = df.parse(range);
+                        dates.put(date, date);
+                    } else {
+                        final Date date = df.parse(range.substring(0, rangePos));
+                        final Date date2 = df.parse(range.substring(rangePos + 1));
+                        dates.put(date, date2);
+                    }
+                } catch (ParseException pe) {
+                    LOG.error(Markers.alert(),
+                            "Error reading excluded dates during delivery time estimation: " + pe.getMessage() +
+                                    ", sla: " + getGuid() + "/" + getName(), pe);
+                }
+            }
+
+        }
+        return dates;
+
+    }
+
     public boolean isGuaranteed() {
         return guaranteed;
     }
@@ -137,12 +196,12 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.guaranteed = guaranteed;
     }
 
-    public void setSupportedPaymentGatewaysAsList(final List<String> supportedPaymentGatewaysAsList) {
-        this.supportedPaymentGatewaysAsList = supportedPaymentGatewaysAsList;
+    public boolean isNamedDay() {
+        return namedDay;
     }
 
-    public void setSupportedFulfilmentCentresAsList(final List<String> supportedFulfilmentCentresAsList) {
-        this.supportedFulfilmentCentresAsList = supportedFulfilmentCentresAsList;
+    public void setNamedDay(final boolean namedDay) {
+        this.namedDay = namedDay;
     }
 
     public String getSlaType() {
@@ -161,6 +220,27 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.script = script;
     }
 
+    public String getExcludeCustomerTypes() {
+        return excludeCustomerTypes;
+    }
+
+    public void setExcludeCustomerTypes(final String excludeCustomerTypes) {
+        this.excludeCustomerTypes = excludeCustomerTypes;
+        this.excludeCustomerTypesList = null;
+    }
+
+    public List<String> getExcludeCustomerTypesAsList() {
+        if (excludeCustomerTypesList == null) {
+            if (excludeCustomerTypes != null) {
+                excludeCustomerTypesList = Arrays.asList(StringUtils.split(excludeCustomerTypes, ','));
+            } else {
+                excludeCustomerTypesList = Collections.emptyList();
+            }
+
+        }
+        return excludeCustomerTypesList;
+    }
+
     public String getSupportedPaymentGateways() {
         return supportedPaymentGateways;
     }
@@ -173,7 +253,7 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     public List<String> getSupportedPaymentGatewaysAsList() {
         if (supportedPaymentGatewaysAsList == null) {
             if (supportedPaymentGateways != null) {
-                supportedPaymentGatewaysAsList = Arrays.asList(supportedPaymentGateways.split(","));
+                supportedPaymentGatewaysAsList = Arrays.asList(StringUtils.split(supportedPaymentGateways, ','));
             } else {
                 supportedPaymentGatewaysAsList = Collections.emptyList();
             }
@@ -181,6 +261,12 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         }
         return supportedPaymentGatewaysAsList;
     }
+
+
+    public void setSupportedPaymentGatewaysAsList(final List<String> supportedPaymentGatewaysAsList) {
+        this.supportedPaymentGatewaysAsList = supportedPaymentGatewaysAsList;
+    }
+
 
     public String getSupportedFulfilmentCentres() {
         return supportedFulfilmentCentres;
@@ -194,7 +280,7 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     public List<String> getSupportedFulfilmentCentresAsList() {
         if (supportedFulfilmentCentresAsList == null) {
             if (supportedFulfilmentCentres != null) {
-                supportedFulfilmentCentresAsList = Arrays.asList(supportedFulfilmentCentres.split(","));
+                supportedFulfilmentCentresAsList = Arrays.asList(StringUtils.split(supportedFulfilmentCentres, ','));
             } else {
                 supportedFulfilmentCentresAsList = Collections.emptyList();
             }
@@ -202,6 +288,11 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         }
         return supportedFulfilmentCentresAsList;
     }
+
+    public void setSupportedFulfilmentCentresAsList(final List<String> supportedFulfilmentCentresAsList) {
+        this.supportedFulfilmentCentresAsList = supportedFulfilmentCentresAsList;
+    }
+
 
     public boolean isBillingAddressNotRequired() {
         return billingAddressNotRequired;

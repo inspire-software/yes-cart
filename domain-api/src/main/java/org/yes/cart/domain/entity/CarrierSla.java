@@ -17,7 +17,10 @@
 package org.yes.cart.domain.entity;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -200,6 +203,13 @@ public interface CarrierSla extends Auditable {
     void setExcludeWeekDays(String excludeWeekDays);
 
     /**
+     * Exclude weekdays. CSV of {@link java.util.Calendar#DAY_OF_WEEK}
+     *
+     * @return csv of days of week when delivery is NOT available
+     */
+    List<Integer> getExcludeWeekDaysAsList();
+
+    /**
      * CSV od Dates and Date Ranges when delivery is not available.
      *
      * Format of date: yyyy-MM-dd
@@ -220,6 +230,15 @@ public interface CarrierSla extends Auditable {
     void setExcludeDates(String excludeDates);
 
     /**
+     * Get excluded dates as map. Uses {@link #getExcludeDates()} setting to create a map
+     * of date ranges. For single date the key/value are the same, for ranges key is the start
+     * date, value is the end date.
+     *
+     * @return map of date exclusions
+     */
+    Map<Date, Date> getExcludeDatesAsMap();
+
+    /**
      * Flag to denote that this is a guaranteed delivery for {@link #getMinDays()}. (e.g. next day delivery)
      *
      * @return guaranteed delivery flag
@@ -232,6 +251,41 @@ public interface CarrierSla extends Auditable {
      * @param guaranteed guaranteed delivery flag
      */
     void setGuaranteed(boolean guaranteed);
+
+    /**
+     * Flag to set named date delivery (customer can pick dates).
+     *
+     * @return true if customer can choose date
+     */
+    boolean isNamedDay();
+
+    /**
+     * Flag to set named date delivery (customer can pick dates).
+     *
+     * @param namedDay named day
+     */
+    void setNamedDay(boolean namedDay);
+
+    /**
+     * Customer types exclusions (CSV).
+     *
+     * @return exclude customer types
+     */
+    String getExcludeCustomerTypes();
+
+    /**
+     * Customer types exclusions.
+     *
+     * @param excludeCustomerTypes exclude customer types CSV
+     */
+    void setExcludeCustomerTypes(String excludeCustomerTypes);
+
+    /**
+     * Customer types exclusions.
+     *
+     * @return exclude customer types
+     */
+    List<String> getExcludeCustomerTypesAsList();
 
     /**
      * Is billing address not required for this order.

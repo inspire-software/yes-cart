@@ -141,6 +141,9 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     @DtoField(value = "b2bRemarks", readOnly = true)
     private String b2bRemarks;
 
+    @DtoField(value = "requestedDeliveryDate", readOnly = true)
+    private Date requestedDeliveryDate;
+
     @DtoField(value = "allValues", readOnly = true)
     private Map<String, Pair<String, String>> allValues;
 
@@ -668,6 +671,20 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
      */
     public void setB2bRemarks(final String b2bRemarks) {
         this.b2bRemarks = b2bRemarks;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date getRequestedDeliveryDate() {
+        return requestedDeliveryDate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setRequestedDeliveryDate(final Date requestedDeliveryDate) {
+        this.requestedDeliveryDate = requestedDeliveryDate;
     }
 
     /**

@@ -68,6 +68,15 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
 
     private String exporterId = "EmailNotificationOrderExporterImpl";
 
+    private int priority = 100;
+
+    private final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        }
+    };
+
     public EmailNotificationOrderExporterImpl(final TaskExecutor taskExecutor,
                                               final ThemeService themeService,
                                               final MailService mailService,
@@ -121,7 +130,7 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
         final Set<String> supplierCodes = new HashSet<String>();
         if (deliveries != null) {
             for (final CustomerOrderDelivery delivery : deliveries) {
-                if (delivery.getDetail() != null) {
+                if (delivery.getEligibleForExport() != null && delivery.getDetail() != null) {
                     for (final CustomerOrderDeliveryDet detail : delivery.getDetail()) {
 
                         supplierCodes.add(detail.getSupplierCode().concat(".").concat(delivery.getEligibleForExport()));
@@ -154,7 +163,7 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
 
     /** {@inheritDoc} */
     @Override
-    public ExportResult export(final CustomerOrder customerOrder, final Collection<CustomerOrderDelivery> customerOrderDeliveries) {
+    public ExportResult export(final CustomerOrder customerOrder, final Collection<CustomerOrderDelivery> customerOrderDeliveries) throws Exception {
 
         final Properties map = getSupplierNotificationsMap(customerOrder);
 
@@ -162,7 +171,7 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
         final List<CustomerOrderDelivery> exportCandidates = new ArrayList<CustomerOrderDelivery>(customerOrderDeliveries);
 
         for (final CustomerOrderDelivery delivery : exportCandidates) {
-            if (!delivery.isBlockExport() && !delivery.getDetail().isEmpty()) {
+            if (!delivery.isBlockExport() && delivery.getEligibleForExport() != null && !delivery.getDetail().isEmpty()) {
                 final String supplierCode = delivery.getDetail().iterator().next().getSupplierCode();
                 final String key = supplierCode.concat(".").concat(delivery.getEligibleForExport());
                 if (map.containsKey(key)) {
@@ -178,7 +187,7 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
 
         final Set<Long> exported = new HashSet<Long>();
         final Map<String, String> audit = new HashMap<String, String>();
-        final String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        final String timestamp = formatter.get().format(new Date());
 
         for (final Map.Entry<String, List<CustomerOrderDelivery>> entry : deliveriesBySupplierCode.entrySet()) {
 
@@ -212,6 +221,16 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
             @Override
             public Map<String, String> getOrderAuditParams() {
                 return audit;
+            }
+
+            @Override
+            public String getNextExportEligibilityForOrder() {
+                return null; // Nothing to follow
+            }
+
+            @Override
+            public Map<Long, String> getNextExportEligibilityForDelivery() {
+                return Collections.emptyMap(); // Nothing to follow
             }
         };
 
@@ -323,5 +342,21 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
      */
     public void setExporterId(final String exporterId) {
         this.exporterId = exporterId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getPriority() {
+        return priority;
+    }
+
+    /**
+     * Set priority as natural order.
+     *
+     * @param priority priority
+     */
+    public void setPriority(final int priority) {
+        this.priority = priority;
     }
 }

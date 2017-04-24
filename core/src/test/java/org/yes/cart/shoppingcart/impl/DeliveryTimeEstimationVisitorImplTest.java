@@ -21,13 +21,16 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.impl.CarrierSlaEntity;
+import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.WarehouseService;
+import org.yes.cart.service.order.DeliveryBucket;
+import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.MutableOrderInfo;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -59,7 +62,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(det).getSupplierCode(); will(returnValue("CED"));
         }});
 
-        new DeliveryTimeEstimationVisitorImpl(null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
 
         assertEquals("2017-02-07", df.format(calendar.getTime()));
 
@@ -85,7 +88,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
         }});
 
-        new DeliveryTimeEstimationVisitorImpl(null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
 
         assertEquals("2017-02-07", df.format(calendar.getTime()));
 
@@ -111,7 +114,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
         }});
 
-        new DeliveryTimeEstimationVisitorImpl(null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
 
         assertEquals("2017-02-09", df.format(calendar.getTime()));
 
@@ -120,7 +123,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
     }
 
     @Test
-    public void testSkipInventoryLeadTimeFfBoLead() throws Exception {
+    public void testSkipInventoryLeadTimeFfBackOrderLead() throws Exception {
 
         final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
         final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
@@ -130,23 +133,23 @@ public class DeliveryTimeEstimationVisitorImplTest {
         calendar.setTime(df.parse("2017-02-07"));
 
         context.checking(new Expectations() {{
-            allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("ABC"));
             allowing(warehouse).getDefaultStandardStockLeadTime(); will(returnValue(0));
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(2));
         }});
 
-        new DeliveryTimeEstimationVisitorImpl(null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
 
-        assertEquals("2017-02-07", df.format(calendar.getTime()));
+        assertEquals("2017-02-09", df.format(calendar.getTime()));
 
         this.context.assertIsSatisfied();
 
     }
 
     @Test
-    public void testSkipInventoryLeadTimeFfBoLead2() throws Exception {
+    public void testSkipInventoryLeadTimeFfMixedLead() throws Exception {
 
         final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
         final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
@@ -163,7 +166,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(2));
         }});
 
-        new DeliveryTimeEstimationVisitorImpl(null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
 
         assertEquals("2017-02-09", df.format(calendar.getTime()));
 
@@ -180,10 +183,10 @@ public class DeliveryTimeEstimationVisitorImplTest {
         calendar.setTime(df.parse("2017-02-07"));
 
         context.checking(new Expectations() {{
-            allowing(sla).getExcludeWeekDays(); will(returnValue(""));
+            allowing(sla).getExcludeWeekDaysAsList(); will(returnValue(Collections.emptyList()));
         }});
 
-        new DeliveryTimeEstimationVisitorImpl(null).skipWeekdayExclusions(sla, calendar);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
 
         assertEquals("2017-02-07", df.format(calendar.getTime()));
 
@@ -199,39 +202,39 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final Calendar calendar = Calendar.getInstance();
 
         context.checking(new Expectations() {{
-            allowing(sla).getExcludeWeekDays(); will(returnValue("1,7"));
+            allowing(sla).getExcludeWeekDaysAsList(); will(returnValue(Arrays.asList(1,7)));
         }});
 
         calendar.setTime(df.parse("2017-02-06"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipWeekdayExclusions(sla, calendar);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
         assertEquals("2017-02-06", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-07"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipWeekdayExclusions(sla, calendar);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
         assertEquals("2017-02-07", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-08"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipWeekdayExclusions(sla, calendar);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
         assertEquals("2017-02-08", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-09"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipWeekdayExclusions(sla, calendar);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
         assertEquals("2017-02-09", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-10"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipWeekdayExclusions(sla, calendar);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
         assertEquals("2017-02-10", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-11"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipWeekdayExclusions(sla, calendar);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
         assertEquals("2017-02-13", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-12"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipWeekdayExclusions(sla, calendar);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
         assertEquals("2017-02-13", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-13"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipWeekdayExclusions(sla, calendar);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
         assertEquals("2017-02-13", df.format(calendar.getTime()));
 
         this.context.assertIsSatisfied();
@@ -242,18 +245,13 @@ public class DeliveryTimeEstimationVisitorImplTest {
     @Test
     public void testGetCarrierSlaExcludedDatesNone() throws Exception {
 
-        final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("");
 
-        context.checking(new Expectations() {{
-            allowing(sla).getExcludeDates(); will(returnValue(""));
-        }});
-
-        final Map<Date, Date> dates = new DeliveryTimeEstimationVisitorImpl(null).getCarrierSlaExcludedDates(sla);
+        final Map<Date, Date> dates = new DeliveryTimeEstimationVisitorImpl(null, null).getCarrierSlaExcludedDates(sla);
 
         assertNotNull(dates);
         assertTrue(dates.isEmpty());
-
-        this.context.assertIsSatisfied();
 
     }
 
@@ -261,14 +259,12 @@ public class DeliveryTimeEstimationVisitorImplTest {
     @Test
     public void testGetCarrierSlaExcludedDates() throws Exception {
 
-        final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-01-08,2017-01-10:2017-01-15,2017-01-17");
+
         Date date, date2;
 
-        context.checking(new Expectations() {{
-            allowing(sla).getExcludeDates(); will(returnValue("2017-01-08,2017-01-10:2017-01-15,2017-01-17"));
-        }});
-
-        final Map<Date, Date> dates = new DeliveryTimeEstimationVisitorImpl(null).getCarrierSlaExcludedDates(sla);
+        final Map<Date, Date> dates = new DeliveryTimeEstimationVisitorImpl(null, null).getCarrierSlaExcludedDates(sla);
 
         assertNotNull(dates);
         assertEquals(3, dates.size());
@@ -279,8 +275,6 @@ public class DeliveryTimeEstimationVisitorImplTest {
         assertEquals(date2, dates.get(date));
         date = df.parse("2017-01-17");
         assertEquals(date, dates.get(date));
-
-        this.context.assertIsSatisfied();
 
     }
 
@@ -299,7 +293,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
             will(returnValue(""));
         }});
 
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, Collections.<Date, Date>emptyMap());
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, Collections.<Date, Date>emptyMap());
 
         assertEquals("2017-02-07", df.format(calendar.getTime()));
 
@@ -312,66 +306,60 @@ public class DeliveryTimeEstimationVisitorImplTest {
     @Test
     public void testSkipDatesExclusionsAllWeekdays() throws Exception {
 
-        final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
 
         final Calendar calendar = Calendar.getInstance();
 
-        context.checking(new Expectations() {{
-            allowing(sla).getExcludeDates(); will(returnValue("2017-02-08,2017-02-10:2017-02-15,2017-02-17"));
-            allowing(sla).getExcludeWeekDays(); will(returnValue(""));
-        }});
-
-        final Map<Date, Date> dates = new DeliveryTimeEstimationVisitorImpl(null).getCarrierSlaExcludedDates(sla);
+        final Map<Date, Date> dates = new DeliveryTimeEstimationVisitorImpl(null, null).getCarrierSlaExcludedDates(sla);
 
         calendar.setTime(df.parse("2017-02-07"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-07", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-08"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-09", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-09"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-09", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-10"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-16", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-11"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-16", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-12"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-16", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-13"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-16", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-14"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-16", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-15"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-16", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-16"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-16", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-17"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-18", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-18"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-18", df.format(calendar.getTime()));
-
-        this.context.assertIsSatisfied();
 
     }
 
@@ -380,66 +368,61 @@ public class DeliveryTimeEstimationVisitorImplTest {
     @Test
     public void testSkipDatesExclusionsNoThuSatSun() throws Exception {
 
-        final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1,5,7");
 
         final Calendar calendar = Calendar.getInstance();
 
-        context.checking(new Expectations() {{
-            allowing(sla).getExcludeDates(); will(returnValue("2017-02-08,2017-02-10:2017-02-15,2017-02-17"));
-            allowing(sla).getExcludeWeekDays(); will(returnValue("1,5,7"));
-        }});
-
-        final Map<Date, Date> dates = new DeliveryTimeEstimationVisitorImpl(null).getCarrierSlaExcludedDates(sla);
+        final Map<Date, Date> dates = new DeliveryTimeEstimationVisitorImpl(null, null).getCarrierSlaExcludedDates(sla);
 
         calendar.setTime(df.parse("2017-02-07"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-07", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-08"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-20", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-09"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-09", df.format(calendar.getTime())); // Must skip weekdays first!
 
         calendar.setTime(df.parse("2017-02-10"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-20", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-11"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-20", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-12"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-20", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-13"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-20", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-14"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-20", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-15"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-20", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-16"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-16", df.format(calendar.getTime()));  // Must skip weekdays first!
 
         calendar.setTime(df.parse("2017-02-17"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-20", df.format(calendar.getTime()));
 
         calendar.setTime(df.parse("2017-02-18"));
-        new DeliveryTimeEstimationVisitorImpl(null).skipDatesExclusions(sla, calendar, dates);
+        new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
         assertEquals("2017-02-18", df.format(calendar.getTime()));  // Must skip weekdays first!
-
-        this.context.assertIsSatisfied();
 
     }
 
@@ -455,12 +438,19 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CustomerOrder order = this.context.mock(CustomerOrder.class, "order");
         final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
         final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
-        final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1,5,7");
+        sla.setGuaranteed(false);
+        sla.setMinDays(1);
+        sla.setMaxDays(5);
+
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(df.parse("2017-02-07"));
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService) {
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
             protected Calendar now() {
                 return calendar;
@@ -476,11 +466,6 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("CED"));
-            allowing(sla).getExcludeDates(); will(returnValue("2017-02-08,2017-02-10:2017-02-15,2017-02-17"));
-            allowing(sla).getExcludeWeekDays(); will(returnValue("1,5,7"));
-            allowing(sla).isGuaranteed(); will(returnValue(false));
-            allowing(sla).getMinDays(); will(returnValue(1));
-            allowing(sla).getMaxDays(); will(returnValue(5));
             // expectations:
             one(delivery).setDeliveryGuaranteed(null);
             one(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-20"))));
@@ -495,6 +480,165 @@ public class DeliveryTimeEstimationVisitorImplTest {
     }
 
 
+    @Test
+    public void testDeliveryTimeFullEstimatedNamedNoFf() throws Exception {
+
+        final WarehouseService warehouseService = this.context.mock(WarehouseService.class, "warehouseService");
+
+        final Shop shop = this.context.mock(Shop.class, "shop");
+        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
+        final CustomerOrder order = this.context.mock(CustomerOrder.class, "order");
+        final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
+        final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1,5,7");
+        sla.setGuaranteed(false);
+        sla.setNamedDay(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(5);
+
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(delivery).getCustomerOrder(); will(returnValue(order));
+            allowing(delivery).getCarrierSla(); will(returnValue(sla));
+            allowing(delivery).getRequestedDeliveryDate(); will(returnValue(df.parse("2017-02-20")));
+            allowing(order).getShop(); will(returnValue(shop));
+            allowing(shop).getShopId(); will(returnValue(123L));
+            allowing(warehouseService).getByShopIdMapped(123L, false); will(returnValue(Collections.singletonMap("ABC", warehouse)));
+            allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
+            allowing(det).getSupplierCode(); will(returnValue("CED"));
+            // expectations: NONE, requested date is valid
+
+        }});
+
+        visitor.visit(delivery);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+
+
+    @Test
+    public void testDeliveryTimeFullEstimatedNamedNoFfInvalid() throws Exception {
+
+        final WarehouseService warehouseService = this.context.mock(WarehouseService.class, "warehouseService");
+
+        final Shop shop = this.context.mock(Shop.class, "shop");
+        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
+        final CustomerOrder order = this.context.mock(CustomerOrder.class, "order");
+        final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
+        final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1,5,7");
+        sla.setGuaranteed(false);
+        sla.setNamedDay(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(5);
+
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(delivery).getCustomerOrder(); will(returnValue(order));
+            allowing(delivery).getCarrierSla(); will(returnValue(sla));
+            allowing(delivery).getRequestedDeliveryDate(); will(returnValue(df.parse("2017-02-12")));
+            allowing(order).getShop(); will(returnValue(shop));
+            allowing(shop).getShopId(); will(returnValue(123L));
+            allowing(warehouseService).getByShopIdMapped(123L, false); will(returnValue(Collections.singletonMap("ABC", warehouse)));
+            allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
+            allowing(det).getSupplierCode(); will(returnValue("CED"));
+            // expectations: NONE, requested date is valid
+            one(delivery).setDeliveryGuaranteed(with(equal(df.parse("2017-02-20"))));
+            one(delivery).setDeliveryEstimatedMin(null);
+            one(delivery).setDeliveryEstimatedMax(null);
+
+        }});
+
+        visitor.visit(delivery);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+
+    @Test
+    public void testDeliveryTimeFullEstimatedNamedNoFfInvalidBackOrder() throws Exception {
+
+        final WarehouseService warehouseService = this.context.mock(WarehouseService.class, "warehouseService");
+
+        final Shop shop = this.context.mock(Shop.class, "shop");
+        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
+        final CustomerOrder order = this.context.mock(CustomerOrder.class, "order");
+        final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
+        final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1,5,7");
+        sla.setGuaranteed(false);
+        sla.setNamedDay(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(5);
+
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(delivery).getCustomerOrder(); will(returnValue(order));
+            allowing(delivery).getCarrierSla(); will(returnValue(sla));
+            allowing(delivery).getRequestedDeliveryDate(); will(returnValue(df.parse("2017-02-12")));
+            allowing(order).getShop(); will(returnValue(shop));
+            allowing(shop).getShopId(); will(returnValue(123L));
+            allowing(warehouseService).getByShopIdMapped(123L, false); will(returnValue(Collections.singletonMap("ABC", warehouse)));
+            allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+            allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
+            allowing(det).getSupplierCode(); will(returnValue("CED"));
+            // expectations: NONE, requested date is valid
+            one(delivery).setDeliveryGuaranteed(null);
+            one(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-20"))));
+            one(delivery).setDeliveryEstimatedMax(null);
+
+        }});
+
+        visitor.visit(delivery);
+
+        this.context.assertIsSatisfied();
+
+    }
+
 
     @Test
     public void testDeliveryTimeFullEstimatedFf() throws Exception {
@@ -506,12 +650,18 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CustomerOrder order = this.context.mock(CustomerOrder.class, "order");
         final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
         final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
-        final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1,5,7");
+        sla.setGuaranteed(false);
+        sla.setMinDays(1);
+        sla.setMaxDays(5);
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(df.parse("2017-02-07"));
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService) {
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
             protected Calendar now() {
                 return calendar;
@@ -528,11 +678,6 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("ABC"));
-            allowing(sla).getExcludeDates(); will(returnValue("2017-02-08,2017-02-10:2017-02-15,2017-02-17"));
-            allowing(sla).getExcludeWeekDays(); will(returnValue("1,5,7"));
-            allowing(sla).isGuaranteed(); will(returnValue(false));
-            allowing(sla).getMinDays(); will(returnValue(1));
-            allowing(sla).getMaxDays(); will(returnValue(5));
             // expectations:
             one(delivery).setDeliveryGuaranteed(null);
             one(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-20"))));
@@ -557,12 +702,18 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CustomerOrder order = this.context.mock(CustomerOrder.class, "order");
         final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
         final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
-        final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1,5");
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(5);
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(df.parse("2017-02-07"));
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService) {
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
             protected Calendar now() {
                 return calendar;
@@ -578,11 +729,6 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("CED"));
-            allowing(sla).getExcludeDates(); will(returnValue("2017-02-08,2017-02-10:2017-02-15,2017-02-17"));
-            allowing(sla).getExcludeWeekDays(); will(returnValue("1,5"));
-            allowing(sla).isGuaranteed(); will(returnValue(true));
-            allowing(sla).getMinDays(); will(returnValue(1));
-            allowing(sla).getMaxDays(); will(returnValue(5));
             // expectations:
             one(delivery).setDeliveryGuaranteed(with(equal(df.parse("2017-02-18"))));
             one(delivery).setDeliveryEstimatedMin(null);
@@ -607,12 +753,18 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CustomerOrder order = this.context.mock(CustomerOrder.class, "order");
         final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
         final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
-        final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1,5");
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(5);
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(df.parse("2017-02-07"));
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService) {
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
             protected Calendar now() {
                 return calendar;
@@ -629,11 +781,6 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("ABC"));
-            allowing(sla).getExcludeDates(); will(returnValue("2017-02-08,2017-02-10:2017-02-15,2017-02-17"));
-            allowing(sla).getExcludeWeekDays(); will(returnValue("1,5"));
-            allowing(sla).isGuaranteed(); will(returnValue(true));
-            allowing(sla).getMinDays(); will(returnValue(1));
-            allowing(sla).getMaxDays(); will(returnValue(5));
             // expectations:
             one(delivery).setDeliveryGuaranteed(with(equal(df.parse("2017-02-18"))));
             one(delivery).setDeliveryEstimatedMin(null);
@@ -657,12 +804,18 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CustomerOrder order = this.context.mock(CustomerOrder.class, "order");
         final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
         final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
-        final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1,5");
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(5);
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(df.parse("2017-02-07"));
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService) {
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
             protected Calendar now() {
                 return calendar;
@@ -678,11 +831,6 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("CED"));
-            allowing(sla).getExcludeDates(); will(returnValue("2017-02-08,2017-02-10:2017-02-15,2017-02-17"));
-            allowing(sla).getExcludeWeekDays(); will(returnValue("1,5"));
-            allowing(sla).isGuaranteed(); will(returnValue(true));
-            allowing(sla).getMinDays(); will(returnValue(1));
-            allowing(sla).getMaxDays(); will(returnValue(5));
             // expectations:
             one(delivery).setDeliveryGuaranteed(null);
             one(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-18"))));
@@ -706,12 +854,18 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CustomerOrder order = this.context.mock(CustomerOrder.class, "order");
         final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
         final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
-        final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1,5");
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(5);
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(df.parse("2017-02-07"));
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService) {
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
             protected Calendar now() {
                 return calendar;
@@ -728,11 +882,6 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("ABC"));
-            allowing(sla).getExcludeDates(); will(returnValue("2017-02-08,2017-02-10:2017-02-15,2017-02-17"));
-            allowing(sla).getExcludeWeekDays(); will(returnValue("1,5"));
-            allowing(sla).isGuaranteed(); will(returnValue(true));
-            allowing(sla).getMinDays(); will(returnValue(1));
-            allowing(sla).getMaxDays(); will(returnValue(5));
             // expectations:
             one(delivery).setDeliveryGuaranteed(null);
             one(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-18"))));
@@ -746,5 +895,763 @@ public class DeliveryTimeEstimationVisitorImplTest {
         this.context.assertIsSatisfied();
 
     }
+
+
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNoSla() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+
+        }});
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, null, null);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNoFf() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue(null));
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0", null);
+            one(orderInfo).putDetail("deliveryDateMin0", null);
+            one(orderInfo).putDetail("deliveryDateMax0", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0", null);
+        }});
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, null);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRange() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(warehouse).getCode(); will(returnValue("ABC"));
+            allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+        }});
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, warehouse);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedNoFfExclusionsSkipFromStart() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1,5");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue(null));
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0", null);
+            one(orderInfo).putDetail("deliveryDateMin0", null);
+            one(orderInfo).putDetail("deliveryDateMax0", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0", null);
+            one(orderInfo).putDetail("deliveryDate0", "1487376000000"); // Sat 18th Feb (this is min)
+            one(orderInfo).putDetail("deliveryDateMin0", "1487376000000"); // Sat 18th Feb (since we skip)
+            one(orderInfo).putDetail("deliveryDateMax0", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            one(orderInfo).putDetail("deliveryDateDExcl0", "1487462400000"); // Sun 19th Feb Thu+Sun between 18th and 22nd
+            one(orderInfo).putDetail("deliveryDateWExcl0", "1,5");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, null);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedNoFfExclusionsSkipMiddle() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue(null));
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0", null);
+            one(orderInfo).putDetail("deliveryDateMin0", null);
+            one(orderInfo).putDetail("deliveryDateMax0", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0", null);
+            one(orderInfo).putDetail("deliveryDate0", "1486598400000");  // Thu 9th Feb  (this is min)
+            one(orderInfo).putDetail("deliveryDateMin0", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fri 17th Feb  Sun 19th Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000");
+            one(orderInfo).putDetail("deliveryDateWExcl0", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, null);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedNoFfExclusionsSkipMiddleInvalidRequested() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue("1486771200000")); // Sat 11th Feb
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0", null);
+            one(orderInfo).putDetail("deliveryDateMin0", null);
+            one(orderInfo).putDetail("deliveryDateMax0", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0", null);
+            one(orderInfo).putDetail("deliveryDate0", "1487203200000");  // Thu 16th Feb  (this first available after 11th)
+            one(orderInfo).putDetail("deliveryDateMin0", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fir 17th Feb  Sun 19th Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000");
+            one(orderInfo).putDetail("deliveryDateWExcl0", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, null);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedNoFfExclusionsSkipMiddleInvalidRequestedLastExcluded() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17,2017-02-22");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue("1487721600000")); // Wed 22nd Feb
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0", null);
+            one(orderInfo).putDetail("deliveryDateMin0", null);
+            one(orderInfo).putDetail("deliveryDateMax0", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0", null);
+            one(orderInfo).putDetail("deliveryDate0", "1487635200000");  // Thu 21st Feb  (adjusted to be in range)
+            one(orderInfo).putDetail("deliveryDateMin0", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0", "1487635200000"); // Tue 21st Feb (7th + 15days max, 22nd exluded)
+            // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fri 17th Feb  Sun 19th Feb  Wed 22nd Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000,1487721600000");
+            one(orderInfo).putDetail("deliveryDateWExcl0", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, null);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedNoFfExclusionsSkipMiddleInvalidRequestedAfterLast() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17,2017-02-22");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue("1490400000000")); // Sat 25th Mar
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0", null);
+            one(orderInfo).putDetail("deliveryDateMin0", null);
+            one(orderInfo).putDetail("deliveryDateMax0", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0", null);
+            one(orderInfo).putDetail("deliveryDate0", "1487635200000");  // Thu 21st Feb  (adjusted to be in range)
+            one(orderInfo).putDetail("deliveryDateMin0", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0", "1487635200000"); // Tue 21st Feb (7th + 15days max, 22nd exluded)
+            // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fri 17th Feb  Sun 19th Feb  Wed 22nd Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000,1487721600000");
+            one(orderInfo).putDetail("deliveryDateWExcl0", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, null);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedNoFfExclusionsSkipMiddleValidRequested() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue("1487376000000")); // Sat 18th Feb
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0", null);
+            one(orderInfo).putDetail("deliveryDateMin0", null);
+            one(orderInfo).putDetail("deliveryDateMax0", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0", null);
+            one(orderInfo).putDetail("deliveryDate0", "1487376000000");  // Thu 18th Feb  (selection preserved)
+            one(orderInfo).putDetail("deliveryDateMin0", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fri 17th Feb  Sun 19th Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000");
+            one(orderInfo).putDetail("deliveryDateWExcl0", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, null);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedExclusionsSkipFromStart() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1,5");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(warehouse).getCode(); will(returnValue("ABC"));
+            allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
+            allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDate0ABC", "1487376000000"); // Sat 18th Feb (this is min)
+            one(orderInfo).putDetail("deliveryDateMin0ABC", "1487376000000"); // Sat 18th Feb (since we skip)
+            one(orderInfo).putDetail("deliveryDateMax0ABC", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", "1487462400000"); // Sun 19th Feb Thu+Sun between 18th and 22nd
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1,5");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, warehouse);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedExclusionsSkipMiddle() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(warehouse).getCode(); will(returnValue("ABC"));
+            allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
+            allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDate0ABC", "1486598400000");  // Thu 9th Feb  (this is min)
+            one(orderInfo).putDetail("deliveryDateMin0ABC", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0ABC", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            // 10th-15th + 17th + Sun between 8th and 22nd>    Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fir 17th Feb  Sun 19th Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000");
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, warehouse);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedExclusionsSkipMiddleInvalidRequested() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(warehouse).getCode(); will(returnValue("ABC"));
+            allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
+            allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue("1486771200000")); // Sat 11th Feb
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDate0ABC", "1487203200000");  // Thu 16th Feb  (this first available after 11th)
+            one(orderInfo).putDetail("deliveryDateMin0ABC", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0ABC", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            // 10th-15th + 17th + Sun between 8th and 22nd>    Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fir 17th Feb  Sun 19th Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000");
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, warehouse);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+
+
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedExclusionsSkipMiddleValidRequested() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(warehouse).getCode(); will(returnValue("ABC"));
+            allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
+            allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue("1487376000000")); // Sat 18th Feb
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDate0ABC", "1487376000000");  // Thu 18th Feb  (selection preserved)
+            one(orderInfo).putDetail("deliveryDateMin0ABC", "1486598400000"); // Thu 9th Feb (1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0ABC", "1487721600000"); // Wed 22nd Feb (7th + 15days max)
+            // 10th-15th + 17th + Sun between 8th and 22nd>    Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fir 17th Feb  Sun 19th Feb
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", "1486684800000,1486771200000,1486857600000,1486944000000,1487030400000,1487116800000,1487289600000,1487462400000");
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, warehouse);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedExclusionsLeadSkipFromStart() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+        final CartItem item1 = this.context.mock(CartItem.class, "item1");
+        final DeliveryBucket bucket1 = this.context.mock(DeliveryBucket.class, "bucket1");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
+        sla.setExcludeWeekDays("1,5");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(15);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(shoppingCart).getCartItemList(); will(returnValue(Collections.singletonList(item1)));
+            allowing(item1).getDeliveryBucket(); will(returnValue(bucket1));
+            allowing(bucket1).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(warehouse).getCode(); will(returnValue("ABC"));
+            allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(10));
+            allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDate0ABC", "1487376000000"); // Sat 18th Feb (this is min)
+            one(orderInfo).putDetail("deliveryDateMin0ABC", "1487376000000"); // Sat 18th Feb (since we skip)
+            one(orderInfo).putDetail("deliveryDateMax0ABC", "1488585600000"); // Sat 4th Mar (7th + 10days lead + 15days max)
+            // Thu+Sun between 18th and 22nd >                 Sun 19th Feb  Thu 23rd Feb  Sun 26th Feb  Thu 2nd Mar
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", "1487462400000,1487808000000,1488067200000,1488412800000");
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1,5");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, warehouse);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testDetermineDeliveryAvailableTimeRangeNamedExclusionsLeadSkipMiddle() throws Exception {
+
+        final CarrierSlaService carrierSlaService = this.context.mock(CarrierSlaService.class, "carrierSlaService");
+
+        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
+        final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
+        final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+        final CartItem item1 = this.context.mock(CartItem.class, "item1");
+        final DeliveryBucket bucket1 = this.context.mock(DeliveryBucket.class, "bucket1");
+
+        final CarrierSlaEntity sla = new CarrierSlaEntity();
+        sla.setExcludeDates("2017-02-08,2017-03-10:2017-03-15,2017-03-17");
+        sla.setExcludeWeekDays("1");
+        sla.setNamedDay(true);
+        sla.setGuaranteed(true);
+        sla.setMinDays(1);
+        sla.setMaxDays(60);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse("2017-02-07"));
+
+        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+            @Override
+            protected Calendar now() {
+                return calendar;
+            }
+        };
+
+        context.checking(new Expectations() {{
+            allowing(carrierSlaService).findById(123L); will(returnValue(sla));
+            allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(shoppingCart).getCartItemList(); will(returnValue(Collections.singletonList(item1)));
+            allowing(item1).getDeliveryBucket(); will(returnValue(bucket1));
+            allowing(bucket1).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(warehouse).getCode(); will(returnValue("ABC"));
+            allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(15));
+            allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
+            // expectations:
+            one(orderInfo).putDetail("deliveryDate0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            one(orderInfo).putDetail("deliveryDate0ABC", "1487808000000");  // Thu 23rd Feb  (this is min)
+            one(orderInfo).putDetail("deliveryDateMin0ABC", "1487808000000");  // Thu 23rd Feb (15+1day lead 8th skipped)
+            one(orderInfo).putDetail("deliveryDateMax0ABC", "1492815600000"); // Fri Apr 21st (22nd + 60days max)
+            // 10th-15th + 17th + Sun between 23rd and 21st>   Sun 26th Feb  Sun 5th Mar   Fri 10th Mar  Sat 11th Mar  Sun 12th Mar  Mon 13th Mar  Tue 14th Mar  Wed 15th Mar  Fri 17th Mar  Sun 19th Mar  Sun 26th Mar  Sun 1st Apr   Sun 8th Apr   Sun 15th Apr  Sun 23rd Apr
+            one(orderInfo).putDetail("deliveryDateDExcl0ABC", "1488067200000,1488672000000,1489104000000,1489190400000,1489276800000,1489363200000,1489449600000,1489536000000,1489708800000,1489881600000,1490486400000,1491087600000,1491692400000,1492297200000,1492902000000");
+            one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
+        }});
+
+
+        visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, warehouse);
+
+        this.context.assertIsSatisfied();
+
+    }
+
+
 
 }

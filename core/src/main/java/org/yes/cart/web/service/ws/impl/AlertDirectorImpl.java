@@ -21,7 +21,9 @@ import org.springframework.cache.CacheManager;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.service.ws.AlertDirector;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +36,12 @@ public class AlertDirectorImpl implements AlertDirector {
 
     private CacheManager cacheManager;
 
+    private final ThreadLocal<SimpleDateFormat> formater = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        }
+    };
 
     /** {@inheritDoc} */
     @Override
@@ -59,7 +67,13 @@ public class AlertDirectorImpl implements AlertDirector {
         final List<Pair<String, String>> all = new ArrayList<Pair<String, String>>(100);
         for (final Map.Entry<Object, Element> elem : elems.entrySet()) {
             if (elem.getValue() != null && !elem.getValue().isExpired()) {
-                all.add((Pair<String, String>) elem.getValue().getObjectValue());
+                final Date last = new Date(elem.getValue().getLatestOfCreationAndUpdateTime());
+                final Pair<String, String> elemOriginal = (Pair<String, String>) elem.getValue().getObjectValue();
+                final Pair<String, String> elemWithLastTime = new Pair<String, String>(
+                        formater.get().format(last) + ": " + elemOriginal.getFirst(),
+                        elemOriginal.getSecond()
+                );
+                all.add(elemWithLastTime);
             }
         }
         return all;

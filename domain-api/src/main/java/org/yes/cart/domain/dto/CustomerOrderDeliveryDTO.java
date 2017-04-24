@@ -403,6 +403,21 @@ public interface CustomerOrderDeliveryDTO   extends Identifiable {
 
 
     /**
+     * Requested delivery date by customer.
+     *
+     * @return requested delivery date
+     */
+    Date getRequestedDeliveryDate();
+
+    /**
+     * Requested delivery date by customer
+     *
+     * @param requestedDeliveryDate requested delivery date
+     */
+    void setRequestedDeliveryDate(Date requestedDeliveryDate);
+
+
+    /**
      * Get the order number. Order number not a pk value, it
      * can be slighty different and depends from active {@link org.yes.cart.service.order.OrderNumberGenerator}
      * implementation.

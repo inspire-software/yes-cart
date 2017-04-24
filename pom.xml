@@ -77,8 +77,10 @@
         <GeDA.version>3.1.0</GeDA.version>
         <mysql-connector.version>5.1.13</mysql-connector.version>
 
+        <!-- servlet API -->
+        <javax.servlet.version>3.0.1</javax.servlet.version>
+
         <!-- Groovy support -->
-        <!--<groovy-all.version>1.7.4</groovy-all.version>-->
         <groovy-all.version>2.4.3</groovy-all.version>
 
         <!-- Storefront global versions -->
@@ -88,6 +90,10 @@
         <!-- Storefront API global versions -->
         <spring-ws.version>2.2.0.RELEASE</spring-ws.version>
         <spring-oxm.version>1.5.10</spring-oxm.version>
+
+        <!-- HTTP client + components -->
+        <org.apache.httpcomponents.version>4.3.3</org.apache.httpcomponents.version>
+        <!--<commons-httpclient.version>3.1</commons-httpclient.version>-->
 
         <!-- Admin global versions -->
         <backport-util-concurrent.version>3.1</backport-util-concurrent.version>
@@ -199,10 +205,6 @@
                 <exclusion>
                     <groupId>javax.mail</groupId>
                     <artifactId>mail</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>servlet-api</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>javax.servlet</groupId>

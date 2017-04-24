@@ -73,6 +73,8 @@ export interface CustomerOrderInfoVO {
   b2bApprovedDate : Date;
   b2bRemarks : string;
 
+  requestedDeliveryDate : Date;
+
   allValues: Pair<string, Pair<string, string>>[];
 
 }
@@ -152,6 +154,8 @@ export interface CustomerOrderDeliveryInfoVO {
   deliveryEstimatedMax : Date;
   deliveryGuaranteed : Date;
   deliveryConfirmed : Date;
+
+  requestedDeliveryDate : Date;
 
   eligibleForExport : string;
   blockExport : boolean;

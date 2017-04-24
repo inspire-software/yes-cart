@@ -2066,7 +2066,7 @@
             </column>
         </property>
 
-
+        <property name="requestedDeliveryDate" column="REQUESTED_DELIVERY_DATE" type="timestamp"/>
         <property name="orderTimestamp" column="ORDER_TIMESTAMP" type="timestamp" not-null="true"/>
         <property name="orderIp" column="ORDER_IP" type="string" length="45"/>
 
@@ -2194,6 +2194,8 @@
         <property name="deliveryGroup" type="string" not-null="true">
             <column name="DELIVERY_GROUP" length="16" not-null="true"/>
         </property>
+
+        <property name="requestedDeliveryDate" column="REQUESTED_DELIVERY_DATE" type="timestamp"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -2326,6 +2328,7 @@
         <property name="excludeWeekDays" column="EXCLUDE_WEEK_DAYS"  type="string" length="15"/>
         <property name="excludeDates" column="EXCLUDE_DATES"  type="string" length="4000"/>
         <property name="guaranteed" column="GUARANTEED"  type="boolean" not-null="true"/>
+        <property name="namedDay" column="NAMEDDAY"  type="boolean" not-null="true"/>
 
         <property name="slaType"  column="SLA_TYPE" type="string" length="1" not-null="true"/>
         <property name="script"   column="SCRIPT"   type="string" length="4000"/>
@@ -2335,6 +2338,7 @@
 
         <property name="supportedPaymentGateways" column="SUPPORTED_PGS" type="string" length="1024"/>
         <property name="supportedFulfilmentCentres" column="SUPPORTED_FCS" type="string" length="1024"/>
+        <property name="excludeCustomerTypes" column="EXCLUDED_CT" type="string" length="255"/>
 
         <property name="externalRef" column="EXTERNAL_REF"  type="string" length="40"/>
 
@@ -3268,6 +3272,12 @@
     <query name="CATEGORY.SUBCATEGORY.COUNT">
         <![CDATA[
                   select count(c.categoryId) from CategoryEntity c  where c.parentId = ?1
+       ]]>
+    </query>
+
+    <query name="CATEGORY.IDS.BY.NAME.OR.GUID">
+        <![CDATA[
+                  select c.categoryId from CategoryEntity c  where c.guid like ?1 or c.name like ?1
        ]]>
     </query>
 

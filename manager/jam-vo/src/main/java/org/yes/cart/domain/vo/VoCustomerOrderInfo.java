@@ -142,6 +142,9 @@ public class VoCustomerOrderInfo {
     @DtoField(value = "b2bRemarks", readOnly = true)
     private String b2bRemarks;
 
+    @DtoField(value = "requestedDeliveryDate", readOnly = true)
+    private Date requestedDeliveryDate;
+
     @DtoField(value = "allValues", converter = "PairMapToPairList", readOnly = true)
     private List<MutablePair<String, MutablePair<String, String>>> allValues;
 
@@ -487,6 +490,14 @@ public class VoCustomerOrderInfo {
 
     public void setB2bRemarks(final String b2bRemarks) {
         this.b2bRemarks = b2bRemarks;
+    }
+
+    public Date getRequestedDeliveryDate() {
+        return requestedDeliveryDate;
+    }
+
+    public void setRequestedDeliveryDate(final Date requestedDeliveryDate) {
+        this.requestedDeliveryDate = requestedDeliveryDate;
     }
 
     public List<MutablePair<String, MutablePair<String, String>>> getAllValues() {

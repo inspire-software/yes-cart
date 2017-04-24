@@ -47,8 +47,11 @@ public interface OrderExporter {
      * @param customerOrderDeliveries specific customer order delivery if this is delivery update
      *
      * @return set of delivery ids that were exported by this exporter
+     *
+     * @throws Exception must throw exception to denote that export process failed. Exception message will be used
+     *         to mark failed order
      */
-    ExportResult export(CustomerOrder customerOrder, Collection<CustomerOrderDelivery> customerOrderDeliveries);
+    ExportResult export(CustomerOrder customerOrder, Collection<CustomerOrderDelivery> customerOrderDeliveries) throws Exception;
 
     /**
      * Get Id of this exporter.
@@ -57,6 +60,16 @@ public interface OrderExporter {
      */
     String getExporterId();
 
+    /**
+     * Exporter priority.
+     *
+     * @return priority
+     */
+    int getPriority();
+
+    /**
+     * Result object
+     */
     interface ExportResult {
 
         /**
@@ -73,6 +86,27 @@ public interface OrderExporter {
          * @return set of parameters
          */
         Map<String, String> getOrderAuditParams();
+
+        /**
+         * Optional export eligibility to trigger after this exporter.
+         *
+         * Note that if multiple exporters are available for given order then ONLY one of them
+         * can set the next eligibility.
+         *
+         * In current implementation it will be the first exporter that runs, for others we raise
+         * alert
+         *
+         * @return next eligibility
+         */
+        String getNextExportEligibilityForOrder();
+
+        /**
+         * Optional export eligibility to trigger after this exporter.
+         * If this map is provided then {@link #getNextExportEligibilityForOrder()} must be provided.
+         *
+         * @return next eligibility
+         */
+        Map<Long, String> getNextExportEligibilityForDelivery();
 
     }
 

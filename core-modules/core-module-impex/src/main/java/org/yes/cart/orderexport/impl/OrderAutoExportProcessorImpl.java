@@ -21,11 +21,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.orderexport.ExportProcessorException;
 import org.yes.cart.orderexport.OrderAutoExportProcessor;
 import org.yes.cart.orderexport.OrderExporter;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.util.log.Markers;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -41,6 +43,13 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
 
     private final Set<OrderExporter> orderExporters = new HashSet<OrderExporter>();
 
+    private final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        }
+    };
+
     public OrderAutoExportProcessorImpl(final CustomerOrderService customerOrderService) {
         this.customerOrderService = customerOrderService;
     }
@@ -54,9 +63,12 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
         for (final Long customerOrderId : eligible) {
             try {
                 proxy().processSingleOrder(customerOrderId);
-            } catch (Exception exp) {
-                proxy().markFailedOrder(customerOrderId, exp.getMessage());
-                LOG.error(Markers.alert(), "Failed to auto export order: " + customerOrderId, exp);
+            } catch (ExportProcessorException exp1) {
+                LOG.error(Markers.alert(), "Failed to auto export order: " + customerOrderId + " [" + exp1.getExporter() + "]", exp1);
+                proxy().markFailedOrder(customerOrderId, exp1.getExporter(), exp1.getMessage());
+            } catch (Exception exp2) {
+                LOG.error(Markers.alert(), "Failed to auto export order: " + customerOrderId, exp2);
+                proxy().markFailedOrder(customerOrderId, "GENERIC", exp2.getMessage());
             }
         }
 
@@ -66,7 +78,7 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
 
     /** {@inheritDoc} */
     @Override
-    public void processSingleOrder(final Long customerOrderId) {
+    public void processSingleOrder(final Long customerOrderId) throws ExportProcessorException {
 
         final CustomerOrder customerOrder = customerOrderService.findById(customerOrderId);
 
@@ -81,6 +93,8 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
 
         final Set<Long> exported = new HashSet<Long>();
         final Map<String, String> audit = new HashMap<String, String>();
+        String nextOrderEligibility = null;
+        Map<Long, String> nextDeliveryEligibility = new HashMap<Long, String>();
 
         if (eligibleDeliveries.isEmpty()) {
             LOG.warn("Auto export for order {} in {} has no eligible deliveries. at least one delivery must be marked as eligible.",
@@ -91,11 +105,29 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
             if (!exporters.isEmpty()) {
 
                 LOG.info("Order {} in {} is eligible for auto export", customerOrder.getOrdernum(), customerOrder.getOrderStatus());
-                for (final OrderExporter exporter : exporters) {
+                for (final OrderExporter exporter : sortByPriority(exporters)) {
 
-                    final OrderExporter.ExportResult result = exporter.export(customerOrder, eligibleDeliveries);
-                    exported.addAll(result.getExportedDeliveryIds());
-                    audit.putAll(result.getOrderAuditParams());
+                    try {
+                        final OrderExporter.ExportResult result = exporter.export(customerOrder, eligibleDeliveries);
+                        exported.addAll(result.getExportedDeliveryIds());
+                        audit.putAll(result.getOrderAuditParams());
+
+                        if (StringUtils.isNotBlank(result.getNextExportEligibilityForOrder())) {
+
+                            if (nextOrderEligibility != null) {
+                                LOG.error(Markers.alert(),
+                                        "Multiple exporters set next eligible auto export for order {} eligible for {}",
+                                        customerOrder.getOrdernum(), customerOrder.getEligibleForExport());
+                            } else {
+                                // Mark for next eligibility (we can only support one)
+                                nextOrderEligibility = result.getNextExportEligibilityForOrder();
+                                nextDeliveryEligibility.putAll(result.getNextExportEligibilityForDelivery());
+                            }
+
+                        }
+                    } catch (Exception exp) {
+                        throw new ExportProcessorException(exp, exporter.getExporterId());
+                    }
 
                 }
 
@@ -104,7 +136,8 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
             for (final CustomerOrderDelivery delivery : eligibleDeliveries) {
 
                 if (!delivery.isBlockExport()) {
-                    delivery.setEligibleForExport(null);
+                    // Set next eligibility if we have one
+                    delivery.setEligibleForExport(nextDeliveryEligibility.get(delivery.getCustomerOrderDeliveryId()));
                     if (exported.contains(delivery.getCustomerOrderDeliveryId())) {
                         delivery.setLastExportDate(new Date());
                         delivery.setLastExportDeliveryStatus(delivery.getDeliveryStatus());
@@ -122,7 +155,8 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
         }
 
         if (!customerOrder.isBlockExport()) {
-            customerOrder.setEligibleForExport(null);
+            // Set next eligibility if we have one
+            customerOrder.setEligibleForExport(nextOrderEligibility);
             if (!exported.isEmpty()) {
                 customerOrder.setLastExportDate(new Date());
                 customerOrder.setLastExportOrderStatus(customerOrder.getOrderStatus());
@@ -140,14 +174,33 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
         customerOrderService.update(customerOrder);
     }
 
+    /*
+        Sort for more deterministic execution of the processors
+     */
+    private OrderExporter[] sortByPriority(final Set<OrderExporter> exporters) {
+        final OrderExporter[] sorted = exporters.toArray(new OrderExporter[exporters.size()]);
+        Arrays.sort(sorted, BY_PRIORITY);
+        return sorted;
+    }
+
+    private static Comparator<OrderExporter> BY_PRIORITY = new Comparator<OrderExporter>() {
+        @Override
+        public int compare(final OrderExporter o1, final OrderExporter o2) {
+            return Integer.compare(o1.getPriority(), o2.getPriority());
+        }
+    };
+
     /** {@inheritDoc} */
     @Override
-    public void markFailedOrder(final Long customerOrderId, final String error) {
+    public void markFailedOrder(final Long customerOrderId, final String exporter, final String error) {
 
         final CustomerOrder customerOrder = customerOrderService.findById(customerOrderId);
         customerOrder.setLastExportOrderStatus(customerOrder.getOrderStatus());
         customerOrder.setLastExportDate(new Date());
         customerOrder.setLastExportStatus(error);
+        // Key is Exporter+Suffix because we want to overwrite this with last error by this exporter (in case this error
+        // is persistent, so that we do not flood the audit table)
+        customerOrder.putValue(exporter + ": ERROR", formatter.get().format(new Date()) + ": " + error, "AUDITEXPORT");
         customerOrderService.update(customerOrder);
 
     }

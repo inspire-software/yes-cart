@@ -72,23 +72,23 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
         if (seoEnabled) {
             if (WebParametersKeys.CATEGORY_ID.equals(idName)) {
 
-                final String categoryId = bookmarkService.saveBookmarkForCategory(idValueToEncode);
-                rez = categoryId != null ? categoryId : idValueToEncode;
+                final String seo = bookmarkService.saveBookmarkForCategory(idValueToEncode);
+                rez = seo != null ? seo : idValueToEncode;
 
             } else if (WebParametersKeys.PRODUCT_ID.equals(idName)) {
 
-                final String productId = bookmarkService.saveBookmarkForProduct(idValueToEncode);
-                rez = productId != null ? productId : idValueToEncode;
+                final String seo = bookmarkService.saveBookmarkForProduct(idValueToEncode);
+                rez = seo != null ? seo : idValueToEncode;
 
             } else if (WebParametersKeys.SKU_ID.equals(idName)) {
 
-                final String skuId = bookmarkService.saveBookmarkForSku(idValueToEncode);
-                rez = skuId != null ? skuId : idValueToEncode;
+                final String seo = bookmarkService.saveBookmarkForSku(idValueToEncode);
+                rez = seo != null ? seo : idValueToEncode;
 
             } else if (WebParametersKeys.CONTENT_ID.equals(idName)) {
 
-                final String contentId = bookmarkService.saveBookmarkForContent(idValueToEncode);
-                rez = contentId != null ? contentId : idValueToEncode;
+                final String seo = bookmarkService.saveBookmarkForContent(idValueToEncode);
+                rez = seo != null ? seo : idValueToEncode;
 
             } else if (WebParametersKeys.PAGE_TYPE.equals(idName)) {
 
@@ -157,24 +157,24 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
         String seoId = idValueToDecode;
         if (seoEnabled) {
             if (WebParametersKeys.CATEGORY_ID.equals(idName)) {
-                final String id = bookmarkService.getCategoryForURI(idValueToDecode);
+                final Long id = bookmarkService.getCategoryForURI(idValueToDecode);
                 if (id != null) {
-                    seoId = id;
+                    seoId = id.toString();
                 }
             } else if (WebParametersKeys.PRODUCT_ID.equals(idName)) {
-                final String id = bookmarkService.getProductForURI(idValueToDecode);
+                final Long id = bookmarkService.getProductForURI(idValueToDecode);
                 if (id != null) {
-                    seoId = id;
+                    seoId = id.toString();
                 }
             } else if (WebParametersKeys.SKU_ID.equals(idName)) {
-                final String id = bookmarkService.getSkuForURI(idValueToDecode);
+                final Long id = bookmarkService.getSkuForURI(idValueToDecode);
                 if (id != null) {
-                    seoId = id;
+                    seoId = id.toString();
                 }
             } else if (WebParametersKeys.CONTENT_ID.equals(idName)) {
-                final String id = bookmarkService.getContentForURI(idValueToDecode);
+                final Long id = bookmarkService.getContentForURI(idValueToDecode);
                 if (id != null) {
-                    seoId = id;
+                    seoId = id.toString();
                 }
             }
         }

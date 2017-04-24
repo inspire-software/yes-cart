@@ -36,7 +36,7 @@ public interface BookmarkService {
      * @param uri SEO URI
      * @return category id
      */
-    String getCategoryForURI(String uri);
+    Long getCategoryForURI(String uri);
 
     /**
      * Save (or return cached) bookmark for given content context.
@@ -51,7 +51,7 @@ public interface BookmarkService {
      * @param uri SEO URI
      * @return category id
      */
-    String getContentForURI(String uri);
+    Long getContentForURI(String uri);
 
     /**
      * Save (or return cached) bookmark for given product context.
@@ -66,7 +66,7 @@ public interface BookmarkService {
      * @param uri SEO URI
      * @return product id
      */
-    String getProductForURI(String uri);
+    Long getProductForURI(String uri);
 
     /**
      * Save (or return cached) bookmark for given SKU context.
@@ -82,6 +82,6 @@ public interface BookmarkService {
      * @param uri SEO URI
      * @return sku id
      */
-    String getSkuForURI(String uri);
+    Long getSkuForURI(String uri);
 
 }

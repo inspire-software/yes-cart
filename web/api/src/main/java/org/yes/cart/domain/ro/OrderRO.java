@@ -135,6 +135,9 @@ public class OrderRO implements Serializable {
     @DtoField(value = "b2bRemarks", readOnly = true)
     private String b2bRemarks;
 
+    @DtoField(value = "requestedDeliveryDate", readOnly = true)
+    private Date requestedDeliveryDate;
+
     @XmlAttribute(name = "customer-order-id")
     public long getCustomerorderId() {
         return customerorderId;
@@ -389,6 +392,15 @@ public class OrderRO implements Serializable {
 
     public void setB2bRemarks(final String b2bRemarks) {
         this.b2bRemarks = b2bRemarks;
+    }
+
+    @XmlElement(name = "requested-delivery-date")
+    public Date getRequestedDeliveryDate() {
+        return requestedDeliveryDate;
+    }
+
+    public void setRequestedDeliveryDate(final Date requestedDeliveryDate) {
+        this.requestedDeliveryDate = requestedDeliveryDate;
     }
 
     public CartTotalRO getTotal() {

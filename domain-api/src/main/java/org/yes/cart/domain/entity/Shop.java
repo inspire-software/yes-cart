@@ -324,6 +324,42 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      */
     boolean isSfAddressBookEnabled(String customerType);
 
+    /**
+     * Flag whether to display tax information for given customer type.
+     *
+     * @param customerType  type of customer
+     *
+     * @return true if tax information should be shown
+     */
+    boolean isSfShowTaxInfo(String customerType);
+
+    /**
+     * Flag whether to display NET (as opposed to GROSS) prices for given customer type.
+     *
+     * @param customerType  type of customer
+     *
+     * @return true if prices are NET (without tax), false if the prices are GROSS (include tax)
+     */
+    boolean isSfShowTaxNet(String customerType);
+
+    /**
+     * Flag whether to display percentage or actual tax amount for given customer type.
+     *
+     * @param customerType  type of customer
+     *
+     * @return true if tax is displayed as amount, false if tax is displayed as percentage
+     */
+    boolean isSfShowTaxAmount(String customerType);
+
+    /**
+     * Flag whether to allow changing price view options for given customer type.
+     *
+     * @param customerType  type of customer
+     *
+     * @return true customer can select various price views (mostly in B2B, e.g. show with/without tax), false if only display one default view (default)
+     */
+    boolean isSfShowTaxOptions(String customerType);
+
 
     /**
      * Flag to denote if shop is disabled on not.

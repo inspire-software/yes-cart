@@ -77,6 +77,10 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Set<String> sfShoppingListsEnabledTypes;
     private Set<String> sfRFQEnabledTypes;
     private Set<String> sfAddressBookDisabledTypes;
+    private Set<String> sfShowTaxInfoTypes;
+    private Set<String> sfShowTaxNetTypes;
+    private Set<String> sfShowTaxAmountTypes;
+    private Set<String> sfShowTaxOptionsTypes;
 
     private Boolean B2BProfileActive = null;
     private Boolean B2BAddresBookActive = null;
@@ -739,6 +743,76 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public boolean isSfAddressBookEnabled(final String customerType) {
         return !getSfAddressBookDisabledTypes().contains(customerType);
+    }
+
+
+    private Set<String> getSfShowTaxInfoTypes() {
+        if (this.sfShowTaxInfoTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO);
+            if (attrs != null) {
+                this.sfShowTaxInfoTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfShowTaxInfoTypes = Collections.emptySet();
+            }
+        }
+        return this.sfShowTaxInfoTypes;
+    }
+
+    public boolean isSfShowTaxInfo(final String customerType) {
+        return getSfShowTaxInfoTypes().contains(customerType);
+    }
+
+
+    private Set<String> getSfShowTaxNetTypes() {
+        if (this.sfShowTaxNetTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET);
+            if (attrs != null) {
+                this.sfShowTaxNetTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfShowTaxNetTypes = Collections.emptySet();
+            }
+        }
+        return this.sfShowTaxNetTypes;
+    }
+
+
+    public boolean isSfShowTaxNet(final String customerType) {
+        return getSfShowTaxNetTypes().contains(customerType);
+    }
+
+
+    private Set<String> getSfShowTaxAmountTypes() {
+        if (this.sfShowTaxAmountTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT);
+            if (attrs != null) {
+                this.sfShowTaxAmountTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfShowTaxAmountTypes = Collections.emptySet();
+            }
+        }
+        return this.sfShowTaxAmountTypes;
+    }
+
+
+    public boolean isSfShowTaxAmount(final String customerType) {
+        return getSfShowTaxAmountTypes().contains(customerType);
+    }
+
+
+    private Set<String> getSfShowTaxOptionsTypes() {
+        if (this.sfShowTaxOptionsTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES);
+            if (attrs != null) {
+                this.sfShowTaxOptionsTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfShowTaxOptionsTypes = Collections.emptySet();
+            }
+        }
+        return this.sfShowTaxOptionsTypes;
+    }
+
+    public boolean isSfShowTaxOptions(final String customerType) {
+        return getSfShowTaxOptionsTypes().contains(customerType);
     }
 
     public String getDefaultShopUrl() {

@@ -136,17 +136,17 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
 
   protected onSearchNumber() {
     this.searchHelpShow = false;
-    this.customerFilter = '#ref';
+    this.customerFilter = '#';
   }
 
   protected onSearchCustomer() {
     this.searchHelpShow = false;
-    this.customerFilter = '?keyword';
+    this.customerFilter = '?';
   }
 
   protected onSearchAddress() {
     this.searchHelpShow = false;
-    this.customerFilter = '@keyword';
+    this.customerFilter = '@';
   }
 
   protected onSearchDate() {
@@ -157,7 +157,7 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
 
   protected onSearchPolicy() {
     this.searchHelpShow = false;
-    this.customerFilter = '$keyword';
+    this.customerFilter = '$';
   }
 
   protected onSearchHelpToggle() {

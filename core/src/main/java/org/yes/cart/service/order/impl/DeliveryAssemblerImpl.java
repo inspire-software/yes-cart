@@ -16,7 +16,9 @@
 
 package org.yes.cart.service.order.impl;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.util.Assert;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
@@ -31,6 +33,7 @@ import org.yes.cart.shoppingcart.Total;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -142,6 +145,13 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                 customerOrderDelivery.setTaxCode(shipping.getTaxCode());
                 customerOrderDelivery.setTaxRate(shipping.getTaxRate());
                 customerOrderDelivery.setTaxExclusiveOfPrice(shipping.isTaxExclusiveOfPrice());
+
+                final String requestedDateKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + customerOrderDelivery.getCarrierSla().getCarrierslaId() + entry.getKey().getSupplier();
+                final long requestedDate = NumberUtils.toLong(shoppingCart.getOrderInfo().getDetailByKey(requestedDateKey), 0);
+                if (requestedDate > System.currentTimeMillis()) {
+                    customerOrderDelivery.setRequestedDeliveryDate(new Date(requestedDate));
+                }
+
 
             }
             order.getDelivery().add(customerOrderDelivery);

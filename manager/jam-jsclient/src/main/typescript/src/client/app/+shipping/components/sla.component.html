@@ -41,6 +41,10 @@
                   </div>
                 </div>
                 <div>
+                  <input formControlName="namedDay" name="namedDay" type="checkbox" [(ngModel)]="sla.namedDay">
+                  <label>{{ 'CARRIERSLA_NAMEDDAY' | translate }}</label>
+                </div>
+                <div>
                   <input formControlName="guaranteed" name="guaranteed" type="checkbox" [(ngModel)]="sla.guaranteed">
                   <label>{{ 'CARRIERSLA_GUARANTEED' | translate }}</label>
                 </div>
@@ -58,8 +62,89 @@
                     {{ 'NUM_REQUIRED' | translate }}
                   </div>
                 </div>
+              </fieldset>
+            </div>
+
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_I18N' | translate }}"  (select)="tabSelected('I18n')">
+
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'NAME' | translate }}"
+                             [source]="sla"
+                             value="name"
+                             i18n="displayNames"
+                             defaultRequired="true"
+                             (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'DESCRIPTION' | translate }}"
+                             [source]="sla"
+                             value="description"
+                             i18n="displayDescriptions"
+                             [formGroup]="slaForm"
+                             (dataChanged)="onDescriptionDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_PG' | translate }}"  (select)="tabSelected('PG')">
+
+        <div class="row">
+          <div class="col-md-6 col-lg-5">
+            <h3>{{ 'ASSIGNED' | translate }}</h3>
+            <span *ngFor="let supportedPg of supportedPgs">
+              <a class="btn js-click" (click)=onSupportedPgClick(supportedPg)><span [ngClass]="supportedPg.active ? '' : 'text-strikethrough text-muted'">{{supportedPg.name}}</span> <i class="fa fa-remove"></i></a>
+            </span>
+          </div>
+          <div class="col-md-6 col-lg-5">
+            <h3>{{ 'AVAILABLE' | translate }}</h3>
+            <span *ngFor="let availablePg of availablePgs">
+              <a class="btn js-click" (click)=onAvailablePgClick(availablePg)>{{availablePg.name}} <i class="fa fa-plus"></i></a>
+            </span>
+          </div>
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'SHOP_TAB_WAREHOUSES' | translate }}"  (select)="tabSelected('FC')">
+
+        <div class="row">
+          <div class="col-md-6 col-lg-5">
+            <h3>{{ 'ASSIGNED' | translate }}</h3>
+            <span *ngFor="let supportedFc of supportedFcs">
+              <a class="btn js-click" (click)=onSupportedFcClick(supportedFc)><span>{{supportedFc.name}}</span> <i class="fa fa-remove"></i></a>
+            </span>
+          </div>
+          <div class="col-md-6 col-lg-5">
+            <h3>{{ 'AVAILABLE' | translate }}</h3>
+            <span *ngFor="let availableFc of availableFcs">
+              <a class="btn js-click" (click)=onAvailableFcClick(availableFc)>{{availableFc.name}} <i class="fa fa-plus"></i></a>
+            </span>
+          </div>
+        </div>
+
+      </tab>
+
+
+      <tab heading="{{ 'CARRIERSLA_EXCLUSIONS' | translate }}"  (select)="tabSelected('Exclusions')">
+
+        <div>
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
                 <div class="form-group">
-                  <label>{{ 'CARRIERSLA_EXCLUSIONS' | translate }}</label>
+                  <label>{{ 'CARRIERSLA_EXCLUDE_CUSTOMER_TYPES' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CARRIERSLA_EXCLUDE_CUSTOMER_TYPES' | translate }}" formControlName="excludeCustomerTypes" name="excludeCustomerTypes" type="text" [(ngModel)]="sla.excludeCustomerTypes">
                 </div>
                 <div>
                   <input formControlName="excludeMonday" name="excludeMonday" type="checkbox" [(ngModel)]="excludeMonday">
@@ -134,72 +219,6 @@
 
           </div>
         </div>
-      </tab>
-
-      <tab heading="{{ 'TAB_I18N' | translate }}"  (select)="tabSelected('I18n')">
-
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'NAME' | translate }}"
-                             [source]="sla"
-                             value="name"
-                             i18n="displayNames"
-                             defaultRequired="true"
-                             (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-lg-9">
-              <yc-i18n-table title="{{ 'DESCRIPTION' | translate }}"
-                             [source]="sla"
-                             value="description"
-                             i18n="displayDescriptions"
-                             [formGroup]="slaForm"
-                             (dataChanged)="onDescriptionDataChange($event)"></yc-i18n-table>
-            </div>
-          </div>
-
-        </div>
-      </tab>
-
-      <tab heading="{{ 'TAB_PG' | translate }}"  (select)="tabSelected('PG')">
-
-        <div class="row">
-          <div class="col-md-6 col-lg-5">
-            <h3>{{ 'ASSIGNED' | translate }}</h3>
-            <span *ngFor="let supportedPg of supportedPgs">
-              <a class="btn js-click" (click)=onSupportedPgClick(supportedPg)><span [ngClass]="supportedPg.active ? '' : 'text-strikethrough text-muted'">{{supportedPg.name}}</span> <i class="fa fa-remove"></i></a>
-            </span>
-          </div>
-          <div class="col-md-6 col-lg-5">
-            <h3>{{ 'AVAILABLE' | translate }}</h3>
-            <span *ngFor="let availablePg of availablePgs">
-              <a class="btn js-click" (click)=onAvailablePgClick(availablePg)>{{availablePg.name}} <i class="fa fa-plus"></i></a>
-            </span>
-          </div>
-        </div>
-
-      </tab>
-
-      <tab heading="{{ 'SHOP_TAB_WAREHOUSES' | translate }}"  (select)="tabSelected('FC')">
-
-        <div class="row">
-          <div class="col-md-6 col-lg-5">
-            <h3>{{ 'ASSIGNED' | translate }}</h3>
-            <span *ngFor="let supportedFc of supportedFcs">
-              <a class="btn js-click" (click)=onSupportedFcClick(supportedFc)><span>{{supportedFc.name}}</span> <i class="fa fa-remove"></i></a>
-            </span>
-          </div>
-          <div class="col-md-6 col-lg-5">
-            <h3>{{ 'AVAILABLE' | translate }}</h3>
-            <span *ngFor="let availableFc of availableFcs">
-              <a class="btn js-click" (click)=onAvailableFcClick(availableFc)>{{availableFc.name}} <i class="fa fa-plus"></i></a>
-            </span>
-          </div>
-        </div>
-
       </tab>
 
       <tab heading="{{ 'TAB_EXTERNAL' | translate }}"  (select)="tabSelected('External')">

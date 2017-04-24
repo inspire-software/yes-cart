@@ -103,6 +103,8 @@ export class SlaComponent implements OnInit, OnDestroy {
       'excludefrom': ['', YcValidators.validDate],
       'excludeto': ['', YcValidators.validDate],
       'guaranteed': [''],
+      'namedDay': [''],
+      'excludeCustomerTypes': [''],
       'slaType': ['', Validators.required],
       'script': ['', YcValidators.nonBlankTrimmed],
       'billingAddressNotRequired': [''],

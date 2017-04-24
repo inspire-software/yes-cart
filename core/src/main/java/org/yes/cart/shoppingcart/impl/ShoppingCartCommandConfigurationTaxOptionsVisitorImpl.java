@@ -16,15 +16,11 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.apache.commons.lang.StringUtils;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.MutableShoppingContext;
-
-import java.util.Arrays;
 
 /**
  * User: denispavlov
@@ -55,26 +51,13 @@ public class ShoppingCartCommandConfigurationTaxOptionsVisitorImpl extends Shopp
 
         // Resolve type. Anonymous type is B2G, blank is B2C
         final String customerType = ensureCustomerType(cart);
-        boolean showTax = shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO);
-        if (showTax) {
-            // If types limit is set then only enable showTax option for given types. Anonymous type is B2G, blank is B2C
-            final String types = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES);
-            showTax = StringUtils.isBlank(types) || Arrays.asList(StringUtils.split(types, ',')).contains(customerType);
-        }
-        boolean showTaxNet = showTax && shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET);
-        boolean showTaxAmount = showTax && shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT);
+        boolean showTax = shop.isSfShowTaxInfo(customerType);
+        boolean showTaxNet = showTax && shop.isSfShowTaxNet(customerType);
+        boolean showTaxAmount = showTax && shop.isSfShowTaxAmount(customerType);
 
         final MutableShoppingContext ctx = cart.getShoppingContext();
 
-        ctx.setTaxInfoChangeViewEnabled(false);
-        final String typesThatCanChangeView = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES);
-        // Ensure change view is allowed for anonymous
-        if (StringUtils.isNotBlank(typesThatCanChangeView)) {
-            final String[] customerTypesThatCanChangeView = StringUtils.split(typesThatCanChangeView, ',');
-            if (Arrays.asList(customerTypesThatCanChangeView).contains(customerType)) {
-                ctx.setTaxInfoChangeViewEnabled(true);
-            }
-        }
+        ctx.setTaxInfoChangeViewEnabled(shop.isSfShowTaxOptions(customerType));
 
         if (ctx.isTaxInfoChangeViewEnabled()) {
             showTax = showTaxOption != null ? showTaxOption : showTax;

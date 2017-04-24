@@ -178,6 +178,11 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                         Collections.<String, Object>singletonMap("from", df.format(delivery.getDeliveryEstimatedMin())));
                                 showDeliveryTime = true;
                             }
+                        } else if (delivery.getRequestedDeliveryDate() != null) {
+                            final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
+                            deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryRequested",
+                                    Collections.<String, Object>singletonMap("date", df.format(delivery.getRequestedDeliveryDate())));
+                            showDeliveryTime = true;
                         } else {
                             deliveryTime = null;
                             showDeliveryTime = false;

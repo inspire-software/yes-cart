@@ -88,6 +88,9 @@ public class VoCustomerOrderDeliveryInfo {
     @DtoField(value = "deliveryConfirmed", readOnly = true)
     private Date deliveryConfirmed;
 
+    @DtoField(value = "requestedDeliveryDate", readOnly = true)
+    private Date requestedDeliveryDate;
+
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
     @DtoField(value = "listPrice", readOnly = true)
@@ -286,6 +289,14 @@ public class VoCustomerOrderDeliveryInfo {
 
     public void setDeliveryConfirmed(final Date deliveryConfirmed) {
         this.deliveryConfirmed = deliveryConfirmed;
+    }
+
+    public Date getRequestedDeliveryDate() {
+        return requestedDeliveryDate;
+    }
+
+    public void setRequestedDeliveryDate(final Date requestedDeliveryDate) {
+        this.requestedDeliveryDate = requestedDeliveryDate;
     }
 
     public BigDecimal getPrice() {

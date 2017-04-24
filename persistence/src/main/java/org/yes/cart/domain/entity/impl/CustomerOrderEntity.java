@@ -72,6 +72,8 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     private Date b2bApprovedDate;
     private String b2bRemarks;
 
+    private Date requestedDeliveryDate;
+
     private Customer customer;
     private Shop shop;
     private Collection<CustomerOrderDet> orderDetail = new ArrayList<CustomerOrderDet>(0);
@@ -286,6 +288,14 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     public void setB2bRemarks(final String b2bRemarks) {
         this.b2bRemarks = b2bRemarks;
+    }
+
+    public Date getRequestedDeliveryDate() {
+        return requestedDeliveryDate;
+    }
+
+    public void setRequestedDeliveryDate(final Date requestedDeliveryDate) {
+        this.requestedDeliveryDate = requestedDeliveryDate;
     }
 
     public Customer getCustomer() {

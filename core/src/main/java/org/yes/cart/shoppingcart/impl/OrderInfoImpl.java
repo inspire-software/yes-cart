@@ -16,6 +16,7 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.shoppingcart.MutableOrderInfo;
 
@@ -68,7 +69,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
 
     /** {@inheritDoc} */
     public void putDetail(final String key, final String detail) {
-        if (detail == null) {
+        if (StringUtils.isBlank(detail)) {
             getDetailsInternal().remove(key);
             if (ORDER_MSG_KEY.equals(key)) {
                 this.orderMessage = null;
@@ -231,7 +232,8 @@ public class OrderInfoImpl implements MutableOrderInfo {
         final Iterator<Map.Entry<String, String>> details = getDetailsInternal().entrySet().iterator();
         while (details.hasNext()) {
             final Map.Entry<String, String> detail = details.next();
-            if (detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID)) {
+            if (detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID) ||
+                    detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID)) {
                 details.remove();
             }
         }

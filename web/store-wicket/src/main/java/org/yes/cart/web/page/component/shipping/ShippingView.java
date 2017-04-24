@@ -16,7 +16,14 @@
 
 package org.yes.cart.web.page.component.shipping;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.IEvent;
+import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
@@ -24,10 +31,13 @@ import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.value.ValueMap;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
@@ -35,6 +45,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -83,6 +94,8 @@ public class ShippingView extends BaseComponent {
 
     private String supplier;
 
+    private Date requestedDate;
+
     /**
      * Construct shipping panel.
      *
@@ -110,7 +123,32 @@ public class ShippingView extends BaseComponent {
         setCarrier(selection.getFirst());
         setCarrierSla(selection.getSecond());
 
-        final Form form = new StatelessForm(SHIPPING_FORM);
+        if (selection.getSecond() != null && selection.getSecond().isNamedDay()) {
+            final String suffix = selection.getSecond().getCarrierslaId() + supplier;
+            final String requested = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + suffix;
+            final long selectedDate = NumberUtils.toLong(getCurrentCart().getOrderInfo().getDetailByKey(requested));
+            if (selectedDate > 0L) {
+                setRequestedDate(new Date(selectedDate));
+            }
+        }
+
+        final Form form = new StatelessForm(SHIPPING_FORM) {
+            @Override
+            protected void onSubmit() {
+
+                final String suffix = getCarrierSla().getCarrierslaId() + supplier;
+                final String requested = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + suffix;
+                final String requestedDateLongStr = getRequestedDate() != null ? String.valueOf(getRequestedDate().getTime()) : "";
+
+                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETORDERDETAILS, getCurrentCart(),
+                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETORDERDETAILS, requested + ":" + requestedDateLongStr)
+                );
+
+                ((AbstractWebPage) getPage()).persistCartIfNecessary();
+
+                super.onSubmit();
+            }
+        };
 
         final Component shippingSelector = new RadioGroup<CarrierSla>(
                 CARRIER_SLA_LIST,
@@ -203,6 +241,7 @@ public class ShippingView extends BaseComponent {
                                 ", " + shippingItem.getModelObject().getName()));
 
                         final boolean infoVisible = shippingItem.getModelObject().equals(carrierSla);
+                        final boolean showDateSelect = infoVisible && carrierSla.isNamedDay();
 
                         contentParams.put("cart", cart);
                         contentParams.put("carrierSla", carrierSla);
@@ -211,6 +250,77 @@ public class ShippingView extends BaseComponent {
                         shippingItem.add(new Label("shippingInfo", contentServiceFacade.getDynamicContentBody("checkout_shipping_"
                                         + shippingItem.getModelObject().getGuid(),
                                 contentShopId, getLocale().getLanguage(), contentParams)).setEscapeModelStrings(false).setVisible(infoVisible));
+
+                        if (showDateSelect) {
+
+                            final IModel<Date> model = new PropertyModel<Date>(ShippingView.this, "requestedDate");
+
+                            final String namedDateSelectorId = "namedDaySelection" + getCarrierSla().getCarrierslaId() + supplier;
+                            final DateTextField namedDateSelector = new DateTextField("namedDaySelection", model, "dd/MM/yyyy"); // TODO: format in settings?
+                            namedDateSelector.add(new AttributeModifier("id", namedDateSelectorId));
+
+                            String js = "";
+
+                            final String suffix = selection.getSecond().getCarrierslaId() + supplier;
+                            final String minKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + "Min" + suffix;
+                            final String maxKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + "Max" + suffix;
+                            final String excludedDatesKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + "DExcl" + suffix;
+                            final String excludedWeekdaysKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + "WExcl" + suffix;
+
+                            final String min = getCurrentCart().getOrderInfo().getDetailByKey(minKey);
+                            final String max = getCurrentCart().getOrderInfo().getDetailByKey(maxKey);
+                            final String excludedD = getCurrentCart().getOrderInfo().getDetailByKey(excludedDatesKey);
+                            final String[] excludedDays = StringUtils.split(excludedD, ',');
+                            final String excludedW = getCurrentCart().getOrderInfo().getDetailByKey(excludedWeekdaysKey);
+                            final String[] excludedWeekdays = StringUtils.split(excludedW, ',');
+
+                            final StringBuilder jsOut = new StringBuilder();
+                            jsOut.append("        <script type=\"text/javascript\">\n");
+                            jsOut.append("            $(function () {\n");
+                            jsOut.append("                var _input = $('#" + namedDateSelectorId + "')\n");
+                            jsOut.append("                _input.parent().datetimepicker({\n");
+                            jsOut.append("                    format: 'DD/MM/YYYY',\n");
+                            jsOut.append("                    ignoreReadonly: true,\n");
+                            if (getRequestedDate() != null) {
+                                jsOut.append("                date: new Date(" + getRequestedDate().getTime() + "),\n");
+                            }
+                            jsOut.append("                    minDate: new Date(" + min + "),\n");
+                            jsOut.append("                    maxDate: new Date(" + max + "),\n");
+                            if (excludedDays != null) {
+                                jsOut.append("                disabledDates: [\n");
+                                for (final String excludedDay : excludedDays) {
+                                    jsOut.append("                 new Date(" + excludedDay + "),\n");
+                                }
+                                jsOut.append("                ],\n");
+                            }
+                            if (excludedWeekdays != null) {
+                                jsOut.append("                daysOfWeekDisabled: [\n");
+                                for (final String excludedWeekday : excludedWeekdays) {
+                                    jsOut.append("                " + (NumberUtils.toInt(excludedWeekday) - 1) + ",");
+                                }
+                                jsOut.append("                ],\n");
+                            }
+                            jsOut.append("                    locale: '" + getLocale().getLanguage() + "'\n");
+                            jsOut.append("                }).on('dp.change', function() { setTimeout(function() { $('#" + namedDateSelectorId + "').closest('form').submit(); }, 200); });\n");
+                            jsOut.append("            });\n");
+                            jsOut.append("        </script>\n");
+
+                            js = jsOut.toString();
+
+                            final Component namedDaySelectionConfig = new Label("namedDaySelectionConfig", js).setEscapeModelStrings(false);
+
+                            final Component namedDayEditor = new Fragment("namedDayEditor", "namedDayFragment", ShippingView.this)
+                                    .add(namedDateSelector).add(namedDaySelectionConfig);
+
+                            shippingItem.add(namedDayEditor);
+
+                        } else {
+
+                            final Component namedDayEditor = new Fragment("namedDayEditor", "namedDayFragmentEmpty", ShippingView.this);
+                            shippingItem.add(namedDayEditor);
+
+                        }
+
 
                     }
                 });
@@ -347,4 +457,21 @@ public class ShippingView extends BaseComponent {
         this.carrierSla = carrierSla;
     }
 
+    /**
+     * Get requested date for named delivery.
+     *
+     * @return requested date
+     */
+    public Date getRequestedDate() {
+        return requestedDate;
+    }
+
+    /**
+     * Set requested date for named delivery.
+     *
+     * @param requestedDate requested date
+     */
+    public void setRequestedDate(final Date requestedDate) {
+        this.requestedDate = requestedDate;
+    }
 }

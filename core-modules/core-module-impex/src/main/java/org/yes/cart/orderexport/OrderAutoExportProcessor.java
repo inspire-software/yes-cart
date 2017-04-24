@@ -30,15 +30,16 @@ public interface OrderAutoExportProcessor extends Runnable {
      *
      * @param customerOrderId order eligible for export
      */
-    void processSingleOrder(Long customerOrderId);
+    void processSingleOrder(Long customerOrderId) throws ExportProcessorException;
 
     /**
      * Process single order eligible for export.
      *
      * @param customerOrderId order eligible for export
+     * @param exporter exporter that failed
      * @param error error message
      */
-    void markFailedOrder(Long customerOrderId, String error);
+    void markFailedOrder(Long customerOrderId, String exporter, String error);
 
     /**
      * Register order exporter.

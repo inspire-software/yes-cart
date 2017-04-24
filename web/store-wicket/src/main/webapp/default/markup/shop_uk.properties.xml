@@ -179,6 +179,7 @@
     <entry key="deliveryEstimatedXY">Доставка: ${from} - ${to}</entry>
     <entry key="deliveryGuaranteed">Дата доставки ${date}</entry>
     <entry key="deliveryConfirmed">Доставлено ${date}</entry>
+    <entry key="deliveryRequested">Позначена дата доставки: ${date}</entry>
 
     <!-- ShippingDeliveriesView -->
     <entry key="deliveryCarrierSelect">Спосіб доставки</entry>

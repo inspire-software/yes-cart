@@ -124,6 +124,7 @@
                   <label>{{ 'PROMOTION_ACTION' | translate }}</label>
                   <select class="form-control" formControlName="promoAction" name="promoAction" type="text" [(ngModel)]="promotion.promoAction">
                     <option value="P" [disabled]="promotion.promoType == 'C'">{{ 'PROMOTION_ACTION_P' | translate }}</option>
+                    <option value="S" [disabled]="promotion.promoType == 'C' || promotion.promoType == 'S'">{{ 'PROMOTION_ACTION_S' | translate }}</option>
                     <option value="F" [disabled]="promotion.promoType == 'C'">{{ 'PROMOTION_ACTION_F' | translate }}</option>
                     <option value="G" [disabled]="promotion.promoType == 'C' || promotion.promoType == 'S'">{{ 'PROMOTION_ACTION_G' | translate }}</option>
                     <option value="T" [disabled]="promotion.promoType != 'C'">{{ 'PROMOTION_ACTION_T' | translate }}</option>

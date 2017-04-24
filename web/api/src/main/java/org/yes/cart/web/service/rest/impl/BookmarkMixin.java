@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.service.rest.impl;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yes.cart.web.support.seo.BookmarkService;
@@ -41,13 +40,8 @@ public class BookmarkMixin {
      * @return PK for category
      */
     public long resolveCategoryId(final String category) {
-        final long categoryId = NumberUtils.toLong(category, 0L);
-        if (categoryId > 0L) {
-            bookmarkService.saveBookmarkForCategory(category);
-            return categoryId;
-        }
-        final String categoryIdStr = bookmarkService.getCategoryForURI(category);
-        return NumberUtils.toLong(categoryIdStr, 0L);
+        final Long categoryId = bookmarkService.getCategoryForURI(category);
+        return categoryId != null ? categoryId : 0L;
     }
 
     /**
@@ -58,13 +52,8 @@ public class BookmarkMixin {
      * @return PK for content
      */
     public long resolveContentId(final String content) {
-        final long contentId = NumberUtils.toLong(content, 0L);
-        if (contentId > 0L) {
-            bookmarkService.saveBookmarkForContent(content);
-            return contentId;
-        }
-        final String contentIdStr = bookmarkService.getContentForURI(content);
-        return NumberUtils.toLong(contentIdStr, 0L);
+        final Long contentId = bookmarkService.getContentForURI(content);
+        return contentId != null ? contentId : 0L;
     }
 
 
@@ -76,13 +65,8 @@ public class BookmarkMixin {
      * @return PK for product
      */
     public long resolveProductId(final String product) {
-        final long productId = NumberUtils.toLong(product, 0L);
-        if (productId > 0L) {
-            bookmarkService.saveBookmarkForProduct(product);
-            return productId;
-        }
-        final String productIdStr = bookmarkService.getProductForURI(product);
-        return NumberUtils.toLong(productIdStr, 0L);
+        final Long productId = bookmarkService.getProductForURI(product);
+        return productId != null ? productId : 0L;
     }
 
 
@@ -94,13 +78,8 @@ public class BookmarkMixin {
      * @return PK for product SKU
      */
     public long resolveSkuId(final String sku) {
-        final long skuId = NumberUtils.toLong(sku, 0L);
-        if (skuId > 0L) {
-            bookmarkService.saveBookmarkForProduct(sku);
-            return skuId;
-        }
-        final String skuIdStr = bookmarkService.getSkuForURI(sku);
-        return NumberUtils.toLong(skuIdStr, 0L);
+        final Long skuId = bookmarkService.getSkuForURI(sku);
+        return skuId != null ? skuId : 0L;
     }
 
 

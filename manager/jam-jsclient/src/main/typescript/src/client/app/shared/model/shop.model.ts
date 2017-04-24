@@ -165,10 +165,6 @@ export interface ShopSummaryVO {
   checkoutEnableMessage: Pair<string, boolean>;
   checkoutEnableQuanityPicker: Pair<string, boolean>;
 
-  taxEnableShow: Pair<string, boolean>;
-  taxEnableShowNet: Pair<string, boolean>;
-  taxEnableShowAmount: Pair<string, boolean>;
-
   adminEmail: Pair<string, string>;
   b2bProfileActive: Pair<string, boolean>;
   b2bAddressbookActive: Pair<string, boolean>;
@@ -181,6 +177,8 @@ export interface ShopSummaryVO {
   customerTypesRequireRegistrationApproval: Pair<string, string[]>;
   customerTypesRequireRegistrationNotification: Pair<string, string[]>;
   customerTypesSeeTax: Pair<string, string[]>;
+  customerTypesSeeNetPrice: Pair<string, string[]>;
+  customerTypesSeeTaxAmount: Pair<string, string[]>;
   customerTypesChangeTaxView: Pair<string, string[]>;
   customerTypesRfq: Pair<string, string[]>;
   customerTypesOrderApproval: Pair<string, string[]>;

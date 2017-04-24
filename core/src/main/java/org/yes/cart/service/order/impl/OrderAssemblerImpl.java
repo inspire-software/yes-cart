@@ -18,6 +18,7 @@ package org.yes.cart.service.order.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.EntityFactory;
@@ -31,6 +32,7 @@ import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
+import java.lang.System;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -308,6 +310,10 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setOrderMessage(shoppingCart.getOrderMessage());
         customerOrder.setB2bRemarks(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_REMARKS_ID));
 
+        final long requestedDate = NumberUtils.toLong(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID), 0);
+        if (requestedDate > System.currentTimeMillis()) {
+            customerOrder.setRequestedDeliveryDate(new Date(requestedDate));
+        }
 
     }
 

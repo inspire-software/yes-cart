@@ -233,7 +233,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
   }
 
   protected onSearchTag() {
-    this.pricelistFilter = '#tag';
+    this.pricelistFilter = '#';
     this.searchHelpShow = false;
   }
 
