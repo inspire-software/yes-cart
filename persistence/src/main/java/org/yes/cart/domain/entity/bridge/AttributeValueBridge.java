@@ -18,16 +18,12 @@ package org.yes.cart.domain.entity.bridge;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.hibernate.search.bridge.FieldBridge;
-import org.hibernate.search.bridge.LuceneOptions;
+//import org.hibernate.search.bridge.FieldBridge;
+//import org.hibernate.search.bridge.LuceneOptions;
 import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.entity.bridge.support.NavigatableAttributesSupport;
-import org.yes.cart.domain.entity.StoredAttributes;
-import org.yes.cart.domain.entity.impl.StoredAttributesImpl;
+import org.yes.cart.search.dao.support.NavigatableAttributesSupport;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
-import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
 import java.util.*;
 
@@ -36,13 +32,13 @@ import java.util.*;
  * Date: 07-May-2011
  * Time: 16:13:01
  */
-public class AttributeValueBridge implements FieldBridge {
+public class AttributeValueBridge /* implements FieldBridge */ {
 
 
     /**
      * {@inheritDoc}
      */
-    public void set(final String name, final Object value, final Document document, final LuceneOptions luceneOptions) {
+    public void set(final String name, final Object value, final Document document /*, final LuceneOptions luceneOptions */) {
 
 //        if (value instanceof Collection) {
 //

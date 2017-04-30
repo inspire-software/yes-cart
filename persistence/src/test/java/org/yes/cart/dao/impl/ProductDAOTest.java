@@ -33,6 +33,8 @@ import org.yes.cart.search.query.impl.ProductShopInStockSearchQueryBuilder;
 import org.yes.cart.search.query.impl.ProductSkuCodeSearchQueryBuilder;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -187,6 +189,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 assertEquals("Product must be found. Failed query [" + query + "]", 1, products.size());
                 assertEquals(pk, products.get(0).getProductId());
 
+                product.getProductCategory().remove(productCategory);
                 productCategoryDao.delete(productCategory);
                 productCategoryDao.flush();  // make changes visible
                 product = productDao.findById(product.getProductId());
@@ -255,9 +258,10 @@ public class ProductDAOTest extends AbstractTestDAO {
                 final SearchQueryBuilder inStockQueryBuilder = new ProductShopInStockSearchQueryBuilder();
                 final Query queryInStock = inStockQueryBuilder.createStrictQuery(10L, null, 10L);
 
-                final BooleanQuery.Builder skuInStockQuery = new BooleanQuery.Builder();
-                skuInStockQuery.add(queryBySku, BooleanClause.Occur.MUST);
-                skuInStockQuery.add(queryInStock, BooleanClause.Occur.MUST);
+                final BooleanQuery.Builder skuInStockQueryBuilder = new BooleanQuery.Builder();
+                skuInStockQueryBuilder.add(queryBySku, BooleanClause.Occur.MUST);
+                skuInStockQueryBuilder.add(queryInStock, BooleanClause.Occur.MUST);
+                final BooleanQuery skuInStockQuery = skuInStockQueryBuilder.build();
 
                 products = productDao.fullTextSearch(queryBySku);
                 assertEquals("Product must be found . Failed query [" + queryBySku + "]", 1, products.size());
@@ -274,8 +278,8 @@ public class ProductDAOTest extends AbstractTestDAO {
                 // Need to call index as we are not committing the transaction
                 productDao.fullTextSearchReindex(product.getProductId(), false);
 
-                // Product is not removed from index if it is out of stock as it is shop dependent
-                assertEquals("Failed SKU search [" + queryBySku + "] because products are out of stock", 1, productDao.fullTextSearchCount(queryBySku));
+                // Product is removed from index because if it is standard product we must have stock
+                assertEquals("Failed SKU search [" + queryBySku + "] because products are out of stock", 0, productDao.fullTextSearchCount(queryBySku));
                 // on site global. must be empty, because quantity is 0
                 assertEquals("Failed SKU search [" + skuInStockQuery + "] because products are out of stock", 0, productDao.fullTextSearchCount(skuInStockQuery));
 
@@ -302,6 +306,12 @@ public class ProductDAOTest extends AbstractTestDAO {
                 product.setCode("SONY_PRODUCT_CODE");
                 product.setName("product sony name");
                 product.setDescription("Description ");
+                try {
+                    // Preorders are only preorders if available to date is in future, otherwise standard
+                    product.setAvailablefrom(new SimpleDateFormat("yyyy-MM-dd").parse("2099-01-01"));
+                } catch (ParseException pe) {
+                    fail(pe.getMessage());
+                }
 
                 ProductType productType = productTypeDao.findById(1L);
                 assertNotNull(productType);
@@ -325,6 +335,18 @@ public class ProductDAOTest extends AbstractTestDAO {
 
                 final SearchQueryBuilder queryBuilder = new ProductSkuCodeSearchQueryBuilder();
                 final Query query = queryBuilder.createStrictQuery(0L, null, Arrays.asList("SONY_PRODUCT_CODE"));
+
+                products = productDao.fullTextSearch(query);
+                assertEquals("Product must not be found because preorderable items must have inventory record. Failed query [" + query + "]", 0, products.size());
+
+                // add quantity on warehouses
+                SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
+                skuWarehouse.setSkuCode(productSku.getCode());
+                skuWarehouse.setQuantity(BigDecimal.ZERO);
+                skuWarehouse.setWarehouse(warehouseDao.findById(2L));
+
+                skuWarehouse = skuWareHouseDao.create(skuWarehouse);
+                productDao.fullTextSearchReindex(product.getProductId());
 
                 products = productDao.fullTextSearch(query);
                 assertEquals("Product must be found because although products are out of stock it is preorderable. Failed query [" + query + "]", 1, products.size());
@@ -378,7 +400,19 @@ public class ProductDAOTest extends AbstractTestDAO {
                 final Query query = queryBuilder.createStrictQuery(0L, null, Arrays.asList("SONY_PRODUCT_CODE"));
 
                 products = productDao.fullTextSearch(query);
-                assertEquals("Product must be found because although products are out of stock it is preorderable. Failed query [" + query + "]", 1, products.size());
+                assertEquals("Product must not be found because back order items. Failed query [" + query + "]", 0, products.size());
+
+                // add quantity on warehouses
+                SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
+                skuWarehouse.setSkuCode(productSku.getCode());
+                skuWarehouse.setQuantity(BigDecimal.ZERO);
+                skuWarehouse.setWarehouse(warehouseDao.findById(2L));
+
+                skuWarehouse = skuWareHouseDao.create(skuWarehouse);
+                productDao.fullTextSearchReindex(product.getProductId());
+
+                products = productDao.fullTextSearch(query);
+                assertEquals("Product must be found because although products are out of stock it is backorderable. Failed query [" + query + "]", 1, products.size());
                 assertEquals(pk, products.get(0).getProductId());
 
                 status.setRollbackOnly();

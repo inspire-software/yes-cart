@@ -20,7 +20,7 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
-import org.yes.cart.domain.entity.bridge.support.ShopWarehouseRelationshipSupport;
+import org.yes.cart.search.dao.support.ShopWarehouseRelationshipSupport;
 
 import java.util.*;
 

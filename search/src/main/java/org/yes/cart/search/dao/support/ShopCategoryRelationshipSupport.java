@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.entity.bridge.support;
+package org.yes.cart.search.dao.support;
 
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;

@@ -14,10 +14,10 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.entity.bridge.support;
+package org.yes.cart.search.dao.support;
 
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.entity.SkuPrice;
 
 import java.util.List;
 import java.util.Map;
@@ -25,10 +25,17 @@ import java.util.Set;
 
 /**
  * User: denispavlov
- * Date: 13-10-16
- * Time: 5:01 PM
+ * Date: 29/05/2015
+ * Time: 08:00
  */
-public interface ShopWarehouseRelationshipSupport {
+public interface SkuPriceRelationshipSupport {
+
+    /**
+     * Get all entities.
+     *
+     * @return list of all entities
+     */
+    Map<Long, Set<Shop>> getAllShopsAndSubs();
 
     /**
      * Get all entities.
@@ -38,28 +45,28 @@ public interface ShopWarehouseRelationshipSupport {
     List<Shop> getAll();
 
     /**
-     * Get map of all shops by fulfilment centre id.
+     * Get all entities.
      *
-     * @return key => ff, value => shops
+     * @return list of all entities
      */
-    Map<Long, Set<Long>> getShopsByFulfilmentMap();
+    List<Shop> getAllNonSub();
 
     /**
-     * Get all warehouses that belong to given shop.
+     * Get all entities.
      *
-     * @param shopId given shop
-     * @param includeDisabled true to include disabled links
-     * @return list of warehouses
+     * @param masterId master PK
+     *
+     * @return list of all entities
      */
-    Set<Long> getShopWarehouseIds(long shopId, boolean includeDisabled);
+    List<Shop> getAllMastered(long masterId);
 
     /**
-     * Get all warehouses that belong to given shop.
+     * Get prices for given sku on all shops.
      *
-     * @param shopId given shop
-     * @param includeDisabled true to include disabled links
-     * @return list of warehouses PKs
+     * @param sku sku code
+     *
+     * @return all prices for given sku on the system
      */
-    List<Warehouse> getShopWarehouses(long shopId, boolean includeDisabled);
+    List<SkuPrice> getSkuPrices(String sku);
 
 }

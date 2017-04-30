@@ -75,16 +75,16 @@
                 <prop key="hibernate.dialect">${db.config.yes.hibernate.dialect}</prop>
                 <prop key="show_sql">false</prop>
 
-                <prop key="hibernate.search.default.directory_provider">${db.config.yes.hibernate.search.default.directory_provider}</prop>
+                <!--<prop key="hibernate.search.default.directory_provider">${db.config.yes.hibernate.search.default.directory_provider}</prop>-->
 
-                <prop key="hibernate.search.default.indexBase">${db.config.yes.hibernate.search.default.indexBase}</prop>
+                <!--<prop key="hibernate.search.default.indexBase">${db.config.yes.hibernate.search.default.indexBase}</prop>-->
 
-                <prop key="hibernate.search.worker.execution">async</prop>
-                <prop key="hibernate.search.worker.thread_pool.size">10</prop>
-                <prop key="hibernate.search.default.exclusive_index_use">false</prop>
+                <!--<prop key="hibernate.search.worker.execution">async</prop>-->
+                <!--<prop key="hibernate.search.worker.thread_pool.size">10</prop>-->
+                <!--<prop key="hibernate.search.default.exclusive_index_use">false</prop>-->
                 <!-- Disable hibernate search automatic support - since we do indexing manually -->
-                <prop key="hibernate.search.autoregister_listeners">true</prop>
-                <prop key="hibernate.search.indexing_strategy">manual</prop>
+                <!--<prop key="hibernate.search.autoregister_listeners">true</prop>-->
+                <!--<prop key="hibernate.search.indexing_strategy">manual</prop>-->
             </props>
         </property>
     </bean>

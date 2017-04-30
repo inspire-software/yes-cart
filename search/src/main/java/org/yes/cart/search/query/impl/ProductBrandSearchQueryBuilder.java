@@ -48,7 +48,7 @@ public class ProductBrandSearchQueryBuilder extends AbstractSearchQueryBuilderIm
                 }
                 return aggregatedQuery.build();
 
-            } else if (brands.size() > 1) {
+            } else if (brands.size() == 1) {
                 return createTermQuery(BRAND_FIELD, escapeValue(brands.iterator().next().toLowerCase()), 3.5f);
             } else {
                 return null;

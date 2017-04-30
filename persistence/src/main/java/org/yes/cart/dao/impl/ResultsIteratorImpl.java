@@ -16,8 +16,9 @@
 
 package org.yes.cart.dao.impl;
 
+import org.hibernate.Hibernate;
 import org.hibernate.ScrollableResults;
-import org.hibernate.search.util.impl.HibernateHelper;
+//import org.hibernate.search.util.impl.HibernateHelper;
 import org.yes.cart.dao.ResultsIterator;
 
 /**
@@ -50,7 +51,9 @@ public class ResultsIteratorImpl<T> implements ResultsIterator<T> {
     @Override
     public T next() {
         if (hasNext) {
-            return (T) HibernateHelper.unproxy(scrollableResults.get(0));
+            final T next = (T) scrollableResults.get(0);
+            Hibernate.initialize(next);
+            return next;
         }
         throw new ArrayIndexOutOfBoundsException("Check that hasNext() returns true first");
     }

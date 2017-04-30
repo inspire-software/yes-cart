@@ -16,24 +16,10 @@
 
 package org.yes.cart.domain.entity.bridge;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.hibernate.search.bridge.FieldBridge;
-import org.hibernate.search.bridge.LuceneOptions;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.domain.entity.bridge.support.SkuPriceRelationshipSupport;
-import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.search.query.ProductSearchQueryBuilder;
-import org.yes.cart.search.query.impl.SearchUtil;
-import org.yes.cart.util.DomainApiUtils;
-import org.yes.cart.util.MoneyUtils;
-
-import java.math.BigDecimal;
-import java.util.*;
+//import org.hibernate.search.bridge.FieldBridge;
+//import org.hibernate.search.bridge.LuceneOptions;
+import org.yes.cart.search.dao.support.SkuPriceRelationshipSupport;
 
 /**
  *
@@ -43,10 +29,10 @@ import java.util.*;
  * Date: 07-May-2011
  * Time: 16:13:01
  * */
-public class SkuPriceBridge implements FieldBridge {
+public class SkuPriceBridge /* implements FieldBridge */ {
 
     /** {@inheritDoc} */
-    public void set(final String proposedFiledName, final Object value, final Document document, final LuceneOptions luceneOptions) {
+    public void set(final String proposedFiledName, final Object value, final Document document /*, final LuceneOptions luceneOptions */) {
 
 //        if (!(value instanceof ProductSku)) {
 //            return;

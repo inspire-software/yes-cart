@@ -16,8 +16,8 @@
 
 package org.yes.cart.domain.entity.bridge;
 
-import org.hibernate.search.bridge.ParameterizedBridge;
-import org.hibernate.search.bridge.StringBridge;
+//import org.hibernate.search.bridge.ParameterizedBridge;
+//import org.hibernate.search.bridge.StringBridge;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.search.query.impl.SearchUtil;
 
@@ -34,7 +34,7 @@ import java.util.Map;
  * Time: 16:13:01 *
  *
  */
-public class BigDecimalBridge implements StringBridge, ParameterizedBridge {
+public class BigDecimalBridge /* implements StringBridge, ParameterizedBridge */ {
 
     private int scale = Constants.DEFAULT_SCALE;
 
@@ -57,7 +57,7 @@ public class BigDecimalBridge implements StringBridge, ParameterizedBridge {
         return null;
     }
 
-    @Override
+//    @Override
     public void setParameterValues(final Map<String, String> parameters) {
         this.scale = Integer.valueOf(parameters.get("scale"));
     }

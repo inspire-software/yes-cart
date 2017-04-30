@@ -18,7 +18,7 @@ package org.yes.cart.domain.entity.bridge.support.impl;
 
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Attribute;
-import org.yes.cart.domain.entity.bridge.support.NavigatableAttributesSupport;
+import org.yes.cart.search.dao.support.NavigatableAttributesSupport;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
 import java.util.HashSet;

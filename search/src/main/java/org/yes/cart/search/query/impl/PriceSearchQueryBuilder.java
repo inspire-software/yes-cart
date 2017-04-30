@@ -51,11 +51,12 @@ public class PriceSearchQueryBuilder extends AbstractSearchQueryBuilderImpl impl
         final Pair<String, Pair<BigDecimal, BigDecimal>> priceParams =
                 priceNavigation.decomposePriceRequestParams(searchValue);
 
-        final Pair<String, String> from = SearchUtil.priceToFacetPair(shopId, priceParams.getFirst(), priceParams.getSecond().getFirst());
-        final Pair<String, String> to = SearchUtil.priceToFacetPair(shopId, priceParams.getFirst(), priceParams.getSecond().getSecond());
+        final String facet = SearchUtil.priceFacetName(shopId, priceParams.getFirst());
+        final Long from = SearchUtil.priceToLong(priceParams.getSecond().getFirst());
+        final Long to = SearchUtil.priceToLong(priceParams.getSecond().getSecond());
 
         // field name for from and to will be the same
-        return createRangeQuery(from.getFirst(), from.getSecond(), to.getSecond());
+        return createRangeQuery(facet + "_range", from, to);
     }
 
     /**

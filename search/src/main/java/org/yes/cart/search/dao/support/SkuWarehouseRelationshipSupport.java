@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.entity.bridge.support;
+package org.yes.cart.search.dao.support;
 
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
@@ -28,6 +28,15 @@ import java.util.List;
  * Time: 17:53
  */
 public interface SkuWarehouseRelationshipSupport {
+
+    /**
+     * Get code of warehouse for given record.
+     *
+     * @param skuWarehouse inventory
+     *
+     * @return warehouse code
+     */
+    String getWarehouseCode(SkuWarehouse skuWarehouse);
 
     /**
      * Get quantities for given sku on all warehouses.

@@ -17,8 +17,8 @@
 package org.yes.cart.domain.entity.bridge;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.hibernate.search.bridge.TwoWayStringBridge;
-import org.hibernate.search.bridge.builtin.impl.TwoWayString2FieldBridgeAdaptor;
+//import org.hibernate.search.bridge.TwoWayStringBridge;
+//import org.hibernate.search.bridge.builtin.impl.TwoWayString2FieldBridgeAdaptor;
 import org.yes.cart.domain.entity.Product;
 
 /**
@@ -26,20 +26,20 @@ import org.yes.cart.domain.entity.Product;
  * Date: 27/11/2014
  * Time: 00:06
  */
-public class ProductBridge extends TwoWayString2FieldBridgeAdaptor {
+public class ProductBridge /* extends TwoWayString2FieldBridgeAdaptor */ {
 
-    public ProductBridge() {
-        super(new TwoWayStringBridge() {
-            @Override
-            public Object stringToObject(final String stringValue) {
-                return NumberUtils.toLong(stringValue);
-            }
-
-            @Override
-            public String objectToString(final Object object) {
-                return String.valueOf(((Product) object).getProductId());
-            }
-        });
-    }
+//    public ProductBridge() {
+//        super(new TwoWayStringBridge() {
+//            @Override
+//            public Object stringToObject(final String stringValue) {
+//                return NumberUtils.toLong(stringValue);
+//            }
+//
+//            @Override
+//            public String objectToString(final Object object) {
+//                return String.valueOf(((Product) object).getProductId());
+//            }
+//        });
+//    }
 
 }

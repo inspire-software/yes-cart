@@ -16,12 +16,11 @@
 
 package org.yes.cart.domain.entity.bridge.support.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
-import org.yes.cart.domain.entity.bridge.support.SkuWarehouseRelationshipSupport;
+import org.yes.cart.search.dao.support.SkuWarehouseRelationshipSupport;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,11 +34,25 @@ import java.util.List;
  */
 public class SkuWarehouseRelationshipSupportImpl implements SkuWarehouseRelationshipSupport {
 
+    private final GenericDAO<Warehouse, Long> warehouseDao;
     private final GenericDAO<SkuWarehouse, Long> skuWarehouseDao;
 
 
-    public SkuWarehouseRelationshipSupportImpl(final GenericDAO<SkuWarehouse, Long> skuWarehouseDao) {
+    public SkuWarehouseRelationshipSupportImpl(final GenericDAO<Warehouse, Long> warehouseDao,
+                                               final GenericDAO<SkuWarehouse, Long> skuWarehouseDao) {
+        this.warehouseDao = warehouseDao;
         this.skuWarehouseDao = skuWarehouseDao;
+    }
+
+    /** {@inheritDoc} */
+    public String getWarehouseCode(final SkuWarehouse skuWarehouse) {
+        if (skuWarehouse != null) {
+            final Warehouse warehouse = warehouseDao.findById(skuWarehouse.getWarehouse().getWarehouseId());
+            if (warehouse != null) {
+                return warehouse.getCode();
+            }
+        }
+        return null;
     }
 
     /** {@inheritDoc} */

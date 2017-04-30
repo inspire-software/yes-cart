@@ -51,7 +51,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, "query", "SearchWord");
         assertNotNull(query);
-        assertEquals("((name:SearchWord~2)^3.0 (displayName:SearchWord~2)^3.0 (sku.code:SearchWord~2)^10.0 (sku.manufacturerCode:SearchWord~2)^10.0 (attribute.attrvalsearchprimary:SearchWord)^15.0 (attribute.attrvalsearchphrase:searchword~2)^4.0)", query.toString());
+        assertEquals("((name:searchword~2)^3.0 (displayName:searchword~2)^3.0 (sku.code:searchword~2)^10.0 (sku.manufacturerCode:searchword~2)^10.0 (attribute.attrvalsearchprimary:searchword)^15.0 (attribute.attrvalsearchphrase:searchword~2)^4.0)", query.toString());
 
     }
 
@@ -60,7 +60,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, "query", "Search, Word");
         assertNotNull(query);
-        assertEquals("((name:Search, Word~2)^3.0 (displayName:Search, Word~2)^3.0 (sku.code:Search, Word~2)^10.0 (sku.manufacturerCode:Search, Word~2)^10.0 (attribute.attrvalsearchprimary:Search, Word)^15.0 (attribute.attrvalsearchphrase:search, word~2)^4.0) ((name:search~2)^2.0 (displayName:search~2)^2.0 (sku.code:search~2)^10.0 (sku.manufacturerCode:search~2)^10.0 (attribute.attrvalsearch:search~2)^4.0) ((name:word~2)^2.0 (displayName:word~2)^2.0 (sku.code:word~2)^10.0 (sku.manufacturerCode:word~2)^10.0 (attribute.attrvalsearch:word~2)^4.0)", query.toString());
+        assertEquals("((name:search, word~2)^3.0 (displayName:search, word~2)^3.0 (sku.code:search, word~2)^10.0 (sku.manufacturerCode:search, word~2)^10.0 (attribute.attrvalsearchprimary:search, word)^15.0 (attribute.attrvalsearchphrase:search, word~2)^4.0) ((name:search~2)^2.0 (displayName:search~2)^2.0 (sku.code:search~2)^10.0 (sku.manufacturerCode:search~2)^10.0 (attribute.attrvalsearch:search~2)^4.0) ((name:word~2)^2.0 (displayName:word~2)^2.0 (sku.code:word~2)^10.0 (sku.manufacturerCode:word~2)^10.0 (attribute.attrvalsearch:word~2)^4.0)", query.toString());
 
     }
 

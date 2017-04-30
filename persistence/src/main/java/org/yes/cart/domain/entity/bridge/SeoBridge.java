@@ -18,8 +18,8 @@ package org.yes.cart.domain.entity.bridge;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.hibernate.search.bridge.FieldBridge;
-import org.hibernate.search.bridge.LuceneOptions;
+//import org.hibernate.search.bridge.FieldBridge;
+//import org.hibernate.search.bridge.LuceneOptions;
 import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
@@ -28,11 +28,11 @@ import org.yes.cart.search.query.ProductSearchQueryBuilder;
  * Date: 6/15/13
  * Time: 4:45 PM
  */
-public class SeoBridge implements FieldBridge {
+public class SeoBridge /* implements FieldBridge */ {
 
     /** {@inheritDoc} */
 
-    public void set(final String name, final Object value, final Document document, final LuceneOptions luceneOptions) {
+    public void set(final String name, final Object value, final Document document /*, final LuceneOptions luceneOptions */) {
         
 //        if (value instanceof Seo) {
 //

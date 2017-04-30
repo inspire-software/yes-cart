@@ -17,6 +17,7 @@
 package org.yes.cart.search.query.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
@@ -48,10 +49,10 @@ public class AttributeSearchQueryBuilder extends AbstractSearchQueryBuilderImpl 
 
             final BooleanQuery.Builder aggregatedQuery = new BooleanQuery.Builder();
 
-            final String searchValueLo = attrValues[0].length() > 0 ? escapeValue(attrValues[0]) : null;
-            final String searchValueHi = attrValues[1].length() > 0 ? escapeValue(attrValues[1]) : null;
+            final Long searchValueLo = attrValues[0].length() > 0 ? NumberUtils.toLong(attrValues[0]) : null;
+            final Long searchValueHi = attrValues[1].length() > 0 ? NumberUtils.toLong(attrValues[1]) : null;
 
-            aggregatedQuery.add(createRangeQuery("facet_" + escapedParameter, searchValueLo, searchValueHi, 3.5f), BooleanClause.Occur.MUST);
+            aggregatedQuery.add(createRangeQuery(escapedParameter + "_range", searchValueLo, searchValueHi, 3.5f), BooleanClause.Occur.MUST);
 
             return aggregatedQuery.build();
 
@@ -61,7 +62,7 @@ public class AttributeSearchQueryBuilder extends AbstractSearchQueryBuilderImpl 
 
         final String ftSearchValue = escapeValue(searchValue);
 
-        aggregatedQuery.add(createTermQuery("facet_" + escapedParameter, ftSearchValue, 3.5f), BooleanClause.Occur.MUST);
+        aggregatedQuery.add(createTermQuery("facet_" + escapedParameter, ftSearchValue.toLowerCase(), 3.5f), BooleanClause.Occur.MUST);
 
         return aggregatedQuery.build();
 

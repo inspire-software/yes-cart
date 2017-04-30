@@ -22,9 +22,6 @@ import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.RowCountProjection;
 import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.indexes.interceptor.EntityIndexingInterceptor;
-import org.hibernate.search.util.impl.ClassLoaderHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.CriteriaTuner;
@@ -72,22 +69,6 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
         this.persistentClass = type;
         this.entityFactory = entityFactory;
     }
-
-    private EntityIndexingInterceptor getInterceptor() {
-        final Indexed indexed = getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class);
-        if (indexed != null) {
-            final Class<? extends EntityIndexingInterceptor> interceptorClass = indexed.interceptor();
-            if (interceptorClass != null) {
-                return ClassLoaderHelper.instanceFromClass(
-                        EntityIndexingInterceptor.class,
-                        interceptorClass,
-                        "IndexingActionInterceptor for " + getPersistentClass().getName()
-                );
-            }
-        }
-        return null;
-    }
-
 
     /**
      * {@inheritDoc}

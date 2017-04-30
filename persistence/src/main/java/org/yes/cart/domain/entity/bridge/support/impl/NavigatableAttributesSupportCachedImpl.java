@@ -17,7 +17,7 @@
 package org.yes.cart.domain.entity.bridge.support.impl;
 
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.domain.entity.bridge.support.NavigatableAttributesSupport;
+import org.yes.cart.search.dao.support.NavigatableAttributesSupport;
 
 import java.util.Set;
 

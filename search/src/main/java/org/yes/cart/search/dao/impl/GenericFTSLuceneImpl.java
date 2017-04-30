@@ -205,6 +205,10 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
     @Override
     public Map<String, List<Pair<String, Integer>>> fullTextSearchNavigation(final Query query, final List<FilteredNavigationRecordRequest> facetingRequest) {
 
+        if (facetingRequest == null || facetingRequest.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
         LOGFTQ.debug("Run facet query {}", query);
 
         final Map<String, List<Pair<String, Integer>>> result = new LinkedHashMap<String, List<Pair<String, Integer>>>();

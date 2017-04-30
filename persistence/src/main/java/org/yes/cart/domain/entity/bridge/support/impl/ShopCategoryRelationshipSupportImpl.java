@@ -21,7 +21,7 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopCategory;
-import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
+import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
 
 import java.util.Collection;
 import java.util.HashSet;

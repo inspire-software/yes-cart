@@ -18,8 +18,8 @@ package org.yes.cart.domain.entity.bridge;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.hibernate.search.bridge.LuceneOptions;
-import org.hibernate.search.bridge.TwoWayFieldBridge;
+//import org.hibernate.search.bridge.LuceneOptions;
+//import org.hibernate.search.bridge.TwoWayFieldBridge;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
@@ -31,10 +31,10 @@ import java.util.Map;
  * Date: 12-08-15
  * Time: 2:05 PM
  */
-public class DisplayNameBridge implements TwoWayFieldBridge/*FieldBridge*/ {
+public class DisplayNameBridge /*implements TwoWayFieldBridge/*FieldBridge*/ {
 
     /** {@inheritDoc} */
-    public void set(final String name, final Object value, final Document document, final LuceneOptions luceneOptions) {
+    public void set(final String name, final Object value, final Document document/*, final LuceneOptions luceneOptions*/) {
 
 //        if (value instanceof String) {
 //            if (ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_FIELD.equals(name)

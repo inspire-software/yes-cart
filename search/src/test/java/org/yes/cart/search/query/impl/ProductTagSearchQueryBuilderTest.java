@@ -61,9 +61,10 @@ public class ProductTagSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryNewArrival() throws Exception {
 
-        final Query query = new ProductTagSearchQueryBuilder().createStrictQuery(10L, "tag", new SimpleDateFormat("yyyyMMddHHmmss").parse("20141118001700"));
+        final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        final Query query = new ProductTagSearchQueryBuilder().createStrictQuery(10L, "tag", formatter.parse("20141118001700"));
         assertNotNull(query);
-        assertEquals("(tag:newarrival)^2.5 (createdTimestamp:[201411180000 TO *})^2.0", query.toString());
+        assertEquals("(tag:newarrival)^2.5 (createdTimestamp:[" + formatter.parse("20141118000000").getTime() + " TO 9223372036854775807])^2.0", query.toString());
 
     }
 
@@ -96,9 +97,10 @@ public class ProductTagSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryNewArrival() throws Exception {
 
-        final Query query = new ProductTagSearchQueryBuilder().createRelaxedQuery(10L, "tag", new SimpleDateFormat("yyyyMMddHHmmss").parse("20141118001700"));
+        final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        final Query query = new ProductTagSearchQueryBuilder().createRelaxedQuery(10L, "tag", formatter.parse("20141118001700"));
         assertNotNull(query);
-        assertEquals("(tag:newarrival)^2.5 (createdTimestamp:[201411180000 TO *})^2.0", query.toString());
+        assertEquals("(tag:newarrival)^2.5 (createdTimestamp:[" + formatter.parse("20141118000000").getTime() + " TO 9223372036854775807])^2.0", query.toString());
 
     }
 

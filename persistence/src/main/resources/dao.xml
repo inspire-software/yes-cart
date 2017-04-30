@@ -305,13 +305,26 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="productFts" class="org.yes.cart.search.dao.impl.GenericFTSHibernateImpl">
-        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductEntity</value></constructor-arg>
-        <property name="sessionFactory" ref="sessionFactory"/>
+    <bean id="productIndexProvider" class="org.yes.cart.search.dao.impl.RAMLuceneIndexProviderImpl">
+        <constructor-arg index="0" value="product"/>
     </bean>
 
-    <bean id="productIndexBuilder" class="org.yes.cart.search.dao.impl.IndexBuilderHibernateImpl">
-        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductEntity</value></constructor-arg>
+    <bean id="productFts" class="org.yes.cart.search.dao.impl.GenericFTSLuceneImpl">
+        <constructor-arg index="0" ref="productIndexProvider"/>
+    </bean>
+
+    <bean id="productIndexBuilder" class="org.yes.cart.search.dao.impl.IndexBuilderLuceneHibernateTxAwareImpl">
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.search.dao.entity.ProductLuceneDocumentAdapter">
+                <property name="attributesSupport" ref="navigatableAttributesSupport"/>
+                <property name="shopCategorySupport" ref="shopCategoryRelationshipSupport"/>
+                <property name="shopWarehouseSupport" ref="shopWarehouseRelationshipSupport"/>
+                <property name="skuPriceSupport" ref="skuPriceRelationshipSupport"/>
+                <property name="skuWarehouseSupport" ref="skuWarehouseRelationshipSupport"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1" ref="productIndexProvider"/>
+        <constructor-arg index="2" ref="productDaoBase"/>
         <property name="sessionFactory" ref="sessionFactory"/>
         <property name="indexExecutor">
             <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
@@ -602,7 +615,8 @@
     <bean id="skuWarehouseRelationshipSupport" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.domain.entity.bridge.support.impl.SkuWarehouseRelationshipSupportImpl">
-                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="skuWarehouseDao"/>
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="warehouseDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="skuWarehouseDao"/>
             </bean>
         </property>
     </bean>

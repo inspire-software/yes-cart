@@ -58,6 +58,29 @@ public class SearchUtil {
         return Collections.EMPTY_LIST;
     }
 
+    /**
+     * Create index value for given shop currency and price.
+     *
+     * @param shopId shop id
+     * @param currency currency code
+     *
+     * @return field name that has format facet_price_shopid_currency.
+     */
+    public static String priceFacetName(final long shopId, final String currency) {
+        return "facet_price_" + shopId + "_" + currency;
+    }
+
+    /**
+     * Convert price to long value.
+     *
+     * @param price price to convert to long
+     *
+     * @return price padded using {@link Constants#MONEY_SCALE}
+     */
+    public static long priceToLong(final BigDecimal price) {
+        return price.movePointRight(Constants.MONEY_SCALE).setScale(0, BigDecimal.ROUND_HALF_UP).longValue();
+    }
+
 
     /**
      * Create index value for given shop currency and price.
@@ -70,7 +93,7 @@ public class SearchUtil {
      *         All digital value will be left padded according to formatter.
      */
     public static Pair<String, String> priceToFacetPair(final long shopId, final String currency, final BigDecimal regularPrice) {
-        return new Pair<String, String>("facet_price_" + shopId + "_" + currency, decimalToString(regularPrice, Constants.MONEY_SCALE));
+        return new Pair<String, String>(priceFacetName(shopId, currency), decimalToString(regularPrice, Constants.MONEY_SCALE));
     }
 
 

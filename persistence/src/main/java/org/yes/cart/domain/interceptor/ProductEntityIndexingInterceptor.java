@@ -16,8 +16,8 @@
 
 package org.yes.cart.domain.interceptor;
 
-import org.hibernate.search.indexes.interceptor.EntityIndexingInterceptor;
-import org.hibernate.search.indexes.interceptor.IndexingOverride;
+//import org.hibernate.search.indexes.interceptor.EntityIndexingInterceptor;
+//import org.hibernate.search.indexes.interceptor.IndexingOverride;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.util.DomainApiUtils;
 
@@ -28,7 +28,7 @@ import java.util.Date;
  * Date: 5/5/12
  * Time: 3:40 PM
  */
-public class ProductEntityIndexingInterceptor implements EntityIndexingInterceptor<Product> {
+public class ProductEntityIndexingInterceptor /* implements EntityIndexingInterceptor<Product> */ {
 
 
     /**
@@ -81,30 +81,30 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
 
 
     /** {@inheritDoc} */
-    public IndexingOverride onAdd(final Product entity) {
-        return isIncludeInLuceneIndex(entity, false)
-                ?IndexingOverride.APPLY_DEFAULT
-                :IndexingOverride.REMOVE;
-    }
+//    public IndexingOverride onAdd(final Product entity) {
+//        return isIncludeInLuceneIndex(entity, false)
+//                ?IndexingOverride.APPLY_DEFAULT
+//                :IndexingOverride.REMOVE;
+//    }
 
     /** {@inheritDoc} */
-    public IndexingOverride onUpdate(final Product entity) {
-        return isIncludeInLuceneIndex(entity, true)
-                ?IndexingOverride.APPLY_DEFAULT
-                :IndexingOverride.REMOVE;
-    }
+//    public IndexingOverride onUpdate(final Product entity) {
+//        return isIncludeInLuceneIndex(entity, true)
+//                ?IndexingOverride.APPLY_DEFAULT
+//                :IndexingOverride.REMOVE;
+//    }
 
     /** {@inheritDoc} */
-    public IndexingOverride onDelete(final Product entity) {
-        return IndexingOverride.APPLY_DEFAULT;
-    }
+//    public IndexingOverride onDelete(final Product entity) {
+//        return IndexingOverride.APPLY_DEFAULT;
+//    }
 
     /** {@inheritDoc} */
-    public IndexingOverride onCollectionUpdate(final Product entity) {
-        return isIncludeInLuceneIndex(entity, true)
-                ?IndexingOverride.APPLY_DEFAULT
-                :IndexingOverride.REMOVE;
-    }
+//    public IndexingOverride onCollectionUpdate(final Product entity) {
+//        return isIncludeInLuceneIndex(entity, true)
+//                ?IndexingOverride.APPLY_DEFAULT
+//                :IndexingOverride.REMOVE;
+//    }
 
 
 }

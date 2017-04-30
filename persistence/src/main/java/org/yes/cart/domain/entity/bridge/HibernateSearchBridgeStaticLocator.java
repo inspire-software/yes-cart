@@ -18,7 +18,7 @@ package org.yes.cart.domain.entity.bridge;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.yes.cart.domain.entity.bridge.support.*;
+import org.yes.cart.search.dao.support.*;
 
 /**
  * User: denispavlov

@@ -73,17 +73,18 @@ public class KeywordProductSkuSearchQueryBuilder extends AbstractSearchQueryBuil
             final BooleanQuery.Builder aggregateQuery = new BooleanQuery.Builder();
 
             final String escapedSearchValue = escapeValue(value);
+            final String escapedSearchValueLower = escapedSearchValue.toLowerCase();
 
             final BooleanQuery.Builder phrazeQuery = new BooleanQuery.Builder();
 
-            phrazeQuery.add(createFuzzyQuery(PRODUCT_NAME_FIELD, escapedSearchValue, 2, 3f), BooleanClause.Occur.SHOULD);
-            phrazeQuery.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedSearchValue, 2, 3f), BooleanClause.Occur.SHOULD);
+            phrazeQuery.add(createFuzzyQuery(PRODUCT_NAME_FIELD, escapedSearchValueLower, 2, 3f), BooleanClause.Occur.SHOULD);
+            phrazeQuery.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedSearchValueLower, 2, 3f), BooleanClause.Occur.SHOULD);
 
-            phrazeQuery.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedSearchValue, 2, 10f), BooleanClause.Occur.SHOULD);
-            phrazeQuery.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD, escapedSearchValue, 2, 10f), BooleanClause.Occur.SHOULD);
+            phrazeQuery.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedSearchValueLower, 2, 10f), BooleanClause.Occur.SHOULD);
+            phrazeQuery.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD, escapedSearchValueLower, 2, 10f), BooleanClause.Occur.SHOULD);
 
-            phrazeQuery.add(createTermQuery(ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD, escapedSearchValue, 15f), BooleanClause.Occur.SHOULD);
-            phrazeQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, escapedSearchValue.toLowerCase(), 2, 4f), BooleanClause.Occur.SHOULD);
+            phrazeQuery.add(createTermQuery(ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD, escapedSearchValueLower, 15f), BooleanClause.Occur.SHOULD);
+            phrazeQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, escapedSearchValueLower, 2, 4f), BooleanClause.Occur.SHOULD);
 
             aggregateQuery.add(phrazeQuery.build(), BooleanClause.Occur.SHOULD);
 

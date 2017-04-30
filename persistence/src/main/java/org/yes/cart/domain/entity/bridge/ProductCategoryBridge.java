@@ -17,18 +17,15 @@
 package org.yes.cart.domain.entity.bridge;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.hibernate.search.bridge.FieldBridge;
-import org.hibernate.search.bridge.LuceneOptions;
+//import org.hibernate.search.bridge.FieldBridge;
+//import org.hibernate.search.bridge.LuceneOptions;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
-import org.yes.cart.search.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Product category bridge determines allows to track immediate categories to which this product is
@@ -41,14 +38,14 @@ import java.util.Set;
  * Date: 2/4/12
  * Time: 1:33 PM
  */
-public class ProductCategoryBridge implements FieldBridge {
+public class ProductCategoryBridge /* implements FieldBridge */ {
 
     private final DisplayNameBridge displayNameBridge = new DisplayNameBridge();
 
     /**
      * {@inheritDoc}
      */
-    public void set(final String name, final Object value, final Document document, final LuceneOptions luceneOptions) {
+    public void set(final String name, final Object value, final Document document /* , final LuceneOptions luceneOptions */) {
 
         if (value instanceof Collection) {
 
@@ -74,7 +71,7 @@ public class ProductCategoryBridge implements FieldBridge {
 
                 final Category category = support.getCategoryById(productCategory.getCategory().getCategoryId());
 
-                addCategory(document, luceneOptions, category, support);
+//                addCategory(document, luceneOptions, category, support);
 
 //                for (final Shop shop : shops) {
 //
@@ -97,7 +94,7 @@ public class ProductCategoryBridge implements FieldBridge {
     }
 
     private void addCategory(final Document document,
-                             final LuceneOptions luceneOptions,
+                             //final LuceneOptions luceneOptions,
                              final Category category,
                              final ShopCategoryRelationshipSupport support) {
 
@@ -116,7 +113,7 @@ public class ProductCategoryBridge implements FieldBridge {
     }
 
     private void addCategoryName(final Document document,
-                                 final LuceneOptions luceneOptions,
+                                 //final LuceneOptions luceneOptions,
                                  final Category category) {
 
 //        document.add(new Field(
@@ -145,7 +142,7 @@ public class ProductCategoryBridge implements FieldBridge {
     }
 
     private void addCategoryParentIds(final Document document,
-                                      final LuceneOptions luceneOptions,
+                                     // final LuceneOptions luceneOptions,
                                       final Category category,
                                       final ShopCategoryRelationshipSupport support) {
 

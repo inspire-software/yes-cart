@@ -17,6 +17,7 @@
 package org.yes.cart.search.query.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.document.LongPoint;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
 import org.yes.cart.search.query.SearchQueryBuilder;
@@ -109,11 +110,24 @@ public abstract class AbstractSearchQueryBuilderImpl implements SearchQueryBuild
      * @param field field name
      * @param low from value (inclusive)
      * @param high to value (exclusive)
+     *
+     * @return range query
+     */
+    protected Query createRangeQuery(final String field, final Long low, final Long high) {
+        return LongPoint.newRangeQuery(field, low != null ? low : Long.MIN_VALUE, high != null ? Math.addExact(high, -1) : Long.MAX_VALUE);
+    }
+
+    /**
+     * Create range query.
+     *
+     * @param field field name
+     * @param low from value (inclusive)
+     * @param high to value (exclusive)
      * @param boost importance of this criteria (default 1.0f)
      *
      * @return range query with boost
      */
-    protected Query createRangeQuery(final String field, final String low, final String high, final float boost) {
+    protected Query createRangeQuery(final String field, final Long low, final Long high, final float boost) {
         final Query query = createRangeQuery(field, low, high);
         return new BoostQuery(query, boost);
     }

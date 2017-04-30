@@ -19,7 +19,7 @@ package org.yes.cart.domain.entity.bridge.support.impl;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.Warehouse;
-import org.yes.cart.domain.entity.bridge.support.ShopWarehouseRelationshipSupport;
+import org.yes.cart.search.dao.support.ShopWarehouseRelationshipSupport;
 
 import java.util.List;
 import java.util.Map;

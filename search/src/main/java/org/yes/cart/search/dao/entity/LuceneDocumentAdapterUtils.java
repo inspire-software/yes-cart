@@ -98,6 +98,24 @@ public class LuceneDocumentAdapterUtils {
         return null;
     }
 
+    /**
+     * Reads object from stored field.
+     *
+     * @param serialized field value
+     * @param clazz      object type
+     */
+    public static <T> T readObjectFieldValue(final String serialized, final Class<T> clazz) {
+
+        if (StringUtils.isNotBlank(serialized)) {
+            try {
+                return (T) MAPPER.readValue(serialized, clazz);
+            } catch (Exception exp) {
+                LOGFTQ.error("Unable to de-serialise the object in field: " + FIELD_OBJECT + ", object: " + serialized, exp);
+            }
+        }
+        return null;
+    }
+
 
     /**
      * Reads PK from stored field.
@@ -192,7 +210,7 @@ public class LuceneDocumentAdapterUtils {
      */
     public static void addSimpleField(final Document document, final String name, final String value) {
         if (value != null) {
-            document.add(new StringField(name, value, Field.Store.NO));
+            document.add(new StringField(name, value.toLowerCase(), Field.Store.NO));
         }
     }
 

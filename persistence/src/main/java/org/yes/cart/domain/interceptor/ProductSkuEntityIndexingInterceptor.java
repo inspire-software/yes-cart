@@ -16,8 +16,8 @@
 
 package org.yes.cart.domain.interceptor;
 
-import org.hibernate.search.indexes.interceptor.EntityIndexingInterceptor;
-import org.hibernate.search.indexes.interceptor.IndexingOverride;
+//import org.hibernate.search.indexes.interceptor.EntityIndexingInterceptor;
+//import org.hibernate.search.indexes.interceptor.IndexingOverride;
 import org.yes.cart.domain.entity.ProductSku;
 
 /**
@@ -25,7 +25,7 @@ import org.yes.cart.domain.entity.ProductSku;
  * Date: 27/11/2014
  * Time: 13:40
  */
-public class ProductSkuEntityIndexingInterceptor implements EntityIndexingInterceptor<ProductSku> {
+public class ProductSkuEntityIndexingInterceptor /*implements EntityIndexingInterceptor<ProductSku>*/ {
 
     private final ProductEntityIndexingInterceptor productInterceptor = new ProductEntityIndexingInterceptor();
 
@@ -44,30 +44,30 @@ public class ProductSkuEntityIndexingInterceptor implements EntityIndexingInterc
 
 
     /** {@inheritDoc} */
-    public IndexingOverride onAdd(final ProductSku entity) {
-        return isIncludeInLuceneIndex(entity, false)
-                ?IndexingOverride.APPLY_DEFAULT
-                :IndexingOverride.REMOVE;
-    }
+//    public IndexingOverride onAdd(final ProductSku entity) {
+//        return isIncludeInLuceneIndex(entity, false)
+//                ?IndexingOverride.APPLY_DEFAULT
+//                :IndexingOverride.REMOVE;
+//    }
 
     /** {@inheritDoc} */
-    public IndexingOverride onUpdate(final ProductSku entity) {
-        return isIncludeInLuceneIndex(entity, true)
-                ?IndexingOverride.APPLY_DEFAULT
-                :IndexingOverride.REMOVE;
-    }
+//    public IndexingOverride onUpdate(final ProductSku entity) {
+//        return isIncludeInLuceneIndex(entity, true)
+//                ?IndexingOverride.APPLY_DEFAULT
+//                :IndexingOverride.REMOVE;
+//    }
 
     /** {@inheritDoc} */
-    public IndexingOverride onDelete(final ProductSku entity) {
-        return IndexingOverride.APPLY_DEFAULT;
-    }
+//    public IndexingOverride onDelete(final ProductSku entity) {
+//        return IndexingOverride.APPLY_DEFAULT;
+//    }
 
     /** {@inheritDoc} */
-    public IndexingOverride onCollectionUpdate(final ProductSku entity) {
-        return isIncludeInLuceneIndex(entity, true)
-                ?IndexingOverride.APPLY_DEFAULT
-                :IndexingOverride.REMOVE;
-    }
+//    public IndexingOverride onCollectionUpdate(final ProductSku entity) {
+//        return isIncludeInLuceneIndex(entity, true)
+//                ?IndexingOverride.APPLY_DEFAULT
+//                :IndexingOverride.REMOVE;
+//    }
 
 
 

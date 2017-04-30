@@ -21,15 +21,15 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexableField;
-import org.hibernate.search.bridge.LuceneOptions;
-import org.hibernate.search.bridge.TwoWayFieldBridge;
+//import org.hibernate.search.bridge.LuceneOptions;
+//import org.hibernate.search.bridge.TwoWayFieldBridge;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuWarehouse;
-import org.yes.cart.domain.entity.bridge.support.ShopWarehouseRelationshipSupport;
-import org.yes.cart.domain.entity.bridge.support.SkuWarehouseRelationshipSupport;
+import org.yes.cart.search.dao.support.ShopWarehouseRelationshipSupport;
+import org.yes.cart.search.dao.support.SkuWarehouseRelationshipSupport;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.util.MoneyUtils;
 
@@ -44,13 +44,13 @@ import java.util.*;
  * Date: 07-May-2011
  * Time: 16:13:01
  * */
-public class SkuWarehouseBridge implements TwoWayFieldBridge {
+public class SkuWarehouseBridge /* implements TwoWayFieldBridge */ {
 
     private final BigDecimalBridge idBridge = new BigDecimalBridge(0);
     private final BigDecimalBridge qtyBridge = new BigDecimalBridge(Constants.INVENTORY_SCALE);
 
     /** {@inheritDoc} */
-    public void set(final String proposedFiledName, final Object value, final Document document, final LuceneOptions luceneOptions) {
+    public void set(final String proposedFiledName, final Object value, final Document document /* , final LuceneOptions luceneOptions */) {
 
         if (value instanceof Collection) {
 
@@ -163,7 +163,7 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
     }
 
     /** {@inheritDoc} */
-    @Override
+//    @Override
     public Object get(final String name, final Document document) {
         final IndexableField[] fields = document.getFields(name);
         final Map<Long, Map<String, BigDecimal>> qty = new HashMap<Long, Map<String, BigDecimal>>();
@@ -187,7 +187,7 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
     }
 
     /** {@inheritDoc} */
-    @Override
+//    @Override
     public String objectToString(final Object object) {
         return String.valueOf(object);
     }

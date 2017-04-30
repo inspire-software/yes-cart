@@ -14,10 +14,10 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.entity.bridge.support;
+package org.yes.cart.search.dao.support;
 
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.entity.Warehouse;
 
 import java.util.List;
 import java.util.Map;
@@ -25,17 +25,10 @@ import java.util.Set;
 
 /**
  * User: denispavlov
- * Date: 29/05/2015
- * Time: 08:00
+ * Date: 13-10-16
+ * Time: 5:01 PM
  */
-public interface SkuPriceRelationshipSupport {
-
-    /**
-     * Get all entities.
-     *
-     * @return list of all entities
-     */
-    Map<Long, Set<Shop>> getAllShopsAndSubs();
+public interface ShopWarehouseRelationshipSupport {
 
     /**
      * Get all entities.
@@ -45,28 +38,28 @@ public interface SkuPriceRelationshipSupport {
     List<Shop> getAll();
 
     /**
-     * Get all entities.
+     * Get map of all shops by fulfilment centre id.
      *
-     * @return list of all entities
+     * @return key => ff, value => shops
      */
-    List<Shop> getAllNonSub();
+    Map<Long, Set<Long>> getShopsByFulfilmentMap();
 
     /**
-     * Get all entities.
+     * Get all warehouses that belong to given shop.
      *
-     * @param masterId master PK
-     *
-     * @return list of all entities
+     * @param shopId given shop
+     * @param includeDisabled true to include disabled links
+     * @return list of warehouses
      */
-    List<Shop> getAllMastered(long masterId);
+    Set<Long> getShopWarehouseIds(long shopId, boolean includeDisabled);
 
     /**
-     * Get prices for given sku on all shops.
+     * Get all warehouses that belong to given shop.
      *
-     * @param sku sku code
-     *
-     * @return all prices for given sku on the system
+     * @param shopId given shop
+     * @param includeDisabled true to include disabled links
+     * @return list of warehouses PKs
      */
-    List<SkuPrice> getSkuPrices(String sku);
+    List<Warehouse> getShopWarehouses(long shopId, boolean includeDisabled);
 
 }

@@ -17,13 +17,13 @@
 package org.yes.cart.search.dao.impl;
 
 import org.hibernate.*;
-import org.hibernate.search.FullTextSession;
-import org.hibernate.search.Search;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.indexes.interceptor.EntityIndexingInterceptor;
-import org.hibernate.search.indexes.interceptor.IndexingOverride;
-import org.hibernate.search.util.impl.ClassLoaderHelper;
-import org.hibernate.search.util.impl.HibernateHelper;
+//import org.hibernate.search.FullTextSession;
+//import org.hibernate.search.Search;
+//import org.hibernate.search.annotations.Indexed;
+//import org.hibernate.search.indexes.interceptor.EntityIndexingInterceptor;
+//import org.hibernate.search.indexes.interceptor.IndexingOverride;
+//import org.hibernate.search.util.impl.ClassLoaderHelper;
+//import org.hibernate.search.util.impl.HibernateHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
@@ -49,7 +49,7 @@ public class IndexBuilderHibernateImpl<T, PK extends Serializable>
 
     private final Class<T> persistentClass;
     private final boolean persistentClassIndexble;
-    private final EntityIndexingInterceptor entityIndexingInterceptor;
+//    private final EntityIndexingInterceptor entityIndexingInterceptor;
     protected SessionFactory sessionFactory;
 
     private TaskExecutor indexExecutor;
@@ -80,24 +80,24 @@ public class IndexBuilderHibernateImpl<T, PK extends Serializable>
     @SuppressWarnings("unchecked")
     public IndexBuilderHibernateImpl(final Class<T> type) {
         this.persistentClass = type;
-        this.persistentClassIndexble = null != type.getAnnotation(Indexed.class);
-        this.entityIndexingInterceptor = getInterceptor();
+        this.persistentClassIndexble = false; // null != type.getAnnotation(Indexed.class);
+        //this.entityIndexingInterceptor = getInterceptor();
     }
 
-    private EntityIndexingInterceptor getInterceptor() {
-        final Indexed indexed = getPersistentClass().getAnnotation(Indexed.class);
-        if (indexed != null) {
-            final Class<? extends EntityIndexingInterceptor> interceptorClass = indexed.interceptor();
-            if (interceptorClass != null) {
-                return ClassLoaderHelper.instanceFromClass(
-                        EntityIndexingInterceptor.class,
-                        interceptorClass,
-                        "IndexingActionInterceptor for " + getPersistentClass().getName()
-                );
-            }
-        }
-        return null;
-    }
+//    private EntityIndexingInterceptor getInterceptor() {
+//        final Indexed indexed = getPersistentClass().getAnnotation(Indexed.class);
+//        if (indexed != null) {
+//            final Class<? extends EntityIndexingInterceptor> interceptorClass = indexed.interceptor();
+//            if (interceptorClass != null) {
+//                return ClassLoaderHelper.instanceFromClass(
+//                        EntityIndexingInterceptor.class,
+//                        interceptorClass,
+//                        "IndexingActionInterceptor for " + getPersistentClass().getName()
+//                );
+//            }
+//        }
+//        return null;
+//    }
 
     /**
      * {@inheritDoc}
@@ -115,31 +115,31 @@ public class IndexBuilderHibernateImpl<T, PK extends Serializable>
 
     public void fullTextSearchReindex(PK primaryKey, boolean purgeOnly) {
         if (persistentClassIndexble) {
-            sessionFactory.getCache().evictEntity(getPersistentClass(), primaryKey);
-
-            FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
-            fullTextSession.setFlushMode(FlushMode.MANUAL);
-            fullTextSession.setCacheMode(CacheMode.IGNORE);
-            fullTextSession.purge(getPersistentClass(), primaryKey);
-            if (!purgeOnly) {
-                T entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), primaryKey);
-                if(entity != null) {
-                    final T unproxied = (T) HibernateHelper.unproxy(entity);
-
-                    if (entityIndexingInterceptor != null) {
-                        if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onUpdate(unproxied)) {
-                            fullTextSession.index(unproxied);
-                        }
-                    } else {
-                        fullTextSession.index(unproxied);
-                    }
-                }
-
-
-            }
-            fullTextSession.flushToIndexes(); //apply changes to indexes
-            fullTextSession.clear(); //clear since the queue is processed
-
+//            sessionFactory.getCache().evictEntity(getPersistentClass(), primaryKey);
+//
+//            FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
+//            fullTextSession.setFlushMode(FlushMode.MANUAL);
+//            fullTextSession.setCacheMode(CacheMode.IGNORE);
+//            fullTextSession.purge(getPersistentClass(), primaryKey);
+//            if (!purgeOnly) {
+//                T entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), primaryKey);
+//                if(entity != null) {
+//                    final T unproxied = (T) HibernateHelper.unproxy(entity);
+//
+//                    if (entityIndexingInterceptor != null) {
+//                        if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onUpdate(unproxied)) {
+//                            fullTextSession.index(unproxied);
+//                        }
+//                    } else {
+//                        fullTextSession.index(unproxied);
+//                    }
+//                }
+//
+//
+//            }
+//            fullTextSession.flushToIndexes(); //apply changes to indexes
+//            fullTextSession.clear(); //clear since the queue is processed
+//
         }
     }
 
@@ -217,45 +217,45 @@ public class IndexBuilderHibernateImpl<T, PK extends Serializable>
                         if (log.isInfoEnabled()) {
                             log.info("Full reindex for {} class", persistentClass);
                         }
-                        FullTextSession fullTextSession = Search.getFullTextSession(async ? sessionFactory.openSession() : sessionFactory.getCurrentSession());
-                        fullTextSession.setFlushMode(FlushMode.MANUAL);
-                        fullTextSession.setCacheMode(CacheMode.IGNORE);
-                        ScrollableResults results = fullTextSession.createCriteria(persistentClass)
-                                .setFetchSize(batchSize)
-                                .scroll(ScrollMode.FORWARD_ONLY);
-
-                        try {
-                            while (results.next()) {
-
-                                final T entity = (T) HibernateHelper.unproxy(results.get(0));
-
-                                if (entityIndexingInterceptor != null) {
-                                    if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onUpdate(entity)) {
-                                        fullTextSession.index(entity);
-                                    }
-                                } else {
-                                    fullTextSession.index(entity);
-                                }
-                                index++;
-
-                                if (index % batchSize == 0) {
-                                    fullTextSession.flushToIndexes(); //apply changes to indexes
-                                    fullTextSession.clear(); //clear since the queue is processed
-                                    if (log.isInfoEnabled()) {
-                                        log.info("Indexed {} items of {} class", index, persistentClass);
-                                    }
-                                }
-                                currentIndexingCount.compareAndSet(index - 1, index);
-                            }
-                        } finally {
-                            results.close();
-                        }
-                        fullTextSession.flushToIndexes(); //apply changes to indexes
-                        fullTextSession.clear(); //clear since the queue is processed
-                        if (log.isInfoEnabled()) {
-                            log.info("Indexed {} items of {} class", index, persistentClass);
-                        }
-                        fullTextSession.getSearchFactory().optimize(getPersistentClass());
+//                        FullTextSession fullTextSession = Search.getFullTextSession(async ? sessionFactory.openSession() : sessionFactory.getCurrentSession());
+//                        fullTextSession.setFlushMode(FlushMode.MANUAL);
+//                        fullTextSession.setCacheMode(CacheMode.IGNORE);
+//                        ScrollableResults results = fullTextSession.createCriteria(persistentClass)
+//                                .setFetchSize(batchSize)
+//                                .scroll(ScrollMode.FORWARD_ONLY);
+//
+//                        try {
+//                            while (results.next()) {
+//
+//                                final T entity = (T) HibernateHelper.unproxy(results.get(0));
+//
+//                                if (entityIndexingInterceptor != null) {
+//                                    if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onUpdate(entity)) {
+//                                        fullTextSession.index(entity);
+//                                    }
+//                                } else {
+//                                    fullTextSession.index(entity);
+//                                }
+//                                index++;
+//
+//                                if (index % batchSize == 0) {
+//                                    fullTextSession.flushToIndexes(); //apply changes to indexes
+//                                    fullTextSession.clear(); //clear since the queue is processed
+//                                    if (log.isInfoEnabled()) {
+//                                        log.info("Indexed {} items of {} class", index, persistentClass);
+//                                    }
+//                                }
+//                                currentIndexingCount.compareAndSet(index - 1, index);
+//                            }
+//                        } finally {
+//                            results.close();
+//                        }
+//                        fullTextSession.flushToIndexes(); //apply changes to indexes
+//                        fullTextSession.clear(); //clear since the queue is processed
+//                        if (log.isInfoEnabled()) {
+//                            log.info("Indexed {} items of {} class", index, persistentClass);
+//                        }
+//                        fullTextSession.getSearchFactory().optimize(getPersistentClass());
                     }
                 } catch (Exception exp) {
                     LOGFTQ.error("Error during indexing", exp);

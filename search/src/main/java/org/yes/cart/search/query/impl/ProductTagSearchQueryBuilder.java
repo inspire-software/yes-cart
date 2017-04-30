@@ -22,6 +22,7 @@ import org.apache.lucene.search.Query;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -33,7 +34,12 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
 
     public static final String TAG_NEWARRIVAL = "newarrival";
 
-    private final ThreadLocal<SimpleDateFormat> format = new ThreadLocal<SimpleDateFormat>();
+    private final ThreadLocal<Calendar> format = new ThreadLocal<Calendar>() {
+        @Override
+        protected Calendar initialValue() {
+            return Calendar.getInstance();
+        }
+    };
 
 
     /**
@@ -43,8 +49,7 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
 
         if (value instanceof Date) {
 
-            final SimpleDateFormat toMinutes = getDateFormat();
-            final String fromDate = toMinutes.format((Date) value);
+            final Long fromDate = getDateOnly((Date) value);
 
             final BooleanQuery.Builder aggregateQuery = new BooleanQuery.Builder();
 
@@ -64,6 +69,17 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
 
     }
 
+    protected Long getDateOnly(final Date value) {
+        final Calendar calendar = format.get();
+        calendar.setTime(value);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return calendar.getTimeInMillis();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -71,12 +87,4 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
         return createStrictQuery(shopId, parameter, value);
     }
 
-    private SimpleDateFormat getDateFormat() {
-        SimpleDateFormat dateFormat = format.get();
-        if (dateFormat == null) {
-            dateFormat = new SimpleDateFormat("yyyyMMdd0000");
-            format.set(dateFormat);
-        }
-        return dateFormat;
-    }
 }

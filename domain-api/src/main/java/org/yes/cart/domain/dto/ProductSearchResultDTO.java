@@ -70,6 +70,20 @@ public interface ProductSearchResultDTO extends Identifiable {
     void setManufacturerCode(String code);
 
     /**
+     * Fulfilment center for given search result.
+     *
+     * @return fulfilment centre code for this result
+     */
+    String getFulfilmentCentreCode();
+
+    /**
+     * Fulfilment center for given search result.
+     *
+     * @param code fulfilment centre code for this result
+     */
+    void setFulfilmentCentreCode(String code);
+
+    /**
      * Get the space separated product tags. For example
      * sale specialoffer, newarrival etc.
      *

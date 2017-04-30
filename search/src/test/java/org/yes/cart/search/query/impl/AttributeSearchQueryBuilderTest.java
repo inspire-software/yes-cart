@@ -58,7 +58,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createStrictQuery(10L, "size", "30-_-50");
         assertNotNull(query);
-        assertEquals("+(facet_size:[30 TO 50})^3.5", query.toString());
+        assertEquals("+(size_range:[30 TO 49])^3.5", query.toString());
 
     }
 
@@ -67,7 +67,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createStrictQuery(10L, "size", "30-_-");
         assertNotNull(query);
-        assertEquals("+(facet_size:[30 TO *})^3.5", query.toString());
+        assertEquals("+(size_range:[30 TO 9223372036854775807])^3.5", query.toString());
 
     }
 
@@ -76,7 +76,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createStrictQuery(10L, "size", "-_-50");
         assertNotNull(query);
-        assertEquals("+(facet_size:[* TO 50})^3.5", query.toString());
+        assertEquals("+(size_range:[-9223372036854775808 TO 49])^3.5", query.toString());
 
     }
 
@@ -114,7 +114,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createRelaxedQuery(10L, "size", "30-_-50");
         assertNotNull(query);
-        assertEquals("+(facet_size:[30 TO 50})^3.5", query.toString());
+        assertEquals("+(size_range:[30 TO 49])^3.5", query.toString());
 
     }
 
@@ -123,7 +123,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createRelaxedQuery(10L, "size", "30-_-");
         assertNotNull(query);
-        assertEquals("+(facet_size:[30 TO *})^3.5", query.toString());
+        assertEquals("+(size_range:[30 TO 9223372036854775807])^3.5", query.toString());
 
     }
 
@@ -132,7 +132,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createRelaxedQuery(10L, "size", "-_-50");
         assertNotNull(query);
-        assertEquals("+(facet_size:[* TO 50})^3.5", query.toString());
+        assertEquals("+(size_range:[-9223372036854775808 TO 49])^3.5", query.toString());
 
     }
 

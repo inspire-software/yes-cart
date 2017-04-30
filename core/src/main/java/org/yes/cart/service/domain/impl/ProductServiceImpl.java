@@ -33,8 +33,6 @@ import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
 import org.yes.cart.domain.dto.impl.ProductSearchResultPageDTOImpl;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
-import org.yes.cart.domain.entity.impl.StoredAttributesImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.i18n.impl.NonI18NModel;
@@ -44,17 +42,17 @@ import org.yes.cart.domain.misc.navigation.range.DisplayValue;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
 import org.yes.cart.search.dao.IndexBuilder;
+import org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils;
+import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
 import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.dto.impl.FilteredNavigationRecordImpl;
-import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ProductTypeAttrService;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -490,58 +488,14 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 maxResults,
                 sortFieldName,
                 reverse,
-                ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_CODE_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_DEFAULT_SKU_CODE_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_NAME_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_DESCRIPTION_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_QTY_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_DEFAULTIMAGE_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_ASIS_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_DESCRIPTION_ASIS_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_FROM_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_TO_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_MIN_QTY_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_MAX_QTY_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_STEP_QTY_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_MULTISKU,
-                ProductSearchQueryBuilder.PRODUCT_MANUFACTURER_CODE_FIELD,
-                ProductSearchQueryBuilder.ATTRIBUTE_VALUE_STORE_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_CREATED_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_UPDATED_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
-                ProductSearchQueryBuilder.BRAND_NAME_FIELD
-
+                LuceneDocumentAdapterUtils.FIELD_PK,
+                LuceneDocumentAdapterUtils.FIELD_CLASS,
+                LuceneDocumentAdapterUtils.FIELD_OBJECT
                 );
 
         final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.getFirst().size());
         for (Object[] obj : searchRez.getFirst()) {
-            final ProductSearchResultDTO dto = new ProductSearchResultDTOImpl();
-            dto.setId((Long) obj[0]);
-            dto.setCode((String) obj[1]);
-            dto.setDefaultSkuCode((String) obj[2]);
-            dto.setName((String) obj[3]);
-            dto.setDescription((String) obj[4]);
-            dto.setAvailability(obj[5] == null ? Product.AVAILABILITY_STANDARD : (Integer) obj[5]);
-            dto.setQtyOnWarehouse((Map) obj[6]);
-            dto.setDefaultImage((String) obj[7]);
-            dto.setDisplayName((String) obj[8]);
-            dto.setDisplayDescription((String) obj[9]);
-            dto.setFeatured(obj[10] != null && (Boolean) obj[10]);
-            dto.setAvailablefrom((Date) obj[11]);
-            dto.setAvailableto((Date) obj[12]);
-            dto.setMinOrderQuantity((BigDecimal) obj[13]);
-            dto.setMaxOrderQuantity((BigDecimal) obj[14]);
-            dto.setStepOrderQuantity((BigDecimal) obj[15]);
-            dto.setMultisku(obj[16] != null && Boolean.valueOf((String) obj[16]));
-            dto.setManufacturerCode((String) obj[17]);
-            dto.setAttributes(new StoredAttributesImpl((String) obj[18]));
-            dto.setCreatedTimestamp((Date) obj[19]);
-            dto.setUpdatedTimestamp((Date) obj[20]);
-            dto.setTag((String) obj[21]);
-            dto.setBrand((String) obj[22]);
+            final ProductSearchResultDTO dto = LuceneDocumentAdapterUtils.readObjectFieldValue((String) obj[2], ProductSearchResultDTOImpl.class);
             rez.add(dto);
         }
 

@@ -16,8 +16,8 @@
 
 package org.yes.cart.domain.entity.bridge;
 
-import org.hibernate.search.bridge.StringBridge;
-import org.hibernate.search.bridge.TwoWayStringBridge;
+//import org.hibernate.search.bridge.StringBridge;
+//import org.hibernate.search.bridge.TwoWayStringBridge;
 import org.yes.cart.domain.entity.Brand;
 
 /**
@@ -25,7 +25,7 @@ import org.yes.cart.domain.entity.Brand;
  * Date: 07-May-2011
  * Time: 16:13:01
  * */
-public class BrandBridge implements StringBridge, TwoWayStringBridge {
+public class BrandBridge /* implements StringBridge, TwoWayStringBridge */ {
     /** {@inheritDoc} */
     public String objectToString(final Object brandObject) {
         return ((Brand) brandObject).getName().toLowerCase();

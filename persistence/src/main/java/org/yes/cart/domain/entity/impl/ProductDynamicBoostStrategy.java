@@ -16,7 +16,7 @@
 
 package org.yes.cart.domain.entity.impl;
 
-import org.hibernate.search.engine.BoostStrategy;
+//import org.hibernate.search.engine.BoostStrategy;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductCategory;
 
@@ -25,7 +25,7 @@ import org.yes.cart.domain.entity.ProductCategory;
  * Date: 13/11/2014
  * Time: 17:13
  */
-public class ProductDynamicBoostStrategy implements BoostStrategy {
+public class ProductDynamicBoostStrategy /* implements BoostStrategy */ {
 
     /**
      * Dynamic boosting of products.
@@ -34,7 +34,7 @@ public class ProductDynamicBoostStrategy implements BoostStrategy {
      *
      * @return boost for full text index
      */
-    @Override
+//    @Override
     public float defineBoost(final Object value) {
         final Product product = (Product) value;
         return 1f + featuredBoost(product) + categoryBoost(product);

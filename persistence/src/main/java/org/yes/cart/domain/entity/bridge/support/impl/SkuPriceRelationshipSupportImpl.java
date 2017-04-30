@@ -19,7 +19,7 @@ package org.yes.cart.domain.entity.bridge.support.impl;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.domain.entity.bridge.support.SkuPriceRelationshipSupport;
+import org.yes.cart.search.dao.support.SkuPriceRelationshipSupport;
 
 import java.util.*;
 
