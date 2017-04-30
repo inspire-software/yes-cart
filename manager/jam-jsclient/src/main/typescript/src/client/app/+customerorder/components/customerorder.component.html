@@ -250,12 +250,13 @@
                         <div>{{row.skuCode}}<br/>{{row.skuName}}</div>
                       </td>
                       <td title="{{ 'QUANTITY' | translate }}" class="text-right">
-                        <span class="{{ row.deliveryRejected ? 'text-danger' : (row.deliveryDifferent ? 'text-warning' : '') }}">{{row.qty | ycquantity}}</span>
+                        &nbsp;<span class="{{ row.deliveryRejected ? 'text-danger' : (row.deliveryDifferent ? 'text-warning' : '') }}">{{row.qty | ycquantity}}</span>
                         <template [ngIf]="row.deliveryDifferent"><br/><span><i class="fa fa-truck"></i> {{ row.deliveredQuantity | ycquantity }}</span></template>
                       </td>
-                      <td title="{{ 'COST' | translate }}" class="text-right">{{ getLineCost(row) | ycprice}}</td>
+                      <td title="{{ 'COST' | translate }}" class="text-right">&nbsp;{{ getLineCost(row) | ycprice}}</td>
                       <td title="{{ 'CUSTOMERORDER_TAB_EXTRADETAILS' | translate }}">
                         <div *ngFor="let oneValue of getCustomValuesInclude(row.allValues, ['SUPPLIER'])" title="{{ oneValue.second.second }}">{{ oneValue.first }}: {{ oneValue.second.first }}</div>
+                        &nbsp;
                       </td>
                     </tr>
                     </tbody>
