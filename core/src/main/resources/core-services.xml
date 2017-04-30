@@ -1059,9 +1059,10 @@
                 <constructor-arg index="3" ref="shopService"/>
                 <constructor-arg index="4" ref="productService"/>
                 <constructor-arg index="5" ref="productSkuService"/>
-                <constructor-arg index="6" ref="orderAddressFormatter"/>
-                <constructor-arg index="7" ref="promotionCouponService"/>
-                <constructor-arg index="8" ref="addressService"/>
+                <constructor-arg index="6" ref="priceService"/>
+                <constructor-arg index="7" ref="orderAddressFormatter"/>
+                <constructor-arg index="8" ref="promotionCouponService"/>
+                <constructor-arg index="9" ref="addressService"/>
             </bean>
         </property>
     </bean>

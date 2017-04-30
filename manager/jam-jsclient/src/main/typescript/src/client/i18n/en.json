@@ -121,6 +121,7 @@
   "SALE_PRICE": "Sale price",
   "NET_PRICE": "Net price",
   "GROSS_PRICE": "Gross price",
+  "COST": "Cost",
   "PRICE": "Price",
   "TAX": "Tax",
   "TOTAL": "Total",

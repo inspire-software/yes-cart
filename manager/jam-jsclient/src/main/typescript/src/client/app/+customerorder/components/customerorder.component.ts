@@ -101,6 +101,19 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     return flags;
   }
 
+  getLineCost(row:CustomerOrderLineVO):number {
+
+    if (row.allValues != null) {
+      let idx = row.allValues.findIndex(val => {
+        return val.first === 'ItemCostPrice';
+      });
+      if (idx != -1) {
+        return +(row.allValues[idx].second.first);
+      }
+    }
+    return 0;
+  }
+
   getOrderListPriceFlags(order:CustomerOrderVO):string {
 
     let flags = '';
