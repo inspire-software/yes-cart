@@ -247,6 +247,10 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   }
 
+  protected onSearchId() {
+    this.searchHelpShow = false;
+    this.customerorderFilter = '*';
+  }
 
   protected onSearchNumber() {
     this.searchHelpShow = false;

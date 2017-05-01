@@ -661,6 +661,7 @@
   "SEARCH_HELP_CUSTOMER_ORDERS_PAYMENT": "Пошук за заказами з відкритими оплатами.",
   "SEARCH_HELP_CUSTOMER_ORDERS_COMPLETED": "Пошук за завершеними замовленнями.",
   "SEARCH_HELP_CUSTOMER_ORDERS_NUMBER": "Пошук замовлення за номером. Формат: '#номер'",
+  "SEARCH_HELP_CUSTOMER_ORDERS_ID": "Пошук замовлення за ID. Формат: '*ID'",
   "SEARCH_HELP_CUSTOMER_ORDERS_CUSTOMER": "Пошук замовлення за атрибутами покупця (адреса електронної пошти, ім'я та прізвище). Формат: '?фраза'",
   "SEARCH_HELP_CUSTOMER_ORDERS_ADDRESS": "Пошук замовлення за адресою покупця. Формат: '@фраза'",
   "SEARCH_HELP_CUSTOMER_ORDERS_RESERVED": "Для пошуку замовлень, в яких SKU зарезервовано і очікують надходження (точний збіг). Формат: '!SKU'",
