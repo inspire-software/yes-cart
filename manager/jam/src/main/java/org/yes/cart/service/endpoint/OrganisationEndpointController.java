@@ -43,7 +43,7 @@ public interface OrganisationEndpointController {
     @ResponseBody
     void removeManager(@PathVariable("email") String email) throws Exception;
 
-    @Secured({"ROLE_SMADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
     @RequestMapping(value = "/manager/reset/{email}", method = RequestMethod.POST)
     @ResponseBody
     void resetPassword(@PathVariable("email") String email) throws Exception;

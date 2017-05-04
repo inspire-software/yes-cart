@@ -288,7 +288,14 @@ public class VoManagementServiceImpl implements VoManagementService {
         if (federationFacade.isManageable(email, ManagerDTO.class)) {
             managementService.resetPassword(email);
         } else {
-            throw new AccessDeniedException("Access is denied");
+
+            final VoManager myself = getMyselfInternal();
+            if (myself != null && email != null && email.equals(myself.getEmail())) {
+                managementService.resetPassword(email);
+            } else {
+                throw new AccessDeniedException("Access is denied");
+            }
+
         }
     }
 
