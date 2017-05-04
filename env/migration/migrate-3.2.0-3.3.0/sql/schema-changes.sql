@@ -732,3 +732,9 @@ update TATTRIBUTE set name = 'Tax: Enable price tax information for customer typ
 update TATTRIBUTE set name = 'Tax: Show net prices for customer types (CSV)', ETYPE_ID = 1004 where CODE = 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET';
 update TATTRIBUTE set name = 'Tax: Show tax amount for customer types (CSV)', ETYPE_ID = 1004 where CODE = 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT';
 
+--
+-- YC-787 Fulfilment centres allow/block part shipment
+--
+
+alter table TWAREHOUSE add column MULTI_SHIP_SUPPORTED bit not null default 0;
+-- alter table TWAREHOUSE add column MULTI_SHIP_SUPPORTED smallint not null DEFAULT 0;

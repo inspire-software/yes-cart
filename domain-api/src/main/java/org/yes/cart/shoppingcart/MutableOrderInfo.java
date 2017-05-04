@@ -104,8 +104,15 @@ public interface MutableOrderInfo extends OrderInfo, Serializable {
      *
      * @param multipleDeliveryAvailable multiple delivery is available for order.
      */
-    void setMultipleDeliveryAvailable(boolean multipleDeliveryAvailable);
+    void setMultipleDeliveryAvailable(Map<String, Boolean> multipleDeliveryAvailable);
 
+    /**
+     * Set multiple delivery available flag.
+     *
+     * @param supplier supplier
+     * @param multipleDeliveryAvailable available flag
+     */
+    void putMultipleDeliveryAvailable(String supplier, Boolean multipleDeliveryAvailable);
 
     /**
      * Set additional details stored on this cart.

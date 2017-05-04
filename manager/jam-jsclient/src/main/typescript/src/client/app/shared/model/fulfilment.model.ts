@@ -29,6 +29,7 @@ export interface FulfilmentCentreInfoVO {
 
   defaultStandardStockLeadTime : number;
   defaultBackorderStockLeadTime : number;
+  multipleShippingSupported : boolean;
 
   displayNames : Pair<string, string>[];
 

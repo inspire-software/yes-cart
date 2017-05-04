@@ -19,6 +19,7 @@ package org.yes.cart.domain.ro;
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.ro.xml.impl.CarrierSlaMapAdapter;
+import org.yes.cart.domain.ro.xml.impl.MultiDeliveryMapAdapter;
 import org.yes.cart.domain.ro.xml.impl.StringMapAdapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -40,7 +41,7 @@ public class CartOrderInfoRO implements Serializable {
     @DtoField(readOnly = true)
     private boolean multipleDelivery;
     @DtoField(readOnly = true)
-    private boolean multipleDeliveryAvailable;
+    private Map<String, Boolean> multipleDeliveryAvailable;
     @DtoField(readOnly = true)
     private boolean separateBillingAddress;
     @DtoField(readOnly = true)
@@ -164,12 +165,19 @@ public class CartOrderInfoRO implements Serializable {
         this.multipleDelivery = multipleDelivery;
     }
 
-    @XmlAttribute(name = "multiple-delivery-available")
-    public boolean isMultipleDeliveryAvailable() {
+    @XmlJavaTypeAdapter(MultiDeliveryMapAdapter.class)
+    @XmlElement(name = "multiple-delivery-available")
+    public Map<String, Boolean> getMultipleDeliveryAvailable() {
+        if (this.multipleDeliveryAvailable == null) {
+            this.multipleDeliveryAvailable = new HashMap<String, Boolean>();
+        }
         return multipleDeliveryAvailable;
     }
 
-    public void setMultipleDeliveryAvailable(final boolean multipleDeliveryAvailable) {
-        this.multipleDeliveryAvailable = multipleDeliveryAvailable;
+    public void setMultipleDeliveryAvailable(final Map<String, Boolean> multipleDeliveryAvailable) {
+        this.getMultipleDeliveryAvailable().clear();
+        if (multipleDeliveryAvailable != null) {
+            this.multipleDeliveryAvailable.putAll(multipleDeliveryAvailable);
+        }
     }
 }

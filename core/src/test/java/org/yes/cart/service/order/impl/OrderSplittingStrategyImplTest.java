@@ -127,7 +127,7 @@ public class OrderSplittingStrategyImplTest {
 
 
     @Test
-    public void testGroupDeliveriesIntoMixedIfNecessaryOnlyElectronic() throws Exception {
+    public void testGroupDeliveriesIntoMixedIfNecessaryOnlyElectronicSingleTrue() throws Exception {
 
         final CartItem d4 = context.mock(CartItem.class, "d4");
 
@@ -135,7 +135,28 @@ public class OrderSplittingStrategyImplTest {
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4));
 
-        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups);
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, Collections.singletonMap("S001", Boolean.TRUE));
+
+        assertEquals(1, groups.size());
+
+        final List<CartItem> electronic = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"));
+
+        assertNotNull(electronic);
+        assertEquals(1, electronic.size());
+        assertSame(d4, electronic.get(0));
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryOnlyElectronicSingleFalse() throws Exception {
+
+        final CartItem d4 = context.mock(CartItem.class, "d4");
+
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4));
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, Collections.singletonMap("S001", Boolean.FALSE));
 
         assertEquals(1, groups.size());
 
@@ -149,7 +170,7 @@ public class OrderSplittingStrategyImplTest {
 
 
     @Test
-    public void testGroupDeliveriesIntoMixedIfNecessaryOnlyElectronicTwoSuppliers() throws Exception {
+    public void testGroupDeliveriesIntoMixedIfNecessaryOnlyElectronicTwoSuppliersSingleTrue() throws Exception {
 
         final CartItem d4_1 = context.mock(CartItem.class, "d4_1");
         final CartItem d4_2 = context.mock(CartItem.class, "d4_2");
@@ -159,7 +180,42 @@ public class OrderSplittingStrategyImplTest {
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4_1));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d4_2));
 
-        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups);
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, new HashMap<String, Boolean>() {{
+            put("S001", Boolean.TRUE);
+            put("S002", Boolean.TRUE);
+        }});
+
+        assertEquals(2, groups.size());
+
+        final List<CartItem> electronic_1 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"));
+
+        assertNotNull(electronic_1);
+        assertEquals(1, electronic_1.size());
+        assertSame(d4_1, electronic_1.get(0));
+
+        final List<CartItem> electronic_2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S002"));
+
+        assertNotNull(electronic_2);
+        assertEquals(1, electronic_2.size());
+        assertSame(d4_2, electronic_2.get(0));
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryOnlyElectronicTwoSuppliersSingleFalse() throws Exception {
+
+        final CartItem d4_1 = context.mock(CartItem.class, "d4_1");
+        final CartItem d4_2 = context.mock(CartItem.class, "d4_2");
+
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4_1));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d4_2));
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, new HashMap<String, Boolean>() {{
+            put("S001", Boolean.FALSE);
+            put("S002", Boolean.FALSE);
+        }});
 
         assertEquals(2, groups.size());
 
@@ -179,7 +235,7 @@ public class OrderSplittingStrategyImplTest {
 
 
     @Test
-    public void testGroupDeliveriesIntoMixedIfNecessaryWithElectronic() throws Exception {
+    public void testGroupDeliveriesIntoMixedIfNecessaryWithElectronicSingleTrue() throws Exception {
 
         final CartItem d1 = context.mock(CartItem.class, "d1");
         final CartItem d2 = context.mock(CartItem.class, "d2");
@@ -193,7 +249,7 @@ public class OrderSplittingStrategyImplTest {
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d3));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4));
 
-        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups);
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, Collections.singletonMap("S001", Boolean.TRUE));
 
         assertEquals(2, groups.size());
 
@@ -213,7 +269,50 @@ public class OrderSplittingStrategyImplTest {
     }
 
     @Test
-    public void testGroupDeliveriesIntoMixedIfNecessaryWithElectronicTwoSuppliers() throws Exception {
+    public void testGroupDeliveriesIntoMixedIfNecessaryWithElectronicSingleFalse() throws Exception {
+
+        final CartItem d1 = context.mock(CartItem.class, "d1");
+        final CartItem d2 = context.mock(CartItem.class, "d2");
+        final CartItem d3 = context.mock(CartItem.class, "d3");
+        final CartItem d4 = context.mock(CartItem.class, "d4");
+
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d3));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4));
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, Collections.singletonMap("S001", Boolean.FALSE));
+
+        assertEquals(4, groups.size());
+
+        final List<CartItem> std = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"));
+        final List<CartItem> date = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"));
+        final List<CartItem> inv = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"));
+        final List<CartItem> electronic = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"));
+
+        assertNotNull(std);
+        assertEquals(1, std.size());
+        assertSame(d1, std.get(0));
+
+        assertNotNull(date);
+        assertEquals(1, date.size());
+        assertSame(d2, date.get(0));
+
+        assertNotNull(inv);
+        assertEquals(1, inv.size());
+        assertSame(d3, inv.get(0));
+
+        assertNotNull(electronic);
+        assertEquals(1, electronic.size());
+        assertSame(d4, electronic.get(0));
+
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryWithElectronicTwoSuppliersSingleTrue() throws Exception {
 
         final CartItem d1 = context.mock(CartItem.class, "d1");
         final CartItem d2 = context.mock(CartItem.class, "d2");
@@ -227,7 +326,10 @@ public class OrderSplittingStrategyImplTest {
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d3));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4));
 
-        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups);
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, new HashMap<String, Boolean>() {{
+            put("S002", Boolean.TRUE);
+            put("S001", Boolean.TRUE);
+        }});
 
         assertEquals(3, groups.size());
 
@@ -251,7 +353,138 @@ public class OrderSplittingStrategyImplTest {
     }
 
     @Test
-    public void testGroupDeliveriesIntoMixedIfNecessary() throws Exception {
+    public void testGroupDeliveriesIntoMixedIfNecessaryWithElectronicTwoSuppliersSingleFalse() throws Exception {
+
+        final CartItem d1 = context.mock(CartItem.class, "d1");
+        final CartItem d2 = context.mock(CartItem.class, "d2");
+        final CartItem d3 = context.mock(CartItem.class, "d3");
+        final CartItem d4 = context.mock(CartItem.class, "d4");
+
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d1));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d3));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4));
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, new HashMap<String, Boolean>() {{
+            put("S002", Boolean.FALSE);
+            put("S001", Boolean.FALSE);
+        }});
+
+        assertEquals(4, groups.size());
+
+        final List<CartItem> date = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"));
+        final List<CartItem> inv = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"));
+        final List<CartItem> electronic = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"));
+        final List<CartItem> standard2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"));
+
+        assertNotNull(date);
+        assertEquals(1, date.size());
+        assertSame(d2, date.get(0));
+
+        assertNotNull(inv);
+        assertEquals(1, inv.size());
+        assertSame(d3, inv.get(0));
+
+        assertNotNull(electronic);
+        assertEquals(1, electronic.size());
+        assertSame(d4, electronic.get(0));
+
+        assertNotNull(standard2);
+        assertEquals(1, standard2.size());
+        assertSame(d1, standard2.get(0));
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryWithElectronicTwoSuppliersSingleMixed1() throws Exception {
+
+        final CartItem d1 = context.mock(CartItem.class, "d1");
+        final CartItem d2 = context.mock(CartItem.class, "d2");
+        final CartItem d3 = context.mock(CartItem.class, "d3");
+        final CartItem d4 = context.mock(CartItem.class, "d4");
+
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d1));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d2));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d3));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4));
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, new HashMap<String, Boolean>() {{
+            put("S002", Boolean.TRUE);
+            put("S001", Boolean.FALSE);
+        }});
+
+        assertEquals(3, groups.size());
+
+        final List<CartItem> electronic = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"));
+        final List<CartItem> inv = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"));
+        final List<CartItem> mixed2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, "S002"));
+
+        assertNotNull(electronic);
+        assertEquals(1, electronic.size());
+        assertSame(d4, electronic.get(0));
+
+        assertNotNull(inv);
+        assertEquals(1, inv.size());
+        assertSame(d3, inv.get(0));
+
+        assertNotNull(mixed2);
+        assertEquals(2, mixed2.size());
+        assertSame(d1, mixed2.get(0));
+        assertSame(d2, mixed2.get(1));
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryWithElectronicTwoSuppliersSingleMixed2() throws Exception {
+
+        final CartItem d1 = context.mock(CartItem.class, "d1");
+        final CartItem d2 = context.mock(CartItem.class, "d2");
+        final CartItem d3 = context.mock(CartItem.class, "d3");
+        final CartItem d4 = context.mock(CartItem.class, "d4");
+
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d1));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d2));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d3));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4));
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, new HashMap<String, Boolean>() {{
+            put("S002", Boolean.FALSE);
+            put("S001", Boolean.TRUE);
+        }});
+
+        assertEquals(4, groups.size());
+
+        final List<CartItem> electronic = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"));
+        final List<CartItem> inv = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"));
+        final List<CartItem> standard2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"));
+        final List<CartItem> date2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S002"));
+
+        assertNotNull(electronic);
+        assertEquals(1, electronic.size());
+        assertSame(d4, electronic.get(0));
+
+        assertNotNull(inv);
+        assertEquals(1, inv.size());
+        assertSame(d3, inv.get(0));
+
+        assertNotNull(standard2);
+        assertEquals(1, standard2.size());
+        assertSame(d1, standard2.get(0));
+
+        assertNotNull(date2);
+        assertEquals(1, date2.size());
+        assertSame(d2, date2.get(0));
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessarySingleTrue() throws Exception {
 
         final CartItem d1 = context.mock(CartItem.class, "d1");
         final CartItem d2 = context.mock(CartItem.class, "d2");
@@ -263,7 +496,7 @@ public class OrderSplittingStrategyImplTest {
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d3));
 
-        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups);
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, Collections.singletonMap("S001", Boolean.TRUE));
 
         assertEquals(1, groups.size());
 
@@ -278,7 +511,42 @@ public class OrderSplittingStrategyImplTest {
     }
 
     @Test
-    public void testGroupDeliveriesIntoMixedIfNecessaryMultipleSuppliers() throws Exception {
+    public void testGroupDeliveriesIntoMixedIfNecessarySingleFalse() throws Exception {
+
+        final CartItem d1 = context.mock(CartItem.class, "d1");
+        final CartItem d2 = context.mock(CartItem.class, "d2");
+        final CartItem d3 = context.mock(CartItem.class, "d3");
+
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d3));
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, Collections.singletonMap("S001", Boolean.FALSE));
+
+        assertEquals(3, groups.size());
+
+        final List<CartItem> std = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"));
+        final List<CartItem> date = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"));
+        final List<CartItem> inv = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"));
+
+        assertNotNull(std);
+        assertEquals(1, std.size());
+        assertSame(d1, std.get(0));
+
+        assertNotNull(date);
+        assertEquals(1, date.size());
+        assertSame(d2, date.get(0));
+
+        assertNotNull(inv);
+        assertEquals(1, inv.size());
+        assertSame(d3, inv.get(0));
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryMultipleSuppliersSingleTrue() throws Exception {
 
         final CartItem d1_1 = context.mock(CartItem.class, "d1_1");
         final CartItem d2_1 = context.mock(CartItem.class, "d2_1");
@@ -302,7 +570,11 @@ public class OrderSplittingStrategyImplTest {
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S003"), Collections.<CartItem>singletonList(d2_3));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S003"), Collections.<CartItem>singletonList(d3_3));
 
-        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups);
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, new HashMap<String, Boolean>() {{
+            put("S001", Boolean.TRUE);
+            put("S002", Boolean.TRUE);
+            put("S003", Boolean.TRUE);
+        }});
 
         assertEquals(3, groups.size());
 
@@ -321,6 +593,156 @@ public class OrderSplittingStrategyImplTest {
         assertSame(d1_2, mixed_2.get(0));
         assertSame(d2_2, mixed_2.get(1));
         assertSame(d3_2, mixed_2.get(2));
+
+        final List<CartItem> mixed_3 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, "S003"));
+
+        assertNotNull(mixed_3);
+        assertEquals(3, mixed_3.size());
+        assertSame(d1_3, mixed_3.get(0));
+        assertSame(d2_3, mixed_3.get(1));
+        assertSame(d3_3, mixed_3.get(2));
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryMultipleSuppliersSingleFalse() throws Exception {
+
+        final CartItem d1_1 = context.mock(CartItem.class, "d1_1");
+        final CartItem d2_1 = context.mock(CartItem.class, "d2_1");
+        final CartItem d3_1 = context.mock(CartItem.class, "d3_1");
+        final CartItem d1_2 = context.mock(CartItem.class, "d1_2");
+        final CartItem d2_2 = context.mock(CartItem.class, "d2_2");
+        final CartItem d3_2 = context.mock(CartItem.class, "d3_2");
+        final CartItem d1_3 = context.mock(CartItem.class, "d1_3");
+        final CartItem d2_3 = context.mock(CartItem.class, "d2_3");
+        final CartItem d3_3 = context.mock(CartItem.class, "d3_3");
+
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1_1));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2_1));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d3_1));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d1_2));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d2_2));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d3_2));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S003"), Collections.<CartItem>singletonList(d1_3));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S003"), Collections.<CartItem>singletonList(d2_3));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S003"), Collections.<CartItem>singletonList(d3_3));
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, new HashMap<String, Boolean>() {{
+            put("S001", Boolean.FALSE);
+            put("S002", Boolean.FALSE);
+            put("S003", Boolean.FALSE);
+        }});
+
+        assertEquals(9, groups.size());
+
+        final List<CartItem> std_1 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"));
+        final List<CartItem> date_1 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"));
+        final List<CartItem> inv_1 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"));
+
+        assertNotNull(std_1);
+        assertEquals(1, std_1.size());
+        assertSame(d1_1, std_1.get(0));
+
+        assertNotNull(date_1);
+        assertEquals(1, date_1.size());
+        assertSame(d2_1, date_1.get(0));
+
+        assertNotNull(inv_1);
+        assertEquals(1, inv_1.size());
+        assertSame(d3_1, inv_1.get(0));
+
+        final List<CartItem> std_2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"));
+        final List<CartItem> date_2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S002"));
+        final List<CartItem> inv_2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S002"));
+
+        assertNotNull(std_2);
+        assertEquals(1, std_2.size());
+        assertSame(d1_2, std_2.get(0));
+
+        assertNotNull(date_2);
+        assertEquals(1, date_2.size());
+        assertSame(d2_2, date_2.get(0));
+
+        assertNotNull(inv_2);
+        assertEquals(1, inv_2.size());
+        assertSame(d3_2, inv_2.get(0));
+
+        final List<CartItem> std_3 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S003"));
+        final List<CartItem> date_3 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S003"));
+        final List<CartItem> inv_3 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S003"));
+
+        assertNotNull(std_3);
+        assertEquals(1, std_3.size());
+        assertSame(d1_3, std_3.get(0));
+
+        assertNotNull(date_3);
+        assertEquals(1, date_3.size());
+        assertSame(d2_3, date_3.get(0));
+
+        assertNotNull(inv_3);
+        assertEquals(1, inv_3.size());
+        assertSame(d3_3, inv_3.get(0));
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryMultipleSuppliersSingleMixed() throws Exception {
+
+        final CartItem d1_1 = context.mock(CartItem.class, "d1_1");
+        final CartItem d2_1 = context.mock(CartItem.class, "d2_1");
+        final CartItem d3_1 = context.mock(CartItem.class, "d3_1");
+        final CartItem d1_2 = context.mock(CartItem.class, "d1_2");
+        final CartItem d2_2 = context.mock(CartItem.class, "d2_2");
+        final CartItem d3_2 = context.mock(CartItem.class, "d3_2");
+        final CartItem d1_3 = context.mock(CartItem.class, "d1_3");
+        final CartItem d2_3 = context.mock(CartItem.class, "d2_3");
+        final CartItem d3_3 = context.mock(CartItem.class, "d3_3");
+
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1_1));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2_1));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d3_1));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d1_2));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d2_2));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d3_2));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S003"), Collections.<CartItem>singletonList(d1_3));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S003"), Collections.<CartItem>singletonList(d2_3));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S003"), Collections.<CartItem>singletonList(d3_3));
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, new HashMap<String, Boolean>() {{
+            put("S001", Boolean.TRUE);
+            put("S002", Boolean.FALSE);
+            put("S003", Boolean.TRUE);
+        }});
+
+        assertEquals(5, groups.size());
+
+        final List<CartItem> mixed_1 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, "S001"));
+
+        assertNotNull(mixed_1);
+        assertEquals(3, mixed_1.size());
+        assertSame(d1_1, mixed_1.get(0));
+        assertSame(d2_1, mixed_1.get(1));
+        assertSame(d3_1, mixed_1.get(2));
+
+        final List<CartItem> std_2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"));
+        final List<CartItem> date_2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S002"));
+        final List<CartItem> inv_2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S002"));
+
+        assertNotNull(std_2);
+        assertEquals(1, std_2.size());
+        assertSame(d1_2, std_2.get(0));
+
+        assertNotNull(date_2);
+        assertEquals(1, date_2.size());
+        assertSame(d2_2, date_2.get(0));
+
+        assertNotNull(inv_2);
+        assertEquals(1, inv_2.size());
+        assertSame(d3_2, inv_2.get(0));
 
         final List<CartItem> mixed_3 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, "S003"));
 
@@ -360,7 +782,7 @@ public class OrderSplittingStrategyImplTest {
         final String skuCode = "001";
         final String supplier = "Main";
         final BigDecimal qty = required;
-        final List<Warehouse> warehouses = Collections.singletonList(warehouse);
+        final Map<String, Warehouse> warehouses = Collections.singletonMap("Main", warehouse);
 
         final ProductSku sku = context.mock(ProductSku.class, "sku");
         final Product product = context.mock(Product.class, "product");
@@ -1137,7 +1559,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(d1).getGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
         }});
 
-        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.TRUE));
 
         assertNotNull(buckets);
         assertEquals(1, buckets.size());
@@ -1158,7 +1580,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(d2).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
         }});
 
-        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.TRUE));
 
         assertNotNull(buckets);
         assertEquals(1, buckets.size());
@@ -1179,7 +1601,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(d3).getGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
         }});
 
-        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.TRUE));
 
         assertNotNull(buckets);
         assertEquals(1, buckets.size());
@@ -1200,7 +1622,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(d4).getGroup(); will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
         }});
 
-        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.TRUE));
 
         assertNotNull(buckets);
         assertEquals(1, buckets.size());
@@ -1221,7 +1643,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(oos).getGroup(); will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
         }});
 
-        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.TRUE));
 
         assertNotNull(buckets);
         assertEquals(1, buckets.size());
@@ -1242,7 +1664,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
         }});
 
-        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.TRUE));
 
         assertNotNull(buckets);
         assertEquals(1, buckets.size());
@@ -1250,7 +1672,7 @@ public class OrderSplittingStrategyImplTest {
     }
 
     @Test
-    public void testGroupDeliveriesIntoMixedIfNecessaryMix() throws Exception {
+    public void testGroupDeliveriesIntoMixedIfNecessaryMixSingleTrue() throws Exception {
 
         final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
 
@@ -1283,7 +1705,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
         }});
 
-        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.TRUE));
 
         assertNotNull(buckets);
         assertEquals(4, buckets.size());
@@ -1302,7 +1724,61 @@ public class OrderSplittingStrategyImplTest {
     }
 
     @Test
-    public void testGroupDeliveriesIntoMixedIfNecessaryStandardMultipleSuppliers() throws Exception {
+    public void testGroupDeliveriesIntoMixedIfNecessaryMixSingleFalse() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
+        final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
+        final DeliveryBucket d3 = context.mock(DeliveryBucket.class, "d3");
+        final DeliveryBucket d4 = context.mock(DeliveryBucket.class, "d4");
+        final DeliveryBucket oos = context.mock(DeliveryBucket.class, "oos");
+        final DeliveryBucket off = context.mock(DeliveryBucket.class, "off");
+
+        buckets.put(d1, Collections.<CartItem>emptyList());
+        buckets.put(d2, Collections.<CartItem>emptyList());
+        buckets.put(d3, Collections.<CartItem>emptyList());
+        buckets.put(d4, Collections.<CartItem>emptyList());
+        buckets.put(oos, Collections.<CartItem>emptyList());
+        buckets.put(off, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d1).getSupplier(); will(returnValue("s1"));
+            allowing(d1).getGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(d2).getSupplier(); will(returnValue("s1"));
+            allowing(d2).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(d3).getSupplier(); will(returnValue("s1"));
+            allowing(d3).getGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+            allowing(d4).getSupplier(); will(returnValue("s1"));
+            allowing(d4).getGroup(); will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+            allowing(oos).getSupplier(); will(returnValue("s1"));
+            allowing(oos).getGroup(); will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+            allowing(off).getSupplier(); will(returnValue("s1"));
+            allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+        }});
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, Collections.singletonMap("s1", Boolean.FALSE));
+
+        assertNotNull(buckets);
+        assertEquals(6, buckets.size());
+
+        final Set<String> expected = new HashSet<String>(Arrays.asList(
+                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
+                CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP,
+                CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP,
+                CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP,
+                CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP,
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP
+        ));
+
+        for (final DeliveryBucket key : buckets.keySet()) {
+            assertTrue(expected.contains(key.getGroup()));
+        }
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryStandardMultipleSuppliersSingleTrue() throws Exception {
 
         final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
 
@@ -1335,7 +1811,138 @@ public class OrderSplittingStrategyImplTest {
             allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
         }});
 
-        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, new HashMap<String, Boolean>() {{
+            put("s1", Boolean.TRUE);
+            put("s2", Boolean.TRUE);
+            put("s3", Boolean.TRUE);
+        }});
+
+        assertNotNull(buckets);
+        assertEquals(5, buckets.size());
+
+        final Map<String, Set<String>> expected = new HashMap<String, Set<String>>() {{
+            put("s1", new HashSet<String>(Arrays.asList(
+                    CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP,
+                    CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP,
+                    CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP
+            )));
+            put("s2", new HashSet<String>(Arrays.asList(
+                    CustomerOrderDelivery.MIX_DELIVERY_GROUP
+            )));
+            put("s3", new HashSet<String>(Arrays.asList(
+                    CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP
+            )));
+        }};
+
+        for (final DeliveryBucket key : buckets.keySet()) {
+            assertTrue("Bucket not expected " + key, expected.get(key.getSupplier()).contains(key.getGroup()));
+        }
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryStandardMultipleSuppliersSingleFalse() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
+        final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
+        final DeliveryBucket d3 = context.mock(DeliveryBucket.class, "d3");
+        final DeliveryBucket d4 = context.mock(DeliveryBucket.class, "d4");
+        final DeliveryBucket oos = context.mock(DeliveryBucket.class, "oos");
+        final DeliveryBucket off = context.mock(DeliveryBucket.class, "off");
+
+        buckets.put(d1, Collections.<CartItem>emptyList());
+        buckets.put(d2, Collections.<CartItem>emptyList());
+        buckets.put(d3, Collections.<CartItem>emptyList());
+        buckets.put(d4, Collections.<CartItem>emptyList());
+        buckets.put(oos, Collections.<CartItem>emptyList());
+        buckets.put(off, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d1).getSupplier(); will(returnValue("s2"));
+            allowing(d1).getGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(d2).getSupplier(); will(returnValue("s1"));
+            allowing(d2).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(d3).getSupplier(); will(returnValue("s2"));
+            allowing(d3).getGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+            allowing(d4).getSupplier(); will(returnValue("s1"));
+            allowing(d4).getGroup(); will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+            allowing(oos).getSupplier(); will(returnValue("s3"));
+            allowing(oos).getGroup(); will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+            allowing(off).getSupplier(); will(returnValue("s1"));
+            allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+        }});
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, new HashMap<String, Boolean>() {{
+            put("s1", Boolean.FALSE);
+            put("s2", Boolean.FALSE);
+            put("s3", Boolean.FALSE);
+        }});
+
+        assertNotNull(buckets);
+        assertEquals(6, buckets.size());
+
+        final Map<String, Set<String>> expected = new HashMap<String, Set<String>>() {{
+            put("s1", new HashSet<String>(Arrays.asList(
+                    CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP,
+                    CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP,
+                    CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP
+            )));
+            put("s2", new HashSet<String>(Arrays.asList(
+                    CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
+                    CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP
+            )));
+            put("s3", new HashSet<String>(Arrays.asList(
+                    CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP
+            )));
+        }};
+
+        for (final DeliveryBucket key : buckets.keySet()) {
+            assertTrue("Bucket not expected " + key, expected.get(key.getSupplier()).contains(key.getGroup()));
+        }
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryStandardMultipleSuppliersSingleMix() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
+        final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
+        final DeliveryBucket d3 = context.mock(DeliveryBucket.class, "d3");
+        final DeliveryBucket d4 = context.mock(DeliveryBucket.class, "d4");
+        final DeliveryBucket oos = context.mock(DeliveryBucket.class, "oos");
+        final DeliveryBucket off = context.mock(DeliveryBucket.class, "off");
+
+        buckets.put(d1, Collections.<CartItem>emptyList());
+        buckets.put(d2, Collections.<CartItem>emptyList());
+        buckets.put(d3, Collections.<CartItem>emptyList());
+        buckets.put(d4, Collections.<CartItem>emptyList());
+        buckets.put(oos, Collections.<CartItem>emptyList());
+        buckets.put(off, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d1).getSupplier(); will(returnValue("s2"));
+            allowing(d1).getGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(d2).getSupplier(); will(returnValue("s1"));
+            allowing(d2).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(d3).getSupplier(); will(returnValue("s2"));
+            allowing(d3).getGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+            allowing(d4).getSupplier(); will(returnValue("s1"));
+            allowing(d4).getGroup(); will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+            allowing(oos).getSupplier(); will(returnValue("s3"));
+            allowing(oos).getGroup(); will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+            allowing(off).getSupplier(); will(returnValue("s1"));
+            allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+        }});
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets, new HashMap<String, Boolean>() {{
+            put("s1", Boolean.FALSE);
+            put("s2", Boolean.TRUE);
+            put("s3", Boolean.FALSE);
+        }});
 
         assertNotNull(buckets);
         assertEquals(5, buckets.size());
@@ -1379,27 +1986,17 @@ public class OrderSplittingStrategyImplTest {
         final CartItem other = context.mock(CartItem.class, "other");
 
         context.checking(new Expectations() {{
-            allowing(item).getDeliveryBucket();
-            will(returnValue(itemBucket));
-            allowing(item).getProductSkuCode();
-            will(returnValue("ABC"));
-            allowing(item).isGift();
-            will(returnValue(false));
-            allowing(other).getDeliveryBucket();
-            will(returnValue(null));
-            allowing(other).getProductSkuCode();
-            will(returnValue("CED"));
-            allowing(other).isGift();
-            will(returnValue(false));
+            allowing(item).getDeliveryBucket(); will(returnValue(itemBucket));
+            allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).isGift(); will(returnValue(false));
+            allowing(other).getDeliveryBucket(); will(returnValue(null));
+            allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).isGift(); will(returnValue(false));
 
-            allowing(cart).getOrderInfo();
-            will(returnValue(info));
-            allowing(info).isMultipleDeliveryAvailable();
-            will(returnValue(true));
-            allowing(info).isMultipleDelivery();
-            will(returnValue(true));
-            allowing(cart).getCartItemList();
-            will(returnValue(Arrays.asList(item, other)));
+            allowing(cart).getOrderInfo(); will(returnValue(info));
+            allowing(info).getMultipleDeliveryAvailable(); will(returnValue(Collections.singletonMap("s1", Boolean.TRUE)));
+            allowing(info).isMultipleDelivery(); will(returnValue(true));
+            allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
 
         }});
 
@@ -1436,7 +2033,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));
-            allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
+            allowing(info).getMultipleDeliveryAvailable(); will(returnValue(Collections.singletonMap("s1", Boolean.TRUE)));
             allowing(info).isMultipleDelivery(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
 
@@ -1476,7 +2073,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));
-            allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
+            allowing(info).getMultipleDeliveryAvailable(); will(returnValue(Collections.singletonMap("s1", Boolean.TRUE)));
             allowing(info).isMultipleDelivery(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
 
@@ -1516,7 +2113,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));
-            allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
+            allowing(info).getMultipleDeliveryAvailable(); will(returnValue(Collections.singletonMap("s1", Boolean.TRUE)));
             allowing(info).isMultipleDelivery(); will(returnValue(false));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
 
@@ -1540,7 +2137,7 @@ public class OrderSplittingStrategyImplTest {
 
         final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService) {
             @Override
-            Pair<String, String> getDeliveryGroup(final CartItem item, final List<Warehouse> warehouses) {
+            Pair<String, String> getDeliveryGroup(final CartItem item, final Map<String, Warehouse> warehouses) {
                 return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
             }
         };
@@ -1563,13 +2160,14 @@ public class OrderSplittingStrategyImplTest {
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));
-            allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
+            allowing(info).getMultipleDeliveryAvailable(); will(returnValue(Collections.singletonMap("s1", Boolean.TRUE)));
             allowing(info).isMultipleDelivery(); will(returnValue(true));
             allowing(cart).getShoppingContext(); will(returnValue(ctx));
             allowing(ctx).getCustomerShopId(); will(returnValue(10L));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
 
-            allowing(warehouseService).getByShopId(10L, false); will(returnValue(Arrays.asList(warehouse)));
+            allowing(warehouseService).getByShopIdMapped(10L, false); will(returnValue(Collections.singletonMap("s1", warehouse)));
+            allowing(warehouse).isMultipleShippingSupported(); will(returnValue(true));
 
         }});
 
@@ -1590,7 +2188,7 @@ public class OrderSplittingStrategyImplTest {
 
         final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService) {
             @Override
-            Pair<String, String> getDeliveryGroup(final CartItem item, final List<Warehouse> warehouses) {
+            Pair<String, String> getDeliveryGroup(final CartItem item, final Map<String, Warehouse> warehouses) {
                 return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
             }
         };
@@ -1615,13 +2213,14 @@ public class OrderSplittingStrategyImplTest {
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));
-            allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
+            allowing(info).getMultipleDeliveryAvailable(); will(returnValue(Collections.singletonMap("s1", Boolean.TRUE)));
             allowing(info).isMultipleDelivery(); will(returnValue(true));
             allowing(cart).getShoppingContext(); will(returnValue(ctx));
             allowing(ctx).getCustomerShopId(); will(returnValue(10L));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
 
-            allowing(warehouseService).getByShopId(10L, false); will(returnValue(Arrays.asList(warehouse)));
+            allowing(warehouseService).getByShopIdMapped(10L, false); will(returnValue(Collections.singletonMap("s1", warehouse)));
+            allowing(warehouse).isMultipleShippingSupported(); will(returnValue(true));
 
         }});
 
@@ -1644,7 +2243,7 @@ public class OrderSplittingStrategyImplTest {
 
         final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService) {
             @Override
-            Pair<String, String> getDeliveryGroup(final CartItem item, final List<Warehouse> warehouses) {
+            Pair<String, String> getDeliveryGroup(final CartItem item, final Map<String, Warehouse> warehouses) {
                 return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
             }
         };
@@ -1669,13 +2268,14 @@ public class OrderSplittingStrategyImplTest {
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));
-            allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
+            allowing(info).getMultipleDeliveryAvailable(); will(returnValue(Collections.singletonMap("s1", Boolean.TRUE)));
             allowing(info).isMultipleDelivery(); will(returnValue(true));
             allowing(cart).getShoppingContext(); will(returnValue(ctx));
             allowing(ctx).getCustomerShopId(); will(returnValue(10L));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
 
-            allowing(warehouseService).getByShopId(10L, false); will(returnValue(Arrays.asList(warehouse)));
+            allowing(warehouseService).getByShopIdMapped(10L, false); will(returnValue(Collections.singletonMap("s1", warehouse)));
+            allowing(warehouse).isMultipleShippingSupported(); will(returnValue(true));
 
         }});
 
@@ -1699,7 +2299,7 @@ public class OrderSplittingStrategyImplTest {
 
         final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService) {
             @Override
-            Pair<String, String> getDeliveryGroup(final CartItem item, final List<Warehouse> warehouses) {
+            Pair<String, String> getDeliveryGroup(final CartItem item, final Map<String, Warehouse> warehouses) {
                 return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
             }
         };
@@ -1724,13 +2324,13 @@ public class OrderSplittingStrategyImplTest {
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));
-            allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
+            allowing(info).getMultipleDeliveryAvailable(); will(returnValue(Collections.singletonMap("s1", Boolean.TRUE)));
             allowing(info).isMultipleDelivery(); will(returnValue(false));
             allowing(cart).getShoppingContext(); will(returnValue(ctx));
             allowing(ctx).getCustomerShopId(); will(returnValue(10L));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
 
-            allowing(warehouseService).getByShopId(10L, false); will(returnValue(Arrays.asList(warehouse)));
+            allowing(warehouseService).getByShopIdMapped(10L, false); will(returnValue(Collections.singletonMap("s1", warehouse)));
 
         }});
 

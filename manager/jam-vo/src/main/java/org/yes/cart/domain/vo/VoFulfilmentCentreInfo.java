@@ -60,6 +60,9 @@ public class VoFulfilmentCentreInfo {
     @DtoField(value = "defaultBackorderStockLeadTime")
     private int defaultBackorderStockLeadTime;
 
+    @DtoField(value = "multipleShippingSupported")
+    private boolean multipleShippingSupported;
+
     @DtoField(value = "displayNames", converter = "DisplayValues")
     private List<MutablePair<String, String>> displayNames;
 
@@ -141,6 +144,14 @@ public class VoFulfilmentCentreInfo {
 
     public void setDefaultBackorderStockLeadTime(final int defaultBackorderStockLeadTime) {
         this.defaultBackorderStockLeadTime = defaultBackorderStockLeadTime;
+    }
+
+    public boolean isMultipleShippingSupported() {
+        return multipleShippingSupported;
+    }
+
+    public void setMultipleShippingSupported(final boolean multipleShippingSupported) {
+        this.multipleShippingSupported = multipleShippingSupported;
     }
 
     public List<MutablePair<String, String>> getDisplayNames() {

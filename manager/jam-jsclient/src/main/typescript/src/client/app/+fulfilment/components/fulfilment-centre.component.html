@@ -122,17 +122,21 @@
               <fieldset>
                 <div class="form-group">
                   <label>{{ 'FULFILMENT_CENTRE_STD_LEAD' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'FULFILMENT_CENTRE_STD_LEAD' | translate }}" formControlName="defaultStandardStockLeadTime" name="defaultStandardStockLeadTime" type="text" [(ngModel)]="centre.defaultStandardStockLeadTime">
+                  <input class="form-control" placeholder="{{ 'FULFILMENT_CENTRE_STD_LEAD' | translate }}" formControlName="defaultStandardStockLeadTime" name="defaultStandardStockLeadTime" type="text" [(ngModel)]="centre.defaultStandardStockLeadTime">
                   <div [hidden]="centreForm.controls['defaultStandardStockLeadTime'].valid || centreForm.controls['defaultStandardStockLeadTime'].pristine" class="alert alert-danger">
                     {{ 'POS_INT_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}" formControlName="defaultBackorderStockLeadTime" name="defaultBackorderStockLeadTime" type="text" [(ngModel)]="centre.defaultBackorderStockLeadTime">
+                  <input class="form-control" placeholder="{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}" formControlName="defaultBackorderStockLeadTime" name="defaultBackorderStockLeadTime" type="text" [(ngModel)]="centre.defaultBackorderStockLeadTime">
                   <div [hidden]="centreForm.controls['defaultBackorderStockLeadTime'].valid || centreForm.controls['defaultBackorderStockLeadTime'].pristine" class="alert alert-danger">
                     {{ 'POS_INT_REQUIRED' | translate }}
                   </div>
+                </div>
+                <div>
+                  <input formControlName="multipleShippingSupported" name="multipleShippingSupported" type="checkbox" [(ngModel)]="centre.multipleShippingSupported">
+                  <label>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}</label>
                 </div>
               </fieldset>
             </div>

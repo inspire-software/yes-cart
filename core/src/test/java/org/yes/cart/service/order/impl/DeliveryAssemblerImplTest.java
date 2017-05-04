@@ -61,8 +61,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart1(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
-        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
+        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
         assertEquals(1, dgroups.size());
         final DeliveryBucket d1 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "WAREHOUSE_1");
         assertNotNull(dgroups.get(d1));
@@ -77,7 +77,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         try {
-            deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
+            deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
             fail("Must not allow creating orders with unavailable SKU");
         } catch (SkuUnavailableException sue) {
             assertEquals("Sku CC_TEST4-M:cc test 4 m is not available, cause:  out of stock", sue.getMessage());
@@ -91,8 +91,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         //Standard and back order with inventory. Only one delivery must be planned
         ShoppingCart shoppingCart = getShoppingCart3(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
-        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
+        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
         assertEquals(1, dgroups.size());
         final DeliveryBucket d1 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "WAREHOUSE_1");
         assertNotNull(dgroups.get(d1));
@@ -105,8 +105,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart4(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
-        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
+        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
         assertEquals(1, dgroups.size());
         final DeliveryBucket d5 = new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, "WAREHOUSE_1");
         assertNotNull(dgroups.get(d5));
@@ -120,8 +120,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         ShoppingCart shoppingCart = getShoppingCart4(customer.getEmail());
         prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
-        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
+        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
         assertEquals(2, dgroups.size());
         final DeliveryBucket d1 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "WAREHOUSE_1");
         final DeliveryBucket d3 = new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "WAREHOUSE_1");
@@ -145,8 +145,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         ShoppingCart shoppingCart = getShoppingCart5(customer.getEmail());
         prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
-        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
+        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
         assertEquals(2, dgroups.size());
         final DeliveryBucket d1 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "WAREHOUSE_1");
         final DeliveryBucket d3 = new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "WAREHOUSE_1");
@@ -169,8 +169,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         ShoppingCart shoppingCart = getShoppingCart6(customer.getEmail());
         prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
-        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
+        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
         assertEquals(2, dgroups.size());
         final DeliveryBucket d1 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "WAREHOUSE_1");
         final DeliveryBucket d2 = new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "WAREHOUSE_1");
@@ -197,8 +197,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         ShoppingCart shoppingCart = getShoppingCart7(customer.getEmail());
         prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
-        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
+        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
         assertEquals(5, dgroups.size());
         final DeliveryBucket d11 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "");
         final DeliveryBucket d1 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "WAREHOUSE_1");
@@ -230,7 +230,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         ShoppingCart shoppingCart = getShoppingCart7(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         assertNotNull("Customer can not be null", shoppingCart.getCustomerEmail());
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         customerOrder = customerOrderService.create(customerOrder);
         assertTrue(customerOrder.getCustomerorderId() > 0);
         for (CustomerOrderDelivery cod : customerOrder.getDelivery()) {
@@ -473,6 +473,15 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         commands.execute(shoppingCart, (Map) params);
 
         return shoppingCart;
+    }
+
+    private Map<String, Boolean> getMultiSelection(ShoppingCart cart) {
+        final Map<String, Boolean> single = new HashMap<String, Boolean>();
+        final boolean selected = cart.getOrderInfo().isMultipleDelivery();
+        for (final Map.Entry<String, Boolean> allowed : cart.getOrderInfo().getMultipleDeliveryAvailable().entrySet()) {
+            single.put(allowed.getKey(), !selected || !allowed.getValue());
+        }
+        return single;
     }
 
 }

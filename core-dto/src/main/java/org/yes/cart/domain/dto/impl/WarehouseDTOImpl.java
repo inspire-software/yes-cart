@@ -62,6 +62,9 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     @DtoField(value = "defaultBackorderStockLeadTime")
     private int defaultBackorderStockLeadTime;
 
+    @DtoField(value = "multipleShippingSupported")
+    private boolean multipleShippingSupported;
+
     @DtoField(value = "displayName", converter = "i18nStringConverter")
     private Map<String, String> displayNames;
 
@@ -184,6 +187,16 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     /** {@inheritDoc}*/
     public void setDefaultBackorderStockLeadTime(final int defaultBackorderStockLeadTime) {
         this.defaultBackorderStockLeadTime = defaultBackorderStockLeadTime;
+    }
+
+    /** {@inheritDoc}*/
+    public boolean isMultipleShippingSupported() {
+        return multipleShippingSupported;
+    }
+
+    /** {@inheritDoc}*/
+    public void setMultipleShippingSupported(final boolean multipleShippingSupported) {
+        this.multipleShippingSupported = multipleShippingSupported;
     }
 
     @Override

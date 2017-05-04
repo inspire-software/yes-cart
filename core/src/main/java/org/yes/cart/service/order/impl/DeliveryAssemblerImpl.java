@@ -88,7 +88,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
      */
     public CustomerOrder assembleCustomerOrder(final CustomerOrder order,
                                                final ShoppingCart shoppingCart,
-                                               final boolean onePhysicalDelivery) throws OrderAssemblyException {
+                                               final Map<String, Boolean> onePhysicalDelivery) throws OrderAssemblyException {
 
 
         final Map<DeliveryBucket, List<CustomerOrderDet>> groups = getDeliveryGroups(order, onePhysicalDelivery);
@@ -255,7 +255,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
      * @return true in case if order can has single delivery.
      */
     Map<DeliveryBucket, List<CustomerOrderDet>> getDeliveryGroups(final CustomerOrder order,
-                                                                  final boolean onePhysicalDelivery)
+                                                                  final Map<String, Boolean> onePhysicalDelivery)
             throws SkuUnavailableException {
 
         final Map<DeliveryBucket, List<CustomerOrderDet>> buckets =

@@ -222,8 +222,10 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             throw new PlaceOrderDisabledException(shoppingCart.getCustomerEmail());
         }
 
-        final boolean onePhysicalDelivery =
-                !shoppingCart.getOrderInfo().isMultipleDelivery() || !shoppingCart.getOrderInfo().isMultipleDeliveryAvailable();
+        final Map<String, Boolean> onePhysicalDelivery = new HashMap<String, Boolean>();
+        for (final Map.Entry<String, Boolean> isAllowed : shoppingCart.getOrderInfo().getMultipleDeliveryAvailable().entrySet()) {
+            onePhysicalDelivery.put(isAllowed.getKey(), !shoppingCart.getOrderInfo().isMultipleDelivery() || !isAllowed.getValue());
+        }
 
         final CustomerOrder customerOrderToDelete = getGenericDao().findSingleByCriteria(
                 Restrictions.eq("cartGuid", shoppingCart.getGuid())

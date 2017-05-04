@@ -206,6 +206,20 @@ public interface Warehouse extends Auditable, Codable {
      */
     void setDefaultBackorderStockLeadTime(int defaultBackorderStockLeadTime);
 
+    /**
+     * Determine if this warehouse supports multiple shipment or not.
+     *
+     * @return true if multiple shipment is supported
+     */
+    boolean isMultipleShippingSupported();
+
+    /**
+     * Determine if this warehouse supports multiple shipment or not.
+     *
+     * @param multipleShippingSupported multiple shipment
+     */
+    void setMultipleShippingSupported(boolean multipleShippingSupported);
+
 
 }
 
