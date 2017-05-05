@@ -294,7 +294,7 @@
           <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].custom5 != null">
             <div class="col-lg-3">{{ addressFormConfig[addressEdit.addressType].custom5.label }}</div>
             <div class="col-lg-9">
-              <input class="form-control" formControlName="custom5" name="custom5" type="text" [(ngModel)]="addressEdit.custom4">
+              <input class="form-control" formControlName="custom5" name="custom5" type="text" [(ngModel)]="addressEdit.custom5">
               <div [hidden]="addressForm.controls['custom5'].valid || addressForm.controls['custom5'].pristine" class="alert alert-danger">
                 {{ addressFormConfig[addressEdit.addressType].custom5.validationMessage != null ?
                     addressFormConfig[addressEdit.addressType].custom5.validationMessage : ('SIMPLE_REQUIRED' | translate) }}
@@ -312,7 +312,7 @@
             </div>
           </div>
           <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].custom7 != null">
-            <div class="col-lg-3">{{ addressFormConfig[addressEdit.addressType].custom0.label }}</div>
+            <div class="col-lg-3">{{ addressFormConfig[addressEdit.addressType].custom7.label }}</div>
             <div class="col-lg-9">
               <input class="form-control" formControlName="custom7" name="custom7" type="text" [(ngModel)]="addressEdit.custom7">
               <div [hidden]="addressForm.controls['custom7'].valid || addressForm.controls['custom7'].pristine" class="alert alert-danger">
