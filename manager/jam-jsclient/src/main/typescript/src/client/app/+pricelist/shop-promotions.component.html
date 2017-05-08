@@ -88,7 +88,7 @@
       </p>
     </div>
 
-    <div *ngIf="promotionFilterRequired">
+    <div *ngIf="promotionFilterRequired && selectedShop != null && selectedCurrency != null">
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 

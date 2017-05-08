@@ -240,7 +240,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   protected onTaxSelected(data:TaxVO) {
     LogUtil.debug('ShopTaxesComponent onTaxSelected', data);
     this.selectedTax = data;
-    this.getFilteredTaxConfig();
+    // this.getFilteredTaxConfig();
   }
 
   protected onTaxconfigSelected(data:TaxConfigVO) {
@@ -285,8 +285,6 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
     this.forceShowAll = !this.forceShowAll;
     if (this.viewMode == ShopTaxesComponent.CONFIGS) {
       this.getFilteredTaxConfig();
-    } else {
-      this.getFilteredTax();
     }
   }
 
@@ -366,7 +364,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   protected onRowList(row:TaxVO) {
     LogUtil.debug('ShopTaxesComponent onRowList handler', row);
     this.viewMode = ShopTaxesComponent.CONFIGS;
-    this.forceShowAll = false;
+    this.getFilteredTaxConfig();
   }
 
 
@@ -501,13 +499,13 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
 
   private getFilteredTax() {
-    this.taxesFilterRequired = !this.forceShowAll && (this.taxesFilter == null || this.taxesFilter.length < 2);
+    this.taxesFilterRequired = false; // !this.forceShowAll && (this.taxesFilter == null || this.taxesFilter.length < 2);
 
-    LogUtil.debug('ShopTaxesComponent getFilteredTax' + (this.forceShowAll ? ' forcefully': ''));
+    LogUtil.debug('ShopTaxesComponent getFilteredTax');
 
     if (this.selectedShop != null && this.selectedCurrency != null && !this.taxesFilterRequired) {
       this.loading = true;
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
+      let max = this.filterNoCap; // this.forceShowAll ? this.filterNoCap : this.filterCap;
       var _sub:any = this._taxService.getFilteredTax(this.selectedShop, this.selectedCurrency, this.taxesFilter, max).subscribe( alltaxes => {
         LogUtil.debug('ShopTaxesComponent getFilteredTax', alltaxes);
         this.taxes = alltaxes;
