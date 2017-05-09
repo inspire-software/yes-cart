@@ -59,7 +59,7 @@
     </p>
   </div>
 
-  <div *ngIf="inventoryFilterRequired">
+  <div *ngIf="inventoryFilterRequired && selectedCentre != null">
     <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
   </div>
 
