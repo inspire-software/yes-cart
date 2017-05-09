@@ -149,7 +149,20 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     let promos:PromotionVO[] = [];
     if (codes != null) {
       codes.forEach(code => {
-        promos.push(this._promotions[code]);
+        let promo = this._promotions[code];
+        if (promo != null) {
+          promos.push(promo);
+        } else {
+          promos.push({
+            promotionId : 0,
+            code : code, shopCode : null, currency : null, rank : 0,
+            name : code, description : null,
+            displayNames : [], displayDescriptions : [],
+            promoType : null, promoAction : null, eligibilityCondition : null, promoActionContext : null,
+            couponTriggered : false, canBeCombined : false, enabled : false,
+            enabledFrom : null, enabledTo : null, tag : null
+          });
+        }
       });
     }
     LogUtil.debug('CustomerOrderComponent getPromotions', codes, promos);
