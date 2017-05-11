@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.image.impl;
 
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueBrand;
 import org.yes.cart.service.misc.LanguageService;
@@ -27,23 +25,23 @@ import org.yes.cart.service.misc.LanguageService;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class BrandImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
-
-    private static final String ATTR_CODE_LIKE = AttributeNamesKeys.Brand.BRAND_IMAGE_PREFIX + '%';
+public class BrandMediaFileNameStrategyImpl extends AbstractMediaFileNameStrategyImpl {
 
     private final GenericDAO<AttrValueBrand, Long> attrValueBrandDao;
 
     /**
      * Construct image name strategy
      *
+     * @param urlPath                        URL path that identifies this strategy
      * @param relativeInternalRootDirectory  internal image relative path root directory without {@link java.io.File#separator}. E.g. "brand"
      * @param attrValueBrandDao              brand attribute dao
      * @param languageService                language service
      */
-    public BrandImageNameStrategyImpl(final String relativeInternalRootDirectory,
-                                      final GenericDAO<AttrValueBrand, Long> attrValueBrandDao,
-                                      final LanguageService languageService) {
-        super(Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN, relativeInternalRootDirectory, languageService);
+    public BrandMediaFileNameStrategyImpl(final String urlPath,
+                                          final String relativeInternalRootDirectory,
+                                          final GenericDAO<AttrValueBrand, Long> attrValueBrandDao,
+                                          final LanguageService languageService) {
+        super(urlPath, relativeInternalRootDirectory, languageService);
         this.attrValueBrandDao = attrValueBrandDao;
     }
 
@@ -54,7 +52,7 @@ public class BrandImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
 
         final String val = resolveFileName(url);
 
-        final Object[] nameAndGuid = attrValueBrandDao.findSingleByNamedQuery("BRAND.NAME.AND.GUID.BY.IMAGE.NAME", val, ATTR_CODE_LIKE);
+        final Object[] nameAndGuid = attrValueBrandDao.findSingleByNamedQuery("BRAND.NAME.AND.GUID.BY.MEDIAFILE.NAME", val, getAttributePrefix() + '%');
 
         if (nameAndGuid != null && nameAndGuid.length == 2) {
             if (nameAndGuid[0] instanceof String) {

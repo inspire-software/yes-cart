@@ -67,6 +67,8 @@ public class VoContentServiceImpl implements VoContentService {
                         VoAttrValueContent.class,
                         AttrValueCategoryDTO.class,
                         Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN,
+                        Constants.CATEGORY_FILE_REPOSITORY_URL_PATTERN,
+                        Constants.CATEGORY_SYSFILE_REPOSITORY_URL_PATTERN,
                         this.dtoContentService,
                         this.dtoAttributeService,
                         this.voAssemblySupport,

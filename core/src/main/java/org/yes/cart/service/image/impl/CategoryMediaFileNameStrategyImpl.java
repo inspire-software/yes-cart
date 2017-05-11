@@ -17,7 +17,6 @@
 package org.yes.cart.service.image.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueCategory;
@@ -28,23 +27,23 @@ import org.yes.cart.service.misc.LanguageService;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class CategoryImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
-
-    private static final String ATTR_CODE_LIKE = AttributeNamesKeys.Category.CATEGORY_IMAGE_PREFIX + '%';
+public class CategoryMediaFileNameStrategyImpl extends AbstractMediaFileNameStrategyImpl {
 
     private final GenericDAO<AttrValueCategory, Long> attrValueEntityCategoryDao;
 
     /**
      * Construct image name strategy
      *
+     * @param urlPath                        URL path that identifies this strategy
      * @param relativeInternalRootDirectory  internal image relative path root directory without {@link java.io.File#separator}. E.g. "category"
      * @param attrValueCategoryDao           category attributes dao
      * @param languageService                language service
      */
-    public CategoryImageNameStrategyImpl(final String relativeInternalRootDirectory,
-                                         final GenericDAO<AttrValueCategory, Long> attrValueCategoryDao,
-                                         final LanguageService languageService) {
-        super(Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, relativeInternalRootDirectory, languageService);
+    public CategoryMediaFileNameStrategyImpl(final String urlPath,
+                                             final String relativeInternalRootDirectory,
+                                             final GenericDAO<AttrValueCategory, Long> attrValueCategoryDao,
+                                             final LanguageService languageService) {
+        super(urlPath, relativeInternalRootDirectory, languageService);
         this.attrValueEntityCategoryDao = attrValueCategoryDao;
     }
 
@@ -73,7 +72,7 @@ public class CategoryImageNameStrategyImpl extends AbstractImageNameStrategyImpl
 
         final String val = resolveFileName(url);
 
-        final Object[] uriAndGuid = attrValueEntityCategoryDao.findSingleByNamedQuery("CATEGORY.URI.AND.GUID.BY.IMAGE.NAME", val, ATTR_CODE_LIKE);
+        final Object[] uriAndGuid = attrValueEntityCategoryDao.findSingleByNamedQuery("CATEGORY.URI.AND.GUID.BY.MEDIAFILE.NAME", val, getAttributePrefix() + '%');
 
         if (uriAndGuid != null && uriAndGuid.length == 2) {
             if (uriAndGuid[0] instanceof String) {

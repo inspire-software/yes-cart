@@ -24,7 +24,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.service.image.MediaFileNameStrategy;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,15 +33,15 @@ import static org.junit.Assert.assertEquals;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class CategoryImageNameStrategyImplTest extends BaseCoreDBTestCase {
+public class CategoryMediaFileNameStrategyImplTest extends BaseCoreDBTestCase {
 
     private CategoryService categoryService;
-    private ImageNameStrategy imageNameStrategy;
+    private MediaFileNameStrategy mediaFileNameStrategy;
     private CacheManager cacheManager;
 
     @Before
     public void setUp() {
-        imageNameStrategy = (ImageNameStrategy) ctx().getBean(ServiceSpringKeys.CATEGORY_IMAGE_NAME_STRATEGY);
+        mediaFileNameStrategy = (MediaFileNameStrategy) ctx().getBean(ServiceSpringKeys.CATEGORY_IMAGE_NAME_STRATEGY);
         categoryService = (CategoryService) ctx().getBean(ServiceSpringKeys.CATEGORY_SERVICE);
         cacheManager = (CacheManager) ctx().getBean("cacheManager");
         super.setUp();
@@ -52,9 +52,9 @@ public class CategoryImageNameStrategyImplTest extends BaseCoreDBTestCase {
     public void testGetCodeFromActualObject() {
 
         //test case to support file names without code with non-seo category
-        assertEquals("313", imageNameStrategy.resolveObjectCode("category.jpeg"));
-        assertEquals("313", imageNameStrategy.resolveObjectCode("imgvault/category/category.jpeg"));
-        assertEquals("313", imageNameStrategy.resolveObjectCode("imgvault/category/category.jpeg?w=10&h=4"));
+        assertEquals("313", mediaFileNameStrategy.resolveObjectCode("category.jpeg"));
+        assertEquals("313", mediaFileNameStrategy.resolveObjectCode("imgvault/category/category.jpeg"));
+        assertEquals("313", mediaFileNameStrategy.resolveObjectCode("imgvault/category/category.jpeg?w=10&h=4"));
 
         final Category cat313 = categoryService.findById(313L);
         cat313.getSeo().setUri("CC-TEST-products");
@@ -63,12 +63,12 @@ public class CategoryImageNameStrategyImplTest extends BaseCoreDBTestCase {
         cacheManager.getCache("imageNameStrategy-resolveObjectCode").clear();
 
         //test case to support file names without code with seo category
-        assertEquals("CC-TEST-products", imageNameStrategy.resolveObjectCode("category.jpeg"));
-        assertEquals("CC-TEST-products", imageNameStrategy.resolveObjectCode("imgvault/category/category.jpeg"));
-        assertEquals("CC-TEST-products", imageNameStrategy.resolveObjectCode("imgvault/category/category.jpeg?w=10&h=4"));
+        assertEquals("CC-TEST-products", mediaFileNameStrategy.resolveObjectCode("category.jpeg"));
+        assertEquals("CC-TEST-products", mediaFileNameStrategy.resolveObjectCode("imgvault/category/category.jpeg"));
+        assertEquals("CC-TEST-products", mediaFileNameStrategy.resolveObjectCode("imgvault/category/category.jpeg?w=10&h=4"));
 
         // test that inexistent are resolved to no image
-        assertEquals(Constants.NO_IMAGE, imageNameStrategy.resolveObjectCode("imgvault/category/unknown-category.jpeg"));
+        assertEquals(Constants.NO_IMAGE, mediaFileNameStrategy.resolveObjectCode("imgvault/category/unknown-category.jpeg"));
 
     }
 

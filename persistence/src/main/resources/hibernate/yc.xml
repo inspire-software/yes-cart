@@ -3503,10 +3503,10 @@
         ]]>
     </query>
 
-    <query name="SHOP.CODE.BY.IMAGE.NAME">
+    <query name="SHOP.CODE.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.shop.code from AttrValueEntityShop a
-            where a.val = ?1
+            where a.attribute.code like ?2 and a.val = ?1
         ]]>
     </query>
 
@@ -3517,28 +3517,28 @@
         ]]>
     </query>
 
-    <query name="BRAND.NAME.AND.GUID.BY.IMAGE.NAME">
+    <query name="BRAND.NAME.AND.GUID.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.brand.name, a.brand.guid from AttrValueEntityBrand a
             where a.attribute.code like ?2 and a.val = ?1
         ]]>
     </query>
 
-    <query name="CATEGORY.URI.AND.GUID.BY.IMAGE.NAME">
+    <query name="CATEGORY.URI.AND.GUID.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.category.seoInternal.uri, a.category.guid from AttrValueEntityCategory a
             where a.attribute.code like ?2 and a.val = ?1
         ]]>
     </query>
 
-    <query name="PRODUCT.CODE.BY.IMAGE.NAME">
+    <query name="PRODUCT.CODE.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.product.code from AttrValueEntityProduct a
             where a.attribute.code like ?2 and a.val = ?1
         ]]>
     </query>
 
-    <query name="SKU.CODE.BY.IMAGE.NAME">
+    <query name="SKU.CODE.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.productSku.code from AttrValueEntityProductSku a
             where a.attribute.code like ?2 and a.val = ?1

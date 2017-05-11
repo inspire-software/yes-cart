@@ -73,6 +73,8 @@ public class VoCustomerServiceImpl implements VoCustomerService {
                         VoAttrValueCustomer.class,
                         AttrValueCustomerDTO.class,
                         Constants.CUSTOMER_IMAGE_REPOSITORY_URL_PATTERN,
+                        Constants.CUSTOMER_FILE_REPOSITORY_URL_PATTERN,
+                        Constants.CUSTOMER_SYSFILE_REPOSITORY_URL_PATTERN,
                         this.dtoCustomerService,
                         this.dtoAttributeService,
                         this.voAssemblySupport,

@@ -66,6 +66,7 @@ public class DtoProductSkuServiceImpl
     private final GenericService<Attribute> attributeService;
     private final PriceService priceService;
     private final ImageService imageService;
+    private final FileService fileService;
     private final SystemService systemService;
 
     /**
@@ -77,6 +78,7 @@ public class DtoProductSkuServiceImpl
      * @param attrValueEntityProductSkuDao sku attributes dao
      * @param adaptersRepository           value converter
      * @param imageService                 {@link org.yes.cart.service.domain.ImageService} to manipulate  related images.
+     * @param fileService {@link FileService} to manipulate related files
      * @param systemService                system service
      */
     public DtoProductSkuServiceImpl(
@@ -87,10 +89,12 @@ public class DtoProductSkuServiceImpl
             final AdaptersRepository adaptersRepository,
             final PriceService priceService,
             final ImageService imageService,
+            final FileService fileService,
             final SystemService systemService) {
         super(dtoFactory, productSkuGenericService, adaptersRepository);
 
         this.imageService = imageService;
+        this.fileService = fileService;
 
         this.dtoAttributeService = dtoAttributeService;
         this.attrValueEntityProductSkuDao = attrValueEntityProductSkuDao;
@@ -490,6 +494,9 @@ public class DtoProductSkuServiceImpl
         if (Etype.IMAGE_BUSINESS_TYPE.equals(attrValue.getAttribute().getEtype().getBusinesstype())) {
             imageService.deleteImage(attrValue.getVal(),
                     Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
+        } else if (Etype.FILE_BUSINESS_TYPE.equals(attrValue.getAttribute().getEtype().getBusinesstype())) {
+            fileService.deleteFile(attrValue.getVal(),
+                    Constants.PRODUCT_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
         }
         attrValueEntityProductSkuDao.delete(attrValue);
         return attrValue.getProductSku().getSkuId();

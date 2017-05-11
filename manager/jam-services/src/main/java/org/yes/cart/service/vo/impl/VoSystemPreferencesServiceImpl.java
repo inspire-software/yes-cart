@@ -69,6 +69,8 @@ public class VoSystemPreferencesServiceImpl implements VoSystemPreferencesServic
                         VoAttrValueSystem.class,
                         AttrValueSystemDTO.class,
                         Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN,
+                        Constants.SHOP_FILE_REPOSITORY_URL_PATTERN,
+                        Constants.SHOP_SYSFILE_REPOSITORY_URL_PATTERN,
                         this.dtoSystemService,
                         this.dtoAttributeService,
                         this.voAssemblySupport,

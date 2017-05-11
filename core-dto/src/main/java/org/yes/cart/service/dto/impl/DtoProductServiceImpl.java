@@ -85,7 +85,7 @@ public class DtoProductServiceImpl
     private final Assembler productSkuDTOAssembler;
     private final Assembler attrValueAssembler;
     private final ImageService imageService;
-
+    private final FileService fileService;
     private final SystemService systemService;
 
     private final LanguageService languageService;
@@ -100,6 +100,7 @@ public class DtoProductServiceImpl
      * @param dtoAttributeGroupService attribute group service
      * @param dtoEtypeService    etype service
      * @param imageService       {@link org.yes.cart.service.domain.ImageService} to manipulate  related images.
+     * @param fileService {@link FileService} to manipulate related files
      * @param systemService      system service
      */
     public DtoProductServiceImpl(
@@ -111,6 +112,7 @@ public class DtoProductServiceImpl
             final DtoEtypeService dtoEtypeService,
             final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao,
             final ImageService imageService,
+            final FileService fileService,
             final DtoProductTypeAttrService dtoProductTypeAttrService,
             final DtoProductCategoryService dtoProductCategoryService,
             final SystemService systemService,
@@ -120,6 +122,7 @@ public class DtoProductServiceImpl
         this.dtoEtypeService = dtoEtypeService;
 
         this.imageService = imageService;
+        this.fileService = fileService;
         this.systemService = systemService;
 
 
@@ -647,6 +650,9 @@ public class DtoProductServiceImpl
         if (Etype.IMAGE_BUSINESS_TYPE.equals(attrValue.getAttribute().getEtype().getBusinesstype())) {
             imageService.deleteImage(attrValue.getVal(),
                     Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
+        } else if (Etype.FILE_BUSINESS_TYPE.equals(attrValue.getAttribute().getEtype().getBusinesstype())) {
+            fileService.deleteFile(attrValue.getVal(),
+                    Constants.PRODUCT_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
         }
         attrValueEntityProductDao.delete(attrValue);
         return attrValue.getProduct().getProductId();

@@ -37,6 +37,11 @@
         <constructor-arg index="1" ref="systemService"/>
     </bean>
 
+    <bean id="fileFilter" class="org.yes.cart.web.filter.FileFilter">
+        <constructor-arg index="0" ref="fileService"/>
+        <constructor-arg index="1" ref="systemService"/>
+    </bean>
+
     <bean id="shoppingCartFilter" class="org.yes.cart.web.filter.ShoppingCartFilter">
         <constructor-arg index="0" ref="tuplizerPool"/>
         <constructor-arg index="1" ref="amountCalculationStrategy"/>

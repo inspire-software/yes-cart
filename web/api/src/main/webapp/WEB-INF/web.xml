@@ -100,7 +100,7 @@
         </init-param>
         <init-param>
             <param-name>excludePattern</param-name>
-            <param-value>(services/backdoor)|(imgvault/)</param-value>
+            <param-value>(services/backdoor)|(imgvault/)|(filevault/)</param-value>
         </init-param>
     </filter>
 
@@ -113,7 +113,7 @@
         </init-param>
         <init-param>
             <param-name>excludePattern</param-name>
-            <param-value>(services/backdoor)|(imgvault/)</param-value>
+            <param-value>(services/backdoor)|(imgvault/)|(filevault/)</param-value>
         </init-param>
     </filter>
 
@@ -133,6 +133,15 @@
 
     <filter>
         <filter-name>imageFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>fileFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
         <init-param>
             <param-name>targetFilterLifecycle</param-name>
@@ -179,6 +188,11 @@
     <filter-mapping>
         <filter-name>imageFilter</filter-name>
         <url-pattern>/imgvault/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>fileFilter</filter-name>
+        <url-pattern>/filevault/*</url-pattern>
     </filter-mapping>
 
 

@@ -16,8 +16,8 @@
 
 package org.yes.cart.service.image.impl;
 
-import org.yes.cart.service.image.ImageNameStrategy;
-import org.yes.cart.service.image.ImageNameStrategyResolver;
+import org.yes.cart.service.image.MediaFileNameStrategy;
+import org.yes.cart.service.image.MediaFileNameStrategyResolver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,16 +25,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Responsible to get the particular {@link ImageNameStrategy} by given image url.
+ * Responsible to get the particular {@link MediaFileNameStrategy} by given image url.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ImageNameStrategyResolverImpl implements ImageNameStrategyResolver {
+public class MediaFileNameStrategyResolverImpl implements MediaFileNameStrategyResolver {
 
-    private final ImageNameStrategy defaultStrategy;
-    private final Map<String, ImageNameStrategy> urlToStrategyMap;
+    private final MediaFileNameStrategy defaultStrategy;
+    private final Map<String, MediaFileNameStrategy> urlToStrategyMap;
     private final String[] urls;
 
     /**
@@ -43,12 +43,12 @@ public class ImageNameStrategyResolverImpl implements ImageNameStrategyResolver 
      * @param defaultStrategy  default strategy
      * @param urlToStrategies map of strategies for given url paths
      */
-    public ImageNameStrategyResolverImpl(final ImageNameStrategy defaultStrategy,
-                                         final List<ImageNameStrategy> urlToStrategies) {
+    public MediaFileNameStrategyResolverImpl(final MediaFileNameStrategy defaultStrategy,
+                                             final List<MediaFileNameStrategy> urlToStrategies) {
 
         this.defaultStrategy = defaultStrategy;
-        final Map<String, ImageNameStrategy> urlToStrategyMap = new HashMap<String, ImageNameStrategy>();
-        for (final ImageNameStrategy strategy : urlToStrategies) {
+        final Map<String, MediaFileNameStrategy> urlToStrategyMap = new HashMap<String, MediaFileNameStrategy>();
+        for (final MediaFileNameStrategy strategy : urlToStrategies) {
             urlToStrategyMap.put(strategy.getUrlPath(), strategy);
         }
         this.urlToStrategyMap = urlToStrategyMap;
@@ -59,11 +59,11 @@ public class ImageNameStrategyResolverImpl implements ImageNameStrategyResolver 
     /**
      * {@inheritDoc}
      */
-    public ImageNameStrategy getImageNameStrategy(final String imageUrl) {
+    public MediaFileNameStrategy getMediaFileNameStrategy(final String mediaUrl) {
 
         for (final String url : urls) {
 
-            if (imageUrl.contains(url)) {
+            if (mediaUrl.contains(url)) {
                 return urlToStrategyMap.get(url);
             }
 

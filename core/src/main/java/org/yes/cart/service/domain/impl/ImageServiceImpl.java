@@ -27,8 +27,8 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.service.image.ImageNameStrategy;
-import org.yes.cart.service.image.ImageNameStrategyResolver;
+import org.yes.cart.service.image.MediaFileNameStrategy;
+import org.yes.cart.service.image.MediaFileNameStrategyResolver;
 import org.yes.cart.stream.io.IOProvider;
 
 import javax.imageio.ImageIO;
@@ -64,7 +64,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
     private Color defaultBorder;
     private final Color alphaBorder = new Color(0, 0, 0, 0);
 
-    private final ImageNameStrategyResolver imageNameStrategyResolver;
+    private final MediaFileNameStrategyResolver mediaFileNameStrategyResolver;
 
     private final GenericDAO<SeoImage, Long> seoImageDao;
 
@@ -75,7 +75,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
      * Construct image service.
      *
      * @param seoImageDao   image seo dao
-     * @param imageNameStrategyResolver the image name strategy resolver
+     * @param mediaFileNameStrategyResolver the image name strategy resolver
      * @param allowedSizes  sizes allowed for resizing
      * @param borderColorR  red border density
      * @param borderColorG  green border color density
@@ -93,7 +93,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
      * @param ioProvider IO provider
      */
     public ImageServiceImpl(final GenericDAO<SeoImage, Long> seoImageDao,
-                            final ImageNameStrategyResolver imageNameStrategyResolver,
+                            final MediaFileNameStrategyResolver mediaFileNameStrategyResolver,
                             final String allowedSizes,
                             final int borderColorR,
                             final int borderColorG,
@@ -106,7 +106,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
         super(seoImageDao);
 
         this.seoImageDao = seoImageDao;
-        this.imageNameStrategyResolver = imageNameStrategyResolver;
+        this.mediaFileNameStrategyResolver = mediaFileNameStrategyResolver;
         this.allowedSizes = allowedSizes;
         this.ioProvider = ioProvider;
         this.defaultBorder = new Color(borderColorR, borderColorG, borderColorB);
@@ -321,8 +321,8 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
     }
 
     /** {@inheritDoc} */
-    public ImageNameStrategy getImageNameStrategy(final String url) {
-        return imageNameStrategyResolver.getImageNameStrategy(url);
+    public MediaFileNameStrategy getImageNameStrategy(final String url) {
+        return mediaFileNameStrategyResolver.getMediaFileNameStrategy(url);
     }
 
     /** {@inheritDoc} */
@@ -384,7 +384,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
                                        final String storagePrefix,
                                        final String pathToRepository) {
 
-        final ImageNameStrategy strategy = getImageNameStrategy(storagePrefix);
+        final MediaFileNameStrategy strategy = getImageNameStrategy(storagePrefix);
         final String filename = strategy.resolveFileName(fullFileName);
 
         String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(filename, code, null);
@@ -400,7 +400,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
                                        final String storagePrefix,
                                        final String pathToRepository) throws IOException {
 
-        final ImageNameStrategy strategy = getImageNameStrategy(storagePrefix);
+        final MediaFileNameStrategy strategy = getImageNameStrategy(storagePrefix);
         final String filename = strategy.resolveFileName(fullFileName);
         final String suffix = strategy.resolveSuffix(fullFileName);
         final String locale = strategy.resolveLocale(fullFileName);
@@ -421,7 +421,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
      */
     String createRepositoryUniqueName(final String fileName,
                                       final IOProvider ioProvider,
-                                      final ImageNameStrategy strategy,
+                                      final MediaFileNameStrategy strategy,
                                       final String code,
                                       final String suffix,
                                       final String locale) {
@@ -441,7 +441,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
                                    final String storagePrefix,
                                    final String pathToRepository) throws IOException {
 
-        final ImageNameStrategy strategy = getImageNameStrategy(storagePrefix);
+        final MediaFileNameStrategy strategy = getImageNameStrategy(storagePrefix);
         final String file = strategy.resolveFileName(fileName);
         String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(file, code, null);
 
@@ -459,7 +459,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
             getGenericDao().delete(seoImage);
         }
 
-        final ImageNameStrategy strategy = getImageNameStrategy(storagePrefix);
+        final MediaFileNameStrategy strategy = getImageNameStrategy(storagePrefix);
         final String file = strategy.resolveFileName(imageFileName);
         final String code = strategy.resolveObjectCode(imageFileName);
         String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(file, code, null);

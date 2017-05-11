@@ -131,7 +131,19 @@ public interface SystemService {
      */
     String getImageRepositoryDirectory();
 
+    /**
+     * Get the file repository directory
+     *
+     * @return path to file repository directory.
+     */
+    String getFileRepositoryDirectory();
 
+    /**
+     * Get the file repository directory
+     *
+     * @return path to file repository directory.
+     */
+    String getSystemFileRepositoryDirectory();
 
 
 

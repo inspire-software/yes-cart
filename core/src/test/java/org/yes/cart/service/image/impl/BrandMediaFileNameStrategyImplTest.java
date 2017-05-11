@@ -19,8 +19,9 @@ package org.yes.cart.service.image.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.service.image.MediaFileNameStrategy;
 
 import static org.junit.Assert.assertEquals;
 
@@ -29,23 +30,27 @@ import static org.junit.Assert.assertEquals;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
+public class BrandMediaFileNameStrategyImplTest extends BaseCoreDBTestCase {
 
-    private ImageNameStrategy imageNameStrategy;
+    private MediaFileNameStrategy mediaFileNameStrategy;
 
     @Before
     public void setUp() {
-        imageNameStrategy = (ImageNameStrategy) ctx().getBean(ServiceSpringKeys.PRODUCT_IMAGE_NAME_STRATEGY);
+        mediaFileNameStrategy = (MediaFileNameStrategy) ctx().getBean(ServiceSpringKeys.BRAND_IMAGE_NAME_STRATEGY);
         super.setUp();
     }
+
 
     @Test
     public void testGetCodeFromActualObject() {
 
-        //test case to support file names without product or sku code
-        assertEquals("SOBOT", imageNameStrategy.resolveObjectCode("sobot-picture.jpeg"));
-        assertEquals("SOBOT", imageNameStrategy.resolveObjectCode("imgvault/product/sobot-picture.jpeg"));
-        assertEquals("SOBOT", imageNameStrategy.resolveObjectCode("imgvault/product/sobot-picture.jpeg?w=10&h=4"));
+        //test case to support file names without brand name code
+        assertEquals("PreorderCompany", mediaFileNameStrategy.resolveObjectCode("brand.jpeg"));
+        assertEquals("PreorderCompany", mediaFileNameStrategy.resolveObjectCode("imgvault/brand/brand.jpeg"));
+        assertEquals("PreorderCompany", mediaFileNameStrategy.resolveObjectCode("imgvault/brand/brand.jpeg?w=10&h=4"));
+
+        // test that inexistent are resolved to no image
+        assertEquals(Constants.NO_IMAGE, mediaFileNameStrategy.resolveObjectCode("imgvault/brand/unknown-brand.jpeg"));
 
     }
 

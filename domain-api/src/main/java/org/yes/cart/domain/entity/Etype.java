@@ -27,6 +27,8 @@ public interface Etype extends Auditable {
 
     // The OOTB business types
     String IMAGE_BUSINESS_TYPE = "Image";
+    String FILE_BUSINESS_TYPE = "File";
+    String SYSFILE_BUSINESS_TYPE = "SystemFile";
     String STRING_BUSINESS_TYPE = "String";
 
     /**

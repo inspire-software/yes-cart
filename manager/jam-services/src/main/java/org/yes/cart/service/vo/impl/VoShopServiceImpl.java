@@ -124,6 +124,8 @@ public class VoShopServiceImpl implements VoShopService {
                         VoAttrValueShop.class,
                         AttrValueShopDTO.class,
                         Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN,
+                        Constants.SHOP_FILE_REPOSITORY_URL_PATTERN,
+                        Constants.SHOP_SYSFILE_REPOSITORY_URL_PATTERN,
                         this.dtoShopService,
                         this.dtoAttributeService,
                         this.voAssemblySupport,

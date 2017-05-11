@@ -60,14 +60,16 @@ public class DtoCategoryServiceImpl
     private final Assembler shopCategoryAssembler;
 
     private final ImageService imageService;
-
+    private final FileService fileService;
     private final SystemService systemService;
 
     /**
      * Construct base remote service.
-     *  @param dtoFactory             {@link DtoFactory}
+     *
+     * @param dtoFactory             {@link DtoFactory}
      * @param categoryGenericService category     {@link GenericService}
      * @param imageService           {@link ImageService} to manipulate  related images.
+     * @param fileService {@link FileService} to manipulate related files
      * @param shopGenericService     shop service
      * @param systemService          system service
      */
@@ -79,6 +81,7 @@ public class DtoCategoryServiceImpl
                                   final DtoAttributeService dtoAttributeService,
                                   final GenericDAO<AttrValueEntityCategory, Long> attrValueEntityCategoryDao,
                                   final ImageService imageService,
+                                  final FileService fileService,
                                   final AdaptersRepository adaptersRepository,
                                   final SystemService systemService) {
         super(dtoFactory, categoryGenericService, adaptersRepository);
@@ -103,7 +106,7 @@ public class DtoCategoryServiceImpl
                 attributeService.getGenericDao().getEntityFactory().getImplClass(ShopCategory.class));
 
         this.imageService = imageService;
-
+        this.fileService = fileService;
 
     }
 
@@ -428,6 +431,9 @@ public class DtoCategoryServiceImpl
         if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityCategory.getAttribute().getEtype().getBusinesstype())) {
             imageService.deleteImage(valueEntityCategory.getVal(),
                     Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
+        } else if (Etype.FILE_BUSINESS_TYPE.equals(valueEntityCategory.getAttribute().getEtype().getBusinesstype())) {
+            fileService.deleteFile(valueEntityCategory.getVal(),
+                    Constants.CATEGORY_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
         }
 
         attrValueEntityCategoryDao.delete(valueEntityCategory);

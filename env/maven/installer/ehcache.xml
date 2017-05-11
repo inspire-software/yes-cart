@@ -565,6 +565,20 @@
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
+    <cache name="web.fileService-fileURI"
+           maxElementsInMemory="500"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+
+    <cache name="web.fileService-objectFiles"
+           maxElementsInMemory="500"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+
     <cache name="web.shoppingCart"
            maxElementsInMemory="500"
            overflowToDisk="false"

@@ -41,6 +41,7 @@ import org.yes.cart.domain.entity.Etype;
 import org.yes.cart.domain.entity.impl.AttrValueEntityBrand;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.service.domain.FileService;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
@@ -65,17 +66,19 @@ public class DtoBrandServiceImpl
     private final DtoAttributeService dtoAttributeService;
     private final GenericDAO<AttrValueEntityBrand, Long> attrValueEntityBrandDao;
     private final ImageService imageService;
+    private final FileService fileService;
     private final SystemService systemService;
 
 
     /**
      * Construct base remote service.
      *
-     * @param brandGenericService       {@link org.yes.cart.service.domain.GenericService}
-     * @param dtoFactory    {@link org.yes.cart.domain.dto.factory.DtoFactory}
+     * @param brandGenericService       {@link GenericService}
+     * @param dtoFactory    {@link DtoFactory}
      * @param dtoAttributeService dto attribute service
      * @param attrValueEntityBrandDao attribute value service
-     * @param imageService {@link org.yes.cart.service.domain.ImageService} to manipulate  related images.
+     * @param imageService {@link ImageService} to manipulate  related images.
+     * @param fileService {@link FileService} to manipulate related files
      * @param systemService system service
      */
     public DtoBrandServiceImpl(final GenericService<Brand> brandGenericService,
@@ -83,9 +86,11 @@ public class DtoBrandServiceImpl
                                final DtoAttributeService dtoAttributeService,
                                final GenericDAO<AttrValueEntityBrand, Long> attrValueEntityBrandDao,
                                final ImageService imageService,
+                               final FileService fileService,
                                final AdaptersRepository adaptersRepository,
                                final SystemService systemService) {
         super(dtoFactory, brandGenericService, adaptersRepository);
+
         this.systemService = systemService;
         this.attrValueAssembler = DTOAssembler.newAssembler(
                 dtoFactory.getImplClass(AttrValueBrandDTO.class),
@@ -94,7 +99,7 @@ public class DtoBrandServiceImpl
         this.dtoAttributeService = dtoAttributeService;
         this.attrValueEntityBrandDao = attrValueEntityBrandDao;
         this.imageService = imageService;
-
+        this.fileService = fileService;
     }
 
 
@@ -184,6 +189,9 @@ public class DtoBrandServiceImpl
         if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityBrand.getAttribute().getEtype().getBusinesstype())) {
             imageService.deleteImage(valueEntityBrand.getVal(),
                     Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
+        } else if (Etype.FILE_BUSINESS_TYPE.equals(valueEntityBrand.getAttribute().getEtype().getBusinesstype())) {
+            fileService.deleteFile(valueEntityBrand.getVal(),
+                    Constants.BRAND_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
         }
         attrValueEntityBrandDao.delete(valueEntityBrand);
         return valueEntityBrand.getBrand().getBrandId();

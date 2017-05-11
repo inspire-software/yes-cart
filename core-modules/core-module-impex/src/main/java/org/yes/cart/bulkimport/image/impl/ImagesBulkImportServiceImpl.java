@@ -27,7 +27,7 @@ import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.service.image.MediaFileNameStrategy;
 
 import java.io.File;
 import java.io.IOException;
@@ -116,7 +116,7 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
                           final Set<String> importedFiles,
                           final String imageVaultRootDirectory) {
 
-        final ImageNameStrategy strategy = imageService.getImageNameStrategy(importDescriptor.getSelectSql());
+        final MediaFileNameStrategy strategy = imageService.getImageNameStrategy(importDescriptor.getSelectSql());
 
         final String fileName = file.getName();
         final String resolvedCode = strategy.resolveObjectCode(fileName);

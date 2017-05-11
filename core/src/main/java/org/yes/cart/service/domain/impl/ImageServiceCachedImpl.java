@@ -23,7 +23,7 @@ import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.service.image.MediaFileNameStrategy;
 
 import java.io.IOException;
 import java.util.List;
@@ -84,7 +84,7 @@ public class ImageServiceCachedImpl implements ImageService {
     }
 
     /** {@inheritDoc} */
-    public ImageNameStrategy getImageNameStrategy(final String url) {
+    public MediaFileNameStrategy getImageNameStrategy(final String url) {
         return imageService.getImageNameStrategy(url);
     }
 

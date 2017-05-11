@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.image.impl;
 
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.entity.AttrValueProductSku;
@@ -34,9 +32,7 @@ import org.yes.cart.service.misc.LanguageService;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ProductImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
-
-    private static final String ATTR_CODE_LIKE = AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + '%';
+public class ProductMediaFileNameStrategyImpl extends AbstractMediaFileNameStrategyImpl {
 
     private final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao;
     private final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao;
@@ -45,16 +41,18 @@ public class ProductImageNameStrategyImpl extends AbstractImageNameStrategyImpl 
     /**
      * Construct image name strategy.
      *
+     * @param urlPath                        URL path that identifies this strategy
      * @param relativeInternalRootDirectory  internal image relative path root directory without {@link java.io.File#separator}. E.g. "product"
      * @param attrValueProductSkuDao         product sku attributes  dao
      * @param attrValueProductDao            product attributes dao
      * @param languageService                language service
      */
-    public ProductImageNameStrategyImpl(final String relativeInternalRootDirectory,
-                                        final GenericDAO<AttrValueProductSku, Long> attrValueProductSkuDao,
-                                        final GenericDAO<AttrValueProduct, Long> attrValueProductDao,
-                                        final LanguageService languageService) {
-        super(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, relativeInternalRootDirectory, languageService);
+    public ProductMediaFileNameStrategyImpl(final String urlPath,
+                                            final String relativeInternalRootDirectory,
+                                            final GenericDAO<AttrValueProductSku, Long> attrValueProductSkuDao,
+                                            final GenericDAO<AttrValueProduct, Long> attrValueProductDao,
+                                            final LanguageService languageService) {
+        super(urlPath, relativeInternalRootDirectory, languageService);
         this.attrValueEntityProductSkuDao = attrValueProductSkuDao;
         this.attrValueEntityProductDao = attrValueProductDao;
     }
@@ -66,13 +64,15 @@ public class ProductImageNameStrategyImpl extends AbstractImageNameStrategyImpl 
 
         final String val = resolveFileName(url);
 
+        final String prefix = getAttributePrefix() + '%';
+
         final String productCode =
-                attrValueEntityProductDao.findSingleByNamedQuery("PRODUCT.CODE.BY.IMAGE.NAME", val, ATTR_CODE_LIKE);
+                attrValueEntityProductDao.findSingleByNamedQuery("PRODUCT.CODE.BY.MEDIAFILE.NAME", val, prefix);
         if (productCode != null) {
             return productCode;
         }
 
-        return attrValueEntityProductSkuDao.findSingleByNamedQuery("SKU.CODE.BY.IMAGE.NAME", val, ATTR_CODE_LIKE);
+        return attrValueEntityProductSkuDao.findSingleByNamedQuery("SKU.CODE.BY.MEDIAFILE.NAME", val, prefix);
 
     }
 
