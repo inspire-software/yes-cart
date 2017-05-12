@@ -8,6 +8,10 @@ derbyinit.log
 
 /imagevault/**
 
+/filevault/**
+
+/sysfilevault/**
+
 env/derby/lib/yes/**
 
 env/derby/lib/yespay/**
