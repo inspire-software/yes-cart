@@ -45,6 +45,7 @@
       <template [ngIf]="systemAttributes">
         <yc-attribute-values #attributeValuesComponent
                              [masterObject]="system"
+                             masterObjectType="shop"
                              [objectAttributes]="systemAttributes"
                              [attributeFilter]="attributeFilter"
                              (dataSelected)="onSelectRow($event)"

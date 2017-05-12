@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.filter;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.service.domain.FileService;
@@ -88,14 +87,15 @@ public class FileFilter extends AbstractFilter implements Filter {
         final boolean origFileExists = fileService.isFileInRepository(originalFileName, code, mediaFileNameStrategy.getUrlPath(), fileRealPathPrefix);
 
         if (!origFileExists) {
-
-            httpServletResponse.sendRedirect(httpServletRequest.getContextPath());
-
+            httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
         } else {
-
-            final byte[] imageFile = fileService.fileToByteArray(originalFileName, code, mediaFileNameStrategy.getUrlPath(), fileRealPathPrefix);
-            IOUtils.write(imageFile, httpServletResponse.getOutputStream());
-
+            final byte[] file = fileService.fileToByteArray(originalFileName, code, mediaFileNameStrategy.getUrlPath(), fileRealPathPrefix);
+            if (file != null && file.length > 0) {
+                httpServletResponse.getOutputStream().write(file);
+                httpServletResponse.flushBuffer();
+            } else {
+                httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
+            }
         }
     }
 

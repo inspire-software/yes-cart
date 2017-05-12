@@ -435,6 +435,10 @@ table.dataTable thead .sorting:after {
   max-width: 400px;
 }
 
+.av-file-upload {
+  margin-bottom: 3px;
+}
+
 .av-image-preview {
   max-height: 400px;
   overflow-y: auto;

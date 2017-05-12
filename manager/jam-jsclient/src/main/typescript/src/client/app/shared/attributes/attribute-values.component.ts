@@ -32,6 +32,8 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   @Input() masterObject:any;
   @Input() avPrototype:AttrValueVO;
 
+  @Input() masterObjectType:string;
+
   @Input() showHelp:boolean = false;
 
   @Output() dataSelected: EventEmitter<AttrValueVO> = new EventEmitter<AttrValueVO>();

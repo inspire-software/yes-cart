@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.filter;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.Constants;
@@ -175,8 +174,12 @@ public class ImageFilter extends AbstractFilter implements Filter {
             }
 
             final byte[] imageFile = getImageFile(absolutePathToOriginal, absolutePathToResized, width, height);
-            IOUtils.write(imageFile, httpServletResponse.getOutputStream());
-
+            if (imageFile != null && imageFile.length > 0) {
+                httpServletResponse.getOutputStream().write(imageFile);
+                httpServletResponse.flushBuffer();
+            } else {
+                httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
+            }
         }
     }
 

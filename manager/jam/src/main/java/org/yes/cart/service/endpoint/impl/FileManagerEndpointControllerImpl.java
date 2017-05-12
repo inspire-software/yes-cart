@@ -25,10 +25,7 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.remote.service.FileManager;
 import org.yes.cart.service.endpoint.FileManagerEndpointController;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -69,13 +66,7 @@ public class FileManagerEndpointControllerImpl implements FileManagerEndpointCon
 
         response.setContentLength(content.length);
 
-        final ServletOutputStream stream = response.getOutputStream();
-        final BufferedInputStream buf = new BufferedInputStream(new ByteArrayInputStream(content));
-        int readBytes = 0;
-
-        while ((readBytes = buf.read()) != -1) {
-            stream.write(readBytes);
-        }
+        response.getOutputStream().write(content);
 
         response.flushBuffer();
 

@@ -79,6 +79,7 @@
             <div class="row">
               <yc-attribute-values #attributeValuesComponent
                                    [masterObject]="brand"
+                                   masterObjectType="brand"
                                    [objectAttributes]="attributes"
                                    [attributeFilter]="attributeFilter"
                                    (dataSelected)="onSelectRow($event)"
