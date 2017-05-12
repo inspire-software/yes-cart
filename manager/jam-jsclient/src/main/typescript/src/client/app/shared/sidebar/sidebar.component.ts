@@ -18,7 +18,8 @@ import { Router } from '@angular/router';
 import { UserVO } from '../model/index';
 import { UserEventBus } from '../services/index';
 import { ShopVO } from '../model/index';
-import { LogUtil } from './../log/index';
+import { LogUtil } from '../log/index';
+import { Config } from '../index';
 
 @Component({
   selector: 'yc-sidebar',
@@ -30,6 +31,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   private currentUserName : string;
   private menuType : string;
+  private docLink : string;
+  private copyNote : string;
 
   private userSub:any;
 
@@ -40,10 +43,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     LogUtil.debug('SidebarComponent ngOnInit');
     this.userSub = UserEventBus.getUserEventBus().userUpdated$.subscribe(user => {
-      let currentUser:UserVO = user;
-      this.currentUserName = currentUser != null ? currentUser.name : 'anonymous';
-      this.menuType = currentUser != null ? currentUser.ui : 'FULL';
+      this.configureUser(user);
     });
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.configureUser(UserEventBus.getUserEventBus().current());
+    }
+  }
+
+  protected configureUser(user:any) {
+    let currentUser:UserVO = user;
+    this.currentUserName = currentUser != null ? currentUser.name : 'anonymous';
+    this.menuType = currentUser != null ? currentUser.ui : 'FULL';
+    this.docLink = Config.UI_DOC_LINK;
+    this.copyNote = Config.UI_COPY_NOTE;
   }
 
   protected selectNewShop() {

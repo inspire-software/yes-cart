@@ -53,7 +53,7 @@ export class AppComponent implements OnDestroy {
     let lang = CookieUtil.readCookie('YCJAM_UI_LANG', userLang);
     I18nEventBus.getI18nEventBus().emit(lang);
 
-    this.loadUiPrefrences();
+    this.loadUiPreferences();
 
     var _sub:any = _managementService.getMyself().subscribe( myself => {
       LogUtil.debug('Loading user', myself);
@@ -61,9 +61,14 @@ export class AppComponent implements OnDestroy {
       _sub.unsubscribe();
     });
 
+    var _sub2:any = _managementService.getMyUI().subscribe( myui => {
+      LogUtil.debug('Loading ui', myui);
+      _sub2.unsubscribe();
+    });
+
   }
 
-  loadUiPrefrences() {
+  loadUiPreferences() {
 
     LogUtil.debug('Load UI configurations');
 

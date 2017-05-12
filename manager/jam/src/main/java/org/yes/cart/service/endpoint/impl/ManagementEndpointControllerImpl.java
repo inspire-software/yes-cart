@@ -18,10 +18,18 @@ package org.yes.cart.service.endpoint.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.yes.cart.domain.vo.VoAttrValue;
+import org.yes.cart.domain.vo.VoAttrValueSystem;
 import org.yes.cart.domain.vo.VoLicenseAgreement;
 import org.yes.cart.domain.vo.VoManager;
 import org.yes.cart.service.endpoint.ManagementEndpointController;
 import org.yes.cart.service.vo.VoManagementService;
+import org.yes.cart.service.vo.VoSystemPreferencesService;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -32,10 +40,13 @@ import org.yes.cart.service.vo.VoManagementService;
 public class ManagementEndpointControllerImpl implements ManagementEndpointController {
 
     private final VoManagementService voManagementService;
+    private final VoSystemPreferencesService voSystemPreferencesService;
 
     @Autowired
-    public ManagementEndpointControllerImpl(final VoManagementService voManagementService) {
+    public ManagementEndpointControllerImpl(final VoManagementService voManagementService,
+                                            final VoSystemPreferencesService voSystemPreferencesService) {
         this.voManagementService = voManagementService;
+        this.voSystemPreferencesService = voSystemPreferencesService;
     }
 
     @Override
@@ -56,4 +67,17 @@ public class ManagementEndpointControllerImpl implements ManagementEndpointContr
         return voManagementService.acceptMyAgreement();
     }
 
+    @Override
+    public @ResponseBody
+    Map<String, String> getMyUiPreferences() throws Exception {
+        final List<VoAttrValueSystem> prefs = voSystemPreferencesService.getSystemPreferences();
+        final Map<String, String> vals = new HashMap<String, String>();
+        final List<String> allowed = Arrays.asList("SYSTEM_PANEL_HELP_DOCS", "SYSTEM_PANEL_HELP_COPYRIGHT");
+        for (final VoAttrValueSystem av : prefs) {
+            if (allowed.contains(av.getAttribute().getCode())) {
+                vals.put(av.getAttribute().getCode(), av.getVal());
+            }
+        }
+        return vals;
+    }
 }

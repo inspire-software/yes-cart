@@ -37,7 +37,7 @@ export class UserEventBus {
 
   constructor() {
     LogUtil.debug('UserEventBus constructed');
-    this._userSource = new BehaviorSubject<any>('en');
+    this._userSource = new BehaviorSubject<any>(null);
     this.userUpdated$ = this._userSource.asObservable();
   }
 
