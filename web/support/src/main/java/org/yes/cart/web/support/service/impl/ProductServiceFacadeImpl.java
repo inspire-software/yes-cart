@@ -640,7 +640,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         // For total we use only list price since we already show discount in unit prices
         final BigDecimal sale = total ? null : item.getSalePrice();
-        final BigDecimal list = total ? (item.getPrice() != null ? item.getPrice().multiply(item.getQty()) : null) : item.getListPrice();
+        final BigDecimal list = total ? (item.getPrice() != null ? item.getPrice().multiply(item.getQty()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP) : null) : item.getListPrice();
 
         if (showTax) {
             if (sale != null) {
@@ -680,12 +680,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                             item.getProductSkuCode(),
                             currency,
                             item.getQty(),
-                            listAdjusted, null,
+                            listAdjusted.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP), null,
                             showTax, showTaxNet, showTaxAmount,
                             item.getTaxCode(),
                             item.getTaxRate(),
                             item.isTaxExclusiveOfPrice(),
-                            item.getGrossPrice().subtract(item.getNetPrice()).multiply(item.getQty())
+                            item.getGrossPrice().subtract(item.getNetPrice()).multiply(item.getQty()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP)
                     );
 
                 }
