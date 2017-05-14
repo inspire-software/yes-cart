@@ -27,7 +27,7 @@ import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.service.image.MediaFileNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 
 import java.io.File;
 import java.io.IOException;

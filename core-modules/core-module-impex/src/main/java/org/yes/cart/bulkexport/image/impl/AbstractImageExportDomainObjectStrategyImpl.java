@@ -23,7 +23,7 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.service.image.MediaFileNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 
 import java.io.*;
 import java.text.MessageFormat;

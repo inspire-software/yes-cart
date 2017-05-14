@@ -14,12 +14,12 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.image.impl;
+package org.yes.cart.service.media.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.service.image.MediaFileNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 import org.yes.cart.service.misc.LanguageService;
 
 import java.io.File;

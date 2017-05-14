@@ -16,11 +16,10 @@
 
 package org.yes.cart.constants;
 
-import org.yes.cart.service.image.MediaFileNameStrategyResolver;
-import org.yes.cart.service.image.impl.BrandMediaFileNameStrategyImpl;
-import org.yes.cart.service.image.impl.CategoryMediaFileNameStrategyImpl;
-import org.yes.cart.service.image.impl.ProductMediaFileNameStrategyImpl;
-import org.yes.cart.service.image.impl.ShopMediaFileNameStrategyImpl;
+import org.yes.cart.service.media.impl.BrandMediaFileNameStrategyImpl;
+import org.yes.cart.service.media.impl.CategoryMediaFileNameStrategyImpl;
+import org.yes.cart.service.media.impl.ProductMediaFileNameStrategyImpl;
+import org.yes.cart.service.media.impl.ShopMediaFileNameStrategyImpl;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

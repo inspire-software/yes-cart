@@ -14,10 +14,10 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.image.impl;
+package org.yes.cart.service.media.impl;
 
-import org.yes.cart.service.image.MediaFileNameStrategy;
-import org.yes.cart.service.image.MediaFileNameStrategyResolver;
+import org.yes.cart.service.media.MediaFileNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategyResolver;
 
 import java.util.ArrayList;
 import java.util.HashMap;

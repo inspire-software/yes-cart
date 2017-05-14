@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.image.impl;
+package org.yes.cart.service.media.impl;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +24,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.image.MediaFileNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 
 import static org.junit.Assert.assertEquals;
 

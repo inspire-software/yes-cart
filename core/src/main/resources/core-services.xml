@@ -312,11 +312,11 @@
 
     <!--     #############################   Media section begin   #############################    -->
 
-    <bean id="categoryImageNameStrategy" class="org.yes.cart.service.image.impl.MediaFileNameStrategyCachedImpl">
+    <bean id="categoryImageNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyCachedImpl">
         <constructor-arg>
             <bean parent="txProxyTemplate">
                 <property name="target">
-                    <bean  class="org.yes.cart.service.image.impl.CategoryMediaFileNameStrategyImpl">
+                    <bean  class="org.yes.cart.service.media.impl.CategoryMediaFileNameStrategyImpl">
                         <constructor-arg index="0" value="/imgvault/category/"/>
                         <constructor-arg index="1" value="category"/>
                         <constructor-arg index="2" ref="attrValueEntityCategoryDao"/>
@@ -334,11 +334,11 @@
         </constructor-arg>
     </bean>
 
-    <bean id="productImageNameStrategy" class="org.yes.cart.service.image.impl.MediaFileNameStrategyCachedImpl">
+    <bean id="productImageNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyCachedImpl">
         <constructor-arg>
             <bean parent="txProxyTemplate">
                 <property name="target">
-                    <bean  class="org.yes.cart.service.image.impl.ProductMediaFileNameStrategyImpl">
+                    <bean  class="org.yes.cart.service.media.impl.ProductMediaFileNameStrategyImpl">
                         <constructor-arg index="0" value="/imgvault/product/"/>
                         <constructor-arg index="1" value="product"/>
                         <constructor-arg index="2" ref="attrValueEntityProductSkuDao"/>
@@ -357,11 +357,11 @@
         </constructor-arg>
     </bean>
 
-    <bean id="brandImageNameStrategy" class="org.yes.cart.service.image.impl.MediaFileNameStrategyCachedImpl">
+    <bean id="brandImageNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyCachedImpl">
         <constructor-arg>
             <bean parent="txProxyTemplate">
                 <property name="target">
-                    <bean  class="org.yes.cart.service.image.impl.BrandMediaFileNameStrategyImpl">
+                    <bean  class="org.yes.cart.service.media.impl.BrandMediaFileNameStrategyImpl">
                         <constructor-arg index="0" value="/imgvault/brand/"/>
                         <constructor-arg index="1" value="brand"/>
                         <constructor-arg index="2" ref="attrValueEntityBrandDao"/>
@@ -379,11 +379,11 @@
         </constructor-arg>
     </bean>
 
-    <bean id="shopImageNameStrategy" class="org.yes.cart.service.image.impl.MediaFileNameStrategyCachedImpl">
+    <bean id="shopImageNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyCachedImpl">
         <constructor-arg>
             <bean parent="txProxyTemplate">
                 <property name="target">
-                    <bean class="org.yes.cart.service.image.impl.ShopMediaFileNameStrategyImpl">
+                    <bean class="org.yes.cart.service.media.impl.ShopMediaFileNameStrategyImpl">
                         <constructor-arg index="0" value="/imgvault/shop/"/>
                         <constructor-arg index="1" value="shop"/>
                         <constructor-arg index="2" ref="attrValueEntityShopDao"/>
@@ -401,8 +401,29 @@
         </constructor-arg>
     </bean>
 
+    <bean id="systemImageNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyCachedImpl">
+        <constructor-arg>
+            <bean parent="txProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.service.media.impl.SystemMediaFileNameStrategyImpl">
+                        <constructor-arg index="0" value="/imgvault/system/"/>
+                        <constructor-arg index="1" value="system"/>
+                        <constructor-arg index="2" ref="languageService"/>
+                        <property name="attributePrefix" value="SYSTEM_IMAGE"/>
+                    </bean>
+                </property>
+                <property name="transactionAttributes">
+                    <props>
+                        <prop key="resolveObjectCode">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                        <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+                    </props>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
 
-    <bean id="imageNameStrategyResolver" class="org.yes.cart.service.image.impl.MediaFileNameStrategyResolverImpl">
+
+    <bean id="imageNameStrategyResolver" class="org.yes.cart.service.media.impl.MediaFileNameStrategyResolverImpl">
         <constructor-arg index="0" ref="productImageNameStrategy"/>
         <constructor-arg index="1">
             <list>
@@ -410,6 +431,7 @@
                 <ref bean="brandImageNameStrategy"/>
                 <ref bean="productImageNameStrategy"/>
                 <ref bean="shopImageNameStrategy"/>
+                <ref bean="systemImageNameStrategy"/>
             </list>
         </constructor-arg>
     </bean>
@@ -427,7 +449,7 @@
                 <property name="target">
                     <bean  class="org.yes.cart.service.domain.impl.ImageServiceImpl">
                         <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="seoImageDao"/>
-                        <constructor-arg type="org.yes.cart.service.image.MediaFileNameStrategyResolver" ref="imageNameStrategyResolver"/>
+                        <constructor-arg type="org.yes.cart.service.media.MediaFileNameStrategyResolver" ref="imageNameStrategyResolver"/>
                         <!--
                             Allowed pictures sizes to resize. Original image will be returned if requested size not allowed.
                         -->
@@ -478,11 +500,11 @@
 
 
 
-    <bean id="categoryFileNameStrategy" class="org.yes.cart.service.image.impl.MediaFileNameStrategyCachedImpl">
+    <bean id="categoryFileNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyCachedImpl">
         <constructor-arg>
             <bean parent="txProxyTemplate">
                 <property name="target">
-                    <bean  class="org.yes.cart.service.image.impl.CategoryMediaFileNameStrategyImpl">
+                    <bean  class="org.yes.cart.service.media.impl.CategoryMediaFileNameStrategyImpl">
                         <constructor-arg index="0" value="/filevault/category/"/>
                         <constructor-arg index="1" value="category"/>
                         <constructor-arg index="2" ref="attrValueEntityCategoryDao"/>
@@ -500,11 +522,11 @@
         </constructor-arg>
     </bean>
 
-    <bean id="productFileNameStrategy" class="org.yes.cart.service.image.impl.MediaFileNameStrategyCachedImpl">
+    <bean id="productFileNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyCachedImpl">
         <constructor-arg>
             <bean parent="txProxyTemplate">
                 <property name="target">
-                    <bean  class="org.yes.cart.service.image.impl.ProductMediaFileNameStrategyImpl">
+                    <bean  class="org.yes.cart.service.media.impl.ProductMediaFileNameStrategyImpl">
                         <constructor-arg index="0" value="/filevault/product/"/>
                         <constructor-arg index="1" value="product"/>
                         <constructor-arg index="2" ref="attrValueEntityProductSkuDao"/>
@@ -523,11 +545,11 @@
         </constructor-arg>
     </bean>
 
-    <bean id="brandFileNameStrategy" class="org.yes.cart.service.image.impl.MediaFileNameStrategyCachedImpl">
+    <bean id="brandFileNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyCachedImpl">
         <constructor-arg>
             <bean parent="txProxyTemplate">
                 <property name="target">
-                    <bean  class="org.yes.cart.service.image.impl.BrandMediaFileNameStrategyImpl">
+                    <bean  class="org.yes.cart.service.media.impl.BrandMediaFileNameStrategyImpl">
                         <constructor-arg index="0" value="/filevault/brand/"/>
                         <constructor-arg index="1" value="brand"/>
                         <constructor-arg index="2" ref="attrValueEntityBrandDao"/>
@@ -545,11 +567,11 @@
         </constructor-arg>
     </bean>
 
-    <bean id="shopFileNameStrategy" class="org.yes.cart.service.image.impl.MediaFileNameStrategyCachedImpl">
+    <bean id="shopFileNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyCachedImpl">
         <constructor-arg>
             <bean parent="txProxyTemplate">
                 <property name="target">
-                    <bean class="org.yes.cart.service.image.impl.ShopMediaFileNameStrategyImpl">
+                    <bean class="org.yes.cart.service.media.impl.ShopMediaFileNameStrategyImpl">
                         <constructor-arg index="0" value="/filevault/shop/"/>
                         <constructor-arg index="1" value="shop"/>
                         <constructor-arg index="2" ref="attrValueEntityShopDao"/>
@@ -567,11 +589,11 @@
         </constructor-arg>
     </bean>
 
-    <bean id="shopSystemFileNameStrategy" class="org.yes.cart.service.image.impl.MediaFileNameStrategyCachedImpl">
+    <bean id="shopSystemFileNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyCachedImpl">
         <constructor-arg>
             <bean parent="txProxyTemplate">
                 <property name="target">
-                    <bean class="org.yes.cart.service.image.impl.ShopMediaFileNameStrategyImpl">
+                    <bean class="org.yes.cart.service.media.impl.ShopMediaFileNameStrategyImpl">
                         <constructor-arg index="0" value="/sysfilevault/shop/"/>
                         <constructor-arg index="1" value="shop"/>
                         <constructor-arg index="2" ref="attrValueEntityShopDao"/>
@@ -589,8 +611,50 @@
         </constructor-arg>
     </bean>
 
+    <bean id="systemFileNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyCachedImpl">
+        <constructor-arg>
+            <bean parent="txProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.service.media.impl.SystemMediaFileNameStrategyImpl">
+                        <constructor-arg index="0" value="/filevault/system/"/>
+                        <constructor-arg index="1" value="system"/>
+                        <constructor-arg index="2" ref="languageService"/>
+                        <property name="attributePrefix" value="SYSTEM_FILE"/>
+                    </bean>
+                </property>
+                <property name="transactionAttributes">
+                    <props>
+                        <prop key="resolveObjectCode">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                        <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+                    </props>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
 
-    <bean id="fileNameStrategyResolver" class="org.yes.cart.service.image.impl.MediaFileNameStrategyResolverImpl">
+    <bean id="systemSystemFileNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyCachedImpl">
+        <constructor-arg>
+            <bean parent="txProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.service.media.impl.SystemMediaFileNameStrategyImpl">
+                        <constructor-arg index="0" value="/sysfilevault/system/"/>
+                        <constructor-arg index="1" value="system"/>
+                        <constructor-arg index="2" ref="languageService"/>
+                        <property name="attributePrefix" value="SYSTEM_SYSFILE"/>
+                    </bean>
+                </property>
+                <property name="transactionAttributes">
+                    <props>
+                        <prop key="resolveObjectCode">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                        <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+                    </props>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+
+    <bean id="fileNameStrategyResolver" class="org.yes.cart.service.media.impl.MediaFileNameStrategyResolverImpl">
         <constructor-arg index="0" ref="productFileNameStrategy"/>
         <constructor-arg index="1">
             <list>
@@ -599,13 +663,15 @@
                 <ref bean="productFileNameStrategy"/>
                 <ref bean="shopFileNameStrategy"/>
                 <ref bean="shopSystemFileNameStrategy"/>
+                <ref bean="systemFileNameStrategy"/>
+                <ref bean="systemSystemFileNameStrategy"/>
             </list>
         </constructor-arg>
     </bean>
 
 
     <bean id="fileService" class="org.yes.cart.service.domain.impl.FileServiceImpl">
-        <constructor-arg type="org.yes.cart.service.image.MediaFileNameStrategyResolver" ref="fileNameStrategyResolver"/>
+        <constructor-arg type="org.yes.cart.service.media.MediaFileNameStrategyResolver" ref="fileNameStrategyResolver"/>
         <!--
             replaceFilesModeOn if set to true will overwrite existing file if name is
             the same. Recommended setting is 'true' because the import service refers to the

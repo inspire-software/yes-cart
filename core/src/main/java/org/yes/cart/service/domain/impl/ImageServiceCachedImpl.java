@@ -23,7 +23,7 @@ import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.service.image.MediaFileNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 
 import java.io.IOException;
 import java.util.List;

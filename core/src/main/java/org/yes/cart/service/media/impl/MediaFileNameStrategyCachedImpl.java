@@ -14,10 +14,10 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.image.impl;
+package org.yes.cart.service.media.impl;
 
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.service.image.MediaFileNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 
 /**
  * User: denispavlov

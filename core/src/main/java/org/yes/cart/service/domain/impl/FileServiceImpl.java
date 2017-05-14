@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.yes.cart.service.domain.FileService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.service.image.MediaFileNameStrategy;
-import org.yes.cart.service.image.MediaFileNameStrategyResolver;
+import org.yes.cart.service.media.MediaFileNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategyResolver;
 import org.yes.cart.stream.io.IOProvider;
 
 import java.io.IOException;

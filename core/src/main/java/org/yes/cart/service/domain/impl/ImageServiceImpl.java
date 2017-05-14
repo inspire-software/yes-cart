@@ -27,8 +27,8 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.service.image.MediaFileNameStrategy;
-import org.yes.cart.service.image.MediaFileNameStrategyResolver;
+import org.yes.cart.service.media.MediaFileNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategyResolver;
 import org.yes.cart.stream.io.IOProvider;
 
 import javax.imageio.ImageIO;

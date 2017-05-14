@@ -16,7 +16,7 @@
 
 package org.yes.cart.service.domain;
 
-import org.yes.cart.service.image.MediaFileNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 
 import java.io.IOException;
 

@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.service.domain.FileService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.service.image.MediaFileNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 import org.yes.cart.web.support.util.HttpUtil;
 
 import javax.activation.MimetypesFileTypeMap;

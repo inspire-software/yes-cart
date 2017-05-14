@@ -29,9 +29,9 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.entity.SeoImage;
-import org.yes.cart.service.image.MediaFileNameStrategy;
-import org.yes.cart.service.image.MediaFileNameStrategyResolver;
-import org.yes.cart.service.image.impl.ProductMediaFileNameStrategyImpl;
+import org.yes.cart.service.media.MediaFileNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategyResolver;
+import org.yes.cart.service.media.impl.ProductMediaFileNameStrategyImpl;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.stream.io.IOProvider;
 

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.image.impl;
+package org.yes.cart.service.media.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.Constants;

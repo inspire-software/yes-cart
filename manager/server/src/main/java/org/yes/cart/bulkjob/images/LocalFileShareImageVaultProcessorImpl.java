@@ -30,7 +30,7 @@ import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.utils.RunAsUserAuthentication;
 import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.service.media.ImageNameStrategy;
 import org.yes.cart.stream.io.FileSystemIOProvider;
 import org.yes.cart.util.ShopCodeContext;
 

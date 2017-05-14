@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.image;
+package org.yes.cart.service.media;
 
 /**
  * File Name Strategy Resolver responsible for

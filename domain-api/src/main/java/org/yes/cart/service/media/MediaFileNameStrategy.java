@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.image;
+package org.yes.cart.service.media;
 
 /**
  * Strategy to getByKey the file names for store/retrieve media from repository.
