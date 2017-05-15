@@ -420,7 +420,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   }
 
   onImageFileSelected(event:any) {
-    var srcElement:any = event.srcElement;
+    var srcElement:any = event.target || event.srcElement;
     var image:any = srcElement.files[0];
     LogUtil.debug('AttributeValuesComponent image file selected', image.name);
     var reader:FileReader = new FileReader();
@@ -452,7 +452,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
 
   onMediaFileSelected(event:any) {
-    var srcElement:any = event.srcElement;
+    var srcElement:any = event.target || event.srcElement;
     var file:any = srcElement.files[0];
     LogUtil.debug('AttributeValuesComponent media file selected', file.name);
     var reader:FileReader = new FileReader();
