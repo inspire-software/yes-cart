@@ -422,21 +422,24 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   onImageFileSelected(event:any) {
     var srcElement:any = event.target || event.srcElement;
     var image:any = srcElement.files[0];
-    LogUtil.debug('AttributeValuesComponent image file selected', image.name);
-    var reader:FileReader = new FileReader();
+    if (image != null) {
+      var imageName:string = image.name;
+      LogUtil.debug('AttributeValuesComponent image file selected', imageName);
+      var reader:FileReader = new FileReader();
 
-    let that = this;
+      let that = this;
 
-    reader.onloadend = function(e:any) {
-      LogUtil.debug('AttributeValuesComponent image file loaded', e.target.result);
-      that.attributeToEdit.val = image.name;
-      that.attributeToEdit.valBase64Data = e.target.result;
-      that.processImageView(that.attributeToEdit);
-      that.changed = true;
-      that.validForSave = true;
-      srcElement.value = '';
-    };
-    reader.readAsDataURL(image);
+      reader.onloadend = function(e:any) {
+        LogUtil.debug('AttributeValuesComponent image file loaded', e.target.result);
+        that.attributeToEdit.val = imageName;
+        that.attributeToEdit.valBase64Data = e.target.result;
+        that.processImageView(that.attributeToEdit);
+        that.changed = true;
+        that.validForSave = true;
+        srcElement.value = '';
+      };
+      reader.readAsDataURL(image);
+    }
   }
 
 
@@ -454,20 +457,22 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   onMediaFileSelected(event:any) {
     var srcElement:any = event.target || event.srcElement;
     var file:any = srcElement.files[0];
-    LogUtil.debug('AttributeValuesComponent media file selected', file.name);
-    var reader:FileReader = new FileReader();
+    if (file != null) {
+      LogUtil.debug('AttributeValuesComponent media file selected', file.name);
+      var reader:FileReader = new FileReader();
 
-    let that = this;
+      let that = this;
 
-    reader.onloadend = function(e:any) {
-      LogUtil.debug('AttributeValuesComponent media file loaded', e.target.result);
-      that.attributeToEdit.val = file.name;
-      that.attributeToEdit.valBase64Data = e.target.result;
-      that.changed = true;
-      that.validForSave = true;
-      srcElement.value = '';
-    };
-    reader.readAsDataURL(file);
+      reader.onloadend = function(e:any) {
+        LogUtil.debug('AttributeValuesComponent media file loaded', e.target.result);
+        that.attributeToEdit.val = file.name;
+        that.attributeToEdit.valBase64Data = e.target.result;
+        that.changed = true;
+        that.validForSave = true;
+        srcElement.value = '';
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
 
