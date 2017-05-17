@@ -42,12 +42,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('SidebarComponent ngOnInit');
-    this.userSub = UserEventBus.getUserEventBus().userUpdated$.subscribe(user => {
-      this.configureUser(user);
-    });
     if (UserEventBus.getUserEventBus().current() != null) {
       this.configureUser(UserEventBus.getUserEventBus().current());
     }
+    this.userSub = UserEventBus.getUserEventBus().userUpdated$.subscribe(user => {
+      this.configureUser(user);
+    });
   }
 
   protected configureUser(user:any) {

@@ -44,14 +44,14 @@ export class AppComponent implements OnDestroy {
     var userLang = navigator.language.split('-')[0]; // use navigator lang if available
     userLang = /(uk|ru|en|de)/gi.test(userLang) ? userLang : 'en';     // TODO: move languages to config
     LogUtil.debug('AppComponent language', userLang);
-    translate.setDefaultLang('en');
+    translate.setDefaultLang(userLang);
 
     this.langSub = I18nEventBus.getI18nEventBus().i18nUpdated$.subscribe(lang => {
       translate.use(lang);
     });
 
     let lang = CookieUtil.readCookie('YCJAM_UI_LANG', userLang);
-    I18nEventBus.getI18nEventBus().emit(lang);
+    translate.use(lang);
 
     this.loadUiPreferences();
 
