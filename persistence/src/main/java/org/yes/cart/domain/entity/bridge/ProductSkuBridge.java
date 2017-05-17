@@ -21,8 +21,10 @@ import org.apache.lucene.document.Field;
 import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.Rankable;
+import org.yes.cart.domain.misc.RankableComparatorImpl;
 
-import java.util.Collection;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -30,6 +32,8 @@ import java.util.Collection;
  * Time: 16:13:01
  */
 public class ProductSkuBridge implements FieldBridge {
+
+    private static final Comparator<Rankable> BY_RANK = new RankableComparatorImpl();
 
     private final SkuPriceBridge skuPriceBridge = new SkuPriceBridge();
     private final AttributeValueBridge attributeValueBridge = new AttributeValueBridge();
@@ -51,8 +55,10 @@ public class ProductSkuBridge implements FieldBridge {
                     luceneOptions.getTermVector()
             ));
 
+            final List<ProductSku> ordered = new ArrayList<ProductSku>(skus);
+            Collections.sort(ordered, BY_RANK);
 
-            for (final ProductSku sku : skus) {
+            for (final ProductSku sku : ordered) {
 
                 document.add(new Field(
                         "sku.code",
