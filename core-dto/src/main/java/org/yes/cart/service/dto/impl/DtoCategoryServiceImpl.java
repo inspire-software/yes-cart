@@ -155,17 +155,28 @@ public class DtoCategoryServiceImpl
         if (entity.getLinkToId() != null) {
             final Category link = ((CategoryService)getService()).getById(entity.getLinkToId());
             if (link != null) {
-                dto.setLinkToName(link.getName());
+                dto.setLinkToName(getParentName(link) + " > " + link.getName());
             }
         }
+        dto.setParentName(getParentName(entity));
+        super.assemblyPostProcess(dto, entity);
+    }
+
+
+    protected String getParentName(final Category entity) {
         if (entity.getParentId() > 0L && entity.getParentId() != entity.getCategoryId()) {
             final Category parent = ((CategoryService)getService()).getById(entity.getParentId());
             if (parent != null) {
-                dto.setParentName(parent.getName());
+                final String oneUp = getParentName(parent);
+                if (oneUp != null) {
+                    return oneUp + " > " + parent.getName();
+                }
+                return parent.getName();
             }
         }
-        super.assemblyPostProcess(dto, entity);
+        return null;
     }
+
 
     /**
      * {@inheritDoc}

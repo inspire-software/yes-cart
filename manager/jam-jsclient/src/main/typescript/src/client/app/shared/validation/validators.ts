@@ -32,10 +32,6 @@ export class YcValidators {
 
   static validSeoUri = Validators.pattern('[A-Za-z0-9.\\-_]+');
 
-  static nonBlankTrimmed = Validators.pattern('\\S+(.*\\S)*');
-
-  static requiredNonBlankTrimmed = Validators.compose([Validators.required, YcValidators.nonBlankTrimmed]);
-
   static noWhitespace = Validators.pattern('\\S+');
 
   static validLanguageCode = Validators.pattern('[a-z]{2}');
@@ -100,6 +96,32 @@ export class YcValidators {
   public static init(validationService:ValidationService) {
     YcValidators.validationService = validationService;
   }
+
+
+  static nonBlankTrimmed(control:any):any {
+
+    let val:string = control.value;
+    if (val == null || val.length == 0 || val.trim().length === val.length) {
+      return null;
+    }
+    return {
+      'invalidValue': true
+    };
+
+  }
+
+  static requiredNonBlankTrimmed(control:any):any {
+
+    let val:string = control.value;
+    if (val != null && val.length > 0 && val.trim().length === val.length) {
+      return null;
+    }
+    return {
+      'invalidValue': true
+    };
+
+  }
+
 
   static validRemoteCheck(control:any, request:ValidationRequestVO):any {
 

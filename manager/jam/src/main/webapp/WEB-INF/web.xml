@@ -99,6 +99,12 @@
     <url-pattern>/service/*</url-pattern>
   </servlet-mapping>
 
+  <servlet-mapping>
+    <servlet-name>Spring MVC despatcher</servlet-name>
+    <url-pattern>/login.jsp</url-pattern>
+  </servlet-mapping>
+
+
   <error-page>
     <error-code>404</error-code>
     <location>/pages/index.jsp</location>

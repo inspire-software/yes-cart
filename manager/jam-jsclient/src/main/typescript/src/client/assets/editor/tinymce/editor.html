@@ -3,6 +3,25 @@
 <head>
   <script src="tinymce.min.js"></script>
   <script>
+
+    function getUrlParameter(sParam) {
+      var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+      for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+          return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+      }
+      return null;
+    };
+
+    window.msgId = getUrlParameter('id');
+
     function contentSubmit() {
       window.opener.postMessage({ lang: window.contentlang, text: document.getElementById('content').value }, '*');
       return false;
@@ -61,7 +80,12 @@
       }
 
     });
+
+    window.opener.postMessage({ loaded: window.msgId  }, '*');
+
   </script>
 </head>
-<body><img id="loading" src="../../img/ajax-loader.gif"></body>
+<body>
+<img id="loading" src="../../img/ajax-loader.gif">
+</body>
 </html>

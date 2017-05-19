@@ -154,13 +154,22 @@ public class DtoContentServiceImpl
      * {@inheritDoc}
      */
     protected void assemblyPostProcess(final CategoryDTO dto, final Category entity) {
+        dto.setParentName(getParentName(entity));
+        super.assemblyPostProcess(dto, entity);
+    }
+
+    protected String getParentName(final Category entity) {
         if (entity.getParentId() > 0L && entity.getParentId() != entity.getCategoryId()) {
             final Category parent = ((ContentService)getService()).getById(entity.getParentId());
             if (parent != null) {
-                dto.setParentName(parent.getName());
+                final String oneUp = getParentName(parent);
+                if (oneUp != null) {
+                    return oneUp + " > " + parent.getName();
+                }
+                return parent.getName();
             }
         }
-        super.assemblyPostProcess(dto, entity);
+        return null;
     }
 
     /**

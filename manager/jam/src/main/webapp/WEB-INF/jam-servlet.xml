@@ -66,6 +66,11 @@
         </bean>
     </mvc:interceptors>
 
+    <bean id="localeResolver"
+          class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="cookieName" value="YCJAM_UI_LANG"/>
+    </bean>
+
     <mvc:resources mapping="/favicon.ico" location="/resources/favicon.ico" />
 
     <bean id="dtoObjectMapper" class="org.yes.cart.remote.service.misc.DtoObjectMapper"/>
