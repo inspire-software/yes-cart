@@ -58,15 +58,16 @@ export class AppComponent implements OnDestroy {
 
     this.loadUiPreferences();
 
-    var _sub:any = _managementService.getMyself().subscribe( myself => {
-      LogUtil.debug('Loading user', myself);
-      UserEventBus.getUserEventBus().emit(myself);
-      _sub.unsubscribe();
-    });
-
-    var _sub2:any = _managementService.getMyUI().subscribe( myui => {
+    var _sub:any = _managementService.getMyUI().subscribe( myui => {
       LogUtil.debug('Loading ui', myui);
-      _sub2.unsubscribe();
+      _sub.unsubscribe();
+
+      var _sub2:any = _managementService.getMyself().subscribe( myself => {
+        LogUtil.debug('Loading user', myself);
+        UserEventBus.getUserEventBus().emit(myself);
+        _sub2.unsubscribe();
+      });
+
     });
 
   }
