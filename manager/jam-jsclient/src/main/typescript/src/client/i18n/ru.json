@@ -496,7 +496,7 @@
   "CUSTOMERORDER_DELIVERY_ESTIMATED": "Сроки поставки",
   "CUSTOMERORDER_DELIVERY_GUARANTEED": "Гарантированная доставка",
   "CUSTOMERORDER_DELIVERY_REMARKS": "Примечания по доставке",
-  "CUSTOMERORDER_TOTAL_ITEM_LIST": "Итого товара (до скидок)",
+  "CUSTOMERORDER_TOTAL_ITEM_LIST": "Итого товара (включая скидки)",
   "CUSTOMERORDER_TOTAL_ITEM_TAX": "НДС",
   "CUSTOMERORDER_TOTAL_ORDER": "Итого по заказу (к оплате)",
   "CUSTOMERORDER_TOTAL_PAID": "Оплачено",

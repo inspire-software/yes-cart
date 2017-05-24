@@ -180,6 +180,12 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     return '';
   }
 
+  protected isOrderType() {
+
+    return this._customerorder.orderStatus != null && this._customerorder.orderStatus.indexOf('os.') == 0;
+
+  }
+
   protected isLineDeliveryHasNext(row:CustomerOrderLineVO) {
     let delivery = this._customerorder.deliveries.find(delivery => {
       return delivery.deliveryNum == row.deliveryNum;
@@ -188,7 +194,7 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
   }
 
   protected isDeliveryHasNextOption(row:CustomerOrderDeliveryInfoVO) {
-    return row.deliveryStatusNextOptions != null && row.deliveryStatusNextOptions.length > 0;
+    return row != null && row.deliveryStatusNextOptions != null && row.deliveryStatusNextOptions.length > 0;
   }
 
 

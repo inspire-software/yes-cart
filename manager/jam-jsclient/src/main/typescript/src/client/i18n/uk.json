@@ -496,7 +496,7 @@
   "CUSTOMERORDER_DELIVERY_ESTIMATED": "Термін постачання",
   "CUSTOMERORDER_DELIVERY_GUARANTEED": "Гарантована доставка",
   "CUSTOMERORDER_DELIVERY_REMARKS": "Примітки з доставки",
-  "CUSTOMERORDER_TOTAL_ITEM_LIST": "Разом товару (без знижок)",
+  "CUSTOMERORDER_TOTAL_ITEM_LIST": "Разом товару (включаючи знижки)",
   "CUSTOMERORDER_TOTAL_ITEM_TAX": "ПДВ",
   "CUSTOMERORDER_TOTAL_ORDER": "Разом за замовленням (до оплати)",
   "CUSTOMERORDER_TOTAL_PAID": "Оплачено",

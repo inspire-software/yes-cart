@@ -496,7 +496,7 @@
   "CUSTOMERORDER_DELIVERY_ESTIMATED": "Voraussichtliche Lieferung",
   "CUSTOMERORDER_DELIVERY_GUARANTEED": "Garantierte Lieferung",
   "CUSTOMERORDER_DELIVERY_REMARKS": "Lieferhinweise",
-  "CUSTOMERORDER_TOTAL_ITEM_LIST": "Totalbetrag ohne Rabatte",
+  "CUSTOMERORDER_TOTAL_ITEM_LIST": "Totalbetrag (Einschließlich Rabatte)",
   "CUSTOMERORDER_TOTAL_ITEM_TAX": "MwSt.",
   "CUSTOMERORDER_TOTAL_ORDER": "Bestellungs Total (zu bezahlender Betrag)",
   "CUSTOMERORDER_TOTAL_PAID": "Konto ausgeglichen",

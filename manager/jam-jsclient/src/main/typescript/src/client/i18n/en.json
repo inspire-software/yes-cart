@@ -496,7 +496,7 @@
   "CUSTOMERORDER_DELIVERY_ESTIMATED": "Estimated delivery",
   "CUSTOMERORDER_DELIVERY_GUARANTEED": "Guaranteed delivery",
   "CUSTOMERORDER_DELIVERY_REMARKS": "Delivery remarks",
-  "CUSTOMERORDER_TOTAL_ITEM_LIST": "Items total before any discounts",
+  "CUSTOMERORDER_TOTAL_ITEM_LIST": "Items total (including discounts)",
   "CUSTOMERORDER_TOTAL_ITEM_TAX": "Tax",
   "CUSTOMERORDER_TOTAL_ORDER": "Order total (Balance to pay)",
   "CUSTOMERORDER_TOTAL_PAID": "Paid balance",
