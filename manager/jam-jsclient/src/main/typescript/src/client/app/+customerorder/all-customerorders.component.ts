@@ -314,6 +314,21 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     this.getFilteredCustomerorders();
   }
 
+  protected onSearchStatusAllOrders() {
+    let _state:boolean = false;
+    this.statuses.forEach((_st:Pair<string, boolean>) => {
+      if (_st.first.indexOf('os.') == 0) {
+        _state = _state || _st.second;
+      }
+    });
+    this.statuses.forEach((_st:Pair<string, boolean>) => {
+      if (_st.first.indexOf('os.') == 0) {
+        _st.second = !_state;
+      }
+    });
+    this.getFilteredCustomerorders();
+  }
+
   protected onSearchHelpToggle() {
     this.searchHelpShow = !this.searchHelpShow;
   }

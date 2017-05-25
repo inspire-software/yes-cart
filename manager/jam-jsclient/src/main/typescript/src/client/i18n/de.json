@@ -656,6 +656,7 @@
   "REPORT_SELECT_TIP" : "Wählen Sie den Bericht aus und klicken Sie auf die Schaltfläche, um den Bericht zu erstellen",
   "REPORT_RUN_TIP" : "Klicken Sie auf die Play-Taste, um diesen Bericht zu generieren",
 
+  "SEARCH_HELP_CUSTOMER_ORDERS_ALL": "Alle Bestellstatus auswählen / deaktivieren:",
   "SEARCH_HELP_CUSTOMER_ORDERS_DEFAULT": "Standartmässig wird gesucht nach: Bestellnummer, E-Mail und Name nur in offenen Bestellungen",
   "SEARCH_HELP_CUSTOMER_ORDERS_OPEN": "Die Auftragssuche sucht regelmässig in offenen Bestellungen. Format: '~ Schlüsselwort' oder '~~' für alle offenen Bestellungen",
   "SEARCH_HELP_CUSTOMER_ORDERS_CANCELLED": "Die Suche nach abgebrochenen Bestellungen führt eine Suche in stornierten oder zurückgesandten Bestellungen durch. Format: '-Schlüsselwort' oder '--' für alle stornierten Bestellungen",

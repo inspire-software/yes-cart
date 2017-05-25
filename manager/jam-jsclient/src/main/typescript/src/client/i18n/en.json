@@ -656,6 +656,7 @@
   "REPORT_SELECT_TIP" : "Select report and click plus button to generate the report",
   "REPORT_RUN_TIP" : "Click play button to run generate this report",
 
+  "SEARCH_HELP_CUSTOMER_ORDERS_ALL": "Select/unselect all order statuses: ",
   "SEARCH_HELP_CUSTOMER_ORDERS_DEFAULT": "Default order search is searching: order number, email and last name in open orders only",
   "SEARCH_HELP_CUSTOMER_ORDERS_OPEN": "Open order search does regular search in open orders.",
   "SEARCH_HELP_CUSTOMER_ORDERS_CANCELLED": "Cancelled order search does regular search in cancelled or returned orders.",
