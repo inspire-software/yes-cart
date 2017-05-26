@@ -87,6 +87,11 @@ public interface Constants {
      */
     String NO_IMAGE = "noimage.jpeg";
 
+    /**
+     * No file file name.
+     */
+    String NO_FILE = "nofile.txt";
+
 
     /**
      * Image height.
@@ -137,6 +142,21 @@ public interface Constants {
     String CUSTOMER_IMAGE_REPOSITORY_URL_PATTERN    = "/imgvault/customer/";
     String PRODUCT_IMAGE_REPOSITORY_URL_PATTERN     = "/imgvault/product/";
     String SHOP_IMAGE_REPOSITORY_URL_PATTERN        = "/imgvault/shop/";
+    String SYSTEM_IMAGE_REPOSITORY_URL_PATTERN      = "/imgvault/system/";
+
+    String CATEGORY_FILE_REPOSITORY_URL_PATTERN    = "/filevault/category/";
+    String BRAND_FILE_REPOSITORY_URL_PATTERN       = "/filevault/brand/";
+    String CUSTOMER_FILE_REPOSITORY_URL_PATTERN    = "/filevault/customer/";
+    String PRODUCT_FILE_REPOSITORY_URL_PATTERN     = "/filevault/product/";
+    String SHOP_FILE_REPOSITORY_URL_PATTERN        = "/filevault/shop/";
+    String SYSTEM_FILE_REPOSITORY_URL_PATTERN      = "/filevault/system/";
+
+    String CATEGORY_SYSFILE_REPOSITORY_URL_PATTERN    = "/sysfilevault/category/";
+    String BRAND_SYSFILE_REPOSITORY_URL_PATTERN       = "/sysfilevault/brand/";
+    String CUSTOMER_SYSFILE_REPOSITORY_URL_PATTERN    = "/sysfilevault/customer/";
+    String PRODUCT_SYSFILE_REPOSITORY_URL_PATTERN     = "/sysfilevault/product/";
+    String SHOP_SYSFILE_REPOSITORY_URL_PATTERN        = "/sysfilevault/shop/";
+    String SYSTEM_SYSFILE_REPOSITORY_URL_PATTERN      = "/sysfilevault/system/";
 
     /**
      * Items quantity on page. In case if default value in root category not set

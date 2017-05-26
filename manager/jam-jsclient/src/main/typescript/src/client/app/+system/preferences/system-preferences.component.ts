@@ -103,7 +103,7 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
 
       LogUtil.debug('ShopAttributeComponent Save handler update', this.update);
 
-      var _sub:any = this._systemService.saveShopAttributes(this.update).subscribe(
+      var _sub:any = this._systemService.saveSystemAttributes(this.update).subscribe(
           rez => {
             LogUtil.debug('ShopAttributeComponent attributes', rez);
             this.systemAttributes = rez;

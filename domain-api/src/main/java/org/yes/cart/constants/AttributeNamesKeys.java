@@ -110,6 +110,14 @@ public interface AttributeNamesKeys {
          */
         String SYSTEM_IMAGE_VAULT = "SYSTEM_IMAGE_VAULT";
         /**
+         * File repository.
+         */
+        String SYSTEM_FILE_VAULT = "SYSTEM_FILE_VAULT";
+        /**
+         * System file repository.
+         */
+        String SYSTEM_SYSFILE_VAULT = "SYSTEM_SYSFILE_VAULT";
+        /**
          * Default (failover) directory for resources.
          */
         String SYSTEM_MAILTEMPLATES_FSPOINTER = "SYSTEM_MAILTEMPLATES_FSPOINTER";
@@ -168,6 +176,11 @@ public interface AttributeNamesKeys {
          * Category image attribute name prefix
          */
         String CATEGORY_IMAGE_PREFIX = "CATEGORY_IMAGE";
+
+        /**
+         * Category image attribute name prefix
+         */
+        String CATEGORY_FILE_PREFIX = "CATEGORY_FILE";
 
         /**
          * Category image attribute name
@@ -234,10 +247,16 @@ public interface AttributeNamesKeys {
          * Default image attribute name.
          */
         String PRODUCT_IMAGE_ATTR_NAME_PREFIX = "IMAGE";
+
         /**
          * Default image attribute name.
          */
         String PRODUCT_DEFAULT_IMAGE_ATTR_NAME = PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0";
+
+        /**
+         * Default image attribute name.
+         */
+        String PRODUCT_FILE_ATTR_NAME_PREFIX = "FILE";
 
         /**
          * Product weight in KG (This attribute is used by Logistics operations)
@@ -382,6 +401,11 @@ public interface AttributeNamesKeys {
          * Shop image attribute name prefix.
          */
         String SHOP_IMAGE_PREFIX = "SHOP_IMAGE";
+
+        /**
+         * Shop file attribute name prefix.
+         */
+        String SHOP_FILE_PREFIX = "SHOP_FILE";
 
         /**
          * Default Shop image.
@@ -604,6 +628,11 @@ public interface AttributeNamesKeys {
          * Brand image attribute name prefix.
          */
         String BRAND_IMAGE_PREFIX = "BRAND_IMAGE";
+
+        /**
+         * Brand file attribute name prefix.
+         */
+        String BRAND_FILE_PREFIX = "BRAND_FILE";
 
         /**
          * Default Brand image.

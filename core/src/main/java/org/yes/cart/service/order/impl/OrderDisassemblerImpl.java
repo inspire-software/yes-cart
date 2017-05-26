@@ -138,6 +138,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
         final Collection<CustomerOrderDelivery> deliveries = customerOrder.getDelivery();
         final Map<String, Integer> noOfStdDeliveriesBySupplier = new HashMap<String, Integer>();
         boolean multi = false;
+        final Map<String, Boolean> multiAvailable = new HashMap<String, Boolean>();
         if (CollectionUtils.isNotEmpty(deliveries)) {
             for (final CustomerOrderDelivery delivery : deliveries) {
                 // Preset shipping methods by supplier from first item in the delivery
@@ -149,16 +150,18 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                     Integer count = noOfStdDeliveriesBySupplier.get(supplier);
                     if (count == null) {
                         noOfStdDeliveriesBySupplier.put(supplier, 1);
+                        multiAvailable.put(supplier, Boolean.FALSE);
                     } else {
                         noOfStdDeliveriesBySupplier.put(supplier, count + 1);
                         multi = true;
+                        multiAvailable.put(supplier, Boolean.TRUE);
                     }
                 }
             }
         }
 
         mutableOrderInfo.setMultipleDelivery(multi);
-        mutableOrderInfo.setMultipleDeliveryAvailable(multi);
+        mutableOrderInfo.setMultipleDeliveryAvailable(multiAvailable);
 
         if (customerOrder.getBillingAddressDetails() != null) {
             mutableOrderInfo.setBillingAddressId(customerOrder.getBillingAddressDetails().getAddressId());

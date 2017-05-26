@@ -25,14 +25,15 @@ import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
-import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.util.MoneyUtils;
 
 import java.lang.System;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -50,6 +51,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
     private final ShopService shopService;
     private final ProductService productService;
     private final ProductSkuService productSkuService;
+    private final PriceService priceService;
     private final OrderAddressFormatter addressFormatter;
     private final PromotionCouponService promotionCouponService;
     private final AddressService addressService;
@@ -58,15 +60,16 @@ public class OrderAssemblerImpl implements OrderAssembler {
     /**
      * Create order assembler.
      *
-     * @param orderNumberGenerator order number generator
-     * @param genericDAO           generic DAO
-     * @param customerService      customer service
-     * @param shopService          shop service
-     * @param productService       product service
-     * @param productSkuService    product sku service
-     * @param addressFormatter     format string to create address in one string from {@link Address} entity.
+     * @param orderNumberGenerator   order number generator
+     * @param genericDAO             generic DAO
+     * @param customerService        customer service
+     * @param shopService            shop service
+     * @param productService         product service
+     * @param productSkuService      product sku service
+     * @param priceService           price service
+     * @param addressFormatter       format string to create address in one string from {@link Address} entity.
      * @param promotionCouponService coupon service
-     * @param addressService       address service
+     * @param addressService         address service
      */
     public OrderAssemblerImpl(final OrderNumberGenerator orderNumberGenerator,
                               final GenericDAO genericDAO,
@@ -74,10 +77,12 @@ public class OrderAssemblerImpl implements OrderAssembler {
                               final ShopService shopService,
                               final ProductService productService,
                               final ProductSkuService productSkuService,
+                              final PriceService priceService,
                               final OrderAddressFormatter addressFormatter,
                               final PromotionCouponService promotionCouponService,
                               final AddressService addressService) {
         this.productService = productService;
+        this.priceService = priceService;
         this.promotionCouponService = promotionCouponService;
         this.entityFactory = genericDAO.getEntityFactory();
         this.orderNumberGenerator = orderNumberGenerator;
@@ -385,9 +390,11 @@ public class OrderAssemblerImpl implements OrderAssembler {
             customerOrderDet.setProductSkuCode(item.getProductSkuCode());
             fillOrderDetail(customerOrder, shoppingCart, item, customerOrderDet, temp);
 
-
             customerOrderDet.setProductName(item.getProductName());
             customerOrderDet.setSupplierCode(item.getSupplierCode());
+
+            fillOrderDetailCosts(customerOrder, shoppingCart, item, customerOrderDet, temp);
+
         }
 
     }
@@ -441,6 +448,39 @@ public class OrderAssemblerImpl implements OrderAssembler {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Fill specific product details for current item.
+     *
+     * @param customerOrder    order
+     * @param shoppingCart     cart
+     * @param item             item
+     * @param customerOrderDet item to populate
+     * @param temp             temporary
+     *
+     * @throws OrderAssemblyException
+     */
+    private void fillOrderDetailCosts(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final CartItem item, final CustomerOrderDet customerOrderDet, final boolean temp) throws OrderAssemblyException {
+        if (!temp) {
+
+            final long customerShopId = shoppingCart.getShoppingContext().getCustomerShopId();
+            final long masterShopId = shoppingCart.getShoppingContext().getShopId();
+            // Fallback only if we have a B2B non-strict mode
+            final Long fallbackShopId = masterShopId == customerShopId || shopService.getById(customerShopId).isB2BStrictPriceActive() ? null : masterShopId;
+            final String currency = shoppingCart.getCurrencyCode();
+
+            final String policyID = "COST" + (StringUtils.isBlank(item.getSupplierCode()) ? "" : "_" + item.getSupplierCode());
+
+            final SkuPrice price = priceService.getMinimalPrice(null, item.getProductSkuCode(), customerShopId, fallbackShopId, currency, item.getQty(), false, policyID);
+            if (price != null) {
+                final BigDecimal sale = price.getSalePriceForCalculation();
+                final BigDecimal list = price.getRegularPrice();
+                final BigDecimal cost = sale != null && MoneyUtils.isFirstBiggerThanSecond(list, sale) ? sale : list;
+                customerOrderDet.putValue("ItemCostPrice", cost.toPlainString(), "SUPPLIER");
+            }
+
         }
     }
 

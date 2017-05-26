@@ -18,13 +18,12 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.service.order.OrderSplittingStrategy;
-import org.yes.cart.service.order.SkuUnavailableException;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
-import org.yes.cart.util.ShopCodeContext;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -86,13 +85,25 @@ public class SplitCartItemsCommandImpl extends AbstractCartCommandImpl implement
         final Map<String, Boolean> isMultiAllowed =
                 this.orderSplittingStrategy.isMultipleDeliveriesAllowed(shopId, shoppingCart.getCartItemList());
 
-        final boolean isMultiAllowedAtLeastOne = isMultiAllowedAtLeastOne(isMultiAllowed);
-        final boolean multiSelected = isMultiAllowedAtLeastOne && shoppingCart.getOrderInfo().isMultipleDelivery();
+        final Map<String, Boolean> singleSelected = new HashMap<String, Boolean>();
+        for (final Map.Entry<String, Boolean> isAllowedForSupplier : isMultiAllowed.entrySet()) {
+            singleSelected.put(isAllowedForSupplier.getKey(), !isAllowedForSupplier.getValue() || !shoppingCart.getOrderInfo().isMultipleDelivery());
+        }
 
         // Ensure multi option is updated
-        if (shoppingCart.getOrderInfo().isMultipleDeliveryAvailable() != isMultiAllowedAtLeastOne) {
-            shoppingCart.getOrderInfo().setMultipleDeliveryAvailable(isMultiAllowedAtLeastOne);
+        final Map<String, Boolean> existingAllowed = shoppingCart.getOrderInfo().getMultipleDeliveryAvailable();
+        if (existingAllowed.size() != isMultiAllowed.size()) {
+            // size does not match so must be different
+            shoppingCart.getOrderInfo().setMultipleDeliveryAvailable(isMultiAllowed);
             changed = true;
+        } else {
+            for (final Map.Entry<String, Boolean> existingAllowedBySupplier : existingAllowed.entrySet()) {
+                if (existingAllowedBySupplier.getValue().equals(isMultiAllowed.get(existingAllowedBySupplier.getKey()))) {
+                    shoppingCart.getOrderInfo().setMultipleDeliveryAvailable(isMultiAllowed);
+                    changed = true;
+                    break; // At least one condition changed
+                }
+            }
         }
 
         // Set default supplier code to all items that are missing one
@@ -108,7 +119,7 @@ public class SplitCartItemsCommandImpl extends AbstractCartCommandImpl implement
         }
 
         final Map<DeliveryBucket, List<CartItem>> cartBuckets =
-                this.orderSplittingStrategy.determineDeliveryBuckets(shopId, shoppingCart.getCartItemList(), !multiSelected);
+                this.orderSplittingStrategy.determineDeliveryBuckets(shopId, shoppingCart.getCartItemList(), singleSelected);
 
         for (final Map.Entry<DeliveryBucket, List<CartItem>> cartBucket : cartBuckets.entrySet()) {
 
@@ -129,16 +140,6 @@ public class SplitCartItemsCommandImpl extends AbstractCartCommandImpl implement
         }
 
         return changed;
-    }
-
-    private boolean isMultiAllowedAtLeastOne(final Map<String, Boolean> isMultiAllowed) {
-        boolean isMultiAllowedAtLeastOne = false;
-        for (final Boolean isAllowed : isMultiAllowed.values()) {
-            if (isAllowed != null && isAllowed) {
-                isMultiAllowedAtLeastOne = true;
-            }
-        }
-        return isMultiAllowedAtLeastOne;
     }
 
 }

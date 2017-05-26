@@ -32,6 +32,8 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   @Input() masterObject:any;
   @Input() avPrototype:AttrValueVO;
 
+  @Input() masterObjectType:string;
+
   @Input() showHelp:boolean = false;
 
   @Output() dataSelected: EventEmitter<AttrValueVO> = new EventEmitter<AttrValueVO>();
@@ -356,6 +358,12 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     return this.attributeToEdit && this.attributeToEdit.attribute.etypeName === 'Image';
   }
 
+  protected isFileEditor():boolean {
+    return this.attributeToEdit &&
+      (this.attributeToEdit.attribute.etypeName === 'File'
+      || this.attributeToEdit.attribute.etypeName === 'SystemFile');
+  }
+
   protected isLocalisableEditor():boolean {
     return this.attributeToEdit && this.attributeToEdit.attribute.etypeName === 'String';
   }
@@ -379,6 +387,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     return this.attributeToEdit &&
       !this.isBooleanEditor()
       && !this.isImageEditor()
+      && !this.isFileEditor()
       && !this.isLocalisableEditor()
       && !this.isTextAreaEditor()
       && !this.isMiniTextEditor();
@@ -400,34 +409,70 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     }
   }
 
-  isFileUploadDisabled():boolean {
+  isImageUploadDisabled():boolean {
     var input:any = document.getElementById('avmodaluploadimage');
+    return input == null || input.disabled;
+  }
+
+  onImageClickRelay() {
+    LogUtil.debug('AttributeValuesComponent image upload relay button click');
+    document.getElementById('avmodaluploadimage').click();
+  }
+
+  onImageFileSelected(event:any) {
+    var srcElement:any = event.target || event.srcElement;
+    var image:any = srcElement.files[0];
+    if (image != null) {
+      var imageName:string = image.name;
+      LogUtil.debug('AttributeValuesComponent image file selected', imageName);
+      var reader:FileReader = new FileReader();
+
+      let that = this;
+
+      reader.onloadend = function(e:any) {
+        LogUtil.debug('AttributeValuesComponent image file loaded', e.target.result);
+        that.attributeToEdit.val = imageName;
+        that.attributeToEdit.valBase64Data = e.target.result;
+        that.processImageView(that.attributeToEdit);
+        that.changed = true;
+        that.validForSave = true;
+        srcElement.value = '';
+      };
+      reader.readAsDataURL(image);
+    }
+  }
+
+
+  isFileUploadDisabled():boolean {
+    var input:any = document.getElementById('avmodaluploadfile');
     return input == null || input.disabled;
   }
 
   onFileClickRelay() {
     LogUtil.debug('AttributeValuesComponent file upload relay button click');
-    document.getElementById('avmodaluploadimage').click();
+    document.getElementById('avmodaluploadfile').click();
   }
 
-  onImageFileSelected(event:any) {
-    var srcElement:any = event.srcElement;
-    var image:any = srcElement.files[0];
-    LogUtil.debug('AttributeValuesComponent image file selected', image.name);
-    var reader:FileReader = new FileReader();
 
-    let that = this;
+  onMediaFileSelected(event:any) {
+    var srcElement:any = event.target || event.srcElement;
+    var file:any = srcElement.files[0];
+    if (file != null) {
+      LogUtil.debug('AttributeValuesComponent media file selected', file.name);
+      var reader:FileReader = new FileReader();
 
-    reader.onloadend = function(e:any) {
-      LogUtil.debug('AttributeValuesComponent image file loaded', e.target.result);
-      that.attributeToEdit.val = image.name;
-      that.attributeToEdit.valBase64Data = e.target.result;
-      that.processImageView(that.attributeToEdit);
-      that.changed = true;
-      that.validForSave = true;
-      srcElement.value = '';
-    };
-    reader.readAsDataURL(image);
+      let that = this;
+
+      reader.onloadend = function(e:any) {
+        LogUtil.debug('AttributeValuesComponent media file loaded', e.target.result);
+        that.attributeToEdit.val = file.name;
+        that.attributeToEdit.valBase64Data = e.target.result;
+        that.changed = true;
+        that.validForSave = true;
+        srcElement.value = '';
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
 

@@ -23,7 +23,7 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 
 import java.io.*;
 import java.text.MessageFormat;
@@ -164,7 +164,7 @@ public abstract class AbstractImageExportDomainObjectStrategyImpl<T> implements 
      * @return image stream
      */
     protected InputStream getObjectImageAsBytes(final T next, final String image) throws IOException {
-        final ImageNameStrategy strategy = imageService.getImageNameStrategy(getImageRepositoryUrlPattern());
+        final MediaFileNameStrategy strategy = imageService.getImageNameStrategy(getImageRepositoryUrlPattern());
         final String code = strategy.resolveObjectCode(image);
 
         final byte[] bytes = imageService.imageToByteArray(image, code, strategy.getRelativeInternalRootDirectory(), systemService.getImageRepositoryDirectory());

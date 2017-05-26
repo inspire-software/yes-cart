@@ -42,7 +42,7 @@
       <tr *ngFor="let row of filteredShopSub; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'NAME' | translate }}"><a class="js-click" [routerLink]="['/subshop', row.shopId ]"><span [ngClass]="row.disabled ? 'label label-danger': 'label label-success'">{{row.code}}</span> {{row.name}}</a></td>
-          <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" [routerLink]="['/subshop', row.shopId ]">{{row.description}}</a></td>
+          <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" [routerLink]="['/subshop', row.shopId ]">{{row.description}}</a>&nbsp;</td>
         </template>
       </tr>
       </tbody>

@@ -14,12 +14,12 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.image.impl;
+package org.yes.cart.service.media.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 import org.yes.cart.service.misc.LanguageService;
 
 import java.io.File;
@@ -30,11 +30,13 @@ import java.util.List;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy {
+public abstract class AbstractMediaFileNameStrategyImpl implements MediaFileNameStrategy {
 
     private final String urlPath;
     private final String relativeInternalRootDirectory;
     private final LanguageService languageService;
+
+    private String attributePrefix;
 
     /**
      * Construct image name strategy
@@ -43,9 +45,9 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
      * @param relativeInternalRootDirectory  internal image relative path root directory without {@link java.io.File#separator}. E.g. "category"
      * @param languageService language service
      */
-    protected AbstractImageNameStrategyImpl(final String urlPath,
-                                            final String relativeInternalRootDirectory,
-                                            final LanguageService languageService) {
+    protected AbstractMediaFileNameStrategyImpl(final String urlPath,
+                                                final String relativeInternalRootDirectory,
+                                                final LanguageService languageService) {
         this.urlPath = urlPath;
         this.languageService = languageService;
         this.relativeInternalRootDirectory = relativeInternalRootDirectory + File.separator;
@@ -256,4 +258,23 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
         }
         return mainPart.substring(0, posRollingNumber) + "-" + (NumberUtils.toInt(mainPart.substring(posRollingNumber + 1)) + 1) + systemPart + fileExt;
     }
+
+    /**
+     * Attribute prefix.
+     *
+     * @return prefix (e.g. IMAGE)
+     */
+    protected String getAttributePrefix() {
+        return attributePrefix;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param attributePrefix attribute prefix
+     */
+    public void setAttributePrefix(final String attributePrefix) {
+        this.attributePrefix = attributePrefix;
+    }
+
 }

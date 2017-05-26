@@ -14,36 +14,34 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.image.impl;
+package org.yes.cart.service.media.impl;
 
-import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.AttrValueBrand;
 import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.service.misc.LanguageService;
-
-import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ShopImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
+public class ShopMediaFileNameStrategyImpl extends AbstractMediaFileNameStrategyImpl {
 
     private final GenericDAO<AttrValueShop, Long> attrValueShopDao;
 
     /**
      * Construct image name strategy
      *
+     * @param urlPath                        URL path that identifies this strategy
      * @param relativeInternalRootDirectory  internal image relative path root directory without {@link java.io.File#separator}. E.g. "brand"
      * @param attrValueShopDao               shop attribute dao
      * @param languageService                language service
      */
-    public ShopImageNameStrategyImpl(final String relativeInternalRootDirectory,
-                                     final GenericDAO<AttrValueShop, Long> attrValueShopDao,
-                                     final LanguageService languageService) {
-        super(Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN, relativeInternalRootDirectory, languageService);
+    public ShopMediaFileNameStrategyImpl(final String urlPath,
+                                         final String relativeInternalRootDirectory,
+                                         final GenericDAO<AttrValueShop, Long> attrValueShopDao,
+                                         final LanguageService languageService) {
+        super(urlPath, relativeInternalRootDirectory, languageService);
         this.attrValueShopDao = attrValueShopDao;
     }
 
@@ -54,10 +52,10 @@ public class ShopImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
 
         final String val = resolveFileName(url);
 
-        final List<String> code = (List) attrValueShopDao.findQueryObjectByNamedQuery("SHOP.CODE.BY.IMAGE.NAME", val);
+        final String code = attrValueShopDao.findSingleByNamedQuery("SHOP.CODE.BY.MEDIAFILE.NAME", val, getAttributePrefix() + '%');
 
-        if (code != null && !code.isEmpty()) {
-            return code.get(0);
+        if (code != null) {
+            return code;
         }
 
         return null;

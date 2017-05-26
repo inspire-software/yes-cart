@@ -42,6 +42,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -79,7 +80,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
         Customer customer = createCustomer();
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, true);
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         customerOrder.setPgLabel("testExtFormPaymentGatewayLabel");
         customerOrder = customerOrderService.create(customerOrder);
         assertEquals("Order must be in ORDER_STATUS_NONE state",
@@ -116,7 +117,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, true);
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         customerOrder.setPgLabel("testExtFormPaymentGatewayLabel");
         customerOrder = customerOrderService.create(customerOrder);
         assertEquals("Order must be in ORDER_STATUS_NONE state",
@@ -157,4 +158,15 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
 
 
     }
+
+
+    private Map<String, Boolean> getMultiSelection(ShoppingCart cart) {
+        final Map<String, Boolean> single = new HashMap<String, Boolean>();
+        final boolean selected = cart.getOrderInfo().isMultipleDelivery();
+        for (final Map.Entry<String, Boolean> allowed : cart.getOrderInfo().getMultipleDeliveryAvailable().entrySet()) {
+            single.put(allowed.getKey(), !selected || !allowed.getValue());
+        }
+        return single;
+    }
+
 }

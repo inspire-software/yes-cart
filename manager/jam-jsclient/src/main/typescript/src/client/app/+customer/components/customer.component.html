@@ -184,6 +184,7 @@
             <div class="row">
               <yc-attribute-values #attributeValuesComponent
                                    [masterObject]="customer"
+                                   masterObjectType="customer"
                                    [objectAttributes]="attributes"
                                    [attributeFilter]="attributeFilter"
                                    (dataSelected)="onSelectRow($event)"

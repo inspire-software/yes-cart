@@ -17,7 +17,7 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <span wicket:id="currency">[currency if symbol is before]</span> <span wicket:id="whole">[00]</span><span wicket:id="dot">[.]</span><span wicket:id="decimal">[00]</span> <span wicket:id="currency2">[currency if symbol is after]</span>
+    <span wicket:id="currency" itemprop="priceCurrency">[currency if symbol is before]</span> <span itemprop="price"><span wicket:id="whole">[00]</span><span wicket:id="dot">[.]</span><span wicket:id="decimal">[00]</span></span> <span wicket:id="currency2" itemprop="priceCurrency">[currency if symbol is after]</span>
     <wicket:enclosure><div class="clearfix"/> <span wicket:id="tax">[inc. 10% VAT]</span></wicket:enclosure>
     <wicket:enclosure><div class="clearfix"/> <span wicket:id="listPrice">[list price]</span></wicket:enclosure>
     <wicket:enclosure><div class="clearfix margin-top5"/> <a wicket:id="save" href="#" data-toggle="tooltip" data-placement="top">[Save 10%]</a></wicket:enclosure>

@@ -34,13 +34,13 @@ public class ShopImageServiceImpl extends AbstractImageServiceImpl implements At
 
     /** {@inheritDoc}
      * @param attributableOrStrategy*/
-    protected String getImageRepositoryUrlPattern(final Object attributableOrStrategy) {
+    protected String getRepositoryUrlPattern(final Object attributableOrStrategy) {
         return Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN;
     }
 
     /** {@inheritDoc}
      * @param attributableOrStrategy*/
-    protected String getImageAttributePrefix(final Object attributableOrStrategy) {
+    protected String getAttributePrefix(final Object attributableOrStrategy) {
         return AttributeNamesKeys.Shop.SHOP_IMAGE_PREFIX;
     }
 

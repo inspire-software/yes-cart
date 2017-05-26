@@ -314,12 +314,14 @@ public class ManagementServiceImpl implements ManagementService {
             "shopFederationStrategy-admin"
     }, key = "#userId")
     public void revokeRole(final String userId, final String role) {
-        final ManagerRole managerRole = managerRoleDao.findSingleByCriteria(
+        final List<ManagerRole> managerRole = managerRoleDao.findByCriteria(
                 Restrictions.eq(CODE, role),
                 Restrictions.eq(EMAIL, userId)
         );
-        if (managerRole != null) {
-            managerRoleDao.delete(managerRole);
+        if (managerRole != null && !managerRole.isEmpty()) {
+            for (final ManagerRole roleAssignment : managerRole) {
+                managerRoleDao.delete(roleAssignment);
+            }
         }
     }
 

@@ -86,6 +86,7 @@
 
     <div *ngIf="searchHelpShow">
       <div class="bg-info text-padding block-margin-spacer">
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_ALL' | translate }} <span><button type="button" (click)="onSearchStatusAllOrders()" class="btn btn-circle"><i class="fa fa-arrows-alt"></i></button></span></p>
         <ul><li *ngFor="let status of statuses"><input type="checkbox" name="{{status.first}}" [(ngModel)]="status.second" (ngModelChange)="onFilterChange($event)"/> {{status.first | translate }}</li></ul>
         <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_DEFAULT' | translate }}</p>
         <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_OPEN' | translate }} <span><button type="button" (click)="onSearchStatusOpen()" class="btn btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
@@ -95,6 +96,7 @@
         <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_NUMBER' | translate }} <span><button type="button" (click)="onSearchNumber()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
         <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_CUSTOMER' | translate }} <span><button type="button" (click)="onSearchCustomer()" class="btn btn-circle"><i class="fa fa-user"></i></button></span></p>
         <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_ADDRESS' | translate }} <span><button type="button" (click)="onSearchAddress()" class="btn btn-circle"><i class="fa fa-home"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_ID' | translate }} <span><button type="button" (click)="onSearchId()" class="btn btn-circle"><i class="fa fa-asterisk"></i></button></span></p>
         <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-circle"><i class="fa fa-calendar"></i></button></span></p>
         <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_RESERVED' | translate }} <span><button type="button" (click)="onSearchReserved()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
       </div>

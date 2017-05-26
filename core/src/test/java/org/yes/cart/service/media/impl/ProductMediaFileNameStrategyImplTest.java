@@ -14,14 +14,13 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.image.impl;
+package org.yes.cart.service.media.impl;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 
 import static org.junit.Assert.assertEquals;
 
@@ -30,27 +29,23 @@ import static org.junit.Assert.assertEquals;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ShopImageNameStrategyImplTest extends BaseCoreDBTestCase {
+public class ProductMediaFileNameStrategyImplTest extends BaseCoreDBTestCase {
 
-    private ImageNameStrategy imageNameStrategy;
+    private MediaFileNameStrategy mediaFileNameStrategy;
 
     @Before
     public void setUp() {
-        imageNameStrategy = (ImageNameStrategy) ctx().getBean(ServiceSpringKeys.SHOP_IMAGE_NAME_STRATEGY);
+        mediaFileNameStrategy = (MediaFileNameStrategy) ctx().getBean(ServiceSpringKeys.PRODUCT_IMAGE_NAME_STRATEGY);
         super.setUp();
     }
-
 
     @Test
     public void testGetCodeFromActualObject() {
 
-        //test case to support file names without brand name code
-        assertEquals("SHOIP1", imageNameStrategy.resolveObjectCode("shoip1.jpeg"));
-        assertEquals("SHOIP1", imageNameStrategy.resolveObjectCode("imgvault/shop/shoip1.jpeg"));
-        assertEquals("SHOIP1", imageNameStrategy.resolveObjectCode("imgvault/shop/shoip1.jpeg?w=10&h=4"));
-
-        // test that inexistent are resolved to no image
-        assertEquals(Constants.NO_IMAGE, imageNameStrategy.resolveObjectCode("imgvault/shop/unknown-shop.jpeg"));
+        //test case to support file names without product or sku code
+        assertEquals("SOBOT", mediaFileNameStrategy.resolveObjectCode("sobot-picture.jpeg"));
+        assertEquals("SOBOT", mediaFileNameStrategy.resolveObjectCode("imgvault/product/sobot-picture.jpeg"));
+        assertEquals("SOBOT", mediaFileNameStrategy.resolveObjectCode("imgvault/product/sobot-picture.jpeg?w=10&h=4"));
 
     }
 

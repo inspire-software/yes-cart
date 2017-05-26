@@ -14,14 +14,14 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.image.impl;
+package org.yes.cart.service.media.impl;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 import org.yes.cart.service.misc.LanguageService;
 
 import java.io.File;
@@ -36,7 +36,7 @@ import static org.junit.Assert.assertNotNull;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class AbstractImageNameStrategyImplTest {
+public class AbstractMediaFileNameStrategyImplTest {
 
     private Mockery context = new JUnit4Mockery();
 
@@ -49,7 +49,7 @@ public class AbstractImageNameStrategyImplTest {
             allowing(languageService).getSupportedLanguages(); will(returnValue(Arrays.asList("en", "ru", "uk")));
         }});
 
-        final ImageNameStrategy imageNameStrategy = new AbstractImageNameStrategyImpl("/root/img/", "root", languageService) {
+        final MediaFileNameStrategy mediaFileNameStrategy = new AbstractMediaFileNameStrategyImpl("/root/img/", "root", languageService) {
             @Override
             public String resolveObjectCodeInternal(final String url) {
                 return null;
@@ -58,56 +58,56 @@ public class AbstractImageNameStrategyImplTest {
 
         // Resolving filename
         assertEquals("file-name_CODE_a.jpeg",
-                imageNameStrategy.resolveFileName("file-name_CODE_a.jpeg"));
+                mediaFileNameStrategy.resolveFileName("file-name_CODE_a.jpeg"));
         assertEquals("file-name_CODE_a.jpeg",
-                imageNameStrategy.resolveFileName("somepath" + File.separator + "file-name_CODE_a.jpeg"));
+                mediaFileNameStrategy.resolveFileName("somepath" + File.separator + "file-name_CODE_a.jpeg"));
 
         assertEquals("1261644759_627724_russkaya-magiya.jpg",
-                imageNameStrategy.resolveFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg"));
+                mediaFileNameStrategy.resolveFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg"));
         assertEquals("1261644759_627724_russkaya-magiya.jpg",
-                imageNameStrategy.resolveFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4"));
+                mediaFileNameStrategy.resolveFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4"));
         assertEquals("1261644759_627724_russkaya-magiya.jpg",
-                imageNameStrategy.resolveFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4"));
+                mediaFileNameStrategy.resolveFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4"));
         assertEquals("1261644759_627724_russkaya-magiya.jpg",
-                imageNameStrategy.resolveFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4~!@#$%^&*()_+"));
+                mediaFileNameStrategy.resolveFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4~!@#$%^&*()_+"));
 
         // Upper case code 'CODE' results in upper case 'C' intermediate directory
         assertEquals("root" + File.separator + "file-name_CODE_a.jpeg",
-                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_CODE_a.jpeg", null, "en"));
+                mediaFileNameStrategy.resolveRelativeInternalFileNamePath("file-name_CODE_a.jpeg", null, "en"));
 
         assertEquals("root" + File.separator + "file-name_CODE_a.jpeg",
-                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_CODE_a.jpeg", null, null));
+                mediaFileNameStrategy.resolveRelativeInternalFileNamePath("file-name_CODE_a.jpeg", null, null));
 
         assertEquals("root" + File.separator + "C" + File.separator + "CODE" + File.separator + "file-name_CODE_a.jpeg",
-                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_CODE_a.jpeg", "CODE", "en"));
+                mediaFileNameStrategy.resolveRelativeInternalFileNamePath("file-name_CODE_a.jpeg", "CODE", "en"));
 
         assertEquals("root" + File.separator + "C" + File.separator + "CODE" + File.separator + "file-name_CODE_a.jpeg",
-                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_CODE_a.jpeg", "CODE", null));
+                mediaFileNameStrategy.resolveRelativeInternalFileNamePath("file-name_CODE_a.jpeg", "CODE", null));
 
         assertEquals("root" + File.separator + "10x30" + File.separator + "C" + File.separator + "CODE" + File.separator + "file-name_CODE_a.jpeg",
-                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_CODE_a.jpeg", "CODE", "en", "10", "30"));
+                mediaFileNameStrategy.resolveRelativeInternalFileNamePath("file-name_CODE_a.jpeg", "CODE", "en", "10", "30"));
 
         assertEquals("root" + File.separator + "10x30" + File.separator + "C" + File.separator + "CODE" + File.separator + "file-name_CODE_a.jpeg",
-                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_CODE_a.jpeg", "CODE", null, "10", "30"));
+                mediaFileNameStrategy.resolveRelativeInternalFileNamePath("file-name_CODE_a.jpeg", "CODE", null, "10", "30"));
 
         // Lower case code 'code' results in upper case 'C' intermediate directory
         assertEquals("root" + File.separator + "file-name_code_a.jpeg",
-                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", null, "en"));
+                mediaFileNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", null, "en"));
 
         assertEquals("root" + File.separator + "file-name_code_a.jpeg",
-                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", null, null));
+                mediaFileNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", null, null));
 
         assertEquals("root" + File.separator + "C" + File.separator + "code" + File.separator + "file-name_code_a.jpeg",
-                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", "code", "en"));
+                mediaFileNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", "code", "en"));
 
         assertEquals("root" + File.separator + "C" + File.separator + "code" + File.separator + "file-name_code_a.jpeg",
-                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", "code", null));
+                mediaFileNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", "code", null));
 
         assertEquals("root" + File.separator + "10x30" + File.separator + "C" + File.separator + "code" + File.separator + "file-name_code_a.jpeg",
-                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", "code", "en", "10", "30"));
+                mediaFileNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", "code", "en", "10", "30"));
 
         assertEquals("root" + File.separator + "10x30" + File.separator + "C" + File.separator + "code" + File.separator + "file-name_code_a.jpeg",
-                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", "code", null, "10", "30"));
+                mediaFileNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", "code", null, "10", "30"));
 
     }
 
@@ -140,7 +140,7 @@ public class AbstractImageNameStrategyImplTest {
         };
 
 
-        final ImageNameStrategy imageNameStrategy = new AbstractImageNameStrategyImpl("/root/img/", "root", languageService) {
+        final MediaFileNameStrategy mediaFileNameStrategy = new AbstractMediaFileNameStrategyImpl("/root/img/", "root", languageService) {
             @Override
             public String resolveObjectCodeInternal(final String url) {
                 return null;
@@ -148,18 +148,18 @@ public class AbstractImageNameStrategyImplTest {
         };
 
         for (String[] fileName : testFilenames) {
-            String code = imageNameStrategy.resolveObjectCode(fileName[0]);
+            String code = mediaFileNameStrategy.resolveObjectCode(fileName[0]);
             assertNotNull(code);
             assertFalse("Contains _ ", code.indexOf('_') > -1);
             assertEquals(fileName[0] + " not in expectations. The code is " + code, code, fileName[1]);
         }
 
-        assertEquals("code", imageNameStrategy.resolveObjectCode("seo_name_code_a.jpg"));
-        assertEquals("code", imageNameStrategy.resolveObjectCode("seo_name_code_a_ru.jpg"));
-        assertEquals("code", imageNameStrategy.resolveObjectCode("_code_b.jpg"));
-        assertEquals("code", imageNameStrategy.resolveObjectCode("_code_b_ru.jpg"));
-        assertEquals(Constants.NO_IMAGE, imageNameStrategy.resolveObjectCode("code_c.jpg"));
-        assertEquals(Constants.NO_IMAGE, imageNameStrategy.resolveObjectCode("code_c_ru.jpg"));
+        assertEquals("code", mediaFileNameStrategy.resolveObjectCode("seo_name_code_a.jpg"));
+        assertEquals("code", mediaFileNameStrategy.resolveObjectCode("seo_name_code_a_ru.jpg"));
+        assertEquals("code", mediaFileNameStrategy.resolveObjectCode("_code_b.jpg"));
+        assertEquals("code", mediaFileNameStrategy.resolveObjectCode("_code_b_ru.jpg"));
+        assertEquals(Constants.NO_IMAGE, mediaFileNameStrategy.resolveObjectCode("code_c.jpg"));
+        assertEquals(Constants.NO_IMAGE, mediaFileNameStrategy.resolveObjectCode("code_c_ru.jpg"));
 
     }
 
@@ -172,16 +172,16 @@ public class AbstractImageNameStrategyImplTest {
             allowing(languageService).getSupportedLanguages(); will(returnValue(Arrays.asList("en", "ru", "uk")));
         }});
 
-        final ImageNameStrategy imageNameStrategy = new AbstractImageNameStrategyImpl("/root/img/", "root", languageService) {
+        final MediaFileNameStrategy mediaFileNameStrategy = new AbstractMediaFileNameStrategyImpl("/root/img/", "root", languageService) {
             @Override
             public String resolveObjectCodeInternal(final String url) {
                 return null;
             }
         };
 
-        assertEquals(Constants.NO_IMAGE, imageNameStrategy.resolveObjectCode(null));
-        assertEquals(Constants.NO_IMAGE, imageNameStrategy.resolveObjectCode(""));
-        assertEquals(Constants.NO_IMAGE, imageNameStrategy.resolveObjectCode("some-incorrect-code-in-file-name"));
+        assertEquals(Constants.NO_IMAGE, mediaFileNameStrategy.resolveObjectCode(null));
+        assertEquals(Constants.NO_IMAGE, mediaFileNameStrategy.resolveObjectCode(""));
+        assertEquals(Constants.NO_IMAGE, mediaFileNameStrategy.resolveObjectCode("some-incorrect-code-in-file-name"));
 
     }
 
@@ -206,7 +206,7 @@ public class AbstractImageNameStrategyImplTest {
         };
 
 
-        final ImageNameStrategy imageNameStrategy = new AbstractImageNameStrategyImpl("/root/img/", "root", languageService) {
+        final MediaFileNameStrategy mediaFileNameStrategy = new AbstractMediaFileNameStrategyImpl("/root/img/", "root", languageService) {
             @Override
             public String resolveObjectCodeInternal(final String url) {
                 return null;
@@ -214,14 +214,14 @@ public class AbstractImageNameStrategyImplTest {
         };
 
         for (String[] fileName : testFilenames) {
-            String language = imageNameStrategy.resolveLocale(fileName[0]);
+            String language = mediaFileNameStrategy.resolveLocale(fileName[0]);
             assertEquals(fileName[0] + " not in expectations. The code is " + language, language, fileName[1]);
         }
 
-        assertEquals("en", imageNameStrategy.resolveLocale("seo_name_code_en.jpg"));
-        assertEquals("en", imageNameStrategy.resolveLocale("_code_en.jpg"));
-        assertEquals("en", imageNameStrategy.resolveLocale("code_en.jpg"));
-        assertEquals(null, imageNameStrategy.resolveLocale("code_zu.jpg"));
+        assertEquals("en", mediaFileNameStrategy.resolveLocale("seo_name_code_en.jpg"));
+        assertEquals("en", mediaFileNameStrategy.resolveLocale("_code_en.jpg"));
+        assertEquals("en", mediaFileNameStrategy.resolveLocale("code_en.jpg"));
+        assertEquals(null, mediaFileNameStrategy.resolveLocale("code_zu.jpg"));
 
     }
 
@@ -252,7 +252,7 @@ public class AbstractImageNameStrategyImplTest {
         };
 
 
-        final ImageNameStrategy imageNameStrategy = new AbstractImageNameStrategyImpl("/root/img/", "root", languageService) {
+        final MediaFileNameStrategy mediaFileNameStrategy = new AbstractMediaFileNameStrategyImpl("/root/img/", "root", languageService) {
             @Override
             public String resolveObjectCodeInternal(final String url) {
                 return null;
@@ -260,18 +260,18 @@ public class AbstractImageNameStrategyImplTest {
         };
 
         for (String[] fileName : testFilenames) {
-            String code = imageNameStrategy.resolveSuffix(fileName[0]);
+            String code = mediaFileNameStrategy.resolveSuffix(fileName[0]);
             assertNotNull(code);
             assertFalse("Contains _ ", code.indexOf('_') > -1);
             assertEquals(fileName[0] + " not in expectations. The code is " + code, code, fileName[1]);
         }
 
-        assertEquals("2", imageNameStrategy.resolveSuffix("seo_name_code_c.jpg"));
-        assertEquals("2", imageNameStrategy.resolveSuffix("seo_name_code_c_ru.jpg"));
-        assertEquals("2", imageNameStrategy.resolveSuffix("_code_c.jpg"));
-        assertEquals("2", imageNameStrategy.resolveSuffix("_code_c_ru.jpg"));
-        assertEquals("0", imageNameStrategy.resolveSuffix("code.jpg"));
-        assertEquals("0", imageNameStrategy.resolveSuffix("code_ru.jpg"));
+        assertEquals("2", mediaFileNameStrategy.resolveSuffix("seo_name_code_c.jpg"));
+        assertEquals("2", mediaFileNameStrategy.resolveSuffix("seo_name_code_c_ru.jpg"));
+        assertEquals("2", mediaFileNameStrategy.resolveSuffix("_code_c.jpg"));
+        assertEquals("2", mediaFileNameStrategy.resolveSuffix("_code_c_ru.jpg"));
+        assertEquals("0", mediaFileNameStrategy.resolveSuffix("code.jpg"));
+        assertEquals("0", mediaFileNameStrategy.resolveSuffix("code_ru.jpg"));
 
     }
 
@@ -285,7 +285,7 @@ public class AbstractImageNameStrategyImplTest {
         }});
 
 
-        final ImageNameStrategy imageNameStrategy = new AbstractImageNameStrategyImpl("/root/img/", "root", languageService) {
+        final MediaFileNameStrategy mediaFileNameStrategy = new AbstractMediaFileNameStrategyImpl("/root/img/", "root", languageService) {
             @Override
             public String resolveObjectCodeInternal(final String url) {
                 return null;
@@ -293,27 +293,27 @@ public class AbstractImageNameStrategyImplTest {
         };
 
 
-        assertEquals("some-file-name-1_a.jpg", imageNameStrategy.createRollingFileName("some-file-name.jpg", Constants.NO_IMAGE, "0", null));
-        assertEquals("some-file-name-2_a.jpg", imageNameStrategy.createRollingFileName("some-file-name-1.jpg", Constants.NO_IMAGE, "0", null));
-        assertEquals("some-file-name-3_a.jpg", imageNameStrategy.createRollingFileName("some-file-name-2.jpg", Constants.NO_IMAGE, "0", null));
-        assertEquals("some-file-name-10_a.jpg", imageNameStrategy.createRollingFileName("some-file-name-9.jpg", Constants.NO_IMAGE, "0", null));
-        assertEquals("some-file-name-11_a.jpg", imageNameStrategy.createRollingFileName("some-file-name-10.jpg", Constants.NO_IMAGE, "0", null));
-        assertEquals("some-file-name-12_a.jpg", imageNameStrategy.createRollingFileName("some-file-name-11.jpg", Constants.NO_IMAGE, "0", null));
+        assertEquals("some-file-name-1_a.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name.jpg", Constants.NO_IMAGE, "0", null));
+        assertEquals("some-file-name-2_a.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-1.jpg", Constants.NO_IMAGE, "0", null));
+        assertEquals("some-file-name-3_a.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-2.jpg", Constants.NO_IMAGE, "0", null));
+        assertEquals("some-file-name-10_a.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-9.jpg", Constants.NO_IMAGE, "0", null));
+        assertEquals("some-file-name-11_a.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-10.jpg", Constants.NO_IMAGE, "0", null));
+        assertEquals("some-file-name-12_a.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-11.jpg", Constants.NO_IMAGE, "0", null));
 
 
-        assertEquals("some-file-name-1_code_a.jpg", imageNameStrategy.createRollingFileName("some-file-name_code_a.jpg", "code", "0", null));
-        assertEquals("some-file-name-2_code_a.jpg", imageNameStrategy.createRollingFileName("some-file-name-1_code_a.jpg", "code", "0", null));
-        assertEquals("some-file-name-3_code_a.jpg", imageNameStrategy.createRollingFileName("some-file-name-2_code_a.jpg", "code", "0", null));
-        assertEquals("some-file-name-10_code_a.jpg", imageNameStrategy.createRollingFileName("some-file-name-9_code_a.jpg", "code", "0", null));
-        assertEquals("some-file-name-11_code_a.jpg", imageNameStrategy.createRollingFileName("some-file-name-10_code_a.jpg", "code", "0", null));
-        assertEquals("some-file-name-12_code_a.jpg", imageNameStrategy.createRollingFileName("some-file-name-11_code_a.jpg", "code", "0", null));
+        assertEquals("some-file-name-1_code_a.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name_code_a.jpg", "code", "0", null));
+        assertEquals("some-file-name-2_code_a.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-1_code_a.jpg", "code", "0", null));
+        assertEquals("some-file-name-3_code_a.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-2_code_a.jpg", "code", "0", null));
+        assertEquals("some-file-name-10_code_a.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-9_code_a.jpg", "code", "0", null));
+        assertEquals("some-file-name-11_code_a.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-10_code_a.jpg", "code", "0", null));
+        assertEquals("some-file-name-12_code_a.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-11_code_a.jpg", "code", "0", null));
 
-        assertEquals("some-file-name-1_code_b_en.jpg", imageNameStrategy.createRollingFileName("some-file-name_code_b_en.jpg", "code", "1", "en"));
-        assertEquals("some-file-name-2_code_b_en.jpg", imageNameStrategy.createRollingFileName("some-file-name-1_code_b_en.jpg", "code", "1", "en"));
-        assertEquals("some-file-name-3_code_b_en.jpg", imageNameStrategy.createRollingFileName("some-file-name-2_code_b_en.jpg", "code", "1", "en"));
-        assertEquals("some-file-name-10_code_b_en.jpg", imageNameStrategy.createRollingFileName("some-file-name-9_code_b_en.jpg", "code", "1", "en"));
-        assertEquals("some-file-name-11_code_b_en.jpg", imageNameStrategy.createRollingFileName("some-file-name-10_code_b_en.jpg", "code", "1", "en"));
-        assertEquals("some-file-name-12_code_b_en.jpg", imageNameStrategy.createRollingFileName("some-file-name-11_code_b_en.jpg", "code", "1", "en"));
+        assertEquals("some-file-name-1_code_b_en.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name_code_b_en.jpg", "code", "1", "en"));
+        assertEquals("some-file-name-2_code_b_en.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-1_code_b_en.jpg", "code", "1", "en"));
+        assertEquals("some-file-name-3_code_b_en.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-2_code_b_en.jpg", "code", "1", "en"));
+        assertEquals("some-file-name-10_code_b_en.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-9_code_b_en.jpg", "code", "1", "en"));
+        assertEquals("some-file-name-11_code_b_en.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-10_code_b_en.jpg", "code", "1", "en"));
+        assertEquals("some-file-name-12_code_b_en.jpg", mediaFileNameStrategy.createRollingFileName("some-file-name-11_code_b_en.jpg", "code", "1", "en"));
 
     }
 }

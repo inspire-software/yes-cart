@@ -163,17 +163,18 @@
             <div class="col-xs-12" [hidden]="attributeToEditImagePreviewAvailable">
               <p class="bg-danger">{{ 'AV_IMAGE_NO_PREVIEW' | translate }}</p>
             </div>
-            <div class="col-xs-12" [hidden]="!isFileUploadDisabled()">
+            <div class="col-xs-12" [hidden]="!isImageUploadDisabled()">
               <p class="bg-danger">{{ 'MODAL_UPLOAD_DISABLED' | translate }}</p>
             </div>
             <div class="col-xs-12">{{ attributeToEdit.attribute.name }}</div>
-            <div class="col-xs-12">{{ attributeToEdit.val }} <button class="btn btn-default" type="button" (click)="onFileClickRelay()" [hidden]="isFileUploadDisabled()">{{ 'MODAL_BUTTON_UPLOAD' | translate }}</button></div>
+            <div class="col-xs-12 av-file-upload"><a target="_dfile" href="../service/filevault/image/{{masterObjectType}}?fileName={{attributeToEdit.val}}"  [hidden]="attributeToEdit.val == null">{{ attributeToEdit.val }}</a> <button class="btn btn-default" type="button" (click)="onImageClickRelay()" [hidden]="isImageUploadDisabled()">{{ 'MODAL_BUTTON_UPLOAD' | translate }}</button></div>
+            <div class="col-xs-12 av-file-upload"[hidden]="attributeToEdit.val == null"><input name="imageUrlCopy" class="form-control" type="text" readonly value="{{ attributeToEdit.val != null ? ('http://[domain]/imagevault/' + masterObjectType + '/' + attributeToEdit.val) : '' }}&w=[X]&h=[Y]"></div>
             <div class="col-xs-12 av-image-preview" [innerHTML]="attributeToEditImagePreview"></div>
           </div>
           <div class="row">
             <div class="col-xs-12 hidden-xs hidden-sm hidden-xs">
               <div class="hidden-file">
-                <input id="avmodaluploadimage" name="val" type="file" (change)="onImageFileSelected($event)" accept="image/png,image/jpg,image/jpeg">
+                <input id="avmodaluploadimage" name="valImg" type="file" (change)="onImageFileSelected($event)" accept="image/png,image/jpg,image/jpeg">
               </div>
             </div>
           </div>
@@ -181,6 +182,37 @@
       </form>
 
     </template>
+
+
+    <template [ngIf]="isFileEditor()">
+
+      <form role="form">
+        <fieldset>
+          <div class="row" [hidden]="!attributeToEdit.attribute.description">
+            <div class="col-xs-12">
+              <pre class="bg-success">{{ attributeToEdit.attribute.description }}</pre>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12" [hidden]="!isFileUploadDisabled()">
+              <p class="bg-danger">{{ 'MODAL_UPLOAD_DISABLED' | translate }}</p>
+            </div>
+            <div class="col-xs-12">{{ attributeToEdit.attribute.name }}</div>
+            <div class="col-xs-12 av-file-upload"><a target="_dfile" href="../service/filevault/{{ attributeToEdit.attribute.etypeName === 'SystemFile' ? 'sysfile' : 'file' }}/{{masterObjectType}}?fileName={{attributeToEdit.val}}"  [hidden]="attributeToEdit.val == null">{{ attributeToEdit.val }}</a> <button class="btn btn-default" type="button" (click)="onFileClickRelay()" [hidden]="isFileUploadDisabled()">{{ 'MODAL_BUTTON_UPLOAD' | translate }}</button></div>
+            <div class="col-xs-12 av-file-upload" [hidden]="attributeToEdit.val == null || attributeToEdit.attribute.etypeName === 'SystemFile'"><input name="fileUrlCopy" class="form-control" type="text" readonly value="{{ attributeToEdit.val != null ? ('http://[domain]/filevault/' + masterObjectType + '/' + attributeToEdit.val) : '' }}"></div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 hidden-xs hidden-sm hidden-xs">
+              <div class="hidden-file">
+                <input id="avmodaluploadfile" name="valFile" type="file" (change)="onMediaFileSelected($event)"/>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </template>
+
 
   </yc-modal>
 

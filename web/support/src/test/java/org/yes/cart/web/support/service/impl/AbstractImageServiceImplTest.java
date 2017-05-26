@@ -50,12 +50,12 @@ public class AbstractImageServiceImplTest {
 
         service = new AbstractImageServiceImpl() {
             @Override
-            protected String getImageRepositoryUrlPattern(final Object attributableOrStrategy) {
+            protected String getRepositoryUrlPattern(final Object attributableOrStrategy) {
                 return "/pat/";
             }
 
             @Override
-            protected String getImageAttributePrefix(final Object attributableOrStrategy) {
+            protected String getAttributePrefix(final Object attributableOrStrategy) {
                 return "MY_IMAGE";
             }
         };

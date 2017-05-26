@@ -68,6 +68,8 @@ public class VoCategoryServiceImpl implements VoCategoryService {
                         VoAttrValueCategory.class,
                         AttrValueCategoryDTO.class,
                         Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN,
+                        Constants.CATEGORY_FILE_REPOSITORY_URL_PATTERN,
+                        Constants.CATEGORY_SYSFILE_REPOSITORY_URL_PATTERN,
                         this.dtoCategoryService,
                         this.dtoAttributeService,
                         this.voAssemblySupport,

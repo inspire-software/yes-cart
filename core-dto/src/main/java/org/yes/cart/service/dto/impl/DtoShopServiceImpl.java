@@ -21,6 +21,7 @@ import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.AttrValueShopDTO;
@@ -60,6 +61,7 @@ public class DtoShopServiceImpl
     private final DtoAttributeService dtoAttributeService;
     private final GenericDAO<AttrValueEntityShop, Long> attrValueEntityShopDao;
     private final ImageService imageService;
+    private final FileService fileService;
     private final SystemService systemService;
 
 
@@ -70,6 +72,7 @@ public class DtoShopServiceImpl
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityShop, Long> attrValueEntityShopDao,
             final ImageService imageService,
+            final FileService fileService,
             final AdaptersRepository adaptersRepository,
             final SystemService systemService) {
         super(dtoFactory, shopService, adaptersRepository);
@@ -84,6 +87,7 @@ public class DtoShopServiceImpl
         this.dtoAttributeService = dtoAttributeService;
         this.attrValueEntityShopDao = attrValueEntityShopDao;
         this.imageService = imageService;
+        this.fileService = fileService;
 
 
     }
@@ -250,7 +254,14 @@ public class DtoShopServiceImpl
     public long deleteAttributeValue(final long attributeValuePk) {
         final AttrValueEntityShop valueEntityShop = attrValueEntityShopDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityShop.getAttribute().getEtype().getBusinesstype())) {
-            imageService.deleteImage(valueEntityShop.getVal(), "", systemService.getImageRepositoryDirectory());
+            imageService.deleteImage(valueEntityShop.getVal(),
+                    Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
+        } else if (Etype.FILE_BUSINESS_TYPE.equals(valueEntityShop.getAttribute().getEtype().getBusinesstype())) {
+            fileService.deleteFile(valueEntityShop.getVal(),
+                    Constants.SHOP_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
+        } else if (Etype.SYSFILE_BUSINESS_TYPE.equals(valueEntityShop.getAttribute().getEtype().getBusinesstype())) {
+            fileService.deleteFile(valueEntityShop.getVal(),
+                    Constants.SHOP_SYSFILE_REPOSITORY_URL_PATTERN, systemService.getSystemFileRepositoryDirectory());
         }
         attrValueEntityShopDao.delete(valueEntityShop);
         return valueEntityShop.getShop().getShopId();

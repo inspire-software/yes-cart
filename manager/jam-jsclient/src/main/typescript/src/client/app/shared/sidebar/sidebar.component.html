@@ -69,10 +69,10 @@
     </ul>
   </accordion-group>
 
-  <accordion-group>
+  <accordion-group *ngIf="menuType != 'CC'">
     <div accordion-heading>{{ 'PANEL_INVENTORY' | translate }}</div>
     <ul class="nav nav-second-level">
-      <li *ngIf="menuType != 'CC'">
+      <li>
         <a [routerLink]="['/fulfilment/inventory']" routerLinkActive="bg-info">{{ 'PANEL_INVENTORY_STOCK' | translate }}</a>
       </li>
       <li>
@@ -93,13 +93,13 @@
     </ul>
   </accordion-group>
 
-  <accordion-group>
+  <accordion-group *ngIf="menuType != 'CC'">
     <div accordion-heading>{{ 'PANEL_SHIPPING' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
         <a [routerLink]="['/shipping']" routerLinkActive="bg-info">{{ 'PANEL_SHIPPING_CARRIERS' | translate }}</a>
       </li>
-      <li *ngIf="menuType != 'CC'">
+      <li>
         <a [routerLink]="['/locations']" routerLinkActive="bg-info">{{ 'PANEL_SHIPPING_LOCATIONS' | translate }}</a>
       </li>
     </ul>
@@ -183,11 +183,9 @@
         <a [routerLink]="['/license']" routerLinkActive="bg-info">{{ 'PANEL_HELP_LICENSE' | translate }}</a>
       </li>
       <li>
-        <a href="http://www.inspire-software.com/confluence/display/YC3EN/YC+3.x.x+Wiki" target="_blank">{{ 'PANEL_HELP_DOCS' | translate }}</a>
+        <a href="{{ docLink }}" target="_blank">{{ 'PANEL_HELP_DOCS' | translate }}</a>
       </li>
-      <li>
-        <a href="http://www.yes-cart.org" target="_blank">YesCart.org</a>
-      </li>
+      <li [innerHTML]="copyNote"></li>
     </ul>
   </accordion-group>
 

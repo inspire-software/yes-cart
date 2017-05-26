@@ -14,32 +14,32 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.image.impl;
+package org.yes.cart.service.media.impl;
 
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 
 /**
  * User: denispavlov
  * Date: 28/01/2017
  * Time: 19:12
  */
-public class ImageNameStrategyCachedImpl implements ImageNameStrategy {
+public class MediaFileNameStrategyCachedImpl implements MediaFileNameStrategy {
 
-    private final ImageNameStrategy imageNameStrategy;
+    private final MediaFileNameStrategy mediaFileNameStrategy;
 
-    public ImageNameStrategyCachedImpl(final ImageNameStrategy imageNameStrategy) {
-        this.imageNameStrategy = imageNameStrategy;
+    public MediaFileNameStrategyCachedImpl(final MediaFileNameStrategy mediaFileNameStrategy) {
+        this.mediaFileNameStrategy = mediaFileNameStrategy;
     }
 
     /** {@inheritDoc} */
     public String getUrlPath() {
-        return imageNameStrategy.getUrlPath();
+        return mediaFileNameStrategy.getUrlPath();
     }
 
     /** {@inheritDoc} */
     public String getRelativeInternalRootDirectory() {
-        return imageNameStrategy.getRelativeInternalRootDirectory();
+        return mediaFileNameStrategy.getRelativeInternalRootDirectory();
     }
 
     /**
@@ -47,7 +47,7 @@ public class ImageNameStrategyCachedImpl implements ImageNameStrategy {
      */
     @Cacheable(value = "imageNameStrategy-resolveObjectCode")
     public String resolveObjectCode(final String url) {
-        return imageNameStrategy.resolveObjectCode(url);
+        return mediaFileNameStrategy.resolveObjectCode(url);
     }
 
     /**
@@ -55,7 +55,7 @@ public class ImageNameStrategyCachedImpl implements ImageNameStrategy {
      */
     @Cacheable(value = "imageNameStrategy-resolveLocale")
     public String resolveLocale(final String url) {
-        return imageNameStrategy.resolveLocale(url);
+        return mediaFileNameStrategy.resolveLocale(url);
     }
 
     /**
@@ -63,26 +63,26 @@ public class ImageNameStrategyCachedImpl implements ImageNameStrategy {
      */
     @Cacheable(value = "imageNameStrategy-resolveSuffix")
     public String resolveSuffix(final String url) {
-        return imageNameStrategy.resolveSuffix(url);
+        return mediaFileNameStrategy.resolveSuffix(url);
     }
 
     /** {@inheritDoc} */
     public String resolveFileName(final String url) {
-        return imageNameStrategy.resolveFileName(url);
+        return mediaFileNameStrategy.resolveFileName(url);
     }
 
     /** {@inheritDoc} */
     public String resolveRelativeInternalFileNamePath(final String fileName, final String code, final String locale) {
-        return imageNameStrategy.resolveRelativeInternalFileNamePath(fileName, code, locale);
+        return mediaFileNameStrategy.resolveRelativeInternalFileNamePath(fileName, code, locale);
     }
 
     /** {@inheritDoc} */
     public String resolveRelativeInternalFileNamePath(final String fileName, final String code, final String locale, final String width, final String height) {
-        return imageNameStrategy.resolveRelativeInternalFileNamePath(fileName, code, locale, width, height);
+        return mediaFileNameStrategy.resolveRelativeInternalFileNamePath(fileName, code, locale, width, height);
     }
 
     /** {@inheritDoc} */
     public String createRollingFileName(final String fileName, final String code, final String suffix, final String locale) {
-        return imageNameStrategy.createRollingFileName(fileName, code, suffix, locale);
+        return mediaFileNameStrategy.createRollingFileName(fileName, code, suffix, locale);
     }
 }

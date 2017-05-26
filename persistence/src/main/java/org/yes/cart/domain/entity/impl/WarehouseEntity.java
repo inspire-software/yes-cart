@@ -43,6 +43,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
 
     private int defaultStandardStockLeadTime;
     private int defaultBackorderStockLeadTime;
+    private boolean multipleShippingSupported;
 
     private Collection<ShopWarehouse> warehouseShop = new ArrayList<ShopWarehouse>(5);
 
@@ -141,6 +142,14 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
 
     public void setDefaultBackorderStockLeadTime(final int defaultBackorderStockLeadTime) {
         this.defaultBackorderStockLeadTime = defaultBackorderStockLeadTime;
+    }
+
+    public boolean isMultipleShippingSupported() {
+        return multipleShippingSupported;
+    }
+
+    public void setMultipleShippingSupported(final boolean multipleShippingSupported) {
+        this.multipleShippingSupported = multipleShippingSupported;
     }
 
     public Date getCreatedTimestamp() {

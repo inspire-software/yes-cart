@@ -402,7 +402,13 @@ public class CheckoutPage extends AbstractWebPage {
         final MarkupContainer rez = new Fragment(CONTENT_VIEW, PAYMENT_FRAGMENT, this);
         final ShoppingCart shoppingCart = getCurrentCart();
         final OrderInfo orderInfo = shoppingCart.getOrderInfo();
-        final boolean showMultipleDelivery = orderInfo.isMultipleDeliveryAvailable();
+        boolean showMultipleDelivery = false;
+        for (final Map.Entry<String, Boolean> available : orderInfo.getMultipleDeliveryAvailable().entrySet()) {
+            if (available.getValue() != null && available.getValue()) {
+                showMultipleDelivery = true;
+                break; // At least one supplier can do multi
+            }
+        }
         final boolean multipleDelivery = orderInfo.isMultipleDelivery();
 
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETPGLABEL,

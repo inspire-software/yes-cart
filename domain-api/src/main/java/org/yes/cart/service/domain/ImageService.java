@@ -17,7 +17,7 @@
 package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.entity.SeoImage;
-import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 
 import java.io.IOException;
 
@@ -114,7 +114,7 @@ public interface ImageService extends GenericService<SeoImage> {
      * @param url the
      * @return image name strategy
      */
-    ImageNameStrategy getImageNameStrategy(String url);
+    MediaFileNameStrategy getImageNameStrategy(String url);
 
     /**
      * Check if given image is in repository.

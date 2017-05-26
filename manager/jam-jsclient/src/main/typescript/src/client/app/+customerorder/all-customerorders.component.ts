@@ -247,6 +247,10 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   }
 
+  protected onSearchId() {
+    this.searchHelpShow = false;
+    this.customerorderFilter = '*';
+  }
 
   protected onSearchNumber() {
     this.searchHelpShow = false;
@@ -306,6 +310,21 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     //this.customerorderFilter = '++';
     this.statuses.forEach((_st:Pair<string, boolean>) => {
       _st.second = AllCustomerOrdersComponent._completed.includes(_st.first);
+    });
+    this.getFilteredCustomerorders();
+  }
+
+  protected onSearchStatusAllOrders() {
+    let _state:boolean = false;
+    this.statuses.forEach((_st:Pair<string, boolean>) => {
+      if (_st.first.indexOf('os.') == 0) {
+        _state = _state || _st.second;
+      }
+    });
+    this.statuses.forEach((_st:Pair<string, boolean>) => {
+      if (_st.first.indexOf('os.') == 0) {
+        _st.second = !_state;
+      }
     });
     this.getFilteredCustomerorders();
   }

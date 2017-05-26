@@ -24,7 +24,7 @@ import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/i
 import { ContentSelectComponent } from './../../shared/content/index';
 import { AttributeValuesComponent } from './../../shared/attributes/index';
 import { LogUtil } from './../../shared/log/index';
-
+import { LRUCache } from './../../shared/model/internal/cache.model';
 
 @Component({
   selector: 'yc-content',
@@ -70,6 +70,8 @@ export class ContentComponent implements OnInit, OnDestroy {
   private bodyEditChange:string;
 
   private searchHelpShow:boolean = false;
+
+  private cache:LRUCache = new LRUCache(10);
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('ContentComponent constructed');
@@ -128,13 +130,25 @@ export class ContentComponent implements OnInit, OnDestroy {
     this.winSub = WindowMessageEventBus.getWindowMessageEventBus().messageUpdated$.subscribe(content => {
       if (this._content != null && this._content.contentBodies != null) {
         let _update:any = content.data;
-        let _body:ContentBodyVO = this._content.contentBodies.find(body => {
-          return body.lang == _update.lang;
-        });
-        LogUtil.debug('ContentComponent update', _body, _update);
-        if (_body != null) {
-          _body.text = _update.text;
-          this.formChange();
+
+        if (_update.loaded) { // pop up ready
+
+          LogUtil.debug('ContentComponent onCMSEdit window is ready', _update.loaded);
+
+          let windowAndMsg:any = this.cache.getValue(_update.loaded);
+          if (windowAndMsg != null) {
+            LogUtil.debug('ContentComponent onCMSEdit posting message', windowAndMsg.msg);
+            windowAndMsg.window.postMessage(windowAndMsg.msg, '*');
+          }
+        } else { // actual update message
+          let _body:ContentBodyVO = this._content.contentBodies.find(body => {
+            return body.lang == _update.lang;
+          });
+          LogUtil.debug('ContentComponent update', _body, _update);
+          if (_body != null) {
+            _body.text = _update.text;
+            this.formChange();
+          }
         }
       }
     });
@@ -271,21 +285,31 @@ export class ContentComponent implements OnInit, OnDestroy {
     let _docBase = this.shopPreviewUrl;
     let _css = this.shopPreviewCss;
 
-    let myWindow = window.open('/yes-manager/resources/assets/editor/tinymce/editor.html', 'CMS', 'width=800,height=660');
-    myWindow.onload = function() {
-
-      let msg = {
-        shop: _shop,
-        docBase: _docBase,
-        previewCss: _css,
-        content: body
-      };
-
-      LogUtil.debug('ContentComponent onCMSEdit', msg);
-
-      myWindow.postMessage(msg, '*');
-
+    let msg = {
+      shop: _shop,
+      docBase: _docBase,
+      previewCss: _css,
+      content: body
     };
+
+    let id = 'cms' + Math.random();
+    let myWindow = window.open('/yes-manager/resources/assets/editor/tinymce/editor.html?lang=' + body.lang + '&id=' + id, 'CMS', 'width=800,height=660');
+
+    LogUtil.debug('ContentComponent onCMSEdit', msg);
+
+    this.cache.putValue(id, {
+      window: myWindow,
+      msg: msg
+    }, 5000);
+
+    //myWindow.addEventListener('message', function(event) {
+    //  myWindow['editorInit'](event);
+    //});
+
+    //setTimeout(function() {
+    //  myWindow.postMessage(msg, '*');
+    //}, 300);
+
 
   }
 

@@ -62,7 +62,15 @@
         <constructor-arg index="2" ref="cacheManager"/>
     </bean>
 
+    <bean id="categoryFileService" class="org.yes.cart.web.support.service.impl.CategoryFileServiceImpl">
+        <constructor-arg index="0" ref="cacheManager"/>
+    </bean>
+
     <bean id="productImageService" class="org.yes.cart.web.support.service.impl.ProductImageServiceImpl">
+        <constructor-arg index="0" ref="cacheManager"/>
+    </bean>
+
+    <bean id="productFileService" class="org.yes.cart.web.support.service.impl.ProductFileServiceImpl">
         <constructor-arg index="0" ref="cacheManager"/>
     </bean>
 
@@ -70,7 +78,15 @@
         <constructor-arg index="0" ref="cacheManager"/>
     </bean>
 
+    <bean id="brandFileService" class="org.yes.cart.web.support.service.impl.BrandFileServiceImpl">
+        <constructor-arg index="0" ref="cacheManager"/>
+    </bean>
+
     <bean id="shopImageService" class="org.yes.cart.web.support.service.impl.ShopImageServiceImpl">
+        <constructor-arg index="0" ref="cacheManager"/>
+    </bean>
+
+    <bean id="shopFileService" class="org.yes.cart.web.support.service.impl.ShopFileServiceImpl">
         <constructor-arg index="0" ref="cacheManager"/>
     </bean>
 

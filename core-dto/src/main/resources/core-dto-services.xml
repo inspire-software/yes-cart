@@ -66,8 +66,9 @@
                 <constructor-arg index="5" ref="dtoAttributeService"/>
                 <constructor-arg index="6" ref="attrValueEntityCategoryDao"/>
                 <constructor-arg index="7" ref="imageService"/>
-                <constructor-arg index="8" ref="dtoAssemblerAdaptersRepository"/>
-                <constructor-arg index="9" ref="systemService"/>
+                <constructor-arg index="8" ref="fileService"/>
+                <constructor-arg index="9" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="10" ref="systemService"/>
             </bean>
         </property>
     </bean>
@@ -81,8 +82,9 @@
                 <constructor-arg index="3" ref="dtoAttributeService"/>
                 <constructor-arg index="4" ref="attrValueEntityCategoryDao"/>
                 <constructor-arg index="5" ref="imageService"/>
-                <constructor-arg index="6" ref="dtoAssemblerAdaptersRepository"/>
-                <constructor-arg index="7" ref="systemService"/>
+                <constructor-arg index="6" ref="fileService"/>
+                <constructor-arg index="7" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="8" ref="systemService"/>
             </bean>
         </property>
     </bean>
@@ -110,10 +112,11 @@
                 <constructor-arg index="5" ref="dtoEtypeService"/>
                 <constructor-arg index="6" ref="attrValueEntityProductDao"/>
                 <constructor-arg index="7" ref="imageService"/>
-                <constructor-arg index="8" ref="dtoProductTypeAttrService"/>
-                <constructor-arg index="9" ref="dtoProductCategoryService"/>
-                <constructor-arg index="10" ref="systemService"/>
-                <constructor-arg index="11" ref="languageService"/>
+                <constructor-arg index="8" ref="fileService"/>
+                <constructor-arg index="9" ref="dtoProductTypeAttrService"/>
+                <constructor-arg index="10" ref="dtoProductCategoryService"/>
+                <constructor-arg index="11" ref="systemService"/>
+                <constructor-arg index="12" ref="languageService"/>
                 <lookup-method name="lookupDtoProductSkuService" bean="dtoProductSkuService"/>
             </bean>
         </property>
@@ -129,7 +132,8 @@
                 <constructor-arg index="4" ref="dtoAssemblerAdaptersRepository"/>
                 <constructor-arg index="5" ref="priceService"/>
                 <constructor-arg index="6" ref="imageService"/>
-                <constructor-arg index="7" ref="systemService"/>
+                <constructor-arg index="7" ref="fileService"/>
+                <constructor-arg index="8" ref="systemService"/>
                 <lookup-method name="lookupDtoProductService" bean="dtoProductService"/>
             </bean>
         </property>
@@ -159,8 +163,9 @@
                 <constructor-arg index="3" ref="dtoAttributeService"/>
                 <constructor-arg index="4" ref="attrValueEntityShopDao"/>
                 <constructor-arg index="5" ref="imageService"/>
-                <constructor-arg index="6" ref="dtoAssemblerAdaptersRepository"/>
-                <constructor-arg index="7" ref="systemService"/>
+                <constructor-arg index="6" ref="fileService"/>
+                <constructor-arg index="7" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="8" ref="systemService"/>
             </bean>
         </property>
     </bean>
@@ -206,8 +211,9 @@
                 <constructor-arg index="2" ref="dtoAttributeService"/>
                 <constructor-arg index="3" ref="attrValueEntityBrandDao"/>
                 <constructor-arg index="4" ref="imageService"/>
-                <constructor-arg index="5" ref="dtoAssemblerAdaptersRepository"/>
-                <constructor-arg index="6" ref="systemService"/>
+                <constructor-arg index="5" ref="fileService"/>
+                <constructor-arg index="6" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="7" ref="systemService"/>
             </bean>
         </property>
     </bean>
@@ -390,6 +396,10 @@
                 <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
+    </bean>
+
+    <bean id="dtoFileService" class="org.yes.cart.service.dto.impl.DtoFileServiceImpl">
+        <constructor-arg index="0" ref="fileService"/>
     </bean>
 
     <bean id="dtoProductCategoryService" parent="txProxyTemplate">

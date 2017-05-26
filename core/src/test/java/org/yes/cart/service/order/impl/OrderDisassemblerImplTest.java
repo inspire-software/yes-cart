@@ -311,7 +311,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         setIPAddress(shoppingCart, "127.0.0.1");
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         assertNotNull(customerOrder);
         customerOrder =  customerOrderService.create(customerOrder);
 
@@ -454,7 +454,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         setOffer(shoppingCart, "CC_TEST1", new BigDecimal("150.00"));
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         assertNotNull(customerOrder);
         customerOrder =  customerOrderService.create(customerOrder);
 
@@ -607,5 +607,16 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         commands.execute(shoppingCart, (Map) params);
 
     }
+
+
+    private Map<String, Boolean> getMultiSelection(ShoppingCart cart) {
+        final Map<String, Boolean> single = new HashMap<String, Boolean>();
+        final boolean selected = cart.getOrderInfo().isMultipleDelivery();
+        for (final Map.Entry<String, Boolean> allowed : cart.getOrderInfo().getMultipleDeliveryAvailable().entrySet()) {
+            single.put(allowed.getKey(), !selected || !allowed.getValue());
+        }
+        return single;
+    }
+
 
 }

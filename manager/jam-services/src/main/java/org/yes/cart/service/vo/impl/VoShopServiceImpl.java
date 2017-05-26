@@ -124,6 +124,8 @@ public class VoShopServiceImpl implements VoShopService {
                         VoAttrValueShop.class,
                         AttrValueShopDTO.class,
                         Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN,
+                        Constants.SHOP_FILE_REPOSITORY_URL_PATTERN,
+                        Constants.SHOP_SYSFILE_REPOSITORY_URL_PATTERN,
                         this.dtoShopService,
                         this.dtoAttributeService,
                         this.voAssemblySupport,
@@ -264,6 +266,24 @@ public class VoShopServiceImpl implements VoShopService {
         if (langs != null) {
             langs.setVal(org.apache.commons.lang.StringUtils.join(languageService.getSupportedLanguages(), ','));
             dtoShopService.createEntityAttributeValue(langs);
+        }
+
+
+    }
+
+    protected void createSubShopDefaults(final ShopDTO shopDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        // Setup basic properties
+        final List<AttrValueShopDTO> avs = (List) dtoShopService.getEntityAttributes(shopDTO.getShopId());
+        final Map<String, AttrValueShopDTO> avsMap = new HashMap<String, AttrValueShopDTO>();
+        for (final AttrValueShopDTO av : avs) {
+            avsMap.put(av.getAttributeDTO().getCode(), av);
+        }
+
+        final AttrValueShopDTO searchIncludeCats = avsMap.get(AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
+        if (searchIncludeCats != null) {
+            searchIncludeCats.setVal(Boolean.TRUE.toString());
+            dtoShopService.createEntityAttributeValue(searchIncludeCats);
         }
 
 

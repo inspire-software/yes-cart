@@ -98,7 +98,7 @@ public interface OrderInfo extends Serializable {
      *
      * @return true if multiple delivery is available.
      */
-    boolean isMultipleDeliveryAvailable();
+    Map<String, Boolean> getMultipleDeliveryAvailable();
 
     /**
      * Get additional details stored on this cart.

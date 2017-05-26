@@ -91,7 +91,8 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
      * @param locale             image locale
      * @param width              image width
      * @param height             image height
-     * @param imageName          name of image    @return image uri.
+     * @param imageName          name of image
+     * @return image uri.
      */
     public String getImageURI(final Object object,
                               final String servletContextPath,
@@ -100,7 +101,7 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
                               final String height,
                               final String imageName) {
 
-        final String urlPattern = getImageRepositoryUrlPattern(object);
+        final String urlPattern = getRepositoryUrlPattern(object);
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(servletContextPath);
         stringBuilder.append(urlPattern);
@@ -151,7 +152,7 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
                            final String attrName,
                            String attrVal) {
 
-        final String urlPattern = getImageRepositoryUrlPattern(attributable);
+        final String urlPattern = getRepositoryUrlPattern(attributable);
 
         final String cacheKey = createCacheKey(getEntityObjectCacheKey(attributable), urlPattern, locale, width, height, attrName, attrVal);
         String image = getFromValueWrapper(IMAGE_URI_CACHE.get(cacheKey));
@@ -169,14 +170,14 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
 
     private Pair<String, String> createNoDefaultImagePair(final Attributable attributable) {
 
-        return new Pair<String, String>(getImageAttributePrefix(attributable) + "0", Constants.NO_IMAGE);
+        return new Pair<String, String>(getAttributePrefix(attributable) + "0", Constants.NO_IMAGE);
 
     }
 
     /** {@inheritDoc} */
     public List<Pair<String, String>> getImageAttributeFileNames(final Attributable attributable, final String lang) {
 
-        final String prefix = getImageAttributePrefix(attributable);
+        final String prefix = getAttributePrefix(attributable);
         final String cacheKey = createCacheKey(getEntityObjectCacheKey(attributable), prefix, lang);
         List<Pair<String, String>> images = getFromValueWrapper(OBJECT_IMAGES_CACHE.get(cacheKey));
         if (images == null) {
@@ -226,7 +227,7 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
      *
      * @return image repository url pattern.
      */
-    protected abstract String getImageRepositoryUrlPattern(Object attributableOrStrategy);
+    protected abstract String getRepositoryUrlPattern(Object attributableOrStrategy);
 
     /**
      *
@@ -234,6 +235,6 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
      *
      * @return image attribute prefix
      */
-    protected abstract String getImageAttributePrefix(Object attributableOrStrategy);
+    protected abstract String getAttributePrefix(Object attributableOrStrategy);
 
 }

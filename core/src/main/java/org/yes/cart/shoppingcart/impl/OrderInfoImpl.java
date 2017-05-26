@@ -36,7 +36,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
 
     private String paymentGatewayLabel;
     private boolean multipleDelivery;
-    private boolean multipleDeliveryAvailable;
+    private Map<String, Boolean> multipleDeliveryAvailable;
     private boolean separateBillingAddress;
     private boolean billingAddressNotRequired;
     private boolean deliveryAddressNotRequired;
@@ -204,21 +204,42 @@ public class OrderInfoImpl implements MutableOrderInfo {
         this.multipleDelivery = multipleDelivery;
     }
 
-    /** {@inheritDoc} */
-    public boolean isMultipleDeliveryAvailable() {
-        return multipleDeliveryAvailable;
+
+    protected Map<String, Boolean> getMultipleDeliveryAvailableInternal() {
+        if (this.multipleDeliveryAvailable == null) {
+            this.multipleDeliveryAvailable = new HashMap<String, Boolean>();
+        }
+        return this.multipleDeliveryAvailable;
     }
 
     /** {@inheritDoc} */
-    public void setMultipleDeliveryAvailable(final boolean multipleDeliveryAvailable) {
-        this.multipleDeliveryAvailable = multipleDeliveryAvailable;
+    public Map<String, Boolean> getMultipleDeliveryAvailable() {
+        return Collections.unmodifiableMap(getMultipleDeliveryAvailableInternal());
+    }
+
+    /** {@inheritDoc} */
+    public void setMultipleDeliveryAvailable(final Map<String, Boolean> multipleDeliveryAvailable) {
+        getMultipleDeliveryAvailableInternal().clear();
+        if (multipleDeliveryAvailable != null) {
+            this.multipleDeliveryAvailable.putAll(multipleDeliveryAvailable);
+        }
+    }
+
+
+    /** {@inheritDoc} */
+    public void putMultipleDeliveryAvailable(final String supplier, final Boolean multipleDeliveryAvailable) {
+        if (multipleDeliveryAvailable == null) {
+            getMultipleDeliveryAvailableInternal().remove(supplier);
+        } else {
+            getMultipleDeliveryAvailableInternal().put(supplier == null ? "" : supplier, multipleDeliveryAvailable);
+        }
     }
 
     /** {@inheritDoc} */
     public void clearInfo() {
         this.paymentGatewayLabel = null;
         this.multipleDelivery = false;
-        this.multipleDeliveryAvailable = false;
+        getMultipleDeliveryAvailableInternal().clear();
         this.separateBillingAddress = false;
         this.billingAddressNotRequired = false;
         this.deliveryAddressNotRequired = false;

@@ -209,7 +209,33 @@ public class SystemServiceImpl implements SystemService {
 
         final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_IMAGE_VAULT);
         if (StringUtils.isBlank(attrValue)) {
-            return "context://default/imagevault/";
+            return "context://../imagevault/";
+        }
+
+        return addTailFileSeparator(attrValue);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getFileRepositoryDirectory() {
+
+        final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_FILE_VAULT);
+        if (StringUtils.isBlank(attrValue)) {
+            return "context://../filevault/";
+        }
+
+        return addTailFileSeparator(attrValue);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getSystemFileRepositoryDirectory() {
+
+        final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_SYSFILE_VAULT);
+        if (StringUtils.isBlank(attrValue)) {
+            return "context://../sysfilevault/";
         }
 
         return addTailFileSeparator(attrValue);

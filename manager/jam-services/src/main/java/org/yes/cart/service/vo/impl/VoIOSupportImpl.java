@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.dto.DtoFileService;
 import org.yes.cart.service.dto.DtoImageService;
 import org.yes.cart.service.vo.VoIOSupport;
 
@@ -42,15 +43,65 @@ public class VoIOSupportImpl implements VoIOSupport {
     private static final Logger LOG = LoggerFactory.getLogger(VoIOSupportImpl.class);
 
     private final DtoImageService dtoImageService;
+    private final DtoFileService dtoFileService;
     private final SystemService systemService;
 
 
     public VoIOSupportImpl(final DtoImageService dtoImageService,
+                           final DtoFileService dtoFileService,
                            final SystemService systemService) {
         this.dtoImageService = dtoImageService;
+        this.dtoFileService = dtoFileService;
         this.systemService = systemService;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public String addFileToRepository(final String fileName,
+                                      final String code,
+                                      final String attributeFileCode,
+                                      final String base64URL,
+                                      final String storagePrefix) throws IOException {
+
+        final String path = systemService.getFileRepositoryDirectory();
+
+        final byte[] fileBody = getByteArray(base64URL);
+        if (fileBody == null || fileBody.length == 0) {
+            throw new IOException("Unable to read BASE64 file");
+        }
+
+        return dtoFileService.addFileToRepository(
+                ensureCorrectFileName(fileName, code, attributeFileCode),
+                code, fileBody, storagePrefix, path
+        );
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public String addSystemFileToRepository(final String fileName,
+                                            final String code,
+                                            final String attributeFileCode,
+                                            final String base64URL,
+                                            final String storagePrefix) throws IOException {
+
+        final String path = systemService.getSystemFileRepositoryDirectory();
+
+        final byte[] fileBody = getByteArray(base64URL);
+        if (fileBody == null || fileBody.length == 0) {
+            throw new IOException("Unable to read BASE64 file");
+        }
+
+        return dtoFileService.addFileToRepository(
+                ensureCorrectFileName(fileName, code, attributeFileCode),
+                code, fileBody, storagePrefix, path
+        );
+
+    }
 
     /**
      * {@inheritDoc}
@@ -75,7 +126,7 @@ public class VoIOSupportImpl implements VoIOSupport {
 
     }
 
-    private static final Pattern IMAGE_ATTR_PATTERN = Pattern.compile("^([^\\d]*)(\\d+)(_[a-z]{2})?$");
+    private static final Pattern MEDIA_ATTR_PATTERN = Pattern.compile("^([^\\d]*)(\\d+)(_[a-z]{2})?$");
 
     static String ensureCorrectFileName(final String fileName, final String objectCode, final String attributeImageCode) {
 
@@ -126,7 +177,7 @@ public class VoIOSupportImpl implements VoIOSupport {
 
     private static String determineFileSuffix(final String attributeImageCode) {
         final String suffix;
-        final Matcher match = IMAGE_ATTR_PATTERN.matcher(attributeImageCode);
+        final Matcher match = MEDIA_ATTR_PATTERN.matcher(attributeImageCode);
         if (match.matches()) {
             if (match.group(3) != null) {
                 // with language

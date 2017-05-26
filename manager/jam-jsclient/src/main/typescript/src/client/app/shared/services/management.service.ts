@@ -97,6 +97,31 @@ export class ManagementService {
     return ui;
   }
 
+  /**
+   * Get current user info,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getMyUI() {
+    return this.http.get(this._serviceBaseUrl + '/myui')
+      .map(res => {
+        let vals = <any> res.json();
+        if (vals.hasOwnProperty('SYSTEM_PANEL_HELP_DOCS')) {
+          let valDoc = vals['SYSTEM_PANEL_HELP_DOCS'];
+          if (valDoc != null && valDoc != '') {
+            Config.UI_DOC_LINK = valDoc;
+          }
+        }
+        if (vals.hasOwnProperty('SYSTEM_PANEL_HELP_COPYRIGHT')) {
+          let valCopy = vals['SYSTEM_PANEL_HELP_COPYRIGHT'];
+          if (valCopy != null && valCopy != '') {
+            Config.UI_COPY_NOTE = valCopy;
+          }
+        }
+        return vals;
+      })
+      .catch(this.handleError);
+  }
+
 
   /**
    * Get current user info,

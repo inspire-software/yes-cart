@@ -101,6 +101,19 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     return flags;
   }
 
+  getLineCost(row:CustomerOrderLineVO):number {
+
+    if (row.allValues != null) {
+      let idx = row.allValues.findIndex(val => {
+        return val.first === 'ItemCostPrice';
+      });
+      if (idx != -1) {
+        return +(row.allValues[idx].second.first);
+      }
+    }
+    return 0;
+  }
+
   getOrderListPriceFlags(order:CustomerOrderVO):string {
 
     let flags = '';
@@ -136,7 +149,20 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     let promos:PromotionVO[] = [];
     if (codes != null) {
       codes.forEach(code => {
-        promos.push(this._promotions[code]);
+        let promo = this._promotions[code];
+        if (promo != null) {
+          promos.push(promo);
+        } else {
+          promos.push({
+            promotionId : 0,
+            code : code, shopCode : null, currency : null, rank : 0,
+            name : code, description : null,
+            displayNames : [], displayDescriptions : [],
+            promoType : null, promoAction : null, eligibilityCondition : null, promoActionContext : null,
+            couponTriggered : false, canBeCombined : false, enabled : false,
+            enabledFrom : null, enabledTo : null, tag : null
+          });
+        }
       });
     }
     LogUtil.debug('CustomerOrderComponent getPromotions', codes, promos);
@@ -154,6 +180,12 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     return '';
   }
 
+  protected isOrderType() {
+
+    return this._customerorder.orderStatus != null && this._customerorder.orderStatus.indexOf('os.') == 0;
+
+  }
+
   protected isLineDeliveryHasNext(row:CustomerOrderLineVO) {
     let delivery = this._customerorder.deliveries.find(delivery => {
       return delivery.deliveryNum == row.deliveryNum;
@@ -162,7 +194,7 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
   }
 
   protected isDeliveryHasNextOption(row:CustomerOrderDeliveryInfoVO) {
-    return row.deliveryStatusNextOptions != null && row.deliveryStatusNextOptions.length > 0;
+    return row != null && row.deliveryStatusNextOptions != null && row.deliveryStatusNextOptions.length > 0;
   }
 
 

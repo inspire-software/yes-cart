@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.AttrValueDTO;
+import org.yes.cart.domain.entity.Etype;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.VoAttrValue;
@@ -43,6 +44,8 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
     private final Class<V> voClass;
     private final Class<D> dtoClass;
     private final String imageStoragePrefix;
+    private final String fileStoragePrefix;
+    private final String sysfileStoragePrefix;
     private final GenericAttrValueService genericAttrValueService;
     private final DtoAttributeService dtoAttributeService;
     private final VoAssemblySupport voAssemblySupport;
@@ -51,6 +54,8 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
     protected VoAttributesCRUDTemplate(final Class<V> voClass,
                                        final Class<D> dtoClass,
                                        final String imageStoragePrefix,
+                                       final String fileStoragePrefix,
+                                       final String sysfileStoragePrefix,
                                        final GenericAttrValueService genericAttrValueService,
                                        final DtoAttributeService dtoAttributeService,
                                        final VoAssemblySupport voAssemblySupport,
@@ -58,6 +63,8 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
         this.voClass = voClass;
         this.dtoClass = dtoClass;
         this.imageStoragePrefix = imageStoragePrefix;
+        this.fileStoragePrefix = fileStoragePrefix;
+        this.sysfileStoragePrefix = sysfileStoragePrefix;
         this.genericAttrValueService = genericAttrValueService;
         this.dtoAttributeService = dtoAttributeService;
         this.voAssemblySupport = voAssemblySupport;
@@ -104,7 +111,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
             final V next = allIt.next();
             if (skipAttributesInView(next.getAttribute().getCode())) {
                 allIt.remove();
-            } else if (next.getAttrvalueId() > 0L && "Image".equals(next.getAttribute().getEtypeName())) {
+            } else if (next.getAttrvalueId() > 0L && Etype.IMAGE_BUSINESS_TYPE.equals(next.getAttribute().getEtypeName())) {
                 if (StringUtils.isNotBlank(next.getVal())) {
                     next.setValBase64Data(
                             voIOSupport.getImageAsBase64(next.getVal(), imageObjectCode, imageStoragePrefix)
@@ -168,7 +175,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                 // update mode
                 final D dto = existing.get(item.getFirst().getAttrvalueId());
                 if (dto != null) {
-                    if ("Image".equals(dto.getAttributeDTO().getEtypeName())) {
+                    if (Etype.IMAGE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
                         final String existingImage = voIOSupport.
                                 getImageAsBase64(dto.getVal(), imageCode, this.imageStoragePrefix);
                         if (existingImage == null || !existingImage.equals(item.getFirst().getValBase64Data())) {
@@ -184,6 +191,28 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                             item.getFirst().setVal(formattedFilename);
                             // TODO Image SEO
                         }
+                    } else if (Etype.FILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
+                        String formattedFilename = item.getFirst().getVal();
+                        formattedFilename = voIOSupport.
+                                addFileToRepository(
+                                        formattedFilename,
+                                        imageCode,
+                                        dto.getAttributeDTO().getCode(),
+                                        item.getFirst().getValBase64Data(),
+                                        this.fileStoragePrefix
+                                );
+                        item.getFirst().setVal(formattedFilename);
+                    } else if (Etype.SYSFILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
+                        String formattedFilename = item.getFirst().getVal();
+                        formattedFilename = voIOSupport.
+                                addSystemFileToRepository(
+                                        formattedFilename,
+                                        imageCode,
+                                        dto.getAttributeDTO().getCode(),
+                                        item.getFirst().getValBase64Data(),
+                                        this.fileStoragePrefix
+                                );
+                        item.getFirst().setVal(formattedFilename);
                     }
                     asm.assembleDto(dto, item.getFirst());
                     genericAttrValueService.updateEntityAttributeValue(dto);
@@ -194,7 +223,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                 // insert mode
                 final D dto = (D) genericAttrValueService.getNewAttribute(objectId);
                 dto.setAttributeDTO(dtoAttributeService.getById(item.getFirst().getAttribute().getAttributeId()));
-                if ("Image".equals(dto.getAttributeDTO().getEtypeName())) {
+                if (Etype.IMAGE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
                     String formattedFilename = item.getFirst().getVal();
                     formattedFilename = voIOSupport.
                             addImageToRepository(
@@ -206,6 +235,28 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                             );
                     item.getFirst().setVal(formattedFilename);
                     // TODO Image SEO
+                } else if (Etype.FILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
+                    String formattedFilename = item.getFirst().getVal();
+                    formattedFilename = voIOSupport.
+                            addFileToRepository(
+                                    formattedFilename,
+                                    imageCode,
+                                    dto.getAttributeDTO().getCode(),
+                                    item.getFirst().getValBase64Data(),
+                                    this.fileStoragePrefix
+                            );
+                    item.getFirst().setVal(formattedFilename);
+                } else if (Etype.SYSFILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
+                    String formattedFilename = item.getFirst().getVal();
+                    formattedFilename = voIOSupport.
+                            addSystemFileToRepository(
+                                    formattedFilename,
+                                    imageCode,
+                                    dto.getAttributeDTO().getCode(),
+                                    item.getFirst().getValBase64Data(),
+                                    this.sysfileStoragePrefix
+                            );
+                    item.getFirst().setVal(formattedFilename);
                 }
                 asm.assembleDto(dto, item.getFirst());
                 this.genericAttrValueService.createEntityAttributeValue(dto);

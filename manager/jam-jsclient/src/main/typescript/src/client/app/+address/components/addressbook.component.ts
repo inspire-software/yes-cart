@@ -414,13 +414,15 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
   protected getFormattedAddress(address:AddressVO) {
 
-    let pk = address.addressId;
-    let formatted = this.addressBook.formattedAddresses.find(item => {
-      return pk == item.first;
-    });
+    if (this.addressBook != null) {
+      let pk = address.addressId;
+      let formatted = this.addressBook.formattedAddresses.find(item => {
+        return pk == item.first;
+      });
 
-    if (formatted != null) {
-      return formatted.second; // if not in <pre/> then => .replace('\r\n', '<br/>').replace('\r', '<br/>').replace('\n', '<br/>');
+      if (formatted != null) {
+        return formatted.second; // if not in <pre/> then => .replace('\r\n', '<br/>').replace('\r', '<br/>').replace('\n', '<br/>');
+      }
     }
 
     return address.addrline1 + (address.addrline2 ? ' ' + address.addrline2 : '') + '\n' +

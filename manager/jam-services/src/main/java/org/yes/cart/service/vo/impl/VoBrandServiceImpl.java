@@ -67,6 +67,8 @@ public class VoBrandServiceImpl implements VoBrandService {
                         VoAttrValueBrand.class,
                         AttrValueBrandDTO.class,
                         Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN,
+                        Constants.BRAND_FILE_REPOSITORY_URL_PATTERN,
+                        Constants.BRAND_SYSFILE_REPOSITORY_URL_PATTERN,
                         this.dtoBrandService,
                         this.dtoAttributeService,
                         this.voAssemblySupport,

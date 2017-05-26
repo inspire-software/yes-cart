@@ -16,6 +16,11 @@
 
 package org.yes.cart.constants;
 
+import org.yes.cart.service.media.impl.BrandMediaFileNameStrategyImpl;
+import org.yes.cart.service.media.impl.CategoryMediaFileNameStrategyImpl;
+import org.yes.cart.service.media.impl.ProductMediaFileNameStrategyImpl;
+import org.yes.cart.service.media.impl.ShopMediaFileNameStrategyImpl;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -80,27 +85,22 @@ public interface ServiceSpringKeys {
     String IMAGE_SERVICE = "imageService";
 
     /**
-     * {@link org.yes.cart.service.image.ImageNameStrategyResolver} bean key.
-     */
-    String IMAGE_NAME_STRATEGY_RESOLVER = "imageNameStrategyResolver";
-
-    /**
-     * {@link org.yes.cart.service.image.impl.BrandImageNameStrategyImpl} bean key.
+     * {@link BrandMediaFileNameStrategyImpl} bean key.
      */
     String BRAND_IMAGE_NAME_STRATEGY = "brandImageNameStrategy";
 
     /**
-     * {@link org.yes.cart.service.image.impl.ShopImageNameStrategyImpl} bean key.
+     * {@link ShopMediaFileNameStrategyImpl} bean key.
      */
     String SHOP_IMAGE_NAME_STRATEGY = "shopImageNameStrategy";
 
     /**
-     * {@link org.yes.cart.service.image.impl.CategoryImageNameStrategyImpl} bean key.
+     * {@link CategoryMediaFileNameStrategyImpl} bean key.
      */
     String CATEGORY_IMAGE_NAME_STRATEGY = "categoryImageNameStrategy";
 
     /**
-     * {@link org.yes.cart.service.image.impl.ProductImageNameStrategyImpl} bean key.
+     * {@link ProductMediaFileNameStrategyImpl} bean key.
      */
     String PRODUCT_IMAGE_NAME_STRATEGY = "productImageNameStrategy";
 

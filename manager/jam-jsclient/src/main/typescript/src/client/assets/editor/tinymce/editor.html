@@ -1,8 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="tinymce.min.js"></script>
-  <script>
+  <script type="text/javascript" src="tinymce.min.js"></script>
+  <script type="text/javascript">
+
+    function getUrlParameter(sParam) {
+      var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+      for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+          return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+      }
+      return null;
+    };
+
+    window.msgId = getUrlParameter('id');
+
     function contentSubmit() {
       window.opener.postMessage({ lang: window.contentlang, text: document.getElementById('content').value }, '*');
       return false;
@@ -25,9 +44,15 @@
       var _content = _msg.content;
       var _lang = _content.lang;
 
-      document.write('<form action="#" onsubmit="contentSubmit()" data-shop-docbase="' + _docBase + '" data-shop-css="' + _css + '"><textarea id="content" name="content">' + _content.text + '</textarea></form>');
-
       window.contentlang = _lang;
+
+      var _form = document.getElementById('contentform');
+      _form.style.display = 'block';
+      _form.setAttribute('data-shop-docbase', _docBase);
+      _form.setAttribute('data-shop-css', _css);
+
+      var _textarea = document.getElementById('content');
+      _textarea.value = _content.text;
 
       tinymce.init({
         selector: 'textarea',
@@ -56,12 +81,17 @@
       });
 
       var _load = document.getElementById('loading');
-      if (_load && _load.parent) {
-        _load.parent.removeChild(_load);
+      if (_load) {
+        _load.style.display = 'none';
       }
-
     });
+    window.onload = function() {
+      window.opener.postMessage({ loaded: window.msgId  }, '*');
+    }
   </script>
 </head>
-<body><img id="loading" src="../../img/ajax-loader.gif"></body>
+<body>
+<img id="loading" src="../../img/ajax-loader.gif">
+<form id="contentform" action="#" onsubmit="contentSubmit()" style="display:none;"><textarea id="content" name="content"></textarea></form>
+</body>
 </html>

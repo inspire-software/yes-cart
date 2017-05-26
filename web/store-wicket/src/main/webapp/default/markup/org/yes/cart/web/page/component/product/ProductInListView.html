@@ -21,45 +21,48 @@
 
     <div class="col-xs-12 col-sm-6 col-md-6">
 
-        <div class="thumbnail">
+        <div class="thumbnail" itemscope itemtype="http://schema.org/Product">
 
             <div class="product-name-holder">
-                <a wicket:id="productLinkName" rel="bookmark">
-                    <span  wicket:id="name">[name]</span>
+                <a wicket:id="productLinkName" rel="bookmark" itemprop="url">
+                    <span  wicket:id="name" itemprop="name">[name]</span>
                 </a>
             </div>
 
-            <div class="text-right">
-                <a wicket:id="addToCartLink" class="btn btn-primary2 js-buy" rel="nofollow">
-                    <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;
-                    <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
-                </a>
-                <a wicket:id="productLinkAlternative" class="btn btn-primary2" rel="nofollow">
-                    <span wicket:id="viewAlternativesLinkLabel">[view alternatives when not in stock]</span>
-                </a>
-            </div>
+            <div  itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                <div class="text-right">
+                    <a wicket:id="addToCartLink" class="btn btn-primary2 js-buy" rel="nofollow">
+                        <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;
+                        <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
+                        <link itemprop="availability" href="http://schema.org/InStock"/>
+                    </a>
+                    <a wicket:id="productLinkAlternative" class="btn btn-primary2" rel="nofollow">
+                        <span wicket:id="viewAlternativesLinkLabel">[view alternatives when not in stock]</span>
+                    </a>
+                </div>
 
-            <div class="product-price-holder">
-                <wicket:container wicket:id="priceView">
-                    [price]
-                </wicket:container>
+                <div class="product-price-holder">
+                    <wicket:container wicket:id="priceView">
+                        [price]
+                    </wicket:container>
+                </div>
             </div>
 
             <div class="text-center">
                 <a wicket:id="productLinkImage" rel="bookmark">
-                    <img wicket:id="productDefaultImage"/>
+                    <img wicket:id="productDefaultImage"  itemprop="image"/>
                 </a>
             </div>
 
             <div class="product-code-holder">
                 <wicket:message key="skuCode">[sku.code:]</wicket:message>
                 <a wicket:id="productLinkSku" rel="bookmark">
-                    <span wicket:id="skuCode">[sku num]</span>
+                    <span wicket:id="skuCode" itemprop="productID">[sku num]</span>
                 </a>
             </div>
 
             <div class="caption">
-                <span wicket:id="description">[description Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s]</span>
+                <span wicket:id="description" itemprop="description">[description Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s]</span>
             </div>
 
         </div>

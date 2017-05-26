@@ -732,3 +732,62 @@ update TATTRIBUTE set name = 'Tax: Enable price tax information for customer typ
 update TATTRIBUTE set name = 'Tax: Show net prices for customer types (CSV)', ETYPE_ID = 1004 where CODE = 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET';
 update TATTRIBUTE set name = 'Tax: Show tax amount for customer types (CSV)', ETYPE_ID = 1004 where CODE = 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT';
 
+--
+-- YC-787 Fulfilment centres allow/block part shipment
+--
+
+alter table TWAREHOUSE add column MULTI_SHIP_SUPPORTED bit not null default 0;
+-- alter table TWAREHOUSE add column MULTI_SHIP_SUPPORTED smallint not null DEFAULT 0;
+
+
+--
+-- YC-712 File attachments attributes
+--
+
+INSERT INTO TETYPE (ETYPE_ID, JAVATYPE, BUSINESSTYPE, GUID) VALUES (1013, 'java.lang.String', 'File', 'File');
+INSERT INTO TETYPE (ETYPE_ID, JAVATYPE, BUSINESSTYPE, GUID) VALUES (1014, 'java.lang.String', 'SystemFile', 'SystemFile');
+
+update TATTRIBUTE set  DESCRIPTION = 'Root directory for image repository.
+Default: context://../imagevault
+Recommended: file:///home/yc/server/share/imagevault' where CODE = 'SYSTEM_IMAGE_VAULT';
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11120,  'SYSTEM_FILE_VAULT', 'SYSTEM_FILE_VAULT',  1,  NULL,  'System\\File Root directory for image repository',
+  'Root directory for file repository.
+Default: context://../filevault
+Recommended: file:///home/yc/server/share/filevault', 1001,  1000, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11121,  'SYSTEM_SYSFILE_VAULT', 'SYSTEM_SYSFILE_VAULT',  1,  NULL,  'System\\System File Root directory for image repository',
+  'Root directory for secure file repository (no storefont access)
+Default: context://../sysfilevault
+Recommended: file:///home/yc/server/share/sysfilevault', 1001,  1000, 0, 0, 0, 0);
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11306,  'SHOP_FILE0',  'SHOP_FILE0',  1,  NULL,  'Shop: Shop file',  null,  1013, 1001, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11307,  'SHOP_SYSFILE0',  'SHOP_SYSFILE0',  1,  NULL,  'Shop: Shop system file',  null,  1014, 1001, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11309,  'BRAND_FILE0', 'BRAND_FILE0',  1,  NULL,  'Brand file',  null,  1013, 1005, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11320,  'CATEGORY_FILE0', 'CATEGORY_FILE0',  0,  NULL,  'Category file',   'Category file',  1003, 1002, 0, 0, 0, 0);
+
+INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1024,'context://../filevault','SYSTEM_FILE_VAULT',100, 'YC_SYSTEM_FILE_VAULT');
+INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1025,'context://../sysfilevault','SYSTEM_SYSFILE_VAULT',100, 'YC_SYSTEM_SYSFILE_VAULT');
+
+--
+-- YC-000 YC help section config
+--
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11029,  'SYSTEM_PANEL_HELP_DOCS', 'SYSTEM_PANEL_HELP_DOCS',  1,  NULL,  'Admin\\Help doc link',
+  'Help doc link in Admin help section', 1002,  1000, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11030,  'SYSTEM_PANEL_HELP_COPYRIGHT', 'SYSTEM_PANEL_HELP_COPYRIGHT',  1,  NULL,  'Admin\\Copyright note',
+  'Copyright note in Admin help section', 1011,  1000, 0, 0, 0, 0);

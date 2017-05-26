@@ -47,13 +47,13 @@ public interface OrderSplittingStrategy {
      *
      * @param shopId              shop PK
      * @param items               items to determine buckets for
-     * @param onePhysicalDelivery true if need to create one physical delivery.
+     * @param onePhysicalDelivery true if need to create one physical delivery (per supplier).
      *
      * @return cart items by delivery bucket
      */
     Map<DeliveryBucket, List<CartItem>> determineDeliveryBuckets(long shopId,
                                                                  Collection<CartItem> items,
-                                                                 boolean onePhysicalDelivery);
+                                                                 Map<String, Boolean> onePhysicalDelivery);
 
     /**
      * Can order have multiple deliveries by supplier.

@@ -34,13 +34,13 @@ public class BrandImageServiceImpl extends AbstractImageServiceImpl implements A
 
     /** {@inheritDoc}
      * @param attributableOrStrategy*/
-    protected String getImageRepositoryUrlPattern(final Object attributableOrStrategy) {
+    protected String getRepositoryUrlPattern(final Object attributableOrStrategy) {
         return Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN;
     }
 
     /** {@inheritDoc}
      * @param attributableOrStrategy*/
-    protected String getImageAttributePrefix(final Object attributableOrStrategy) {
+    protected String getAttributePrefix(final Object attributableOrStrategy) {
         return AttributeNamesKeys.Brand.BRAND_IMAGE_PREFIX;
     }
 

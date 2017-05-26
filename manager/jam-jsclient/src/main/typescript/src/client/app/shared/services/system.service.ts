@@ -56,7 +56,7 @@ export class SystemService {
    * @param attrs
    * @returns {Observable<R>}
    */
-  saveShopAttributes(attrs:Array<Pair<AttrValueSystemVO, boolean>>) {
+  saveSystemAttributes(attrs:Array<Pair<AttrValueSystemVO, boolean>>) {
     let body = JSON.stringify(attrs);
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });

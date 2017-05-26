@@ -22,7 +22,7 @@
       <a class="js-click" (click)="onSearchHelpToggleTaxConfig()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
 
-    <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode === 'taxes'" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
 
@@ -92,11 +92,11 @@
     </p>
   </div>
 
-  <div *ngIf="taxesFilterRequired">
+  <div *ngIf="taxconfigsFilterRequired && viewMode !== 'taxes'">
     <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
   </div>
 
-  <div *ngIf="taxesFilterCapped">
+  <div *ngIf="taxconfigsFilterCapped && viewMode !== 'taxes'">
     <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
   </div>
 

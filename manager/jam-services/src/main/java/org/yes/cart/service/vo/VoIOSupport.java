@@ -26,6 +26,45 @@ import java.io.IOException;
 public interface VoIOSupport {
 
     /**
+     * Store file in repository.
+     *
+     * @param fileName full name properly formatted
+     * @param code master object code
+     * @param attributeFileCode file attribute code
+     * @param base64URL base64 URL string
+     * @param storagePrefix storage prefix
+     *
+     * @return filename
+     *
+     * @throws IOException in case image cannot be added
+     */
+    String addFileToRepository(String fileName,
+                               String code,
+                               String attributeFileCode,
+                               String base64URL,
+                               String storagePrefix) throws IOException;
+
+    /**
+     * Store file in repository.
+     *
+     * @param fileName full name properly formatted
+     * @param code master object code
+     * @param attributeFileCode file attribute code
+     * @param base64URL base64 URL string
+     * @param storagePrefix storage prefix
+     *
+     * @return filename
+     *
+     * @throws IOException in case image cannot be added
+     */
+    String addSystemFileToRepository(String fileName,
+                                     String code,
+                                     String attributeFileCode,
+                                     String base64URL,
+                                     String storagePrefix) throws IOException;
+
+
+    /**
      * Store image in repository.
      *
      * @param fileName full name properly formatted

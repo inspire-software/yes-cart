@@ -22,6 +22,7 @@ import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -578,7 +579,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     };
 
 
-    private final static char[] ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU = new char[] { '#', '?', '@', '!' };
+    private final static char[] ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU = new char[] { '#', '?', '@', '!', '*' };
     private final static List<String> OPEN_ORDERS = Arrays.asList(
             CustomerOrder.ORDER_STATUS_PENDING,
             CustomerOrder.ORDER_STATUS_WAITING,
@@ -629,7 +630,17 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
             if (orderNumberOrCustomerOrAddressOrSku != null) {
 
-                if ("#".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
+                if ("*".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
+                    // If this by PK then to by PK
+                    final long byPk = NumberUtils.toLong(orderNumberOrCustomerOrAddressOrSku.getFirst());
+                    if (page == 0 && byPk > 0) {
+                        final CustomerOrderDTO order = getById(byPk);
+                        if (order != null) {
+                            orders.add(order);
+                        }
+                    }
+                    return orders;
+                } else if ("#".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
                     // order number search
                     final String orderNumber = orderNumberOrCustomerOrAddressOrSku.getSecond();
                     criteria.add(Restrictions.or(
@@ -725,7 +736,17 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
             if (orderNumberOrCustomerOrAddressOrSku != null) {
 
-                if ("#".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
+                if ("*".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
+                    // If this by PK then to by PK
+                    final long byPk = NumberUtils.toLong(orderNumberOrCustomerOrAddressOrSku.getSecond());
+                    if (page == 0 && byPk > 0) {
+                        final CustomerOrderDTO order = getById(byPk);
+                        if (order != null) {
+                            orders.add(order);
+                        }
+                    }
+                    return orders;
+                } else if ("#".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
                     // order number search
                     final String orderNumber = orderNumberOrCustomerOrAddressOrSku.getSecond();
                     criteria.add(Restrictions.or(

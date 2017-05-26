@@ -33,6 +33,7 @@
         <property name="beans">
             <map>
                 <entry key="bean:name=YesShop-ImageFilter" value-ref="imageFilter"/>
+                <entry key="bean:name=YesShop-FileFilter" value-ref="fileFilter"/>
                 <entry key="bean:name=YesShop-ShopResolverFilter" value-ref="shopResolverFilter"/>
                 <entry key="bean:name=YesShop-ShoppingCartFilter" value-ref="shoppingCartFilter"/>
                 <entry key="bean:name=YesShop-ImageService" value-ref="imageService"/>

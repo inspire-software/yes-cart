@@ -35,7 +35,7 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
     @DtoField(readOnly = true)
     private boolean multipleDelivery;
     @DtoField(readOnly = true)
-    private boolean multipleDeliveryAvailable;
+    private Map<String, Boolean> multipleDeliveryAvailable;
     @DtoField(readOnly = true)
     private boolean separateBillingAddress;
     @DtoField(readOnly = true)
@@ -164,11 +164,11 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
         this.multipleDelivery = multipleDelivery;
     }
 
-    public boolean isMultipleDeliveryAvailable() {
+    public Map<String, Boolean> getMultipleDeliveryAvailable() {
         return multipleDeliveryAvailable;
     }
 
-    public void setMultipleDeliveryAvailable(final boolean multipleDeliveryAvailable) {
+    public void setMultipleDeliveryAvailable(final Map<String, Boolean> multipleDeliveryAvailable) {
         this.multipleDeliveryAvailable = multipleDeliveryAvailable;
     }
 }

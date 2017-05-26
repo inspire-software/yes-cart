@@ -55,10 +55,10 @@ public interface DeliveryAssembler {
      *
      * @param shoppingCart        given shopping cart
      * @param order               without deliveries
-     * @param onePhysicalDelivery true if need to create one physical delivery.
+     * @param onePhysicalDelivery true if need to create one physical delivery (per supplier).
      * @return order with attached deliveries
      */
-    CustomerOrder assembleCustomerOrder(CustomerOrder order, ShoppingCart shoppingCart, boolean onePhysicalDelivery) throws OrderAssemblyException;
+    CustomerOrder assembleCustomerOrder(CustomerOrder order, ShoppingCart shoppingCart, Map<String, Boolean> onePhysicalDelivery) throws OrderAssemblyException;
 
     /**
      * Is order can be with multiple deliveries by supplier.

@@ -278,6 +278,14 @@
             <constructor-arg index="0" value="web.imageService-objectImages"/>
             <constructor-arg index="1" value="all"/>
         </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="web.fileService-fileURI"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="web.fileService-objectFiles"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
     </util:set>
 
     <util:set id="CategoryCreate">
@@ -562,6 +570,14 @@
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="web.imageService-objectImages"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="web.fileService-fileURI"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="web.fileService-objectFiles"/>
             <constructor-arg index="1" value="all"/>
         </bean>
     </util:set>

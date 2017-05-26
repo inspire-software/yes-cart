@@ -44,26 +44,35 @@ export class AppComponent implements OnDestroy {
     var userLang = navigator.language.split('-')[0]; // use navigator lang if available
     userLang = /(uk|ru|en|de)/gi.test(userLang) ? userLang : 'en';     // TODO: move languages to config
     LogUtil.debug('AppComponent language', userLang);
-    translate.setDefaultLang('en');
+    translate.setDefaultLang(userLang);
 
     this.langSub = I18nEventBus.getI18nEventBus().i18nUpdated$.subscribe(lang => {
-      translate.use(lang);
+      if (translate.currentLang != lang) {
+        translate.use(lang);
+      }
     });
 
     let lang = CookieUtil.readCookie('YCJAM_UI_LANG', userLang);
+    translate.use(lang);
     I18nEventBus.getI18nEventBus().emit(lang);
 
-    this.loadUiPrefrences();
+    this.loadUiPreferences();
 
-    var _sub:any = _managementService.getMyself().subscribe( myself => {
-      LogUtil.debug('Loading user', myself);
-      UserEventBus.getUserEventBus().emit(myself);
+    var _sub:any = _managementService.getMyUI().subscribe( myui => {
+      LogUtil.debug('Loading ui', myui);
       _sub.unsubscribe();
+
+      var _sub2:any = _managementService.getMyself().subscribe( myself => {
+        LogUtil.debug('Loading user', myself);
+        UserEventBus.getUserEventBus().emit(myself);
+        _sub2.unsubscribe();
+      });
+
     });
 
   }
 
-  loadUiPrefrences() {
+  loadUiPreferences() {
 
     LogUtil.debug('Load UI configurations');
 

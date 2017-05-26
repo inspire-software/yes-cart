@@ -37,7 +37,6 @@ import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
@@ -238,7 +237,7 @@ public class ShippingDeliveriesView extends BaseComponent {
         add(new Form("paymentOptionsForm") {
                     @Override
                     public boolean isVisible() {
-                        return getCurrentCart().getOrderInfo().isMultipleDeliveryAvailable();
+                        return isMultipleDeliveryAvailableForAtLeastOneSupplier();
                     }
                 }
                 .add(multiDelivery)
@@ -259,7 +258,7 @@ public class ShippingDeliveriesView extends BaseComponent {
             info(getLocalizer().getString("carrierSelectMultiSupplier", this));
         }
 
-        if (shoppingCart.getOrderInfo().isMultipleDeliveryAvailable() && !shoppingCart.getOrderInfo().isMultipleDelivery()) {
+        if (!shoppingCart.getOrderInfo().isMultipleDelivery() && isMultipleDeliveryAvailableForAtLeastOneSupplier()) {
             info(getLocalizer().getString("carrierSelectMultiDelivery", this));
         }
 
@@ -272,5 +271,14 @@ public class ShippingDeliveriesView extends BaseComponent {
 
     public void setMultipleDelivery(final boolean multipleDelivery) {
         this.multipleDelivery = multipleDelivery;
+    }
+
+    private boolean isMultipleDeliveryAvailableForAtLeastOneSupplier() {
+        for (final Boolean available : getCurrentCart().getOrderInfo().getMultipleDeliveryAvailable().values()) {
+            if (available) {
+                return true;
+            }
+        }
+        return false;
     }
 }

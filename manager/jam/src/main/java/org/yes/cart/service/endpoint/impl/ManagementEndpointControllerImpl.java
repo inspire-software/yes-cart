@@ -20,8 +20,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.vo.VoLicenseAgreement;
 import org.yes.cart.domain.vo.VoManager;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.endpoint.ManagementEndpointController;
 import org.yes.cart.service.vo.VoManagementService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -32,10 +36,13 @@ import org.yes.cart.service.vo.VoManagementService;
 public class ManagementEndpointControllerImpl implements ManagementEndpointController {
 
     private final VoManagementService voManagementService;
+    private final SystemService systemPreferencesService;
 
     @Autowired
-    public ManagementEndpointControllerImpl(final VoManagementService voManagementService) {
+    public ManagementEndpointControllerImpl(final VoManagementService voManagementService,
+                                            final SystemService systemPreferencesService) {
         this.voManagementService = voManagementService;
+        this.systemPreferencesService = systemPreferencesService;
     }
 
     @Override
@@ -56,4 +63,12 @@ public class ManagementEndpointControllerImpl implements ManagementEndpointContr
         return voManagementService.acceptMyAgreement();
     }
 
+    @Override
+    public @ResponseBody
+    Map<String, String> getMyUiPreferences() throws Exception {
+        final Map<String, String> vals = new HashMap<String, String>();
+        vals.put("SYSTEM_PANEL_HELP_DOCS", systemPreferencesService.getAttributeValue("SYSTEM_PANEL_HELP_DOCS"));
+        vals.put("SYSTEM_PANEL_HELP_COPYRIGHT", systemPreferencesService.getAttributeValue("SYSTEM_PANEL_HELP_COPYRIGHT"));
+        return vals;
+    }
 }

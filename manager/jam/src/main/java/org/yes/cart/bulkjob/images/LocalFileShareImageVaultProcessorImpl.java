@@ -34,7 +34,7 @@ import org.yes.cart.service.cluster.ClusterService;
 import org.yes.cart.service.cluster.ReindexService;
 import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.service.media.MediaFileNameStrategy;
 import org.yes.cart.stream.io.FileSystemIOProvider;
 import org.yes.cart.web.service.ws.client.AsyncContextFactory;
 
@@ -58,7 +58,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
     private final SystemService systemService;
     private final FileSystemIOProvider ioProvider;
-    private final ImageNameStrategy[] imageNameStrategies;
+    private final MediaFileNameStrategy[] imageNameStrategies;
     private final ImageImportDomainObjectStrategy[] imageImportStrategies;
     private final ReindexService reindexService;
     private final ClusterService clusterService;
@@ -71,7 +71,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
     public LocalFileShareImageVaultProcessorImpl(final SystemService systemService,
                                                  final FileSystemIOProvider ioProvider,
-                                                 final ImageNameStrategy[] imageNameStrategies,
+                                                 final MediaFileNameStrategy[] imageNameStrategies,
                                                  final ImageImportDomainObjectStrategy[] imageImportStrategies,
                                                  final ReindexService reindexService,
                                                  final ClusterService clusterService,
@@ -176,7 +176,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
         final Set<String> scanned = new HashSet<String>();
         int count = 0;
 
-        for (final ImageNameStrategy strategy : imageNameStrategies) {
+        for (final MediaFileNameStrategy strategy : imageNameStrategies) {
 
             if (scanned.contains(strategy.getRelativeInternalRootDirectory())) {
                 continue; // skip duplicates (e.g. product + sku)
@@ -196,7 +196,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
         return count;
     }
 
-    private int scanRootDirectory(final File dir, final ImageNameStrategy strategy) {
+    private int scanRootDirectory(final File dir, final MediaFileNameStrategy strategy) {
 
         final JobStatusListener statusListener = new JobStatusListenerLoggerWrapperImpl(LOG);
 
