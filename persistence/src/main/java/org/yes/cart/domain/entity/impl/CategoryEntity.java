@@ -18,7 +18,6 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.apache.commons.lang.StringUtils;
-//import org.hibernate.search.annotations.*;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.xml.CategoryPriceNavigationXStreamProvider;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
@@ -31,7 +30,6 @@ import java.util.*;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-//@Indexed(index = "luceneindex/category")
 public class CategoryEntity implements org.yes.cart.domain.entity.Category, java.io.Serializable {
 
     private long categoryId;
@@ -65,7 +63,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
 
 
 
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public long getParentId() {
         return this.parentId;
     }
@@ -82,7 +79,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.linkToId = linkToId;
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public int getRank() {
         return this.rank;
     }
@@ -99,7 +95,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.productType = productType;
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getName() {
         return this.name;
     }
@@ -108,7 +103,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.name = name;
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getDisplayName() {
         return this.displayName;
     }
@@ -117,7 +111,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.displayName = displayName;
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getDescription() {
         return this.description;
     }
@@ -158,7 +151,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.attributes = attributes;
     }
 
-//    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.SeoBridge.class)
     public SeoEntity getSeoInternal() {
         return this.seoInternal;
     }
@@ -247,7 +239,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.guid = guid;
     }
 
-//    @DocumentId
     public long getCategoryId() {
         return this.categoryId;
     }

@@ -49,7 +49,7 @@ import static org.junit.Assert.*;
  */
 public class FTSLuceneImplTest {
 
-    private RAMLuceneIndexProviderImpl provider;
+    private LuceneIndexProviderImpl provider;
     private GenericFTSLuceneImpl genericFTSLucene;
     private MapLuceneDocumentAdapter documentAdapter;
     private MapIndexBuilderLucene indexBuilderLucene;
@@ -58,9 +58,10 @@ public class FTSLuceneImplTest {
     @Before
     public void setUp() throws Exception {
 
-        provider = new RAMLuceneIndexProviderImpl("test");
+        provider = new LuceneIndexProviderImpl("test", "ram");
         provider.afterPropertiesSet();
-        genericFTSLucene = new GenericFTSLuceneImpl(provider);
+        genericFTSLucene = new GenericFTSLuceneImpl();
+        genericFTSLucene.setLuceneIndexProvider(provider);
         documentAdapter = new MapLuceneDocumentAdapter();
         indexBuilderLucene = new MapIndexBuilderLucene(documentAdapter, provider);
     }
@@ -424,16 +425,16 @@ public class FTSLuceneImplTest {
         assertNotNull(rez);
         assertEquals(3, rez.size());
 
-        facets = rez.get("_PK_facet");
+        facets = rez.get("PK Range");
         assertEquals(2, facets.size());
         checkFacetValue(facets, "000000-_-100001", 1);
         checkFacetValue(facets, "100001-_-999999", 5);
-        facets = rez.get("name_facet");
+        facets = rez.get("Names");
         assertEquals(3, facets.size());
         checkFacetValue(facets, "item one", 1);
         checkFacetValue(facets, "item two", 1);
         checkFacetValue(facets, "element", 4);
-        facets = rez.get("desc_facet");
+        facets = rez.get("Descriptions");
         assertEquals(3, facets.size());
         checkFacetValue(facets, "some desc", 2);
         checkFacetValue(facets, "other desc", 3);
@@ -446,14 +447,14 @@ public class FTSLuceneImplTest {
         assertNotNull(rez);
         assertEquals(3, rez.size());
 
-        facets = rez.get("_PK_facet");
+        facets = rez.get("PK Range");
         assertEquals(2, facets.size());
         checkFacetValue(facets, "000000-_-100001", 0);
         checkFacetValue(facets, "100001-_-999999", 2);
-        facets = rez.get("name_facet");
+        facets = rez.get("Names");
         assertEquals(1, facets.size());
         checkFacetValue(facets, "element", 2);
-        facets = rez.get("desc_facet");
+        facets = rez.get("Descriptions");
         assertEquals(2, facets.size());
         checkFacetValue(facets, "other desc", 1);
         checkFacetValue(facets, "desc", 1);
@@ -465,15 +466,15 @@ public class FTSLuceneImplTest {
         assertNotNull(rez);
         assertEquals(3, rez.size());
 
-        facets = rez.get("_PK_facet");
+        facets = rez.get("PK Range");
         assertEquals(2, facets.size());
         checkFacetValue(facets, "000000-_-100001", 0);
         checkFacetValue(facets, "100001-_-999999", 5);
-        facets = rez.get("name_facet");
+        facets = rez.get("Names");
         assertEquals(2, facets.size());
         checkFacetValue(facets, "item two", 1);
         checkFacetValue(facets, "element", 4);
-        facets = rez.get("desc_facet");
+        facets = rez.get("Descriptions");
         assertEquals(3, facets.size());
         checkFacetValue(facets, "some desc", 1);
         checkFacetValue(facets, "other desc", 3);

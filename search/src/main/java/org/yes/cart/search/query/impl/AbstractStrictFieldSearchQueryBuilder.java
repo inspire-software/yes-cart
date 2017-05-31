@@ -71,7 +71,7 @@ public abstract class AbstractStrictFieldSearchQueryBuilder extends AbstractSear
             return null;
         }
 
-        return createTermQuery(field, escapeValue(value), boost);
+        return createTermQuery(field, escapeValue(value).toLowerCase(), boost);
     }
 
     /**

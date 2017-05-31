@@ -21,7 +21,6 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -53,8 +52,9 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
 
             final BooleanQuery.Builder aggregateQuery = new BooleanQuery.Builder();
 
-            aggregateQuery.add(createTermQuery(PRODUCT_TAG_FIELD, TAG_NEWARRIVAL, 2.5f), BooleanClause.Occur.SHOULD);
-            aggregateQuery.add(createRangeQuery(PRODUCT_CREATED_FIELD, fromDate, null, 2f), BooleanClause.Occur.SHOULD);
+            // newarrival tag is top priority 20 points
+            aggregateQuery.add(createTermQuery(PRODUCT_TAG_FIELD, TAG_NEWARRIVAL, 20f), BooleanClause.Occur.SHOULD);
+            aggregateQuery.add(createRangeQuery(PRODUCT_CREATED_FIELD, fromDate, null), BooleanClause.Occur.SHOULD);
 
             return aggregateQuery.build();
 
@@ -65,7 +65,7 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
             return null;
         }
 
-        return createTermQuery(PRODUCT_TAG_FIELD, escapeValue(value), 2.5f);
+        return createTermQuery(PRODUCT_TAG_FIELD, escapeValue(value), 20f);
 
     }
 

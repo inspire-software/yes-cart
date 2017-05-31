@@ -305,12 +305,8 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="productIndexProvider" class="org.yes.cart.search.dao.impl.RAMLuceneIndexProviderImpl">
-        <constructor-arg index="0" value="product"/>
-    </bean>
-
     <bean id="productFts" class="org.yes.cart.search.dao.impl.GenericFTSLuceneImpl">
-        <constructor-arg index="0" ref="productIndexProvider"/>
+        <property name="luceneIndexProvider" ref="productIndexProvider"/>
     </bean>
 
     <bean id="productIndexBuilder" class="org.yes.cart.search.dao.impl.IndexBuilderLuceneHibernateTxAwareImpl">
@@ -351,13 +347,19 @@
         <constructor-arg type="org.yes.cart.search.dao.IndexBuilder" ref="productIndexBuilder"/>
     </bean>
 
-    <bean id="productSkuFts" class="org.yes.cart.search.dao.impl.GenericFTSHibernateImpl">
-        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductSkuEntity</value></constructor-arg>
-        <property name="sessionFactory" ref="sessionFactory"/>
+
+    <bean id="productSkuFts" class="org.yes.cart.search.dao.impl.GenericFTSLuceneImpl">
+        <property name="luceneIndexProvider" ref="productSkuIndexProvider"/>
     </bean>
 
-    <bean id="productSkuIndexBuilder" class="org.yes.cart.search.dao.impl.IndexBuilderHibernateImpl">
-        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductSkuEntity</value></constructor-arg>
+    <bean id="productSkuIndexBuilder" class="org.yes.cart.search.dao.impl.IndexBuilderLuceneHibernateTxAwareImpl">
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.search.dao.entity.ProductSkuLuceneDocumentAdapter">
+                <property name="attributesSupport" ref="navigatableAttributesSupport"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1" ref="productSkuIndexProvider"/>
+        <constructor-arg index="2" ref="productSkuDaoBase"/>
         <property name="sessionFactory" ref="sessionFactory"/>
         <property name="indexExecutor">
             <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
@@ -569,8 +571,6 @@
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
-
-    <bean id="hibernateSearchBridgeStaticLocator" class="org.yes.cart.domain.entity.bridge.HibernateSearchBridgeStaticLocator"/>
 
     <bean id="navigatableAttributesSupport" class="org.yes.cart.domain.entity.bridge.support.impl.NavigatableAttributesSupportCachedImpl">
         <constructor-arg>

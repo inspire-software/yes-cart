@@ -54,7 +54,7 @@ public class ProductCategoryIncludingParentsSearchQueryBuilderTest {
 
         final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createStrictQuery(10L, "productCategory.category.inc.parents", "1");
         assertNotNull(query);
-        assertEquals("(productCategory.category.inc.parents:1)^1.0", query.toString());
+        assertEquals("(productCategory.category.inc.parents:[1 TO 1])^1.0", query.toString());
 
     }
 
@@ -63,7 +63,7 @@ public class ProductCategoryIncludingParentsSearchQueryBuilderTest {
 
         final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createStrictQuery(10L, "productCategory.category.inc.parents", Arrays.asList("1", "2", "3"));
         assertNotNull(query);
-        assertEquals("(productCategory.category.inc.parents:1)^1.0 (productCategory.category.inc.parents:2)^1.0 (productCategory.category.inc.parents:3)^1.0", query.toString());
+        assertEquals("(productCategory.category.inc.parents:[1 TO 1])^1.0 (productCategory.category.inc.parents:[2 TO 2])^1.0 (productCategory.category.inc.parents:[3 TO 3])^1.0", query.toString());
 
     }
 
@@ -96,7 +96,7 @@ public class ProductCategoryIncludingParentsSearchQueryBuilderTest {
 
         final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createRelaxedQuery(10L, "productCategory.category.inc.parents", "1");
         assertNotNull(query);
-        assertEquals("(productCategory.category.inc.parents:1)^1.0", query.toString());
+        assertEquals("(productCategory.category.inc.parents:[1 TO 1])^1.0", query.toString());
 
 
     }
@@ -106,7 +106,7 @@ public class ProductCategoryIncludingParentsSearchQueryBuilderTest {
 
         final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createRelaxedQuery(10L, "productCategory.category.inc.parents", Arrays.asList("1", "2", "3"));
         assertNotNull(query);
-        assertEquals("(productCategory.category.inc.parents:1)^1.0 (productCategory.category.inc.parents:2)^1.0 (productCategory.category.inc.parents:3)^1.0", query.toString());
+        assertEquals("(productCategory.category.inc.parents:[1 TO 1])^1.0 (productCategory.category.inc.parents:[2 TO 2])^1.0 (productCategory.category.inc.parents:[3 TO 3])^1.0", query.toString());
 
     }
 

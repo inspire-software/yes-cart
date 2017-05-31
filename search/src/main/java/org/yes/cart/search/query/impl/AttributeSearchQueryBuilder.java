@@ -62,7 +62,7 @@ public class AttributeSearchQueryBuilder extends AbstractSearchQueryBuilderImpl 
 
         final String ftSearchValue = escapeValue(searchValue);
 
-        aggregatedQuery.add(createTermQuery("facet_" + escapedParameter, ftSearchValue.toLowerCase(), 3.5f), BooleanClause.Occur.MUST);
+        aggregatedQuery.add(createTermQuery(escapedParameter, ftSearchValue.toLowerCase(), 3.5f), BooleanClause.Occur.MUST);
 
         return aggregatedQuery.build();
 

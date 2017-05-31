@@ -21,6 +21,7 @@ import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.entity.AttrValueProductSku;
 import org.yes.cart.service.misc.LanguageService;
 
+import java.util.List;
 
 /**
  * Handle both product and product sku image url to code resolving.
@@ -66,14 +67,19 @@ public class ProductMediaFileNameStrategyImpl extends AbstractMediaFileNameStrat
 
         final String prefix = getAttributePrefix() + '%';
 
-        final String productCode =
-                attrValueEntityProductDao.findSingleByNamedQuery("PRODUCT.CODE.BY.MEDIAFILE.NAME", val, prefix);
-        if (productCode != null) {
-            return productCode;
+        final List<String> productCode =
+                (List) attrValueEntityProductDao.findQueryObjectByNamedQuery("PRODUCT.CODE.BY.MEDIAFILE.NAME", val, prefix);
+        if (productCode != null && !productCode.isEmpty()) {
+            return productCode.get(0);
         }
 
-        return attrValueEntityProductSkuDao.findSingleByNamedQuery("SKU.CODE.BY.MEDIAFILE.NAME", val, prefix);
+        final List<String> skuCode =
+                (List) attrValueEntityProductSkuDao.findQueryObjectByNamedQuery("SKU.CODE.BY.MEDIAFILE.NAME", val, prefix);
+        if (skuCode != null && !skuCode.isEmpty()) {
+            return skuCode.get(0);
+        }
 
+        return null;
     }
 
 }

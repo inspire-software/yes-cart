@@ -17,15 +17,12 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.apache.commons.lang.StringUtils;
-//import org.hibernate.search.annotations.*;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.domain.entity.bridge.ProductBridge;
-import org.yes.cart.domain.entity.bridge.SkuPriceBridge;
-import org.yes.cart.domain.interceptor.ProductSkuEntityIndexingInterceptor;
 
 import java.util.*;
+
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -33,8 +30,6 @@ import java.util.*;
  * Time: 9:10 AM
  */
 
-//@Indexed(index = "luceneindex/productsku", interceptor = ProductSkuEntityIndexingInterceptor.class)
-//@ClassBridge(impl = SkuPriceBridge.class)
 public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, java.io.Serializable {
 
     private long skuId;
@@ -65,10 +60,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
 
 
 
-//    @Fields({
-//            @Field(name = "sku.code", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES),
-//            @Field(name = "sku.code_stem", index = Index.YES, analyze = Analyze.YES, norms = Norms.NO, store = Store.NO)
-//    })
     public String getCode() {
         return this.code;
     }
@@ -77,10 +68,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.code = code;
     }
 
-//    @Fields({
-//            @Field(name = "sku.manufacturerCode", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES),
-//            @Field(name = "sku.manufacturerCode_stem", index = Index.YES, analyze = Analyze.YES, norms = Norms.NO, store = Store.NO)
-//    })
     public String getManufacturerCode() {
         return manufacturerCode;
     }
@@ -113,7 +100,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.supplierCatalogCode = supplierCatalogCode;
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
     public String getName() {
         return this.name;
     }
@@ -122,12 +108,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.name = name;
     }
 
-//    @Fields({
-//            @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.YES, store = Store.YES,
-//                    bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.DisplayNameBridge.class)),
-//            @Field(name = "displayNameAsIs", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES,
-//                    bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.DisplayNameBridge.class))
-//    })
     public String getDisplayName() {
         return this.displayName;
     }
@@ -144,8 +124,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.description = description;
     }
 
-//    @Field(name = "productId", index = Index.YES, analyze = Analyze.NO, store = Store.YES,
-//            bridge = @FieldBridge(impl = ProductBridge.class))
     public Product getProduct() {
         return this.product;
     }
@@ -170,7 +148,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.barCode = barCode;
     }
 
-//    @Field(bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class))
     public Collection<AttrValueProductSku> getAttributes() {
         return this.attributes;
     }
@@ -227,7 +204,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.guid = guid;
     }
 
-//    @DocumentId
     public long getSkuId() {
         return this.skuId;
     }
@@ -323,7 +299,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
      * Get default image, which is stored into lucene index, to reduce db hit.
      * @return default product image if found, otherwise no image constant.
      */
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getDefaultImage() {
         final String attr = getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
         if (StringUtils.isBlank(attr)) {

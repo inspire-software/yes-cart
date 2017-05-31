@@ -59,7 +59,7 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
 
             final List<FilteredNavigationRecord> allNavigationRecordsTemplates = getProductService().getDistinctBrands(locale);
 
-            final FilteredNavigationRecordRequest request = new FilteredNavigationRecordRequestImpl("brandFacet", ProductSearchQueryBuilder.BRAND_FIELD);
+            final FilteredNavigationRecordRequest request = new FilteredNavigationRecordRequestImpl("brandFacet", "facet_" + ProductSearchQueryBuilder.BRAND_FIELD);
 
             final Map<String, List<Pair<String, Integer>>> counts =
                     getProductService().findFilteredNavigationRecords(navigationContext, Collections.singletonList(request));

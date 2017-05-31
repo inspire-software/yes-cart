@@ -204,7 +204,7 @@ start_luke() {
     echo " Starting Luke (lucene index browser)           ";
     echo "================================================";
 
-    java -jar "$YC_HOME/env/luke/lukeall-3.5.0.jar" &
+    java -jar "$YC_HOME/env/luke/luke-with-deps-6.5.jar" &
 
 }
 

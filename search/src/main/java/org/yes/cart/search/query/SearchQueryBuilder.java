@@ -52,4 +52,5 @@ public interface SearchQueryBuilder {
      */
     Query createRelaxedQuery(long shopId, String parameter, Object value);
 
+
 }

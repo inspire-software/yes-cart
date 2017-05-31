@@ -23,7 +23,7 @@ import org.yes.cart.search.query.ProductSearchQueryBuilder;
  * Date: 15/11/2014
  * Time: 23:16
  */
-public class ProductCategorySearchQueryBuilder extends AbstractStrictFieldSearchQueryBuilder implements ProductSearchQueryBuilder {
+public class ProductCategorySearchQueryBuilder extends AbstractNumericStrictFieldSearchQueryBuilder implements ProductSearchQueryBuilder {
 
     public ProductCategorySearchQueryBuilder() {
         super(PRODUCT_CATEGORY_FIELD);

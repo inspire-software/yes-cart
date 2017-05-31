@@ -49,7 +49,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createStrictQuery(10L, "size", "30");
         assertNotNull(query);
-        assertEquals("+(facet_size:30)^3.5", query.toString());
+        assertEquals("+(size:30)^3.5", query.toString());
 
     }
 
@@ -103,7 +103,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createRelaxedQuery(10L, "size", "30");
         assertNotNull(query);
-        assertEquals("+(facet_size:30)^3.5", query.toString());
+        assertEquals("+(size:30)^3.5", query.toString());
 
 
     }

@@ -54,7 +54,7 @@ public class ProductCategorySearchQueryBuilderTest {
 
         final Query query = new ProductCategorySearchQueryBuilder().createStrictQuery(10L, "productCategory.category", "1");
         assertNotNull(query);
-        assertEquals("(productCategory.category:1)^1.0", query.toString());
+        assertEquals("(productCategory.category:[1 TO 1])^1.0", query.toString());
 
     }
 
@@ -63,7 +63,7 @@ public class ProductCategorySearchQueryBuilderTest {
 
         final Query query = new ProductCategorySearchQueryBuilder().createStrictQuery(10L, "productCategory.category", Arrays.asList("1", "2", "3"));
         assertNotNull(query);
-        assertEquals("(productCategory.category:1)^1.0 (productCategory.category:2)^1.0 (productCategory.category:3)^1.0", query.toString());
+        assertEquals("(productCategory.category:[1 TO 1])^1.0 (productCategory.category:[2 TO 2])^1.0 (productCategory.category:[3 TO 3])^1.0", query.toString());
 
     }
 
@@ -96,7 +96,7 @@ public class ProductCategorySearchQueryBuilderTest {
 
         final Query query = new ProductCategorySearchQueryBuilder().createRelaxedQuery(10L, "productCategory.category", "1");
         assertNotNull(query);
-        assertEquals("(productCategory.category:1)^1.0", query.toString());
+        assertEquals("(productCategory.category:[1 TO 1])^1.0", query.toString());
 
 
     }
@@ -106,7 +106,7 @@ public class ProductCategorySearchQueryBuilderTest {
 
         final Query query = new ProductCategorySearchQueryBuilder().createRelaxedQuery(10L, "productCategory.category", Arrays.asList("1", "2", "3"));
         assertNotNull(query);
-        assertEquals("(productCategory.category:1)^1.0 (productCategory.category:2)^1.0 (productCategory.category:3)^1.0", query.toString());
+        assertEquals("(productCategory.category:[1 TO 1])^1.0 (productCategory.category:[2 TO 2])^1.0 (productCategory.category:[3 TO 3])^1.0", query.toString());
 
     }
 

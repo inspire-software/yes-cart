@@ -38,6 +38,7 @@ import org.yes.cart.stream.io.IOProvider;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
@@ -64,7 +65,9 @@ public class ImageServiceTest {
     private GenericDAO<SeoImage, Long> seoImageDao = mockery.mock(GenericDAO.class, "seoImageDao");
     private GenericDAO<AttrValueProduct, Long> productDao = mockery.mock(GenericDAO.class, "productDao");
     final LanguageService languageService = mockery.mock(LanguageService.class, "languageService");
-    private MediaFileNameStrategy mediaFileNameStrategy = new ProductMediaFileNameStrategyImpl(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, "product", null, productDao, languageService);
+    private MediaFileNameStrategy mediaFileNameStrategy = new ProductMediaFileNameStrategyImpl(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, "product", null, productDao, languageService) {{
+        setAttributePrefix("IMAGE");
+    }};
 
 
     @Test
@@ -180,8 +183,8 @@ public class ImageServiceTest {
             will(returnValue(Arrays.asList("en", "uk", "ru")));
             allowing(seoImageDao).findByCriteria(with(any(Criterion.class)));
             will(returnValue(null));
-            allowing(productDao).findSingleByNamedQuery(with(equal("PRODUCT.CODE.BY.MEDIAFILE.NAME")), with(any(String.class)));
-            will(returnValue("PRODUCT2"));
+            allowing(productDao).findQueryObjectByNamedQuery(with(equal("PRODUCT.CODE.BY.MEDIAFILE.NAME")), with(equal(new String[]{"some-seo-image-name_PRODUCT2.jpeg", "IMAGE%"})));
+            will(returnValue(Collections.singletonList("PRODUCT2")));
         }});
 
         imageService = new ImageServiceImpl(seoImageDao, mediaFileNameStrategyResolver, "50x150", 255, 255, 255, false, 50, true, new IOProvider() {

@@ -25,24 +25,30 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
 
     //can be used in sort order
     String PRODUCT_NAME_FIELD = "name";
+    String PRODUCT_NAME_SORT_FIELD = "name_sort";
+    String PRODUCT_NAME_STEM_FIELD = "name_stem";
     String PRODUCT_DISPLAYNAME_FIELD = "displayName";
     String PRODUCT_DISPLAYNAME_STEM_FIELD = "displayName_stem";
     String PRODUCT_DISPLAYNAME_ASIS_FIELD = "displayNameAsIs"; //for projections only
     String PRODUCT_CATEGORYNAME_FIELD = "categoryName";
     String PRODUCT_CATEGORYNAME_STEM_FIELD = "categoryName_stem";
     String PRODUCT_CODE_FIELD = "code";
-    String PRODUCT_MANUFACTURER_CODE_FIELD = "manufacturerCode";
-    String PRODUCT_DEFAULT_SKU_CODE_FIELD = "defaultSku";
+    String PRODUCT_CODE_SORT_FIELD = "code_sort";
     String PRODUCT_CODE_STEM_FIELD = "code_stem";
+    String PRODUCT_MANUFACTURER_CODE_FIELD = "manufacturerCode";
+    String PRODUCT_MANUFACTURER_CODE_SORT_FIELD = "manufacturerCode_sort";
     String PRODUCT_MANUFACTURER_CODE_STEM_FIELD = "manufacturerCode_stem";
+    String PRODUCT_DEFAULT_SKU_CODE_FIELD = "defaultSku";
     String PRODUCT_MULTISKU = "multisku";
 
     String PRODUCT_CREATED_FIELD = "createdTimestamp"; //for projections only
+    String PRODUCT_CREATED_SORT_FIELD = "createdTimestamp_sort"; //for projections only
     String PRODUCT_UPDATED_FIELD = "updatedTimestamp"; //for projections only
     String PRODUCT_FEATURED_FIELD = "featured"; //for projections only
     String PRODUCT_AVAILABILITY_FROM_FIELD = "availablefrom"; //for projections only
     String PRODUCT_AVAILABILITY_TO_FIELD = "availableto"; //for projections only
     String PRODUCT_AVAILABILITY_FIELD = "availability"; //for projections only
+    String PRODUCT_AVAILABILITY_SORT_FIELD = "availability_sort"; //for projections only
     String PRODUCT_QTY_FIELD = "qtyOnWarehouse"; //for projections only
     String PRODUCT_DEFAULTIMAGE_FIELD = "defaultImage"; //for projections only
     String PRODUCT_DESCRIPTION_ASIS_FIELD = "descriptionAsIs"; //for projections only
@@ -52,15 +58,17 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
 
     String PRODUCT_TAG_FIELD = "tag";
     String SKU_PRODUCT_CODE_FIELD = "sku.code";
+    String SKU_PRODUCT_CODE_SORT_FIELD = "sku.code_sort";
     String SKU_PRODUCT_CODE_STEM_FIELD = "sku.code_stem";
     String SKU_PRODUCT_MANUFACTURER_CODE_FIELD = "sku.manufacturerCode";
+    String SKU_PRODUCT_MANUFACTURER_CODE_SORT_FIELD = "sku.manufacturerCode_sort";
     String SKU_PRODUCT_MANUFACTURER_CODE_STEM_FIELD = "sku.manufacturerCode_stem";
-    String PRODUCT_NAME_SORT_FIELD = "name_sort";
     String PRODUCT_DISPLAYNAME_SORT_FIELD = "displayName_sort";
     String PRODUCT_DESCRIPTION_FIELD = "description";
     String PRODUCT_DESCRIPTION_STEM_FIELD = "description_stem";
     String BRAND_FIELD = "brand";
-    String BRAND_NAME_FIELD = "brandName";
+    String BRAND_SORT_FIELD = "brand";
+    String BRAND_STEM_FIELD = "brand_stem";
     String ATTRIBUTE_CODE_FIELD = "attribute.attribute";
     String ATTRIBUTE_VALUE_FIELD = "attribute.val";
     String ATTRIBUTE_VALUE_SEARCH_FIELD = "attribute.attrvalsearch";

@@ -133,6 +133,32 @@ public abstract class AbstractSearchQueryBuilderImpl implements SearchQueryBuild
     }
 
     /**
+     * Create range query.
+     *
+     * @param field field name
+     * @param value value
+     *
+     * @return range query
+     */
+    protected Query createNumericQuery(final String field, final long value) {
+        return LongPoint.newExactQuery(field, value);
+    }
+
+    /**
+     * Create range query.
+     *
+     * @param field field name
+     * @param value value
+     * @param boost importance of this criteria (default 1.0f)
+     *
+     * @return range query with boost
+     */
+    protected Query createNumericQuery(final String field, final long value, final float boost) {
+        final Query query = createNumericQuery(field, value);
+        return new BoostQuery(query, boost);
+    }
+
+    /**
      * Check if raw value is empty.
      *
      * @param rawValue raw
@@ -164,8 +190,6 @@ public abstract class AbstractSearchQueryBuilderImpl implements SearchQueryBuild
      * @return safe value
      */
     protected String escapeValue(Object value) {
-        // Looks like there is double escaping happening in hibernate search, so leave as is
-        // return QueryParser.escape(String.valueOf(value));
         return String.valueOf(value);
     }
 

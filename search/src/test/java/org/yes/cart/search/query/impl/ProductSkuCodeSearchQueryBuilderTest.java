@@ -55,7 +55,7 @@ public class ProductSkuCodeSearchQueryBuilderTest {
 
         final Query query = new ProductSkuCodeSearchQueryBuilder().createStrictQuery(10L, "sku.code", "ABC 1");
         assertNotNull(query);
-        assertEquals("(sku.code:ABC 1)^1.0", query.toString());
+        assertEquals("(sku.code:abc 1)^1.0", query.toString());
 
     }
 
@@ -97,7 +97,7 @@ public class ProductSkuCodeSearchQueryBuilderTest {
 
         final Query query = new ProductSkuCodeSearchQueryBuilder().createRelaxedQuery(10L, "sku.code", "ABC 1");
         assertNotNull(query);
-        assertEquals("(sku.code:ABC 1)^1.0", query.toString());
+        assertEquals("(sku.code:abc 1)^1.0", query.toString());
 
 
     }

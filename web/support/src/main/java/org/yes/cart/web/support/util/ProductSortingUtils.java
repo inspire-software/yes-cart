@@ -16,12 +16,9 @@
 
 package org.yes.cart.web.support.util;
 
-import org.yes.cart.domain.entity.bridge.SkuPriceBridge;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.search.query.impl.SearchUtil;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,8 +28,6 @@ import java.util.Map;
  * Time: 23:35
  */
 public class ProductSortingUtils {
-
-    private static final SkuPriceBridge SKU_PRICE_BRIDGE = new SkuPriceBridge();
 
     public static class SupportedSorting {
 
@@ -67,16 +62,21 @@ public class ProductSortingUtils {
         });
         put("basePrice", new SupportedSorting("byPrice", null) {
             public String resolveSortField(final long shopId, final String language, final String currency) {
-                final Pair<String, String> priceSort = SearchUtil.priceToFacetPair(shopId, currency, BigDecimal.ZERO);
-                return priceSort.getFirst();
+                final String facetName = SearchUtil.priceFacetName(shopId, currency);
+                return facetName + "_sort";
             }
         });
-        put("productCode", new SupportedSorting("byCode", ProductSearchQueryBuilder.PRODUCT_CODE_FIELD));
-        put("manufacturerCode", new SupportedSorting("byCode", ProductSearchQueryBuilder.PRODUCT_MANUFACTURER_CODE_FIELD));
-        put("sku", new SupportedSorting("bySKU", ProductSearchQueryBuilder.SKU_PRODUCT_CODE_FIELD));
-        put("brand", new SupportedSorting("byBrand", ProductSearchQueryBuilder.BRAND_FIELD));
-        put("availability", new SupportedSorting("byAvailability", ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_FIELD));
-        put("created", new SupportedSorting("byCreation", ProductSearchQueryBuilder.PRODUCT_CREATED_FIELD));
+        put("productCode", new SupportedSorting("byCode", ProductSearchQueryBuilder.PRODUCT_CODE_SORT_FIELD));
+        put("manufacturerCode", new SupportedSorting("byCode", ProductSearchQueryBuilder.PRODUCT_MANUFACTURER_CODE_SORT_FIELD));
+        put("sku", new SupportedSorting("bySKU", ProductSearchQueryBuilder.PRODUCT_CODE_SORT_FIELD));
+        put("brand", new SupportedSorting("byBrand", ProductSearchQueryBuilder.BRAND_SORT_FIELD));
+        put("availability", new SupportedSorting("byAvailability", ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_SORT_FIELD) {
+            @Override
+            public String resolveSortField(final long shopId, final String language, final String currency) {
+                return this.sortFieldBase + shopId;
+            }
+        });
+        put("created", new SupportedSorting("byCreation", ProductSearchQueryBuilder.PRODUCT_CREATED_SORT_FIELD));
     }};
 
     /**

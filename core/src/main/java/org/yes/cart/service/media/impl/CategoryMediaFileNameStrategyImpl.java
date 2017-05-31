@@ -22,6 +22,8 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueCategory;
 import org.yes.cart.service.misc.LanguageService;
 
+import java.util.List;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -72,13 +74,14 @@ public class CategoryMediaFileNameStrategyImpl extends AbstractMediaFileNameStra
 
         final String val = resolveFileName(url);
 
-        final Object[] uriAndGuid = attrValueEntityCategoryDao.findSingleByNamedQuery("CATEGORY.URI.AND.GUID.BY.MEDIAFILE.NAME", val, getAttributePrefix() + '%');
+        final List<Object[]> uriAndGuid = (List) attrValueEntityCategoryDao.findQueryObjectByNamedQuery("CATEGORY.URI.AND.GUID.BY.MEDIAFILE.NAME", val, getAttributePrefix() + '%');
 
-        if (uriAndGuid != null && uriAndGuid.length == 2) {
-            if (uriAndGuid[0] instanceof String) {
-                return (String) uriAndGuid[0];
-            } else if (uriAndGuid[1] instanceof String) {
-                return (String) uriAndGuid[1];
+        if (uriAndGuid != null && !uriAndGuid.isEmpty()) {
+            final Object[] uriAndGuidPair = uriAndGuid.get(0);
+            if (uriAndGuidPair[0] instanceof String) {
+                return (String) uriAndGuidPair[0];
+            } else if (uriAndGuidPair[1] instanceof String) {
+                return (String) uriAndGuidPair[1];
             }
         }
 

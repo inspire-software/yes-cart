@@ -491,7 +491,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 LuceneDocumentAdapterUtils.FIELD_PK,
                 LuceneDocumentAdapterUtils.FIELD_CLASS,
                 LuceneDocumentAdapterUtils.FIELD_OBJECT
-                );
+        );
 
         final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.getFirst().size());
         for (Object[] obj : searchRez.getFirst()) {

@@ -51,11 +51,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
     private static final int MAX_FACETS = 100;
 
-    private final LuceneIndexProvider luceneIndexProvider;
-
-    public GenericFTSLuceneImpl(final LuceneIndexProvider luceneIndexProvider) {
-        this.luceneIndexProvider = luceneIndexProvider;
-    }
+    private LuceneIndexProvider luceneIndexProvider;
 
     /**
      * {@inheritDoc}
@@ -76,6 +72,8 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                     pks.add(Long.valueOf(doc.get("_PK")));
                     logExplanation(searcher, query, null, hit.doc);
                 }
+            } else {
+                logExplanation(searcher, query, null, 0);
             }
         } catch (Exception exp) {
             LOG.error("Failed to run query " + query + ", caused: " + exp.getMessage(), exp);
@@ -115,6 +113,8 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                     pks.add(Long.valueOf(doc.get("_PK")));
                     logExplanation(searcher, query, sort, hit.doc);
                 }
+            } else {
+                logExplanation(searcher, query, null, 0);
             }
         } catch (Exception exp) {
             LOG.error("Failed to run query " + query + ", caused: " + exp.getMessage(), exp);
@@ -138,6 +138,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
         LOGFTQ.debug("Run count query {}", query);
 
         Pair<List<Object[]>, Integer> result = EMPTY;
+        int lastResult = maxResults < 0 ? Integer.MAX_VALUE : firstResult + maxResults;
 
         IndexSearcher searcher = this.luceneIndexProvider.provideIndexReader();
         try {
@@ -146,15 +147,17 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
             Sort sort = null;
             if (StringUtils.isNotBlank(sortFieldName)) {
                 sort = new Sort(new SortField(sortFieldName, SortField.Type.STRING_VAL, reverse));
-                topDocs = searcher.search(query, firstResult + maxResults, sort);
+                topDocs = searcher.search(query, lastResult, sort);
             } else {
-                topDocs = searcher.search(query, firstResult + maxResults);
+                topDocs = searcher.search(query, lastResult);
             }
-            if (topDocs.totalHits > 0) {
+            if (topDocs.totalHits > firstResult) {
 
-                final List<Object[]> resItems = new ArrayList<Object[]>(maxResults);
+                lastResult = lastResult > topDocs.totalHits ? topDocs.totalHits : lastResult;
 
-                for (int i = firstResult; i < firstResult + maxResults; i++) {
+                final List<Object[]> resItems = new ArrayList<Object[]>(lastResult - firstResult);
+
+                for (int i = firstResult; i < lastResult; i++) {
                     final ScoreDoc hit = topDocs.scoreDocs[i];
                     final Document doc = searcher.doc(hit.doc, retrieve);
                     final Object[] values = new Object[fields.length];
@@ -166,6 +169,8 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                 }
 
                 return new Pair<List<Object[]>, Integer>(resItems, topDocs.totalHits);
+            } else {
+                logExplanation(searcher, query, null, 0);
             }
         } catch (Exception exp) {
             LOG.error("Failed to run query " + query + ", caused: " + exp.getMessage(), exp);
@@ -261,7 +266,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                             values.add(new Pair<String, Integer>(lav.label, lav.value.intValue()));
                         }
 
-                        result.put(topValues.dim, values);
+                        result.put(request.getFacetName(), values);
 
                     }
 
@@ -294,6 +299,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
         try {
             count = searcher.count(query);
+            logExplanation(searcher, query, null, 0);
         } catch (Exception exp) {
             LOG.error("Failed to run query " + query + ", caused: " + exp.getMessage(), exp);
         } finally {
@@ -303,6 +309,16 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
         LOGFTQ.debug("Count is {} query {}", count, query);
 
         return count;
+    }
+
+
+    /**
+     * Spring IoC.
+     *
+     * @return provider
+     */
+    public void setLuceneIndexProvider(final LuceneIndexProvider luceneIndexProvider) {
+        this.luceneIndexProvider = luceneIndexProvider;
     }
 
 }

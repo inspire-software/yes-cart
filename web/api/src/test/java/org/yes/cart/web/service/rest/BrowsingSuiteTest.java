@@ -386,6 +386,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
         reindex();
 
         final SearchRO search = new SearchRO();
+        search.setSortField("sku.code_sort");
 
         final byte[] body = toJsonBytes(search);
 
@@ -407,6 +408,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
         reindex();
 
         final SearchRO search = new SearchRO();
+        search.setSortField("sku.code_sort");
 
         final byte[] body = toJsonBytes(search);
 

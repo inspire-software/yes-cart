@@ -32,7 +32,9 @@ import org.yes.cart.domain.entity.impl.StoredAttributesImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -200,6 +202,32 @@ public class LuceneDocumentAdapterUtils {
         }
     }
 
+    /**
+     * Adds a float field (stored and not tokenized)
+     *
+     * @param document document
+     * @param name     field name
+     * @param value    value
+     */
+    public static void addStoredField(final Document document, final String name, final Float value) {
+        if (value != null) {
+            document.add(new StoredField(name, value));
+        }
+    }
+
+    /**
+     * Adds a long field (stored and not tokenized)
+     *
+     * @param document document
+     * @param name     field name
+     * @param value    value
+     */
+    public static void addStoredField(final Document document, final String name, final Long value) {
+        if (value != null) {
+            document.add(new StoredField(name, value));
+        }
+    }
+
 
     /**
      * Adds a string field (not stored and not tokenized)
@@ -274,7 +302,6 @@ public class LuceneDocumentAdapterUtils {
         document.add(new LongPoint(name, nonNull));
 
     }
-
 
 
     /**
@@ -394,14 +421,16 @@ public class LuceneDocumentAdapterUtils {
      */
     public static void addStemFields(final Document document, final String name, final String ... values) {
 
-        final StringBuilder all = new StringBuilder();
-        for (final String value : values) {
-            if (value != null) {
-                all.append(value).append(' ');
+        if (values != null && values.length > 0) {
+            final StringBuilder all = new StringBuilder();
+            for (final String value : new HashSet<String>(Arrays.asList(values))) {
+                if (value != null) {
+                    all.append(value).append(' ');
+                }
             }
-        }
-        if (all.length() > 0) {
-            document.add(new TextField(name, all.toString(), Field.Store.NO));
+            if (all.length() > 0) {
+                document.add(new TextField(name, all.toString(), Field.Store.NO));
+            }
         }
     }
 

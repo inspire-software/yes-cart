@@ -19,10 +19,8 @@ package org.yes.cart.web.page.component.filterednavigation.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.bridge.BigDecimalBridge;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.search.PriceNavigation;
@@ -32,6 +30,7 @@ import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.dto.impl.FilteredNavigationRecordRequestImpl;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.query.impl.SearchUtil;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
@@ -57,8 +56,6 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
     private final ShopService shopService;
     private final PriceService priceService;
     private final PriceNavigation priceNavigation;
-
-    private final BigDecimalBridge moneyBridge = new BigDecimalBridge(Constants.DEFAULT_SCALE);
 
     public PriceFilteredNavigationSupportImpl(final SearchQueryFactory searchQueryFactory,
                                               final ProductService productService,
@@ -113,9 +110,9 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
                     priceNavigation.decomposePriceRequestParams(record.getValue());
 
                 rangeValues.add(new Pair<String, String>(
-                        moneyBridge.objectToString(range.getSecond().getFirst()),
-                        moneyBridge.objectToString(range.getSecond().getSecond())
-                ));
+                        String.valueOf(SearchUtil.priceToLong(range.getSecond().getFirst())),
+                        String.valueOf(SearchUtil.priceToLong(range.getSecond().getSecond()))
+                        ));
             }
             final FilteredNavigationRecordRequest request = new FilteredNavigationRecordRequestImpl("priceFacet", priceFacet, rangeValues);
 

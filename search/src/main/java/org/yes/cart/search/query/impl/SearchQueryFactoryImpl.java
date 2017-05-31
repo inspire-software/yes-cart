@@ -110,6 +110,40 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
 
     }
 
+    private static final Set<String> PRODUCT_BOOST_FIELDS = new HashSet<>(
+            Arrays.asList(
+                    ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD + "_boost",
+                    ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD + "_boost",
+                    "featured_boost"
+            )
+    );
+
+    private Query productBoost(final Query query) {
+
+        if (query == null) {
+            return null;
+        }
+
+        return new DocumentBoostFieldsScoreQuery(query, PRODUCT_BOOST_FIELDS);
+
+    }
+
+    private static final Set<String> SKU_BOOST_FIELDS = new HashSet<>(
+            Arrays.asList(
+                    "rank_boost"
+            )
+    );
+
+    private Query skuBoost(final Query query) {
+
+        if (query == null) {
+            return null;
+        }
+
+        return new DocumentBoostFieldsScoreQuery(query, SKU_BOOST_FIELDS);
+
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -358,10 +392,11 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
 
         if (productService.getProductQty(testProd) == 0) {
             // use relaxation for all elements of query if strict query yields no results
-            prod = join(productQueryChainRelaxed, BooleanClause.Occur.MUST);
-            sku = join(skuQueryChainRelaxed, BooleanClause.Occur.SHOULD);
+            prod = productBoost(join(productQueryChainRelaxed, BooleanClause.Occur.MUST));
+            sku = skuBoost(join(skuQueryChainRelaxed, BooleanClause.Occur.SHOULD));
         } else {
-            sku = join(skuQueryChainStrict, BooleanClause.Occur.SHOULD);
+            prod = productBoost(prod);
+            sku = skuBoost(join(skuQueryChainStrict, BooleanClause.Occur.SHOULD));
         }
 
         if (LOG.isDebugEnabled()) {

@@ -20,6 +20,8 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.service.misc.LanguageService;
 
+import java.util.List;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -52,10 +54,10 @@ public class ShopMediaFileNameStrategyImpl extends AbstractMediaFileNameStrategy
 
         final String val = resolveFileName(url);
 
-        final String code = attrValueShopDao.findSingleByNamedQuery("SHOP.CODE.BY.MEDIAFILE.NAME", val, getAttributePrefix() + '%');
+        final List<String> code = (List) attrValueShopDao.findQueryObjectByNamedQuery("SHOP.CODE.BY.MEDIAFILE.NAME", val, getAttributePrefix() + '%');
 
-        if (code != null) {
-            return code;
+        if (code != null && !code.isEmpty()) {
+            return code.get(0);
         }
 
         return null;

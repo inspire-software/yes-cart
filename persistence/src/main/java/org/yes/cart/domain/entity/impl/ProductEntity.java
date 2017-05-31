@@ -17,12 +17,10 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.apache.commons.lang.StringUtils;
-//import org.hibernate.search.annotations.*;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
-import org.yes.cart.domain.interceptor.ProductEntityIndexingInterceptor;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -33,8 +31,6 @@ import java.util.*;
  * Time: 9:10 AM
  */
 
-//@Indexed(index = "luceneindex/product", interceptor = ProductEntityIndexingInterceptor.class)
-//@DynamicBoost(impl = ProductDynamicBoostStrategy.class)
 public class ProductEntity implements org.yes.cart.domain.entity.Product, java.io.Serializable {
 
     private ProductSku defaultProductSku = null;
@@ -77,10 +73,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
 
 
-//    @Fields({
-//        @Field(name = "code", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES),
-//        @Field(name = "code_stem", index = Index.YES, analyze = Analyze.YES, norms = Norms.NO, store = Store.NO)
-//    })
     public String getCode() {
         return this.code;
     }
@@ -89,10 +81,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.code = code;
     }
 
-//    @Fields({
-//            @Field(name = "manufacturerCode", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES),
-//            @Field(name = "manufacturerCode_stem", index = Index.YES, analyze = Analyze.YES, norms = Norms.NO, store = Store.NO)
-//    })
     public String getManufacturerCode() {
         return manufacturerCode;
     }
@@ -133,7 +121,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.pimCode = pimCode;
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public Date getAvailablefrom() {
         return this.availablefrom;
     }
@@ -143,7 +130,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
     /** {@inheritDoc} */
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public Date getAvailableto() {
         return this.availableto;
     }
@@ -154,9 +140,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
     /** {@inheritDoc} */
-//    @Fields({
-//            @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES),
-//            @Field(name = "name_sort", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.NO)})
     public String getName() {
         return this.name;
     }
@@ -167,14 +150,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
     /** {@inheritDoc} */
-//    @Fields({
-//        @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.YES, store = Store.YES,
-//                bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.DisplayNameBridge.class)),
-//        @Field(name = "displayNameAsIs", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES,
-//                bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.DisplayNameBridge.class)),
-//        @Field(name = "displayName_sort", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.NO,
-//                bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.DisplayNameBridge.class))
-//    })
     public String getDisplayName() {
         return this.displayName;
     }
@@ -185,7 +160,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
     /** {@inheritDoc} */
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getDescriptionAsIs() {
         final StringBuilder builder = new StringBuilder();
         for (AttrValue attr : attributes) {
@@ -203,7 +177,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return attrCode.substring(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX.length());
     }
 
-//    @Field(name = "description_stem", index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.NO)
     public String getDescriptionStem() {
         final String localisedDescription = getDescriptionAsIs();
         final String description = getDescription();
@@ -216,7 +189,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return description;
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
     public String getDescription() {
         return this.description;
     }
@@ -225,7 +197,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.description = description;
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
     public String getTag() {
         return this.tag;
     }
@@ -234,12 +205,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.tag = tag;
     }
 
-//    @Fields({
-//            @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES,
-//                    bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class)),
-//            @Field(name = "brandName", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES,
-//                    bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandNameBridge.class))
-//    })
     public Brand getBrand() {
         return this.brand;
     }
@@ -248,7 +213,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.brand = brand;
     }
 
-//    @Field(name = "producttype", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getProducttypeId() {
         return String.valueOf(getProducttype().getProducttypeId());
     }
@@ -261,7 +225,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.producttype = producttype;
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public int getAvailability() {
         return this.availability;
     }
@@ -270,7 +233,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.availability = availability;
     }
 
-//    @Field(bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class))
     public Set<AttrValueProduct> getAttributes() {
         return this.attributes;
     }
@@ -279,7 +241,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.attributes = attributes;
     }
 
-//    @Field(bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductCategoryBridge.class))
     public Set<ProductCategory> getProductCategory() {
         return this.productCategory;
     }
@@ -288,11 +249,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.productCategory = productCategory;
     }
 
-//    @Fields({
-//        @Field(bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductSkuBridge.class)),
-//        @Field(name = "qtyOnWarehouse", store = Store.YES, analyze = Analyze.NO,
-//                bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.SkuWarehouseBridge.class))
-//    })
     public Collection<ProductSku> getSku() {
         return this.sku;
     }
@@ -317,7 +273,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.productAssociations = productAssociations;
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public Boolean getFeatured() {
         return this.featured;
     }
@@ -334,7 +289,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.seoInternal = seo;
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -343,7 +297,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.createdTimestamp = createdTimestamp;
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -376,7 +329,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.guid = guid;
     }
 
-//    @DocumentId
     public long getProductId() {
         return this.productId;
     }
@@ -402,7 +354,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
      * Get default image, which is stored into lucene index, to reduce db hit.
      * @return default product image if found, otherwise no image constant.
      */
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getDefaultImage() {
         final String attr = getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
         if (StringUtils.isBlank(attr)) {
@@ -413,7 +364,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return attr;
     }
 
-//    @Field(name = "defaultSku", index = Index.YES, analyze = Analyze.NO, store = Store.YES)
     public String getDefaultSkuCode() {
         final ProductSku sku = getDefaultSku();
         if (sku != null) {
@@ -529,7 +479,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.setSeoInternal((SeoEntity) seo);
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public BigDecimal getMinOrderQuantity() {
         return minOrderQuantity;
     }
@@ -538,7 +487,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.minOrderQuantity = minOrderQuantity;
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public BigDecimal getMaxOrderQuantity() {
         return maxOrderQuantity;
     }
@@ -547,7 +495,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.maxOrderQuantity = maxOrderQuantity;
     }
 
-//    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public BigDecimal getStepOrderQuantity() {
         return stepOrderQuantity;
     }

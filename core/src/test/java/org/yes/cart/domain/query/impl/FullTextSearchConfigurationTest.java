@@ -156,12 +156,12 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L, 313L), false,
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("CC_TESTX")));
                 products = productDao.fullTextSearch(context.getProductQuery());
-                assertEquals("This is fuzzy so we see all CC_TESTX", 10, products.size());
+                assertEquals("This is fuzzy so we see all CC_TESTX (including stemmed)", 13, products.size());
                 // search by Sku code with stems
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L, 313L), false,
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("cc_test4")));
                 products = productDao.fullTextSearch(context.getProductQuery());
-                assertEquals("Relaxed search should give all cc_test skus", 10, products.size());
+                assertEquals("Relaxed search should give all cc_test skus (search is case-insensitive)", 1, products.size());
                 assertEquals("CC_TEST4 is best match", "CC_TEST4", products.get(0).getCode());
                 // search by sku id
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, null, false,
@@ -180,12 +180,11 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("Rodriguez Bending")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertTrue(!products.isEmpty());
-                assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
+                assertTrue("BENDER is best match", Arrays.asList("BENDER", "BENDER-ua").contains(products.get(0).getCode()));
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L), false,
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("DiMaggio")));
                 products = productDao.fullTextSearch(context.getProductQuery());
-                assertFalse(products.isEmpty());
-                assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
+                assertTrue("Must not use description in FT, it produces bad results", products.isEmpty());
                 // search on empty string
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L), false,
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("")));
@@ -315,7 +314,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, null, false,
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("CC_TESTX")));
                 products = productDao.fullTextSearch(context.getProductQuery());
-                assertEquals("CC_TEST1 - CC_TEST9 + CC_TEST5-NOINV are in this shop " + context.getProductQuery().toString(), 10, products.size());
+                assertEquals("CC_TEST1 - CC_TEST9 + CC_TEST5-NOINV are in this shop " + context.getProductQuery().toString(), 13, products.size());
 
                 //test fuzzy search
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, null, false,
@@ -329,12 +328,11 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("Rodriguez Bending")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertFalse(products.isEmpty());
-                assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
+                assertTrue("BENDER is best match", Arrays.asList("BENDER", "BENDER-ua").contains(products.get(0).getCode()));
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, null, false,
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("DiMaggio")));
                 products = productDao.fullTextSearch(context.getProductQuery());
-                assertFalse(products.isEmpty());
-                assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
+                assertTrue("Must not use description in FT, it produces bad results", products.isEmpty());
 
                 // search on empty string
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, null, false,
@@ -414,11 +412,11 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertFalse("Failed [" + context.getProductQuery().toString() + "]", products.isEmpty());
                 assertEquals("CC_TEST9 is best match but also 2 digit ones applicable 10,11,12", "CC_TEST9", products.get(0).getCode());
-                assertEquals(4, products.size());
+                assertEquals(13, products.size());
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, null, false,
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("CC_TEZT9")));
                 products = productDao.fullTextSearch(context.getProductQuery());
-                assertEquals("Misspelling does not increase the score and should find a match", 1, products.size());
+                assertEquals("Misspelling does not increase the score and should find a match", 10, products.size());
                 assertEquals("CC_TEST9 is best match", "CC_TEST9", products.get(0).getCode());
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, null, false,
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("cc_test99")));
@@ -542,7 +540,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 final FilteredNavigationRecordRequest brands =
                         new FilteredNavigationRecordRequestImpl(
                                 "brandFacet",
-                                ProductSearchQueryBuilder.BRAND_FIELD
+                                "facet_" + ProductSearchQueryBuilder.BRAND_FIELD
                         );
 
 
@@ -555,8 +553,8 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertEquals(2, brandFacetResults.size());
 
                 final List<Pair<String, Integer>> expectedInCategory = Arrays.asList(
-                        new Pair<String, Integer>("futurerobots", 1),
-                        new Pair<String, Integer>("unknown", 1)
+                        new Pair<String, Integer>("FutureRobots", 1),
+                        new Pair<String, Integer>("Unknown", 1)
                 );
 
                 for (final Pair<String, Integer> brandFacetResultItem : brandFacetResults) {
@@ -573,11 +571,11 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
 
                 final List<Pair<String, Integer>> expectedInShop = Arrays.asList(
                         new Pair<String, Integer>("cc tests", 13),
-                        new Pair<String, Integer>("futurerobots", 3),
-                        new Pair<String, Integer>("samsung", 2),
-                        new Pair<String, Integer>("sony", 1),
-                        new Pair<String, Integer>("lg", 1),
-                        new Pair<String, Integer>("unknown", 1)
+                        new Pair<String, Integer>("FutureRobots", 3),
+                        new Pair<String, Integer>("Samsung", 2),
+                        new Pair<String, Integer>("Sony", 1),
+                        new Pair<String, Integer>("LG", 1),
+                        new Pair<String, Integer>("Unknown", 1)
                 );
 
                 for (final Pair<String, Integer> brandFacetResultItem : brandFacetResults) {
@@ -596,8 +594,8 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertEquals(2, brandFacetResults.size());
 
                 final List<Pair<String, Integer>> subExpectedInCategory = Arrays.asList(
-                        new Pair<String, Integer>("futurerobots", 1),
-                        new Pair<String, Integer>("unknown", 1)
+                        new Pair<String, Integer>("FutureRobots", 1),
+                        new Pair<String, Integer>("Unknown", 1)
                 );
 
                 for (final Pair<String, Integer> brandFacetResultItem : brandFacetResults) {
@@ -655,17 +653,17 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 priceFacetResults = facets.get("priceFacet");
                 assertNotNull(priceFacetResults);
                 assertEquals(6, priceFacetResults.size());
-                assertEquals("[00000000, 00001500)", priceFacetResults.get(0).getFirst());
+                assertEquals("00000000-_-00001500", priceFacetResults.get(0).getFirst());
                 assertEquals(Integer.valueOf(0), priceFacetResults.get(0).getSecond());
-                assertEquals("[00001500, 00001600)", priceFacetResults.get(1).getFirst());
+                assertEquals("00001500-_-00001600", priceFacetResults.get(1).getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(1).getSecond());
-                assertEquals("[00001600, 00030000)", priceFacetResults.get(2).getFirst());
+                assertEquals("00001600-_-00030000", priceFacetResults.get(2).getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(2).getSecond());
-                assertEquals("[00025000, 00030000)", priceFacetResults.get(3).getFirst());
+                assertEquals("00025000-_-00030000", priceFacetResults.get(3).getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(3).getSecond());
-                assertEquals("[00030000, 00040000)", priceFacetResults.get(4).getFirst());
+                assertEquals("00030000-_-00040000", priceFacetResults.get(4).getFirst());
                 assertEquals(Integer.valueOf(0), priceFacetResults.get(4).getSecond());
-                assertEquals("[00030000, 01000000]", priceFacetResults.get(5).getFirst());
+                assertEquals("00030000-_-01000000", priceFacetResults.get(5).getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(5).getSecond());
 
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, null, false, null);
@@ -680,8 +678,8 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 // BENDER     --.--
                 // SOBOT
                 //    BEER   150.85 EUR
-                //    PINK   150.85 EUR
-                //    LIGHT  145.00 EUR <- lowest
+                //    PINK   140.11 EUR <- lowest
+                //    LIGHT  150.85 EUR
                 //    ORIG   150.85 EUR
                 // CC_TEST4
                 //           123.00 EUR
@@ -703,11 +701,11 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 //            55.17 EUR <- lowest
                 //            80.99 EUR
                 // CC_TEST1
-                //            19.99 EUR
+                //            19.99 EUR <- lowest
                 //           190.99 EUR
                 //            19.00 EUR
                 //           190.01 EUR
-                //            18.00 EUR <- lowest
+                //            18.00 EUR
                 //           180.00 EUR
                 // CC_TEST2
                 //            29.99 EUR
@@ -760,17 +758,17 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 priceFacetResults = facets.get("priceFacet");
                 assertNotNull(priceFacetResults);
                 assertEquals(6, priceFacetResults.size());
-                assertEquals("[00000000, 00001500)", priceFacetResults.get(0).getFirst());
+                assertEquals("00000000-_-00001500", priceFacetResults.get(0).getFirst());
                 assertEquals(Integer.valueOf(5), priceFacetResults.get(0).getSecond());
-                assertEquals("[00001500, 00001600)", priceFacetResults.get(1).getFirst());
+                assertEquals("00001500-_-00001600", priceFacetResults.get(1).getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(1).getSecond());
-                assertEquals("[00001600, 00030000)", priceFacetResults.get(2).getFirst());
+                assertEquals("00001600-_-00030000", priceFacetResults.get(2).getFirst());
                 assertEquals(Integer.valueOf(12), priceFacetResults.get(2).getSecond());
-                assertEquals("[00025000, 00030000)", priceFacetResults.get(3).getFirst());
+                assertEquals("00025000-_-00030000", priceFacetResults.get(3).getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(3).getSecond());
-                assertEquals("[00030000, 00040000)", priceFacetResults.get(4).getFirst());
+                assertEquals("00030000-_-00040000", priceFacetResults.get(4).getFirst());
                 assertEquals(Integer.valueOf(0), priceFacetResults.get(4).getSecond());
-                assertEquals("[00030000, 01000000]", priceFacetResults.get(5).getFirst());
+                assertEquals("00030000-_-01000000", priceFacetResults.get(5).getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(5).getSecond());
 
                 final FilteredNavigationRecordRequest priceInShop2 =
@@ -794,24 +792,24 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 priceFacetResults = facets.get("priceFacet");
                 assertNotNull(priceFacetResults);
                 assertEquals(7, priceFacetResults.size());
-                assertEquals("[00000000, 00001000)", priceFacetResults.get(0).getFirst());
+                assertEquals("00000000-_-00001000", priceFacetResults.get(0).getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(0).getSecond());
-                assertEquals("[00001000, 00001500)", priceFacetResults.get(1).getFirst());
+                assertEquals("00001000-_-00001500", priceFacetResults.get(1).getFirst());
                 assertEquals(Integer.valueOf(3), priceFacetResults.get(1).getSecond());
-                assertEquals("[00001500, 00002000)", priceFacetResults.get(2).getFirst());
+                assertEquals("00001500-_-00002000", priceFacetResults.get(2).getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(2).getSecond());
-                assertEquals("[00002000, 00002500)", priceFacetResults.get(3).getFirst());
+                assertEquals("00002000-_-00002500", priceFacetResults.get(3).getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(3).getSecond());
-                assertEquals("[00002500, 00006000)", priceFacetResults.get(4).getFirst());
+                assertEquals("00002500-_-00006000", priceFacetResults.get(4).getFirst());
                 assertEquals(Integer.valueOf(5), priceFacetResults.get(4).getSecond());
-                assertEquals("[00006000, 00010000)", priceFacetResults.get(5).getFirst());
+                assertEquals("00006000-_-00010000", priceFacetResults.get(5).getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(5).getSecond());
-                assertEquals("[00010000, 01000000]", priceFacetResults.get(6).getFirst());
+                assertEquals("00010000-_-01000000", priceFacetResults.get(6).getFirst());
                 assertEquals(Integer.valueOf(5), priceFacetResults.get(6).getSecond());
 
 
 
-                // Sub shop price facting
+                // Sub shop price faceting
 
                 context = searchQueryFactory.getFilteredNavigationQueryChain(1010L, Arrays.asList(129L, 130L, 131L, 132L), false, null);
 
@@ -842,17 +840,17 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 priceFacetResults = facets.get("priceFacet");
                 assertNotNull(priceFacetResults);
                 assertEquals(6, priceFacetResults.size());
-                assertEquals("[00000000, 00001500)", priceFacetResults.get(0).getFirst());
+                assertEquals("00000000-_-00001500", priceFacetResults.get(0).getFirst());
                 assertEquals(Integer.valueOf(0), priceFacetResults.get(0).getSecond());
-                assertEquals("[00001500, 00001600)", priceFacetResults.get(1).getFirst());
+                assertEquals("00001500-_-00001600", priceFacetResults.get(1).getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(1).getSecond());
-                assertEquals("[00001600, 00030000)", priceFacetResults.get(2).getFirst());
+                assertEquals("00001600-_-00030000", priceFacetResults.get(2).getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(2).getSecond());
-                assertEquals("[00025000, 00030000)", priceFacetResults.get(3).getFirst());
+                assertEquals("00025000-_-00030000", priceFacetResults.get(3).getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(3).getSecond());
-                assertEquals("[00030000, 00040000)", priceFacetResults.get(4).getFirst());
+                assertEquals("00030000-_-00040000", priceFacetResults.get(4).getFirst());
                 assertEquals(Integer.valueOf(0), priceFacetResults.get(4).getSecond());
-                assertEquals("[00030000, 01000000]", priceFacetResults.get(5).getFirst());
+                assertEquals("00030000-_-01000000", priceFacetResults.get(5).getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(5).getSecond());
 
 
@@ -1068,7 +1066,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, null, false,
                         Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD, (List) Arrays.asList("newarrival")));
                 List<Product> products = productDao.fullTextSearch(context.getProductQuery());
-                assertEquals("Failed [" + context.getProductQuery().toString() +"] expected 2 products", 2, products.size());
+                assertTrue("Failed [" + context.getProductQuery().toString() + "] expected >=2 products", products.size() >= 2);
                 assertTrue("Must have tag", products.get(0).getTag().contains("newarrival"));
                 assertTrue("Must have tag", products.get(1).getTag().contains("newarrival"));
 
@@ -1200,49 +1198,49 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
 
                 // range values are excluding high value
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(130L, 131L, 132L), false,
-                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("0.001-_-2.3")));
+                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("1-_-2300")));
                 List<Product> products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals("Range search with query [" + context.getProductQuery() + "] incorrect", 2, products.size());
 
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(130L, 131L, 132L), false,
-                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("0.001-_-2.31")));
+                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("1-_-2310")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals("Range search with query [" + context.getProductQuery() + "] incorrect", 3, products.size());
 
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(130L, 131L, 132L), false,
-                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("2.1-_-2.31")));
+                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("2100-_-2310")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals("Range search with query [" + context.getProductQuery() + "] incorrect", 3, products.size());
 
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(130L, 131L, 132L), false,
-                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("2.35-_-2.36")));
+                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("2350-_-2360")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals("Range search with query [" + context.getProductQuery() + "] incorrect", 1, products.size());
 
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(130L, 131L, 132L), false,
-                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("2.34-_-2.36")));
+                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("2340-_-2360")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals("Range search with query [" + context.getProductQuery() + "] incorrect", 1, products.size());
 
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(130L, 131L, 132L), false,
-                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("2.35-_-2.38")));
+                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("2350-_-2380")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals("Range search with query [" + context.getProductQuery() + "] incorrect", 1, products.size());
 
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(130L, 131L, 132L), false,
-                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("2.4-_-2.49")));
+                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("2400-_-2490")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals("Range search with query [" + context.getProductQuery() + "] incorrect", 0, products.size());
 
                 // products not assigned to this category
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(100L), false,
-                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("2.1-_-2.5")));
+                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("2100-_-2500")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals("Range search with query [" + context.getProductQuery() + "] incorrect", 0, products.size());
 
                 // products not assigned to this category
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(100L, 101L, 102L), false,
-                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("2.1-_-2.5")));
+                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("2100-_-2500")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals("Range search with query [" + context.getProductQuery() + "] incorrect", 0, products.size());
 
@@ -1250,7 +1248,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 // sub shops
                 // range values are excluding high value
                 context = searchQueryFactory.getFilteredNavigationQueryChain(1010L, Arrays.asList(130L, 131L, 132L), false,
-                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("0.001-_-2.3")));
+                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("1-_-2300")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals("Range search with query [" + context.getProductQuery() + "] incorrect", 2, products.size());
 
