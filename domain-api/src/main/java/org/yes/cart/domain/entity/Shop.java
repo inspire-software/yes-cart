@@ -360,6 +360,15 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      */
     boolean isSfShowTaxOptions(String customerType);
 
+    /**
+     * Flag whether to disable same address checkbox option for given customer type.
+     *
+     * @param customerType  type of customer
+     *
+     * @return true customer can see "billing same as shipping" checkbox
+     */
+    boolean isSfShowSameBillingAddressDisabledTypes(String customerType);
+
 
     /**
      * Flag to denote if shop is disabled on not.

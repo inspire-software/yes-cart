@@ -101,8 +101,8 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
                 ctx.setCustomerEmail(customer.getEmail());
                 ctx.setCustomerName(customerService.formatNameFor(customer, current));
                 ctx.setCustomerShops(customerShops);
-                setDefaultAddressesIfNecessary(current, customer, shoppingCart);
                 setDefaultCustomerOptions(shoppingCart);
+                setDefaultAddressesIfNecessary(current, customer, shoppingCart);
                 setDefaultTaxOptions(shoppingCart);
 
                 recalculatePricesInCart(shoppingCart);

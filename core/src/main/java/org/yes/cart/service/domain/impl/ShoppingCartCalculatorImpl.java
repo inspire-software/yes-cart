@@ -53,6 +53,7 @@ public class ShoppingCartCalculatorImpl implements ShoppingCartCalculator {
             cart.getOrderInfo().setPaymentGatewayLabel(currentCart.getOrderInfo().getPaymentGatewayLabel());
             cart.getOrderInfo().setMultipleDelivery(currentCart.getOrderInfo().isMultipleDelivery());
             cart.getOrderInfo().setSeparateBillingAddress(currentCart.getOrderInfo().isSeparateBillingAddress());
+            cart.getOrderInfo().setSeparateBillingAddressEnabled(currentCart.getOrderInfo().isSeparateBillingAddressEnabled());
             cart.getOrderInfo().setBillingAddressNotRequired(currentCart.getOrderInfo().isBillingAddressNotRequired());
             cart.getOrderInfo().setDeliveryAddressNotRequired(currentCart.getOrderInfo().isDeliveryAddressNotRequired());
             cart.getOrderInfo().setCarrierSlaId(currentCart.getOrderInfo().getCarrierSlaId());

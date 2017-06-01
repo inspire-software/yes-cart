@@ -94,6 +94,7 @@ public class VoShopSummary {
     private MutablePair<String, List<String>> customerTypesSeeNetPrice;
     private MutablePair<String, List<String>> customerTypesSeeTaxAmount;
     private MutablePair<String, List<String>> customerTypesChangeTaxView;
+    private MutablePair<String, List<String>> customerTypesDisableOneAddress;
     private MutablePair<String, List<String>> customerTypesRfq;
     private MutablePair<String, List<String>> customerTypesOrderApproval;
     private MutablePair<String, List<String>> customerTypesBlockCheckout;
@@ -477,6 +478,14 @@ public class VoShopSummary {
 
     public void setCustomerTypesChangeTaxView(final MutablePair<String, List<String>> customerTypesChangeTaxView) {
         this.customerTypesChangeTaxView = customerTypesChangeTaxView;
+    }
+
+    public MutablePair<String, List<String>> getCustomerTypesDisableOneAddress() {
+        return customerTypesDisableOneAddress;
+    }
+
+    public void setCustomerTypesDisableOneAddress(final MutablePair<String, List<String>> customerTypesDisableOneAddress) {
+        this.customerTypesDisableOneAddress = customerTypesDisableOneAddress;
     }
 
     public MutablePair<String, List<String>> getCustomerTypesRfq() {

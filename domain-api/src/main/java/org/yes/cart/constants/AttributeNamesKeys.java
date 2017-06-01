@@ -438,6 +438,11 @@ public interface AttributeNamesKeys {
         String SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT = "SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT";
 
         /**
+         * Setting for whether to allow single address (i.e. use shipping for billing)
+         */
+        String SHOP_DELIVERY_ONE_ADDRESS_DISABLE = "SHOP_DELIVERY_ONE_ADDRESS_DISABLE";
+
+        /**
          * Flag whether to include subcategories in search
          */
         String SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH = "INCLUDE_SUBCATEGORIES_IN_SEARCH_SHOP";

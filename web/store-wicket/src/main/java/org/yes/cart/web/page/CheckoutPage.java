@@ -642,7 +642,8 @@ public class CheckoutPage extends AbstractWebPage {
         final Shop shop = getCurrentShop();
         final ShoppingCart cart = getCurrentCart();
 
-        boolean billingAddressHidden = !cart.getOrderInfo().isSeparateBillingAddress();
+        final boolean forceTwoAddresses = cart.getOrderInfo().isSeparateBillingAddressEnabled();
+        final boolean billingAddressHidden = !cart.getOrderInfo().isSeparateBillingAddress();
 
         final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
@@ -686,7 +687,7 @@ public class CheckoutPage extends AbstractWebPage {
                                 addFeedbackForAddressSelection();
                             }
                         }
-                )
+                ).setVisible(!forceTwoAddresses)
         );
 
         addFeedbackForAddressSelection();

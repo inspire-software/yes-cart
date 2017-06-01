@@ -53,7 +53,7 @@ public class SetBillingSeparateFromShippingAddressCommandImpl extends AbstractCa
     @Override
     public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
-            final Boolean value = Boolean.valueOf((String) parameters.get(getCmdKey()));
+            final Boolean value = shoppingCart.getOrderInfo().isSeparateBillingAddressEnabled() ? Boolean.TRUE : Boolean.valueOf((String) parameters.get(getCmdKey()));
             if (!value.equals(shoppingCart.getOrderInfo().isSeparateBillingAddress())) {
                 shoppingCart.getOrderInfo().setSeparateBillingAddress(value);
                 markDirty(shoppingCart);

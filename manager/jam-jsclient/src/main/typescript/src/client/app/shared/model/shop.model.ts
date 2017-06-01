@@ -180,6 +180,7 @@ export interface ShopSummaryVO {
   customerTypesSeeNetPrice: Pair<string, string[]>;
   customerTypesSeeTaxAmount: Pair<string, string[]>;
   customerTypesChangeTaxView: Pair<string, string[]>;
+  customerTypesDisableOneAddress: Pair<string, string[]>;
   customerTypesRfq: Pair<string, string[]>;
   customerTypesOrderApproval: Pair<string, string[]>;
   customerTypesBlockCheckout: Pair<string, string[]>;
