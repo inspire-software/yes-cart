@@ -156,12 +156,15 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         if (productIds != null && !productIds.isEmpty()) {
 
+
+            final List<Long> search = productIds.size() > 50 ? productIds.subList(0, 50) : productIds;
+
             final NavigationContext assoc = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, null, false,
                     Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
-                            (List) Arrays.asList(productIds)));
+                            (List) Arrays.asList(search)));
 
             return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
-                    assoc.getProductQuery(), 0, productIds.size(), null, false).getResults());
+                    assoc.getProductQuery(), 0, search.size(), null, false).getResults());
         }
 
         return Collections.emptyList();
