@@ -227,6 +227,10 @@
                   <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesChangeTaxView.second) ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></td>
                 </tr>
                 <tr>
+                  <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}"><i class="fa fa-dollar"></i> {{ shopSummary.customerTypesHidePrices.first }}</td>
+                  <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesHidePrices.second) ? 'fa-check text-danger' : 'fa-remove text-success' }}"></i></td>
+                </tr>
+                <tr>
                   <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}" class="text-muted"><i class="fa fa-envelope"></i> {{ shopSummary.customerTypesRfq.first }} <span class="label label-info">YCE</span></td>
                   <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesRfq.second) ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></td>
                 </tr>

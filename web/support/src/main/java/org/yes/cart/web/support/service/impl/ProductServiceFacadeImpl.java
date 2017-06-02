@@ -449,6 +449,16 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
     }
 
+    /**
+     * Model that does not show any details, NULL object.
+     *
+     * @param currency currency
+     *
+     * @return null price model
+     */
+    protected ProductPriceModelImpl getNullProductPriceModel(final String currency) {
+        return new ProductPriceModelImpl(null, currency, null, null, null);
+    }
 
     /**
      * {@inheritDoc}
@@ -456,6 +466,13 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     @Override
     public Pair<ProductPriceModel, CustomerWishList.PriceChange> getSkuPrice(final ShoppingCart cart,
                                                                              final CustomerWishList item) {
+
+        if (cart.getShoppingContext().isHidePrices()) {
+            return new Pair<ProductPriceModel, CustomerWishList.PriceChange>(
+                    getNullProductPriceModel(cart.getCurrencyCode()),
+                    new CustomerWishList.PriceChange(CustomerWishList.PriceChangeType.NOCHANGE, null)
+            );
+        }
 
         final String sku = item.getSkus().getCode();
         final BigDecimal qty = item.getQuantity();
@@ -528,20 +545,22 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         final String currency = cart.getCurrencyCode();
 
-        final SkuPrice resolved = resolveMinimalPrice(cart, productId, skuCode, quantity);
+        if (!cart.getShoppingContext().isHidePrices()) {
+            final SkuPrice resolved = resolveMinimalPrice(cart, productId, skuCode, quantity);
 
-        if (resolved != null) {
+            if (resolved != null) {
 
-            return getSkuPrice(
-                    cart,
-                    resolved.getSkuCode(),
-                    resolved.getQuantity(),
-                    resolved.getRegularPrice(),
-                    resolved.getSalePriceForCalculation()
-            );
+                return getSkuPrice(
+                        cart,
+                        resolved.getSkuCode(),
+                        resolved.getQuantity(),
+                        resolved.getRegularPrice(),
+                        resolved.getSalePriceForCalculation()
+                );
 
+            }
         }
-        return new ProductPriceModelImpl(null, currency, null, null, null);
+        return getNullProductPriceModel(currency);
     }
 
     /**
@@ -554,6 +573,10 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                          final BigDecimal salePrice) {
 
         final String currency = cart.getCurrencyCode();
+
+        if (cart.getShoppingContext().isHidePrices()) {
+            return getNullProductPriceModel(currency);
+        }
 
         final boolean showTax = cart.getShoppingContext().isTaxInfoEnabled();
         final boolean showTaxNet = showTax && cart.getShoppingContext().isTaxInfoUseNet();
@@ -627,19 +650,35 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      * {@inheritDoc}
      */
     public ProductPriceModel getSkuPrice(final ShoppingCart cart, final CartItem item, boolean total) {
+
+        if (cart.getShoppingContext().isHidePrices()) {
+            return getNullProductPriceModel(cart.getCurrencyCode());
+        }
+
         final boolean enabled = cart.getShoppingContext().isTaxInfoEnabled();
         return getSkuPrice(
                 cart.getCurrencyCode(),
                 enabled,
                 enabled && cart.getShoppingContext().isTaxInfoUseNet(),
                 enabled && cart.getShoppingContext().isTaxInfoShowAmount(),
-                item, total);
+                item, total, false);
+
     }
 
     /**
      * {@inheritDoc}
      */
-    public ProductPriceModel getSkuPrice(final String currency, final boolean showTax, final boolean showTaxNet, final boolean showTaxAmount, final CartItem item, final boolean total) {
+    public ProductPriceModel getSkuPrice(final String currency,
+                                         final boolean showTax,
+                                         final boolean showTaxNet,
+                                         final boolean showTaxAmount,
+                                         final CartItem item,
+                                         final boolean total,
+                                         final boolean hide) {
+
+        if (hide) {
+            return getNullProductPriceModel(currency);
+        }
 
         // For total we use only list price since we already show discount in unit prices
         final BigDecimal sale = total ? null : item.getSalePrice();
@@ -729,26 +768,27 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                                 final Long productId,
                                                 final String skuCode) {
 
-        final Collection<SkuPrice> prices = resolvePrices(cart, productId, skuCode);
+        if (!cart.getShoppingContext().isHidePrices()) {
+            final Collection<SkuPrice> prices = resolvePrices(cart, productId, skuCode);
 
-        if (CollectionUtils.isNotEmpty(prices)) {
+            if (CollectionUtils.isNotEmpty(prices)) {
 
-            final List<ProductPriceModel> models = new ArrayList<ProductPriceModel>(prices.size());
-            for (final SkuPrice price : prices) {
+                final List<ProductPriceModel> models = new ArrayList<ProductPriceModel>(prices.size());
+                for (final SkuPrice price : prices) {
 
-                models.add(getSkuPrice(
-                        cart,
-                        price.getSkuCode(),
-                        price.getQuantity(),
-                        price.getRegularPrice(),
-                        price.getSalePriceForCalculation()
-                ));
+                    models.add(getSkuPrice(
+                            cart,
+                            price.getSkuCode(),
+                            price.getQuantity(),
+                            price.getRegularPrice(),
+                            price.getSalePriceForCalculation()
+                    ));
+
+                }
+                return models;
 
             }
-            return models;
-
         }
-
         return Collections.emptyList();
     }
 
@@ -760,6 +800,10 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     public ProductPriceModel getCartItemsTotal(final ShoppingCart cart) {
 
         final String currency = cart.getCurrencyCode();
+
+        if (cart.getShoppingContext().isHidePrices()) {
+            return getNullProductPriceModel(currency);
+        }
 
         final BigDecimal list = cart.getTotal().getListSubTotal();
         final BigDecimal sale = cart.getTotal().getSubTotal();

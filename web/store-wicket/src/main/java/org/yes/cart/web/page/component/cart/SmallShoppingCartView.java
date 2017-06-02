@@ -77,6 +77,7 @@ public class SmallShoppingCartView extends BaseComponent {
 
         final Integer itemsInCart = cart.getCartItemsCount();
         final String linkTarget = getLinkTarget();
+        final boolean showPrices = !cart.getShoppingContext().isHidePrices();
 
         add(
                 new ExternalLink(
@@ -93,7 +94,7 @@ public class SmallShoppingCartView extends BaseComponent {
                                 ) {
                                     @Override
                                     public boolean isVisible() {
-                                        return true;
+                                        return showPrices;
                                     }
                                 }
                         ).

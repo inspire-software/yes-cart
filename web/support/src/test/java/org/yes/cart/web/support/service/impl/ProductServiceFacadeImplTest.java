@@ -49,6 +49,52 @@ public class ProductServiceFacadeImplTest {
 
 
     @Test
+    public void testGetSkuPriceSearchAndProductDetailsHidePrice() throws Exception {
+
+        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+        final PricingPolicyProvider.PricingPolicy policy = context.mock(PricingPolicyProvider.PricingPolicy.class, "policy");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(true));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
+
+
+        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+
+        assertNotNull(model);
+
+        assertNull(model.getRef());
+
+        assertEquals("EUR", model.getCurrency());
+        assertNull(model.getQuantity());
+
+        assertNull(model.getRegularPrice());
+        assertNull(model.getSalePrice());
+
+        assertFalse(model.isTaxInfoEnabled());
+        assertFalse(model.isTaxInfoUseNet());
+        assertFalse(model.isTaxInfoShowAmount());
+
+        assertNull(model.getPriceTaxCode());
+        assertNull(model.getPriceTaxRate());
+        assertFalse(model.isPriceTaxExclusive());
+        assertNull(model.getPriceTax());
+
+        context.assertIsSatisfied();
+
+    }
+
+
+    @Test
     public void testGetSkuPriceSearchAndProductDetailsNoPrice() throws Exception {
 
         final PriceService priceService = context.mock(PriceService.class, "priceService");
@@ -61,6 +107,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(true));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -117,6 +164,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(true));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(345L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -176,6 +224,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(true));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(345L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -235,6 +284,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(true));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -298,6 +348,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(true));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -363,6 +414,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(true));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -429,6 +481,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -492,6 +545,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -559,6 +613,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -632,6 +687,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -708,6 +764,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -783,6 +840,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -859,6 +917,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -932,6 +991,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -1008,6 +1068,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -1083,6 +1144,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
@@ -1140,6 +1202,74 @@ public class ProductServiceFacadeImplTest {
 
 
     @Test
+    public void testGetSkuPriceCartItemsHidePrice() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+
+        final Shop shop = context.mock(Shop.class, "shop");
+
+        final CartItem item = context.mock(CartItem.class, "item");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(true));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
+
+
+        final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
+
+        assertNotNull(modelPrice);
+
+        assertNull(modelPrice.getRef());
+
+        assertEquals("EUR", modelPrice.getCurrency());
+        assertNull(modelPrice.getQuantity());
+
+        assertNull(modelPrice.getRegularPrice());
+        assertNull(modelPrice.getSalePrice());
+
+        assertFalse(modelPrice.isTaxInfoEnabled());
+        assertFalse(modelPrice.isTaxInfoUseNet());
+        assertFalse(modelPrice.isTaxInfoShowAmount());
+
+        assertNull(modelPrice.getPriceTaxCode());
+        assertNull(modelPrice.getPriceTaxRate());
+        assertFalse(modelPrice.isPriceTaxExclusive());
+        assertNull(modelPrice.getPriceTax());
+
+
+        final ProductPriceModel modelTotal = facade.getSkuPrice(cart, item, true);
+
+        assertNotNull(modelTotal);
+
+        assertNull(modelTotal.getRef());
+
+        assertEquals("EUR", modelTotal.getCurrency());
+        assertNull(modelTotal.getQuantity());
+
+        assertNull(modelTotal.getRegularPrice());
+        assertNull(modelTotal.getSalePrice());
+
+        assertFalse(modelTotal.isTaxInfoEnabled());
+        assertFalse(modelTotal.isTaxInfoUseNet());
+        assertFalse(modelTotal.isTaxInfoShowAmount());
+
+        assertNull(modelTotal.getPriceTaxCode());
+        assertNull(modelTotal.getPriceTaxRate());
+        assertFalse(modelTotal.isPriceTaxExclusive());
+        assertNull(modelTotal.getPriceTax());
+
+        context.assertIsSatisfied();
+
+    }
+
+    @Test
     public void testGetSkuPriceCartItemsEmptyPriceNoTaxInfo() throws Exception {
 
         final ShopService shopService = context.mock(ShopService.class, "shopService");
@@ -1153,6 +1283,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(item).getProductSkuCode(); will(returnValue(null));
@@ -1228,6 +1359,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(item).getProductSkuCode(); will(returnValue(null));
@@ -1305,6 +1437,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(item).getProductSkuCode(); will(returnValue("ABC"));
@@ -1381,6 +1514,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(item).getProductSkuCode(); will(returnValue("ABC"));
@@ -1457,6 +1591,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(item).getProductSkuCode(); will(returnValue("ABC"));
@@ -1539,6 +1674,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(item).getProductSkuCode(); will(returnValue("ABC"));
@@ -1621,6 +1757,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(item).getProductSkuCode(); will(returnValue("ABC"));
@@ -1703,6 +1840,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(item).getProductSkuCode(); will(returnValue("ABC"));
@@ -1773,6 +1911,51 @@ public class ProductServiceFacadeImplTest {
 
 
     @Test
+    public void testGetCartItemsTotalHidePrices() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+        final Total cartTotal = context.mock(Total.class, "cartTotal");
+
+        final Shop shop = context.mock(Shop.class, "shop");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(true));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
+
+
+        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+
+        assertNotNull(model);
+
+        assertNull(model.getRef());
+
+        assertEquals("EUR", model.getCurrency());
+        assertNull(model.getQuantity());
+
+        assertNull(model.getRegularPrice());
+        assertNull(model.getSalePrice());
+
+        assertFalse(model.isTaxInfoEnabled());
+        assertFalse(model.isTaxInfoUseNet());
+        assertFalse(model.isTaxInfoShowAmount());
+
+        assertNull(model.getPriceTaxCode());
+        assertNull(model.getPriceTaxRate());
+        assertFalse(model.isPriceTaxExclusive());
+        assertNull(model.getPriceTax());
+
+        context.assertIsSatisfied();
+
+    }
+
+    @Test
     public void testGetCartItemsTotalEmptyTotalNoTaxInfo() throws Exception {
 
         final ShopService shopService = context.mock(ShopService.class, "shopService");
@@ -1785,6 +1968,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -1835,6 +2019,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -1889,6 +2074,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -1939,6 +2125,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -1994,6 +2181,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2062,6 +2250,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2128,6 +2317,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2190,6 +2380,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2254,6 +2445,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2322,6 +2514,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2388,6 +2581,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2450,6 +2644,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2515,6 +2710,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2584,6 +2780,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2650,6 +2847,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2712,6 +2910,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2778,6 +2977,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2846,6 +3046,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2913,6 +3114,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
@@ -2975,6 +3177,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getTotal(); will(returnValue(cartTotal));

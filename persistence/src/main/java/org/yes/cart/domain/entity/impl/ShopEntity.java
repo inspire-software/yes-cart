@@ -82,6 +82,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Set<String> sfShowTaxAmountTypes;
     private Set<String> sfShowTaxOptionsTypes;
     private Set<String> sfShowSameBillingAddressDisabledTypes;
+    private Set<String> sfHidePricesTypes;
 
     private Boolean B2BProfileActive = null;
     private Boolean B2BAddresBookActive = null;
@@ -830,6 +831,22 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public boolean isSfShowSameBillingAddressDisabledTypes(final String customerType) {
         return getSfShowSameBillingAddressDisabledTypes().contains(customerType);
+    }
+
+    private Set<String> getSfHidePricesTypes() {
+        if (this.sfHidePricesTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_HIDE_PRICES);
+            if (attrs != null) {
+                this.sfHidePricesTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfHidePricesTypes = Collections.emptySet();
+            }
+        }
+        return this.sfHidePricesTypes;
+    }
+
+    public boolean isSfHidePricesTypes(final String customerType) {
+        return getSfHidePricesTypes().contains(customerType);
     }
 
     public String getDefaultShopUrl() {

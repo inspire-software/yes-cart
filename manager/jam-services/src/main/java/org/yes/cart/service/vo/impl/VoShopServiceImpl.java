@@ -434,6 +434,10 @@ public class VoShopServiceImpl implements VoShopService {
         final MutablePair<String, List<String>> changeTax =
                 getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES, lang);
 
+        // Prices
+        final MutablePair<String, List<String>> hidePrices =
+                getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_HIDE_PRICES, lang);
+
         // Allow selection of same address
         final MutablePair<String, List<String>> disableOneAddress =
                 getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_DELIVERY_ONE_ADDRESS_DISABLE, lang);
@@ -464,6 +468,7 @@ public class VoShopServiceImpl implements VoShopService {
         additionalTypes.addAll(seeNetPrice.getSecond());
         additionalTypes.addAll(seeTaxAmount.getSecond());
         additionalTypes.addAll(changeTax.getSecond());
+        additionalTypes.addAll(hidePrices.getSecond());
         additionalTypes.addAll(disableOneAddress.getSecond());
         additionalTypes.addAll(rfq.getSecond());
         additionalTypes.addAll(approve.getSecond());
@@ -490,6 +495,7 @@ public class VoShopServiceImpl implements VoShopService {
         summary.setCustomerTypesSeeNetPrice(seeNetPrice);
         summary.setCustomerTypesSeeTaxAmount(seeTaxAmount);
         summary.setCustomerTypesChangeTaxView(changeTax);
+        summary.setCustomerTypesHidePrices(hidePrices);
         summary.setCustomerTypesDisableOneAddress(disableOneAddress);
         summary.setCustomerTypesRfq(rfq);
         summary.setCustomerTypesOrderApproval(approve);

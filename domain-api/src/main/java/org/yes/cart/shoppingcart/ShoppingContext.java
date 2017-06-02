@@ -120,6 +120,13 @@ public interface ShoppingContext extends Serializable {
     boolean isTaxInfoShowAmount();
 
     /**
+     * Get flag to indicate to display prices.
+     *
+     * @return true if prices should not be displayed
+     */
+    boolean isHidePrices();
+
+    /**
      * Get shopper ip address
      *
      * @return customer's IP

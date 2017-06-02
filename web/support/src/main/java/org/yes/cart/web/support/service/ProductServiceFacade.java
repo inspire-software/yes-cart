@@ -367,9 +367,10 @@ public interface ProductServiceFacade {
      * @param item      item to create price model for
      * @param total     true indicates that we what total amount, false indicates list and sale price
      *
+     * @param hide
      * @return price (or blank object)
      */
-    ProductPriceModel getSkuPrice(String currency, boolean showTax, boolean showTaxNet, boolean showTaxAmount, CartItem item, boolean total);
+    ProductPriceModel getSkuPrice(String currency, boolean showTax, boolean showTaxNet, boolean showTaxAmount, CartItem item, boolean total, final boolean hide);
 
     /**
      * Get prices for all SKU quantity tiers sorted by tier.

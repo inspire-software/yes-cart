@@ -117,6 +117,12 @@ public interface MutableShoppingContext extends ShoppingContext, Serializable {
      */
     void setTaxInfoShowAmount(final boolean taxInfoShowAmount);
 
+    /**
+     * Set flag to indicate to display/hide prices.
+     *
+     * @param hidePrices true to hide prices, false to show prices
+     */
+    void setHidePrices(final boolean hidePrices);
 
     /**
      * Set shopper ip address.

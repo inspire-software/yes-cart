@@ -443,6 +443,11 @@ public interface AttributeNamesKeys {
         String SHOP_DELIVERY_ONE_ADDRESS_DISABLE = "SHOP_DELIVERY_ONE_ADDRESS_DISABLE";
 
         /**
+         * Setting for whether to show prices
+         */
+        String SHOP_PRODUCT_HIDE_PRICES = "SHOP_PRODUCT_HIDE_PRICES";
+
+        /**
          * Flag whether to include subcategories in search
          */
         String SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH = "INCLUDE_SUBCATEGORIES_IN_SEARCH_SHOP";
