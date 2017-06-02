@@ -93,6 +93,9 @@ public class VoCategoryServiceImpl implements VoCategoryService {
                             return new Pair<>(false, null);
                         }
                         final CategoryDTO category = dtoCategoryService.getById(objectId);
+                        if (StringUtils.isNotBlank(category.getUri())) {
+                            return new Pair<>(true, category.getUri());
+                        }
                         return new Pair<>(true, category.getGuid());
                     }
                 };

@@ -92,6 +92,9 @@ public class VoContentServiceImpl implements VoContentService {
                             return new Pair<>(false, null);
                         }
                         final CategoryDTO category = dtoContentService.getById(objectId);
+                        if (StringUtils.isNotBlank(category.getUri())) {
+                            return new Pair<>(true, category.getUri());
+                        }
                         return new Pair<>(true, category.getGuid());
                     }
                 };
