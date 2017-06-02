@@ -238,7 +238,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   protected onEditParent() {
     LogUtil.debug('CategoryComponent onEditParent handler');
-    this.categoryParentSelectComponent.showDialog();
+    this.categoryParentSelectComponent.showDialog(this.category.parentId);
   }
 
   protected onCategoryParentSelected(event:FormValidationEvent<CategoryVO>) {

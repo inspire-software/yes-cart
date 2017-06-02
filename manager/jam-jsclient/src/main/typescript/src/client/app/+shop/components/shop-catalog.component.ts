@@ -214,8 +214,8 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
       if (catVo.children !== null && catVo.children.length > 0) {
         node.children = this.adaptToTree(catVo.children, disabled);
         node.children.forEach(child => {
-          if (child.disabled) {
-            node.expanded = true; // Expand parent if child is expanded
+          if (child.disabled || child.expanded) {
+            node.expanded = true; // Expand parent if child is selected or expanded
           }
         });
       }

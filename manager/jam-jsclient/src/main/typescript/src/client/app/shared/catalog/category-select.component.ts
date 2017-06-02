@@ -80,7 +80,7 @@ export class CategorySelectComponent implements OnInit {
 
   onRefresh() {
     LogUtil.debug('CategorySelectComponent onRefresh');
-    this.loadData(true);
+    this.loadData(0, true);
   }
 
   collectExpanded(nodes:Array<ITreeNode>, expanded:any) {
@@ -95,9 +95,9 @@ export class CategorySelectComponent implements OnInit {
   }
 
 
-  public showDialog() {
-    LogUtil.debug('CategorySelectComponent showDialog');
-    this.loadData();
+  public showDialog(current:number = 0) {
+    LogUtil.debug('CategorySelectComponent showDialog', current);
+    this.loadData(current);
     this.catalogTreeModalDialog.show();
   }
 
@@ -114,7 +114,7 @@ export class CategorySelectComponent implements OnInit {
   /**
    * Load data and adapt time.
    */
-  private loadData(force:boolean = false) {
+  private loadData(current:number = 0, force:boolean = false) {
     LogUtil.debug('CategorySelectComponent loading categories');
 
     let cacheKey = 'catalog';
@@ -126,6 +126,9 @@ export class CategorySelectComponent implements OnInit {
       this.selectedNode = null;
       this.changed = false;
       this.validForSelect = false;
+      if (current > 0) {
+        this.expandCurrent(this.nodes, current);
+      }
 
     } else {
 
@@ -139,7 +142,7 @@ export class CategorySelectComponent implements OnInit {
       var _subc:any = this._categoryService.getAllCategories().subscribe(
           cats => {
           LogUtil.debug('CategorySelectComponent all categories', cats);
-          this.nodes = this.adaptToTree(cats, expanded);
+          this.nodes = this.adaptToTree(cats, expanded, current);
           CategorySelectComponent._cache.putValue(cacheKey, this.nodes, 1800000); // 30 mins
           this.selectedNode = null;
           this.changed = false;
@@ -156,7 +159,7 @@ export class CategorySelectComponent implements OnInit {
    * @param vo
    * @returns {Array<ITreeNode>}
    */
-  private adaptToTree(vo:Array<CategoryVO>, expanded:any):Array<ITreeNode> {
+  private adaptToTree(vo:Array<CategoryVO>, expanded:any, current:number):Array<ITreeNode> {
     var rez:Array<ITreeNode> = [];
     for (var idx = 0; idx < vo.length; idx++) {
       var catVo:CategoryVO = vo[idx];
@@ -165,17 +168,42 @@ export class CategorySelectComponent implements OnInit {
         'id': id,
         'name': catVo.name,
         'children': [],
-        'expanded': catVo.categoryId === 100 || expanded.hasOwnProperty('ID' + id), //the root is expanded by default
-        'selected': catVo.categoryId === 100, //treat root as already selected
+        'expanded': catVo.categoryId === 100 || catVo.parentId === current || expanded.hasOwnProperty('ID' + id), //the root is expanded by default
+        'selected': catVo.categoryId === current, //treat root as already selected
         'disabled': false,
         'source': catVo
       };
       if (catVo.children !== null && catVo.children.length > 0) {
-        node.children = this.adaptToTree(catVo.children, expanded);
+        node.children = this.adaptToTree(catVo.children, expanded, current);
+        node.children.forEach(child => {
+          if (child.selected || child.expanded) {
+            node.expanded = true; // Expand parent if child is selected or expanded
+          }
+        });
+      }
+      if (node.selected) {
+        this.onSelectNode(node);
       }
       rez.push(node);
     }
     return rez;
+  }
+
+  private expandCurrent(nodes:Array<ITreeNode>, current:number):boolean {
+    for (var idx = 0; idx < nodes.length; idx++) {
+      let node:ITreeNode = nodes[idx];
+      if (node.source.categoryId === current) {
+        this.onSelectNode(node);
+        return true;
+      }
+      if (node.children != null && node.children.length > 0) {
+        if (this.expandCurrent(node.children, current)) {
+          node.expanded = true;
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
 }

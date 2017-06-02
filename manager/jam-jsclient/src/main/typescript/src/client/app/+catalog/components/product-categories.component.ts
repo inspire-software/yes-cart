@@ -161,7 +161,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
 
         var _subc:any = this._categoryService.getAllCategories().subscribe(
             cats => {
-              LogUtil.debug('ProductCategoryComponent all categories', cats);
+              LogUtil.debug('ProductCategoryComponent all categories', cats, _assignedIds);
               this.categories = cats;
               this.nodes = this.adaptToTree(cats, _assignedIds);
               this.selectedNode = null;
@@ -204,8 +204,8 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
       if (catVo.children !== null && catVo.children.length > 0) {
         node.children = this.adaptToTree(catVo.children, disabled);
         node.children.forEach(child => {
-          if (child.disabled) {
-            node.expanded = true; // Expand parent if child is expanded
+          if (child.disabled || child.expanded) {
+            node.expanded = true; // Expand parent if child is selected or expanded
           }
         });
       }
