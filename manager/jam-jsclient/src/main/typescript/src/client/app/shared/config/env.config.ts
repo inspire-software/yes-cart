@@ -14,6 +14,7 @@ export interface EnvConfig {
 
   UI_DOC_LINK?: string;
   UI_COPY_NOTE?: string;
+  UI_LABEL?: string;
 }
 
 export const Config: EnvConfig = JSON.parse('<%= ENV_CONFIG %>');

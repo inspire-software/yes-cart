@@ -183,6 +183,11 @@ body {
   font-size: 90%
 }
 
+#sidebar-env {
+  padding: 0 15px 0 15px;
+  text-align: center;
+}
+
 #sidebar-login {
   padding: 0 15px 15px 15px;
   text-align: right;

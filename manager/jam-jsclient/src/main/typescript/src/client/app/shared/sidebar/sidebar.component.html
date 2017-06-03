@@ -1,9 +1,10 @@
 
+<div id="sidebar-env" *ngIf="envLabel" [innerHTML]="envLabel"></div>
+
 <div id="sidebar-logo">
   Powered by<br/>
   <a href="http://yes-cart.org" target="_blank">YC - pure <sup>e</sup>Commerce</a>
 </div>
-
 
 <div id="sidebar-login">
   <span>{{ 'LOGGED_IN' | translate: { user: currentUserName } }}</span>

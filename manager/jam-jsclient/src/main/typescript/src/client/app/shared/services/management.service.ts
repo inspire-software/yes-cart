@@ -117,6 +117,12 @@ export class ManagementService {
             Config.UI_COPY_NOTE = valCopy;
           }
         }
+        if (vals.hasOwnProperty('SYSTEM_PANEL_LABEL')) {
+          let valLabel = vals['SYSTEM_PANEL_LABEL'];
+          if (valLabel != null && valLabel != '') {
+            Config.UI_LABEL = valLabel;
+          }
+        }
         return vals;
       })
       .catch(this.handleError);

@@ -69,6 +69,7 @@ public class ManagementEndpointControllerImpl implements ManagementEndpointContr
         final Map<String, String> vals = new HashMap<String, String>();
         vals.put("SYSTEM_PANEL_HELP_DOCS", systemPreferencesService.getAttributeValue("SYSTEM_PANEL_HELP_DOCS"));
         vals.put("SYSTEM_PANEL_HELP_COPYRIGHT", systemPreferencesService.getAttributeValue("SYSTEM_PANEL_HELP_COPYRIGHT"));
+        vals.put("SYSTEM_PANEL_LABEL", systemPreferencesService.getAttributeValue("SYSTEM_PANEL_LABEL"));
         return vals;
     }
 }
