@@ -12,7 +12,7 @@ const BaseConfig: EnvConfig = {
   UI_TABLE_PAGE_NUMS: 5,
   UI_DOC_LINK: 'http://www.inspire-software.com/confluence/display/YC3EN/YC+3.x.x+Wiki',
   UI_COPY_NOTE: '<a href=http://www.yes-cart.org target=_blank>YesCart.org</a>',
-  UI_LABEL: '<span class="label label-success">DEVELOPMENT ENVIRONMENT</span>'
+  UI_LABEL: ''
 };
 
 export = BaseConfig;

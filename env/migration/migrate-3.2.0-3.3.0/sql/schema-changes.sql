@@ -817,4 +817,5 @@ This setting must be used together with Block checkout feature to prevent going 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11031,  'SYSTEM_PANEL_LABEL', 'SYSTEM_PANEL_LABEL',  1,  NULL,  'Admin\\System label',
   'Label on the side panel to warn of the type of environment you are on', 1011,  1000, 0, 0, 0, 0);
+INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1027,'<span class="label label-success">DEVELOPMENT ENVIRONMENT</span>','SYSTEM_PANEL_LABEL',100, 'YC_SYSTEM_PANEL_LABEL');
 
