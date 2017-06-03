@@ -503,6 +503,8 @@ public class OrderAssemblerImpl implements OrderAssembler {
             copy.setMiddlename(address.getMiddlename());
             copy.setPhone1(address.getPhone1());
             copy.setPhone2(address.getPhone2());
+            copy.setMobile1(address.getMobile1());
+            copy.setMobile2(address.getMobile2());
             copy.setEmail1(address.getEmail1());
             copy.setEmail2(address.getEmail2());
             copy.setCustom0(address.getCustom0());
