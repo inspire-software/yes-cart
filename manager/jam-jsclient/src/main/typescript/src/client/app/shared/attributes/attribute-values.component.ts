@@ -340,7 +340,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
         } else {
           return '<i class="fa fa-times-circle"></i>';
         }
-      } else if (row.attribute.etypeName === 'HTML') {
+      } else if (row.attribute.etypeName === 'HTML' || row.attribute.etypeName === 'Properties') {
         return '<pre>' + row.val + '</pre>';
       } else if (row.attribute.etypeName === 'Image' && row.valBase64Data) {
         return '<img class="av-image-thumb" src="' + row.valBase64Data + '" alt="' + row.val + '"/>';
