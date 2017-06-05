@@ -144,7 +144,8 @@ public class VoContentServiceImpl implements VoContentService {
 
             for (final MutablePair<String, Boolean> shopEmail : summary.getEmailTemplatesShop()) {
 
-                final String uri = summary.getCode().concat("_mail_").concat(shopEmail.getFirst()).concat(".html");
+                final String code = StringUtils.isBlank(summary.getMasterCode()) ? summary.getCode() : summary.getMasterCode();
+                final String uri = code.concat("_mail_").concat(shopEmail.getFirst()).concat(".html");
 
                 final boolean noOverride = dtoContentService.isUriAvailableForContent(uri, 0L);
                 shopEmail.setSecond(!noOverride);
