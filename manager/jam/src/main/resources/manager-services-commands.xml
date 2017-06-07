@@ -59,6 +59,12 @@
         <property name="priority" value="11"/>
     </bean>
 
+    <bean id="restoreCmd" class="org.yes.cart.shoppingcart.impl.RestoreCartCommandImpl">
+        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <property name="priority" value="12"/>
+    </bean>
+
     <bean id="recalculatePriceCmd" class="org.yes.cart.shoppingcart.impl.RecalculateSkuPricesEventCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" ref="priceService"/>

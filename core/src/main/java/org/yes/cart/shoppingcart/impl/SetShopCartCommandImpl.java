@@ -79,6 +79,7 @@ public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements 
     protected void setDefaultOrderInfoOptions(final MutableShoppingCart shoppingCart) {
 
         setCustomerOptions(shoppingCart);
+        setDefaultAddressesIfPossible(shoppingCart);
 
     }
 

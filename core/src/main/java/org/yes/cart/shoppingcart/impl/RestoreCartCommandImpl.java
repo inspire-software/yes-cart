@@ -16,6 +16,7 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
@@ -23,26 +24,31 @@ import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import java.util.Map;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * User: denis
  */
-public class ExpireCartCommandImpl  extends AbstractCartCommandImpl implements ShoppingCartCommand {
+public class RestoreCartCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
-    private static final long serialVersionUID = 20101026L;
+    private static final long serialVersionUID = 2010522L;
+
+    private final ShopService shopService;
 
     /**
      * Construct command.
      *
      * @param registry shopping cart command registry
+     * @param shopService shop service
      */
-    public ExpireCartCommandImpl(final ShoppingCartCommandRegistry registry) {
+    public RestoreCartCommandImpl(final ShoppingCartCommandRegistry registry,
+                                  final ShopService shopService) {
         super(registry);
+        this.shopService = shopService;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * @return command key
+     */
     public String getCmdKey() {
-        return CMD_EXPIRE;
+        return CMD_RESTORE;
     }
 
     /** {@inheritDoc} */
@@ -50,19 +56,24 @@ public class ExpireCartCommandImpl  extends AbstractCartCommandImpl implements S
     public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
 
-            shoppingCart.getShoppingContext().clearContext();
-            shoppingCart.getOrderInfo().clearInfo();
+            setDefaultOrderInfoOptions(shoppingCart);
+            setDefaultTaxOptions(shoppingCart);
 
-            setCustomerOptions(shoppingCart);
-            setDefaultAddressesIfPossible(shoppingCart);
-            setTaxOptions(shoppingCart, null, null, null);
-
-            if (shoppingCart.removeItemOffers()) {
-                // Offers have to be removed from cart, since we may get stale prices
-                // Offers assumed to be valid only for duration of cart validity
-                recalculate(shoppingCart);
-            }
             markDirty(shoppingCart);
+
         }
     }
+
+    protected void setDefaultOrderInfoOptions(final MutableShoppingCart shoppingCart) {
+
+        setCustomerOptions(shoppingCart);
+
+    }
+
+    protected void setDefaultTaxOptions(final MutableShoppingCart shoppingCart) {
+
+        setTaxOptions(shoppingCart, null, null, null);
+
+    }
+
 }

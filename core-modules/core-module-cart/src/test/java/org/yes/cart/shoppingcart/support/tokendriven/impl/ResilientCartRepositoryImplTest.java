@@ -296,6 +296,7 @@ public class ResilientCartRepositoryImplTest {
             one(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));
             one(cartCache).get("IN-CACHE"); will(returnValue(wrapper));
             one(wrapper).get(); will(returnValue(cachedCart));
+            one(cartUpdateProcessor).invalidateShoppingCart(cachedCart);
             one(shopService).getById(111L); will(returnValue(shop));
             one(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue("120"));
         }});
@@ -305,11 +306,11 @@ public class ResilientCartRepositoryImplTest {
             void storeAsynchronously(final ShoppingCart shoppingCart) {
                 // If this cache is stale just update the state
                 assertEquals(cachedCart.getGuid(), shoppingCart.getGuid());
-                assertNull(shoppingCart.getCustomerEmail());
+                assertSame(cachedCart, shoppingCart);
             }
         };
 
-        assertEquals(cachedCart, repo.getShoppingCart("IN-CACHE"));
+        assertSame(cachedCart, repo.getShoppingCart("IN-CACHE"));
 
         context.assertIsSatisfied();
 
@@ -666,6 +667,7 @@ public class ResilientCartRepositoryImplTest {
             allowing(cartState).getUpdatedTimestamp(); will(returnValue(stillActive));
             one(cartState).getState(); will(returnValue(bytes));
             one(cartUpdateProcessor).restoreState(bytes); will(returnValue(restored));
+            one(cartUpdateProcessor).invalidateShoppingCart(restored);
             one(shopService).getById(111L); will(returnValue(shop));
             one(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue("120"));
             one(cartCache).put(with(equal(cart.getGuid())), with(any(ShoppingCart.class)));
@@ -675,14 +677,14 @@ public class ResilientCartRepositoryImplTest {
             @Override
             void storeAsynchronously(final ShoppingCart shoppingCart) {
                 assertEquals(cart.getGuid(), shoppingCart.getGuid());
-                assertNull(shoppingCart.getCustomerEmail());
+                assertSame(restored, shoppingCart);
             }
         };
 
         final ShoppingCart newCart = repo.getShoppingCart("IN-DB-INACTIVE");
         assertNotNull(newCart);
         assertEquals(newCart.getGuid(), cart.getGuid());
-        assertNull(newCart.getCustomerEmail());
+        assertSame(restored, newCart);
 
         context.assertIsSatisfied();
 
@@ -769,6 +771,7 @@ public class ResilientCartRepositoryImplTest {
             allowing(cartState).getUpdatedTimestamp(); will(returnValue(stillActive));
             one(cartState).getState(); will(returnValue(bytes));
             one(cartUpdateProcessor).restoreState(bytes); will(returnValue(restored));
+            one(cartUpdateProcessor).invalidateShoppingCart(restored);
             one(shopService).getById(111L); will(returnValue(shop));
             one(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue(null));
             one(cartCache).put(with(equal(cart.getGuid())), with(any(ShoppingCart.class)));
@@ -778,14 +781,14 @@ public class ResilientCartRepositoryImplTest {
             @Override
             void storeAsynchronously(final ShoppingCart shoppingCart) {
                 assertEquals(cart.getGuid(), shoppingCart.getGuid());
-                assertNull(shoppingCart.getCustomerEmail());
+                assertSame(restored, shoppingCart);
             }
         };
 
         final ShoppingCart newCart = repo.getShoppingCart("IN-DB-INACTIVE");
         assertNotNull(newCart);
         assertEquals(newCart.getGuid(), cart.getGuid());
-        assertNull(newCart.getCustomerEmail());
+        assertSame(restored, newCart);
 
         context.assertIsSatisfied();
 

@@ -174,7 +174,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
      * @param shopId current shop id.
      */
     public void setShopId(final long shopId) {
-        if (this.shopId != shopId) {
+        if (this.shopId > 0L && this.shopId != shopId) {
             clearShopRelatedParameters();
         }
         this.shopId = shopId;
@@ -192,7 +192,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
      * @param shopCode current shop code.
      */
     public void setShopCode(final String shopCode) {
-        if (!shopCode.equals(this.shopCode)) {
+        if (this.shopCode != null && !shopCode.equals(this.shopCode)) {
             clearShopRelatedParameters();
         }
         this.shopCode = shopCode;
