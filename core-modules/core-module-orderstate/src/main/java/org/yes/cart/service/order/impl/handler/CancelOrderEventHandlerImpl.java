@@ -26,6 +26,7 @@ import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.log.Markers;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -129,7 +130,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
                     final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
                     if (selected == null) {
-                        LOG.warn(
+                        LOG.warn(Markers.alert(),
                                 "Warehouse is not found for delivery detail {}:{}",
                                 delivery.getDeliveryNum(), det.getProductSkuCode()
                         );

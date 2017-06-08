@@ -29,6 +29,7 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.*;
 import org.yes.cart.service.order.impl.OrderEventImpl;
+import org.yes.cart.util.log.Markers;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -376,25 +377,14 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
                     final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
                     if (selected == null) {
-                        LOG.error(
+                        LOG.warn(Markers.alert(),
                                 "Warehouse is not found for delivery detail {}:{}",
                                 orderDelivery.getDeliveryNum(), det.getProductSkuCode()
                         );
-
-                        /**
-                         * For allocation we always must have stock items with inventory supported availability
-                         */
-                        throw new OrderItemAllocationException(
-                                skuCode,
-                                toAllocate,
-                                "ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
-                                        + " for sku = " + skuCode
-                                        + " in delivery " + orderDelivery.getDeliveryNum());
+                    } else {
+                        // At this point we should have reserved the quantity, so we just releasing the reservation
+                        skuWarehouseService.voidReservation(selected, skuCode, toAllocate);
                     }
-
-                    // At this point we should have reserved the quantity, so we just releasing the reservation
-                    skuWarehouseService.voidReservation(selected, skuCode, toAllocate);
-
                 }
             }
         }
