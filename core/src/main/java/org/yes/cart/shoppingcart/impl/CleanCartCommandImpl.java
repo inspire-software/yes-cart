@@ -50,8 +50,15 @@ public class CleanCartCommandImpl extends AbstractCartCommandImpl implements Sho
     @Override
     public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
+
             shoppingCart.clean();
+
+            setCustomerOptions(shoppingCart);
+            setDefaultAddressesIfPossible(shoppingCart);
+            setTaxOptions(shoppingCart, null, null, null);
+
             markDirty(shoppingCart);
+
         }
     }
 }
