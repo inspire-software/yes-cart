@@ -77,4 +77,13 @@ public interface MailComposer {
     void convertMessage(Mail mail, MimeMessage mimeMessage)
             throws MessagingException, IOException, ClassNotFoundException;
 
+    /**
+     * Convert persistent message into mime message.
+     *
+     * @param mail persistent mail
+     *
+     * @return HTML message
+     */
+    String convertMessageToHTML(Mail mail);
+
 }

@@ -351,6 +351,8 @@
   "PRODUCT_TAB_CATALOG": "Каталог",
   "PRODUCT_TAB_ASSOCIATIONS": "Связи",
 
+  "EMAILPREVIEW_ORDER": "Выберите заказ для предварительного просмотра шаблона почты",
+
   "CACHE_NODE": "Узел",
   "CACHE_NAME": "Кэш",
   "CACHE_SIZE": "Размер",

@@ -1,13 +1,12 @@
 package org.yes.cart.service.domain.aspect.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.i18n.I18NModel;
-import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
-import org.yes.cart.domain.message.consumer.StandardMessageListener;
+import org.yes.cart.service.mail.impl.MailUtils;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.theme.ThemeService;
 
@@ -41,75 +40,47 @@ public abstract class BaseOrderStateAspect extends BaseNotificationAspect  {
     /**
      * Create email and sent it.
      *
-     * @param orderEvent        given order event
-     * @param emailTemplateName optional email template name
-     * @param emailsAddresses   set of email addresses
-     * @param params            additional params
+     * @param pjp             join point
+     * @param orderEvent      given order event
+     * @param template        email template name
+     * @param params          additional params
+     * @param mailTo          set of email addresses
      */
-    protected void fillNotificationParameters(final OrderEvent orderEvent, final String emailTemplateName, final Map<String,Object> params, final String... emailsAddresses) {
+    protected void sendOrderNotification(final ProceedingJoinPoint pjp,
+                                         final OrderEvent orderEvent,
+                                         final String template,
+                                         final Map<String, Object> params,
+                                         final String... mailTo) {
 
-        if (StringUtils.isNotBlank(emailTemplateName)) {
+        if (StringUtils.isNotBlank(template)) {
 
             final CustomerOrder customerOrder = orderEvent.getCustomerOrder();
-            final Shop shop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
+            final CustomerOrderDelivery customerOrderDelivery = orderEvent.getCustomerOrderDelivery();
+            final Shop orderShop = customerOrder.getShop();
+            final Shop shop = orderShop.getMaster() != null ? orderShop.getMaster() : orderShop;
 
-            for (String emailAddr : emailsAddresses) {
 
-                final HashMap<String, Object> map = new HashMap<String, Object>();
+            for (final String recipient : mailTo) {
 
-                if (params != null) {
+                if (StringUtils.isNotBlank(recipient)) {
 
-                    map.putAll(params);
+                    final HashMap<String, Object> map = new HashMap<String, Object>();
+
+                    MailUtils.appendMethodParamaters(map, pjp.getArgs());
+
+                    MailUtils.appendOrderEmailParameters(
+                            map,
+                            themeService.getMailTemplateChainByShopId(shop.getShopId()),
+                            template,
+                            recipient,
+                            customerOrder,
+                            customerOrderDelivery,
+                            params);
+
+                    sendNotification(map);
                 }
-
-                map.put(StandardMessageListener.SHOP_CODE, shop.getCode());
-                map.put(StandardMessageListener.CUSTOMER_EMAIL, emailAddr);
-                map.put(StandardMessageListener.RESULT, true);
-                map.put(StandardMessageListener.ROOT, customerOrder);
-                map.put(StandardMessageListener.TEMPLATE_FOLDER, themeService.getMailTemplateChainByShopId(shop.getShopId()));
-                map.put(StandardMessageListener.SHOP, shop);
-                map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
-                map.put(StandardMessageListener.SHIPPING_ADDRESS, customerOrder.getShippingAddressDetails());
-                map.put(StandardMessageListener.BILLING_ADDRESS, customerOrder.getBillingAddressDetails());
-                map.put(StandardMessageListener.TEMPLATE_NAME, emailTemplateName);
-                map.put(StandardMessageListener.LOCALE, customerOrder.getLocale());
-
-                if (orderEvent.getCustomerOrderDelivery() != null) {
-                    final CustomerOrderDelivery delivery = orderEvent.getCustomerOrderDelivery();
-                    map.put(StandardMessageListener.DELIVERY, delivery);
-                    final I18NModel carrierName = new FailoverStringI18NModel(
-                            delivery.getCarrierSla().getCarrier().getDisplayName(),
-                            delivery.getCarrierSla().getCarrier().getName());
-                    map.put(StandardMessageListener.DELIVERY_CARRIER, carrierName.getValue(customerOrder.getLocale()));
-                    final I18NModel carrierSlaName = new FailoverStringI18NModel(
-                            delivery.getCarrierSla().getDisplayName(),
-                            delivery.getCarrierSla().getName());
-                    map.put(StandardMessageListener.DELIVERY_CARRIER_SLA, carrierSlaName.getValue(customerOrder.getLocale()));
-                    map.put(StandardMessageListener.DELIVERY_NUM, delivery.getDeliveryNum());
-                    map.put(StandardMessageListener.DELIVERY_EXTERNAL_NUM, delivery.getRefNo());
-                } else {
-                    final Map<String, String> carrier = new HashMap<String, String>();
-                    final Map<String, String> carrierSla = new HashMap<String, String>();
-                    for (final CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
-
-                        final I18NModel carrierName = new FailoverStringI18NModel(
-                                delivery.getCarrierSla().getCarrier().getDisplayName(),
-                                delivery.getCarrierSla().getCarrier().getName());
-                        carrier.put(delivery.getDeliveryNum(), carrierName.getValue(customerOrder.getLocale()));
-                        final I18NModel carrierSlaName = new FailoverStringI18NModel(
-                                delivery.getCarrierSla().getDisplayName(),
-                                delivery.getCarrierSla().getName());
-                        carrierSla.put(delivery.getDeliveryNum(), carrierSlaName.getValue(customerOrder.getLocale()));
-                    }
-                    map.put(StandardMessageListener.DELIVERY_CARRIER, carrier);
-                    map.put(StandardMessageListener.DELIVERY_CARRIER_SLA, carrierSla);
-                }
-
-                sendNotification(map);
 
             }
-
-
 
         }
 
@@ -119,13 +90,17 @@ public abstract class BaseOrderStateAspect extends BaseNotificationAspect  {
     /**
      * Create email and sent it.
      *
-     * @param orderEvent       given order event
-     * @param emailTempateName optional email tempate name
-     * @param emailsAddresses  set of email addresses
+     * @param pjp             join point
+     * @param orderEvent      given order event
+     * @param template        email template name
+     * @param mailTo          set of email addresses
      */
-    protected void fillNotificationParameters(final OrderEvent orderEvent, final String emailTempateName, final String... emailsAddresses) {
+    protected void sendOrderNotification(final ProceedingJoinPoint pjp,
+                                         final OrderEvent orderEvent,
+                                         final String template,
+                                         final String... mailTo) {
 
-        fillNotificationParameters( orderEvent, emailTempateName, null, emailsAddresses);
+        sendOrderNotification(pjp, orderEvent, template, null, mailTo);
 
     }
 

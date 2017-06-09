@@ -351,6 +351,8 @@
   "PRODUCT_TAB_CATALOG": "Каталог",
   "PRODUCT_TAB_ASSOCIATIONS": "Зв'язки",
 
+  "EMAILPREVIEW_ORDER": "Виберіть замовлення для попереднього перегляду шаблону пошти",
+
   "CACHE_NODE": "Вузол",
   "CACHE_NAME": "Кеш",
   "CACHE_SIZE": "Розмір",

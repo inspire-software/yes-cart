@@ -642,6 +642,7 @@ public class VoShopServiceImpl implements VoShopService {
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "payment", false);
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "rfq-new", true);
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "shipment-complete", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "sup-order-new", false);
 
     }
 

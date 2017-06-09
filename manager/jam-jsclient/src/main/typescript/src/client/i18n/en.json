@@ -351,6 +351,8 @@
   "PRODUCT_TAB_CATALOG": "Catalog",
   "PRODUCT_TAB_ASSOCIATIONS": "Associations",
 
+  "EMAILPREVIEW_ORDER": "Select order to preview email",
+
   "CACHE_NODE": "Node",
   "CACHE_NAME": "Cache",
   "CACHE_SIZE": "Size",

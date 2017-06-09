@@ -306,7 +306,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let emailTemplate of shopSummary.emailTemplates" class="{{ isEmailConfigOn(emailTemplate.first, shopSummary.emailTemplatesYCE) ? 'text-muted' : '' }}">
-                  <td title="{{ 'SHOP_EMAIL_TEMPLATES' | translate }}">{{ emailTemplate.first }} <span class="label label-info" [hidden]="!isEmailConfigOn(emailTemplate.first, shopSummary.emailTemplatesYCE)">YCE</span></td>
+                  <td title="{{ 'SHOP_EMAIL_TEMPLATES' | translate }}"><a class="js-click" (click)="onEmailPreview(emailTemplate.first)">{{ emailTemplate.first }}</a> <span class="label label-info" [hidden]="!isEmailConfigOn(emailTemplate.first, shopSummary.emailTemplatesYCE)">YCE</span></td>
                   <td title="{{ 'SHOP_EMAIL_TEMPLATES_ENABLED' | translate }}"><i class="fa {{ emailTemplate.second ? 'fa-remove text-danger' : 'fa-check text-success' }}"></i></td>
                   <td title="{{ 'SHOP_EMAIL_TEMPLATES_CMS' | translate }}"><i class="fa fa-check text-info" [hidden]="!isEmailConfigOn(emailTemplate.first, shopSummary.emailTemplatesShop)"></i>&nbsp;</td>
                   <td title="{{ 'SHOP_EMAIL_TEMPLATES_FROM' | translate }}">{{ getEmailConfigString(emailTemplate.first, shopSummary.emailTemplatesFrom) }}<i class="fa fa-remove text-danger" [hidden]="getEmailConfigString(emailTemplate.first, shopSummary.emailTemplatesFrom) != ''"></i></td>
@@ -323,3 +323,5 @@
   </div>
 
 </template>
+
+<yc-mail-preview #mailPreviewComponent></yc-mail-preview>

@@ -19,7 +19,7 @@ import { I18nComponent } from './i18n/index';
 
 import { BrandSelectComponent, CategorySelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent } from './catalog/index';
 
-import { ContentSelectComponent } from './content/index';
+import { ContentSelectComponent, MailPreviewComponent } from './content/index';
 
 import { FulfilmentCentreSelectComponent, InventoryInfoComponent } from './fulfilment/index';
 
@@ -55,7 +55,7 @@ import { CurrencySelectComponent } from './price/index';
     ModalComponent,
     I18nComponent,
     BrandSelectComponent, CategorySelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent,
-    ContentSelectComponent,
+    ContentSelectComponent, MailPreviewComponent,
     FulfilmentCentreSelectComponent, InventoryInfoComponent,
     FileSelectComponent, DataGroupSelectComponent,
     AttributeValuesComponent, ProductAttributeSelectComponent, ProductAttributeUsageComponent,
@@ -72,7 +72,7 @@ import { CurrencySelectComponent } from './price/index';
     ModalComponent,
     I18nComponent,
     BrandSelectComponent, CategorySelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent,
-    ContentSelectComponent,
+    ContentSelectComponent, MailPreviewComponent,
     FulfilmentCentreSelectComponent, InventoryInfoComponent,
     FileSelectComponent, DataGroupSelectComponent,
     AttributeValuesComponent, ProductAttributeSelectComponent, ProductAttributeUsageComponent,

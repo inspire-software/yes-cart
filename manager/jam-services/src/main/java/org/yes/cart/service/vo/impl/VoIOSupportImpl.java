@@ -24,12 +24,9 @@ import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.dto.DtoFileService;
 import org.yes.cart.service.dto.DtoImageService;
 import org.yes.cart.service.vo.VoIOSupport;
+import org.yes.cart.util.MimeTypesUtils;
 
 import java.io.IOException;
-import java.net.FileNameMap;
-import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -224,73 +221,14 @@ public class VoIOSupportImpl implements VoIOSupport {
     }
 
     static String getBase64String(final String contentType, byte[] content) {
-        final StringBuilder out = new StringBuilder();
-        out.append("data:").append(contentType).append(";base64,").append(Base64.encodeBase64String(content));
-        return out.toString();
+        return MimeTypesUtils.getBase64DataURL(contentType, content);
     }
 
 
     static String getMimeType(String fileName) {
 
-        final FileNameMap mimeTypes = URLConnection.getFileNameMap();
-        final String contentType = mimeTypes.getContentTypeFor(fileName);
+        return MimeTypesUtils.getMimeType(fileName);
 
-        // 2. nothing found -> lookup our in extension map to find types like ".doc" or ".docx"
-        if (contentType == null) {
-            final String extension = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length());;
-            return EXT_MIMETYPE_MAP.get(extension);
-        }
-        return contentType;
     }
-
-    private static final Map<String, String> EXT_MIMETYPE_MAP = new HashMap<String, String>() {{
-        // MS Office
-        put("doc", "application/msword");
-        put("dot", "application/msword");
-        put("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        put("dotx", "application/vnd.openxmlformats-officedocument.wordprocessingml.template");
-        put("docm", "application/vnd.ms-word.document.macroEnabled.12");
-        put("dotm", "application/vnd.ms-word.template.macroEnabled.12");
-        put("xls", "application/vnd.ms-excel");
-        put("xlt", "application/vnd.ms-excel");
-        put("xla", "application/vnd.ms-excel");
-        put("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        put("xltx", "application/vnd.openxmlformats-officedocument.spreadsheetml.template");
-        put("xlsm", "application/vnd.ms-excel.sheet.macroEnabled.12");
-        put("xltm", "application/vnd.ms-excel.template.macroEnabled.12");
-        put("xlam", "application/vnd.ms-excel.addin.macroEnabled.12");
-        put("xlsb", "application/vnd.ms-excel.sheet.binary.macroEnabled.12");
-        put("ppt", "application/vnd.ms-powerpoint");
-        put("pot", "application/vnd.ms-powerpoint");
-        put("pps", "application/vnd.ms-powerpoint");
-        put("ppa", "application/vnd.ms-powerpoint");
-        put("pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation");
-        put("potx", "application/vnd.openxmlformats-officedocument.presentationml.template");
-        put("ppsx", "application/vnd.openxmlformats-officedocument.presentationml.slideshow");
-        put("ppam", "application/vnd.ms-powerpoint.addin.macroEnabled.12");
-        put("pptm", "application/vnd.ms-powerpoint.presentation.macroEnabled.12");
-        put("potm", "application/vnd.ms-powerpoint.presentation.macroEnabled.12");
-        put("ppsm", "application/vnd.ms-powerpoint.slideshow.macroEnabled.12");
-        // Open Office
-        put("odt", "application/vnd.oasis.opendocument.text");
-        put("ott", "application/vnd.oasis.opendocument.text-template");
-        put("oth", "application/vnd.oasis.opendocument.text-web");
-        put("odm", "application/vnd.oasis.opendocument.text-master");
-        put("odg", "application/vnd.oasis.opendocument.graphics");
-        put("otg", "application/vnd.oasis.opendocument.graphics-template");
-        put("odp", "application/vnd.oasis.opendocument.presentation");
-        put("otp", "application/vnd.oasis.opendocument.presentation-template");
-        put("ods", "application/vnd.oasis.opendocument.spreadsheet");
-        put("ots", "application/vnd.oasis.opendocument.spreadsheet-template");
-        put("odc", "application/vnd.oasis.opendocument.chart");
-        put("odf", "application/vnd.oasis.opendocument.formula");
-        put("odb", "application/vnd.oasis.opendocument.database");
-        put("odi", "application/vnd.oasis.opendocument.image");
-        put("oxt", "application/vnd.openofficeorg.extension");
-        // Other
-        put("txt", "text/plain");
-        put("rtf", "application/rtf");
-        put("pdf", "application/pdf");
-    }};
 
 }
