@@ -135,15 +135,16 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
                     sendOrderNotification(pjp, orderEvent, shopperTemplate, orderEvent.getCustomerOrder().getEmail());
 
-                    if (mastered) {
-                        if (StringUtils.isBlank(subAdminEmail)) {
-                            LOG.error(Markers.alert(), "Can't get sub-admin email address for shop " + orderShop.getCode());
-                        } else {
-                            sendOrderNotification(pjp, orderEvent, shopperTemplate, subAdminEmail);
-                        }
-                    }
-
                 }
+
+                if (mastered) {
+                    if (StringUtils.isBlank(subAdminEmail)) {
+                        LOG.error(Markers.alert(), "Can't get sub-admin email address for shop " + orderShop.getCode());
+                    } else if (StringUtils.isNotBlank(shopperTemplate)) {
+                        sendOrderNotification(pjp, orderEvent, shopperTemplate, subAdminEmail);
+                    }
+                }
+
 
                 if (StringUtils.isBlank(adminEmail)) {
                     LOG.error(Markers.alert(), "Can't get admin email address for shop " + emailShop.getCode());
