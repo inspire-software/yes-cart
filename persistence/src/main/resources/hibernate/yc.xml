@@ -1404,9 +1404,7 @@
         <many-to-one name="product" class="org.yes.cart.domain.entity.impl.ProductEntity" foreign-key="FK_PA_PRODUCT" lazy="false">
             <column name="PRODUCT_ID" not-null="true"/>
         </many-to-one>
-        <many-to-one name="productAssociated" class="org.yes.cart.domain.entity.impl.ProductEntity" foreign-key="FK_PA_ASSOCPROD"  lazy="false">
-            <column name="ASSOCIATEDPRODUCT_ID" not-null="true"/>
-        </many-to-one>
+        <property name="associatedSku" column="ASSOCIATED_SKU_CODE" type="string" length="255" index="ASSOCIATED_SKUCODE" not-null="true"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -3205,9 +3203,9 @@
        ]]>
     </query>
 
-    <query name="PRODUCT.ASSOCIATIONS.IDS.BY.TYPE">
+    <query name="PRODUCT.ASSOCIATIONS.CODES.BY.TYPE">
         <![CDATA[
-       select a.productAssociated.productId
+       select a.associatedSku
        from ProductAssociationEntity a
        where a.product.productId = ?1
         and a.association.code = ?2
@@ -3368,6 +3366,12 @@
         ]]>
     </query>
 
+
+    <query name="PRODUCT.NAME.BY.CODE">
+        <![CDATA[
+                 select p.name from ProductEntity p   where p.code = ?1
+        ]]>
+    </query>
 
     <query name="SKU.NAME.BY.CODE">
         <![CDATA[

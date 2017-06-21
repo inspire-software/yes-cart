@@ -645,7 +645,7 @@
         RANK integer comment 'RANK can have different meaning, depending from association type for example similarity always will be less, that 1000000 (MAX similarity) who buy , counter of who buy the one product also buy other product',
         ASSOCIATION_ID bigint not null,
         PRODUCT_ID bigint not null,
-        ASSOCIATEDPRODUCT_ID bigint not null,
+        ASSOCIATED_SKU_CODE varchar(255) not null,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
@@ -1449,19 +1449,13 @@
         foreign key (ASSOCIATION_ID) 
         references TASSOCIATION (ASSOCIATION_ID);
 
-    alter table TPRODUCTASSOCIATION 
-        add index FK_PA_ASSOCPROD (ASSOCIATEDPRODUCT_ID), 
-        add constraint FK_PA_ASSOCPROD 
-        foreign key (ASSOCIATEDPRODUCT_ID) 
-        references TPRODUCT (PRODUCT_ID);
-
-
-    alter table TPRODUCTASSOCIATION 
+    alter table TPRODUCTASSOCIATION
         add index FK_PA_PRODUCT (PRODUCT_ID), 
         add constraint FK_PA_PRODUCT 
         foreign key (PRODUCT_ID) 
         references TPRODUCT (PRODUCT_ID);
 
+    create index ASSOCIATED_SKUCODE on TPRODUCTASSOCIATION (ASSOCIATED_SKU_CODE);
 
     alter table TPRODUCTATTRVALUE 
         add index FK_P_ATTRIBUTE (CODE), 

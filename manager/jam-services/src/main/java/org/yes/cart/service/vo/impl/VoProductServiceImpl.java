@@ -259,7 +259,7 @@ public class VoProductServiceImpl implements VoProductService {
         if (CollectionUtils.isNotEmpty(existingAssoc)) {
             for (final ProductAssociationDTO existing : existingAssoc) {
                 final VoProductAssociation update = keepAssoc.get(existing.getProductassociationId());
-                keepAssoc.remove(existing.getAssociatedProductId());
+                keepAssoc.remove(existing.getProductassociationId());
                 if (update == null) {
                     dtoProductAssociationService.remove(existing.getProductassociationId());
                 } else {

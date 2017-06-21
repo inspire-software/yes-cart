@@ -149,7 +149,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                                                final long shopId,
                                                                final String associationType) {
 
-        final List<Long> productIds = productAssociationService.getProductAssociationsIds(
+        final List<String> productIds = productAssociationService.getProductAssociationsProductCodes(
                 productId,
                 associationType
         );
@@ -157,10 +157,10 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         if (productIds != null && !productIds.isEmpty()) {
 
 
-            final List<Long> search = productIds.size() > 50 ? productIds.subList(0, 50) : productIds;
+            final List<String> search = productIds.size() > 50 ? productIds.subList(0, 50) : productIds;
 
             final NavigationContext assoc = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, null, false,
-                    Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
+                    Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_CODE_FIELD,
                             (List) Arrays.asList(search)));
 
             return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(

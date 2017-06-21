@@ -664,7 +664,7 @@
         RANK integer,
         ASSOCIATION_ID bigint not null,
         PRODUCT_ID bigint not null,
-        ASSOCIATEDPRODUCT_ID bigint not null,
+        ASSOCIATED_SKU_CODE varchar(255) not null,
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),
@@ -1450,17 +1450,12 @@
         foreign key (ASSOCIATION_ID) 
         references TASSOCIATION;
 
-    alter table TPRODUCTASSOCIATION 
-        add constraint FK_PA_ASSOCPROD 
-        foreign key (ASSOCIATEDPRODUCT_ID) 
-        references TPRODUCT;
-
-
-    alter table TPRODUCTASSOCIATION 
+    alter table TPRODUCTASSOCIATION
         add constraint FK_PA_PRODUCT 
         foreign key (PRODUCT_ID) 
         references TPRODUCT;
 
+    create index ASSOCIATED_SKUCODE on TPRODUCTASSOCIATION (ASSOCIATED_SKU_CODE);
 
     alter table TPRODUCTATTRVALUE 
         add constraint FK_P_ATTRIBUTE 

@@ -46,7 +46,8 @@
     <bean id="productShopInStockLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopInStockSearchQueryBuilder"/>
     <bean id="productShopHasPriceLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopHasPriceSearchQueryBuilder"/>
     <bean id="productIdLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductIdSearchQueryBuilder"/>
-    <bean id="productCodeLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductSkuCodeSearchQueryBuilder"/>
+    <bean id="productSkuCodeLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductSkuCodeSearchQueryBuilder"/>
+    <bean id="productCodeLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductCodeSearchQueryBuilder"/>
     <bean id="productSkuIdLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductSkuIdSearchQueryBuilder"/>
     <bean id="productTagLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductTagSearchQueryBuilder"/>
     <bean id="noopLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.NoopProductSearchQueryBuilder"/>
@@ -60,10 +61,11 @@
                 <!-- Direct sku from URL or in code -->
                 <entry key="sku"            value-ref="productSkuIdLuceneQueryBuilder"/>
                 <entry key="sku.skuId"      value-ref="productSkuIdLuceneQueryBuilder"/>
-                <entry key="sku.code"       value-ref="productCodeLuceneQueryBuilder"/>
+                <entry key="sku.code"       value-ref="productSkuCodeLuceneQueryBuilder"/>
                 <!-- Direct product from URL or in code -->
                 <entry key="product"        value-ref="productIdLuceneQueryBuilder"/>
                 <entry key="productId"      value-ref="productIdLuceneQueryBuilder"/>
+                <entry key="code"           value-ref="productCodeLuceneQueryBuilder"/>
 
                 <!-- Searching from url -->
                 <entry key="brand"          value-ref="brandLuceneQueryBuilder"/>
@@ -86,10 +88,11 @@
                 <!-- Direct sku from URL or in code -->
                 <entry key="sku"            value-ref="noopLuceneQueryBuilder"/>
                 <entry key="sku.skuId"      value-ref="noopLuceneQueryBuilder"/>
-                <entry key="sku.code"       value-ref="productCodeLuceneQueryBuilder"/>
+                <entry key="sku.code"       value-ref="productSkuCodeLuceneQueryBuilder"/>
                 <!-- Direct product from URL or in code -->
                 <entry key="product"        value-ref="productIdLuceneQueryBuilder"/>
                 <entry key="productId"      value-ref="productIdLuceneQueryBuilder"/>
+                <entry key="code"           value-ref="productCodeLuceneQueryBuilder"/>
 
                 <!-- Searching from url -->
                 <entry key="brand"          value-ref="noopLuceneQueryBuilder"/>

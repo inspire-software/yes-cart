@@ -112,31 +112,6 @@ public class DtoProductAssociationServiceImplTezt extends BaseCoreDBTestCase {
 
 
     @Test
-    public void testInvalidAssociationCreate() throws Exception {
-
-        getTx().execute(new TransactionCallbackWithoutResult() {
-            public void doInTransactionWithoutResult(TransactionStatus status) {
-                try {
-                    ProductAssociationDTO dto = getDto();
-                    dto.setProductId(11002L);
-                    dto.setAssociatedProductId(11002L);
-                    dtoProductAssociationService.create(dto);
-                }   catch (UnableToCreateInstanceException e) {
-                    assertTrue(e.getMessage(), true);
-                }   catch (Exception e) {
-                    assertTrue(e.getMessage(), false);
-
-                }
-
-                status.setRollbackOnly();
-            }
-        });
-
-
-    }
-
-
-    @Test
     public void testGetProductAssociationsByProductAssociationType() throws Exception {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
@@ -171,7 +146,7 @@ public class DtoProductAssociationServiceImplTezt extends BaseCoreDBTestCase {
         ProductAssociationDTO dto = dtoFactory.getByIface(ProductAssociationDTO.class);
         dto.setAssociationId(dtoAssociationService.getById(3L).getAssociationId());
         dto.setProductId(11002L);
-        dto.setAssociatedProductId(11003L);
+        dto.setAssociatedCode("PRODUCT4");
         return dto;
     }
 }

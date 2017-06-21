@@ -96,10 +96,8 @@ export interface ProductAssociationVO {
 
   rank : number;
 
-  associatedProductId : number;
   associatedCode : string;
   associatedName : string;
-  associatedDescription : string;
 
 }
 

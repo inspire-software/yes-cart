@@ -47,11 +47,11 @@ public class ProductAssociationServiceTest extends BaseCoreDBTestCase {
         associations = associationService.findProductAssociations(product.getProductId(), "up");
         assertNotNull(associations);
         assertEquals(1, associations.size());
-        assertEquals(12004L, associations.get(0).getProductAssociated().getProductId());
+        assertEquals("PRODUCT5-UP", associations.get(0).getAssociatedSku());
         associations = associationService.findProductAssociations(product.getProductId(), "cross");
         assertNotNull(associations);
         assertEquals(2, associations.size());
-        assertEquals(13005L, associations.get(0).getProductAssociated().getProductId());
-        assertEquals(13004L, associations.get(1).getProductAssociated().getProductId());
+        assertEquals("PRODUCT5-CROSS2", associations.get(0).getAssociatedSku());
+        assertEquals("PRODUCT5-CROSS", associations.get(1).getAssociatedSku());
     }
 }
