@@ -253,7 +253,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
      */
     protected void moveImportFilesToArchive(final Set<String> importedFiles) {
         if (!importedFiles.isEmpty()) {
-            final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd-hh-mm-ss");
+            final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
             final String fullPathToArchiveFolder = pathToArchiveDirectory;
             File dir = new File(fullPathToArchiveFolder + File.separator + dateFormat.format(new Date()) + File.separator);
             dir.mkdirs();

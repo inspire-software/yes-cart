@@ -247,7 +247,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                     return;
                 }
 
-                final SimpleDateFormat format = new SimpleDateFormat("_yyyy-MMM-dd-hh-mm-ss-SSS");
+                final SimpleDateFormat format = new SimpleDateFormat("_yyyy-MM-dd_HHmmss_SSS");
 
                 final int total = readyForImport.length;
                 int count = 1;

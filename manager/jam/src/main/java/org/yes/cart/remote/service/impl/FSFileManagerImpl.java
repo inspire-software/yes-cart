@@ -126,7 +126,7 @@ public class FSFileManagerImpl implements FileManager {
 
         final String importRoot = importDirectorService.getImportDirectory();
 
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MMM-dd-hh-mm-ss");
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
         final String timestamp = format.format(new Date());
         final SecurityContext sc = SecurityContextHolder.getContext();
 
