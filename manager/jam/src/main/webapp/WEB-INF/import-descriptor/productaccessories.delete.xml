@@ -53,7 +53,7 @@
         <!-- associated product code -->
         <column-descriptor>
             <column-index>2</column-index>
-            <field-type>FK_FIELD</field-type>
+            <field-type>FIELD</field-type>
             <name>associatedSku</name>
         </column-descriptor>
 
