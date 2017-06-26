@@ -104,6 +104,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
             }
 
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
+                // online payment processing
                 final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams());
                 if (Payment.PAYMENT_STATUS_OK.equals(result)) {
                     //payment was ok, so quantity on warehouses will be decreased
@@ -115,8 +116,11 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                     //in case of bad payment reserved product quantity will be returned from reservation
                     getOrderStateManager().fireTransition(new OrderEventImpl(orderEvent, OrderStateManager.EVT_CANCEL, orderEvent.getCustomerOrder()));
                 }
+            } else if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isAutoCapture()) {
+                // offline payments for auto capture (e.g. B2B invoice through contact)
+                getOrderStateManager().fireTransition(new OrderEventImpl(orderEvent, OrderStateManager.EVT_PAYMENT_CONFIRMED, orderEvent.getCustomerOrder()));
             } else {
-                // wait for confirmation about payment
+                // offline, wait for confirmation about payment
                 getOrderStateManager().fireTransition(new OrderEventImpl(orderEvent, OrderStateManager.EVT_PAYMENT_OFFLINE, orderEvent.getCustomerOrder()));
             }
 

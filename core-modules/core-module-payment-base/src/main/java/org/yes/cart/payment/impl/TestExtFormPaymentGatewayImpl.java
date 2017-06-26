@@ -42,10 +42,10 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
     public static String AUTH_RESPONSE_CODE_PARAM_KEY = "ext-auth-response-code";
     public static String REFUND_RESPONSE_CODE_PARAM_KEY = "ext-refund-response-code";
 
-    private static final PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+    private static final PaymentGatewayFeature PAYMENT_GATEWAY_FEATURE = new PaymentGatewayFeatureImpl(
             false, false, false, true,
             false, false, false,
-            true, true, false,
+            true, true, true, false,
             null,
             false, false
     );
@@ -74,7 +74,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
      * {@inheritDoc}
      */
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
-        return paymentGatewayFeature;
+        return PAYMENT_GATEWAY_FEATURE;
     }
 
     /**

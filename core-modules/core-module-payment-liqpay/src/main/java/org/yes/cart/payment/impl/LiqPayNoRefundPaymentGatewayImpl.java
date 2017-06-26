@@ -31,10 +31,10 @@ import java.util.UUID;
 public class LiqPayNoRefundPaymentGatewayImpl extends LiqPayPaymentGatewayImpl {
 
 
-    private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+    private final static PaymentGatewayFeature PAYMENT_GATEWAY_FEATURE = new PaymentGatewayFeatureImpl(
             false, false, false, true,
             false, false, false,
-            true, true, true,
+            true, true, true, true,
             null,
             false, false
     );
@@ -64,7 +64,7 @@ public class LiqPayNoRefundPaymentGatewayImpl extends LiqPayPaymentGatewayImpl {
      * {@inheritDoc}
      */
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
-        return paymentGatewayFeature;
+        return PAYMENT_GATEWAY_FEATURE;
     }
 
 }

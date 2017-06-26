@@ -100,10 +100,10 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
 
     private static final String ORDER_GUID = "orderGuid";
 
-    private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+    private final static PaymentGatewayFeature PAYMENT_GATEWAY_FEATURE = new PaymentGatewayFeatureImpl(
             false, false, false, true,
             false, false, false,
-            true, true, true,
+            true, true, true, true,
             null ,
             false, false
     );
@@ -120,7 +120,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
-        return paymentGatewayFeature;
+        return PAYMENT_GATEWAY_FEATURE;
     }
 
     /**

@@ -37,7 +37,7 @@ public class AuthInvoicePaymentGatewayImpl extends AbstractPaymentGatewayImpl im
     private static final PaymentGatewayFeature PAYMENT_GATEWAY_FEATURE = new PaymentGatewayFeatureImpl(
             true, true, true, false,
             false, true, true,
-            false, false, false,
+            false, false, true, false,
             null,
             true, true
     );

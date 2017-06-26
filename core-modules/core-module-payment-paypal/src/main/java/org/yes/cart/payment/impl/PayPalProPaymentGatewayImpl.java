@@ -46,10 +46,10 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
 
     private static final Logger LOG = LoggerFactory.getLogger(PayPalProPaymentGatewayImpl.class);
 
-    private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+    private final static PaymentGatewayFeature PAYMENT_GATEWAY_FEATURE = new PaymentGatewayFeatureImpl(
             true, true, true, false,
             true, true, true,
-            false, true, true,
+            false, true, true, true,
             null,
             false, true
     );
@@ -66,7 +66,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
      * {@inheritDoc}
      */
     public synchronized PaymentGatewayFeature getPaymentGatewayFeatures() {
-        return paymentGatewayFeature;
+        return PAYMENT_GATEWAY_FEATURE;
     }
 
     /**

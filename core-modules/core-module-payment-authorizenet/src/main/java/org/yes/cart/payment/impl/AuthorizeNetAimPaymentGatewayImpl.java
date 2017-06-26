@@ -37,10 +37,10 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthorizeNetAimPaymentGatewayImpl.class);
 
-    private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+    private final static PaymentGatewayFeature PAYMENT_GATEWAY_FEATURE = new PaymentGatewayFeatureImpl(
             true, true, true, true,
             true, true, true,
-            false, true, false,
+            false, true, true, false,
             null,
             false, true
     );
@@ -56,7 +56,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
-        return paymentGatewayFeature;
+        return PAYMENT_GATEWAY_FEATURE;
     }
 
     /**
