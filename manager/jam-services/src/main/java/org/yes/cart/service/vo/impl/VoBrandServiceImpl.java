@@ -92,7 +92,7 @@ public class VoBrandServiceImpl implements VoBrandService {
                     return new Pair<>(false, null);
                 }
                 final BrandDTO brand = dtoBrandService.getById(objectId);
-                return new Pair<>(true, brand.getName());
+                return new Pair<>(true, brand.getName().replace(' ', '-'));
             }
         };
     }
