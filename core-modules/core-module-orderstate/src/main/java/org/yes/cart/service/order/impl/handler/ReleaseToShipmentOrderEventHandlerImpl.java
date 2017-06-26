@@ -79,6 +79,21 @@ public class ReleaseToShipmentOrderEventHandlerImpl implements OrderEventHandler
 
                     }
 
+                }  else if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isAutoCapture()) {
+
+                    // offline payments for auto capture (e.g. B2B invoice through contact)
+                    if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.shipmentComplete(order, delivery.getDeliveryNum(), orderEvent.getParams()))) {
+
+                        // payment was ok so continue
+                        delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
+
+                    } else {
+
+                        // payment was not ok so we mark the order as waiting payment and we do NOT proceed to shipping
+                        delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT);
+
+                    }
+
                 } else {
 
                     // this is offline PG, so CAPTURE will happen on delivery (i.e. next phase)
