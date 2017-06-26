@@ -33,16 +33,23 @@
 
     <import resource="classpath:test-payment-api.xml"/>
 
+    <bean id="courierPaymentGateway"  class="org.yes.cart.payment.impl.CourierPaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
+
+    <bean id="prePaymentGateway"  class="org.yes.cart.payment.impl.PrePaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
+
+    <bean id="authInvoicePaymentGateway"  class="org.yes.cart.payment.impl.AuthInvoicePaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
 
     <bean id="testPaymentGateway" class="org.yes.cart.payment.impl.TestPaymentGatewayImpl" scope="prototype">
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
 
     <bean id="testExtFormPaymentGateway" class="org.yes.cart.payment.impl.TestExtFormPaymentGatewayImpl" scope="prototype"/>
-
-    <bean id="courierPaymentGateway" class="org.yes.cart.payment.impl.CourierPaymentGatewayImpl" scope="prototype"/>
-
-    <bean id="prePaymentGateway" class="org.yes.cart.payment.impl.PrePaymentGatewayImpl" scope="prototype"/>
 
 
     <bean id="courierPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
@@ -59,6 +66,13 @@
         <property name="description" value="Offline pre payment gateway"/>
     </bean>
 
+
+    <bean id="authInvoicePaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="authInvoicePaymentGatewayLabel"/>
+        <property name="url" value="authInvoicePaymentGateway"/>
+        <!--name without protocol means spring context-->
+        <property name="description" value="Authorize Invoice payment gateway"/>
+    </bean>
 
     <bean id="testPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
         <property name="label" value="testPaymentGatewayLabel"/>
@@ -88,6 +102,7 @@
                 <entry key="courierPaymentGateway" value-ref="courierPaymentGatewayDescriptor"/>
                 <entry key="prePaymentGateway" value-ref="prePaymentGatewayDescriptor"/>
                 <entry key="testExtFormPaymentGateway" value-ref="testExtFormPaymentGatewayDescriptor"/>
+                <entry key="authInvoicePaymentGateway" value-ref="authInvoicePaymentGatewayDescriptor"/>
             </map>
         </property>
         <property name="paymentModulesManager" ref="paymentModulesManager"/>
