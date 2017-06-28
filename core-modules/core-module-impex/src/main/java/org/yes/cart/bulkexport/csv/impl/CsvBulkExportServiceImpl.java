@@ -138,6 +138,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
         statusListener.notifyMessage(msgInfoImp);
 
         CsvFileWriter csvFileWriter = new CsvFileWriterImpl();
+        ResultsIterator<Object> results = null;
         try {
             final String filename = fileToExport;
 
@@ -155,10 +156,12 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                     csvExportDescriptor.getExportFileDescriptor().isPrintHeader());
 
 
-            final ResultsIterator<Object> results = getExistingEntities(csvExportDescriptor, csvExportDescriptor.getSelectSql(), null, null);
+            results = getExistingEntities(csvExportDescriptor, csvExportDescriptor.getSelectSql(), null, null);
             while (results.hasNext()) {
-                final CsvExportTuple tuple = new CsvExportTupleImpl(results.next());
+                final Object entity = results.next();
+                final CsvExportTuple tuple = new CsvExportTupleImpl(entity);
                 csvFileWriter.writeLine(doExportTuple(statusListener, tuple, csvExportDescriptorName, csvExportDescriptor, null));
+                releaseEntity(entity);
             }
             final String msgInfoLines = MessageFormat.format("total data lines : {0}",
                     (csvExportDescriptor.getExportFileDescriptor().isPrintHeader() ? csvFileWriter.getRowsWritten() - 1 : csvFileWriter.getRowsWritten()));
@@ -177,6 +180,16 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                     e.getMessage());
             statusListener.notifyError(msgErr, e);
         } finally {
+            try {
+                if (results != null) {
+                    results.close();
+                }
+            } catch (Exception exp) {
+                final String msgErr = MessageFormat.format("cannot close the csv resultset : {0} {1}",
+                        fileToExport,
+                        exp.getMessage());
+                statusListener.notifyError(msgErr, exp);
+            }
             try {
                 csvFileWriter.close();
             } catch (IOException ioe) {
@@ -236,12 +249,22 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                     );
 
                     if (StringUtils.isNotBlank(column.getDescriptor().getSelectSql())) {
-                        final ResultsIterator<Object> subResult = getExistingEntities(column.getDescriptor(), column.getDescriptor().getSelectSql(), tuple.getData(), tuple);
-                        while (subResult.hasNext()) {
-                            final CsvExportTuple subItem = new CsvExportTupleImpl(subResult.next());
-                            subWriter.writeLine(
-                                    doExportTuple(statusListener, subItem, csvExportDescriptorName, (CsvExportDescriptor) column.getDescriptor(), tuple.getData())
-                            );
+                        ResultsIterator<Object> subResult = null;
+
+                        try {
+                            subResult = getExistingEntities(column.getDescriptor(), column.getDescriptor().getSelectSql(), tuple.getData(), tuple);
+                            while (subResult.hasNext()) {
+                                final Object subEntity = subResult.next();
+                                final CsvExportTuple subItem = new CsvExportTupleImpl(subEntity);
+                                subWriter.writeLine(
+                                        doExportTuple(statusListener, subItem, csvExportDescriptorName, (CsvExportDescriptor) column.getDescriptor(), tuple.getData())
+                                );
+                                releaseEntity(subEntity);
+                            }
+                        } finally {
+                            if (subResult != null) {
+                                subResult.close();
+                            }
                         }
 
                     } else {
@@ -315,6 +338,15 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
         final ResultsIterator<Object> object = genericDAO.findByQueryIterator(query.getQueryString(), query.getParameters());
         return object;
 
+    }
+
+    /**
+     * Release exported object from session.
+     *
+     * @param entity entity
+     */
+    private void releaseEntity(final Object entity) {
+        genericDAO.evict(entity);
     }
 
 
