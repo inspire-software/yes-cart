@@ -27,6 +27,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -415,6 +416,14 @@ public interface ProductService extends GenericService<Product> {
      * @return product id if found otherwise null
      */
     List<Long> findProductIdsByBarCode(String code);
+
+    /**
+     * Get product id by given code
+     *
+     * @param codes given barcode (EAN/UPC)
+     * @return product id if found otherwise null
+     */
+    List<Long> findProductIdsByBarCodes(Collection<String> codes);
 
     /**
      * Get product id by given code

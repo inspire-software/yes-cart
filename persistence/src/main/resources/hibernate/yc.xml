@@ -3323,6 +3323,12 @@
         ]]>
     </query>
 
+    <query name="PRODUCT.IDS.BY.SKU.BARCODES">
+        <![CDATA[
+                 select s.product.productId from ProductSkuEntity s   where s.barCode in (?1)
+        ]]>
+    </query>
+
     <query name="PRODUCT.IDS.BY.ATTRIBUTE.CODE.AND.VALUE">
         <![CDATA[
                  select avp.product.productId from AttrValueEntityProduct avp   where avp.attribute.code = ?1 and avp.val = ?2
