@@ -10,6 +10,7 @@ const BaseConfig: EnvConfig = {
   UI_FILTER_NO_CAP: 100,
   UI_TABLE_PAGE_SIZE: 10,
   UI_TABLE_PAGE_NUMS: 5,
+  UI_ORDER_TOTALS: 'gross',
   UI_DOC_LINK: 'http://www.inspire-software.com/confluence/display/YC3EN/YC+3.x.x+Wiki',
   UI_COPY_NOTE: '<a href=http://www.yes-cart.org target=_blank>YesCart.org</a>',
   UI_LABEL: ''

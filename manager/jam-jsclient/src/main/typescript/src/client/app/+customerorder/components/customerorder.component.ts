@@ -16,6 +16,8 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderLineVO, PromotionVO, Pair } from './../../shared/model/index';
+import { CookieUtil } from './../../shared/cookies/index';
+import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
@@ -71,6 +73,21 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
 
   get customerorder():CustomerOrderVO {
     return this._customerorder;
+  }
+
+  get showGrossTotal():boolean {
+    return Config.UI_ORDER_TOTALS === 'gross';
+  }
+
+  set showGrossTotal(showGrossTotal:boolean) {
+    Config.UI_ORDER_TOTALS = showGrossTotal ? 'gross' : 'net';
+    let cookieName = 'YCJAM_UI_ORDER_TOTALS';
+    CookieUtil.createCookie(cookieName, Config.UI_ORDER_TOTALS, 360);
+  }
+
+  onShowGrossTotalClick() {
+    var _gross = this.showGrossTotal;
+    this.showGrossTotal = !_gross;
   }
 
   ngOnInit() {

@@ -473,6 +473,35 @@ public interface CustomerOrderDeliveryDetailDTO extends Identifiable {
     void setLineTax(BigDecimal lineTax);
 
     /**
+     * Total amount for this line.
+     *
+     * @return  qty * grossPrice;
+     */
+    BigDecimal getLineTotalGross();
+
+    /**
+     * Total amount for this line.
+     *
+     * @param lineTotalGross qty * grossPrice;
+     */
+    void setLineTotalGross(BigDecimal lineTotalGross);
+
+    /**
+     * Total amount for this line.
+     *
+     * @return  qty * netPrice;
+     */
+    BigDecimal getLineTotalNet();
+
+    /**
+     * Total amount for this line.
+     *
+     * @param lineTotalNet qty * netPrice;
+     */
+    void setLineTotalNet(BigDecimal lineTotalNet);
+
+
+    /**
      * @return all values mapped to codes
      */
     Map<String, Pair<String, String>> getAllValues();

@@ -490,6 +490,8 @@
   "CUSTOMERORDER_MSG": "Заметки",
   "CUSTOMERORDER_MULTI_SHIP": "Множественная доставка",
   "CUSTOMERORDER_TOTAL": "Итого (вкл. НДС)",
+  "CUSTOMERORDER_TOTAL_WITH_TAX": "Итого (вкл. НДС)",
+  "CUSTOMERORDER_TOTAL_NO_TAX": "Итого (без НДС)",
   "CUSTOMERORDER_BALANCE": "Оплачено",
   "CUSTOMERORDER_IP": "IP",
   "CUSTOMERORDER_PROMOTIONS": "Акции",

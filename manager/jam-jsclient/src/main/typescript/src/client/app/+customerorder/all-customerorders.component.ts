@@ -18,6 +18,7 @@ import { CustomerOrderService, I18nEventBus, ErrorEventBus } from './../shared/s
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { CustomerOrderInfoVO, CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO, Pair } from './../shared/model/index';
 import { Futures, Future } from './../shared/event/index';
+import { CookieUtil } from './../shared/cookies/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
 import { LogUtil } from './../shared/log/index';
@@ -129,6 +130,21 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   set statuses(value:Pair<string, boolean>[]) {
     AllCustomerOrdersComponent._statuses = value;
+  }
+
+  get showGrossTotal():boolean {
+    return Config.UI_ORDER_TOTALS === 'gross';
+  }
+
+  set showGrossTotal(showGrossTotal:boolean) {
+    Config.UI_ORDER_TOTALS = showGrossTotal ? 'gross' : 'net';
+    let cookieName = 'YCJAM_UI_ORDER_TOTALS';
+    CookieUtil.createCookie(cookieName, Config.UI_ORDER_TOTALS, 360);
+  }
+
+  onShowGrossTotalClick() {
+    var _gross = this.showGrossTotal;
+    this.showGrossTotal = !_gross;
   }
 
   ngOnDestroy() {

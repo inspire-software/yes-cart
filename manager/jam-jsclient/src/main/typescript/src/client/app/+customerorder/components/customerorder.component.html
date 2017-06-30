@@ -58,7 +58,7 @@
                     <th>{{ 'COST' | translate }}</th>
                     <th>{{ 'PRICE' | translate }}</th>
                     <th>{{ 'TAX' | translate }}</th>
-                    <th>{{ 'TOTAL' | translate }}</th>
+                    <th><a (click)="onShowGrossTotalClick()" class="js-click"  title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_NO_TAX' : 'CUSTOMERORDER_TOTAL_WITH_TAX') | translate }}">{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }} {{ customerorder.currency }}</a></th>
                     <th>{{ 'PROMO_APPLIED' | translate }}</th>
                   </tr>
                   </thead>
@@ -82,9 +82,9 @@
                       <template [ngIf]="row.deliveryDifferent"><br/><span><i class="fa fa-truck"></i> {{ row.deliveredQuantity | ycquantity }}</span></template>
                     </td>
                     <td title="{{ 'COST' | translate }}" class="text-right">{{ getLineCost(row) | ycprice}}</td>
-                    <td title="{{ 'PRICE' | translate }}" class="text-right"><span [innerHTML]="getLinePriceFlags(row)"></span> {{row.price | ycprice}}</td>
+                    <td title="{{ 'PRICE' | translate }}" class="text-right"><span [innerHTML]="getLinePriceFlags(row)"></span> {{ (showGrossTotal ? row.grossPrice : row.netPrice) | ycprice}}</td>
                     <td title="{{ 'TAX' | translate }}" class="text-right">{{row.taxCode}} @ {{row.taxRate}}%</td>
-                    <td title="{{ 'TOTAL' | translate }}" class="text-right">{{ customerorder.currency }} {{row.lineTotal}}</td>
+                    <td title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }} {{ customerorder.currency }}" class="text-right">{{ (showGrossTotal ? row.lineTotalGross : row.lineTotalNet) }}</td>
                     <td title="{{ 'PROMO_APPLIED' | translate }}">
                       <span *ngIf="row.gift"><i class="fa fa-gift"></i></span>
                       <a  *ngFor="let linePromo of getPromotions(row.appliedPromo)" title="{{linePromo.name}}"><span class="label label-info">{{ linePromo.code }}</span></a>&nbsp;
@@ -92,15 +92,10 @@
                   </tr>
                   <tr>
                     <th colspan="6">{{ 'CUSTOMERORDER_TOTAL_ITEM_LIST' | translate }}</th>
-                    <td class="text-right"><span [innerHTML]="getOrderListPriceFlags(customerorder)"></span> {{ customerorder.price | ycprice }}</td>
+                    <td class="text-right"><span [innerHTML]="getOrderListPriceFlags(customerorder)"></span> {{ (showGrossTotal ? customerorder.grossPrice : customerorder.netPrice) | ycprice }}</td>
                     <td title="{{ 'PROMO_APPLIED' | translate }}">
                       <a *ngFor="let itemsPromo of getPromotions(customerorder.appliedPromo)" title="{{itemsPromo.name}}"><span class="label label-info">{{ itemsPromo.code }}</span></a>&nbsp;
                     </td>
-                  </tr>
-                  <tr>
-                    <th colspan="6">{{ 'CUSTOMERORDER_TOTAL_ITEM_TAX' | translate }}</th>
-                    <td class="text-right"> {{ (customerorder.grossPrice - customerorder.netPrice) | ycprice }}</td>
-                    <td></td>
                   </tr>
                   <tr *ngFor="let delivery of customerorder.deliveries" class="{{delivery == selectedDelivery ? 'active' : ''}}">
                     <th colspan="6">
@@ -111,22 +106,27 @@
                       <template [ngIf]="delivery.deliveryConfirmed"><br/><i class="fa fa-check-square-o"></i> {{ delivery.deliveryConfirmed | ycdate }}</template>
                       {{ delivery.deliveryRemarks }}
                     </th>
-                    <td class="text-right">{{ delivery.price | ycprice }}</td>
+                    <td class="text-right">{{ (showGrossTotal ? delivery.grossPrice : delivery.netPrice) | ycprice }}</td>
                     <td title="{{ 'PROMO_APPLIED' | translate }}">
                       <a *ngFor="let deliveryPromo of getPromotions(delivery.appliedPromo)" title="{{deliveryPromo.name}}"><span class="label label-info">{{ deliveryPromo.code }}</span></a>&nbsp;
                     </td>
                   </tr>
                   <tr>
                     <th colspan="6">
-                      {{ 'CUSTOMERORDER_TOTAL_ORDER' | translate }}
+                      {{ 'CUSTOMERORDER_TOTAL_ORDER' | translate }} {{ customerorder.currency }}
                       <template [ngIf]="customerorder.requestedDeliveryDate"><br/><i class="fa fa-user"></i> {{ customerorder.requestedDeliveryDate | ycdate }}</template>
                     </th>
-                    <td class="text-right">{{ customerorder.currency }} {{ (customerorder.orderTotal) | ycprice }}</td>
+                    <td class="text-right">{{ (showGrossTotal ? customerorder.orderGrossTotal : customerorder.orderNetTotal) | ycprice }}</td>
                     <td>&nbsp;</td>
                   </tr>
+                  <tr>
+                    <th colspan="6">{{ 'CUSTOMERORDER_TOTAL_ITEM_TAX' | translate }}</th>
+                    <td class="text-right"> {{ customerorder.orderTotalTax | ycprice }}</td>
+                    <td></td>
+                  </tr>
                   <tr *ngIf="isOrderType()">
-                    <th colspan="6">{{ 'CUSTOMERORDER_TOTAL_PAID' | translate }}: {{ customerorder.pgName }}</th>
-                    <td class="{{ (customerorder.orderPaymentBalance < customerorder.orderTotal) ? 'bg-danger text-right' : 'text-right' }}">{{ customerorder.currency }} {{ customerorder.orderPaymentBalance | ycprice }}</td>
+                    <th colspan="6">{{ 'CUSTOMERORDER_TOTAL_PAID' | translate }} {{ customerorder.currency }}: {{ customerorder.pgName }}</th>
+                    <td class="{{ (customerorder.orderPaymentBalance < customerorder.orderTotal) ? 'bg-danger text-right' : 'text-right' }}">{{ customerorder.orderPaymentBalance | ycprice }}</td>
                     <td>&nbsp;</td>
                   </tr>
                   </tbody>

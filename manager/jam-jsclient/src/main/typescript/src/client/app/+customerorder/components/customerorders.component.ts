@@ -15,6 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { CustomerOrderInfoVO } from './../../shared/model/index';
+import { CookieUtil } from './../../shared/cookies/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
@@ -56,6 +57,21 @@ export class CustomerOrdersComponent implements OnInit, OnDestroy {
   set customerorders(customerorders:Array<CustomerOrderInfoVO>) {
     this._customerorders = customerorders;
     this.filterCustomerorders();
+  }
+
+  get showGrossTotal():boolean {
+    return Config.UI_ORDER_TOTALS === 'gross';
+  }
+
+  set showGrossTotal(showGrossTotal:boolean) {
+    Config.UI_ORDER_TOTALS = showGrossTotal ? 'gross' : 'net';
+    let cookieName = 'YCJAM_UI_ORDER_TOTALS';
+    CookieUtil.createCookie(cookieName, Config.UI_ORDER_TOTALS, 360);
+  }
+
+  onShowGrossTotalClick() {
+    var _gross = this.showGrossTotal;
+    this.showGrossTotal = !_gross;
   }
 
   ngOnDestroy() {

@@ -110,6 +110,8 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     private boolean taxExclusiveOfPrice;
 
     private BigDecimal lineTotal;
+    private BigDecimal lineTotalGross;
+    private BigDecimal lineTotalNet;
 
     private BigDecimal lineTax;
 
@@ -139,11 +141,28 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     public void setLineTax(final BigDecimal lineTax) {
         this.lineTax = lineTax;
     }
+    public BigDecimal getLineTotalGross() {
+        return lineTotalGross;
+    }
+
+    public void setLineTotalGross(final BigDecimal lineTotalGross) {
+        this.lineTotalGross = lineTotalGross;
+    }
+
+    public BigDecimal getLineTotalNet() {
+        return lineTotalNet;
+    }
+
+    public void setLineTotalNet(final BigDecimal lineTotalNet) {
+        this.lineTotalNet = lineTotalNet;
+    }
 
     private void calculateLineTotal() {
 
         if (qty != null && netPrice != null && grossPrice != null) {
             lineTotal = qty.multiply(grossPrice).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
+            lineTotalGross = qty.multiply(grossPrice).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
+            lineTotalNet = qty.multiply(netPrice).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
             lineTax = qty.multiply(grossPrice.subtract(netPrice)).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
         }
 

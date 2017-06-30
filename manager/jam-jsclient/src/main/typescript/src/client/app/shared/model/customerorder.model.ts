@@ -48,6 +48,9 @@ export interface CustomerOrderInfoVO {
 
   currency : string;
   orderTotal : number; // GrossPrice + SUM(delivery.GrossPrice)
+  orderTotalTax : number; // GrossPrice + SUM(delivery.GrossPrice)
+  orderGrossTotal : number; // GrossPrice + SUM(delivery.GrossPrice)
+  orderNetTotal : number; // GrossPrice + SUM(delivery.GrossPrice)
   orderPaymentBalance : number; // Payments less Refunds
 
   price : number;
@@ -130,6 +133,8 @@ export interface CustomerOrderLineVO {
   taxExclusiveOfPrice : boolean;
 
   lineTotal : number;
+  lineTotalGross : number;
+  lineTotalNet : number;
   lineTax : number;
 
   deliveryNum : string;

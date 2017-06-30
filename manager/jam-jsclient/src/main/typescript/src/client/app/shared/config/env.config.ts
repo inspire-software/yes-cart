@@ -12,6 +12,8 @@ export interface EnvConfig {
   UI_TABLE_PAGE_SIZE?: number;
   UI_TABLE_PAGE_NUMS?: number;
 
+  UI_ORDER_TOTALS?: string;
+
   UI_DOC_LINK?: string;
   UI_COPY_NOTE?: string;
   UI_LABEL?: string;

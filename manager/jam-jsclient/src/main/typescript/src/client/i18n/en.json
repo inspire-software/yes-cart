@@ -490,6 +490,8 @@
   "CUSTOMERORDER_MSG": "Message",
   "CUSTOMERORDER_MULTI_SHIP": "Multiple shipping",
   "CUSTOMERORDER_TOTAL": "Total (inc. tax)",
+  "CUSTOMERORDER_TOTAL_WITH_TAX": "Total (inc. tax)",
+  "CUSTOMERORDER_TOTAL_NO_TAX": "Total (no tax)",
   "CUSTOMERORDER_BALANCE": "Paid balance",
   "CUSTOMERORDER_IP": "IP",
   "CUSTOMERORDER_PROMOTIONS": "Promotions",

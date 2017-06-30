@@ -101,6 +101,12 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
 
     @DtoField(value = "orderTotal", readOnly = true)
     private BigDecimal orderTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+    @DtoField(value = "orderTotalTax", readOnly = true)
+    private BigDecimal orderTotalTax = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+    @DtoField(value = "orderGrossTotal", readOnly = true)
+    private BigDecimal orderGrossTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+    @DtoField(value = "orderNetTotal", readOnly = true)
+    private BigDecimal orderNetTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
 
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
@@ -174,6 +180,48 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
      */
     public void setOrderTotal(final BigDecimal orderTotal) {
         this.orderTotal = orderTotal;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getOrderTotalTax() {
+        return orderTotalTax;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setOrderTotalTax(final BigDecimal orderTotalTax) {
+        this.orderTotalTax = orderTotalTax;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getOrderGrossTotal() {
+        return orderGrossTotal;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setOrderGrossTotal(final BigDecimal orderGrossTotal) {
+        this.orderGrossTotal = orderGrossTotal;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getOrderNetTotal() {
+        return orderNetTotal;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setOrderNetTotal(final BigDecimal orderNetTotal) {
+        this.orderNetTotal = orderNetTotal;
     }
 
     /**
