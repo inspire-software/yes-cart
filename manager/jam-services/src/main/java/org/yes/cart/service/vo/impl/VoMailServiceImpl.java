@@ -126,13 +126,13 @@ public class VoMailServiceImpl implements VoMailService {
         }
 
         final HashMap<String, Object> emailModel = new HashMap<String, Object>();
+        final Shop configShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
 
         if (template.contains("payment") || template.contains("shipment-complete")) {
 
-            final Shop pgShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
-            final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel(), pgShop.getCode());
+            final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel(), configShop.getCode());
             if (gateway == null) {
-                return "Cannot send payment email because gateway " + customerOrder.getPgLabel() + " is not resolved for " + pgShop.getCode() + ", could it be disabled?";
+                return "Cannot send payment email because gateway " + customerOrder.getPgLabel() + " is not resolved for " + configShop.getCode() + ", could it be disabled?";
             }
 
             List<CustomerOrderPayment> payments = null;
@@ -155,7 +155,7 @@ public class VoMailServiceImpl implements VoMailService {
 
             MailUtils.appendPaymentEmailParameters(
                     emailModel,
-                    themeService.getMailTemplateChainByShopId(shopId),
+                    themeService.getMailTemplateChainByShopId(configShop.getShopId()),
                     template,
                     "test@example.com", customerOrder,
                     gateway,
@@ -209,7 +209,7 @@ public class VoMailServiceImpl implements VoMailService {
                     mail,
                     shop.getCode(),
                     customerOrder.getLocale(),
-                    themeService.getMailTemplateChainByShopId(shopId),
+                    themeService.getMailTemplateChainByShopId(configShop.getShopId()),
                     template,
                     "test@example.com",
                     "test@example.com",
@@ -232,7 +232,7 @@ public class VoMailServiceImpl implements VoMailService {
 
             MailUtils.appendOrderEmailParameters(
                     emailModel,
-                    themeService.getMailTemplateChainByShopId(shopId),
+                    themeService.getMailTemplateChainByShopId(configShop.getShopId()),
                     template,
                     "test@example.com",
                     customerOrder,
