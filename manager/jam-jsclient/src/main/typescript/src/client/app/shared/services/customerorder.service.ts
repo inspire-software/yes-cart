@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { CustomerOrderVO, CustomerOrderInfoVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO, PaymentVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -52,7 +52,7 @@ export class CustomerOrderService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/filtered/' + max + '/' + lang, body, options)
-        .map(res => <CustomerOrderInfoVO[]> res.json())
+        .map(res => <CustomerOrderInfoVO[]> this.json(res))
         .catch(this.handleError);
   }
 
@@ -63,7 +63,7 @@ export class CustomerOrderService {
    */
   getOrderById(lang:string, orderId:number) {
     return this.http.get(this._serviceBaseUrl + '/order/' + orderId + '/' + lang)
-      .map(res => <CustomerOrderVO> res.json())
+      .map(res => <CustomerOrderVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -82,7 +82,7 @@ export class CustomerOrderService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/transition/' + action + '/' + order.ordernum + '/', body, options)
-        .map(res => <CustomerOrderTransitionResultVO> res.json())
+        .map(res => <CustomerOrderTransitionResultVO> this.json(res))
         .catch(this.handleError);
   }
 
@@ -102,7 +102,7 @@ export class CustomerOrderService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/transition/' + action + '/' + order.ordernum + '/' + delivery.deliveryNum + '/', body, options)
-        .map(res => <CustomerOrderTransitionResultVO> res.json())
+        .map(res => <CustomerOrderTransitionResultVO> this.json(res))
         .catch(this.handleError);
   }
 
@@ -119,10 +119,19 @@ export class CustomerOrderService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/payments/filtered/' + max + '/', body, options)
-      .map(res => <PaymentVO[]> res.json())
+      .map(res => <PaymentVO[]> this.json(res))
       .catch(this.handleError);
   }
 
+
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    LogUtil.debug('Processing JSON response', contentType, res.text().includes('loginForm'));
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
+  }
 
 
   private handleError (error:any) {

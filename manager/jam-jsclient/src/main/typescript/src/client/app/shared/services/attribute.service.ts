@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { EtypeVO, AttributeGroupVO, AttributeVO, Pair } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -47,7 +47,7 @@ export class AttributeService {
    */
   getAllEtypes() {
     return this.http.get(this._serviceBaseUrl + '/etype/all')
-      .map(res => <EtypeVO[]> res.json())
+      .map(res => <EtypeVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -57,7 +57,7 @@ export class AttributeService {
    */
   getAllGroups() {
     return this.http.get(this._serviceBaseUrl + '/group/all')
-      .map(res => <AttributeGroupVO[]> res.json())
+      .map(res => <AttributeGroupVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -68,7 +68,7 @@ export class AttributeService {
    */
   getAllAttributes(groupCode:string) {
     return this.http.get(this._serviceBaseUrl + '/attribute/all/' + groupCode + '/')
-      .map(res => <AttributeVO[]> res.json())
+      .map(res => <AttributeVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -85,7 +85,7 @@ export class AttributeService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/attribute/filtered/' + groupCode + '/' + max, body, options)
-      .map(res => <AttributeVO[]> res.json())
+      .map(res => <AttributeVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -97,7 +97,7 @@ export class AttributeService {
    */
   getProductTypesByAttributeCode(code:string) {
     return this.http.get(this._serviceBaseUrl + '/attribute/producttype/' + code)
-      .map(res => <Pair<number,string>[]> res.json())
+      .map(res => <Pair<number,string>[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -110,7 +110,7 @@ export class AttributeService {
    */
   getAttributeById(id:number) {
     return this.http.get(this._serviceBaseUrl + '/attribute/' + id)
-      .map(res => <AttributeVO> res.json())
+      .map(res => <AttributeVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -127,11 +127,11 @@ export class AttributeService {
 
     if (attribute.attributeId > 0) {
       return this.http.post(this._serviceBaseUrl + '/attribute', body, options)
-        .map(res => <AttributeVO> res.json())
+        .map(res => <AttributeVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/attribute', body, options)
-        .map(res => <AttributeVO> res.json())
+        .map(res => <AttributeVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -150,6 +150,14 @@ export class AttributeService {
       .catch(this.handleError);
   }
 
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    LogUtil.debug('Processing JSON response', contentType, res.text().includes('loginForm'));
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
+  }
 
   private handleError (error:any) {
 

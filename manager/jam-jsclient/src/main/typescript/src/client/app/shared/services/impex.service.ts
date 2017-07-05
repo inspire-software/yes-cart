@@ -15,7 +15,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -47,7 +47,7 @@ export class ImpexService {
    */
   getGroups(lang:string, mode:string) {
     return this.http.get(this._serviceBaseUrl + '/impex/' + mode + '/groups/' + lang)
-      .map(res => <DataGroupInfoVO[]> res.json())
+      .map(res => <DataGroupInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -70,7 +70,7 @@ export class ImpexService {
    */
   getImportStatus(token:string) {
     return this.http.get(this._serviceBaseUrl + '/impex/import/status?token=' + encodeURI(token))
-      .map(res => <JobStatusVO> res.json())
+      .map(res => <JobStatusVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -94,7 +94,7 @@ export class ImpexService {
    */
   getExportStatus(token:string) {
     return this.http.get(this._serviceBaseUrl + '/impex/export/status?token=' + encodeURI(token))
-      .map(res => <JobStatusVO> res.json())
+      .map(res => <JobStatusVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -106,7 +106,7 @@ export class ImpexService {
    */
   getFiles(mode:string) {
     return this.http.get(this._serviceBaseUrl + '/filemanager/list/' + mode)
-      .map(res => <Pair<string, string>[]> res.json())
+      .map(res => <Pair<string, string>[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -124,6 +124,14 @@ export class ImpexService {
       .catch(this.handleError);
   }
 
+
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
+  }
 
 
   private handleError (error:any) {

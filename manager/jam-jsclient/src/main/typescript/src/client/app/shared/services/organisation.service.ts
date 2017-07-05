@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { RoleVO, ManagerInfoVO, ManagerVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -47,7 +47,7 @@ export class OrganisationService {
    */
   getAllManagers() {
     return this.http.get(this._serviceBaseUrl + '/managers/all')
-      .map(res => <ManagerInfoVO[]> res.json())
+      .map(res => <ManagerInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -57,7 +57,7 @@ export class OrganisationService {
    */
   getManagerByEmail(email:string) {
     return this.http.get(this._serviceBaseUrl + '/manager/' + email + '/')
-      .map(res => <ManagerVO> res.json())
+      .map(res => <ManagerVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -74,11 +74,11 @@ export class OrganisationService {
 
     if (manager.managerId > 0) {
       return this.http.post(this._serviceBaseUrl + '/manager', body, options)
-        .map(res => <ManagerVO> res.json())
+        .map(res => <ManagerVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/manager', body, options)
-        .map(res => <ManagerVO> res.json())
+        .map(res => <ManagerVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -131,7 +131,7 @@ export class OrganisationService {
    */
   getAllRoles() {
     return this.http.get(this._serviceBaseUrl + '/role/all')
-      .map(res => <RoleVO[]> res.json())
+      .map(res => <RoleVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -148,11 +148,11 @@ export class OrganisationService {
 
     if (role.roleId > 0) {
       return this.http.post(this._serviceBaseUrl + '/role', body, options)
-        .map(res => <RoleVO> res.json())
+        .map(res => <RoleVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/role', body, options)
-        .map(res => <RoleVO> res.json())
+        .map(res => <RoleVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -168,6 +168,16 @@ export class OrganisationService {
 
     return this.http.delete(this._serviceBaseUrl + '/role/' + role.code, options)
       .catch(this.handleError);
+  }
+
+
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    LogUtil.debug('Processing JSON response', contentType, res.text().includes('loginForm'));
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
   }
 
 

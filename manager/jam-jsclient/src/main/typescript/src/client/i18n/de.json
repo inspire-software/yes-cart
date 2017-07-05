@@ -33,6 +33,7 @@
   "MODAL_BUTTON_CLOSE": "Schliessen",
   "MODAL_BUTTON_RESET": "Zurücksetzen",
   "MODAL_ERROR_TITLE": "FEHLER",
+  "MODAL_ERROR_MESSAGE_AUTH": "Session abgelaufen, bitte Neustart der Anwendung",
   "MODAL_ERROR_MESSAGE_AUTH200": "Fehler beim Zugriff auf den Server, Ihre Session ist abgelaufen und Sie müssen sich neu einloggen",
   "MODAL_ERROR_MESSAGE_AUTH403": "Sie sind nicht berechtigt diese Daten zu sehen und/oder zu updaten",
   "MODAL_ERROR_MESSAGE_AUTH404": "Server Fehler: Servicepfad nicht gefunden",

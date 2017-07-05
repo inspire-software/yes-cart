@@ -33,6 +33,7 @@
   "MODAL_BUTTON_CLOSE": "Close",
   "MODAL_BUTTON_RESET": "Reset",
   "MODAL_ERROR_TITLE": "ERROR",
+  "MODAL_ERROR_MESSAGE_AUTH": "Session expired, please restart application",
   "MODAL_ERROR_MESSAGE_AUTH200": "There was an error on server call, it could be that your session expired and you need to log in",
   "MODAL_ERROR_MESSAGE_AUTH403": "You are not authorised to view and/or update data",
   "MODAL_ERROR_MESSAGE_AUTH404": "Server error: Service path not found",

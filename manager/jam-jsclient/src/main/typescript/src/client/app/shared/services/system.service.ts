@@ -15,7 +15,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -47,7 +47,7 @@ export class SystemService {
    */
   getSystemPreferences() {
     return this.http.get(this._serviceBaseUrl + '/preferences')
-      .map(res => <AttrValueSystemVO[]> res.json())
+      .map(res => <AttrValueSystemVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -61,7 +61,7 @@ export class SystemService {
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/preferences', body, options)
-      .map(res => <AttrValueSystemVO[]> res.json())
+      .map(res => <AttrValueSystemVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -73,7 +73,7 @@ export class SystemService {
    */
   getCacheInfo() {
     return this.http.get(this._serviceBaseUrl + '/cache')
-      .map(res => <CacheInfoVO[]> res.json())
+      .map(res => <CacheInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -87,7 +87,7 @@ export class SystemService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/cache', options)
-      .map(res => <CacheInfoVO[]> res.json())
+      .map(res => <CacheInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -102,7 +102,7 @@ export class SystemService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/cache/' + name + '/', options)
-      .map(res => <CacheInfoVO[]> res.json())
+      .map(res => <CacheInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -120,7 +120,7 @@ export class SystemService {
     let path = stats ? 'statson/' : 'statsoff/';
 
     return this.http.post(this._serviceBaseUrl + '/cache/' + path + name + '/', null, options)
-      .map(res => <CacheInfoVO[]> res.json())
+      .map(res => <CacheInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -131,7 +131,7 @@ export class SystemService {
    */
   getClusterInfo() {
     return this.http.get(this._serviceBaseUrl + '/cluster')
-      .map(res => <ClusterNodeVO[]> res.json())
+      .map(res => <ClusterNodeVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -144,7 +144,7 @@ export class SystemService {
    */
   getIndexJobStatus(token:string) {
     return this.http.get(this._serviceBaseUrl + '/index/status/' + token + '/')
-      .map(res => <JobStatusVO> res.json())
+      .map(res => <JobStatusVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -159,7 +159,7 @@ export class SystemService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/index/all', null, options)
-      .map(res => <JobStatusVO> res.json())
+      .map(res => <JobStatusVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -175,7 +175,7 @@ export class SystemService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/index/shop/' + id, null, options)
-      .map(res => <JobStatusVO> res.json())
+      .map(res => <JobStatusVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -196,8 +196,18 @@ export class SystemService {
     let path = (typ == 'HQL') ? '/hquery/' : ((typ == 'FT') ? '/ftquery/' : '/dbquery/');
 
     return this.http.post(this._serviceBaseUrl + path + node + '/', query, options)
-      .map(res => <Array<Array<string>>> res.json())
+      .map(res => <Array<Array<string>>> this.json(res))
       .catch(this.handleError);
+  }
+
+
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    LogUtil.debug('Processing JSON response', contentType, res.text().includes('loginForm'));
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
   }
 
 

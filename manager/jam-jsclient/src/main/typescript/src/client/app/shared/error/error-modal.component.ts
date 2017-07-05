@@ -86,12 +86,17 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
     let keyParams:any = {};
 
     if (message.message) {
-      if (message.message.indexOf('JSON Parse error') != -1) {
-        key = 'MODAL_ERROR_MESSAGE_AUTH200';
-      } else if (message.message.indexOf('unique or primary key constraint') != -1) {
-        key = 'MODAL_ERROR_MESSAGE_UNIQUE';
+      if (message.message == 'MODAL_ERROR_MESSAGE_AUTH') {
+        key = 'MODAL_ERROR_MESSAGE_AUTH';
+        this.errorString = '';
+      } else {
+        if (message.message.indexOf('JSON Parse error') != -1) {
+          key = 'MODAL_ERROR_MESSAGE_AUTH200';
+        } else if (message.message.indexOf('unique or primary key constraint') != -1) {
+          key = 'MODAL_ERROR_MESSAGE_UNIQUE';
+        }
+        this.errorString = message.message;
       }
-      this.errorString = message.message;
     } else {
       this.errorString = 'Server error';
     }

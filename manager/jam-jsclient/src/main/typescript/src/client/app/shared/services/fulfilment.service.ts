@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { FulfilmentCentreInfoVO, FulfilmentCentreVO, ShopFulfilmentCentreVO, InventoryVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -47,7 +47,7 @@ export class FulfilmentService {
    */
   getAllFulfilmentCentres() {
     return this.http.get(this._serviceBaseUrl + '/centre/all')
-      .map(res => <FulfilmentCentreVO[]> res.json())
+      .map(res => <FulfilmentCentreVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -57,7 +57,7 @@ export class FulfilmentService {
    */
   getShopFulfilmentCentres(shopId:number) {
     return this.http.get(this._serviceBaseUrl + '/centre/shop/' + shopId)
-      .map(res => <ShopFulfilmentCentreVO[]> res.json())
+      .map(res => <ShopFulfilmentCentreVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -74,11 +74,11 @@ export class FulfilmentService {
 
     if (centre.warehouseId > 0) {
       return this.http.post(this._serviceBaseUrl + '/centre', body, options)
-        .map(res => <FulfilmentCentreVO> res.json())
+        .map(res => <FulfilmentCentreVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/centre', body, options)
-        .map(res => <FulfilmentCentreVO> res.json())
+        .map(res => <FulfilmentCentreVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -95,7 +95,7 @@ export class FulfilmentService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.put(this._serviceBaseUrl + '/centre/shop/' + shopId, body, options)
-      .map(res => <FulfilmentCentreVO> res.json())
+      .map(res => <FulfilmentCentreVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -112,7 +112,7 @@ export class FulfilmentService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/centre/shop', body, options)
-      .map(res => <Array<ShopFulfilmentCentreVO>> res.json())
+      .map(res => <Array<ShopFulfilmentCentreVO>> this.json(res))
       .catch(this.handleError);
   }
 
@@ -142,7 +142,7 @@ export class FulfilmentService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/inventory/centre/' + centre.warehouseId + '/filtered/' + max, body, options)
-      .map(res => <InventoryVO[]> res.json())
+      .map(res => <InventoryVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -153,7 +153,7 @@ export class FulfilmentService {
    */
   getInventoryById(inventoryId:number) {
     return this.http.get(this._serviceBaseUrl + '/inventory/' + inventoryId)
-      .map(res => <InventoryVO> res.json())
+      .map(res => <InventoryVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -171,11 +171,11 @@ export class FulfilmentService {
 
     if (inventory.skuWarehouseId > 0) {
       return this.http.post(this._serviceBaseUrl + '/inventory', body, options)
-        .map(res => <InventoryVO> res.json())
+        .map(res => <InventoryVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/inventory', body, options)
-        .map(res => <InventoryVO> res.json())
+        .map(res => <InventoryVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -194,6 +194,15 @@ export class FulfilmentService {
       .catch(this.handleError);
   }
 
+
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    LogUtil.debug('Processing JSON response', contentType, res.text().includes('loginForm'));
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
+  }
 
 
   private handleError (error:any) {

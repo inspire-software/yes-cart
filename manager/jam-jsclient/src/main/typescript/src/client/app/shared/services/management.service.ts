@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { UserVO, ManagerVO, ManagerInfoVO, LicenseAgreementVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -48,7 +48,7 @@ export class ManagementService {
   getMyself() {
     return this.http.get(this._serviceBaseUrl + '/myself')
       .map(res => {
-        let manager = <ManagerVO> res.json();
+        let manager = <ManagerVO> this.json(res);
         let name = this.getUserName(manager);
         let ui = this.getUserInterface(manager);
         let user:UserVO = { manager: manager, name: name, ui: ui };
@@ -104,7 +104,7 @@ export class ManagementService {
   getMyUI() {
     return this.http.get(this._serviceBaseUrl + '/myui')
       .map(res => {
-        let vals = <any> res.json();
+        let vals = <any> this.json(res);
         if (vals.hasOwnProperty('SYSTEM_PANEL_HELP_DOCS')) {
           let valDoc = vals['SYSTEM_PANEL_HELP_DOCS'];
           if (valDoc != null && valDoc != '') {
@@ -135,7 +135,7 @@ export class ManagementService {
    */
   getMyAgreement() {
     return this.http.get(this._serviceBaseUrl + '/license')
-      .map(res => <LicenseAgreementVO> res.json())
+      .map(res => <LicenseAgreementVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -149,9 +149,20 @@ export class ManagementService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/license', null, options)
-        .map(res => <LicenseAgreementVO> res.json())
+        .map(res => <LicenseAgreementVO> this.json(res))
         .catch(this.handleError);
   }
+
+
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    LogUtil.debug('Processing JSON response', contentType, res.text().includes('loginForm'));
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
+  }
+
 
   private handleError (error:any) {
 

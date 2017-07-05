@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { CustomerVO, CustomerInfoVO, AttrValueCustomerVO, AddressBookVO, AddressVO, Pair } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -52,7 +52,7 @@ export class CustomerService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/filtered/' + max, body, options)
-        .map(res => <CustomerInfoVO[]> res.json())
+        .map(res => <CustomerInfoVO[]> this.json(res))
         .catch(this.handleError);
   }
 
@@ -64,7 +64,7 @@ export class CustomerService {
   getCustomerTypes(lang:string) {
 
     return this.http.get(this._serviceBaseUrl + '/types/' + lang)
-      .map(res => <Pair<string, string>[]> res.json())
+      .map(res => <Pair<string, string>[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -74,7 +74,7 @@ export class CustomerService {
    */
   getCustomerById(customerId:number) {
     return this.http.get(this._serviceBaseUrl + '/' + customerId)
-      .map(res => <CustomerVO> res.json())
+      .map(res => <CustomerVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -92,11 +92,11 @@ export class CustomerService {
 
     if (customer.customerId > 0) {
       return this.http.post(this._serviceBaseUrl + '/', body, options)
-        .map(res => <CustomerVO> res.json())
+        .map(res => <CustomerVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/', body, options)
-        .map(res => <CustomerVO> res.json())
+        .map(res => <CustomerVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -123,7 +123,7 @@ export class CustomerService {
    */
   getCustomerAttributes(id:number) {
     return this.http.get(this._serviceBaseUrl + '/attributes/' + id)
-      .map(res => <AttrValueCustomerVO[]> res.json())
+      .map(res => <AttrValueCustomerVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -138,7 +138,7 @@ export class CustomerService {
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/attributes', body, options)
-      .map(res => <AttrValueCustomerVO[]> res.json())
+      .map(res => <AttrValueCustomerVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -165,7 +165,7 @@ export class CustomerService {
   getAddressBook(customer:CustomerInfoVO, formattingShopId:number, lang:string) {
 
     return this.http.get(this._serviceBaseUrl + '/addressbook/' + customer.customerId + '/' + formattingShopId + '/' + lang)
-      .map(res => <AddressBookVO> res.json())
+      .map(res => <AddressBookVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -184,11 +184,11 @@ export class CustomerService {
 
     if (address.addressId > 0) {
       return this.http.post(this._serviceBaseUrl + '/addressbook', body, options)
-        .map(res => <AddressVO> res.json())
+        .map(res => <AddressVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/addressbook', body, options)
-        .map(res => <AddressVO> res.json())
+        .map(res => <AddressVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -205,6 +205,16 @@ export class CustomerService {
 
     return this.http.delete(this._serviceBaseUrl + '/addressbook/' + address.addressId, options)
       .catch(this.handleError);
+  }
+
+
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    LogUtil.debug('Processing JSON response', contentType, res.text().includes('loginForm'));
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
   }
 
 

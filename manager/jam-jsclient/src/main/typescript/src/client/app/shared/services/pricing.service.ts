@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { ShopVO, PriceListVO, TaxVO, TaxConfigVO, PromotionVO, PromotionCouponVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -52,7 +52,7 @@ export class PricingService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/price/shop/' + shop.shopId + '/currency/' + currency + '/filtered/' + max, body, options)
-        .map(res => <PriceListVO[]> res.json())
+        .map(res => <PriceListVO[]> this.json(res))
         .catch(this.handleError);
   }
 
@@ -62,7 +62,7 @@ export class PricingService {
    */
   getPriceListById(priceId:number) {
     return this.http.get(this._serviceBaseUrl + '/price/' + priceId)
-      .map(res => <PriceListVO> res.json())
+      .map(res => <PriceListVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -79,11 +79,11 @@ export class PricingService {
 
     if (price.skuPriceId > 0) {
       return this.http.post(this._serviceBaseUrl + '/price', body, options)
-        .map(res => <PriceListVO> res.json())
+        .map(res => <PriceListVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/price', body, options)
-        .map(res => <PriceListVO> res.json())
+        .map(res => <PriceListVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -115,7 +115,7 @@ export class PricingService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/tax/shop/' + shop.code + '/currency/' + currency + '/filtered/' + max, body, options)
-      .map(res => <TaxVO[]> res.json())
+      .map(res => <TaxVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -125,7 +125,7 @@ export class PricingService {
    */
   getTaxById(taxId:number) {
     return this.http.get(this._serviceBaseUrl + '/tax/' + taxId)
-      .map(res => <TaxVO> res.json())
+      .map(res => <TaxVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -142,11 +142,11 @@ export class PricingService {
 
     if (tax.taxId > 0) {
       return this.http.post(this._serviceBaseUrl + '/tax', body, options)
-        .map(res => <TaxVO> res.json())
+        .map(res => <TaxVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/tax', body, options)
-        .map(res => <TaxVO> res.json())
+        .map(res => <TaxVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -178,7 +178,7 @@ export class PricingService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/taxconfig/tax/' + tax.taxId + '/filtered/' + max, body, options)
-      .map(res => <TaxConfigVO[]> res.json())
+      .map(res => <TaxConfigVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -188,7 +188,7 @@ export class PricingService {
    */
   getTaxConfigById(taxConfigId:number) {
     return this.http.get(this._serviceBaseUrl + '/taxconfig/' + taxConfigId)
-      .map(res => <TaxConfigVO> res.json())
+      .map(res => <TaxConfigVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -204,7 +204,7 @@ export class PricingService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.put(this._serviceBaseUrl + '/taxconfig', body, options)
-      .map(res => <TaxConfigVO> res.json())
+      .map(res => <TaxConfigVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -236,7 +236,7 @@ export class PricingService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/promotion/shop/' + shop.code + '/currency/' + currency + '/filtered/' + max, body, options)
-      .map(res => <PromotionVO[]> res.json())
+      .map(res => <PromotionVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -246,7 +246,7 @@ export class PricingService {
    */
   getPromotionById(promotionId:number) {
     return this.http.get(this._serviceBaseUrl + '/promotion/' + promotionId)
-      .map(res => <PromotionVO> res.json())
+      .map(res => <PromotionVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -263,11 +263,11 @@ export class PricingService {
 
     if (promotion.promotionId > 0) {
       return this.http.post(this._serviceBaseUrl + '/promotion', body, options)
-        .map(res => <PromotionVO> res.json())
+        .map(res => <PromotionVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/promotion', body, options)
-        .map(res => <PromotionVO> res.json())
+        .map(res => <PromotionVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -314,7 +314,7 @@ export class PricingService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/promotioncoupon/' + promotion.promotionId + '/filtered/' + max, body, options)
-      .map(res => <PromotionCouponVO[]> res.json())
+      .map(res => <PromotionCouponVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -331,7 +331,7 @@ export class PricingService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.put(this._serviceBaseUrl + '/promotioncoupon', body, options)
-      .map(res => <PromotionCouponVO[]> res.json())
+      .map(res => <PromotionCouponVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -349,6 +349,15 @@ export class PricingService {
       .catch(this.handleError);
   }
 
+
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    LogUtil.debug('Processing JSON response', contentType, res.text().includes('loginForm'));
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
+  }
 
 
   private handleError (error:any) {

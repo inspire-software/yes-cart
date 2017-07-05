@@ -1,4 +1,3 @@
-
   <yc-modal #errorModalDialog
          title="{{ 'MODAL_ERROR_TITLE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_IGNORE' | translate }}"
@@ -8,7 +7,7 @@
     <div>
       {{ errorTitleKey | translate: { params: { value: errorTitleParams } } }}
     </div>
-    <div>
+    <div *ngIf="errorString">
       <pre style="max-height: 100px; overflow-y: auto">{{ errorString }}</pre>
     </div>
   </yc-modal>
