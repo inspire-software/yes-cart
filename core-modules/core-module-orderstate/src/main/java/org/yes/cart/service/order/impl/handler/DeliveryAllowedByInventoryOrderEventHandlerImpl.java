@@ -20,12 +20,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderItemAllocationException;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.shoppingcart.InventoryResolver;
 
 import java.util.Map;
 
@@ -45,13 +44,13 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl extends ProcessAllo
      * Construct transition
      *
      * @param warehouseService    warehouse service
-     * @param skuWarehouseService sku on warehouse service to change quantity
+     * @param inventoryResolver   sku on warehouse service to change quantity
      * @param productService      product service
      */
     public DeliveryAllowedByInventoryOrderEventHandlerImpl(final WarehouseService warehouseService,
-                                                           final SkuWarehouseService skuWarehouseService,
+                                                           final InventoryResolver inventoryResolver,
                                                            final ProductService productService) {
-        super(warehouseService, skuWarehouseService, productService);
+        super(warehouseService, inventoryResolver, productService);
         this.productService = productService;
     }
 
@@ -86,7 +85,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl extends ProcessAllo
                             return false; // warehouse is disabled or not available
                         }
 
-                        final SkuWarehouse stock = getSkuWarehouseService().findByWarehouseSku(
+                        final SkuWarehouse stock = getInventoryResolver().findByWarehouseSku(
                                 selected,
                                 det.getProductSkuCode()
                         );

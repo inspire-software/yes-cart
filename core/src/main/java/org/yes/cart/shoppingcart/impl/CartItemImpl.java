@@ -20,7 +20,6 @@ package org.yes.cart.shoppingcart.impl;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.yes.cart.service.order.DeliveryBucket;
-import org.yes.cart.service.order.impl.DeliveryBucketImpl;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.util.MoneyUtils;
 

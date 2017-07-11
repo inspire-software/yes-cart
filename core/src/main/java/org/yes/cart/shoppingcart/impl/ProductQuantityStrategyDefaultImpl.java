@@ -14,14 +14,14 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.domain.impl;
+package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.impl.ProductQuantityModelImpl;
-import org.yes.cart.service.domain.ProductQuantityStrategy;
+import org.yes.cart.shoppingcart.ProductQuantityStrategy;
 
 import java.math.BigDecimal;
 
@@ -30,7 +30,7 @@ import java.math.BigDecimal;
  * Date: 25/10/2014
  * Time: 21:05
  */
-public class ProductQuantityStrategyImpl implements ProductQuantityStrategy {
+public class ProductQuantityStrategyDefaultImpl implements ProductQuantityStrategy {
 
     /** {@inheritDoc} */
     public ProductQuantityModel getQuantityModel(final BigDecimal cartQty, final Product product) {

@@ -17,9 +17,6 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableOrderInfo;

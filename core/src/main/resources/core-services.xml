@@ -253,13 +253,17 @@
     </bean>
 
     <bean id="productAvailabilityStrategy"
-          class="org.yes.cart.service.domain.impl.ProductAvailabilityStrategyImpl">
-        <constructor-arg index="0" ref="warehouseService"/>
-        <constructor-arg index="1" ref="skuWarehouseService"/>
+          class="org.yes.cart.shoppingcart.impl.ProductAvailabilityStrategyImpl">
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.shoppingcart.impl.ProductAvailabilityStrategyDefaultImpl">
+                <constructor-arg index="0" ref="warehouseService"/>
+                <constructor-arg index="1" ref="skuWarehouseService"/>
+            </bean>
+        </constructor-arg>
     </bean>
 
     <bean id="productQuantityStrategy"
-          class="org.yes.cart.service.domain.impl.ProductQuantityStrategyImpl"/>
+          class="org.yes.cart.shoppingcart.impl.ProductQuantityStrategyDefaultImpl"/>
 
     <bean id="addressService" parent="txProxyTemplate">
         <property name="target">
@@ -1032,7 +1036,7 @@
     <bean id="promoActionItemNonSaleDiscount" class="org.yes.cart.promotion.impl.action.ItemNonSaleDiscountPromotionAction"/>
     <bean id="promoActionItemAmountOff" class="org.yes.cart.promotion.impl.action.ItemAmountOffPromotionAction"/>
     <bean id="promoActionItemGift" class="org.yes.cart.promotion.impl.action.ItemGiftPromotionAction">
-        <constructor-arg index="0" ref="priceService"/>
+        <constructor-arg index="0" ref="priceResolver"/>
         <constructor-arg index="1" ref="shopService"/>
         <constructor-arg index="2" ref="productService"/>
         <constructor-arg index="3" ref="orderSplittingStrategy"/>
@@ -1042,7 +1046,7 @@
     <bean id="promoActionOrderNonSaleDiscount" class="org.yes.cart.promotion.impl.action.OrderNonSaleDiscountPromotionAction"/>
     <bean id="promoActionOrderAmountOff" class="org.yes.cart.promotion.impl.action.OrderAmountOffPromotionAction"/>
     <bean id="promoActionOrderGift" class="org.yes.cart.promotion.impl.action.OrderGiftPromotionAction">
-        <constructor-arg index="0" ref="priceService"/>
+        <constructor-arg index="0" ref="priceResolver"/>
         <constructor-arg index="1" ref="shopService"/>
         <constructor-arg index="2" ref="productService"/>
         <constructor-arg index="3" ref="orderSplittingStrategy"/>
@@ -1209,7 +1213,7 @@
     </bean>
 
     <bean id="defaultDeliveryCostRegionalPriceResolver" class="org.yes.cart.shoppingcart.impl.DeliveryCostRegionalPriceResolverImpl">
-        <constructor-arg index="0" ref="priceService"/>
+        <constructor-arg index="0" ref="priceResolver"/>
         <constructor-arg index="1" ref="shopService"/>
     </bean>
 
@@ -1254,15 +1258,38 @@
     </bean>
 
     <bean id="taxProvider" class="org.yes.cart.shoppingcart.impl.TaxProviderImpl">
-        <constructor-arg index="0" ref="taxService"/>
-        <constructor-arg index="1" ref="taxConfigService"/>
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.shoppingcart.impl.TaxProviderDefaultImpl">
+                <constructor-arg index="0" ref="taxService"/>
+                <constructor-arg index="1" ref="taxConfigService"/>
+            </bean>
+        </constructor-arg>
     </bean>
 
     <bean id="pricingPolicyProvider" class="org.yes.cart.shoppingcart.impl.PricingPolicyProviderImpl">
-        <constructor-arg index="0" ref="customerService"/>
-        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.shoppingcart.impl.PricingPolicyProviderCustomerAttributeImpl">
+                <constructor-arg index="0" ref="customerService"/>
+                <constructor-arg index="1" ref="shopService"/>
+            </bean>
+        </constructor-arg>
     </bean>
 
+    <bean id="priceResolver" class="org.yes.cart.shoppingcart.impl.PriceResolverImpl">
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.shoppingcart.impl.PriceResolverDefaultImpl">
+                <constructor-arg index="0" ref="priceService"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="inventoryResolver" class="org.yes.cart.shoppingcart.impl.InventoryResolverImpl">
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.shoppingcart.impl.InventoryResolverDefaultImpl">
+                <constructor-arg index="0" ref="skuWarehouseService"/>
+            </bean>
+        </constructor-arg>
+    </bean>
 
     <bean id="orderNumberGenerator" class="org.yes.cart.service.order.impl.DefaultOrderNumberGeneratorImpl">
         <constructor-arg index="0" ref="customerOrderDao"/>
@@ -1285,7 +1312,7 @@
                 <constructor-arg index="3" ref="shopService"/>
                 <constructor-arg index="4" ref="productService"/>
                 <constructor-arg index="5" ref="productSkuService"/>
-                <constructor-arg index="6" ref="priceService"/>
+                <constructor-arg index="6" ref="priceResolver"/>
                 <constructor-arg index="7" ref="orderAddressFormatter"/>
                 <constructor-arg index="8" ref="promotionCouponService"/>
                 <constructor-arg index="9" ref="addressService"/>
@@ -1306,7 +1333,7 @@
         <constructor-arg index="0" ref="shopService"/>
         <constructor-arg index="1" ref="productService"/>
         <constructor-arg index="2" ref="warehouseService"/>
-        <constructor-arg index="3" ref="skuWarehouseService"/>
+        <constructor-arg index="3" ref="inventoryResolver"/>
     </bean>
 
     <bean id="deliveryAssembler" class="org.yes.cart.service.order.impl.DeliveryAssemblerImpl">

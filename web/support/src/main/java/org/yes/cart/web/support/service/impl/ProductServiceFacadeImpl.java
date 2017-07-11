@@ -32,10 +32,7 @@ import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.*;
-import org.yes.cart.shoppingcart.CartItem;
-import org.yes.cart.shoppingcart.PricingPolicyProvider;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
@@ -58,7 +55,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     private final ProductAvailabilityStrategy productAvailabilityStrategy;
     private final ProductQuantityStrategy productQuantityStrategy;
     private final PricingPolicyProvider pricingPolicyProvider;
-    private final PriceService priceService;
+    private final PriceResolver priceResolver;
     private final ShoppingCartCalculator shoppingCartCalculator;
     private final PromotionService promotionService;
     private final CategoryServiceFacade categoryServiceFacade;
@@ -72,7 +69,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                     final ProductAvailabilityStrategy productAvailabilityStrategy,
                                     final ProductQuantityStrategy productQuantityStrategy,
                                     final PricingPolicyProvider pricingPolicyProvider,
-                                    final PriceService priceService,
+                                    final PriceResolver priceResolver,
                                     final ShoppingCartCalculator shoppingCartCalculator,
                                     final PromotionService promotionService,
                                     final CategoryServiceFacade categoryServiceFacade,
@@ -85,7 +82,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         this.productAvailabilityStrategy = productAvailabilityStrategy;
         this.productQuantityStrategy = productQuantityStrategy;
         this.pricingPolicyProvider = pricingPolicyProvider;
-        this.priceService = priceService;
+        this.priceResolver = priceResolver;
         this.shoppingCartCalculator = shoppingCartCalculator;
         this.categoryServiceFacade = categoryServiceFacade;
         this.promotionService = promotionService;
@@ -411,7 +408,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 cart.getShoppingContext().getStateCode()
         );
 
-        return priceService.getMinimalPrice(productId, sku, customerShopId, fallbackShopId, currency, qty, false, policy.getID());
+        return priceResolver.getMinimalPrice(productId, sku, customerShopId, fallbackShopId, currency, qty, false, policy.getID());
 
     }
 
@@ -445,7 +442,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 cart.getShoppingContext().getStateCode()
         );
 
-        return priceService.getAllCurrentPrices(productId, sku, customerShopId, fallbackShopId, currency, policy.getID());
+        return priceResolver.getAllCurrentPrices(productId, sku, customerShopId, fallbackShopId, currency, policy.getID());
 
     }
 

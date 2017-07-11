@@ -16,96 +16,58 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.apache.commons.lang.StringUtils;
-import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.service.domain.ShopService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: denispavlov
  * Date: 07/06/2016
  * Time: 18:39
  */
-public class PricingPolicyProviderImpl implements PricingPolicyProvider {
+public class PricingPolicyProviderImpl implements PricingPolicyProvider, ConfigurationRegistry<String, PricingPolicyProvider> {
 
-    private static final PricingPolicy DEFAULT = new PricingPolicyImpl(null, PricingPolicy.Type.DEFAULT);
+    private static final Logger LOG = LoggerFactory.getLogger(PricingPolicyProviderImpl.class);
 
-    private final CustomerService customerService;
-    private final ShopService shopService;
+    private final PricingPolicyProvider defaultPricingPolicyProvider;
+    private final Map<String, PricingPolicyProvider> customPricingPolicyProviders = new HashMap<String, PricingPolicyProvider>();
 
-    public PricingPolicyProviderImpl(final CustomerService customerService,
-                                     final ShopService shopService) {
-        this.customerService = customerService;
-        this.shopService = shopService;
+    public PricingPolicyProviderImpl(final PricingPolicyProvider defaultPricingPolicyProvider) {
+        this.defaultPricingPolicyProvider = defaultPricingPolicyProvider;
     }
 
-    private static class PricingPolicyImpl implements PricingPolicy {
 
-        private final String id;
-        private final Type type;
+    /** {@inheritDoc} */
+    public PricingPolicy determinePricingPolicy(final String shopCode, final String currency, final String customerEmail, String countryCode, String stateCode) {
 
-        public PricingPolicyImpl(final String id, final Type type) {
-            this.id = id;
-            this.type = type;
+        PricingPolicyProvider provider = getPricingPolicyProvider(shopCode);
+
+        return provider.determinePricingPolicy(shopCode, currency, customerEmail, countryCode, stateCode);
+    }
+
+    protected PricingPolicyProvider getPricingPolicyProvider(final String shopCode) {
+        PricingPolicyProvider provider = customPricingPolicyProviders.get(shopCode);
+        if (provider == null) {
+            provider = defaultPricingPolicyProvider;
         }
-
-        /** {@inheritDoc} */
-        public String getID() {
-            return id;
-        }
-
-        /** {@inheritDoc} */
-        public Type getType() {
-            return type;
-        }
-
-        @Override
-        public String toString() {
-            return "PricingPolicyImpl{" +
-                    "id='" + id + '\'' +
-                    ", type=" + type +
-                    '}';
-        }
+        return provider;
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "priceService-determinePricingPolicy")
-    public PricingPolicy determinePricingPolicy(final String shopCode, final String currency, final String customerEmail, String countryCode, String stateCode) {
-
-        final Shop shop = shopService.getShopByCode(shopCode);
-        if (shop != null) {
-
-            if (StringUtils.isNotBlank(customerEmail)) {
-                final Customer customer = customerService.getCustomerByEmail(customerEmail, shop);
-                if (customer != null && StringUtils.isNotBlank(customer.getPricingPolicy())) {
-                    return new PricingPolicyImpl(customer.getPricingPolicy(), PricingPolicy.Type.CUSTOMER);
-                }
-            }
-
-            if (StringUtils.isNotBlank(countryCode)) {
-
-                if (StringUtils.isNotBlank(stateCode)) {
-
-                    final String statePolicy = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_REGIONAL_PRICING_PREFIX + countryCode + "_" + stateCode);
-                    if (StringUtils.isNotBlank(statePolicy)) {
-                        return new PricingPolicyImpl(statePolicy, PricingPolicy.Type.STATE);
-                    }
-
-                }
-
-                final String countryPolicy = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_REGIONAL_PRICING_PREFIX + countryCode);
-                if (StringUtils.isNotBlank(countryPolicy)) {
-                    return new PricingPolicyImpl(countryPolicy, PricingPolicy.Type.COUNTRY);
-                }
-
-            }
-
-        }
-        return DEFAULT;
+    public boolean supports(final Object configuration) {
+        return configuration instanceof PricingPolicyProvider;
     }
 
+    /** {@inheritDoc} */
+    public void register(final String shopCode, final PricingPolicyProvider provider) {
+
+        LOG.info("Custom shop settings for {} Registering pricing provider {}", shopCode, provider.getClass());
+
+        customPricingPolicyProviders.put(shopCode, provider);
+
+    }
 }

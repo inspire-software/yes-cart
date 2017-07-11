@@ -21,13 +21,9 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
-import org.yes.cart.service.domain.PriceService;
-import org.yes.cart.service.domain.ProductQuantityStrategy;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.shoppingcart.PricingPolicyProvider;
-import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -52,19 +48,19 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
      * Construct sku command.
      *
      * @param registry shopping cart command registry
-     * @param priceService price service
+     * @param priceResolver price service
      * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      * @param shopService shop service
      * @param productQuantityStrategy product quantity strategy
      */
     public AddSkuToCartEventCommandImpl(final ShoppingCartCommandRegistry registry,
-                                        final PriceService priceService,
+                                        final PriceResolver priceResolver,
                                         final PricingPolicyProvider pricingPolicyProvider,
                                         final ProductService productService,
                                         final ShopService shopService,
                                         final ProductQuantityStrategy productQuantityStrategy) {
-        super(registry, priceService, pricingPolicyProvider, productService, shopService);
+        super(registry, priceResolver, pricingPolicyProvider, productService, shopService);
         this.productQuantityStrategy = productQuantityStrategy;
     }
 

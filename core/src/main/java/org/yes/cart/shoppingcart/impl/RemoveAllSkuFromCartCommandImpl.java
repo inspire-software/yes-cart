@@ -19,10 +19,10 @@ package org.yes.cart.shoppingcart.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.shoppingcart.PriceResolver;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
@@ -46,17 +46,17 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
      * Construct sku command.
      *
      * @param registry shopping cart command registry
-     * @param priceService price service
+     * @param priceResolver price service
      * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      * @param shopService shop service
      */
     public RemoveAllSkuFromCartCommandImpl(final ShoppingCartCommandRegistry registry,
-                                           final PriceService priceService,
+                                           final PriceResolver priceResolver,
                                            final PricingPolicyProvider pricingPolicyProvider,
                                            final ProductService productService,
                                            final ShopService shopService) {
-        super(registry, priceService, pricingPolicyProvider, productService, shopService);
+        super(registry, priceResolver, pricingPolicyProvider, productService, shopService);
     }
 
     /** {@inheritDoc} */

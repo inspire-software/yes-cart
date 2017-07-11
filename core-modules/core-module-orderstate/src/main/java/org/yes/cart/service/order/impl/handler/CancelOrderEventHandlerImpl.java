@@ -20,11 +20,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderException;
+import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.log.Markers;
 
@@ -42,21 +42,20 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
     private static final Logger LOG = LoggerFactory.getLogger(CancelOrderEventHandlerImpl.class);
 
     private final WarehouseService warehouseService;
-    private final SkuWarehouseService skuWarehouseService;
+    private final InventoryResolver inventoryResolver;
     private final ProductService productService;
 
 
     /**
      * @param warehouseService    to locate warehouse, that belong to shop where order was created
-     * @param skuWarehouseService to credit quantity on warehouse
+     * @param inventoryResolver   to credit quantity on warehouse
      * @param productService      product service
      */
-    public CancelOrderEventHandlerImpl(
-            final WarehouseService warehouseService,
-            final SkuWarehouseService skuWarehouseService,
-            final ProductService productService) {
+    public CancelOrderEventHandlerImpl(final WarehouseService warehouseService,
+                                       final InventoryResolver inventoryResolver,
+                                       final ProductService productService) {
         this.warehouseService = warehouseService;
-        this.skuWarehouseService = skuWarehouseService;
+        this.inventoryResolver = inventoryResolver;
         this.productService = productService;
     }
 
@@ -138,7 +137,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
 
                         if (voidReservation) {
                             // this delivery was not completed, so can just void reservation
-                            final BigDecimal rem = skuWarehouseService.voidReservation(selected, skuCode, toCredit);
+                            final BigDecimal rem = inventoryResolver.voidReservation(selected, skuCode, toCredit);
                             if (MoneyUtils.isFirstBiggerThanSecond(rem, BigDecimal.ZERO)) {
                                 LOG.warn(
                                         "Could not void all reservation {}:{}",
@@ -147,7 +146,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
                             }
                         } else if (voidCredit) {
                             // this delivery is completed, so need to credit qty
-                            final BigDecimal rem = skuWarehouseService.credit(selected, skuCode, toCredit);
+                            final BigDecimal rem = inventoryResolver.credit(selected, skuCode, toCredit);
                             if (MoneyUtils.isFirstBiggerThanSecond(rem, BigDecimal.ZERO)) {
                                 LOG.warn(
                                         "Could not credit all reservation {}:{}",

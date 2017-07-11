@@ -16,15 +16,8 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.apache.commons.lang.StringUtils;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.Address;
-import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.shoppingcart.*;
 
-import java.util.Arrays;
 import java.util.Map;
 
 /**

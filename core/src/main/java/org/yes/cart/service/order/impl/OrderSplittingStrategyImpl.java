@@ -21,11 +21,11 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.service.order.OrderSplittingStrategy;
 import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.DomainApiUtils;
 
@@ -41,16 +41,16 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
     private final ShopService shopService;
     private final ProductService productService;
     private final WarehouseService warehouseService;
-    private final SkuWarehouseService skuWarehouseService;
+    private final InventoryResolver inventoryResolver;
 
     public OrderSplittingStrategyImpl(final ShopService shopService,
                                       final ProductService productService,
                                       final WarehouseService warehouseService,
-                                      final SkuWarehouseService skuWarehouseService) {
+                                      final InventoryResolver inventoryResolver) {
         this.shopService = shopService;
         this.productService = productService;
         this.warehouseService = warehouseService;
-        this.skuWarehouseService = skuWarehouseService;
+        this.inventoryResolver = inventoryResolver;
     }
 
 
@@ -259,7 +259,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
         for (final Warehouse warehouse : suppliers) {
 
-            final SkuWarehouse inventory = skuWarehouseService.findByWarehouseSku(warehouse, sku);
+            final SkuWarehouse inventory = inventoryResolver.findByWarehouseSku(warehouse, sku);
 
             if (inventory != null) { // we need inventory for inventory tracked items
 

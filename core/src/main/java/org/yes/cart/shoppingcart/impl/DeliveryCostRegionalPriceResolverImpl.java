@@ -17,17 +17,14 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.service.domain.CarrierSlaService;
-import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.shoppingcart.*;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.shoppingcart.DeliveryCostRegionalPriceResolver;
+import org.yes.cart.shoppingcart.PriceResolver;
+import org.yes.cart.shoppingcart.PricingPolicyProvider;
+import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 /**
  * User: denispavlov
@@ -36,12 +33,12 @@ import java.math.RoundingMode;
  */
 public class DeliveryCostRegionalPriceResolverImpl implements DeliveryCostRegionalPriceResolver {
 
-    private final PriceService priceService;
+    private final PriceResolver priceResolver;
     private final ShopService shopService;
 
-    public DeliveryCostRegionalPriceResolverImpl(final PriceService priceService,
+    public DeliveryCostRegionalPriceResolverImpl(final PriceResolver priceResolver,
                                                  final ShopService shopService) {
-        this.priceService = priceService;
+        this.priceResolver = priceResolver;
         this.shopService = shopService;
     }
 
@@ -98,7 +95,7 @@ public class DeliveryCostRegionalPriceResolverImpl implements DeliveryCostRegion
         final Long fallbackShopId = masterShopId == customerShopId || shopService.getById(customerShopId).isB2BStrictPriceActive() ? null : masterShopId;
         final String currency = cart.getCurrencyCode();
 
-        return priceService.getMinimalPrice(null, slaSkuCode, customerShopId, fallbackShopId, currency, qty, true, policy.getID());
+        return priceResolver.getMinimalPrice(null, slaSkuCode, customerShopId, fallbackShopId, currency, qty, true, policy.getID());
 
     }
 

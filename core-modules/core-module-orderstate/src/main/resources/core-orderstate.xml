@@ -51,7 +51,7 @@
             <bean class="org.yes.cart.service.order.impl.handler.PendingOrderEventHandlerImpl">
                 <constructor-arg index="0" ref="paymentProcessorFactory"/>
                 <constructor-arg index="1" ref="warehouseService"/>
-                <constructor-arg index="2" ref="skuWarehouseService"/>
+                <constructor-arg index="2" ref="inventoryResolver"/>
                 <constructor-arg index="3" ref="productService"/>
             </bean>
         </property>
@@ -93,7 +93,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.order.impl.handler.ProcessAllocationOrderEventHandlerImpl">
                 <constructor-arg index="0" ref="warehouseService"/>
-                <constructor-arg index="1" ref="skuWarehouseService"/>
+                <constructor-arg index="1" ref="inventoryResolver"/>
                 <constructor-arg index="2" ref="productService"/>
             </bean>
         </property>
@@ -113,7 +113,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.order.impl.handler.CancelOrderEventHandlerImpl">
                 <constructor-arg index="0" ref="warehouseService"/>
-                <constructor-arg index="1" ref="skuWarehouseService"/>
+                <constructor-arg index="1" ref="inventoryResolver"/>
                 <constructor-arg index="2" ref="productService"/>
             </bean>
         </property>
@@ -142,7 +142,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.order.impl.handler.DeliveryAllowedByInventoryOrderEventHandlerImpl">
                 <constructor-arg index="0" ref="warehouseService"/>
-                <constructor-arg index="1" ref="skuWarehouseService"/>
+                <constructor-arg index="1" ref="inventoryResolver"/>
                 <constructor-arg index="2" ref="productService"/>
             </bean>
         </property>
@@ -175,7 +175,7 @@
             <bean class="org.yes.cart.service.order.impl.handler.CancelOrderWithRefundOrderEventHandlerImpl">
                 <constructor-arg index="0" ref="paymentProcessorFactory"/>
                 <constructor-arg index="1" ref="warehouseService"/>
-                <constructor-arg index="2" ref="skuWarehouseService"/>
+                <constructor-arg index="2" ref="inventoryResolver"/>
                 <constructor-arg index="3" ref="productService"/>
             </bean>
         </property>
@@ -187,7 +187,7 @@
             <bean class="org.yes.cart.service.order.impl.handler.CancelNewOrderWithRefundOrderEventHandlerImpl">
                 <constructor-arg index="0" ref="paymentProcessorFactory"/>
                 <constructor-arg index="1" ref="warehouseService"/>
-                <constructor-arg index="2" ref="skuWarehouseService"/>
+                <constructor-arg index="2" ref="inventoryResolver"/>
                 <constructor-arg index="3" ref="productService"/>
             </bean>
         </property>
@@ -198,7 +198,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.order.impl.handler.delivery.DeliveryUpdateOrderEventHandlerImpl">
                 <constructor-arg index="0" ref="warehouseService"/>
-                <constructor-arg index="1" ref="skuWarehouseService"/>
+                <constructor-arg index="1" ref="inventoryResolver"/>
                 <constructor-arg index="2" ref="productService"/>
             </bean>
         </property>

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.domain.impl;
+package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
@@ -22,9 +22,9 @@ import org.yes.cart.domain.entity.ProductAvailabilityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.entity.impl.ProductAvailabilityModelImpl;
-import org.yes.cart.service.domain.ProductAvailabilityStrategy;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
+import org.yes.cart.shoppingcart.ProductAvailabilityStrategy;
 import org.yes.cart.util.DomainApiUtils;
 
 import java.math.BigDecimal;
@@ -37,13 +37,13 @@ import java.util.Map;
  * Date: 13-04-06
  * Time: 1:20 PM
  */
-public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrategy {
+public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabilityStrategy {
 
     private final WarehouseService warehouseService;
     private final SkuWarehouseService skuWarehouseService;
 
-    public ProductAvailabilityStrategyImpl(final WarehouseService warehouseService,
-                                           final SkuWarehouseService skuWarehouseService) {
+    public ProductAvailabilityStrategyDefaultImpl(final WarehouseService warehouseService,
+                                                  final SkuWarehouseService skuWarehouseService) {
         this.warehouseService = warehouseService;
         this.skuWarehouseService = skuWarehouseService;
     }

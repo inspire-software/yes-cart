@@ -28,6 +28,7 @@ import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.PriceResolver;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.MoneyUtils;
@@ -51,7 +52,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
     private final ShopService shopService;
     private final ProductService productService;
     private final ProductSkuService productSkuService;
-    private final PriceService priceService;
+    private final PriceResolver priceResolver;
     private final OrderAddressFormatter addressFormatter;
     private final PromotionCouponService promotionCouponService;
     private final AddressService addressService;
@@ -66,7 +67,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * @param shopService            shop service
      * @param productService         product service
      * @param productSkuService      product sku service
-     * @param priceService           price service
+     * @param priceResolver           price service
      * @param addressFormatter       format string to create address in one string from {@link Address} entity.
      * @param promotionCouponService coupon service
      * @param addressService         address service
@@ -77,12 +78,12 @@ public class OrderAssemblerImpl implements OrderAssembler {
                               final ShopService shopService,
                               final ProductService productService,
                               final ProductSkuService productSkuService,
-                              final PriceService priceService,
+                              final PriceResolver priceResolver,
                               final OrderAddressFormatter addressFormatter,
                               final PromotionCouponService promotionCouponService,
                               final AddressService addressService) {
         this.productService = productService;
-        this.priceService = priceService;
+        this.priceResolver = priceResolver;
         this.promotionCouponService = promotionCouponService;
         this.entityFactory = genericDAO.getEntityFactory();
         this.orderNumberGenerator = orderNumberGenerator;
@@ -473,7 +474,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
             final String policyID = "COST" + (StringUtils.isBlank(item.getSupplierCode()) ? "" : "_" + item.getSupplierCode());
 
-            final SkuPrice price = priceService.getMinimalPrice(null, item.getProductSkuCode(), customerShopId, fallbackShopId, currency, item.getQty(), false, policyID);
+            final SkuPrice price = priceResolver.getMinimalPrice(null, item.getProductSkuCode(), customerShopId, fallbackShopId, currency, item.getQty(), false, policyID);
             if (price != null) {
                 final BigDecimal sale = price.getSalePriceForCalculation();
                 final BigDecimal list = price.getRegularPrice();

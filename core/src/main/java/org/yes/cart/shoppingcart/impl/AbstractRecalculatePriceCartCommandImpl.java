@@ -37,7 +37,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRecalculatePriceCartCommandImpl.class);
 
-    private final PriceService priceService;
+    private final PriceResolver priceResolver;
 
     private final PricingPolicyProvider pricingPolicyProvider;
 
@@ -50,18 +50,18 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
      * Construct abstract sku command.
      *
      * @param registry shopping cart command registry
-     * @param priceService price service
+     * @param priceResolver price service
      * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      * @param shopService shop service
      */
     public AbstractRecalculatePriceCartCommandImpl(final ShoppingCartCommandRegistry registry,
-                                                   final PriceService priceService,
+                                                   final PriceResolver priceResolver,
                                                    final PricingPolicyProvider pricingPolicyProvider,
                                                    final ProductService productService,
                                                    final ShopService shopService) {
         super(registry);
-        this.priceService = priceService;
+        this.priceResolver = priceResolver;
         this.pricingPolicyProvider = pricingPolicyProvider;
         this.productService = productService;
         this.shopService = shopService;
@@ -126,7 +126,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
             final PricingPolicyProvider.PricingPolicy policy = determinePricingPolicy(shoppingCart);
 
-            final SkuPrice skuPrice = getPriceService().getMinimalPrice(
+            final SkuPrice skuPrice = getPriceResolver().getMinimalPrice(
                     null,
                     skuCode,
                     customerShopId,
@@ -162,7 +162,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
                                     final BigDecimal qty,
                                     final PricingPolicyProvider.PricingPolicy policy) {
 
-        final SkuPrice skuPrice = getPriceService().getMinimalPrice(
+        final SkuPrice skuPrice = getPriceResolver().getMinimalPrice(
                 null,
                 skuCode,
                 customerShopId,
@@ -196,8 +196,8 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
      *
      * @return {@link PriceService}
      */
-    public PriceService getPriceService() {
-        return priceService;
+    public PriceResolver getPriceResolver() {
+        return priceResolver;
     }
 
     /**

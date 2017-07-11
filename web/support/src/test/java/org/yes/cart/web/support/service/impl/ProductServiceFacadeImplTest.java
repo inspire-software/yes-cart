@@ -51,7 +51,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsHidePrice() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
 
@@ -65,7 +65,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -97,7 +97,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsNoPrice() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
 
@@ -117,10 +117,10 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(null));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(null));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -152,7 +152,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsNoPriceB2BStrict() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
 
@@ -174,12 +174,12 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 345L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(null));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 345L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(null));
             allowing(shopService).getById(345L); will(returnValue(b2b));
             allowing(b2b).isB2BStrictPriceActive(); will(returnValue(true));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -212,7 +212,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsNoPriceB2B() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
 
@@ -234,12 +234,12 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 345L, 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(null));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 345L, 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(null));
             allowing(shopService).getById(345L); will(returnValue(b2b));
             allowing(b2b).isB2BStrictPriceActive(); will(returnValue(false));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -270,7 +270,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsEmptyPriceNoTaxInfo() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
 
@@ -294,7 +294,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
             allowing(skuPrice).getRegularPrice(); will(returnValue(null));
@@ -303,7 +303,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -334,7 +334,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsEmptyPriceWithTaxInfoGross() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
 
@@ -358,7 +358,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
             allowing(skuPrice).getRegularPrice(); will(returnValue(null));
@@ -369,7 +369,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -400,7 +400,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsEmptyPriceWithTaxInfoNet() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
 
@@ -424,7 +424,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
             allowing(skuPrice).getRegularPrice(); will(returnValue(null));
@@ -435,7 +435,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -467,7 +467,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsPriceListOnlyNoTaxInfo() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
 
@@ -491,7 +491,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -500,7 +500,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -531,7 +531,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsPriceListAndSaleNoTaxInfo() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
 
@@ -555,7 +555,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -564,7 +564,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -597,7 +597,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsPriceListOnlyWithTaxExclInfoGross() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ShoppingCartCalculator calculator = context.mock(ShoppingCartCalculator.class, "calculator");
@@ -623,7 +623,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -640,7 +640,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, calculator, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -671,7 +671,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsPriceListOnlyWithTaxExclInfoNet() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ShoppingCartCalculator calculator = context.mock(ShoppingCartCalculator.class, "calculator");
@@ -697,7 +697,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -714,7 +714,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, calculator, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -748,7 +748,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsPriceListOnlyWithTaxInclInfoGross() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ShoppingCartCalculator calculator = context.mock(ShoppingCartCalculator.class, "calculator");
@@ -774,7 +774,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -791,7 +791,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("16.67")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, calculator, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -824,7 +824,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsPriceListOnlyWithTaxInclInfoNet() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ShoppingCartCalculator calculator = context.mock(ShoppingCartCalculator.class, "calculator");
@@ -850,7 +850,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -867,7 +867,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("16.67")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, calculator, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -901,7 +901,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsPriceListAndSaleWithTaxExclInfoGross() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ShoppingCartCalculator calculator = context.mock(ShoppingCartCalculator.class, "calculator");
@@ -927,7 +927,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -944,7 +944,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("16.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, calculator, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -975,7 +975,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsPriceListAndSaleWithTaxExclInfoNet() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ShoppingCartCalculator calculator = context.mock(ShoppingCartCalculator.class, "calculator");
@@ -1001,7 +1001,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -1018,7 +1018,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("16.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, calculator, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -1052,7 +1052,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsPriceListAndSaleWithTaxInclInfoGross() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ShoppingCartCalculator calculator = context.mock(ShoppingCartCalculator.class, "calculator");
@@ -1078,7 +1078,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -1095,7 +1095,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("13.33")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, calculator, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -1128,7 +1128,7 @@ public class ProductServiceFacadeImplTest {
     @Test
     public void testGetSkuPriceSearchAndProductDetailsPriceListAndSaleWithTaxInclInfoNet() throws Exception {
 
-        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PriceResolver priceResolver = context.mock(PriceResolver.class, "priceResolver");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ShoppingCartCalculator calculator = context.mock(ShoppingCartCalculator.class, "calculator");
@@ -1154,7 +1154,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -1171,7 +1171,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("13.33")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, calculator, null, null, shopService, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
