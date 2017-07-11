@@ -266,6 +266,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
         while (details.hasNext()) {
             final Map.Entry<String, String> detail = details.next();
             if (detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID) ||
+                    detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID) ||
                     detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID)) {
                 details.remove();
             }

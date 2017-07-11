@@ -16,8 +16,10 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
@@ -172,13 +174,19 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
                 false,
                 policy.getID());
 
-        if (!shoppingCart.setProductSkuPrice(
+        if (shoppingCart.setProductSkuPrice(
                 skuCode,
                 MoneyUtils.minPositive(skuPrice.getSalePriceForCalculation(), skuPrice.getRegularPrice()),
                 skuPrice.getRegularPrice()
         )) {
+            final String key = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID + skuCode;
+            if (StringUtils.isNotBlank(skuPrice.getRef())) {
+                shoppingCart.getOrderInfo().putDetail(key, skuPrice.getRef());
+            } else {
+                shoppingCart.getOrderInfo().putDetail(key, null);
+            }
+        } else {
             LOG.warn("Can not set price to sku with code {}", skuCode);
-
         }
     }
 

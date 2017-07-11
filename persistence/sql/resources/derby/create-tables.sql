@@ -985,6 +985,7 @@
         SALE_TO timestamp,
         TAG varchar(45),
         PRICINGPOLICY varchar(255),
+        REF varchar(255),
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),
@@ -1598,7 +1599,7 @@
 
     create index SKUPRICE_SKUCODE on TSKUPRICE (SKU_CODE);
     create index SKUPRICE_PRICINGPOLICY on TSKUPRICE (PRICINGPOLICY);
-
+    create index SKUPRICE_REF on TSKUPRICE (REF);
 
     alter table TSKUWAREHOUSE 
         add constraint FKAC00F89A1C1544FC 

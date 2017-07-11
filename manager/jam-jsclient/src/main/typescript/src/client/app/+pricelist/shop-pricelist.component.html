@@ -213,6 +213,15 @@
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col-lg-3">{{ 'PRICELIST_REF' | translate }}</div>
+            <div class="col-lg-9">
+              <input class="form-control" formControlName="ref" name="ref" type="text" [(ngModel)]="pricelistEdit.ref">
+              <div [hidden]="pricelistEditForm.controls['ref'].valid || pricelistEditForm.controls['ref'].pristine" class="alert alert-danger">
+                {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+              </div>
+            </div>
+          </div>
         </fieldset>
       </form>
     </template>

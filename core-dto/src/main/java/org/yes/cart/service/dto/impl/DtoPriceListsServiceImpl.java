@@ -258,8 +258,9 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                     final String tagOrPolicy = tagSearch.getSecond();
                     criteria.add(Restrictions.or(
                             Restrictions.ilike("tag", tagOrPolicy, MatchMode.ANYWHERE),
-                            Restrictions.eq("pricingPolicy", tagOrPolicy)
-                    ));
+                            Restrictions.eq("pricingPolicy", tagOrPolicy),
+                            Restrictions.eq("ref", tagOrPolicy)
+                            ));
 
                 } else if (dateSearch != null) {
 

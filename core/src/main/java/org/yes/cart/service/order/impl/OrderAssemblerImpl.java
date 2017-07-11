@@ -394,7 +394,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
             customerOrderDet.setProductName(item.getProductName());
             customerOrderDet.setSupplierCode(item.getSupplierCode());
 
-            fillOrderDetailCosts(customerOrder, shoppingCart, item, customerOrderDet, temp);
+            fillOrderDetailPricing(customerOrder, shoppingCart, item, customerOrderDet, temp);
 
         }
 
@@ -453,7 +453,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
     }
 
     /**
-     * Fill specific product details for current item.
+     * Fill price specific product details for current item.
      *
      * @param customerOrder    order
      * @param shoppingCart     cart
@@ -463,7 +463,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
      *
      * @throws OrderAssemblyException
      */
-    private void fillOrderDetailCosts(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final CartItem item, final CustomerOrderDet customerOrderDet, final boolean temp) throws OrderAssemblyException {
+    private void fillOrderDetailPricing(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final CartItem item, final CustomerOrderDet customerOrderDet, final boolean temp) throws OrderAssemblyException {
         if (!temp) {
 
             final long customerShopId = shoppingCart.getShoppingContext().getCustomerShopId();
@@ -480,6 +480,12 @@ public class OrderAssemblerImpl implements OrderAssembler {
                 final BigDecimal list = price.getRegularPrice();
                 final BigDecimal cost = sale != null && MoneyUtils.isFirstBiggerThanSecond(list, sale) ? sale : list;
                 customerOrderDet.putValue("ItemCostPrice", cost.toPlainString(), "SUPPLIER");
+            }
+
+            final String priceRef = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID + item.getProductSkuCode();
+            final String priceRefVal = shoppingCart.getOrderInfo().getDetailByKey(priceRef);
+            if (StringUtils.isNotBlank(priceRefVal)) {
+                customerOrderDet.putValue("ItemPriceRef", priceRefVal, "SUPPLIER");
             }
 
         }

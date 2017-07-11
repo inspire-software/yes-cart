@@ -97,6 +97,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
       'salefrom': ['', YcValidators.validDate],
       'saleto': ['', YcValidators.validDate],
       'tag': ['', YcValidators.nonBlankTrimmed],
+      'ref': ['', YcValidators.nonBlankTrimmed],
     });
   }
 

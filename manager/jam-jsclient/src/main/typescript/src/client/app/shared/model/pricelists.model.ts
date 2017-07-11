@@ -38,6 +38,8 @@ export interface PriceListVO {
 
   pricingPolicy : string;
 
+  ref : string;
+
 }
 
 export interface PromotionVO {

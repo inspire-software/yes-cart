@@ -47,6 +47,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     private String guid;
     private String tag;
     private String pricingPolicy;
+    private String ref;
 
     public SkuPriceEntity() {
     }
@@ -207,6 +208,14 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
 
     public void setPricingPolicy(final String pricingPolicy) {
         this.pricingPolicy = pricingPolicy;
+    }
+
+    public String getRef() {
+        return ref;
+    }
+
+    public void setRef(final String ref) {
+        this.ref = ref;
     }
 
     public long getSkuPriceId() {

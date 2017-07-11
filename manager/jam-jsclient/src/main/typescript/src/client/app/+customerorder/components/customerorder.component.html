@@ -122,7 +122,7 @@
                   <tr>
                     <th colspan="6">{{ 'CUSTOMERORDER_TOTAL_ITEM_TAX' | translate }}</th>
                     <td class="text-right"> {{ customerorder.orderTotalTax | ycprice }}</td>
-                    <td></td>
+                    <td>&nbsp;</td>
                   </tr>
                   <tr *ngIf="isOrderType()">
                     <th colspan="6">{{ 'CUSTOMERORDER_TOTAL_PAID' | translate }} {{ customerorder.currency }}: {{ customerorder.pgName }}</th>
