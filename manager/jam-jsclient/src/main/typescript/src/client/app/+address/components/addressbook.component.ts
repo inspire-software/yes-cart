@@ -295,9 +295,13 @@ export class AddressBookComponent implements OnInit, OnDestroy {
   protected onRowEditSelected(address:AddressVO) {
     if (address != null) {
       this.validForSave = false;
-      UiUtil.formInitialise(this, 'initialising', 'addressForm', 'addressEdit', Util.clone(address), address != null && address.addressId > 0, ['addressType']);
-      this.reloadCountries();
+      this.reloadCountries(address.addressType);
       this.reloadStates();
+      let copy:AddressVO = Util.clone(address);
+      if ((copy.countryCode == null || copy.countryCode == '') && this.countries.length > 0) {
+        copy.countryCode = this.countries[0].first; // preselect first for new addresses
+      }
+      UiUtil.formInitialise(this, 'initialising', 'addressForm', 'addressEdit', copy, address != null && address.addressId > 0, ['addressType']);
       this.formConfigure(address.addressType);
       this.editModalDialog.show();
     }
@@ -305,7 +309,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
   protected onAddressTypeChange(event:any) {
 
-    this.reloadCountries();
+    this.reloadCountries(this.addressEdit.addressType);
     this.formConfigure(this.addressEdit.addressType);
 
   }
@@ -316,20 +320,14 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
   }
 
-  protected reloadCountries():void {
+  protected reloadCountries(addressType:string):void {
 
-    if (this.addressEdit != null) {
-      let countryPair = this.addressBook.countries.find((country:Pair<string, Pair<string, string>[]>) => {
-        return country.first == this.addressEdit.addressType;
-      });
-      if (countryPair != null) {
-        this.countries = countryPair.second;
-        this.states = [];
-      } else {
-        this.countries = [];
-        this.states = [];
-      }
-
+    let countryPair = this.addressBook.countries.find((country:Pair<string, Pair<string, string>[]>) => {
+      return country.first == addressType;
+    });
+    if (countryPair != null) {
+      this.countries = countryPair.second;
+      this.states = [];
     } else {
       this.countries = [];
       this.states = [];
