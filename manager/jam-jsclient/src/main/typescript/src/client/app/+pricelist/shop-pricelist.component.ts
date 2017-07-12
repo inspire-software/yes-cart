@@ -145,7 +145,8 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
       currency: this.selectedCurrency,
       skuCode: '', skuName: '',
       shopCode: this.selectedShop.code,
-      tag: null, pricingPolicy: null};
+      tag: null, pricingPolicy: null, ref: null
+    };
   }
 
   ngOnInit() {
