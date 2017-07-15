@@ -75,7 +75,7 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
      * @param customer customer to create
      * @param shopId   from what shop customer will have notification
      */
-    void remoteResetPassword(CustomerDTO customer, long shopId);
+    void resetPassword(CustomerDTO customer, long shopId);
 
 
     /**

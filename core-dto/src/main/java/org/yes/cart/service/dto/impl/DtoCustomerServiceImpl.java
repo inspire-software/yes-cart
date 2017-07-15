@@ -394,7 +394,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void remoteResetPassword(final CustomerDTO customer, final long shopId) {
+    public void resetPassword(final CustomerDTO customer, final long shopId) {
         final Customer cust = service.findById(customer.getCustomerId());
         if (cust != null) {
             final Shop shop = shopDao.findById(shopId);
