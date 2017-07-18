@@ -837,3 +837,15 @@ create index ASSOCIATED_SKUCODE on TPRODUCTASSOCIATION (ASSOCIATED_SKU_CODE);
 
 ALTER TABLE TSKUPRICE ADD COLUMN REF varchar(255);
 create index SKUPRICE_REF on TSKUPRICE (REF);
+
+--
+--  YC-800 Product filtering and sorting by "in stock"
+--
+
+update TATTRIBUTE set  DESCRIPTION =
+  'List of sort fields separated by comma with fail over. Default is: displayName,sku,basePrice. All supported: name,displayName,basePrice,productCode,manufacturerCode,sku,brand,availability,created,inStock'
+    where  CODE = 'CATEGORY_SORT_OPTIONS';
+
+update TATTRIBUTE set  DESCRIPTION =
+  'List of sort fields separated by comma with fail over. Default is: displayName,sku,basePrice. All supported: name,displayName,basePrice,productCode,manufacturerCode,sku,brand,availability,created,inStock'
+    where CODE = 'SHOP_CATEGORY_SORT_OPTIONS';

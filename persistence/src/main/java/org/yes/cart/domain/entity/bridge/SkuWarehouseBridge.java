@@ -73,7 +73,7 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
                 final ProductSku sku = (ProductSku) obj;
 
                 always = sku.getProduct().getAvailability() == Product.AVAILABILITY_ALWAYS;
-                preorder = sku.getProduct().getAvailability() == Product.AVAILABILITY_ALWAYS;
+                preorder = sku.getProduct().getAvailability() == Product.AVAILABILITY_PREORDER;
 
                 if (!always) {
                     final List<SkuWarehouse> inventory = skuSupport.getQuantityOnWarehouse(sku.getCode());
@@ -136,6 +136,7 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
                 // out of stock stock items have -50% boost, preorder gives +25% boost
                 final boolean hasStock = always || skuStock;
                 final float boost = (hasStock ? 1.0f : 0.5f) + (preorder ? 0.25f : 0f);
+                final int flag = hasStock || preorder ? 1 : 0;
 
                 // Fill in PK's of shops where we have this in stock.
                 final Field inStock = new Field(
@@ -148,6 +149,16 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
                 inStock.setBoost(boost);
 
                 document.add(inStock);
+
+                final Field inStockFlag = new Field(
+                        ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FLAG_FIELD + shop,
+                        String.valueOf(flag),
+                        Field.Store.NO,
+                        Field.Index.NOT_ANALYZED,
+                        luceneOptions.getTermVector()
+                );
+
+                document.add(inStockFlag);
 
             }
 
