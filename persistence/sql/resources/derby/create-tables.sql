@@ -629,6 +629,9 @@
         SUPPLIER_CODE varchar(255),
         SUPPLIER_CATALOG_CODE varchar(255),
         PIM_CODE varchar(255),
+        PIM_DISABLED smallint not null default 0,
+        PIM_OUTDATED smallint not null default 0,
+        PIM_UPDATED timestamp,
         AVAILABLEFROM timestamp,
         AVAILABLETO timestamp,
         NAME varchar(255) not null,
@@ -1578,6 +1581,8 @@
     create index PRODUCT_SCODE on TPRODUCT (SUPPLIER_CODE);
     create index PRODUCT_SCCODE on TPRODUCT (SUPPLIER_CATALOG_CODE);
     create index PRODUCT_PCODE on TPRODUCT (PIM_CODE);
+    create index PRODUCT_PDISABLED on TPRODUCT (PIM_DISABLED);
+    create index PRODUCT_POUTDATED on TPRODUCT (PIM_OUTDATED);
     create index SKU_MCODE on TSKU (MANUFACTURER_CODE);
     create index SKU_MPCODE on TSKU (MANUFACTURER_PART_CODE);
     create index SKU_SCODE on TSKU (SUPPLIER_CODE);

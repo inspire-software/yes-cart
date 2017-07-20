@@ -46,7 +46,12 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     private String manufacturerPartCode;
     private String supplierCode;
     private String supplierCatalogCode;
+
     private String pimCode;
+    private boolean pimDisabled;
+    private boolean pimOutdated;
+    private Date pimUpdated;
+
     private Date availablefrom;
     private Date availableto;
     private String name;
@@ -131,6 +136,30 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     public void setPimCode(final String pimCode) {
         this.pimCode = pimCode;
+    }
+
+    public boolean getPimDisabled() {
+        return pimDisabled;
+    }
+
+    public void setPimDisabled(final boolean pimDisabled) {
+        this.pimDisabled = pimDisabled;
+    }
+
+    public boolean getPimOutdated() {
+        return pimOutdated;
+    }
+
+    public void setPimOutdated(final boolean pimOutdated) {
+        this.pimOutdated = pimOutdated;
+    }
+
+    public Date getPimUpdated() {
+        return pimUpdated;
+    }
+
+    public void setPimUpdated(final Date pimUpdated) {
+        this.pimUpdated = pimUpdated;
     }
 
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)

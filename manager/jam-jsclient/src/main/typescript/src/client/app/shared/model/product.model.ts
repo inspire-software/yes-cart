@@ -111,7 +111,11 @@ export interface ProductVO {
   manufacturerPartCode : string;
   supplierCode : string;
   supplierCatalogCode : string;
+
   pimCode : string;
+  pimDisabled : boolean;
+  pimOutdated : boolean;
+  pimUpdated : Date;
 
   tag : string;
   availablefrom : Date;

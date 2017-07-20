@@ -135,6 +135,52 @@ public interface ProductDTO extends Identifiable, Guidable {
      */
     void setPimCode(String pimCode);
 
+
+    /**
+     * PIM updates are disabled for this product
+     *
+     * @return true means no PIM updates only manual
+     */
+    boolean getPimDisabled();
+
+    /**
+     * PIM updates are disabled for this product
+     *
+     * @param pimDisabled true means no PIM updates only manual
+     */
+    void setPimDisabled(boolean pimDisabled);
+
+
+    /**
+     * PIM updates are required, data is stale
+     *
+     * @return true means PIM data is old and needs update
+     */
+    boolean getPimOutdated();
+
+    /**
+     * PIM updates are required, data is stale
+     *
+     * @param pimOutdated true means PIM data is old and needs update
+     */
+    void setPimOutdated(boolean pimOutdated);
+
+
+    /**
+     * PIM last update timestamp
+     *
+     * @return last update timestamp
+     */
+    Date getPimUpdated();
+
+    /**
+     * PIM last update timestamp
+     *
+     * @param pimUpdated last update timestamp
+     */
+    void setPimUpdated(Date pimUpdated);
+
+
     /**
      * Get the {@link org.yes.cart.domain.entity.Brand} of product.
      *

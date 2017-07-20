@@ -849,3 +849,18 @@ update TATTRIBUTE set  DESCRIPTION =
 update TATTRIBUTE set  DESCRIPTION =
   'List of sort fields separated by comma with fail over. Default is: displayName,sku,basePrice. All supported: name,displayName,basePrice,productCode,manufacturerCode,sku,brand,availability,created,inStock'
     where CODE = 'SHOP_CATEGORY_SORT_OPTIONS';
+
+--
+-- YC-801 Improve product attributes performance on enterprise projects
+--
+
+alter table TPRODUCT add column PIM_DISABLED bit not null default 0;
+-- alter table TPRODUCT add column PIM_DISABLED smallint not null default 0;
+alter table TPRODUCT add column PIM_OUTDATED bit not null default 0;
+-- alter table TPRODUCT add column PIM_OUTDATED smallint not null default 0;
+alter table TPRODUCT add column PIM_UPDATED datetime;
+-- alter table TPRODUCT add column PIM_UPDATED timestamp;
+
+create index PRODUCT_PDISABLED on TPRODUCT (PIM_DISABLED);
+create index PRODUCT_POUTDATED on TPRODUCT (PIM_OUTDATED);
+

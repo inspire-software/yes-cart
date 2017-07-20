@@ -63,6 +63,15 @@ public class ProductDTOImpl implements ProductDTO {
     @DtoField(value = "pimCode")
     private String pimCode;
 
+    @DtoField(value = "pimDisabled")
+    private boolean pimDisabled;
+
+    @DtoField(value = "pimOutdated")
+    private boolean pimOutdated;
+
+    @DtoField(value = "pimUpdated", readOnly = true)
+    private Date pimUpdated;
+
     @DtoField(value = "tag")
     private String tag;
 
@@ -282,6 +291,48 @@ public class ProductDTOImpl implements ProductDTO {
      */
     public void setPimCode(final String pimCode) {
         this.pimCode = pimCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean getPimDisabled() {
+        return pimDisabled;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setPimDisabled(final boolean pimDisabled) {
+        this.pimDisabled = pimDisabled;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean getPimOutdated() {
+        return pimOutdated;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setPimOutdated(final boolean pimOutdated) {
+        this.pimOutdated = pimOutdated;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date getPimUpdated() {
+        return pimUpdated;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setPimUpdated(final Date pimUpdated) {
+        this.pimUpdated = pimUpdated;
     }
 
     /**
