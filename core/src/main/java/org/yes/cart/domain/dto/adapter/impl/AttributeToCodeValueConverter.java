@@ -64,9 +64,16 @@ public class AttributeToCodeValueConverter implements ValueConverter {
 
             if (attr != null) {
 
-                final Object dto = beanFactory.get("org.yes.cart.domain.dto.AttributeDTO");
+                final AttributeDTO dto = (AttributeDTO) beanFactory.get("org.yes.cart.domain.dto.AttributeDTO");
                 final Assembler asm = DTOAssembler.newAssembler(dto.getClass(), Attribute.class);
                 asm.assembleDto(dto, attr, getAdapters().getAll(), beanFactory);
+                return dto;
+
+            } else {
+
+                final AttributeDTO dto = (AttributeDTO) beanFactory.get("org.yes.cart.domain.dto.AttributeDTO");
+                dto.setCode((String) object);
+                dto.setName((String) object);
                 return dto;
 
             }

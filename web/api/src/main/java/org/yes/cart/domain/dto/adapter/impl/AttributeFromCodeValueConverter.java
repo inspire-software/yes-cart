@@ -84,9 +84,14 @@ public class AttributeFromCodeValueConverter implements ValueConverter {
                 asm.assembleDto(ro, attr, getAdapters().getAll(), beanFactory);
                 return ro;
 
-            }
+            } else {
 
-            return null;
+                final AttributeRO ro = new AttributeRO();
+                ro.setCode((String) object);
+                ro.setName((String) object);
+                return ro;
+
+            }
 
         }
 
