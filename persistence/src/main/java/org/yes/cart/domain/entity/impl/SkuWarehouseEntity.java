@@ -16,7 +16,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.util.MoneyUtils;
 

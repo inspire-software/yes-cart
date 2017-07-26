@@ -20,7 +20,6 @@ import com.inspiresoftware.lib.dto.geda.adapter.BeanFactory;
 import com.inspiresoftware.lib.dto.geda.adapter.ValueConverter;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.ProductAssociation;
-import org.yes.cart.domain.entity.SkuPrice;
 
 import java.util.List;
 

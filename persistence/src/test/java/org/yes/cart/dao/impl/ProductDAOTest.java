@@ -88,12 +88,11 @@ public class ProductDAOTest extends AbstractTestDAO {
                 ProductType productType = productTypeDao.findById(1L);
                 assertNotNull(productType);
                 product.setProducttype(productType);
-                Attribute attribute = attributeDao.findById(2006L);  //WEIGHT
                 AttrValueProduct attrValueProduct = new AttrValueEntityProduct();
                 //attrValueProduct.setAttrvalueId(33L);
                 attrValueProduct.setProduct(product);
                 attrValueProduct.setVal("100");
-                attrValueProduct.setAttribute(attribute);
+                attrValueProduct.setAttributeCode("WEIGHT");
                 product.getAttributes().add(attrValueProduct);
                 long pk = productDao.create(product).getProductId();
                 assertTrue(pk > 0L);
@@ -108,11 +107,10 @@ public class ProductDAOTest extends AbstractTestDAO {
                 productType = productTypeDao.findById(1L);
                 assertNotNull(productType);
                 product.setProducttype(productType);
-                attribute = attributeDao.findById(2004L);  //WEIGHT
                 attrValueProduct = new AttrValueEntityProduct();
                 attrValueProduct.setProduct(product);
                 attrValueProduct.setVal("asdfasdf");
-                attrValueProduct.setAttribute(attribute);
+                attrValueProduct.setAttributeCode("WEIGHT");
                 product.getAttributes().add(attrValueProduct);
                 pk = productDao.create(product).getProductId();
                 assertTrue(pk > 0L);

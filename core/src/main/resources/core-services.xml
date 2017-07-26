@@ -915,6 +915,7 @@
 
     <bean id="shopCustomerCustomisationSupport" class="org.yes.cart.service.domain.impl.ShopCustomerCustomisationSupportImpl">
         <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="attributeService"/>
     </bean>
 
     <bean id="managerService" parent="txProxyTemplate">
@@ -1319,6 +1320,7 @@
                 <constructor-arg index="7" ref="orderAddressFormatter"/>
                 <constructor-arg index="8" ref="promotionCouponService"/>
                 <constructor-arg index="9" ref="addressService"/>
+                <constructor-arg index="10" ref="attributeService"/>
             </bean>
         </property>
     </bean>

@@ -231,7 +231,7 @@ public class DtoShopServiceImpl
         final Shop shop = service.findById(((AttrValueShopDTO) attrValueDTO).getShopId());
         if (!multivalue) {
             for (final AttrValueShop avp : shop.getAttributes()) {
-                if (avp.getAttribute().getCode().equals(atr.getCode())) {
+                if (avp.getAttributeCode().equals(atr.getCode())) {
                     // this is a duplicate, so need to update
                     attrValueDTO.setAttrvalueId(avp.getAttrvalueId());
                     return updateEntityAttributeValue(attrValueDTO);
@@ -241,7 +241,7 @@ public class DtoShopServiceImpl
 
         AttrValueShop valueEntityShop = getPersistenceEntityFactory().getByIface(AttrValueShop.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityShop, getAdaptersRepository(), dtoFactory);
-        valueEntityShop.setAttribute(atr);
+        valueEntityShop.setAttributeCode(atr.getCode());
         valueEntityShop.setShop(shop);
         valueEntityShop = attrValueEntityShopDao.create((AttrValueEntityShop) valueEntityShop);
         attrValueDTO.setAttrvalueId(valueEntityShop.getAttrvalueId());
@@ -251,15 +251,17 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc}*/
-    public long deleteAttributeValue(final long attributeValuePk) {
+    public long deleteAttributeValue(final long attributeValuePk)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueEntityShop valueEntityShop = attrValueEntityShopDao.findById(attributeValuePk);
-        if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityShop.getAttribute().getEtype().getBusinesstype())) {
+        final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(valueEntityShop.getAttributeCode());
+        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
             imageService.deleteImage(valueEntityShop.getVal(),
                     Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
-        } else if (Etype.FILE_BUSINESS_TYPE.equals(valueEntityShop.getAttribute().getEtype().getBusinesstype())) {
+        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
             fileService.deleteFile(valueEntityShop.getVal(),
                     Constants.SHOP_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
-        } else if (Etype.SYSFILE_BUSINESS_TYPE.equals(valueEntityShop.getAttribute().getEtype().getBusinesstype())) {
+        } else if (Etype.SYSFILE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
             fileService.deleteFile(valueEntityShop.getVal(),
                     Constants.SHOP_SYSFILE_REPOSITORY_URL_PATTERN, systemService.getSystemFileRepositoryDirectory());
         }

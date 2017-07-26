@@ -24,7 +24,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValueCustomer;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
@@ -493,14 +493,14 @@ public class AuthenticationController {
                 formRO.setCustomerTypeSupported(customerServiceFacade.isShopCustomerTypeSupported(shop, customerType));
             }
 
-            final List<AttrValueCustomer> avs = customerServiceFacade.getShopRegistrationAttributes(shop, customerType);
+            final List<AttrValueWithAttribute> avs = customerServiceFacade.getShopRegistrationAttributes(shop, customerType);
 
-            formRO.setCustom(mappingMixin.map(avs, AttrValueCustomerRO.class, AttrValueCustomer.class));
+            formRO.setCustom(mappingMixin.map(avs, AttrValueAndAttributeRO.class, AttrValueWithAttribute.class));
 
         } else {
             // If no type then present form with allowed types.
 
-            final AttrValueCustomerRO avroct = new AttrValueCustomerRO();
+            final AttrValueAndAttributeRO avroct = new AttrValueAndAttributeRO();
             avroct.setAttributeCode("customerType");
 
             final List<String> supported = languageService.getSupportedLanguages(shop.getCode());
@@ -520,11 +520,11 @@ public class AuthenticationController {
             }
             avroct.setAttributeDisplayChoices(displayChoice);
 
-            final AttrValueCustomerRO avrogc = new AttrValueCustomerRO();
+            final AttrValueAndAttributeRO avrogc = new AttrValueAndAttributeRO();
             avrogc.setAttributeCode("guestCheckoutEnabled");
             avrogc.setVal(String.valueOf(customerServiceFacade.isShopGuestCheckoutSupported(shop)));
 
-            formRO.setCustom(new ArrayList<AttrValueCustomerRO>(Arrays.asList(avrogc, avroct)));
+            formRO.setCustom(new ArrayList<AttrValueAndAttributeRO>(Arrays.asList(avrogc, avroct)));
 
         }
 
@@ -691,7 +691,7 @@ public class AuthenticationController {
 
         if (registerRO.getCustom() != null) {
 
-            for (final AttrValueCustomer av : customerServiceFacade.getShopRegistrationAttributes(shop, registerRO.getCustomerType())) {
+            for (final AttrValueWithAttribute av : customerServiceFacade.getShopRegistrationAttributes(shop, registerRO.getCustomerType())) {
 
                 final Attribute attr = av.getAttribute();
                 final String value = registerRO.getCustom().get(attr.getCode());
@@ -881,7 +881,7 @@ public class AuthenticationController {
 
         if (registerRO.getCustom() != null) {
 
-            for (final AttrValueCustomer av : customerServiceFacade.getShopRegistrationAttributes(shop, registerRO.getCustomerType())) {
+            for (final AttrValueWithAttribute av : customerServiceFacade.getShopRegistrationAttributes(shop, registerRO.getCustomerType())) {
 
                 final Attribute attr = av.getAttribute();
                 final String value = registerRO.getCustom().get(attr.getCode());

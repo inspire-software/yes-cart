@@ -287,7 +287,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         final Set<AttrValueCustomer> result = new HashSet<AttrValueCustomer>();
         if (this.attributes != null) {
             for (AttrValueCustomer attrValue : this.attributes) {
-                if (attrValue.getAttribute().getCode().equals(attributeCode)) {
+                if (attributeCode.equals(attrValue.getAttributeCode())) {
                     result.add(attrValue);
                 }
             }
@@ -304,7 +304,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         }
         if (this.attributes != null) {
             for (AttrValueCustomer attrValue : this.attributes) {
-                if (attrValue.getAttribute().getCode().equals(attributeCode)) {
+                if (attributeCode.equals(attrValue.getAttributeCode())) {
                     return attrValue;
                 }
             }

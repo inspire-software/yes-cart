@@ -42,7 +42,7 @@ public class CsvAttributeValueByCodeValueAdapterImpl implements ValueAdapter {
         final Collection<AttrValue> values = (Collection<AttrValue>) rawValue;
         if (CollectionUtils.isNotEmpty(values)) {
             for (final AttrValue av : values) {
-                if (code.equals(av.getAttribute().getCode())) {
+                if (code.equals(av.getAttributeCode())) {
                     return av.getVal();
                 }
             }

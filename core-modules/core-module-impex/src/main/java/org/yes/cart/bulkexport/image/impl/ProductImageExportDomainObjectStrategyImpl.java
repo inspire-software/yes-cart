@@ -90,7 +90,7 @@ public class ProductImageExportDomainObjectStrategyImpl extends AbstractImageExp
                                     final Collection<AttrValue> attrs) {
         if (CollectionUtils.isNotEmpty(attrs)) {
             for (final AttrValue attr : attrs) {
-                final String code = attr.getAttribute().getCode();
+                final String code = attr.getAttributeCode();
                 if (code.startsWith(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX)
                         && StringUtils.isNotBlank(attr.getVal())) {
                     images.add(attr.getVal());

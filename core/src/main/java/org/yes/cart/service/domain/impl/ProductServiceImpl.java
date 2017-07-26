@@ -24,6 +24,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.util.CollectionUtils;
+import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.CriteriaTuner;
@@ -201,15 +202,22 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attributesToShow =
                 new TreeMap<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>>(BY_SECOND);
 
+        final Map<String, I18NModel> attrDisplayNames = attributeService.getAllAttributeNames();
+        final List<Attribute> multivalue = attributeService.findAttributesWithMultipleValues(AttributeGroupNames.PRODUCT);
+        final Set<String> multivalueCodes = new HashSet<String>();
+        for (final Attribute multi : multivalue) {
+            multivalueCodes.add(multi.getCode());
+        }
+
         for (final AttrValue attrValue : productAttrValues) {
 
-            loadAttributeValueToAttributesToShowMap(locale, attributeViewGroupMap, viewsGroupsI18n, attrI18n, attributesToShow, attrValue);
+            loadAttributeValueToAttributesToShowMap(locale, attributeViewGroupMap, viewsGroupsI18n, attrI18n, attributesToShow, attrValue, attrDisplayNames, multivalueCodes);
 
         }
 
         for (final AttrValue attrValue : skuAttrValues) {
 
-            loadAttributeValueToAttributesToShowMap(locale, attributeViewGroupMap, viewsGroupsI18n, attrI18n, attributesToShow, attrValue);
+            loadAttributeValueToAttributesToShowMap(locale, attributeViewGroupMap, viewsGroupsI18n, attrI18n, attributesToShow, attrValue, attrDisplayNames, multivalueCodes);
 
         }
 
@@ -222,23 +230,21 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             final String locale, final Map<String, List<Pair<String, String>>> attributeViewGroupMap,
             final Map<String, Pair<String, String>> viewsGroupsI18n, final Map<String, Pair<String, String>> attrI18n,
             final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attributesToShow,
-            final AttrValue attrValue) {
+            final AttrValue attrValue, final Map<String, I18NModel> attrDisplayNames, final Set<String> multivalueCodes) {
 
-        if (attrValue.getAttribute() == null) {
+        if (attrValue.getAttributeCode() == null) {
             return;
         }
         final Pair<String, String> attr;
-        if (attrI18n.containsKey(attrValue.getAttribute().getCode())) {
-            attr = attrI18n.get(attrValue.getAttribute().getCode());
+        if (attrI18n.containsKey(attrValue.getAttributeCode())) {
+            attr = attrI18n.get(attrValue.getAttributeCode());
         } else {
-            attr = new Pair<String, String>(
-                    attrValue.getAttribute().getCode(),
-                    new FailoverStringI18NModel(
-                            attrValue.getAttribute().getDisplayName(),
-                            attrValue.getAttribute().getName()
-                    ).getValue(locale)
-            );
-            attrI18n.put(attrValue.getAttribute().getCode(), attr);
+
+            final I18NModel attrModel = attrDisplayNames.get(attrValue.getAttributeCode());
+            final String name = attrModel != null ? attrModel.getValue(locale) : attrValue.getAttributeCode();
+
+            attr = new Pair<String, String>(attrValue.getAttributeCode(), name);
+            attrI18n.put(attrValue.getAttributeCode(), attr);
         }
 
         List<Pair<String, String>> groupsForAttr = attributeViewGroupMap.get(attr.getFirst());
@@ -270,7 +276,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             final List<Pair<String, String>> attrValuesForAttr;
             if (attrValuesInGroup.containsKey(attr)) {
                 attrValuesForAttr = attrValuesInGroup.get(attr);
-                if (attrValue.getAttribute().isAllowduplicate()) {
+                if (multivalueCodes.contains(attrValue.getAttributeCode())) {
                     attrValuesForAttr.add(val);
                 } else {
                     attrValuesForAttr.set(0, val); // replace with latest (hopefully SKU)

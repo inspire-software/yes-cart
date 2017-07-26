@@ -21,7 +21,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
 
 /**
  * User: denispavlov
@@ -48,7 +48,7 @@ public class BooleanEditor extends Fragment {
                          final MarkupContainer markupProvider,
                          final IModel<String> model,
                          final IModel<String> labelModel,
-                         final AttrValue attrValue,
+                         final AttrValueWithAttribute attrValue,
                          final boolean readOnly) {
 
         super(id, "booleanEditor", markupProvider);

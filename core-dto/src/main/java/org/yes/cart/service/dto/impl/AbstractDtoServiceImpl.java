@@ -128,6 +128,23 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
         return result;
     }
 
+
+    /**
+     * Fill dtos from entities
+     * @param entity entity
+     * @return dto
+     * @throws UnmappedInterfaceException in case of config errors
+     * @throws UnableToCreateInstanceException ion case of dto creating errors
+     */
+    public DTOIFACE fillDTO(final IFACE entity)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        DTOIFACE dto = (DTOIFACE) dtoFactory.getByIface(getDtoIFace());
+        assembler.assembleDto(dto, entity, getAdaptersRepository(), dtoFactory);
+        assemblyPostProcess(dto, entity);
+        return dto;
+    }
+
+
     /**
      * Fill dtos from entities
      * @param entities list of entities

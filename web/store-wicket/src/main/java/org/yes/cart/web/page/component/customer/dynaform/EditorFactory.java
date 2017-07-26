@@ -24,7 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.springframework.core.convert.TypeDescriptor;
-import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -60,7 +60,7 @@ public class EditorFactory implements Serializable {
     public Component getEditor(final String id,
                                final MarkupContainer markupContainer,
                                final String language,
-                               final AttrValue attrValue,
+                               final AttrValueWithAttribute attrValue,
                                final Boolean readOnly) {
 
         final boolean notEditable = readOnly == null || readOnly;

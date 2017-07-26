@@ -88,7 +88,7 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
             }
             imageAttributeValue = categoryService.getGenericDao().getEntityFactory().getByIface(AttrValueCategory.class);
             imageAttributeValue.setCategory(category);
-            imageAttributeValue.setAttribute(attribute);
+            imageAttributeValue.setAttributeCode(attribute.getCode());
             category.getAttributes().add(imageAttributeValue);
         } else if (isInsertOnly()) {
             return false;

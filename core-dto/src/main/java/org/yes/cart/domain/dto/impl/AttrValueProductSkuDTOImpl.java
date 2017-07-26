@@ -43,8 +43,7 @@ public class AttrValueProductSkuDTOImpl implements AttrValueProductSkuDTO {
     private Map<String, String> displayVals;
 
 
-    @DtoField(value = "attribute",
-            dtoBeanKey = "org.yes.cart.domain.dto.AttributeDTO", readOnly = true)
+    @DtoField(value = "attributeCode", converter = "attributeDTO2Code")
     private AttributeDTO attributeDTO;
 
     @DtoField(value = "productSku.skuId", readOnly = true)

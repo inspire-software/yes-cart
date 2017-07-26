@@ -50,7 +50,7 @@ public class BrandImageImportDomainObjectStrategyImplTest extends BaseCoreDBTest
         final Collection<AttrValueBrand> attributesBefore = brand.getAttributes();
         if (attributesBefore != null) {
             for (AttrValueBrand attrValue : attributesBefore) {
-                if (attrValue.getAttribute() != null && AttributeNamesKeys.Brand.BRAND_IMAGE.equals(attrValue.getAttribute().getCode())) {
+                if (AttributeNamesKeys.Brand.BRAND_IMAGE.equals(attrValue.getAttributeCode())) {
                     fail("Has image - it should not");
                     break;
                 }
@@ -79,7 +79,7 @@ public class BrandImageImportDomainObjectStrategyImplTest extends BaseCoreDBTest
         final Collection<AttrValueBrand> attributesAfter = brand.getAttributes();
         if (attributesAfter != null) {
             for (AttrValueBrand attrValue : attributesAfter) {
-                if (attrValue.getAttribute() != null && AttributeNamesKeys.Brand.BRAND_IMAGE.equals(attrValue.getAttribute().getCode())) {
+                if (AttributeNamesKeys.Brand.BRAND_IMAGE.equals(attrValue.getAttributeCode())) {
                     saved = attrValue;
                     break;
                 }

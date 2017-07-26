@@ -18,11 +18,13 @@ package org.yes.cart.domain.ro;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.Map;
@@ -48,23 +50,23 @@ public class AttrValueCustomerRO implements Serializable {
     @DtoField(value = "displayVal", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> displayVals;
 
-    @DtoField(value = "attribute.attributeId", readOnly = true)
-    private long attributeId;
-
-    @DtoField(value = "attribute.code", readOnly = true)
-    private String attributeCode;
-
-    @DtoField(value = "attribute.name", readOnly = true)
-    private String attributeName;
-
-    @DtoField(value = "attribute.displayName", converter = "i18nStringConverter", readOnly = true)
-    private Map<String, String> attributeDisplayNames;
-
-    @DtoField(value = "attribute.choiceData", converter = "i18nStringConverter", readOnly = true)
-    private Map<String, String> attributeDisplayChoices;
+    @DtoField(value = "attributeCode", converter = "attributeCodeConverter", readOnly = true)
+    private AttributeRO attribute;
 
     @DtoField(value = "customer.customerId", readOnly = true)
     private long customerId;
+
+    public AttrValueCustomerRO() {
+    }
+
+    public AttrValueCustomerRO(final AttrValueAndAttributeRO ava, final long customerId) {
+        attrvalueId = ava.getAttrvalueId();
+        val = ava.getVal();
+        displayVals = ava.getDisplayVals();
+        attribute = ava.getAttribute();
+        this.customerId = customerId;
+    }
+
 
     @XmlAttribute(name = "attrvalue-id")
     public long getAttrvalueId() {
@@ -93,51 +95,77 @@ public class AttrValueCustomerRO implements Serializable {
         this.displayVals = displayVals;
     }
 
+    @JsonIgnore
+    @XmlTransient
+    public AttributeRO getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(final AttributeRO attribute) {
+        this.attribute = attribute;
+    }
+
+    private void initAttribute() {
+        if (this.attribute == null) {
+            this.attribute = new AttributeRO();
+        }
+    }
+
     @XmlAttribute(name = "attribute-id")
     public long getAttributeId() {
-        return attributeId;
+        initAttribute();
+        return attribute.getAttributeId();
     }
 
     public void setAttributeId(final long attributeId) {
-        this.attributeId = attributeId;
+        initAttribute();
+        this.attribute.setAttributeId(attributeId);
     }
 
     @XmlAttribute(name = "attribute-code")
     public String getAttributeCode() {
-        return attributeCode;
+        initAttribute();
+        return attribute.getCode();
     }
 
     public void setAttributeCode(final String attributeCode) {
-        this.attributeCode = attributeCode;
+        initAttribute();
+        this.attribute.setCode(attributeCode);
     }
 
     @XmlElement(name = "attribute-name")
     public String getAttributeName() {
-        return attributeName;
+        initAttribute();
+        return attribute.getName();
     }
 
     public void setAttributeName(final String attributeName) {
-        this.attributeName = attributeName;
+        initAttribute();
+        this.attribute.setName(attributeName);
     }
 
     @XmlJavaTypeAdapter(I18nMapAdapter.class)
     @XmlElement(name = "attribute-display-names")
     public Map<String, String> getAttributeDisplayNames() {
-        return attributeDisplayNames;
+        initAttribute();
+        return attribute.getDisplayNames();
     }
 
     public void setAttributeDisplayNames(final Map<String, String> attributeDisplayNames) {
-        this.attributeDisplayNames = attributeDisplayNames;
+        initAttribute();
+        this.attribute.setDisplayNames(attributeDisplayNames);
     }
 
     @XmlJavaTypeAdapter(I18nMapAdapter.class)
     @XmlElement(name = "attribute-display-choices")
     public Map<String, String> getAttributeDisplayChoices() {
-        return attributeDisplayChoices;
+        initAttribute();
+        return attribute.getChoiceData();
     }
 
     public void setAttributeDisplayChoices(final Map<String, String> attributeDisplayChoices) {
-        this.attributeDisplayChoices = attributeDisplayChoices;
+        initAttribute();
+        this.attribute.setChoiceData(attributeDisplayChoices);
     }
 
     @XmlAttribute(name = "customer-id")

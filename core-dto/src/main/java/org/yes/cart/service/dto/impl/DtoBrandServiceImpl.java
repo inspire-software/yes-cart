@@ -164,7 +164,7 @@ public class DtoBrandServiceImpl
         final Brand brand = service.findById(((AttrValueBrandDTO) attrValueDTO).getBrandId());
         if (!multivalue) {
             for (final AttrValueBrand avp : brand.getAttributes()) {
-                if (avp.getAttribute().getCode().equals(atr.getCode())) {
+                if (avp.getAttributeCode().equals(atr.getCode())) {
                     // this is a duplicate, so need to update
                     attrValueDTO.setAttrvalueId(avp.getAttrvalueId());
                     return updateEntityAttributeValue(attrValueDTO);
@@ -174,7 +174,7 @@ public class DtoBrandServiceImpl
 
         AttrValueBrand valueEntityBrand = getPersistenceEntityFactory().getByIface(AttrValueBrand.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityBrand, getAdaptersRepository(), dtoFactory);
-        valueEntityBrand.setAttribute(atr);
+        valueEntityBrand.setAttributeCode(atr.getCode());
         valueEntityBrand.setBrand(brand);
         valueEntityBrand = attrValueEntityBrandDao.create((AttrValueEntityBrand) valueEntityBrand);
         attrValueDTO.setAttrvalueId(valueEntityBrand.getAttrvalueId());
@@ -184,12 +184,14 @@ public class DtoBrandServiceImpl
     }
 
     /** {@inheritDoc}*/
-    public long deleteAttributeValue(final long attributeValuePk) {
+    public long deleteAttributeValue(final long attributeValuePk)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueEntityBrand valueEntityBrand = attrValueEntityBrandDao.findById(attributeValuePk);
-        if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityBrand.getAttribute().getEtype().getBusinesstype())) {
+        final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(valueEntityBrand.getAttributeCode());
+        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
             imageService.deleteImage(valueEntityBrand.getVal(),
                     Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
-        } else if (Etype.FILE_BUSINESS_TYPE.equals(valueEntityBrand.getAttribute().getEtype().getBusinesstype())) {
+        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
             fileService.deleteFile(valueEntityBrand.getVal(),
                     Constants.BRAND_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
         }

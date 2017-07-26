@@ -16,7 +16,7 @@
 
 package org.yes.cart.service.domain;
 
-import org.yes.cart.domain.entity.AttrValueCustomer;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
@@ -99,7 +99,7 @@ public interface CustomerCustomisationSupport {
      *
      * @return list of eligible attributes
      */
-    List<AttrValueCustomer> getRegistrationAttributes(Shop shop, String customerType);
+    List<AttrValueWithAttribute> getRegistrationAttributes(Shop shop, String customerType);
 
 
     /**
@@ -135,6 +135,6 @@ public interface CustomerCustomisationSupport {
      *
      * @return list of eligible attributes (pair: 1) attribute, 2) read only flag)
      */
-    List<Pair<AttrValueCustomer, Boolean>> getProfileAttributes(Shop shop, Customer customer);
+    List<Pair<AttrValueWithAttribute, Boolean>> getProfileAttributes(Shop shop, Customer customer);
 
 }

@@ -42,8 +42,7 @@ public class AttrValueCustomerDTOImpl implements AttrValueCustomerDTO {
     @DtoField(value = "displayVal", converter = "i18nStringConverter")
     private Map<String, String> displayVals;
 
-    @DtoField(value = "attribute",
-            dtoBeanKey = "org.yes.cart.domain.dto.AttributeDTO", readOnly = true)
+    @DtoField(value = "attributeCode", converter = "attributeDTO2Code")
     private AttributeDTO attributeDTO;
 
     @DtoField(value = "customer.customerId", readOnly = true)

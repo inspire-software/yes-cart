@@ -25,7 +25,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.PatternValidator;
-import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
 
 import java.util.Map;
 
@@ -54,7 +54,7 @@ public class StringEditor extends Fragment {
                         final IModel<String> model,
                         final IModel<String> labelModel,
                         final IModel<String> errorLabelModel,
-                        final AttrValue attrValue,
+                        final AttrValueWithAttribute attrValue,
                         final boolean readOnly) {
 
         super(id, "stringEditor", markupProvider);

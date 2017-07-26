@@ -92,7 +92,7 @@ public interface AddressBookFacade {
      *
      * @return attributes that describe suitable address form
      */
-    List<AttrValue> getShopCustomerAddressAttributes(Customer customer, Shop shop, String addressType);
+    List<AttrValueWithAttribute> getShopCustomerAddressAttributes(Customer customer, Shop shop, String addressType);
 
     /**
      * Create or update address object.

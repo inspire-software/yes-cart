@@ -1247,20 +1247,14 @@
         references TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID);
 
 
-    alter table TBRANDATTRVALUE 
-        add index FKFA06C3CD5CB3C6AB (CODE), 
-        add constraint FKFA06C3CD5CB3C6AB 
-        foreign key (CODE) 
-        references TATTRIBUTE (CODE);
-
-    alter table TBRANDATTRVALUE 
-        add index FKFA06C3CDDF51D3AD (BRAND_ID), 
-        add constraint FKFA06C3CDDF51D3AD 
+    alter table TBRANDATTRVALUE
+        add index FK_AV_BRAND_BRANDID (BRAND_ID),
+        add constraint FK_AV_BRAND_BRANDID
         foreign key (BRAND_ID) 
         references TBRAND (BRAND_ID) 
         on delete cascade;
 
-
+    create index AV_BRAND_CODE on TBRANDATTRVALUE (CODE);
 
     alter table TCARRIERSLA 
         add index FK_CSLA_CARR (CARRIER_ID), 
@@ -1289,32 +1283,24 @@
         references TPRODUCTTYPE (PRODUCTTYPE_ID);
 
 
-    alter table TCATEGORYATTRVALUE 
-        add index FK_CAT_ATTRIBUTE (CODE), 
-        add constraint FK_CAT_ATTRIBUTE 
-        foreign key (CODE) 
-        references TATTRIBUTE (CODE);
-
-    alter table TCATEGORYATTRVALUE 
-        add index FKBAB98EE5FA5E3ED (CATEGORY_ID), 
-        add constraint FKBAB98EE5FA5E3ED 
+    alter table TCATEGORYATTRVALUE
+        add index FK_AV_CATEGORY_CATEGORYID (CATEGORY_ID),
+        add constraint FK_AV_CATEGORY_CATEGORYID
         foreign key (CATEGORY_ID) 
         references TCATEGORY (CATEGORY_ID) 
         on delete cascade;
 
+    create index AV_CATEGORY_CODE on TCATEGORYATTRVALUE (CODE);
+
 
     alter table TCUSTOMERATTRVALUE 
-        add index FK_C_ATTRIBUTE (CODE), 
-        add constraint FK_C_ATTRIBUTE 
-        foreign key (CODE) 
-        references TATTRIBUTE (CODE);
-
-    alter table TCUSTOMERATTRVALUE 
-        add index FKB44A120EAF56CFED (CUSTOMER_ID), 
-        add constraint FKB44A120EAF56CFED 
+        add index FK_AV_CUSTOMER_CUSTOMERID (CUSTOMER_ID),
+        add constraint FK_AV_CUSTOMER_CUSTOMERID
         foreign key (CUSTOMER_ID) 
         references TCUSTOMER (CUSTOMER_ID) 
         on delete cascade;
+
+    create index AV_CUSTOMER_CODE on TCUSTOMERATTRVALUE (CODE);
 
 
 
@@ -1461,20 +1447,14 @@
 
     create index ASSOCIATED_SKUCODE on TPRODUCTASSOCIATION (ASSOCIATED_SKU_CODE);
 
-    alter table TPRODUCTATTRVALUE 
-        add index FK_P_ATTRIBUTE (CODE), 
-        add constraint FK_P_ATTRIBUTE 
-        foreign key (CODE) 
-        references TATTRIBUTE (CODE);
-
-    alter table TPRODUCTATTRVALUE 
+    alter table TPRODUCTATTRVALUE
         add index FK215F4E65FFF5E8AD (PRODUCT_ID), 
         add constraint FK215F4E65FFF5E8AD 
         foreign key (PRODUCT_ID) 
         references TPRODUCT (PRODUCT_ID) 
         on delete cascade;
 
-
+    create index AV_PRODUCT_CODE on TPRODUCTATTRVALUE (CODE);
 
 
     alter table TPRODUCTCATEGORY 
@@ -1493,17 +1473,12 @@
 
 
     alter table TPRODUCTSKUATTRVALUE 
-        add index FK23B3D31E4EC4B749 (SKU_ID), 
-        add constraint FK23B3D31E4EC4B749 
+        add index FK_AV_SKU_SKUID (SKU_ID),
+        add constraint FK_AV_SKU_SKUID
         foreign key (SKU_ID) 
         references TSKU (SKU_ID);
 
-    alter table TPRODUCTSKUATTRVALUE 
-        add index FK_S_ATTRIBUTE (CODE), 
-        add constraint FK_S_ATTRIBUTE 
-        foreign key (CODE) 
-        references TATTRIBUTE (CODE);
-
+    create index AV_SKU_CODE on TPRODUCTSKUATTRVALUE (CODE);
 
     alter table TPRODUCTTYPEATTR 
         add index FK_PTA_PRODTYPE (PRODUCTTYPE_ID), 
@@ -1536,18 +1511,12 @@
 
 
     alter table TSHOPATTRVALUE 
-        add index FK_ATTR_SHOP (SHOP_ID), 
-        add constraint FK_ATTR_SHOP 
+        add index FK_AV_SHOP_SHOPID (SHOP_ID),
+        add constraint FK_AV_SHOP_SHOPID
         foreign key (SHOP_ID) 
         references TSHOP (SHOP_ID);
 
-
-    alter table TSHOPATTRVALUE 
-        add index FK_SHOP_ATTRIBUTE (CODE), 
-        add constraint FK_SHOP_ATTRIBUTE 
-        foreign key (CODE) 
-        references TATTRIBUTE (CODE);
-
+    create index AV_SHOP_CODE on TSHOPATTRVALUE (CODE);
 
 
     alter table TSHOPCATEGORY 
@@ -1639,17 +1608,12 @@
     create index SKUWAREHOUSE_SKUCODE on TSKUWAREHOUSE (SKU_CODE);
 
     alter table TSYSTEMATTRVALUE 
-        add index FK_SYS_ATTRIBUTE (CODE), 
-        add constraint FK_SYS_ATTRIBUTE 
-        foreign key (CODE) 
-        references TATTRIBUTE (CODE);
-
-    alter table TSYSTEMATTRVALUE 
-        add index FK_ATTR_SYS (SYSTEM_ID), 
-        add constraint FK_ATTR_SYS 
+        add index FK_AV_SYSTEM_SYSTEMID (SYSTEM_ID),
+        add constraint FK_AV_SYSTEM_SYSTEMID
         foreign key (SYSTEM_ID) 
         references TSYSTEM (SYSTEM_ID);
 
+    create index AV_SYSTEM_CODE on TSYSTEMATTRVALUE (CODE);
 
     create index IMAGE_NAME_IDX on TSEOIMAGE (IMAGE_NAME);
 

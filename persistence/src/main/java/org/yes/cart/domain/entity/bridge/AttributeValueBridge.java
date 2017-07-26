@@ -29,7 +29,10 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -57,11 +60,11 @@ public class AttributeValueBridge implements FieldBridge {
             for (Object obj : (Collection) value) {
                 final AttrValue attrValue = (AttrValue) obj;
 
-                if (attrValue.getAttribute() == null) {
+                if (attrValue.getAttributeCode() == null) {
                     continue; // skip invalid ones
                 }
 
-                final String code = attrValue.getAttribute().getCode();
+                final String code = attrValue.getAttributeCode();
 
                 final boolean navigation = navAttrs.contains(code);
                 final boolean search = navigation || searchAttrs.contains(code);

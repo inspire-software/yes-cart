@@ -14,22 +14,27 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.utils.impl;
-
-
-import org.yes.cart.domain.entity.AttrValue;
-
-import java.util.Comparator;
+package org.yes.cart.domain.entity;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * User: denispavlov
+ * Date: 21/07/2017
+ * Time: 10:31
  */
-public class AttrValueRankComparator implements Comparator<AttrValue> {
+public interface AttrValueWithAttribute extends AttrValue {
 
-    /** {@inheritDoc} */
-    public int compare(final AttrValue attrValue1, final AttrValue attrValue2) {
-        return attrValue1.getAttribute().getRank() - attrValue2.getAttribute().getRank();
-    }
+    /**
+     * Get the attribute.
+     *
+     * @return {@link Attribute}
+     */
+    Attribute getAttribute();
+
+    /**
+     * Set attribute.
+     *
+     * @param attribute attribute.
+     */
+    void setAttribute(Attribute attribute);
+
 }

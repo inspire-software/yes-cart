@@ -252,7 +252,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         final Collection<AttrValueProductSku> result = new ArrayList<AttrValueProductSku>();
         if (attributeCode != null && this.attributes != null) {
             for (AttrValueProductSku attrValue : this.attributes) {
-                if (attrValue.getAttribute().getCode().equals(attributeCode)) {
+                if (attributeCode.equals(attrValue.getAttributeCode())) {
                     result.add(attrValue);
                 }
             }
@@ -266,7 +266,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         }
         if (this.attributes != null) {
             for (AttrValueProductSku attrValue : this.attributes) {
-                if (attrValue.getAttribute().getCode().equals(attributeCode)) {
+                if (attributeCode.equals(attrValue.getAttributeCode())) {
                     return attrValue;
                 }
             }
@@ -293,8 +293,8 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
         if (this.attributes != null) {
             for (AttrValue attrValue : this.attributes) {
-                if (attrValue != null && attrValue.getAttribute() != null) {
-                    rez.put(attrValue.getAttribute().getCode(), attrValue);
+                if (attrValue != null && attrValue.getAttributeCode() != null) {
+                    rez.put(attrValue.getAttributeCode(), attrValue);
                 }
             }
         }

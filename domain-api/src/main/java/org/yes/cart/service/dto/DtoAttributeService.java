@@ -31,6 +31,20 @@ public interface DtoAttributeService extends GenericDTOService<AttributeDTO> {
 
 
     /**
+     * Get {@link AttributeDTO} by given code.
+     *
+     * @param attributeCode given attribute group code
+     * @return list of {@link AttributeDTO}
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    AttributeDTO findByAttributeCode(String attributeCode)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+    /**
      * Get list of {@link AttributeDTO} by given group code.
      *
      * @param attributeGroupCode given attribute group code

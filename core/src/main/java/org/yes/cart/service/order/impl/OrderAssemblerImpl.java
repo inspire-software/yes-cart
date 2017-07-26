@@ -24,6 +24,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.order.*;
@@ -39,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -57,11 +59,11 @@ public class OrderAssemblerImpl implements OrderAssembler {
     private final PromotionCouponService promotionCouponService;
     private final AddressService addressService;
     private final CustomerService customerService;
+    private final AttributeService attributeService;
 
     /**
      * Create order assembler.
-     *
-     * @param orderNumberGenerator   order number generator
+     *  @param orderNumberGenerator   order number generator
      * @param genericDAO             generic DAO
      * @param customerService        customer service
      * @param shopService            shop service
@@ -71,6 +73,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * @param addressFormatter       format string to create address in one string from {@link Address} entity.
      * @param promotionCouponService coupon service
      * @param addressService         address service
+     * @param attributeService       attribute service
      */
     public OrderAssemblerImpl(final OrderNumberGenerator orderNumberGenerator,
                               final GenericDAO genericDAO,
@@ -81,10 +84,12 @@ public class OrderAssemblerImpl implements OrderAssembler {
                               final PriceResolver priceResolver,
                               final OrderAddressFormatter addressFormatter,
                               final PromotionCouponService promotionCouponService,
-                              final AddressService addressService) {
+                              final AddressService addressService,
+                              final AttributeService attributeService) {
         this.productService = productService;
         this.priceResolver = priceResolver;
         this.promotionCouponService = promotionCouponService;
+        this.attributeService = attributeService;
         this.entityFactory = genericDAO.getEntityFactory();
         this.orderNumberGenerator = orderNumberGenerator;
         this.customerService = customerService;
@@ -426,25 +431,28 @@ public class OrderAssemblerImpl implements OrderAssembler {
                 // stored attributes are configured per customer group
                 final List<String> storedAttributes = customerOrder.getShop().getProductStoredAttributesAsList();
                 if (CollectionUtils.isNotEmpty(storedAttributes)) {
+
+                    final Map<String, I18NModel> attrI18n = this.attributeService.getAllAttributeNames();
+
                     // fill product first
                     final Product product = productService.getProductById(sku.getProduct().getProductId(), true);
                     for (final AttrValue av : product.getAttributes()) {
-                        if (storedAttributes.contains(av.getAttribute().getCode())) {
-                            final String name =
-                                    new FailoverStringI18NModel(av.getAttribute().getDisplayName(), av.getAttribute().getName()).getValue(customerOrder.getLocale());
+                        if (storedAttributes.contains(av.getAttributeCode())) {
+                            final I18NModel nameModel = attrI18n.get(av.getAttributeCode());
+                            final String name = nameModel != null ? nameModel.getValue(customerOrder.getLocale()) : av.getAttributeCode();
                             final String displayValue =
                                     new FailoverStringI18NModel(av.getDisplayVal(), av.getVal()).getValue(customerOrder.getLocale());
-                            customerOrderDet.putValue(av.getAttribute().getCode(), av.getVal(), name + ": " + displayValue);
+                            customerOrderDet.putValue(av.getAttributeCode(), av.getVal(), name + ": " + displayValue);
                         }
                     }
                     // fill SKU specific (will override product ones)
                     for (final AttrValue av : sku.getAttributes()) {
-                        if (storedAttributes.contains(av.getAttribute().getCode())) {
-                            final String name =
-                                    new FailoverStringI18NModel(av.getAttribute().getDisplayName(), av.getAttribute().getName()).getValue(customerOrder.getLocale());
+                        if (storedAttributes.contains(av.getAttributeCode())) {
+                            final I18NModel nameModel = attrI18n.get(av.getAttributeCode());
+                            final String name = nameModel != null ? nameModel.getValue(customerOrder.getLocale()) : av.getAttributeCode();
                             final String displayValue =
                                     new FailoverStringI18NModel(av.getDisplayVal(), av.getVal()).getValue(customerOrder.getLocale());
-                            customerOrderDet.putValue(av.getAttribute().getCode(), av.getVal(), name + ": " + displayValue);
+                            customerOrderDet.putValue(av.getAttributeCode(), av.getVal(), name + ": " + displayValue);
                         }
                     }
                 }

@@ -137,8 +137,8 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
     public Map<String, AttrValue> getAllAttributesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
         for (AttrValue attrValue : getAllAttributes()) {
-            if (attrValue != null && attrValue.getAttribute() != null) {
-                rez.put(attrValue.getAttribute().getCode(), attrValue);
+            if (attrValue != null && attrValue.getAttributeCode() != null) {
+                rez.put(attrValue.getAttributeCode(), attrValue);
             }
         }
         return rez;
@@ -148,7 +148,7 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
         final Collection<AttrValueBrand> result = new ArrayList<AttrValueBrand>();
         if (attributeCode != null && this.attributes != null) {
             for (AttrValueBrand attrValue : this.attributes) {
-                if (attrValue.getAttribute().getCode().equals(attributeCode)) {
+                if (attributeCode.equals(attrValue.getAttributeCode())) {
                     result.add(attrValue);
                 }
             }
@@ -162,7 +162,7 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
         }
         if (this.attributes != null) {
             for (AttrValueBrand attrValue : this.attributes) {
-                if (attrValue.getAttribute() != null && attributeCode.equals(attrValue.getAttribute().getCode())) {
+                if (attributeCode.equals(attrValue.getAttributeCode())) {
                     return attrValue;
                 }
             }

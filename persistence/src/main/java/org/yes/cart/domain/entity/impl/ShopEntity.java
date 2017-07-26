@@ -187,8 +187,8 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         final Map<String, List<AttrValueShop>> rezMulti = new HashMap<String, List<AttrValueShop>>(this.attributes != null ? this.attributes.size() * 2 : 50);
         if (this.attributes != null) {
             for (AttrValueShop attrValue : this.attributes) {
-                if (attrValue != null && attrValue.getAttribute() != null) {
-                    final String code = attrValue.getAttribute().getCode();
+                if (attrValue != null && attrValue.getAttributeCode() != null) {
+                    final String code = attrValue.getAttributeCode();
                     rez.put(code, attrValue);
                     List<AttrValueShop> attrs = rezMulti.get(code);
                     if (attrs == null) {

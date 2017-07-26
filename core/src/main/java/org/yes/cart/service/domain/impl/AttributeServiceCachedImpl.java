@@ -56,6 +56,13 @@ public class AttributeServiceCachedImpl implements AttributeService {
         return attributeService.findByAttributeCode(attributeCode);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "attributeService-byAttributeCode")
+    public Attribute getByAttributeCode(final String attributeCode) {
+        return attributeService.getByAttributeCode(attributeCode);
+    }
 
     /**
      * {@inheritDoc}
@@ -203,6 +210,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
             "attributeService-availableImageAttributesByGroupCode",
             "attributeService-availableAttributesByGroupCodeStartsWith",
+            "attributeService-byAttributeCode",
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-allSearchableAttributeCodes",
@@ -221,6 +229,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
             "attributeService-availableImageAttributesByGroupCode",
             "attributeService-availableAttributesByGroupCodeStartsWith",
+            "attributeService-byAttributeCode",
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-allSearchableAttributeCodes",
@@ -239,6 +248,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
             "attributeService-availableImageAttributesByGroupCode",
             "attributeService-availableAttributesByGroupCodeStartsWith",
+            "attributeService-byAttributeCode",
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-allSearchableAttributeCodes",

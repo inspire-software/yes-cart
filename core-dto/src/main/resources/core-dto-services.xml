@@ -633,6 +633,12 @@
         <constructor-arg index="0" ref="attributeDao"/>
     </bean>
 
+    <bean id="attributeDTO2Code" class="org.yes.cart.domain.dto.adapter.impl.AttributeToCodeValueConverter">
+        <constructor-arg index="0" ref="attributeDao"/>
+        <constructor-arg index="1" ref="cacheManager"/>
+        <lookup-method name="getAdapters" bean="dtoAssemblerAdaptersRepository"/>
+    </bean>
+
     <bean id="bigDecimalToFloat" class="org.yes.cart.domain.dto.adapter.impl.BigDecimalToFloatValueConverter"/>
 
     <bean id="i18nStringConverter" class="org.yes.cart.domain.dto.adapter.impl.I18NStringConverter"/>
@@ -656,6 +662,7 @@
                 <entry key="producttypeId2ProductType"          value-ref="producttypeId2ProductType"/>
 
                 <entry key="attributeDTO2Attribute"             value-ref="attributeDTO2Attribute"/>
+                <entry key="attributeDTO2Code"                  value-ref="attributeDTO2Code"/>
 
                 <entry key="i18nStringConverter"                value-ref="i18nStringConverter"/>
 

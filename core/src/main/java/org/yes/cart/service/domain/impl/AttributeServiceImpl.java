@@ -64,7 +64,11 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
      * {@inheritDoc}
      */
     public Attribute findByAttributeCode(final String attributeCode) {
-        return attributeDao.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", attributeCode);
+        final Attribute attribute = attributeDao.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", attributeCode);
+        if (attribute != null) {
+            Hibernate.initialize(attribute.getEtype());
+        }
+        return attribute;
     }
 
 
@@ -110,6 +114,13 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
                     attributeGroupCode,
                     exclude);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Attribute getByAttributeCode(final String attributeCode) {
+        return findByAttributeCode(attributeCode);
     }
 
     /**

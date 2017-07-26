@@ -102,7 +102,7 @@ public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImp
             }
             imageAttributeValue = productService.getGenericDao().getEntityFactory().getByIface(AttrValueProduct.class);
             imageAttributeValue.setProduct(productWithAttrs);
-            imageAttributeValue.setAttribute(attribute);
+            imageAttributeValue.setAttributeCode(attribute.getCode());
             productWithAttrs.getAttributes().add(imageAttributeValue);
         } else if (isInsertOnly()) {
             return false;

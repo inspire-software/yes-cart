@@ -119,6 +119,14 @@ public interface AttributeService extends GenericService<Attribute> {
     Attribute findByAttributeCode(String attributeCode);
 
     /**
+     * Get attribute by given code.
+     *
+     * @param attributeCode given  code
+     * @return instance {@link Attribute} if fount, otherwise null
+     */
+    Attribute getByAttributeCode(String attributeCode);
+
+    /**
      * Get list of available attributes within given <code>attributeGroupCode</code>, that can be assigned to business entity.
      *
      * @param attributeGroupCode     see AttributeGroup#code
