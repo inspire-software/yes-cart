@@ -356,6 +356,7 @@ public class DtoProductServiceImpl
      */
     protected void createPostProcess(final ProductDTO dto, final Product entity) {
         ensureBlankUriIsNull(entity);
+        ensureTagsAreLowercase(entity);
         super.createPostProcess(dto, entity);
     }
 
@@ -364,12 +365,19 @@ public class DtoProductServiceImpl
      */
     protected void updatePostProcess(final ProductDTO dto, final Product entity) {
         ensureBlankUriIsNull(entity);
+        ensureTagsAreLowercase(entity);
         super.updatePostProcess(dto, entity);
     }
 
     private void ensureBlankUriIsNull(final Seoable entity) {
         if (entity.getSeo() != null && entity.getSeo().getUri() != null && StringUtils.isBlank(entity.getSeo().getUri())) {
             entity.getSeo().setUri(null);
+        }
+    }
+
+    private void ensureTagsAreLowercase(final Taggable entity) {
+        if (StringUtils.isNotBlank(entity.getTag())) {
+            entity.setTag(entity.getTag().toLowerCase());
         }
     }
 
