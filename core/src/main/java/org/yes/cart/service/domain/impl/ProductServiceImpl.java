@@ -205,8 +205,10 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         final Map<String, I18NModel> attrDisplayNames = attributeService.getAllAttributeNames();
         final List<Attribute> multivalue = attributeService.findAttributesWithMultipleValues(AttributeGroupNames.PRODUCT);
         final Set<String> multivalueCodes = new HashSet<String>();
-        for (final Attribute multi : multivalue) {
-            multivalueCodes.add(multi.getCode());
+        if (!CollectionUtils.isEmpty(multivalue)) {
+            for (final Attribute multi : multivalue) {
+                multivalueCodes.add(multi.getCode());
+            }
         }
 
         for (final AttrValue attrValue : productAttrValues) {
