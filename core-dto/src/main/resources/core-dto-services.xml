@@ -527,6 +527,7 @@
                 <entry key="org.yes.cart.domain.dto.ProductDTO" value="org.yes.cart.domain.dto.impl.ProductDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductSearchResultDTO" value="org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductSkuDTO" value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttrValueDTO" value="org.yes.cart.domain.dto.impl.AttrValueDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.AttrValueCategoryDTO" value="org.yes.cart.domain.dto.impl.AttrValueCategoryDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.AttrValueCustomerDTO" value="org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CustomerDTO" value="org.yes.cart.domain.dto.impl.CustomerDTOImpl"/>

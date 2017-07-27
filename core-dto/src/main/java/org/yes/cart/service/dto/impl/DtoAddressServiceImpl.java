@@ -21,13 +21,11 @@ import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.domain.dto.AddressDTO;
 import org.yes.cart.domain.dto.AttrValueCustomerDTO;
+import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.AddressDTOImpl;
 import org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl;
-import org.yes.cart.domain.entity.Address;
-import org.yes.cart.domain.entity.AttrValueCustomer;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -129,17 +127,17 @@ public class DtoAddressServiceImpl extends AbstractDtoServiceImpl<AddressDTO, Ad
                 }
             }
 
-            final List<AttrValueCustomer> fields = (List) this.addressCustomisationSupport.getShopCustomerAddressAttributes(customer, shop, addressType);
+            final List<AttrValueWithAttribute> fields = this.addressCustomisationSupport.getShopCustomerAddressAttributes(customer, shop, addressType);
 
             final Assembler asm = DTOAssembler.newAssembler(AttrValueCustomerDTOImpl.class, AttrValueCustomer.class);
 
-            for (final AttrValueCustomer field : fields) {
+            for (final AttrValueWithAttribute field : fields) {
 
-                final AttrValueCustomerDTO dto = new AttrValueCustomerDTOImpl();
+                final AttrValueDTO dto = (AttrValueDTO) dtoFactory.get("org.yes.cart.domain.dto.AttrValueDTO");
 
                 asm.assembleDto(dto, field, getAdaptersRepository(), getAssemblerDtoFactory());
 
-                dtos.add(dto);
+                dtos.add(new AttrValueCustomerDTOImpl(dto, customerId));
 
             }
 
