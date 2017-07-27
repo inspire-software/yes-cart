@@ -19,6 +19,9 @@ public class AttrValueWithAttributeAdapter implements AttrValueWithAttribute {
     public AttrValueWithAttributeAdapter(final AttrValue value, final Attribute attribute) {
         this.value = value;
         this.attribute = attribute;
+        if (value.getAttributeCode() == null) {
+            this.value.setAttributeCode(attribute.getCode());
+        }
     }
 
     @Override
