@@ -25,7 +25,10 @@ import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.AddressDTOImpl;
 import org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.Address;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
+import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -129,7 +132,7 @@ public class DtoAddressServiceImpl extends AbstractDtoServiceImpl<AddressDTO, Ad
 
             final List<AttrValueWithAttribute> fields = this.addressCustomisationSupport.getShopCustomerAddressAttributes(customer, shop, addressType);
 
-            final Assembler asm = DTOAssembler.newAssembler(AttrValueCustomerDTOImpl.class, AttrValueCustomer.class);
+            final Assembler asm = DTOAssembler.newAssembler(dtoFactory.getImplClass("org.yes.cart.domain.dto.AttrValueDTO"), AttrValueWithAttribute.class);
 
             for (final AttrValueWithAttribute field : fields) {
 
