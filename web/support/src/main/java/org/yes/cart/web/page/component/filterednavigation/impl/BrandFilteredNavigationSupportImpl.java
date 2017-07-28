@@ -68,7 +68,7 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
             final List<Pair<String, Integer>> rangeCounts = new ArrayList<Pair<String, Integer>>(counts.get("brandFacet"));
 
             if (rangeCounts.isEmpty()) {
-                LOGFTQ.warn("Unable to get price filtered navigation for query: {}, request: {}", navigationContext.getProductQuery(), request);
+                LOGFTQ.debug("Unable to get brand filtered navigation for query: {}, request: {}", navigationContext.getProductQuery(), request);
                 return Collections.emptyList();
             }
 

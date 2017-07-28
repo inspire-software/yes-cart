@@ -125,12 +125,12 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
             final List<Pair<String, Integer>> rangeCounts = counts.get("priceFacet");
 
             if (rangeCounts.isEmpty()) {
-                LOGFTQ.warn("Unable to get price filtered navigation for query: {}, request: {}", navigationContext.getProductQuery(), request);
+                LOGFTQ.debug("Unable to get price filtered navigation for query: {}, request: {}", navigationContext.getProductQuery(), request);
                 return Collections.emptyList();
             }
 
             if (rangeCounts.size() != allNavigationRecords.size()) {
-                LOGFTQ.warn("Price ranges do not match configuration for query: {}, request: {}", navigationContext.getProductQuery(), request);
+                LOGFTQ.debug("Price ranges do not match configuration for query: {}, request: {}", navigationContext.getProductQuery(), request);
                 return Collections.emptyList();
             }
 
