@@ -184,6 +184,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_PRICE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.QUERY);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
+        allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_INSTOCK_FIELD);
         return new HashSet<String>(allowedAttributeNames);
     }
 
@@ -196,6 +197,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_PRICE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.QUERY);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
+        allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_INSTOCK_FIELD);
         return new HashSet<String>(allowedAttributeNames);
     }
 

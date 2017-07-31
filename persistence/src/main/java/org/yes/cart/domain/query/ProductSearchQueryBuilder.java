@@ -51,6 +51,7 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
     String PRODUCT_STEP_QTY_FIELD = "stepOrderQuantity"; //for projections only
 
     String PRODUCT_TAG_FIELD = "tag";
+    String PRODUCT_INSTOCK_FIELD = "instock";
     String SKU_PRODUCT_CODE_FIELD = "sku.code";
     String SKU_PRODUCT_CODE_STEM_FIELD = "sku.code_stem";
     String SKU_PRODUCT_MANUFACTURER_CODE_FIELD = "sku.manufacturerCode";
