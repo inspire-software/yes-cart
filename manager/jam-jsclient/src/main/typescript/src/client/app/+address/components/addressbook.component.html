@@ -70,11 +70,11 @@
           title="{{ 'TAB_ADDRESSBOOK' | translate }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
-          [valid]="true"
+          [valid]="validForSave"
           (closed)="onEditConfirmationResult($event)">
 
   <template [ngIf]="addressEdit != null">
-
+    <div [hidden]="addressForm.valid || addressForm.pristine" class="alert alert-warning">{{ 'ADDRESS_REQUIRED' | translate }}</div>
     <div  style="max-height: 400px;overflow-y: auto; overflow-x: hidden">
       <form role="form" [formGroup]="addressForm">
         <fieldset>

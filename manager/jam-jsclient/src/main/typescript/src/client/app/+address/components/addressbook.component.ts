@@ -296,10 +296,15 @@ export class AddressBookComponent implements OnInit, OnDestroy {
     if (address != null) {
       this.validForSave = false;
       this.reloadCountries(address.addressType);
-      this.reloadStates();
       let copy:AddressVO = Util.clone(address);
       if ((copy.countryCode == null || copy.countryCode == '') && this.countries.length > 0) {
         copy.countryCode = this.countries[0].first; // preselect first for new addresses
+        LogUtil.debug('AddressBookComponent pre-selected country', copy.countryCode);
+      }
+      this.reloadStates(copy);
+      if ((copy.stateCode == null || copy.stateCode == '') && this.states.length > 0) {
+        copy.stateCode = this.states[0].first; // preselect first for new addresses
+        LogUtil.debug('AddressBookComponent pre-selected state', copy.stateCode);
       }
       UiUtil.formInitialise(this, 'initialising', 'addressForm', 'addressEdit', copy, address != null && address.addressId > 0, ['addressType']);
       this.formConfigure(address.addressType);
@@ -316,7 +321,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
   protected onCountryChange(event:any) {
 
-    this.reloadStates();
+    this.reloadStates(this.addressEdit);
 
   }
 
@@ -336,11 +341,11 @@ export class AddressBookComponent implements OnInit, OnDestroy {
   }
 
 
-  protected reloadStates():void {
+  protected reloadStates(address:AddressVO):void {
 
-    if (this.addressEdit != null && this.addressEdit.countryCode != null) {
+    if (address != null && address.countryCode != null) {
       let statePair = this.addressBook.states.find((state:Pair<string, Pair<string, string>[]>) => {
-        return state.first == this.addressEdit.countryCode;
+        return state.first == address.countryCode;
       });
       if (statePair != null) {
         this.states = statePair.second;

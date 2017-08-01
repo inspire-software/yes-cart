@@ -19,6 +19,7 @@
   "EMAIL_REQUIRED": "Valid email address is required",
   "PHONE_REQUIRED": "Valid phone is required (e.g. +44 077 777-777, (0)77-777-777, 777-777)",
   "TAX_REQUIRED": "Valid tax rate is required, a number from 0 to 100",
+  "ADDRESS_REQUIRED": "Some address fields are missing or incorrect (note that form is displayed as per configuration of shop, so some fields may not be visible)",
   "SAVEDOBJECT_REQUIRED": "To display this information please save the main data first",
 
   "FILTER_REQUIRED": "This panel requires filter to display results. Please type search phrase into filter input.",

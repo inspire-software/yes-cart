@@ -19,6 +19,7 @@
   "EMAIL_REQUIRED": "Es wird eine gültige E-Mail Adresse benötigt",
   "PHONE_REQUIRED": "Korrektes Format für die Telefonnummer ist erforderlich (z.b. +44 077 777-777, (0) 77-777-777, 777-777)",
   "TAX_REQUIRED": "Eine korrekte MWST Eingabe ist erforderlich, Zahl mit oder ohne Kommastelle von 0-100 wird benötigt",
+  "ADDRESS_REQUIRED": "Einige Adressfelder fehlen oder sind falsch (beachten Sie, dass das Formular nach der Konfiguration des Shops angezeigt wird, so dass einige Felder möglicherweise nicht sichtbar sind)",
   "SAVEDOBJECT_REQUIRED": "Zur Anzeige dieser Information müssen Sie zuerst die Daten speichern",
 
   "FILTER_REQUIRED": "Dieses Panel benötigt Filter zur Anzeige des Resultates. Bitte geben Sie den passenden Suchbegriff ein",
