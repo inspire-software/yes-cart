@@ -1,0 +1,68 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<nodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:noNamespaceSchemaLocation="file:../../../../../domain-api/src/main/resources/META-INF/schema/cluster-configuration.xsd">
+    <node>
+        <cluster-id>${cluster.config.cluster_id}</cluster-id>
+        <node-id>${cluster.config.yes.node_id}</node-id>
+        <node-type>SFG</node-type>
+        <node-config>${cluster.config.yes.node_config}</node-config>
+        <version>${project.version}</version>
+        <build-number>${buildNumber}</build-number>
+        <lucene-index-disabled>${cluster.config.yes.lucene_index_disabled}</lucene-index-disabled>
+        <channel>${cluster.config.yes.ws.channel_uri}</channel>
+    </node>
+    <node>
+        <cluster-id>${cluster.config.cluster_id}</cluster-id>
+        <node-id>${cluster.config.yes2.node_id}</node-id>
+        <node-type>SFW</node-type>
+        <node-config>${cluster.config.yes2.node_config}</node-config>
+        <version>${project.version}</version>
+        <build-number>${buildNumber}</build-number>
+        <lucene-index-disabled>${cluster.config.yes2.lucene_index_disabled}</lucene-index-disabled>
+        <channel>${cluster.config.yes2.ws.channel_uri}</channel>
+    </node>
+    <node>
+        <cluster-id>${cluster.config.cluster_id}</cluster-id>
+        <node-id>${cluster.config.api.node_id}</node-id>
+        <node-type>API</node-type>
+        <node-config>${cluster.config.api.node_config}</node-config>
+        <version>${project.version}</version>
+        <build-number>${buildNumber}</build-number>
+        <lucene-index-disabled>${cluster.config.api.lucene_index_disabled}</lucene-index-disabled>
+        <channel>${cluster.config.api.ws.channel_uri}</channel>
+    </node>
+    <node>
+        <cluster-id>${cluster.config.cluster_id}</cluster-id>
+        <node-id>${cluster.config.api2.node_id}</node-id>
+        <node-type>API</node-type>
+        <node-config>${cluster.config.api2.node_config}</node-config>
+        <version>${project.version}</version>
+        <build-number>${buildNumber}</build-number>
+        <lucene-index-disabled>${cluster.config.api2.lucene_index_disabled}</lucene-index-disabled>
+        <channel>${cluster.config.api2.ws.channel_uri}</channel>
+    </node>
+    <node>
+        <cluster-id>${cluster.config.cluster_id}</cluster-id>
+        <node-id>${cluster.config.admin.node_id}</node-id>
+        <node-type>ADM</node-type>
+        <node-config>${cluster.config.admin.node_config}</node-config>
+        <version>${project.version}</version>
+        <build-number>${buildNumber}</build-number>
+        <lucene-index-disabled>true</lucene-index-disabled>
+    </node>
+</nodes>
