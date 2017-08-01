@@ -69,6 +69,8 @@
     <entry key="contacts">Contacts</entry>
     <entry key="profileLogin">Login / Register</entry>
     <entry key="sale">Sale</entry>
+    <entry key="instock1">Items in stock</entry>
+    <entry key="instock0">Items out of stock</entry>
     <entry key="newArrivals">New arrivals</entry>
     <entry key="addToCart">Add to cart</entry>
     <entry key="preorderCart">Preorder</entry>

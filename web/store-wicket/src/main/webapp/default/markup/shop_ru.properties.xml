@@ -69,6 +69,8 @@
     <entry key="contacts">Контакты</entry>
     <entry key="profileLogin">Вход / Регистрация</entry>
     <entry key="sale">Распродажа</entry>
+    <entry key="instock1">Товары на складе</entry>
+    <entry key="instock0">Товары отсутствующие на складе</entry>
     <entry key="newArrivals">Новые послупления</entry>
     <entry key="addToCart">В корзину</entry>
     <entry key="preorderCart">Резерв</entry>

@@ -308,7 +308,12 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
         } else if (WebParametersKeys.QUERY.equals(key)) {
             name = queryPrefix;
         } else {
-            name = attributeCodeName.get(key).getValue(locale);
+            final I18NModel nameModel = attributeCodeName.get(key);
+            if (nameModel == null) {
+                name = "";
+            } else {
+                name = nameModel.getValue(locale);
+            }
         }
         return name;
     }
