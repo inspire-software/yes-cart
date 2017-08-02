@@ -13,4 +13,5 @@ else
         apt-get install -y net-tools
         apt-get install -y mc
         apt-get install -y unzip
+	apt-get install -y jq
 fi
