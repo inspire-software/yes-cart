@@ -39,13 +39,13 @@ Vagrant.configure("2") do |config|
 
     config.vm.provision :shell, inline: "mkdir -p /home/vagrant/.m2 && chown vagrant:vagrant /home/vagrant/.m2"
 
+    config.vm.provision :shell, :path => "awscli-setup.sh"
     config.vm.provision :shell, :path => "mysql-setup.sh"
     config.vm.provision :shell, :path => "util-setup.sh"
     config.vm.provision :shell, :path => "nodejs-setup.sh"
     config.vm.provision :shell, :path => "java-setup.sh"
     config.vm.provision :shell, :path => "docker-setup.sh"
     config.vm.provision :shell, :path => "kubernetes-setup.sh"
-    config.vm.provision :shell, :path => "awscli-setup.sh"
 
     config.vm.provision "file", source: "ufw", destination: "/home/vagrant/ufw"
     config.vm.provision :shell, :path => "firewall-setup.sh"

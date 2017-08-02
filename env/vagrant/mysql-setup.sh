@@ -7,8 +7,10 @@
 #else
         echo "mysql installation"
 
+        export DEBIAN_FRONTEND="noninteractive"
 
-        apt-get install -y mysql-server
+
+        apt-get install -y mysql-server-5.6  --fix-missing --fix-broken
 
 
 #fi

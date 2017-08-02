@@ -10,7 +10,8 @@
 
        add-apt-repository ppa:fkrull/deadsnakes-python2.7
        apt-get update 
-       apt-get install python2.7
+       apt-get install -y python2.7
+       apt-get install -y python-pip
 
 
        pip install awscli
