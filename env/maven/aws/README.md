@@ -25,6 +25,33 @@ yum install -y mysql
 
 ## Notes
 
+aws ec2 create-security-group \
+    --group-name yescart \
+    --description "Yes cart security group. HTTP(s), ssh and mysql"  \
+    --region eu-central-1
+
+aws ec2 authorize-security-group-ingress \
+    --group-name yescart
+    --protocol tcp --port 22 --cidr 0.0.0.0/0
+   
+aws ec2 authorize-security-group-ingress \
+    --group-name yescart
+    --protocol tcp --port 80 --cidr 0.0.0.0/0
+
+aws ec2 authorize-security-group-ingress \
+    --group-name yescart
+    --protocol tcp --port 8080 --cidr 0.0.0.0/0
+
+aws ec2 authorize-security-group-ingress \
+    --group-name yescart
+    --protocol tcp --port 443 --cidr 0.0.0.0/0
+
+aws ec2 authorize-security-group-ingress \
+    --group-name yescart
+    --protocol tcp --port 8443 --cidr 0.0.0.0/0
+
+
+
 aws rds create-db-instance \
     --db-instance-identifier yescartmysql \
     --db-instance-class db.t2.micro \
