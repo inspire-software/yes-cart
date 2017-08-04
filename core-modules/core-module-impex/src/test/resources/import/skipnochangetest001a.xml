@@ -21,7 +21,7 @@
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>skipfktest001a.csv</file-name-mask>
+        <file-name-mask>skipnochangetest001a.csv</file-name-mask>
         <ignore-first-line>true</ignore-first-line>
         <column-delimiter>;</column-delimiter>
         <text-qualifier>&quot;</text-qualifier>
@@ -67,7 +67,6 @@
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
             <lookup-query>select b from BrandEntity b where b.name = {brand}</lookup-query>
-            <update-skip-unresolved>true</update-skip-unresolved>
         </column-descriptor>
 
         <!-- product type -->
@@ -79,7 +78,6 @@
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
             <lookup-query>select pt from ProductTypeEntity pt where pt.name = {producttype}</lookup-query>
-            <insert-only>true</insert-only>
         </column-descriptor>
 
         <!--  Productname -->
@@ -89,7 +87,6 @@
             <name>name</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <insert-only>true</insert-only>
         </column-descriptor>
 
         <column-descriptor>

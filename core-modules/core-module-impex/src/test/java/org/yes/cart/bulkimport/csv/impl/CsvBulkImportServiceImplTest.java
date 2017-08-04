@@ -747,6 +747,22 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         }
     }
 
+    private static class StringNotStartsWithMatcher extends TypeSafeMatcher<String> {
+        private String prefix;
+
+        public StringNotStartsWithMatcher(String prefix) {
+            this.prefix = prefix;
+        }
+
+        public boolean matchesSafely(String s) {
+            return !s.startsWith(prefix);
+        }
+
+        public void describeTo(Description description) {
+            description.appendText("a string NOT starting with ").appendValue(prefix);
+        }
+    }
+
     private static class StringContainsMatcher extends TypeSafeMatcher<String> {
         private String text;
 
@@ -763,14 +779,40 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         }
     }
 
+    private static class StringNotContainsMatcher extends TypeSafeMatcher<String> {
+        private String text;
+
+        public StringNotContainsMatcher(String text) {
+            this.text = text;
+        }
+
+        public boolean matchesSafely(String s) {
+            return !s.contains(text);
+        }
+
+        public void describeTo(Description description) {
+            description.appendText("a string NOT containing text: ").appendValue(text);
+        }
+    }
+
     @Factory
     public static Matcher<String> aStringStartingWith(String prefix) {
         return new StringStartsWithMatcher(prefix);
     }
 
     @Factory
+    public static Matcher<String> aStringNotStartingWith(String prefix) {
+        return new StringNotStartsWithMatcher(prefix);
+    }
+
+    @Factory
     public static Matcher<String> aStringContains(String text) {
         return new StringContainsMatcher(text);
+    }
+
+    @Factory
+    public static Matcher<String> aStringNotContains(String text) {
+        return new StringNotContainsMatcher(text);
     }
 
 
@@ -954,12 +996,14 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         bulkImportService.doImport(createContext("src/test/resources/import/insertonlytest001a.xml", listener, importedFilesSet));
 
+        long version = 0;
+
         try {
             ResultSet rs;
 
             rs = getConnection().getConnection().createStatement().executeQuery(
                     "select GUID, CODE, MANUFACTURER_CODE, BRAND_ID, PRODUCTTYPE_ID, " +
-                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM from TPRODUCT where code='SKU-ASIMO-INSERT'");
+                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM, VERSION from TPRODUCT where code='SKU-ASIMO-INSERT'");
             rs.next();
             assertEquals("GUID-ASIMO-INSERT", rs.getString(1));
             assertEquals("SKU-ASIMO-INSERT", rs.getString(2));
@@ -974,6 +1018,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals(1, rs.getInt(8));
             assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
             assertEquals("2015-06-12", new SimpleDateFormat("yyyy-MM-dd").format(rs.getDate(10)));
+            version = rs.getLong(11);
             rs.close();
 
 
@@ -992,7 +1037,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             rs = getConnection().getConnection().createStatement().executeQuery(
                     "select GUID, CODE, MANUFACTURER_CODE, BRAND_ID, PRODUCTTYPE_ID, " +
-                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM from TPRODUCT where code='SKU-ASIMO-INSERT'");
+                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM, VERSION from TPRODUCT where code='SKU-ASIMO-INSERT'");
             rs.next();
             assertEquals("GUID-ASIMO-INSERT", rs.getString(1));
             assertEquals("SKU-ASIMO-INSERT", rs.getString(2));
@@ -1007,6 +1052,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals(1, rs.getInt(8));
             assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
             assertEquals("2015-06-12", new SimpleDateFormat("yyyy-MM-dd").format(rs.getDate(10)));
+            assertTrue(version < rs.getLong(11)); // version is updated
             rs.close();
 
 
@@ -1032,7 +1078,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listener).notifyPing();
             allowing(listener).notifyPing(with(any(String.class)));
             allowing(listener).notifyMessage(with(any(String.class)));
-            allowing(listener).notifyWarning(with(aStringStartingWith("Skipping tuple:")));
+            allowing(listener).notifyWarning(with(aStringStartingWith("Skipping tuple (unresolved foreign key):")));
         }});
 
 
@@ -1062,5 +1108,75 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
+
+
+    @Test
+    public void testDoImportWithSkipNoChange() throws Exception {
+
+        final JobStatusListener listener1 = mockery.mock(JobStatusListener.class, "listener1");
+        final JobStatusListener listener2 = mockery.mock(JobStatusListener.class, "listener2");
+
+        mockery.checking(new Expectations() {{
+            allowing(listener1).notifyPing();
+            allowing(listener1).notifyPing(with(any(String.class)));
+            allowing(listener1).notifyMessage(with(aStringNotStartingWith("Skipping tuple (no change):")));
+            allowing(listener1).notifyWarning(with(aStringStartingWith("Skipping tuple (unresolved foreign key):")));
+
+            allowing(listener2).notifyPing();
+            allowing(listener2).notifyPing(with(any(String.class)));
+            allowing(listener2).notifyMessage(with(aStringNotStartingWith("Skipping tuple (no change):")));
+        }});
+
+
+        Set<String> importedFilesSet = new HashSet<String>();
+
+        bulkImportService.doImport(createContext("src/test/resources/import/skipnochangetest001a.xml", listener1, importedFilesSet));
+
+        long version = 0;
+
+        try {
+            ResultSet rs;
+
+            rs = getConnection().getConnection().createStatement().executeQuery(
+                    "select GUID, VERSION, CODE, MANUFACTURER_CODE, BRAND_ID, PRODUCTTYPE_ID, " +
+                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM from TPRODUCT where code='ASIMO-NOCHANGE'");
+            assertTrue(rs.next()); // Imported
+            version = rs.getLong(2);
+            rs.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+
+        }
+
+        importedFilesSet.clear();
+
+        bulkImportService.doImport(createContext("src/test/resources/import/skipnochangetest001a.xml", listener2, importedFilesSet));
+
+        try {
+            ResultSet rs;
+
+            rs = getConnection().getConnection().createStatement().executeQuery(
+                    "select GUID, VERSION, CODE, MANUFACTURER_CODE, BRAND_ID, PRODUCTTYPE_ID, " +
+                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM from TPRODUCT where code='ASIMO-NOCHANGE'");
+            assertTrue(rs.next()); // Already imported
+            assertEquals(version, rs.getLong(2)); // but no update (no version change)
+            rs.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+
+        }
+
+        importedFilesSet.clear();
+
+
+        mockery.assertIsSatisfied();
+
+    }
 
 }

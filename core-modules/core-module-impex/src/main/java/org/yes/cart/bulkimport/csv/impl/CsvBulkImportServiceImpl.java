@@ -51,6 +51,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -367,12 +368,12 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 object = objectAndState != null ? objectAndState.getFirst() : null;
                 final boolean insert = objectAndState != null ? objectAndState.getSecond() : false;
 
-                fillEntityFields(tuple, object, insert, descriptor.getColumns(ImpExColumn.FIELD));
-                final boolean skip = fillEntityForeignKeys(tuple, object, insert, descriptor.getColumns(ImpExColumn.FK_FIELD), masterObject, descriptor, entityCache);
+                final boolean valueChanged = fillEntityFields(tuple, object, insert, descriptor.getColumns(ImpExColumn.FIELD));
+                final Boolean fkChanged = fillEntityForeignKeys(tuple, object, insert, descriptor.getColumns(ImpExColumn.FK_FIELD), masterObject, descriptor, entityCache);
 
-                if (skip) {
+                if (fkChanged == null) {
 
-                    statusListener.notifyWarning("Skipping tuple: " + tuple);
+                    statusListener.notifyWarning("Skipping tuple (unresolved foreign key): " + tuple);
 
                 } else {
 
@@ -387,7 +388,13 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                         // Preliminary validation - not always applicable for transient object (e.g. products need category assignments)
                         validateAccessBeforeUpdate(object, descriptor.getEntityTypeClass());
                     }
-                    genericDAO.saveOrUpdate(object);
+
+                    if (valueChanged || fkChanged) {
+                        genericDAO.saveOrUpdate(object); // If no changed are made then we do not need to save
+                    } else {
+                        statusListener.notifyMessage("Skipping tuple (no change): " + tuple.getSourceId());
+                    }
+
                     performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
                             descriptor.getColumns(ImpExColumn.SLAVE_INLINE_FIELD), entityCache);
                     performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
@@ -490,18 +497,23 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      * @param object        entity object
      * @param insert        entity insert (true), update (false)
      * @param importColumns particular type column collection
+     *
+     * @return true if this tuple has changes, false otherwise
+     *
      * @throws Exception in case if something wrong with reflection (IntrospectionException,
      *                   InvocationTargetException,
      *                   IllegalAccessException)
      */
-    private void fillEntityFields(final ImportTuple tuple,
-                                  final Object object,
-                                  final boolean insert,
-                                  final Collection<ImportColumn> importColumns) throws Exception {
+    private boolean fillEntityFields(final ImportTuple tuple,
+                                     final Object object,
+                                     final boolean insert,
+                                     final Collection<ImportColumn> importColumns) throws Exception {
 
         final Class clz = object.getClass();
 
         PropertyDescriptor propertyDescriptor = null;
+
+        boolean updated = false;
 
         for (ImportColumn importColumn : importColumns) {
             try {
@@ -534,7 +546,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                     if (importColumn.getLanguage() != null) {
                         final I18NModel model = new StringI18NModel((String) propertyDescriptor.getReadMethod().invoke(object));
                         model.putValue(importColumn.getLanguage(), singleObjectValue != null ? String.valueOf(singleObjectValue) : null);
-                        singleObjectValue = model.toString();
+                        final String i18nString = model.toString();
+                        singleObjectValue = i18nString.length() > 0 ? i18nString : null;
                     }
                     if (singleObjectValue != null && !singleObjectValue.getClass().equals(propertyDescriptor.getPropertyType())) {
                         // if we have mismatch try on the fly conversion - this happens if someone omits <data-type> for non String values
@@ -546,7 +559,16 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                                     ));
                     }
 
-                    propertyDescriptor.getWriteMethod().invoke(writeObject, singleObjectValue);
+                    final Object current = propertyDescriptor.getReadMethod().invoke(writeObject);
+
+                    boolean valueChanged = isValueChanged(singleObjectValue, current);
+
+                    if (valueChanged) {
+                        propertyDescriptor.getWriteMethod().invoke(writeObject, singleObjectValue);
+                    }
+
+                    updated = updated || valueChanged;
+
                 }
             } catch (Exception exp) {
 
@@ -562,6 +584,36 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
             }
         }
 
+        return updated;
+
+    }
+
+    private boolean isValueChanged(final Object singleObjectValue, final Object current) {
+
+        if (singleObjectValue instanceof Identifiable) {
+
+            // Foreign key has been set or has changed
+            final Object currentId = current != null ? genericDAO.getEntityIdentifier(current) : null;
+            final Object newValueId = genericDAO.getEntityIdentifier(singleObjectValue);
+
+
+            return currentId == null || !currentId.equals(newValueId);
+
+        } else if (singleObjectValue instanceof BigDecimal) {
+
+            // BidDecimal value has been set or changed
+            return current == null || (((BigDecimal) current).compareTo((BigDecimal) singleObjectValue) != 0);
+
+        } else if (singleObjectValue != null) {
+
+            // Generic comparison of values (this should be all built-in in Java types)
+            return current == null || !current.equals(singleObjectValue);
+
+        } // else single value is null
+
+        // New value is null but current is not
+        return current != null;
+
     }
 
     /**
@@ -575,13 +627,13 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      * @param importDescriptor import descriptor
      * @param entityCache      runtime cache
      *
-     * @return true if this tuple should be skipped
+     * @return null if this tuple should be skipped, true if there are changes, false otherwise
      *
      * @throws Exception in case if something wrong with reflection (IntrospectionException,
      *                   InvocationTargetException,
      *                   IllegalAccessException)
      */
-    private boolean fillEntityForeignKeys(final ImportTuple tuple,
+    private Boolean fillEntityForeignKeys(final ImportTuple tuple,
                                           final Object object,
                                           final boolean insert,
                                           final Collection<ImportColumn> importColumns,
@@ -592,6 +644,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
         ImportColumn currentColumn = null;
         final Class clz = object.getClass();
         Object singleObjectValue = null;
+        boolean updated = false;
         PropertyDescriptor propertyDescriptor = null;
 
         try {
@@ -611,28 +664,27 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 } else {
                     final Pair<Object, Boolean> singleObjectValueAndState = getEntity(tuple, importColumn, masterObject, importDescriptor, entityCache);
                     singleObjectValue = singleObjectValueAndState != null ? singleObjectValueAndState.getFirst() : null;
-                    if (singleObjectValueAndState != null && singleObjectValueAndState.getSecond() && currentColumn.isSkipUpdateForUnresolved()) {
-                        return true; // This is new FK object and we should skip this tuple and not abort with exception
+                    if (singleObjectValueAndState != null && singleObjectValueAndState.getSecond()) {
+                        if (currentColumn.isSkipUpdateForUnresolved()) {
+                            return null; // This is new FK object and we should skip this tuple and not abort with exception
+                        }
+                        throw new Exception("Unable to resolve entity for tuple " + tuple.getSourceId() + " column + " + importColumn);
                     }
                 }
                 propertyDescriptor = new PropertyDescriptor(importColumn.getName(), clz);
                 final Object oldValue = propertyDescriptor.getReadMethod().invoke(object);
-                if (oldValue instanceof Identifiable || singleObjectValue instanceof Identifiable) {
-                    final Object oldValuePK = oldValue != null ? genericDAO.getEntityIdentifier(oldValue) : null;
-                    final Object newValuePK = singleObjectValue != null ? genericDAO.getEntityIdentifier(singleObjectValue) : null;
 
-                    if (oldValuePK == null || !oldValuePK.equals(newValuePK)) {
-                        // Update the object only if the value has changed
-                        propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
-                    }
-                } else {
-                    // This is not identifiable, possibly primitive (PK) so write always
+                boolean valueChanged = isValueChanged(singleObjectValue, oldValue);
+
+                if (valueChanged) {
                     propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
                 }
 
+                updated = updated || valueChanged;
+
             }
 
-            return false; // Do not skip
+            return updated;
 
         } catch (Exception exp) {
 
