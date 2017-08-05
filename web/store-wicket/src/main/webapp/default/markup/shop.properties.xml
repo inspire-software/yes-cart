@@ -108,7 +108,7 @@
     <entry key="subject">Subject</entry>
     <entry key="message">Message</entry>
     <entry key="send">Send</entry>
-    <entry key="emailSend">You message has been sent</entry>
+    <entry key="emailSend">Your message has been sent</entry>
 
     <!-- ProfilePage -->
     <entry key="profileSummary">Your profile</entry>
@@ -247,7 +247,7 @@
     <!-- LoginPanel -->
     <entry key="wrongPassword">Password is not valid</entry>
     <entry key="customerNotExists">Email is not registered. Please register.</entry>
-    <entry key="customerNotActiveInShop">Account is not active for this shop.</entry>
+    <entry key="customerNotActiveInShop">Account is not activated.</entry>
     <entry key="existingUser">Registered customer</entry>
     <entry key="restorePassword">Restore password</entry>
     <entry key="tryRestorePassword">Forgot password?</entry>
@@ -360,6 +360,7 @@
 
     <!-- ProductSorter -->
     <entry key="sort">Sort:</entry>
+    <entry key="byDefault">best match</entry>
     <entry key="byName">name</entry>
     <entry key="byCode">code</entry>
     <entry key="bySKU">SKU</entry>

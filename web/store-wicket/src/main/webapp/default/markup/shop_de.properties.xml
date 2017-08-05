@@ -360,6 +360,7 @@
 
     <!-- ProductSorter -->
     <entry key="sort">Sortieren:</entry>
+    <entry key="byDefault">Beste Suchergebnis</entry>
     <entry key="byName">Nach Name</entry>
     <entry key="byCode">Nach Artikelnummer</entry>
     <entry key="bySKU">SKU</entry>

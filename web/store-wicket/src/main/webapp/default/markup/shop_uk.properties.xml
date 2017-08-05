@@ -360,6 +360,7 @@
 
     <!-- ProductSorter -->
     <entry key="sort">Сортувати:</entry>
+    <entry key="byDefault">Кращий збіг</entry>
     <entry key="byName">ім'я</entry>
     <entry key="byCode">код</entry>
     <entry key="bySKU">SKU</entry>
