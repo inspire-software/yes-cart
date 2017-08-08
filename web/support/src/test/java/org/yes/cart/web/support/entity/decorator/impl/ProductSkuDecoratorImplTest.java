@@ -21,9 +21,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.yes.cart.domain.entity.AttrValueProductSku;
-import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.impl.AttrValueEntityProductSku;
-import org.yes.cart.domain.entity.impl.AttributeEntity;
 import org.yes.cart.domain.entity.impl.ProductEntity;
 import org.yes.cart.domain.entity.impl.ProductSkuEntity;
 import org.yes.cart.domain.misc.Pair;
@@ -185,11 +183,9 @@ public class ProductSkuDecoratorImplTest {
             final ProductSkuEntity productSkuEntity,
             final String code,
             final String val) {
-        Attribute attribute = new AttributeEntity();
-        attribute.setCode(code);
         AttrValueProductSku enDesc = new AttrValueEntityProductSku();
         enDesc.setProductSku(productSkuEntity);
-        enDesc.setAttribute(attribute);
+        enDesc.setAttributeCode(code);
         enDesc.setVal(val);
         return enDesc;
     }

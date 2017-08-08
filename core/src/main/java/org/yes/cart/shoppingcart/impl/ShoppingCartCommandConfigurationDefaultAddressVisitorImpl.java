@@ -55,6 +55,13 @@ public class ShoppingCartCommandConfigurationDefaultAddressVisitorImpl extends S
         final MutableOrderInfo info = cart.getOrderInfo();
         final MutableShoppingContext ctx = cart.getShoppingContext();
 
+        final String customerType = ensureCustomerType(cart);
+        final boolean forceSeparateAddresses = customerShop.isSfShowSameBillingAddressDisabledTypes(customerType);
+        info.setSeparateBillingAddressEnabled(forceSeparateAddresses);
+        if (forceSeparateAddresses) {
+            info.setSeparateBillingAddress(true);
+        }
+
         if (!info.isDeliveryAddressNotRequired() && delivery != null &&
                 shop.getSupportedShippingCountriesAsList().contains(delivery.getCountryCode())) {
             info.setDeliveryAddressId(delivery.getAddressId());

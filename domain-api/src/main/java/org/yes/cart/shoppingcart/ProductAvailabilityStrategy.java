@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.domain;
+package org.yes.cart.shoppingcart;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;

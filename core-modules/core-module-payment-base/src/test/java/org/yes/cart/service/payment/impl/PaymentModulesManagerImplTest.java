@@ -84,15 +84,15 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetPaymentGateways() {
         Collection<PaymentGatewayDescriptor> paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors("basePaymentModule");
-        assertEquals(4, paymentGateways.size());
+        assertEquals(5, paymentGateways.size());
         paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(true, null);
-        assertEquals(4, paymentGateways.size());
+        assertEquals(5, paymentGateways.size());
         paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(true, "DEFAULT");
-        assertEquals(4, paymentGateways.size());
+        assertEquals(5, paymentGateways.size());
         paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(true, "SHOIP1");
-        assertEquals(4, paymentGateways.size());
+        assertEquals(5, paymentGateways.size());
         paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(false, "SHOIP1");
-        assertEquals(3, paymentGateways.size());
+        assertEquals(4, paymentGateways.size());
     }
 
     /**

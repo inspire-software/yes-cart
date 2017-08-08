@@ -16,12 +16,9 @@
 
 package org.yes.cart.service.domain.aspect.impl;
 
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.core.task.TaskExecutor;
-import org.yes.cart.domain.message.consumer.StandardMessageListener;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  *
@@ -52,20 +49,6 @@ public abstract class BaseNotificationAspect {
             final Runnable task = getTask(serializableMessage);
             if (task != null) {
                 taskExecutor.execute(task);
-            }
-        }
-    }
-
-    /**
-     * Fill all passed parameters into message map.
-     *
-     * @param pjp {@link org.aspectj.lang.ProceedingJoinPoint}
-     * @param map context map
-     */
-    protected void fillParameters(final ProceedingJoinPoint pjp, final HashMap<String, Object> map) {
-        if (pjp.getArgs() != null) {
-            for (int i = 0; i < pjp.getArgs().length; i++) {
-                map.put(StandardMessageListener.PARAM_PREFIX + i, pjp.getArgs()[i]);
             }
         }
     }

@@ -791,3 +791,213 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11030,  'SYSTEM_PANEL_HELP_COPYRIGHT', 'SYSTEM_PANEL_HELP_COPYRIGHT',  1,  NULL,  'Admin\\Copyright note',
   'Copyright note in Admin help section', 1011,  1000, 0, 0, 0, 0);
+
+--
+-- YC-789 Ability to configure "separate shipping" checkbox
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10963,  'SHOP_DELIVERY_ONE_ADDRESS_DISABLE', 'SHOP_DELIVERY_ONE_ADDRESS_DISABLE',  0,  NULL,  'Customer: Disable same address for billing',
+  'Disable use of same address feature for customer types. Blank value is treated as enabled. To reference guests use B2G, blank types are treated as B2C.',  1004, 1001, 0, 0, 0, 0);
+
+--
+-- YC-790	B2B anonymous browsing without prices
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10962,  'SHOP_PRODUCT_HIDE_PRICES', 'SHOP_PRODUCT_HIDE_PRICES',  0,  NULL,  'Customer: hide prices',
+  'Hide prices for customer types. Blank value is treated as show prices. To reference guests use B2G, blank types are treated as B2C.
+This setting must be used together with Block checkout feature to prevent going through checkout for customer types that cannot see prices',  1004, 1001, 0, 0, 0, 0);
+
+
+--
+-- YC-792 JAM should display environment label
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11031,  'SYSTEM_PANEL_LABEL', 'SYSTEM_PANEL_LABEL',  1,  NULL,  'Admin\\System label',
+  'Label on the side panel to warn of the type of environment you are on', 1011,  1000, 0, 0, 0, 0);
+INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1027,'<span class="label label-success">DEVELOPMENT ENVIRONMENT</span>','SYSTEM_PANEL_LABEL',100, 'YC_SYSTEM_PANEL_LABEL');
+
+--
+-- YC-795 Make relationship between product and associated product loose
+--
+ALTER TABLE TPRODUCTASSOCIATION ADD COLUMN ASSOCIATED_SKU_CODE varchar(255);
+update TPRODUCTASSOCIATION as a set ASSOCIATED_SKU_CODE = (SELECT CODE FROM TPRODUCT p WHERE p.PRODUCT_ID = a.ASSOCIATEDPRODUCT_ID);
+-- check
+select p.CODE, a.ASSOCIATED_SKU_CODE from TPRODUCTASSOCIATION a, TPRODUCT p WHERE p.PRODUCT_ID = a.ASSOCIATEDPRODUCT_ID;
+-- ALTER TABLE TPRODUCTASSOCIATION DROP FOREIGN KEY FK_PA_ASSOCPROD;
+ALTER TABLE TPRODUCTASSOCIATION DROP COLUMN ASSOCIATEDPRODUCT_ID;
+ALTER TABLE TPRODUCTASSOCIATION MODIFY COLUMN ASSOCIATED_SKU_CODE varchar(255) not null;
+create index ASSOCIATED_SKUCODE on TPRODUCTASSOCIATION (ASSOCIATED_SKU_CODE);
+
+--
+-- YC-799 Allow specifying price record reference which is copied to order line
+--
+
+ALTER TABLE TSKUPRICE ADD COLUMN REF varchar(255);
+create index SKUPRICE_REF on TSKUPRICE (REF);
+
+--
+--  YC-800 Product filtering and sorting by "in stock"
+--
+
+update TATTRIBUTE set  DESCRIPTION =
+  'List of sort fields separated by comma with fail over. Default is: displayName,sku,basePrice. All supported: name,displayName,basePrice,productCode,manufacturerCode,sku,brand,availability,created,inStock'
+    where  CODE = 'CATEGORY_SORT_OPTIONS';
+
+update TATTRIBUTE set  DESCRIPTION =
+  'List of sort fields separated by comma with fail over. Default is: displayName,sku,basePrice. All supported: name,displayName,basePrice,productCode,manufacturerCode,sku,brand,availability,created,inStock'
+    where CODE = 'SHOP_CATEGORY_SORT_OPTIONS';
+
+--
+-- YC-801 Improve product attributes performance on enterprise projects
+--
+
+-- PIM fields
+alter table TPRODUCT add column PIM_DISABLED bit not null default 0;
+-- alter table TPRODUCT add column PIM_DISABLED smallint not null default 0;
+alter table TPRODUCT add column PIM_OUTDATED bit not null default 0;
+-- alter table TPRODUCT add column PIM_OUTDATED smallint not null default 0;
+alter table TPRODUCT add column PIM_UPDATED datetime;
+-- alter table TPRODUCT add column PIM_UPDATED timestamp;
+
+create index PRODUCT_PDISABLED on TPRODUCT (PIM_DISABLED);
+create index PRODUCT_POUTDATED on TPRODUCT (PIM_OUTDATED);
+
+-- AV indexes
+alter table TBRANDATTRVALUE drop foreign key constraint FKFA06C3CD5CB3C6AB;
+-- alter table TBRANDATTRVALUE drop constraint FKFA06C3CD5CB3C6AB;
+create index AV_BRAND_CODE on TBRANDATTRVALUE (CODE);
+
+alter table TBRANDATTRVALUE drop foreign key constraint FKFA06C3CDEF74BF7C;
+-- alter table TBRANDATTRVALUE drop constraint FKFA06C3CDEF74BF7C;
+alter table TBRANDATTRVALUE drop foreign key constraint FKFA06C3CDDF51D3AD;
+-- alter table TBRANDATTRVALUE drop constraint FKFA06C3CDDF51D3AD;
+
+    alter table TBRANDATTRVALUE
+        add index FK_AV_BRAND_BRANDID (BRAND_ID),
+        add constraint FK_AV_BRAND_BRANDID
+        foreign key (BRAND_ID)
+        references TBRAND (BRAND_ID)
+        on delete cascade;
+
+-- alter table TBRANDATTRVALUE
+--         add constraint FK_AV_BRAND_BRANDID
+--         foreign key (BRAND_ID)
+--         references TBRAND on delete cascade;
+
+alter table TCATEGORYATTRVALUE drop foreign key constraint FK_CAT_ATTRIBUTE;
+-- alter table TCATEGORYATTRVALUE drop constraint FK_CAT_ATTRIBUTE;
+create index AV_CATEGORY_CODE on TCATEGORYATTRVALUE (CODE);
+
+alter table TCATEGORYATTRVALUE drop foreign key constraint FKBAB98EE5FA5E3ED;
+-- alter table TCATEGORYATTRVALUE drop constraint FKBAB98EE5FA5E3ED;
+
+    alter table TCATEGORYATTRVALUE
+        add index FK_AV_CATEGORY_CATEGORYID (CATEGORY_ID),
+        add constraint FK_AV_CATEGORY_CATEGORYID
+        foreign key (CATEGORY_ID)
+        references TCATEGORY (CATEGORY_ID)
+        on delete cascade;
+
+--     alter table TCATEGORYATTRVALUE
+--         add constraint FK_AV_CATEGORY_CATEGORYID
+--         foreign key (CATEGORY_ID)
+--         references TCATEGORY
+--         on delete cascade;
+
+alter table TCUSTOMERATTRVALUE drop foreign key constraint FK_C_ATTRIBUTE;
+-- alter table TCUSTOMERATTRVALUE drop constraint FK_C_ATTRIBUTE;
+create index AV_CUSTOMER_CODE on TCUSTOMERATTRVALUE (CODE);
+
+alter table TCUSTOMERATTRVALUE drop foreign key constraint FKB44A120EAF56CFED;
+-- alter table TCUSTOMERATTRVALUE drop constraint FKB44A120EAF56CFED;
+
+    alter table TCUSTOMERATTRVALUE
+        add index FK_AV_CUSTOMER_CUSTOMERID (CUSTOMER_ID),
+        add constraint FK_AV_CUSTOMER_CUSTOMERID
+        foreign key (CUSTOMER_ID)
+        references TCUSTOMER (CUSTOMER_ID)
+        on delete cascade;
+
+--     alter table TCUSTOMERATTRVALUE
+--         add constraint FK_AV_CUSTOMER_CUSTOMERID
+--         foreign key (CUSTOMER_ID)
+--         references TCUSTOMER
+--         on delete cascade;
+
+alter table TPRODUCTATTRVALUE drop foreign key constraint FK_P_ATTRIBUTE;
+-- alter table TPRODUCTATTRVALUE drop constraint FK_P_ATTRIBUTE;
+create index AV_PRODUCT_CODE on TPRODUCTATTRVALUE (CODE);
+
+alter table TPRODUCTATTRVALUE drop foreign key constraint FK215F4E65FFF5E8AD;
+-- alter table TPRODUCTATTRVALUE drop constraint FK215F4E65FFF5E8AD;
+
+    alter table TPRODUCTATTRVALUE
+        add index FK_AV_PRODUCT_PRODUCTID (PRODUCT_ID),
+        add constraint FK_AV_PRODUCT_PRODUCTID
+        foreign key (PRODUCT_ID)
+        references TPRODUCT (PRODUCT_ID)
+        on delete cascade;
+
+--     alter table TPRODUCTATTRVALUE
+--         add constraint FK_AV_PRODUCT_PRODUCTID
+--         foreign key (PRODUCT_ID)
+--         references TPRODUCT
+--         on delete cascade;
+
+alter table TPRODUCTSKUATTRVALUE drop foreign key constraint FK_S_ATTRIBUTE;
+-- alter table TPRODUCTSKUATTRVALUE drop constraint FK_S_ATTRIBUTE;
+create index AV_SKU_CODE on TPRODUCTSKUATTRVALUE (CODE);
+
+alter table TPRODUCTSKUATTRVALUE drop foreign key constraint FK23B3D31E4EC4B749;
+-- alter table TPRODUCTSKUATTRVALUE drop constraint FK23B3D31E4EC4B749;
+
+    alter table TPRODUCTSKUATTRVALUE
+        add index FK_AV_SKU_SKUID (SKU_ID),
+        add constraint FK_AV_SKU_SKUID
+        foreign key (SKU_ID)
+        references TSKU (SKU_ID);
+
+--     alter table TPRODUCTSKUATTRVALUE
+--         add constraint FK_AV_SKU_SKUID
+--         foreign key (SKU_ID)
+--         references TSKU;
+
+alter table TSHOPATTRVALUE drop foreign key constraint FK_SHOP_ATTRIBUTE;
+-- alter table TSHOPATTRVALUE drop constraint FK_SHOP_ATTRIBUTE;
+create index AV_SHOP_CODE on TSHOPATTRVALUE (CODE);
+
+alter table TSHOPATTRVALUE drop foreign key constraint FK_ATTR_SHOP;
+-- alter table TSHOPATTRVALUE drop constraint FK_ATTR_SHOP;
+
+    alter table TSHOPATTRVALUE
+        add index FK_AV_SHOP_SHOPID (SHOP_ID),
+        add constraint FK_AV_SHOP_SHOPID
+        foreign key (SHOP_ID)
+        references TSHOP (SHOP_ID);
+
+--     alter table TSHOPATTRVALUE
+--         add constraint FK_AV_SHOP_SHOPID
+--         foreign key (SHOP_ID)
+--         references TSHOP;
+
+alter table TSYSTEMATTRVALUE drop foreign key constraint FK_SYS_ATTRIBUTE;
+-- alter table TSYSTEMATTRVALUE drop constraint FK_SYS_ATTRIBUTE;
+create index AV_SYSTEM_CODE on TSYSTEMATTRVALUE (CODE);
+
+alter table TSYSTEMATTRVALUE drop foreign key constraint FK_ATTR_SYS;
+-- alter table TSYSTEMATTRVALUE drop constraint FK_ATTR_SYS;
+
+    alter table TSYSTEMATTRVALUE
+        add index FK_AV_SYSTEM_SYSTEMID (SYSTEM_ID),
+        add constraint FK_AV_SYSTEM_SYSTEMID
+        foreign key (SYSTEM_ID)
+        references TSYSTEM (SYSTEM_ID);
+
+--     alter table TSYSTEMATTRVALUE
+--         add constraint FK_AV_SYSTEM_SYSTEMID
+--         foreign key (SYSTEM_ID)
+--         references TSYSTEM;
+

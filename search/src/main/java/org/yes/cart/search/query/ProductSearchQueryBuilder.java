@@ -57,6 +57,7 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
     String PRODUCT_STEP_QTY_FIELD = "stepOrderQuantity"; //for projections only
 
     String PRODUCT_TAG_FIELD = "tag";
+    String PRODUCT_INSTOCK_FIELD = "instock";
     String SKU_PRODUCT_CODE_FIELD = "sku.code";
     String SKU_PRODUCT_CODE_SORT_FIELD = "sku.code_sort";
     String SKU_PRODUCT_CODE_STEM_FIELD = "sku.code_stem";
@@ -80,6 +81,7 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
     String PRODUCT_CATEGORY_INC_PARENTS_FIELD = "productCategory.category.inc.parents";
     String PRODUCT_SHOP_FIELD = "productShopId";
     String PRODUCT_SHOP_INSTOCK_FIELD = "productInStockShopId";
+    String PRODUCT_SHOP_INSTOCK_FLAG_FIELD = "productInStockFlagShopId";
     String PRODUCT_SHOP_INSTOCK_STATE_FIELD = "productInStockShopIdState";
     String PRODUCT_SHOP_HASPRICE_FIELD = "productHasPriceShopId";
     String PRODUCT_ID_FIELD = "productId";

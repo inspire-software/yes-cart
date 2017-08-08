@@ -158,64 +158,68 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
             final InputStream bis = new ByteArrayInputStream(content);
 
             final BufferedImage originalImg = ImageIO.read(bis);
-            final String codec = getCodecFromFilename(filename);
-            final boolean supportsAlpha = hasAlphaSupport(codec);
+            if (originalImg != null) {
+                final String codec = getCodecFromFilename(filename);
+                final boolean supportsAlpha = hasAlphaSupport(codec);
 
-            int x = NumberUtils.toInt(width);
-            int y = NumberUtils.toInt(height);
-            int originalX = originalImg.getWidth();
-            int originalY = originalImg.getHeight();
+                int x = NumberUtils.toInt(width);
+                int y = NumberUtils.toInt(height);
+                int originalX = originalImg.getWidth();
+                int originalY = originalImg.getHeight();
 
-            boolean doCropToFit = cropToFit || x < forceCropToFitOnSize || y < forceCropToFitOnSize;
+                boolean doCropToFit = cropToFit || x < forceCropToFitOnSize || y < forceCropToFitOnSize;
 
-            final int imageType = originalImg.getType();
+                final int imageType = originalImg.getType();
 
-            final Image resizedImg;
-//            final BufferedImage resizedImg;
-            final int padX, padY;
-            if (doCropToFit) {
-                // crop the original to best fit of target size
-                int[] cropDims = cropImageToCenter(x, y, originalX, originalY);
-                padX = 0;
-                padY = 0;
+                final Image resizedImg;
+                //            final BufferedImage resizedImg;
+                final int padX, padY;
+                if (doCropToFit) {
+                    // crop the original to best fit of target size
+                    int[] cropDims = cropImageToCenter(x, y, originalX, originalY);
+                    padX = 0;
+                    padY = 0;
 
-                final BufferedImage croppedImg = originalImg.getSubimage(cropDims[0], cropDims[1], cropDims[2], cropDims[3]);
-                resizedImg = croppedImg.getScaledInstance(x, y, Image.SCALE_SMOOTH);
+                    final BufferedImage croppedImg = originalImg.getSubimage(cropDims[0], cropDims[1], cropDims[2], cropDims[3]);
+                    resizedImg = croppedImg.getScaledInstance(x, y, Image.SCALE_SMOOTH);
 
-//                final BufferedImage croppedImg = originalImg.getSubimage(cropDims[0], cropDims[1], cropDims[2], cropDims[3]);
-//                resizedImg = new BufferedImage(y, x, imageType);
-//                Graphics2D graphics = resizedImg.createGraphics();
-//                graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-//                graphics.drawImage(croppedImg, 0, 0, x, y, null);
+                    //                final BufferedImage croppedImg = originalImg.getSubimage(cropDims[0], cropDims[1], cropDims[2], cropDims[3]);
+                    //                resizedImg = new BufferedImage(y, x, imageType);
+                    //                Graphics2D graphics = resizedImg.createGraphics();
+                    //                graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                    //                graphics.drawImage(croppedImg, 0, 0, x, y, null);
+                } else {
+                    int[] scaleDims = scaleImageToCenter(x, y, originalX, originalY);
+                    padX = scaleDims[0];
+                    padY = scaleDims[1];
+
+                    resizedImg = originalImg.getScaledInstance(scaleDims[2], scaleDims[3], Image.SCALE_SMOOTH);
+
+                    //                resizedImg = new BufferedImage(scaleDims[3], scaleDims[2], imageType);
+                    //                Graphics2D graphics = resizedImg.createGraphics();
+                    //                graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                    //                graphics.drawImage(originalImg, 0, 0, scaleDims[2], scaleDims[3], null);
+                }
+
+                // base canvas
+                final BufferedImage resizedImgFinal = new BufferedImage(x, y, imageType);
+
+                // fill base color
+                final Graphics2D graphics = resizedImgFinal.createGraphics();
+                graphics.setPaint(supportsAlpha ? alphaBorder : defaultBorder);
+                graphics.fillRect(0, 0, x, y);
+
+                // insert scaled image
+                graphics.drawImage(resizedImg, padX, padY, null);
+
+                final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+                ImageIO.write(resizedImgFinal, codec, bos);
+
+                return bos.toByteArray();
             } else {
-                int[] scaleDims = scaleImageToCenter(x, y, originalX, originalY);
-                padX = scaleDims[0];
-                padY = scaleDims[1];
-
-                resizedImg = originalImg.getScaledInstance(scaleDims[2], scaleDims[3], Image.SCALE_SMOOTH);
-
-//                resizedImg = new BufferedImage(scaleDims[3], scaleDims[2], imageType);
-//                Graphics2D graphics = resizedImg.createGraphics();
-//                graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-//                graphics.drawImage(originalImg, 0, 0, scaleDims[2], scaleDims[3], null);
+                LOG.warn("Image byte content could not be read {}, size is {} bytes", filename, content.length);
             }
-
-            // base canvas
-            final BufferedImage resizedImgFinal = new BufferedImage(x, y, imageType);
-
-            // fill base color
-            final Graphics2D graphics = resizedImgFinal.createGraphics();
-            graphics.setPaint(supportsAlpha ? alphaBorder : defaultBorder);
-            graphics.fillRect(0, 0, x, y);
-
-            // insert scaled image
-            graphics.drawImage(resizedImg, padX, padY, null);
-
-            final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-            ImageIO.write(resizedImgFinal, codec, bos);
-
-            return bos.toByteArray();
 
         } catch (Exception exp) {
             LOG.error("Unable to resize image " + filename, exp);

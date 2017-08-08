@@ -77,7 +77,7 @@ public class ShopImageImportDomainObjectStrategyImpl extends AbstractImageImport
         final Collection<AttrValueShop> attributes = shop.getAttributes();
         if (attributes != null) {
             for (AttrValueShop attrValue : attributes) {
-                if (attrValue.getAttribute() != null && attributeCode.equals(attrValue.getAttribute().getCode())) {
+                if (attributeCode.equals(attrValue.getAttributeCode())) {
                     imageAttributeValue = attrValue;
                     break;
                 }
@@ -99,7 +99,7 @@ public class ShopImageImportDomainObjectStrategyImpl extends AbstractImageImport
             }
             imageAttributeValue = shopService.getGenericDao().getEntityFactory().getByIface(AttrValueShop.class);
             imageAttributeValue.setShop(shop);
-            imageAttributeValue.setAttribute(attribute);
+            imageAttributeValue.setAttributeCode(attribute.getCode());
             shop.getAttributes().add(imageAttributeValue);
         } else if (isInsertOnly()) {
             return false;

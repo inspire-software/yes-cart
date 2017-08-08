@@ -161,7 +161,7 @@
         <constructor-arg index="4" ref="productAvailabilityStrategy"/>
         <constructor-arg index="5" ref="productQuantityStrategy"/>
         <constructor-arg index="6" ref="pricingPolicyProvider"/>
-        <constructor-arg index="7" ref="priceService"/>
+        <constructor-arg index="7" ref="priceResolver"/>
         <constructor-arg index="8" ref="shoppingCartCalculator"/>
         <constructor-arg index="9" ref="promotionService"/>
         <constructor-arg index="10" ref="categoryServiceFacade"/>

@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkexport.csv.impl;
 
+import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +70,8 @@ public class CsvExportTupleImpl implements CsvExportTuple {
         Object rawValue = null;
         try {
             rawValue = PropertyUtils.getNestedProperty(getData(), property);
+        } catch (NestedNullException nne) {
+            // do not report, it is just null
         } catch (Exception exp) {
             LOG.error("Unable to read property: " + property, exp);
         }

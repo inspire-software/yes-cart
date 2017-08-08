@@ -295,9 +295,18 @@ export class AddressBookComponent implements OnInit, OnDestroy {
   protected onRowEditSelected(address:AddressVO) {
     if (address != null) {
       this.validForSave = false;
-      UiUtil.formInitialise(this, 'initialising', 'addressForm', 'addressEdit', Util.clone(address), address != null && address.addressId > 0, ['addressType']);
-      this.reloadCountries();
-      this.reloadStates();
+      this.reloadCountries(address.addressType);
+      let copy:AddressVO = Util.clone(address);
+      if ((copy.countryCode == null || copy.countryCode == '') && this.countries.length > 0) {
+        copy.countryCode = this.countries[0].first; // preselect first for new addresses
+        LogUtil.debug('AddressBookComponent pre-selected country', copy.countryCode);
+      }
+      this.reloadStates(copy);
+      if ((copy.stateCode == null || copy.stateCode == '') && this.states.length > 0) {
+        copy.stateCode = this.states[0].first; // preselect first for new addresses
+        LogUtil.debug('AddressBookComponent pre-selected state', copy.stateCode);
+      }
+      UiUtil.formInitialise(this, 'initialising', 'addressForm', 'addressEdit', copy, address != null && address.addressId > 0, ['addressType']);
       this.formConfigure(address.addressType);
       this.editModalDialog.show();
     }
@@ -305,31 +314,25 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
   protected onAddressTypeChange(event:any) {
 
-    this.reloadCountries();
+    this.reloadCountries(this.addressEdit.addressType);
     this.formConfigure(this.addressEdit.addressType);
 
   }
 
   protected onCountryChange(event:any) {
 
-    this.reloadStates();
+    this.reloadStates(this.addressEdit);
 
   }
 
-  protected reloadCountries():void {
+  protected reloadCountries(addressType:string):void {
 
-    if (this.addressEdit != null) {
-      let countryPair = this.addressBook.countries.find((country:Pair<string, Pair<string, string>[]>) => {
-        return country.first == this.addressEdit.addressType;
-      });
-      if (countryPair != null) {
-        this.countries = countryPair.second;
-        this.states = [];
-      } else {
-        this.countries = [];
-        this.states = [];
-      }
-
+    let countryPair = this.addressBook.countries.find((country:Pair<string, Pair<string, string>[]>) => {
+      return country.first == addressType;
+    });
+    if (countryPair != null) {
+      this.countries = countryPair.second;
+      this.states = [];
     } else {
       this.countries = [];
       this.states = [];
@@ -338,11 +341,11 @@ export class AddressBookComponent implements OnInit, OnDestroy {
   }
 
 
-  protected reloadStates():void {
+  protected reloadStates(address:AddressVO):void {
 
-    if (this.addressEdit != null && this.addressEdit.countryCode != null) {
+    if (address != null && address.countryCode != null) {
       let statePair = this.addressBook.states.find((state:Pair<string, Pair<string, string>[]>) => {
-        return state.first == this.addressEdit.countryCode;
+        return state.first == address.countryCode;
       });
       if (statePair != null) {
         this.states = statePair.second;

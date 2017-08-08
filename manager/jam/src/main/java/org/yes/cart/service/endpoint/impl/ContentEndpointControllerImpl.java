@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoAttrValueContent;
@@ -27,6 +28,7 @@ import org.yes.cart.domain.vo.VoContentBody;
 import org.yes.cart.domain.vo.VoContentWithBody;
 import org.yes.cart.service.endpoint.ContentEndpointController;
 import org.yes.cart.service.vo.VoContentService;
+import org.yes.cart.service.vo.VoMailService;
 
 import java.util.List;
 
@@ -39,19 +41,22 @@ import java.util.List;
 public class ContentEndpointControllerImpl implements ContentEndpointController {
 
     private final VoContentService voContentService;
+    private final VoMailService voMailService;
 
     @Autowired
-    public ContentEndpointControllerImpl(final VoContentService voContentService) {
+    public ContentEndpointControllerImpl(final VoContentService voContentService,
+                                         final VoMailService voMailService) {
         this.voContentService = voContentService;
+        this.voMailService = voMailService;
     }
 
     public @ResponseBody
-    List<VoContent> getShopContent(@PathVariable("shopId") final int shopId) throws Exception {
+    List<VoContent> getShopContent(@PathVariable("shopId") final long shopId) throws Exception {
         return voContentService.getAll(shopId);
     }
 
     public @ResponseBody
-    List<VoContent> getFilteredContent(@PathVariable("shopId") final int shopId, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    List<VoContent> getFilteredContent(@PathVariable("shopId") final long shopId, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
         return voContentService.getFiltered(shopId, filter, max);
     }
 
@@ -88,5 +93,11 @@ public class ContentEndpointControllerImpl implements ContentEndpointController 
     public @ResponseBody
     List<VoContentBody> getContentBody(@PathVariable("contentId") final long contentId) throws Exception {
         return voContentService.getContentBody(contentId);
+    }
+
+    @Override
+    public @ResponseBody
+    String getShopMail(@PathVariable("shopId") final long shopId, @PathVariable("template") final String template, @RequestParam(value = "order", required = false) final String order, @RequestParam(value = "delivery", required = false) final String delivery, @RequestParam(value = "customer", required = false) final String customer) throws Exception {
+        return voMailService.getShopMail(shopId, template, order, delivery, customer);
     }
 }

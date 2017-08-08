@@ -99,73 +99,26 @@ public interface PaymentGatewayFeature extends Serializable {
     String getAdditionalFeatures();
 
     /**
-     * @param supportAuthorize true if supports
-     */
-    void setSupportAuthorize(final boolean supportAuthorize);
-
-    /**
-     * @param supportCapture true if supports
-     */
-    void setSupportCapture(final boolean supportCapture);
-
-    /**
-     * @param supportAuthorizeCapture true if supports
-     */
-    void setSupportAuthorizeCapture(final boolean supportAuthorizeCapture);
-
-    /**
-     * @param supportVoid true if supports
-     */
-    void setSupportVoid(final boolean supportVoid);
-
-    /**
-     * @param supportReverseAuthorization true if supports
-     */
-    void setSupportReverseAuthorization(final boolean supportReverseAuthorization);
-
-    /**
-     * @param supportRefund true if supports
-     */
-    void setSupportRefund(final boolean supportRefund);
-
-    /**
-     * @param externalFormProcessing true if supports
-     */
-    void setExternalFormProcessing(final boolean externalFormProcessing);
-
-
-    /**
-     * @param supportAuthorizePerShipment true if supports
-     */
-    void setSupportAuthorizePerShipment(final boolean supportAuthorizePerShipment);
-
-    /**
-     * @param additionalFeatures true if supports
-     */
-    void setAdditionalFeatures(final String additionalFeatures);
-
-    /**
      * @return online payment flag
      */
     boolean isOnlineGateway();
 
     /**
-     * @param onlineGateway online payment
+     * Auto capture means that this payment is self-authorised.
+     * For online gateways it is always true since the payment is authorise by the PG service.
+     * This setting is useful for offline PG configuration, for example with offline invoice PG which is on signed
+     * contact, so all payments are essentially pre-authorised
+     *
+     * @return true if payment can be automatically captured without human interaction
      */
-    void setOnlineGateway(boolean onlineGateway);
+    boolean isAutoCapture();
 
     /**
      * Is need to pass details in case of html for construction.
      *
      * @return   true in case if need provide detail info
      */
-     boolean isRequireDetails();
-
-    /**
-     * Set require detail flag
-     * @param requireDetails  flag to set.
-     */
-    void setRequireDetails(boolean requireDetails);
+    boolean isRequireDetails();
 
     /**
      *
@@ -174,21 +127,9 @@ public interface PaymentGatewayFeature extends Serializable {
     boolean isSupportCaptureMore() ;
 
     /**
-     * Set caprure more flag.
-     * @param supportCaptureMore   flag
-     */
-    void setSupportCaptureMore(boolean supportCaptureMore);
-
-    /**
      *
      * @return true in case if pgw support amount capture less that authorized before.
      */
     boolean isSupportCaptureLess();
-
-    /**
-     * Set capture less flag.
-     * @param supportCaptureLess
-     */
-    void setSupportCaptureLess(boolean supportCaptureLess);
 
 }

@@ -82,18 +82,18 @@ public interface ProductAssociation extends Auditable {
     void setProduct(Product product);
 
     /**
-     * Get accosiated(destiation) product.
+     * Get associated (destination) product.
      *
-     * @return accosiated product.
+     * @return associated product.
      */
-    Product getProductAssociated();
+    String getAssociatedSku();
 
     /**
-     * Set accosiated product.
+     * Set associated product SKU.
      *
-     * @param productAssociated accosiated product.
+     * @param associatedSku associated product.
      */
-    void setProductAssociated(Product productAssociated);
+    void setAssociatedSku(String associatedSku);
 
 }
 

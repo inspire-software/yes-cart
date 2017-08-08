@@ -32,6 +32,7 @@ import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.ProductService;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -263,6 +264,13 @@ public class ProductServiceCachedImpl implements ProductService {
      */
     public List<Long> findProductIdsByBarCode(final String code) {
         return productService.findProductIdsByBarCode(code);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Long> findProductIdsByBarCodes(final Collection<String> codes) {
+        return productService.findProductIdsByBarCodes(codes);
     }
 
     /**

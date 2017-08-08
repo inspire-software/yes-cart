@@ -201,7 +201,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
                         final AttrValueCustomer attrValueCustomer = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
                         attrValueCustomer.setCustomer(customer);
                         attrValueCustomer.setVal(String.valueOf(attrVal.getValue()));
-                        attrValueCustomer.setAttribute(attribute);
+                        attrValueCustomer.setAttributeCode(attribute.getCode());
 
                         customer.getAttributes().add(attrValueCustomer);
 
@@ -314,18 +314,18 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
-    public List<AttrValueCustomer> getShopRegistrationAttributes(final Shop shop, final String customerType) {
+    public List<AttrValueWithAttribute> getShopRegistrationAttributes(final Shop shop, final String customerType) {
 
-        final List<AttrValueCustomer> registration = customerCustomisationSupport.getRegistrationAttributes(shop, customerType);
+        final List<AttrValueWithAttribute> registration = customerCustomisationSupport.getRegistrationAttributes(shop, customerType);
 
         return registration;  // CPOINT - possibly need to filter some out
     }
 
 
     /** {@inheritDoc} */
-    public List<Pair<AttrValueCustomer, Boolean>> getCustomerProfileAttributes(final Shop shop, final Customer customer) {
+    public List<Pair<AttrValueWithAttribute, Boolean>> getCustomerProfileAttributes(final Shop shop, final Customer customer) {
 
-        final List<Pair<AttrValueCustomer, Boolean>> profile = customerCustomisationSupport.getProfileAttributes(shop, customer);
+        final List<Pair<AttrValueWithAttribute, Boolean>> profile = customerCustomisationSupport.getProfileAttributes(shop, customer);
 
         return profile;  // CPOINT - possibly need to filter some out
     }

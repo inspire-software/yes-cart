@@ -48,6 +48,8 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     private boolean taxInfoUseNet;
     private boolean taxInfoShowAmount;
 
+    private boolean hidePrices;
+
     private List<String> latestViewedSkus;
     private List<String> latestViewedCategories;
     private String resolvedIp;
@@ -86,6 +88,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         taxInfoEnabled = false;
         taxInfoUseNet = false;
         taxInfoShowAmount = false;
+        hidePrices = false;
     }
 
     /** {@inheritDoc} */
@@ -171,7 +174,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
      * @param shopId current shop id.
      */
     public void setShopId(final long shopId) {
-        if (this.shopId != shopId) {
+        if (this.shopId > 0L && this.shopId != shopId) {
             clearShopRelatedParameters();
         }
         this.shopId = shopId;
@@ -189,7 +192,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
      * @param shopCode current shop code.
      */
     public void setShopCode(final String shopCode) {
-        if (!shopCode.equals(this.shopCode)) {
+        if (this.shopCode != null && !shopCode.equals(this.shopCode)) {
             clearShopRelatedParameters();
         }
         this.shopCode = shopCode;
@@ -306,5 +309,19 @@ public class ShoppingContextImpl implements MutableShoppingContext {
      */
     public void setTaxInfoShowAmount(final boolean taxInfoShowAmount) {
         this.taxInfoShowAmount = taxInfoShowAmount;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isHidePrices() {
+        return hidePrices;
+    }
+
+    /**
+     * Set flag to indicate to display/hide prices.
+     *
+     * @param hidePrices true to hide prices, false to show prices
+     */
+    public void setHidePrices(final boolean hidePrices) {
+        this.hidePrices = hidePrices;
     }
 }

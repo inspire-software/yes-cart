@@ -329,6 +329,18 @@
                   </div>
                 </div>
                 <div class="form-group">
+                  <input formControlName="pimDisabled" name="pimDisabled" type="checkbox" [(ngModel)]="product.pimDisabled">
+                  <label>{{ 'PRODUCT_PIM_DISABLED' | translate }}</label>
+                </div>
+                <div class="form-group">
+                  <input formControlName="pimOutdated" name="pimOutdated" type="checkbox" [(ngModel)]="product.pimOutdated">
+                  <label>{{ 'PRODUCT_PIM_OUTDATED' | translate }}</label>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_PIM_UPDATED' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_PIM_UPDATED' | translate }}" type="text" value="{{ product.pimUpdated | ycdatetime }}" readonly="readonly">
+                </div>
+                <div class="form-group">
                   <label>{{ 'PRODUCT_SUPPLIER_CODE' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'PRODUCT_SUPPLIER_CODE' | translate }}" formControlName="supplierCode" name="supplierCode" type="text" [(ngModel)]="product.supplierCode">
                   <div [hidden]="productForm.controls['supplierCode'].valid || productForm.controls['supplierCode'].pristine" class="alert alert-danger">

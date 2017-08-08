@@ -36,7 +36,7 @@ public interface AddressCustomisationSupport {
      *
      * @return attributes that describe suitable address form
      */
-    List<AttrValue> getShopCustomerAddressAttributes(Customer customer, Shop shop, String addressType);
+    List<AttrValueWithAttribute> getShopCustomerAddressAttributes(Customer customer, Shop shop, String addressType);
 
     /**
      * Find all countries.

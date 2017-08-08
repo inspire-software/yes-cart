@@ -112,10 +112,14 @@ public abstract class AbstractTestDAO  {
     protected IDataSet createDataSet() throws Exception {
         final FlatXmlDataSet dataSet = new FlatXmlDataSetBuilder()
                 //.setColumnSensing(true) // This enables auto discovery of columns but breaks the tests, possibly our data needs clean up
-                .build(getClass().getClassLoader().getResourceAsStream("initialdata.xml"));
+                .build(getClass().getClassLoader().getResourceAsStream(createDataSetFile()));
         final ReplacementDataSet rDataSet = new ReplacementDataSet(dataSet);
         rDataSet.addReplacementObject("[NULL]", null);
         return rDataSet;
+    }
+
+    protected String createDataSetFile() {
+        return "initialdata.xml";
     }
 
     protected void dumpDataBase(final String prefix, final String ... tables) throws Exception {

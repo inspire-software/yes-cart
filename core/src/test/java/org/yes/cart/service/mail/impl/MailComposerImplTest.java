@@ -798,16 +798,20 @@ public class MailComposerImplTest {
         mockery.checking(new Expectations() {{
             allowing(provider).getTemplate(chain, shopCode, locale, fileName, ext);
             will(returnValue(template));
-            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
-            allowing(cache).get(includeFunc + template); will(returnValue(null));
+            allowing(cacheManager).getCache("contentService-templateSupport");
+            will(returnValue(cache));
+            allowing(cache).get(includeFunc + template);
+            will(returnValue(null));
             allowing(cache).put(with(equal(includeFunc + template)), with(any(Object.class)));
             allowing(provider).getTemplate(chain, shopCode, locale, "header", ext);
             will(returnValue(templateHeader));
-            allowing(cache).get(includeFunc + templateHeader); will(returnValue(null));
+            allowing(cache).get(includeFunc + templateHeader);
+            will(returnValue(null));
             allowing(cache).put(with(equal(includeFunc + templateHeader)), with(any(Object.class)));
             allowing(provider).getTemplate(chain, shopCode, locale, "footer", ext);
             will(returnValue(templateFooter));
-            allowing(cache).get(includeFunc + templateFooter); will(returnValue(null));
+            allowing(cache).get(includeFunc + templateFooter);
+            will(returnValue(null));
             allowing(cache).put(with(equal(includeFunc + templateFooter)), with(any(Object.class)));
 
         }});
@@ -820,6 +824,56 @@ public class MailComposerImplTest {
         mockery.assertIsSatisfied();
     }
 
+
+    /**
+     * html only
+     */
+    @Test
+    public void testConvertMailEntityToHTMLWithAttach() throws MessagingException, IOException, ClassNotFoundException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("<% \n %>${name} is awesome!"); will(returnValue(null));
+            allowing(cache).put(with(equal("<% \n %>${name} is awesome!")), with(any(Object.class)));
+        }});
+
+        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+
+        // of course you would use DI in any real-world cases
+
+        final Mail mail = new MailEntity();
+        mail.setShopCode("SHOP10");
+        mail.setSubject("Тема письма");
+        mail.setFrom("test@localhost.lo");
+        mail.setRecipients("to@somedomain.com");
+        mail.setCc("cc@somedomain.com");
+        mail.setBcc("bcc@somedomain.com");
+        mail.setTextVersion("Bender lives in theme park with blackjack poetess");
+        mail.setHtmlVersion("<img src=\"cid:mail-head_jpeg\"/><h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>");
+        final MailPart attach = mail.addPart();
+        attach.setFilename("myimage.jpg");
+        attach.setResourceId("attachment:image/jpeg;myimage.jpg");
+        attach.setData(new byte[]{1, 1, 1});
+        final MailPart embed = mail.addPart();
+        embed.setFilename("mail-head.jpeg");
+        embed.setResourceId("mail-head_jpeg");
+        embed.setData(new byte[]{2, 2, 2});
+
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
+        final String html = mailComposer.convertMessageToHTML(mail);
+
+        String str = html;
+        assertNotNull(str);
+        // html and text present in mail message
+        assertTrue(str.contains("<img src=\"data:image/jpeg;base64,AgIC\"/>"));
+        assertTrue(str.contains("<embed type=\"image/jpeg\" src=\"data:image/jpeg;base64,AQEB\" width=\"100%\" height=\"400\"/>"));
+        assertTrue(str.contains("<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>"));
+        mockery.assertIsSatisfied();
+
+    }
 
 
 }

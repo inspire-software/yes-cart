@@ -37,7 +37,7 @@
             <field-type>FIELD</field-type>
             <name>guid</name>
             <value-regex>(.{0,255})(.*)</value-regex>
-            <value-regex-template>GUID-$1</value-regex-template>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <!-- SKU code -->
@@ -46,7 +46,7 @@
             <field-type>FIELD</field-type>
             <name>code</name>
             <value-regex>(.{0,255})(.*)</value-regex>
-            <value-regex-template>SKU-$1</value-regex-template>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <!-- Manufacturer code -->

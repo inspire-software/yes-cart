@@ -188,8 +188,8 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   }
 
   protected onViewTree() {
-    LogUtil.debug('ShopContentComponent onViewTree handler');
-    this.contentSelectComponent.showDialog();
+    LogUtil.debug('ShopContentComponent onViewTree handler', this.selectedContent);
+    this.contentSelectComponent.showDialog(this.selectedContent != null ? this.selectedContent.contentId : 0);
   }
 
   protected onContentTreeDataSelected(event:FormValidationEvent<ContentVO>) {

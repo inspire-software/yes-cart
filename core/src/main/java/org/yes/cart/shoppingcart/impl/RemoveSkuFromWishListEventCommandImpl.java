@@ -22,11 +22,11 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.service.domain.*;
-import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.shoppingcart.PricingPolicyProvider;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
+import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.CustomerWishListService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.shoppingcart.*;
 
 import java.util.List;
 import java.util.Map;
@@ -50,7 +50,7 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
     /**
      * Construct sku command.
      * @param registry shopping cart command registry
-     * @param priceService price service
+     * @param priceResolver price service
      * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      * @param shopService shop service
@@ -58,13 +58,13 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
      * @param customerWishListService customer wish list service
      */
     public RemoveSkuFromWishListEventCommandImpl(final ShoppingCartCommandRegistry registry,
-                                                 final PriceService priceService,
+                                                 final PriceResolver priceResolver,
                                                  final PricingPolicyProvider pricingPolicyProvider,
                                                  final ProductService productService,
                                                  final ShopService shopService,
                                                  final CustomerService customerService,
                                                  final CustomerWishListService customerWishListService) {
-        super(registry, priceService, pricingPolicyProvider, productService, shopService);
+        super(registry, priceResolver, pricingPolicyProvider, productService, shopService);
         this.customerService = customerService;
         this.customerWishListService = customerWishListService;
     }

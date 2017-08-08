@@ -34,12 +34,12 @@ public class DomainApiUtils {
     /**
      * Get the value of attribute from attribute value map.
      *
-     * @param attrName attribute name
+     * @param attrCode attribute name
      * @param values   map of attribute name and {@link AttrValue}
      * @return null if attribute not present in map, otherwise value of attribute
      */
-    public static String getAttributeValue(final String attrName, final Map<String, AttrValue> values) {
-        AttrValue attrValue = values.get(attrName);
+    public static String getAttributeValue(final String attrCode, final Map<String, AttrValue> values) {
+        AttrValue attrValue = values.get(attrCode);
         if (attrValue != null) {
             return attrValue.getVal();
         }
@@ -49,13 +49,13 @@ public class DomainApiUtils {
     /**
      * Get attribute value
      *
-     * @param attrName   attribute name
+     * @param attrCode   attribute name
      * @param attributes collection of attribute
-     * @return value if fount otherwise null
+     * @return value if found otherwise null
      */
-    public static String getAttributeValue(final String attrName, final Collection<? extends AttrValue> attributes) {
+    public static String getAttributeValue(final String attrCode, final Collection<? extends AttrValue> attributes) {
         for (AttrValue attrValue : attributes) {
-            if (attrName.equals(attrValue.getAttribute().getName())) {
+            if (attrCode.equals(attrValue.getAttributeCode())) {
                 return attrValue.getVal();
             }
         }

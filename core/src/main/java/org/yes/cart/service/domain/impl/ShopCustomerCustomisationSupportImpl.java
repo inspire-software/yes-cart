@@ -21,14 +21,13 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.entity.AttrValueCustomer;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.impl.AttrValueWithAttributeAdapter;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerCustomisationSupport;
 import org.yes.cart.service.domain.CustomerService;
 
@@ -46,9 +45,12 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
     private static final String GUEST_TYPE = AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST;
 
     private final CustomerService customerService;
+    private final AttributeService attributeService;
 
-    public ShopCustomerCustomisationSupportImpl(final CustomerService customerService) {
+    public ShopCustomerCustomisationSupportImpl(final CustomerService customerService,
+                                                final AttributeService attributeService) {
         this.customerService = customerService;
+        this.attributeService = attributeService;
     }
 
 
@@ -129,7 +131,7 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
     }
 
     /** {@inheritDoc} */
-    public List<AttrValueCustomer> getRegistrationAttributes(final Shop shop, final String customerType) {
+    public List<AttrValueWithAttribute> getRegistrationAttributes(final Shop shop, final String customerType) {
 
         final Set<String> types = getCustomerTypes(shop, true);
         if (!types.contains(customerType)) {
@@ -148,15 +150,15 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
             return Collections.emptyList();
         }
 
-        final List<AttrValueCustomer> registration = new ArrayList<AttrValueCustomer>();
+        final List<AttrValueWithAttribute> registration = new ArrayList<AttrValueWithAttribute>();
         final Map<String, AttrValueCustomer> map = new HashMap<String, AttrValueCustomer>(attrValueCollection.size());
         for (final AttrValueCustomer av : attrValueCollection) {
-            map.put(av.getAttribute().getCode(), av);
+            map.put(av.getAttributeCode(), av);
         }
         for (final String code : allowed) {
             final AttrValueCustomer av = map.get(code);
             if (av != null) {
-                registration.add(av);
+                registration.add(new AttrValueWithAttributeAdapter(av, attributeService.getByAttributeCode(av.getAttributeCode())));
             }
         }
 
@@ -174,7 +176,7 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
     }
 
     /** {@inheritDoc} */
-    public List<Pair<AttrValueCustomer, Boolean>> getProfileAttributes(final Shop shop, final Customer customer) {
+    public List<Pair<AttrValueWithAttribute, Boolean>> getProfileAttributes(final Shop shop, final Customer customer) {
 
         final List<String> allowed = getSupportedProfileFormAttributesAsList(shop, customer.getCustomerType());
         if (CollectionUtils.isEmpty(allowed)) {
@@ -190,24 +192,27 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
         }
 
 
-        final List<Pair<AttrValueCustomer, Boolean>> profile = new ArrayList<Pair<AttrValueCustomer, Boolean>>();
-        final Map<String, AttrValueCustomer> map = new HashMap<String, AttrValueCustomer>(attrValueCollection.size());
+        final List<Pair<AttrValueWithAttribute, Boolean>> profile = new ArrayList<Pair<AttrValueWithAttribute, Boolean>>();
+        final Map<String, AttrValueWithAttribute> map = new HashMap<String, AttrValueWithAttribute>(attrValueCollection.size());
         for (final AttrValueCustomer av : attrValueCollection) {
-            map.put(av.getAttribute().getCode(), av);
-            if ("salutation".equals(av.getAttribute().getCode())) {
+            map.put(
+                    av.getAttributeCode(),
+                    new AttrValueWithAttributeAdapter(av, attributeService.getByAttributeCode(av.getAttributeCode()))
+            );
+            if ("salutation".equals(av.getAttributeCode())) {
                 av.setVal(customer.getSalutation());
-            } else if ("firstname".equals(av.getAttribute().getCode())) {
+            } else if ("firstname".equals(av.getAttributeCode())) {
                 av.setVal(customer.getFirstname());
-            } else if ("middlename".equals(av.getAttribute().getCode())) {
+            } else if ("middlename".equals(av.getAttributeCode())) {
                 av.setVal(customer.getMiddlename());
-            } else if ("lastname".equals(av.getAttribute().getCode())) {
+            } else if ("lastname".equals(av.getAttributeCode())) {
                 av.setVal(customer.getLastname());
             }
         }
         for (final String code : allowed) {
-            final AttrValueCustomer av = map.get(code);
+            final AttrValueWithAttribute av = map.get(code);
             if (av != null) {
-                profile.add(new Pair<AttrValueCustomer, Boolean>(av, readonly.contains(code)));
+                profile.add(new Pair<AttrValueWithAttribute, Boolean>(av, readonly.contains(code)));
             }
         }
 

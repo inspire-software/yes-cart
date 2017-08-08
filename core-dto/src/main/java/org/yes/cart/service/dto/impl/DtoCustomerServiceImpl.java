@@ -234,7 +234,7 @@ public class DtoCustomerServiceImpl
         } else {
             if (!multivalue) {
                 for (final AttrValueCustomer avp : customer.getAttributes()) {
-                    if (avp.getAttribute().getCode().equals(atr.getCode())) {
+                    if (avp.getAttributeCode().equals(atr.getCode())) {
                         // this is a duplicate, so need to update
                         attrValueDTO.setAttrvalueId(avp.getAttrvalueId());
                         return updateEntityAttributeValue(attrValueDTO);
@@ -245,7 +245,7 @@ public class DtoCustomerServiceImpl
 
             AttrValueCustomer valueEntityCustomer = getPersistenceEntityFactory().getByIface(AttrValueCustomer.class);
             attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCustomer, getAdaptersRepository(), dtoFactory);
-            valueEntityCustomer.setAttribute(atr);
+            valueEntityCustomer.setAttributeCode(atr.getCode());
             valueEntityCustomer.setCustomer(customer);
             valueEntityCustomer = attrValueEntityCustomerDao.create((AttrValueEntityCustomer) valueEntityCustomer);
             attrValueDTO.setAttrvalueId(valueEntityCustomer.getAttrvalueId());
@@ -394,7 +394,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void remoteResetPassword(final CustomerDTO customer, final long shopId) {
+    public void resetPassword(final CustomerDTO customer, final long shopId) {
         final Customer cust = service.findById(customer.getCustomerId());
         if (cust != null) {
             final Shop shop = shopDao.findById(shopId);

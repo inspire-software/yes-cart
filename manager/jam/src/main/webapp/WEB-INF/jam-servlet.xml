@@ -48,7 +48,9 @@
 
     <mvc:annotation-driven>
         <mvc:message-converters>
-            <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg index="0" name="defaultCharset" value="UTF-8"/>
+            </bean>
             <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
             <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
                 <property name="objectMapper" ref="dtoObjectMapper" />

@@ -65,10 +65,10 @@ public class RobokassaPaymentGatewayImpl extends AbstractRobokassaPaymentGateway
     // merchant password
     static final String RB_URL = "RB_URL";
 
-    private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+    private final static PaymentGatewayFeature PAYMENT_GATEWAY_FEATURE = new PaymentGatewayFeatureImpl(
             false, false, false, true,
             false, false, false,
-            true, true, false,
+            true, true, true, false,
             null ,
             false, false
     );
@@ -286,7 +286,7 @@ public class RobokassaPaymentGatewayImpl extends AbstractRobokassaPaymentGateway
      * {@inheritDoc}
      */
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
-        return paymentGatewayFeature;
+        return PAYMENT_GATEWAY_FEATURE;
     }
 
 

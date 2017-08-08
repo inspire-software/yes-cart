@@ -16,8 +16,10 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
@@ -37,7 +39,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRecalculatePriceCartCommandImpl.class);
 
-    private final PriceService priceService;
+    private final PriceResolver priceResolver;
 
     private final PricingPolicyProvider pricingPolicyProvider;
 
@@ -50,18 +52,18 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
      * Construct abstract sku command.
      *
      * @param registry shopping cart command registry
-     * @param priceService price service
+     * @param priceResolver price service
      * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      * @param shopService shop service
      */
     public AbstractRecalculatePriceCartCommandImpl(final ShoppingCartCommandRegistry registry,
-                                                   final PriceService priceService,
+                                                   final PriceResolver priceResolver,
                                                    final PricingPolicyProvider pricingPolicyProvider,
                                                    final ProductService productService,
                                                    final ShopService shopService) {
         super(registry);
-        this.priceService = priceService;
+        this.priceResolver = priceResolver;
         this.pricingPolicyProvider = pricingPolicyProvider;
         this.productService = productService;
         this.shopService = shopService;
@@ -126,7 +128,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
             final PricingPolicyProvider.PricingPolicy policy = determinePricingPolicy(shoppingCart);
 
-            final SkuPrice skuPrice = getPriceService().getMinimalPrice(
+            final SkuPrice skuPrice = getPriceResolver().getMinimalPrice(
                     null,
                     skuCode,
                     customerShopId,
@@ -162,7 +164,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
                                     final BigDecimal qty,
                                     final PricingPolicyProvider.PricingPolicy policy) {
 
-        final SkuPrice skuPrice = getPriceService().getMinimalPrice(
+        final SkuPrice skuPrice = getPriceResolver().getMinimalPrice(
                 null,
                 skuCode,
                 customerShopId,
@@ -172,13 +174,19 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
                 false,
                 policy.getID());
 
-        if (!shoppingCart.setProductSkuPrice(
+        if (shoppingCart.setProductSkuPrice(
                 skuCode,
                 MoneyUtils.minPositive(skuPrice.getSalePriceForCalculation(), skuPrice.getRegularPrice()),
                 skuPrice.getRegularPrice()
         )) {
+            final String key = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID + skuCode;
+            if (StringUtils.isNotBlank(skuPrice.getRef())) {
+                shoppingCart.getOrderInfo().putDetail(key, skuPrice.getRef());
+            } else {
+                shoppingCart.getOrderInfo().putDetail(key, null);
+            }
+        } else {
             LOG.warn("Can not set price to sku with code {}", skuCode);
-
         }
     }
 
@@ -196,8 +204,8 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
      *
      * @return {@link PriceService}
      */
-    public PriceService getPriceService() {
-        return priceService;
+    public PriceResolver getPriceResolver() {
+        return priceResolver;
     }
 
     /**

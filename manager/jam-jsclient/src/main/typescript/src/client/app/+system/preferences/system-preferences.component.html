@@ -15,9 +15,9 @@
         <i class="fa fa-edit"></i>
       </button>
 
-      <!--<button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" >-->
-        <!--<i class="fa fa-remove"></i>-->
-      <!--</button>-->
+      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null || this.selectedRow.attribute.mandatory" class="btn btn-danger btn-circle btn-xl" >
+        <i class="fa fa-remove"></i>
+      </button>
 
       <yc-data-control [changed]="changed"
                        [valid]="true"

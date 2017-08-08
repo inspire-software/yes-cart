@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.impl.AttrValueWithAttributeAdapter;
 import org.yes.cart.service.domain.*;
 
 import java.util.*;
@@ -74,7 +75,7 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
     }
 
     /** {@inheritDoc} */
-    public List<AttrValue> getShopCustomerAddressAttributes(final Customer customer, final Shop shop, final String addressType) {
+    public List<AttrValueWithAttribute> getShopCustomerAddressAttributes(final Customer customer, final Shop shop, final String addressType) {
 
         final List<String> addressFormAttributes = getAddressFormAttributeList(customer, shop, addressType);
 
@@ -88,13 +89,12 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
             formFieldsConfigMap.put(attribute.getCode(), attribute);
         }
 
-        final List<AttrValue> addressAttributes = new ArrayList<AttrValue>();
+        final List<AttrValueWithAttribute> addressAttributes = new ArrayList<AttrValueWithAttribute>();
         for (final String formFieldConfigName : addressFormAttributes) {
             final Attribute formFieldConfig = formFieldsConfigMap.get(formFieldConfigName);
             if (formFieldConfig != null) {
                 final AttrValue av = attributeService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
-                av.setAttribute(formFieldConfig);
-                addressAttributes.add(av);
+                addressAttributes.add(new AttrValueWithAttributeAdapter(av, formFieldConfig));
             }
         }
 

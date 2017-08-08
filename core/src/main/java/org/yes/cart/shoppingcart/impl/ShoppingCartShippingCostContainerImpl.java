@@ -78,6 +78,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
         this.orderInfo.setOrderMessage(original.getOrderInfo().getOrderMessage());
         this.orderInfo.setPaymentGatewayLabel(original.getOrderInfo().getPaymentGatewayLabel());
         this.orderInfo.setSeparateBillingAddress(original.getOrderInfo().isSeparateBillingAddress());
+        this.orderInfo.setSeparateBillingAddressEnabled(original.getOrderInfo().isSeparateBillingAddressEnabled());
 
     }
 

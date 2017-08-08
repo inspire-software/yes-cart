@@ -24,13 +24,9 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryBucket;
-import org.yes.cart.shoppingcart.CartItem;
-import org.yes.cart.shoppingcart.OrderInfo;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingContext;
+import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -767,9 +763,9 @@ public class OrderSplittingStrategyImplTest {
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ProductService productService = context.mock(ProductService.class, "productService");
         final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
-        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+        final InventoryResolver inventoryResolver = context.mock(InventoryResolver.class, "inventoryResolver");
 
-        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService) {
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver) {
             @Override
             Date now() {
                 return now;
@@ -811,7 +807,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(item).getQty(); will(returnValue(qty));
 
             if (stock != null) {
-                allowing(skuWarehouseService).findByWarehouseSku(warehouse, skuCode); will(returnValue(skuWarehouse));
+                allowing(inventoryResolver).findByWarehouseSku(warehouse, skuCode); will(returnValue(skuWarehouse));
                 allowing(skuWarehouse).isAvailableToSell(qty); will(returnValue(stock.compareTo(qty) >= 0));
             }
         }});
@@ -1974,9 +1970,9 @@ public class OrderSplittingStrategyImplTest {
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ProductService productService = context.mock(ProductService.class, "productService");
         final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
-        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+        final InventoryResolver inventoryResolver = context.mock(InventoryResolver.class, "inventoryResolver");
 
-        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService);
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver);
 
         final CartItem item = context.mock(CartItem.class, "item");
         final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
@@ -2013,9 +2009,9 @@ public class OrderSplittingStrategyImplTest {
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ProductService productService = context.mock(ProductService.class, "productService");
         final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
-        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+        final InventoryResolver inventoryResolver = context.mock(InventoryResolver.class, "inventoryResolver");
 
-        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService);
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver);
 
         final CartItem item = context.mock(CartItem.class, "item");
         final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
@@ -2052,9 +2048,9 @@ public class OrderSplittingStrategyImplTest {
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ProductService productService = context.mock(ProductService.class, "productService");
         final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
-        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+        final InventoryResolver inventoryResolver = context.mock(InventoryResolver.class, "inventoryResolver");
 
-        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService);
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver);
 
         final CartItem item = context.mock(CartItem.class, "item");
         final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
@@ -2092,9 +2088,9 @@ public class OrderSplittingStrategyImplTest {
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ProductService productService = context.mock(ProductService.class, "productService");
         final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
-        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+        final InventoryResolver inventoryResolver = context.mock(InventoryResolver.class, "inventoryResolver");
 
-        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService);
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver);
 
         final CartItem item = context.mock(CartItem.class, "item");
         final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
@@ -2133,9 +2129,9 @@ public class OrderSplittingStrategyImplTest {
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ProductService productService = context.mock(ProductService.class, "productService");
         final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
-        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+        final InventoryResolver inventoryResolver = context.mock(InventoryResolver.class, "inventoryResolver");
 
-        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService) {
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver) {
             @Override
             Pair<String, String> getDeliveryGroup(final CartItem item, final Map<String, Warehouse> warehouses) {
                 return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
@@ -2184,9 +2180,9 @@ public class OrderSplittingStrategyImplTest {
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ProductService productService = context.mock(ProductService.class, "productService");
         final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
-        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+        final InventoryResolver inventoryResolver = context.mock(InventoryResolver.class, "inventoryResolver");
 
-        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService) {
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver) {
             @Override
             Pair<String, String> getDeliveryGroup(final CartItem item, final Map<String, Warehouse> warehouses) {
                 return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
@@ -2239,9 +2235,9 @@ public class OrderSplittingStrategyImplTest {
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ProductService productService = context.mock(ProductService.class, "productService");
         final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
-        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+        final InventoryResolver inventoryResolver = context.mock(InventoryResolver.class, "inventoryResolver");
 
-        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService) {
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver) {
             @Override
             Pair<String, String> getDeliveryGroup(final CartItem item, final Map<String, Warehouse> warehouses) {
                 return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
@@ -2295,9 +2291,9 @@ public class OrderSplittingStrategyImplTest {
         final ShopService shopService = context.mock(ShopService.class, "shopService");
         final ProductService productService = context.mock(ProductService.class, "productService");
         final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
-        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+        final InventoryResolver inventoryResolver = context.mock(InventoryResolver.class, "inventoryResolver");
 
-        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService) {
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver) {
             @Override
             Pair<String, String> getDeliveryGroup(final CartItem item, final Map<String, Warehouse> warehouses) {
                 return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");

@@ -195,7 +195,7 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
         }
         final Map<String, String> attrToFileMap = new TreeMap<String, String>(); // sort naturally
         for (final AttrValue av : values) {
-            final String code = av.getAttribute().getCode();
+            final String code = av.getAttributeCode();
             if (code.startsWith(prefix) && StringUtils.isNotBlank(av.getVal())) {
                 if (code.endsWith(lang)) {
                     // put value for this language and remove possible default values

@@ -19,7 +19,10 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.shoppingcart.*;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingContext;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
 import java.util.Map;
 
@@ -79,6 +82,7 @@ public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements 
     protected void setDefaultOrderInfoOptions(final MutableShoppingCart shoppingCart) {
 
         setCustomerOptions(shoppingCart);
+        setDefaultAddressesIfPossible(shoppingCart);
 
     }
 

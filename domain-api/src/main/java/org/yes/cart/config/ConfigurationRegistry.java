@@ -14,22 +14,31 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.utils.impl;
-
-
-import org.yes.cart.domain.entity.AttrValue;
-
-import java.util.Comparator;
+package org.yes.cart.config;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * User: denispavlov
+ * Date: 11/07/2017
+ * Time: 12:47
  */
-public class AttrValueRankComparator implements Comparator<AttrValue> {
+public interface ConfigurationRegistry<K, C> {
 
-    /** {@inheritDoc} */
-    public int compare(final AttrValue attrValue1, final AttrValue attrValue2) {
-        return attrValue1.getAttribute().getRank() - attrValue2.getAttribute().getRank();
-    }
+    /**
+     * Check if this configuration is supported.
+     *
+     * @param configuration configuration object
+     *
+     * @return true is supports this configuration
+     */
+    boolean supports(Object configuration);
+
+    /**
+     * Register shop specific configuration with given registry.
+     *
+     * @param key shop specific key
+     * @param configuration configuration
+     */
+    void register(K key, C configuration);
+
+
 }

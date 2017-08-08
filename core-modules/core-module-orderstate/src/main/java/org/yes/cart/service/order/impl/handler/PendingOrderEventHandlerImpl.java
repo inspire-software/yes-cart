@@ -22,12 +22,12 @@ import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.*;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
+import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
 
@@ -49,7 +49,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
     private OrderStateManager orderStateManager = null;
     private ApplicationContext applicationContext;
     private final WarehouseService warehouseService;
-    private final SkuWarehouseService skuWarehouseService;
+    private final InventoryResolver inventoryResolver;
     private final ProductService productService;
 
     /**
@@ -57,16 +57,16 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
      *
      * @param paymentProcessorFactory to perform authorize operation
      * @param warehouseService        warehouse service
-     * @param skuWarehouseService     sku on warehouse service to change quantity
+     * @param inventoryResolver       sku on warehouse service to change quantity
      * @param productService          product service
      */
     public PendingOrderEventHandlerImpl(final PaymentProcessorFactory paymentProcessorFactory,
                                         final WarehouseService warehouseService,
-                                        final SkuWarehouseService skuWarehouseService,
+                                        final InventoryResolver inventoryResolver,
                                         final ProductService productService) {
         this.paymentProcessorFactory = paymentProcessorFactory;
         this.warehouseService = warehouseService;
-        this.skuWarehouseService = skuWarehouseService;
+        this.inventoryResolver = inventoryResolver;
         this.productService = productService;
     }
 
@@ -104,6 +104,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
             }
 
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
+                // online payment processing
                 final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams());
                 if (Payment.PAYMENT_STATUS_OK.equals(result)) {
                     //payment was ok, so quantity on warehouses will be decreased
@@ -115,8 +116,11 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                     //in case of bad payment reserved product quantity will be returned from reservation
                     getOrderStateManager().fireTransition(new OrderEventImpl(orderEvent, OrderStateManager.EVT_CANCEL, orderEvent.getCustomerOrder()));
                 }
+            } else if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isAutoCapture()) {
+                // offline payments for auto capture (e.g. B2B invoice through contact)
+                getOrderStateManager().fireTransition(new OrderEventImpl(orderEvent, OrderStateManager.EVT_PAYMENT_CONFIRMED, orderEvent.getCustomerOrder()));
             } else {
-                // wait for confirmation about payment
+                // offline, wait for confirmation about payment
                 getOrderStateManager().fireTransition(new OrderEventImpl(orderEvent, OrderStateManager.EVT_PAYMENT_OFFLINE, orderEvent.getCustomerOrder()));
             }
 
@@ -178,7 +182,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                     final boolean preorder = availability == Product.AVAILABILITY_PREORDER && !DomainApiUtils.isObjectAvailableNow(true, availableFrom, availableTo, now) && DomainApiUtils.isObjectAvailableNow(true, null, availableTo, now);
                     final boolean backorder = availability == Product.AVAILABILITY_BACKORDER;
 
-                    final BigDecimal rem = skuWarehouseService.reservation(selected, skuCode, toReserve, backorder || preorder);
+                    final BigDecimal rem = inventoryResolver.reservation(selected, skuCode, toReserve, backorder || preorder);
 
                     if (MoneyUtils.isFirstBiggerThanSecond(rem, BigDecimal.ZERO)) {
                         /**

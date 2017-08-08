@@ -356,6 +356,7 @@ public class DtoProductServiceImpl
      */
     protected void createPostProcess(final ProductDTO dto, final Product entity) {
         ensureBlankUriIsNull(entity);
+        ensureTagsAreLowercase(entity);
         super.createPostProcess(dto, entity);
     }
 
@@ -364,12 +365,19 @@ public class DtoProductServiceImpl
      */
     protected void updatePostProcess(final ProductDTO dto, final Product entity) {
         ensureBlankUriIsNull(entity);
+        ensureTagsAreLowercase(entity);
         super.updatePostProcess(dto, entity);
     }
 
     private void ensureBlankUriIsNull(final Seoable entity) {
         if (entity.getSeo() != null && entity.getSeo().getUri() != null && StringUtils.isBlank(entity.getSeo().getUri())) {
             entity.getSeo().setUri(null);
+        }
+    }
+
+    private void ensureTagsAreLowercase(final Taggable entity) {
+        if (StringUtils.isNotBlank(entity.getTag())) {
+            entity.setTag(entity.getTag().toLowerCase());
         }
     }
 
@@ -550,7 +558,7 @@ public class DtoProductServiceImpl
         final Product product = service.findById(((AttrValueProductDTO) attrValueDTO).getProductId());
         if (!multivalue) {
             for (final AttrValueProduct avp : product.getAttributes()) {
-                if (avp.getAttribute().getCode().equals(atr.getCode())) {
+                if (avp.getAttributeCode().equals(atr.getCode())) {
                     // this is a duplicate, so need to update
                     attrValueDTO.setAttrvalueId(avp.getAttrvalueId());
                     return updateEntityAttributeValue(attrValueDTO);
@@ -560,7 +568,7 @@ public class DtoProductServiceImpl
 
         AttrValueProduct valueEntity = getPersistenceEntityFactory().getByIface(AttrValueProduct.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntity, getAdaptersRepository(), dtoFactory);
-        valueEntity.setAttribute(atr);
+        valueEntity.setAttributeCode(atr.getCode());
         valueEntity.setProduct(product);
         valueEntity = attrValueEntityProductDao.create(valueEntity);
         attrValueDTO.setAttrvalueId(valueEntity.getAttrvalueId());
@@ -645,12 +653,14 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
-    public long deleteAttributeValue(final long attributeValuePk) {
+    public long deleteAttributeValue(final long attributeValuePk)
+            throws UnableToCreateInstanceException, UnmappedInterfaceException {
         final AttrValueProduct attrValue = attrValueEntityProductDao.findById(attributeValuePk);
-        if (Etype.IMAGE_BUSINESS_TYPE.equals(attrValue.getAttribute().getEtype().getBusinesstype())) {
+        final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(attrValue.getAttributeCode());
+        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
             imageService.deleteImage(attrValue.getVal(),
                     Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
-        } else if (Etype.FILE_BUSINESS_TYPE.equals(attrValue.getAttribute().getEtype().getBusinesstype())) {
+        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
             fileService.deleteFile(attrValue.getVal(),
                     Constants.PRODUCT_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
         }

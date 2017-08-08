@@ -48,7 +48,7 @@ public class ShopCustomerCustomisationSupportImplTest {
             one(shop).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES); will(returnValue(null));
         }});
 
-        final List<Pair<String, I18NModel>> types = new ShopCustomerCustomisationSupportImpl(null).getSupportedCustomerTypes(shop);
+        final List<Pair<String, I18NModel>> types = new ShopCustomerCustomisationSupportImpl(null, null).getSupportedCustomerTypes(shop);
 
         assertNotNull(types);
         assertTrue(types.isEmpty());
@@ -68,7 +68,7 @@ public class ShopCustomerCustomisationSupportImplTest {
             allowing(av).getVal(); will(returnValue(""));
         }});
 
-        final List<Pair<String, I18NModel>> types = new ShopCustomerCustomisationSupportImpl(null).getSupportedCustomerTypes(shop);
+        final List<Pair<String, I18NModel>> types = new ShopCustomerCustomisationSupportImpl(null, null).getSupportedCustomerTypes(shop);
 
         assertNotNull(types);
         assertTrue(types.isEmpty());
@@ -89,7 +89,7 @@ public class ShopCustomerCustomisationSupportImplTest {
             allowing(av).getDisplayVal(); will(returnValue(null));
         }});
 
-        final List<Pair<String, I18NModel>> types = new ShopCustomerCustomisationSupportImpl(null).getSupportedCustomerTypes(shop);
+        final List<Pair<String, I18NModel>> types = new ShopCustomerCustomisationSupportImpl(null, null).getSupportedCustomerTypes(shop);
 
         assertNotNull(types);
         assertEquals(2, types.size());
@@ -114,7 +114,7 @@ public class ShopCustomerCustomisationSupportImplTest {
             allowing(av).getDisplayVal(); will(returnValue("en#~#Private#~#de#~#Private DE,Company DE"));
         }});
 
-        final List<Pair<String, I18NModel>> types = new ShopCustomerCustomisationSupportImpl(null).getSupportedCustomerTypes(shop);
+        final List<Pair<String, I18NModel>> types = new ShopCustomerCustomisationSupportImpl(null, null).getSupportedCustomerTypes(shop);
 
         assertNotNull(types);
         assertEquals(2, types.size());

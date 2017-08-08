@@ -38,6 +38,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
     private boolean multipleDelivery;
     private Map<String, Boolean> multipleDeliveryAvailable;
     private boolean separateBillingAddress;
+    private boolean separateBillingAddressEnabled;
     private boolean billingAddressNotRequired;
     private boolean deliveryAddressNotRequired;
     private Map<String, Long> carrierSlaId;
@@ -165,6 +166,16 @@ public class OrderInfoImpl implements MutableOrderInfo {
     }
 
     /** {@inheritDoc} */
+    public boolean isSeparateBillingAddressEnabled() {
+        return separateBillingAddressEnabled;
+    }
+
+    /** {@inheritDoc} */
+    public void setSeparateBillingAddressEnabled(final boolean separateBillingAddressEnabled) {
+        this.separateBillingAddressEnabled = separateBillingAddressEnabled;
+    }
+
+    /** {@inheritDoc} */
     public boolean isBillingAddressNotRequired() {
         return billingAddressNotRequired;
     }
@@ -241,6 +252,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
         this.multipleDelivery = false;
         getMultipleDeliveryAvailableInternal().clear();
         this.separateBillingAddress = false;
+        this.separateBillingAddressEnabled = false;
         this.billingAddressNotRequired = false;
         this.deliveryAddressNotRequired = false;
         getCarrierSlaIdInternal().clear();
@@ -254,6 +266,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
         while (details.hasNext()) {
             final Map.Entry<String, String> detail = details.next();
             if (detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID) ||
+                    detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID) ||
                     detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID)) {
                 details.remove();
             }

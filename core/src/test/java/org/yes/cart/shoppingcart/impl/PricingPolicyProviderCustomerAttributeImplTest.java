@@ -33,7 +33,7 @@ import static org.junit.Assert.*;
  * Date: 08/06/2016
  * Time: 09:05
  */
-public class PricingPolicyProviderImplTest {
+public class PricingPolicyProviderCustomerAttributeImplTest {
 
     private final Mockery context = new JUnit4Mockery();
 
@@ -52,7 +52,7 @@ public class PricingPolicyProviderImplTest {
             allowing(customer).getPricingPolicy(); will(returnValue("BOB"));
         }});
 
-        final PricingPolicyProviderImpl provider = new PricingPolicyProviderImpl(customerService, shopService);
+        final PricingPolicyProviderCustomerAttributeImpl provider = new PricingPolicyProviderCustomerAttributeImpl(customerService, shopService);
 
         PricingPolicyProvider.PricingPolicy policy;
 
@@ -78,7 +78,7 @@ public class PricingPolicyProviderImplTest {
             allowing(shop).getAttributeValueByCode("SHOP_REGIONAL_PRICING_GB_GB-CAM"); will(returnValue("REGIONAL"));
         }});
 
-        final PricingPolicyProviderImpl provider = new PricingPolicyProviderImpl(customerService, shopService);
+        final PricingPolicyProviderCustomerAttributeImpl provider = new PricingPolicyProviderCustomerAttributeImpl(customerService, shopService);
 
         PricingPolicyProvider.PricingPolicy policy;
 
@@ -106,7 +106,7 @@ public class PricingPolicyProviderImplTest {
             allowing(shop).getAttributeValueByCode("SHOP_REGIONAL_PRICING_GB"); will(returnValue("REGIONAL"));
         }});
 
-        final PricingPolicyProviderImpl provider = new PricingPolicyProviderImpl(customerService, shopService);
+        final PricingPolicyProviderCustomerAttributeImpl provider = new PricingPolicyProviderCustomerAttributeImpl(customerService, shopService);
 
         PricingPolicyProvider.PricingPolicy policy;
 
@@ -136,7 +136,7 @@ public class PricingPolicyProviderImplTest {
             allowing(shop).getAttributeValueByCode("SHOP_REGIONAL_PRICING_GB"); will(returnValue(null));
         }});
 
-        final PricingPolicyProviderImpl provider = new PricingPolicyProviderImpl(customerService, shopService);
+        final PricingPolicyProviderCustomerAttributeImpl provider = new PricingPolicyProviderCustomerAttributeImpl(customerService, shopService);
 
         PricingPolicyProvider.PricingPolicy policy;
 
@@ -163,7 +163,7 @@ public class PricingPolicyProviderImplTest {
             allowing(shop).getAttributeValueByCode("SHOP_REGIONAL_PRICING_GB"); will(returnValue(null));
         }});
 
-        final PricingPolicyProviderImpl provider = new PricingPolicyProviderImpl(customerService, shopService);
+        final PricingPolicyProviderCustomerAttributeImpl provider = new PricingPolicyProviderCustomerAttributeImpl(customerService, shopService);
 
         PricingPolicyProvider.PricingPolicy policy;
 
@@ -190,7 +190,7 @@ public class PricingPolicyProviderImplTest {
             allowing(shop).getAttributeValueByCode("SHOP_REGIONAL_PRICING_GB"); will(returnValue(null));
         }});
 
-        final PricingPolicyProviderImpl provider = new PricingPolicyProviderImpl(customerService, shopService);
+        final PricingPolicyProviderCustomerAttributeImpl provider = new PricingPolicyProviderCustomerAttributeImpl(customerService, shopService);
 
         PricingPolicyProvider.PricingPolicy policy;
 

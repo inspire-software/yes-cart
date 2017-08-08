@@ -31,25 +31,27 @@
 
     <bean id="priceNavigation" class="org.yes.cart.search.query.impl.PriceNavigationImpl"/>
 
-    <bean id="attributeLuceneQueryBuilder" class="org.yes.cart.search.query.impl.AttributeSearchQueryBuilder"/>
-    <bean id="attributeSkuLuceneQueryBuilder" class="org.yes.cart.search.query.impl.AttributeSkuSearchQueryBuilder"/>
-    <bean id="featuredProductLuceneQueryBuilder" class="org.yes.cart.search.query.impl.FeaturedProductSearchQueryBuilder"/>
-    <bean id="keywordProductLuceneQueryBuilder" class="org.yes.cart.search.query.impl.KeywordProductSearchQueryBuilder"/>
-    <bean id="keywordProductSkuLuceneQueryBuilder" class="org.yes.cart.search.query.impl.KeywordProductSkuSearchQueryBuilder"/>
-    <bean id="priceLuceneQueryBuilder" class="org.yes.cart.search.query.impl.PriceSearchQueryBuilder">
+    <bean id="attributeLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.AttributeSearchQueryBuilder"/>
+    <bean id="attributeSkuLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.AttributeSkuSearchQueryBuilder"/>
+    <bean id="featuredProductLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.FeaturedProductSearchQueryBuilder"/>
+    <bean id="inStockProductSearchQueryBuilder" class="org.yes.cart.domain.query.impl.InStockProductSearchQueryBuilder"/>
+    <bean id="keywordProductLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.KeywordProductSearchQueryBuilder"/>
+    <bean id="keywordProductSkuLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.KeywordProductSkuSearchQueryBuilder"/>
+    <bean id="priceLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.PriceSearchQueryBuilder">
         <constructor-arg index="0" ref="priceNavigation"/>
     </bean>
-    <bean id="brandLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductBrandSearchQueryBuilder"/>
-    <bean id="productCategoryLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductCategorySearchQueryBuilder"/>
-    <bean id="productCategoryIncludingParentsLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductCategoryIncludingParentsSearchQueryBuilder"/>
-    <bean id="productShopLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductShopSearchQueryBuilder"/>
-    <bean id="productShopInStockLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductShopInStockSearchQueryBuilder"/>
-    <bean id="productShopHasPriceLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductShopHasPriceSearchQueryBuilder"/>
-    <bean id="productIdLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductIdSearchQueryBuilder"/>
-    <bean id="productCodeLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductSkuCodeSearchQueryBuilder"/>
-    <bean id="productSkuIdLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductSkuIdSearchQueryBuilder"/>
-    <bean id="productTagLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductTagSearchQueryBuilder"/>
-    <bean id="noopLuceneQueryBuilder" class="org.yes.cart.search.query.impl.NoopProductSearchQueryBuilder"/>
+    <bean id="brandLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductBrandSearchQueryBuilder"/>
+    <bean id="productCategoryLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductCategorySearchQueryBuilder"/>
+    <bean id="productCategoryIncludingParentsLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductCategoryIncludingParentsSearchQueryBuilder"/>
+    <bean id="productShopLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopSearchQueryBuilder"/>
+    <bean id="productShopInStockLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopInStockSearchQueryBuilder"/>
+    <bean id="productShopHasPriceLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopHasPriceSearchQueryBuilder"/>
+    <bean id="productIdLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductIdSearchQueryBuilder"/>
+    <bean id="productSkuCodeLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductSkuCodeSearchQueryBuilder"/>
+    <bean id="productCodeLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductCodeSearchQueryBuilder"/>
+    <bean id="productSkuIdLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductSkuIdSearchQueryBuilder"/>
+    <bean id="productTagLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductTagSearchQueryBuilder"/>
+    <bean id="noopLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.NoopProductSearchQueryBuilder"/>
 
     <bean id="luceneQueryFactory" class="org.yes.cart.search.query.impl.SearchQueryFactoryImpl">
         <constructor-arg index="0" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
@@ -60,10 +62,11 @@
                 <!-- Direct sku from URL or in code -->
                 <entry key="sku"            value-ref="productSkuIdLuceneQueryBuilder"/>
                 <entry key="sku.skuId"      value-ref="productSkuIdLuceneQueryBuilder"/>
-                <entry key="sku.code"       value-ref="productCodeLuceneQueryBuilder"/>
+                <entry key="sku.code"       value-ref="productSkuCodeLuceneQueryBuilder"/>
                 <!-- Direct product from URL or in code -->
                 <entry key="product"        value-ref="productIdLuceneQueryBuilder"/>
                 <entry key="productId"      value-ref="productIdLuceneQueryBuilder"/>
+                <entry key="code"           value-ref="productCodeLuceneQueryBuilder"/>
 
                 <!-- Searching from url -->
                 <entry key="brand"          value-ref="brandLuceneQueryBuilder"/>
@@ -79,6 +82,7 @@
                 <entry key="productInStockShopId"                   value-ref="productShopInStockLuceneQueryBuilder"/>
                 <entry key="productHasPriceShopId"                  value-ref="productShopHasPriceLuceneQueryBuilder"/>
                 <entry key="featured"                               value-ref="featuredProductLuceneQueryBuilder"/>
+                <entry key="instock"                                value-ref="inStockProductSearchQueryBuilder"/>
             </map>
         </constructor-arg>
         <constructor-arg index="4">
@@ -86,10 +90,11 @@
                 <!-- Direct sku from URL or in code -->
                 <entry key="sku"            value-ref="noopLuceneQueryBuilder"/>
                 <entry key="sku.skuId"      value-ref="noopLuceneQueryBuilder"/>
-                <entry key="sku.code"       value-ref="productCodeLuceneQueryBuilder"/>
+                <entry key="sku.code"       value-ref="productSkuCodeLuceneQueryBuilder"/>
                 <!-- Direct product from URL or in code -->
                 <entry key="product"        value-ref="productIdLuceneQueryBuilder"/>
                 <entry key="productId"      value-ref="productIdLuceneQueryBuilder"/>
+                <entry key="code"           value-ref="productCodeLuceneQueryBuilder"/>
 
                 <!-- Searching from url -->
                 <entry key="brand"          value-ref="noopLuceneQueryBuilder"/>
@@ -102,6 +107,7 @@
                 <entry key="productCategory.category"      value-ref="noopLuceneQueryBuilder"/>
                 <entry key="productShopId"                 value-ref="noopLuceneQueryBuilder"/>
                 <entry key="featured"                      value-ref="noopLuceneQueryBuilder"/>
+                <entry key="instock"                       value-ref="noopLuceneQueryBuilder"/>
             </map>
         </constructor-arg>
         <constructor-arg index="5">
@@ -250,13 +256,17 @@
     </bean>
 
     <bean id="productAvailabilityStrategy"
-          class="org.yes.cart.service.domain.impl.ProductAvailabilityStrategyImpl">
-        <constructor-arg index="0" ref="warehouseService"/>
-        <constructor-arg index="1" ref="skuWarehouseService"/>
+          class="org.yes.cart.shoppingcart.impl.ProductAvailabilityStrategyImpl">
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.shoppingcart.impl.ProductAvailabilityStrategyDefaultImpl">
+                <constructor-arg index="0" ref="warehouseService"/>
+                <constructor-arg index="1" ref="skuWarehouseService"/>
+            </bean>
+        </constructor-arg>
     </bean>
 
     <bean id="productQuantityStrategy"
-          class="org.yes.cart.service.domain.impl.ProductQuantityStrategyImpl"/>
+          class="org.yes.cart.shoppingcart.impl.ProductQuantityStrategyDefaultImpl"/>
 
     <bean id="addressService" parent="txProxyTemplate">
         <property name="target">
@@ -905,6 +915,7 @@
 
     <bean id="shopCustomerCustomisationSupport" class="org.yes.cart.service.domain.impl.ShopCustomerCustomisationSupportImpl">
         <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="attributeService"/>
     </bean>
 
     <bean id="managerService" parent="txProxyTemplate">
@@ -1029,7 +1040,7 @@
     <bean id="promoActionItemNonSaleDiscount" class="org.yes.cart.promotion.impl.action.ItemNonSaleDiscountPromotionAction"/>
     <bean id="promoActionItemAmountOff" class="org.yes.cart.promotion.impl.action.ItemAmountOffPromotionAction"/>
     <bean id="promoActionItemGift" class="org.yes.cart.promotion.impl.action.ItemGiftPromotionAction">
-        <constructor-arg index="0" ref="priceService"/>
+        <constructor-arg index="0" ref="priceResolver"/>
         <constructor-arg index="1" ref="shopService"/>
         <constructor-arg index="2" ref="productService"/>
         <constructor-arg index="3" ref="orderSplittingStrategy"/>
@@ -1039,7 +1050,7 @@
     <bean id="promoActionOrderNonSaleDiscount" class="org.yes.cart.promotion.impl.action.OrderNonSaleDiscountPromotionAction"/>
     <bean id="promoActionOrderAmountOff" class="org.yes.cart.promotion.impl.action.OrderAmountOffPromotionAction"/>
     <bean id="promoActionOrderGift" class="org.yes.cart.promotion.impl.action.OrderGiftPromotionAction">
-        <constructor-arg index="0" ref="priceService"/>
+        <constructor-arg index="0" ref="priceResolver"/>
         <constructor-arg index="1" ref="shopService"/>
         <constructor-arg index="2" ref="productService"/>
         <constructor-arg index="3" ref="orderSplittingStrategy"/>
@@ -1206,7 +1217,7 @@
     </bean>
 
     <bean id="defaultDeliveryCostRegionalPriceResolver" class="org.yes.cart.shoppingcart.impl.DeliveryCostRegionalPriceResolverImpl">
-        <constructor-arg index="0" ref="priceService"/>
+        <constructor-arg index="0" ref="priceResolver"/>
         <constructor-arg index="1" ref="shopService"/>
     </bean>
 
@@ -1251,15 +1262,38 @@
     </bean>
 
     <bean id="taxProvider" class="org.yes.cart.shoppingcart.impl.TaxProviderImpl">
-        <constructor-arg index="0" ref="taxService"/>
-        <constructor-arg index="1" ref="taxConfigService"/>
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.shoppingcart.impl.TaxProviderDefaultImpl">
+                <constructor-arg index="0" ref="taxService"/>
+                <constructor-arg index="1" ref="taxConfigService"/>
+            </bean>
+        </constructor-arg>
     </bean>
 
     <bean id="pricingPolicyProvider" class="org.yes.cart.shoppingcart.impl.PricingPolicyProviderImpl">
-        <constructor-arg index="0" ref="customerService"/>
-        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.shoppingcart.impl.PricingPolicyProviderCustomerAttributeImpl">
+                <constructor-arg index="0" ref="customerService"/>
+                <constructor-arg index="1" ref="shopService"/>
+            </bean>
+        </constructor-arg>
     </bean>
 
+    <bean id="priceResolver" class="org.yes.cart.shoppingcart.impl.PriceResolverImpl">
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.shoppingcart.impl.PriceResolverDefaultImpl">
+                <constructor-arg index="0" ref="priceService"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="inventoryResolver" class="org.yes.cart.shoppingcart.impl.InventoryResolverImpl">
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.shoppingcart.impl.InventoryResolverDefaultImpl">
+                <constructor-arg index="0" ref="skuWarehouseService"/>
+            </bean>
+        </constructor-arg>
+    </bean>
 
     <bean id="orderNumberGenerator" class="org.yes.cart.service.order.impl.DefaultOrderNumberGeneratorImpl">
         <constructor-arg index="0" ref="customerOrderDao"/>
@@ -1282,10 +1316,11 @@
                 <constructor-arg index="3" ref="shopService"/>
                 <constructor-arg index="4" ref="productService"/>
                 <constructor-arg index="5" ref="productSkuService"/>
-                <constructor-arg index="6" ref="priceService"/>
+                <constructor-arg index="6" ref="priceResolver"/>
                 <constructor-arg index="7" ref="orderAddressFormatter"/>
                 <constructor-arg index="8" ref="promotionCouponService"/>
                 <constructor-arg index="9" ref="addressService"/>
+                <constructor-arg index="10" ref="attributeService"/>
             </bean>
         </property>
     </bean>
@@ -1303,7 +1338,7 @@
         <constructor-arg index="0" ref="shopService"/>
         <constructor-arg index="1" ref="productService"/>
         <constructor-arg index="2" ref="warehouseService"/>
-        <constructor-arg index="3" ref="skuWarehouseService"/>
+        <constructor-arg index="3" ref="inventoryResolver"/>
     </bean>
 
     <bean id="deliveryAssembler" class="org.yes.cart.service.order.impl.DeliveryAssemblerImpl">

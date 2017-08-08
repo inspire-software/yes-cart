@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Brand;
 
 import java.util.Date;
@@ -35,7 +34,7 @@ public class AttrValueEntityBrand implements org.yes.cart.domain.entity.AttrValu
     private Brand brand;
     private String val;
     private String displayVal;
-    private Attribute attribute;
+    private String attributeCode;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -70,12 +69,12 @@ public class AttrValueEntityBrand implements org.yes.cart.domain.entity.AttrValu
         this.displayVal = displayVal;
     }
 
-    public Attribute getAttribute() {
-        return this.attribute;
+    public String getAttributeCode() {
+        return attributeCode;
     }
 
-    public void setAttribute(Attribute attribute) {
-        this.attribute = attribute;
+    public void setAttributeCode(final String attributeCode) {
+        this.attributeCode = attributeCode;
     }
 
     public Date getCreatedTimestamp() {

@@ -28,7 +28,7 @@
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
-    <select-sql>select v from AttrValueEntityProduct v where v.attribute.code = {attribute} and v.product.guid = {product}</select-sql>
+    <select-sql>select v from AttrValueEntityProduct v where v.attributeCode = {attributeCode} and v.product.guid = {product}</select-sql>
 
     <import-columns>
 
@@ -48,10 +48,10 @@
             <column-index>3</column-index>
             <!-- field-type>FK_FIELD</field-type -->
             <field-type>FIELD</field-type>
-            <name>attribute</name>
+            <name>attributeCode</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <!-- lookup-query>select a from AttributeEntity a where a.code = {attribute}</lookup-query -->
+            <!-- lookup-query>select a from AttributeEntity a where a.code = {attributeCode}</lookup-query -->
         </column-descriptor>
 
     </import-columns>

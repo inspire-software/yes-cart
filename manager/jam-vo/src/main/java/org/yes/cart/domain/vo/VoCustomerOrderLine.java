@@ -103,6 +103,12 @@ public class VoCustomerOrderLine {
     @DtoField(value = "lineTax", readOnly = true)
     private BigDecimal lineTax;
 
+    @DtoField(value = "lineTotalGross", readOnly = true)
+    private BigDecimal lineTotalGross;
+
+    @DtoField(value = "lineTotalNet", readOnly = true)
+    private BigDecimal lineTotalNet;
+
     @DtoField(value = "deliveryNum", readOnly = true)
     private String deliveryNum;
 
@@ -342,6 +348,22 @@ public class VoCustomerOrderLine {
 
     public void setLineTax(final BigDecimal lineTax) {
         this.lineTax = lineTax;
+    }
+
+    public BigDecimal getLineTotalGross() {
+        return lineTotalGross;
+    }
+
+    public void setLineTotalGross(final BigDecimal lineTotalGross) {
+        this.lineTotalGross = lineTotalGross;
+    }
+
+    public BigDecimal getLineTotalNet() {
+        return lineTotalNet;
+    }
+
+    public void setLineTotalNet(final BigDecimal lineTotalNet) {
+        this.lineTotalNet = lineTotalNet;
     }
 
     public String getDeliveryNum() {

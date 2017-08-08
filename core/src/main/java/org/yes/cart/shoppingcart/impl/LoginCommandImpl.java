@@ -19,7 +19,6 @@ package org.yes.cart.shoppingcart.impl;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
@@ -45,17 +44,17 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
      * @param registry shopping cart command registry
      * @param customerService customer service
      * @param shopService shop service
-     * @param priceService price service
+     * @param priceResolver price service
      * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      */
     public LoginCommandImpl(final ShoppingCartCommandRegistry registry,
                             final CustomerService customerService,
                             final ShopService shopService,
-                            final PriceService priceService,
+                            final PriceResolver priceResolver,
                             final PricingPolicyProvider pricingPolicyProvider,
                             final ProductService productService) {
-        super(registry, priceService, pricingPolicyProvider, productService, shopService);
+        super(registry, priceResolver, pricingPolicyProvider, productService, shopService);
         this.customerService = customerService;
         this.shopService = shopService;
     }
@@ -101,8 +100,8 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
                 ctx.setCustomerEmail(customer.getEmail());
                 ctx.setCustomerName(customerService.formatNameFor(customer, current));
                 ctx.setCustomerShops(customerShops);
-                setDefaultAddressesIfNecessary(current, customer, shoppingCart);
                 setDefaultCustomerOptions(shoppingCart);
+                setDefaultAddressesIfNecessary(current, customer, shoppingCart);
                 setDefaultTaxOptions(shoppingCart);
 
                 recalculatePricesInCart(shoppingCart);

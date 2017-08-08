@@ -20,7 +20,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
-import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.page.component.util.PairChoiceRenderer;
 
@@ -49,7 +49,7 @@ public class MultipleChoicesEditor extends Fragment {
                                  final IModel model,
                                  final IModel<String> labelModel,
                                  final IModel choices,
-                                 final AttrValue attrValue,
+                                 final AttrValueWithAttribute attrValue,
                                  final boolean readOnly) {
         super(id, "multipleChoicesEditor", markupProvider);
         final CheckBoxMultipleChoice<Pair<String, String>> checkBoxMultipleChoice =

@@ -42,7 +42,12 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     private String manufacturerPartCode;
     private String supplierCode;
     private String supplierCatalogCode;
+
     private String pimCode;
+    private boolean pimDisabled;
+    private boolean pimOutdated;
+    private Date pimUpdated;
+
     private Date availablefrom;
     private Date availableto;
     private String name;
@@ -121,6 +126,30 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.pimCode = pimCode;
     }
 
+    public boolean getPimDisabled() {
+        return pimDisabled;
+    }
+
+    public void setPimDisabled(final boolean pimDisabled) {
+        this.pimDisabled = pimDisabled;
+    }
+
+    public boolean getPimOutdated() {
+        return pimOutdated;
+    }
+
+    public void setPimOutdated(final boolean pimOutdated) {
+        this.pimOutdated = pimOutdated;
+    }
+
+    public Date getPimUpdated() {
+        return pimUpdated;
+    }
+
+    public void setPimUpdated(final Date pimUpdated) {
+        this.pimUpdated = pimUpdated;
+    }
+
     public Date getAvailablefrom() {
         return this.availablefrom;
     }
@@ -163,8 +192,9 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     public String getDescriptionAsIs() {
         final StringBuilder builder = new StringBuilder();
         for (AttrValue attr : attributes) {
-            if (attr.getAttribute().getCode().startsWith(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX)) {
-                builder.append(getLocale(attr.getAttribute().getCode()));
+            if (attr.getAttributeCode() != null &&
+                    attr.getAttributeCode().startsWith(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX)) {
+                builder.append(getLocale(attr.getAttributeCode()));
                 builder.append(StringI18NModel.SEPARATOR);
                 builder.append(attr.getVal());
                 builder.append(StringI18NModel.SEPARATOR);
@@ -398,7 +428,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         final Collection<AttrValueProduct> result = new ArrayList<AttrValueProduct>();
         if (attributeCode != null && this.attributes != null) {
             for (AttrValueProduct attrValue : this.attributes) {
-                if (attrValue.getAttribute() != null && attrValue.getAttribute().getCode() != null && attrValue.getAttribute().getCode().equals(attributeCode)) {
+                if (attributeCode.equals(attrValue.getAttributeCode())) {
                     result.add(attrValue);
                 }
             }
@@ -410,8 +440,8 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
         if (this.attributes != null) {
             for (AttrValue attrValue : this.attributes) {
-                if (attrValue != null && attrValue.getAttribute() != null) {
-                    rez.put(attrValue.getAttribute().getCode(), attrValue);
+                if (attrValue != null && attrValue.getAttributeCode() != null) {
+                    rez.put(attrValue.getAttributeCode(), attrValue);
                 }
             }
         }
@@ -422,7 +452,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         if (attributeCode != null) {
             if (this.attributes != null) {
                 for (AttrValueProduct attrValue : this.attributes) {
-                    if (attrValue.getAttribute() != null && attrValue.getAttribute().getCode() != null && attrValue.getAttribute().getCode().equals(attributeCode)) {
+                    if (attributeCode.equals(attrValue.getAttributeCode())) {
                         return attrValue;
                     }
                 }

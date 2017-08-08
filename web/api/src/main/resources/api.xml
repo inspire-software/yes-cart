@@ -35,6 +35,7 @@
                 <entry key="org.yes.cart.domain.ro.ProductAvailabilityModelRO" value="org.yes.cart.domain.ro.ProductAvailabilityModelRO"/>
                 <entry key="org.yes.cart.domain.ro.ProductSkuRO" value="org.yes.cart.domain.ro.ProductSkuRO"/>
                 <entry key="org.yes.cart.domain.ro.SkuPriceRO" value="org.yes.cart.domain.ro.SkuPriceRO"/>
+                <entry key="org.yes.cart.domain.ro.AttrValueAndAttributeRO" value="org.yes.cart.domain.ro.AttrValueAndAttributeRO"/>
                 <entry key="org.yes.cart.domain.ro.AttrValueCategoryRO" value="org.yes.cart.domain.ro.AttrValueCategoryRO"/>
                 <entry key="org.yes.cart.domain.ro.AttrValueCustomerRO" value="org.yes.cart.domain.ro.AttrValueCustomerRO"/>
                 <entry key="org.yes.cart.domain.ro.CustomerRO" value="org.yes.cart.domain.ro.CustomerRO"/>
@@ -71,6 +72,7 @@
             <map>
 
                 <entry key="i18nStringConverter" value-ref="i18nStringConverter"/>
+                <entry key="attributeCodeConverter" value-ref="attributeCodeConverter"/>
                 <entry key="productAvailabilityModelATSConverter" value-ref="productAvailabilityModelATSConverter"/>
                 <entry key="storedAttributesConverter" value-ref="storedAttributesConverter"/>
 
@@ -79,6 +81,13 @@
     </bean>
 
     <bean id="i18nStringConverter" class="org.yes.cart.domain.dto.adapter.impl.I18NStringConverter"/>
+
+    <bean id="attributeCodeConverter" class="org.yes.cart.domain.dto.adapter.impl.AttributeFromCodeValueConverter">
+        <constructor-arg index="0" ref="attributeDao"/>
+        <constructor-arg index="1" ref="transactionManager"/>
+        <constructor-arg index="2" ref="cacheManager"/>
+        <lookup-method name="getAdapters" bean="roAssemblerAdaptersRepository"/>
+    </bean>
 
     <bean id="productAvailabilityModelATSConverter" class="org.yes.cart.domain.dto.adapter.impl.ProductAvailabilityModelATSConverter"/>
 

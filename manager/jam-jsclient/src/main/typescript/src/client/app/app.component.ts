@@ -82,8 +82,22 @@ export class AppComponent implements OnDestroy {
     this.configureIntPreference('UI_FILTER_NO_CAP');
     this.configureIntPreference('UI_TABLE_PAGE_SIZE');
     this.configureIntPreference('UI_TABLE_PAGE_NUMS');
+    this.configureStringPreference('UI_ORDER_TOTALS_GROSS');
 
   }
+
+
+  configureStringPreference(configName:string):void {
+    let cfg:any = Config;
+    let cookieName = 'YCJAM_' + configName;
+    let defaultValue = ''+cfg[configName];
+    let value = CookieUtil.readCookie(cookieName, defaultValue);
+    if (defaultValue !== value) {
+      cfg[configName] = value;
+    }
+    LogUtil.debug('Load UI configuration', configName, value, defaultValue);
+  }
+
 
   configureIntPreference(configName:string):void {
     let cfg:any = Config;

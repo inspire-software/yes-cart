@@ -14,11 +14,9 @@
  *    limitations under the License.
  */
 
-
 package org.yes.cart.domain.entity.impl;
 
 
-import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.ProductSku;
 
 import java.util.Date;
@@ -33,10 +31,10 @@ public class AttrValueEntityProductSku implements org.yes.cart.domain.entity.Att
     private long attrvalueId;
     private long version;
 
+    private ProductSku productSku;
     private String val;
     private String displayVal;
-    private ProductSku productSku;
-    private Attribute attribute;
+    private String attributeCode;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -46,7 +44,13 @@ public class AttrValueEntityProductSku implements org.yes.cart.domain.entity.Att
     public AttrValueEntityProductSku() {
     }
 
+    public ProductSku getProductSku() {
+        return this.productSku;
+    }
 
+    public void setProductSku(ProductSku productSku) {
+        this.productSku = productSku;
+    }
 
     public String getVal() {
         return this.val;
@@ -64,20 +68,12 @@ public class AttrValueEntityProductSku implements org.yes.cart.domain.entity.Att
         this.displayVal = displayVal;
     }
 
-    public ProductSku getProductSku() {
-        return this.productSku;
+    public String getAttributeCode() {
+        return attributeCode;
     }
 
-    public void setProductSku(ProductSku productSku) {
-        this.productSku = productSku;
-    }
-
-    public Attribute getAttribute() {
-        return this.attribute;
-    }
-
-    public void setAttribute(Attribute attribute) {
-        this.attribute = attribute;
+    public void setAttributeCode(final String attributeCode) {
+        this.attributeCode = attributeCode;
     }
 
     public Date getCreatedTimestamp() {

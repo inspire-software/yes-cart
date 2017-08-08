@@ -40,12 +40,12 @@ public interface ContentEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/shop/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoContent> getShopContent(@PathVariable("shopId") int shopId) throws Exception;
+    List<VoContent> getShopContent(@PathVariable("shopId") long shopId) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/shop/{shopId}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoContent> getFilteredContent(@PathVariable("shopId") int shopId, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+    List<VoContent> getFilteredContent(@PathVariable("shopId") long shopId, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -83,5 +83,11 @@ public interface ContentEndpointController {
     @RequestMapping(value = "/body/{contentId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoContentBody> getContentBody(@PathVariable("contentId") long contentId) throws Exception;
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN"})
+    @RequestMapping(value = "/mail/{shopId}/{template}", method = RequestMethod.GET,  produces = { MediaType.TEXT_HTML_VALUE })
+    @ResponseBody
+    String getShopMail(@PathVariable("shopId") long shopId, @PathVariable("template") String template, @RequestParam(value = "order", required = false) String order, @RequestParam(value = "delivery", required = false) String delivery, @RequestParam(value = "customer", required = false) String customer) throws Exception;
 
 }

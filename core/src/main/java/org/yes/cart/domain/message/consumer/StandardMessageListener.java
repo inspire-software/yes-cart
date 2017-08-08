@@ -57,6 +57,16 @@ public class StandardMessageListener implements Runnable {
     public static final String SHOP = "shop";
 
     /**
+     * Shop code.  Shop code context variable.
+     */
+    public static final String CUSTOMER_SHOP_CODE = "customerShop_code";
+
+    /**
+     * Shop.  {@link Shop} context variable.
+     */
+    public static final String CUSTOMER_SHOP = "customerShop";
+
+    /**
      * Customer email.  Email context variable.
      */
     public static final String CUSTOMER_EMAIL = "email";

@@ -25,10 +25,7 @@ import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.support.tokendriven.CartUpdateProcessor;
 import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerializer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -78,7 +75,7 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
                 if (dbState.getGuid().equals(oldCartState.getGuid())) {
                     continue;
                 }
-                final ShoppingCart oldCart = restoreState(oldCartState.getState());
+                final ShoppingCart oldCart = restoreStateInternal(oldCartState.getState());
                 // 4.2. Merge only valid restored carts that are not
                 if (oldCart != null) {
                     // 4.3. Only merge carts from the same shop as we may have mismatch on SKU's
@@ -220,14 +217,37 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
 
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public void invalidateShoppingCart(final ShoppingCart shoppingCart) {
+
+        shoppingCartCommandFactory.execute(shoppingCart,
+                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_EXPIRE, ShoppingCartCommand.CMD_EXPIRE));
+
+    }
 
     /** {@inheritDoc} */
     @Override
     public ShoppingCart restoreState(final byte[] bytes) {
 
+        final ShoppingCart cart = restoreStateInternal(bytes);
+
+        if (cart instanceof MutableShoppingCart) {
+            // deserializing old cart may contain invalid settings
+            shoppingCartCommandFactory.execute(cart,
+                    (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RESTORE, ShoppingCartCommand.CMD_RESTORE));
+        }
+
+        return cart;
+
+    }
+
+    protected ShoppingCart restoreStateInternal(final byte[] bytes) {
+
         return shoppingCartStateSerializer.restoreState(bytes);
 
     }
+
 
     /** {@inheritDoc} */
     @Override

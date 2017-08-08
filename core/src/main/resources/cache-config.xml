@@ -66,6 +66,10 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-byAttributeCode"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="attributeService-allAttributeCodes"/>
             <constructor-arg index="1" value="all"/>
         </bean>

@@ -54,6 +54,7 @@ public class ExpireCartCommandImpl  extends AbstractCartCommandImpl implements S
             shoppingCart.getOrderInfo().clearInfo();
 
             setCustomerOptions(shoppingCart);
+            setDefaultAddressesIfPossible(shoppingCart);
             setTaxOptions(shoppingCart, null, null, null);
 
             if (shoppingCart.removeItemOffers()) {

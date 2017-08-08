@@ -57,6 +57,13 @@ public interface MutableOrderInfo extends OrderInfo, Serializable {
     void setSeparateBillingAddress(boolean separateBillingAddress);
 
     /**
+     * Set force billing address different from shipping address flag.
+     *
+     * @param separateBillingAddressEnabled flag.
+     */
+    void setSeparateBillingAddressEnabled(boolean separateBillingAddressEnabled);
+
+    /**
      * Set delivery address.
      *
      * @param deliveryAddressId delivery address.

@@ -52,6 +52,6 @@ public interface ProductAssociationService
      * @param associationCode association code [up, cross, etc]
      * @return list of product associations ids
      */
-    List<Long> getProductAssociationsIds(Long productId, String associationCode);
+    List<String> getProductAssociationsProductCodes(Long productId, String associationCode);
 
 }

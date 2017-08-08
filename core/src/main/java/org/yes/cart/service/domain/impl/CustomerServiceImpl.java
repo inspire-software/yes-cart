@@ -32,7 +32,7 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.utils.impl.AttrValueRankComparator;
+import org.yes.cart.utils.impl.AttributeRankComparator;
 
 import java.util.*;
 
@@ -84,9 +84,6 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         Customer customer = getGenericDao().findSingleByNamedQuery("CUSTOMER.BY.EMAIL.SHOP", email, shop.getShopId(), Boolean.FALSE);
         if (customer != null) {
             Hibernate.initialize(customer.getAttributes());
-            for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
-                Hibernate.initialize(attrValueCustomer.getAttribute().getEtype());
-            }
         }
         return customer;
     }
@@ -98,9 +95,6 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("authToken", token));
         if (customer != null) {
             Hibernate.initialize(customer.getAttributes());
-            for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
-                Hibernate.initialize(attrValueCustomer.getAttribute().getEtype());
-            }
         }
         return customer;
     }
@@ -112,9 +106,6 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("publicKey", publicKey), Restrictions.eq("lastname", lastName));
         if (customer != null) {
             Hibernate.initialize(customer.getAttributes());
-            for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
-                Hibernate.initialize(attrValueCustomer.getAttribute().getEtype());
-            }
         }
         return customer;
     }
@@ -257,12 +248,11 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             if (attrVal != null) {
                 attrVal.setVal(attributeValue);
             } else {
-                Attribute attr = attributeService.findByAttributeCode(attributeCode);
-                Hibernate.initialize(attr.getEtype()); //load lazy values
+                final Attribute attr = attributeService.findByAttributeCode(attributeCode);
                 if (attr != null) {
                     attrVal = getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
                     attrVal.setVal(attributeValue);
-                    attrVal.setAttribute(attr);
+                    attrVal.setAttributeCode(attr.getCode());
                     attrVal.setCustomer(customer);
                     customer.getAttributes().add(attrVal);
                 }
@@ -274,29 +264,29 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     public List<AttrValueCustomer> getRankedAttributeValues(final Customer customer) {
-        final List<String> filledAttributes;
-        final List<AttrValueCustomer> rez;
+        final Map<String, AttrValueCustomer> filledAttributes;
         if (customer != null) {
-            rez = new ArrayList<AttrValueCustomer>(customer.getAttributes());
-            filledAttributes = new ArrayList<String>(customer.getAttributes().size());
+            filledAttributes = new HashMap<String, AttrValueCustomer>(customer.getAttributes().size());
             for (AttrValueCustomer attrVal : customer.getAttributes()) {
-                filledAttributes.add(attrVal.getAttribute().getCode());
-                rez.add(attrVal);
+                filledAttributes.put(attrVal.getAttributeCode(), attrVal);
             }
         } else {
-            rez = new ArrayList<AttrValueCustomer>();
-            filledAttributes = Collections.EMPTY_LIST;
+            filledAttributes = Collections.EMPTY_MAP;
         }
-        final List<Attribute> emptyAttributes = attributeService.findAvailableAttributes(AttributeGroupNames.CUSTOMER, filledAttributes);
-        for (Attribute attr : emptyAttributes) {
-            AttrValueCustomer attrValueCustomer = attributeService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
-            attrValueCustomer.setAttribute(attr);
-            attrValueCustomer.setCustomer(customer);
-            rez.add(attrValueCustomer);
-        }
-        Collections.sort(rez, new AttrValueRankComparator());
-        for (AttrValueCustomer avc : rez) {
-            Hibernate.initialize(avc.getAttribute().getEtype()); //load lazy values
+        final List<Attribute> attributes = new ArrayList<Attribute>(attributeService.findAvailableAttributes(AttributeGroupNames.CUSTOMER, Collections.EMPTY_LIST));
+        Collections.sort(attributes, new AttributeRankComparator());
+
+        final List<AttrValueCustomer> rez = new ArrayList<AttrValueCustomer>(attributes.size());
+        for (Attribute attr : attributes) {
+            final AttrValueCustomer existing = filledAttributes.get(attr.getCode());
+            if (existing != null) {
+                rez.add(existing);
+            } else {
+                AttrValueCustomer attrValueCustomer = attributeService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
+                attrValueCustomer.setAttributeCode(attr.getCode());
+                attrValueCustomer.setCustomer(customer);
+                rez.add(attrValueCustomer);
+            }
         }
         return rez;
     }

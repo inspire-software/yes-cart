@@ -438,6 +438,16 @@ public interface AttributeNamesKeys {
         String SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT = "SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT";
 
         /**
+         * Setting for whether to allow single address (i.e. use shipping for billing)
+         */
+        String SHOP_DELIVERY_ONE_ADDRESS_DISABLE = "SHOP_DELIVERY_ONE_ADDRESS_DISABLE";
+
+        /**
+         * Setting for whether to show prices
+         */
+        String SHOP_PRODUCT_HIDE_PRICES = "SHOP_PRODUCT_HIDE_PRICES";
+
+        /**
          * Flag whether to include subcategories in search
          */
         String SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH = "INCLUDE_SUBCATEGORIES_IN_SEARCH_SHOP";
@@ -723,6 +733,8 @@ public interface AttributeNamesKeys {
         String ORDER_INFO_B2B_CHARGE_ID = "b2bChargeId";
         String ORDER_INFO_B2B_ORDER_REMARKS_ID = "b2bRemarks";
         String ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID = "b2bRemarksLine";
+
+        String ORDER_INFO_ORDER_LINE_PRICE_REF_ID = "priceRefLine";
 
         String ORDER_INFO_REQUESTED_DELIVERY_DATE_ID = "deliveryDate";
 

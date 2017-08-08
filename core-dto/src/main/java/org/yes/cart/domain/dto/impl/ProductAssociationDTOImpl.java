@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.yes.cart.domain.dto.ProductAssociationDTO;
 
 /**
@@ -51,22 +52,11 @@ public class ProductAssociationDTOImpl implements ProductAssociationDTO {
     )
     private long productId;
 
-
-    @DtoField(
-            value = "productAssociated",
-            converter = "productId2Product",
-            entityBeanKeys = "org.yes.cart.domain.entity.Product"
-    )
-    private long associatedProductId;
-
-    @DtoField(value = "productAssociated.code", readOnly = true)
+    @DtoField(value = "associatedSku")
     private String associatedCode;
 
-    @DtoField(value = "productAssociated.name", readOnly = true)
+    @DtoVirtualField(converter = "productAssociationSkuCodeToName", readOnly = true)
     private String associatedName;
-
-    @DtoField(value = "productAssociated.description", readOnly = true)
-    private String associatedDescription;
 
     /** {@inheritDoc} */
     public long getProductassociationId() {
@@ -116,16 +106,6 @@ public class ProductAssociationDTOImpl implements ProductAssociationDTO {
     }
 
     /** {@inheritDoc} */
-    public long getAssociatedProductId() {
-        return associatedProductId;
-    }
-
-    /** {@inheritDoc} */
-    public void setAssociatedProductId(final long associatedProductId) {
-        this.associatedProductId = associatedProductId;
-    }
-
-    /** {@inheritDoc} */
     public String getAssociatedCode() {
         return associatedCode;
     }
@@ -145,16 +125,6 @@ public class ProductAssociationDTOImpl implements ProductAssociationDTO {
         this.associatedName = associatedName;
     }
 
-    /** {@inheritDoc} */
-    public String getAssociatedDescription() {
-        return associatedDescription;
-    }
-
-    /** {@inheritDoc} */
-    public void setAssociatedDescription(final String associatedDescription) {
-        this.associatedDescription = associatedDescription;
-    }
-
     @Override
     public String toString() {
         return "ProductAssociationDTOImpl{" +
@@ -162,10 +132,8 @@ public class ProductAssociationDTOImpl implements ProductAssociationDTO {
                 ", rank=" + rank +
                 ", associationId=" + associationId +
                 ", productId=" + productId +
-                ", associatedProductId=" + associatedProductId +
                 ", associatedCode='" + associatedCode + '\'' +
                 ", associatedName='" + associatedName + '\'' +
-                ", associatedDescription='" + associatedDescription + '\'' +
                 '}';
     }
 }

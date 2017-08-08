@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { DashboardWidgetVO, ReportDescriptorVO, ReportRequestVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -47,7 +47,7 @@ export class ReportsService {
    */
   getDashboard() {
     return this.http.get(this._serviceBaseUrl + '/dashboard')
-      .map(res => <DashboardWidgetVO[]> res.json())
+      .map(res => <DashboardWidgetVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -57,7 +57,7 @@ export class ReportsService {
    */
   getReportDescriptors() {
     return this.http.get(this._serviceBaseUrl + '/report/all')
-      .map(res => <ReportDescriptorVO[]> res.json())
+      .map(res => <ReportDescriptorVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -74,7 +74,7 @@ export class ReportsService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/report/configure', body, options)
-        .map(res => <ReportRequestVO> res.json())
+        .map(res => <ReportRequestVO> this.json(res))
         .catch(this.handleError);
   }
 
@@ -93,6 +93,16 @@ export class ReportsService {
     return this.http.post(this._serviceBaseUrl + '/report/generate', body, options)
         .map(res => res.text())
         .catch(this.handleError);
+  }
+
+
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    LogUtil.debug('Processing JSON response', contentType, res.text().includes('loginForm'));
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
   }
 
 

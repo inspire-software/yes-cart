@@ -315,7 +315,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
     public void resetPassword(final long customerId, final long shopId) throws Exception {
         if (federationFacade.isManageable(customerId, CustomerDTO.class) && federationFacade.isShopAccessibleByCurrentManager(shopId)) {
 
-            dtoCustomerService.remoteResetPassword(dtoCustomerService.getById(customerId), shopId);
+            dtoCustomerService.resetPassword(dtoCustomerService.getById(customerId), shopId);
 
         } else {
             throw new AccessDeniedException("Access is denied");

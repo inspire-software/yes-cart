@@ -305,11 +305,8 @@
 
         <property name="val" column="VAL" type="string" length="4000"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
-        <many-to-one name="customer" class="org.yes.cart.domain.entity.impl.CustomerEntity"  not-null="true" column="CUSTOMER_ID"/>
-        <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="false" foreign-key="FK_C_ATTRIBUTE"
-                     property-ref="code" insert="true" update="true">
-            <column name="CODE" not-null="true"/>
-        </many-to-one>
+        <many-to-one name="customer" class="org.yes.cart.domain.entity.impl.CustomerEntity"  not-null="true" column="CUSTOMER_ID" foreign-key="FK_AV_CUSTOMER_CUSTOMERID"/>
+        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_CUSTOMER_CODE"/>
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
@@ -329,11 +326,9 @@
 
         <property name="val" column="VAL" type="string" length="4000"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
-        <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity"  not-null="true" column="SHOP_ID"/>
-        <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="false"
-                     foreign-key="FK_SHOP_ATTRIBUTE" property-ref="code" insert="true" update="true">
-            <column name="CODE" not-null="true"/>
-        </many-to-one>
+        <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity"  not-null="true" column="SHOP_ID" foreign-key="FK_AV_SHOP_SHOPID"/>
+        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_SHOP_CODE"/>
+
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
@@ -354,11 +349,8 @@
 
         <property name="val" column="VAL" type="string" length="4000"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
-        <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="false"
-                     foreign-key="FK_SYS_ATTRIBUTE" property-ref="code" insert="true" update="true">
-            <column name="CODE" not-null="true"/>
-        </many-to-one>
-        <many-to-one name="system" class="org.yes.cart.domain.entity.impl.SystemEntity"  not-null="true" column="SYSTEM_ID"/>
+        <many-to-one name="system" class="org.yes.cart.domain.entity.impl.SystemEntity"  not-null="true" column="SYSTEM_ID" foreign-key="FK_AV_SYSTEM_SYSTEMID"/>
+        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_SYSTEM_CODE"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -381,13 +373,10 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <many-to-one name="brand" class="org.yes.cart.domain.entity.impl.BrandEntity"  not-null="true" column="BRAND_ID"/>
+        <many-to-one name="brand" class="org.yes.cart.domain.entity.impl.BrandEntity"  not-null="true" column="BRAND_ID" foreign-key="FK_AV_BRAND_BRANDID"/>
         <property name="val" column="VAL" type="string" length="4000"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
-        <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="false"
-                     property-ref="code" insert="true" update="true">
-            <column name="CODE" not-null="true"/>
-        </many-to-one>
+        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_BRAND_CODE"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -409,12 +398,8 @@
 
         <property name="val" column="VAL" type="string" length="4000"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
-        <many-to-one name="product" class="org.yes.cart.domain.entity.impl.ProductEntity" lazy="proxy" not-null="true" column="PRODUCT_ID"/>
-        <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="false" foreign-key="FK_P_ATTRIBUTE"
-                     property-ref="code" insert="true" update="true" fetch="join">
-            <column name="CODE" not-null="true"/>
-        </many-to-one>
-
+        <many-to-one name="product" class="org.yes.cart.domain.entity.impl.ProductEntity" lazy="proxy" not-null="true" column="PRODUCT_ID" foreign-key="FK_AV_PRODUCT_PRODUCTID"/>
+        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_PRODUCT_CODE"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -436,11 +421,8 @@
 
         <property name="val" column="VAL" type="string" length="4000"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
-        <many-to-one name="productSku" class="org.yes.cart.domain.entity.impl.ProductSkuEntity"  not-null="true" column="SKU_ID"/>
-        <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="false" foreign-key="FK_S_ATTRIBUTE"
-                     property-ref="code" insert="true" update="true">
-            <column name="CODE" not-null="true"/>
-        </many-to-one>
+        <many-to-one name="productSku" class="org.yes.cart.domain.entity.impl.ProductSkuEntity"  not-null="true" column="SKU_ID" foreign-key="FK_AV_SKU_SKUID"/>
+        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_SKU_CODE"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -462,11 +444,8 @@
 
         <property name="val" column="VAL" type="string" length="4000"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
-        <many-to-one name="category" class="org.yes.cart.domain.entity.impl.CategoryEntity"  not-null="true" column="CATEGORY_ID"/>
-        <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="false"
-                     foreign-key="FK_CAT_ATTRIBUTE" property-ref="code" insert="true" update="true">
-            <column name="CODE" not-null="true"/>
-        </many-to-one>
+        <many-to-one name="category" class="org.yes.cart.domain.entity.impl.CategoryEntity"  not-null="true" column="CATEGORY_ID" foreign-key="FK_AV_CATEGORY_CATEGORYID"/>
+        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_CATEGORY_CODE"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -1081,6 +1060,9 @@
         <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255" index="PRODUCT_SCODE" not-null="false"/>
         <property name="supplierCatalogCode" column="SUPPLIER_CATALOG_CODE" type="string" length="255" index="PRODUCT_SCCODE" not-null="false"/>
         <property name="pimCode" column="PIM_CODE" type="string" length="255" index="PRODUCT_PCODE" not-null="false"/>
+        <property name="pimDisabled" column="PIM_DISABLED" type="boolean" index="PRODUCT_PDISABLED" not-null="true"/>
+        <property name="pimOutdated" column="PIM_OUTDATED" type="boolean" index="PRODUCT_POUTDATED" not-null="true"/>
+        <property name="pimUpdated" column="PIM_UPDATED" type="timestamp" not-null="false"/>
 
         <property name="availablefrom" column="AVAILABLEFROM" type="timestamp" not-null="false"/>
         <property name="availableto" column="AVAILABLETO" type="timestamp" not-null="false"/>
@@ -1317,6 +1299,7 @@
             </column>
         </property>
         <property name="pricingPolicy" length="255" type="java.lang.String" column="PRICINGPOLICY" index="SKUPRICE_PRICINGPOLICY" not-null="false"/>
+        <property name="ref" length="255" type="java.lang.String" column="REF" index="SKUPRICE_REF" not-null="false"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -1404,9 +1387,7 @@
         <many-to-one name="product" class="org.yes.cart.domain.entity.impl.ProductEntity" foreign-key="FK_PA_PRODUCT" lazy="false">
             <column name="PRODUCT_ID" not-null="true"/>
         </many-to-one>
-        <many-to-one name="productAssociated" class="org.yes.cart.domain.entity.impl.ProductEntity" foreign-key="FK_PA_ASSOCPROD"  lazy="false">
-            <column name="ASSOCIATEDPRODUCT_ID" not-null="true"/>
-        </many-to-one>
+        <property name="associatedSku" column="ASSOCIATED_SKU_CODE" type="string" length="255" index="ASSOCIATED_SKUCODE" not-null="true"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -2787,10 +2768,10 @@
     <query name="CONTENTBODY.BY.CONTENTID">
         <![CDATA[
        select av.val from CategoryEntity c, AttrValueEntityCategory av
-       where c.categoryId = av.category.categoryId and c.categoryId = ?1 and av.attribute.code like ?2
+       where c.categoryId = av.category.categoryId and c.categoryId = ?1 and av.attributeCode like ?2
        and (c.availablefrom < ?3 OR c.availablefrom IS NULL)
        and (c.availableto > ?3 OR c.availableto IS NULL)
-       order by av.attribute.code
+       order by av.attributeCode
        ]]>
     </query>
 
@@ -2930,7 +2911,7 @@
         <![CDATA[
        select a.val, a.displayVal
        from   ProductEntity p inner join p.attributes a
-            where p.productId = ?1 and a.attribute.code = ?2
+            where p.productId = ?1 and a.attributeCode = ?2
        ]]>
     </query>
 
@@ -2938,7 +2919,7 @@
         <![CDATA[
        select a.val, a.displayVal
        from   ProductSkuEntity p inner join p.attributes a
-            where p.skuId = ?1 and a.attribute.code = ?2
+            where p.skuId = ?1 and a.attributeCode = ?2
        ]]>
     </query>
 
@@ -2946,7 +2927,7 @@
         <![CDATA[
        select a.displayVal
        from   AttrValueEntityProduct a
-            where a.attribute.code = ?1 and a.val = ?2
+            where a.attributeCode = ?1 and a.val = ?2
        ]]>
     </query>
 
@@ -2954,7 +2935,7 @@
         <![CDATA[
        select a.displayVal
        from   AttrValueEntityProductSku a
-            where a.attribute.code = ?1 and a.val = ?2
+            where a.attributeCode = ?1 and a.val = ?2
        ]]>
     </query>
 
@@ -2963,7 +2944,7 @@
        select distinct a.val
        from   ProductEntity p inner join p.attributes a
             where p.producttype.producttypeId = ?1
-            and a.attribute.code = ?2
+            and a.attributeCode = ?2
        ]]>
     </query>
 
@@ -3038,7 +3019,7 @@
        select pav.val
        from  AttrValueEntityProduct pav
             where  pav.product.productId = ?1
-            and pav.attribute.code = ?2
+            and pav.attributeCode = ?2
        ]]>
     </query>
 
@@ -3046,21 +3027,21 @@
         <![CDATA[
        select pav.product.productId, pav.val
        from  AttrValueEntityProduct pav
-            where pav.attribute.code = ?1
+            where pav.attributeCode = ?1
        ]]>
     </query>
 
     <query name="PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES">
         <![CDATA[
-       select a.attribute.code, a.val, a.displayVal from  AttrValueEntityProduct a
-       where a.attribute.code in (?1) group by a.attribute.code, a.val, a.displayVal
+       select a.attributeCode, a.val, a.displayVal from  AttrValueEntityProduct a
+       where a.attributeCode in (?1) group by a.attributeCode, a.val, a.displayVal
        ]]>
     </query>
 
     <query name="PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES">
         <![CDATA[
-       select a.attribute.code, a.val, a.displayVal from AttrValueEntityProductSku a
-       where a.attribute.code in (?1) group by a.attribute.code, a.val, a.displayVal
+       select a.attributeCode, a.val, a.displayVal from AttrValueEntityProductSku a
+       where a.attributeCode in (?1) group by a.attributeCode, a.val, a.displayVal
        ]]>
     </query>
 
@@ -3205,9 +3186,9 @@
        ]]>
     </query>
 
-    <query name="PRODUCT.ASSOCIATIONS.IDS.BY.TYPE">
+    <query name="PRODUCT.ASSOCIATIONS.CODES.BY.TYPE">
         <![CDATA[
-       select a.productAssociated.productId
+       select a.associatedSku
        from ProductAssociationEntity a
        where a.product.productId = ?1
         and a.association.code = ?2
@@ -3325,9 +3306,15 @@
         ]]>
     </query>
 
+    <query name="PRODUCT.IDS.BY.SKU.BARCODES">
+        <![CDATA[
+                 select s.product.productId from ProductSkuEntity s   where s.barCode in (?1)
+        ]]>
+    </query>
+
     <query name="PRODUCT.IDS.BY.ATTRIBUTE.CODE.AND.VALUE">
         <![CDATA[
-                 select avp.product.productId from AttrValueEntityProduct avp   where avp.attribute.code = ?1 and avp.val = ?2
+                 select avp.product.productId from AttrValueEntityProduct avp   where avp.attributeCode = ?1 and avp.val = ?2
         ]]>
     </query>
 
@@ -3368,6 +3355,12 @@
         ]]>
     </query>
 
+
+    <query name="PRODUCT.NAME.BY.CODE">
+        <![CDATA[
+                 select p.name from ProductEntity p   where p.code = ?1
+        ]]>
+    </query>
 
     <query name="SKU.NAME.BY.CODE">
         <![CDATA[
@@ -3506,42 +3499,42 @@
     <query name="SHOP.CODE.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.shop.code from AttrValueEntityShop a
-            where a.attribute.code like ?2 and a.val = ?1
+            where a.attributeCode like ?2 and a.val = ?1
         ]]>
     </query>
 
     <query name="SHOP.ATTRIBUTE.BY.ID.AND.ATTRCODE">
         <![CDATA[
             select a.val from AttrValueEntityShop a
-            where a.shop.shopId = ?1 and a.attribute.code = ?2
+            where a.shop.shopId = ?1 and a.attributeCode = ?2
         ]]>
     </query>
 
     <query name="BRAND.NAME.AND.GUID.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.brand.name, a.brand.guid from AttrValueEntityBrand a
-            where a.attribute.code like ?2 and a.val = ?1
+            where a.attributeCode like ?2 and a.val = ?1
         ]]>
     </query>
 
     <query name="CATEGORY.URI.AND.GUID.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.category.seoInternal.uri, a.category.guid from AttrValueEntityCategory a
-            where a.attribute.code like ?2 and a.val = ?1
+            where a.attributeCode like ?2 and a.val = ?1
         ]]>
     </query>
 
     <query name="PRODUCT.CODE.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.product.code from AttrValueEntityProduct a
-            where a.attribute.code like ?2 and a.val = ?1
+            where a.attributeCode like ?2 and a.val = ?1
         ]]>
     </query>
 
     <query name="SKU.CODE.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.productSku.code from AttrValueEntityProductSku a
-            where a.attribute.code like ?2 and a.val = ?1
+            where a.attributeCode like ?2 and a.val = ?1
         ]]>
     </query>
 

@@ -168,7 +168,7 @@
             </div>
             <div class="col-xs-12">{{ attributeToEdit.attribute.name }}</div>
             <div class="col-xs-12 av-file-upload"><a target="_dfile" href="../service/filevault/image/{{masterObjectType}}?fileName={{attributeToEdit.val}}"  [hidden]="attributeToEdit.val == null">{{ attributeToEdit.val }}</a> <button class="btn btn-default" type="button" (click)="onImageClickRelay()" [hidden]="isImageUploadDisabled()">{{ 'MODAL_BUTTON_UPLOAD' | translate }}</button></div>
-            <div class="col-xs-12 av-file-upload"[hidden]="attributeToEdit.val == null"><input name="imageUrlCopy" class="form-control" type="text" readonly value="{{ attributeToEdit.val != null ? ('http://[domain]/imagevault/' + masterObjectType + '/' + attributeToEdit.val) : '' }}&w=[X]&h=[Y]"></div>
+            <div class="col-xs-12 av-file-upload"[hidden]="attributeToEdit.val == null"><input name="imageUrlCopy" class="form-control" type="text" readonly value="{{ attributeToEdit.val != null ? ('http://[domain]/imgvault/' + masterObjectType + '/' + attributeToEdit.val) : '' }}?w=[X]&h=[Y]"></div>
             <div class="col-xs-12 av-image-preview" [innerHTML]="attributeToEditImagePreview"></div>
           </div>
           <div class="row">

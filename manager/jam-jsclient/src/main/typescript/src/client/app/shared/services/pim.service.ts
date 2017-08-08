@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { AssociationVO, AttrValueProductVO, AttrValueProductSkuVO, ProductSkuVO, ProductVO, ProductWithLinksVO, Pair } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -49,7 +49,7 @@ export class PIMService {
   getAllAssociations() {
 
     return this.http.get(this._serviceBaseUrl + '/associations/all')
-      .map(res => <AssociationVO[]> res.json())
+      .map(res => <AssociationVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -66,7 +66,7 @@ export class PIMService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/product/filtered/' + max, body, options)
-      .map(res => <ProductVO[]> res.json())
+      .map(res => <ProductVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -76,7 +76,7 @@ export class PIMService {
    */
   getProductById(productId:number) {
     return this.http.get(this._serviceBaseUrl + '/product/' + productId)
-      .map(res => <ProductWithLinksVO> res.json())
+      .map(res => <ProductWithLinksVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -93,11 +93,11 @@ export class PIMService {
 
     if (product.productId > 0) {
       return this.http.post(this._serviceBaseUrl + '/product', body, options)
-        .map(res => <ProductWithLinksVO> res.json())
+        .map(res => <ProductWithLinksVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/product', body, options)
-        .map(res => <ProductWithLinksVO> res.json())
+        .map(res => <ProductWithLinksVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -124,7 +124,7 @@ export class PIMService {
    */
   getProductAttributes(id:number) {
     return this.http.get(this._serviceBaseUrl + '/product/attributes/' + id)
-      .map(res => <AttrValueProductVO[]> res.json())
+      .map(res => <AttrValueProductVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -139,7 +139,7 @@ export class PIMService {
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/product/attributes', body, options)
-      .map(res => <AttrValueProductVO[]> res.json())
+      .map(res => <AttrValueProductVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -153,7 +153,7 @@ export class PIMService {
   getProductSkuAll(product:ProductVO) {
 
     return this.http.get(this._serviceBaseUrl + '/product/sku/' + product.productId)
-      .map(res => <ProductSkuVO[]> res.json())
+      .map(res => <ProductSkuVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -170,7 +170,7 @@ export class PIMService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/product/sku/filtered/' + max, body, options)
-      .map(res => <ProductSkuVO[]> res.json())
+      .map(res => <ProductSkuVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -181,7 +181,7 @@ export class PIMService {
    */
   getSkuById(skuId:number) {
     return this.http.get(this._serviceBaseUrl + '/sku/' + skuId)
-      .map(res => <ProductSkuVO> res.json())
+      .map(res => <ProductSkuVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -198,11 +198,11 @@ export class PIMService {
 
     if (sku.skuId > 0) {
       return this.http.post(this._serviceBaseUrl + '/sku', body, options)
-        .map(res => <ProductSkuVO> res.json())
+        .map(res => <ProductSkuVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/sku', body, options)
-        .map(res => <ProductSkuVO> res.json())
+        .map(res => <ProductSkuVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -229,7 +229,7 @@ export class PIMService {
    */
   getSKUAttributes(id:number) {
     return this.http.get(this._serviceBaseUrl + '/sku/attributes/' + id)
-      .map(res => <AttrValueProductSkuVO[]> res.json())
+      .map(res => <AttrValueProductSkuVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -244,13 +244,20 @@ export class PIMService {
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/sku/attributes', body, options)
-      .map(res => <AttrValueProductSkuVO[]> res.json())
+      .map(res => <AttrValueProductSkuVO[]> this.json(res))
       .catch(this.handleError);
   }
 
 
 
-
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    LogUtil.debug('Processing JSON response', contentType, res.text().includes('loginForm'));
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
+  }
 
 
   private handleError (error:any) {

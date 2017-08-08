@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { PaymentGatewayInfoVO, PaymentGatewayVO, PaymentGatewayParameterVO, Pair } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -48,7 +48,7 @@ export class PaymentService {
    */
   getPaymentGateways(lang:string) {
     return this.http.get(this._serviceBaseUrl + '/gateways/all/' + lang)
-      .map(res => <PaymentGatewayInfoVO[]> res.json())
+      .map(res => <PaymentGatewayInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -60,7 +60,7 @@ export class PaymentService {
    */
   getPaymentGatewaysForShop(lang:string, shopCode:string) {
     return this.http.get(this._serviceBaseUrl + '/gateways/shop/' + shopCode + '/' + lang)
-      .map(res => <PaymentGatewayInfoVO[]> res.json())
+      .map(res => <PaymentGatewayInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -71,7 +71,7 @@ export class PaymentService {
    */
   getAllowedPaymentGatewaysForShops(lang:string) {
     return this.http.get(this._serviceBaseUrl + '/gateways/shop/allowed/' + lang)
-      .map(res => <PaymentGatewayInfoVO[]> res.json())
+      .map(res => <PaymentGatewayInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -87,7 +87,7 @@ export class PaymentService {
     let _path = shopCode != null ? '/gateways/configure/shop/' + shopCode + '/' : '/gateways/configure/all/';
 
     return this.http.get(this._serviceBaseUrl + _path + lang)
-      .map(res => <PaymentGatewayVO[]> res.json())
+      .map(res => <PaymentGatewayVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -124,8 +124,18 @@ export class PaymentService {
     let _path = shopCode != null ? ('/gateways/configure/' + pgLabel + '/' + shopCode + '/') : ('/gateways/configure/'  + pgLabel + '/');
 
     return this.http.post(this._serviceBaseUrl + _path , body, options)
-      .map(res => <PaymentGatewayParameterVO[]> res.json())
+      .map(res => <PaymentGatewayParameterVO[]> this.json(res))
       .catch(this.handleError);
+  }
+
+
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    LogUtil.debug('Processing JSON response', contentType, res.text().includes('loginForm'));
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
   }
 
   private handleError (error:any) {

@@ -544,6 +544,51 @@ public interface CustomerOrderDTO extends Identifiable {
     void setOrderTotal(BigDecimal orderTotal);
 
     /**
+     * Get sum of tax amounts
+     * (included delivery).
+     *
+     * @return order price.
+     */
+    BigDecimal getOrderTotalTax();
+
+    /**
+     * Set order total tax.
+     *
+     * @param orderTotalTax order total tax
+     */
+    void setOrderTotalTax(BigDecimal orderTotalTax);
+
+    /**
+     * Get sum of order details prices less promotion discounts applied
+     * (included delivery).
+     *
+     * @return order total (including tax).
+     */
+    BigDecimal getOrderGrossTotal();
+
+    /**
+     * Set order total.
+     *
+     * @param orderGrossTotal order total
+     */
+    void setOrderGrossTotal(BigDecimal orderGrossTotal);
+
+    /**
+     * Get sum of order details prices less promotion discounts applied
+     * (included delivery).
+     *
+     * @return order total (excluding tax).
+     */
+    BigDecimal getOrderNetTotal();
+
+    /**
+     * Set order total.
+     *
+     * @param orderNetTotal order total
+     */
+    void setOrderNetTotal(BigDecimal orderNetTotal);
+
+    /**
      * Calculated delivery price.
      *
      * @return delivery price.

@@ -98,7 +98,7 @@ public class AddressForm extends Form<Address> {
     private final Class<? extends Page> successPage;
     private final PageParameters successPageParameters;
 
-    private final List<AttrValue> values;
+    private final List<AttrValueWithAttribute> values;
 
     /**
      * Create address form.
@@ -144,7 +144,7 @@ public class AddressForm extends Form<Address> {
 
 
         final Map<String, AttrValue> valuesMap = new HashMap<String, AttrValue>();
-        for (final AttrValue av : values) {
+        for (final AttrValueWithAttribute av : values) {
             valuesMap.put(av.getAttribute().getVal(), av);
             try {
                 final Object val = PropertyUtils.getProperty(address, av.getAttribute().getVal());
@@ -191,7 +191,7 @@ public class AddressForm extends Form<Address> {
 
 
 
-        for (final AttrValue attrValue : values) {
+        for (final AttrValueWithAttribute attrValue : values) {
 
             WebMarkupContainer row;
 
@@ -230,7 +230,7 @@ public class AddressForm extends Form<Address> {
                 final ShoppingCart cart = ((AbstractWebPage) getPage()).getCurrentCart();
                 if (isNew || cart.getLogonState() == ShoppingCart.LOGGED_IN) {
 
-                    for (final AttrValue value : values) {
+                    for (final AttrValueWithAttribute value : values) {
                         try {
                             PropertyUtils.setProperty(addr, value.getAttribute().getVal(), value.getVal());
                         }  catch (Exception e) {
@@ -311,7 +311,7 @@ public class AddressForm extends Form<Address> {
     }
 
 
-    private Label getLabel(final AttrValue attrValue, final String lang) {
+    private Label getLabel(final AttrValueWithAttribute attrValue, final String lang) {
 
         final I18NModel model = i18NWebSupport.getFailoverModel(
                 attrValue.getAttribute().getDisplayName(),
@@ -345,7 +345,7 @@ public class AddressForm extends Form<Address> {
      *
      * @return editor
      */
-    protected Component getEditor(final AttrValue attrValue, final Boolean readOnly) {
+    protected Component getEditor(final AttrValueWithAttribute attrValue, final Boolean readOnly) {
 
         return editorFactory.getEditor(EDITOR, this, getLocale().getLanguage(), attrValue, readOnly);
     }

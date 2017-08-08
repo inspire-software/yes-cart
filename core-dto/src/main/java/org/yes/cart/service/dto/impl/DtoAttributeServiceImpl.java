@@ -83,6 +83,13 @@ public class DtoAttributeServiceImpl
     }
 
     /** {@inheritDoc}  */
+    public AttributeDTO findByAttributeCode(final String attributeCode)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final Attribute attribute =  ((AttributeService)service).findByAttributeCode(attributeCode);
+        return fillDTO(attribute);
+    }
+
+    /** {@inheritDoc}  */
     public List<AttributeDTO> findByAttributeGroupCode(final String attributeGroupCode)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Attribute> attributes =  ((AttributeService)service).findByAttributeGroupCode(attributeGroupCode);

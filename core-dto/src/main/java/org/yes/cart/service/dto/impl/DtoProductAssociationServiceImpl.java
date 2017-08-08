@@ -57,28 +57,6 @@ public class DtoProductAssociationServiceImpl
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public ProductAssociationDTO create(final ProductAssociationDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (instance.getProductId() != instance.getAssociatedProductId()) {
-            return super.create(instance);
-        }
-        throw new UnableToCreateInstanceException("Cannot associate product with itself", null);
-
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public ProductAssociationDTO update(final ProductAssociationDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (instance.getProductId() != instance.getAssociatedProductId()) {
-            return super.update(instance);
-        }
-        throw new UnableToCreateInstanceException("Cannot associate product with itself", null);
-    }
-
-    /**
      * Get the dto interface.
      *
      * @return dto interface.

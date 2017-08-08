@@ -62,11 +62,12 @@ public class WsCacheDirectorImplTest {
 
         Set<Pair<String,String>> caches = cacheDirector.resolveCacheNames(CacheDirector.EntityOperation.CREATE, "AttributeEntity");
 
-        assertEquals(14, caches.size());
+        assertEquals(15, caches.size());
 
         assertTrue(caches.contains(new Pair("attributeService-availableAttributesByProductTypeId", "all")));
         assertTrue(caches.contains(new Pair("attributeService-availableImageAttributesByGroupCode", "all")));
         assertTrue(caches.contains(new Pair("attributeService-availableAttributesByGroupCodeStartsWith", "all")));
+        assertTrue(caches.contains(new Pair("attributeService-byAttributeCode", "all")));
         assertTrue(caches.contains(new Pair("attributeService-allAttributeCodes", "all")));
         assertTrue(caches.contains(new Pair("attributeService-allNavigatableAttributeCodes", "all")));
         assertTrue(caches.contains(new Pair("attributeService-allSearchableAttributeCodes", "all")));

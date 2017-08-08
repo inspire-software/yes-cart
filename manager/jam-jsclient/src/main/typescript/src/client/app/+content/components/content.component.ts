@@ -267,7 +267,7 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   protected onEditParent() {
     LogUtil.debug('ContentComponent onEditParent handler');
-    this.contentParentSelectComponent.showDialog();
+    this.contentParentSelectComponent.showDialog(this.content.parentId);
   }
 
   protected onContentParentSelected(event:FormValidationEvent<ContentVO>) {

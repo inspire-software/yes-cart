@@ -19,6 +19,7 @@ package org.yes.cart.domain.dto.impl;
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AttrValueCustomerDTO;
+import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.AttributeDTO;
 
 import java.util.Map;
@@ -42,13 +43,22 @@ public class AttrValueCustomerDTOImpl implements AttrValueCustomerDTO {
     @DtoField(value = "displayVal", converter = "i18nStringConverter")
     private Map<String, String> displayVals;
 
-    @DtoField(value = "attribute",
-            dtoBeanKey = "org.yes.cart.domain.dto.AttributeDTO", readOnly = true)
+    @DtoField(value = "attributeCode", converter = "attributeDTO2Code")
     private AttributeDTO attributeDTO;
 
     @DtoField(value = "customer.customerId", readOnly = true)
     private long customerId;
 
+    public AttrValueCustomerDTOImpl() {
+    }
+
+    public AttrValueCustomerDTOImpl(final AttrValueDTO ava, long customerId) {
+        attrvalueId = ava.getAttrvalueId();
+        val = ava.getVal();
+        displayVals = ava.getDisplayVals();
+        attributeDTO = ava.getAttributeDTO();
+        this.customerId = customerId;
+    }
 
     /** {@inheritDoc} */
     public long getAttrvalueId() {

@@ -22,7 +22,6 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueShop;
-import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.ShopUrl;
 
 import java.util.Arrays;
@@ -107,55 +106,31 @@ public class ShopEntityTest {
         final ShopEntity shopEntity = new ShopEntity();
 
         final AttrValueShop av_def_b = context.mock(AttrValueShop.class, "av_b");
-        final Attribute a_def_b = context.mock(Attribute.class, "a_b");
         final AttrValueShop av_code_b = context.mock(AttrValueShop.class, "av_code_b");
-        final Attribute a_code_b = context.mock(Attribute.class, "a_code_b");
         final AttrValueShop av_lang_b = context.mock(AttrValueShop.class, "av_lang_b");
-        final Attribute a_lang_b = context.mock(Attribute.class, "a_lang_b");
         final AttrValueShop av_code_lang_b = context.mock(AttrValueShop.class, "av_code_lang_b");
-        final Attribute a_code_lang_b = context.mock(Attribute.class, "a_code_lang_b");
         final AttrValueShop av_type_b = context.mock(AttrValueShop.class, "av_type_b");
-        final Attribute a_type_b = context.mock(Attribute.class, "a_type_b");
         final AttrValueShop av_type_lang_b = context.mock(AttrValueShop.class, "av_type_lang_b");
-        final Attribute a_type_lang_b = context.mock(Attribute.class, "a_type_lang_b");
         final AttrValueShop av_code_type_b = context.mock(AttrValueShop.class, "av_code_type_b");
-        final Attribute a_code_type_b = context.mock(Attribute.class, "a_code_type_b");
         final AttrValueShop av_code_lang_type_b = context.mock(AttrValueShop.class, "av_code_lang_type_b");
-        final Attribute a_code_lang_type_b = context.mock(Attribute.class, "a_code_lang_type_b");
 
         final AttrValueShop av_def_s = context.mock(AttrValueShop.class, "av_s");
-        final Attribute a_def_s = context.mock(Attribute.class, "a_s");
         final AttrValueShop av_code_s = context.mock(AttrValueShop.class, "av_code_s");
-        final Attribute a_code_s = context.mock(Attribute.class, "a_code_s");
         final AttrValueShop av_lang_s = context.mock(AttrValueShop.class, "av_lang_s");
-        final Attribute a_lang_s = context.mock(Attribute.class, "a_lang_s");
         final AttrValueShop av_code_lang_s = context.mock(AttrValueShop.class, "av_code_lang_s");
-        final Attribute a_code_lang_s = context.mock(Attribute.class, "a_code_lang_s");
         final AttrValueShop av_type_s = context.mock(AttrValueShop.class, "av_type_s");
-        final Attribute a_type_s = context.mock(Attribute.class, "a_type_s");
         final AttrValueShop av_type_lang_s = context.mock(AttrValueShop.class, "av_type_lang_s");
-        final Attribute a_type_lang_s = context.mock(Attribute.class, "a_type_lang_s");
         final AttrValueShop av_code_type_s = context.mock(AttrValueShop.class, "av_code_type_s");
-        final Attribute a_code_type_s = context.mock(Attribute.class, "a_code_type_s");
         final AttrValueShop av_code_lang_type_s = context.mock(AttrValueShop.class, "av_code_lang_type_s");
-        final Attribute a_code_lang_type_s = context.mock(Attribute.class, "a_code_lang_type_s");
 
         final AttrValueShop av_def = context.mock(AttrValueShop.class, "av");
-        final Attribute a_def = context.mock(Attribute.class, "a");
         final AttrValueShop av_code = context.mock(AttrValueShop.class, "av_code");
-        final Attribute a_code = context.mock(Attribute.class, "a_code");
         final AttrValueShop av_lang = context.mock(AttrValueShop.class, "av_lang");
-        final Attribute a_lang = context.mock(Attribute.class, "a_lang");
         final AttrValueShop av_code_lang = context.mock(AttrValueShop.class, "av_code_lang");
-        final Attribute a_code_lang = context.mock(Attribute.class, "a_code_lang");
         final AttrValueShop av_type = context.mock(AttrValueShop.class, "av_type");
-        final Attribute a_type = context.mock(Attribute.class, "a_type");
         final AttrValueShop av_type_lang = context.mock(AttrValueShop.class, "av_type_lang");
-        final Attribute a_type_lang = context.mock(Attribute.class, "a_type_lang");
         final AttrValueShop av_code_type = context.mock(AttrValueShop.class, "av_code_type");
-        final Attribute a_code_type = context.mock(Attribute.class, "a_code_type");
         final AttrValueShop av_code_lang_type = context.mock(AttrValueShop.class, "av_code_lang_type");
-        final Attribute a_code_lang_type = context.mock(Attribute.class, "a_code_lang_type");
 
 
         shopEntity.setAttributes(Arrays.asList(
@@ -166,106 +141,82 @@ public class ShopEntityTest {
 
         context.checking(new Expectations() {{
 
-            allowing(av_def).getAttribute(); will(returnValue(a_def));
-            allowing(a_def).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX));
+            allowing(av_def).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX));
             allowing(av_def).getVal();will(returnValue("f1"));
 
-            allowing(av_code).getAttribute(); will(returnValue(a_code));
-            allowing(a_code).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_GB"));
+            allowing(av_code).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_GB"));
             allowing(av_code).getVal(); will(returnValue("f1_gb"));
 
-            allowing(av_lang).getAttribute(); will(returnValue(a_lang));
-            allowing(a_lang).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_en"));
+            allowing(av_lang).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_en"));
             allowing(av_lang).getVal(); will(returnValue("f1_en"));
 
-            allowing(av_code_lang).getAttribute(); will(returnValue(a_code_lang));
-            allowing(a_code_lang).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_GB_en"));
+            allowing(av_code_lang).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_GB_en"));
             allowing(av_code_lang).getVal(); will(returnValue("f1_gb_en"));
 
-            allowing(av_type).getAttribute(); will(returnValue(a_type));
-            allowing(a_type).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B2B"));
+            allowing(av_type).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B2B"));
             allowing(av_type).getVal(); will(returnValue("f1_B2B"));
 
-            allowing(av_type_lang).getAttribute(); will(returnValue(a_type_lang));
-            allowing(a_type_lang).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_en_B2B"));
+            allowing(av_type_lang).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_en_B2B"));
             allowing(av_type_lang).getVal(); will(returnValue("f1_B2B_en"));
 
-            allowing(av_code_type).getAttribute(); will(returnValue(a_code_type));
-            allowing(a_code_type).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_GB_B2B"));
+            allowing(av_code_type).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_GB_B2B"));
             allowing(av_code_type).getVal(); will(returnValue("f1_gb_B2B"));
 
-            allowing(av_code_lang_type).getAttribute(); will(returnValue(a_code_lang_type));
-            allowing(a_code_lang_type).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_GB_en_B2B"));
+            allowing(av_code_lang_type).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_GB_en_B2B"));
             allowing(av_code_lang_type).getVal(); will(returnValue("f1_gb_B2B_en"));
 
 
 
 
-            allowing(av_def_s).getAttribute(); will(returnValue(a_def_s));
-            allowing(a_def_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S"));
+            allowing(av_def_s).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S"));
             allowing(av_def_s).getVal();will(returnValue("f1_S"));
 
-            allowing(av_code_s).getAttribute(); will(returnValue(a_code_s));
-            allowing(a_code_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_GB"));
+            allowing(av_code_s).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_GB"));
             allowing(av_code_s).getVal(); will(returnValue("f1_gb_S"));
 
-            allowing(av_lang_s).getAttribute(); will(returnValue(a_lang_s));
-            allowing(a_lang_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_en"));
+            allowing(av_lang_s).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_en"));
             allowing(av_lang_s).getVal(); will(returnValue("f1_en_S"));
 
-            allowing(av_code_lang_s).getAttribute(); will(returnValue(a_code_lang_s));
-            allowing(a_code_lang_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_GB_en"));
+            allowing(av_code_lang_s).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_GB_en"));
             allowing(av_code_lang_s).getVal(); will(returnValue("f1_gb_en_S"));
 
-            allowing(av_type_s).getAttribute(); will(returnValue(a_type_s));
-            allowing(a_type_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_B2B"));
+            allowing(av_type_s).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_B2B"));
             allowing(av_type_s).getVal(); will(returnValue("f1_B2B_S"));
 
-            allowing(av_type_lang_s).getAttribute(); will(returnValue(a_type_lang_s));
-            allowing(a_type_lang_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_en_B2B"));
+            allowing(av_type_lang_s).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_en_B2B"));
             allowing(av_type_lang_s).getVal(); will(returnValue("f1_B2B_en_S"));
 
-            allowing(av_code_type_s).getAttribute(); will(returnValue(a_code_type_s));
-            allowing(a_code_type_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_GB_B2B"));
+            allowing(av_code_type_s).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_GB_B2B"));
             allowing(av_code_type_s).getVal(); will(returnValue("f1_gb_B2B_S"));
 
-            allowing(av_code_lang_type_s).getAttribute(); will(returnValue(a_code_lang_type_s));
-            allowing(a_code_lang_type_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_GB_en_B2B"));
+            allowing(av_code_lang_type_s).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_GB_en_B2B"));
             allowing(av_code_lang_type_s).getVal(); will(returnValue("f1_gb_B2B_en_S"));
 
 
 
 
-            allowing(av_def_b).getAttribute(); will(returnValue(a_def_b));
-            allowing(a_def_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B"));
+            allowing(av_def_b).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B"));
             allowing(av_def_b).getVal();will(returnValue("f1_B"));
 
-            allowing(av_code_b).getAttribute(); will(returnValue(a_code_b));
-            allowing(a_code_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_GB"));
+            allowing(av_code_b).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_GB"));
             allowing(av_code_b).getVal(); will(returnValue("f1_gb_B"));
 
-            allowing(av_lang_b).getAttribute(); will(returnValue(a_lang_b));
-            allowing(a_lang_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_en"));
+            allowing(av_lang_b).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_en"));
             allowing(av_lang_b).getVal(); will(returnValue("f1_en_B"));
 
-            allowing(av_code_lang_b).getAttribute(); will(returnValue(a_code_lang_b));
-            allowing(a_code_lang_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_GB_en"));
+            allowing(av_code_lang_b).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_GB_en"));
             allowing(av_code_lang_b).getVal(); will(returnValue("f1_gb_en_B"));
 
-            allowing(av_type_b).getAttribute(); will(returnValue(a_type_b));
-            allowing(a_type_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_B2B"));
+            allowing(av_type_b).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_B2B"));
             allowing(av_type_b).getVal(); will(returnValue("f1_B2B_B"));
 
-            allowing(av_type_lang_b).getAttribute(); will(returnValue(a_type_lang_b));
-            allowing(a_type_lang_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_en_B2B"));
+            allowing(av_type_lang_b).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_en_B2B"));
             allowing(av_type_lang_b).getVal(); will(returnValue("f1_B2B_en_B"));
 
-            allowing(av_code_type_b).getAttribute(); will(returnValue(a_code_type_b));
-            allowing(a_code_type_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_GB_B2B"));
+            allowing(av_code_type_b).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_GB_B2B"));
             allowing(av_code_type_b).getVal(); will(returnValue("f1_gb_B2B_B"));
 
-            allowing(av_code_lang_type_b).getAttribute(); will(returnValue(a_code_lang_type_b));
-            allowing(a_code_lang_type_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_GB_en_B2B"));
+            allowing(av_code_lang_type_b).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_GB_en_B2B"));
             allowing(av_code_lang_type_b).getVal(); will(returnValue("f1_gb_B2B_en_B"));
 
 

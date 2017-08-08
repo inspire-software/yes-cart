@@ -38,6 +38,13 @@ public interface CartUpdateProcessor {
     void updateShoppingCart(ShoppingCart shoppingCart);
 
     /**
+     * Invalidate given cart by removing all customer auth related information
+     *
+     * @param shoppingCart cart to invalidate
+     */
+    void invalidateShoppingCart(ShoppingCart shoppingCart);
+
+    /**
      * Restore shopping cart from bytes as is.
      *
      * @param bytes bytes to restore cart from

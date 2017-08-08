@@ -90,7 +90,7 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
             }
             imageAttibute = productSkuService.getGenericDao().getEntityFactory().getByIface(AttrValueProductSku.class);
             imageAttibute.setProductSku(productSku);
-            imageAttibute.setAttribute(attribute);
+            imageAttibute.setAttributeCode(attribute.getCode());
             productSku.getAttributes().add(imageAttibute);
         } else if (isInsertOnly()) {
             return false;

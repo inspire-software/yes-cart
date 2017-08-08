@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { CarrierLocaleVO, CarrierVO, ShopCarrierVO, CarrierSlaVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -47,7 +47,7 @@ export class ShippingService {
    */
   getAllCarriers() {
     return this.http.get(this._serviceBaseUrl + '/carrier/all')
-      .map(res => <CarrierVO[]> res.json())
+      .map(res => <CarrierVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -57,7 +57,7 @@ export class ShippingService {
    */
   getShopCarriers(shopId:number) {
     return this.http.get(this._serviceBaseUrl + '/carrier/shop/' + shopId)
-      .map(res => <ShopCarrierVO[]> res.json())
+      .map(res => <ShopCarrierVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -74,11 +74,11 @@ export class ShippingService {
 
     if (carrier.carrierId > 0) {
       return this.http.post(this._serviceBaseUrl + '/carrier', body, options)
-        .map(res => <CarrierVO> res.json())
+        .map(res => <CarrierVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/carrier', body, options)
-        .map(res => <CarrierVO> res.json())
+        .map(res => <CarrierVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -95,7 +95,7 @@ export class ShippingService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.put(this._serviceBaseUrl + '/carrier/shop/' + shopId, body, options)
-      .map(res => <CarrierVO> res.json())
+      .map(res => <CarrierVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -112,7 +112,7 @@ export class ShippingService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/carrier/shop', body, options)
-      .map(res => <Array<ShopCarrierVO>> res.json())
+      .map(res => <Array<ShopCarrierVO>> this.json(res))
       .catch(this.handleError);
   }
 
@@ -137,7 +137,7 @@ export class ShippingService {
    */
   getCarrierSlas(carrierId:number) {
     return this.http.get(this._serviceBaseUrl + '/carriersla/all/' + carrierId)
-      .map(res => <CarrierSlaVO[]> res.json())
+      .map(res => <CarrierSlaVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -152,7 +152,7 @@ export class ShippingService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/carriersla/filtered/' + max, body, options)
-      .map(res => <CarrierSlaVO[]> res.json())
+      .map(res => <CarrierSlaVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -170,11 +170,11 @@ export class ShippingService {
 
     if (sla.carrierslaId > 0) {
       return this.http.post(this._serviceBaseUrl + '/carriersla', body, options)
-        .map(res => <CarrierSlaVO> res.json())
+        .map(res => <CarrierSlaVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/carriersla', body, options)
-        .map(res => <CarrierSlaVO> res.json())
+        .map(res => <CarrierSlaVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -192,6 +192,16 @@ export class ShippingService {
 
     return this.http.delete(this._serviceBaseUrl + '/carriersla/' + sla.carrierslaId, options)
       .catch(this.handleError);
+  }
+
+
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    LogUtil.debug('Processing JSON response', contentType, res.text().includes('loginForm'));
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
   }
 
 

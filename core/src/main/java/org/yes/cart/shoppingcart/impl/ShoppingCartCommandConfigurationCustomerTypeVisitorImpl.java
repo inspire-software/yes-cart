@@ -43,7 +43,7 @@ public class ShoppingCartCommandConfigurationCustomerTypeVisitorImpl extends Abs
 
         String customerType = determineType(determineCustomer(cart));
         cart.getOrderInfo().putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_TYPE, customerType);
-
+        cart.getShoppingContext().setHidePrices(determineShop(cart).isSfHidePricesTypes(customerType));
     }
 
     /**

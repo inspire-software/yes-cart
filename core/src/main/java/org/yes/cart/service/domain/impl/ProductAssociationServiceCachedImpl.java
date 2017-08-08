@@ -70,8 +70,8 @@ public class ProductAssociationServiceCachedImpl implements ProductAssociationSe
      * @return list of product associations
      */
     @Cacheable(value = "productService-productAssociationsIds")
-    public List<Long> getProductAssociationsIds(final Long productId, final String associationCode) {
-        return productAssociationService.getProductAssociationsIds(productId, associationCode);
+    public List<String> getProductAssociationsProductCodes(final Long productId, final String associationCode) {
+        return productAssociationService.getProductAssociationsProductCodes(productId, associationCode);
     }
 
     /** {@inheritDoc} */

@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Product;
 
 import java.util.Date;
@@ -32,10 +31,10 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
     private long attrvalueId;
     private long version;
 
+    private Product product;
     private String val;
     private String displayVal;
-    private Product product;
-    private Attribute attribute;
+    private String attributeCode;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -45,6 +44,13 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
     public AttrValueEntityProduct() {
     }
 
+    public Product getProduct() {
+        return this.product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public String getVal() {
         return this.val;
@@ -62,20 +68,12 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
         this.displayVal = displayVal;
     }
 
-    public Product getProduct() {
-        return this.product;
+    public String getAttributeCode() {
+        return attributeCode;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Attribute getAttribute() {
-        return this.attribute;
-    }
-
-    public void setAttribute(Attribute attribute) {
-        this.attribute = attribute;
+    public void setAttributeCode(final String attributeCode) {
+        this.attributeCode = attributeCode;
     }
 
     public Date getCreatedTimestamp() {

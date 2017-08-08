@@ -76,8 +76,8 @@ public class ProductAssociationServiceImpl
      * @param associationCode association code [up, cross, etc]
      * @return list of product associations
      */
-    public List<Long> getProductAssociationsIds(final Long productId, final String associationCode) {
-        return (List) productAssociationDao.findQueryObjectByNamedQuery("PRODUCT.ASSOCIATIONS.IDS.BY.TYPE", productId, associationCode);
+    public List<String> getProductAssociationsProductCodes(final Long productId, final String associationCode) {
+        return (List) productAssociationDao.findQueryObjectByNamedQuery("PRODUCT.ASSOCIATIONS.CODES.BY.TYPE", productId, associationCode);
     }
 
 

@@ -27,7 +27,7 @@
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
-    <select-sql>select p from ProductAssociationEntity p where p.product.code = {product} and p.productAssociated.code = {productAssociated}</select-sql>
+    <select-sql>select p from ProductAssociationEntity p where p.product.code = {product} and p.associatedSku = {associatedSku}</select-sql>
 
     <import-columns>
 
@@ -52,10 +52,8 @@
         <!-- associated product code -->
         <column-descriptor>
             <column-index>2</column-index>
-            <field-type>FK_FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.Product</entity-type>
-            <name>productAssociated</name>
-            <lookup-query>select p from ProductEntity p where p.code = {productAssociated}</lookup-query>
+            <field-type>FIELD</field-type>
+            <name>associatedSku</name>
         </column-descriptor>
 
         <!-- accessories rank -->

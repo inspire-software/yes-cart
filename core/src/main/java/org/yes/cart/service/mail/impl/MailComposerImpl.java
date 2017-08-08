@@ -29,6 +29,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.mail.MailComposerTemplateSupport;
 import org.yes.cart.service.mail.MailTemplateResourcesProvider;
+import org.yes.cart.util.MimeTypesUtils;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -692,5 +693,62 @@ public class MailComposerImpl implements MailComposer {
 
     }
 
+    /**
+     *
+     * @param mail persistent mail
+     *
+     * @return HTML version with all resources embeded as BASE64 URLs
+     */
+    public String convertMessageToHTML(final Mail mail) {
+
+        final StringBuilder htmlTemplate = new StringBuilder(mail.getHtmlVersion());
+
+        if (CollectionUtils.isNotEmpty(mail.getParts())) {
+            for (final MailPart part : mail.getParts()) {
+                final String fileName = part.getFilename();
+                final String resourceId = part.getResourceId();
+                if (resourceId.startsWith(ATTACHMENT_PREFIX)) {
+                    final Pair<String, String> contentTypeAndFile = convertAttachmentKeyIntoContentTypeAndFilename(resourceId);
+                    if (contentTypeAndFile != null) {
+
+                        final int pos = htmlTemplate.indexOf("</body>");
+                        final String tag = embededTag(contentTypeAndFile.getFirst(), MimeTypesUtils.getBase64DataURL(contentTypeAndFile.getFirst(), part.getData()));
+
+                        if (pos != -1) {
+
+                            htmlTemplate.insert(pos, tag);
+
+                        } else {
+
+                            htmlTemplate.append(tag);
+                        }
+
+                    }
+                } else {
+
+                    final String key = "cid:" + resourceId;
+                    final int pos = htmlTemplate.indexOf(key);
+                    final String contentType = MimeTypesUtils.getMimeType(fileName);
+                    final String tag = embededTag(contentType, MimeTypesUtils.getBase64DataURL(contentType, part.getData()));
+
+                    if (pos != -1) {
+
+                        htmlTemplate.replace(pos, pos + key.length(), MimeTypesUtils.getBase64DataURL(contentType, part.getData()));
+
+                    } else {
+
+                        htmlTemplate.append(tag);
+                    }
+
+                }
+            }
+        }
+
+        return htmlTemplate.toString();
+    }
+
+    private String embededTag(final String contentType, final String src) {
+        return "<embed type=\"" + contentType + "\" src=\"" + src + "\" width=\"100%\" height=\"400\"/>";
+    }
 
 }

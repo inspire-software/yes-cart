@@ -144,7 +144,7 @@ public class SystemServiceImpl implements SystemService {
 
                 attrVal = systemDao.getEntityFactory().getByIface(AttrValueSystem.class);
                 attrVal.setVal(value);
-                attrVal.setAttribute(attr);
+                attrVal.setAttributeCode(attr.getCode());
                 attrVal.setSystem(system);
                 system.getAttributes().put(key, attrVal);
             }

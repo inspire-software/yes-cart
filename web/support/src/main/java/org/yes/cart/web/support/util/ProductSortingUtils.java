@@ -66,6 +66,11 @@ public class ProductSortingUtils {
                 return facetName + "_sort";
             }
         });
+        put("inStock", new SupportedSorting("byAvailability", ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FLAG_FIELD) {
+            public String resolveSortField(final long shopId, final String language, final String currency) {
+                return this.sortFieldBase + shopId;
+            }
+        });
         put("productCode", new SupportedSorting("byCode", ProductSearchQueryBuilder.PRODUCT_CODE_SORT_FIELD));
         put("manufacturerCode", new SupportedSorting("byCode", ProductSearchQueryBuilder.PRODUCT_MANUFACTURER_CODE_SORT_FIELD));
         put("sku", new SupportedSorting("bySKU", ProductSearchQueryBuilder.PRODUCT_CODE_SORT_FIELD));

@@ -32,6 +32,7 @@ import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.service.theme.ThemeService;
+import org.yes.cart.util.log.Markers;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -116,10 +117,11 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
         final OrderEvent orderEvent = (OrderEvent) args[0];
 
-        final boolean mastered = orderEvent.getCustomerOrder().getShop().getMaster() != null;
-        final Shop emailShop = mastered ? orderEvent.getCustomerOrder().getShop().getMaster() : orderEvent.getCustomerOrder().getShop();
+        final Shop orderShop = orderEvent.getCustomerOrder().getShop();
+        final boolean mastered = orderShop.getMaster() != null;
+        final Shop emailShop = mastered ? orderShop.getMaster() : orderShop;
         final String adminEmail = emailShop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
-        final String subAdminEmail = mastered ? orderEvent.getCustomerOrder().getShop().getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL) : null;
+        final String subAdminEmail = mastered ? orderShop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL) : null;
 
         try {
             Object rez = pjp.proceed();
@@ -127,38 +129,55 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
                 final String templateKey = getTemplateKey(orderEvent);
 
-                fillNotificationParameters(orderEvent, shopperTemplates.get(templateKey), orderEvent.getCustomerOrder().getEmail());
+                final String shopperTemplate =  shopperTemplates.get(templateKey);
+
+                if (StringUtils.isNotBlank(shopperTemplate)) {
+
+                    sendOrderNotification(pjp, orderEvent, shopperTemplate, orderEvent.getCustomerOrder().getEmail());
+
+                }
 
                 if (mastered) {
                     if (StringUtils.isBlank(subAdminEmail)) {
-                        LOG.error("Cant get sub-admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode());
-                    } else {
-                        fillNotificationParameters(orderEvent, shopperTemplates.get(templateKey), subAdminEmail);
+                        LOG.error(Markers.alert(), "Can't get sub-admin email address for shop " + orderShop.getCode());
+                    } else if (StringUtils.isNotBlank(shopperTemplate)) {
+                        sendOrderNotification(pjp, orderEvent, shopperTemplate, subAdminEmail);
                     }
                 }
 
+
                 if (StringUtils.isBlank(adminEmail)) {
-                    LOG.error("Cant get admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode() );
+                    LOG.error(Markers.alert(), "Can't get admin email address for shop " + emailShop.getCode());
                 } else {
-                    fillNotificationParameters(orderEvent, adminTemplates.get(templateKey), adminEmail);
+
+                    final String adminTemplate = adminTemplates.get(templateKey);
+
+                    if (StringUtils.isNotBlank(adminTemplate)) {
+
+                        sendOrderNotification(pjp, orderEvent, adminTemplate, adminEmail);
+
+                    }
                 }
 
             }
             return rez;
         } catch (final OrderItemAllocationException th) {
 
-            LOG.warn("Cant allocation quantity for product " + th.getProductSkuCode() );
+            LOG.warn("Can't allocation quantity for product " + th.getProductSkuCode() );
 
             if (StringUtils.isBlank(adminEmail)) {
-                LOG.error("Cant get admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode() );
+                LOG.error(Markers.alert(), "Can't get admin email address for shop " + emailShop.getCode() );
             } else {
 
                 final ProductSku sku = productSkuService.getProductSkuBySkuCode(th.getProductSkuCode());
 
-                fillNotificationParameters(
+                sendOrderNotification(
+                        pjp,
                         orderEvent,
                         "adm-cant-allocate-product-qty",
-                        new HashMap<String, Object>() {{ put("sku", sku); }},
+                        new HashMap<String, Object>() {{
+                            put("sku", sku);
+                        }},
                         adminEmail);
             }
 

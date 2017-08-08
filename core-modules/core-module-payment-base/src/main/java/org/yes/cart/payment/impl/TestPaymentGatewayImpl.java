@@ -76,8 +76,8 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
 
     private final PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             true, true, true, true,
-            true, true, true, false,
-            true, false,
+            true, true, true,
+            false, true, true, false,
             null,
             true, true
     ) {

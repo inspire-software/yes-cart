@@ -77,7 +77,7 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
         final Collection<AttrValueBrand> attributes = brand.getAttributes();
         if (attributes != null) {
             for (AttrValueBrand attrValue : attributes) {
-                if (attrValue.getAttribute() != null && attributeCode.equals(attrValue.getAttribute().getCode())) {
+                if (attributeCode.equals(attrValue.getAttributeCode())) {
                     imageAttributeValue = attrValue;
                     break;
                 }
@@ -99,7 +99,7 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
             }
             imageAttributeValue = brandService.getGenericDao().getEntityFactory().getByIface(AttrValueBrand.class);
             imageAttributeValue.setBrand(brand);
-            imageAttributeValue.setAttribute(attribute);
+            imageAttributeValue.setAttributeCode(attribute.getCode());
             brand.getAttributes().add(imageAttributeValue);
         }  else if (isInsertOnly()) {
             return false;

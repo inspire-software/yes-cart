@@ -35,7 +35,7 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
     private int rank;
     private Association association;
     private Product product;
-    private Product productAssociated;
+    private String associatedSku;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -70,12 +70,12 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
         this.product = product;
     }
 
-    public Product getProductAssociated() {
-        return this.productAssociated;
+    public String getAssociatedSku() {
+        return associatedSku;
     }
 
-    public void setProductAssociated(Product productAssociated) {
-        this.productAssociated = productAssociated;
+    public void setAssociatedSku(final String associatedSku) {
+        this.associatedSku = associatedSku;
     }
 
     public Date getCreatedTimestamp() {

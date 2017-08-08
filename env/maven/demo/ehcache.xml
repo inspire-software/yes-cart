@@ -88,6 +88,9 @@
            overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="attributeService-byAttributeCode" maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
     <cache name="attributeService-allAttributeCodes" maxElementsInMemory="1" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
@@ -279,13 +282,13 @@
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="productService-featuredProducts" maxElementsInMemory="100" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+           eternal="false" timeToLiveSeconds="600" timeToIdleSeconds="300"/>
 
     <cache name="productService-newProducts" maxElementsInMemory="100" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+           eternal="false" timeToLiveSeconds="600" timeToIdleSeconds="300"/>
 
     <cache name="productService-taggedProducts" maxElementsInMemory="100" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+           eternal="false" timeToLiveSeconds="600" timeToIdleSeconds="300"/>
 
     <cache name="productService-productByQuery" maxElementsInMemory="200" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="600" timeToIdleSeconds="300"/>

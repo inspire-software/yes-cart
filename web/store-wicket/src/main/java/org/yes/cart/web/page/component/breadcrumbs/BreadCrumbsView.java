@@ -112,12 +112,20 @@ public class BreadCrumbsView extends BaseComponent {
                     protected void populateItem(final ListItem<Crumb> crumbListItem) {
                         final Crumb crumb = crumbListItem.getModelObject();
                         final I18NModel crumbModel;
-                        if ("tag".equals(crumb.getKey())) {
+                        if (ProductSearchQueryBuilder.PRODUCT_TAG_FIELD.equals(crumb.getKey())) {
                             String tag = crumb.getName();
                             try {
-                                tag = getString(crumb.getName());
-                            } catch (Exception exp) { }
+                                tag = getString(tag);
+                            } catch (Exception exp) {
+                            }
                             crumbModel = getI18NSupport().getFailoverModel(null, tag);
+                        } else if (ProductSearchQueryBuilder.PRODUCT_INSTOCK_FIELD.equals(crumb.getKey())) {
+                            String inStock = crumb.getName();
+                            try {
+                                inStock = getString(ProductSearchQueryBuilder.PRODUCT_INSTOCK_FIELD + inStock);
+                            } catch (Exception exp) {
+                            }
+                            crumbModel = getI18NSupport().getFailoverModel(null, inStock);
                         } else {
                             crumbModel = getI18NSupport().getFailoverModel(crumb.getDisplayName(), crumb.getName());
                         }

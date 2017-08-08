@@ -146,10 +146,10 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
     }
 
 
-    private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+    private final static PaymentGatewayFeature PAYMENT_GATEWAY_FEATURE = new PaymentGatewayFeatureImpl(
             true, true, true, false,
             true, true, true,
-            false, true, false,
+            false, true, true, false,
             null ,
             false, true
     );
@@ -166,7 +166,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      * {@inheritDoc}
      */
     public synchronized PaymentGatewayFeature getPaymentGatewayFeatures() {
-        return paymentGatewayFeature;
+        return PAYMENT_GATEWAY_FEATURE;
     }
 
 

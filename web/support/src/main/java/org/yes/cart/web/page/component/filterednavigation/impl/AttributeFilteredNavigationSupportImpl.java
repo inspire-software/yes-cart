@@ -126,12 +126,12 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
                 final FilteredNavigationRecordRequest request = requestsMap.get(recordTemplate.getCode());
                 if (request == null) {
-                    LOGFTQ.warn("Unable to get filtered navigation request for record: {}", recordTemplate);
+                    LOGFTQ.debug("Unable to get filtered navigation request for record: {}", recordTemplate);
                     continue;
                 }
                 final List<Pair<String, Integer>> counts = facets.get(recordTemplate.getCode());
                 if (counts == null) {
-                    LOGFTQ.warn("Unable to get filtered navigation counts for record: {}, request: {}", recordTemplate, request);
+                    LOGFTQ.debug("Unable to get filtered navigation counts for record: {}, request: {}", recordTemplate, request);
                     continue;
                 }
 

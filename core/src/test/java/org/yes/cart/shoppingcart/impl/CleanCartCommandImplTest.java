@@ -18,6 +18,9 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -38,7 +41,14 @@ public class CleanCartCommandImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testExecute() {
+
+        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
+        Shop shop10 = shopService.getById(10L);
+
         MutableShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.getShoppingContext().setShopCode(shop10.getCode());
+        shoppingCart.getShoppingContext().setShopId(shop10.getShopId());
+
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 

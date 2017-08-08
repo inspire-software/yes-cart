@@ -39,6 +39,8 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
     @DtoField(readOnly = true)
     private boolean separateBillingAddress;
     @DtoField(readOnly = true)
+    private boolean separateBillingAddressEnabled;
+    @DtoField(readOnly = true)
     private boolean billingAddressNotRequired;
     @DtoField(readOnly = true)
     private boolean deliveryAddressNotRequired;
@@ -129,6 +131,14 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
 
     public void setSeparateBillingAddress(final boolean separateBillingAddress) {
         this.separateBillingAddress = separateBillingAddress;
+    }
+
+    public boolean isSeparateBillingAddressEnabled() {
+        return separateBillingAddressEnabled;
+    }
+
+    public void setSeparateBillingAddressEnabled(final boolean separateBillingAddressEnabled) {
+        this.separateBillingAddressEnabled = separateBillingAddressEnabled;
     }
 
     public boolean isBillingAddressNotRequired() {

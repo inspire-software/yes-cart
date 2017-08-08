@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
@@ -34,8 +32,8 @@ public class CarrierSlaServiceImplTest extends BaseCoreDBTestCase {
 
     private CarrierService carrierService;
 
-    protected IDataSet createDataSet() throws Exception {
-        return new FlatXmlDataSet(getClass().getClassLoader().getResourceAsStream("initialdata_carrier.xml"), false);
+    protected String createDataSetFile() {
+        return "initialdata_carrier.xml";
     }
 
     @Before

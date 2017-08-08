@@ -85,20 +85,6 @@ public interface ProductAssociationDTO extends Identifiable {
     void setProductId(long productId);
 
     /**
-     * Get product pk.
-     *
-     * @return product pk.
-     */
-    long getAssociatedProductId();
-
-    /**
-     * Set product pk.
-     *
-     * @param associatedProductId product pk.
-     */
-    void setAssociatedProductId(long associatedProductId);
-
-    /**
      * Get the product code.
      *
      * @return product code.
@@ -125,19 +111,5 @@ public interface ProductAssociationDTO extends Identifiable {
      * @param associatedName
      */
     void setAssociatedName(String associatedName);
-
-    /**
-     * Get the product description.
-     *
-     * @return product description.
-     */
-    String getAssociatedDescription();
-
-    /**
-     * Product description.
-     *
-     * @param associatedDescription description
-     */
-    void setAssociatedDescription(String associatedDescription);
 
 }

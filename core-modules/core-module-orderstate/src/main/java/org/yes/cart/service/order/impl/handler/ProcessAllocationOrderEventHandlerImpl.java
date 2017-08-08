@@ -28,6 +28,7 @@ import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderItemAllocationException;
+import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -45,7 +46,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
     private final WarehouseService warehouseService;
 
-    private final SkuWarehouseService skuWarehouseService;
+    private final InventoryResolver inventoryResolver;
 
     private final ProductService productService;
 
@@ -53,14 +54,14 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
      * Construct transition.
      *
      * @param warehouseService    warehouse service
-     * @param skuWarehouseService sku on warehouse service to change quantity
+     * @param inventoryResolver sku on warehouse service to change quantity
      * @param productService      product service
      */
     public ProcessAllocationOrderEventHandlerImpl(final WarehouseService warehouseService,
-                                                  final SkuWarehouseService skuWarehouseService,
+                                                  final InventoryResolver inventoryResolver,
                                                   final ProductService productService) {
         this.warehouseService = warehouseService;
-        this.skuWarehouseService = skuWarehouseService;
+        this.inventoryResolver = inventoryResolver;
         this.productService = productService;
     }
 
@@ -89,8 +90,8 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
      *
      * @return {@link SkuWarehouseService}
      */
-    protected SkuWarehouseService getSkuWarehouseService() {
-        return skuWarehouseService;
+    protected InventoryResolver getInventoryResolver() {
+        return inventoryResolver;
     }
 
 
@@ -137,7 +138,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
                                         + " in delivery " + orderDelivery.getDeliveryNum());
                     }
 
-                    final BigDecimal rem = skuWarehouseService.debit(selected, skuCode, toAllocate);
+                    final BigDecimal rem = inventoryResolver.debit(selected, skuCode, toAllocate);
 
                     if (MoneyUtils.isFirstBiggerThanSecond(rem, BigDecimal.ZERO)) {
                         /**
@@ -152,7 +153,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
                     }
 
                     // Then if we have taken something that is how much we void in reserve
-                    skuWarehouseService.voidReservation(selected, skuCode, toAllocate);
+                    inventoryResolver.voidReservation(selected, skuCode, toAllocate);
 
                 }
             }

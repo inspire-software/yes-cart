@@ -46,9 +46,16 @@ public interface OrderInfo extends Serializable {
     /**
      * Is billing address different from shipping address.
      *
-     * @return true is billing and shipping address are different.
+     * @return true if billing and shipping address are different.
      */
     boolean isSeparateBillingAddress();
+
+    /**
+     * Is setting for billing address different from shipping address is forced.
+     *
+     * @return true if billing and shipping address are different.
+     */
+    boolean isSeparateBillingAddressEnabled();
 
     /**
      * Get delivery address.

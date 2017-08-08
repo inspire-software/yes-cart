@@ -74,6 +74,10 @@
       <i class="fa fa-edit"></i>
     </button>
 
+    <button type="button" (click)="onShowGrossTotalClick()" class="btn btn-circle btn-xl">
+      <i class="fa {{showGrossTotal ? 'fa-toggle-on' : 'fa-toggle-off'}}" title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_NO_TAX' : 'CUSTOMERORDER_TOTAL_WITH_TAX') | translate }}"></i>
+    </button>
+
     <yc-data-control [changed]="changed"
                      [valid]="validForSave"
                      (saveEvent)="onSaveHandler()"

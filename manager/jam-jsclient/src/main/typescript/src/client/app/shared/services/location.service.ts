@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { CountryVO, StateVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -47,7 +47,7 @@ export class LocationService {
    */
   getAllCountries() {
     return this.http.get(this._serviceBaseUrl + '/country/all')
-      .map(res => <CountryVO[]> res.json())
+      .map(res => <CountryVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -58,7 +58,7 @@ export class LocationService {
    */
   getCountryById(id:number) {
     return this.http.get(this._serviceBaseUrl + '/country/' + id)
-      .map(res => <CountryVO> res.json())
+      .map(res => <CountryVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -75,11 +75,11 @@ export class LocationService {
 
     if (country.countryId > 0) {
       return this.http.post(this._serviceBaseUrl + '/country', body, options)
-        .map(res => <CountryVO> res.json())
+        .map(res => <CountryVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/country', body, options)
-        .map(res => <CountryVO> res.json())
+        .map(res => <CountryVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -105,7 +105,7 @@ export class LocationService {
    */
   getAllStates(country:CountryVO) {
     return this.http.get(this._serviceBaseUrl + '/state/all/' + country.countryId)
-      .map(res => <StateVO[]> res.json())
+      .map(res => <StateVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -117,7 +117,7 @@ export class LocationService {
    */
   getStateById(id:number) {
     return this.http.get(this._serviceBaseUrl + '/state/' + id)
-      .map(res => <StateVO> res.json())
+      .map(res => <StateVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -133,11 +133,11 @@ export class LocationService {
 
     if (state.stateId > 0) {
       return this.http.post(this._serviceBaseUrl + '/state', body, options)
-        .map(res => <StateVO> res.json())
+        .map(res => <StateVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/state', body, options)
-        .map(res => <StateVO> res.json())
+        .map(res => <StateVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -154,6 +154,17 @@ export class LocationService {
     return this.http.delete(this._serviceBaseUrl + '/state/' + state.stateId, options)
       .catch(this.handleError);
   }
+
+
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    LogUtil.debug('Processing JSON response', contentType, res.text().includes('loginForm'));
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
+  }
+
 
   private handleError (error:any) {
 

@@ -70,7 +70,7 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
   }
 
   protected onRowDeleteSelected() {
-    if (this.selectedRow != null) {
+    if (this.selectedRow != null && !this.selectedRow.attribute.mandatory) {
       this.attributeValuesComponent.onRowDeleteSelected();
     }
   }

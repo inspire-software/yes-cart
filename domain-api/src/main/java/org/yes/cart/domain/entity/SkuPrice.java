@@ -209,4 +209,18 @@ public interface SkuPrice extends Auditable, Taggable {
      */
     void setPricingPolicy(String pricingPolicy);
 
+    /**
+     * Get reference for this price list.
+     *
+     * @return reference
+     */
+    String getRef();
+
+    /**
+     * Set reference for this price list
+     *
+     * @param ref reference (e.g. contract number or special price mark)
+     */
+    void setRef(String ref);
+
 }

@@ -49,10 +49,10 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
 
     private static final Logger LOG = LoggerFactory.getLogger(PostFinancePaymentGatewayImpl.class);
 
-    private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+    private final static PaymentGatewayFeature PAYMENT_GATEWAY_FEATURE = new PaymentGatewayFeatureImpl(
             false, false, false, true,
             false, false, false,
-            true, true, true,
+            true, true, true, true,
             null,
             false, false
     );
@@ -597,7 +597,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
      * {@inheritDoc}
      */
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
-        return paymentGatewayFeature;
+        return PAYMENT_GATEWAY_FEATURE;
     }
 
 

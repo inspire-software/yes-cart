@@ -36,7 +36,7 @@
 
     <bean id="preOrderJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="preorderJob" />
-        <property name="cronExpression" value="${yum.cron.preorderJob}" />
+        <property name="cronExpression" value="${admin.cron.preorderJob}" />
     </bean>
 
     <!-- ################################ Backorder/Delivery notifications  ################################# -->
@@ -54,7 +54,7 @@
 
     <bean id="deliveryInfoUpdateJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="deliveryInfoUpdateJob" />
-        <property name="cronExpression" value="${yum.cron.deliveryInfoUpdateJob}" />
+        <property name="cronExpression" value="${admin.cron.deliveryInfoUpdateJob}" />
     </bean>
 
     <!-- ################################ AutoExport notifications  ################################# -->
@@ -72,7 +72,7 @@
 
     <bean id="orderAutoExportProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="orderAutoExportProcessorJob" />
-        <property name="cronExpression" value="${yum.cron.orderAutoExportProcessorJob}" />
+        <property name="cronExpression" value="${admin.cron.orderAutoExportProcessorJob}" />
     </bean>
 
     <!-- ################################ Abandon shopping cart clean up  ################################### -->
@@ -90,7 +90,7 @@
 
     <bean id="abandonedShoppingCartJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="abandonedShoppingCartJob" />
-        <property name="cronExpression" value="${yum.cron.abandonedShoppingCartJob}" />
+        <property name="cronExpression" value="${admin.cron.abandonedShoppingCartJob}" />
     </bean>
 
     <bean name="emptyAnonymousShoppingCartJob" class="org.springframework.scheduling.quartz.JobDetailBean">
@@ -106,7 +106,7 @@
 
     <bean id="emptyAnonymousShoppingCartJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="emptyAnonymousShoppingCartJob" />
-        <property name="cronExpression" value="${yum.cron.emptyAnonymousShoppingCartJob}" />
+        <property name="cronExpression" value="${admin.cron.emptyAnonymousShoppingCartJob}" />
     </bean>
 
 
@@ -125,7 +125,7 @@
 
     <bean id="expiredGuestsJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="expiredGuestsJob" />
-        <property name="cronExpression" value="${yum.cron.expiredGuestsJob}" />
+        <property name="cronExpression" value="${admin.cron.expiredGuestsJob}" />
     </bean>
 
     <!-- ################################ Customer tagging  ################################################# -->
@@ -143,7 +143,7 @@
 
     <bean id="customerTagJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="customerTagJob" />
-        <property name="cronExpression" value="${yum.cron.customerTagJob}" />
+        <property name="cronExpression" value="${admin.cron.customerTagJob}" />
     </bean>
 
     <!-- ################################ Bulk email  ###################################################### -->
@@ -176,7 +176,7 @@
 
     <bean id="sendMailJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="sendMailJob" />
-        <property name="cronExpression" value="${yum.cron.sendMailJob}" />
+        <property name="cronExpression" value="${admin.cron.sendMailJob}" />
     </bean>
 
     <!-- ################################ Auto Import  ###################################################### -->
@@ -212,7 +212,7 @@
 
     <bean id="autoImportJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="autoImportJob" />
-        <property name="cronExpression" value="${yum.cron.autoImportJob}" />
+        <property name="cronExpression" value="${admin.cron.autoImportJob}" />
     </bean>
 
     <!-- ################################ Image scanner  ################################################### -->
@@ -294,7 +294,7 @@
 
     <bean id="imageVaultProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="imageVaultProcessorJob" />
-        <property name="cronExpression" value="${yum.cron.imageVaultProcessorJob}" />
+        <property name="cronExpression" value="${admin.cron.imageVaultProcessorJob}" />
     </bean>
 
     <!-- ################################ Scheduler  ####################################################### -->

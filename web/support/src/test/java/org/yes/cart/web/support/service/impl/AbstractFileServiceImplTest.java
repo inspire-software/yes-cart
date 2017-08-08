@@ -24,7 +24,6 @@ import org.junit.Test;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Attributable;
-import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.misc.Pair;
 
 import java.util.Arrays;
@@ -96,14 +95,11 @@ public class AbstractFileServiceImplTest {
 
         final AttrValue av1 = context.mock(AttrValue.class, "av1");
 
-        final Attribute a1 = context.mock(Attribute.class, "a1");
-
         final List<AttrValue> avs = Arrays.asList(av1);
 
         context.checking(new Expectations() {{
             one(attributable).getAllAttributes(); will(returnValue(avs));
-            one(av1).getAttribute(); will(returnValue(a1));
-            one(a1).getCode(); will(returnValue("NON_IMAGE"));
+            one(av1).getAttributeCode(); will(returnValue("NON_IMAGE"));
         }});
 
         final List<Pair<String, String>> pairs = service.getFileAttributeFileNamesInternal(attributable, "en", "MY_FILE");
@@ -129,25 +125,16 @@ public class AbstractFileServiceImplTest {
         final AttrValue av3 = context.mock(AttrValue.class, "av3");
         final AttrValue av4 = context.mock(AttrValue.class, "av4");
 
-        final Attribute a1 = context.mock(Attribute.class, "a1");
-        final Attribute a2 = context.mock(Attribute.class, "a2");
-        final Attribute a3 = context.mock(Attribute.class, "a3");
-        final Attribute a4 = context.mock(Attribute.class, "a4");
-
         final List<AttrValue> avs = Arrays.asList(av1, av2, av3, av4);
 
         context.checking(new Expectations() {{
             one(attributable).getAllAttributes(); will(returnValue(avs));
-            one(av1).getAttribute(); will(returnValue(a1));
-            one(a1).getCode(); will(returnValue("NON_FILE"));
-            one(av2).getAttribute(); will(returnValue(a2));
-            one(a2).getCode(); will(returnValue("MY_FILE2"));
+            one(av1).getAttributeCode(); will(returnValue("NON_FILE"));
+            one(av2).getAttributeCode(); will(returnValue("MY_FILE2"));
             exactly(2).of(av2).getVal(); will(returnValue("file2.txt"));
-            one(av3).getAttribute(); will(returnValue(a3));
-            one(a3).getCode(); will(returnValue("MY_FILE1"));
+            one(av3).getAttributeCode(); will(returnValue("MY_FILE1"));
             exactly(2).of(av3).getVal(); will(returnValue("file1.pdf"));
-            one(av4).getAttribute(); will(returnValue(a4));
-            one(a4).getCode(); will(returnValue("NON_FILE"));
+            one(av4).getAttributeCode(); will(returnValue("NON_FILE"));
 
         }});
 
@@ -176,26 +163,17 @@ public class AbstractFileServiceImplTest {
         final AttrValue av3 = context.mock(AttrValue.class, "av3");
         final AttrValue av4 = context.mock(AttrValue.class, "av4");
 
-        final Attribute a1 = context.mock(Attribute.class, "a1");
-        final Attribute a2 = context.mock(Attribute.class, "a2");
-        final Attribute a3 = context.mock(Attribute.class, "a3");
-        final Attribute a4 = context.mock(Attribute.class, "a4");
-
         final List<AttrValue> avs = Arrays.asList(av1, av2, av3, av4);
 
         context.checking(new Expectations() {{
             one(attributable).getAllAttributes(); will(returnValue(avs));
-            one(av1).getAttribute(); will(returnValue(a1));
-            one(a1).getCode(); will(returnValue("MY_FILE1_en"));
+            one(av1).getAttributeCode(); will(returnValue("MY_FILE1_en"));
             exactly(2).of(av1).getVal(); will(returnValue("file1_en.jpg"));
-            one(av2).getAttribute(); will(returnValue(a2));
-            one(a2).getCode(); will(returnValue("MY_FILE2"));
+            one(av2).getAttributeCode(); will(returnValue("MY_FILE2"));
             exactly(2).of(av2).getVal(); will(returnValue("file2.jpg"));
-            one(av3).getAttribute(); will(returnValue(a3));
-            one(a3).getCode(); will(returnValue("MY_FILE1"));
+            one(av3).getAttributeCode(); will(returnValue("MY_FILE1"));
             one(av3).getVal(); will(returnValue("file1.jpg"));
-            one(av4).getAttribute(); will(returnValue(a4));
-            one(a4).getCode(); will(returnValue("MY_FILE2_en"));
+            one(av4).getAttributeCode(); will(returnValue("MY_FILE2_en"));
             exactly(2).of(av4).getVal(); will(returnValue("file2_en.jpg"));
 
         }});
@@ -226,26 +204,17 @@ public class AbstractFileServiceImplTest {
         final AttrValue av3 = context.mock(AttrValue.class, "av3");
         final AttrValue av4 = context.mock(AttrValue.class, "av4");
 
-        final Attribute a1 = context.mock(Attribute.class, "a1");
-        final Attribute a2 = context.mock(Attribute.class, "a2");
-        final Attribute a3 = context.mock(Attribute.class, "a3");
-        final Attribute a4 = context.mock(Attribute.class, "a4");
-
         final List<AttrValue> avs = Arrays.asList(av1, av2, av3, av4);
 
         context.checking(new Expectations() {{
             one(attributable).getAllAttributes(); will(returnValue(avs));
-            one(av1).getAttribute(); will(returnValue(a1));
-            one(a1).getCode(); will(returnValue("MY_FILE1_en"));
+            one(av1).getAttributeCode(); will(returnValue("MY_FILE1_en"));
             exactly(2).of(av1).getVal(); will(returnValue("file1_en.jpg"));
-            one(av2).getAttribute(); will(returnValue(a2));
-            one(a2).getCode(); will(returnValue("MY_FILE2"));
+            one(av2).getAttributeCode(); will(returnValue("MY_FILE2"));
             exactly(2).of(av2).getVal(); will(returnValue("file2.jpg"));
-            one(av3).getAttribute(); will(returnValue(a3));
-            one(a3).getCode(); will(returnValue("MY_FILE1"));
+            one(av3).getAttributeCode(); will(returnValue("MY_FILE1"));
             one(av3).getVal(); will(returnValue("file1.jpg"));
-            one(av4).getAttribute(); will(returnValue(a4));
-            one(a4).getCode(); will(returnValue("MY_FILE3_en"));
+            one(av4).getAttributeCode(); will(returnValue("MY_FILE3_en"));
             exactly(2).of(av4).getVal(); will(returnValue("file3_en.jpg"));
 
         }});

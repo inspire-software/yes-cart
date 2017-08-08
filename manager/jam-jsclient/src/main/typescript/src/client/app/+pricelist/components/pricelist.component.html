@@ -13,7 +13,7 @@
         <th>{{ 'PRICELIST_MIN' | translate }}</th>
         <th>{{ 'PRICELIST_FROM' | translate }}</th>
         <th>{{ 'PRICELIST_TO' | translate }}</th>
-        <th>{{ 'PRICELIST_TAG' | translate }}</th>
+        <th>{{ 'PRICELIST_TAG' | translate }} / {{ 'PRICELIST_REF' | translate }}</th>
       </tr>
       </thead>
       <tbody>
@@ -28,7 +28,7 @@
           <td title="{{ 'PRICELIST_MIN' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.minimalPrice | ycprice}}</a>&nbsp;</td>
           <td title="{{ 'PRICELIST_FROM' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.salefrom | ycdatetime }}</a>&nbsp;</td>
           <td title="{{ 'PRICELIST_TO' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.saleto | ycdatetime }}</a>&nbsp;</td>
-          <td title="{{ 'PRICELIST_TAG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.tag}}</a>&nbsp;</td>
+          <td title="{{ 'PRICELIST_TAG' | translate }} / {{ 'PRICELIST_REF' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.tag}} {{row.ref}}</a>&nbsp;</td>
         </template>
       </tr>
       </tbody>

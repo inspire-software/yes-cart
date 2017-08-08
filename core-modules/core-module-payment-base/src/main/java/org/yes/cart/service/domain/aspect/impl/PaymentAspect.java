@@ -25,10 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.i18n.I18NModel;
-import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
@@ -39,6 +36,7 @@ import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
+import org.yes.cart.service.mail.impl.MailUtils;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.theme.ThemeService;
 
@@ -205,31 +203,22 @@ public class PaymentAspect extends BaseNotificationAspect {
         final String shopperTemplate = shopperTemplates.get(rez);
         final String adminTemplate = adminTemplates.get(rez);
 
-        final HashMap<String, Object> map = new HashMap<String, Object>();
-
-        fillParameters(pjp, map);
-
-        fillPaymentParameters(pjp, order, gateway, rez, map);
-
         final PaymentGatewayFeature feature = gateway.getPaymentGatewayFeatures();
 
         // We only report online PG result to shoppers, as offline would be made by contacting shopper directly
         if (feature.isOnlineGateway() && StringUtils.isNotBlank(shopperTemplate)) {
-            final HashMap<String, Object> userMap = new HashMap<String, Object>(map);
-            userMap.put(StandardMessageListener.TEMPLATE_NAME, shopperTemplate);
-            sendNotification(userMap);
+
+            sendPaymentNotification(pjp, order, gateway, rez, false, shopperTemplate, order.getEmail());
+
         }
 
         // We notify admin with all PG results for audit purposes
         if (StringUtils.isNotBlank(adminTemplate)) {
             final String adminEmail = pgShop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
             if (StringUtils.isNotBlank(adminEmail)) {
-                final HashMap<String, Object> adminMap = new HashMap<String, Object>(map);
-                adminMap.put(StandardMessageListener.TEMPLATE_NAME, adminTemplate);
-                adminMap.put(StandardMessageListener.CUSTOMER_EMAIL, adminEmail);
-                List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(order.getOrdernum(), null, (String) null, (String) null);
-                adminMap.put(StandardMessageListener.PAYMENTS, payments);
-                sendNotification(adminMap);
+
+                sendPaymentNotification(pjp, order, gateway, rez, true, adminTemplate, adminEmail);
+
             } else {
                 LOG.warn("Shop admin e-mail is not setup for: {}", order.getShop().getCode());
             }
@@ -237,52 +226,57 @@ public class PaymentAspect extends BaseNotificationAspect {
 
     }
 
-
     /**
-     * Fill extra parameters associated with payment.
+     * Prepare mail object and send it for each recipient
      *
-     * @param pjp {@link org.aspectj.lang.ProceedingJoinPoint}
-     * @param rez payment result {@link org.yes.cart.payment.dto.Payment}
-     * @param map context map
+     * @param pjp             join point
+     * @param customerOrder   customer order
+     * @param paymentGateway  gateway
+     * @param rez             payment result
+     * @param listPayments    true if need to send list of all payments
+     * @param template        mail template to use
+     * @param mailTo          recipients
      */
-    protected void fillPaymentParameters(final ProceedingJoinPoint pjp, final CustomerOrder customerOrder, final PaymentGateway paymentGateway, final String rez, final HashMap<String, Object> map) {
+    protected void sendPaymentNotification(final ProceedingJoinPoint pjp,
+                                           final CustomerOrder customerOrder,
+                                           final PaymentGateway paymentGateway,
+                                           final String rez,
+                                           final boolean listPayments,
+                                           final String template,
+                                           final String ... mailTo) {
 
-        final Shop orderShop = shopService.getById(customerOrder.getShop().getShopId());
+        final Shop orderShop = customerOrder.getShop();
         final Shop shop = orderShop.getMaster() != null ? orderShop.getMaster() : orderShop;
 
-        map.put(StandardMessageListener.SHOP_CODE, shop.getCode());
-        map.put(StandardMessageListener.CUSTOMER_EMAIL, customerOrder.getEmail());
-        map.put(StandardMessageListener.RESULT, rez);
-        map.put(StandardMessageListener.ROOT, customerOrder);
-        map.put(StandardMessageListener.TEMPLATE_FOLDER, themeService.getMailTemplateChainByShopId(shop.getShopId()));
+        List<CustomerOrderPayment> payments = null;
 
-        map.put(StandardMessageListener.SHOP, shop);
-        map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
-        map.put(StandardMessageListener.SHIPPING_ADDRESS, customerOrder.getShippingAddressDetails());
-        map.put(StandardMessageListener.BILLING_ADDRESS, customerOrder.getBillingAddressDetails());
-        map.put(StandardMessageListener.LOCALE, customerOrder.getLocale());
-
-        final PaymentGatewayFeature feature = paymentGateway.getPaymentGatewayFeatures();
-        map.put(StandardMessageListener.PAYMENT_GATEWAY_FEATURE, feature);
-
-        final Map<String, String> carrier = new HashMap<String, String>();
-        final Map<String, String> carrierSla = new HashMap<String, String>();
-        for (final CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
-
-            final I18NModel carrierName = new FailoverStringI18NModel(
-                    delivery.getCarrierSla().getCarrier().getDisplayName(),
-                    delivery.getCarrierSla().getCarrier().getName());
-            carrier.put(delivery.getDeliveryNum(), carrierName.getValue(customerOrder.getLocale()));
-            final I18NModel carrierSlaName = new FailoverStringI18NModel(
-                    delivery.getCarrierSla().getDisplayName(),
-                    delivery.getCarrierSla().getName());
-            carrierSla.put(delivery.getDeliveryNum(), carrierSlaName.getValue(customerOrder.getLocale()));
+        if (listPayments) {
+            payments = customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, (String) null, (String) null);
         }
-        map.put(StandardMessageListener.DELIVERY_CARRIER, carrier);
-        map.put(StandardMessageListener.DELIVERY_CARRIER_SLA, carrierSla);
+
+        for (final String recipient : mailTo) {
+
+            if (StringUtils.isNotBlank(recipient)) {
+
+                final HashMap<String, Object> map = new HashMap<String, Object>();
+
+                MailUtils.appendMethodParamaters(map, pjp.getArgs());
+
+                MailUtils.appendPaymentEmailParameters(
+                        map,
+                        themeService.getMailTemplateChainByShopId(shop.getShopId()),
+                        template,
+                        recipient, customerOrder,
+                        paymentGateway,
+                        rez,
+                        payments);
+
+                sendNotification(map);
+            }
+
+        }
 
     }
-
 
     public void setAuthoriseShopperTemplates(final Map<String, String> authoriseShopperTemplates) {
         this.authoriseShopperTemplates = authoriseShopperTemplates;

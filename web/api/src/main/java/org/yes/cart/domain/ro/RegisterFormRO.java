@@ -36,15 +36,15 @@ public class RegisterFormRO implements Serializable {
     private String email;
     private String customerType;
     private boolean customerTypeSupported;
-    private List<AttrValueCustomerRO> custom;
+    private List<AttrValueAndAttributeRO> custom;
 
     @XmlElementWrapper(name = "custom")
     @XmlElement(name = "attribute")
-    public List<AttrValueCustomerRO> getCustom() {
+    public List<AttrValueAndAttributeRO> getCustom() {
         return custom;
     }
 
-    public void setCustom(final List<AttrValueCustomerRO> custom) {
+    public void setCustom(final List<AttrValueAndAttributeRO> custom) {
         this.custom = custom;
     }
 

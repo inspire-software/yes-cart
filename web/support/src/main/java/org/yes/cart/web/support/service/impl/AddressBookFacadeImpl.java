@@ -199,7 +199,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
-    public List<AttrValue> getShopCustomerAddressAttributes(final Customer customer, final Shop shop, final String addressType) {
+    public List<AttrValueWithAttribute> getShopCustomerAddressAttributes(final Customer customer, final Shop shop, final String addressType) {
 
         return addressCustomisationSupport.getShopCustomerAddressAttributes(customer, shop, addressType);
 

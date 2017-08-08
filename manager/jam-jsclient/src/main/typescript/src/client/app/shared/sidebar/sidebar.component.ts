@@ -33,6 +33,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private menuType : string;
   private docLink : string;
   private copyNote : string;
+  private envLabel : string;
 
   private userSub:any;
 
@@ -56,6 +57,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.menuType = currentUser != null ? currentUser.ui : 'FULL';
     this.docLink = Config.UI_DOC_LINK;
     this.copyNote = Config.UI_COPY_NOTE;
+    this.envLabel = Config.UI_LABEL;
   }
 
   protected selectNewShop() {

@@ -170,8 +170,9 @@ public class CustomerController {
 
         // Only map allowed attributes
         final List<AttrValueCustomerRO> profileAttrs = new ArrayList<AttrValueCustomerRO>();
-        for (final Pair<AttrValueCustomer, Boolean> av : customerServiceFacade.getCustomerProfileAttributes(shop, customer)) {
-            profileAttrs.add(mappingMixin.map(av.getFirst(), AttrValueCustomerRO.class, AttrValueCustomer.class));
+        for (final Pair<AttrValueWithAttribute, Boolean> av : customerServiceFacade.getCustomerProfileAttributes(shop, customer)) {
+            final AttrValueAndAttributeRO ava = mappingMixin.map(av.getFirst(), AttrValueAndAttributeRO.class, AttrValueWithAttribute.class);
+            profileAttrs.add(new AttrValueCustomerRO(ava, ro.getCustomerId()));
         }
         ro.setAttributes(profileAttrs);
 
@@ -399,7 +400,7 @@ public class CustomerController {
             }
 
             final List<String> readonly = shop.getSupportedProfileFormReadOnlyAttributesAsList(customer.getCustomerType());
-            for (final Pair<AttrValueCustomer, Boolean> av : customerServiceFacade.getCustomerProfileAttributes(shop, customer)) {
+            for (final Pair<AttrValueWithAttribute, Boolean> av : customerServiceFacade.getCustomerProfileAttributes(shop, customer)) {
 
                 final Attribute attr = av.getFirst().getAttribute();
                 final AttrValueCustomerRO avRO = valuesInThisUpdate.get(attr.getCode());

@@ -298,7 +298,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         final Set<AttrValueCategory> result = new HashSet<AttrValueCategory>();
         if (this.attributes != null) {
             for (AttrValueCategory attrValue : this.attributes) {
-                if (attrValue.getAttribute().getCode().equals(attributeCode)) {
+                if (attributeCode.equals(attrValue.getAttributeCode())) {
                     result.add(attrValue);
                 }
             }
@@ -315,7 +315,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         }
         if (this.attributes != null) {
             for (AttrValueCategory attrValue : this.attributes) {
-                if (attrValue.getAttribute() != null && attributeCode.equals(attrValue.getAttribute().getCode())) {
+                if (attributeCode.equals(attrValue.getAttributeCode())) {
                     return attrValue;
                 }
             }
@@ -341,8 +341,8 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     public Map<String, AttrValue> getAllAttributesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
         for (AttrValue attrValue : getAllAttributes()) {
-            if (attrValue != null && attrValue.getAttribute() != null) {
-                rez.put(attrValue.getAttribute().getCode(), attrValue);
+            if (attrValue != null && attrValue.getAttributeCode() != null) {
+                rez.put(attrValue.getAttributeCode(), attrValue);
             }
         }
         return rez;

@@ -35,7 +35,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.entity.AttrValueCustomer;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -265,10 +265,10 @@ public class RegisterPanel extends BaseComponent {
             add(fields);
 
             final String lang = getLocale().getLanguage();
-            final List<AttrValueCustomer> reg = getCustomerServiceFacade()
+            final List<AttrValueWithAttribute> reg = getCustomerServiceFacade()
                     .getShopRegistrationAttributes(getCurrentShop(), customerType);
 
-            for (final AttrValue attrValue : reg) {
+            for (final AttrValueWithAttribute attrValue : reg) {
 
                 WebMarkupContainer row = new WebMarkupContainer(fields.newChildId());
 
@@ -316,9 +316,9 @@ public class RegisterPanel extends BaseComponent {
                                 // data.put("phone", getPhone());
                                 data.put("customerType", customerType); // Type is required for registration
 
-                                for (final AttrValue av : reg) {
+                                for (final AttrValueWithAttribute av : reg) {
                                     if (StringUtils.isNotBlank(av.getVal())) {
-                                        data.put(av.getAttribute().getCode(), av.getVal());
+                                        data.put(av.getAttributeCode(), av.getVal());
                                     }
                                 }
 
@@ -365,7 +365,7 @@ public class RegisterPanel extends BaseComponent {
     }
 
 
-    private Label getLabel(final AttrValue attrValue, final String lang) {
+    private Label getLabel(final AttrValueWithAttribute attrValue, final String lang) {
 
         final I18NModel model = getI18NSupport().getFailoverModel(
                 attrValue.getAttribute().getDisplayName(),
@@ -394,7 +394,7 @@ public class RegisterPanel extends BaseComponent {
      *
      * @return editor
      */
-    protected Component getEditor(final AttrValue attrValue, final Boolean readOnly) {
+    protected Component getEditor(final AttrValueWithAttribute attrValue, final Boolean readOnly) {
 
         return editorFactory.getEditor(EDITOR, this, getLocale().getLanguage(), attrValue, readOnly);
     }

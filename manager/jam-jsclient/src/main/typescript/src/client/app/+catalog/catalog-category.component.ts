@@ -152,8 +152,8 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
   }
 
   protected onViewTree() {
-    LogUtil.debug('CatalogCategoryComponent onViewTree handler');
-    this.categorySelectComponent.showDialog();
+    LogUtil.debug('CatalogCategoryComponent onViewTree handler', this.selectedCategory);
+    this.categorySelectComponent.showDialog(this.selectedCategory != null ? this.selectedCategory.categoryId : 0);
   }
 
   protected onCatalogTreeDataSelected(event:FormValidationEvent<CategoryVO>) {

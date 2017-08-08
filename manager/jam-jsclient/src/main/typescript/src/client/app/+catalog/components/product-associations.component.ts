@@ -137,7 +137,7 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
     this.associationToEdit = {
       productassociationId: 0, rank: 0, associationId: assocId,
       productId: this.masterObject.productId,
-      associatedProductId: 0, associatedCode: null, associatedName: null, associatedDescription: null
+      associatedCode: null, associatedName: null
     };
     LogUtil.debug('ProductAssociationsComponent onRowAdd', this.associationToEdit);
     this.addModalDialog.show();
@@ -183,7 +183,7 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
 
   protected onDataChange(event:any) {
 
-    this.validForSave = this.associationToEdit.associatedProductId > 0 && this.associationToEdit.associationId > 0;
+    this.validForSave = this.associationToEdit.associatedCode != null && this.associationToEdit.associatedCode != '';
     LogUtil.debug('ProductAssociationsComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
 
   }
@@ -202,8 +202,6 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
     if (event.valid && this.associationToEdit != null && this.associationToEdit.productassociationId <= 0) {
       this.associationToEdit.associatedCode = event.source.code;
       this.associationToEdit.associatedName = event.source.name;
-      this.associationToEdit.associatedDescription = event.source.description;
-      this.associationToEdit.associatedProductId = event.source.productId;
       LogUtil.debug('ProductAssociationsComponent onProductSelected', this.associationToEdit);
       this.onDataChange(event);
     }
@@ -216,7 +214,7 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
       let attrToDelete = this.selectedRow.productassociationId;
       if (attrToDelete === 0) {
         let idx = this._objectAssociations.findIndex(attrVo => {
-          return attrVo.associationId === this.selectedRow.associationId && attrVo.associatedProductId === this.selectedRow.associatedProductId;
+          return attrVo.associationId === this.selectedRow.associationId && attrVo.associatedCode === this.selectedRow.associatedCode;
         });
         if (idx != -1) {
           this._objectAssociations.splice(idx, 1);

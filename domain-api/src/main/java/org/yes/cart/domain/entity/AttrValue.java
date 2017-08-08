@@ -76,14 +76,14 @@ public interface AttrValue extends Auditable {
      *
      * @return {@link Attribute}
      */
-    Attribute getAttribute();
+    String getAttributeCode();
 
     /**
      * Set attribute.
      *
-     * @param attribute attribute.
+     * @param attributeCode attribute.
      */
-    void setAttribute(Attribute attribute);
+    void setAttributeCode(String attributeCode);
 
 
 }

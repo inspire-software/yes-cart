@@ -58,6 +58,15 @@ public class VoProduct {
     @DtoField(value = "pimCode")
     private String pimCode;
 
+    @DtoField(value = "pimDisabled")
+    private boolean pimDisabled;
+
+    @DtoField(value = "pimOutdated")
+    private boolean pimOutdated;
+
+    @DtoField(value = "pimUpdated")
+    private Date pimUpdated;
+
     @DtoField(value = "tag")
     private String tag;
 
@@ -212,6 +221,30 @@ public class VoProduct {
 
     public void setPimCode(final String pimCode) {
         this.pimCode = pimCode;
+    }
+
+    public boolean isPimDisabled() {
+        return pimDisabled;
+    }
+
+    public void setPimDisabled(final boolean pimDisabled) {
+        this.pimDisabled = pimDisabled;
+    }
+
+    public boolean isPimOutdated() {
+        return pimOutdated;
+    }
+
+    public void setPimOutdated(final boolean pimOutdated) {
+        this.pimOutdated = pimOutdated;
+    }
+
+    public Date getPimUpdated() {
+        return pimUpdated;
+    }
+
+    public void setPimUpdated(final Date pimUpdated) {
+        this.pimUpdated = pimUpdated;
     }
 
     public String getTag() {

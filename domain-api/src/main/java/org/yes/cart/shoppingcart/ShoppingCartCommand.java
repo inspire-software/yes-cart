@@ -73,6 +73,8 @@ public interface ShoppingCartCommand extends Serializable {
     String CMD_SETPGLABEL = "setPgLabelCmd";
     String CMD_SETSHOP = "setShopIdCmd";
 
+    String CMD_RESTORE = "restoreCmd";
+
     String CMD_SETTAXOPTIONS = "setTaxOptionsCmd";
     String CMD_SETTAXOPTIONS_P_NET = "txn";
     String CMD_SETTAXOPTIONS_P_AMOUNT = "txa";

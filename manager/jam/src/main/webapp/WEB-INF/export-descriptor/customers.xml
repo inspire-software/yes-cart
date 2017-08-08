@@ -84,8 +84,8 @@
                 <export-columns>
                     <column-descriptor>
                         <column-header/>
-                        <field-type>FK_FIELD</field-type>
-                        <name>attribute.code</name>
+                        <field-type>FIELD</field-type>
+                        <name>attributeCode</name>
                     </column-descriptor>
                     <column-descriptor>
                         <column-header/>

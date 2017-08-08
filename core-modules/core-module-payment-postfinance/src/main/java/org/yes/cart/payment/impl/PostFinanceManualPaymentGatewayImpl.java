@@ -31,10 +31,10 @@ import java.util.UUID;
 public class PostFinanceManualPaymentGatewayImpl extends PostFinancePaymentGatewayImpl {
 
 
-    private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+    private final static PaymentGatewayFeature PAYMENT_GATEWAY_FEATURE = new PaymentGatewayFeatureImpl(
             true, false, true, false,
             false, false, false,
-            true, true, true,
+            true, true, true, true,
             null,
             false, false
     );
@@ -79,7 +79,7 @@ public class PostFinanceManualPaymentGatewayImpl extends PostFinancePaymentGatew
      * {@inheritDoc}
      */
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
-        return paymentGatewayFeature;
+        return PAYMENT_GATEWAY_FEATURE;
     }
 
 

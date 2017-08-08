@@ -46,7 +46,7 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
      * Find ATS value per product sku for product.
      *
      * @param productId product PK
-     * @param warehouses warehouses to consider (pass cached collection from {@link WarehouseService#getByShopId(long)})
+     * @param warehouses warehouses to consider (pass cached collection from {@link WarehouseService#getByShopId(long, boolean)}})
      *
      * @return SKU code -> ATS map
      */
@@ -56,7 +56,7 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
      * Find ATS value per product sku for product.
      *
      * @param productSku product sku
-     * @param warehouses warehouses to consider (pass cached collection from {@link WarehouseService#getByShopId(long)})
+     * @param warehouses warehouses to consider (pass cached collection from {@link WarehouseService#getByShopId(long, boolean)})
      *
      * @return SKU code -> ATS map
      */

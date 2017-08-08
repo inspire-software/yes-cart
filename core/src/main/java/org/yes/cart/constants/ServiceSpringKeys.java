@@ -116,6 +116,11 @@ public interface ServiceSpringKeys {
      */
     String PRICE_SERVICE = "priceService";
 
+    /**
+     * {@link org.yes.cart.shoppingcart.PriceResolver} bean key.
+     */
+    String PRICE_RESOLVER = "priceResolver";
+
 
     String USER_MANAGMENT_SERVICE = "userManagementService";
 

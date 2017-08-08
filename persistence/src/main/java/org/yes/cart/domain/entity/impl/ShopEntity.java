@@ -81,6 +81,8 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Set<String> sfShowTaxNetTypes;
     private Set<String> sfShowTaxAmountTypes;
     private Set<String> sfShowTaxOptionsTypes;
+    private Set<String> sfShowSameBillingAddressDisabledTypes;
+    private Set<String> sfHidePricesTypes;
 
     private Boolean B2BProfileActive = null;
     private Boolean B2BAddresBookActive = null;
@@ -185,8 +187,8 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         final Map<String, List<AttrValueShop>> rezMulti = new HashMap<String, List<AttrValueShop>>(this.attributes != null ? this.attributes.size() * 2 : 50);
         if (this.attributes != null) {
             for (AttrValueShop attrValue : this.attributes) {
-                if (attrValue != null && attrValue.getAttribute() != null) {
-                    final String code = attrValue.getAttribute().getCode();
+                if (attrValue != null && attrValue.getAttributeCode() != null) {
+                    final String code = attrValue.getAttributeCode();
                     rez.put(code, attrValue);
                     List<AttrValueShop> attrs = rezMulti.get(code);
                     if (attrs == null) {
@@ -813,6 +815,38 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public boolean isSfShowTaxOptions(final String customerType) {
         return getSfShowTaxOptionsTypes().contains(customerType);
+    }
+
+    private Set<String> getSfShowSameBillingAddressDisabledTypes() {
+        if (this.sfShowSameBillingAddressDisabledTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_DELIVERY_ONE_ADDRESS_DISABLE);
+            if (attrs != null) {
+                this.sfShowSameBillingAddressDisabledTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfShowSameBillingAddressDisabledTypes = Collections.emptySet();
+            }
+        }
+        return this.sfShowSameBillingAddressDisabledTypes;
+    }
+
+    public boolean isSfShowSameBillingAddressDisabledTypes(final String customerType) {
+        return getSfShowSameBillingAddressDisabledTypes().contains(customerType);
+    }
+
+    private Set<String> getSfHidePricesTypes() {
+        if (this.sfHidePricesTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_HIDE_PRICES);
+            if (attrs != null) {
+                this.sfHidePricesTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfHidePricesTypes = Collections.emptySet();
+            }
+        }
+        return this.sfHidePricesTypes;
+    }
+
+    public boolean isSfHidePricesTypes(final String customerType) {
+        return getSfHidePricesTypes().contains(customerType);
     }
 
     public String getDefaultShopUrl() {

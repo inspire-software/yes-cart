@@ -187,6 +187,7 @@
                 <value>setAddressesCmd</value>
                 <value>setMultipleDeliveryCmd</value>
                 <value>setShopIdCmd</value>
+                <value>restoreCmd</value>
                 <value>setTaxOptionsCmd</value>
                 <value>setQuantityToCartCmd</value>
                 <value>setPriceCmd</value>
@@ -219,6 +220,7 @@
                 <value>setAddressesCmd</value>
                 <value>setMultipleDeliveryCmd</value>
                 <value>setShopIdCmd</value>
+                <value>restoreCmd</value>
                 <value>viewSkuInternalCmd</value>
                 <value>setIpInternalCmd</value>
                 <value>setPgLabelCmd</value>

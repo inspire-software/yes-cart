@@ -37,18 +37,11 @@ public class VoProductAssociation {
     @DtoField(value = "productId")
     private long productId;
 
-
-    @DtoField(value = "associatedProductId")
-    private long associatedProductId;
-
     @DtoField(value = "associatedCode")
     private String associatedCode;
 
     @DtoField(value = "associatedName")
     private String associatedName;
-
-    @DtoField(value = "associatedDescription")
-    private String associatedDescription;
 
     public long getProductassociationId() {
         return productassociationId;
@@ -82,14 +75,6 @@ public class VoProductAssociation {
         this.productId = productId;
     }
 
-    public long getAssociatedProductId() {
-        return associatedProductId;
-    }
-
-    public void setAssociatedProductId(final long associatedProductId) {
-        this.associatedProductId = associatedProductId;
-    }
-
     public String getAssociatedCode() {
         return associatedCode;
     }
@@ -104,13 +89,5 @@ public class VoProductAssociation {
 
     public void setAssociatedName(final String associatedName) {
         this.associatedName = associatedName;
-    }
-
-    public String getAssociatedDescription() {
-        return associatedDescription;
-    }
-
-    public void setAssociatedDescription(final String associatedDescription) {
-        this.associatedDescription = associatedDescription;
     }
 }

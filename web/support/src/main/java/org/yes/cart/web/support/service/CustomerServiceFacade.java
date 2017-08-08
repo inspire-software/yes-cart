@@ -182,7 +182,7 @@ public interface CustomerServiceFacade {
      *
      * @return list of eligible attributes
      */
-    List<AttrValueCustomer> getShopRegistrationAttributes(Shop shop, String customerType);
+    List<AttrValueWithAttribute> getShopRegistrationAttributes(Shop shop, String customerType);
 
 
     /**
@@ -196,7 +196,7 @@ public interface CustomerServiceFacade {
      *
      * @return list of eligible attributes (pair: 1) attribute, 2) read only flag)
      */
-    List<Pair<AttrValueCustomer, Boolean>> getCustomerProfileAttributes(Shop shop, Customer customer);
+    List<Pair<AttrValueWithAttribute, Boolean>> getCustomerProfileAttributes(Shop shop, Customer customer);
 
     /**
      * Update customer entry.

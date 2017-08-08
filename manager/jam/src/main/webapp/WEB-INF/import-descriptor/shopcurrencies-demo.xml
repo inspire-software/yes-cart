@@ -27,7 +27,7 @@
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
-    <select-sql>select c from AttrValueEntityShop c where c.shop.code = 'SHOP10' and c.attribute.code = 'CURRENCY'</select-sql>
+    <select-sql>select c from AttrValueEntityShop c where c.shop.code = 'SHOP10' and c.attributeCode = 'CURRENCY'</select-sql>
 
     <import-columns>
 
@@ -46,9 +46,8 @@
 
         <column-descriptor>
             <column-index>-1</column-index>
-            <field-type>FK_FIELD</field-type>
-            <name>attribute</name>
-            <lookup-query>select a from AttributeEntity a where a.code = 'CURRENCY'</lookup-query>
+            <field-type>FIELD</field-type>
+            <name>attributeCode</name>
         </column-descriptor>
 
     </import-columns>

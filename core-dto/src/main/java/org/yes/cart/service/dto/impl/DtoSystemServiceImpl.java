@@ -120,7 +120,20 @@ public class DtoSystemServiceImpl implements DtoSystemService {
 
     /** {@inheritDoc}*/
     public long deleteAttributeValue(final long attributeValuePk) {
-        throw new UnsupportedOperationException("System attributes cannot be deleted"); // at least for now
+
+        final Collection<AttrValueSystemDTO> attrs = getAttributesById();
+
+        for (final AttrValueSystemDTO attr : attrs) {
+
+            if (attr.getAttrvalueId() == attributeValuePk && !attr.getAttributeDTO().isMandatory()) {
+
+                systemService.updateAttributeValue(attr.getAttributeDTO().getCode(), null);
+
+            }
+
+        }
+
+        return YC_ID;
     }
 
     /**

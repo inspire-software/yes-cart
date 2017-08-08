@@ -22,15 +22,11 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.promotion.PromotionAction;
-import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.service.order.OrderSplittingStrategy;
-import org.yes.cart.shoppingcart.CartItem;
-import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -52,16 +48,16 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
     // i.e. Gift "ABC : 2" - 1 gift for every two quantity of items
     private static final Pattern RATIO_PATTERN = Pattern.compile("(.*)(( (=|~) )((\\d*)\\.?(\\d*)))");
 
-    private final PriceService priceService;
+    private final PriceResolver priceResolver;
     private final ShopService shopService;
     private final ProductService productService;
     private final OrderSplittingStrategy orderSplittingStrategy;
 
-    public OrderGiftPromotionAction(final PriceService priceService,
+    public OrderGiftPromotionAction(final PriceResolver priceResolver,
                                     final ShopService shopService,
                                     final ProductService productService,
                                     final OrderSplittingStrategy orderSplittingStrategy) {
-        this.priceService = priceService;
+        this.priceResolver = priceResolver;
         this.shopService = shopService;
         this.productService = productService;
         this.orderSplittingStrategy = orderSplittingStrategy;
@@ -106,7 +102,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
             // Fallback only if we have a B2B non-strict mode
             final Long fallbackShopId = masterShopId == customerShopId || shopService.getById(customerShopId).isB2BStrictPriceActive() ? null : masterShopId;
 
-            return priceService.getMinimalPrice(
+            return priceResolver.getMinimalPrice(
                     null,
                     sku,
                     customerShopId,

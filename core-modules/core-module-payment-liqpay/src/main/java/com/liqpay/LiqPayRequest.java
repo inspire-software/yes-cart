@@ -21,12 +21,18 @@
 
 package com.liqpay;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yes.cart.payment.impl.LiqPayPaymentGatewayImpl;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +40,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 
 public class LiqPayRequest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LiqPayPaymentGatewayImpl.class);
 
     public static String post(String url, HashMap<String, String> list, LiqPay lp) throws Exception {
 
@@ -43,8 +51,10 @@ public class LiqPayRequest {
         for (Map.Entry<String, String> entry: list.entrySet())
             urlParameters += entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), "UTF-8") + "&";
 
+        LOG.debug("LiqPay request: {}", urlParameters);
+
         URL obj = new URL(url);
-        DataOutputStream wr;
+        OutputStream wr;
         BufferedReader in;
 
         if(url.indexOf( "https:" ) != -1){
@@ -57,10 +67,12 @@ public class LiqPayRequest {
                     con.setRequestProperty("Proxy-Authorization", "Basic " + lp.getProxyUser());
             }
             con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            con.setRequestProperty("charset", "utf-8");
             con.setDoOutput(true);
-            wr = new DataOutputStream(con.getOutputStream());
+            wr = con.getOutputStream();
             // Send post request
-            wr.writeBytes(urlParameters);
+            wr.write(urlParameters.getBytes(StandardCharsets.UTF_8));
             wr.flush();
             wr.close();
 
@@ -75,10 +87,12 @@ public class LiqPayRequest {
                     con.setRequestProperty("Proxy-Authorization", "Basic " + lp.getProxyUser());
             }
             con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            con.setRequestProperty("charset", "utf-8");
             con.setDoOutput(true);
-            wr = new DataOutputStream(con.getOutputStream());
+            wr = con.getOutputStream();
             // Send post request
-            wr.writeBytes(urlParameters);
+            wr.write(urlParameters.getBytes(StandardCharsets.UTF_8));
             wr.flush();
             wr.close();
 
@@ -94,6 +108,8 @@ public class LiqPayRequest {
             response.append(inputLine);
         }
         in.close();
+
+        LOG.debug("LiqPay response: {}", response);
 
         return response.toString();
     }

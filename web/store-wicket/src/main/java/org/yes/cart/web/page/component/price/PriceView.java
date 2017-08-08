@@ -252,6 +252,8 @@ public class PriceView extends BaseComponent {
     public boolean isVisible() {
         return super.isVisible()
                 &&
+                productPriceModel != null
+                &&
                 productPriceModel.getRegularPrice() != null
                 &&
                 !MoneyUtils.isFirstEqualToSecond(

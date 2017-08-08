@@ -64,7 +64,11 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
      * {@inheritDoc}
      */
     public Attribute findByAttributeCode(final String attributeCode) {
-        return attributeDao.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", attributeCode);
+        final Attribute attribute = attributeDao.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", attributeCode);
+        if (attribute != null) {
+            Hibernate.initialize(attribute.getEtype());
+        }
+        return attribute;
     }
 
 
@@ -110,6 +114,13 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
                     attributeGroupCode,
                     exclude);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Attribute getByAttributeCode(final String attributeCode) {
+        return findByAttributeCode(attributeCode);
     }
 
     /**
@@ -173,6 +184,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_PRICE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.QUERY);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
+        allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_INSTOCK_FIELD);
         return new HashSet<String>(allowedAttributeNames);
     }
 
@@ -185,6 +197,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_PRICE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.QUERY);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
+        allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_INSTOCK_FIELD);
         return new HashSet<String>(allowedAttributeNames);
     }
 

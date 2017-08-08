@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { ContentWithBodyVO, ContentVO, AttrValueContentVO, ContentBodyVO, Pair } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -47,7 +47,7 @@ export class ContentService {
    */
   getAllShopContent(shopId:number) {
     return this.http.get(this._serviceBaseUrl + '/shop/' + shopId)
-      .map(res => <ContentVO[]> res.json())
+      .map(res => <ContentVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -62,7 +62,7 @@ export class ContentService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/shop/' + shopId + '/filtered/' + max, body, options)
-      .map(res => <ContentVO[]> res.json())
+      .map(res => <ContentVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -72,7 +72,7 @@ export class ContentService {
    */
   getContentById(contentId:number) {
     return this.http.get(this._serviceBaseUrl + '/' + contentId)
-      .map(res => <ContentWithBodyVO> res.json())
+      .map(res => <ContentWithBodyVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -90,11 +90,11 @@ export class ContentService {
 
     if (content.contentId > 0) {
       return this.http.post(this._serviceBaseUrl + '/', body, options)
-        .map(res => <ContentWithBodyVO> res.json())
+        .map(res => <ContentWithBodyVO> this.json(res))
         .catch(this.handleError);
     } else {
       return this.http.put(this._serviceBaseUrl + '/', body, options)
-        .map(res => <ContentWithBodyVO> res.json())
+        .map(res => <ContentWithBodyVO> this.json(res))
         .catch(this.handleError);
     }
   }
@@ -122,7 +122,7 @@ export class ContentService {
    */
   getContentAttributes(id:number) {
     return this.http.get(this._serviceBaseUrl + '/attributes/' + id)
-      .map(res => <AttrValueContentVO[]> res.json())
+      .map(res => <AttrValueContentVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -137,7 +137,7 @@ export class ContentService {
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/attributes', body, options)
-      .map(res => <AttrValueContentVO[]> res.json())
+      .map(res => <AttrValueContentVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -150,10 +150,19 @@ export class ContentService {
    */
   getContentBody(id:number) {
     return this.http.get(this._serviceBaseUrl + '/body/' + id)
-      .map(res => <ContentBodyVO[]> res.json())
+      .map(res => <ContentBodyVO[]> this.json(res))
       .catch(this.handleError);
   }
 
+
+  private json(res: Response): any {
+    let contentType = res.headers.get('Content-Type');
+    LogUtil.debug('Processing JSON response', contentType, res.text().includes('loginForm'));
+    if (contentType != null && contentType.includes('text/html') && res.text().includes('loginForm')) {
+      throw new Error('MODAL_ERROR_MESSAGE_AUTH');
+    }
+    return res.json();
+  }
 
 
   private handleError (error:any) {

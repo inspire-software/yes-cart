@@ -29,7 +29,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.entity.AttrValueCustomer;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
@@ -98,7 +98,7 @@ public class DynaFormPanel extends BaseComponent {
         final Shop shop = getCurrentShop();
         final Customer customer = (Customer) getDefaultModelObject();
 
-        final List<Pair<AttrValueCustomer, Boolean>> attrValueCollection = customerService.getCustomerProfileAttributes(shop, customer);
+        final List<Pair<AttrValueWithAttribute, Boolean>> attrValueCollection = customerService.getCustomerProfileAttributes(shop, customer);
 
         final Form form = new Form(FORM) {
 
@@ -107,7 +107,7 @@ public class DynaFormPanel extends BaseComponent {
                 LOG.debug("Attributes will be updated for customer [{}]", customer.getEmail());
 
                 final Map<String, String> values = new HashMap<String, String>();
-                for (Pair<? extends AttrValue, Boolean> av : attrValueCollection) {
+                for (Pair<? extends AttrValueWithAttribute, Boolean> av : attrValueCollection) {
                     LOG.debug("Attribute with code [{}] has value [{}], readonly [{}]",
                             new Object[] {
                                     av.getFirst().getAttribute().getCode(),
@@ -146,7 +146,7 @@ public class DynaFormPanel extends BaseComponent {
 
         final String lang = getLocale().getLanguage();
 
-        for (Pair<? extends AttrValue, Boolean> attrValue : attrValueCollection) {
+        for (Pair<? extends AttrValueWithAttribute, Boolean> attrValue : attrValueCollection) {
 
             WebMarkupContainer row = new WebMarkupContainer(fields.newChildId());
 
@@ -161,6 +161,8 @@ public class DynaFormPanel extends BaseComponent {
         form.add( new SubmitLink(SAVE_LINK) );
 
         form.add(new Label(CONTENT, ""));
+
+        form.setVisible(!attrValueCollection.isEmpty());
 
     }
 
@@ -185,7 +187,7 @@ public class DynaFormPanel extends BaseComponent {
     }
 
 
-    private Label getLabel(final AttrValue attrValue, final String lang) {
+    private Label getLabel(final AttrValueWithAttribute attrValue, final String lang) {
 
         final I18NModel model = getI18NSupport().getFailoverModel(
                 attrValue.getAttribute().getDisplayName(),
@@ -214,7 +216,7 @@ public class DynaFormPanel extends BaseComponent {
      *
      * @return editor
      */
-    protected Component getEditor(final AttrValue attrValue, final Boolean readOnly) {
+    protected Component getEditor(final AttrValueWithAttribute attrValue, final Boolean readOnly) {
 
         return editorFactory.getEditor(EDITOR, this, getLocale().getLanguage(), attrValue, readOnly);
     }

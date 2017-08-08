@@ -227,6 +227,10 @@
                   <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesChangeTaxView.second) ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></td>
                 </tr>
                 <tr>
+                  <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}"><i class="fa fa-dollar"></i> {{ shopSummary.customerTypesHidePrices.first }}</td>
+                  <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesHidePrices.second) ? 'fa-check text-danger' : 'fa-remove text-success' }}"></i></td>
+                </tr>
+                <tr>
                   <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}" class="text-muted"><i class="fa fa-envelope"></i> {{ shopSummary.customerTypesRfq.first }} <span class="label label-info">YCE</span></td>
                   <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesRfq.second) ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></td>
                 </tr>
@@ -257,6 +261,10 @@
                 <tr>
                   <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}" class="text-muted"><i class="fa fa-edit"></i> {{ shopSummary.customerTypesAddressBookDisabled.first }} <span class="label label-info">YCE</span></td>
                   <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ shopSummary.b2bAddressbookActive.second || isTypeEnabled(type.first, shopSummary.customerTypesAddressBookDisabled.second) ? 'fa-check text-danger' : 'fa-remove text-success' }}"></i></td>
+                </tr>
+                <tr>
+                  <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}"><i class="fa fa-truck"></i> {{ shopSummary.customerTypesDisableOneAddress.first }}</td>
+                  <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesDisableOneAddress.second) ? 'fa-files-o' : 'fa-file-o' }}"></i></td>
                 </tr>
                 </tbody>
               </table>
@@ -298,7 +306,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let emailTemplate of shopSummary.emailTemplates" class="{{ isEmailConfigOn(emailTemplate.first, shopSummary.emailTemplatesYCE) ? 'text-muted' : '' }}">
-                  <td title="{{ 'SHOP_EMAIL_TEMPLATES' | translate }}">{{ emailTemplate.first }} <span class="label label-info" [hidden]="!isEmailConfigOn(emailTemplate.first, shopSummary.emailTemplatesYCE)">YCE</span></td>
+                  <td title="{{ 'SHOP_EMAIL_TEMPLATES' | translate }}"><a class="js-click" (click)="onEmailPreview(emailTemplate.first)">{{ emailTemplate.first }}</a> <span class="label label-info" [hidden]="!isEmailConfigOn(emailTemplate.first, shopSummary.emailTemplatesYCE)">YCE</span></td>
                   <td title="{{ 'SHOP_EMAIL_TEMPLATES_ENABLED' | translate }}"><i class="fa {{ emailTemplate.second ? 'fa-remove text-danger' : 'fa-check text-success' }}"></i></td>
                   <td title="{{ 'SHOP_EMAIL_TEMPLATES_CMS' | translate }}"><i class="fa fa-check text-info" [hidden]="!isEmailConfigOn(emailTemplate.first, shopSummary.emailTemplatesShop)"></i>&nbsp;</td>
                   <td title="{{ 'SHOP_EMAIL_TEMPLATES_FROM' | translate }}">{{ getEmailConfigString(emailTemplate.first, shopSummary.emailTemplatesFrom) }}<i class="fa fa-remove text-danger" [hidden]="getEmailConfigString(emailTemplate.first, shopSummary.emailTemplatesFrom) != ''"></i></td>
@@ -315,3 +323,5 @@
   </div>
 
 </template>
+
+<yc-mail-preview #mailPreviewComponent></yc-mail-preview>

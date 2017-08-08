@@ -58,6 +58,9 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
     private boolean taxInfoShowAmount;
 
     @DtoField(readOnly = true)
+    private boolean hidePrices;
+
+    @DtoField(readOnly = true)
     private List<String> latestViewedSkus;
     @DtoField(readOnly = true)
     private List<String> latestViewedCategories;
@@ -191,5 +194,13 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
 
     public void setTaxInfoShowAmount(final boolean taxInfoShowAmount) {
         this.taxInfoShowAmount = taxInfoShowAmount;
+    }
+
+    public boolean isHidePrices() {
+        return hidePrices;
+    }
+
+    public void setHidePrices(final boolean hidePrices) {
+        this.hidePrices = hidePrices;
     }
 }

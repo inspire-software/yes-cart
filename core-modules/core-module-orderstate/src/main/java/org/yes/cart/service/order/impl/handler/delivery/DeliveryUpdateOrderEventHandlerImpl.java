@@ -25,10 +25,11 @@ import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.*;
 import org.yes.cart.service.order.impl.OrderEventImpl;
+import org.yes.cart.shoppingcart.InventoryResolver;
+import org.yes.cart.util.log.Markers;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -50,7 +51,7 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
 
     private final WarehouseService warehouseService;
 
-    private final SkuWarehouseService skuWarehouseService;
+    private final InventoryResolver inventoryResolver;
 
     private final ProductService productService;
 
@@ -59,14 +60,14 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
      * Construct transition.
      *
      * @param warehouseService    warehouse service
-     * @param skuWarehouseService sku on warehouse service to change quantity
+     * @param inventoryResolver   sku on warehouse service to change quantity
      * @param productService      product service
      */
     public DeliveryUpdateOrderEventHandlerImpl(final WarehouseService warehouseService,
-                                               final SkuWarehouseService skuWarehouseService,
+                                               final InventoryResolver inventoryResolver,
                                                final ProductService productService) {
         this.warehouseService = warehouseService;
-        this.skuWarehouseService = skuWarehouseService;
+        this.inventoryResolver = inventoryResolver;
         this.productService = productService;
     }
 
@@ -376,25 +377,14 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
                     final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
                     if (selected == null) {
-                        LOG.error(
+                        LOG.warn(Markers.alert(),
                                 "Warehouse is not found for delivery detail {}:{}",
                                 orderDelivery.getDeliveryNum(), det.getProductSkuCode()
                         );
-
-                        /**
-                         * For allocation we always must have stock items with inventory supported availability
-                         */
-                        throw new OrderItemAllocationException(
-                                skuCode,
-                                toAllocate,
-                                "ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
-                                        + " for sku = " + skuCode
-                                        + " in delivery " + orderDelivery.getDeliveryNum());
+                    } else {
+                        // At this point we should have reserved the quantity, so we just releasing the reservation
+                        inventoryResolver.voidReservation(selected, skuCode, toAllocate);
                     }
-
-                    // At this point we should have reserved the quantity, so we just releasing the reservation
-                    skuWarehouseService.voidReservation(selected, skuCode, toAllocate);
-
                 }
             }
         }

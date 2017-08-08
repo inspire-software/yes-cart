@@ -26,21 +26,22 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
  */
 public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
 
-    protected boolean supportAuthorize;
-    protected boolean supportCapture;
-    protected boolean supportAuthorizeCapture;
-    protected boolean supportVoid;
-    protected boolean supportReverseAuthorization;
-    protected boolean supportRefund;
-    protected boolean externalFormProcessing;
-    protected boolean onlineGateway;
-    protected boolean requireDetails;
-    protected boolean supportCaptureMore;
-    protected boolean supportCaptureLess;
+    protected final boolean supportAuthorize;
+    protected final boolean supportCapture;
+    protected final boolean supportAuthorizeCapture;
+    protected final boolean supportVoid;
+    protected final boolean supportReverseAuthorization;
+    protected final boolean supportRefund;
+    protected final boolean externalFormProcessing;
+    protected final boolean onlineGateway;
+    protected final boolean autoCapture;
+    protected final boolean requireDetails;
+    protected final boolean supportCaptureMore;
+    protected final boolean supportCaptureLess;
 
 
-    protected boolean supportAuthorizePerShipment;
-    protected String additionalFeatures;
+    protected final boolean supportAuthorizePerShipment;
+    protected final String additionalFeatures;
 
 
 
@@ -61,21 +62,20 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
      * @param requireDetails true in case if gateway require payment details for html form
      */
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public PaymentGatewayFeatureImpl(
-            final boolean supportAuthorize,
-            final boolean supportAuthorizePerShipment,
-            final boolean supportCapture,
-            final boolean supportAuthorizeCapture,
-            final boolean supportVoid,
-            final boolean supportReverseAuthorization,
-            final boolean supportRefund,
-            final boolean externalFormProcessing,
-            final boolean onlineGateway,
-            final boolean requireDetails,
-            final String additionalFeatures,
-            final boolean supportCaptureMore,
-            final boolean supportCaptureLess
-    ) {
+    public PaymentGatewayFeatureImpl(final boolean supportAuthorize,
+                                     final boolean supportAuthorizePerShipment,
+                                     final boolean supportCapture,
+                                     final boolean supportAuthorizeCapture,
+                                     final boolean supportVoid,
+                                     final boolean supportReverseAuthorization,
+                                     final boolean supportRefund,
+                                     final boolean externalFormProcessing,
+                                     final boolean onlineGateway,
+                                     final boolean autoCapture,
+                                     final boolean requireDetails,
+                                     final String additionalFeatures,
+                                     final boolean supportCaptureMore,
+                                     final boolean supportCaptureLess) {
         this.supportAuthorize = supportAuthorize;
         this.supportAuthorizePerShipment = supportAuthorizePerShipment;
         this.supportCapture = supportCapture;
@@ -86,6 +86,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
         this.externalFormProcessing = externalFormProcessing;
         this.additionalFeatures = additionalFeatures;
         this.onlineGateway = onlineGateway;
+        this.autoCapture = autoCapture;
         this.requireDetails = requireDetails;
         this.supportCaptureMore = supportCaptureMore;
         this.supportCaptureLess = supportCaptureLess;
@@ -101,8 +102,8 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
-    public void setOnlineGateway(final boolean onlineGateway) {
-        this.onlineGateway = onlineGateway;
+    public boolean isAutoCapture() {
+        return autoCapture;
     }
 
     /**
@@ -169,80 +170,11 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
         return additionalFeatures;
     }
 
-
-    public void setSupportAuthorize(final boolean supportAuthorize) {
-        this.supportAuthorize = supportAuthorize;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public void setSupportCapture(final boolean supportCapture) {
-        this.supportCapture = supportCapture;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public void setSupportAuthorizeCapture(final boolean supportAuthorizeCapture) {
-        this.supportAuthorizeCapture = supportAuthorizeCapture;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public void setSupportVoid(final boolean supportVoid) {
-        this.supportVoid = supportVoid;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public void setSupportReverseAuthorization(final boolean supportReverseAuthorization) {
-        this.supportReverseAuthorization = supportReverseAuthorization;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public void setSupportRefund(final boolean supportRefund) {
-        this.supportRefund = supportRefund;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public void setExternalFormProcessing(final boolean externalFormProcessing) {
-        this.externalFormProcessing = externalFormProcessing;
-    }
-
-
-    /**
-     * {@inheritDoc }
-     */
-    public void setSupportAuthorizePerShipment(final boolean supportAuthorizePerShipment) {
-        this.supportAuthorizePerShipment = supportAuthorizePerShipment;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public void setAdditionalFeatures(final String additionalFeatures) {
-        this.additionalFeatures = additionalFeatures;
-    }
-
     /**
      * {@inheritDoc }
      */
     public boolean isRequireDetails() {
         return requireDetails;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public void setRequireDetails(boolean requireDetails) {
-        this.requireDetails = requireDetails;
     }
 
     /**
@@ -255,22 +187,8 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
-    public void setSupportCaptureMore(boolean supportCaptureMore) {
-        this.supportCaptureMore = supportCaptureMore;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
     public boolean isSupportCaptureLess() {
         return supportCaptureLess;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public void setSupportCaptureLess(boolean supportCaptureLess) {
-        this.supportCaptureLess = supportCaptureLess;
     }
 
     /**

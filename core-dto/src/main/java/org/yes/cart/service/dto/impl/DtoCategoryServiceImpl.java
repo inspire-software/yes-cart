@@ -437,12 +437,14 @@ public class DtoCategoryServiceImpl
      *
      * @param attributeValuePk given pk value.
      */
-    public long deleteAttributeValue(final long attributeValuePk) {
+    public long deleteAttributeValue(final long attributeValuePk)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueEntityCategory valueEntityCategory = attrValueEntityCategoryDao.findById(attributeValuePk);
-        if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityCategory.getAttribute().getEtype().getBusinesstype())) {
+        final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(valueEntityCategory.getAttributeCode());
+        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
             imageService.deleteImage(valueEntityCategory.getVal(),
                     Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
-        } else if (Etype.FILE_BUSINESS_TYPE.equals(valueEntityCategory.getAttribute().getEtype().getBusinesstype())) {
+        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
             fileService.deleteFile(valueEntityCategory.getVal(),
                     Constants.CATEGORY_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
         }
@@ -464,7 +466,7 @@ public class DtoCategoryServiceImpl
         final Category category = service.findById(((AttrValueCategoryDTO) attrValueDTO).getCategoryId());
         if (!multivalue) {
             for (final AttrValueCategory avp : category.getAttributes()) {
-                if (avp.getAttribute().getCode().equals(atr.getCode())) {
+                if (avp.getAttributeCode().equals(atr.getCode())) {
                     // this is a duplicate, so need to update
                     attrValueDTO.setAttrvalueId(avp.getAttrvalueId());
                     return updateEntityAttributeValue(attrValueDTO);
@@ -474,7 +476,7 @@ public class DtoCategoryServiceImpl
 
         AttrValueCategory valueEntityCategory = getPersistenceEntityFactory().getByIface(AttrValueCategory.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCategory, getAdaptersRepository(), dtoFactory);
-        valueEntityCategory.setAttribute(atr);
+        valueEntityCategory.setAttributeCode(atr.getCode());
         valueEntityCategory.setCategory(category);
         valueEntityCategory = attrValueEntityCategoryDao.create((AttrValueEntityCategory) valueEntityCategory);
         attrValueDTO.setAttrvalueId(valueEntityCategory.getAttrvalueId());

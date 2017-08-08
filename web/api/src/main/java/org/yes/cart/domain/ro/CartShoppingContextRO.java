@@ -63,6 +63,9 @@ public class CartShoppingContextRO implements Serializable {
     private boolean taxInfoShowAmount;
 
     @DtoField(readOnly = true)
+    private boolean hidePrices;
+
+    @DtoField(readOnly = true)
     private List<String> latestViewedSkus;
     @DtoField(readOnly = true)
     private List<String> latestViewedCategories;
@@ -215,5 +218,14 @@ public class CartShoppingContextRO implements Serializable {
 
     public void setTaxInfoShowAmount(final boolean taxInfoShowAmount) {
         this.taxInfoShowAmount = taxInfoShowAmount;
+    }
+
+    @XmlAttribute(name = "hide-prices")
+    public boolean isHidePrices() {
+        return hidePrices;
+    }
+
+    public void setHidePrices(final boolean hidePrices) {
+        this.hidePrices = hidePrices;
     }
 }

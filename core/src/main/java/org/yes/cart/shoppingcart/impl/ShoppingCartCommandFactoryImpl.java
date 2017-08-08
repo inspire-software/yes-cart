@@ -63,7 +63,7 @@ public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactor
     }
 
     ConfigurableShoppingCartCommand[] remapCommandChain(final Collection<ConfigurableShoppingCartCommand> commands) {
-        final List<ShoppingCartCommand> ordered = new ArrayList<ShoppingCartCommand>(commands);
+        final List<ConfigurableShoppingCartCommand> ordered = new ArrayList<ConfigurableShoppingCartCommand>(commands);
         Collections.sort(ordered, new Comparator<ShoppingCartCommand>() {
             @Override
             public int compare(final ShoppingCartCommand cmd1, final ShoppingCartCommand cmd2) {

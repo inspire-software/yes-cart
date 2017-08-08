@@ -69,6 +69,8 @@
     <entry key="contacts">Kontakt</entry>
     <entry key="profileLogin">Login / Konto erstellen</entry>
     <entry key="sale">Abverkauf</entry>
+    <entry key="instock1">Produkte an Lager</entry>
+    <entry key="instock0">Produkte nicht an Lager</entry>
     <entry key="newArrivals">Neu eingetroffen</entry>
     <entry key="addToCart">In den Warenkorb</entry>
     <entry key="preorderCart">Vorbestellen</entry>
@@ -358,6 +360,7 @@
 
     <!-- ProductSorter -->
     <entry key="sort">Sortieren:</entry>
+    <entry key="byDefault">Beste Suchergebnis</entry>
     <entry key="byName">Nach Name</entry>
     <entry key="byCode">Nach Artikelnummer</entry>
     <entry key="bySKU">SKU</entry>

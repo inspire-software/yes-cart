@@ -340,7 +340,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
         } else {
           return '<i class="fa fa-times-circle"></i>';
         }
-      } else if (row.attribute.etypeName === 'HTML') {
+      } else if (row.attribute.etypeName === 'HTML' || row.attribute.etypeName === 'Properties') {
         return '<pre>' + row.val + '</pre>';
       } else if (row.attribute.etypeName === 'Image' && row.valBase64Data) {
         return '<img class="av-image-thumb" src="' + row.valBase64Data + '" alt="' + row.val + '"/>';
@@ -501,19 +501,19 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     let _filter = this._attributeFilter ? this._attributeFilter.toLowerCase() : null;
     let _filteredObjectAttributes:Array<AttrValueVO> = [];
     if (_filter) {
-      if (_filter === '###') {
+      if (_filter === '###') { // all existing values (check for blank is suppressed because sometimes we have empty values from imports)
         _filteredObjectAttributes = this._objectAttributes.filter(val =>
-          val.val != null && val.val != '' && val.attrvalueId > 0
+          /* val.val != null && val.val != '' && */ val.attrvalueId > 0
         );
-      } else if (_filter === '##0') {
+      } else if (_filter === '##0') { // non-empty values
         _filteredObjectAttributes = this._objectAttributes.filter(val =>
           val.val != null && val.val != ''
         );
-      } else if (_filter === '#00') {
+      } else if (_filter === '#00') { // non-empty new values
         _filteredObjectAttributes = this._objectAttributes.filter(val =>
           val.val != null && val.val != '' && val.attrvalueId == 0
         );
-      } else if (_filter === '#0#') {
+      } else if (_filter === '#0#') { // non-empty inherited
         _filteredObjectAttributes = this._objectAttributes.filter(val =>
           this.isEditedAttribute(val) || (val.attrvalueId == 0 && val.val != null && val.val != '' && val.val.indexOf('* ') !== 0)
         );
