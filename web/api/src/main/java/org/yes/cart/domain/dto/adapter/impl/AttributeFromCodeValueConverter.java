@@ -67,7 +67,7 @@ public class AttributeFromCodeValueConverter implements ValueConverter {
                 attr = this.transactionTemplate.execute(new TransactionCallback<Attribute>() {
                     @Override
                     public Attribute doInTransaction(final TransactionStatus status) {
-                        final Attribute attribute = genericDAO.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", object);
+                        final Attribute attribute = (Attribute) genericDAO.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", object);
                         if (attribute != null) {
                             Hibernate.initialize(attribute.getEtype());
                         }

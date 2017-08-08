@@ -56,7 +56,7 @@ public interface ClusterService {
      * @param context web service context
      * @return quantity product in index.
      */
-    Map<String, Pair<Integer, Boolean>> getProductReindexingState(AsyncContext context);
+    Map<String, Pair<Long, Boolean>> getProductReindexingState(AsyncContext context);
 
     /**
      * Reindex all products.
@@ -64,7 +64,7 @@ public interface ClusterService {
      * @param context web service context
      * @return quantity product in index.
      */
-    Map<String, Pair<Integer, Boolean>> getProductSkuReindexingState(AsyncContext context);
+    Map<String, Pair<Long, Boolean>> getProductSkuReindexingState(AsyncContext context);
 
     /**
      * Reindex all products status.

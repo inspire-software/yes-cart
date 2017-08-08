@@ -80,7 +80,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
             addSortField(document, SKU_PRODUCT_MANUFACTURER_CODE_SORT_FIELD, entity.getManufacturerCode());
             addStemFields(document, SKU_PRODUCT_MANUFACTURER_CODE_STEM_FIELD, entity.getManufacturerCode(), entity.getManufacturerPartCode(), entity.getSupplierCode());
 
-            addSimpleField(document, PRODUCT_NAME_FIELD, entity.getName());
+            addSnowballField(document, PRODUCT_NAME_FIELD, entity.getName());
             addSortField(document, PRODUCT_NAME_SORT_FIELD, entity.getName());
             addStemFields(document, PRODUCT_NAME_STEM_FIELD, entity.getName(), entity.getSeo().getTitle(), entity.getSeo().getMetakeywords());
 
@@ -88,7 +88,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
             addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, displayName);
             addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(entity.getSeo().getDisplayTitle()));
             addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(entity.getSeo().getDisplayMetakeywords()));
-            addSimpleFields(document, PRODUCT_DISPLAYNAME_FIELD, displayName);
+            addSnowballFields(document, PRODUCT_DISPLAYNAME_FIELD, displayName);
             addSortFields(document, PRODUCT_DISPLAYNAME_SORT_FIELD, displayName);
 
             addNumericField(document, "rank", (long) entity.getRank(), false);
@@ -171,11 +171,11 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
 
         for (final AttrValue attrValue : attributes) {
 
-            if (attrValue.getAttribute() == null) {
+            if (attrValue.getAttributeCode() == null) {
                 continue; // skip invalid ones
             }
 
-            final String code = attrValue.getAttribute().getCode();
+            final String code = attrValue.getAttributeCode();
 
             final boolean navigation = navAttrs.contains(code);
             final boolean search = navigation || searchAttrs.contains(code);

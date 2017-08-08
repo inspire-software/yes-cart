@@ -93,7 +93,7 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
-    public Map<String, Pair<Integer, Boolean>> getProductReindexingState(final AsyncContext context) {
+    public Map<String, Pair<Long, Boolean>> getProductReindexingState(final AsyncContext context) {
 
         final Map<String, Boolean> indexFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
         if (indexFinished == null) {
@@ -119,11 +119,11 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final Map<String, Pair<Integer, Boolean>> indexStatus = new HashMap<String, Pair<Integer, Boolean>>();
+        final Map<String, Pair<Long, Boolean>> indexStatus = new HashMap<String, Pair<Long, Boolean>>();
         for (final Message response : message.getResponses()) {
 
             final Object[] rsp = (Object[]) response.getPayload();
-            indexStatus.put(response.getSource(), new Pair<Integer, Boolean>((Integer) rsp[1], "DONE".equals(rsp[0])));
+            indexStatus.put(response.getSource(), new Pair<Long, Boolean>((Long) rsp[1], "DONE".equals(rsp[0])));
 
         }
         return indexStatus;
@@ -133,7 +133,7 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
-    public Map<String, Pair<Integer, Boolean>> getProductSkuReindexingState(final AsyncContext context) {
+    public Map<String, Pair<Long, Boolean>> getProductSkuReindexingState(final AsyncContext context) {
 
         final Map<String, Boolean> indexFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
         final Long shopId = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_SHOP);
@@ -160,11 +160,11 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final Map<String, Pair<Integer, Boolean>> indexStatus = new HashMap<String, Pair<Integer, Boolean>>();
+        final Map<String, Pair<Long, Boolean>> indexStatus = new HashMap<String, Pair<Long, Boolean>>();
         for (final Message response : message.getResponses()) {
 
             final Object[] rsp = (Object[]) response.getPayload();
-            indexStatus.put(response.getSource(), new Pair<Integer, Boolean>((Integer) rsp[1], "DONE".equals(rsp[0])));
+            indexStatus.put(response.getSource(), new Pair<Long, Boolean>((Long) rsp[1], "DONE".equals(rsp[0])));
 
         }
         return indexStatus;

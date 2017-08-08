@@ -95,12 +95,12 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                     listener.notifyMessage("Indexing stared\n");
 
                     final Map<String, Boolean> indexingFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
-                    final Map<String, Integer> lastPositive = new HashMap<String, Integer>();
-                    Map<String, Pair<Integer, Boolean>> cnt = new HashMap<String, Pair<Integer, Boolean>>();
+                    final Map<String, Long> lastPositive = new HashMap<String, Long>();
+                    Map<String, Pair<Long, Boolean>> cnt = new HashMap<String, Pair<Long, Boolean>>();
 
                     for (final Node yesNode : nodeService.getSfNodes()) {
                         indexingFinished.put(yesNode.getId(), Boolean.FALSE);
-                        cnt.put(yesNode.getId(), new Pair<Integer, Boolean>(0, Boolean.FALSE));
+                        cnt.put(yesNode.getId(), new Pair<Long, Boolean>(0L, Boolean.FALSE));
                     }
 
                     // Trigger reindex
@@ -111,12 +111,12 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
                         // This should call
                         cnt = clusterService.getProductReindexingState(context);
-                        if (isIndexingInProgress(cnt)) {
+                        //if (isIndexingInProgress(cnt)) {
 
                             final StringBuilder state = new StringBuilder("Indexing products:\n");
-                            for (final Map.Entry<String, Pair<Integer, Boolean>> cntNode : cnt.entrySet()) {
+                            for (final Map.Entry<String, Pair<Long, Boolean>> cntNode : cnt.entrySet()) {
                                 final String nodeUri = cntNode.getKey();
-                                final Pair<Integer, Boolean> nodeCnt = cntNode.getValue();
+                                final Pair<Long, Boolean> nodeCnt = cntNode.getValue();
                                 if (nodeCnt != null) {
                                     lastPositive.put(nodeUri, nodeCnt.getFirst());
                                     if (nodeCnt.getSecond()) {
@@ -129,22 +129,22 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                             }
                             listener.notifyPing(state.toString());
                             Thread.sleep(5000l);
-                        }
+                        //}
 
                     }
 
                     final StringBuilder summaryProd = new StringBuilder("Product indexing completed. Last traceable product count:\n");
-                    for (final Map.Entry<String, Integer> cntNode : lastPositive.entrySet()) {
+                    for (final Map.Entry<String, Long> cntNode : lastPositive.entrySet()) {
                         final String nodeUri = cntNode.getKey();
-                        final Integer nodeCnt = cntNode.getValue();
+                        final Long nodeCnt = cntNode.getValue();
                         summaryProd.append(nodeUri).append(": ").append(nodeCnt).append(" ... finished\n");
                     }
                     listener.notifyMessage(summaryProd.toString());
 
                     for (final Node yesNode : nodeService.getSfNodes()) {
                         indexingFinished.put(yesNode.getId(), Boolean.FALSE);
-                        lastPositive.put(yesNode.getId(), 0);
-                        cnt.put(yesNode.getId(), new Pair<Integer, Boolean>(0, Boolean.FALSE));
+                        lastPositive.put(yesNode.getId(), 0L);
+                        cnt.put(yesNode.getId(), new Pair<Long, Boolean>(0L, Boolean.FALSE));
                     }
 
                     // Trigger reindex
@@ -154,12 +154,12 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
                         // This should call
                         cnt = clusterService.getProductSkuReindexingState(context);
-                        if (isIndexingInProgress(cnt)) {
+                        //if (isIndexingInProgress(cnt)) {
 
                             final StringBuilder state = new StringBuilder("Indexing SKU:\n");
-                            for (final Map.Entry<String, Pair<Integer, Boolean>> cntNode : cnt.entrySet()) {
+                            for (final Map.Entry<String, Pair<Long, Boolean>> cntNode : cnt.entrySet()) {
                                 final String nodeUri = cntNode.getKey();
-                                final Pair<Integer, Boolean> nodeCnt = cntNode.getValue();
+                                final Pair<Long, Boolean> nodeCnt = cntNode.getValue();
                                 if (nodeCnt != null) {
                                     lastPositive.put(nodeUri, nodeCnt.getFirst());
                                     if (nodeCnt.getSecond()) {
@@ -172,13 +172,13 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                             }
                             listener.notifyPing(state.toString());
                             Thread.sleep(5000l);
-                        }
+                        //}
 
                     }
                     final StringBuilder summarySku = new StringBuilder("SKU indexing completed. Last traceable SKU count:\n");
-                    for (final Map.Entry<String, Integer> cntNode : lastPositive.entrySet()) {
+                    for (final Map.Entry<String, Long> cntNode : lastPositive.entrySet()) {
                         final String nodeUri = cntNode.getKey();
-                        final Integer nodeCnt = cntNode.getValue();
+                        final Long nodeCnt = cntNode.getValue();
                         summarySku.append(nodeUri).append(": ").append(nodeCnt).append(" ... finished\n");
                     }
                     listener.notifyMessage(summarySku.toString());
@@ -204,8 +204,8 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
         };
     }
 
-    boolean isIndexingInProgress(Map<String, Pair<Integer, Boolean>> cnt) {
-        for (final Pair<Integer, Boolean> cntNode : cnt.values()) {
+    boolean isIndexingInProgress(Map<String, Pair<Long, Boolean>> cnt) {
+        for (final Pair<Long, Boolean> cntNode : cnt.values()) {
             if (cntNode != null && cntNode.getSecond() != null && !cntNode.getSecond()) {
                 return true;
             }

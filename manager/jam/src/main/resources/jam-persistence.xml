@@ -132,5 +132,10 @@
         </property>
     </bean>
 
+
+    <bean id="productIndexProvider" class="org.yes.cart.search.dao.impl.NoopLuceneIndexProviderImpl"/>
+
+    <bean id="productSkuIndexProvider" class="org.yes.cart.search.dao.impl.NoopLuceneIndexProviderImpl"/>
+
 </beans>
         

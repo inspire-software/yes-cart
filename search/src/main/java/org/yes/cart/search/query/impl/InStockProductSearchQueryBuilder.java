@@ -17,7 +17,7 @@
 package org.yes.cart.search.query.impl;
 
 import org.apache.lucene.search.Query;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
 /**
  * User: denispavlov

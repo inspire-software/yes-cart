@@ -78,7 +78,7 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
                 while (rangeCountsIt.hasNext()) {
 
                     final Pair<String, Integer> rangeCount = rangeCountsIt.next();
-                    if (rangeCount.getFirst().equals(recordTemplate.getValue().toLowerCase())) {
+                    if (rangeCount.getFirst().equals(recordTemplate.getValue())) {
 
                         final Integer candidateResultCount = rangeCount.getSecond();
                         if (candidateResultCount != null && candidateResultCount > 0) {

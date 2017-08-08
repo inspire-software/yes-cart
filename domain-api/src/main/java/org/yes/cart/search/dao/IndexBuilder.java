@@ -49,7 +49,7 @@ public interface IndexBuilder<T, PK extends Serializable> {
          *
          * @return count
          */
-        int getLastIndexCount();
+        long getLastIndexCount();
 
     }
 

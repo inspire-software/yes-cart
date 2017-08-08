@@ -56,7 +56,7 @@ public class AttributeToCodeValueConverter implements ValueConverter {
             }
 
             if (attr == null) {
-                attr = this.genericDAO.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", object);
+                attr = (Attribute) this.genericDAO.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", object);
                 if (attr != null) {
                     Hibernate.initialize(attr.getEtype());
                 }

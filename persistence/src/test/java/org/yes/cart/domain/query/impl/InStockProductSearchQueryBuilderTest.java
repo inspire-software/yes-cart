@@ -18,6 +18,7 @@ package org.yes.cart.domain.query.impl;
 
 import org.apache.lucene.search.Query;
 import org.junit.Test;
+import org.yes.cart.search.query.impl.InStockProductSearchQueryBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

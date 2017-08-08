@@ -322,6 +322,7 @@
         <constructor-arg index="1" ref="productIndexProvider"/>
         <constructor-arg index="2" ref="productDaoBase"/>
         <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="platformTransactionManager" ref="transactionManager"/>
         <property name="indexExecutor">
             <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
                 <description>
@@ -361,6 +362,7 @@
         <constructor-arg index="1" ref="productSkuIndexProvider"/>
         <constructor-arg index="2" ref="productSkuDaoBase"/>
         <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="platformTransactionManager" ref="transactionManager"/>
         <property name="indexExecutor">
             <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
                 <description>

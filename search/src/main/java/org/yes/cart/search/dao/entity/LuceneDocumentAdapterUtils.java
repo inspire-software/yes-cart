@@ -49,6 +49,7 @@ public class LuceneDocumentAdapterUtils {
     public static final String FIELD_PK = "_PK";
     public static final String FIELD_CLASS = "_CLASS";
     public static final String FIELD_OBJECT = "_OBJECT";
+    public static final String FIELD_INDEXTIME = "_IDXTIME";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -242,6 +243,29 @@ public class LuceneDocumentAdapterUtils {
         }
     }
 
+    /**
+     * Adds a string field (split by space and then added as snowball)
+     *
+     * @param document document
+     * @param name     field name
+     * @param value    value
+     */
+    public static void addSnowballField(final Document document, final String name, final String value) {
+        if (value != null) {
+            final String lower = value.toLowerCase();
+            final String[] parts = StringUtils.split(lower, ' ');
+            final StringBuilder snowball = new StringBuilder();
+            for (final String part : parts) {
+                if (snowball.length() > 0) {
+                    snowball.append(' ');
+                }
+                snowball.append(part);
+                document.add(new StringField(name, snowball.toString(), Field.Store.NO));
+            }
+            document.add(new StringField(name, lower, Field.Store.NO));
+        }
+    }
+
 
     /**
      * Adds a string field (stored and not tokenized)
@@ -254,6 +278,21 @@ public class LuceneDocumentAdapterUtils {
         if (model != null && !model.getAllValues().isEmpty()) {
             for (final String value : model.getAllValues().values()) {
                 addSimpleField(document, name, value);
+            }
+        }
+    }
+
+    /**
+     * Adds a string field (split by space and then added as snowball)
+     *
+     * @param document document
+     * @param name     field name
+     * @param model    value
+     */
+    public static void addSnowballFields(final Document document, final String name, final I18NModel model) {
+        if (model != null && !model.getAllValues().isEmpty()) {
+            for (final String value : model.getAllValues().values()) {
+                addSnowballField(document, name, value);
             }
         }
     }

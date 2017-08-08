@@ -254,19 +254,18 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
                 }
 
+                final List<Pair<String, Integer>> values = new ArrayList<Pair<String, Integer>>();
+                result.put(request.getFacetName(), values);
+
                 if (facets != null) {
 
                     final FacetResult topValues = facets.getTopChildren(MAX_FACETS, request.getField());
 
                     if (topValues != null && topValues.value != null && topValues.value.intValue() > 0) {
 
-                        final List<Pair<String, Integer>> values = new ArrayList<Pair<String, Integer>>();
-
                         for (final LabelAndValue lav : topValues.labelValues) {
                             values.add(new Pair<String, Integer>(lav.label, lav.value.intValue()));
                         }
-
-                        result.put(request.getFacetName(), values);
 
                     }
 

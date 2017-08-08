@@ -2,7 +2,9 @@ package org.yes.cart.search.dao.impl;
 
 import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.search.dao.LuceneDocumentAdapter;
@@ -19,6 +21,7 @@ public class IndexBuilderLuceneHibernateTxAwareImpl<T, PK extends Serializable> 
 
     private final GenericDAO<T, PK> genericDao;
     protected SessionFactory sessionFactory;
+    protected PlatformTransactionManager platformTransactionManager;
 
     public IndexBuilderLuceneHibernateTxAwareImpl(final LuceneDocumentAdapter<T, PK> documentAdapter,
                                                   final LuceneIndexProvider indexProvider,
@@ -50,15 +53,17 @@ public class IndexBuilderLuceneHibernateTxAwareImpl<T, PK extends Serializable> 
     /** {@inheritDoc} */
     @Override
     protected Object startTx() {
-        return sessionFactory.getCurrentSession().beginTransaction();
+        TransactionTemplate tx = new TransactionTemplate(this.platformTransactionManager);
+        return this.platformTransactionManager.getTransaction(tx);
     }
 
 
     /** {@inheritDoc} */
     @Override
     protected void endTx(final Object tx) {
-        final Transaction transaction = (Transaction) tx;
-        transaction.rollback(); // Read only transactions
+        final TransactionStatus transaction = (TransactionStatus) tx;
+        transaction.setRollbackOnly();; // Read only transactions
+        this.platformTransactionManager.commit(transaction);
     }
 
     /**
@@ -68,5 +73,14 @@ public class IndexBuilderLuceneHibernateTxAwareImpl<T, PK extends Serializable> 
      */
     public void setSessionFactory(final SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+    /**
+     * Sprig IoC.
+     *
+     * @param platformTransactionManager platform manager
+     */
+    public void setPlatformTransactionManager(final PlatformTransactionManager platformTransactionManager) {
+        this.platformTransactionManager = platformTransactionManager;
     }
 }
