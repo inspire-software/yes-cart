@@ -25,30 +25,42 @@ yum install -y mysql
 
 ## Notes
 
+[root@ip-172-31-29-86 ~]# aws configure
+AWS Access Key ID [None]: SDAFASDFASDFAFSDVA
+AWS Secret Access Key [None]: pvSDQFQSDFQF+1c+s@$%GBEBES#SDFGVQC
+Default region name [None]:
+Default output format [None]:
+
+
 aws ec2 create-security-group \
     --group-name yescart \
     --description "Yes cart security group. HTTP(s), ssh and mysql"  \
     --region eu-central-1
 
 aws ec2 authorize-security-group-ingress \
-    --group-name yescart
-    --protocol tcp --port 22 --cidr 0.0.0.0/0
+    --group-name yescart \
+    --protocol tcp --port 22 --cidr 0.0.0.0/0 \
+    --region eu-central-1
    
 aws ec2 authorize-security-group-ingress \
-    --group-name yescart
-    --protocol tcp --port 80 --cidr 0.0.0.0/0
+    --group-name yescart  \
+    --protocol tcp --port 80 --cidr 0.0.0.0/0 \
+    --region eu-central-1
 
 aws ec2 authorize-security-group-ingress \
-    --group-name yescart
-    --protocol tcp --port 8080 --cidr 0.0.0.0/0
+    --group-name yescart   \
+    --protocol tcp --port 8080 --cidr 0.0.0.0/0 \
+    --region eu-central-1
 
 aws ec2 authorize-security-group-ingress \
-    --group-name yescart
-    --protocol tcp --port 443 --cidr 0.0.0.0/0
+    --group-name yescart    \
+    --protocol tcp --port 443 --cidr 0.0.0.0/0 \
+    --region eu-central-1
 
 aws ec2 authorize-security-group-ingress \
-    --group-name yescart
-    --protocol tcp --port 8443 --cidr 0.0.0.0/0
+    --group-name yescart \
+    --protocol tcp --port 8443 --cidr 0.0.0.0/0 \
+    --region eu-central-1
 
 
 
