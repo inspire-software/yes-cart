@@ -20,8 +20,44 @@
 
 ## AWS Image provisioning 
 
+yum update -y
+
 yum install -y jq
 yum install -y mysql
+yum install -y git
+yum install -y wget
+yum install -y curl
+yum install -y net-tools
+yum install -y mc
+yum install -y unzip
+yum install -y xmlstarlet
+
+
+
+curl -sL https://rpm.nodesource.com/setup_7.x | sudo -E bash -
+
+yum install -y nodejs 
+npm install -g webpack webpack-dev-server --save
+npm install -g spawn-sync --save
+
+
+
+
+
+wget http://www-eu.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz
+tar xzvf apache-maven-3.5.0-bin.tar.gz -C /usr/local/
+ln -s /usr/local/apache-maven-3.5.0/bin/mvn /usr/bin/mvn
+
+
+--------- ec2-user
+
+git clone https://github.com/inspire-software/yes-cart.git --depth 5 --branch aws
+cd yes-cart
+
+mvn clean install -Pmysql,paymentAll,ssl,aws
+
+
+
 
 ## Notes
 
