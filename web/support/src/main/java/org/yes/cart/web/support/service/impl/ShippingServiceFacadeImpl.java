@@ -327,10 +327,12 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
         final String currency = cart.getCurrencyCode();
 
-        BigDecimal deliveriesCount = BigDecimal.ZERO; new BigDecimal(cart.getShippingList().size());
-        BigDecimal list = BigDecimal.ZERO;
-        BigDecimal sale = BigDecimal.ZERO;
-        BigDecimal taxAmount = BigDecimal.ZERO;
+        BigDecimal deliveriesCount = BigDecimal.ZERO;
+        BigDecimal list = Total.ZERO;
+        BigDecimal sale = Total.ZERO;
+        BigDecimal taxAmount = Total.ZERO;
+        BigDecimal net = Total.ZERO;
+        BigDecimal gross = Total.ZERO;
 
         final Set<String> taxes = new TreeSet<String>(); // sorts and de-dup's
         final Set<BigDecimal> rates = new TreeSet<BigDecimal>();
@@ -344,6 +346,8 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                 if (StringUtils.isNotBlank(shipping.getTaxCode())) {
                     taxes.add(shipping.getTaxCode());
                 }
+                net = net.add(shipping.getNetPrice().multiply(shipping.getQty()).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP));
+                gross = gross.add(shipping.getGrossPrice().multiply(shipping.getQty()).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP));
                 rates.add(shipping.getTaxRate());
             }
         }
@@ -355,13 +359,11 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
         if (showTax) {
 
-            final BigDecimal costInclTax = sale;
+            final BigDecimal costInclTax = gross;
 
             if (MoneyUtils.isFirstBiggerThanSecond(costInclTax, Total.ZERO)) {
 
                 final BigDecimal totalTax = taxAmount;
-                final BigDecimal net = costInclTax.subtract(totalTax);
-                final BigDecimal gross = costInclTax;
 
                 final BigDecimal totalAdjusted = showTaxNet ? net : gross;
 

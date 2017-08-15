@@ -325,7 +325,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                 }
         );
 
-        add(new Label(DELIVERY_GRAND_TOTAL, grandTotal.getTotal().toString()));
+        add(new Label(DELIVERY_GRAND_TOTAL, grandTotal.getTotalAmount().toString()));
         add(new Label(BILLING_ADDRESS, makeHtml(billingAddress)).setEscapeModelStrings(false));
         add(new Label(DELIVERY_GRAND_TAX, grandTotal.getTotalTax().toString()));
         add(
