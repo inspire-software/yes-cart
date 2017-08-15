@@ -192,7 +192,7 @@ public interface Total extends Serializable {
     /**
      * Get total amount as it would be if we used catalog prices with no promotions.
      *
-     * This can be gross or net depending on the tax config (This is price list prices).
+     * This is always gross.
      *
      * total = sub total list price + delivery sale cost
      *
