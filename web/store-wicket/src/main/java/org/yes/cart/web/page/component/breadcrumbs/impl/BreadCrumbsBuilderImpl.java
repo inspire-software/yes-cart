@@ -25,6 +25,7 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.PriceNavigation;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.query.impl.SearchUtil;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
@@ -239,8 +240,8 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
         } else if (rawValue != null && rawValue.contains(Constants.RANGE_NAVIGATION_DELIMITER)) {
             final String[] range = StringUtils.split(rawValue, Constants.RANGE_NAVIGATION_DELIMITER);
             if (range.length == 2) {
-                final I18NModel fromDisplayValue = attributeService.getNavigatableAttributeDisplayValue(code, range[0]);
-                final I18NModel toDisplayValue = attributeService.getNavigatableAttributeDisplayValue(code, range[1]);
+                final I18NModel fromDisplayValue = attributeService.getNavigatableAttributeDisplayValue(code, SearchUtil.longToVal(range[0], Constants.NUMERIC_NAVIGATION_PRECISION));
+                final I18NModel toDisplayValue = attributeService.getNavigatableAttributeDisplayValue(code, SearchUtil.longToVal(range[1], Constants.NUMERIC_NAVIGATION_PRECISION));
                 return fromDisplayValue.getValue(locale) + " - " + toDisplayValue.getValue(locale);
             }
             return null;

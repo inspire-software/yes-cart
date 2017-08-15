@@ -186,6 +186,15 @@ public interface Constants {
      */
     String RANGE_NAVIGATION_DELIMITER = "-_-";
 
+    /**
+     * Number precision to use. All decimals need to be converted to long to allow for long point
+     * range queries. Therefore with this precision the decimal point is moved to right and then
+     * the value is rounded to get the long.
+     *
+     * E.g. 1 => 1000, 2.33 => 2330, 3.3333 => 3333 and 3.3336 => 3334
+     */
+    int NUMERIC_NAVIGATION_PRECISION = 3;
+
     /** Root category PK. */
     long ROOT_CATEGORY_ID = 100L;
 

@@ -205,7 +205,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
             attributes.addAll(sku.getAttributes());
         }
 
-        final Set<String> sortFields = new HashSet<String>();
+        final Map<String, String> sortFields = new HashMap<String, String>();
+        final Map<String, Long> numRangeFields = new HashMap<String, Long>();
 
         for (final AttrValue attrValue : attributes) {
 
@@ -256,18 +257,18 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
             if (navigation) {
                 // strict attribute navigation only for filtered navigation
                 final String navVal = cleanFacetValue(attrValue.getVal());
-                addFacetField(document, "facet_" + code, navVal);
-                addSimpleField(document, code, navVal);
-                final String sort = code + "_sort";
-                if (sortFields.contains(sort)) {
-                    addSortField(document, sort, navVal);
-                    sortFields.add(sort);
-                }
-                try {
-                    final BigDecimal val = new BigDecimal(navVal);
-                    addNumericField(document, code + "_range", val.setScale(2, BigDecimal.ROUND_HALF_UP).movePointRight(3).longValue(), false);
-                } catch (Exception exp) {
-                    // Do nothing, it is not a number
+                if (StringUtils.isNotBlank(navVal)) {
+                    addFacetField(document, "facet_" + code, navVal);
+                    addSimpleField(document, code, navVal);
+                    // Choose the lowest value for sorting
+                    if (!sortFields.containsKey(code) || navVal.compareTo(sortFields.get(code)) < 0){
+                        sortFields.put(code, navVal);
+                    }
+                    final Long decNavVal = SearchUtil.valToLong(navVal, 3);
+                    // If this is a decimal value choose the lowers value for range navigation
+                    if (decNavVal != null && (!numRangeFields.containsKey(code) || decNavVal.compareTo(numRangeFields.get(code)) < 0)) {
+                        numRangeFields.put(code, decNavVal);
+                    }
                 }
             }
 
@@ -280,10 +281,20 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
         }
 
+        for (final Map.Entry<String, String> sort : sortFields.entrySet()) {
+            addSortField(document, sort.getKey() + "_sort", sort.getValue());
+        }
+
+        for (final Map.Entry<String, Long> numRange : numRangeFields.entrySet()) {
+            addFacetField(document, "facetr_" + numRange.getKey(), numRange.getValue());
+            addNumericField(document, numRange.getKey() + "_range", numRange.getValue(), false);
+        }
+
+
     }
 
     private String cleanFacetValue(final String val) {
-        return val.replace('/', ' '); // replace all forward slashes since they get decoded into paths
+        return val != null ? val.replace('/', ' ') : null; // replace all forward slashes since they get decoded into paths
     }
 
     private List<String> getSearchValue(final AttrValue attrValue) {

@@ -33,6 +33,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.GenericFTS;
 import org.yes.cart.search.dao.LuceneIndexProvider;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
+import org.yes.cart.util.log.Markers;
 
 import java.util.*;
 
@@ -227,50 +228,54 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
             for (final FilteredNavigationRecordRequest request : facetingRequest) {
 
-                final FacetsConfig facetsConfig = new FacetsConfig();
-                facetsConfig.setIndexFieldName(request.getField(), request.getField());
-                final boolean range = request.isRangeValue();
+                try {
+                    // always reset to empty first (could be multiple attribute mappings with invalid fields type in index, so hard reset)
+                    final List<Pair<String, Integer>> values = new ArrayList<Pair<String, Integer>>();
+                    result.put(request.getFacetName(), values);
 
-                Facets facets = null;
+                    final FacetsConfig facetsConfig = new FacetsConfig();
+                    facetsConfig.setIndexFieldName(request.getField(), request.getField());
+                    final boolean range = request.isRangeValue();
 
-                if (range) {
+                    Facets facets = null;
 
-                    final List<Pair<String, String>> ranges = request.getRangeValues();
-                    if (CollectionUtils.isNotEmpty(ranges)) {
+                    if (range) {
 
-                        final LongRange[] longRanges = new LongRange[ranges.size()];
-                        for (int r = 0; r < longRanges.length; r++) {
-                            final Pair<String, String> rangeVals = ranges.get(r);
-                            final String compareValue = rangeVals.getFirst() + Constants.RANGE_NAVIGATION_DELIMITER + rangeVals.getSecond();
-                            longRanges[r] = new LongRange(compareValue, NumberUtils.toLong(rangeVals.getFirst()), true, NumberUtils.toLong(rangeVals.getSecond()), false);
+                        final List<Pair<String, String>> ranges = request.getRangeValues();
+                        if (CollectionUtils.isNotEmpty(ranges)) {
+
+                            final LongRange[] longRanges = new LongRange[ranges.size()];
+                            for (int r = 0; r < longRanges.length; r++) {
+                                final Pair<String, String> rangeVals = ranges.get(r);
+                                final String compareValue = rangeVals.getFirst() + Constants.RANGE_NAVIGATION_DELIMITER + rangeVals.getSecond();
+                                longRanges[r] = new LongRange(compareValue, NumberUtils.toLong(rangeVals.getFirst()), true, NumberUtils.toLong(rangeVals.getSecond()), false);
+                            }
+
+                            facets = new LongRangeFacetCounts(request.getField(), fc, longRanges);
                         }
 
-                        facets = new LongRangeFacetCounts(request.getField(), fc, longRanges);
-                    }
+                    } else {
 
-                } else {
-
-                    facets = new SortedSetDocValuesFacetCounts(new DefaultSortedSetDocValuesReaderState(searcher.getIndexReader(), request.getField()), fc);
-
-                }
-
-                final List<Pair<String, Integer>> values = new ArrayList<Pair<String, Integer>>();
-                result.put(request.getFacetName(), values);
-
-                if (facets != null) {
-
-                    final FacetResult topValues = facets.getTopChildren(MAX_FACETS, request.getField());
-
-                    if (topValues != null && topValues.value != null && topValues.value.intValue() > 0) {
-
-                        for (final LabelAndValue lav : topValues.labelValues) {
-                            values.add(new Pair<String, Integer>(lav.label, lav.value.intValue()));
-                        }
+                        facets = new SortedSetDocValuesFacetCounts(new DefaultSortedSetDocValuesReaderState(searcher.getIndexReader(), request.getField()), fc);
 
                     }
 
-                }
+                    if (facets != null) {
 
+                        final FacetResult topValues = facets.getTopChildren(MAX_FACETS, request.getField());
+
+                        if (topValues != null && topValues.value != null && topValues.value.intValue() > 0) {
+
+                            for (final LabelAndValue lav : topValues.labelValues) {
+                                values.add(new Pair<String, Integer>(lav.label, lav.value.intValue()));
+                            }
+
+                        }
+
+                    }
+                } catch (Exception exp) {
+                    LOG.error(Markers.alert(), "Failed to create facet for request " + request + ", caused: " + exp.getMessage(), exp);
+                }
             }
 
         } catch (Exception exp) {

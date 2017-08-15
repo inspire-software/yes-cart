@@ -47,7 +47,12 @@ public abstract class AbstractSearchQueryBuilderImpl implements SearchQueryBuild
             return new TermQuery(new Term(field, value));
         }
         // 2 edits is the maximum supported in Lucene 6.5.x
-        return new FuzzyQuery(new Term(field, value), maxEdits > 2 ? 2 : maxEdits);
+        // allow 2 only for more than 5 char words (otherwise too many matches)
+        if (maxEdits >= 2 && value.length() > 4) {
+            return new FuzzyQuery(new Term(field, value), 2);
+        }
+        // allow only 1 if under 5
+        return new FuzzyQuery(new Term(field, value), 1);
     }
 
     /**

@@ -17,12 +17,11 @@
 package org.yes.cart.search.query.impl;
 
 import org.junit.Test;
-import org.yes.cart.constants.Constants;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -84,19 +83,39 @@ public class SearchUtilTest {
 
 
     @Test
-    public void testObjectToString() throws Exception {
+    public void testValToLong() throws Exception {
 
-        assertEquals(Constants.MONEY_FORMAT_TOINDEX, SearchUtil.decimalToString(BigDecimal.ZERO, 2));
-        assertEquals("100000000000000", SearchUtil.decimalToString(new BigDecimal(1000000000000L), 2));
-        assertEquals("10000000", SearchUtil.decimalToString(new BigDecimal(100000L), 2));
-        assertEquals("00100000", SearchUtil.decimalToString(new BigDecimal(1000L), 2));
-        assertEquals("00000100", SearchUtil.decimalToString(new BigDecimal(1L), 2));
-        assertEquals("00000133", SearchUtil.decimalToString(new BigDecimal("1.33"), 2));
-        assertEquals("00003210", SearchUtil.decimalToString(new BigDecimal("32.1"), 2));
-        assertEquals("00000012", SearchUtil.decimalToString(new BigDecimal(".12"), 2));
-        assertEquals("00009800", SearchUtil.decimalToString(new BigDecimal("98"), 2));
-        assertEquals("00009822", SearchUtil.decimalToString(new BigDecimal("98.222"), 2));
-        assertEquals("00009855", SearchUtil.decimalToString(new BigDecimal("98.555"), 2));
+        assertEquals(Long.valueOf(0L), SearchUtil.valToLong("0", 2));
+        assertEquals(Long.valueOf(100000000000000L), SearchUtil.valToLong("1000000000000", 2));
+        assertEquals(Long.valueOf(10000000L), SearchUtil.valToLong("100000", 2));
+        assertEquals(Long.valueOf(100000L), SearchUtil.valToLong("1000", 2));
+        assertEquals(Long.valueOf(100), SearchUtil.valToLong("1", 2));
+        assertEquals(Long.valueOf(133), SearchUtil.valToLong("1.33", 2));
+        assertEquals(Long.valueOf(3210), SearchUtil.valToLong("32.1", 2));
+        assertEquals(Long.valueOf(12), SearchUtil.valToLong(".12", 2));
+        assertEquals(Long.valueOf(9800), SearchUtil.valToLong("98", 2));
+        assertEquals(Long.valueOf(9822), SearchUtil.valToLong("98.222", 2));
+        assertEquals(Long.valueOf(9856), SearchUtil.valToLong("98.555", 2));
+        assertNull(SearchUtil.valToLong("98.555zzz", 2));
+
+
+    }
+
+    @Test
+    public void testLongToVal() throws Exception {
+
+        assertEquals("0", SearchUtil.longToVal("0", 2));
+        assertEquals("10000000000", SearchUtil.longToVal("1000000000000", 2));
+        assertEquals("1000", SearchUtil.longToVal("100000", 2));
+        assertEquals("10", SearchUtil.longToVal("1000", 2));
+        assertEquals("0.01", SearchUtil.longToVal("1", 2));
+        assertEquals("1.33", SearchUtil.longToVal("133", 2));
+        assertEquals("3.21", SearchUtil.longToVal("321", 2));
+        assertEquals("0.12", SearchUtil.longToVal("12", 2));
+        assertEquals("0.98", SearchUtil.longToVal("98", 2));
+        assertEquals("98.22", SearchUtil.longToVal("9822", 2));
+        assertEquals("98.56", SearchUtil.longToVal("9856", 2));
+        assertEquals("0", SearchUtil.longToVal("98.555zzz", 2));
 
 
     }

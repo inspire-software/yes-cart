@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.filterednavigation.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
@@ -64,13 +65,14 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
             final Map<String, List<Pair<String, Integer>>> counts =
                     getProductService().findFilteredNavigationRecords(navigationContext, Collections.singletonList(request));
 
+            final List<Pair<String, Integer>> rangeCountsOrigin = counts.get("brandFacet");
 
-            final List<Pair<String, Integer>> rangeCounts = new ArrayList<Pair<String, Integer>>(counts.get("brandFacet"));
-
-            if (rangeCounts.isEmpty()) {
+            if (CollectionUtils.isEmpty(rangeCountsOrigin)) {
                 LOGFTQ.debug("Unable to get brand filtered navigation for query: {}, request: {}", navigationContext.getProductQuery(), request);
                 return Collections.emptyList();
             }
+
+            final List<Pair<String, Integer>> rangeCounts = new ArrayList<Pair<String, Integer>>(rangeCountsOrigin);
 
             for (final FilteredNavigationRecord recordTemplate : allNavigationRecordsTemplates) {
 

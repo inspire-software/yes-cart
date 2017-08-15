@@ -49,6 +49,7 @@ import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.dto.impl.FilteredNavigationRecordImpl;
+import org.yes.cart.search.query.impl.SearchUtil;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
@@ -714,7 +715,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     }
 
     private String getRangeValueRepresentation(final String from, final String to) {
-        return from + Constants.RANGE_NAVIGATION_DELIMITER + to;
+        return SearchUtil.valToLong(from, Constants.NUMERIC_NAVIGATION_PRECISION) + Constants.RANGE_NAVIGATION_DELIMITER + SearchUtil.valToLong(to, Constants.NUMERIC_NAVIGATION_PRECISION);
     }
 
     private String getRangeDisplayValueRepresentation(final String locale, final Map<String, String> display, final String from, final String to) {

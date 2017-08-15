@@ -177,7 +177,7 @@
         <appender-ref ref="AUDIT"/>
     </logger>
 
-    <logger name="FTQ" level="INFO">
+    <logger name="FTQ" level="TRACE">
         <appender-ref ref="FTQ"/>
     </logger>
 

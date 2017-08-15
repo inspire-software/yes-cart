@@ -29,12 +29,11 @@ import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.LuceneDocumentAdapter;
 import org.yes.cart.search.dao.support.NavigatableAttributesSupport;
+import org.yes.cart.search.query.impl.SearchUtil;
 import org.yes.cart.util.DomainApiUtils;
 
 import java.lang.System;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils.*;
 import static org.yes.cart.search.query.ProductSearchQueryBuilder.*;
@@ -169,6 +168,8 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
 
         final List<AttrValue> attributes = new ArrayList<AttrValue>(entity.getAttributes());
 
+        final Map<String, Long> numRangeFields = new HashMap<String, Long>();
+
         for (final AttrValue attrValue : attributes) {
 
             if (attrValue.getAttributeCode() == null) {
@@ -217,7 +218,15 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
 
             if (navigation) {
                 // strict attribute navigation only for filtered navigation
-                addFacetField(document, "facet_" + code, cleanFacetValue(attrValue.getVal()));
+                final String navVal = cleanFacetValue(attrValue.getVal());
+                if (StringUtils.isNotBlank(navVal)) {
+                    addFacetField(document, "facet_" + code, navVal);
+                    final Long decNavVal = SearchUtil.valToLong(navVal, 3);
+                    // If this is a decimal value choose the lowers value for range navigation
+                    if (decNavVal != null && (!numRangeFields.containsKey(code) || decNavVal.compareTo(numRangeFields.get(code)) < 0)) {
+                        numRangeFields.put(code, decNavVal);
+                    }
+                }
             }
 
             final boolean stored = storeAttrs.contains(code);
@@ -229,10 +238,17 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
 
         }
 
+
+        for (final Map.Entry<String, Long> numRange : numRangeFields.entrySet()) {
+            addFacetField(document, "facetr_" + numRange.getKey(), numRange.getValue());
+            addNumericField(document, numRange.getKey() + "_range", numRange.getValue(), false);
+        }
+
+
     }
 
     private String cleanFacetValue(final String val) {
-        return val.replace('/', ' '); // replace all forward slashes since they get decoded into paths
+        return val != null ? val.replace('/', ' ') : null; // replace all forward slashes since they get decoded into paths
     }
 
     private List<String> getSearchValue(final AttrValue attrValue) {

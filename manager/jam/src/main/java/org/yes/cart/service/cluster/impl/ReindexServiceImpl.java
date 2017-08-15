@@ -111,25 +111,23 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
                         // This should call
                         cnt = clusterService.getProductReindexingState(context);
-                        //if (isIndexingInProgress(cnt)) {
 
-                            final StringBuilder state = new StringBuilder("Indexing products:\n");
-                            for (final Map.Entry<String, Pair<Long, Boolean>> cntNode : cnt.entrySet()) {
-                                final String nodeUri = cntNode.getKey();
-                                final Pair<Long, Boolean> nodeCnt = cntNode.getValue();
-                                if (nodeCnt != null) {
-                                    lastPositive.put(nodeUri, nodeCnt.getFirst());
-                                    if (nodeCnt.getSecond()) {
-                                        // this node finished
-                                        state.append(nodeUri).append(": ").append(nodeCnt.getFirst()).append(" ... finished\n");
-                                    } else {
-                                        state.append(nodeUri).append(": ").append(nodeCnt.getFirst()).append(" ... in progress\n");
-                                    }
+                        final StringBuilder state = new StringBuilder("Indexing products:\n");
+                        for (final Map.Entry<String, Pair<Long, Boolean>> cntNode : cnt.entrySet()) {
+                            final String nodeUri = cntNode.getKey();
+                            final Pair<Long, Boolean> nodeCnt = cntNode.getValue();
+                            if (nodeCnt != null) {
+                                lastPositive.put(nodeUri, nodeCnt.getFirst());
+                                if (nodeCnt.getSecond()) {
+                                    // this node finished
+                                    state.append(nodeUri).append(": ").append(nodeCnt.getFirst()).append(" ... finished\n");
+                                } else {
+                                    state.append(nodeUri).append(": ").append(nodeCnt.getFirst()).append(" ... in progress\n");
                                 }
                             }
-                            listener.notifyPing(state.toString());
-                            Thread.sleep(5000l);
-                        //}
+                        }
+                        listener.notifyPing(state.toString());
+                        Thread.sleep(5000l);
 
                     }
 
@@ -154,25 +152,23 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
                         // This should call
                         cnt = clusterService.getProductSkuReindexingState(context);
-                        //if (isIndexingInProgress(cnt)) {
 
-                            final StringBuilder state = new StringBuilder("Indexing SKU:\n");
-                            for (final Map.Entry<String, Pair<Long, Boolean>> cntNode : cnt.entrySet()) {
-                                final String nodeUri = cntNode.getKey();
-                                final Pair<Long, Boolean> nodeCnt = cntNode.getValue();
-                                if (nodeCnt != null) {
-                                    lastPositive.put(nodeUri, nodeCnt.getFirst());
-                                    if (nodeCnt.getSecond()) {
-                                        // this node finished
-                                        state.append(nodeUri).append(": ").append(nodeCnt.getFirst()).append(" ... finished\n");
-                                    } else {
-                                        state.append(nodeUri).append(": ").append(nodeCnt.getFirst()).append(" ... in progress\n");
-                                    }
+                        final StringBuilder state = new StringBuilder("Indexing SKU:\n");
+                        for (final Map.Entry<String, Pair<Long, Boolean>> cntNode : cnt.entrySet()) {
+                            final String nodeUri = cntNode.getKey();
+                            final Pair<Long, Boolean> nodeCnt = cntNode.getValue();
+                            if (nodeCnt != null) {
+                                lastPositive.put(nodeUri, nodeCnt.getFirst());
+                                if (nodeCnt.getSecond()) {
+                                    // this node finished
+                                    state.append(nodeUri).append(": ").append(nodeCnt.getFirst()).append(" ... finished\n");
+                                } else {
+                                    state.append(nodeUri).append(": ").append(nodeCnt.getFirst()).append(" ... in progress\n");
                                 }
                             }
-                            listener.notifyPing(state.toString());
-                            Thread.sleep(5000l);
-                        //}
+                        }
+                        listener.notifyPing(state.toString());
+                        Thread.sleep(5000l);
 
                     }
                     final StringBuilder summarySku = new StringBuilder("SKU indexing completed. Last traceable SKU count:\n");

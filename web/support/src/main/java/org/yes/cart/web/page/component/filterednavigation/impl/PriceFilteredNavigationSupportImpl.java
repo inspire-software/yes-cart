@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.filterednavigation.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
@@ -121,7 +122,7 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
 
             final List<Pair<String, Integer>> rangeCounts = counts.get("priceFacet");
 
-            if (rangeCounts.isEmpty()) {
+            if (CollectionUtils.isEmpty(rangeCounts)) {
                 LOGFTQ.debug("Unable to get price filtered navigation for query: {}, request: {}", navigationContext.getProductQuery(), request);
                 return Collections.emptyList();
             }

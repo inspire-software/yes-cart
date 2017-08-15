@@ -81,37 +81,40 @@ public class SearchUtil {
         return price.movePointRight(Constants.MONEY_SCALE).setScale(0, BigDecimal.ROUND_HALF_UP).longValue();
     }
 
-
-    /**
-     * Create index value for given shop currency and price.
-     *
-     * @param shopId shop id
-     * @param currency currency code
-     * @param regularPrice regular price
-     *
-     * @return pair where first is field name and second is the string representation of price. Field has format facet_price_shopid_currency.
-     *         All digital value will be left padded according to formatter.
-     */
-    public static Pair<String, String> priceToFacetPair(final long shopId, final String currency, final BigDecimal regularPrice) {
-        return new Pair<String, String>(priceFacetName(shopId, currency), decimalToString(regularPrice, Constants.MONEY_SCALE));
-    }
-
-
     /**
      * Decimal to string. Pads the numbers since FT searches numbers as strings.
      *
-     * @param bigDecimal decimal to pad
+     * @param value      decimal to pad
      * @param scale      scale to preserve
      *
      * @return padded big decimal
      */
-    public static String decimalToString(final BigDecimal bigDecimal, final int scale) {
-        long toIndex = bigDecimal.movePointRight(scale).longValue();
-        final String str = String.valueOf(toIndex);
-        if (str.length() >= Constants.MONEY_FORMAT_TOINDEX.length()) {
-            return str;
+    public static Long valToLong(final String value, final int scale) {
+        try {
+            final BigDecimal decimal = new BigDecimal(value);
+            return decimal.movePointRight(scale).setScale(0, BigDecimal.ROUND_HALF_UP).longValue();
+        } catch (Exception exp) {
+            // NaN
         }
-        return Constants.MONEY_FORMAT_TOINDEX.substring(0, Constants.MONEY_FORMAT_TOINDEX.length() - str.length()).concat(str);
+        return null;
+    }
+
+    /**
+     * Decimal to string. Pads the numbers since FT searches numbers as strings.
+     *
+     * @param value      decimal to pad
+     * @param scale      scale to preserve
+     *
+     * @return padded big decimal
+     */
+    public static String longToVal(final String value, final int scale) {
+        try {
+            final BigDecimal decimal = new BigDecimal(value);
+            return decimal.movePointLeft(scale).stripTrailingZeros().toPlainString();
+        } catch (Exception exp) {
+            // NaN
+        }
+        return "0";
     }
 
 

@@ -30,6 +30,7 @@ import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.dto.impl.FilteredNavigationRecordRequestImpl;
+import org.yes.cart.search.query.impl.SearchUtil;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductTypeAttrService;
 import org.yes.cart.web.page.component.filterednavigation.AttributeFilteredNavigationSupport;
@@ -77,9 +78,10 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
             for (final ProductTypeAttr pta : ptas) {
 
                 final String facetName = pta.getAttribute().getCode();
-                final String fieldName = "facet_" + facetName;
 
                 if (ProductTypeAttr.NAVIGATION_TYPE_SINGLE.equals(pta.getNavigationType())) {
+
+                    final String fieldName = "facet_" + facetName;
 
                     final FilteredNavigationRecordRequest singleMultiValue = new FilteredNavigationRecordRequestImpl(facetName, fieldName, true);
                     requests.add(singleMultiValue);
@@ -87,12 +89,17 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
                 } else {
 
+                    final String fieldName = "facetr_" + facetName;
+
                     final List<Pair<String, String>> rangeValues = new ArrayList<Pair<String, String>>();
                     final RangeList rangeList = pta.getRangeList();
                     if (rangeList != null && rangeList.getRanges() != null) {
                         for (RangeNode node : rangeList.getRanges()) {
 
-                            rangeValues.add(new Pair<String, String>(node.getFrom(), node.getTo()));
+                            rangeValues.add(new Pair<String, String>(
+                                    SearchUtil.valToLong(node.getFrom(), Constants.NUMERIC_NAVIGATION_PRECISION).toString(),
+                                    SearchUtil.valToLong(node.getTo(), 3).toString()
+                            ));
 
                         }
                     }
@@ -144,17 +151,8 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
                     if (request.isRangeValue()) {
 
                         // range record value has the following form "from_value-_-to_value"
-                        // range count value has the following form "[from_value, to_value)"
 
-                        final String[] rangeValues = StringUtils.splitByWholeSeparator(count.getFirst().substring(1, count.getFirst().length() - 1), ", ");
-                        if (rangeValues.length != 2) {
-                            LOGFTQ.error("Unable to parse count range: {}", count.getFirst());
-                            countIt.remove();
-                            continue;
-                        }
-                        final String compareValue = rangeValues[0] + Constants.RANGE_NAVIGATION_DELIMITER + rangeValues[1];
-
-                        if (recordTemplate.getValue().equals(compareValue)) { // range value match
+                        if (recordTemplate.getValue().equals(count.getFirst())) { // range value match
 
                             final Integer candidateResultCount = count.getSecond();
 
