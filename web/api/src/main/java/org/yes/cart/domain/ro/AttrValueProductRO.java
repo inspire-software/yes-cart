@@ -18,6 +18,7 @@ package org.yes.cart.domain.ro;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 
@@ -44,7 +45,7 @@ public class AttrValueProductRO implements Serializable {
     @DtoField(value = "displayVal", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> displayVals;
 
-    @DtoField(value = "attributeCode", converter = "attributeCodeConverter", readOnly = true)
+    @DtoVirtualField(converter = "attributeCodeConverter", readOnly = true)
     private AttributeRO attribute;
 
     @DtoField(value = "product.productId", readOnly = true)
