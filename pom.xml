@@ -594,25 +594,6 @@
         </profile>
 
         <!--
-            PLACEHOLDER PARAMETERS FOR MANAGER/CLIENT MODULE
-        -->
-
-        <profile>
-            <activation><activeByDefault>true</activeByDefault></activation>
-            <id>flexAntBuild</id>
-            <properties>
-                <packaging.type>jar</packaging.type>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>flexMojoBuild</id>
-            <properties>
-                <packaging.type>swf</packaging.type>
-            </properties>
-        </profile>
-
-        <!--
             BUILD PROCESS OPTIMISATION
 
             Includes profiles to skip some steps of full build to save some time
