@@ -96,7 +96,7 @@
 
             <executable targetfile="$INSTALL_PATH/yesbin/opendoc.bat" />
 
-            <executable targetfile="$INSTALL_PATH/yesbin/openyum.bat" />
+            <executable targetfile="$INSTALL_PATH/yesbin/openadmin.bat" />
 
             <executable targetfile="$INSTALL_PATH/yesbin/startcart.bat" />
             <executable targetfile="$INSTALL_PATH/yesbin/startcart.sh" stage="never" keep="true" type="bin">

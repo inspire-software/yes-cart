@@ -63,14 +63,14 @@ public class NodeConfigurationXStreamProviderTest {
         assertTrue(yes1.isFtIndexDisabled());
         assertEquals("http://localhost:8081/yes-api/services/backdoor", yes1.getChannel());
 
-        final Node yum = cluster.get(2);
-        assertEquals("TESTCLUSTER.JAM", yum.getId());
-        assertEquals("TESTCLUSTER", yum.getClusterId());
-        assertEquals("JAM", yum.getNodeId());
-        assertEquals("ADM", yum.getNodeType());
-        assertEquals("DEFAULT", yum.getNodeConfig());
-        assertTrue(yum.isFtIndexDisabled());
-        assertNull(yum.getChannel());
+        final Node admin = cluster.get(2);
+        assertEquals("TESTCLUSTER.JAM", admin.getId());
+        assertEquals("TESTCLUSTER", admin.getClusterId());
+        assertEquals("JAM", admin.getNodeId());
+        assertEquals("ADM", admin.getNodeType());
+        assertEquals("DEFAULT", admin.getNodeConfig());
+        assertTrue(admin.isFtIndexDisabled());
+        assertNull(admin.getChannel());
 
     }
 }

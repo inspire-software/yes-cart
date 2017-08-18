@@ -31,7 +31,7 @@ public interface Node extends Serializable {
     boolean isCurrent();
 
     /**
-     * @return true if current node is yum
+     * @return true if current node is admin
      */
     boolean isAdmin();
 

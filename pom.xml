@@ -41,7 +41,6 @@
         <env>dev</env>
         <env.db>derby</env.db>
         <env.ssl>off</env.ssl>
-        <env.yum.lang>all</env.yum.lang>
         <payment.liqpay.module>off</payment.liqpay.module>
         <payment.cybersource.module>off</payment.cybersource.module>
         <payment.authorizenet.module>off</payment.authorizenet.module>
@@ -628,7 +627,6 @@
                 <env>installer</env>
                 <env.db>derby</env.db>
                 <env.ssl>off</env.ssl>
-                <env.yum.lang>all</env.yum.lang>
                 <payment.liqpay.module>off</payment.liqpay.module>
                 <payment.cybersource.module>off</payment.cybersource.module>
                 <payment.authorizenet.module>off</payment.authorizenet.module>
@@ -659,7 +657,6 @@
                 <env>demo</env>
                 <env.db>mysql</env.db>
                 <env.ssl>off</env.ssl>
-                <env.yum.lang>all</env.yum.lang>
                 <payment.liqpay.module>off</payment.liqpay.module>
                 <payment.cybersource.module>off</payment.cybersource.module>
                 <payment.authorizenet.module>off</payment.authorizenet.module>

@@ -144,7 +144,7 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
 
     private AsyncContext getAsyncContext() {
         try {
-            // This is manual access via YUM
+            // This is manual access via admin
             return this.asyncContextFactory.getInstance(new HashMap<String, Object>());
         } catch (IllegalStateException exp) {
             // This is auto access with thread local

@@ -419,12 +419,12 @@ public class ClusterServiceImpl implements ClusterService {
 
         }
 
-        final String yum = nodeService.getCurrentNodeId();
-        List<CacheInfoDTOImpl> yumRez = localCacheDirector.getCacheInfo();
-        for (final CacheInfoDTOImpl cacheInfoDTO : yumRez) {
-            cacheInfoDTO.setNodeId(yum);
+        final String admin = nodeService.getCurrentNodeId();
+        List<CacheInfoDTOImpl> adminRez = localCacheDirector.getCacheInfo();
+        for (final CacheInfoDTOImpl cacheInfoDTO : adminRez) {
+            cacheInfoDTO.setNodeId(admin);
         }
-        info.put(yum, yumRez);
+        info.put(admin, adminRez);
 
         return info;
     }
