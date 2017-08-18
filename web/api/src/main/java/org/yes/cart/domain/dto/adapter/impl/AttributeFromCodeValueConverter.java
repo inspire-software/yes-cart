@@ -29,6 +29,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.ro.AttributeRO;
 
@@ -54,10 +56,21 @@ public class AttributeFromCodeValueConverter implements ValueConverter {
     /** {@inheritDoc}*/
     @Override
     public Object convertToDto(final Object object, final BeanFactory beanFactory) {
-        if (object instanceof String) {
+        if (object instanceof AttrValueWithAttribute) {
+            final Attribute attr = ((AttrValueWithAttribute) object).getAttribute();
+            if (attr != null) {
+                final AttributeRO ro = new AttributeRO();
+                final Assembler asm = DTOAssembler.newAssembler(ro.getClass(), Attribute.class);
+                asm.assembleDto(ro, attr, getAdapters().getAll(), beanFactory);
+                return ro;
+            }
+        }
+        if (object instanceof AttrValue) {
 
+            final AttrValue av = (AttrValue) object;
+            final String code = av.getAttributeCode();
             Attribute attr = null;
-            final Cache.ValueWrapper val = this.attributeCache.get(object);
+            final Cache.ValueWrapper val = this.attributeCache.get(code);
             if (val != null) {
                 attr = (Attribute) val.get();
             }
@@ -67,7 +80,7 @@ public class AttributeFromCodeValueConverter implements ValueConverter {
                 attr = this.transactionTemplate.execute(new TransactionCallback<Attribute>() {
                     @Override
                     public Attribute doInTransaction(final TransactionStatus status) {
-                        final Attribute attribute = genericDAO.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", object);
+                        final Attribute attribute = genericDAO.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", code);
                         if (attribute != null) {
                             Hibernate.initialize(attribute.getEtype());
                         }
@@ -87,8 +100,8 @@ public class AttributeFromCodeValueConverter implements ValueConverter {
             } else {
 
                 final AttributeRO ro = new AttributeRO();
-                ro.setCode((String) object);
-                ro.setName((String) object);
+                ro.setCode(code);
+                ro.setName(code);
                 return ro;
 
             }
@@ -104,7 +117,9 @@ public class AttributeFromCodeValueConverter implements ValueConverter {
 
         if (object instanceof AttributeRO) {
 
-            return ((AttributeRO) object).getCode();
+            final String code = ((AttributeRO) object).getCode();
+            ((AttrValue) oldEntity).setAttributeCode(code);
+            return code;
 
         }
 
