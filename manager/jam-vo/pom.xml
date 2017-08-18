@@ -21,7 +21,7 @@
   <parent>
     <groupId>org.yes</groupId>
     <artifactId>manager</artifactId>
-    <version>3.3.0-SNAPSHOT</version>
+    <version>3.3.0</version>
   </parent>
   <artifactId>jam-vo</artifactId>
   <name>Yes cart JAM: value objects</name>
