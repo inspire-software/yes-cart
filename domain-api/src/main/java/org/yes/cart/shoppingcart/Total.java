@@ -41,6 +41,9 @@ public interface Total extends Serializable {
 
     /**
      * Get subtotal of all items list price.
+     *
+     * This can be gross or net depending on the tax config (This is sum of price list prices).
+     *
      * This total shows the catalog total with no discounts.
      *
      * @return list price subtotal.
@@ -49,6 +52,9 @@ public interface Total extends Serializable {
 
     /**
      * Get subtotal of all items sale price.
+     *
+     * This can be gross or net depending on the tax config (This is sum of price list prices).
+     *
      * Sale sub total shows total of items price using special
      * sale prices before any promotions applied.
      *
@@ -58,6 +64,9 @@ public interface Total extends Serializable {
 
     /**
      * Get subtotal of all items that do not have sale price.
+     *
+     * This can be gross or net depending on the tax config (This is sum of price list prices).
+     *
      * Non sale sub total shows total of items price using items without
      * sale prices before any promotions applied.
      *
@@ -67,6 +76,9 @@ public interface Total extends Serializable {
 
     /**
      * Get subtotal of all items final price.
+     *
+     * This can be gross or net depending on the tax config (This is sum of price list prices).
+     *
      * Final item price total inclusive of all sale prices and
      * item level promotions.
      *
@@ -75,32 +87,31 @@ public interface Total extends Serializable {
     BigDecimal getPriceSubTotal();
 
     /**
-     * Returns true if promotions have been applied to
-     * grand total.
+     * Returns true if promotions have been applied at order level. (Flag to show discount applied to item sub total)
      *
      * @return true if promotions have been applied
      */
     boolean isOrderPromoApplied();
 
     /**
-     * Comma separated list of promotion codes that have been applied
-     * for this total.
+     * Comma separated list of promotion codes that have been applied for this total.
      *
      * @return comma separated
      */
     String getAppliedOrderPromo();
 
     /**
-     * Get cart subtotal. Final sub total including getPriceSubTotal() and
-     * any additional order level promotions applied.
+     * Get cart subtotal. Final sub total including getPriceSubTotal() and any additional order level promotions applied.
+     *
+     * This can be gross or net depending on the tax config (This is sum of price list prices).
      *
      * @return cart subtotal.
      */
     BigDecimal getSubTotal();
 
-     /**
+    /**
      * Get sub total tax.
-      *
+     *
      * @return sub total tax
      */
     BigDecimal getSubTotalTax();
@@ -108,13 +119,16 @@ public interface Total extends Serializable {
     /**
      * Get sub total amount including tax.
      *
+     * This is always gross.
+     *
      * @return  sub total amount including tax.
      */
     BigDecimal getSubTotalAmount();
 
     /**
-     * Get delivery sale cost. The cost of delivery as it
-     * is calculated without any discounts applied.
+     * Get delivery sale cost. The cost of delivery as it is calculated without any discounts applied.
+     *
+     * This can be gross or net depending on the tax config (This is price list prices).
      *
      * @return delivery amount.
      */
@@ -123,21 +137,21 @@ public interface Total extends Serializable {
     /**
      * Get delivery cost. Cost of delivery less shipping promotions.
      *
+     * This can be gross or net depending on the tax config (This is price list prices).
+     *
      * @return delivery amount.
      */
     BigDecimal getDeliveryCost();
 
     /**
-     * Returns true if promotions have been applied to this
-     * delivery.
+     * Returns true if promotions have been applied to this delivery.
      *
      * @return true if promotions have been applied
      */
     boolean isDeliveryPromoApplied();
 
     /**
-     * Comma separated list of promotion codes that have been applied
-     * for this order.
+     * Comma separated list of promotion codes that have been applied for this order.
      *
      * @return comma separated
      */
@@ -153,12 +167,16 @@ public interface Total extends Serializable {
     /**
      * Get delivery amount including tax.
      *
+     * This is always gross.
+     *
      * @return delivery amount including tax
      */
     BigDecimal getDeliveryCostAmount();
 
     /**
      * Get total = sub total + delivery cost
+     *
+     * This can be gross or net depending on the tax config (This is price list prices).
      *
      * @return total.
      */
@@ -172,8 +190,9 @@ public interface Total extends Serializable {
     BigDecimal getTotalTax();
 
     /**
-     * Get total amount as it would be if we used
-     * catalog prices with no promotions.
+     * Get total amount as it would be if we used catalog prices with no promotions.
+     *
+     * This is always gross.
      *
      * total = sub total list price + delivery sale cost
      *
@@ -183,6 +202,8 @@ public interface Total extends Serializable {
 
     /**
      * Get total amount to be paid.
+     *
+     * This is always gross.
      *
      * @return  total amount.
      */

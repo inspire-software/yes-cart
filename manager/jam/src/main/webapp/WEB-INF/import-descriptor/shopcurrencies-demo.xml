@@ -48,6 +48,7 @@
             <column-index>-1</column-index>
             <field-type>FIELD</field-type>
             <name>attributeCode</name>
+            <value-constant>CURRENCY</value-constant>
         </column-descriptor>
 
     </import-columns>
