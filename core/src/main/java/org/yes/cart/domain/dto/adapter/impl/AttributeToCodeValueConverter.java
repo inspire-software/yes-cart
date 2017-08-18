@@ -26,6 +26,8 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.AttributeDTO;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Attribute;
 
 /**
@@ -47,16 +49,27 @@ public class AttributeToCodeValueConverter implements ValueConverter {
     /** {@inheritDoc}*/
     @Override
     public Object convertToDto(final Object object, final BeanFactory beanFactory) {
-        if (object instanceof String) {
+        if (object instanceof AttrValueWithAttribute) {
+            final Attribute attr = ((AttrValueWithAttribute) object).getAttribute();
+            if (attr != null) {
+                final AttributeDTO dto = (AttributeDTO) beanFactory.get("org.yes.cart.domain.dto.AttributeDTO");
+                final Assembler asm = DTOAssembler.newAssembler(dto.getClass(), Attribute.class);
+                asm.assembleDto(dto, attr, getAdapters().getAll(), beanFactory);
+                return dto;
+            }
+        }
+        if (object instanceof AttrValue) {
 
+            final AttrValue av = (AttrValue) object;
+            final String code = av.getAttributeCode();
             Attribute attr = null;
-            final Cache.ValueWrapper val = this.attributeCache.get(object);
+            final Cache.ValueWrapper val = this.attributeCache.get(code);
             if (val != null) {
                 attr = (Attribute) val.get();
             }
 
             if (attr == null) {
-                attr = (Attribute) this.genericDAO.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", object);
+                attr = (Attribute) this.genericDAO.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", code);
                 if (attr != null) {
                     Hibernate.initialize(attr.getEtype());
                 }
@@ -72,8 +85,8 @@ public class AttributeToCodeValueConverter implements ValueConverter {
             } else {
 
                 final AttributeDTO dto = (AttributeDTO) beanFactory.get("org.yes.cart.domain.dto.AttributeDTO");
-                dto.setCode((String) object);
-                dto.setName((String) object);
+                dto.setCode(code);
+                dto.setName(code);
                 return dto;
 
             }
@@ -89,7 +102,9 @@ public class AttributeToCodeValueConverter implements ValueConverter {
 
         if (object instanceof AttributeDTO) {
 
-            return ((AttributeDTO) object).getCode();
+            final String code = ((AttributeDTO) object).getCode();
+            ((AttrValue) oldEntity).setAttributeCode(code);
+            return code;
 
         }
 

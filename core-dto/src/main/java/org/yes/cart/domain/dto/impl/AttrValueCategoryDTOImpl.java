@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.yes.cart.domain.dto.AttrValueCategoryDTO;
 import org.yes.cart.domain.dto.AttributeDTO;
 
@@ -43,7 +44,7 @@ public class AttrValueCategoryDTOImpl implements AttrValueCategoryDTO {
     private Map<String, String> displayVals;
 
 
-    @DtoField(value = "attributeCode", converter = "attributeDTO2Code")
+    @DtoVirtualField(converter = "attributeDTO2Code")
     private AttributeDTO attributeDTO;
 
     @DtoField(value = "category.categoryId", readOnly = true)
