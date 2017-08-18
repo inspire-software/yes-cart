@@ -71,7 +71,7 @@
     <shortcut
             name="Open demo store admin"
             description="Open yes cart demo store"
-            iconFile="$INSTALL_PATH\yesbin\openyum.ico"
+            iconFile="$INSTALL_PATH\yesbin\openadmin.ico"
             iconIndex="0"
             initialState="noShow"
             programGroup="yes"

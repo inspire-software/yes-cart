@@ -71,11 +71,11 @@
 
     <shortcut
             name="Відкрити адмін-панель"
-            target="$INSTALL_PATH\yesbin\openyum.bat"
+            target="$INSTALL_PATH\yesbin\openadmin.bat"
             commandLine=""
             workingDirectory="$INSTALL_PATH\yesbin"
             description="Відкрити адміністративну панель"
-            iconFile="$INSTALL_PATH\yesbin\openyum.ico"
+            iconFile="$INSTALL_PATH\yesbin\openadmin.ico"
             iconIndex="0"
             initialState="normal"
             programGroup="no"

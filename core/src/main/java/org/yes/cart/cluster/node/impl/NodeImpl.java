@@ -91,14 +91,14 @@ public class NodeImpl implements Node {
     }
 
     /**
-     * @return true if current node is yum
+     * @return true if current node is admin
      */
     public boolean isAdmin() {
         return admin;
     }
 
     /**
-     * @param admin true if current node is yum
+     * @param admin true if current node is admin
      */
     public void setAdmin(final boolean admin) {
         this.admin = admin;
@@ -288,7 +288,7 @@ public class NodeImpl implements Node {
     public String toString() {
         return "NodeImpl{" +
                 "current=" + current +
-                ", yum=" + admin +
+                ", admin=" + admin +
                 ", nodeId='" + nodeId + '\'' +
                 ", nodeType='" + nodeType + '\'' +
                 ", nodeConfig='" + nodeConfig + '\'' +

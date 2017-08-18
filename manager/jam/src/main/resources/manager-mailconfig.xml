@@ -28,16 +28,16 @@
     </bean>
 
     <bean id="defaultMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="${yum.mail.host}"/>
-        <property name="port" value="${yum.mail.port}"/>
-        <property name="username" value="${yum.mail.username}"/>
-        <property name="password" value="${yum.mail.password}"/>
+        <property name="host" value="${admin.mail.host}"/>
+        <property name="port" value="${admin.mail.port}"/>
+        <property name="username" value="${admin.mail.username}"/>
+        <property name="password" value="${admin.mail.password}"/>
         <property name="javaMailProperties">
             <props>
                 <!-- Use SMTP-AUTH to authenticate to SMTP server -->
-                <prop key="mail.smtp.auth">${yum.mail.smtp.auth.enable}</prop>
+                <prop key="mail.smtp.auth">${admin.mail.smtp.auth.enable}</prop>
                 <!-- Use TLS to encrypt communication with SMTP server -->
-                <prop key="mail.smtp.starttls.enable">${yum.mail.smtp.starttls.enable}</prop>
+                <prop key="mail.smtp.starttls.enable">${admin.mail.smtp.starttls.enable}</prop>
             </props>
         </property>
     </bean>

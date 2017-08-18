@@ -68,7 +68,7 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
         String val = contentService.getContentAttributeRecursive(null, 10105L, "SOME_NOT_EXISTING_ATTR", null);
         assertNull(val);
         val = contentService.getContentAttributeRecursive(null, 10105L, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
-        assertNull(val); // This is root, not editable in YUM, so must not use
+        assertNull(val); // This is root, not editable in admin, so must not use
         val = contentService.getContentAttributeRecursive(null, 10107L, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("6,12,24", val);
     }
