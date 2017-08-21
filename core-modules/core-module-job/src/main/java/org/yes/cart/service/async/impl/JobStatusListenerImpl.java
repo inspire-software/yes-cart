@@ -110,6 +110,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
     /** {@inheritDoc} */
     public void notifyPing(final String msg) {
         pingMsg = msg;
+        LOG.debug(msg);
         notifyPing();
     }
 

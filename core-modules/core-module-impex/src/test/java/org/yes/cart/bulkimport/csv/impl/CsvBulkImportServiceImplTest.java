@@ -1076,9 +1076,9 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         mockery.checking(new Expectations() {{
             allowing(listener).notifyPing();
-            allowing(listener).notifyPing(with(any(String.class)));
             allowing(listener).notifyMessage(with(any(String.class)));
-            allowing(listener).notifyWarning(with(aStringStartingWith("Skipping tuple (unresolved foreign key):")));
+            one(listener).notifyPing(with(aStringStartingWith("Skipping tuple (unresolved foreign key):")));
+            allowing(listener).notifyPing(with(aStringStartingWith("Importing tuple: ")));
         }});
 
 
@@ -1118,13 +1118,13 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         mockery.checking(new Expectations() {{
             allowing(listener1).notifyPing();
-            allowing(listener1).notifyPing(with(any(String.class)));
-            allowing(listener1).notifyMessage(with(aStringNotStartingWith("Skipping tuple (no change):")));
-            allowing(listener1).notifyWarning(with(aStringStartingWith("Skipping tuple (unresolved foreign key):")));
+            allowing(listener1).notifyMessage(with(any(String.class)));
+            allowing(listener1).notifyPing(with(aStringStartingWith("Importing tuple: ")));
 
             allowing(listener2).notifyPing();
-            allowing(listener2).notifyPing(with(any(String.class)));
-            allowing(listener2).notifyMessage(with(aStringNotStartingWith("Skipping tuple (no change):")));
+            allowing(listener2).notifyMessage(with(any(String.class)));
+            allowing(listener2).notifyPing(with(aStringStartingWith("Importing tuple: ")));
+            one(listener2).notifyPing(with(aStringStartingWith("Skipping tuple (no change):")));
         }});
 
 

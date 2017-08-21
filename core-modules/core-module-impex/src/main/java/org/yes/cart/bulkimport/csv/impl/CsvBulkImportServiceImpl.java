@@ -213,8 +213,9 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                         doImportMerge(statusListener, tuple, csvImportDescriptorName, csvImportDescriptor, null, entityCache);
                     }
                 }
-                final String msgInfoLines = MessageFormat.format("total data lines : {0}",
-                        (csvImportDescriptor.getImportFileDescriptor().isIgnoreFirstLine() ? csvFileReader.getRowsRead() - 1 : csvFileReader.getRowsRead()));
+                final String msgInfoLines = MessageFormat.format("total data lines : {0} ({1})",
+                        (csvImportDescriptor.getImportFileDescriptor().isIgnoreFirstLine() ? csvFileReader.getRowsRead() - 1 : csvFileReader.getRowsRead()),
+                        fileToImport.getAbsolutePath());
                 statusListener.notifyMessage(msgInfoLines);
 
                 csvFileReader.close();
@@ -373,7 +374,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
                 if (fkChanged == null) {
 
-                    statusListener.notifyWarning("Skipping tuple (unresolved foreign key): " + tuple);
+                    statusListener.notifyPing("Skipping tuple (unresolved foreign key): " + tuple);
 
                 } else {
 
@@ -392,7 +393,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                     if (valueChanged || fkChanged) {
                         genericDAO.saveOrUpdate(object); // If no changed are made then we do not need to save
                     } else {
-                        statusListener.notifyMessage("Skipping tuple (no change): " + tuple.getSourceId());
+                        statusListener.notifyPing("Skipping tuple (no change): " + tuple.getSourceId());
                     }
 
                     performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
@@ -601,8 +602,13 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
         } else if (singleObjectValue instanceof BigDecimal) {
 
-            // BidDecimal value has been set or changed
+            // BigDecimal value has been set or changed
             return current == null || (((BigDecimal) current).compareTo((BigDecimal) singleObjectValue) != 0);
+
+        } else if (singleObjectValue instanceof Date) {
+
+            // Sometimes Date is Timestamp (or other impl, so it does not equal)
+            return current == null || ((Date) current).getTime() != ((Date) singleObjectValue).getTime();
 
         } else if (singleObjectValue != null) {
 
