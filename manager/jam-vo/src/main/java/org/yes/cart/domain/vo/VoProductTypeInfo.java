@@ -18,6 +18,9 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.misc.MutablePair;
+
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -30,6 +33,9 @@ public class VoProductTypeInfo {
 
     @DtoField(value = "name")
     private String name;
+
+    @DtoField(value = "displayNames", converter = "DisplayValues")
+    private List<MutablePair<String, String>> displayNames;
 
     @DtoField(value = "guid")
     private String guid;
@@ -72,6 +78,14 @@ public class VoProductTypeInfo {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public List<MutablePair<String, String>> getDisplayNames() {
+        return displayNames;
+    }
+
+    public void setDisplayNames(final List<MutablePair<String, String>> displayNames) {
+        this.displayNames = displayNames;
     }
 
     public String getGuid() {

@@ -80,7 +80,7 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
 
     this.productTypeForm = fb.group({
       'guid': ['', validCode],
-      'name': ['', YcValidators.requiredNonBlankTrimmed],
+      'name': [''],
       'description': [''],
       'uitemplate': ['', YcValidators.noWhitespace],
       'uisearchtemplate': ['', YcValidators.noWhitespace],
@@ -140,6 +140,10 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
   onGroupDataChanged(event:any) {
     LogUtil.debug('ProductTypeComponent attr data changed', this._productType);
     this.delayedChange.delay();
+  }
+
+  onNameDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'productTypeForm', 'name', event);
   }
 
   ngOnInit() {

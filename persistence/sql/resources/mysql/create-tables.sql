@@ -705,6 +705,7 @@
         PRODUCTTYPE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         NAME varchar(255),
+        DISPLAYNAME longtext,
         DESCRIPTION varchar(255),
         UITEMPLATE varchar(255) comment 'What UI template will be used for show particular type of product.',
         UISEARCHTEMPLATE varchar(255) comment 'UI template label for search on category, if category has a default product type.',

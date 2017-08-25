@@ -16,7 +16,6 @@
 
 package org.yes.cart.domain.dto.impl;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.StoredAttributes;
@@ -47,6 +46,8 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private String displayName;
     private String description;
     private String displayDescription;
+    private String type;
+    private String displayType;
     private String tag;
     private String brand;
     private Date availablefrom;
@@ -64,6 +65,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     private I18NModel i18NModelName;
     private I18NModel i18NModelDescription;
+    private I18NModel i18NModelType;
 
     private StoredAttributes attributes;
 
@@ -203,10 +205,13 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     /** {@inheritDoc} */
     public String getName(final String locale) {
-        return (String) ObjectUtils.defaultIfNull(
-                this.i18NModelName.getValue(locale),
-                name
-        );
+        if (this.i18NModelName != null) {
+            final String name = this.i18NModelName.getValue(locale);
+            if (name != null) {
+                return name;
+            }
+        }
+        return this.name;
     }
 
     /** {@inheritDoc} */
@@ -233,10 +238,13 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     /** {@inheritDoc} */
     public String getDescription(final String locale) {
-        return (String) ObjectUtils.defaultIfNull(
-                this.i18NModelDescription.getValue(locale),
-                description
-        );
+        if (this.i18NModelDescription != null) {
+            final String desc = this.i18NModelDescription.getValue(locale);
+            if (desc != null) {
+                return desc;
+            }
+        }
+        return this.description;
     }
 
 
@@ -251,6 +259,41 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         this.displayDescription = displayDescription;
 
         i18NModelDescription = new StringI18NModel(this.displayDescription);
+    }
+
+    /** {@inheritDoc} */
+    public String getType(final String locale) {
+        if (this.i18NModelType != null) {
+            final String type = this.i18NModelType.getValue(locale);
+            if (type != null) {
+                return type;
+            }
+        }
+        return this.type;
+    }
+
+    /** {@inheritDoc} */
+    public String getType() {
+        return type;
+    }
+
+    /** {@inheritDoc} */
+    public void setType(final String type) {
+        this.type = type;
+    }
+
+    /** {@inheritDoc} */
+    public String getDisplayType() {
+        return displayType;
+    }
+
+    /** {@inheritDoc} */
+    public void setDisplayType(final String displayType) {
+
+        this.displayType = displayType;
+
+        i18NModelType = new StringI18NModel(this.displayType);
+
     }
 
     /** {@inheritDoc} */
@@ -370,6 +413,8 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         copy.setDisplayName(this.displayName);
         copy.setDescription(this.description);
         copy.setDisplayDescription(this.displayDescription);
+        copy.setType(this.type);
+        copy.setDisplayType(this.displayType);
         copy.setTag(this.tag);
         copy.setBrand(this.brand);
         copy.setAvailablefrom(this.availablefrom);

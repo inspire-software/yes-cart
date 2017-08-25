@@ -45,6 +45,8 @@ public class ProductSearchResultDTOImplTest {
         first.setDisplayName("FirstDisplayName");
         first.setDescription("FirstDescription");
         first.setDisplayDescription("FirstDisplayDescription");
+        first.setType("typeA");
+        first.setDisplayType("displayTypeA");
         first.setTag("tag");
         first.setBrand("brand");
         first.setAvailablefrom(new Date());
@@ -69,6 +71,8 @@ public class ProductSearchResultDTOImplTest {
         assertEquals(first.getDisplayName(), copy.getDisplayName());
         assertEquals(first.getDescription(), copy.getDescription());
         assertEquals(first.getDisplayDescription(), copy.getDisplayDescription());
+        assertEquals(first.getType(), copy.getType());
+        assertEquals(first.getDisplayType(), copy.getDisplayType());
         assertEquals(first.getTag(), copy.getTag());
         assertEquals(first.getBrand(), copy.getBrand());
         assertEquals(first.getAvailablefrom(), copy.getAvailablefrom());

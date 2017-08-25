@@ -138,6 +138,12 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 addSnowballFields(document, PRODUCT_DISPLAYNAME_FIELD, displayName);
                 addSortFields(document, PRODUCT_DISPLAYNAME_SORT_FIELD, displayName);
 
+                final I18NModel displayType = new StringI18NModel(entity.getProducttype().getDisplayName());
+                addSnowballField(document, PRODUCT_TYPE_FIELD, entity.getProducttype().getName());
+                addSnowballFields(document, PRODUCT_TYPE_FIELD, displayType);
+                addStemField(document, PRODUCT_TYPE_STEM_FIELD, entity.getProducttype().getName());
+                addStemFields(document, PRODUCT_TYPE_STEM_FIELD, displayType);
+
                 // Description is a bad field to index as it contain a lot of information, most of which is irrelevant
 //                addSimpleField(document, "description", entity.getDescription());
 //                final String descAsIs = entity.getDescriptionAsIs();
@@ -807,6 +813,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
         baseResult.setDisplayName(entity.getDisplayName());
         baseResult.setDescription(entity.getDescription());
         baseResult.setDisplayDescription(entity.getDescriptionAsIs());
+        baseResult.setType(entity.getProducttype().getName());
+        baseResult.setDisplayType(entity.getProducttype().getDisplayName());
         baseResult.setTag(entity.getTag());
         baseResult.setBrand(entity.getBrand().getName());
         baseResult.setAvailablefrom(entity.getAvailablefrom());

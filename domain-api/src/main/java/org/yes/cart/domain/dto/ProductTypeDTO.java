@@ -19,6 +19,8 @@ package org.yes.cart.domain.dto;
 import org.yes.cart.domain.entity.Guidable;
 import org.yes.cart.domain.entity.Identifiable;
 
+import java.util.Map;
+
 /**
  * Product type DTO.
  * <p/>
@@ -55,6 +57,20 @@ public interface ProductTypeDTO extends Identifiable, Guidable {
      * @param name name to set
      */
     void setName(String name);
+
+    /**
+     * Name of product type.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayNames();
+
+    /**
+     * Set product type name
+     *
+     * @param names localised locale => name pairs
+     */
+    void setDisplayNames(Map<String, String> names);
 
     /**
      * Description of product type.

@@ -177,6 +177,7 @@ public interface ProductSearchResultDTO extends Identifiable {
      */
     void setDescription(String description);
 
+
     /**
      * Get start of product availability.
      * Null - product has not start date, means no limitation.
@@ -277,6 +278,38 @@ public interface ProductSearchResultDTO extends Identifiable {
      * @param displayDescription localized raw value
      */
     void setDisplayDescription(String displayDescription);
+
+
+    /**
+     * Get product name by specified locale.
+     * @param locale given locale
+     * @return product name.
+     */
+    String getType(final String locale);
+
+    /**
+     * Get product type.
+     * @return product type.
+     */
+    String getType();
+
+    /**
+     * Set product type.
+     * @param type product type.
+     */
+    void setType(String type);
+
+    /**
+     * Get product type.
+     * @return product type.
+     */
+    String getDisplayType();
+
+    /**
+     * Set product type.
+     * @param type product type.
+     */
+    void setDisplayType(String type);
 
 
     /**

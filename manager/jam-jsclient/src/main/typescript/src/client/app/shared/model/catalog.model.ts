@@ -38,6 +38,7 @@ export interface ProductTypeInfoVO {
   guid  : string;
 
   name : string;
+  displayNames :  Pair<string, string>[];
   description : string;
 
   uitemplate : string;

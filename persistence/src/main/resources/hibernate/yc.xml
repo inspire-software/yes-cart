@@ -808,12 +808,9 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="name" type="string" length="255" not-null="true">
-            <column name="NAME"/>
-        </property>
-        <property name="description" type="string" length="4000">
-            <column name="DESCRIPTION"/>
-        </property>
+        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
+        <property name="displayName" column="DISPLAYNAME" type="string" length="4000"/>
+        <property name="description" column="DESCRIPTION" type="string" length="255"/>
 
         <bag name="attributeViewGroup" inverse="false" lazy="true" cascade="all" order-by="RANK">
             <key>

@@ -254,6 +254,8 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
                 ProductSearchResultDTO bender = searchRes.getResults().get(0);
                 assertEquals("Бендер Згибатель Родригес", bender.getName("ru"));
                 assertEquals("Бендер Згинач Родріґес", bender.getName("ua"));
+                assertEquals("Robots", bender.getType("ru"));
+                assertEquals("Robots", bender.getType("ua"));
 
             }
         });

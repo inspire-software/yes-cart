@@ -58,6 +58,20 @@ public interface ProductType extends Auditable {
     void setName(String name);
 
     /**
+     * Name of product type.
+     *
+     * @return name of product type.
+     */
+    String getDisplayName();
+
+    /**
+     * Set product type name
+     *
+     * @param name name to set
+     */
+    void setDisplayName(String name);
+
+    /**
      * Description of product type.
      *
      * @return description

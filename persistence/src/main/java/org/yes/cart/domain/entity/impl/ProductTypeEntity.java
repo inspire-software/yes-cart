@@ -35,6 +35,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     private long version;
 
     private String name;
+    private String displayName;
     private String description;
     private Collection<ProdTypeAttributeViewGroup> attributeViewGroup = new ArrayList<ProdTypeAttributeViewGroup>(0);
     private Collection<ProductTypeAttr> attributes = new ArrayList<ProductTypeAttr>(0);
@@ -62,6 +63,14 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(final String displayName) {
+        this.displayName = displayName;
     }
 
     public String getDescription() {
