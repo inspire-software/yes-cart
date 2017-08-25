@@ -64,6 +64,10 @@ public class ProductSearchResultRO implements Serializable {
     @DtoField(readOnly = true, converter = "i18nStringConverter")
     private Map<String, String> displayDescription;
     @DtoField(readOnly = true)
+    private String type;
+    @DtoField(readOnly = true, converter = "i18nStringConverter")
+    private Map<String, String> displayType;
+    @DtoField(readOnly = true)
     private String tag;
     @DtoField(readOnly = true)
     private String brand;
@@ -236,6 +240,24 @@ public class ProductSearchResultRO implements Serializable {
     public void setDisplayDescription(final Map<String, String> displayDescription) {
         
         this.displayDescription = displayDescription;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(final String type) {
+        this.type = type;
+    }
+
+    @XmlJavaTypeAdapter(I18nMapAdapter.class)
+    @XmlElement(name = "display-type")
+    public Map<String, String> getDisplayType() {
+        return displayType;
+    }
+
+    public void setDisplayType(final Map<String, String> displayType) {
+        this.displayType = displayType;
     }
 
     public String getTag() {
