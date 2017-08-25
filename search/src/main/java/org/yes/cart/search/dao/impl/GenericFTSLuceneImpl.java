@@ -303,7 +303,6 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
         try {
             count = searcher.count(query);
-            logExplanation(searcher, query, null, 0);
         } catch (Exception exp) {
             LOG.error("Failed to run query " + query + ", caused: " + exp.getMessage(), exp);
         } finally {

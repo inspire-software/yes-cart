@@ -204,11 +204,12 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals(1, products.size());
                 assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
-                // search on primary attribute MATERIAL no fuzzy! ('metall')
+                // search on primary attribute MATERIAL with fuzzy ('metall')
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L), false,
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("metall")));
                 products = productDao.fullTextSearch(context.getProductQuery());
-                assertEquals(0, products.size());
+                assertEquals(1, products.size());
+                assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
 
 
                 // query search via linked category (price must be set for shop 70)
@@ -354,11 +355,12 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals(1, products.size());
                 assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
-                // search on primary attribute MATERIAL no fuzzy! ('metall')
+                // search on primary attribute MATERIAL with fuzzy ('metall')
                 context = searchQueryFactory.getFilteredNavigationQueryChain(20L, null, false,
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("metall")));
                 products = productDao.fullTextSearch(context.getProductQuery());
-                assertEquals(0, products.size());
+                assertEquals(1, products.size());
+                assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
 
 
                 // query search via linked category
@@ -466,6 +468,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 ProductSearchResultPageDTO page = productService.getProductSearchResultDTOByQuery(pContext, 0, 100, null, false);
                 List<ProductSearchResultDTO> products = page.getResults();
                 assertFalse("Failed [" + pContext.getProductQuery().toString() + "]", products.isEmpty());
+                assertEquals("SOBOT + 2x Bender (because Sobot matches Robots type with 2 edits)", 3, products.size());
                 assertEquals("SOBOT is best match", "SOBOT", products.get(0).getCode());
 
                 sContext = searchQueryFactory.getSkuSnowBallQuery(pContext, products);
@@ -474,7 +477,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 List<ProductSkuSearchResultDTO> skus = productSkuService.getProductSkuSearchResultDTOByQuery(sContext);
                 assertFalse("Failed [" + sContext.getProductSkuQuery().toString() + "]", skus.isEmpty());
                 assertEquals("SOBOT is best match", products.get(0).getId(), skus.get(0).getProductId());
-                assertEquals("There are 4 SKU", 4, skus.size());
+                assertEquals("There are 4 Sobot SKU, + 2 x Bender SKU", 6, skus.size());
                 assertEquals("SOBOT-LIGHT is best match", "SOBOT-LIGHT", skus.get(0).getCode());
 
 

@@ -32,7 +32,7 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
     String PRODUCT_CATEGORYNAME_FIELD = "categoryName";
     String PRODUCT_CATEGORYNAME_STEM_FIELD = "categoryName_stem";
     String PRODUCT_TYPE_FIELD = "type";
-    String PRODUCT_TYPE_STEM_FIELD = "name_stem";
+    String PRODUCT_TYPE_STEM_FIELD = "type_stem";
     String PRODUCT_CODE_FIELD = "code";
     String PRODUCT_CODE_SORT_FIELD = "code_sort";
     String PRODUCT_CODE_STEM_FIELD = "code_stem";
