@@ -16,3 +16,13 @@ And that is still not all! YesCart is an embodiment of e-commerce best practices
 
 Please visit our official site http://www.yes-cart.org/ to read more the project.
 
+
+
+
+
+
+Our supporters:
+
+![JProfiler](https://www.ej-technologies.com/images/product_banners/jprofiler_small.png "JProfiler") 
+
+https://www.ej-technologies.com/products/jprofiler/overview.html
