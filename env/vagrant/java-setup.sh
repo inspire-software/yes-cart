@@ -19,5 +19,7 @@ else
         tar xzvf apache-maven-3.5.0-bin.tar.gz -C /usr/local/
         ln -s /usr/local/apache-maven-3.5.0/bin/mvn /usr/bin/mvn
 
+        sudo apt-get install -y tomcat7
+
 fi
 

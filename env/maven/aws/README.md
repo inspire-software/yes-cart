@@ -31,6 +31,7 @@ yum install -y net-tools
 yum install -y mc
 yum install -y unzip
 yum install -y xmlstarlet
+yum install -y tomcat
 
 
 
@@ -39,7 +40,7 @@ curl -sL https://rpm.nodesource.com/setup_7.x | sudo -E bash -
 yum install -y nodejs 
 npm install -g webpack webpack-dev-server --save
 npm install -g spawn-sync --save
-
+npm install --global gulp-cli
 
 
 
@@ -54,7 +55,7 @@ ln -s /usr/local/apache-maven-3.5.0/bin/mvn /usr/bin/mvn
 git clone https://github.com/inspire-software/yes-cart.git --depth 5 --branch aws
 cd yes-cart
 
-mvn clean install -Pmysql,paymentAll,ssl,aws
+mvn clean install -PbuildAws
 
 
 
