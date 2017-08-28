@@ -25,8 +25,12 @@
 
     <cache:annotation-driven />
 
-    <import resource="classpath:dao.xml"/>
     <import resource="cache-config.xml"/>
+
+    <import resource="classpath:dao.xml"/>
+    <import resource="dao-index-support.xml"/>
+    <import resource="classpath:dao-index.xml"/>
+
     <import resource="core-cronjob.xml"/>
 
     <bean id="priceNavigation" class="org.yes.cart.search.query.impl.PriceNavigationImpl"/>

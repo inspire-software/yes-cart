@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/cache
+	                       http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+    <cache:annotation-driven />
+
+    <import resource="classpath:dao.xml"/>
+
+    <bean id="navigatableAttributesSupport" class="org.yes.cart.domain.entity.bridge.support.impl.NavigatableAttributesSupportCachedImpl">
+        <constructor-arg>
+            <bean parent="txProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.domain.entity.bridge.support.impl.NavigatableAttributesSupportImpl">
+                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="attributeDao"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="shopCategoryRelationshipSupport" class="org.yes.cart.domain.entity.bridge.support.impl.ShopCategoryRelationshipSupportCachedImpl">
+        <constructor-arg>
+            <bean parent="txProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.domain.entity.bridge.support.impl.ShopCategoryRelationshipSupportImpl">
+                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
+                        <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
+                        <lookup-method name="getSelf" bean="shopCategoryRelationshipSupport"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="shopWarehouseRelationshipSupport" class="org.yes.cart.domain.entity.bridge.support.impl.ShopWarehouseRelationshipSupportCachedImpl">
+        <constructor-arg>
+            <bean parent="txProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.domain.entity.bridge.support.impl.ShopWarehouseRelationshipSupportImpl">
+                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
+                        <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="warehouseDao"/>
+                        <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="shopWarehouseDao"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="skuWarehouseRelationshipSupport" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.domain.entity.bridge.support.impl.SkuWarehouseRelationshipSupportImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="warehouseDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="skuWarehouseDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="skuPriceRelationshipSupport" class="org.yes.cart.domain.entity.bridge.support.impl.SkuPriceRelationshipSupportCachedImpl">
+        <constructor-arg>
+            <bean parent="txProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.domain.entity.bridge.support.impl.SkuPriceRelationshipSupportImpl">
+                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
+                        <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="skuPriceDao"/>
+                        <lookup-method name="getSelf" bean="skuPriceRelationshipSupport"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+
+</beans>
+

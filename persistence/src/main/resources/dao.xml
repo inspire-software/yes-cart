@@ -305,87 +305,16 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="productFts" class="org.yes.cart.search.dao.impl.GenericFTSLuceneImpl">
-        <property name="luceneIndexProvider" ref="productIndexProvider"/>
-    </bean>
-
-    <bean id="productIndexBuilder" class="org.yes.cart.search.dao.impl.IndexBuilderLuceneHibernateTxAwareImpl">
-        <constructor-arg index="0">
-            <bean class="org.yes.cart.search.dao.entity.ProductLuceneDocumentAdapter">
-                <property name="attributesSupport" ref="navigatableAttributesSupport"/>
-                <property name="shopCategorySupport" ref="shopCategoryRelationshipSupport"/>
-                <property name="shopWarehouseSupport" ref="shopWarehouseRelationshipSupport"/>
-                <property name="skuPriceSupport" ref="skuPriceRelationshipSupport"/>
-                <property name="skuWarehouseSupport" ref="skuWarehouseRelationshipSupport"/>
-            </bean>
-        </constructor-arg>
-        <constructor-arg index="1" ref="productIndexProvider"/>
-        <constructor-arg index="2" ref="productDaoBase"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
-        <property name="platformTransactionManager" ref="transactionManager"/>
-        <property name="indexExecutor">
-            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-                <description>
-                    Thread pool (1) for product indexing since they may be slow. We only need
-                    one thread for this as we only anticipate one thread to be reindexing all
-                    products.
-                </description>
-                <property name="corePoolSize" value="1"/>
-                <property name="maxPoolSize" value="1"/>
-            </bean>
-        </property>
-    </bean>
-
     <bean id="productDaoBase" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductEntity</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="productDao" class="org.yes.cart.dao.impl.GenericFTSCapableDAOImpl">
-        <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="productDaoBase"/>
-        <constructor-arg type="org.yes.cart.search.dao.GenericFTS" ref="productFts"/>
-        <constructor-arg type="org.yes.cart.search.dao.IndexBuilder" ref="productIndexBuilder"/>
-    </bean>
-
-
-    <bean id="productSkuFts" class="org.yes.cart.search.dao.impl.GenericFTSLuceneImpl">
-        <property name="luceneIndexProvider" ref="productSkuIndexProvider"/>
-    </bean>
-
-    <bean id="productSkuIndexBuilder" class="org.yes.cart.search.dao.impl.IndexBuilderLuceneHibernateTxAwareImpl">
-        <constructor-arg index="0">
-            <bean class="org.yes.cart.search.dao.entity.ProductSkuLuceneDocumentAdapter">
-                <property name="attributesSupport" ref="navigatableAttributesSupport"/>
-            </bean>
-        </constructor-arg>
-        <constructor-arg index="1" ref="productSkuIndexProvider"/>
-        <constructor-arg index="2" ref="productSkuDaoBase"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
-        <property name="platformTransactionManager" ref="transactionManager"/>
-        <property name="indexExecutor">
-            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-                <description>
-                    Thread pool (1) for product indexing since they may be slow. We only need
-                    one thread for this as we only anticipate one thread to be reindexing all
-                    products.
-                </description>
-                <property name="corePoolSize" value="1"/>
-                <property name="maxPoolSize" value="1"/>
-            </bean>
-        </property>
-    </bean>
-
     <bean id="productSkuDaoBase" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductSkuEntity</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
-    <bean id="productSkuDao" class="org.yes.cart.dao.impl.GenericFTSCapableDAOImpl">
-        <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="productSkuDaoBase"/>
-        <constructor-arg type="org.yes.cart.search.dao.GenericFTS" ref="productSkuFts"/>
-        <constructor-arg type="org.yes.cart.search.dao.IndexBuilder" ref="productSkuIndexBuilder"/>
     </bean>
 
     <bean  id="productTypeDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
@@ -573,70 +502,6 @@
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
-
-    <bean id="navigatableAttributesSupport" class="org.yes.cart.domain.entity.bridge.support.impl.NavigatableAttributesSupportCachedImpl">
-        <constructor-arg>
-            <bean parent="txProxyTemplate">
-                <property name="target">
-                    <bean class="org.yes.cart.domain.entity.bridge.support.impl.NavigatableAttributesSupportImpl">
-                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="attributeDao"/>
-                    </bean>
-                </property>
-            </bean>
-        </constructor-arg>
-    </bean>
-
-    <bean id="shopCategoryRelationshipSupport" class="org.yes.cart.domain.entity.bridge.support.impl.ShopCategoryRelationshipSupportCachedImpl">
-        <constructor-arg>
-            <bean parent="txProxyTemplate">
-                <property name="target">
-                    <bean class="org.yes.cart.domain.entity.bridge.support.impl.ShopCategoryRelationshipSupportImpl">
-                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
-                        <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
-                        <lookup-method name="getSelf" bean="shopCategoryRelationshipSupport"/>
-                    </bean>
-                </property>
-            </bean>
-        </constructor-arg>
-    </bean>
-
-    <bean id="shopWarehouseRelationshipSupport" class="org.yes.cart.domain.entity.bridge.support.impl.ShopWarehouseRelationshipSupportCachedImpl">
-        <constructor-arg>
-            <bean parent="txProxyTemplate">
-                <property name="target">
-                    <bean class="org.yes.cart.domain.entity.bridge.support.impl.ShopWarehouseRelationshipSupportImpl">
-                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
-                        <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="warehouseDao"/>
-                        <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="shopWarehouseDao"/>
-                    </bean>
-                </property>
-            </bean>
-        </constructor-arg>
-    </bean>
-
-    <bean id="skuWarehouseRelationshipSupport" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.domain.entity.bridge.support.impl.SkuWarehouseRelationshipSupportImpl">
-                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="warehouseDao"/>
-                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="skuWarehouseDao"/>
-            </bean>
-        </property>
-    </bean>
-
-    <bean id="skuPriceRelationshipSupport" class="org.yes.cart.domain.entity.bridge.support.impl.SkuPriceRelationshipSupportCachedImpl">
-        <constructor-arg>
-            <bean parent="txProxyTemplate">
-                <property name="target">
-                    <bean class="org.yes.cart.domain.entity.bridge.support.impl.SkuPriceRelationshipSupportImpl">
-                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
-                        <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="skuPriceDao"/>
-                        <lookup-method name="getSelf" bean="skuPriceRelationshipSupport"/>
-                    </bean>
-                </property>
-            </bean>
-        </constructor-arg>
-    </bean>
-
 
 </beans>
 

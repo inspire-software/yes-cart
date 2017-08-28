@@ -21,6 +21,8 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="dao.xml"/>
+    <import resource="dao-index-support.xml"/>
+    <import resource="dao-index.xml"/>
     <import resource="persistence.xml"/>
 
 </beans>

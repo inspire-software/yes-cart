@@ -89,7 +89,7 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
             parentId = categoryId;
         }
 
-        final List<Category> categories = categoryDao.findByNamedQueryCached(
+        final List<Category> categories = categoryDao.findByNamedQuery(
                 "CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING",
                 parentId
         );
