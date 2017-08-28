@@ -54,6 +54,7 @@ public class IndexBuilderLuceneHibernateTxAwareImpl<T, PK extends Serializable> 
     @Override
     protected Object startTx() {
         TransactionTemplate tx = new TransactionTemplate(this.platformTransactionManager);
+        tx.setReadOnly(true);
         return this.platformTransactionManager.getTransaction(tx);
     }
 
