@@ -221,6 +221,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                 final String navVal = cleanFacetValue(attrValue.getVal());
                 if (StringUtils.isNotBlank(navVal)) {
                     addFacetField(document, "facet_" + code, navVal);
+                    addSimpleField(document, code, navVal);
                     final Long decNavVal = SearchUtil.valToLong(navVal, 3);
                     // If this is a decimal value choose the lowers value for range navigation
                     if (decNavVal != null && (!numRangeFields.containsKey(code) || decNavVal.compareTo(numRangeFields.get(code)) < 0)) {

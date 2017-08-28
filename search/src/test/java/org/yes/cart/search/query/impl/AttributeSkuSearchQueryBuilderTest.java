@@ -51,7 +51,7 @@ public class AttributeSkuSearchQueryBuilderTest {
 
         final Query query = new AttributeSkuSearchQueryBuilder().createStrictQuery(10L, "size", "30");
         assertNotNull(query);
-        assertEquals("(facet_size:30)^3.5", query.toString());
+        assertEquals("(size:30)^3.5", query.toString());
 
     }
 
@@ -105,7 +105,7 @@ public class AttributeSkuSearchQueryBuilderTest {
 
         final Query query = new AttributeSkuSearchQueryBuilder().createRelaxedQuery(10L, "size", "30");
         assertNotNull(query);
-        assertEquals("(facet_size:30)^3.5", query.toString());
+        assertEquals("(size:30)^3.5", query.toString());
 
 
     }
