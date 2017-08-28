@@ -98,7 +98,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
                         for (RangeNode node : rangeList.getRanges()) {
 
                             final Long from  = SearchUtil.valToLong(node.getFrom(), Constants.NUMERIC_NAVIGATION_PRECISION);
-                            final Long to  = SearchUtil.valToLong(node.getFrom(), Constants.NUMERIC_NAVIGATION_PRECISION);
+                            final Long to  = SearchUtil.valToLong(node.getTo(), Constants.NUMERIC_NAVIGATION_PRECISION);
 
                             if (from == null || to == null) {
                                 LOGFTQ.error(Markers.alert(), "Invalid range configuration for {}", fieldName);
