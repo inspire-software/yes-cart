@@ -62,8 +62,8 @@ npm install --global gulp
 git clone https://github.com/inspire-software/yes-cart.git --depth 5 --branch aws
 cd yes-cart
 
-mvn clean install -PbuildAws -DskipTests=true
 
+mvn install -Pmysql,paymentAll,ssl,buildAws -DskipTests=true
 
 -------------------------------------
 sudo su -
@@ -71,6 +71,9 @@ sudo su -
 cp /home/ec2-user/yes-cart/manager/jam/target/yes-manager.war /usr/share/tomcat7/webapps/
 cp /home/ec2-user/yes-cart/web/api/target/yes-api.war /usr/share/tomcat7/webapps/
 cp /home/ec2-user/yes-cart/web/store-wicket/target/yes-shop.war /usr/share/tomcat7/webapps/
+mkdir -p /var/lib/tomcat7-ycdemo
+chown tomcat:tomcat /var/lib/tomcat7-ycdemo
+
 service tomcat7 start
 
 
@@ -85,35 +88,34 @@ Default output format [None]:
 
 aws ec2 create-security-group \
     --group-name yescart \
-    --description "Yes cart security group. HTTP(s), ssh and mysql"  \
-    --region eu-central-1
+    --description "Yes cart security group. HTTP(s), ssh and mysql" 
 
 aws ec2 authorize-security-group-ingress \
     --group-name yescart \
-    --protocol tcp --port 22 --cidr 0.0.0.0/0 \
-    --region eu-central-1
+    --protocol tcp --port 22 --cidr 0.0.0.0/0 
    
 aws ec2 authorize-security-group-ingress \
     --group-name yescart  \
-    --protocol tcp --port 80 --cidr 0.0.0.0/0 \
-    --region eu-central-1
+    --protocol tcp --port 80 --cidr 0.0.0.0/0 
 
 aws ec2 authorize-security-group-ingress \
     --group-name yescart   \
-    --protocol tcp --port 8080 --cidr 0.0.0.0/0 \
-    --region eu-central-1
+    --protocol tcp --port 8080 --cidr 0.0.0.0/0 
 
 aws ec2 authorize-security-group-ingress \
     --group-name yescart    \
-    --protocol tcp --port 443 --cidr 0.0.0.0/0 \
-    --region eu-central-1
+    --protocol tcp --port 443 --cidr 0.0.0.0/0 
 
 aws ec2 authorize-security-group-ingress \
     --group-name yescart \
-    --protocol tcp --port 8443 --cidr 0.0.0.0/0 \
-    --region eu-central-1
+    --protocol tcp --port 8443 --cidr 0.0.0.0/0 
+
+aws ec2 authorize-security-group-ingress \
+    --group-name yescart \
+    --protocol tcp --port 3306 --cidr 0.0.0.0/0 
 
 
+#aws ec2 describe-security-groups --group-names yescart | jq '.SecurityGroups[0] | .GroupId'
 
 aws rds create-db-instance \
     --db-instance-identifier yescartmysql \
@@ -123,8 +125,8 @@ aws rds create-db-instance \
     --master-username yes \
     --master-user-password U34y3PaSs98 \
     --backup-retention-period 3 \
-    --region eu-central-1
+    --vpc-security-group-ids $(aws ec2 describe-security-groups --group-names yescart | jq '.SecurityGroups[0] | .GroupId' | sed 's/\"//g')
 
-aws rds wait db-instance-available --db-instance-identifier yescartmysql  --region eu-central-1
-aws rds describe-db-instances --db-instance-identifier  yescartmysql --region eu-central-1 | jq '.DBInstances[0] | .Endpoint.Address'  | sed 's/\"//g'
-aws rds delete-db-instance  --db-instance-identifier  yescartmysql --region eu-central-1 --skip-final-snapshot
+aws rds wait db-instance-available --db-instance-identifier yescartmysql 
+aws rds describe-db-instances --db-instance-identifier  yescartmysql | jq '.DBInstances[0] | .Endpoint.Address'  | sed 's/\"//g'
+aws rds delete-db-instance  --db-instance-identifier  yescartmysql --skip-final-snapshot
