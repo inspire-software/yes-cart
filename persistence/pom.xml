@@ -55,16 +55,7 @@
             </exclusions>
         </dependency>
 
-
-
-        <dependency>
-            <groupId>javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.8.0.GA</version>
-            <scope>runtime</scope>
-
-        </dependency>
-
+        
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>

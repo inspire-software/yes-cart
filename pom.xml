@@ -63,18 +63,16 @@
         <webapp.admin.war.name>yes-manager</webapp.admin.war.name>
 
         <!-- Core frameworks globals versions -->
-        <hibernate.core.version>4.2.0.Final</hibernate.core.version>
-        <hibernate.search.version>4.2.0.Final</hibernate.search.version>
+        <hibernate.core.version>4.2.21.Final</hibernate.core.version>
         <lucene.version>6.5.0</lucene.version>
         <cxf.version>2.5.2</cxf.version>
         <spring-security.version>3.1.4.RELEASE</spring-security.version>
         <spring.version>3.2.3.RELEASE</spring.version>
         <lucene.config.index.dir>/yes-cart/lucene-index</lucene.config.index.dir>
         <ehcache.version>2.6.6</ehcache.version>
-        <!--<ehcache.version>1.6.2</ehcache.version>-->
         <jackson.version>1.9.13</jackson.version>
         <GeDA.version>3.1.0</GeDA.version>
-        <mysql-connector.version>5.1.13</mysql-connector.version>
+        <mysql-connector.version>5.1.43</mysql-connector.version>
 
         <!-- servlet API -->
         <javax.servlet.version>3.0.1</javax.servlet.version>
@@ -96,9 +94,6 @@
 
         <!-- Admin global versions -->
         <backport-util-concurrent.version>3.1</backport-util-concurrent.version>
-        <!-- <blazeds.version>3.2.0.3978</blazeds.version>-->
-        <!--<blazeds.version>4.0.0.14931</blazeds.version>-->
-        <!--<spring-flex.version>1.5.2.RELEASE</spring-flex.version>-->
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -145,11 +140,6 @@
             <snapshots><enabled>false</enabled></snapshots>
         </repository>
         <repository>
-            <id>sonatype-flexgroup</id>
-            <url>http://repository.sonatype.org/content/groups/flexgroup</url>
-            <snapshots><enabled>false</enabled></snapshots>
-        </repository>
-        <repository>
             <id>jboss-public</id>
             <url>http://repository.jboss.org/nexus/content/groups/public</url>
             <snapshots><enabled>false</enabled></snapshots>
@@ -175,11 +165,6 @@
             <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        <!--dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jms</artifactId>
-            <version>${spring.version}</version>
-        </dependency-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -251,6 +236,10 @@
             <version>1.2</version>
         </dependency>
         <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.18.1-GA</version>
+        </dependency>        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.10</version>
@@ -379,16 +368,6 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>dbunit-maven-plugin</artifactId>
                     <version>1.0-beta-3</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>hibernate3-maven-plugin</artifactId>
-                    <version>2.2</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.sonatype.flexmojos</groupId>
-                    <artifactId>flexmojos-maven-plugin</artifactId>
-                    <version>4.0-RC2</version>
                 </plugin>
             </plugins>
         </pluginManagement>
