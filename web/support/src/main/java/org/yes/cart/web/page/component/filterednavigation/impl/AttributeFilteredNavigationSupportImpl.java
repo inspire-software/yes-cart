@@ -33,6 +33,7 @@ import org.yes.cart.search.dto.impl.FilteredNavigationRecordRequestImpl;
 import org.yes.cart.search.query.impl.SearchUtil;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductTypeAttrService;
+import org.yes.cart.util.log.Markers;
 import org.yes.cart.web.page.component.filterednavigation.AttributeFilteredNavigationSupport;
 
 import java.util.*;
@@ -96,9 +97,17 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
                     if (rangeList != null && rangeList.getRanges() != null) {
                         for (RangeNode node : rangeList.getRanges()) {
 
+                            final Long from  = SearchUtil.valToLong(node.getFrom(), Constants.NUMERIC_NAVIGATION_PRECISION);
+                            final Long to  = SearchUtil.valToLong(node.getFrom(), Constants.NUMERIC_NAVIGATION_PRECISION);
+
+                            if (from == null || to == null) {
+                                LOGFTQ.error(Markers.alert(), "Invalid range configuration for {}", fieldName);
+                                continue;
+                            }
+
                             rangeValues.add(new Pair<String, String>(
-                                    SearchUtil.valToLong(node.getFrom(), Constants.NUMERIC_NAVIGATION_PRECISION).toString(),
-                                    SearchUtil.valToLong(node.getTo(), 3).toString()
+                                    from.toString(),
+                                    to.toString()
                             ));
 
                         }
@@ -148,25 +157,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
                     final Pair<String, Integer> count = countIt.next();
 
-                    if (request.isRangeValue()) {
-
-                        // range record value has the following form "from_value-_-to_value"
-
-                        if (recordTemplate.getValue().equals(count.getFirst())) { // range value match
-
-                            final Integer candidateResultCount = count.getSecond();
-
-                            if (candidateResultCount != null && candidateResultCount > 0) {
-                                final FilteredNavigationRecord record = recordTemplate.clone();
-                                record.setCount(candidateResultCount);
-                                navigationList.add(record);
-                            }
-
-                            countIt.remove();
-                            break;
-                        }
-
-                    } else if (recordTemplate.getValue().equals(count.getFirst())) { // single value match
+                    if (recordTemplate.getValue().equals(count.getFirst())) { // range value match
 
                         final Integer candidateResultCount = count.getSecond();
 
