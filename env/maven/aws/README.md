@@ -74,7 +74,7 @@ cp /home/ec2-user/yes-cart/web/store-wicket/target/yes-shop.war /usr/share/tomca
 mkdir -p /var/lib/tomcat7-ycdemo
 chown tomcat:tomcat /var/lib/tomcat7-ycdemo
 
-service tomcat7 start
+#service tomcat7 start
 
 
 ## Notes
@@ -128,5 +128,11 @@ aws rds create-db-instance \
     --vpc-security-group-ids $(aws ec2 describe-security-groups --group-names yescart | jq '.SecurityGroups[0] | .GroupId' | sed 's/\"//g')
 
 aws rds wait db-instance-available --db-instance-identifier yescartmysql 
-aws rds describe-db-instances --db-instance-identifier  yescartmysql | jq '.DBInstances[0] | .Endpoint.Address'  | sed 's/\"//g'
+
+host $(aws rds describe-db-instances --db-instance-identifier  yescartmysql | jq '.DBInstances[0] | .Endpoint.Address'  | sed 's/\"//g') | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'
+
+export ycmysqldb=$(host $(aws rds describe-db-instances --db-instance-identifier  yescartmysql | jq '.DBInstances[0] | .Endpoint.Address'  | sed 's/\"//g') | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+echo "$ycmysqldb        yesmysqlhost" | sudo tee --append /etc/hosts
+
+
 aws rds delete-db-instance  --db-instance-identifier  yescartmysql --skip-final-snapshot
