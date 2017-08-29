@@ -88,7 +88,7 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         final Date tenSecondsAfterCreation = new Date(System.currentTimeMillis() + 10000L);
         final Date tenSecondsBeforeCreation = new Date(tenSecondsAfterCreation.getTime() - 20000L);
 
-        getTx().execute(new TransactionCallback<Object>() {
+        getTxReadOnly().execute(new TransactionCallback<Object>() {
             @Override
             public Object doInTransaction(final TransactionStatus status) {
                 ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation);
@@ -99,7 +99,7 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
             }
         });
 
-        getTx().execute(new TransactionCallback<Object>() {
+        getTxReadOnly().execute(new TransactionCallback<Object>() {
             @Override
             public Object doInTransaction(final TransactionStatus status) {
                 ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation);
@@ -128,7 +128,7 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         final Date tenSecondsAfterCreation = new Date(System.currentTimeMillis() + 10000L);
         final Date tenSecondsBeforeCreation = new Date(tenSecondsAfterCreation.getTime() - 20000L);
 
-        getTx().execute(new TransactionCallback<Object>() {
+        getTxReadOnly().execute(new TransactionCallback<Object>() {
             @Override
             public Object doInTransaction(final TransactionStatus status) {
                 ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation, true);
@@ -139,7 +139,7 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
             }
         });
 
-        getTx().execute(new TransactionCallback<Object>() {
+        getTxReadOnly().execute(new TransactionCallback<Object>() {
             @Override
             public Object doInTransaction(final TransactionStatus status) {
                 ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation, true);
@@ -165,7 +165,7 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         final Date tenSecondsAfterCreation = new Date(System.currentTimeMillis() + 10000L);
         final Date tenSecondsBeforeCreation = new Date(tenSecondsAfterCreation.getTime() - 20000L);
 
-        getTx().execute(new TransactionCallback<Object>() {
+        getTxReadOnly().execute(new TransactionCallback<Object>() {
             @Override
             public Object doInTransaction(final TransactionStatus status) {
                 ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation, true);
@@ -176,7 +176,7 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
             }
         });
 
-        getTx().execute(new TransactionCallback<Object>() {
+        getTxReadOnly().execute(new TransactionCallback<Object>() {
             @Override
             public Object doInTransaction(final TransactionStatus status) {
                 ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation, true);

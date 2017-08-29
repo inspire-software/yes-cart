@@ -98,9 +98,6 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">create</prop>
                 <prop key="hibernate.connection.autocommit">true</prop>
-                <!-- Disable hibernate search automatic support - no indexing for payments -->
-                <prop key="hibernate.search.autoregister_listeners">false</prop>
-                <prop key="hibernate.search.indexing_strategy">manual</prop>
             </props>
         </property>
         <property name="entityInterceptor">
@@ -125,13 +122,6 @@
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">create</prop>
-                <!--<prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.impl.RAMDirectoryProvider</prop>-->
-                <!--<prop key="hibernate.search.worker.execution">async</prop>-->
-                <!--<prop key="hibernate.search.worker.thread_pool.size">2</prop>-->
-                <!--<prop key="hibernate.search.default.exclusive_index_use">false</prop>-->
-                <!-- Disable hibernate search automatic support - since we do indexing manually -->
-                <!--<prop key="hibernate.search.autoregister_listeners">true</prop>-->
-                <!--<prop key="hibernate.search.indexing_strategy">manual</prop>-->
             </props>
         </property>
     </bean>

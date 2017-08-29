@@ -55,15 +55,22 @@ public abstract class AbstractTestDAO  {
 
     private PlatformTransactionManager transactionManager;
     private TransactionTemplate tx;
+    private TransactionTemplate txReadOnly;
 
     @Before
     public void setUp()   {
         transactionManager =   ctx().getBean("transactionManager", PlatformTransactionManager.class);
         tx = new TransactionTemplate(transactionManager);
+        txReadOnly = new TransactionTemplate(transactionManager);
+        txReadOnly.setReadOnly(true);
     }
 
     public TransactionTemplate getTx() {
         return tx;
+    }
+
+    public TransactionTemplate getTxReadOnly() {
+        return txReadOnly;
     }
 
     @Rule
@@ -74,19 +81,23 @@ public abstract class AbstractTestDAO  {
             sessionFactory = (SessionFactory) ctx().getBean("sessionFactory");
             session = sessionFactory.openSession();
             dbTester = createDatabaseTester();
-            try {
-                dbTester.onSetup();
-            } catch (Exception e) {
-                throw e;
+            if (dbTester != null) {
+                try {
+                    dbTester.onSetup();
+                } catch (Exception e) {
+                    throw e;
+                }
             }
         }
 
         @Override
         protected void after() {
-            try {
-                dbTester.onTearDown();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            if (dbTester != null) {
+                try {
+                    dbTester.onTearDown();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
             //sessionFactory.close();
             session.close();

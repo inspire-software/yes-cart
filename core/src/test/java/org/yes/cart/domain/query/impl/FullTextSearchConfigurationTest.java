@@ -116,7 +116,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     @Test
     public void testCategoryQuerySearch() throws InterruptedException {
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -266,7 +266,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     @Test
     public void testShopQuerySearch() throws InterruptedException {
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -395,7 +395,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     @Test
     public void testFuzzySearch() throws InterruptedException {
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -450,7 +450,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     public void testSkuRelevancySearch() throws InterruptedException {
 
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -532,7 +532,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     @Test
     public void testBrandFaceting() throws InterruptedException {
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -618,7 +618,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     @Test
     public void testPriceFaceting() throws InterruptedException {
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -869,7 +869,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     @Test
     public void testAttributeFaceting() throws InterruptedException {
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -998,7 +998,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     @Test
     public void testMultiValueSpecificFieldSearch() throws InterruptedException {
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -1027,7 +1027,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     @Test
     public void testCategoryBrowsing() throws InterruptedException {
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 
@@ -1058,7 +1058,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     @Test
     public void testTagBrowsingTest() throws InterruptedException {
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 
@@ -1109,7 +1109,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     @Test
     public void testSingleValueAttributeNavigation() throws Exception {
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 
@@ -1192,7 +1192,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     public void testGetRangeAttributeValueNavigation() throws InterruptedException {
 
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -1335,7 +1335,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
 
 
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -1459,7 +1459,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     @Test
     public void testProductAvailability() throws InterruptedException {
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 

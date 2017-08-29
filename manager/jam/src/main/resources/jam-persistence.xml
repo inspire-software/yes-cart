@@ -80,10 +80,6 @@
                 <prop key="hibernate.cache.use_second_level_cache">false</prop>
                 <prop key="hibernate.dialect">${db.config.yes.hibernate.dialect}</prop>
                 <prop key="show_sql">false</prop>
-
-                <!-- Disable hibernate search automatic support - since we do not have FT index in ADMIN -->
-                <prop key="hibernate.search.autoregister_listeners">false</prop>
-                <prop key="hibernate.search.indexing_strategy">manual</prop>
             </props>
         </property>
     </bean>
@@ -102,10 +98,6 @@
             <props>
                 <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.dialect">${db.config.yespay.hibernate.dialect}</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <!-- Disable hibernate search automatic support - no indexing for payments -->
-                <prop key="hibernate.search.autoregister_listeners">false</prop>
-                <prop key="hibernate.search.indexing_strategy">manual</prop>
             </props>
         </property>
         <property name="entityInterceptor">

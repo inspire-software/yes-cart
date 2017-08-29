@@ -49,6 +49,11 @@ public class IndexBuilderLuceneHibernateTxAwareImpl<T, PK extends Serializable> 
         return entity;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    protected void endBatch(final Object tx) {
+        this.sessionFactory.getCurrentSession().clear(); // release memory
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -63,7 +68,7 @@ public class IndexBuilderLuceneHibernateTxAwareImpl<T, PK extends Serializable> 
     @Override
     protected void endTx(final Object tx) {
         final TransactionStatus transaction = (TransactionStatus) tx;
-        transaction.setRollbackOnly();; // Read only transactions
+        transaction.setRollbackOnly(); // Read only transactions
         this.platformTransactionManager.commit(transaction);
     }
 

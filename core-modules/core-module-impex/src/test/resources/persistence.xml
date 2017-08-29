@@ -52,13 +52,6 @@
                 <prop key="hibernate.use_sql_comments">false</prop>
                 <prop key="hibernate.connection.autocommit">true</prop>
                 <prop key="hibernate.jdbc.batch_size">100</prop>
-
-                <!--<prop key="hibernate.search.default.exclusive_index_use">false</prop>-->
-                <!-- Disable hibernate search automatic support - since we do not have FT index in ADMIN -->
-                <!--<prop key="hibernate.search.autoregister_listeners">false</prop>-->
-                <!--<prop key="hibernate.search.indexing_strategy">manual</prop>-->
-                <!--<prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.impl.RAMDirectoryProvider</prop>-->
-                <!--prop key="hibernate.jdbc.batch_size">0</prop-->
             </props>
         </property>
         <property name="entityInterceptor">

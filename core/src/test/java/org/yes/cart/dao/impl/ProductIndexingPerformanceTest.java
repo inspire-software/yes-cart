@@ -24,6 +24,7 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductSku;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -32,29 +33,36 @@ import org.yes.cart.domain.entity.Product;
  */
 public class ProductIndexingPerformanceTest extends AbstractTestDAO {
 
+    private int maxIterations = 500;
+    private int batchSize = 250;
+
     private GenericFTSCapableDAO<Product, Long, Object> productDao;
+    private GenericFTSCapableDAO<ProductSku, Long, Object> productSkuDao;
 
     @Before
     public void setUp()  {
         productDao = (GenericFTSCapableDAO<Product, Long, Object>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO);
+        productSkuDao = (GenericFTSCapableDAO<ProductSku, Long, Object>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_SKU_DAO);
 
         super.setUp();
     }
 
-    @Ignore("Performance sampling only")
-    @Test
-    public void testCreateNewProductNoSkuNoCategory() throws InterruptedException {
+// Performance sampling on MySQL
+//    @Override
+//    protected AbstractDatabaseTester createDatabaseTester() throws Exception {
+//        return null;
+//    }
 
-        final int maxIterations = 1000;
+    private void runIndexing(final String entity, final GenericFTSCapableDAO dao, final int maxIterations, final int batchSize) throws InterruptedException {
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                System.out.println("Starting test with product count: " + productDao.findCountByCriteria());
+                System.out.println("Starting " + entity + " test with count: " + dao.findCountByCriteria());
 
                 final long start = System.currentTimeMillis();
                 for (int i = 0; i < maxIterations; i++) {
-                    productDao.fullTextSearchReindex(false, 1000);
+                    dao.fullTextSearchReindex(false, batchSize);
                     final long now = System.currentTimeMillis();
                     System.out.println("Cycle: " + i + ", average cycle (ms): " + ((now - start) / (i + 1)));
                 }
@@ -62,6 +70,23 @@ public class ProductIndexingPerformanceTest extends AbstractTestDAO {
 
             }
         });
+
+    }
+
+
+    @Ignore("Performance sampling only")
+    @Test
+    public void testProductIndexPerformance() throws InterruptedException {
+
+        runIndexing("product", this.productDao, maxIterations, batchSize);
+
+    }
+
+    @Ignore("Performance sampling only")
+    @Test
+    public void testProductSkuIndexPerformance() throws InterruptedException {
+
+        runIndexing("sku", this.productSkuDao, maxIterations, batchSize);
 
     }
 

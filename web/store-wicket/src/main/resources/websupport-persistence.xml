@@ -93,7 +93,6 @@
             <props>
                 <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.dialect">${db.config.yespay.hibernate.dialect}</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
             </props>
         </property>
         <property name="entityInterceptor">

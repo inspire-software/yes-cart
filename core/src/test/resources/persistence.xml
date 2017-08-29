@@ -38,6 +38,21 @@
         <property name="maxWait" value="500"/>
     </bean>
 
+    <!-- MySQL Data Source -->
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">-->
+        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
+        <!--<property name="url" value="jdbc:mysql://localhost/yes?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8"/>-->
+        <!--<property name="username" value="yes"/>-->
+        <!--<property name="password" value="y3$PaSs"/>-->
+        <!--<property name="initialSize" value="50"/>-->
+        <!--<property name="maxActive" value="1000"/>-->
+        <!--<property name="poolPreparedStatements" value="true"/>-->
+        <!--<property name="maxOpenPreparedStatements" value="1000"/>-->
+        <!--<property name="defaultAutoCommit" value="true"/>-->
+        <!--<property name="maxIdle" value="100"/>-->
+        <!--<property name="maxWait" value="500"/>-->
+    <!--</bean>-->
+
     <!-- Hibernate Session Factory  -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
@@ -55,16 +70,6 @@
                 <prop key="hibernate.use_sql_comments">false</prop>
                 <prop key="hibernate.connection.autocommit">true</prop>
                 <prop key="hibernate.jdbc.batch_size">100</prop>
-
-                <!--<prop key="hibernate.search.worker.execution">sync</prop>-->
-                <!--<prop key="hibernate.search.worker.thread_pool.size">1</prop>-->
-                <!--<prop key="hibernate.search.default.exclusive_index_use">false</prop>-->
-                <!--<prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.impl.RAMDirectoryProvider</prop>-->
-                <!-- Disable hibernate search automatic support - since we do indexing manually -->
-                <!--<prop key="hibernate.search.autoregister_listeners">true</prop>-->
-                <!--<prop key="hibernate.search.indexing_strategy">manual</prop>-->
-                <!--prop key="hibernate.jdbc.batch_size">0</prop-->
-
             </props>
         </property>
         <property name="entityInterceptor">

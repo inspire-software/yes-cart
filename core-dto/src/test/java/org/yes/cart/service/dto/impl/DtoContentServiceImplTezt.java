@@ -62,7 +62,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
     public void testGetAll() throws Exception {
 
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
                     List<CategoryDTO> list = dtoService.getAllByShopId(20L);
@@ -83,7 +83,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
     public void testGetAllWithAvailabilityFilter() throws Exception {
 
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
                     List<CategoryDTO> list = dtoService.getAllWithAvailabilityFilter(20L, true);

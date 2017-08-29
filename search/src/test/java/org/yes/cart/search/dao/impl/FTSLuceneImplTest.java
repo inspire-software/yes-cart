@@ -224,6 +224,11 @@ public class FTSLuceneImplTest {
         }
 
         @Override
+        protected void endBatch(final Object tx) {
+
+        }
+
+        @Override
         protected void endTx(final Object tx) {
 
         }

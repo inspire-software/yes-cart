@@ -204,6 +204,13 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
     protected abstract T unproxyEntity(T entity);
 
     /**
+     * Extension hook called on each batch commit.
+     *
+     * @param tx current tx object
+     */
+    protected abstract void endBatch(Object tx);
+
+    /**
      * Extension hook for persistence layer.
      *
      * @param tx tx to be committed
@@ -284,6 +291,7 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
                                 // TODO: may need to revisit this in favour of iw.flush()
                                 iw.commit();  //apply changes to indexes
                                 indexProvider.refreshIfNecessary(); // make changes visible
+                                endBatch(tx);
                                 if (log.isInfoEnabled()) {
                                     log.info("Indexed {} items of {} class", index, indexProvider.getName());
                                 }
@@ -300,6 +308,7 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
 
                     iw.commit();  //apply changes to indexes
                     indexProvider.refreshIfNecessary(); // make changes visible
+                    endBatch(tx);
                     if (log.isInfoEnabled()) {
                         log.info("Indexed +{}/-{} items of {} class", new Object[] { index, deleted, indexProvider.getName() });
                     }

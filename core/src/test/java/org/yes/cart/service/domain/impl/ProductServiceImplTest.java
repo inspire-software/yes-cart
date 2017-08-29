@@ -237,7 +237,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
 
         // Single category
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 ((GenericFTSCapableDAO) productService.getGenericDao()).fullTextSearchReindex(false, 1000);
@@ -261,7 +261,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         });
 
         // Category with subs
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 ((GenericFTSCapableDAO) productService.getGenericDao()).fullTextSearchReindex(false, 1000);

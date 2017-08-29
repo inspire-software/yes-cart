@@ -88,7 +88,7 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
 
         warehouseService.assignWarehouse(warehouse.getWarehouseId(), shop.getShopId(), false);
         final long[] pk = new long[1];
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 final Iterator<ShopWarehouse> it = warehouseService.findById(warehouse.getWarehouseId()).getWarehouseShop().iterator();
                 ShopWarehouse shopWarehouse = null;

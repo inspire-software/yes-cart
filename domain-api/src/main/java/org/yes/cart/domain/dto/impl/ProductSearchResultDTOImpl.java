@@ -92,6 +92,11 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return qtyOnWarehouse != null ? qtyOnWarehouse.get(shopId) : null;
     }
 
+    // JSON serialization accessor
+    public Map<Long, Map<String, BigDecimal>> getQtyOnWarehouse() {
+        return qtyOnWarehouse;
+    }
+
     /** {@inheritDoc} */
     public void setQtyOnWarehouse(final Map<Long, Map<String, BigDecimal>> qtyOnWarehouse) {
         this.qtyOnWarehouse = qtyOnWarehouse;

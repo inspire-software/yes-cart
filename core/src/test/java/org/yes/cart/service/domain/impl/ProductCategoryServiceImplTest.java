@@ -71,7 +71,7 @@ public class ProductCategoryServiceImplTest extends BaseCoreDBTestCase {
 
         final long product1pk = 11000L;
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
                 final List<ProductCategory> pc = productCategoryDAO.findByCriteria(
@@ -83,7 +83,7 @@ public class ProductCategoryServiceImplTest extends BaseCoreDBTestCase {
 
         productCategoryService.removeByProductIds(product1pk);
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
                 final List<ProductCategory> pc = productCategoryDAO.findByCriteria(
@@ -106,7 +106,7 @@ public class ProductCategoryServiceImplTest extends BaseCoreDBTestCase {
         final long product1pk = 11000L;
         final long[] product1categorypk = new long[1];
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
                 final List<ProductCategory> pc = productCategoryDAO.findByCriteria(
@@ -121,7 +121,7 @@ public class ProductCategoryServiceImplTest extends BaseCoreDBTestCase {
         productCategoryService.removeByCategoryProductIds(product1categorypk[0], product1pk);
 
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
                 final List<ProductCategory> pc = productCategoryDAO.findByCriteria(
