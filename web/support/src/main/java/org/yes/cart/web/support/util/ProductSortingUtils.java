@@ -66,7 +66,7 @@ public class ProductSortingUtils {
                 return facetName + "_sort";
             }
         });
-        put("inStock", new SupportedSorting("byAvailability", ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FLAG_FIELD) {
+        put("inStock", new SupportedSorting("byAvailability", ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD) {
             public String resolveSortField(final long shopId, final String language, final String currency) {
                 return this.sortFieldBase + shopId;
             }

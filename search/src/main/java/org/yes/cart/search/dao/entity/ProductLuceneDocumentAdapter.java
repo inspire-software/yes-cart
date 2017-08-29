@@ -652,12 +652,14 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_boost", 0.95f);
                 addSortField(document, PRODUCT_AVAILABILITY_SORT_FIELD + shop.toString(), "095");
                 addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + shop.toString(), 1L, false);
+                addSortField(document, PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD + shop.toString(), "1");
             } else if (result.getAvailability() == Product.AVAILABILITY_PREORDER &&
                     DomainApiUtils.isObjectAvailableNow(true, result.getAvailablefrom(), null, now)) {
                 // Preorder is 1.25f = 25% boost
                 addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_boost", 1.25f);
                 addSortField(document, PRODUCT_AVAILABILITY_SORT_FIELD + shop.toString(), "125");
                 addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + shop.toString(), 1L, false);
+                addSortField(document, PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD + shop.toString(), "1");
             } else { // Standard stock
                 final Map<String, BigDecimal> qty = result.getQtyOnWarehouse(shop);
                 boolean hasStock = false;
@@ -671,6 +673,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_boost", hasStock ? 1.0f : 0.9f);
                 addSortField(document, PRODUCT_AVAILABILITY_SORT_FIELD + shop.toString(), hasStock ? "100" : "090");
                 addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + shop.toString(), hasStock ? 1L : 0L, false);
+                addSortField(document, PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD + shop.toString(), hasStock ? "1" : "0");
             }
         }
 

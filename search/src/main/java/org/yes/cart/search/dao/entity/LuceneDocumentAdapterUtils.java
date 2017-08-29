@@ -418,18 +418,18 @@ public class LuceneDocumentAdapterUtils {
      *
      * Note that multivalue fields cannot be sorted.
      *
-     * @param document     document
-     * @param name         field name
-     * @param value        value
-     * @param negativeNull true if null values are to be filled with {@link Long#MIN_VALUE}, false if to be filled with {@link Long#MAX_VALUE}
+     * @param document      document
+     * @param name          field name
+     * @param positiveValue value
+     * @param zeroNull true if null values are to be filled with 0, false if to be filled with 9's
      */
     public static void addSortField(final Document document,
                                     final String name,
-                                    final Long value,
-                                    final boolean negativeNull) {
+                                    final Long positiveValue,
+                                    final boolean zeroNull) {
 
-        final long notNull = value != null ? value : (negativeNull ? Long.MIN_VALUE : Long.MAX_VALUE);
-        document.add(new SortedDocValuesField(name, new BytesRef(String.valueOf(notNull))));
+        final String notNull = positiveValue != null ? StringUtils.leftPad(positiveValue.toString(), 10, '0') : (zeroNull ? "0000000000" : "9999999999");
+        document.add(new SortedDocValuesField(name, new BytesRef(notNull)));
 
     }
 

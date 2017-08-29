@@ -83,7 +83,7 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
     String PRODUCT_SHOP_FIELD = "productShopId";
     String PRODUCT_SHOP_INSTOCK_FIELD = "productInStockShopId";
     String PRODUCT_SHOP_INSTOCK_FLAG_FIELD = "productInStockFlagShopId";
-    String PRODUCT_SHOP_INSTOCK_STATE_FIELD = "productInStockShopIdState";
+    String PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD = "productInStockFlagShopId_sort";
     String PRODUCT_SHOP_HASPRICE_FIELD = "productHasPriceShopId";
     String PRODUCT_ID_FIELD = "productId";
     String SKU_ID_FIELD = "sku.skuId"; //////////////////////////////////////////////
