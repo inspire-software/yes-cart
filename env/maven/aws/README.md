@@ -2,12 +2,11 @@
 
 ## Build procedure
 
-  mvn clean install -PbuildAws
+incorect   mvn clean install -PbuildAws
 
 ## Hosts substitutions
 
  * yesmysqlhost - will be substituted with aws rds mysql host
- * yespaymysqlhost  - will be substituted with aws rds mysql host
  * yummailhost - created aws SES 
  
 ## Logins and passwords 
@@ -68,23 +67,47 @@ mvn install -Pmysql,paymentAll,ssl,buildAws -DskipTests=true
 -------------------------------------
 sudo su -
 
+aws configure
+#AWS Access Key ID [None]: SDAFASDFASDFAFSDVA
+#AWS Secret Access Key [None]: pvSDQFQSDFQF+1c+s@$%GBEBES#SDFGVQC
+#Default region name [None]:
+#Default output format [None]:
+
+
 cp /home/ec2-user/yes-cart/manager/jam/target/yes-manager.war /usr/share/tomcat7/webapps/
 cp /home/ec2-user/yes-cart/web/api/target/yes-api.war /usr/share/tomcat7/webapps/
 cp /home/ec2-user/yes-cart/web/store-wicket/target/yes-shop.war /usr/share/tomcat7/webapps/
-mkdir -p /var/lib/tomcat7-ycdemo
-chown tomcat:tomcat /var/lib/tomcat7-ycdemo
+mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/config
+mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/archived
+mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/incoming
+mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/processing
+mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/processed
+tee /var/lib/tomcat7-ycdemo/import/SHOP10/config/config.properties <<-'EOF'
+config.0.group=YC DEMO: Initial Data
+config.0.regex=import\\.zip
+config.0.reindex=true
+config.0.user=admin@yes-cart.com
+config.0.pass=1234567
+config.1.group=YC DEMO: IceCat Catalog
+config.1.regex=import\\-EN,DE,UK,RU\\.zip
+config.1.reindex=true
+config.1.user=admin@yes-cart.com
+config.1.pass=1234567
+config.2.group=YC DEMO: Product images (IceCat)
+config.2.regex=import\\-EN,DE,UK,RU\\-img\\.zip
+config.2.reindex=true
+config.2.user=admin@yes-cart.com
+config.2.pass=1234567
+EOF
+cp /home/ec2-user/yes-cart/env/sampledata/demo-data/icecat/import/* /var/lib/tomcat7-ycdemo/import/SHOP10/incoming
+chown tomcat:tomcat /var/lib/tomcat7-ycdemo -R
+
+
 
 #service tomcat7 start
 
 
 ## Notes
-
-[root@ip-172-31-29-86 ~]# aws configure
-AWS Access Key ID [None]: SDAFASDFASDFAFSDVA
-AWS Secret Access Key [None]: pvSDQFQSDFQF+1c+s@$%GBEBES#SDFGVQC
-Default region name [None]:
-Default output format [None]:
-
 
 aws ec2 create-security-group \
     --group-name yescart \
@@ -135,8 +158,18 @@ export ycmysqldb=$(host $(aws rds describe-db-instances --db-instance-identifier
 echo "$ycmysqldb        yesmysqlhost" | sudo tee --append /etc/hosts
 
 sed -i -- 's/y3$PaSs/pwdMy34SqL/g' env/setup/dbi/mysql/dbinit.sql
+sed -i -- "s/localhost/'%'/g" env/setup/dbi/mysql/dbinit.sql
 mysql -uyesmaster -hyesmysqlhost -ppwdMy34SqL < "env/setup/dbi/mysql/dbinit.sql"
 
+#Get domain name
+
+export ycdemohost=$(aws ec2 describe-instances --filter Name=tag:Name,Values=YCDEMO | jq '.Reservations[0].Instances[0] | .PublicDnsName' | sed 's/\"//g')
+
+mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; DELETE FROM TSHOPURL WHERE URL <> 'localhost'; UPDATE TSHOPURL SET URL = '$ycdemohost';" yes
+mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; INSERT INTO TSYSTEMATTRVALUE SET val = '/var/lib/tomcat7-ycdemo/import', code = 'JOB_LOCAL_FILE_IMPORT_FS_ROOT', SYSTEM_ID=100; " yes
 
 
-aws rds delete-db-instance  --db-instance-identifier  yescartmysql --skip-final-snapshot
+
+
+
+#aws rds delete-db-instance  --db-instance-identifier  yescartmysql --skip-final-snapshot
