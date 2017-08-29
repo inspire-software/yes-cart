@@ -122,17 +122,21 @@ aws rds create-db-instance \
     --db-instance-class db.t2.micro \
     --engine MySQL \
     --allocated-storage 20 \
-    --master-username yes \
-    --master-user-password U34y3PaSs98 \
+    --master-username yesmaster \
+    --master-user-password pwdMy34SqL \
     --backup-retention-period 3 \
     --vpc-security-group-ids $(aws ec2 describe-security-groups --group-names yescart | jq '.SecurityGroups[0] | .GroupId' | sed 's/\"//g')
 
 aws rds wait db-instance-available --db-instance-identifier yescartmysql 
 
-host $(aws rds describe-db-instances --db-instance-identifier  yescartmysql | jq '.DBInstances[0] | .Endpoint.Address'  | sed 's/\"//g') | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'
+#host $(aws rds describe-db-instances --db-instance-identifier  yescartmysql | jq '.DBInstances[0] | .Endpoint.Address'  | sed 's/\"//g') | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'
 
 export ycmysqldb=$(host $(aws rds describe-db-instances --db-instance-identifier  yescartmysql | jq '.DBInstances[0] | .Endpoint.Address'  | sed 's/\"//g') | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
 echo "$ycmysqldb        yesmysqlhost" | sudo tee --append /etc/hosts
+
+sed -i -- 's/y3$PaSs/pwdMy34SqL/g' env/setup/dbi/mysql/dbinit.sql
+mysql -uyesmaster -hyesmysqlhost -ppwdMy34SqL < "env/setup/dbi/mysql/dbinit.sql"
+
 
 
 aws rds delete-db-instance  --db-instance-identifier  yescartmysql --skip-final-snapshot
