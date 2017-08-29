@@ -566,34 +566,6 @@ public class ProductDAOTest extends AbstractTestDAO {
 
 
     @Test
-    public void testGetUniqueAttribValues() {
-
-        getTx().execute(new TransactionCallbackWithoutResult() {
-            public void doInTransactionWithoutResult(TransactionStatus status) {
-
-
-                List<Object> list = productDao.findQueryObjectByNamedQuery("PRODUCTS.ATTRIBUTE.VALUES.BY.CODE.PRODUCTTYPEID",
-                        1L,
-                        "MATERIAL");
-                assertNotNull(list);
-                assertEquals(2, list.size());
-                assertTrue(list.contains("Plastik"));
-                assertTrue(list.contains("metal"));
-                list = productDao.findQueryObjectByNamedQuery("PRODUCTS.ATTRIBUTE.VALUES.BY.CODE.PRODUCTTYPEID",
-                        1L,
-                        "BATTERY_TYPE");
-                assertNotNull(list);
-                assertNotNull(list);
-                assertEquals(1, list.size());
-                assertTrue(list.contains("Plutonium"));
-
-                status.setRollbackOnly();
-
-            }
-        });
-    }
-
-    @Test
     public void testGetRankedUniqueCodeAttribValues() {
 
 

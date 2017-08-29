@@ -2936,15 +2936,6 @@
        ]]>
     </query>
 
-    <query name="PRODUCTS.ATTRIBUTE.VALUES.BY.CODE.PRODUCTTYPEID">
-        <![CDATA[
-       select distinct a.val
-       from   ProductEntity p inner join p.attributes a
-            where p.producttype.producttypeId = ?1
-            and a.attributeCode = ?2
-       ]]>
-    </query>
-
     <query name="PRODUCT.TYPE.VIEWGROUP.BY.PROD.TYPE.ID">
           <![CDATA[
        select ptg
