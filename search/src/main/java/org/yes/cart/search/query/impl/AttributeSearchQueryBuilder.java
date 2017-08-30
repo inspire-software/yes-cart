@@ -34,7 +34,7 @@ public class AttributeSearchQueryBuilder extends AbstractSearchQueryBuilderImpl 
     /**
      * {@inheritDoc}
      */
-    public Query createStrictQuery(final long shopId, final String parameter, final Object value) {
+    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
 
         if (isEmptyValue(value) || StringUtils.isBlank(parameter)) {
             return null;
@@ -71,7 +71,7 @@ public class AttributeSearchQueryBuilder extends AbstractSearchQueryBuilderImpl 
     /**
      * {@inheritDoc}
      */
-    public Query createRelaxedQuery(final long shopId, final String parameter, final Object value) {
-        return createStrictQuery(shopId, parameter, value);
+    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
+        return createStrictQuery(shopId, customerShopId, parameter, value);
     }
 }

@@ -16,6 +16,7 @@
 
 package org.yes.cart.search.query.impl;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.Query;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
@@ -29,14 +30,14 @@ public class InStockProductSearchQueryBuilder extends AbstractSearchQueryBuilder
     /**
      * {@inheritDoc}
      */
-    public Query createStrictQuery(final long shopId, final String parameter, final Object value) {
-        return createTermQuery(PRODUCT_SHOP_INSTOCK_FLAG_FIELD + shopId, String.valueOf(value));
+    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
+        return createNumericQuery(PRODUCT_SHOP_INSTOCK_FLAG_FIELD + ("0".equals(value) ? "0" : "1"), customerShopId);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Query createRelaxedQuery(final long shopId, final String parameter, final Object value) {
-        return createStrictQuery(shopId, parameter, value);
+    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
+        return createStrictQuery(shopId, customerShopId, parameter, value);
     }
 }

@@ -33,7 +33,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryNull() throws Exception {
 
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, "query", null);
+        final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, 1010L, "query", null);
         assertNull(query);
 
     }
@@ -41,7 +41,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryBlank() throws Exception {
 
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, "query", "   ");
+        final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, 1010L, "query", "   ");
         assertNull(query);
 
     }
@@ -49,7 +49,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQuerySingle() throws Exception {
 
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, "query", "SearchWord");
+        final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, 1010L, "query", "SearchWord");
         assertNotNull(query);
         assertEquals("((name:searchword~2)^3.0 (displayName:searchword~2)^3.0 (sku.code:searchword~2)^10.0 (sku.manufacturerCode:searchword~2)^10.0 (attribute.attrvalsearchprimary:searchword~2)^15.0 (attribute.attrvalsearchphrase:searchword~2)^4.0)", query.toString());
 
@@ -58,7 +58,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryMulti() throws Exception {
 
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, "query", "Search, Word");
+        final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, 1010L, "query", "Search, Word");
         assertNotNull(query);
         assertEquals("((name:search, word~2)^3.0 (displayName:search, word~2)^3.0 (sku.code:search, word~2)^10.0 (sku.manufacturerCode:search, word~2)^10.0 (attribute.attrvalsearchprimary:search, word~2)^15.0 (attribute.attrvalsearchphrase:search, word~2)^4.0) ((name:search~2)^2.0 (displayName:search~2)^2.0 (sku.code:search~2)^10.0 (sku.manufacturerCode:search~2)^10.0 (attribute.attrvalsearchprimary:search~2)^15.0 (attribute.attrvalsearch:search~2)^4.0) ((name:word~1)^2.0 (displayName:word~1)^2.0 (sku.code:word~1)^10.0 (sku.manufacturerCode:word~1)^10.0 (attribute.attrvalsearchprimary:word~1)^15.0 (attribute.attrvalsearch:word~1)^4.0)", query.toString());
 
@@ -68,7 +68,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryNull() throws Exception {
 
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, "query", null);
+        final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "query", null);
         assertNull(query);
 
     }
@@ -76,7 +76,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryBlank() throws Exception {
 
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, "query", "   ");
+        final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "query", "   ");
         assertNull(query);
 
     }
@@ -85,7 +85,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQuerySingle() throws Exception {
 
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, "query", "SearchWord");
+        final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "query", "SearchWord");
         assertNotNull(query);
         assertEquals("((name:searchword~2)^2.0 (displayName:searchword~2)^2.0 (sku.code:searchword~2)^10.0 (sku.manufacturerCode:searchword~2)^10.0 (sku.code_stem:searchword~1)^1.0 (sku.manufacturerCode_stem:searchword~1)^1.0 (attribute.attrvalsearchprimary:searchword~2)^4.0 (attribute.attrvalsearch:searchword~2)^4.0)", query.toString());
 
@@ -94,7 +94,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryMulti() throws Exception {
 
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, "query", "Search, Word");
+        final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "query", "Search, Word");
         assertNotNull(query);
         assertEquals("((name:search~2)^2.0 (displayName:search~2)^2.0 (sku.code:search~2)^10.0 (sku.manufacturerCode:search~2)^10.0 (sku.code_stem:search~1)^1.0 (sku.manufacturerCode_stem:search~1)^1.0 (attribute.attrvalsearchprimary:search~2)^4.0 (attribute.attrvalsearch:search~2)^4.0) ((name:word~1)^2.0 (displayName:word~1)^2.0 (sku.code:word~1)^10.0 (sku.manufacturerCode:word~1)^10.0 (sku.code_stem:word~1)^1.0 (sku.manufacturerCode_stem:word~1)^1.0 (attribute.attrvalsearchprimary:word~1)^4.0 (attribute.attrvalsearch:word~1)^4.0)", query.toString());
 

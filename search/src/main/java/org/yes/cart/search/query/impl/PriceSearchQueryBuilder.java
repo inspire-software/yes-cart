@@ -41,7 +41,7 @@ public class PriceSearchQueryBuilder extends AbstractSearchQueryBuilderImpl impl
     /**
      * {@inheritDoc}
      */
-    public Query createStrictQuery(final long shopId, final String parameter, final Object value) {
+    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
 
         final String searchValue = String.valueOf(value);
         if (value == null || StringUtils.isBlank(searchValue)) {
@@ -51,7 +51,7 @@ public class PriceSearchQueryBuilder extends AbstractSearchQueryBuilderImpl impl
         final Pair<String, Pair<BigDecimal, BigDecimal>> priceParams =
                 priceNavigation.decomposePriceRequestParams(searchValue);
 
-        final String facet = SearchUtil.priceFacetName(shopId, priceParams.getFirst());
+        final String facet = SearchUtil.priceFacetName(customerShopId, priceParams.getFirst());
         final Long from = SearchUtil.priceToLong(priceParams.getSecond().getFirst());
         final Long to = SearchUtil.priceToLong(priceParams.getSecond().getSecond());
 
@@ -62,7 +62,7 @@ public class PriceSearchQueryBuilder extends AbstractSearchQueryBuilderImpl impl
     /**
      * {@inheritDoc}
      */
-    public Query createRelaxedQuery(final long shopId, final String parameter, final Object value) {
-        return createStrictQuery(shopId, parameter, value);
+    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
+        return createStrictQuery(shopId, customerShopId, parameter, value);
     }
 }

@@ -32,6 +32,7 @@ import java.util.Map;
 public class LuceneNavigationContextImpl implements NavigationContext<Query> {
 
     private final long shopId;
+    private final long customerShopId;
     private final List<Long> categories;
     private final boolean includeSubCategories;
     private final Map<String, List<String>> navigationParameters;
@@ -40,12 +41,14 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
     private final Query productSkuQuery;
 
     public LuceneNavigationContextImpl(final long shopId,
+                                       final long customerShopId,
                                        final List<Long> categories,
                                        final boolean includeSubCategories,
                                        final Map<String, List<String>> navigationParameters,
                                        final Query productQuery,
                                        final Query productSkuQuery) {
         this.shopId = shopId;
+        this.customerShopId = customerShopId;
         this.categories = categories;
         this.includeSubCategories = includeSubCategories;
         if (navigationParameters == null) {
@@ -62,6 +65,13 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
      */
     public long getShopId() {
         return shopId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public long getCustomerShopId() {
+        return customerShopId;
     }
 
     /**
@@ -121,6 +131,7 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
         final LuceneNavigationContextImpl that = (LuceneNavigationContextImpl) o;
 
         if (shopId != that.shopId) return false;
+        if (customerShopId != that.customerShopId) return false;
         if (includeSubCategories != that.includeSubCategories) return false;
         if (categories != null) {
             if (that.categories == null || categories.size() != that.categories.size()) return false;
@@ -146,6 +157,7 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
     @Override
     public int hashCode() {
         int result = (int) (shopId ^ (shopId >>> 32));
+        result = 31 * result + (int) (customerShopId ^ (customerShopId >>> 32));
         result = 31 * result + (includeSubCategories ? 1 : 0);
         if (categories != null) {
             for (final Long category : categories) {

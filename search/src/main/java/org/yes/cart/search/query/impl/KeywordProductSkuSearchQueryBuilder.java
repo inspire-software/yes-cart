@@ -61,7 +61,7 @@ public class KeywordProductSkuSearchQueryBuilder extends AbstractSearchQueryBuil
     /**
      * {@inheritDoc}
      */
-    public Query createStrictQuery(final long shopId, final String parameter, final Object value) {
+    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
 
         if (!isEmptyValue(value)) {
 
@@ -118,7 +118,7 @@ public class KeywordProductSkuSearchQueryBuilder extends AbstractSearchQueryBuil
     /**
      * {@inheritDoc}
      */
-    public Query createRelaxedQuery(final long shopId, final String parameter, final Object value) {
+    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
 
         if (value != null) {
 

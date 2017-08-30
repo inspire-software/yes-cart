@@ -482,6 +482,7 @@ public class SearchController {
 
         final long categoryId = bookmarkMixin.resolveCategoryId(search.getCategory());
         final ShoppingCart cart = cartMixin.getCurrentCart();
+        final long shopId = cart.getShoppingContext().getShopId();
         final long browsingShopId = cart.getShoppingContext().getCustomerShopId();
 
         final SearchResultRO result = new SearchResultRO();
@@ -494,7 +495,7 @@ public class SearchController {
         }
 
 
-        final NavigationContext context = createNavigationContext(categoryId, browsingShopId, result);
+        final NavigationContext context = createNavigationContext(shopId, browsingShopId, categoryId, result);
 
         configureResultViewOptions(categoryId, browsingShopId, cart.getCurrentLocale(), cart.getCurrencyCode(), result);
 
@@ -785,11 +786,10 @@ public class SearchController {
 
     }
 
-    private NavigationContext createNavigationContext(final long categoryId,
-                                                      final long shopId,
+    private NavigationContext createNavigationContext(final long shopId, final long browsingShopId, final long categoryId,
                                                       final SearchResultRO result) {
 
-        final Pair<List<Long>, Boolean> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, shopId);
+        final Pair<List<Long>, Boolean> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, browsingShopId);
 
         final Map<String, List> mapParams = new HashMap<String, List>();
 
@@ -799,6 +799,7 @@ public class SearchController {
 
         return searchQueryFactory.getFilteredNavigationQueryChain(
                 shopId,
+                browsingShopId,
                 currentCategoriesIds.getFirst(),
                 currentCategoriesIds.getSecond(),
                 mapParams

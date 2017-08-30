@@ -102,11 +102,13 @@ public class HomePage extends AbstractWebPage {
             categoryId = 0l;
         }
 
+        final long shopId = getCurrentShopId();
         final long browsingShopId = getCurrentCustomerShopId();
 
         final Pair<List<Long>, Boolean> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, browsingShopId);
 
         final NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(
+                shopId,
                 browsingShopId,
                 currentCategoriesIds.getFirst(),
                 currentCategoriesIds.getSecond(),

@@ -34,23 +34,25 @@ public interface SearchQueryBuilder {
      * Create strict boolean query for given value.
      *
      * @param shopId shop PK
+     * @param customerShopId customer shop PK
      * @param parameter parameter name
      * @param value value can be collection or single value depending on builder impl
      *
      * @return boolean query
      */
-    Query createStrictQuery(long shopId, String parameter, Object value);
+    Query createStrictQuery(long shopId, long customerShopId, String parameter, Object value);
 
     /**
      * Create relaxed boolean query for given value.
      *
      * @param shopId shop PK
+     * @param customerShopId customer shop PK
      * @param parameter parameter name
      * @param value value can be collection or single value depending on builder impl
      *
      * @return boolean query
      */
-    Query createRelaxedQuery(long shopId, String parameter, Object value);
+    Query createRelaxedQuery(long shopId, long customerShopId, String parameter, Object value);
 
 
 }

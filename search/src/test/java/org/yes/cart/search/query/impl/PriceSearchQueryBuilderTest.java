@@ -47,7 +47,7 @@ public class PriceSearchQueryBuilderTest {
 
         final PriceSearchQueryBuilder buider = new PriceSearchQueryBuilder(priceNavigation);
 
-        final Query query = buider.createStrictQuery(10L, "price", null);
+        final Query query = buider.createStrictQuery(10L, 1010L, "price", null);
         assertNull(query);
 
     }
@@ -59,7 +59,7 @@ public class PriceSearchQueryBuilderTest {
 
         final PriceSearchQueryBuilder buider = new PriceSearchQueryBuilder(priceNavigation);
 
-        final Query query = buider.createStrictQuery(10L, "price", "   ");
+        final Query query = buider.createStrictQuery(10L, 1010L, "price", "   ");
         assertNull(query);
 
     }
@@ -81,9 +81,9 @@ public class PriceSearchQueryBuilderTest {
             one(priceNavigation).decomposePriceRequestParams("EUR-_-10-_-20"); will(returnValue(priceRange));
         }});
 
-        final Query query = buider.createStrictQuery(10L, "price", "EUR-_-10-_-20");
+        final Query query = buider.createStrictQuery(10L, 1010L, "price", "EUR-_-10-_-20");
         assertNotNull(query);
-        assertEquals("facet_price_10_EUR_range:[1000 TO 1999]", query.toString());
+        assertEquals("facet_price_1010_EUR_range:[1000 TO 1999]", query.toString());
 
     }
 
@@ -95,7 +95,7 @@ public class PriceSearchQueryBuilderTest {
 
         final PriceSearchQueryBuilder buider = new PriceSearchQueryBuilder(priceNavigation);
 
-        final Query query = buider.createRelaxedQuery(10L, "price", null);
+        final Query query = buider.createRelaxedQuery(10L, 1010L, "price", null);
         assertNull(query);
 
     }
@@ -107,7 +107,7 @@ public class PriceSearchQueryBuilderTest {
 
         final PriceSearchQueryBuilder buider = new PriceSearchQueryBuilder(priceNavigation);
 
-        final Query query = buider.createRelaxedQuery(10L, "price", "   ");
+        final Query query = buider.createRelaxedQuery(10L, 1010L, "price", "   ");
         assertNull(query);
 
     }
@@ -129,9 +129,9 @@ public class PriceSearchQueryBuilderTest {
             one(priceNavigation).decomposePriceRequestParams("EUR-_-10-_-20"); will(returnValue(priceRange));
         }});
 
-        final Query query = buider.createRelaxedQuery(10L, "price", "EUR-_-10-_-20");
+        final Query query = buider.createRelaxedQuery(10L, 1010L, "price", "EUR-_-10-_-20");
         assertNotNull(query);
-        assertEquals("facet_price_10_EUR_range:[1000 TO 1999]", query.toString());
+        assertEquals("facet_price_1010_EUR_range:[1000 TO 1999]", query.toString());
 
     }
 }

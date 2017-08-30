@@ -36,7 +36,7 @@ public class ProductCategoryIncludingParentsSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryNull() throws Exception {
 
-        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createStrictQuery(10L, "productCategory.category.inc.parents", null);
+        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createStrictQuery(10L, 1010L, "productCategory.category.inc.parents", null);
         assertNull(query);
 
     }
@@ -44,7 +44,7 @@ public class ProductCategoryIncludingParentsSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryBlank() throws Exception {
 
-        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createStrictQuery(10L, "productCategory.category.inc.parents", "  ");
+        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createStrictQuery(10L, 1010L, "productCategory.category.inc.parents", "  ");
         assertNull(query);
 
     }
@@ -52,7 +52,7 @@ public class ProductCategoryIncludingParentsSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQuerySingle() throws Exception {
 
-        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createStrictQuery(10L, "productCategory.category.inc.parents", "1");
+        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createStrictQuery(10L, 1010L, "productCategory.category.inc.parents", "1");
         assertNotNull(query);
         assertEquals("(productCategory.category.inc.parents:[1 TO 1])^1.0", query.toString());
 
@@ -61,7 +61,7 @@ public class ProductCategoryIncludingParentsSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryMultiCollection() throws Exception {
 
-        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createStrictQuery(10L, "productCategory.category.inc.parents", Arrays.asList("1", "2", "3"));
+        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createStrictQuery(10L, 1010L, "productCategory.category.inc.parents", Arrays.asList("1", "2", "3"));
         assertNotNull(query);
         assertEquals("(productCategory.category.inc.parents:[1 TO 1])^1.0 (productCategory.category.inc.parents:[2 TO 2])^1.0 (productCategory.category.inc.parents:[3 TO 3])^1.0", query.toString());
 
@@ -70,7 +70,7 @@ public class ProductCategoryIncludingParentsSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryMultiCollectionEmpty() throws Exception {
 
-        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createStrictQuery(10L, "productCategory.category.inc.parents", Collections.emptyList());
+        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createStrictQuery(10L, 1010L, "productCategory.category.inc.parents", Collections.emptyList());
         assertNull(query);
 
     }
@@ -78,7 +78,7 @@ public class ProductCategoryIncludingParentsSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryNull() throws Exception {
 
-        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createRelaxedQuery(10L, "productCategory.category.inc.parents", null);
+        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "productCategory.category.inc.parents", null);
         assertNull(query);
 
     }
@@ -86,7 +86,7 @@ public class ProductCategoryIncludingParentsSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryBlank() throws Exception {
 
-        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createRelaxedQuery(10L, "productCategory.category.inc.parents", "  ");
+        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "productCategory.category.inc.parents", "  ");
         assertNull(query);
 
     }
@@ -94,7 +94,7 @@ public class ProductCategoryIncludingParentsSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQuerySingle() throws Exception {
 
-        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createRelaxedQuery(10L, "productCategory.category.inc.parents", "1");
+        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "productCategory.category.inc.parents", "1");
         assertNotNull(query);
         assertEquals("(productCategory.category.inc.parents:[1 TO 1])^1.0", query.toString());
 
@@ -104,7 +104,7 @@ public class ProductCategoryIncludingParentsSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryMultiCollection() throws Exception {
 
-        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createRelaxedQuery(10L, "productCategory.category.inc.parents", Arrays.asList("1", "2", "3"));
+        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "productCategory.category.inc.parents", Arrays.asList("1", "2", "3"));
         assertNotNull(query);
         assertEquals("(productCategory.category.inc.parents:[1 TO 1])^1.0 (productCategory.category.inc.parents:[2 TO 2])^1.0 (productCategory.category.inc.parents:[3 TO 3])^1.0", query.toString());
 
@@ -113,7 +113,7 @@ public class ProductCategoryIncludingParentsSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryMultiCollectionEmpty() throws Exception {
 
-        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createRelaxedQuery(10L, "productCategory.category.inc.parents", Collections.emptyList());
+        final Query query = new ProductCategoryIncludingParentsSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "productCategory.category.inc.parents", Collections.emptyList());
         assertNull(query);
 
     }

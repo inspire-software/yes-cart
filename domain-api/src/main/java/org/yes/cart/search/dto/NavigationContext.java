@@ -39,6 +39,13 @@ public interface NavigationContext<T> extends Serializable {
     long getShopId();
 
     /**
+     * Get shop PK for context.
+     *
+     * @return shop context
+     */
+    long getCustomerShopId();
+
+    /**
      * Get category tree context.
      *
      * @return category context

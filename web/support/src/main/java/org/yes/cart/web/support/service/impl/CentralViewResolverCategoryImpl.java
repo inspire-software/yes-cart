@@ -88,6 +88,7 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
             if (categoryId > 0L) {
 
                 final long shopId = ApplicationDirector.getShoppingCart().getShoppingContext().getShopId();
+                final long browsingShopId = ApplicationDirector.getShoppingCart().getShoppingContext().getCustomerShopId();
 
                 // If we have template just use it without any checks (saves us 1 FT query for each request)
                 final String template = shopService.getShopCategoryTemplate(shopId, categoryId);
@@ -108,7 +109,7 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
                 }
 
                 // shopId will be used for inStock check, because we have category IDs will always look in those
-                final NavigationContext hasProducts = searchQueryFactory.getFilteredNavigationQueryChain(shopId, catIds.getFirst(), catIds.getSecond(), null);
+                final NavigationContext hasProducts = searchQueryFactory.getFilteredNavigationQueryChain(shopId, browsingShopId, catIds.getFirst(), catIds.getSecond(), null);
 
                 if (productService.getProductQty(hasProducts) > 0) {
 

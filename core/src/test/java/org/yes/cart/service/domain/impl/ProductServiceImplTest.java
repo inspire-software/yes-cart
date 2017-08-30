@@ -242,7 +242,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
                 ((GenericFTSCapableDAO) productService.getGenericDao()).fullTextSearchReindex(false, 1000);
 
-                NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L), false, null);
+                NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, Arrays.asList(101L), false, null);
                 final ProductSearchResultPageDTO searchRes = productService.getProductSearchResultDTOByQuery(
                         context,
                         0,
@@ -266,7 +266,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
                 ((GenericFTSCapableDAO) productService.getGenericDao()).fullTextSearchReindex(false, 1000);
 
-                NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L), true, null);
+                NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, Arrays.asList(101L), true, null);
                 final ProductSearchResultPageDTO searchRes = productService.getProductSearchResultDTOByQuery(
                         context,
                         0,

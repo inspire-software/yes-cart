@@ -31,14 +31,14 @@ public class NoopProductSearchQueryBuilder implements ProductSearchQueryBuilder 
     /**
      * {@inheritDoc}
      */
-    public Query createStrictQuery(final long shopId, final String parameter, final Object value) {
+    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
         return null;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Query createRelaxedQuery(final long shopId, final String parameter, final Object value) {
+    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
         return null;
     }
 }

@@ -36,7 +36,7 @@ public class ProductSkuIdSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryNull() throws Exception {
 
-        final Query query = new ProductSkuIdSearchQueryBuilder().createStrictQuery(10L, "sku.skuId", null);
+        final Query query = new ProductSkuIdSearchQueryBuilder().createStrictQuery(10L, 1010L, "sku.skuId", null);
         assertNull(query);
 
     }
@@ -44,7 +44,7 @@ public class ProductSkuIdSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryBlank() throws Exception {
 
-        final Query query = new ProductSkuIdSearchQueryBuilder().createStrictQuery(10L, "sku.skuId", "  ");
+        final Query query = new ProductSkuIdSearchQueryBuilder().createStrictQuery(10L, 1010L, "sku.skuId", "  ");
         assertNull(query);
 
     }
@@ -52,7 +52,7 @@ public class ProductSkuIdSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQuerySingle() throws Exception {
 
-        final Query query = new ProductSkuIdSearchQueryBuilder().createStrictQuery(10L, "sku.skuId", "1");
+        final Query query = new ProductSkuIdSearchQueryBuilder().createStrictQuery(10L, 1010L, "sku.skuId", "1");
         assertNotNull(query);
         assertEquals("(sku.skuId:1)^1.0", query.toString());
 
@@ -61,7 +61,7 @@ public class ProductSkuIdSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryMultiCollection() throws Exception {
 
-        final Query query = new ProductSkuIdSearchQueryBuilder().createStrictQuery(10L, "sku.skuId", Arrays.asList("1", "2", "3"));
+        final Query query = new ProductSkuIdSearchQueryBuilder().createStrictQuery(10L, 1010L, "sku.skuId", Arrays.asList("1", "2", "3"));
         assertNotNull(query);
         assertEquals("(sku.skuId:1)^1.0 (sku.skuId:2)^1.0 (sku.skuId:3)^1.0", query.toString());
 
@@ -70,7 +70,7 @@ public class ProductSkuIdSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryMultiCollectionEmpty() throws Exception {
 
-        final Query query = new ProductSkuIdSearchQueryBuilder().createStrictQuery(10L, "sku.skuId", Collections.emptyList());
+        final Query query = new ProductSkuIdSearchQueryBuilder().createStrictQuery(10L, 1010L, "sku.skuId", Collections.emptyList());
         assertNull(query);
 
     }
@@ -78,7 +78,7 @@ public class ProductSkuIdSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryNull() throws Exception {
 
-        final Query query = new ProductSkuIdSearchQueryBuilder().createRelaxedQuery(10L, "sku.skuId", null);
+        final Query query = new ProductSkuIdSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "sku.skuId", null);
         assertNull(query);
 
     }
@@ -86,7 +86,7 @@ public class ProductSkuIdSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryBlank() throws Exception {
 
-        final Query query = new ProductSkuIdSearchQueryBuilder().createRelaxedQuery(10L, "sku.skuId", "  ");
+        final Query query = new ProductSkuIdSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "sku.skuId", "  ");
         assertNull(query);
 
     }
@@ -94,7 +94,7 @@ public class ProductSkuIdSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQuerySingle() throws Exception {
 
-        final Query query = new ProductSkuIdSearchQueryBuilder().createRelaxedQuery(10L, "sku.skuId", "1");
+        final Query query = new ProductSkuIdSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "sku.skuId", "1");
         assertNotNull(query);
         assertEquals("(sku.skuId:1)^1.0", query.toString());
 
@@ -104,7 +104,7 @@ public class ProductSkuIdSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryMultiCollection() throws Exception {
 
-        final Query query = new ProductSkuIdSearchQueryBuilder().createRelaxedQuery(10L, "sku.skuId", Arrays.asList("1", "2", "3"));
+        final Query query = new ProductSkuIdSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "sku.skuId", Arrays.asList("1", "2", "3"));
         assertNotNull(query);
         assertEquals("(sku.skuId:1)^1.0 (sku.skuId:2)^1.0 (sku.skuId:3)^1.0", query.toString());
 
@@ -113,7 +113,7 @@ public class ProductSkuIdSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryMultiCollectionEmpty() throws Exception {
 
-        final Query query = new ProductSkuIdSearchQueryBuilder().createRelaxedQuery(10L, "sku.skuId", Collections.emptyList());
+        final Query query = new ProductSkuIdSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "sku.skuId", Collections.emptyList());
         assertNull(query);
 
     }

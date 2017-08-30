@@ -364,8 +364,8 @@ public interface ProductServiceFacade {
      * @param showTaxAmount use tax amount
      * @param item      item to create price model for
      * @param total     true indicates that we what total amount, false indicates list and sale price
+     * @param hide      true mean no price should be displayed
      *
-     * @param hide
      * @return price (or blank object)
      */
     ProductPriceModel getSkuPrice(String currency, boolean showTax, boolean showTaxNet, boolean showTaxAmount, CartItem item, boolean total, final boolean hide);

@@ -62,11 +62,12 @@ public interface SearchQueryFactory<T> {
      * otherwise need to use all sub categories, that belong to given category list.
      *
      * @param shopId                the current shop id
+     * @param customerShopId        the current customer shop id
      * @param categories            given category ids
      * @param searchSubCategories   if categories are specified this flag determines if this search should include all sub categories as well
      * @param requestParameters     web request parameters
      * @return ordered by cookie name list of cookies
      */
-    NavigationContext<T> getFilteredNavigationQueryChain(long shopId, List<Long> categories, boolean searchSubCategories, Map<String, List> requestParameters);
+    NavigationContext<T> getFilteredNavigationQueryChain(long shopId, final long customerShopId, List<Long> categories, boolean searchSubCategories, Map<String, List> requestParameters);
 
 }

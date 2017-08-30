@@ -32,7 +32,7 @@ public class FeaturedProductSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQuery() throws Exception {
 
-        final Query query = new FeaturedProductSearchQueryBuilder().createStrictQuery(10L, "any", "any");
+        final Query query = new FeaturedProductSearchQueryBuilder().createStrictQuery(10L, 1010L, "any", "any");
         assertNotNull(query);
         assertEquals("featured:true", query.toString());
 
@@ -41,7 +41,7 @@ public class FeaturedProductSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQuery() throws Exception {
 
-        final Query query = new FeaturedProductSearchQueryBuilder().createStrictQuery(10L, "any", "any");
+        final Query query = new FeaturedProductSearchQueryBuilder().createStrictQuery(10L, 1010L, "any", "any");
         assertNotNull(query);
         assertEquals("featured:true", query.toString());
 

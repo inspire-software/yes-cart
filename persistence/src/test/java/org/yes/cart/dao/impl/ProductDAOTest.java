@@ -121,7 +121,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(pk, false);
 
                 final SearchQueryBuilder queryBuilder = new ProductSkuCodeSearchQueryBuilder();
-                final Query query = queryBuilder.createStrictQuery(0L, null, Arrays.asList("SONY_PRODUCT_CODE", "SONY_PRODUCT_CODE2"));
+                final Query query = queryBuilder.createStrictQuery(0L, 0L, null, Arrays.asList("SONY_PRODUCT_CODE", "SONY_PRODUCT_CODE2"));
 
                 // There are no SKU and inventory - should not be in index
                 assertEquals(0, productDao.fullTextSearchCount(query));
@@ -181,7 +181,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 List<Product> products = null;
 
                 final SearchQueryBuilder queryBuilder = new ProductSkuCodeSearchQueryBuilder();
-                final Query query = queryBuilder.createStrictQuery(0L, null, Arrays.asList("SONY_PRODUCT_CODE"));
+                final Query query = queryBuilder.createStrictQuery(0L, 0L, null, Arrays.asList("SONY_PRODUCT_CODE"));
 
                 products = productDao.fullTextSearch(query);
                 assertEquals("Product must be found. Failed query [" + query + "]", 1, products.size());
@@ -251,10 +251,10 @@ public class ProductDAOTest extends AbstractTestDAO {
                 List<Product> products = null;
 
                 final SearchQueryBuilder skuCodeQueryBuilder = new ProductSkuCodeSearchQueryBuilder();
-                final Query queryBySku = skuCodeQueryBuilder.createStrictQuery(0L, null, Arrays.asList("SONY_PRODUCT_CODE"));
+                final Query queryBySku = skuCodeQueryBuilder.createStrictQuery(0L, 0L, null, Arrays.asList("SONY_PRODUCT_CODE"));
 
                 final SearchQueryBuilder inStockQueryBuilder = new ProductShopInStockSearchQueryBuilder();
-                final Query queryInStock = inStockQueryBuilder.createStrictQuery(10L, null, 10L);
+                final Query queryInStock = inStockQueryBuilder.createStrictQuery(10L, 10L, null, 10L);
 
                 final BooleanQuery.Builder skuInStockQueryBuilder = new BooleanQuery.Builder();
                 skuInStockQueryBuilder.add(queryBySku, BooleanClause.Occur.MUST);
@@ -332,7 +332,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 List<Product> products = null;
 
                 final SearchQueryBuilder queryBuilder = new ProductSkuCodeSearchQueryBuilder();
-                final Query query = queryBuilder.createStrictQuery(0L, null, Arrays.asList("SONY_PRODUCT_CODE"));
+                final Query query = queryBuilder.createStrictQuery(0L, 0L, null, Arrays.asList("SONY_PRODUCT_CODE"));
 
                 products = productDao.fullTextSearch(query);
                 assertEquals("Product must not be found because preorderable items must have inventory record. Failed query [" + query + "]", 0, products.size());
@@ -395,7 +395,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 List<Product> products = null;
 
                 final SearchQueryBuilder queryBuilder = new ProductSkuCodeSearchQueryBuilder();
-                final Query query = queryBuilder.createStrictQuery(0L, null, Arrays.asList("SONY_PRODUCT_CODE"));
+                final Query query = queryBuilder.createStrictQuery(0L, 0L, null, Arrays.asList("SONY_PRODUCT_CODE"));
 
                 products = productDao.fullTextSearch(query);
                 assertEquals("Product must not be found because back order items. Failed query [" + query + "]", 0, products.size());
@@ -458,7 +458,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 List<Product> products = null;
 
                 final SearchQueryBuilder queryBuilder = new ProductSkuCodeSearchQueryBuilder();
-                final Query query = queryBuilder.createStrictQuery(0L, null, Arrays.asList("SONY_PRODUCT_CODE"));
+                final Query query = queryBuilder.createStrictQuery(0L, 0L, null, Arrays.asList("SONY_PRODUCT_CODE"));
 
                 products = productDao.fullTextSearch(query);
                 assertEquals("Product must be found because although products are out of stock it is preorderable. Failed query [" + query + "]", 1, products.size());

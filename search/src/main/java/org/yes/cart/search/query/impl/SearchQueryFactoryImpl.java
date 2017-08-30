@@ -164,7 +164,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
                 builder = productAttributeBuilder; // use attribute builder by default
             }
 
-            final Query strictQuery = builder.createStrictQuery(navigationContext.getShopId(), param, value);
+            final Query strictQuery = builder.createStrictQuery(navigationContext.getShopId(), navigationContext.getCustomerShopId(), param, value);
             if (strictQuery != null) {
                 snowball.add(strictQuery, BooleanClause.Occur.MUST);
 
@@ -181,6 +181,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
 
         return new LuceneNavigationContextImpl(
                     navigationContext.getShopId(),
+                    navigationContext.getCustomerShopId(),
                     navigationContext.getCategories(),
                     navigationContext.isIncludeSubCategories(),
                     navigationParameters,
@@ -212,7 +213,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
             }
 
             final Query strictQuery = builder.createStrictQuery(
-                    navigationContext.getShopId(), ProductSearchQueryBuilder.PRODUCT_ID_FIELD, productIds);
+                    navigationContext.getShopId(), navigationContext.getCustomerShopId(), ProductSearchQueryBuilder.PRODUCT_ID_FIELD, productIds);
             if (strictQuery != null) {
                 snowball.add(strictQuery, BooleanClause.Occur.MUST);
             }
@@ -221,6 +222,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
 
         return new LuceneNavigationContextImpl(
                 navigationContext.getShopId(),
+                navigationContext.getCustomerShopId(),
                 navigationContext.getCategories(),
                 navigationContext.isIncludeSubCategories(),
                 navigationParameters,
@@ -233,6 +235,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
      * {@inheritDoc}
      */
     public NavigationContext<Query> getFilteredNavigationQueryChain(final long shopId,
+                                                                    final long customerShopId,
                                                                     final List<Long> categories,
                                                                     final boolean includeSubCategories,
                                                                     final Map<String, List> requestParameters) {
@@ -278,7 +281,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
                                 searchValue = valueItem;
                             }
 
-                            final Query strictProdQuery = prodBuilder.createStrictQuery(shopId, decodedKeyName, searchValue);
+                            final Query strictProdQuery = prodBuilder.createStrictQuery(shopId, customerShopId, decodedKeyName, searchValue);
                             if (strictProdQuery == null) {
                                 continue; // no valid criteria
                             }
@@ -293,7 +296,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
                             productQueryChainStrictClauses.add(strictProdQuery);
 
                             if (useQueryRelaxation.contains(decodedKeyName)) {
-                                final Query relaxedProdQuery = prodBuilder.createRelaxedQuery(shopId, decodedKeyName, searchValue);
+                                final Query relaxedProdQuery = prodBuilder.createRelaxedQuery(shopId, customerShopId, decodedKeyName, searchValue);
                                 if (relaxedProdQuery == null) {
                                     continue; // no valid criteria
                                 }
@@ -302,14 +305,14 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
                                 productQueryChainRelaxedClauses.add(strictProdQuery);
                             }
 
-                            final Query strictSkuQuery = skuBuilder.createStrictQuery(shopId, decodedKeyName, searchValue);
+                            final Query strictSkuQuery = skuBuilder.createStrictQuery(shopId, customerShopId, decodedKeyName, searchValue);
                             if (strictSkuQuery == null) {
                                 continue; // no valid criteria
                             }
                             skuQueryChainStrictClauses.add(strictSkuQuery);
 
                             if (useQueryRelaxation.contains(decodedKeyName)) {
-                                final Query relaxedSkuQuery = skuBuilder.createRelaxedQuery(shopId, decodedKeyName, searchValue);
+                                final Query relaxedSkuQuery = skuBuilder.createRelaxedQuery(shopId, customerShopId, decodedKeyName, searchValue);
                                 if (relaxedSkuQuery == null) {
                                     continue; // no valid criteria
                                 }
@@ -356,9 +359,9 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
         // Mandatory fields are last for better scoring
         final Query cats;
         if (includeSubCategories) {
-            cats = productCategoryIncludingParentsBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_CATEGORY_INC_PARENTS_FIELD, categories);
+            cats = productCategoryIncludingParentsBuilder.createStrictQuery(shopId, customerShopId, ProductSearchQueryBuilder.PRODUCT_CATEGORY_INC_PARENTS_FIELD, categories);
         } else {
-            cats = productCategoryBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD, categories);
+            cats = productCategoryBuilder.createStrictQuery(shopId, customerShopId, ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD, categories);
         }
         if (cats != null) {
             // Every category belongs to a store, so no need to add store query too
@@ -366,20 +369,20 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
             productQueryChainRelaxed.add(cats);
         } else {
             // If we have no category criteria need to ensure we only view products that belong to current store
-            final Query store = productShopBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD, shopId);
+            final Query store = productShopBuilder.createStrictQuery(shopId, customerShopId, ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD, customerShopId);
             productQueryChainStrict.add(store);
             productQueryChainRelaxed.add(store);
         }
 
         // Enforce in stock products
-        final  Query inStock = productShopStockBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD, shopId);
+        final  Query inStock = productShopStockBuilder.createStrictQuery(shopId, customerShopId, ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD, customerShopId);
         if (inStock != null) {
             productQueryChainStrict.add(inStock);
             productQueryChainRelaxed.add(inStock);
         }
 
         // Enforce products with price
-        final  Query hasPrice = productShopPriceBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_SHOP_HASPRICE_FIELD, shopId);
+        final  Query hasPrice = productShopPriceBuilder.createStrictQuery(shopId, customerShopId, ProductSearchQueryBuilder.PRODUCT_SHOP_HASPRICE_FIELD, customerShopId);
         if (hasPrice != null) {
             productQueryChainStrict.add(hasPrice);
             productQueryChainRelaxed.add(hasPrice);
@@ -388,7 +391,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
         Query prod = join(productQueryChainStrict, BooleanClause.Occur.MUST);
         Query sku;
 
-        final NavigationContext<Query> testProd = new LuceneNavigationContextImpl(shopId, categories, includeSubCategories, navigationParameters, prod, null);
+        final NavigationContext<Query> testProd = new LuceneNavigationContextImpl(shopId, customerShopId, categories, includeSubCategories, navigationParameters, prod, null);
 
         if (productService.getProductQty(testProd) == 0) {
             // use relaxation for all elements of query if strict query yields no results
@@ -404,7 +407,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
             LOG.debug("Constructed nav sku  query: {}", sku );
         }
 
-        return new LuceneNavigationContextImpl(shopId, categories, includeSubCategories, navigationParameters, prod, sku);
+        return new LuceneNavigationContextImpl(shopId, customerShopId, categories, includeSubCategories, navigationParameters, prod, sku);
     }
 
     private Date earliestNewArrivalDate(final Long shopId, final List<Long> categories) {

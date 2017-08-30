@@ -221,7 +221,7 @@ public class CentralViewResolverCategoryImplTest {
         context.checking(new Expectations() {{
             one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
             one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
-            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), true, null); will(returnValue(hasProducts));
+            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, Arrays.asList(10L), true, null); will(returnValue(hasProducts));
             one(productService).getProductQty(hasProducts); will(returnValue(0));
             one(categoryService).isCategoryHasChildren(10L); will(returnValue(false));
         }});
@@ -262,7 +262,7 @@ public class CentralViewResolverCategoryImplTest {
         context.checking(new Expectations() {{
             one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
             one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), false)));
-            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), false, null); will(returnValue(hasProducts));
+            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, Arrays.asList(10L), false, null); will(returnValue(hasProducts));
             one(productService).getProductQty(hasProducts); will(returnValue(0));
             one(categoryService).isCategoryHasChildren(10L); will(returnValue(true));
         }});
@@ -304,7 +304,7 @@ public class CentralViewResolverCategoryImplTest {
         context.checking(new Expectations() {{
             one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
             one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
-            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), true, null); will(returnValue(hasProducts));
+            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, Arrays.asList(10L), true, null); will(returnValue(hasProducts));
             one(productService).getProductQty(hasProducts); will(returnValue(1));
             one(shopService).getShopCategorySearchTemplate(11L, 10L); will(returnValue(null));
         }});
@@ -346,7 +346,7 @@ public class CentralViewResolverCategoryImplTest {
         context.checking(new Expectations() {{
             one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
             one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), false)));
-            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), false, null); will(returnValue(hasProducts));
+            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, Arrays.asList(10L), false, null); will(returnValue(hasProducts));
             one(productService).getProductQty(hasProducts); will(returnValue(1));
             one(shopService).getShopCategorySearchTemplate(11L, 10L); will(returnValue(" "));
         }});
@@ -388,7 +388,7 @@ public class CentralViewResolverCategoryImplTest {
         context.checking(new Expectations() {{
             one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
             one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
-            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), true, null); will(returnValue(hasProducts));
+            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, Arrays.asList(10L), true, null); will(returnValue(hasProducts));
             one(productService).getProductQty(hasProducts); will(returnValue(1));
             one(shopService).getShopCategorySearchTemplate(11L, 10L); will(returnValue("prodtypesearch"));
         }});

@@ -36,7 +36,7 @@ public class ProductIdSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryNull() throws Exception {
 
-        final Query query = new ProductIdSearchQueryBuilder().createStrictQuery(10L, "productId", null);
+        final Query query = new ProductIdSearchQueryBuilder().createStrictQuery(10L, 1010L, "productId", null);
         assertNull(query);
 
     }
@@ -44,7 +44,7 @@ public class ProductIdSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryBlank() throws Exception {
 
-        final Query query = new ProductIdSearchQueryBuilder().createStrictQuery(10L, "productId", "  ");
+        final Query query = new ProductIdSearchQueryBuilder().createStrictQuery(10L, 1010L, "productId", "  ");
         assertNull(query);
 
     }
@@ -52,7 +52,7 @@ public class ProductIdSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQuerySingle() throws Exception {
 
-        final Query query = new ProductIdSearchQueryBuilder().createStrictQuery(10L, "productId", "1");
+        final Query query = new ProductIdSearchQueryBuilder().createStrictQuery(10L, 1010L, "productId", "1");
         assertNotNull(query);
         assertEquals("(productId:1)^1.0", query.toString());
 
@@ -61,7 +61,7 @@ public class ProductIdSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryMultiCollection() throws Exception {
 
-        final Query query = new ProductIdSearchQueryBuilder().createStrictQuery(10L, "productId", Arrays.asList("1", "2", "3"));
+        final Query query = new ProductIdSearchQueryBuilder().createStrictQuery(10L, 1010L, "productId", Arrays.asList("1", "2", "3"));
         assertNotNull(query);
         assertEquals("(productId:1)^1.0 (productId:2)^1.0 (productId:3)^1.0", query.toString());
 
@@ -70,7 +70,7 @@ public class ProductIdSearchQueryBuilderTest {
     @Test
     public void testCreateStrictQueryMultiCollectionEmpty() throws Exception {
 
-        final Query query = new ProductIdSearchQueryBuilder().createStrictQuery(10L, "productId", Collections.emptyList());
+        final Query query = new ProductIdSearchQueryBuilder().createStrictQuery(10L, 1010L, "productId", Collections.emptyList());
         assertNull(query);
 
     }
@@ -78,7 +78,7 @@ public class ProductIdSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryNull() throws Exception {
 
-        final Query query = new ProductIdSearchQueryBuilder().createRelaxedQuery(10L, "productId", null);
+        final Query query = new ProductIdSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "productId", null);
         assertNull(query);
 
     }
@@ -86,7 +86,7 @@ public class ProductIdSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryBlank() throws Exception {
 
-        final Query query = new ProductIdSearchQueryBuilder().createRelaxedQuery(10L, "productId", "  ");
+        final Query query = new ProductIdSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "productId", "  ");
         assertNull(query);
 
     }
@@ -94,7 +94,7 @@ public class ProductIdSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQuerySingle() throws Exception {
 
-        final Query query = new ProductIdSearchQueryBuilder().createRelaxedQuery(10L, "productId", "1");
+        final Query query = new ProductIdSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "productId", "1");
         assertNotNull(query);
         assertEquals("(productId:1)^1.0", query.toString());
 
@@ -104,7 +104,7 @@ public class ProductIdSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryMultiCollection() throws Exception {
 
-        final Query query = new ProductIdSearchQueryBuilder().createRelaxedQuery(10L, "productId", Arrays.asList("1", "2", "3"));
+        final Query query = new ProductIdSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "productId", Arrays.asList("1", "2", "3"));
         assertNotNull(query);
         assertEquals("(productId:1)^1.0 (productId:2)^1.0 (productId:3)^1.0", query.toString());
 
@@ -113,7 +113,7 @@ public class ProductIdSearchQueryBuilderTest {
     @Test
     public void testCreateRelaxedQueryMultiCollectionEmpty() throws Exception {
 
-        final Query query = new ProductIdSearchQueryBuilder().createRelaxedQuery(10L, "productId", Collections.emptyList());
+        final Query query = new ProductIdSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "productId", Collections.emptyList());
         assertNull(query);
 
     }

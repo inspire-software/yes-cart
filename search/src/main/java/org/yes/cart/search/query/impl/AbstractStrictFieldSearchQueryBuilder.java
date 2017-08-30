@@ -46,7 +46,7 @@ public abstract class AbstractStrictFieldSearchQueryBuilder extends AbstractSear
     /**
      * {@inheritDoc}
      */
-    public Query createStrictQuery(final long shopId, final String parameter, final Object value) {
+    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
 
         if (value instanceof Collection) {
             final Collection singleValues = (Collection) value;
@@ -77,9 +77,9 @@ public abstract class AbstractStrictFieldSearchQueryBuilder extends AbstractSear
     /**
      * {@inheritDoc}
      */
-    public Query createRelaxedQuery(final long shopId, final String parameter, final Object value) {
+    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
 
-        return createStrictQuery(shopId, parameter, value);
+        return createStrictQuery(shopId, customerShopId, parameter, value);
 
     }
 }

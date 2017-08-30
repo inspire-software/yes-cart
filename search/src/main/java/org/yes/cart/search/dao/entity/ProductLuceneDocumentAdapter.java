@@ -651,14 +651,14 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 // Always = -5% boost (stocked items must be first)
                 addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_boost", 0.95f);
                 addSortField(document, PRODUCT_AVAILABILITY_SORT_FIELD + shop.toString(), "095");
-                addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + shop.toString(), 1L, false);
+                addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + "1", shop, false);
                 addSortField(document, PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD + shop.toString(), "1");
             } else if (result.getAvailability() == Product.AVAILABILITY_PREORDER &&
                     DomainApiUtils.isObjectAvailableNow(true, result.getAvailablefrom(), null, now)) {
                 // Preorder is 1.25f = 25% boost
                 addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_boost", 1.25f);
                 addSortField(document, PRODUCT_AVAILABILITY_SORT_FIELD + shop.toString(), "125");
-                addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + shop.toString(), 1L, false);
+                addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + "1", shop, false);
                 addSortField(document, PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD + shop.toString(), "1");
             } else { // Standard stock
                 final Map<String, BigDecimal> qty = result.getQtyOnWarehouse(shop);
@@ -672,7 +672,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 // Standard + Backorder in stock = no boost, out of stock = -10% boost
                 addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_boost", hasStock ? 1.0f : 0.9f);
                 addSortField(document, PRODUCT_AVAILABILITY_SORT_FIELD + shop.toString(), hasStock ? "100" : "090");
-                addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + shop.toString(), hasStock ? 1L : 0L, false);
+                addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + (hasStock ? "1" : "0"), shop, false);
                 addSortField(document, PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD + shop.toString(), hasStock ? "1" : "0");
             }
         }
