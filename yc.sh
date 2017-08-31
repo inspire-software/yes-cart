@@ -226,9 +226,11 @@ start_aws() {
     echo "  * AWS Access Key ID                           ";
     echo "  * AWS Secret Access Key                       ";
     echo "  * Default region                              ";
+    echo "                                                ";
+    echo "  * Run under root                              ";
     echo "================================================";
 
-    sudo su 
+
     aws configure
 
     aws ec2 create-security-group \
