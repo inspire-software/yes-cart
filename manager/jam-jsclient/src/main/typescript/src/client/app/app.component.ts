@@ -2,7 +2,7 @@ import { Component, OnDestroy, Inject } from '@angular/core';
 import { Config } from './shared/index';
 import './operators';
 
-import { ShopEventBus, ErrorEventBus, I18nEventBus, WindowMessageEventBus, UserEventBus, ValidationService, ManagementService } from './shared/services/index';
+import { ShopEventBus, ErrorEventBus, I18nEventBus, WindowMessageEventBus, UserEventBus, ValidationService, ManagementService, ShopService } from './shared/services/index';
 import { YcValidators } from './shared/validation/validators';
 import { CookieUtil } from './shared/cookies/index';
 import { LogUtil } from './shared/log/index';
@@ -31,6 +31,7 @@ export class AppComponent implements OnDestroy {
               @Inject(UserEventBus)          _userEventBus:UserEventBus,
               @Inject(ValidationService)     _validationService:ValidationService,
               @Inject(ManagementService)     _managementService:ManagementService,
+              @Inject(ShopService)           _shopService:ShopService,
               translate: TranslateService) {
     LogUtil.debug('Environment config', Config);
 
@@ -67,6 +68,13 @@ export class AppComponent implements OnDestroy {
         UserEventBus.getUserEventBus().emit(myself);
         _sub2.unsubscribe();
       });
+
+      var _sub3:any = _shopService.getAllShops().subscribe( allshops => {
+        LogUtil.debug('Loading user shops', allshops);
+        ShopEventBus.getShopEventBus().emitAll(allshops);
+        _sub3.unsubscribe();
+      });
+
 
     });
 

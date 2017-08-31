@@ -30,10 +30,7 @@ import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
 import org.yes.cart.service.vo.VoDashboardWidgetService;
 import org.yes.cart.web.service.ws.client.AsyncContextFactory;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -42,8 +39,7 @@ import java.util.Map;
  */
 public class VoDashboardWidgetPluginReindex implements VoDashboardWidgetPlugin {
 
-
-    private final List<String> roles = Arrays.asList("ROLE_SMADMIN", "ROLE_SMSHOPADMIN");
+    private List<String> roles = Collections.emptyList();
 
     private ClusterService clusterService;
     private AsyncContextFactory asyncContextFactory;
@@ -107,6 +103,15 @@ public class VoDashboardWidgetPluginReindex implements VoDashboardWidgetPlugin {
         widget.setData(data);
 
         return widget;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param roles roles for accessing this widget
+     */
+    public void setRoles(final List<String> roles) {
+        this.roles = roles;
     }
 
     /**

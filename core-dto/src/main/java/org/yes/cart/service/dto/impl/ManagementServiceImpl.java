@@ -294,8 +294,11 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @CacheEvict(value = {
-            "shopFederationStrategy-admin"
-    }, key = "#userId")
+            "shopFederationStrategy-admin",
+            "shopFederationStrategy-shop",
+            "shopFederationStrategy-shopId",
+            "shopFederationStrategy-shopCode",
+    }, allEntries = true)
     public void grantRole(final String userId, final String role) {
         final Role roleEntity = roleDao.findSingleByCriteria(Restrictions.eq(CODE, role));
         final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
@@ -311,8 +314,11 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @CacheEvict(value = {
-            "shopFederationStrategy-admin"
-    }, key = "#userId")
+            "shopFederationStrategy-admin",
+            "shopFederationStrategy-shop",
+            "shopFederationStrategy-shopId",
+            "shopFederationStrategy-shopCode",
+    }, allEntries = true)
     public void revokeRole(final String userId, final String role) {
         final List<ManagerRole> managerRole = managerRoleDao.findByCriteria(
                 Restrictions.eq(CODE, role),
@@ -399,10 +405,11 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @CacheEvict(value = {
+            "shopFederationStrategy-admin",
             "shopFederationStrategy-shop",
             "shopFederationStrategy-shopId",
-            "shopFederationStrategy-shopCode"
-    }, key = "#userId")
+            "shopFederationStrategy-shopCode",
+    }, allEntries = true)
     public void grantShop(final String userId, final String shopCode) {
         final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
         final Collection<ManagerShop> assigned = manager.getShops();
@@ -425,10 +432,11 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @CacheEvict(value = {
+            "shopFederationStrategy-admin",
             "shopFederationStrategy-shop",
             "shopFederationStrategy-shopId",
-            "shopFederationStrategy-shopCode"
-    }, key = "#userId")
+            "shopFederationStrategy-shopCode",
+    }, allEntries = true)
     public void revokeShop(final String userId, final String shopCode) {
         final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
         final Iterator<ManagerShop> assigned = manager.getShops().iterator();

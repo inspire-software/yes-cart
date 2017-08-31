@@ -34,27 +34,27 @@ import java.util.List;
 public interface CustomerEndpointController {
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER","ROLE_SMCALLCENTERCUSTOMER"})
     @RequestMapping(value = "/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoCustomerInfo> getFilteredCustomer(@RequestBody String filter, @PathVariable("max") int max) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER","ROLE_SMCALLCENTERCUSTOMER"})
     @RequestMapping(value = "/types/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<MutablePair<String, String>> getCustomerTypes(@PathVariable("lang") String lang) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER","ROLE_SMCALLCENTERCUSTOMER"})
     @RequestMapping(value = "/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoCustomer getCustomerById(@PathVariable("id") long id) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTERCUSTOMER"})
     @RequestMapping(value = "/", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoCustomer createCustomer(@RequestBody VoCustomer vo)  throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTERCUSTOMER"})
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoCustomer updateCustomer(@RequestBody VoCustomer vo)  throws Exception;
@@ -64,41 +64,41 @@ public interface CustomerEndpointController {
     @ResponseBody
     void removeCustomer(@PathVariable("id") long id) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER","ROLE_SMCALLCENTERCUSTOMER"})
     @RequestMapping(value = "/attributes/{customerId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoAttrValueCustomer> getCustomerAttributes(@PathVariable("customerId") long customerId) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTERCUSTOMER"})
     @RequestMapping(value = "/attributes", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoAttrValueCustomer> updateCustomer(@RequestBody List<MutablePair<VoAttrValueCustomer, Boolean>> vo) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER","ROLE_SMCALLCENTERCUSTOMER"})
     @RequestMapping(value = "/reset/{customerId}/{shopId}", method = RequestMethod.POST)
     @ResponseBody
     void resetPassword(@PathVariable("customerId") long customerId, @PathVariable("shopId") long shopId) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER","ROLE_SMCALLCENTERCUSTOMER"})
     @RequestMapping(value = "/addressbook/{id}/{formattingShopId}/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoAddressBook getAddressBook(@PathVariable("id") long customerId, @PathVariable("formattingShopId") long formattingShopId, @PathVariable("lang") String lang) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTERCUSTOMER"})
     @RequestMapping(value = "/addressbook", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoAddress createAddress(@RequestBody VoAddress vo)  throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTERCUSTOMER"})
     @RequestMapping(value = "/addressbook", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoAddress updateAddress(@RequestBody VoAddress vo)  throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTERCUSTOMER"})
     @RequestMapping(value = "/addressbook/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     void removeAddress(@PathVariable("id") long id) throws Exception;

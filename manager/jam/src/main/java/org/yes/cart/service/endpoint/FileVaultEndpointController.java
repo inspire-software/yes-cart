@@ -16,6 +16,7 @@
 package org.yes.cart.service.endpoint;
 
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +40,7 @@ public interface FileVaultEndpointController {
      * Download given file as bytes.
      * @param fileName file name
      */
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMCONTENTADMIN"})
+    @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/image/{type}", method = RequestMethod.GET)
     void downloadImage(@PathVariable("type") String type, @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
 
@@ -47,7 +48,7 @@ public interface FileVaultEndpointController {
      * Download given file as bytes.
      * @param fileName file name
      */
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMCONTENTADMIN"})
+    @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/file/{type}", method = RequestMethod.GET)
     void downloadFile(@PathVariable("type") String type, @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
 
@@ -55,7 +56,7 @@ public interface FileVaultEndpointController {
      * Download given file as bytes.
      * @param fileName file name
      */
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/sysfile/{type}", method = RequestMethod.GET)
     void downloadSysFile(@PathVariable("type") String type, @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
 

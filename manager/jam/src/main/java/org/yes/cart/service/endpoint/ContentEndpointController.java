@@ -37,17 +37,17 @@ import java.util.List;
 public interface ContentEndpointController {
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
     @RequestMapping(value = "/shop/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoContent> getShopContent(@PathVariable("shopId") long shopId) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
     @RequestMapping(value = "/shop/{shopId}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoContent> getFilteredContent(@PathVariable("shopId") long shopId, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
     @RequestMapping(value = "/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoContentWithBody getContentById(@PathVariable("id") long id) throws Exception;
@@ -67,7 +67,7 @@ public interface ContentEndpointController {
     @ResponseBody
     void removeContent(@PathVariable("id") long id) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
     @RequestMapping(value = "/attributes/{contentId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoAttrValueContent> getContentAttributes(@PathVariable("contentId") long contentId) throws Exception;
@@ -79,13 +79,13 @@ public interface ContentEndpointController {
     List<VoAttrValueContent> updateContent(@RequestBody List<MutablePair<VoAttrValueContent, Boolean>> vo) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
     @RequestMapping(value = "/body/{contentId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoContentBody> getContentBody(@PathVariable("contentId") long contentId) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER"})
     @RequestMapping(value = "/mail/{shopId}/{template}", method = RequestMethod.GET,  produces = { MediaType.TEXT_HTML_VALUE })
     @ResponseBody
     String getShopMail(@PathVariable("shopId") long shopId, @PathVariable("template") String template, @RequestParam(value = "order", required = false) String order, @RequestParam(value = "delivery", required = false) String delivery, @RequestParam(value = "customer", required = false) String customer) throws Exception;

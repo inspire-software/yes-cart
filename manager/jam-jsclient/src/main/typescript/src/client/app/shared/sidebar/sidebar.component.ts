@@ -54,7 +54,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
   protected configureUser(user:any) {
     let currentUser:UserVO = user;
     this.currentUserName = currentUser != null ? currentUser.name : 'anonymous';
-    this.menuType = currentUser != null ? currentUser.ui : 'FULL';
+    this.menuType = currentUser != null ? currentUser.ui : {
+      'CCC': false,
+      'PIM': false,
+      'CMS': false,
+      'MRK': false,
+      'INV': false,
+      'REP': false,
+      'SHP': false,
+      'SHO': false,
+      'ORG': false,
+      'SYS': false
+    };
     this.docLink = Config.UI_DOC_LINK;
     this.copyNote = Config.UI_COPY_NOTE;
     this.envLabel = Config.UI_LABEL;

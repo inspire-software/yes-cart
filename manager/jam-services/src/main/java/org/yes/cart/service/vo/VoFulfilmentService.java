@@ -71,7 +71,7 @@ public interface VoFulfilmentService {
      * @return persistent version
      * @throws Exception
      */
-    VoFulfilmentCentre createFulfilmentCentre(VoFulfilmentCentreInfo vo)  throws Exception;
+    VoFulfilmentCentre createFulfilmentCentre(VoFulfilmentCentre vo)  throws Exception;
 
     /**
      * Create new vo

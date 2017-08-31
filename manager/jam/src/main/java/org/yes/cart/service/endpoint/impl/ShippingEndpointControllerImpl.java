@@ -60,7 +60,7 @@ public class ShippingEndpointControllerImpl implements ShippingEndpointControlle
     }
 
     @Override
-    public @ResponseBody VoCarrier createCarrier(@RequestBody final VoCarrierLocale vo) throws Exception {
+    public @ResponseBody VoCarrier createCarrier(@RequestBody final VoCarrier vo) throws Exception {
         return voShippingService.createCarrier(vo);
     }
 

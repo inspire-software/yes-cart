@@ -35,25 +35,25 @@ import java.util.List;
 @RequestMapping("/shipping")
 public interface ShippingEndpointController {
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMSHIPPINGADMIN","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
     @RequestMapping(value = "/carrier/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoCarrier> getAllCarriers() throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMSHIPPINGADMIN","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
     @RequestMapping(value = "/carrier/shop/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoShopCarrier> getShopCarriers(@PathVariable("id") long shopId) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMSHIPPINGADMIN","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
     @RequestMapping(value = "/carrier/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoCarrier getCarrierById(@PathVariable("id") long id) throws Exception;
 
-    @Secured({"ROLE_SMADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
     @RequestMapping(value = "/carrier", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCarrier createCarrier(@RequestBody VoCarrierLocale vo)  throws Exception;
+    VoCarrier createCarrier(@RequestBody VoCarrier vo)  throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
     @RequestMapping(value = "/carrier/shop/{id}", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -76,18 +76,18 @@ public interface ShippingEndpointController {
     void removeCarrier(@PathVariable("id") long id) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMSHIPPINGADMIN","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
     @RequestMapping(value = "/carriersla/all/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoCarrierSla> getCarrierSlas(@PathVariable("id") long carrierId) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMSHIPPINGADMIN","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
     @RequestMapping(value = "/carriersla/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoCarrierSla> getFilteredCarrierSlas(@RequestBody String filter, @PathVariable("max") int max) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMSHIPPINGADMIN","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
     @RequestMapping(value = "/carriersla/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoCarrierSla getCarrierSlaById(@PathVariable("id") long id) throws Exception;

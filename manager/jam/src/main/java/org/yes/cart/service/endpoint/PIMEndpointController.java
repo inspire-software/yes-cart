@@ -33,89 +33,89 @@ import java.util.List;
 @RequestMapping("/pim")
 public interface PIMEndpointController {
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN","ROLE_SMPIMUSER"})
     @RequestMapping(value = "/associations/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoAssociation> getAllAssociations() throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN","ROLE_SMPIMUSER"})
     @RequestMapping(value = "/product/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoProduct> getFilteredProducts(@RequestBody String filter, @PathVariable("max") int max) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN","ROLE_SMPIMUSER"})
     @RequestMapping(value = "/product/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoProductWithLinks getProductById(@PathVariable("id") long id) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN"})
     @RequestMapping(value = "/product", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoProductWithLinks createProduct(@RequestBody VoProduct vo)  throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN"})
     @RequestMapping(value = "/product", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoProductWithLinks updateProduct(@RequestBody VoProductWithLinks vo)  throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN"})
     @RequestMapping(value = "/product/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     void removeProduct(@PathVariable("id") long id) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN","ROLE_SMPIMUSER"})
     @RequestMapping(value = "/product/attributes/{productId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoAttrValueProduct> getProductAttributes(@PathVariable("productId") long productId) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN"})
     @RequestMapping(value = "/product/attributes", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoAttrValueProduct> updateProduct(@RequestBody List<MutablePair<VoAttrValueProduct, Boolean>> vo) throws Exception;
 
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN","ROLE_SMPIMUSER"})
     @RequestMapping(value = "/product/sku/{productId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoProductSku> getProductSkuAll(@PathVariable("productId") long productId) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN","ROLE_SMPIMUSER","ROLE_SMWAREHOUSEADMIN","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/product/sku/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoProductSku> getFilteredProductSkus(@RequestBody String filter, @PathVariable("max") int max) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN","ROLE_SMPIMUSER","ROLE_SMWAREHOUSEADMIN","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/sku/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoProductSku getSkuById(@PathVariable("id") long id) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN"})
     @RequestMapping(value = "/sku", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoProductSku createSku(@RequestBody VoProductSku vo)  throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN"})
     @RequestMapping(value = "/sku", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoProductSku updateSku(@RequestBody VoProductSku vo)  throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN"})
     @RequestMapping(value = "/sku/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     void removeSku(@PathVariable("id") long id) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN","ROLE_SMPIMUSER","ROLE_SMWAREHOUSEADMIN","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/sku/attributes/{skuId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoAttrValueProductSku> getSkuAttributes(@PathVariable("skuId") long skuId) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN"})
     @RequestMapping(value = "/sku/attributes", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoAttrValueProductSku> updateSku(@RequestBody List<MutablePair<VoAttrValueProductSku, Boolean>> vo) throws Exception;

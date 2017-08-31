@@ -71,7 +71,7 @@ public interface VoShippingService {
      * @return persistent version
      * @throws Exception
      */
-    VoCarrier createCarrier(VoCarrierLocale vo)  throws Exception;
+    VoCarrier createCarrier(VoCarrier vo)  throws Exception;
 
     /**
      * Create new vo

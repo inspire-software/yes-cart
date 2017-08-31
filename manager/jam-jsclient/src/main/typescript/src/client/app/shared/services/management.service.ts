@@ -85,14 +85,72 @@ export class ManagementService {
    *
    * @return ui name
    */
-  getUserInterface(manager:ManagerVO):string {
-    let ui = 'ADMIN';
+  getUserInterface(manager:ManagerVO):any {
+    let ui = {
+      'CCC': false,
+      'PIM': false,
+      'CMS': false,
+      'MRK': false,
+      'INV': false,
+      'REP': false,
+      'SHP': false,
+      'SHO': false,
+      'ORG': false,
+      'SYS': false
+    };
     manager.managerRoles.forEach(role => {
-       if ('ROLE_SMCALLCENTER' == role.code) {
-         ui = 'CC';
-       } else if ('ROLE_SMADMIN' == role.code) {
-         ui = 'SYSADMIN';
-       }
+      switch (role.code) {
+        case 'ROLE_SMADMIN':
+        case 'ROLE_SMSHOPADMIN':
+          ui.CCC = true;
+          ui.PIM = true;
+          ui.CMS = true;
+          ui.MRK = true;
+          ui.INV = true;
+          ui.REP = true;
+          ui.SHP = true;
+          ui.SHO = true;
+          ui.ORG = true;
+          ui.SYS = true;
+          break;
+        case 'ROLE_SMSUBSHOPUSER':
+          ui.CCC = true;
+          ui.SHO = true;
+          break;
+        case 'ROLE_SMSHOPUSER':
+          ui.SHO = true;
+          break;
+        case 'ROLE_SMWAREHOUSEADMIN':
+        case 'ROLE_SMWAREHOUSEUSER':
+          ui.INV = true;
+          break;
+        case 'ROLE_SMCALLCENTER':
+        case 'ROLE_SMCALLCENTERCUSTOMER':
+        case 'ROLE_SMCALLCENTERORDERAPPROVE':
+        case 'ROLE_SMCALLCENTERORDERCONFIRM':
+        case 'ROLE_SMCALLCENTERORDERPROCESS':
+          ui.CCC = true;
+          break;
+        case 'ROLE_SMCONTENTADMIN':
+        case 'ROLE_SMCONTENTUSER':
+          ui.CMS = true;
+          break;
+        case 'ROLE_SMMARKETINGADMIN':
+        case 'ROLE_SMMARKETINGUSER':
+          ui.MRK = true;
+          break;
+        case 'ROLE_SMSHIPPINGADMIN':
+        case 'ROLE_SMSHIPPINGUSER':
+          ui.SHP = true;
+          break;
+        case 'ROLE_SMCATALOGADMIN':
+        case 'ROLE_SMCATALOGUSER':
+        case 'ROLE_SMPIMADMIN':
+        case 'ROLE_SMPIMUSER':
+          ui.PIM = true;
+          break;
+
+      }
     });
     return ui;
   }

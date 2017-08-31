@@ -17,6 +17,7 @@ package org.yes.cart.service.endpoint;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.vo.VoCountry;
@@ -33,12 +34,12 @@ import java.util.List;
 @RequestMapping("/location")
 public interface LocationEndpointController {
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMSHIPPINGADMIN","ROLE_SMCONTENTADMIN"})
+    @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/country/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoCountry> getAllCountries() throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMSHIPPINGADMIN","ROLE_SMCONTENTADMIN"})
+    @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/country/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoCountry getCountryById(@PathVariable("id") long id) throws Exception;
@@ -59,12 +60,12 @@ public interface LocationEndpointController {
     void removeCountry(@PathVariable("id") long id) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMSHIPPINGADMIN","ROLE_SMCONTENTADMIN"})
+    @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/state/all/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoState> getAllStates(@PathVariable("id") long id) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMSHIPPINGADMIN","ROLE_SMCONTENTADMIN"})
+    @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/state/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoState getStateById(@PathVariable("id") long id) throws Exception;

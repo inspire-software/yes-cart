@@ -16,7 +16,7 @@
 
 <accordion [closeOthers]="true">
 
-  <accordion-group>
+  <accordion-group *ngIf="menuType.CCC === true">
     <div accordion-heading>{{ 'PANEL_CUSTOMER_SERVICE' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
@@ -32,7 +32,7 @@
   </accordion-group>
 
 
-  <accordion-group *ngIf="menuType != 'CC'">
+  <accordion-group *ngIf="menuType.PIM === true">
     <div accordion-heading>{{ 'PANEL_PIM' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
@@ -50,12 +50,12 @@
     </ul>
   </accordion-group>
 
-  <accordion-group *ngIf="menuType != 'CC'">
+  <accordion-group *ngIf="menuType.CMS === true">
     <div accordion-heading>{{ 'PANEL_CMS' | translate }}</div>
     <yc-shop-select [showNewLink]="false" (dataSelected)="selectCurrentShopContent($event)"></yc-shop-select>
   </accordion-group>
 
-  <accordion-group *ngIf="menuType != 'CC'">
+  <accordion-group *ngIf="menuType.MRK === true">
     <div accordion-heading>{{ 'PANEL_MARKETING' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
@@ -70,7 +70,7 @@
     </ul>
   </accordion-group>
 
-  <accordion-group *ngIf="menuType != 'CC'">
+  <accordion-group *ngIf="menuType.INV === true">
     <div accordion-heading>{{ 'PANEL_INVENTORY' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
@@ -82,7 +82,7 @@
     </ul>
   </accordion-group>
 
-  <accordion-group>
+  <accordion-group *ngIf="menuType.REP === true">
     <div accordion-heading>{{ 'PANEL_REPORTS' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
@@ -94,7 +94,7 @@
     </ul>
   </accordion-group>
 
-  <accordion-group *ngIf="menuType != 'CC'">
+  <accordion-group *ngIf="menuType.SHP === true">
     <div accordion-heading>{{ 'PANEL_SHIPPING' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
@@ -106,12 +106,12 @@
     </ul>
   </accordion-group>
 
-  <accordion-group>
+  <accordion-group *ngIf="menuType.SHO === true">
     <div accordion-heading>{{ 'PANEL_SHOPS' | translate }}</div>
     <yc-shop-select [showNewLink]="menuType == 'SYSADMIN'" (dataNew)="selectNewShop()" (dataSelected)="selectCurrentShop($event)"></yc-shop-select>
   </accordion-group>
 
-  <accordion-group *ngIf="menuType != 'CC'">
+  <accordion-group *ngIf="menuType.ORG === true">
     <div accordion-heading>{{ 'PANEL_EMPLOYEES' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
@@ -123,7 +123,7 @@
     </ul>
   </accordion-group>
 
-  <accordion-group *ngIf="menuType != 'CC'">
+  <accordion-group *ngIf="menuType.SYS === true">
     <div accordion-heading>{{ 'PANEL_SYSTEM' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>

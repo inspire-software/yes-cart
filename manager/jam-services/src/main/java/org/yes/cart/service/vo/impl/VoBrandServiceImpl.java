@@ -87,7 +87,7 @@ public class VoBrandServiceImpl implements VoBrandService {
 
             @Override
             protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId) throws Exception {
-                boolean accessible = federationFacade.isCurrentUserSystemAdmin();
+                boolean accessible = true; // federationFacade.isCurrentUserSystemAdmin(); allow brand attributes to be visible by roles
                 if (!accessible) {
                     return new Pair<>(false, null);
                 }

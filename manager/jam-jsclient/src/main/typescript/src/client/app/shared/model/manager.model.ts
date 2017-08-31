@@ -66,6 +66,6 @@ export interface UserVO {
 
   manager: ManagerVO;
   name: string;
-  ui: string;
+  ui: any;
 
 }

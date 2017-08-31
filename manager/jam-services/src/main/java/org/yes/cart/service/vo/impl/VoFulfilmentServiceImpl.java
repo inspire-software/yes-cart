@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.InventoryDTO;
@@ -150,13 +151,33 @@ public class VoFulfilmentServiceImpl implements VoFulfilmentService {
     }
 
     @Override
-    public VoFulfilmentCentre createFulfilmentCentre(final VoFulfilmentCentreInfo vo) throws Exception {
-        if (federationFacade.isCurrentUserSystemAdmin()) {
+    public VoFulfilmentCentre createFulfilmentCentre(final VoFulfilmentCentre vo) throws Exception {
+
+        final List<VoFulfilmentCentreShopLink> shops = vo.getFulfilmentShops();
+        boolean sysAdminOnly = true;
+        if (CollectionUtils.isNotEmpty(shops)) {
+            for (final VoFulfilmentCentreShopLink link : shops) {
+                if (federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
+                    sysAdminOnly = false;
+                } // else skip updates for inaccessible shops
+            }
+        }
+
+        if (!sysAdminOnly || federationFacade.isCurrentUserSystemAdmin()) {
 
             WarehouseDTO dto = dtoWarehouseService.getNew();
             dto = dtoWarehouseService.create(
                     voAssemblySupport.assembleDto(WarehouseDTO.class, VoFulfilmentCentreInfo.class, dto, vo)
             );
+
+            if (CollectionUtils.isNotEmpty(shops)) {
+                for (final VoFulfilmentCentreShopLink link : shops) {
+                    if (federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
+                        dtoWarehouseService.assignWarehouse(dto.getWarehouseId(), link.getShopId(), link.isDisabled());
+                    } // else skip updates for inaccessible shops
+                }
+            }
+
             return getFulfilmentCentreById(dto.getWarehouseId());
 
         } else {
