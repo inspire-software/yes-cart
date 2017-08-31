@@ -16,9 +16,16 @@ Start Yes Cart t2.medium instance and assign Name=YCDEMO
  * localhost has beed change to mysqlhost . real ip of mysqlhost will be placed into /etc/hosts
 
 
-## Start
+## Build and start
 
-Use ys.sh 
+```
+git clone https://github.com/inspire-software/yes-cart.git
+cd yes-cart
+mvn install -Pmysql,paymentAll,ssl,buildAws -DskipTests=true
+
+```
+
+Use ys.sh to configure aws. 
 
 ## AWS Image provisioning 
 
