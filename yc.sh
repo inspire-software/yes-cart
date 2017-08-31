@@ -50,6 +50,8 @@ show_help() {
     echo "  derbygob  - start derby server (in back mode) ";
     echo "  derbyend  - stop derby server                 ";
     echo "  derbycon  - connect to derby with ij          ";
+    echo "                                                ";
+    echo "  aws       - initialise aws image              ";
     echo "================================================";
 }
 
@@ -218,6 +220,116 @@ start_nullsmtp() {
 
 }
 
+start_aws() {
+    echo "================================================";
+    echo " Starting YC AWS. Required:                     ";
+    echo "  * AWS Access Key ID                           ";
+    echo "  * AWS Secret Access Key                       ";
+    echo "  * Default region                              ";
+    echo "================================================";
+
+    sudo su 
+    aws configure
+
+    aws ec2 create-security-group \
+        --group-name yescart \
+        --description "Yes cart security group. HTTP(s), ssh and mysql" 
+
+    aws ec2 authorize-security-group-ingress \
+        --group-name yescart \
+        --protocol tcp --port 22 --cidr 0.0.0.0/0 
+   
+    aws ec2 authorize-security-group-ingress \
+        --group-name yescart  \
+        --protocol tcp --port 80 --cidr 0.0.0.0/0 
+
+    aws ec2 authorize-security-group-ingress \
+        --group-name yescart   \
+        --protocol tcp --port 8080 --cidr 0.0.0.0/0 
+
+    aws ec2 authorize-security-group-ingress \
+        --group-name yescart    \
+        --protocol tcp --port 443 --cidr 0.0.0.0/0 
+
+    aws ec2 authorize-security-group-ingress \
+        --group-name yescart \
+        --protocol tcp --port 8443 --cidr 0.0.0.0/0 
+
+    aws ec2 authorize-security-group-ingress \
+        --group-name yescart \
+        --protocol tcp --port 3306 --cidr 0.0.0.0/0 
+
+
+    aws rds create-db-instance \
+        --db-instance-identifier yescartmysql \
+        --db-instance-class db.t2.micro \
+        --engine MySQL \
+        --allocated-storage 20 \
+        --master-username yesmaster \
+        --master-user-password pwdMy34SqL \
+        --backup-retention-period 3 \
+        --vpc-security-group-ids $(aws ec2 describe-security-groups --group-names yescart | jq '.SecurityGroups[0] | .GroupId' | sed 's/\"//g')
+
+    echo "================================================";
+    echo " Please be patient, waiting for database ....   ";
+    echo "================================================";
+
+    aws rds wait db-instance-available --db-instance-identifier yescartmysql     
+
+
+    export ycmysqldb=$(host $(aws rds describe-db-instances --db-instance-identifier  yescartmysql | jq '.DBInstances[0] | .Endpoint.Address'  | sed 's/\"//g') | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+    echo "$ycmysqldb        yesmysqlhost" | sudo tee --append /etc/hosts
+
+    sed -i -- 's/y3$PaSs/pwdMy34SqL/g' env/setup/dbi/mysql/dbinit.sql
+    sed -i -- "s/localhost/'%'/g" env/setup/dbi/mysql/dbinit.sql
+    mysql -uyesmaster -hyesmysqlhost -ppwdMy34SqL < "env/setup/dbi/mysql/dbinit.sql"
+
+
+    export ycdemohost=$(aws ec2 describe-instances --filter Name=tag:Name,Values=YCDEMO | jq '.Reservations[0].Instances[0] | .PublicDnsName' | sed 's/\"//g')
+
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; DELETE FROM TSHOPURL WHERE STOREURL_ID <> 12; UPDATE TSHOPURL SET URL = '$ycdemohost';" yes
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; INSERT INTO TSYSTEMATTRVALUE SET val = '/var/lib/tomcat7-ycdemo/import', code = 'JOB_LOCAL_FILE_IMPORT_FS_ROOT', SYSTEM_ID=100; " yes
+
+
+
+    cp /home/ec2-user/yes-cart/manager/jam/target/yes-manager.war /usr/share/tomcat7/webapps/
+    cp /home/ec2-user/yes-cart/web/api/target/yes-api.war /usr/share/tomcat7/webapps/
+    cp /home/ec2-user/yes-cart/web/store-wicket/target/yes-shop.war /usr/share/tomcat7/webapps/
+    mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/config
+    mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/archived
+    mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/incoming
+    mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/processing
+    mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/processed
+tee /var/lib/tomcat7-ycdemo/import/SHOP10/config/config.properties <<-'EOF'
+config.0.group=YC DEMO: Initial Data
+config.0.regex=import\\.zip
+config.0.reindex=true
+config.0.user=admin@yes-cart.com
+config.0.pass=1234567
+config.1.group=YC DEMO: IceCat Catalog
+config.1.regex=import\\-EN,DE,UK,RU\\.zip
+config.1.reindex=true
+config.1.user=admin@yes-cart.com
+config.1.pass=1234567
+config.2.group=YC DEMO: Product images (IceCat)
+config.2.regex=import\\-EN,DE,UK,RU\\-img\\.zip
+config.2.reindex=true
+config.2.user=admin@yes-cart.com
+config.2.pass=1234567
+EOF
+    cp /home/ec2-user/yes-cart/env/sampledata/demo-data/icecat/import/* /var/lib/tomcat7-ycdemo/import/SHOP10/incoming
+    chown tomcat:tomcat /var/lib/tomcat7-ycdemo -R
+    service tomcat7 start
+
+    echo " Yes-Cart is available on "
+    echo " http://$ycdemohost:8080/yes-manager/ "
+    echo " http://$ycdemohost:8080/yes-shop/ "
+
+    exit
+
+
+}
+
 
 if [ $1 ];
 then
@@ -291,6 +403,13 @@ then
         start_nullsmtp;
         cd "$RUNDIR"
         exit 0;
+    elif [ $1 = "aws" ];
+    then
+        cd "$YC_HOME"
+        start_aws;
+        cd "$RUNDIR"
+        exit 0;
+
     else
         echo "Provide a command..."; show_help; exit 100;
     fi
