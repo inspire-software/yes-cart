@@ -189,3 +189,5 @@ yes-cart.ipr
 yes-cart.iws
 
 target/**
+
+env/vagrant/.vagrant/**

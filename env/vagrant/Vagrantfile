@@ -1,0 +1,53 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+#
+# Docker, kubernetes, java, mysql workstation configuration.
+# 02-Aug-2017 Igor Azarny (iazarny@yahoo.com)
+
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "ubuntu/trusty64"
+    config.vm.hostname = "ycdev"
+
+    config.vm.network :private_network, type: "dhcp"
+    config.vm.network "forwarded_port", guest: 8080, host: 8080
+    config.vm.network "forwarded_port", guest: 8443, host: 8443
+    config.vm.network "forwarded_port", guest: 3306, host: 3306
+
+    config.vm.synced_folder "../../", "/project"
+
+    config.vm.provider :libvirt do |libvirt|
+        libvirt.uri = 'qemu+unix:///system'
+        libvirt.memory = 6144
+        libvirt.cpus = 2
+	    libvirt.cpu_feature :name => 'x2apic', :policy => 'disable'
+        libvirt.graphics_type = "spice"
+        libvirt.video_type = "qxl"
+    end
+
+    # in case of problems during provision (vagrant cannot login to vm box) uncomment 2 lines below
+    #config.ssh.username = "vagrant"
+    #config.ssh.password = "vagrant"
+
+    config.vm.provider "virtualbox" do |vb|
+        vb.name = "ycdev"
+        vb.gui = true
+        vb.memory = "6144"
+        vb.cpus = 2
+    end
+
+    config.vm.provision :shell, inline: "mkdir -p /home/vagrant/.m2 && chown vagrant:vagrant /home/vagrant/.m2"
+
+    config.vm.provision :shell, :path => "awscli-setup.sh"
+    config.vm.provision :shell, :path => "mysql-setup.sh"
+    config.vm.provision :shell, :path => "util-setup.sh"
+    config.vm.provision :shell, :path => "nodejs-setup.sh"
+    config.vm.provision :shell, :path => "java-setup.sh"
+    config.vm.provision :shell, :path => "docker-setup.sh"
+    config.vm.provision :shell, :path => "kubernetes-setup.sh"
+
+    config.vm.provision "file", source: "ufw", destination: "/home/vagrant/ufw"
+    config.vm.provision :shell, :path => "firewall-setup.sh"
+
+end
