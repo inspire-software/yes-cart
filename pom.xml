@@ -625,6 +625,27 @@
             </properties>
         </profile>
 
+
+        <!--
+            AWS STORE
+        -->
+
+        <profile>
+            <activation><activeByDefault>false</activeByDefault></activation>
+            <id>buildAws</id>
+            <properties>
+                <env>aws</env>
+                <env.db>mysql</env.db>
+                <env.ssl>off</env.ssl>
+                <env.yum.lang>all</env.yum.lang>
+                <payment.liqpay.module>on</payment.liqpay.module>
+                <payment.cybersource.module>on</payment.cybersource.module>
+                <payment.authorizenet.module>on</payment.authorizenet.module>
+                <payment.paypal.module>on</payment.paypal.module>
+                <payment.postfinance.module>on</payment.postfinance.module>
+            </properties>
+        </profile>
+
         <!--
             ADDITIONAL MODULES ACTIVATION
         -->
