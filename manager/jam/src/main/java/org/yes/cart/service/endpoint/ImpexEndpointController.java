@@ -41,7 +41,7 @@ public interface ImpexEndpointController {
      *
      * @return configured import groups
      */
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMCONTENTADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/export/groups/{lang}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoDataGroupInfo> getExportGroups(@PathVariable("lang") String language);
@@ -52,7 +52,7 @@ public interface ImpexEndpointController {
      * @param fileName optional override full filename to export
      * @return status object token
      */
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMCONTENTADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/export/{group}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.TEXT_PLAIN_VALUE })
     @ResponseBody
     String doExport(@PathVariable("group") String descriptorGroup, @RequestBody String fileName);
@@ -62,7 +62,7 @@ public interface ImpexEndpointController {
      * @param token job token from #doExport
      * @return status object
      */
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMCONTENTADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/export/status", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoJobStatus getExportStatus(@RequestParam("token") String token);
@@ -76,7 +76,7 @@ public interface ImpexEndpointController {
      *
      * @return configured import groups
      */
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMCONTENTADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/import/groups/{lang}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoDataGroupInfo> getImportGroups(@PathVariable("lang") String language);
@@ -87,7 +87,7 @@ public interface ImpexEndpointController {
      * @param fileName optional full filename to import
      * @return status object token
      */
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMCONTENTADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/import/{group}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.TEXT_PLAIN_VALUE })
     @ResponseBody
     String doImport(@PathVariable("group") String descriptorGroup, @RequestBody String fileName);
@@ -97,7 +97,7 @@ public interface ImpexEndpointController {
      * @param token job token from #doImport
      * @return status object
      */
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMCONTENTADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/import/status", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoJobStatus getImportStatus(@RequestParam("token") String token);

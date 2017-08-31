@@ -17,6 +17,7 @@ package org.yes.cart.service.endpoint;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.misc.MutablePair;
@@ -36,17 +37,17 @@ import java.util.List;
 public interface PaymentGatewaysEndpointController {
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMSHIPPINGADMIN"})
+    @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/gateways/all/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoPaymentGatewayInfo> getPaymentGateways(@PathVariable("lang") String lang) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMSHIPPINGADMIN"})
+    @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/gateways/shop/{code}/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoPaymentGatewayInfo> getPaymentGatewaysForShop(@PathVariable("lang") String lang, @PathVariable("code") String shopCode) throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMSHIPPINGADMIN"})
+    @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/gateways/shop/allowed/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoPaymentGatewayInfo> getAllowedPaymentGatewaysForShops(@PathVariable("lang") String lang) throws Exception;
@@ -58,7 +59,7 @@ public interface PaymentGatewaysEndpointController {
     List<VoPaymentGateway> getPaymentGatewaysWithParameters(@PathVariable("lang") String lang) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/gateways/configure/shop/{code}/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(@PathVariable("lang") String lang, @PathVariable("code") String shopCode) throws Exception;

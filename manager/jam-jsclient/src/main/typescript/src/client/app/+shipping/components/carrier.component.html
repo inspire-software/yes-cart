@@ -31,36 +31,20 @@
 
       <tab heading="{{ 'TAB_SHOPS' | translate }}"  (select)="tabSelected('Shops')">
 
-        <template [ngIf]="!(carrier.carrierId > 0)">
-
-          <div class="row">
-            <div class="col-xs-12 block-padding-spacer">
-              <div class="bg-info text-padding">
-                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
-              </div>
-            </div>
+        <div class="row">
+          <div class="col-md-6 col-lg-5">
+            <h3>{{ 'ASSIGNED' | translate }}</h3>
+              <span *ngFor="let supported of supportedShops">
+                <a class="btn js-click" (click)=onSupportedShopClick(supported)><span [ngClass]="supported.second.disabled ? 'text-strikethrough text-muted' : '' ">{{supported.first.name}} ( {{supported.first.code}} ) </span> <i class="fa fa-remove"></i></a>
+              </span>
           </div>
-
-        </template>
-
-        <template [ngIf]="carrier.carrierId > 0">
-
-          <div class="row">
-            <div class="col-md-6 col-lg-5">
-              <h3>{{ 'ASSIGNED' | translate }}</h3>
-                <span *ngFor="let supported of supportedShops">
-                  <a class="btn js-click" (click)=onSupportedShopClick(supported)><span [ngClass]="supported.second.disabled ? 'text-strikethrough text-muted' : '' ">{{supported.first.name}} ( {{supported.first.code}} ) </span> <i class="fa fa-remove"></i></a>
-                </span>
-            </div>
-            <div class="col-md-6 col-lg-5">
-              <h3>{{ 'AVAILABLE' | translate }}</h3>
-                <span *ngFor="let available of availableShops">
-                  <a class="btn js-click" (click)=onAvailableShopClick(available)>{{available.first.name}} ( {{available.first.code}} ) <i class="fa fa-plus"></i></a>
-                </span>
-            </div>
+          <div class="col-md-6 col-lg-5">
+            <h3>{{ 'AVAILABLE' | translate }}</h3>
+              <span *ngFor="let available of availableShops">
+                <a class="btn js-click" (click)=onAvailableShopClick(available)>{{available.first.name}} ( {{available.first.code}} ) <i class="fa fa-plus"></i></a>
+              </span>
           </div>
-
-        </template>
+        </div>
 
       </tab>
 

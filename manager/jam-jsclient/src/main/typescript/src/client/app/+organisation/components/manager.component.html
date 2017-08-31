@@ -73,13 +73,13 @@
             <div class="col-md-6 col-lg-5">
               <h3>{{ 'ASSIGNED' | translate }}</h3>
                 <span *ngFor="let supported of supportedRoles">
-                  <a class="btn js-click" (click)=onSupportedRoleClick(supported)>{{supported.first.code}} <i class="fa fa-remove"></i></a>
+                  <a class="btn js-click" (click)=onSupportedRoleClick(supported) title="{{supported.first.code}}">{{supported.first.description}} <i class="fa fa-remove"></i></a>
                 </span>
             </div>
             <div class="col-md-6 col-lg-5">
               <h3>{{ 'AVAILABLE' | translate }}</h3>
                 <span *ngFor="let available of availableRoles">
-                  <a class="btn js-click" (click)=onAvailableRoleClick(available)>{{available.first.code}} <i class="fa fa-plus"></i></a>
+                  <a class="btn js-click" (click)=onAvailableRoleClick(available) title="{{available.first.code}}">{{available.first.description}} <i class="fa fa-plus"></i></a>
                 </span>
             </div>
           </div>

@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CarrierDTO;
@@ -147,13 +148,33 @@ public class VoShippingServiceImpl implements VoShippingService {
 
     /** {@inheritDoc} */
     @Override
-    public VoCarrier createCarrier(final VoCarrierLocale vo) throws Exception {
-        if (federationFacade.isCurrentUserSystemAdmin()) {
+    public VoCarrier createCarrier(final VoCarrier vo) throws Exception {
+
+        final List<VoCarrierShopLink> shops = vo.getCarrierShops();
+        boolean sysAdminOnly = true;
+        if (CollectionUtils.isNotEmpty(shops)) {
+            for (final VoCarrierShopLink link : shops) {
+                if (federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
+                    sysAdminOnly = false;
+                } // else skip updates for inaccessible shops
+            }
+        }
+
+        if (!sysAdminOnly || federationFacade.isCurrentUserSystemAdmin()) {
 
             CarrierDTO dto = dtoCarrierService.getNew();
             dto = dtoCarrierService.create(
                     voAssemblySupport.assembleDto(CarrierDTO.class, VoCarrierLocale.class, dto, vo)
             );
+
+            if (CollectionUtils.isNotEmpty(shops)) {
+                for (final VoCarrierShopLink link : shops) {
+                    if (federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
+                        dtoCarrierService.assignToShop(dto.getCarrierId(), link.getShopId(), link.isDisabled());
+                    } // else skip updates for inaccessible shops
+                }
+            }
+
             return getCarrierById(dto.getCarrierId());
 
         } else {

@@ -69,6 +69,9 @@ export class ShopSelectComponent implements OnInit, OnDestroy {
   ngOnInit() {
     LogUtil.debug('ShopListComponent ngOnInit');
     if (this.shops == null) {
+      this.shops = ShopEventBus.getShopEventBus().currentAll();
+    }
+    if (this.shops == null) {
       this.getAllShops();
     }
     let that = this;

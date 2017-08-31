@@ -37,7 +37,7 @@ import java.util.*;
  */
 public class VoDashboardWidgetPluginUnprocessedPgCallbacks implements VoDashboardWidgetPlugin {
 
-    private final List<String> roles = Arrays.asList("ROLE_SMADMIN", "ROLE_SMSHOPADMIN");
+    private List<String> roles = Collections.emptyList();
 
     private PaymentModuleGenericService<PaymentGatewayCallback> paymentModuleGenericService;
     private final ShopService shopService;
@@ -104,6 +104,15 @@ public class VoDashboardWidgetPluginUnprocessedPgCallbacks implements VoDashboar
         }});
 
         return widget;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param roles roles for accessing this widget
+     */
+    public void setRoles(final List<String> roles) {
+        this.roles = roles;
     }
 
     /**

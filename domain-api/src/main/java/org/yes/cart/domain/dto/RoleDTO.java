@@ -55,7 +55,7 @@ public interface RoleDTO extends Identifiable {
     void setCode(String code);
 
     /**
-     * Get role desription
+     * Get role description
      *
      * @return role description
      */

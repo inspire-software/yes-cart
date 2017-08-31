@@ -173,7 +173,7 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
 
 
   private recalculateShops():void {
-    if (this._centre && this._centre.warehouseId > 0) {
+    if (this._centre) {
       this.availableShops = this.getAvailableShopNames();
       this.supportedShops = this.getSupportedShopNames();
     } else {

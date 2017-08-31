@@ -16,7 +16,7 @@
 package org.yes.cart.service.endpoint;
 
 import org.springframework.http.MediaType;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,7 +42,7 @@ public interface FileManagerEndpointController {
      * @return pair of absolute and human friendly paths
      * @throws IOException
      */
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMCONTENTADMIN"})
+    @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/list/{mode}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<MutablePair<String, String>> list(@PathVariable("mode") String mode) throws IOException;
@@ -51,7 +51,7 @@ public interface FileManagerEndpointController {
      * Download given file as bytes.
      * @param fileName file name
      */
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMCONTENTADMIN"})
+    @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/download", method = RequestMethod.GET)
     void download(@RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
 
@@ -60,7 +60,7 @@ public interface FileManagerEndpointController {
      * @param file file body.
      * @return file name, including path, on server side.
      */
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMCONTENTADMIN"})
+    @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     String upload(@RequestParam("file") MultipartFile file) throws IOException;
 
@@ -68,7 +68,7 @@ public interface FileManagerEndpointController {
      * Delete given file.
      * @param fileName file name
      */
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMCONTENTADMIN"})
+    @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     @ResponseBody
     void delete(@RequestParam("fileName") String fileName) throws IOException;

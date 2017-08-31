@@ -143,7 +143,7 @@ export class CarrierComponent implements OnInit, OnDestroy {
 
 
   private recalculateShops():void {
-    if (this._carrier && this._carrier.carrierId > 0) {
+    if (this._carrier) {
       this.availableShops = this.getAvailableShopNames();
       this.supportedShops = this.getSupportedShopNames();
     } else {

@@ -24,12 +24,24 @@
     <!-- ############################# Cluster specific widgets ######################### -->
 
     <bean id="voDashboardWidgetPluginCacheMonitoring" class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginCacheMonitoring">
+        <property name="roles">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+            </list>
+        </property>
         <property name="dashboardWidgetService" ref="voDashboardWidgetService"/>
         <property name="clusterService" ref="clusterService"/>
         <property name="asyncContextFactory" ref="webAppManagerAsyncContextFactory"/>
     </bean>
 
     <bean id="voDashboardWidgetPluginReindex" class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginReindex">
+        <property name="roles">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+            </list>
+        </property>
         <property name="dashboardWidgetService" ref="voDashboardWidgetService"/>
         <property name="clusterService" ref="clusterService"/>
         <property name="asyncContextFactory" ref="webAppManagerAsyncContextFactory"/>
@@ -39,6 +51,14 @@
     <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginAlerts">
         <constructor-arg index="0" ref="shopService"/>
         <constructor-arg index="1" ref="mailService"/>
+        <property name="roles">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+                <value>ROLE_SMSHOPUSER</value>
+                <value>ROLE_SMSUBSHOPUSER</value>
+            </list>
+        </property>
         <property name="dashboardWidgetService" ref="voDashboardWidgetService"/>
         <property name="clusterService" ref="clusterService"/>
         <property name="asyncContextFactory" ref="webAppManagerAsyncContextFactory"/>

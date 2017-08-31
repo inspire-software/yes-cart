@@ -141,14 +141,39 @@
                 <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginOrdersInShops">
                     <constructor-arg index="0" ref="customerOrderService"/>
                     <constructor-arg index="1" ref="shopService"/>
+                    <property name="roles">
+                        <list>
+                            <value>ROLE_SMADMIN</value>
+                            <value>ROLE_SMSHOPADMIN</value>
+                            <value>ROLE_SMSHOPUSER</value>
+                            <value>ROLE_SMSUBSHOPUSER</value>
+                            <value>ROLE_SMCALLCENTERCUSTOMER</value>
+                        </list>
+                    </property>
                 </bean>
                 <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginCustomersInShops">
                     <constructor-arg index="0" ref="customerService"/>
                     <constructor-arg index="1" ref="shopService"/>
+                    <property name="roles">
+                        <list>
+                            <value>ROLE_SMADMIN</value>
+                            <value>ROLE_SMSHOPADMIN</value>
+                            <value>ROLE_SMSHOPUSER</value>
+                            <value>ROLE_SMSUBSHOPUSER</value>
+                            <value>ROLE_SMCALLCENTERCUSTOMER</value>
+                        </list>
+                    </property>
                 </bean>
                 <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginUnprocessedPgCallbacks">
                     <constructor-arg index="0" ref="paymentGatewayCallbackService"/>
                     <constructor-arg index="1" ref="shopService"/>
+                    <property name="roles">
+                        <list>
+                            <value>ROLE_SMADMIN</value>
+                            <value>ROLE_SMSHOPADMIN</value>
+                            <value>ROLE_SMSHOPUSER</value>
+                        </list>
+                    </property>
                 </bean>
             </list>
         </property>
@@ -272,6 +297,43 @@
                 <entry key="return.order" value-ref="defaultUiOrderFlowCancelAction"/>
             </map>
         </constructor-arg>
+        <constructor-arg index="2">
+            <map>
+                <entry key="approve.order">
+                    <list>
+                        <value>ROLE_SMSHOPADMIN</value>
+                        <value>ROLE_SMSUBSHOPUSER</value>
+                        <value>ROLE_SMCALLCENTERORDERCONFIRM</value>
+                    </list>
+                </entry>
+                <entry key="cancel.order">
+                    <list>
+                        <value>ROLE_SMSHOPADMIN</value>
+                        <value>ROLE_SMSUBSHOPUSER</value>
+                        <value>ROLE_SMCALLCENTERORDERPROCESS</value>
+                    </list>
+                </entry>
+                <entry key="cancel.order.refund">
+                    <list>
+                        <value>ROLE_SMSHOPADMIN</value>
+                        <value>ROLE_SMCALLCENTERORDERPROCESS</value>
+                    </list>
+                </entry>
+                <entry key="cancel.order.manual.refund">
+                    <list>
+                        <value>ROLE_SMSHOPADMIN</value>
+                        <value>ROLE_SMCALLCENTERORDERCONFIRM</value>
+                    </list>
+                </entry>
+                <entry key="return.order">
+                    <list>
+                        <value>ROLE_SMSHOPADMIN</value>
+                        <value>ROLE_SMCALLCENTERORDERCONFIRM</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="3" ref="shopFederationStrategy"/>
     </bean>
 
     <bean id="defaultUiOrderDeliveryFlowPackAction" class="org.yes.cart.service.order.impl.GenericDeliveryTransitionAction">
@@ -348,6 +410,42 @@
                 <entry key="update.external.ref" value-ref="defaultUiOrderDeliveryFlowUpdateRefAction"/>
             </map>
         </constructor-arg>
+        <constructor-arg index="2">
+            <map>
+                <entry key="pack.delivery">
+                    <list>
+                        <value>ROLE_SMSHOPADMIN</value>
+                        <value>ROLE_SMCALLCENTERORDERPROCESS</value>
+                    </list>
+                </entry>
+                <entry key="mark.ready.for.shipment">
+                    <list>
+                        <value>ROLE_SMSHOPADMIN</value>
+                        <value>ROLE_SMCALLCENTERORDERPROCESS</value>
+                    </list>
+                </entry>
+                <entry key="start.shipment">
+                    <list>
+                        <value>ROLE_SMSHOPADMIN</value>
+                        <value>ROLE_SMCALLCENTERORDERPROCESS</value>
+                    </list>
+                </entry>
+                <entry key="start.shipment.manual.payment">
+                    <list>
+                        <value>ROLE_SMSHOPADMIN</value>
+                        <value>ROLE_SMCALLCENTERORDERCONFIRM</value>
+                    </list>
+                </entry>
+                <entry key="mark.shipped">
+                    <list>
+                        <value>ROLE_SMSHOPADMIN</value>
+                        <value>ROLE_SMCALLCENTERORDERPROCESS</value>
+                    </list>
+                </entry>
+                <!--<entry key="update.external.ref"><list/></entry>-->
+            </map>
+        </constructor-arg>
+        <constructor-arg index="3" ref="shopFederationStrategy"/>
     </bean>
 
     <bean id="voCustomerOrderService" class="org.yes.cart.service.vo.impl.VoCustomerOrderServiceImpl">

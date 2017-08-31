@@ -38,7 +38,7 @@ import java.util.*;
  */
 public class VoDashboardWidgetPluginCacheMonitoring implements VoDashboardWidgetPlugin {
 
-    private final List<String> roles = Arrays.asList("ROLE_SMADMIN", "ROLE_SMSHOPADMIN");
+    private List<String> roles = Collections.emptyList();
 
     private ClusterService clusterService;
     private AsyncContextFactory asyncContextFactory;
@@ -88,6 +88,15 @@ public class VoDashboardWidgetPluginCacheMonitoring implements VoDashboardWidget
         widget.setData(data);
 
         return widget;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param roles roles for accessing this widget
+     */
+    public void setRoles(final List<String> roles) {
+        this.roles = roles;
     }
 
     /**

@@ -20,6 +20,7 @@ import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
+import org.yes.cart.domain.vo.VoManagerRole;
 import org.yes.cart.domain.vo.VoManagerShop;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShopService;
@@ -34,6 +35,8 @@ import java.util.*;
  */
 public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPlugin {
 
+    private List<String> roles = Collections.emptyList();
+
     private final CustomerOrderService customerOrderService;
     private final ShopService shopService;
 
@@ -45,7 +48,14 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
 
     @Override
     public boolean applicable(final VoManager manager) {
-        return manager.getManagerShops().size() > 0;
+        if (manager.getManagerShops().size() > 0) {
+            for (final VoManagerRole role : manager.getManagerRoles()) {
+                if (roles.contains(role.getCode())) {
+                    return manager.getManagerShops().size() > 0;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -123,4 +133,14 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
 
         return widget;
     }
+
+    /**
+     * Spring IoC.
+     *
+     * @param roles roles for accessing this widget
+     */
+    public void setRoles(final List<String> roles) {
+        this.roles = roles;
+    }
+
 }

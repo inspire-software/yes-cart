@@ -39,7 +39,7 @@ import java.util.*;
  */
 public class VoDashboardWidgetPluginAlerts implements VoDashboardWidgetPlugin {
 
-    private final List<String> roles = Arrays.asList("ROLE_SMADMIN", "ROLE_SMSHOPADMIN");
+    private List<String> roles = Collections.emptyList();
 
     private final ShopService shopService;
     private final MailService mailService;
@@ -107,6 +107,15 @@ public class VoDashboardWidgetPluginAlerts implements VoDashboardWidgetPlugin {
         widget.setData(data);
 
         return widget;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param roles roles for accessing this widget
+     */
+    public void setRoles(final List<String> roles) {
+        this.roles = roles;
     }
 
     /**

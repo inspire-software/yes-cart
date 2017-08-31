@@ -60,7 +60,7 @@ public class FulfilmentEndpointControllerImpl implements FulfilmentEndpointContr
     }
 
     @Override
-    public @ResponseBody VoFulfilmentCentre createFulfilmentCentre(@RequestBody final VoFulfilmentCentreInfo vo) throws Exception {
+    public @ResponseBody VoFulfilmentCentre createFulfilmentCentre(@RequestBody final VoFulfilmentCentre vo) throws Exception {
         return voFulfilmentService.createFulfilmentCentre(vo);
     }
 
