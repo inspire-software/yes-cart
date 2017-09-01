@@ -266,6 +266,9 @@ start_aws() {
         --group-name yescart \
         --protocol tcp --port 3306 --cidr 0.0.0.0/0 
 
+    aws ec2 modify-instance-attribute \
+        --groups $(aws ec2 describe-security-groups --group-names yescart | jq '.SecurityGroups[0] | .GroupId' | sed 's/\"//g') \
+        --instance-id $(aws ec2 describe-instances --filter Name=tag:Name,Values=YCDEMO | jq '.Reservations[0].Instances[0] | .InstanceId' | sed 's/\"//g')
 
     aws rds create-db-instance \
         --db-instance-identifier yescartmysql \
