@@ -33,6 +33,7 @@ import org.yes.cart.search.dao.LuceneDocumentAdapter;
 import org.yes.cart.search.dao.LuceneIndexProvider;
 import org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -91,16 +92,60 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
             remove = documents == null || documents.getSecond() == null || documents.getSecond().length == 0;
         }
 
+        final long indexTime = System.currentTimeMillis();
         final String name = indexProvider.getName();
         final IndexWriter iw = indexProvider.provideIndexWriter();
         try {
 
-            iw.deleteDocuments(new Term(LuceneDocumentAdapterUtils.FIELD_PK, String.valueOf(primaryKey)));
-            LOGFTQ.trace("Removing {} document _PK:{}", name, primaryKey);
+            long counts[] = new long[] { 0L, 0L, 0L };
+            fullTextSearchReindexSingleEntity(iw, name, documents, remove, indexTime, counts);
 
-            if (!remove) {
-                final FacetsConfig facetsConfig = new FacetsConfig();
-                for (final Document document : documents.getSecond()) {
+            if (LOGFTQ.isTraceEnabled()) {
+                LOGFTQ.trace("Processed index entity {} with PK {}, added: {}, removed: {}, failed: {}",
+                        new Object[] { name, primaryKey, counts[0], counts[1], counts[2] });
+            }
+
+            // Refresh ensures we use an updated index
+            indexProvider.refreshIfNecessary();
+
+        } catch (Exception exp) {
+            LOGFTQ.error("Unable to remove " + name + " document with _PK:" + primaryKey, exp);
+        }
+
+    }
+
+    /**
+     * Process single entity update in the FT index.
+     *
+     * @param iw         index writer
+     * @param indexName  index name
+     * @param documents  documents to index and PK
+     * @param remove     remove only
+     * @param indexTime  time of this index (added as field to added documents)
+     * @param counts     counts[3] = { added, removed, failed }
+     *
+     * @throws IOException
+     */
+    protected void fullTextSearchReindexSingleEntity(final IndexWriter iw,
+                                                      final String indexName,
+                                                      final Pair<PK, Document[]> documents,
+                                                      final boolean remove,
+                                                      final long indexTime,
+                                                      final long[] counts) throws IOException {
+
+        final PK primaryKey = documents.getFirst();
+
+        // Remove all documents with primary key (could be multiple)
+        iw.deleteDocuments(new Term(LuceneDocumentAdapterUtils.FIELD_PK, String.valueOf(primaryKey)));
+        counts[1]++;
+        LOGFTQ.trace("Removing {} document _PK:{}", indexName, primaryKey);
+
+        if (!remove) {
+            // Add documents
+            final FacetsConfig facetsConfig = new FacetsConfig();
+            for (final Document document : documents.getSecond()) {
+                try {
+                    LuceneDocumentAdapterUtils.addNumericField(document, LuceneDocumentAdapterUtils.FIELD_INDEXTIME, indexTime, false);
                     for (final IndexableField ixf : document) {
                         if (ixf.fieldType() == SortedSetDocValuesFacetField.TYPE) {
                             SortedSetDocValuesFacetField facetField = (SortedSetDocValuesFacetField) ixf;
@@ -109,15 +154,13 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
                         }
                     }
                     iw.addDocument(facetsConfig.build(document));
+                    counts[0]++;
+                } catch (Exception sde) {
+                    LOGFTQ.error("Updating {} document _PK:{} failed ... cause: {}", new Object[] { indexName, documents.getFirst(), sde.getMessage() });
+                    counts[2]++;
                 }
-                LOGFTQ.trace("Updating {} document _PK:{}", name, primaryKey);
             }
-
-            // Refresh ensures we use an updated index
-            indexProvider.refreshIfNecessary();
-
-        } catch (Exception exp) {
-            LOGFTQ.error("Unable to remove " + name + " document with _PK:" + primaryKey, exp);
+            LOGFTQ.trace("Updating {} document _PK:{}", indexName, primaryKey);
         }
 
     }
@@ -222,7 +265,8 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
             @Override
             public void run() {
                 long index = 0;
-                long deleted = 0;
+                long counts[] = new long[] { 0L, 0L, 0L };
+
                 final Logger log = LOGFTQ;
 
                 Object tx = null;
@@ -255,35 +299,7 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
                             final Pair<PK, Document[]> documents = documentAdapter.toDocument(entity);
                             boolean remove = documents == null || documents.getSecond() == null || documents.getSecond().length == 0;
 
-                            if (!remove) {
-
-                                LOGFTQ.trace("Updating {} document _PK:{}", name, documents.getFirst());
-
-                                for (final Document document : documents.getSecond()) {
-                                    try {
-                                        LuceneDocumentAdapterUtils.addNumericField(document, LuceneDocumentAdapterUtils.FIELD_INDEXTIME, indexTime, false);
-                                        for (final IndexableField ixf : document) {
-                                            if (ixf.fieldType() == SortedSetDocValuesFacetField.TYPE) {
-                                                SortedSetDocValuesFacetField facetField = (SortedSetDocValuesFacetField) ixf;
-                                                facetsConfig.setIndexFieldName(facetField.dim, facetField.dim);
-                                                facetsConfig.setMultiValued(facetField.dim, true); // TODO: revisit this but for now all fields assumed to have multivalue
-                                            }
-                                        }
-                                        iw.updateDocument(new Term(LuceneDocumentAdapterUtils.FIELD_PK, String.valueOf(documents.getFirst())), facetsConfig.build(document));
-                                    } catch (Exception sde) {
-                                        LOGFTQ.error("Updating {} document _PK:{} failed ... cause: {}", new Object[] { name, documents.getFirst(), sde.getMessage() });
-                                    }
-                                }
-                            } else {
-
-                                LOGFTQ.trace("Removing {} document _PK:{}", name, documents.getFirst());
-
-                                try {
-                                    deleted += iw.deleteDocuments(new Term(LuceneDocumentAdapterUtils.FIELD_PK, String.valueOf(documents.getFirst())));
-                                } catch (Exception sde) {
-                                    LOGFTQ.error("Removing {} document _PK:{} failed ... cause: {}", new Object[] { name, documents.getFirst(), sde.getMessage() });
-                                }
-                            }
+                            fullTextSearchReindexSingleEntity(iw, name, documents, remove, indexTime, counts);
 
                             index++;
 
@@ -300,7 +316,7 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
                         }
 
                         // Remove unindexed values
-                        deleted += iw.deleteDocuments(LongPoint.newRangeQuery(LuceneDocumentAdapterUtils.FIELD_INDEXTIME, 0, indexTime - 1));
+                        counts[1] += iw.deleteDocuments(LongPoint.newRangeQuery(LuceneDocumentAdapterUtils.FIELD_INDEXTIME, 0, indexTime - 1));
 
                     } finally {
                         all.close();
@@ -310,7 +326,7 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
                     indexProvider.refreshIfNecessary(); // make changes visible
                     endBatch(tx);
                     if (log.isInfoEnabled()) {
-                        log.info("Indexed +{}/-{} items of {} class", new Object[] { index, deleted, indexProvider.getName() });
+                        log.info("Indexed {} items of {} class, added: {}, removed: {}, failed: {}", new Object[] { index, indexProvider.getName(), counts[0], counts[1], counts[2] });
                     }
                     iw.forceMerge(1, true); // optimise the index
                 } catch (Exception exp) {
