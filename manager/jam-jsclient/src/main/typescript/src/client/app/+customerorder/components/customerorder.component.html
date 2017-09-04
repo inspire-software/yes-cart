@@ -84,7 +84,7 @@
                     <td title="{{ 'COST' | translate }}" class="text-right">{{ getLineCost(row) | ycprice}}</td>
                     <td title="{{ 'PRICE' | translate }}" class="text-right"><span [innerHTML]="getLinePriceFlags(row)"></span> {{ (showGrossTotal ? row.grossPrice : row.netPrice) | ycprice}}</td>
                     <td title="{{ 'TAX' | translate }}" class="text-right">{{row.taxCode}} @ {{row.taxRate}}%</td>
-                    <td title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }} {{ customerorder.currency }}" class="text-right">{{ (showGrossTotal ? row.lineTotalGross : row.lineTotalNet) }}</td>
+                    <td title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }} {{ customerorder.currency }}" class="text-right">{{ (showGrossTotal ? row.lineTotalGross : row.lineTotalNet) | ycprice }}</td>
                     <td title="{{ 'PROMO_APPLIED' | translate }}">
                       <span *ngIf="row.gift"><i class="fa fa-gift"></i></span>
                       <a  *ngFor="let linePromo of getPromotions(row.appliedPromo)" title="{{linePromo.name}}"><span class="label label-info">{{ linePromo.code }}</span></a>&nbsp;
