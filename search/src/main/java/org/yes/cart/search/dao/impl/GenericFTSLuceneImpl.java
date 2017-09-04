@@ -73,8 +73,6 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                     pks.add(Long.valueOf(doc.get("_PK")));
                     logExplanation(searcher, query, null, hit.doc);
                 }
-            } else {
-                logExplanation(searcher, query, null, 0);
             }
         } catch (Exception exp) {
             LOG.error("Failed to run query " + query + ", caused: " + exp.getMessage(), exp);
@@ -114,8 +112,6 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                     pks.add(Long.valueOf(doc.get("_PK")));
                     logExplanation(searcher, query, sort, hit.doc);
                 }
-            } else {
-                logExplanation(searcher, query, null, 0);
             }
         } catch (Exception exp) {
             LOG.error("Failed to run query " + query + ", caused: " + exp.getMessage(), exp);
@@ -170,8 +166,6 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                 }
 
                 return new Pair<List<Object[]>, Integer>(resItems, topDocs.totalHits);
-            } else {
-                logExplanation(searcher, query, null, 0);
             }
         } catch (Exception exp) {
             LOG.error("Failed to run query " + query + ", caused: " + exp.getMessage(), exp);
@@ -318,7 +312,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
     /**
      * Spring IoC.
      *
-     * @return provider
+     * @param  luceneIndexProvider provider
      */
     public void setLuceneIndexProvider(final LuceneIndexProvider luceneIndexProvider) {
         this.luceneIndexProvider = luceneIndexProvider;

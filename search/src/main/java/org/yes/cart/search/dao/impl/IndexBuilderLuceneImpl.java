@@ -316,7 +316,7 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
                         }
 
                         // Remove unindexed values
-                        counts[1] += iw.deleteDocuments(LongPoint.newRangeQuery(LuceneDocumentAdapterUtils.FIELD_INDEXTIME, 0, indexTime - 1));
+                        iw.deleteDocuments(LongPoint.newRangeQuery(LuceneDocumentAdapterUtils.FIELD_INDEXTIME, 0, indexTime - 1));
 
                     } finally {
                         all.close();
