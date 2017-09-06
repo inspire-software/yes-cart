@@ -299,6 +299,10 @@ start_aws() {
 
     mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; DELETE FROM TSHOPURL WHERE STOREURL_ID <> 12; UPDATE TSHOPURL SET URL = '$ycdemohost';" yes
     mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; INSERT INTO TSYSTEMATTRVALUE SET val = '/var/lib/tomcat7-ycdemo/import', code = 'JOB_LOCAL_FILE_IMPORT_FS_ROOT', SYSTEM_ID=100; " yes
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; UPDATE TSYSTEMATTRVALUE SET val = 'http://$ycdemohost:8080/yes-shop' WHERE code = 'SYSTEM_DEFAULT_SHOP' AND SYSTEM_ID=100; " yes
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; UPDATE TSYSTEMATTRVALUE SET val = 'false' WHERE code = 'JOB_LOCAL_FILE_IMPORT_PAUSE' AND SYSTEM_ID=100; " yes
+
+
 
 
 
@@ -327,7 +331,9 @@ config.2.reindex=true
 config.2.user=admin@yes-cart.com
 config.2.pass=1234567
 EOF
-    cp /home/ec2-user/yes-cart/env/sampledata/demo-data/icecat/import/* /var/lib/tomcat7-ycdemo/import/SHOP10/incoming
+    cp /home/ec2-user/yes-cart/env/sampledata/demo-data/icecat/import/* /var/lib/tomcat7-ycdemo/import/SHOP10/processed
+    mv /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU.zip         /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU.20170906010101.zip
+    mv /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU-img.zip /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU-img.20170906020202.zip
     chown tomcat:tomcat /var/lib/tomcat7-ycdemo -R
     service tomcat7 start
 
