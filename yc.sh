@@ -318,17 +318,17 @@ start_aws() {
     mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/processed
 tee /var/lib/tomcat7-ycdemo/import/SHOP10/config/config.properties <<-'EOF'
 config.0.group=YC DEMO: Initial Data
-config.0.regex=import\\.zip
+config.0.regex=import([\\.\\d{14}]*)\\.zip
 config.0.reindex=true
 config.0.user=admin@yes-cart.com
 config.0.pass=1234567
 config.1.group=YC DEMO: IceCat Catalog
-config.1.regex=import\\-EN,DE,UK,RU\\.zip
+config.1.regex=import\\-EN,DE,UK,RU([\\.\\d{14}]*)\\.zip
 config.1.reindex=true
 config.1.user=admin@yes-cart.com
 config.1.pass=1234567
 config.2.group=YC DEMO: Product images (IceCat)
-config.2.regex=import\\-EN,DE,UK,RU\\-img\\.zip
+config.2.regex=import\\-EN,DE,UK,RU\\-img([\\.\\d{14}]*)\\.zip
 config.2.reindex=true
 config.2.user=admin@yes-cart.com
 config.2.pass=1234567
