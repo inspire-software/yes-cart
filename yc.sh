@@ -298,9 +298,11 @@ start_aws() {
     export ycdemohost=$(aws ec2 describe-instances --filter Name=tag:Name,Values=YCDEMO | jq '.Reservations[0].Instances[0] | .PublicDnsName' | sed 's/\"//g')
 
     mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; DELETE FROM TSHOPURL WHERE STOREURL_ID <> 12; UPDATE TSHOPURL SET URL = '$ycdemohost';" yes
-    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; INSERT INTO TSYSTEMATTRVALUE SET val = '/var/lib/tomcat7-ycdemo/import', code = 'JOB_LOCAL_FILE_IMPORT_FS_ROOT', SYSTEM_ID=100; " yes
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; INSERT INTO TSYSTEMATTRVALUE SET val = '/var/lib/tomcat7-ycdemo/import', code = 'JOB_LOCAL_FILE_IMPORT_FS_ROOT', SYSTEM_ID=100, GUID='JLFIR100'; " yes
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; INSERT INTO TSYSTEMATTRVALUE SET val = 'false', code = 'JOB_LOCAL_FILE_IMPORT_PAUSE', SYSTEM_ID=100, GUID='JLFP100'; " yes
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; INSERT INTO TSYSTEMATTRVALUE SET val = 'false', code = 'JOB_SEND_MAIL_PAUSE', SYSTEM_ID=100, GUID='JSPM100'; " yes
+
     mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; UPDATE TSYSTEMATTRVALUE SET val = 'http://$ycdemohost:8080/yes-shop' WHERE code = 'SYSTEM_DEFAULT_SHOP' AND SYSTEM_ID=100; " yes
-    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; UPDATE TSYSTEMATTRVALUE SET val = 'false' WHERE code = 'JOB_LOCAL_FILE_IMPORT_PAUSE' AND SYSTEM_ID=100; " yes
 
 
 
@@ -335,7 +337,7 @@ EOF
     mv /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU.zip         /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU.20170906010101.zip
     mv /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU-img.zip /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU-img.20170906020202.zip
     chown tomcat:tomcat /var/lib/tomcat7-ycdemo -R
-    service tomcat7 start
+    #service tomcat7 start
 
     echo " Yes-Cart is available on "
     echo " http://$ycdemohost:8080/yes-manager/ "
