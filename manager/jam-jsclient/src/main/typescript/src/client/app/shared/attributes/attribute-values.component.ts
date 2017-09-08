@@ -332,6 +332,28 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     }
   }
 
+
+  protected getSearchFlags(row:AttributeVO) {
+    if (this.masterObjectType === 'product') {
+      let flags = '';
+      if (row.store) {
+        flags += '<i class="fa fa-save"></i>&nbsp;';
+      }
+      if (row.search) {
+        if (row.primary) {
+          flags += '<i class="fa fa-search-plus"></i>&nbsp;';
+        } else {
+          flags += '<i class="fa fa-search"></i>&nbsp;';
+        }
+      }
+      if (row.navigation) {
+        flags += '<i class="fa fa-list-alt"></i>&nbsp;';
+      }
+      return flags;
+    }
+    return '&nbsp;';
+  }
+
   protected getDisplayValue(row:AttrValueVO):string {
     if (row.val != null) {
       if (row.attribute.etypeName === 'Boolean') {

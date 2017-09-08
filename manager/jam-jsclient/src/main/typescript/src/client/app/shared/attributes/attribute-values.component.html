@@ -13,7 +13,7 @@
       <tr *ngFor="let row of filteredObjectAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click" [title]="row.attribute.code">{{row.attribute.name}}</a></td>
-          <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click" [title]="row.attribute.code">{{row.attribute.etypeName}}</a></td>
+          <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click" [title]="row.attribute.code">{{row.attribute.etypeName}} <span [innerHTML]="getSearchFlags(row.attribute)"></span></a></td>
           <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click text-force-break"><div [innerHTML]="getDisplayValue(row)"></div></a></td>
         </template>
       </tr>

@@ -9,7 +9,6 @@
         <th>{{ 'AV_TYPE' | translate }}</th>
         <th>{{ 'AV_REGEX' | translate }}</th>
         <th>{{ 'AV_RANK' | translate }}</th>
-        <th>{{ 'AV_SEARCH' | translate }}</th>
       </tr>
       </thead>
       <tbody>
@@ -17,10 +16,9 @@
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
-          <td title="{{ 'AV_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.etypeName}}</a></td>
+          <td title="{{ 'AV_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.etypeName}} <span [innerHTML]="getSearchFlags(row)"></span></a></td>
           <td title="{{ 'AV_REGEX' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.mandatory ? 'fa-check-circle' : 'fa-times-circle' }}"></i> {{row.regexp}}&nbsp;</a></td>
           <td title="{{ 'AV_RANK' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.rank}}</a></td>
-          <td title="{{ 'AV_SEARCH' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span [innerHTML]="getSearchFlags(row)"></span></a></td>
         </template>
       </tr>
       </tbody>
