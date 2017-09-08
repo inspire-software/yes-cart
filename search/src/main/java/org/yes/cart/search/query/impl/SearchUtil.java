@@ -43,13 +43,48 @@ public class SearchUtil {
      */
     public static List<String> splitForSearch(final String phraze, final int charThreshold) {
         if (phraze != null) {
-            String [] token = StringUtils.splitPreserveAllTokens(phraze, "| ;,.");
+            String [] token = StringUtils.splitPreserveAllTokens(phraze, "| ;");
             List<String> words = new ArrayList<String>(token.length);
             for (final String aToken : token) {
                 if (StringUtils.isNotBlank(aToken)) {
-                    final String clean = aToken.trim();
+                    String clean = aToken.trim();
                     if (clean.length() >= charThreshold) {
-                        words.add(clean);
+                        // remove tailing punctuation
+                        int pos = clean.length() - 1;
+                        for (; pos >= 0; pos--) {
+                            char last = clean.charAt(pos);
+                            if (last != ',' && last != '.' && last != '!' && last != '?' && last != ')' && last != '}' && last != ']') {
+                                break;
+                            }
+                        }
+                        if (pos < clean.length() - 1) {
+                            clean = clean.substring(0, pos + 1);
+                        }
+                        // remove leading punctuation
+                        pos = 0;
+                        for (; pos < clean.length(); pos++) {
+                            char first = clean.charAt(pos);
+                            if (first != '(' && first != '{' && first != '[') {
+                                break;
+                            }
+                        }
+                        if (pos > 0) {
+                            clean = clean.substring(pos);
+                        }
+
+                        if (clean.length() >= charThreshold) {
+                            // look for words separates by dash
+                            pos = clean.indexOf('-');
+                            if (pos >= charThreshold &&
+                                    /* more than just dashed min words */ clean.length() > charThreshold * 2 + 1 &&
+                                    /* full words */ pos != 0 && (pos < clean.length() - charThreshold) &&
+                                    /* doubke dash */ clean.charAt(pos + 1) != '-') {
+                                words.add(clean.substring(0, pos));
+                                words.add(clean.substring(pos + 1, clean.length()));
+                            } else {
+                                words.add(clean);
+                            }
+                        }
                     }
                 }
             }

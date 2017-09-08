@@ -591,10 +591,10 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      */
     protected void addCategoryNameFields(final Document document, final Category category) {
 
-        addSimpleField(document, PRODUCT_CATEGORYNAME_FIELD, category.getName());
+        addSnowballField(document, PRODUCT_CATEGORYNAME_FIELD, category.getName());
         addStemField(document, PRODUCT_CATEGORYNAME_STEM_FIELD, category.getName());
         final I18NModel displayName = new StringI18NModel(category.getDisplayName());
-        addSimpleFields(document, PRODUCT_CATEGORYNAME_FIELD, displayName);
+        addSnowballFields(document, PRODUCT_CATEGORYNAME_FIELD, displayName);
         addStemFields(document, PRODUCT_CATEGORYNAME_STEM_FIELD, displayName);
 
     }

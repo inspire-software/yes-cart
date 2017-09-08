@@ -123,7 +123,7 @@ public class ProductBrandSearchQueryBuilderTest {
 
         final Query query = new ProductBrandSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "brand", "Toshiba-_-LG-_-Sobot");
         assertNotNull(query);
-        assertEquals("(brand:toshiba~2)^2.5 (brand:lg)^2.5 (brand:sobot~2)^2.5", query.toString());
+        assertEquals("(brand:toshiba~2)^2.5 (brand:lg)^2.5 (brand:sobot~1)^2.5", query.toString());
 
     }
 
@@ -140,7 +140,7 @@ public class ProductBrandSearchQueryBuilderTest {
 
         final Query query = new ProductBrandSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "brand", Arrays.asList("Toshiba", "LG", "Sobot"));
         assertNotNull(query);
-        assertEquals("(brand:toshiba~2)^2.5 (brand:lg)^2.5 (brand:sobot~2)^2.5", query.toString());
+        assertEquals("(brand:toshiba~2)^2.5 (brand:lg)^2.5 (brand:sobot~1)^2.5", query.toString());
 
     }
 

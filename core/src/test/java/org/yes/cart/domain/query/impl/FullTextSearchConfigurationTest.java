@@ -468,7 +468,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 ProductSearchResultPageDTO page = productService.getProductSearchResultDTOByQuery(pContext, 0, 100, null, false);
                 List<ProductSearchResultDTO> products = page.getResults();
                 assertFalse("Failed [" + pContext.getProductQuery().toString() + "]", products.isEmpty());
-                assertEquals("SOBOT + 2x Bender (because Sobot matches Robots type with 2 edits)", 3, products.size());
+                assertEquals("SOBOT", 1, products.size());
                 assertEquals("SOBOT is best match", "SOBOT", products.get(0).getCode());
 
                 sContext = searchQueryFactory.getSkuSnowBallQuery(pContext, products);
@@ -477,7 +477,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 List<ProductSkuSearchResultDTO> skus = productSkuService.getProductSkuSearchResultDTOByQuery(sContext);
                 assertFalse("Failed [" + sContext.getProductSkuQuery().toString() + "]", skus.isEmpty());
                 assertEquals("SOBOT is best match", products.get(0).getId(), skus.get(0).getProductId());
-                assertEquals("There are 4 Sobot SKU, + 2 x Bender SKU", 6, skus.size());
+                assertEquals("There are 4 Sobot SKU", 4, skus.size());
                 assertEquals("SOBOT-LIGHT is best match", "SOBOT-LIGHT", skus.get(0).getCode());
 
 

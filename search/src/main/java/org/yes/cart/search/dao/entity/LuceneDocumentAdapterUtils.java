@@ -31,6 +31,7 @@ import org.yes.cart.domain.entity.StoredAttributes;
 import org.yes.cart.domain.entity.impl.StoredAttributesImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
+import org.yes.cart.search.query.impl.SearchUtil;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -253,9 +254,8 @@ public class LuceneDocumentAdapterUtils {
     public static void addSnowballField(final Document document, final String name, final String value) {
         if (value != null) {
             final String lower = value.toLowerCase();
-            final String[] parts = StringUtils.split(lower, ' ');
             final StringBuilder snowball = new StringBuilder();
-            for (final String part : parts) {
+            for (final String part : SearchUtil.splitForSearch(lower,2)) {
                 if (snowball.length() > 0) {
                     snowball.append(' ');
                 }
