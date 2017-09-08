@@ -84,7 +84,9 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
                 }
                 if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(qty, BigDecimal.ZERO)) {
                     return qty.setScale(0, BigDecimal.ROUND_CEILING);
-                }
+                } // nfe
+            } catch (NumberFormatException nfe) {
+                LOG.error("Invalid quantity {} in add to cart command", strQty);
             } catch (Exception exp) {
                 LOG.error("Invalid quantity in add to cart command", exp);
             }
