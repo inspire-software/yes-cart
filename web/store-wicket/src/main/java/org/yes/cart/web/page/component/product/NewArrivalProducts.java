@@ -53,9 +53,10 @@ public class NewArrivalProducts extends AbstractProductSearchResultList {
         if (products == null) {
 
             final long categoryId = getWicketUtil().getCategoryId(getPage().getPageParameters());
+            final long shopId = getCurrentShopId();
             final long browsingShopId = getCurrentCustomerShopId();
 
-            products = productServiceFacade.getNewProducts(categoryId, browsingShopId);
+            products = productServiceFacade.getNewProducts(categoryId, shopId, browsingShopId);
         }
         return products;
     }

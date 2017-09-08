@@ -55,8 +55,9 @@ public class RecentlyViewedProducts extends AbstractProductSearchResultList {
 
             final long categoryId = getWicketUtil().getCategoryId(getPage().getPageParameters());
             final List<String> productIds = getCurrentCart().getShoppingContext().getLatestViewedSkus();
+            final long shopId = getCurrentShopId();
             final long browsingShopId = getCurrentCustomerShopId();
-            products = productServiceFacade.getListProducts(productIds, categoryId, browsingShopId);
+            products = productServiceFacade.getListProducts(productIds, categoryId, shopId, browsingShopId);
 
         }
         return products;
