@@ -337,7 +337,7 @@ EOF
     mv /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU.zip         /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU.20170906010101.zip
     mv /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU-img.zip /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU-img.20170906020202.zip
     chown tomcat:tomcat /var/lib/tomcat7-ycdemo -R
-    #service tomcat7 start
+    service tomcat7 start
 
     echo " Yes-Cart is available on "
     echo " http://$ycdemohost:8080/yes-manager/ "
