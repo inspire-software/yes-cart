@@ -289,6 +289,7 @@ start_aws() {
 
     export ycmysqldb=$(host $(aws rds describe-db-instances --db-instance-identifier  yescartmysql | jq '.DBInstances[0] | .Endpoint.Address'  | sed 's/\"//g') | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
     echo "$ycmysqldb        yesmysqlhost" | sudo tee --append /etc/hosts
+    echo "127.0.0.1            yummailhost"  | sudo tee --append /etc/hosts
 
     sed -i -- 's/y3$PaSs/pwdMy34SqL/g' env/setup/dbi/mysql/dbinit.sql
     sed -i -- "s/localhost/'%'/g" env/setup/dbi/mysql/dbinit.sql
@@ -306,6 +307,41 @@ start_aws() {
 
 
 
+    mkdir -p /var/lib/tomcat7/webapps/ROOT/WEB-INF
+tee /var/lib/tomcat7/webapps/ROOT/index.html <<-'EOF'
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="refresh" content="0; url=/yes-shop/">
+</head>
+<body>
+    <a href="/yes-shop/">Shop</a>
+</body>
+</html>
+EOF
+tee /var/lib/tomcat7/webapps/ROOT/WEB-INF/web.xml <<-'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1"  metadata-complete="true">
+
+  <display-name>Yes-cart</display-name>
+  <description>
+     Yes-cart
+  </description>
+
+</web-app>
+EOF
+    
+
+    cp env/maven/aws/tomcat/keystore.jks /etc/tomcat7/keystore.jks
+    cp env/maven/aws/tomcat/server.xml  /etc/tomcat7/server.xml
+
+    chown tomcat:tomcat /var/lib/tomcat7/webapps/ROOT -R
+    chown tomcat:tomcat /etc/tomcat7/keystore.jks
+    chown tomcat:tomcat /etc/tomcat7/server.xml
 
 
     cp /home/ec2-user/yes-cart/manager/jam/target/yes-manager.war /usr/share/tomcat7/webapps/
