@@ -326,6 +326,10 @@ config.2.pass=1234567
 EOF
     cp /home/ec2-user/yes-cart/env/sampledata/demo-data/icecat/import/* /var/lib/tomcat7-ycdemo/import/SHOP10/incoming
     chown tomcat:tomcat /var/lib/tomcat7-ycdemo -R
+
+    sudo /sbin/iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
+    sudo /sbin/iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 8443
+
     service tomcat7 start
 
     echo " Yes-Cart is available on "
