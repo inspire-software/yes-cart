@@ -21,7 +21,7 @@ package org.yes.cart.search.query;
  * Date: 07-May-2011
  * Time: 16:13:01
  */
-public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
+public interface ProductSearchQueryBuilder<T> extends SearchQueryBuilder<T> {
 
     //can be used in sort order
     String PRODUCT_NAME_FIELD = "name";

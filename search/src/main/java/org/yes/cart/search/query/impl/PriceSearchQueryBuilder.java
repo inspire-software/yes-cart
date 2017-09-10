@@ -16,20 +16,25 @@
 
 package org.yes.cart.search.query.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.search.Query;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.PriceNavigation;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * User: denispavlov
  * Date: 16/11/2014
  * Time: 00:21
  */
-public class PriceSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
+public class PriceSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder<Query> {
 
     private final PriceNavigation priceNavigation;
 
@@ -41,28 +46,30 @@ public class PriceSearchQueryBuilder extends AbstractSearchQueryBuilderImpl impl
     /**
      * {@inheritDoc}
      */
-    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
+    public List<Query> createQueryChain(final NavigationContext<Query> navigationContext, final String parameter, final Object value) {
 
-        final String searchValue = String.valueOf(value);
-        if (value == null || StringUtils.isBlank(searchValue)) {
+        String strValue = null;
+        if (value instanceof Collection) {
+            if (CollectionUtils.isNotEmpty((Collection) value)) {
+                strValue = String.valueOf(((Collection) value).iterator().next());
+            }
+        } else if (value != null) {
+            strValue = String.valueOf(value);
+        }
+
+
+        if (strValue == null || StringUtils.isBlank(strValue)) {
             return null;
         }
 
         final Pair<String, Pair<BigDecimal, BigDecimal>> priceParams =
-                priceNavigation.decomposePriceRequestParams(searchValue);
+                priceNavigation.decomposePriceRequestParams(strValue);
 
-        final String facet = SearchUtil.priceFacetName(customerShopId, priceParams.getFirst());
+        final String facet = SearchUtil.priceFacetName(navigationContext.getCustomerShopId(), priceParams.getFirst());
         final Long from = SearchUtil.priceToLong(priceParams.getSecond().getFirst());
         final Long to = SearchUtil.priceToLong(priceParams.getSecond().getSecond());
 
         // field name for from and to will be the same
-        return createRangeQuery(facet + "_range", from, to);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
-        return createStrictQuery(shopId, customerShopId, parameter, value);
+        return Collections.<Query>singletonList(createRangeQuery(facet + "_range", from, to));
     }
 }

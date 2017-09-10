@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.entity.bridge.support.impl;
 
+import org.hibernate.Hibernate;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.search.dao.support.NavigatableAttributesSupport;
@@ -72,5 +73,16 @@ public class NavigatableAttributesSupportImpl implements NavigatableAttributesSu
     public Set<String> getAllStorableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.STORE.UNIQUE", Boolean.TRUE);
         return new HashSet<String>(allowedAttributeNames);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Attribute getByAttributeCode(final String attributeCode) {
+        final Attribute attribute = attributeDao.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", attributeCode);
+        if (attribute != null) {
+            Hibernate.initialize(attribute.getEtype());
+        }
+        return attribute;
     }
 }

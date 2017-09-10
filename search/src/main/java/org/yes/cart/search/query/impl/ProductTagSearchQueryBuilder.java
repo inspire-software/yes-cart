@@ -19,19 +19,21 @@ package org.yes.cart.search.query.impl;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
+import org.springframework.util.CollectionUtils;
+import org.yes.cart.search.ShopSearchSupportService;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 /**
  * User: denispavlov
  * Date: 18/11/2014
  * Time: 00:00
  */
-public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
+public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder<Query> {
 
-    public static final String TAG_NEWARRIVAL = "newarrival";
+    private static final String TAG_NEWARRIVAL = "newarrival";
 
     private final ThreadLocal<Calendar> format = new ThreadLocal<Calendar>() {
         @Override
@@ -40,15 +42,64 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
         }
     };
 
+    private final ShopSearchSupportService shopSearchSupportService;
+
+    public ProductTagSearchQueryBuilder(final ShopSearchSupportService shopSearchSupportService) {
+        this.shopSearchSupportService = shopSearchSupportService;
+    }
+
 
     /**
      * {@inheritDoc}
      */
-    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
+    public List<Query> createQueryChain(final NavigationContext<Query> navigationContext, final String parameter, final Object value) {
 
-        if (value instanceof Date) {
+        if (value instanceof Collection) {
 
-            final Long fromDate = getDateOnly((Date) value);
+            final Collection singleValues = (Collection) value;
+            if (singleValues.size() > 1) {
+
+                final BooleanQuery.Builder aggregatedQuery = new BooleanQuery.Builder();
+
+                boolean hasClause = false;
+                for (final Object item : singleValues) {
+
+                    final Query clause = createTagQuery(navigationContext, escapeValue(item));
+                    if (clause != null) {
+                        aggregatedQuery.add(clause, BooleanClause.Occur.SHOULD);
+                        hasClause = true;
+                    }
+
+                }
+
+                if (hasClause) {
+                    return Collections.<Query>singletonList(aggregatedQuery.build());
+                }
+
+        } else if (singleValues.size() == 1) {
+
+                final Query clause = createTagQuery(navigationContext, escapeValue(singleValues.iterator().next()));
+                if (clause != null) {
+                    return Collections.<Query>singletonList(clause);
+                }
+
+            }
+            return null;
+        }
+
+        final Query clause = createTagQuery(navigationContext, escapeValue(value));
+        if (clause != null) {
+            return Collections.<Query>singletonList(clause);
+        }
+        return null;
+
+    }
+
+    private Query createTagQuery(final NavigationContext<Query> navigationContext, final String tag) {
+
+        if (TAG_NEWARRIVAL.equals(tag)) {
+
+            final Long fromDate = getDateOnly(earliestNewArrivalDate(navigationContext));
 
             final BooleanQuery.Builder aggregateQuery = new BooleanQuery.Builder();
 
@@ -61,13 +112,14 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
         }
 
 
-        if (isEmptyValue(value)) {
+        if (isEmptyValue(tag)) {
             return null;
         }
 
-        return createTermQuery(PRODUCT_TAG_FIELD, escapeValue(value), 20f);
+        return createTermQuery(PRODUCT_TAG_FIELD, tag, 20f);
 
     }
+
 
     protected Long getDateOnly(final Date value) {
         final Calendar calendar = format.get();
@@ -80,11 +132,24 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
         return calendar.getTimeInMillis();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
-        return createStrictQuery(shopId, customerShopId, parameter, value);
+
+    private Date earliestNewArrivalDate(final NavigationContext<Query> navigationContext) {
+
+        Date beforeDays = new Date();
+        if (CollectionUtils.isEmpty(navigationContext.getCategories())) {
+
+            beforeDays = shopSearchSupportService.getCategoryNewArrivalDate(0L, navigationContext.getShopId());
+
+        } else {
+            for (final Long categoryId : navigationContext.getCategories()) {
+                Date catBeforeDays = shopSearchSupportService.getCategoryNewArrivalDate(categoryId, navigationContext.getShopId());
+                if (catBeforeDays.before(beforeDays)) {
+                    beforeDays = catBeforeDays; // get the earliest
+                }
+            }
+        }
+        return beforeDays;
     }
+
 
 }

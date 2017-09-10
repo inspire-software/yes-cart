@@ -157,9 +157,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
             final List<String> search = productIds.size() > 50 ? productIds.subList(0, 50) : productIds;
 
-            final NavigationContext assoc = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, false,
-                    Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_CODE_FIELD,
-                            (List) Arrays.asList(search)));
+            final NavigationContext assoc = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, null,
+                    false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_CODE_FIELD,
+                            search));
 
             return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
                     assoc, 0, search.size(), null, false).getResults());
@@ -185,9 +185,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         final int limit = categoryServiceFacade.getFeaturedListSizeConfig(categoryId, shopId);
 
-        final NavigationContext featured = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, categories, false,
-                Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD,
-                        (List) Arrays.asList("true")));
+        final NavigationContext featured = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, categories,
+                false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD,
+                        (List) Collections.singletonList("true")));
 
         return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
                 featured, 0, limit, null, false).getResults());
@@ -209,9 +209,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         } else {
             newArrivalCats = null;
         }
-        final NavigationContext newarrival = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, newArrivalCats, false,
-                Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
-                        (List) Arrays.asList(ProductSearchQueryBuilder.TAG_NEWARRIVAL)));
+        final NavigationContext newarrival = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, newArrivalCats,
+                false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
+                        (List) Collections.singletonList(ProductSearchQueryBuilder.TAG_NEWARRIVAL)));
 
         return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
                 newarrival, 0, limit, null, true).getResults());
@@ -235,9 +235,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         final int limit = categoryServiceFacade.getFeaturedListSizeConfig(categoryId, shopId);
 
-        final NavigationContext tagged = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, categories, false,
-                Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
-                        (List) Arrays.asList(tag)));
+        final NavigationContext tagged = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, categories,
+                false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
+                        (List) Collections.singletonList(tag)));
 
         return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
                 tagged, 0, limit, null, false).getResults());
@@ -260,9 +260,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 productIdsForCategory = productIds.subList(productIds.size() - limit, productIds.size());
             }
 
-            final NavigationContext recent = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, false,
-                    Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
-                            (List) Arrays.asList(productIdsForCategory)));
+            final NavigationContext recent = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, null,
+                    false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
+                            productIdsForCategory));
 
             return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
                     recent, 0, limit, null, false).getResults());

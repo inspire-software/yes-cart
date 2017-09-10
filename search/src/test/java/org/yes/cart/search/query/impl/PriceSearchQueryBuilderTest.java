@@ -23,12 +23,12 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.PriceNavigation;
+import org.yes.cart.search.dto.NavigationContext;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
@@ -41,31 +41,31 @@ public class PriceSearchQueryBuilderTest {
 
 
     @Test
-    public void testCreateStrictQueryNull() throws Exception {
+    public void testCreateQueryChainNull() throws Exception {
 
         final PriceNavigation priceNavigation = context.mock(PriceNavigation.class, "priceNavigation");
 
         final PriceSearchQueryBuilder buider = new PriceSearchQueryBuilder(priceNavigation);
 
-        final Query query = buider.createStrictQuery(10L, 1010L, "price", null);
+        final List<Query> query = buider.createQueryChain(null, "price", null);
         assertNull(query);
 
     }
 
     @Test
-    public void testCreateStrictQueryBlank() throws Exception {
+    public void testCreateQueryChainBlank() throws Exception {
 
         final PriceNavigation priceNavigation = context.mock(PriceNavigation.class, "priceNavigation");
 
         final PriceSearchQueryBuilder buider = new PriceSearchQueryBuilder(priceNavigation);
 
-        final Query query = buider.createStrictQuery(10L, 1010L, "price", "   ");
+        final List<Query> query = buider.createQueryChain(null, "price", "   ");
         assertNull(query);
 
     }
 
     @Test
-    public void testCreateStrictQuery() throws Exception {
+    public void testCreateQueryChain() throws Exception {
 
         final PriceNavigation priceNavigation = context.mock(PriceNavigation.class, "priceNavigation");
 
@@ -77,61 +77,20 @@ public class PriceSearchQueryBuilderTest {
                                 new BigDecimal("10"),
                                 new BigDecimal("20")));
 
-        context.checking(new Expectations() {{
-            one(priceNavigation).decomposePriceRequestParams("EUR-_-10-_-20"); will(returnValue(priceRange));
-        }});
-
-        final Query query = buider.createStrictQuery(10L, 1010L, "price", "EUR-_-10-_-20");
-        assertNotNull(query);
-        assertEquals("facet_price_1010_EUR_range:[1000 TO 1999]", query.toString());
-
-    }
-
-
-    @Test
-    public void testCreateRelaxedQueryNull() throws Exception {
-
-        final PriceNavigation priceNavigation = context.mock(PriceNavigation.class, "priceNavigation");
-
-        final PriceSearchQueryBuilder buider = new PriceSearchQueryBuilder(priceNavigation);
-
-        final Query query = buider.createRelaxedQuery(10L, 1010L, "price", null);
-        assertNull(query);
-
-    }
-
-    @Test
-    public void testCreateRelaxedQueryBlank() throws Exception {
-
-        final PriceNavigation priceNavigation = context.mock(PriceNavigation.class, "priceNavigation");
-
-        final PriceSearchQueryBuilder buider = new PriceSearchQueryBuilder(priceNavigation);
-
-        final Query query = buider.createRelaxedQuery(10L, 1010L, "price", "   ");
-        assertNull(query);
-
-    }
-
-    @Test
-    public void testCreateRelaxedQuery() throws Exception {
-
-        final PriceNavigation priceNavigation = context.mock(PriceNavigation.class, "priceNavigation");
-
-        final PriceSearchQueryBuilder buider = new PriceSearchQueryBuilder(priceNavigation);
-
-        final Pair<String, Pair<BigDecimal, BigDecimal>> priceRange =
-                new Pair<String, Pair<BigDecimal, BigDecimal>>("EUR",
-                        new Pair<BigDecimal, BigDecimal>(
-                                new BigDecimal("10"),
-                                new BigDecimal("20")));
+        final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
         context.checking(new Expectations() {{
             one(priceNavigation).decomposePriceRequestParams("EUR-_-10-_-20"); will(returnValue(priceRange));
+            one(navigationContext).getCustomerShopId(); will(returnValue(1010L));
         }});
 
-        final Query query = buider.createRelaxedQuery(10L, 1010L, "price", "EUR-_-10-_-20");
+        final List<Query> query = buider.createQueryChain(navigationContext, "price", "EUR-_-10-_-20");
         assertNotNull(query);
-        assertEquals("facet_price_1010_EUR_range:[1000 TO 1999]", query.toString());
+        assertEquals(1, query.size());
+        assertEquals("facet_price_1010_EUR_range:[1000 TO 1999]", query.get(0).toString());
+
+        this.context.assertIsSatisfied();
 
     }
+
 }

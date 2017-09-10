@@ -19,16 +19,19 @@ package org.yes.cart.search.query.impl;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * User: denispavlov
  * Date: 15/11/2014
  * Time: 23:16
  */
-public abstract class AbstractStrictFieldSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
+public abstract class AbstractStrictFieldSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder<Query> {
 
     private final String field;
     private final float boost;
@@ -46,40 +49,55 @@ public abstract class AbstractStrictFieldSearchQueryBuilder extends AbstractSear
     /**
      * {@inheritDoc}
      */
-    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
+    public List<Query> createQueryChain(final NavigationContext<Query> navigationContext, final String parameter, final Object value) {
 
         if (value instanceof Collection) {
+
             final Collection singleValues = (Collection) value;
             if (singleValues.size() > 1) {
 
                 final BooleanQuery.Builder aggregatedQuery = new BooleanQuery.Builder();
 
+                boolean hasClause = false;
                 for (final Object singleValue : singleValues) {
-                    aggregatedQuery.add(createTermQuery(field, escapeValue(singleValue).toLowerCase(), boost), BooleanClause.Occur.SHOULD);
+
+                    final Query clause = createTermQuery(escapeValue(singleValue));
+                    if (clause != null) {
+                        aggregatedQuery.add(clause, BooleanClause.Occur.SHOULD);
+                        hasClause = true;
+                    }
+
                 }
-                return aggregatedQuery.build();
+
+                if (hasClause) {
+                    return Collections.<Query>singletonList(aggregatedQuery.build());
+                }
 
             } else if (singleValues.size() == 1) {
-                return createTermQuery(field, escapeValue(singleValues.iterator().next()).toLowerCase(), boost);
-            } else {
-                return null;
-            }
 
+                final Query clause = createTermQuery(escapeValue(singleValues.iterator().next()));
+                if (clause != null) {
+                    return Collections.<Query>singletonList(clause);
+                }
+
+            }
+            return null;
         }
+
+        final Query clause = createTermQuery(escapeValue(value));
+        if (clause != null) {
+            return Collections.<Query>singletonList(clause);
+        }
+        return null;
+
+    }
+
+    private Query createTermQuery(final String value) {
 
         if (isEmptyValue(value)) {
             return null;
         }
 
-        return createTermQuery(field, escapeValue(value).toLowerCase(), boost);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
-
-        return createStrictQuery(shopId, customerShopId, parameter, value);
-
+        return createTermQuery(field, value.toLowerCase(), boost);
     }
 }

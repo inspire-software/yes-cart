@@ -110,13 +110,13 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                     addSimpleField(document, SKU_PRODUCT_CODE_FIELD, sku.getCode());
                     addSimpleField(document, SKU_ID_FIELD, String.valueOf(sku.getSkuId()));
                     addStemFields(document, SKU_PRODUCT_CODE_STEM_FIELD, sku.getCode(), sku.getManufacturerCode(), sku.getManufacturerPartCode(), sku.getSupplierCode());
-                    addSnowballField(document, PRODUCT_NAME_FIELD, sku.getName());
+                    addSearchField(document, PRODUCT_NAME_FIELD, sku.getName());
                     addStemFields(document, PRODUCT_NAME_STEM_FIELD, sku.getName(), sku.getSeo().getTitle(), sku.getSeo().getMetakeywords());
                     final I18NModel displayName = new StringI18NModel(sku.getDisplayName());
                     addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, displayName);
                     addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(sku.getSeo().getDisplayTitle()));
                     addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(sku.getSeo().getDisplayMetakeywords()));
-                    addSnowballFields(document, PRODUCT_DISPLAYNAME_FIELD, displayName);
+                    addSearchFields(document, PRODUCT_DISPLAYNAME_FIELD, displayName);
                 }
                 addSortField(document, SKU_PRODUCT_CODE_SORT_FIELD, entity.getDefaultSku().getCode());
 
@@ -127,7 +127,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 //            addSortableDateField(document, "availablefrom", "availablefrom_sort", "availablefrom_range", entity.getAvailablefrom(), true);
                 //            addSortableDateField(document, "availableto", "availableto_sort", "availableto_range", entity.getAvailableto(), false);
 
-                addSnowballField(document, PRODUCT_NAME_FIELD, entity.getName());
+                addSearchField(document, PRODUCT_NAME_FIELD, entity.getName());
                 addSortField(document, PRODUCT_NAME_SORT_FIELD, entity.getName());
                 addStemFields(document, PRODUCT_NAME_STEM_FIELD, entity.getName(), entity.getSeo().getTitle(), entity.getSeo().getMetakeywords());
 
@@ -135,12 +135,12 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, displayName);
                 addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(entity.getSeo().getDisplayTitle()));
                 addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(entity.getSeo().getDisplayMetakeywords()));
-                addSnowballFields(document, PRODUCT_DISPLAYNAME_FIELD, displayName);
+                addSearchFields(document, PRODUCT_DISPLAYNAME_FIELD, displayName);
                 addSortFields(document, PRODUCT_DISPLAYNAME_SORT_FIELD, displayName);
 
                 final I18NModel displayType = new StringI18NModel(entity.getProducttype().getDisplayName());
-                addSnowballField(document, PRODUCT_TYPE_FIELD, entity.getProducttype().getName());
-                addSnowballFields(document, PRODUCT_TYPE_FIELD, displayType);
+                addSearchField(document, PRODUCT_TYPE_FIELD, entity.getProducttype().getName());
+                addSearchFields(document, PRODUCT_TYPE_FIELD, displayType);
                 addStemField(document, PRODUCT_TYPE_STEM_FIELD, entity.getProducttype().getName());
                 addStemFields(document, PRODUCT_TYPE_STEM_FIELD, displayType);
 
@@ -230,29 +230,36 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
             if (search) {
                 if (StringUtils.isNotBlank(attrValue.getVal())) {
 
+                    final String searchValue = cleanFacetValue(attrValue.getVal());
+
                     if (searchPrimary) {
 
-                        final List<String> searchValues = getSearchValue(attrValue);
-
-                        // primary search should only exist in primary search exact match
-                        for (final String searchValue : searchValues) {
-
-                            addSimpleField(document, ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD, searchValue);
-
-                        }
+                        addSearchField(document, ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD, searchValue);
 
                     } else {
 
-                        final List<String> searchValues = getSearchValue(attrValue);
+                        final I18NModel displayValue = StringUtils.isNotBlank(attrValue.getDisplayVal()) ? new StringI18NModel(attrValue.getDisplayVal()) : null;
 
-                        for (final String searchValue : searchValues) {
+                        // searchable and navigatable terms for global search tokenised
+                        addStemField(document, ATTRIBUTE_VALUE_SEARCH_FIELD, searchValue);
 
-                            // searchable and navigatable terms for global search tokenised
-                            addStemField(document, ATTRIBUTE_VALUE_SEARCH_FIELD, searchValue);
+                        // searchable and navigatable terms for global search full phrase
+                        addSearchField(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, searchValue);
+                        addSearchFields(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, displayValue);
 
-                            // searchable and navigatable terms for global search full phrase
-                            addSimpleField(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, searchValue);
+                        // Sometimes values are yes/no flags and some are meaningless without the attribute name
+                        // so we add attribute name to search values in case someone searches by features
+                        // (e.g. "notebook with optical drive", where attribute name "optical drive" and value is Y/N)
+                        if (!"N".equalsIgnoreCase(searchValue)) { // TODO: improve
 
+                            final Attribute attribute = attributesSupport.getByAttributeCode(attrValue.getAttributeCode());
+                            if (attribute != null) {
+
+                                final I18NModel attrName = StringUtils.isNotBlank(attribute.getDisplayName()) ? new StringI18NModel(attribute.getDisplayName()) : null;
+
+                                addSearchField(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, attribute.getName());
+                                addSearchFields(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, attrName);
+                            }
                         }
 
                     }
@@ -301,18 +308,6 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
     private String cleanFacetValue(final String val) {
         return val != null ? val.replace('/', ' ') : null; // replace all forward slashes since they get decoded into paths
-    }
-
-    private List<String> getSearchValue(final AttrValue attrValue) {
-        final List<String> values = new ArrayList<String>();
-        if (StringUtils.isNotBlank(attrValue.getDisplayVal())) {
-            final I18NModel model = new StringI18NModel(attrValue.getDisplayVal());
-            for (final String value : model.getAllValues().values()) {
-                values.add(value.toLowerCase());
-            }
-        }
-        values.add(attrValue.getVal().toLowerCase());
-        return values;
     }
 
 
@@ -591,10 +586,10 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      */
     protected void addCategoryNameFields(final Document document, final Category category) {
 
-        addSnowballField(document, PRODUCT_CATEGORYNAME_FIELD, category.getName());
+        addSearchField(document, PRODUCT_CATEGORYNAME_FIELD, category.getName());
         addStemField(document, PRODUCT_CATEGORYNAME_STEM_FIELD, category.getName());
         final I18NModel displayName = new StringI18NModel(category.getDisplayName());
-        addSnowballFields(document, PRODUCT_CATEGORYNAME_FIELD, displayName);
+        addSearchFields(document, PRODUCT_CATEGORYNAME_FIELD, displayName);
         addStemFields(document, PRODUCT_CATEGORYNAME_STEM_FIELD, displayName);
 
     }

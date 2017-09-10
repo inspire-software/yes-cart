@@ -16,6 +16,7 @@
 
 package org.yes.cart.search.query.impl;
 
+import org.apache.lucene.search.Query;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
 /**
@@ -23,7 +24,7 @@ import org.yes.cart.search.query.ProductSearchQueryBuilder;
  * Date: 15/11/2014
  * Time: 23:16
  */
-public class ProductCategorySearchQueryBuilder extends AbstractNumericStrictFieldSearchQueryBuilder implements ProductSearchQueryBuilder {
+public class ProductCategorySearchQueryBuilder extends AbstractNumericStrictFieldSearchQueryBuilder implements ProductSearchQueryBuilder<Query> {
 
     public ProductCategorySearchQueryBuilder() {
         super(PRODUCT_CATEGORY_FIELD);

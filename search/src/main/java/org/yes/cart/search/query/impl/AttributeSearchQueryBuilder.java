@@ -22,56 +22,90 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * User: denispavlov
  * Date: 15/11/2014
  * Time: 23:26
  */
-public class AttributeSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
+public class AttributeSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder<Query> {
 
     /**
      * {@inheritDoc}
      */
-    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
+    public List<Query> createQueryChain(final NavigationContext<Query> navigationContext, final String parameter, final Object value) {
 
-        if (isEmptyValue(value) || StringUtils.isBlank(parameter)) {
+        if (StringUtils.isBlank(parameter)) {
             return null;
         }
 
-        final String searchValue = String.valueOf(value);
-
         final String escapedParameter = escapeValue(parameter);
 
-        if (searchValue.contains(Constants.RANGE_NAVIGATION_DELIMITER)) { // value range navigation
-            final String[] attrValues = StringUtils.splitByWholeSeparatorPreserveAllTokens(searchValue, Constants.RANGE_NAVIGATION_DELIMITER);
+        if (value instanceof Collection) {
 
-            final BooleanQuery.Builder aggregatedQuery = new BooleanQuery.Builder();
+            final Collection singleValues = (Collection) value;
+            if (singleValues.size() > 1) {
+
+                final BooleanQuery.Builder aggregatedQuery = new BooleanQuery.Builder();
+
+                boolean hasClause = false;
+                for (final Object item : singleValues) {
+
+                    final Query clause = createAttributeQuery(escapedParameter, escapeValue(item));
+                    if (clause != null) {
+                        aggregatedQuery.add(clause, BooleanClause.Occur.SHOULD);
+                        hasClause = true;
+                    }
+
+                }
+
+                if (hasClause) {
+                    return Collections.<Query>singletonList(aggregatedQuery.build());
+                }
+
+            } else if (singleValues.size() == 1) {
+
+                final Query clause = createAttributeQuery(escapedParameter, escapeValue(singleValues.iterator().next()));
+                if (clause != null) {
+                    return Collections.<Query>singletonList(clause);
+                }
+
+            }
+            return null;
+        }
+
+        final Query clause = createAttributeQuery(escapedParameter, escapeValue(value));
+        if (clause != null) {
+            return Collections.<Query>singletonList(clause);
+        }
+        return null;
+
+    }
+
+    private Query createAttributeQuery(final String parameter, final String value) {
+
+        if (isEmptyValue(value)) {
+            return null;
+        }
+
+        if (value.contains(Constants.RANGE_NAVIGATION_DELIMITER)) { // value range navigation
+            final String[] attrValues = StringUtils.splitByWholeSeparatorPreserveAllTokens(value, Constants.RANGE_NAVIGATION_DELIMITER);
 
             final Long searchValueLo = attrValues[0].length() > 0 ? NumberUtils.toLong(attrValues[0]) : null;
             final Long searchValueHi = attrValues[1].length() > 0 ? NumberUtils.toLong(attrValues[1]) : null;
 
-            aggregatedQuery.add(createRangeQuery(escapedParameter + "_range", searchValueLo, searchValueHi, 3.5f), BooleanClause.Occur.MUST);
-
-            return aggregatedQuery.build();
+            return createRangeQuery(parameter + "_range", searchValueLo, searchValueHi, 3.5f);
 
         }
 
-        final BooleanQuery.Builder aggregatedQuery = new BooleanQuery.Builder();
-
-        final String ftSearchValue = escapeValue(searchValue);
-
-        aggregatedQuery.add(createTermQuery(escapedParameter, ftSearchValue.toLowerCase(), 3.5f), BooleanClause.Occur.MUST);
-
-        return aggregatedQuery.build();
+        return createTermQuery(parameter, value.toLowerCase(), 3.5f);
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
-        return createStrictQuery(shopId, customerShopId, parameter, value);
-    }
 }

@@ -79,7 +79,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
             addSortField(document, SKU_PRODUCT_MANUFACTURER_CODE_SORT_FIELD, entity.getManufacturerCode());
             addStemFields(document, SKU_PRODUCT_MANUFACTURER_CODE_STEM_FIELD, entity.getManufacturerCode(), entity.getManufacturerPartCode(), entity.getSupplierCode());
 
-            addSnowballField(document, PRODUCT_NAME_FIELD, entity.getName());
+            addSearchField(document, PRODUCT_NAME_FIELD, entity.getName());
             addSortField(document, PRODUCT_NAME_SORT_FIELD, entity.getName());
             addStemFields(document, PRODUCT_NAME_STEM_FIELD, entity.getName(), entity.getSeo().getTitle(), entity.getSeo().getMetakeywords());
 
@@ -87,7 +87,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
             addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, displayName);
             addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(entity.getSeo().getDisplayTitle()));
             addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(entity.getSeo().getDisplayMetakeywords()));
-            addSnowballFields(document, PRODUCT_DISPLAYNAME_FIELD, displayName);
+            addSearchFields(document, PRODUCT_DISPLAYNAME_FIELD, displayName);
             addSortFields(document, PRODUCT_DISPLAYNAME_SORT_FIELD, displayName);
 
             addNumericField(document, "rank", (long) entity.getRank(), false);
@@ -186,29 +186,36 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
             if (search) {
                 if (StringUtils.isNotBlank(attrValue.getVal())) {
 
+                    final String searchValue = cleanFacetValue(attrValue.getVal());
+
                     if (searchPrimary) {
 
-                        final List<String> searchValues = getSearchValue(attrValue);
-
-                        // primary search should only exist in primary search exact match
-                        for (final String searchValue : searchValues) {
-
-                            addSimpleField(document, ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD, searchValue);
-
-                        }
+                        addSearchField(document, ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD, searchValue);
 
                     } else {
 
-                        final List<String> searchValues = getSearchValue(attrValue);
+                        final I18NModel displayValue = StringUtils.isNotBlank(attrValue.getDisplayVal()) ? new StringI18NModel(attrValue.getDisplayVal()) : null;
 
-                        for (final String searchValue : searchValues) {
+                        // searchable and navigatable terms for global search tokenised
+                        addStemField(document, ATTRIBUTE_VALUE_SEARCH_FIELD, searchValue);
 
-                            // searchable and navigatable terms for global search tokenised
-                            addStemField(document, ATTRIBUTE_VALUE_SEARCH_FIELD, searchValue);
+                        // searchable and navigatable terms for global search full phrase
+                        addSearchField(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, searchValue);
+                        addSearchFields(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, displayValue);
 
-                            // searchable and navigatable terms for global search full phrase
-                            addSimpleField(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, searchValue);
+                        // Sometimes values are yes/no flags and some are meaningless without the attribute name
+                        // so we add attribute name to search values in case someone searches by features
+                        // (e.g. "notebook with optical drive", where attribute name "optical drive" and value is Y/N)
+                        if (!"N".equalsIgnoreCase(searchValue)) { // TODO: improve
 
+                            final Attribute attribute = attributesSupport.getByAttributeCode(attrValue.getAttributeCode());
+                            if (attribute != null) {
+
+                                final I18NModel attrName = StringUtils.isNotBlank(attribute.getDisplayName()) ? new StringI18NModel(attribute.getDisplayName()) : null;
+
+                                addSearchField(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, attribute.getName());
+                                addSearchFields(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, attrName);
+                            }
                         }
 
                     }
@@ -250,18 +257,6 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
 
     private String cleanFacetValue(final String val) {
         return val != null ? val.replace('/', ' ') : null; // replace all forward slashes since they get decoded into paths
-    }
-
-    private List<String> getSearchValue(final AttrValue attrValue) {
-        final List<String> values = new ArrayList<String>();
-        if (StringUtils.isNotBlank(attrValue.getDisplayVal())) {
-            final I18NModel model = new StringI18NModel(attrValue.getDisplayVal());
-            for (final String value : model.getAllValues().values()) {
-                values.add(value.toLowerCase());
-            }
-        }
-        values.add(attrValue.getVal().toLowerCase());
-        return values;
     }
 
     /**

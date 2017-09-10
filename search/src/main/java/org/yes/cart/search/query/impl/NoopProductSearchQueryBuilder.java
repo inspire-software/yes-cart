@@ -17,7 +17,10 @@
 package org.yes.cart.search.query.impl;
 
 import org.apache.lucene.search.Query;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
+
+import java.util.List;
 
 /**
  * No operation builder used to silence some parameters in param-to-builder maps.
@@ -26,19 +29,12 @@ import org.yes.cart.search.query.ProductSearchQueryBuilder;
  * Date: 03/12/2014
  * Time: 21:06
  */
-public class NoopProductSearchQueryBuilder implements ProductSearchQueryBuilder {
+public class NoopProductSearchQueryBuilder implements ProductSearchQueryBuilder<Query> {
 
     /**
      * {@inheritDoc}
      */
-    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
+    public List<Query> createQueryChain(final NavigationContext<Query> navigationContext, final String parameter, final Object value) {
         return null;
     }
 }

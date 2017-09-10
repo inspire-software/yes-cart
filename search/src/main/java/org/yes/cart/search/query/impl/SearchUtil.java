@@ -17,13 +17,19 @@
 package org.yes.cart.search.query.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.de.GermanAnalyzer;
+import org.apache.lucene.analysis.fr.FrenchAnalyzer;
+import org.apache.lucene.analysis.it.ItalianAnalyzer;
+import org.apache.lucene.analysis.ru.RussianAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.TermToBytesRefAttribute;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.misc.Pair;
 
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
 * User: Igor Azarny iazarny@yahoo.com
@@ -92,6 +98,82 @@ public class SearchUtil {
         }
         return Collections.EMPTY_LIST;
     }
+
+
+    /**
+     * Tokenize search phraze and clean from empty strings.
+     *
+     * @param lang   language to assume the phrase is in
+     * @param phraze optional phraze
+     *
+     * @return list of tokens, that found in phraze.
+     */
+    public static List<String> analyseForSearch(final String lang, final String phraze) {
+        final Analysis analysis = LANGUAGE_SPECIFIC.getOrDefault(lang, LANGUAGE_SPECIFIC.get("default"));
+        return analysis.analyse(phraze);
+    }
+
+    private static Map<String, Analysis> LANGUAGE_SPECIFIC = new HashMap<String, Analysis>();
+    static {
+        LANGUAGE_SPECIFIC.put("ru", new Analysis() {
+            @Override
+            protected Analyzer initialValue() {
+                return new RussianAnalyzer();
+            }
+        });
+        LANGUAGE_SPECIFIC.put("uk", new Analysis() {
+            @Override
+            protected Analyzer initialValue() {
+                return new RussianAnalyzer();
+            }
+        });
+        LANGUAGE_SPECIFIC.put("de", new Analysis() {
+            @Override
+            protected Analyzer initialValue() {
+                return new GermanAnalyzer();
+            }
+        });
+        LANGUAGE_SPECIFIC.put("fr", new Analysis() {
+            @Override
+            protected Analyzer initialValue() {
+                return new FrenchAnalyzer();
+            }
+        });
+        LANGUAGE_SPECIFIC.put("it", new Analysis() {
+            @Override
+            protected Analyzer initialValue() {
+                return new ItalianAnalyzer();
+            }
+        });
+        LANGUAGE_SPECIFIC.put("default", new Analysis() {
+            @Override
+            protected Analyzer initialValue() {
+                return new StandardAnalyzer();
+            }
+        });
+    }
+
+    private static class Analysis extends ThreadLocal<Analyzer> {
+
+        List<String> analyse(String search) {
+
+            final TokenStream stream = get().tokenStream("X", search);
+
+            final List<String> result = new ArrayList<String>();
+            try {
+                stream.reset();
+                while(stream.incrementToken()) {
+                    result.add(stream.getAttribute(TermToBytesRefAttribute.class).getBytesRef().utf8ToString());
+                }
+                stream.close();
+            } catch (IOException e) { }
+
+            return result;
+
+        }
+
+    }
+
 
     /**
      * Create index value for given shop currency and price.

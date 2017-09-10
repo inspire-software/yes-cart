@@ -21,10 +21,9 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
@@ -34,120 +33,55 @@ import static org.junit.Assert.assertNull;
 public class ProductBrandSearchQueryBuilderTest {
 
     @Test
-    public void testCreateStrictQueryNull() throws Exception {
+    public void testCreateQueryChainNull() throws Exception {
 
-        final Query query = new ProductBrandSearchQueryBuilder().createStrictQuery(10L, 1010L, "brand", null);
+        final List<Query> query = new ProductBrandSearchQueryBuilder().createQueryChain(null, "brand", null);
         assertNull(query);
 
     }
 
     @Test
-    public void testCreateStrictQueryBlank() throws Exception {
+    public void testCreateQueryChainBlank() throws Exception {
 
-        final Query query = new ProductBrandSearchQueryBuilder().createStrictQuery(10L, 1010L, "brand", "  ");
+        final List<Query> query = new ProductBrandSearchQueryBuilder().createQueryChain(null, "brand", "  ");
         assertNull(query);
 
     }
 
     @Test
-    public void testCreateStrictQuerySingle() throws Exception {
+    public void testCreateQueryChainSingle() throws Exception {
 
-        final Query query = new ProductBrandSearchQueryBuilder().createStrictQuery(10L, 1010L, "brand", "Toshiba");
+        final List<Query> query = new ProductBrandSearchQueryBuilder().createQueryChain(null, "brand", "Toshiba");
         assertNotNull(query);
-        assertEquals("(brand:toshiba)^3.5", query.toString());
+        assertEquals(1, query.size());
+        assertEquals("(brand:toshiba)^3.5", query.get(0).toString());
 
     }
 
     @Test
-    public void testCreateStrictQueryMulti() throws Exception {
+    public void testCreateQueryChainMulti() throws Exception {
 
-        final Query query = new ProductBrandSearchQueryBuilder().createStrictQuery(10L, 1010L, "brand", "Toshiba-_-LG-_-Sobot");
+        final List<Query> query = new ProductBrandSearchQueryBuilder().createQueryChain(null, "brand", Arrays.asList("Toshiba", "LG", "Sobot"));
         assertNotNull(query);
-        assertEquals("(brand:toshiba)^3.5 (brand:lg)^3.5 (brand:sobot)^3.5", query.toString());
+        assertEquals(1, query.size());
+        assertEquals("(brand:toshiba)^3.5 (brand:lg)^3.5 (brand:sobot)^3.5", query.get(0).toString());
 
     }
 
     @Test
-    public void testCreateStrictQueryMultiNone() throws Exception {
+    public void testCreateQueryChainMultiWithEmpty() throws Exception {
 
-        final Query query = new ProductBrandSearchQueryBuilder().createStrictQuery(10L, 1010L, "brand", "-_--_-");
-        assertNull(query);
-
-    }
-
-    @Test
-    public void testCreateStrictQueryMultiCollection() throws Exception {
-
-        final Query query = new ProductBrandSearchQueryBuilder().createStrictQuery(10L, 1010L, "brand", Arrays.asList("Toshiba", "LG", "Sobot"));
+        final List<Query> query = new ProductBrandSearchQueryBuilder().createQueryChain(null, "brand", Arrays.asList("Toshiba", "", "Sobot"));
         assertNotNull(query);
-        assertEquals("(brand:toshiba)^3.5 (brand:lg)^3.5 (brand:sobot)^3.5", query.toString());
+        assertEquals(1, query.size());
+        assertEquals("(brand:toshiba)^3.5 (brand:sobot)^3.5", query.get(0).toString());
 
     }
 
     @Test
-    public void testCreateStrictQueryMultiCollectionEmpty() throws Exception {
+    public void testCreateQueryChainMultiCollectionEmpty() throws Exception {
 
-        final Query query = new ProductBrandSearchQueryBuilder().createStrictQuery(10L, 1010L, "brand", Collections.emptyList());
-        assertNull(query);
-
-    }
-
-    @Test
-    public void testCreateRelaxedQueryNull() throws Exception {
-
-        final Query query = new ProductBrandSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "brand", null);
-        assertNull(query);
-
-    }
-
-    @Test
-    public void testCreateRelaxedQueryBlank() throws Exception {
-
-        final Query query = new ProductBrandSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "brand", "  ");
-        assertNull(query);
-
-    }
-
-    @Test
-    public void testCreateRelaxedQuerySingle() throws Exception {
-
-        final Query query = new ProductBrandSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "brand", "Toshiba");
-        assertNotNull(query);
-        assertEquals("(brand:toshiba~2)^2.5", query.toString());
-
-
-    }
-
-    @Test
-    public void testCreateRelaxedQueryMulti() throws Exception {
-
-        final Query query = new ProductBrandSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "brand", "Toshiba-_-LG-_-Sobot");
-        assertNotNull(query);
-        assertEquals("(brand:toshiba~2)^2.5 (brand:lg)^2.5 (brand:sobot~1)^2.5", query.toString());
-
-    }
-
-    @Test
-    public void testCreateRelaxedQueryMultiNone() throws Exception {
-
-        final Query query = new ProductBrandSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "brand", "-_--_-");
-        assertNull(query);
-
-    }
-
-    @Test
-    public void testCreateRelaxedQueryMultiCollection() throws Exception {
-
-        final Query query = new ProductBrandSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "brand", Arrays.asList("Toshiba", "LG", "Sobot"));
-        assertNotNull(query);
-        assertEquals("(brand:toshiba~2)^2.5 (brand:lg)^2.5 (brand:sobot~1)^2.5", query.toString());
-
-    }
-
-    @Test
-    public void testCreateRelaxedQueryMultiCollectionEmpty() throws Exception {
-
-        final Query query = new ProductBrandSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "brand", Collections.emptyList());
+        final List<Query> query = new ProductBrandSearchQueryBuilder().createQueryChain(null, "brand", Collections.emptyList());
         assertNull(query);
 
     }

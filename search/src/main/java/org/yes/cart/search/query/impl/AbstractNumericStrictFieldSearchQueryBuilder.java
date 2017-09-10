@@ -20,16 +20,19 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * User: denispavlov
  * Date: 15/11/2014
  * Time: 23:16
  */
-public abstract class AbstractNumericStrictFieldSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
+public abstract class AbstractNumericStrictFieldSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder<Query> {
 
     private final String field;
     private final float boost;
@@ -47,7 +50,7 @@ public abstract class AbstractNumericStrictFieldSearchQueryBuilder extends Abstr
     /**
      * {@inheritDoc}
      */
-    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
+    public List<Query> createQueryChain(final NavigationContext<Query> navigationContext, final String parameter, final Object value) {
 
         if (value instanceof Collection) {
             final Collection singleValues = (Collection) value;
@@ -59,11 +62,11 @@ public abstract class AbstractNumericStrictFieldSearchQueryBuilder extends Abstr
                     final long number = toNumber(singleValue);
                     aggregatedQuery.add(createNumericQuery(field, number, boost), BooleanClause.Occur.SHOULD);
                 }
-                return aggregatedQuery.build();
+                return Collections.<Query>singletonList(aggregatedQuery.build());
 
             } else if (singleValues.size() == 1) {
                 final long number = toNumber(singleValues.iterator().next());
-                return createNumericQuery(field, number, boost);
+                return Collections.<Query>singletonList(createNumericQuery(field, number, boost));
             } else {
                 return null;
             }
@@ -75,7 +78,7 @@ public abstract class AbstractNumericStrictFieldSearchQueryBuilder extends Abstr
         }
 
         final long number = toNumber(value);
-        return createNumericQuery(field, number, boost);
+        return Collections.<Query>singletonList(createNumericQuery(field, number, boost));
     }
 
     private Long toNumber(final Object value) {
@@ -85,12 +88,4 @@ public abstract class AbstractNumericStrictFieldSearchQueryBuilder extends Abstr
         return NumberUtils.toLong(String.valueOf(value));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
-
-        return createStrictQuery(shopId, customerShopId, parameter, value);
-
-    }
 }

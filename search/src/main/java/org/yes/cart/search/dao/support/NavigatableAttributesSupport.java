@@ -16,6 +16,8 @@
 
 package org.yes.cart.search.dao.support;
 
+import org.yes.cart.domain.entity.Attribute;
+
 import java.util.Set;
 
 /**
@@ -52,5 +54,13 @@ public interface NavigatableAttributesSupport {
      * @return set of attribute codes.
      */
     Set<String> getAllStorableAttributeCodes();
+
+    /**
+     * Get attribute by given code.
+     *
+     * @param attributeCode given  code
+     * @return instance {@link Attribute} if fount, otherwise null
+     */
+    Attribute getByAttributeCode(String attributeCode);
 
 }

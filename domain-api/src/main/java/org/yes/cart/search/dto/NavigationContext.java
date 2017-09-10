@@ -46,6 +46,13 @@ public interface NavigationContext<T> extends Serializable {
     long getCustomerShopId();
 
     /**
+     * Get customer language (could be null).
+     *
+     * @return language
+     */
+    String getCustomerLanguage();
+
+    /**
      * Get category tree context.
      *
      * @return category context
