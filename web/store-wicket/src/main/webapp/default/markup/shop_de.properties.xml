@@ -92,11 +92,11 @@
     <entry key="shipmentStep">Versandart</entry>
     <entry key="paymentStep">Zahlung</entry>
     <entry key="paymentGatewayLabel">Zahlungsart</entry>
-    <entry key="multipleDeliveryLabel">Senden Sie Artikel, die verfügbar sind, so bald wie möglich</entry>
-    <entry key="multipleDeliveryHint">Einige Artikel, die nicht sofort verfügbar sind, werden in einer separaten Lieferung geliefert</entry>
+    <entry key="multipleDeliveryLabel">Teillieferungen erwünscht</entry>
+    <entry key="multipleDeliveryHint">Diese Bestellung weist mehrere Teillieferungen auf</entry>
     <entry key="paymentSubmit">Bezahlen</entry>
     <entry key="orderPlace">Zahlungspflichtig kaufen</entry>
-    <entry key="checkoutTitle">Checkout</entry>
+    <entry key="checkoutTitle">Weiter mit Bestellung</entry>
     <entry key="selectAddr">Bitte geben Sie Versand- und Rechnungsadresse an</entry>
     <entry key="selectPayment">Zahlung</entry>
     <entry key="selectDeliveryAddress">Bitte geben Sie Ihre Versandadresse ein bevor Sie die Versandart wählen</entry>
@@ -140,7 +140,7 @@
     <!-- RegistrationPage -->
 
     <!-- ShoppingCartPage -->
-    <entry key="checkout">Checkout</entry>
+    <entry key="checkout">Weiter mit Bestellung</entry>
     <entry key="shoppingCart">Warenkorb</entry>
     <entry key="emptyCart">Der Warenkorb ist leer</entry>
     <entry key="orderErrorGeneral">Beim Erstellen Ihrer Bestellung ist ein Fehler aufgetreten. Bitte versuchen Sie es nochmals.</entry>
@@ -181,15 +181,15 @@
     <entry key="deliveryEstimatedXY">Voraussichtliche Lieferzeit ist zwischen ${from} und ${to}</entry>
     <entry key="deliveryGuaranteed">Liefertermin ist ${date}</entry>
     <entry key="deliveryConfirmed">Geliefert ${date}</entry>
-    <entry key="deliveryRequested">Ausgewählter Liefertermin ist ${date}</entry>
+    <entry key="deliveryRequested">Gewählter Liefertermin ist ${date}</entry>
 
     <!-- ShippingDeliveriesView -->
     <entry key="deliveryCarrierSelect">Versandart</entry>
     <entry key="deliveryBucketCarrierSelect">Wählen Sie Versandart für Artikel von ${supplier}</entry>
-    <entry key="deliveryBucketCarrierSelectNone">Keine Verschiffenmethoden vorhanden für Artikel von ${supplier}. Sie müssen diese Artikel aus dem Warenkorb entfernen, um die Bestellung abzuschließen.</entry>
+    <entry key="deliveryBucketCarrierSelectNone">Keine Versandmethoden vorhanden für Artikel von ${supplier}. Sie müssen diese Artikel aus dem Warenkorb entfernen, um die Bestellung abzuschliessen.</entry>
     <entry key="deliveryBucketCarrier">Artikel von ${supplier}</entry>
     <entry key="carrierSelectMultiSupplier">Die Artikel in Ihrem Warenkorb werden von mehr als einem Lieferanten geliefert</entry>
-    <entry key="carrierSelectMultiDelivery">Einige Artikel in Ihrem Warenkorb benötigen möglicherweise einige Zeit, um wieder auf Lager zu sein. Wenn Sie Einzelteile wünschen, die auf Lager sind, um so bald wie möglich versendet zu werden, dann wählen Sie Kästchen unten. Beachten Sie, dass sich die Lieferkosten erhöhen können.</entry>
+    <entry key="carrierSelectMultiDelivery">Einige Artikel in Ihrem Warenkorb benötigen möglicherweise einige Zeit, um wieder an Lager zu sein. Wenn Sie Einzelteile wünschen, die auf Lager sind, um so bald wie möglich versendet zu werden, dann wählen Sie Kästchen unten. Beachten Sie, dass sich die Lieferkosten erhöhen können.</entry>
 
     <!-- ShoppingCartView -->
     <entry key="product">Produkt</entry>
@@ -198,8 +198,8 @@
     <entry key="removeOneLink">-1</entry>
     <entry key="removeAllLink">X</entry>
     <entry key="addOneLinkHint">Einen Artikel zufügen</entry>
-    <entry key="removeOneLinkHint">Einen Artikel löschen</entry>
-    <entry key="removeAllLinkHint">Alle Artikel löschen</entry>
+    <entry key="removeOneLinkHint">Einen Artikel entfernen</entry>
+    <entry key="removeAllLinkHint">Alle Artikel entfernen</entry>
     <entry key="refreshLinkHint">Stückzahl updaten</entry>
     <entry key="nonZeroDigits">Bitte die korrekte Anzahl eingeben</entry>
     <entry key="skuNumber">Artikel Nr.</entry>
@@ -247,7 +247,7 @@
     <!-- LoginPanel -->
     <entry key="wrongPassword">Falsches Passwort</entry>
     <entry key="customerNotExists">Kein Konto vorhanden. Bitte registrieren Sie sich zuerst.</entry>
-    <entry key="customerNotActiveInShop">Konto ist nicht aktiviert.</entry>
+    <entry key="customerNotActiveInShop">Ihre E-Mail Adresse ist im Shop noch nicht aktiviert. Zum Aktivieren loggen Sie sich bitte nochmals mit Ihren Logindaten ein und klicken auf "Anmelden".</entry>
     <entry key="existingUser">Registrierter Kunde</entry>
     <entry key="restorePassword">Passwort zurücksetzen</entry>
     <entry key="tryRestorePassword">Passwort vergessen?</entry>
@@ -317,7 +317,7 @@
     <entry key="preorderCartWlBtn">Vorbestellung (${quantity})</entry>
     <entry key="removeFromWishlist">Artikel entfernen</entry>
     <entry key="wishListPriceIncreased">Preiserhöhung ${delta}%</entry>
-    <entry key="wishListPriceDecreased">Preisnachlass ${delta}%</entry>
+    <entry key="wishListPriceDecreased">Preisänderung ${delta}%</entry>
     <entry key="wishListPriceOnSaleNow">Abverkauf. ${delta}% Rabatt</entry>
     <entry key="wishListShare">Dieser Artikel ist nur für Sie sichtbar.  Klicken Sie das Icon an um ihn zu teilen.</entry>
     <entry key="wishListHide">Dieser Artikel ist für jederman über den Teilen-Link. Klicken Sie dieses Icon an um den Link auszublenden.</entry>
@@ -350,7 +350,7 @@
     <entry key="demoMultiSku">Artikel Varianten</entry>
     <entry key="demoPreorder">Vorbestellung</entry>
     <entry key="demoBackorder">Rückstand</entry>
-    <entry key="demoAlways">Always</entry>
+    <entry key="demoAlways">Immer</entry>
     <entry key="demoShowroom">Showroom</entry>
     <entry key="demoMultiBuy">Mengenrabatt</entry>
     <entry key="demoAccessories">Zubehör</entry>
@@ -401,7 +401,7 @@
     <entry key="noResultsFound">Keine Artikel gefunden die Ihrer Suche entsprechen</entry>
 
     <!-- SkuCentralView -->
-    <entry key="addToWishlist">Auf Merkliste</entry>
+    <entry key="addToWishlist">Merkliste</entry>
     <entry key="saveForLater">Speichern, im Warenkorb löschen</entry>
     <entry key="wishListItemAddedW">Produkt ${sku} der Merkliste zugefügt. Sie können die Liste in Ihrer Profilseite ändern.</entry>
     <entry key="wishListItemAddedC">Produkt ${sku} gespeichert. Sie sehen die gespeicherten Artikel in Ihrem Warenkorb.</entry>
