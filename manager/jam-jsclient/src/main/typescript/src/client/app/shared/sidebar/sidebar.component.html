@@ -108,7 +108,7 @@
 
   <accordion-group *ngIf="menuType.SHO === true">
     <div accordion-heading>{{ 'PANEL_SHOPS' | translate }}</div>
-    <yc-shop-select [showNewLink]="menuType == 'SYSADMIN'" (dataNew)="selectNewShop()" (dataSelected)="selectCurrentShop($event)"></yc-shop-select>
+    <yc-shop-select [showNewLink]="menuType.SYS === true" (dataNew)="selectNewShop()" (dataSelected)="selectCurrentShop($event)"></yc-shop-select>
   </accordion-group>
 
   <accordion-group *ngIf="menuType.ORG === true">
