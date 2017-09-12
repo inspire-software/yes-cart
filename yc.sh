@@ -206,7 +206,7 @@ start_luke() {
     echo " Starting Luke (lucene index browser)           ";
     echo "================================================";
 
-    java -jar "$YC_HOME/env/luke/luke-with-deps-6.5.jar" &
+    java -jar "$YC_HOME/env/luke/lukeall-3.5.0.jar" &
 
 }
 
@@ -266,6 +266,9 @@ start_aws() {
         --group-name yescart \
         --protocol tcp --port 3306 --cidr 0.0.0.0/0 
 
+    aws ec2 modify-instance-attribute \
+        --groups $(aws ec2 describe-security-groups --group-names yescart | jq '.SecurityGroups[0] | .GroupId' | sed 's/\"//g') \
+        --instance-id $(aws ec2 describe-instances --filter Name=tag:Name,Values=YCDEMO | jq '.Reservations[0].Instances[0] | .InstanceId' | sed 's/\"//g')
 
     aws rds create-db-instance \
         --db-instance-identifier yescartmysql \
@@ -286,6 +289,7 @@ start_aws() {
 
     export ycmysqldb=$(host $(aws rds describe-db-instances --db-instance-identifier  yescartmysql | jq '.DBInstances[0] | .Endpoint.Address'  | sed 's/\"//g') | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
     echo "$ycmysqldb        yesmysqlhost" | sudo tee --append /etc/hosts
+    echo "127.0.0.1            yummailhost"  | sudo tee --append /etc/hosts
 
     sed -i -- 's/y3$PaSs/pwdMy34SqL/g' env/setup/dbi/mysql/dbinit.sql
     sed -i -- "s/localhost/'%'/g" env/setup/dbi/mysql/dbinit.sql
@@ -295,8 +299,49 @@ start_aws() {
     export ycdemohost=$(aws ec2 describe-instances --filter Name=tag:Name,Values=YCDEMO | jq '.Reservations[0].Instances[0] | .PublicDnsName' | sed 's/\"//g')
 
     mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; DELETE FROM TSHOPURL WHERE STOREURL_ID <> 12; UPDATE TSHOPURL SET URL = '$ycdemohost';" yes
-    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; INSERT INTO TSYSTEMATTRVALUE SET val = '/var/lib/tomcat7-ycdemo/import', code = 'JOB_LOCAL_FILE_IMPORT_FS_ROOT', SYSTEM_ID=100; " yes
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; INSERT INTO TSYSTEMATTRVALUE SET val = '/var/lib/tomcat7-ycdemo/import', code = 'JOB_LOCAL_FILE_IMPORT_FS_ROOT', SYSTEM_ID=100, GUID='JLFIR100'; " yes
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; INSERT INTO TSYSTEMATTRVALUE SET val = 'false', code = 'JOB_LOCAL_FILE_IMPORT_PAUSE', SYSTEM_ID=100, GUID='JLFP100'; " yes
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; INSERT INTO TSYSTEMATTRVALUE SET val = 'false', code = 'JOB_SEND_MAIL_PAUSE', SYSTEM_ID=100, GUID='JSPM100'; " yes
 
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; UPDATE TSYSTEMATTRVALUE SET val = 'http://$ycdemohost:8080/yes-shop' WHERE code = 'SYSTEM_DEFAULT_SHOP' AND SYSTEM_ID=100; " yes
+
+
+
+    mkdir -p /var/lib/tomcat7/webapps/ROOT/WEB-INF
+tee /var/lib/tomcat7/webapps/ROOT/index.html <<-'EOF'
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="refresh" content="0; url=/yes-shop/">
+</head>
+<body>
+    <a href="/yes-shop/">Shop</a>
+</body>
+</html>
+EOF
+tee /var/lib/tomcat7/webapps/ROOT/WEB-INF/web.xml <<-'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1"  metadata-complete="true">
+
+  <display-name>Yes-cart</display-name>
+  <description>
+     Yes-cart
+  </description>
+
+</web-app>
+EOF
+    
+
+    cp env/maven/aws/tomcat/keystore.jks /etc/tomcat7/keystore.jks
+    cp env/maven/aws/tomcat/server.xml  /etc/tomcat7/server.xml
+
+    chown tomcat:tomcat /var/lib/tomcat7/webapps/ROOT -R
+    chown tomcat:tomcat /etc/tomcat7/keystore.jks
+    chown tomcat:tomcat /etc/tomcat7/server.xml
 
 
     cp /home/ec2-user/yes-cart/manager/jam/target/yes-manager.war /usr/share/tomcat7/webapps/
@@ -309,23 +354,29 @@ start_aws() {
     mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/processed
 tee /var/lib/tomcat7-ycdemo/import/SHOP10/config/config.properties <<-'EOF'
 config.0.group=YC DEMO: Initial Data
-config.0.regex=import\\.zip
+config.0.regex=import([\\.\\d{14}]*)\\.zip
 config.0.reindex=true
 config.0.user=admin@yes-cart.com
 config.0.pass=1234567
 config.1.group=YC DEMO: IceCat Catalog
-config.1.regex=import\\-EN,DE,UK,RU\\.zip
+config.1.regex=import\\-EN,DE,UK,RU([\\.\\d{14}]*)\\.zip
 config.1.reindex=true
 config.1.user=admin@yes-cart.com
 config.1.pass=1234567
 config.2.group=YC DEMO: Product images (IceCat)
-config.2.regex=import\\-EN,DE,UK,RU\\-img\\.zip
+config.2.regex=import\\-EN,DE,UK,RU\\-img([\\.\\d{14}]*)\\.zip
 config.2.reindex=true
 config.2.user=admin@yes-cart.com
 config.2.pass=1234567
 EOF
-    cp /home/ec2-user/yes-cart/env/sampledata/demo-data/icecat/import/* /var/lib/tomcat7-ycdemo/import/SHOP10/incoming
+    cp /home/ec2-user/yes-cart/env/sampledata/demo-data/icecat/import/* /var/lib/tomcat7-ycdemo/import/SHOP10/processed
+    mv /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU.zip         /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU.20170906010101.zip
+    mv /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU-img.zip /var/lib/tomcat7-ycdemo/import/SHOP10/processed/import-EN,DE,UK,RU-img.20170906020202.zip
     chown tomcat:tomcat /var/lib/tomcat7-ycdemo -R
+
+    sudo /sbin/iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
+    sudo /sbin/iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 8443
+
     service tomcat7 start
 
     echo " Yes-Cart is available on "
