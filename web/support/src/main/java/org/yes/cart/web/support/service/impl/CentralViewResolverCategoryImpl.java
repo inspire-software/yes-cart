@@ -26,6 +26,7 @@ import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -87,8 +88,10 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
             final long categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(parameters.get(WebParametersKeys.CATEGORY_ID)));
             if (categoryId > 0L) {
 
-                final long shopId = ApplicationDirector.getShoppingCart().getShoppingContext().getShopId();
-                final long browsingShopId = ApplicationDirector.getShoppingCart().getShoppingContext().getCustomerShopId();
+                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+                final long shopId = cart.getShoppingContext().getShopId();
+                final long browsingShopId = cart.getShoppingContext().getCustomerShopId();
+                final String lang = cart.getCurrentLocale();
 
                 // If we have template just use it without any checks (saves us 1 FT query for each request)
                 final String template = shopService.getShopCategoryTemplate(shopId, categoryId);
@@ -109,7 +112,7 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
                 }
 
                 // shopId will be used for inStock check, because we have category IDs will always look in those
-                final NavigationContext hasProducts = searchQueryFactory.getFilteredNavigationQueryChain(shopId, browsingShopId, catIds.getFirst(), catIds.getSecond(), null);
+                final NavigationContext hasProducts = searchQueryFactory.getFilteredNavigationQueryChain(shopId, browsingShopId, lang, catIds.getFirst(), catIds.getSecond(), null);
 
                 if (productService.getProductQty(hasProducts) > 0) {
 

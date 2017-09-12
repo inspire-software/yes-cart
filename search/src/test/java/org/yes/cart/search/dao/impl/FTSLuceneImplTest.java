@@ -83,7 +83,7 @@ public class FTSLuceneImplTest {
 
                 final String fieldName = field.getKey();
                 final Object values = field.getValue();
-                final List<String> strValues = values instanceof String ? Collections.singletonList(values) : (List) values;
+                final List<String> strValues = values instanceof String ? Collections.singletonList((String) values) : (List) values;
                 final boolean multi = strValues.size() > 1;
                 final boolean numeric = this.numeric.contains(fieldName);
 

@@ -17,6 +17,7 @@
 package org.yes.cart.domain.entity.bridge.support.impl;
 
 import org.springframework.cache.annotation.Cacheable;
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.search.dao.support.NavigatableAttributesSupport;
 
 import java.util.Set;
@@ -65,4 +66,13 @@ public class NavigatableAttributesSupportCachedImpl implements NavigatableAttrib
     public Set<String> getAllStorableAttributeCodes() {
         return support.getAllStorableAttributeCodes();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "attributeService-byAttributeCode")
+    public Attribute getByAttributeCode(final String attributeCode) {
+        return support.getByAttributeCode(attributeCode);
+    }
+
 }

@@ -70,8 +70,8 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
 
         productService.reindexProduct(product.getId());
 
-        final NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, false,
-                Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD, (List) Arrays.asList("9998")));
+        final NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, null,
+                false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD, (List) Arrays.asList("9998")));
 
         List<ProductSearchResultDTO> rez = productService.getProductSearchResultDTOByQuery(
                 context, 0, 1, null, false).getResults();

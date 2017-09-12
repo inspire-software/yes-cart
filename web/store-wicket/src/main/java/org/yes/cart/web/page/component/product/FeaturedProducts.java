@@ -47,10 +47,11 @@ public class FeaturedProducts extends AbstractProductSearchResultList {
     public List<ProductSearchResultDTO> getProductListToShow() {
         if (products == null) {
 
+            final long shopId = getCurrentShopId();
             final long browsingShopId = getCurrentCustomerShopId();
             final long categoryId = getWicketUtil().getCategoryId(getPage().getPageParameters());
 
-            products = productServiceFacade.getFeaturedProducts(categoryId, browsingShopId);
+            products = productServiceFacade.getFeaturedProducts(categoryId, shopId, browsingShopId);
 
         }
         return products;

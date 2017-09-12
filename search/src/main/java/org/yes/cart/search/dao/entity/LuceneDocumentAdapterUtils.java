@@ -17,7 +17,6 @@
 package org.yes.cart.search.dao.entity;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.document.*;
 import org.apache.lucene.facet.sortedset.SortedSetDocValuesFacetField;
 import org.apache.lucene.util.BytesRef;
@@ -31,6 +30,7 @@ import org.yes.cart.domain.entity.StoredAttributes;
 import org.yes.cart.domain.entity.impl.StoredAttributesImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
+import org.yes.cart.search.query.impl.SearchUtil;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -250,19 +250,32 @@ public class LuceneDocumentAdapterUtils {
      * @param name     field name
      * @param value    value
      */
-    public static void addSnowballField(final Document document, final String name, final String value) {
+    public static void addSearchField(final Document document, final String name, final String value) {
         if (value != null) {
             final String lower = value.toLowerCase();
-            final String[] parts = StringUtils.split(lower, ' ');
-            final StringBuilder snowball = new StringBuilder();
-            for (final String part : parts) {
-                if (snowball.length() > 0) {
-                    snowball.append(' ');
-                }
-                snowball.append(part);
-                document.add(new StringField(name, snowball.toString(), Field.Store.NO));
+            for (final String part : SearchUtil.splitForSearch(lower,2)) {
+                document.add(new StringField(name, part, Field.Store.NO));
             }
-            document.add(new StringField(name, lower, Field.Store.NO));
+        }
+    }
+
+    /**
+     * Adds a string field (split by space and then added as snowball)
+     *
+     * @param document document
+     * @param lang     language hint
+     * @param name     field name
+     * @param value    value
+     */
+    public static void addSearchI18nField(final Document document, final String lang, final String name, final String value) {
+        if (value != null) {
+            final String lower = value.toLowerCase();
+            for (final String part : SearchUtil.splitForSearch(lower,2)) {
+                document.add(new StringField(name, part, Field.Store.NO));
+            }
+            for (final String part : SearchUtil.analyseForSearch(lang, lower)) {
+                document.add(new StringField(name, part, Field.Store.NO));
+            }
         }
     }
 
@@ -289,10 +302,10 @@ public class LuceneDocumentAdapterUtils {
      * @param name     field name
      * @param model    value
      */
-    public static void addSnowballFields(final Document document, final String name, final I18NModel model) {
+    public static void addSearchFields(final Document document, final String name, final I18NModel model) {
         if (model != null && !model.getAllValues().isEmpty()) {
-            for (final String value : model.getAllValues().values()) {
-                addSnowballField(document, name, value);
+            for (final Map.Entry<String, String> entry : model.getAllValues().entrySet()) {
+                addSearchI18nField(document, entry.getKey(), name, entry.getValue());
             }
         }
     }

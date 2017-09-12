@@ -217,7 +217,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
                         weight = weight.add(kg.multiply(cartItem.getQty()));
                     }
                 } catch (Exception exp) {
-                    LOG.error("Product {} does not have valid weight");
+                    LOG.error("Product {} does not have valid weight", product.getCode());
                 }
 
                 try {
@@ -227,7 +227,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
                         volume = volume.add(m3.multiply(cartItem.getQty()));
                     }
                 } catch (Exception exp) {
-                    LOG.error("Product {} does not have valid volume");
+                    LOG.error("Product {} does not have valid volume", product.getCode());
                 }
 
             }

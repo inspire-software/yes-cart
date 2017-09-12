@@ -484,6 +484,7 @@ public class SearchController {
         final ShoppingCart cart = cartMixin.getCurrentCart();
         final long shopId = cart.getShoppingContext().getShopId();
         final long browsingShopId = cart.getShoppingContext().getCustomerShopId();
+        final String locale = cart.getCurrentLocale();
 
         final SearchResultRO result = new SearchResultRO();
         result.setSearch(search);
@@ -495,7 +496,7 @@ public class SearchController {
         }
 
 
-        final NavigationContext context = createNavigationContext(shopId, browsingShopId, categoryId, result);
+        final NavigationContext context = createNavigationContext(shopId, browsingShopId, locale, categoryId, result);
 
         configureResultViewOptions(categoryId, browsingShopId, cart.getCurrentLocale(), cart.getCurrencyCode(), result);
 
@@ -786,7 +787,10 @@ public class SearchController {
 
     }
 
-    private NavigationContext createNavigationContext(final long shopId, final long browsingShopId, final long categoryId,
+    private NavigationContext createNavigationContext(final long shopId,
+                                                      final long browsingShopId,
+                                                      final String locale,
+                                                      final long categoryId,
                                                       final SearchResultRO result) {
 
         final Pair<List<Long>, Boolean> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, browsingShopId);
@@ -800,10 +804,10 @@ public class SearchController {
         return searchQueryFactory.getFilteredNavigationQueryChain(
                 shopId,
                 browsingShopId,
+                locale,
                 currentCategoriesIds.getFirst(),
                 currentCategoriesIds.getSecond(),
-                mapParams
-        );
+                mapParams);
 
     }
 

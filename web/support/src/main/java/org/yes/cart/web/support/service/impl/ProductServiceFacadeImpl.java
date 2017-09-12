@@ -144,6 +144,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     @Cacheable(value = "productService-productAssociationsIds")
     public List<ProductSearchResultDTO> getProductAssociations(final long productId,
                                                                final long shopId,
+                                                               final long customerShopId,
                                                                final String associationType) {
 
         final List<String> productIds = productAssociationService.getProductAssociationsProductCodes(
@@ -156,9 +157,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
             final List<String> search = productIds.size() > 50 ? productIds.subList(0, 50) : productIds;
 
-            final NavigationContext assoc = searchQueryFactory.getFilteredNavigationQueryChain(shopId, shopId, null, false,
-                    Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_CODE_FIELD,
-                            (List) Arrays.asList(search)));
+            final NavigationContext assoc = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, null,
+                    false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_CODE_FIELD,
+                            search));
 
             return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
                     assoc, 0, search.size(), null, false).getResults());
@@ -171,7 +172,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      * {@inheritDoc}
      */
     @Cacheable(value = "productService-featuredProducts")
-    public List<ProductSearchResultDTO> getFeaturedProducts(final long categoryId, final long shopId) {
+    public List<ProductSearchResultDTO> getFeaturedProducts(final long categoryId,
+                                                            final long shopId,
+                                                            final long customerShopId) {
 
         final List<Long> categories;
         if (categoryId == 0) {
@@ -182,9 +185,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         final int limit = categoryServiceFacade.getFeaturedListSizeConfig(categoryId, shopId);
 
-        final NavigationContext featured = searchQueryFactory.getFilteredNavigationQueryChain(shopId, shopId, categories, false,
-                Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD,
-                        (List) Arrays.asList("true")));
+        final NavigationContext featured = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, categories,
+                false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD,
+                        (List) Collections.singletonList("true")));
 
         return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
                 featured, 0, limit, null, false).getResults());
@@ -194,7 +197,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      * {@inheritDoc}
      */
     @Cacheable(value = "productService-newProducts")
-    public List<ProductSearchResultDTO> getNewProducts(final long categoryId, final long shopId) {
+    public List<ProductSearchResultDTO> getNewProducts(final long categoryId,
+                                                       final long shopId,
+                                                       final long customerShopId) {
 
         final int limit = categoryServiceFacade.getNewArrivalListSizeConfig(categoryId, shopId);
 
@@ -204,9 +209,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         } else {
             newArrivalCats = null;
         }
-        final NavigationContext newarrival = searchQueryFactory.getFilteredNavigationQueryChain(shopId, shopId, newArrivalCats, false,
-                Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
-                        (List) Arrays.asList(ProductSearchQueryBuilder.TAG_NEWARRIVAL)));
+        final NavigationContext newarrival = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, newArrivalCats,
+                false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
+                        (List) Collections.singletonList(ProductSearchQueryBuilder.TAG_NEWARRIVAL)));
 
         return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
                 newarrival, 0, limit, null, true).getResults());
@@ -216,7 +221,10 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      * {@inheritDoc}
      */
     @Cacheable(value = "productService-taggedProducts")
-    public List<ProductSearchResultDTO> getTaggedProducts(final long categoryId, final long shopId, final String tag) {
+    public List<ProductSearchResultDTO> getTaggedProducts(final long categoryId,
+                                                          final long shopId,
+                                                          final long customerShopId,
+                                                          final String tag) {
 
         final List<Long> categories;
         if (categoryId == 0) {
@@ -227,9 +235,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         final int limit = categoryServiceFacade.getFeaturedListSizeConfig(categoryId, shopId);
 
-        final NavigationContext tagged = searchQueryFactory.getFilteredNavigationQueryChain(shopId, shopId, categories, false,
-                Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
-                        (List) Arrays.asList(tag)));
+        final NavigationContext tagged = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, categories,
+                false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
+                        (List) Collections.singletonList(tag)));
 
         return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
                 tagged, 0, limit, null, false).getResults());
@@ -240,7 +248,8 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      */
     public List<ProductSearchResultDTO> getListProducts(final List<String> productIds,
                                                         final long categoryId,
-                                                        final long shopId) {
+                                                        final long shopId,
+                                                        final long customerShopId) {
         if (CollectionUtils.isNotEmpty(productIds)) {
 
             List<String> productIdsForCategory = productIds;
@@ -251,9 +260,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 productIdsForCategory = productIds.subList(productIds.size() - limit, productIds.size());
             }
 
-            final NavigationContext recent = searchQueryFactory.getFilteredNavigationQueryChain(shopId, shopId, null, false,
-                    Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
-                            (List) Arrays.asList(productIdsForCategory)));
+            final NavigationContext recent = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, null,
+                    false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
+                            productIdsForCategory));
 
             return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
                     recent, 0, limit, null, false).getResults());
@@ -304,36 +313,36 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
-    public ProductAvailabilityModel getProductAvailability(final ProductSearchResultDTO product, final long shopId) {
+    public ProductAvailabilityModel getProductAvailability(final ProductSearchResultDTO product, final long customerShopId) {
 
-        return productAvailabilityStrategy.getAvailabilityModel(shopId, product);
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public ProductAvailabilityModel getProductAvailability(final Product product, final long shopId) {
-
-        return productAvailabilityStrategy.getAvailabilityModel(shopId, product);
+        return productAvailabilityStrategy.getAvailabilityModel(customerShopId, product);
 
     }
 
     /**
      * {@inheritDoc}
      */
-    public ProductAvailabilityModel getProductAvailability(final ProductSku product, final long shopId) {
+    public ProductAvailabilityModel getProductAvailability(final Product product, final long customerShopId) {
 
-        return productAvailabilityStrategy.getAvailabilityModel(shopId, product);
+        return productAvailabilityStrategy.getAvailabilityModel(customerShopId, product);
 
     }
 
     /**
      * {@inheritDoc}
      */
-    public ProductAvailabilityModel getProductAvailability(final String skuCode, final long shopId) {
+    public ProductAvailabilityModel getProductAvailability(final ProductSku product, final long customerShopId) {
 
-        return productAvailabilityStrategy.getAvailabilityModel(shopId, skuCode);
+        return productAvailabilityStrategy.getAvailabilityModel(customerShopId, product);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ProductAvailabilityModel getProductAvailability(final String skuCode, final long customerShopId) {
+
+        return productAvailabilityStrategy.getAvailabilityModel(customerShopId, skuCode);
 
     }
 

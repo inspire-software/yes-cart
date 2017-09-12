@@ -19,153 +19,72 @@ package org.yes.cart.search.query.impl;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
-import org.springframework.util.CollectionUtils;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
-
-import java.util.List;
 
 /**
  * Analysed terms are all lower case - there is no point in using fuzzy to search against them
  * as it is case sensitive. Make sure that analysed field are "word.toLowerCase()" matches.
  *
- * Default lucene fuzzy is 0.5 - i.e. 50% match. Below settings are very project specific
- * and have to be fine-tuned.
- *
- * For attributes 0.65 - i.e. up to 3.5 letters wrong in a 10 letter word, more than this could be
- * damaging to search especially in Russian language. The worst example would
- * be fuzzy 0.5 on color, which is Russian has common ending for adjectives
- * in all colors
- *
- * In order to provide better matches we use the following strict boosts (phrase/words):
- * Name:             3.0/ 2.0
- * Display name:     3.0/ 2.0
- * CODE:            10.0/10.0 (ensure sku match)
- * Primary attr:    15.0/     (ensure exact match)
- * Attributes:       4.0/ 4.0 (variation attributes are more important than name)
- *
- * In order to provide better matches we use the following relaxed boosts:
- * Name:              2.0
- * Display name:      2.0
- * CODE:             10.0 (ensure sku match)
- * CODE stem:         1.0 (ensure sku match)
- * Attributes:        4.0 (variation attributes are more important than name)
- *
  * User: denispavlov
  * Date: 16/11/2014
  * Time: 16:19
  */
-public class KeywordProductSkuSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
+public class KeywordProductSkuSearchQueryBuilder extends AbstractKeywordSearchQueryBuilder implements ProductSearchQueryBuilder<Query> {
 
-    private int minWordLength = 2;
-
-    /**
-     * {@inheritDoc}
-     */
-    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
-
-        if (!isEmptyValue(value)) {
-
-            final List<String> words = SearchUtil.splitForSearch(String.valueOf(value), minWordLength);
-            if (CollectionUtils.isEmpty(words)) {
-                return null;
-            }
-
-            final BooleanQuery.Builder aggregateQuery = new BooleanQuery.Builder();
-
-            final String escapedSearchValue = escapeValue(value);
-            final String escapedSearchValueLower = escapedSearchValue.toLowerCase();
-
-            final BooleanQuery.Builder phrazeQuery = new BooleanQuery.Builder();
-
-            phrazeQuery.add(createFuzzyQuery(PRODUCT_NAME_FIELD, escapedSearchValueLower, 2, 3f), BooleanClause.Occur.SHOULD);
-            phrazeQuery.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedSearchValueLower, 2, 3f), BooleanClause.Occur.SHOULD);
-
-            phrazeQuery.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedSearchValueLower, 2, 10f), BooleanClause.Occur.SHOULD);
-            phrazeQuery.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD, escapedSearchValueLower, 2, 10f), BooleanClause.Occur.SHOULD);
-
-            phrazeQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD, escapedSearchValueLower, 2, 15f), BooleanClause.Occur.SHOULD);
-            phrazeQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, escapedSearchValueLower, 2, 4f), BooleanClause.Occur.SHOULD);
-
-            aggregateQuery.add(phrazeQuery.build(), BooleanClause.Occur.SHOULD);
-
-            if (words.size() > 1 || !words.get(0).equals(escapedSearchValue)) {
-                for (String word : words) {
-
-                    final String escapedWord = escapeValue(word.toLowerCase());
-
-                    final BooleanQuery.Builder wordQuery = new BooleanQuery.Builder();
-
-                    wordQuery.add(createFuzzyQuery(PRODUCT_NAME_FIELD, escapedWord, 2, 2f), BooleanClause.Occur.SHOULD);
-                    wordQuery.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedWord, 2, 2f), BooleanClause.Occur.SHOULD);
-
-                    wordQuery.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedWord, 2, 10f), BooleanClause.Occur.SHOULD);
-                    wordQuery.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD, escapedWord, 2, 10f), BooleanClause.Occur.SHOULD);
-
-                    wordQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD, escapedWord, 2, 15f), BooleanClause.Occur.SHOULD);
-                    wordQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCH_FIELD, escapedWord, 2, 4f), BooleanClause.Occur.SHOULD);
-
-                    aggregateQuery.add(wordQuery.build(), BooleanClause.Occur.SHOULD);
-                }
-            }
-
-            return aggregateQuery.build();
-
-        }
-
-        return null;
+    public KeywordProductSkuSearchQueryBuilder() {
+        super(false);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
+    private Query createKeywordQueryMaxMatch(final String term) {
 
-        if (value != null) {
+        final String escapedTerm = escapeValue(term);
 
-            final List<String> words = SearchUtil.splitForSearch(String.valueOf(value), minWordLength);
-            if (CollectionUtils.isEmpty(words)) {
-                return null;
-            }
+        final BooleanQuery.Builder query = new BooleanQuery.Builder();
 
-            final BooleanQuery.Builder aggregateQuery = new BooleanQuery.Builder();
+        // product name weight (3~2/1~1)
+        query.add(createFuzzyQuery(PRODUCT_NAME_FIELD, escapedTerm, 2, 3f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(PRODUCT_NAME_STEM_FIELD, escapedTerm, 1, 1f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedTerm, 2, 3f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_STEM_FIELD, escapedTerm, 1, 1f), BooleanClause.Occur.SHOULD);
 
-            for (String word : words) {
+        // product code matches (5/4~1) so that exact code match brings top result
+        query.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedTerm, 1,5f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(SKU_PRODUCT_CODE_STEM_FIELD, escapedTerm, 1, 2f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD, escapedTerm, 1, 5f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_STEM_FIELD, escapedTerm, 1,2f), BooleanClause.Occur.SHOULD);
 
-                final String escapedWord = escapeValue(word.toLowerCase()); // use lower case to increase chance of match
+        // attribute primary (4~1)
+        query.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD, escapedTerm, 1, 5f), BooleanClause.Occur.SHOULD);
 
-                final BooleanQuery.Builder wordQuery = new BooleanQuery.Builder();
+        // attribute general (5~2/5~1)
+        query.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, escapedTerm, 2, 5f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCH_FIELD, escapedTerm, 1, 5f), BooleanClause.Occur.SHOULD);
 
-                wordQuery.add(createFuzzyQuery(PRODUCT_NAME_FIELD, escapedWord, 2, 2f), BooleanClause.Occur.SHOULD);
-                wordQuery.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedWord, 2, 2f), BooleanClause.Occur.SHOULD);
+        return query.build();
 
-                wordQuery.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedWord, 2, 10f), BooleanClause.Occur.SHOULD);
-                wordQuery.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD, escapedWord, 2, 10f), BooleanClause.Occur.SHOULD);
-
-                wordQuery.add(createFuzzyQuery(SKU_PRODUCT_CODE_STEM_FIELD, escapedWord, 1, 1.0f), BooleanClause.Occur.SHOULD);
-                wordQuery.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_STEM_FIELD, escapedWord, 1, 1.0f), BooleanClause.Occur.SHOULD);
-
-                wordQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD, escapedWord, 2, 4f), BooleanClause.Occur.SHOULD);
-                wordQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCH_FIELD, escapedWord, 2, 4f), BooleanClause.Occur.SHOULD);
-
-                aggregateQuery.add(wordQuery.build(), BooleanClause.Occur.SHOULD);
-            }
-
-            return aggregateQuery.build();
-
-        }
-
-        return null;
     }
 
+    @Override
+    protected Query createKeywordQueryExact(final String term) {
 
-    /**
-     * Set minimum length of a searchable word.
-     *
-     * @param minWordLength min char length
-     */
-    public void setMinWordLength(final int minWordLength) {
-        this.minWordLength = minWordLength;
+        return createKeywordQueryMaxMatch(term);
+
     }
+
+    @Override
+    protected Query createKeywordQueryTerm(final String term) {
+
+        return createKeywordQueryMaxMatch(term);
+
+    }
+
+    @Override
+    protected Query createKeywordQueryStem(final String stem) {
+
+        return createKeywordQueryMaxMatch(stem);
+
+    }
+
 
 
 }

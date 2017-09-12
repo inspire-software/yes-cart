@@ -136,10 +136,11 @@ public class WishListView extends AbstractProductSearchResultList {
 
                 }
 
+                final long shopId = getCurrentShopId();
                 final long browsingShopId = getCurrentCustomerShopId();
 
                 final List<ProductSearchResultDTO> uniqueProducts = productServiceFacade.getListProducts(
-                        productIds, -1L, browsingShopId);
+                        productIds, -1L, shopId, browsingShopId);
 
                 final List<ProductSearchResultDTO> wishListProducts = new ArrayList<ProductSearchResultDTO>();
 

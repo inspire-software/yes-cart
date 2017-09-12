@@ -887,8 +887,10 @@ public class ProductController {
 
         final long productId = bookmarkMixin.resolveProductId(product);
         final ShoppingCart cart = cartMixin.getCurrentCart();
+        final long shopId = cart.getShoppingContext().getShopId();
+        final long browsingShopId = cart.getShoppingContext().getCustomerShopId();
 
-        final List<ProductSearchResultDTO> productAssociations = productServiceFacade.getProductAssociations(productId, cart.getShoppingContext().getCustomerShopId(), type);
+        final List<ProductSearchResultDTO> productAssociations = productServiceFacade.getProductAssociations(productId, shopId, browsingShopId, type);
 
         final List<ProductSearchResultRO> ros = new ArrayList<ProductSearchResultRO>();
 

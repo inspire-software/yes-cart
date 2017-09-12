@@ -16,28 +16,36 @@
 
 package org.yes.cart.search.query.impl;
 
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.lucene.search.Query;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * User: denispavlov
  * Date: 17/07/2017
  * Time: 23:16
  */
-public class InStockProductSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
+public class InStockProductSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder<Query> {
 
     /**
      * {@inheritDoc}
      */
-    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
-        return createNumericQuery(PRODUCT_SHOP_INSTOCK_FLAG_FIELD + ("0".equals(value) ? "0" : "1"), customerShopId);
-    }
+    public List<Query> createQueryChain(final NavigationContext<Query> navigationContext, final String parameter, final Object value) {
 
-    /**
-     * {@inheritDoc}
-     */
-    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
-        return createStrictQuery(shopId, customerShopId, parameter, value);
+        String strValue = "1";
+        if (value instanceof Collection) {
+            if (CollectionUtils.isNotEmpty((Collection) value)) {
+                strValue = "0".equals(((Collection) value).iterator().next()) ? "0" : "1";
+            }
+        } else {
+            strValue = "0".equals(value) ? "0" : "1";
+        }
+
+        return Collections.<Query>singletonList(createNumericQuery(PRODUCT_SHOP_INSTOCK_FLAG_FIELD + strValue, navigationContext.getCustomerShopId()));
     }
 }

@@ -109,11 +109,10 @@ public class HomePage extends AbstractWebPage {
 
         final NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(
                 shopId,
-                browsingShopId,
+                browsingShopId, getLocale().getLanguage(),
                 currentCategoriesIds.getFirst(),
                 currentCategoriesIds.getSecond(),
-                (Map) mapParams
-        );
+                (Map) mapParams);
 
         addOrReplace(new BreadCrumbsView("breadCrumbs", browsingShopId, categoryId));
 

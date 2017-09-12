@@ -314,7 +314,7 @@ public class SkuCentralView extends AbstractCentralView {
 
         final List<ProductSearchResultDTO> productsAccessories = productServiceFacade.getProductAssociations(
                 isProduct ? product.getProductId() : sku.getProduct().getProductId(),
-                browsingStoreId, Association.ACCESSORIES
+                shop.getShopId(), browsingStoreId, Association.ACCESSORIES
         );
 
         final boolean accessoriesVisible = CollectionUtils.isNotEmpty(productsAccessories);
@@ -327,7 +327,7 @@ public class SkuCentralView extends AbstractCentralView {
 
         final List<ProductSearchResultDTO> productsExpendables = productServiceFacade.getProductAssociations(
                 isProduct ? product.getProductId() : sku.getProduct().getProductId(),
-                browsingStoreId, Association.EXPENDABLE
+                shop.getShopId(), browsingStoreId, Association.EXPENDABLE
         );
 
         final boolean expendablesVisible = CollectionUtils.isNotEmpty(productsExpendables);
@@ -340,11 +340,11 @@ public class SkuCentralView extends AbstractCentralView {
 
         final List<ProductSearchResultDTO> productsUp = productServiceFacade.getProductAssociations(
                 isProduct ? product.getProductId() : sku.getProduct().getProductId(),
-                browsingStoreId, Association.UP_SELL
+                shop.getShopId(), browsingStoreId, Association.UP_SELL
         );
         final List<ProductSearchResultDTO> productsCross = productServiceFacade.getProductAssociations(
                 isProduct ? product.getProductId() : sku.getProduct().getProductId(),
-                browsingStoreId, Association.CROSS_SELL
+                shop.getShopId(), browsingStoreId, Association.CROSS_SELL
         );
 
         final List<ProductSearchResultDTO> productsSell = new ArrayList<ProductSearchResultDTO>();
@@ -366,7 +366,7 @@ public class SkuCentralView extends AbstractCentralView {
 
         final List<ProductSearchResultDTO> productsBuy = productServiceFacade.getProductAssociations(
                 isProduct ? product.getProductId() : sku.getProduct().getProductId(),
-                browsingStoreId, Association.BUY_WITH_THIS
+                shop.getShopId(), browsingStoreId, Association.BUY_WITH_THIS
         );
 
         final boolean buyVisible = CollectionUtils.isNotEmpty(productsBuy);

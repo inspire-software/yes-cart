@@ -87,8 +87,10 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
                 if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(qty, BigDecimal.ZERO)) {
                     return qty.setScale(0, BigDecimal.ROUND_CEILING);
                 }
+            } catch (NumberFormatException nfe) {
+                LOG.error("Invalid quantity {} in set qty to cart command", strQty);
             } catch (Exception exp) {
-                LOG.error("Invalid quantity in add to cart command", exp);
+                LOG.error("Invalid quantity in set qty to cart command", exp);
             }
         }
         if (productSku != null) {

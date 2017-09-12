@@ -17,26 +17,23 @@
 package org.yes.cart.search.query.impl;
 
 import org.apache.lucene.search.Query;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * User: denispavlov
  * Date: 15/11/2014
  * Time: 23:16
  */
-public class FeaturedProductSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
+public class FeaturedProductSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder<Query> {
 
     /**
      * {@inheritDoc}
      */
-    public Query createStrictQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
-        return createTermQuery(PRODUCT_FEATURED_FIELD, "true");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Query createRelaxedQuery(final long shopId, final long customerShopId, final String parameter, final Object value) {
-        return createStrictQuery(shopId, customerShopId, parameter, value);
+    public List<Query> createQueryChain(final NavigationContext<Query> navigationContext, final String parameter, final Object value) {
+        return Collections.<Query>singletonList(createTermQuery(PRODUCT_FEATURED_FIELD, "true"));
     }
 }

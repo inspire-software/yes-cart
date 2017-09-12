@@ -151,42 +151,46 @@ public interface ProductServiceFacade {
      *
      * @param productId       product primary key
      * @param shopId          current shop
+     * @param customerShopId  current customer shop
      * @param associationType association code [up, cross, etc]
      *
      * @return list of product associations
      */
-    List<ProductSearchResultDTO> getProductAssociations(long productId, long shopId, String associationType);
+    List<ProductSearchResultDTO> getProductAssociations(long productId, long shopId, final long customerShopId, String associationType);
 
     /**
      * Get featured products for given category. Limit is set by the category.
      *
      * @param categoryId      category (optional)
      * @param shopId          current shop
+     * @param customerShopId  current customer shop
      *
      * @return list of featured products
      */
-    List<ProductSearchResultDTO> getFeaturedProducts(long categoryId, long shopId);
+    List<ProductSearchResultDTO> getFeaturedProducts(long categoryId, long shopId, final long customerShopId);
 
     /**
      * Get new products for given category. Limit is set by the category.
      *
      * @param categoryId      category (optional)
      * @param shopId          current shop
+     * @param customerShopId  current customer shop
      *
      * @return list of new products
      */
-    List<ProductSearchResultDTO> getNewProducts(long categoryId, long shopId);
+    List<ProductSearchResultDTO> getNewProducts(long categoryId, long shopId, final long customerShopId);
 
     /**
      * Get new products for given category. Limit is set by the category.
      *
      * @param categoryId      category (optional)
      * @param shopId          current shop
+     * @param customerShopId  current customer shop
      * @param tag             tag
      *
      * @return list of new products
      */
-    List<ProductSearchResultDTO> getTaggedProducts(long categoryId, long shopId, String tag);
+    List<ProductSearchResultDTO> getTaggedProducts(long categoryId, long shopId, final long customerShopId, String tag);
 
     /**
      * Get new products for given category. Limit is set by the category.
@@ -194,10 +198,11 @@ public interface ProductServiceFacade {
      * @param productIds      list of products
      * @param categoryId      category (optional), specify -1 for no limit
      * @param shopId          current shop
+     * @param customerShopId  current customer shop
      *
      * @return list of new products
      */
-    List<ProductSearchResultDTO> getListProducts(List<String> productIds, long categoryId, long shopId);
+    List<ProductSearchResultDTO> getListProducts(List<String> productIds, long categoryId, long shopId, final long customerShopId);
 
     /**
      * Get the all products , that match the given query
@@ -219,41 +224,41 @@ public interface ProductServiceFacade {
      * Get product availability.
      *
      * @param product product
-     * @param shopId  current shop
+     * @param customerShopId  current shop
      *
      * @return availability model
      */
-    ProductAvailabilityModel getProductAvailability(ProductSearchResultDTO product, long shopId);
+    ProductAvailabilityModel getProductAvailability(ProductSearchResultDTO product, long customerShopId);
 
     /**
      * Get product availability.
      *
      * @param product product
-     * @param shopId  current shop
+     * @param customerShopId  current shop
      *
      * @return availability model
      */
-    ProductAvailabilityModel getProductAvailability(Product product, long shopId);
+    ProductAvailabilityModel getProductAvailability(Product product, long customerShopId);
 
     /**
      * Get product availability.
      *
      * @param product product
-     * @param shopId  current shop
+     * @param customerShopId  current shop
      *
      * @return availability model
      */
-    ProductAvailabilityModel getProductAvailability(ProductSku product, long shopId);
+    ProductAvailabilityModel getProductAvailability(ProductSku product, long customerShopId);
 
     /**
      * Get product availability.
      *
      * @param skuCode SKU code (not product code)
-     * @param shopId  current shop
+     * @param customerShopId  current shop
      *
      * @return availability model
      */
-    ProductAvailabilityModel getProductAvailability(String skuCode, long shopId);
+    ProductAvailabilityModel getProductAvailability(String skuCode, long customerShopId);
 
     /**
      * Quantity model.

@@ -19,6 +19,8 @@ package org.yes.cart.search.query.impl;
 import org.apache.lucene.search.Query;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -30,20 +32,13 @@ import static org.junit.Assert.assertNotNull;
 public class FeaturedProductSearchQueryBuilderTest {
 
     @Test
-    public void testCreateStrictQuery() throws Exception {
+    public void testCreateQueryChain() throws Exception {
 
-        final Query query = new FeaturedProductSearchQueryBuilder().createStrictQuery(10L, 1010L, "any", "any");
+        final List<Query> query = new FeaturedProductSearchQueryBuilder().createQueryChain(null, "any", "any");
         assertNotNull(query);
-        assertEquals("featured:true", query.toString());
+        assertEquals(1, query.size());
+        assertEquals("featured:true", query.get(0).toString());
 
     }
 
-    @Test
-    public void testCreateRelaxedQuery() throws Exception {
-
-        final Query query = new FeaturedProductSearchQueryBuilder().createStrictQuery(10L, 1010L, "any", "any");
-        assertNotNull(query);
-        assertEquals("featured:true", query.toString());
-
-    }
 }

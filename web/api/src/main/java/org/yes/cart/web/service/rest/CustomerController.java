@@ -1155,7 +1155,7 @@ public class CustomerController {
             }
 
             final List<ProductSearchResultDTO> uniqueProducts = productServiceFacade.getListProducts(
-                    productIds, -1L, browsingShopId);
+                    productIds, -1L, shop.getShopId(), browsingShopId);
 
             final List<ProductWishlistRO> wlRo = new ArrayList<ProductWishlistRO>();
 
@@ -1631,12 +1631,13 @@ public class CustomerController {
 
 
         final ShoppingCart cart = cartMixin.getCurrentCart();
+        final long shopId = cartMixin.getCurrentShopId();
         final long browsingShopId = cartMixin.getCurrentCustomerShopId();
 
         final List<String> productIds = cart.getShoppingContext().getLatestViewedSkus();
 
         final List<ProductSearchResultDTO> viewedProducts = productServiceFacade.getListProducts(
-                productIds, -1L, browsingShopId);
+                productIds, -1L, shopId, browsingShopId);
 
         final List<ProductSearchResultRO> rvRo = new ArrayList<ProductSearchResultRO>();
 

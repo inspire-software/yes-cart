@@ -10,20 +10,27 @@
  *    Unless required by applicable law or agreed to in writing, software
  *    distributed under the License is distributed on an "AS IS" BASIS,
  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
+ *    See the License for the specific nulluage governing permissions and
  *    limitations under the License.
  */
 
 package org.yes.cart.search.query.impl;
 
 import org.apache.lucene.search.Query;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.yes.cart.search.ShopSearchSupportService;
+import org.yes.cart.search.dto.NavigationContext;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
@@ -32,78 +39,152 @@ import static org.junit.Assert.assertNull;
  */
 public class ProductTagSearchQueryBuilderTest {
 
+    private final Mockery context = new JUnit4Mockery();
 
     @Test
-    public void testCreateStrictQueryNull() throws Exception {
+    public void testCreateQueryChainNull() throws Exception {
 
-        final Query query = new ProductTagSearchQueryBuilder().createStrictQuery(10L, 1010L, "tag", null);
+        final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
+
+        final List<Query> query = new ProductTagSearchQueryBuilder(shopSearchSupportService).createQueryChain(null, "tag", null);
         assertNull(query);
+
+        this.context.assertIsSatisfied();
 
     }
 
     @Test
-    public void testCreateStrictQueryBlank() throws Exception {
+    public void testCreateQueryChainBlank() throws Exception {
 
-        final Query query = new ProductTagSearchQueryBuilder().createStrictQuery(10L, 1010L, "tag", "  ");
+        final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
+
+        final List<Query> query = new ProductTagSearchQueryBuilder(shopSearchSupportService).createQueryChain(null, "tag", "  ");
         assertNull(query);
+
+        this.context.assertIsSatisfied();
 
     }
 
     @Test
-    public void testCreateStrictQueryTag() throws Exception {
+    public void testCreateQueryChainTag() throws Exception {
 
-        final Query query = new ProductTagSearchQueryBuilder().createStrictQuery(10L, 1010L, "tag", "tag1");
+        final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
+
+        final List<Query> query = new ProductTagSearchQueryBuilder(shopSearchSupportService).createQueryChain(null, "tag", "tag1");
         assertNotNull(query);
-        assertEquals("(tag:tag1)^20.0", query.toString());
+        assertEquals(1, query.size());
+        assertEquals("(tag:tag1)^20.0", query.get(0).toString());
+
+        this.context.assertIsSatisfied();
 
     }
 
     @Test
-    public void testCreateStrictQueryNewArrival() throws Exception {
+    public void testCreateQueryChainTagMulti() throws Exception {
+
+        final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
+
+        final List<Query> query = new ProductTagSearchQueryBuilder(shopSearchSupportService).createQueryChain(null, "tag", Arrays.asList("tag1", "tag2"));
+        assertNotNull(query);
+        assertEquals(1, query.size());
+        assertEquals("(tag:tag1)^20.0 (tag:tag2)^20.0", query.get(0).toString());
+
+        this.context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testCreateQueryChainTagMultiWithEmpty() throws Exception {
+
+        final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
+
+        final List<Query> query = new ProductTagSearchQueryBuilder(shopSearchSupportService).createQueryChain(null, "tag", Arrays.asList("tag1", ""));
+        assertNotNull(query);
+        assertEquals(1, query.size());
+        assertEquals("(tag:tag1)^20.0", query.get(0).toString());
+
+        this.context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testCreateQueryChainNewArrivalShop() throws Exception {
+
+        final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
 
         final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        final Query query = new ProductTagSearchQueryBuilder().createStrictQuery(10L, 1010L, "tag", formatter.parse("20141118001700"));
+        final Date earliest = formatter.parse("20141118000000");
+
+        final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
+
+        context.checking(new Expectations() {{
+            one(shopSearchSupportService).getCategoryNewArrivalDate(0L, 10L); will(returnValue(earliest));
+            one(navigationContext).getCategories(); will(returnValue(null));
+            one(navigationContext).getShopId(); will(returnValue(10L));
+        }});
+
+
+        final List<Query> query = new ProductTagSearchQueryBuilder(shopSearchSupportService).createQueryChain(navigationContext, "tag", "newarrival");
         assertNotNull(query);
-        assertEquals("(tag:newarrival)^20.0 createdTimestamp:[" + formatter.parse("20141118000000").getTime() + " TO 9223372036854775807]", query.toString());
+        assertEquals(1, query.size());
+        assertEquals("(tag:newarrival)^20.0 createdTimestamp:[" + earliest.getTime() + " TO 9223372036854775807]", query.get(0).toString());
+
+        this.context.assertIsSatisfied();
 
     }
 
     @Test
-    public void testCreateRelaxedQueryNull() throws Exception {
+    public void testCreateQueryChainNewArrivalCategory() throws Exception {
 
-        final Query query = new ProductTagSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "tag", null);
-        assertNull(query);
-
-    }
-
-    @Test
-    public void testCreateRelaxedQueryBlank() throws Exception {
-
-        final Query query = new ProductTagSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "tag", "  ");
-        assertNull(query);
-
-    }
-
-    @Test
-    public void testCreateRelaxedQueryTag() throws Exception {
-
-        final Query query = new ProductTagSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "tag", "tag1");
-        assertNotNull(query);
-        assertEquals("(tag:tag1)^20.0", query.toString());
-
-
-    }
-
-    @Test
-    public void testCreateRelaxedQueryNewArrival() throws Exception {
+        final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
 
         final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        final Query query = new ProductTagSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "tag", formatter.parse("20141118001700"));
+        final Date earliest = formatter.parse("20141118000000");
+
+        final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
+
+        context.checking(new Expectations() {{
+            one(shopSearchSupportService).getCategoryNewArrivalDate(123L, 10L); will(returnValue(earliest));
+            atLeast(2).of(navigationContext).getCategories(); will(returnValue(Collections.singletonList(123L)));
+            one(navigationContext).getShopId(); will(returnValue(10L));
+        }});
+
+
+        final List<Query> query = new ProductTagSearchQueryBuilder(shopSearchSupportService).createQueryChain(navigationContext, "tag", "newarrival");
         assertNotNull(query);
-        assertEquals("(tag:newarrival)^20.0 createdTimestamp:[" + formatter.parse("20141118000000").getTime() + " TO 9223372036854775807]", query.toString());
+        assertEquals(1, query.size());
+        assertEquals("(tag:newarrival)^20.0 createdTimestamp:[" + earliest.getTime() + " TO 9223372036854775807]", query.get(0).toString());
+
+        this.context.assertIsSatisfied();
 
     }
 
+    @Test
+    public void testCreateQueryChainNewArrivalCategoryMulti() throws Exception {
 
+        final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
+
+        final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
+
+        final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        final Date earliest123 = formatter.parse("20141118000000");
+        final Date earliest234 = formatter.parse("20141218000000");
+
+        context.checking(new Expectations() {{
+            one(shopSearchSupportService).getCategoryNewArrivalDate(123L, 10L); will(returnValue(earliest123));
+            one(shopSearchSupportService).getCategoryNewArrivalDate(234L, 10L); will(returnValue(earliest234));
+            atLeast(2).of(navigationContext).getCategories(); will(returnValue(Arrays.asList(123L, 234L)));
+            atLeast(2).of(navigationContext).getShopId(); will(returnValue(10L));
+        }});
+
+
+        final List<Query> query = new ProductTagSearchQueryBuilder(shopSearchSupportService).createQueryChain(navigationContext, "tag", "newarrival");
+        assertNotNull(query);
+        assertEquals(1, query.size());
+        assertEquals("(tag:newarrival)^20.0 createdTimestamp:[" + earliest123.getTime() + " TO 9223372036854775807]", query.get(0).toString());
+
+        this.context.assertIsSatisfied();
+
+    }
 
 }

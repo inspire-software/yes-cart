@@ -17,6 +17,9 @@
 package org.yes.cart.search.query;
 
 import org.apache.lucene.search.Query;
+import org.yes.cart.search.dto.NavigationContext;
+
+import java.util.List;
 
 /**
  * Basic interface for full text search query builder. Each builder should only
@@ -28,31 +31,17 @@ import org.apache.lucene.search.Query;
  * Date: 15/11/2014
  * Time: 22:16
  */
-public interface SearchQueryBuilder {
+public interface SearchQueryBuilder<T> {
 
     /**
      * Create strict boolean query for given value.
      *
-     * @param shopId shop PK
-     * @param customerShopId customer shop PK
+     * @param navigationContext navigation context
      * @param parameter parameter name
      * @param value value can be collection or single value depending on builder impl
      *
-     * @return boolean query
+     * @return create query chain to try in order of strictness
      */
-    Query createStrictQuery(long shopId, long customerShopId, String parameter, Object value);
-
-    /**
-     * Create relaxed boolean query for given value.
-     *
-     * @param shopId shop PK
-     * @param customerShopId customer shop PK
-     * @param parameter parameter name
-     * @param value value can be collection or single value depending on builder impl
-     *
-     * @return boolean query
-     */
-    Query createRelaxedQuery(long shopId, long customerShopId, String parameter, Object value);
-
+    List<Query> createQueryChain(NavigationContext<T> navigationContext, String parameter, Object value);
 
 }

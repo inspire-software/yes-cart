@@ -17,8 +17,13 @@
 package org.yes.cart.search.query.impl;
 
 import org.apache.lucene.search.Query;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.yes.cart.search.query.impl.InStockProductSearchQueryBuilder;
+import org.yes.cart.search.dto.NavigationContext;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -30,39 +35,41 @@ import static org.junit.Assert.assertNotNull;
  */
 public class InStockProductSearchQueryBuilderTest {
 
-    @Test
-    public void testCreateStrictQueryInStock() throws Exception {
+    private final Mockery context = new JUnit4Mockery();
 
-        final Query query = new InStockProductSearchQueryBuilder().createStrictQuery(10L, 1010L, "any", "1");
+    @Test
+    public void testCreateQueryChainInStock() throws Exception {
+
+        final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
+
+        this.context.checking(new Expectations() {{
+            one(navigationContext).getCustomerShopId(); will(returnValue(1010L));
+        }});
+
+        final List<Query> query = new InStockProductSearchQueryBuilder().createQueryChain(navigationContext, "any", "1");
         assertNotNull(query);
-        assertEquals("productInStockFlagShopId1:[1010 TO 1010]", query.toString());
+        assertEquals(1, query.size());
+        assertEquals("productInStockFlagShopId1:[1010 TO 1010]", query.get(0).toString());
+
+        this.context.assertIsSatisfied();
 
     }
 
     @Test
-    public void testCreateStrictQueryNoStock() throws Exception {
+    public void testCreateQueryChainNoStock() throws Exception {
 
-        final Query query = new InStockProductSearchQueryBuilder().createStrictQuery(10L, 1010L, "any", "0");
+        final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
+
+        this.context.checking(new Expectations() {{
+            one(navigationContext).getCustomerShopId(); will(returnValue(1010L));
+        }});
+
+        final List<Query> query = new InStockProductSearchQueryBuilder().createQueryChain(navigationContext, "any", "0");
         assertNotNull(query);
-        assertEquals("productInStockFlagShopId0:[1010 TO 1010]", query.toString());
+        assertEquals(1, query.size());
+        assertEquals("productInStockFlagShopId0:[1010 TO 1010]", query.get(0).toString());
 
-    }
-
-    @Test
-    public void testCreateRelaxedQueryInStock() throws Exception {
-
-        final Query query = new InStockProductSearchQueryBuilder().createStrictQuery(10L, 1010L, "any", "1");
-        assertNotNull(query);
-        assertEquals("productInStockFlagShopId1:[1010 TO 1010]", query.toString());
-
-    }
-
-    @Test
-    public void testCreateRelaxedQueryNoStock() throws Exception {
-
-        final Query query = new InStockProductSearchQueryBuilder().createStrictQuery(10L, 1010L, "any", "0");
-        assertNotNull(query);
-        assertEquals("productInStockFlagShopId0:[1010 TO 1010]", query.toString());
+        this.context.assertIsSatisfied();
 
     }
 }

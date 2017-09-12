@@ -29,7 +29,7 @@ import org.yes.cart.search.query.SearchQueryBuilder;
  * Date: 15/11/2014
  * Time: 23:00
  */
-public abstract class AbstractSearchQueryBuilderImpl implements SearchQueryBuilder {
+public abstract class AbstractSearchQueryBuilderImpl implements SearchQueryBuilder<Query> {
 
 
     /**
@@ -42,13 +42,13 @@ public abstract class AbstractSearchQueryBuilderImpl implements SearchQueryBuild
      * @return fuzzy query
      */
     protected Query createFuzzyQuery(final String field, final String value, final int maxEdits) {
-        // If the search value is less than 3 char then fuzzy does not make sense
-        if (maxEdits <= 0 || value.length() < 3) {
+        // If the search value is less than 4 char then fuzzy does not make sense
+        if (maxEdits <= 0 || value.length() < 4) {
             return new TermQuery(new Term(field, value));
         }
         // 2 edits is the maximum supported in Lucene 6.5.x
         // allow 2 only for more than 5 char words (otherwise too many matches)
-        if (maxEdits >= 2 && value.length() > 4) {
+        if (maxEdits >= 2 && value.length() > 5) {
             return new FuzzyQuery(new Term(field, value), 2);
         }
         // allow only 1 if under 5
@@ -171,7 +171,7 @@ public abstract class AbstractSearchQueryBuilderImpl implements SearchQueryBuild
      * @return true if string value representation is not blank
      */
     protected boolean isEmptyValue(Object rawValue) {
-        return rawValue == null || StringUtils.isBlank(String.valueOf(rawValue));
+        return rawValue == null || StringUtils.isBlank(escapeValue(rawValue));
     }
 
     /**
@@ -195,6 +195,9 @@ public abstract class AbstractSearchQueryBuilderImpl implements SearchQueryBuild
      * @return safe value
      */
     protected String escapeValue(Object value) {
+        if (value == null) {
+            return null;
+        }
         return String.valueOf(value);
     }
 

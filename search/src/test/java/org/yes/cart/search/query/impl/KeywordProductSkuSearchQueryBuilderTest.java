@@ -10,18 +10,23 @@
  *    Unless required by applicable law or agreed to in writing, software
  *    distributed under the License is distributed on an "AS IS" BASIS,
  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
+ *    See the License for the specific nulluage governing permissions and
  *    limitations under the License.
  */
 
 package org.yes.cart.search.query.impl;
 
 import org.apache.lucene.search.Query;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.yes.cart.search.dto.NavigationContext;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
@@ -30,74 +35,90 @@ import static org.junit.Assert.assertNull;
  */
 public class KeywordProductSkuSearchQueryBuilderTest {
 
-    @Test
-    public void testCreateStrictQueryNull() throws Exception {
+    private final Mockery context = new JUnit4Mockery();
 
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, 1010L, "query", null);
+    @Test
+    public void testCreateQueryChainNull() throws Exception {
+
+        final List<Query> query = new KeywordProductSkuSearchQueryBuilder().createQueryChain(null, "query", null);
         assertNull(query);
 
     }
 
     @Test
-    public void testCreateStrictQueryBlank() throws Exception {
+    public void testCreateQueryChainBlank() throws Exception {
 
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, 1010L, "query", "   ");
+        final List<Query> query = new KeywordProductSkuSearchQueryBuilder().createQueryChain(null, "query", "   ");
         assertNull(query);
 
     }
 
     @Test
-    public void testCreateStrictQuerySingle() throws Exception {
+    public void testCreateQueryChainSingle() throws Exception {
 
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, 1010L, "query", "SearchWord");
+        final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
+
+        this.context.checking(new Expectations() {{
+            one(navigationContext).getCustomerLanguage(); will(returnValue("en"));
+        }});
+
+        final List<Query> query = new KeywordProductSkuSearchQueryBuilder().createQueryChain(navigationContext, "query", "SearchWord");
         assertNotNull(query);
-        assertEquals("((name:searchword~2)^3.0 (displayName:searchword~2)^3.0 (sku.code:searchword~2)^10.0 (sku.manufacturerCode:searchword~2)^10.0 (attribute.attrvalsearchprimary:searchword~2)^15.0 (attribute.attrvalsearchphrase:searchword~2)^4.0)", query.toString());
+        assertEquals(2, query.size());
+        assertEquals("(name:searchword~2)^3.0 (name_stem:searchword~1)^1.0 (displayName:searchword~2)^3.0 (displayName_stem:searchword~1)^1.0 (sku.code:searchword~1)^5.0 (sku.code_stem:searchword~1)^2.0 (sku.manufacturerCode:searchword~1)^5.0 (sku.manufacturerCode_stem:searchword~1)^2.0 (attribute.attrvalsearchprimary:searchword~1)^5.0 (attribute.attrvalsearchphrase:searchword~2)^5.0 (attribute.attrvalsearch:searchword~1)^5.0", query.get(0).toString());
+        assertEquals("(name:searchword~2)^3.0 (name_stem:searchword~1)^1.0 (displayName:searchword~2)^3.0 (displayName_stem:searchword~1)^1.0 (sku.code:searchword~1)^5.0 (sku.code_stem:searchword~1)^2.0 (sku.manufacturerCode:searchword~1)^5.0 (sku.manufacturerCode_stem:searchword~1)^2.0 (attribute.attrvalsearchprimary:searchword~1)^5.0 (attribute.attrvalsearchphrase:searchword~2)^5.0 (attribute.attrvalsearch:searchword~1)^5.0", query.get(1).toString());
+
+        this.context.assertIsSatisfied();
 
     }
 
     @Test
-    public void testCreateStrictQueryMulti() throws Exception {
+    public void testCreateQueryChainMulti() throws Exception {
 
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, 1010L, "query", "Search, Word");
+        final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
+
+        this.context.checking(new Expectations() {{
+            one(navigationContext).getCustomerLanguage(); will(returnValue("en"));
+        }});
+
+        final List<Query> query = new KeywordProductSkuSearchQueryBuilder().createQueryChain(navigationContext, "query", "Search, Word");
         assertNotNull(query);
-        assertEquals("((name:search, word~2)^3.0 (displayName:search, word~2)^3.0 (sku.code:search, word~2)^10.0 (sku.manufacturerCode:search, word~2)^10.0 (attribute.attrvalsearchprimary:search, word~2)^15.0 (attribute.attrvalsearchphrase:search, word~2)^4.0) ((name:search~2)^2.0 (displayName:search~2)^2.0 (sku.code:search~2)^10.0 (sku.manufacturerCode:search~2)^10.0 (attribute.attrvalsearchprimary:search~2)^15.0 (attribute.attrvalsearch:search~2)^4.0) ((name:word~1)^2.0 (displayName:word~1)^2.0 (sku.code:word~1)^10.0 (sku.manufacturerCode:word~1)^10.0 (attribute.attrvalsearchprimary:word~1)^15.0 (attribute.attrvalsearch:word~1)^4.0)", query.toString());
+        assertEquals(3, query.size());
+        assertEquals("((name:search~2)^3.0 (name_stem:search~1)^1.0 (displayName:search~2)^3.0 (displayName_stem:search~1)^1.0 (sku.code:search~1)^5.0 (sku.code_stem:search~1)^2.0 (sku.manufacturerCode:search~1)^5.0 (sku.manufacturerCode_stem:search~1)^2.0 (attribute.attrvalsearchprimary:search~1)^5.0 (attribute.attrvalsearchphrase:search~2)^5.0 (attribute.attrvalsearch:search~1)^5.0) ((name:word~1)^3.0 (name_stem:word~1)^1.0 (displayName:word~1)^3.0 (displayName_stem:word~1)^1.0 (sku.code:word~1)^5.0 (sku.code_stem:word~1)^2.0 (sku.manufacturerCode:word~1)^5.0 (sku.manufacturerCode_stem:word~1)^2.0 (attribute.attrvalsearchprimary:word~1)^5.0 (attribute.attrvalsearchphrase:word~1)^5.0 (attribute.attrvalsearch:word~1)^5.0)", query.get(0).toString());
+        assertEquals("((name:search~2)^3.0 (name_stem:search~1)^1.0 (displayName:search~2)^3.0 (displayName_stem:search~1)^1.0 (sku.code:search~1)^5.0 (sku.code_stem:search~1)^2.0 (sku.manufacturerCode:search~1)^5.0 (sku.manufacturerCode_stem:search~1)^2.0 (attribute.attrvalsearchprimary:search~1)^5.0 (attribute.attrvalsearchphrase:search~2)^5.0 (attribute.attrvalsearch:search~1)^5.0) ((name:word~1)^3.0 (name_stem:word~1)^1.0 (displayName:word~1)^3.0 (displayName_stem:word~1)^1.0 (sku.code:word~1)^5.0 (sku.code_stem:word~1)^2.0 (sku.manufacturerCode:word~1)^5.0 (sku.manufacturerCode_stem:word~1)^2.0 (attribute.attrvalsearchprimary:word~1)^5.0 (attribute.attrvalsearchphrase:word~1)^5.0 (attribute.attrvalsearch:word~1)^5.0)", query.get(1).toString());
+        assertEquals("((name:search~2)^3.0 (name_stem:search~1)^1.0 (displayName:search~2)^3.0 (displayName_stem:search~1)^1.0 (sku.code:search~1)^5.0 (sku.code_stem:search~1)^2.0 (sku.manufacturerCode:search~1)^5.0 (sku.manufacturerCode_stem:search~1)^2.0 (attribute.attrvalsearchprimary:search~1)^5.0 (attribute.attrvalsearchphrase:search~2)^5.0 (attribute.attrvalsearch:search~1)^5.0) ((name:word~1)^3.0 (name_stem:word~1)^1.0 (displayName:word~1)^3.0 (displayName_stem:word~1)^1.0 (sku.code:word~1)^5.0 (sku.code_stem:word~1)^2.0 (sku.manufacturerCode:word~1)^5.0 (sku.manufacturerCode_stem:word~1)^2.0 (attribute.attrvalsearchprimary:word~1)^5.0 (attribute.attrvalsearchphrase:word~1)^5.0 (attribute.attrvalsearch:word~1)^5.0)", query.get(2).toString());
+
+        this.context.assertIsSatisfied();
 
     }
 
 
     @Test
-    public void testCreateRelaxedQueryNull() throws Exception {
+    public void testCreateQueryChainMultiMultiple() throws Exception {
 
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "query", null);
-        assertNull(query);
+        final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
-    }
+        this.context.checking(new Expectations() {{
+            one(navigationContext).getCustomerLanguage(); will(returnValue("de"));
+        }});
 
-    @Test
-    public void testCreateRelaxedQueryBlank() throws Exception {
-
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "query", "   ");
-        assertNull(query);
-
-    }
-
-
-    @Test
-    public void testCreateRelaxedQuerySingle() throws Exception {
-
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "query", "SearchWord");
+        final List<Query> query = new KeywordProductSkuSearchQueryBuilder().createQueryChain(navigationContext, "query", Arrays.asList("hp tonerpatrone", "für laserjet pro m452"));
         assertNotNull(query);
-        assertEquals("((name:searchword~2)^2.0 (displayName:searchword~2)^2.0 (sku.code:searchword~2)^10.0 (sku.manufacturerCode:searchword~2)^10.0 (sku.code_stem:searchword~1)^1.0 (sku.manufacturerCode_stem:searchword~1)^1.0 (attribute.attrvalsearchprimary:searchword~2)^4.0 (attribute.attrvalsearch:searchword~2)^4.0)", query.toString());
+        assertEquals(10, query.size());
+        assertEquals("((name:hp)^3.0 (name_stem:hp)^1.0 (displayName:hp)^3.0 (displayName_stem:hp)^1.0 (sku.code:hp)^5.0 (sku.code_stem:hp)^2.0 (sku.manufacturerCode:hp)^5.0 (sku.manufacturerCode_stem:hp)^2.0 (attribute.attrvalsearchprimary:hp)^5.0 (attribute.attrvalsearchphrase:hp)^5.0 (attribute.attrvalsearch:hp)^5.0) ((name:tonerpatrone~2)^3.0 (name_stem:tonerpatrone~1)^1.0 (displayName:tonerpatrone~2)^3.0 (displayName_stem:tonerpatrone~1)^1.0 (sku.code:tonerpatrone~1)^5.0 (sku.code_stem:tonerpatrone~1)^2.0 (sku.manufacturerCode:tonerpatrone~1)^5.0 (sku.manufacturerCode_stem:tonerpatrone~1)^2.0 (attribute.attrvalsearchprimary:tonerpatrone~1)^5.0 (attribute.attrvalsearchphrase:tonerpatrone~2)^5.0 (attribute.attrvalsearch:tonerpatrone~1)^5.0) ((name:für)^3.0 (name_stem:für)^1.0 (displayName:für)^3.0 (displayName_stem:für)^1.0 (sku.code:für)^5.0 (sku.code_stem:für)^2.0 (sku.manufacturerCode:für)^5.0 (sku.manufacturerCode_stem:für)^2.0 (attribute.attrvalsearchprimary:für)^5.0 (attribute.attrvalsearchphrase:für)^5.0 (attribute.attrvalsearch:für)^5.0) ((name:laserjet~2)^3.0 (name_stem:laserjet~1)^1.0 (displayName:laserjet~2)^3.0 (displayName_stem:laserjet~1)^1.0 (sku.code:laserjet~1)^5.0 (sku.code_stem:laserjet~1)^2.0 (sku.manufacturerCode:laserjet~1)^5.0 (sku.manufacturerCode_stem:laserjet~1)^2.0 (attribute.attrvalsearchprimary:laserjet~1)^5.0 (attribute.attrvalsearchphrase:laserjet~2)^5.0 (attribute.attrvalsearch:laserjet~1)^5.0) ((name:pro)^3.0 (name_stem:pro)^1.0 (displayName:pro)^3.0 (displayName_stem:pro)^1.0 (sku.code:pro)^5.0 (sku.code_stem:pro)^2.0 (sku.manufacturerCode:pro)^5.0 (sku.manufacturerCode_stem:pro)^2.0 (attribute.attrvalsearchprimary:pro)^5.0 (attribute.attrvalsearchphrase:pro)^5.0 (attribute.attrvalsearch:pro)^5.0) ((name:m452~1)^3.0 (name_stem:m452~1)^1.0 (displayName:m452~1)^3.0 (displayName_stem:m452~1)^1.0 (sku.code:m452~1)^5.0 (sku.code_stem:m452~1)^2.0 (sku.manufacturerCode:m452~1)^5.0 (sku.manufacturerCode_stem:m452~1)^2.0 (attribute.attrvalsearchprimary:m452~1)^5.0 (attribute.attrvalsearchphrase:m452~1)^5.0 (attribute.attrvalsearch:m452~1)^5.0)", query.get(0).toString());
+        assertEquals("((name:hp)^3.0 (name_stem:hp)^1.0 (displayName:hp)^3.0 (displayName_stem:hp)^1.0 (sku.code:hp)^5.0 (sku.code_stem:hp)^2.0 (sku.manufacturerCode:hp)^5.0 (sku.manufacturerCode_stem:hp)^2.0 (attribute.attrvalsearchprimary:hp)^5.0 (attribute.attrvalsearchphrase:hp)^5.0 (attribute.attrvalsearch:hp)^5.0) ((name:tonerpatron~2)^3.0 (name_stem:tonerpatron~1)^1.0 (displayName:tonerpatron~2)^3.0 (displayName_stem:tonerpatron~1)^1.0 (sku.code:tonerpatron~1)^5.0 (sku.code_stem:tonerpatron~1)^2.0 (sku.manufacturerCode:tonerpatron~1)^5.0 (sku.manufacturerCode_stem:tonerpatron~1)^2.0 (attribute.attrvalsearchprimary:tonerpatron~1)^5.0 (attribute.attrvalsearchphrase:tonerpatron~2)^5.0 (attribute.attrvalsearch:tonerpatron~1)^5.0) ((name:laserjet~2)^3.0 (name_stem:laserjet~1)^1.0 (displayName:laserjet~2)^3.0 (displayName_stem:laserjet~1)^1.0 (sku.code:laserjet~1)^5.0 (sku.code_stem:laserjet~1)^2.0 (sku.manufacturerCode:laserjet~1)^5.0 (sku.manufacturerCode_stem:laserjet~1)^2.0 (attribute.attrvalsearchprimary:laserjet~1)^5.0 (attribute.attrvalsearchphrase:laserjet~2)^5.0 (attribute.attrvalsearch:laserjet~1)^5.0) ((name:pro)^3.0 (name_stem:pro)^1.0 (displayName:pro)^3.0 (displayName_stem:pro)^1.0 (sku.code:pro)^5.0 (sku.code_stem:pro)^2.0 (sku.manufacturerCode:pro)^5.0 (sku.manufacturerCode_stem:pro)^2.0 (attribute.attrvalsearchprimary:pro)^5.0 (attribute.attrvalsearchphrase:pro)^5.0 (attribute.attrvalsearch:pro)^5.0) ((name:m452~1)^3.0 (name_stem:m452~1)^1.0 (displayName:m452~1)^3.0 (displayName_stem:m452~1)^1.0 (sku.code:m452~1)^5.0 (sku.code_stem:m452~1)^2.0 (sku.manufacturerCode:m452~1)^5.0 (sku.manufacturerCode_stem:m452~1)^2.0 (attribute.attrvalsearchprimary:m452~1)^5.0 (attribute.attrvalsearchphrase:m452~1)^5.0 (attribute.attrvalsearch:m452~1)^5.0)", query.get(1).toString());
+        assertEquals("((name:hp)^3.0 (name_stem:hp)^1.0 (displayName:hp)^3.0 (displayName_stem:hp)^1.0 (sku.code:hp)^5.0 (sku.code_stem:hp)^2.0 (sku.manufacturerCode:hp)^5.0 (sku.manufacturerCode_stem:hp)^2.0 (attribute.attrvalsearchprimary:hp)^5.0 (attribute.attrvalsearchphrase:hp)^5.0 (attribute.attrvalsearch:hp)^5.0) ((name:tonerpatrone~2)^3.0 (name_stem:tonerpatrone~1)^1.0 (displayName:tonerpatrone~2)^3.0 (displayName_stem:tonerpatrone~1)^1.0 (sku.code:tonerpatrone~1)^5.0 (sku.code_stem:tonerpatrone~1)^2.0 (sku.manufacturerCode:tonerpatrone~1)^5.0 (sku.manufacturerCode_stem:tonerpatrone~1)^2.0 (attribute.attrvalsearchprimary:tonerpatrone~1)^5.0 (attribute.attrvalsearchphrase:tonerpatrone~2)^5.0 (attribute.attrvalsearch:tonerpatrone~1)^5.0) ((name:für)^3.0 (name_stem:für)^1.0 (displayName:für)^3.0 (displayName_stem:für)^1.0 (sku.code:für)^5.0 (sku.code_stem:für)^2.0 (sku.manufacturerCode:für)^5.0 (sku.manufacturerCode_stem:für)^2.0 (attribute.attrvalsearchprimary:für)^5.0 (attribute.attrvalsearchphrase:für)^5.0 (attribute.attrvalsearch:für)^5.0) ((name:laserjet~2)^3.0 (name_stem:laserjet~1)^1.0 (displayName:laserjet~2)^3.0 (displayName_stem:laserjet~1)^1.0 (sku.code:laserjet~1)^5.0 (sku.code_stem:laserjet~1)^2.0 (sku.manufacturerCode:laserjet~1)^5.0 (sku.manufacturerCode_stem:laserjet~1)^2.0 (attribute.attrvalsearchprimary:laserjet~1)^5.0 (attribute.attrvalsearchphrase:laserjet~2)^5.0 (attribute.attrvalsearch:laserjet~1)^5.0) ((name:pro)^3.0 (name_stem:pro)^1.0 (displayName:pro)^3.0 (displayName_stem:pro)^1.0 (sku.code:pro)^5.0 (sku.code_stem:pro)^2.0 (sku.manufacturerCode:pro)^5.0 (sku.manufacturerCode_stem:pro)^2.0 (attribute.attrvalsearchprimary:pro)^5.0 (attribute.attrvalsearchphrase:pro)^5.0 (attribute.attrvalsearch:pro)^5.0) ((name:m452~1)^3.0 (name_stem:m452~1)^1.0 (displayName:m452~1)^3.0 (displayName_stem:m452~1)^1.0 (sku.code:m452~1)^5.0 (sku.code_stem:m452~1)^2.0 (sku.manufacturerCode:m452~1)^5.0 (sku.manufacturerCode_stem:m452~1)^2.0 (attribute.attrvalsearchprimary:m452~1)^5.0 (attribute.attrvalsearchphrase:m452~1)^5.0 (attribute.attrvalsearch:m452~1)^5.0)", query.get(2).toString());
+        assertEquals("((name:hp)^3.0 (name_stem:hp)^1.0 (displayName:hp)^3.0 (displayName_stem:hp)^1.0 (sku.code:hp)^5.0 (sku.code_stem:hp)^2.0 (sku.manufacturerCode:hp)^5.0 (sku.manufacturerCode_stem:hp)^2.0 (attribute.attrvalsearchprimary:hp)^5.0 (attribute.attrvalsearchphrase:hp)^5.0 (attribute.attrvalsearch:hp)^5.0) ((name:tonerpatron~2)^3.0 (name_stem:tonerpatron~1)^1.0 (displayName:tonerpatron~2)^3.0 (displayName_stem:tonerpatron~1)^1.0 (sku.code:tonerpatron~1)^5.0 (sku.code_stem:tonerpatron~1)^2.0 (sku.manufacturerCode:tonerpatron~1)^5.0 (sku.manufacturerCode_stem:tonerpatron~1)^2.0 (attribute.attrvalsearchprimary:tonerpatron~1)^5.0 (attribute.attrvalsearchphrase:tonerpatron~2)^5.0 (attribute.attrvalsearch:tonerpatron~1)^5.0) ((name:laserjet~2)^3.0 (name_stem:laserjet~1)^1.0 (displayName:laserjet~2)^3.0 (displayName_stem:laserjet~1)^1.0 (sku.code:laserjet~1)^5.0 (sku.code_stem:laserjet~1)^2.0 (sku.manufacturerCode:laserjet~1)^5.0 (sku.manufacturerCode_stem:laserjet~1)^2.0 (attribute.attrvalsearchprimary:laserjet~1)^5.0 (attribute.attrvalsearchphrase:laserjet~2)^5.0 (attribute.attrvalsearch:laserjet~1)^5.0) ((name:pro)^3.0 (name_stem:pro)^1.0 (displayName:pro)^3.0 (displayName_stem:pro)^1.0 (sku.code:pro)^5.0 (sku.code_stem:pro)^2.0 (sku.manufacturerCode:pro)^5.0 (sku.manufacturerCode_stem:pro)^2.0 (attribute.attrvalsearchprimary:pro)^5.0 (attribute.attrvalsearchphrase:pro)^5.0 (attribute.attrvalsearch:pro)^5.0) ((name:m452~1)^3.0 (name_stem:m452~1)^1.0 (displayName:m452~1)^3.0 (displayName_stem:m452~1)^1.0 (sku.code:m452~1)^5.0 (sku.code_stem:m452~1)^2.0 (sku.manufacturerCode:m452~1)^5.0 (sku.manufacturerCode_stem:m452~1)^2.0 (attribute.attrvalsearchprimary:m452~1)^5.0 (attribute.attrvalsearchphrase:m452~1)^5.0 (attribute.attrvalsearch:m452~1)^5.0)", query.get(3).toString());
+        assertEquals("((name:hp)^3.0 (name_stem:hp)^1.0 (displayName:hp)^3.0 (displayName_stem:hp)^1.0 (sku.code:hp)^5.0 (sku.code_stem:hp)^2.0 (sku.manufacturerCode:hp)^5.0 (sku.manufacturerCode_stem:hp)^2.0 (attribute.attrvalsearchprimary:hp)^5.0 (attribute.attrvalsearchphrase:hp)^5.0 (attribute.attrvalsearch:hp)^5.0) ((name:tonerpatrone~2)^3.0 (name_stem:tonerpatrone~1)^1.0 (displayName:tonerpatrone~2)^3.0 (displayName_stem:tonerpatrone~1)^1.0 (sku.code:tonerpatrone~1)^5.0 (sku.code_stem:tonerpatrone~1)^2.0 (sku.manufacturerCode:tonerpatrone~1)^5.0 (sku.manufacturerCode_stem:tonerpatrone~1)^2.0 (attribute.attrvalsearchprimary:tonerpatrone~1)^5.0 (attribute.attrvalsearchphrase:tonerpatrone~2)^5.0 (attribute.attrvalsearch:tonerpatrone~1)^5.0) ((name:für)^3.0 (name_stem:für)^1.0 (displayName:für)^3.0 (displayName_stem:für)^1.0 (sku.code:für)^5.0 (sku.code_stem:für)^2.0 (sku.manufacturerCode:für)^5.0 (sku.manufacturerCode_stem:für)^2.0 (attribute.attrvalsearchprimary:für)^5.0 (attribute.attrvalsearchphrase:für)^5.0 (attribute.attrvalsearch:für)^5.0) ((name:laserjet~2)^3.0 (name_stem:laserjet~1)^1.0 (displayName:laserjet~2)^3.0 (displayName_stem:laserjet~1)^1.0 (sku.code:laserjet~1)^5.0 (sku.code_stem:laserjet~1)^2.0 (sku.manufacturerCode:laserjet~1)^5.0 (sku.manufacturerCode_stem:laserjet~1)^2.0 (attribute.attrvalsearchprimary:laserjet~1)^5.0 (attribute.attrvalsearchphrase:laserjet~2)^5.0 (attribute.attrvalsearch:laserjet~1)^5.0) ((name:pro)^3.0 (name_stem:pro)^1.0 (displayName:pro)^3.0 (displayName_stem:pro)^1.0 (sku.code:pro)^5.0 (sku.code_stem:pro)^2.0 (sku.manufacturerCode:pro)^5.0 (sku.manufacturerCode_stem:pro)^2.0 (attribute.attrvalsearchprimary:pro)^5.0 (attribute.attrvalsearchphrase:pro)^5.0 (attribute.attrvalsearch:pro)^5.0) ((name:m452~1)^3.0 (name_stem:m452~1)^1.0 (displayName:m452~1)^3.0 (displayName_stem:m452~1)^1.0 (sku.code:m452~1)^5.0 (sku.code_stem:m452~1)^2.0 (sku.manufacturerCode:m452~1)^5.0 (sku.manufacturerCode_stem:m452~1)^2.0 (attribute.attrvalsearchprimary:m452~1)^5.0 (attribute.attrvalsearchphrase:m452~1)^5.0 (attribute.attrvalsearch:m452~1)^5.0)", query.get(4).toString());
+        assertEquals("((name:hp)^3.0 (name_stem:hp)^1.0 (displayName:hp)^3.0 (displayName_stem:hp)^1.0 (sku.code:hp)^5.0 (sku.code_stem:hp)^2.0 (sku.manufacturerCode:hp)^5.0 (sku.manufacturerCode_stem:hp)^2.0 (attribute.attrvalsearchprimary:hp)^5.0 (attribute.attrvalsearchphrase:hp)^5.0 (attribute.attrvalsearch:hp)^5.0) ((name:tonerpatron~2)^3.0 (name_stem:tonerpatron~1)^1.0 (displayName:tonerpatron~2)^3.0 (displayName_stem:tonerpatron~1)^1.0 (sku.code:tonerpatron~1)^5.0 (sku.code_stem:tonerpatron~1)^2.0 (sku.manufacturerCode:tonerpatron~1)^5.0 (sku.manufacturerCode_stem:tonerpatron~1)^2.0 (attribute.attrvalsearchprimary:tonerpatron~1)^5.0 (attribute.attrvalsearchphrase:tonerpatron~2)^5.0 (attribute.attrvalsearch:tonerpatron~1)^5.0) ((name:laserjet~2)^3.0 (name_stem:laserjet~1)^1.0 (displayName:laserjet~2)^3.0 (displayName_stem:laserjet~1)^1.0 (sku.code:laserjet~1)^5.0 (sku.code_stem:laserjet~1)^2.0 (sku.manufacturerCode:laserjet~1)^5.0 (sku.manufacturerCode_stem:laserjet~1)^2.0 (attribute.attrvalsearchprimary:laserjet~1)^5.0 (attribute.attrvalsearchphrase:laserjet~2)^5.0 (attribute.attrvalsearch:laserjet~1)^5.0) ((name:pro)^3.0 (name_stem:pro)^1.0 (displayName:pro)^3.0 (displayName_stem:pro)^1.0 (sku.code:pro)^5.0 (sku.code_stem:pro)^2.0 (sku.manufacturerCode:pro)^5.0 (sku.manufacturerCode_stem:pro)^2.0 (attribute.attrvalsearchprimary:pro)^5.0 (attribute.attrvalsearchphrase:pro)^5.0 (attribute.attrvalsearch:pro)^5.0) ((name:m452~1)^3.0 (name_stem:m452~1)^1.0 (displayName:m452~1)^3.0 (displayName_stem:m452~1)^1.0 (sku.code:m452~1)^5.0 (sku.code_stem:m452~1)^2.0 (sku.manufacturerCode:m452~1)^5.0 (sku.manufacturerCode_stem:m452~1)^2.0 (attribute.attrvalsearchprimary:m452~1)^5.0 (attribute.attrvalsearchphrase:m452~1)^5.0 (attribute.attrvalsearch:m452~1)^5.0)", query.get(5).toString());
+        assertEquals("((name:hp)^3.0 (name_stem:hp)^1.0 (displayName:hp)^3.0 (displayName_stem:hp)^1.0 (sku.code:hp)^5.0 (sku.code_stem:hp)^2.0 (sku.manufacturerCode:hp)^5.0 (sku.manufacturerCode_stem:hp)^2.0 (attribute.attrvalsearchprimary:hp)^5.0 (attribute.attrvalsearchphrase:hp)^5.0 (attribute.attrvalsearch:hp)^5.0) ((name:tonerpatrone~2)^3.0 (name_stem:tonerpatrone~1)^1.0 (displayName:tonerpatrone~2)^3.0 (displayName_stem:tonerpatrone~1)^1.0 (sku.code:tonerpatrone~1)^5.0 (sku.code_stem:tonerpatrone~1)^2.0 (sku.manufacturerCode:tonerpatrone~1)^5.0 (sku.manufacturerCode_stem:tonerpatrone~1)^2.0 (attribute.attrvalsearchprimary:tonerpatrone~1)^5.0 (attribute.attrvalsearchphrase:tonerpatrone~2)^5.0 (attribute.attrvalsearch:tonerpatrone~1)^5.0) ((name:für)^3.0 (name_stem:für)^1.0 (displayName:für)^3.0 (displayName_stem:für)^1.0 (sku.code:für)^5.0 (sku.code_stem:für)^2.0 (sku.manufacturerCode:für)^5.0 (sku.manufacturerCode_stem:für)^2.0 (attribute.attrvalsearchprimary:für)^5.0 (attribute.attrvalsearchphrase:für)^5.0 (attribute.attrvalsearch:für)^5.0) ((name:laserjet~2)^3.0 (name_stem:laserjet~1)^1.0 (displayName:laserjet~2)^3.0 (displayName_stem:laserjet~1)^1.0 (sku.code:laserjet~1)^5.0 (sku.code_stem:laserjet~1)^2.0 (sku.manufacturerCode:laserjet~1)^5.0 (sku.manufacturerCode_stem:laserjet~1)^2.0 (attribute.attrvalsearchprimary:laserjet~1)^5.0 (attribute.attrvalsearchphrase:laserjet~2)^5.0 (attribute.attrvalsearch:laserjet~1)^5.0) ((name:pro)^3.0 (name_stem:pro)^1.0 (displayName:pro)^3.0 (displayName_stem:pro)^1.0 (sku.code:pro)^5.0 (sku.code_stem:pro)^2.0 (sku.manufacturerCode:pro)^5.0 (sku.manufacturerCode_stem:pro)^2.0 (attribute.attrvalsearchprimary:pro)^5.0 (attribute.attrvalsearchphrase:pro)^5.0 (attribute.attrvalsearch:pro)^5.0) ((name:m452~1)^3.0 (name_stem:m452~1)^1.0 (displayName:m452~1)^3.0 (displayName_stem:m452~1)^1.0 (sku.code:m452~1)^5.0 (sku.code_stem:m452~1)^2.0 (sku.manufacturerCode:m452~1)^5.0 (sku.manufacturerCode_stem:m452~1)^2.0 (attribute.attrvalsearchprimary:m452~1)^5.0 (attribute.attrvalsearchphrase:m452~1)^5.0 (attribute.attrvalsearch:m452~1)^5.0)", query.get(6).toString());
+        assertEquals("((name:hp)^3.0 (name_stem:hp)^1.0 (displayName:hp)^3.0 (displayName_stem:hp)^1.0 (sku.code:hp)^5.0 (sku.code_stem:hp)^2.0 (sku.manufacturerCode:hp)^5.0 (sku.manufacturerCode_stem:hp)^2.0 (attribute.attrvalsearchprimary:hp)^5.0 (attribute.attrvalsearchphrase:hp)^5.0 (attribute.attrvalsearch:hp)^5.0) ((name:tonerpatron~2)^3.0 (name_stem:tonerpatron~1)^1.0 (displayName:tonerpatron~2)^3.0 (displayName_stem:tonerpatron~1)^1.0 (sku.code:tonerpatron~1)^5.0 (sku.code_stem:tonerpatron~1)^2.0 (sku.manufacturerCode:tonerpatron~1)^5.0 (sku.manufacturerCode_stem:tonerpatron~1)^2.0 (attribute.attrvalsearchprimary:tonerpatron~1)^5.0 (attribute.attrvalsearchphrase:tonerpatron~2)^5.0 (attribute.attrvalsearch:tonerpatron~1)^5.0) ((name:laserjet~2)^3.0 (name_stem:laserjet~1)^1.0 (displayName:laserjet~2)^3.0 (displayName_stem:laserjet~1)^1.0 (sku.code:laserjet~1)^5.0 (sku.code_stem:laserjet~1)^2.0 (sku.manufacturerCode:laserjet~1)^5.0 (sku.manufacturerCode_stem:laserjet~1)^2.0 (attribute.attrvalsearchprimary:laserjet~1)^5.0 (attribute.attrvalsearchphrase:laserjet~2)^5.0 (attribute.attrvalsearch:laserjet~1)^5.0) ((name:pro)^3.0 (name_stem:pro)^1.0 (displayName:pro)^3.0 (displayName_stem:pro)^1.0 (sku.code:pro)^5.0 (sku.code_stem:pro)^2.0 (sku.manufacturerCode:pro)^5.0 (sku.manufacturerCode_stem:pro)^2.0 (attribute.attrvalsearchprimary:pro)^5.0 (attribute.attrvalsearchphrase:pro)^5.0 (attribute.attrvalsearch:pro)^5.0) ((name:m452~1)^3.0 (name_stem:m452~1)^1.0 (displayName:m452~1)^3.0 (displayName_stem:m452~1)^1.0 (sku.code:m452~1)^5.0 (sku.code_stem:m452~1)^2.0 (sku.manufacturerCode:m452~1)^5.0 (sku.manufacturerCode_stem:m452~1)^2.0 (attribute.attrvalsearchprimary:m452~1)^5.0 (attribute.attrvalsearchphrase:m452~1)^5.0 (attribute.attrvalsearch:m452~1)^5.0)", query.get(7).toString());
+        assertEquals("((name:hp)^3.0 (name_stem:hp)^1.0 (displayName:hp)^3.0 (displayName_stem:hp)^1.0 (sku.code:hp)^5.0 (sku.code_stem:hp)^2.0 (sku.manufacturerCode:hp)^5.0 (sku.manufacturerCode_stem:hp)^2.0 (attribute.attrvalsearchprimary:hp)^5.0 (attribute.attrvalsearchphrase:hp)^5.0 (attribute.attrvalsearch:hp)^5.0) ((name:tonerpatrone~2)^3.0 (name_stem:tonerpatrone~1)^1.0 (displayName:tonerpatrone~2)^3.0 (displayName_stem:tonerpatrone~1)^1.0 (sku.code:tonerpatrone~1)^5.0 (sku.code_stem:tonerpatrone~1)^2.0 (sku.manufacturerCode:tonerpatrone~1)^5.0 (sku.manufacturerCode_stem:tonerpatrone~1)^2.0 (attribute.attrvalsearchprimary:tonerpatrone~1)^5.0 (attribute.attrvalsearchphrase:tonerpatrone~2)^5.0 (attribute.attrvalsearch:tonerpatrone~1)^5.0) ((name:für)^3.0 (name_stem:für)^1.0 (displayName:für)^3.0 (displayName_stem:für)^1.0 (sku.code:für)^5.0 (sku.code_stem:für)^2.0 (sku.manufacturerCode:für)^5.0 (sku.manufacturerCode_stem:für)^2.0 (attribute.attrvalsearchprimary:für)^5.0 (attribute.attrvalsearchphrase:für)^5.0 (attribute.attrvalsearch:für)^5.0) ((name:laserjet~2)^3.0 (name_stem:laserjet~1)^1.0 (displayName:laserjet~2)^3.0 (displayName_stem:laserjet~1)^1.0 (sku.code:laserjet~1)^5.0 (sku.code_stem:laserjet~1)^2.0 (sku.manufacturerCode:laserjet~1)^5.0 (sku.manufacturerCode_stem:laserjet~1)^2.0 (attribute.attrvalsearchprimary:laserjet~1)^5.0 (attribute.attrvalsearchphrase:laserjet~2)^5.0 (attribute.attrvalsearch:laserjet~1)^5.0) ((name:pro)^3.0 (name_stem:pro)^1.0 (displayName:pro)^3.0 (displayName_stem:pro)^1.0 (sku.code:pro)^5.0 (sku.code_stem:pro)^2.0 (sku.manufacturerCode:pro)^5.0 (sku.manufacturerCode_stem:pro)^2.0 (attribute.attrvalsearchprimary:pro)^5.0 (attribute.attrvalsearchphrase:pro)^5.0 (attribute.attrvalsearch:pro)^5.0) ((name:m452~1)^3.0 (name_stem:m452~1)^1.0 (displayName:m452~1)^3.0 (displayName_stem:m452~1)^1.0 (sku.code:m452~1)^5.0 (sku.code_stem:m452~1)^2.0 (sku.manufacturerCode:m452~1)^5.0 (sku.manufacturerCode_stem:m452~1)^2.0 (attribute.attrvalsearchprimary:m452~1)^5.0 (attribute.attrvalsearchphrase:m452~1)^5.0 (attribute.attrvalsearch:m452~1)^5.0)", query.get(8).toString());
+        assertEquals("((name:hp)^3.0 (name_stem:hp)^1.0 (displayName:hp)^3.0 (displayName_stem:hp)^1.0 (sku.code:hp)^5.0 (sku.code_stem:hp)^2.0 (sku.manufacturerCode:hp)^5.0 (sku.manufacturerCode_stem:hp)^2.0 (attribute.attrvalsearchprimary:hp)^5.0 (attribute.attrvalsearchphrase:hp)^5.0 (attribute.attrvalsearch:hp)^5.0) ((name:tonerpatron~2)^3.0 (name_stem:tonerpatron~1)^1.0 (displayName:tonerpatron~2)^3.0 (displayName_stem:tonerpatron~1)^1.0 (sku.code:tonerpatron~1)^5.0 (sku.code_stem:tonerpatron~1)^2.0 (sku.manufacturerCode:tonerpatron~1)^5.0 (sku.manufacturerCode_stem:tonerpatron~1)^2.0 (attribute.attrvalsearchprimary:tonerpatron~1)^5.0 (attribute.attrvalsearchphrase:tonerpatron~2)^5.0 (attribute.attrvalsearch:tonerpatron~1)^5.0) ((name:laserjet~2)^3.0 (name_stem:laserjet~1)^1.0 (displayName:laserjet~2)^3.0 (displayName_stem:laserjet~1)^1.0 (sku.code:laserjet~1)^5.0 (sku.code_stem:laserjet~1)^2.0 (sku.manufacturerCode:laserjet~1)^5.0 (sku.manufacturerCode_stem:laserjet~1)^2.0 (attribute.attrvalsearchprimary:laserjet~1)^5.0 (attribute.attrvalsearchphrase:laserjet~2)^5.0 (attribute.attrvalsearch:laserjet~1)^5.0) ((name:pro)^3.0 (name_stem:pro)^1.0 (displayName:pro)^3.0 (displayName_stem:pro)^1.0 (sku.code:pro)^5.0 (sku.code_stem:pro)^2.0 (sku.manufacturerCode:pro)^5.0 (sku.manufacturerCode_stem:pro)^2.0 (attribute.attrvalsearchprimary:pro)^5.0 (attribute.attrvalsearchphrase:pro)^5.0 (attribute.attrvalsearch:pro)^5.0) ((name:m452~1)^3.0 (name_stem:m452~1)^1.0 (displayName:m452~1)^3.0 (displayName_stem:m452~1)^1.0 (sku.code:m452~1)^5.0 (sku.code_stem:m452~1)^2.0 (sku.manufacturerCode:m452~1)^5.0 (sku.manufacturerCode_stem:m452~1)^2.0 (attribute.attrvalsearchprimary:m452~1)^5.0 (attribute.attrvalsearchphrase:m452~1)^5.0 (attribute.attrvalsearch:m452~1)^5.0)", query.get(9).toString());
+
+        this.context.assertIsSatisfied();
 
     }
 
-    @Test
-    public void testCreateRelaxedQueryMulti() throws Exception {
-
-        final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "query", "Search, Word");
-        assertNotNull(query);
-        assertEquals("((name:search~2)^2.0 (displayName:search~2)^2.0 (sku.code:search~2)^10.0 (sku.manufacturerCode:search~2)^10.0 (sku.code_stem:search~1)^1.0 (sku.manufacturerCode_stem:search~1)^1.0 (attribute.attrvalsearchprimary:search~2)^4.0 (attribute.attrvalsearch:search~2)^4.0) ((name:word~1)^2.0 (displayName:word~1)^2.0 (sku.code:word~1)^10.0 (sku.manufacturerCode:word~1)^10.0 (sku.code_stem:word~1)^1.0 (sku.manufacturerCode_stem:word~1)^1.0 (attribute.attrvalsearchprimary:word~1)^4.0 (attribute.attrvalsearch:word~1)^4.0)", query.toString());
-
-    }
 
 }

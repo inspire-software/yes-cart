@@ -40,7 +40,9 @@ public interface SearchQueryFactory<T> {
      * @param value        additional filter value(s)
      * @return combined from chain query
      */
-    NavigationContext<T> getProductSnowBallQuery(NavigationContext<T> navigationContext, String param, Object value);
+    NavigationContext<T> getProductSnowBallQuery(NavigationContext<T> navigationContext,
+                                                 String param,
+                                                 Object value);
 
     /**
      * Get the combined from query chain query.
@@ -52,7 +54,8 @@ public interface SearchQueryFactory<T> {
      * @param products          products for which to create sku navigation query
      * @return combined from chain query
      */
-    NavigationContext<T> getSkuSnowBallQuery(NavigationContext<T> navigationContext, List<ProductSearchResultDTO> products);
+    NavigationContext<T> getSkuSnowBallQuery(NavigationContext<T> navigationContext,
+                                             List<ProductSearchResultDTO> products);
 
     /**
      * Get the queries chain.
@@ -63,11 +66,16 @@ public interface SearchQueryFactory<T> {
      *
      * @param shopId                the current shop id
      * @param customerShopId        the current customer shop id
+     * @param customerLanguage      customer language (optional)
      * @param categories            given category ids
      * @param searchSubCategories   if categories are specified this flag determines if this search should include all sub categories as well
-     * @param requestParameters     web request parameters
-     * @return ordered by cookie name list of cookies
+     * @param requestParameters     web request parameters    @return ordered by cookie name list of cookies
      */
-    NavigationContext<T> getFilteredNavigationQueryChain(long shopId, final long customerShopId, List<Long> categories, boolean searchSubCategories, Map<String, List> requestParameters);
+    NavigationContext<T> getFilteredNavigationQueryChain(long shopId,
+                                                         long customerShopId,
+                                                         String customerLanguage,
+                                                         List<Long> categories,
+                                                         boolean searchSubCategories,
+                                                         Map<String, List> requestParameters);
 
 }

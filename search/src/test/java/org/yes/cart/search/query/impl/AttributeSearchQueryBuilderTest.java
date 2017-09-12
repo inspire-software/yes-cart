@@ -19,6 +19,8 @@ package org.yes.cart.search.query.impl;
 import org.apache.lucene.search.Query;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -29,112 +31,59 @@ import static org.junit.Assert.*;
 public class AttributeSearchQueryBuilderTest {
 
     @Test
-    public void testCreateStrictQueryNull() throws Exception {
+    public void testCreateQueryChainNull() throws Exception {
 
-        final Query query = new AttributeSearchQueryBuilder().createStrictQuery(10L, 1010L, "size", null);
+        final List<Query> query = new AttributeSearchQueryBuilder().createQueryChain(null, "size", null);
         assertNull(query);
 
     }
 
     @Test
-    public void testCreateStrictQueryBlank() throws Exception {
+    public void testCreateQueryChainBlank() throws Exception {
 
-        final Query query = new AttributeSearchQueryBuilder().createStrictQuery(10L, 1010L, "size", "   ");
+        final List<Query> query = new AttributeSearchQueryBuilder().createQueryChain(null, "size", "   ");
         assertNull(query);
 
     }
 
     @Test
-    public void testCreateStrictQuerySingle() throws Exception {
+    public void testCreateQueryChainSingle() throws Exception {
 
-        final Query query = new AttributeSearchQueryBuilder().createStrictQuery(10L, 1010L, "size", "30");
+        final List<Query> query = new AttributeSearchQueryBuilder().createQueryChain(null, "size", "30");
         assertNotNull(query);
-        assertEquals("+(size:30)^3.5", query.toString());
+        assertEquals(1, query.size());
+        assertEquals("(size:30)^3.5", query.get(0).toString());
 
     }
 
     @Test
-    public void testCreateStrictQueryRange() throws Exception {
+    public void testCreateQueryChainRange() throws Exception {
 
-        final Query query = new AttributeSearchQueryBuilder().createStrictQuery(10L, 1010L, "size", "30-_-50");
+        final List<Query> query = new AttributeSearchQueryBuilder().createQueryChain(null, "size", "30-_-50");
         assertNotNull(query);
-        assertEquals("+(size_range:[30 TO 49])^3.5", query.toString());
+        assertEquals(1, query.size());
+        assertEquals("(size_range:[30 TO 49])^3.5", query.get(0).toString());
 
     }
 
     @Test
-    public void testCreateStrictQueryRangeFrom() throws Exception {
+    public void testCreateQueryChainRangeFrom() throws Exception {
 
-        final Query query = new AttributeSearchQueryBuilder().createStrictQuery(10L, 1010L, "size", "30-_-");
+        final List<Query> query = new AttributeSearchQueryBuilder().createQueryChain(null, "size", "30-_-");
         assertNotNull(query);
-        assertEquals("+(size_range:[30 TO 9223372036854775807])^3.5", query.toString());
+        assertEquals(1, query.size());
+        assertEquals("(size_range:[30 TO 9223372036854775807])^3.5", query.get(0).toString());
 
     }
 
     @Test
-    public void testCreateStrictQueryRangeTo() throws Exception {
+    public void testCreateQueryChainRangeTo() throws Exception {
 
-        final Query query = new AttributeSearchQueryBuilder().createStrictQuery(10L, 1010L, "size", "-_-50");
+        final List<Query> query = new AttributeSearchQueryBuilder().createQueryChain(null, "size", "-_-50");
         assertNotNull(query);
-        assertEquals("+(size_range:[-9223372036854775808 TO 49])^3.5", query.toString());
+        assertEquals(1, query.size());
+        assertEquals("(size_range:[-9223372036854775808 TO 49])^3.5", query.get(0).toString());
 
     }
-
-
-    @Test
-    public void testCreateRelaxedQueryNull() throws Exception {
-
-        final Query query = new AttributeSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "size", null);
-        assertNull(query);
-
-    }
-
-    @Test
-    public void testCreateRelaxedQueryBlank() throws Exception {
-
-        final Query query = new AttributeSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "size", "   ");
-        assertNull(query);
-
-    }
-
-
-    @Test
-    public void testCreateRelaxedQuerySingle() throws Exception {
-
-        final Query query = new AttributeSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "size", "30");
-        assertNotNull(query);
-        assertEquals("+(size:30)^3.5", query.toString());
-
-
-    }
-
-
-    @Test
-    public void testCreateRelaxedQueryRange() throws Exception {
-
-        final Query query = new AttributeSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "size", "30-_-50");
-        assertNotNull(query);
-        assertEquals("+(size_range:[30 TO 49])^3.5", query.toString());
-
-    }
-
-    @Test
-    public void testCreateRelaxedQueryRangeFrom() throws Exception {
-
-        final Query query = new AttributeSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "size", "30-_-");
-        assertNotNull(query);
-        assertEquals("+(size_range:[30 TO 9223372036854775807])^3.5", query.toString());
-
-    }
-
-    @Test
-    public void testCreateRelaxedQueryRangeTo() throws Exception {
-
-        final Query query = new AttributeSearchQueryBuilder().createRelaxedQuery(10L, 1010L, "size", "-_-50");
-        assertNotNull(query);
-        assertEquals("+(size_range:[-9223372036854775808 TO 49])^3.5", query.toString());
-
-    }
-
 
 }

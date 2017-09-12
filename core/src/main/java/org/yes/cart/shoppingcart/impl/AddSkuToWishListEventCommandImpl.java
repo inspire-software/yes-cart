@@ -88,7 +88,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
             try {
                 return new BigDecimal((String) strQty);
             } catch (Exception exp) {
-                LOG.error("Invalid quantity in add to cart command", exp);
+                LOG.error("Invalid quantity {} in add to cart command", strQty);
             }
         }
         return BigDecimal.ONE; // if no parameter specified assume 1 unit
