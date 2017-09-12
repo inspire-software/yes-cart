@@ -82,7 +82,8 @@ export interface ProductCategoryVO {
   productId : number;
   categoryId : number;
 
-  categoryName : number;
+  categoryCode : string;
+  categoryName : string;
   rank : number;
 
 }

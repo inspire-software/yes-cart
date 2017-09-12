@@ -22,6 +22,7 @@ import { ITreeNode } from './../../shared/tree-view/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
+import { Util } from "./../../shared/services/util";
 
 @Component({
   selector: 'yc-product-categories',
@@ -48,10 +49,18 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
   @ViewChild('editNewCategoryName')
   private editNewCategoryName:ModalComponent;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private editCategory:ProductCategoryVO;
+  @ViewChild('editCategoryRank')
+  private editCategoryRank:ModalComponent;
+
+  private initialisingAdd:boolean = false; // tslint:disable-line:no-unused-variable
   private newCategoryForm:any;
   private newCategoryFormSub:any; // tslint:disable-line:no-unused-variable
   private validForSave:boolean = false;
+  private initialisingEdit:boolean = false; // tslint:disable-line:no-unused-variable
+  private editCategoryForm:any;
+  private editCategoryFormSub:any; // tslint:disable-line:no-unused-variable
+  private validForEdit:boolean = false;
 
   private nodes:Array<ITreeNode>;
   private selectedNode:ITreeNode;
@@ -68,6 +77,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
     LogUtil.debug('ProductCategoryComponent constructed');
 
     this.newCategory = this.newCategoryInstance();
+    this.editCategory = this.newProductCategoryInstance();
 
     let that = this;
 
@@ -90,6 +100,10 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
     this.newCategoryForm = fb.group({
       'guid': ['', validCode],
       'name': ['', YcValidators.requiredNonBlankTrimmed],
+    });
+
+    this.editCategoryForm = fb.group({
+      'rank': ['', YcValidators.requiredPositiveWholeNumber],
     });
   }
 
@@ -123,31 +137,52 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('ProductCategoryComponent ngOnInit product', this.product);
-    this.formBind();
+    this.formBindAdd();
+    this.formBindEdit();
   }
 
   ngOnDestroy() {
     LogUtil.debug('ProductCategoryComponent ngOnDestroy');
-    this.formUnbind();
+    this.formUnbindAdd();
+    this.formUnbindEdit();
   }
 
   newCategoryInstance():BasicCategoryVO {
-    return { 'name': '', 'guid': '' };
+    return { name: '', guid: '' };
   }
 
-  formBind():void {
-    UiUtil.formBind(this, 'newCategoryForm', 'newCategoryFormSub', 'formChange', 'initialising', false);
+  newProductCategoryInstance():ProductCategoryVO {
+    return { productCategoryId : 0, productId : 0, categoryId : 0, categoryCode : '', categoryName : '', rank : 0 };
   }
 
-  formUnbind():void {
+  formBindAdd():void {
+    UiUtil.formBind(this, 'newCategoryForm', 'newCategoryFormSub', 'formChangeAdd', 'initialisingAdd', false);
+  }
+
+  formUnbindAdd():void {
     UiUtil.formUnbind(this, 'newCategoryFormSub');
   }
 
-  formChange():void {
-    LogUtil.debug('ProductCategoryComponent formChange', this.newCategoryForm.valid, this.newCategory);
+  formChangeAdd():void {
+    LogUtil.debug('ProductCategoryComponent formChangeAdd', this.newCategoryForm.valid, this.newCategory);
     this.validForSave = this.newCategoryForm.valid;
   }
 
+
+  formBindEdit():void {
+    UiUtil.formBind(this, 'editCategoryForm', 'editCategoryFormSub', 'formChangeEdit', 'initialisingEdit', false);
+  }
+
+
+  formUnbindEdit():void {
+    UiUtil.formUnbind(this, 'editCategoryFormSub');
+  }
+
+
+  formChangeEdit():void {
+    LogUtil.debug('ProductCategoryComponent formChangeEdit', this.editCategoryForm.valid, this.editCategory);
+    this.validForEdit = this.editCategoryForm.valid;
+  }
 
   /**
    * Load data and adapt time.
@@ -165,7 +200,8 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
               this.categories = cats;
               this.nodes = this.adaptToTree(cats, _assignedIds);
               this.selectedNode = null;
-              UiUtil.formInitialise(this, 'initialising', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+              UiUtil.formInitialise(this, 'initialisingAdd', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+              UiUtil.formInitialise(this, 'initialisingEdit', 'editCategoryForm', 'editCategory', this.newProductCategoryInstance());
               this.changed = false;
               this._reload = false;
               _subc.unsubscribe();
@@ -221,7 +257,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
   assignToProductClick(node:ITreeNode) {
     LogUtil.debug('ProductCategoryComponent assignToProduct ', node);
     let catVo = node.source;
-    this.assigned.push({ productCategoryId: 0,  productId: this._product.productId, categoryId: catVo.categoryId, categoryName: catVo.name, rank: 0 });
+    this.assigned.push({ productCategoryId: 0,  productId: this._product.productId, categoryId: catVo.categoryId, categoryCode: catVo.guid, categoryName: catVo.name, rank: 0 });
     LogUtil.debug('ProductCategoryComponent disabled node', node);
     node.disabled = true;
     node.expanded = false;
@@ -289,7 +325,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
   createNew(parent:ITreeNode) {
     LogUtil.debug('ProductCategoryComponent createNew for parent', parent);
     this.validForSave = false;
-    UiUtil.formInitialise(this, 'initialising', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+    UiUtil.formInitialise(this, 'initialisingAdd', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
     this.editNewCategoryName.show();
   }
 
@@ -306,6 +342,38 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
           this.loadData();
         }
       );
+
+    }
+  }
+
+
+  onRankClick(cat:ProductCategoryVO) {
+    LogUtil.debug('ProductCategoryComponent onRank', cat);
+
+    this.validForEdit = false;
+    UiUtil.formInitialise(this, 'initialisingEdit', 'editCategoryForm', 'editCategory', Util.clone(cat));
+    this.editCategoryRank.show();
+
+  }
+
+
+  /**
+   * Handle result of new category modal dialog.
+   * @param modalresult
+   */
+  editCategoryRankModalResult(modalresult:ModalResult) {
+    LogUtil.debug('ProductCategoryComponent editCategoryRankModalResult modal result', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+
+      let _cat = this.assigned.find( cat => {
+         return cat.categoryId == this.editCategory.categoryId;
+      });
+
+      if (_cat != null) {
+        _cat.rank = this.editCategory.rank;
+        this.changed = true;
+        this.dataChanged.emit(this.assigned);
+      }
 
     }
   }

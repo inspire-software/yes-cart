@@ -69,7 +69,7 @@
     <div class="col-md-6 col-lg-5">
       <h3>{{ 'ASSIGNED' | translate }}</h3>
       <ul class="treenodes lvl-1">
-        <li class="treenode" *ngFor="let cat of assigned"><a class="js-click" (click)=onAssignedClick(cat)>{{cat.name}} <i class="fa fa-remove"></i></a></li>
+        <li class="treenode" *ngFor="let cat of assigned"><a class="js-click" (click)=onAssignedClick(cat) title="{{cat.guid}}">{{cat.name}} <i class="fa fa-remove"></i></a></li>
       </ul>
     </div>
     <div class="col-md-6 col-lg-5">

@@ -29,7 +29,7 @@
           <td title="{{ 'PRODUCT_CATEGORIES' | translate }}">
             <a class="js-click" (click)="onSelectRow(row)">
               <ul class="list-unstyled">
-                <li *ngFor="let category of row.productCategories">{{category.rank}} {{category.categoryName}}</li>
+                <li *ngFor="let category of row.productCategories" title="{{category.categoryCode}}">{{category.categoryName}} ({{category.rank}})</li>
               </ul>
             </a>
             &nbsp;</td>

@@ -47,11 +47,34 @@
     </form>
   </yc-modal>
 
+
+  <yc-modal #editCategoryRank
+            title="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+            [valid]="validForEdit"
+            (closed)="editCategoryRankModalResult($event)">
+    <form role="form" [formGroup]="editCategoryForm">
+      <fieldset>
+        <div class="row">
+          <div class="col-lg-3">{{ 'AV_RANK' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="rank" name="rank" type="text" [(ngModel)]="editCategory.rank">
+            <div [hidden]="editCategoryForm.controls['rank'].valid || editCategoryForm.controls['rank'].pristine" class="alert alert-danger">
+              {{ 'POS_INT_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </yc-modal>
+
+
   <div class="row">
     <div class="col-md-6 col-lg-5">
       <h3>{{ 'ASSIGNED' | translate }}</h3>
       <ul class="treenodes lvl-1">
-        <li class="treenode" *ngFor="let cat of assigned"><a class="js-click" (click)=onAssignedClick(cat)>{{cat.categoryName}} <i class="fa fa-remove"></i></a></li>
+        <li class="treenode" *ngFor="let cat of assigned"><a class="js-click" (click)=onAssignedClick(cat) title="{{cat.categoryCode}}">{{cat.categoryName}} <i class="fa fa-remove"></i></a> (<a class="js-click" (click)=onRankClick(cat)>{{cat.rank}}</a>)</li>
       </ul>
     </div>
     <div class="col-md-6 col-lg-5">

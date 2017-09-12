@@ -39,11 +39,24 @@ public class ProductCategoryDTOImpl implements ProductCategoryDTO {
     @DtoField(value = "category.categoryId", readOnly = true)
     private long categoryId;
 
+    @DtoField(value = "category.guid", readOnly = true)
+    private String categoryCode;
+
     @DtoField(value = "category.name", readOnly = true)
     private String categoryName;
 
     @DtoField(value = "rank")
     private int rank;
+
+    /** {@inheritDoc} */
+    public String getCategoryCode() {
+        return categoryCode;
+    }
+
+    /** {@inheritDoc} */
+    public void setCategoryCode(final String categoryCode) {
+        this.categoryCode = categoryCode;
+    }
 
     /** {@inheritDoc} */
     public String getCategoryName() {

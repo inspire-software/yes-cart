@@ -85,6 +85,20 @@ public interface ProductCategoryDTO extends Identifiable {
     void setRank(int rank);
 
     /**
+     * Get category code.
+     *
+     * @return category code
+     */
+    String getCategoryCode();
+
+    /**
+     * Set category code.
+     *
+     * @param categoryCode category code.
+     */
+    void setCategoryCode(final String categoryCode);
+
+    /**
      * Get category name.
      *
      * @return category name

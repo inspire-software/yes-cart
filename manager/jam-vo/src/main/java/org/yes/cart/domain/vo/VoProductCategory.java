@@ -34,6 +34,9 @@ public class VoProductCategory {
     @DtoField(value = "categoryId")
     private long categoryId;
 
+    @DtoField(value = "categoryCode")
+    private String categoryCode;
+
     @DtoField(value = "categoryName")
     private String categoryName;
 
@@ -62,6 +65,14 @@ public class VoProductCategory {
 
     public void setCategoryId(final long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getCategoryCode() {
+        return categoryCode;
+    }
+
+    public void setCategoryCode(final String categoryCode) {
+        this.categoryCode = categoryCode;
     }
 
     public String getCategoryName() {
