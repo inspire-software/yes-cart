@@ -21,9 +21,10 @@ import org.apache.lucene.document.Document;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
+import org.yes.cart.domain.dto.StoredAttributesDTO;
 import org.yes.cart.domain.dto.impl.ProductSkuSearchResultDTOImpl;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.domain.entity.impl.StoredAttributesImpl;
+import org.yes.cart.domain.dto.impl.StoredAttributesDTOImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -60,9 +61,6 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
             final Document document = new Document();
 
             final ProductSkuSearchResultDTO result = createBaseResultObject(entity);
-
-            // save the whole search object instead of individual fields, fields are only for searching
-            addObjectDefaultField(document, result);
 
             addPkField(document, ProductSku.class, String.valueOf(entity.getSkuId()));
 
@@ -109,6 +107,10 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
             // Add attributes
             addAttributeFields(document, entity, result);
 
+            // save the whole search object instead of individual fields, fields are only for searching
+            // must be last step so that we have fully modified object serialised to index
+            addObjectDefaultField(document, result);
+
             return new Pair<Long, Document[]>(entity.getSkuId(), new Document[] { document });
 
         }
@@ -144,7 +146,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
         } else {
             baseResult.setDefaultImage(image0);
         }
-        baseResult.setAttributes(new StoredAttributesImpl());
+        baseResult.setAttributes(new StoredAttributesDTOImpl());
 
         return baseResult;
     }
@@ -164,7 +166,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
         final Set<String> searchPrimaryAttrs = attributesSupport.getAllSearchablePrimaryAttributeCodes();
         final Set<String> storeAttrs = attributesSupport.getAllStorableAttributeCodes();
 
-        StoredAttributes storedAttributes = result.getAttributes();
+        StoredAttributesDTO storedAttributes = result.getAttributes();
 
         final List<AttrValue> attributes = new ArrayList<AttrValue>(entity.getAttributes());
 

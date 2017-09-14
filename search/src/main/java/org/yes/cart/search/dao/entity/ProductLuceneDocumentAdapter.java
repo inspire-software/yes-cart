@@ -24,9 +24,10 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.StoredAttributesDTO;
 import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.domain.entity.impl.StoredAttributesImpl;
+import org.yes.cart.domain.dto.impl.StoredAttributesDTOImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -92,9 +93,6 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 }
 
                 final Document document = new Document();
-
-                // save the whole search object instead of individual fields, fields are only for searching
-                addObjectDefaultField(document, result);
 
                 addPkField(document, Product.class, String.valueOf(entity.getProductId()));
 
@@ -180,6 +178,10 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 // Add attributes
                 addAttributeFields(document, entity, result);
 
+                // save the whole search object instead of individual fields, fields are only for searching
+                // must be last step so that we have fully modified object serialised to index
+                addObjectDefaultField(document, result);
+
                 documents[count++] = document;
 
             }
@@ -204,7 +206,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
         final Set<String> searchPrimaryAttrs = attributesSupport.getAllSearchablePrimaryAttributeCodes();
         final Set<String> storeAttrs = attributesSupport.getAllStorableAttributeCodes();
 
-        StoredAttributes storedAttributes = result.getAttributes();
+        StoredAttributesDTO storedAttributes = result.getAttributes();
 
         final List<AttrValue> attributes = new ArrayList<AttrValue>(entity.getAttributes());
         for (final ProductSku sku : entity.getSku()) {
@@ -830,7 +832,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
         baseResult.setStepOrderQuantity(entity.getStepOrderQuantity());
         baseResult.setCreatedTimestamp(entity.getCreatedTimestamp());
         baseResult.setUpdatedTimestamp(entity.getUpdatedTimestamp());
-        baseResult.setAttributes(new StoredAttributesImpl());
+        baseResult.setAttributes(new StoredAttributesDTOImpl());
         baseResult.setQtyOnWarehouse(null); // this will be now per warehouse (i.e. result per supplier)
 
         return baseResult;

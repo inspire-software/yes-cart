@@ -14,10 +14,12 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.entity.impl;
+package org.yes.cart.domain.dto.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.domain.entity.StoredAttributes;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.yes.cart.domain.dto.StoredAttributesDTO;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -31,19 +33,29 @@ import java.util.Map;
  * Date: 04/11/2015
  * Time: 17:44
  */
-public class StoredAttributesImpl implements StoredAttributes, Serializable {
+public class StoredAttributesDTOImpl implements StoredAttributesDTO, Serializable {
 
     public static final String SEPARATOR = "#$#";
 
+    @JsonIgnore
     private final Map<String, Pair<String, I18NModel>> values = new HashMap<String, Pair<String, I18NModel>>();
 
-    public StoredAttributesImpl(final Map<String, Pair<String, I18NModel>> values) {
+    public StoredAttributesDTOImpl(final Map<String, Pair<String, I18NModel>> values) {
         if (values != null && !values.isEmpty()) {
             this.values.putAll(values);
         }
     }
 
-    public StoredAttributesImpl(final String raw) {
+    public StoredAttributesDTOImpl(final String raw) {
+        setStringData(raw);
+    }
+
+    @JsonProperty
+    public String getStringData() {
+        return toString();
+    }
+
+    public void setStringData(final String raw) {
         if (raw != null && raw.length() > 0) {
             final String[] valueTriplets = StringUtils.splitByWholeSeparatorPreserveAllTokens(raw, SEPARATOR);
             for (int i = 0; i < valueTriplets.length - 2; i+=3)  {
@@ -64,7 +76,7 @@ public class StoredAttributesImpl implements StoredAttributes, Serializable {
         }
     }
 
-    public StoredAttributesImpl() {
+    public StoredAttributesDTOImpl() {
     }
 
     /** {@inheritDoc} */
@@ -91,6 +103,7 @@ public class StoredAttributesImpl implements StoredAttributes, Serializable {
     }
 
     /** {@inheritDoc} */
+    @JsonIgnore
     public Map<String, Pair<String, I18NModel>> getAllValues() {
         return values;
     }

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.entity;
+package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -26,7 +26,7 @@ import java.util.Map;
  * Date: 04/11/2015
  * Time: 17:43
  */
-public interface StoredAttributes {
+public interface StoredAttributesDTO {
 
     /**
      * @param code attribute code

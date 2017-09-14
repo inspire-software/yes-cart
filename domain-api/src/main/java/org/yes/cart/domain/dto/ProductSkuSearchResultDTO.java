@@ -17,7 +17,6 @@
 package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
-import org.yes.cart.domain.entity.StoredAttributes;
 
 /**
  * Represent product from search result. The whole entity usage id overhead.
@@ -123,14 +122,14 @@ public interface ProductSkuSearchResultDTO extends Identifiable {
      *
      * @return stored attributes
      */
-    StoredAttributes getAttributes();
+    StoredAttributesDTO getAttributes();
 
     /**
      * Stored attributes container.
      *
      * @param attributes stored attributes
      */
-    void setAttributes(StoredAttributes attributes);
+    void setAttributes(StoredAttributesDTO attributes);
 
     /**
      * Creates copy of this object

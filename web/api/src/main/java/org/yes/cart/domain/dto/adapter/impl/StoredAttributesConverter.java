@@ -18,7 +18,7 @@ package org.yes.cart.domain.dto.adapter.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.BeanFactory;
 import com.inspiresoftware.lib.dto.geda.adapter.ValueConverter;
-import org.yes.cart.domain.entity.StoredAttributes;
+import org.yes.cart.domain.dto.StoredAttributesDTO;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.ProductSearchResultAttributeRO;
@@ -36,8 +36,8 @@ public class StoredAttributesConverter implements ValueConverter {
 
     /** {@inheritDoc} */
     public Object convertToDto(final Object object, final BeanFactory beanFactory) {
-        if (object instanceof StoredAttributes) {
-            final StoredAttributes attributes = (StoredAttributes) object;
+        if (object instanceof StoredAttributesDTO) {
+            final StoredAttributesDTO attributes = (StoredAttributesDTO) object;
             final List<ProductSearchResultAttributeRO> ros = new ArrayList<ProductSearchResultAttributeRO>();
             for (final Map.Entry<String, Pair<String, I18NModel>> storedAttribute : attributes.getAllValues().entrySet()) {
                 final ProductSearchResultAttributeRO ro = new ProductSearchResultAttributeRO();

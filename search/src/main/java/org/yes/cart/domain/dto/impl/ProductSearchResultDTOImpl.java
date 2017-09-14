@@ -18,8 +18,7 @@ package org.yes.cart.domain.dto.impl;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
-import org.yes.cart.domain.entity.StoredAttributes;
-import org.yes.cart.domain.entity.impl.StoredAttributesImpl;
+import org.yes.cart.domain.dto.StoredAttributesDTO;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
@@ -67,7 +66,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private I18NModel i18NModelDescription;
     private I18NModel i18NModelType;
 
-    private StoredAttributes attributes;
+    private StoredAttributesDTO attributes;
 
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -372,12 +371,12 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     }
 
     /** {@inheritDoc} */
-    public StoredAttributes getAttributes() {
+    public StoredAttributesDTO getAttributes() {
         return attributes;
     }
 
     /** {@inheritDoc} */
-    public void setAttributes(final StoredAttributes attributes) {
+    public void setAttributes(final StoredAttributesDTO attributes) {
         this.attributes = attributes;
     }
 
@@ -434,7 +433,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         copy.setCreatedTimestamp(this.createdTimestamp);
         copy.setUpdatedTimestamp(this.updatedTimestamp);
         if (this.attributes != null) {
-            copy.setAttributes(new StoredAttributesImpl(this.attributes.toString()));
+            copy.setAttributes(new StoredAttributesDTOImpl(this.attributes.toString()));
         }
         return copy;
     }

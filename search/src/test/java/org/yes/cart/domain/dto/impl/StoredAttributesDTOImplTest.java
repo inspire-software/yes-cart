@@ -14,10 +14,10 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.entity.impl;
+package org.yes.cart.domain.dto.impl;
 
 import org.junit.Test;
-import org.yes.cart.domain.entity.StoredAttributes;
+import org.yes.cart.domain.dto.StoredAttributesDTO;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
@@ -28,32 +28,32 @@ import static org.junit.Assert.*;
  * Date: 04/11/2015
  * Time: 17:47
  */
-public class StoredAttributesImplTest {
+public class StoredAttributesDTOImplTest {
 
     @Test
     public void testStringNull() throws Exception {
-        final StoredAttributes model = new StoredAttributesImpl();
+        final StoredAttributesDTO model = new StoredAttributesDTOImpl();
         assertNotNull(model.getAllValues());
         assertTrue(model.getAllValues().isEmpty());
     }
 
     @Test
     public void testStringEmpty() throws Exception {
-        final StoredAttributes model = new StoredAttributesImpl("");
+        final StoredAttributesDTO model = new StoredAttributesDTOImpl("");
         assertNotNull(model.getAllValues());
         assertTrue(model.getAllValues().isEmpty());
     }
 
     @Test
     public void testStringInvalid() throws Exception {
-        final StoredAttributes model = new StoredAttributesImpl("some text");
+        final StoredAttributesDTO model = new StoredAttributesDTOImpl("some text");
         assertNotNull(model.getAllValues());
         assertTrue(model.getAllValues().isEmpty());
     }
 
     @Test
     public void testString() throws Exception {
-        final StoredAttributes model = new StoredAttributesImpl("ATT1#$#Some text#$##$#ATT2#$#Текст#$##$#ATT3#$#");
+        final StoredAttributesDTO model = new StoredAttributesDTOImpl("ATT1#$#Some text#$##$#ATT2#$#Текст#$##$#ATT3#$#");
         assertNotNull(model.getAllValues());
         assertEquals(2, model.getAllValues().size());
         assertEquals("Some text", model.getValue("ATT1").getFirst());
@@ -65,7 +65,7 @@ public class StoredAttributesImplTest {
 
     @Test
     public void testStringI18n() throws Exception {
-        final StoredAttributes model = new StoredAttributesImpl("ATT1#$#Some text#$#EN#~#Some text en#~#RU#~#Текст ru#$#ATT2#$#Текст#$##$#ATT3#$#");
+        final StoredAttributesDTO model = new StoredAttributesDTOImpl("ATT1#$#Some text#$#EN#~#Some text en#~#RU#~#Текст ru#$#ATT2#$#Текст#$##$#ATT3#$#");
         assertNotNull(model.getAllValues());
         assertEquals(2, model.getAllValues().size());
         assertEquals("Some text", model.getValue("ATT1").getFirst());
@@ -80,13 +80,13 @@ public class StoredAttributesImplTest {
 
     @Test
     public void testStringBlankValues() throws Exception {
-        final StoredAttributes model = new StoredAttributesImpl();
+        final StoredAttributesDTO model = new StoredAttributesDTOImpl();
         assertNotNull(model.getAllValues());
         assertEquals(0, model.getAllValues().size());
         model.putValue("ATT1", "Some text", null);
         model.putValue("ATT2", null, null);
         model.putValue("ATT3", "", "EN#~#Some text en");
-        final StoredAttributes restored = new StoredAttributesImpl(model.toString());
+        final StoredAttributesDTO restored = new StoredAttributesDTOImpl(model.toString());
         assertNotNull(restored.getAllValues());
         assertEquals(1, restored.getAllValues().size());
         assertEquals("Some text", restored.getValue("ATT1").getFirst());
@@ -97,13 +97,13 @@ public class StoredAttributesImplTest {
 
     @Test
     public void testRestore() throws Exception {
-        final StoredAttributes model = new StoredAttributesImpl();
+        final StoredAttributesDTO model = new StoredAttributesDTOImpl();
         assertNotNull(model.getAllValues());
         assertEquals(0, model.getAllValues().size());
         model.putValue("ATT1", "Some text", null);
         model.putValue("ATT2", "value2", new StringI18NModel("RU#~#Текст ru"));
         model.putValue("ATT3", "value3", "EN#~#Some text en");
-        final StoredAttributes restored = new StoredAttributesImpl(model.toString());
+        final StoredAttributesDTO restored = new StoredAttributesDTOImpl(model.toString());
         assertNotNull(restored.getAllValues());
         assertEquals(3, restored.getAllValues().size());
         assertEquals("Some text", restored.getValue("ATT1").getFirst());

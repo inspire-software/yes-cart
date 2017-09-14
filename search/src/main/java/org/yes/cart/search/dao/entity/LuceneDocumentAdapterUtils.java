@@ -26,8 +26,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.module.SimpleModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.domain.entity.StoredAttributes;
-import org.yes.cart.domain.entity.impl.StoredAttributesImpl;
+import org.yes.cart.domain.dto.StoredAttributesDTO;
+import org.yes.cart.domain.dto.impl.StoredAttributesDTOImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.search.query.impl.SearchUtil;
@@ -58,7 +58,7 @@ public class LuceneDocumentAdapterUtils {
         MAPPER.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
 
         SimpleModule module = new SimpleModule("search", new Version(3, 4, 0, null));
-        module.addAbstractTypeMapping(StoredAttributes.class, StoredAttributesImpl.class);
+        module.addAbstractTypeMapping(StoredAttributesDTO.class, StoredAttributesDTOImpl.class);
         module.addAbstractTypeMapping(I18NModel.class, StringI18NModel.class);
 
         MAPPER.registerModule(module);
@@ -92,11 +92,7 @@ public class LuceneDocumentAdapterUtils {
 
         final String serialized = document.get(FIELD_OBJECT);
         if (StringUtils.isNotBlank(serialized)) {
-            try {
-                return (T) MAPPER.readValue(serialized, clazz);
-            } catch (Exception exp) {
-                LOGFTQ.error("Unable to de-serialise the object in field: " + name + ", object: " + serialized, exp);
-            }
+            return readObjectFieldValue(serialized, clazz);
         }
         return null;
     }
@@ -114,6 +110,23 @@ public class LuceneDocumentAdapterUtils {
                 return (T) MAPPER.readValue(serialized, clazz);
             } catch (Exception exp) {
                 LOGFTQ.error("Unable to de-serialise the object in field: " + FIELD_OBJECT + ", object: " + serialized, exp);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Write object to string.
+     *
+     * @param object     object type
+     */
+    static String writeObjectFieldValue(final Object object) {
+
+        if (object != null) {
+            try {
+                return MAPPER.writeValueAsString(object);
+            } catch (Exception exp) {
+                LOGFTQ.error("Unable to serialise the object into field: xxxx, object: " + object, exp);
             }
         }
         return null;

@@ -18,7 +18,6 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.domain.entity.Identifiable;
-import org.yes.cart.domain.entity.StoredAttributes;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -383,14 +382,14 @@ public interface ProductSearchResultDTO extends Identifiable {
      *
      * @return stored attributes
      */
-    StoredAttributes getAttributes();
+    StoredAttributesDTO getAttributes();
 
     /**
      * Stored attributes container.
      *
      * @param attributes stored attributes
      */
-    void setAttributes(StoredAttributes attributes);
+    void setAttributes(StoredAttributesDTO attributes);
 
 
     /**
