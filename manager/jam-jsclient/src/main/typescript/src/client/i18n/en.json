@@ -360,6 +360,7 @@
 
   "PRODUCT_TAB_AVAILABILITY": "Availability",
   "PRODUCT_TAB_CATALOG": "Catalog",
+  "PRODUCT_TAB_CATALOG_NEW": "New products must be assigned to at least one category. Only 'Super user' can create products without categories",
   "PRODUCT_TAB_ASSOCIATIONS": "Associations",
 
   "EMAILPREVIEW_ORDER": "Select order to preview email",
@@ -614,8 +615,10 @@
   "CUSTOMER_B2B_BLOCK_CHECKOUT": "Block checkout",
   "CUSTOMER_B2B_APPROVE_ORDER": "Require orders approval",
   "CUSTOMER_TAB_B2B": "B2B",
+  "CUSTOMER_TAB_SHOPS_NEW": "New customers must have at least one shop assigned to their account",
 
   "MANAGER_ENABLED": "Active",
+  "MANAGER_TAB_SHOPS_NEW": "New managers must have at least one shop assigned to their account. Only 'super user' can create managers not assigned to any shop",
 
   "PAYMENT_DATE": "Timestamp",
   "PAYMENT_ORDER": "Order no.",
