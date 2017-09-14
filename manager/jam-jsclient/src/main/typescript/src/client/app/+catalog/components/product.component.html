@@ -7,6 +7,16 @@
 
         <div class="panel-body">
 
+          <template [ngIf]="product != null && !(product.productId > 0) && (product.productCategories == null || product.productCategories.length == 0)">
+            <div class="row">
+              <div class="col-xs-12 block-padding-spacer">
+                <div class="bg-warning text-padding">
+                  <p>{{ 'PRODUCT_TAB_CATALOG_NEW' | translate }}</p>
+                </div>
+              </div>
+            </div>
+          </template>
+
           <div class="row">
             <div class="col-md-9 col-lg-6">
               <fieldset>
@@ -432,6 +442,17 @@
       </tab>
 
       <tab heading="{{ 'PRODUCT_TAB_CATALOG' | translate }}" (select)="tabSelected('Catalogue')">
+
+        <template [ngIf]="product != null && !(product.productId > 0) && (product.productCategories == null || product.productCategories.length == 0)">
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-warning text-padding">
+                <p>{{ 'PRODUCT_TAB_CATALOG_NEW' | translate }}</p>
+              </div>
+            </div>
+          </div>
+        </template>
+
         <yc-product-categories [product]="product" [reload]="reloadCatalogue"
                                (dataChanged)="onCategoriesDataChanged($event)"></yc-product-categories>
       </tab>

@@ -360,6 +360,7 @@
 
   "PRODUCT_TAB_AVAILABILITY": "Verfügbarkeit",
   "PRODUCT_TAB_CATALOG": "Katalog",
+  "PRODUCT_TAB_CATALOG_NEW": "Neue Produkte müssen mindestens einer Kategorie zugeordnet sein. Nur 'Superuser' kann Produkte ohne Kategorien erstellen",
   "PRODUCT_TAB_ASSOCIATIONS": "Assoziation",
 
   "EMAILPREVIEW_ORDER": "Geben Sie eine aktuelle Bestellnummer für die Vorschau der E-Mail ein",
@@ -614,8 +615,10 @@
   "CUSTOMER_B2B_BLOCK_CHECKOUT": "Kasse auschecken",
   "CUSTOMER_B2B_APPROVE_ORDER": "Auftragsfreigabe erforderlich",
   "CUSTOMER_TAB_B2B": "B2B",
+  "CUSTOMER_TAB_SHOPS_NEW": "Neue Kunden müssen mindestens einen Shop haben, der ihrem Konto zugeordnet ist",
 
   "MANAGER_ENABLED": "Aktiv",
+  "MANAGER_TAB_SHOPS_NEW": "Neue Manager müssen mindestens einen Shop haben, der ihrem Konto zugeordnet ist. Nur 'Superuser' kann Manager erstellen, die keinem Geschäft zugeordnet sind",
 
   "PAYMENT_DATE": "Datum/Zeit",
   "PAYMENT_ORDER": "Bestellnummer",

@@ -5,6 +5,16 @@
 
       <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
 
+        <template [ngIf]="customer != null && !(customer.customerId > 0) && (customer.customerShops == null || customer.customerShops.length == 0)">
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-warning text-padding">
+                <p>{{ 'CUSTOMER_TAB_SHOPS_NEW' | translate }}</p>
+              </div>
+            </div>
+          </div>
+        </template>
+
         <div class="row">
           <div class="col-md-9 col-lg-6">
             <div class="panel-body">
@@ -111,6 +121,16 @@
       <tab heading="{{ 'TAB_SHOPS' | translate }}"  (select)="tabSelected('Shops')">
 
         <template [ngIf]="customer != null">
+
+          <template [ngIf]="!(customer.customerId > 0) && (customer.customerShops == null || customer.customerShops.length == 0)">
+            <div class="row">
+              <div class="col-xs-12 block-padding-spacer">
+                <div class="bg-warning text-padding">
+                  <p>{{ 'CUSTOMER_TAB_SHOPS_NEW' | translate }}</p>
+                </div>
+              </div>
+            </div>
+          </template>
 
           <div class="row">
             <div class="col-md-6 col-lg-5">
