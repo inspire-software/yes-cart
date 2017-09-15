@@ -49,7 +49,7 @@ public class SearchUtil {
      */
     public static List<String> splitForSearch(final String phraze, final int charThreshold) {
         if (phraze != null) {
-            String [] token = StringUtils.splitPreserveAllTokens(phraze, "| ;");
+            String [] token = StringUtils.splitPreserveAllTokens(phraze, "| ;/\\");
             List<String> words = new ArrayList<String>(token.length);
             for (final String aToken : token) {
                 if (StringUtils.isNotBlank(aToken)) {

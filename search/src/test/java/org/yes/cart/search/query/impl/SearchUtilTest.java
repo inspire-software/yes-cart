@@ -44,10 +44,13 @@ public class SearchUtilTest {
         assertArrayEquals(new String[] {"1y", "SecureDoc", "WinEntr", "Supp", "5K+", "E-LTU" }, rez.toArray());
 
         rez = SearchUtil.splitForSearch("HP Monitor EliteDisplay E271i / 68,5cm (27\") IPS LED / 1920 x 1080 (16:9) / DVI-D Display Port VGA / 1000:1 / 250cd/m2 / 7ms", 2);
-        assertArrayEquals(new String[] {"HP", "Monitor", "EliteDisplay", "E271i", "68,5cm", "27\"", "IPS", "LED", "1920", "1080", "16:9", "DVI-D", "Display", "Port", "VGA", "1000:1", "250cd/m2", "7ms" }, rez.toArray());
+        assertArrayEquals(new String[] {"HP", "Monitor", "EliteDisplay", "E271i", "68,5cm", "27\"", "IPS", "LED", "1920", "1080", "16:9", "DVI-D", "Display", "Port", "VGA", "1000:1", "250cd", "m2", "7ms" }, rez.toArray());
 
         rez = SearchUtil.splitForSearch("iPad Wi-Fi + Cellular 128GB - Gold", 2);
         assertArrayEquals(new String[] {"iPad", "Wi-Fi", "Cellular", "128GB", "Gold" }, rez.toArray());
+
+        rez = SearchUtil.splitForSearch("TS/ThinkPad T570/i5-7200U/8GB /256GB SSD/15.6\"/Integrated Intel HD Graphics 620/W10P/Black - Kaby Lake", 2);
+        assertArrayEquals(new String[] {"TS", "ThinkPad", "T570", "i5", "7200U", "8GB", "256GB", "SSD", "15.6\"", "Integrated", "Intel", "HD", "Graphics", "620", "W10P", "Black", "Kaby", "Lake" }, rez.toArray());
 
     }
 

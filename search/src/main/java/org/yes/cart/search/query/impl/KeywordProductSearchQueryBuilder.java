@@ -42,9 +42,9 @@ public class KeywordProductSearchQueryBuilder extends AbstractKeywordSearchQuery
 
         final BooleanQuery.Builder query = new BooleanQuery.Builder();
 
-        // product name weight (3~1)
-        query.add(createFuzzyQuery(PRODUCT_NAME_FIELD, escapedTerm, 1, 3f), BooleanClause.Occur.SHOULD);
-        query.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedTerm, 1, 3f), BooleanClause.Occur.SHOULD);
+        // product name weight (3)
+        query.add(createTermQuery(PRODUCT_NAME_FIELD, escapedTerm, 3f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(PRODUCT_DISPLAYNAME_FIELD, escapedTerm, 3f), BooleanClause.Occur.SHOULD);
 
         // product brand weight (5) must be higher than name (e.g. "hp notebook" must show hp brand first)
         query.add(createTermQuery(BRAND_FIELD, escapedTerm, 5f), BooleanClause.Occur.SHOULD);
