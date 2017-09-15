@@ -17,6 +17,8 @@
 package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Attributable;
@@ -32,6 +34,8 @@ import java.util.Map;
  * Time: 6:42 PM
  */
 public class CategoryImageServiceImpl extends AbstractImageServiceImpl implements AttributableImageService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CategoryImageServiceImpl.class);
 
     private final Map<String, CategoryImageRetrieveStrategy> strategies;
     private final String defaultStrategy;
@@ -97,8 +101,13 @@ public class CategoryImageServiceImpl extends AbstractImageServiceImpl implement
                            final String attrName,
                            final String attrVal) {
 
-        final String strategyLabel = getImageAttributeValue(category, AttributeNamesKeys.Category.CATEGORY_IMAGE_RETRIEVE_STRATEGY, defaultStrategy);
-        final CategoryImageRetrieveStrategy strategy = strategies.get(strategyLabel);
+        String strategyLabel = getImageAttributeValue(category, AttributeNamesKeys.Category.CATEGORY_IMAGE_RETRIEVE_STRATEGY, defaultStrategy);
+        CategoryImageRetrieveStrategy strategy = strategies.get(strategyLabel);
+        if (strategy == null) {
+            LOG.error("Category {} image strategy {} is invalid, using default", category.getName(), strategyLabel);
+            strategy = strategies.get(defaultStrategy);
+            strategyLabel = defaultStrategy;
+        }
         final String imageName = strategy.getImageName(category, attrName, locale);
         return getImageURI(strategyLabel, httpServletContextPath, locale, width, height, imageName);
 
