@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.stream.io.FileSystemIOProvider;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 
@@ -63,7 +64,8 @@ public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOPr
     @Override
     public boolean exists(final String uri, final Map<String, Object> context) {
 
-        return resolveFileFromUri(uri, context).exists();
+        final File file = resolveFileFromUri(uri, context);
+        return file != null && file.exists();
 
     }
 
@@ -74,7 +76,7 @@ public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOPr
         final File file1 = resolveFileFromUri(uriToCheck, context);
         final File file2 = resolveFileFromUri(uriToCheckAgainst, context);
 
-        return file1.exists() && file2.exists() && file2.lastModified() < file1.lastModified();
+        return file1 == null || file2 == null || file1.exists() && file2.exists() && file2.lastModified() < file1.lastModified();
 
     }
 
@@ -82,7 +84,11 @@ public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOPr
     @Override
     public byte[] read(final String uri, final Map<String, Object> context) throws IOException {
 
-        return FileUtils.readFileToByteArray(resolveFileFromUri(uri, context));
+        final File file = resolveFileFromUri(uri, context);
+        if (file == null) {
+            throw new FileNotFoundException("Unable to resolve file path: " + uri);
+        }
+        return FileUtils.readFileToByteArray(file);
 
     }
 
@@ -91,6 +97,9 @@ public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOPr
     public void write(final String uri, final byte[] content, final Map<String, Object> context) throws IOException {
 
         final File file = resolveFileFromUri(uri, context);
+        if (file == null) {
+            throw new IOException("Unable to resolve path: " + uri);
+        }
 
         if (!file.getParentFile().exists()) {
             // ensure we create all dirs necessary
@@ -99,7 +108,7 @@ public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOPr
             }
         }
 
-        FileUtils.writeByteArrayToFile(resolveFileFromUri(uri, context), content);
+        FileUtils.writeByteArrayToFile(file, content);
 
     }
 
@@ -109,7 +118,7 @@ public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOPr
 
         final File file = resolveFileFromUri(uri, context);
 
-        if (file.exists()) {
+        if (file != null && file.exists()) {
             if (!file.delete()) {
                 LOG.error("Unable to delete file {}", file.getAbsolutePath());
             }

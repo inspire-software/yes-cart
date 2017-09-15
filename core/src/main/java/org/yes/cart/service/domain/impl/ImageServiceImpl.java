@@ -34,10 +34,7 @@ import org.yes.cart.stream.io.IOProvider;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
@@ -375,6 +372,11 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
                 return ioProvider.read(resized, ctx);
             }
             return ioProvider.read(original, ctx);
+
+        } catch (FileNotFoundException fnf) {
+
+            LOG.error("Unable to resize image " + original + " to " + resized + ", caused by: file not found");
+            return new byte[0];
 
         } catch (IOException ioe) {
             LOG.error("Unable to resize image " + original + " to " + resized + ", caused by: " + ioe.getMessage(), ioe);

@@ -26,6 +26,7 @@ import org.yes.cart.service.dto.DtoImageService;
 import org.yes.cart.service.vo.VoIOSupport;
 import org.yes.cart.util.MimeTypesUtils;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -214,6 +215,9 @@ public class VoIOSupportImpl implements VoIOSupport {
             final String contentType = getMimeType(fileName);
 
             return getBase64String(contentType, content);
+        } catch (FileNotFoundException fnf) {
+            LOG.error("Error retrieving image data for " + code + "/" + fileName + ", caused by: file not found");
+            return null;
         } catch (Exception exp) {
             LOG.error("Error retrieving image data for " + code + "/" + fileName + ", caused by: " + exp.getMessage(), exp);
             return null;

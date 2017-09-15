@@ -48,7 +48,12 @@ public class WebAppContextIOProviderImpl extends AbstractFileSystemIOProviderImp
         } else {
             absolutePath = uri;
         }
-        return new File(getOsAwarePath(servletContext.getRealPath(absolutePath)));
+
+        final String ctxPath = servletContext.getRealPath(absolutePath);
+        if (ctxPath == null) {
+            throw new IllegalArgumentException("Specified path cannot be resolved: " + uri);
+        }
+        return new File(getOsAwarePath(ctxPath));
 
     }
 
