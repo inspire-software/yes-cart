@@ -126,6 +126,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.SystemServiceImpl">
                 <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="systemDao"/>
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="attrValueEntitySystemDao"/>
                 <constructor-arg type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
                 <constructor-arg type="org.yes.cart.service.domain.RuntimeAttributeService" ref="runtimeAttributeService"/>
                 <constructor-arg type="org.springframework.cache.CacheManager" ref="cacheManager"/>

@@ -17,14 +17,17 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueSystem;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.System;
+import org.yes.cart.domain.entity.impl.AttrValueEntitySystem;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
@@ -41,6 +44,8 @@ public class SystemServiceImpl implements SystemService {
 
     private final GenericDAO<System, Long> systemDao;
 
+    private final GenericDAO<AttrValueEntitySystem, Long> attrValueEntitySystemDao;
+
     private final AttributeService attributeService;
 
     private final RuntimeAttributeService runtimeAttributeService;
@@ -55,12 +60,14 @@ public class SystemServiceImpl implements SystemService {
      * @param cacheManager    cache manager to use
      */
     public SystemServiceImpl(final GenericDAO<System, Long> systemDao,
+                             final GenericDAO<AttrValueEntitySystem, Long> attrValueEntitySystemDao,
                              final AttributeService attributeService,
                              final RuntimeAttributeService runtimeAttributeService,
                              final CacheManager cacheManager) {
         this.systemDao = systemDao;
         this.attributeService = attributeService;
         this.runtimeAttributeService = runtimeAttributeService;
+        this.attrValueEntitySystemDao = attrValueEntitySystemDao;
         PREF_CACHE = cacheManager.getCache("systemService-attributeValue");
     }
 
@@ -115,7 +122,7 @@ public class SystemServiceImpl implements SystemService {
             synchronized (SystemService.class) {
                 final Map<String, AttrValueSystem> current = findAttributeValues();
                 if (!current.containsKey(key)) {
-                    runtimeAttributeService.create(key, "SYSTEM", eType);
+                    runtimeAttributeService.create(key, AttributeGroupNames.SYSTEM, eType);
                 }
             }
         }
@@ -136,7 +143,7 @@ public class SystemServiceImpl implements SystemService {
 
         final System system = getSystem();
 
-        AttrValueSystem attrVal = system.getAttributes().get(key);
+        AttrValueSystem attrVal = attrValueEntitySystemDao.findSingleByCriteria(Restrictions.eq("attributeCode", key));
 
         if (attrVal == null) {
             Attribute attr = attributeService.findByAttributeCode(key);
@@ -153,13 +160,7 @@ public class SystemServiceImpl implements SystemService {
         }
 
         if (attrVal != null) {
-            systemDao.saveOrUpdate(system);
-            // Must force attribute to be persisted to avoid optimistic locking
-            // Note this method should be synchronised to ensure that save in time
-            systemDao.flush();
-
-            attrVal = system.getAttributes().get(key);
-            PREF_CACHE.put(key, attrVal.getVal());
+            PREF_CACHE.put(key, value);
             PREF_CACHE.put(attrVal.getAttrvalueId(), attrVal.getVal());
         }
     }
