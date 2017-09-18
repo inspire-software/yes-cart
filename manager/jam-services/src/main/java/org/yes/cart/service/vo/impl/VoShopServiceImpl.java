@@ -529,6 +529,8 @@ public class VoShopServiceImpl implements VoShopService {
                 attrsMap, AttributeNamesKeys.Shop.SHOP_SEARCH_SUGGEST_MAX_ITEMS, lang, 10));
         summary.setSearchSuggestMinChars(getIntegerShopAttributeConfig(
                 attrsMap, AttributeNamesKeys.Shop.SHOP_SEARCH_SUGGEST_MIN_CHARS, lang, 3));
+        summary.setSearchSuggestFadeOut(getIntegerShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_SEARCH_SUGGEST_FADE_OUT, lang, 3000));
     }
 
     protected Map<String, VoAttrValueShop> getStringVoAttrValueShopMap(final long shopId, final String code) throws Exception {

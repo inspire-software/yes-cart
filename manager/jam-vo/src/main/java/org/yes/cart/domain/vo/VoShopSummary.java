@@ -77,6 +77,7 @@ public class VoShopSummary {
     private MutablePair<String, Boolean> searchSuggestEnable;
     private MutablePair<String, Integer> searchSuggestMaxResults;
     private MutablePair<String, Integer> searchSuggestMinChars;
+    private MutablePair<String, Integer> searchSuggestFadeOut;
 
 
     private MutablePair<String, String> adminEmail;
@@ -359,6 +360,14 @@ public class VoShopSummary {
 
     public void setSearchSuggestMinChars(final MutablePair<String, Integer> searchSuggestMinChars) {
         this.searchSuggestMinChars = searchSuggestMinChars;
+    }
+
+    public MutablePair<String, Integer> getSearchSuggestFadeOut() {
+        return searchSuggestFadeOut;
+    }
+
+    public void setSearchSuggestFadeOut(final MutablePair<String, Integer> searchSuggestFadeOut) {
+        this.searchSuggestFadeOut = searchSuggestFadeOut;
     }
 
     public MutablePair<String, String> getAdminEmail() {

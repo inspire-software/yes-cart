@@ -493,6 +493,11 @@ public interface AttributeNamesKeys {
         String SHOP_SEARCH_SUGGEST_MIN_CHARS = "SHOP_SEARCH_SUGGEST_MIN_CHARS";
 
         /**
+         * Milliseconds after which result pop up should fade out
+         */
+        String SHOP_SEARCH_SUGGEST_FADE_OUT = "SHOP_SEARCH_SUGGEST_FADE_OUT";
+
+        /**
          * Comma separated list of product sorting options
          */
         String SHOP_CATEGORY_SORT_OPTIONS = "SHOP_CATEGORY_SORT_OPTIONS";

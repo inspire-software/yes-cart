@@ -165,6 +165,14 @@ export interface ShopSummaryVO {
   checkoutEnableMessage: Pair<string, boolean>;
   checkoutEnableQuanityPicker: Pair<string, boolean>;
 
+  searchInSubCatsEnable: Pair<string, boolean>;
+  searchCompoundEnable: Pair<string, boolean>;
+
+  searchSuggestEnable: Pair<string, boolean>;
+  searchSuggestMaxResults: Pair<string, number>;
+  searchSuggestMinChars: Pair<string, number>;
+  searchSuggestFadeOut: Pair<string, number>;
+
   adminEmail: Pair<string, string>;
   b2bProfileActive: Pair<string, boolean>;
   b2bAddressbookActive: Pair<string, boolean>;

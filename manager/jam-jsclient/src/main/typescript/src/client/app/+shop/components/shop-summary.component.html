@@ -185,6 +185,7 @@
             <i class="fa {{ shopSummary.searchSuggestEnable.second ? 'fa-check text-muted' : 'fa-remove text-muted' }}"></i>
             <span class="text-muted" [hidden]="!shopSummary.searchSuggestEnable.second">{{ shopSummary.searchSuggestMaxResults.second }} <i class="fa fa-info" title="{{ shopSummary.searchSuggestMaxResults.first }}"></i></span>
             <span class="text-muted" [hidden]="!shopSummary.searchSuggestEnable.second">{{ shopSummary.searchSuggestMinChars.second }} <i class="fa fa-info" title="{{ shopSummary.searchSuggestMinChars.first }}"></i></span>
+            <span class="text-muted" [hidden]="!shopSummary.searchSuggestEnable.second">{{ shopSummary.searchSuggestFadeOut.second }} <i class="fa fa-info" title="{{ shopSummary.searchSuggestFadeOut.first }}"></i></span>
           </div>
         </div>
         <div class="row block-margin-spacer" *ngIf="shopSummary.customerTypes.length > 0">
