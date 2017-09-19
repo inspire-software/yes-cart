@@ -74,6 +74,8 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                     logExplanation(searcher, query, null, hit.doc);
                 }
             }
+        } catch (IllegalStateException ise) {
+            LOG.warn("Failed to run query " + query + ", caused: " + ise.getMessage());
         } catch (Exception exp) {
             LOG.error("Failed to run query " + query + ", caused: " + exp.getMessage(), exp);
         } finally {
@@ -113,6 +115,8 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                     logExplanation(searcher, query, sort, hit.doc);
                 }
             }
+        } catch (IllegalStateException ise) {
+            LOG.warn("Failed to run query " + query + ", caused: " + ise.getMessage());
         } catch (Exception exp) {
             LOG.error("Failed to run query " + query + ", caused: " + exp.getMessage(), exp);
         } finally {
@@ -167,6 +171,8 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
                 return new Pair<List<Object[]>, Integer>(resItems, topDocs.totalHits);
             }
+        } catch (IllegalStateException ise) {
+            LOG.warn("Failed to run query " + query + ", caused: " + ise.getMessage());
         } catch (Exception exp) {
             LOG.error("Failed to run query " + query + ", caused: " + exp.getMessage(), exp);
         } finally {
@@ -267,11 +273,15 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                         }
 
                     }
+                } catch (IllegalStateException ise) {
+                    LOG.warn(Markers.alert(), "Failed to create facet for request " + request + ", caused: " + ise.getMessage());
                 } catch (Exception exp) {
                     LOG.error(Markers.alert(), "Failed to create facet for request " + request + ", caused: " + exp.getMessage(), exp);
                 }
             }
 
+        } catch (IllegalStateException ise) {
+            LOG.warn("Failed to run query " + query + ", caused: " + ise.getMessage());
         } catch (Exception exp) {
             LOG.error("Failed to run query " + query + ", caused: " + exp.getMessage(), exp);
         } finally {
@@ -297,6 +307,8 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
         try {
             count = searcher.count(query);
+        } catch (IllegalStateException ise) {
+            LOG.warn("Failed to run query " + query + ", caused: " + ise.getMessage());
         } catch (Exception exp) {
             LOG.error("Failed to run query " + query + ", caused: " + exp.getMessage(), exp);
         } finally {
