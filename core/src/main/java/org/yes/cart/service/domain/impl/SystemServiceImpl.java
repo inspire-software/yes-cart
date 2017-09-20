@@ -18,6 +18,8 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.constants.AttributeGroupNames;
@@ -33,6 +35,7 @@ import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
 
 import java.io.File;
+import java.text.MessageFormat;
 import java.util.Map;
 
 /**
@@ -41,6 +44,8 @@ import java.util.Map;
  * Time: 14:12:54
  */
 public class SystemServiceImpl implements SystemService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SystemServiceImpl.class);
 
     private final GenericDAO<System, Long> systemDao;
 
@@ -54,10 +59,11 @@ public class SystemServiceImpl implements SystemService {
 
     /**
      * Construct system services, which is determinate shop set.
-     * @param systemDao system dao
-     * @param attributeService attribute service.
+     *
+     * @param systemDao               system dao
+     * @param attributeService        attribute service.
      * @param runtimeAttributeService runtime attribute service
-     * @param cacheManager    cache manager to use
+     * @param cacheManager            cache manager to use
      */
     public SystemServiceImpl(final GenericDAO<System, Long> systemDao,
                              final GenericDAO<AttrValueEntitySystem, Long> attrValueEntitySystemDao,
@@ -145,8 +151,19 @@ public class SystemServiceImpl implements SystemService {
 
         AttrValueSystem attrVal = attrValueEntitySystemDao.findSingleByCriteria(Restrictions.eq("attributeCode", key));
 
+
         if (attrVal == null) {
+
+            LOG.info(
+                    MessageFormat.format(
+                            "Try to update {0} with {1} previous value was apsent. th {2}",
+                            key,
+                            value,
+                            Thread.currentThread().getId())
+            );
+
             Attribute attr = attributeService.findByAttributeCode(key);
+
             if (attr != null) {
 
                 attrVal = systemDao.getEntityFactory().getByIface(AttrValueSystem.class);
@@ -156,15 +173,27 @@ public class SystemServiceImpl implements SystemService {
                 system.getAttributes().put(key, attrVal);
             }
         } else {
+
+            LOG.info(
+                    MessageFormat.format(
+                            "Try to update {0} with {1} previous value was {2}. th {3}",
+                            key,
+                            value,
+                            attrVal.getVal(),
+                            Thread.currentThread().getId())
+            );
+
             attrVal.setVal(value);
         }
+
+        attrValueEntitySystemDao.saveOrUpdate((AttrValueEntitySystem) attrVal);
+        attrValueEntitySystemDao.flushClear();
 
         if (attrVal != null) {
             PREF_CACHE.put(key, value);
             PREF_CACHE.put(attrVal.getAttrvalueId(), attrVal.getVal());
         }
     }
-
 
 
     /**
@@ -243,7 +272,6 @@ public class SystemServiceImpl implements SystemService {
     }
 
 
-
     /**
      * {@inheritDoc}
      */
@@ -280,7 +308,9 @@ public class SystemServiceImpl implements SystemService {
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public GenericDAO getGenericDao() {
         return systemDao;
     }
