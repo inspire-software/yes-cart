@@ -374,6 +374,17 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
         return entity;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public T saveOrUpdateWithPessimistickLock(T entity) {
+        Session ses = sessionFactory.getCurrentSession();
+        ses.buildLockRequest(new LockOptions(LockMode.PESSIMISTIC_WRITE)).lock(entity);
+        ses.saveOrUpdate(entity);
+        return entity;
+    }
+
 
     /**
      * {@inheritDoc}

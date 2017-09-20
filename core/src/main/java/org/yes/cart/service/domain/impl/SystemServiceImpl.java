@@ -186,7 +186,7 @@ public class SystemServiceImpl implements SystemService {
             attrVal.setVal(value);
         }
 
-        attrValueEntitySystemDao.saveOrUpdate((AttrValueEntitySystem) attrVal);
+        attrValueEntitySystemDao.saveOrUpdateWithPessimistickLock((AttrValueEntitySystem) attrVal);
         attrValueEntitySystemDao.flushClear();
 
         if (attrVal != null) {
