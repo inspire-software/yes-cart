@@ -311,6 +311,13 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    public T saveOrUpdateWithPessimistickLock(final T entity) {
+        return delegate.saveOrUpdateWithPessimistickLock(entity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void delete(final Object entity) {
         delegate.delete(entity);
     }

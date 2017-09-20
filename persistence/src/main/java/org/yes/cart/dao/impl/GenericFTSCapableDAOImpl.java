@@ -329,6 +329,13 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    public T saveOrUpdateWithPessimistickLock(final T entity) {
+        return genericDAO.saveOrUpdateWithPessimistickLock(entity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void delete(final Object entity) {
         genericDAO.delete(entity);
     }
