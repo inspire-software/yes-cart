@@ -156,10 +156,9 @@ public class SystemServiceImpl implements SystemService {
 
             LOG.info(
                     MessageFormat.format(
-                            "Try to update {0} with {1} previous value was apsent. th {2}",
+                            "Try to update {0} with {1} previous value was apsent",
                             key,
-                            value,
-                            Thread.currentThread().getId())
+                            value)
             );
 
             Attribute attr = attributeService.findByAttributeCode(key);
@@ -176,17 +175,16 @@ public class SystemServiceImpl implements SystemService {
 
             LOG.info(
                     MessageFormat.format(
-                            "Try to update {0} with {1} previous value was {2}. th {3}",
+                            "Try to update {0} with {1} previous value was {2}",
                             key,
                             value,
-                            attrVal.getVal(),
-                            Thread.currentThread().getId())
+                            attrVal.getVal())
             );
 
             attrVal.setVal(value);
         }
 
-        attrValueEntitySystemDao.saveOrUpdateWithPessimistickLock((AttrValueEntitySystem) attrVal);
+        attrValueEntitySystemDao.saveOrUpdate((AttrValueEntitySystem) attrVal);
         attrValueEntitySystemDao.flushClear();
 
         if (attrVal != null) {

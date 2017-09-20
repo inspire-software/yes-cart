@@ -440,15 +440,6 @@ public interface GenericDAO<T, PK extends Serializable> {
     T saveOrUpdate(T entity);
 
     /**
-     * Save or update the entity. Please, use #create or #update instead of this method.
-     *
-     * @param entity entity to update
-     *
-     * @return updated entity.
-     */
-    T saveOrUpdateWithPessimistickLock(T entity);
-
-    /**
      * Delete the given entity.
      *
      * @param entity to delete
