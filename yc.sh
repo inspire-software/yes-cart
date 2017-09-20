@@ -345,8 +345,9 @@ EOF
 
 
     cp /home/ec2-user/yes-cart/manager/jam/target/yes-manager.war /usr/share/tomcat7/webapps/
-    cp /home/ec2-user/yes-cart/web/api/target/yes-api.war /usr/share/tomcat7/webapps/
+    #cp /home/ec2-user/yes-cart/web/api/target/yes-api.war /usr/share/tomcat7/webapps/
     cp /home/ec2-user/yes-cart/web/store-wicket/target/yes-shop.war /usr/share/tomcat7/webapps/
+
     mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/config
     mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/archived
     mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/incoming
