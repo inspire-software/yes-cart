@@ -299,9 +299,9 @@ start_aws() {
     export ycdemohost=$(aws ec2 describe-instances --filter Name=tag:Name,Values=YCDEMO | jq '.Reservations[0].Instances[0] | .PublicDnsName' | sed 's/\"//g')
 
     mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; DELETE FROM TSHOPURL WHERE STOREURL_ID <> 12; UPDATE TSHOPURL SET URL = '$ycdemohost';" yes
-    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; INSERT INTO TSYSTEMATTRVALUE SET val = '/var/lib/tomcat7-ycdemo/import', code = 'JOB_LOCAL_FILE_IMPORT_FS_ROOT', SYSTEM_ID=100, GUID='JLFIR100'; " yes
-    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; INSERT INTO TSYSTEMATTRVALUE SET val = 'false', code = 'JOB_LOCAL_FILE_IMPORT_PAUSE', SYSTEM_ID=100, GUID='JLFP100'; " yes
-    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; INSERT INTO TSYSTEMATTRVALUE SET val = 'false', code = 'JOB_SEND_MAIL_PAUSE', SYSTEM_ID=100, GUID='JSPM100'; " yes
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes;  INSERT INTO TSYSTEMATTRVALUE SET val = '/var/lib/tomcat7-ycdemo/import', code = 'JOB_LOCAL_FILE_IMPORT_FS_ROOT', SYSTEM_ID=100, GUID='JLFIR100'; " yes
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; DELETE FROM TSYSTEMATTRVALUE WHERE CODE='JOB_LOCAL_FILE_IMPORT_PAUSE'; INSERT INTO TSYSTEMATTRVALUE SET val = 'false', code = 'JOB_LOCAL_FILE_IMPORT_PAUSE', SYSTEM_ID=100, GUID='JLFP100'; " yes
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; DELETE FROM TSYSTEMATTRVALUE WHERE CODE='JOB_SEND_MAIL_PAUSE'; INSERT INTO TSYSTEMATTRVALUE SET val = 'false', code = 'JOB_SEND_MAIL_PAUSE', SYSTEM_ID=100, GUID='JSPM100'; " yes
 
     mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; UPDATE TSYSTEMATTRVALUE SET val = 'http://$ycdemohost:8080/yes-shop' WHERE code = 'SYSTEM_DEFAULT_SHOP' AND SYSTEM_ID=100; " yes
 
@@ -345,7 +345,7 @@ EOF
 
 
     cp /home/ec2-user/yes-cart/manager/jam/target/yes-manager.war /usr/share/tomcat7/webapps/
-    #cp /home/ec2-user/yes-cart/web/api/target/yes-api.war /usr/share/tomcat7/webapps/
+    cp /home/ec2-user/yes-cart/web/api/target/yes-api.war /usr/share/tomcat7/webapps/
     cp /home/ec2-user/yes-cart/web/store-wicket/target/yes-shop.war /usr/share/tomcat7/webapps/
 
     mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/config
