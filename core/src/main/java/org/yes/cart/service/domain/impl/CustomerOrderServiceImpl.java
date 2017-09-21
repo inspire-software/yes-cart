@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.hibernate.Hibernate;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,6 +87,13 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      */
     public CustomerOrderDelivery findDelivery(final long deliveryId) {
         return customerOrderDeliveryDao.findById(deliveryId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public CustomerOrderDelivery findDeliveryByNumber(final String deliveryNum) {
+        return customerOrderDeliveryDao.findSingleByCriteria(Restrictions.eq("deliveryNum", deliveryNum));
     }
 
     /**
@@ -285,6 +293,18 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             return findByOrderNumber(reference);
         }
         return order;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public CustomerOrder findByDeliveryReference(final String reference) {
+        final CustomerOrderDelivery delivery = findDeliveryByNumber(reference);
+        if (delivery != null) {
+            Hibernate.initialize(delivery.getCustomerOrder());
+            return delivery.getCustomerOrder();
+        }
+        return null;
     }
 
     /**

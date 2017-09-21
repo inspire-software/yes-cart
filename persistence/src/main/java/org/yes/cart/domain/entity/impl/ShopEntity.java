@@ -16,6 +16,7 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
@@ -311,12 +312,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public List<String> getSupportedCurrenciesAsList() {
         if (supportedCurrenciesAsList == null) {
-            final String currencies = getSupportedCurrencies();
-            if (currencies != null) {
-                supportedCurrenciesAsList = Arrays.asList(StringUtils.split(currencies, ','));
-            } else {
-                supportedCurrenciesAsList = Collections.emptyList();
-            }
+            supportedCurrenciesAsList = getCsvValuesTrimmedAsListRaw(getSupportedCurrencies());
         }
         return supportedCurrenciesAsList;
     }
@@ -328,13 +324,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public List<String> getSupportedShippingCountriesAsList() {
         if (supportedShippingCountriesAsList == null) {
-            final String countries = getSupportedShippingCountries();
-            if (countries != null) {
-                supportedShippingCountriesAsList = Arrays.asList(StringUtils.split(countries, ','));
-            } else {
-                supportedShippingCountriesAsList = Collections.emptyList();
-            }
-
+            supportedShippingCountriesAsList = getCsvValuesTrimmedAsListRaw(getSupportedShippingCountries());
         }
         return supportedShippingCountriesAsList;
     }
@@ -345,12 +335,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public List<String> getSupportedBillingCountriesAsList() {
         if (supportedBillingCountriesAsList == null) {
-            final String countries = getSupportedBillingCountries();
-            if (countries != null) {
-                supportedBillingCountriesAsList = Arrays.asList(StringUtils.split(countries, ','));
-            } else {
-                supportedBillingCountriesAsList = Collections.emptyList();
-            }
+            supportedBillingCountriesAsList = getCsvValuesTrimmedAsListRaw(getSupportedBillingCountries());
         }
         return supportedBillingCountriesAsList;
     }
@@ -361,12 +346,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public List<String> getSupportedLanguagesAsList() {
         if (supportedLanguagesAsList == null) {
-            final String languages = getSupportedLanguages();
-            if (languages != null) {
-                supportedLanguagesAsList = Arrays.asList(StringUtils.split(languages, ','));
-            } else {
-                supportedLanguagesAsList = Collections.emptyList();
-            }
+            supportedLanguagesAsList = getCsvValuesTrimmedAsListRaw(getSupportedLanguages());
         }
         return supportedLanguagesAsList;
     }
@@ -445,12 +425,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     public List<String> getSupportedRegistrationFormAttributesAsList(final String customerType) {
         List<String> supportedRegistrationFormAttributesAsList = this.supportedRegistrationFormAttributesByType.get(customerType);
         if (supportedRegistrationFormAttributesAsList == null) {
-            final String attrs = getSupportedRegistrationFormAttributes(customerType);
-            if (attrs != null) {
-                supportedRegistrationFormAttributesAsList = Arrays.asList(StringUtils.split(attrs, ','));
-            } else {
-                supportedRegistrationFormAttributesAsList = Collections.emptyList();
-            }
+            supportedRegistrationFormAttributesAsList = getCsvValuesTrimmedAsListRaw(getSupportedRegistrationFormAttributes(customerType));
             this.supportedRegistrationFormAttributesByType.put(customerType, supportedRegistrationFormAttributesAsList);
         }
         return supportedRegistrationFormAttributesAsList;
@@ -466,12 +441,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     public List<String> getSupportedProfileFormAttributesAsList(final String customerType) {
         List<String> supportedProfileFormAttributesAsList = this.supportedProfileFormAttributesByType.get(customerType);
         if (supportedProfileFormAttributesAsList == null) {
-            final String attrs = getSupportedProfileFormAttributes(customerType);
-            if (attrs != null) {
-                supportedProfileFormAttributesAsList = Arrays.asList(StringUtils.split(attrs, ','));
-            } else {
-                supportedProfileFormAttributesAsList = Collections.emptyList();
-            }
+            supportedProfileFormAttributesAsList = getCsvValuesTrimmedAsListRaw(getSupportedProfileFormAttributes(customerType));
             this.supportedProfileFormAttributesByType.put(customerType, supportedProfileFormAttributesAsList);
         }
         return supportedProfileFormAttributesAsList;
@@ -487,12 +457,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     public List<String> getSupportedProfileFormReadOnlyAttributesAsList(final String customerType) {
         List<String> supportedProfileFormReadOnlyAttributesAsList = this.supportedProfileFormReadOnlyAttributesByType.get(customerType);
         if (supportedProfileFormReadOnlyAttributesAsList == null) {
-            final String attrs = getSupportedProfileFormReadOnlyAttributes(customerType);
-            if (attrs != null) {
-                supportedProfileFormReadOnlyAttributesAsList = Arrays.asList(StringUtils.split(attrs, ','));
-            } else {
-                supportedProfileFormReadOnlyAttributesAsList = Collections.emptyList();
-            }
+            supportedProfileFormReadOnlyAttributesAsList = getCsvValuesTrimmedAsListRaw(getSupportedProfileFormReadOnlyAttributes(customerType));
             this.supportedProfileFormReadOnlyAttributesByType.put(customerType, supportedProfileFormReadOnlyAttributesAsList);
         }
         return supportedProfileFormReadOnlyAttributesAsList;
@@ -504,12 +469,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public List<String> getProductStoredAttributesAsList() {
         if (productStoredAttributesAsList == null) {
-            final String attributes = getProductStoredAttributes();
-            if (attributes != null) {
-                productStoredAttributesAsList = Arrays.asList(StringUtils.split(attributes, ','));
-            } else {
-                productStoredAttributesAsList = Collections.emptyList();
-            }
+            productStoredAttributesAsList = getCsvValuesTrimmedAsListRaw(getProductStoredAttributes());
         }
         return productStoredAttributesAsList;
     }
@@ -579,12 +539,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfRequireCustomerRegistrationApprovalTypes() {
         if (this.sfRequireCustomerRegistrationApprovalTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_APPROVE);
-            if (attrs != null) {
-                this.sfRequireCustomerRegistrationApprovalTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfRequireCustomerRegistrationApprovalTypes = Collections.emptySet();
-            }
+            this.sfRequireCustomerRegistrationApprovalTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_APPROVE);
         }
         return this.sfRequireCustomerRegistrationApprovalTypes;
     }
@@ -596,12 +551,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfRequireCustomerRegistrationNotificationTypes() {
         if (this.sfRequireCustomerRegistrationNotificationTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_NOTIFICATION);
-            if (attrs != null) {
-                this.sfRequireCustomerRegistrationNotificationTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfRequireCustomerRegistrationNotificationTypes = Collections.emptySet();
-            }
+            this.sfRequireCustomerRegistrationNotificationTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_NOTIFICATION);
         }
         return this.sfRequireCustomerRegistrationNotificationTypes;
     }
@@ -612,12 +562,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfRequireCustomerOrderApprovalTypes() {
         if (this.sfRequireCustomerOrderApprovalTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_ORDER_APPROVE);
-            if (attrs != null) {
-                this.sfRequireCustomerOrderApprovalTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfRequireCustomerOrderApprovalTypes = Collections.emptySet();
-            }
+            this.sfRequireCustomerOrderApprovalTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_ORDER_APPROVE);
         }
         return this.sfRequireCustomerOrderApprovalTypes;
     }
@@ -628,12 +573,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfBlockCustomerCheckoutTypes() {
         if (this.sfBlockCustomerCheckoutTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_CANNOT_PLACE_ORDER);
-            if (attrs != null) {
-                this.sfBlockCustomerCheckoutTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfBlockCustomerCheckoutTypes = Collections.emptySet();
-            }
+            this.sfBlockCustomerCheckoutTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_SF_CANNOT_PLACE_ORDER);
         }
         return this.sfBlockCustomerCheckoutTypes;
     }
@@ -644,12 +584,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfRepeatOrdersEnabledTypes() {
         if (this.sfRepeatOrdersEnabledTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_REPEAT_ORDER_TYPES);
-            if (attrs != null) {
-                this.sfRepeatOrdersEnabledTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfRepeatOrdersEnabledTypes = Collections.emptySet();
-            }
+            this.sfRepeatOrdersEnabledTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_SF_REPEAT_ORDER_TYPES);
         }
         return this.sfRepeatOrdersEnabledTypes;
     }
@@ -660,12 +595,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfShoppingListsEnabledTypes() {
         if (this.sfShoppingListsEnabledTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_SHOPPING_LIST_TYPES);
-            if (attrs != null) {
-                this.sfShoppingListsEnabledTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfShoppingListsEnabledTypes = Collections.emptySet();
-            }
+            this.sfShoppingListsEnabledTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_SF_SHOPPING_LIST_TYPES);
         }
         return this.sfShoppingListsEnabledTypes;
     }
@@ -676,12 +606,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfB2BOrderLineRemarksEnabledTypes() {
         if (this.sfB2BOrderLineRemarksEnabledTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_B2B_LINE_REMARKS_TYPES);
-            if (attrs != null) {
-                this.sfB2BOrderLineRemarksEnabledTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfB2BOrderLineRemarksEnabledTypes = Collections.emptySet();
-            }
+            this.sfB2BOrderLineRemarksEnabledTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_SF_B2B_LINE_REMARKS_TYPES);
         }
         return this.sfB2BOrderLineRemarksEnabledTypes;
     }
@@ -692,12 +617,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfB2BOrderFormEnabledTypes() {
         if (this.sfB2BOrderFormEnabledTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_B2B_ORDER_FORM_TYPES);
-            if (attrs != null) {
-                this.sfB2BOrderFormEnabledTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfB2BOrderFormEnabledTypes = Collections.emptySet();
-            }
+            this.sfB2BOrderFormEnabledTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_SF_B2B_ORDER_FORM_TYPES);
         }
         return this.sfB2BOrderFormEnabledTypes;
     }
@@ -708,12 +628,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfRFQEnabledTypes() {
         if (this.sfRFQEnabledTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_RFQ_CUSTOMER_TYPES);
-            if (attrs != null) {
-                this.sfRFQEnabledTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfRFQEnabledTypes = Collections.emptySet();
-            }
+            this.sfRFQEnabledTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_RFQ_CUSTOMER_TYPES);
         }
         return this.sfRFQEnabledTypes;
     }
@@ -733,12 +648,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfAddressBookDisabledTypes() {
         if (this.sfAddressBookDisabledTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADDRESSBOOK_DISABLED_CUSTOMER_TYPES);
-            if (attrs != null) {
-                this.sfAddressBookDisabledTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfAddressBookDisabledTypes = Collections.emptySet();
-            }
+            this.sfAddressBookDisabledTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_ADDRESSBOOK_DISABLED_CUSTOMER_TYPES);
         }
         return this.sfAddressBookDisabledTypes;
     }
@@ -750,12 +660,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfShowTaxInfoTypes() {
         if (this.sfShowTaxInfoTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO);
-            if (attrs != null) {
-                this.sfShowTaxInfoTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfShowTaxInfoTypes = Collections.emptySet();
-            }
+            this.sfShowTaxInfoTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO);
         }
         return this.sfShowTaxInfoTypes;
     }
@@ -767,12 +672,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfShowTaxNetTypes() {
         if (this.sfShowTaxNetTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET);
-            if (attrs != null) {
-                this.sfShowTaxNetTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfShowTaxNetTypes = Collections.emptySet();
-            }
+            this.sfShowTaxNetTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET);
         }
         return this.sfShowTaxNetTypes;
     }
@@ -785,12 +685,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfShowTaxAmountTypes() {
         if (this.sfShowTaxAmountTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT);
-            if (attrs != null) {
-                this.sfShowTaxAmountTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfShowTaxAmountTypes = Collections.emptySet();
-            }
+            this.sfShowTaxAmountTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT);
         }
         return this.sfShowTaxAmountTypes;
     }
@@ -803,12 +698,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfShowTaxOptionsTypes() {
         if (this.sfShowTaxOptionsTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES);
-            if (attrs != null) {
-                this.sfShowTaxOptionsTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfShowTaxOptionsTypes = Collections.emptySet();
-            }
+            this.sfShowTaxOptionsTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES);
         }
         return this.sfShowTaxOptionsTypes;
     }
@@ -819,12 +709,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfShowSameBillingAddressDisabledTypes() {
         if (this.sfShowSameBillingAddressDisabledTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_DELIVERY_ONE_ADDRESS_DISABLE);
-            if (attrs != null) {
-                this.sfShowSameBillingAddressDisabledTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfShowSameBillingAddressDisabledTypes = Collections.emptySet();
-            }
+            this.sfShowSameBillingAddressDisabledTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_DELIVERY_ONE_ADDRESS_DISABLE);
         }
         return this.sfShowSameBillingAddressDisabledTypes;
     }
@@ -835,12 +720,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfHidePricesTypes() {
         if (this.sfHidePricesTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_HIDE_PRICES);
-            if (attrs != null) {
-                this.sfHidePricesTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
-            } else {
-                this.sfHidePricesTypes = Collections.emptySet();
-            }
+            this.sfHidePricesTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_PRODUCT_HIDE_PRICES);
         }
         return this.sfHidePricesTypes;
     }
@@ -870,6 +750,33 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
             return protocol + shopUrl.getUrl();
         }
         return "";
+    }
+
+    protected Set<String> getCsvValuesTrimmedAsSet(final String attributeKey) {
+        final List<String> csv = getCsvValuesTrimmedAsList(attributeKey);
+        if (CollectionUtils.isNotEmpty(csv)) {
+            return Collections.unmodifiableSet(new HashSet<String>(csv));
+        }
+        return Collections.emptySet();
+    }
+
+    protected List<String> getCsvValuesTrimmedAsList(final String attributeKey) {
+        return getCsvValuesTrimmedAsListRaw(getAttributeValueByCode(attributeKey));
+    }
+
+
+    protected List<String> getCsvValuesTrimmedAsListRaw(final String raw) {
+        if (raw != null) {
+            final String[] split = StringUtils.split(raw, ',');
+            final List<String> csv = new ArrayList<String>(split.length);
+            for (final String value : split) {
+                if (StringUtils.isNotBlank(value)) {
+                    csv.add(value.trim());
+                }
+            }
+            return Collections.unmodifiableList(csv);
+        }
+        return Collections.emptyList();
     }
 
 

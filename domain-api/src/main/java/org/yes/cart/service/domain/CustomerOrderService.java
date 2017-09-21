@@ -99,6 +99,14 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
     CustomerOrderDelivery findDelivery(long deliveryId);
 
     /**
+     * Find specific delivery.
+     *
+     * @param deliveryNum delivery number
+     * @return delivery
+     */
+    CustomerOrderDelivery findDeliveryByNumber(String deliveryNum);
+
+    /**
      * Find order ids with eligible for export flag set to true.
      *
      * @return order ids with eligible for export flag
@@ -143,6 +151,15 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * @return customer order
      */
     CustomerOrder findByReference(String reference);
+
+    /**
+     * Find order by reference (cart guid or order number).
+     *
+     * @param reference reference
+     *
+     * @return customer order
+     */
+    CustomerOrder findByDeliveryReference(String reference);
 
     /**
      * Find created order by cart guid.

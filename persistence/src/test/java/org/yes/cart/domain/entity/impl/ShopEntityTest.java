@@ -24,11 +24,9 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.ShopUrl;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
@@ -261,6 +259,77 @@ public class ShopEntityTest {
         assertEquals("f1", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "de", "B2C", "Z"));
 
         context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testGetCsvValuesTrimmedAsList() throws Exception {
+
+        final ShopEntity shopEntity = new ShopEntity();
+
+        final AttrValueShop av = context.mock(AttrValueShop.class, "av");
+
+        shopEntity.setAttributes(Collections.singletonList(av));
+
+        context.checking(new Expectations() {{
+            allowing(av).getAttributeCode(); will(returnValue("attr"));
+            allowing(av).getVal();will(returnValue(" abc ,    bcd \t,\tcde,\n\n,\n\n,\t,def\n, bcd,def\n"));
+        }});
+
+        final List<String> csv = shopEntity.getCsvValuesTrimmedAsList("attr");
+
+        assertNotNull(csv);
+        assertEquals(6, csv.size());
+        assertEquals("abc", csv.get(0));
+        assertEquals("bcd", csv.get(1));
+        assertEquals("cde", csv.get(2));
+        assertEquals("def", csv.get(3));
+        assertEquals("bcd", csv.get(4));
+        assertEquals("def", csv.get(5));
+
+    }
+
+    @Test
+    public void testGetCsvValuesTrimmedAsSet() throws Exception {
+
+        final ShopEntity shopEntity = new ShopEntity();
+
+        final AttrValueShop av = context.mock(AttrValueShop.class, "av");
+
+        shopEntity.setAttributes(Collections.singletonList(av));
+
+        context.checking(new Expectations() {{
+            allowing(av).getAttributeCode(); will(returnValue("attr"));
+            allowing(av).getVal();will(returnValue(" abc ,    bcd \t,\tcde,\n\n,\n\n,\t,def\n, bcd,def\n"));
+        }});
+
+        final Set<String> csv = shopEntity.getCsvValuesTrimmedAsSet("attr");
+
+        assertNotNull(csv);
+        assertEquals(4, csv.size());
+        assertTrue(csv.contains("abc"));
+        assertTrue(csv.contains("bcd"));
+        assertTrue(csv.contains("cde"));
+        assertTrue(csv.contains("def"));
+
+
+    }
+
+    @Test
+    public void testGetCsvValuesTrimmedAsListRaw() throws Exception {
+
+        final ShopEntity shopEntity = new ShopEntity();
+
+        final List<String> csv = shopEntity.getCsvValuesTrimmedAsListRaw(" abc ,    bcd \t,\tcde,\n\n,\n\n,\t,def\n, bcd,def\n");
+
+        assertNotNull(csv);
+        assertEquals(6, csv.size());
+        assertEquals("abc", csv.get(0));
+        assertEquals("bcd", csv.get(1));
+        assertEquals("cde", csv.get(2));
+        assertEquals("def", csv.get(3));
+        assertEquals("bcd", csv.get(4));
+        assertEquals("def", csv.get(5));
 
     }
 }
