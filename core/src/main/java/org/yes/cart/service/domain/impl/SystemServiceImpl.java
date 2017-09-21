@@ -35,7 +35,6 @@ import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
 
 import java.io.File;
-import java.text.MessageFormat;
 import java.util.Map;
 
 /**
@@ -154,12 +153,9 @@ public class SystemServiceImpl implements SystemService {
 
         if (attrVal == null) {
 
-            LOG.info(
-                    MessageFormat.format(
-                            "Try to update {0} with {1} previous value was apsent",
-                            key,
-                            value)
-            );
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("updating system preference {} with {} (previous value was absent)", key, value);
+            }
 
             Attribute attr = attributeService.findByAttributeCode(key);
 
@@ -173,13 +169,9 @@ public class SystemServiceImpl implements SystemService {
             }
         } else {
 
-            LOG.info(
-                    MessageFormat.format(
-                            "Try to update {0} with {1} previous value was {2}",
-                            key,
-                            value,
-                            attrVal.getVal())
-            );
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("updating system preference {} with {} (previous value was {})", new Object[]{key, value, attrVal.getVal()});
+            }
 
             attrVal.setVal(value);
         }
