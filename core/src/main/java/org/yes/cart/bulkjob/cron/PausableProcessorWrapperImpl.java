@@ -42,7 +42,9 @@ public class PausableProcessorWrapperImpl implements Runnable, PausableProcessor
     public void run() {
 
         if (!pauseInitialised) {
+
             final String paused = systemService.createOrGetAttributeValue(pausePreferenceKey, "Boolean");
+
             if (paused == null) {
                 systemService.updateAttributeValue(pausePreferenceKey, String.valueOf(pausePreferenceDefault));
             }
