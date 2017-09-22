@@ -38,8 +38,10 @@ import org.yes.cart.utils.impl.ObjectUtil;
 import org.yes.cart.web.service.ws.BackdoorService;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -134,6 +136,20 @@ public class BackdoorServiceImpl implements BackdoorService {
      */
     public void reindexAllProducts() {
         if (!isLuceneIndexDisabled()) {
+
+            try {
+                final Date now = new Date();
+                final String inventoryChangeLastKey = "JOB_PRODINVUP_LR_" + nodeService.getCurrentNodeId();
+                final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                final String lastRun = systemService.getAttributeValue(inventoryChangeLastKey);
+                if (StringUtils.isBlank(lastRun) || format.parse(lastRun).before(now)) {
+                    // Ensure that product inventory changes have last date which corresponds to indexing start time
+                    systemService.updateAttributeValue(inventoryChangeLastKey, format.format(now));
+                }
+            } catch (Exception exp) {
+                LOG.error("Unable to update JOB_PRODINVUP_LR_X: " + exp.getMessage(), exp);
+            }
+
             productService.reindexProducts(getProductIndexBatchSize());
         }
     }
