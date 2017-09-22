@@ -99,26 +99,32 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
 
             // Check again to see if we do not have bulk updates
             int count = productSkus.size();
-            try {
-                Thread.sleep(getDeltaCheckDelay());
-            } catch (InterruptedException e) {
-            }
-            productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
-            int delta = productSkus.size() - count;
-            int maxDelta = getDeltaCheckSize();
-            if (delta > maxDelta) {
-                LOG.info("Detected bulking operation ... {} inventory records changed in past {} seconds (max: {}). Postponing check until next run.",
-                        new Object[]{delta, getDeltaCheckDelay() / 1000, maxDelta});
-                return false;
+            int full = getChangeMaxSize();
+
+            boolean runBatch = count < full;
+
+            if (runBatch) {
+                try {
+                    Thread.sleep(getDeltaCheckDelay());
+                } catch (InterruptedException e) {
+                }
+                productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
+                int delta = productSkus.size() - count;
+                int maxDelta = getDeltaCheckSize();
+                if (delta > maxDelta) {
+                    LOG.info("Detected bulking operation ... {} inventory records changed in past {} seconds (max: {}). Postponing check until next run.",
+                            new Object[]{delta, getDeltaCheckDelay() / 1000, maxDelta});
+                    return false;
+                }
             }
 
             // Check whether we need batch or full
             count = productSkus.size();
-            int full = getChangeMaxSize();
+            runBatch = count < full;
 
             LOG.info("Inventory changed for {} since {}", new Object[]{productSkus.size(), lastRun});
 
-            if (count < full) {
+            if (runBatch) {
                 int fromIndex = 0;
                 int toIndex = 0;
                 while (fromIndex < productSkus.size()) {
@@ -176,8 +182,8 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
 
         if (skuCodes == null) {
             // do full reindex
-            productService.reindexProducts(getBatchSize(), false);
-            productService.reindexProductsSku(getBatchSize(), false);
+            productService.reindexProducts(getBatchSize(), true);
+            productService.reindexProductsSku(getBatchSize(), true);
 
         } else {
             for (final String sku : skuCodes) {
