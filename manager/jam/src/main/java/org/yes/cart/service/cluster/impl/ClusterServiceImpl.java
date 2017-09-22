@@ -17,6 +17,7 @@
 package org.yes.cart.service.cluster.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.yes.cart.cluster.node.Message;
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.cluster.node.NodeService;
@@ -123,7 +124,9 @@ public class ClusterServiceImpl implements ClusterService {
         for (final Message response : message.getResponses()) {
 
             final Object[] rsp = (Object[]) response.getPayload();
-            indexStatus.put(response.getSource(), new Pair<Long, Boolean>((Long) rsp[1], "DONE".equals(rsp[0])));
+            indexStatus.put(
+                    response.getSource(),
+                    new Pair<Long, Boolean>(Long.valueOf(ObjectUtils.defaultIfNull(rsp[1],"0").toString()), "DONE".equals(rsp[0])));
 
         }
         return indexStatus;
@@ -164,7 +167,8 @@ public class ClusterServiceImpl implements ClusterService {
         for (final Message response : message.getResponses()) {
 
             final Object[] rsp = (Object[]) response.getPayload();
-            indexStatus.put(response.getSource(), new Pair<Long, Boolean>((Long) rsp[1], "DONE".equals(rsp[0])));
+            indexStatus.put(response.getSource(),
+                    new Pair<Long, Boolean>(Long.valueOf(ObjectUtils.defaultIfNull(rsp[1],"0").toString()), "DONE".equals(rsp[0])));
 
         }
         return indexStatus;
