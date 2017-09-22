@@ -47,6 +47,13 @@ public abstract class AbstractLastRunDependentProcessorImpl implements Runnable 
     private boolean lastRunInitialised = false;
     private Date lastRun;
 
+    private final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat(DATE_FORMAT);
+        }
+    };
+
 
     public AbstractLastRunDependentProcessorImpl(final SystemService systemService,
                                                  final RuntimeAttributeService runtimeAttributeService) {
@@ -60,7 +67,7 @@ public abstract class AbstractLastRunDependentProcessorImpl implements Runnable 
 
         final Date now = new Date();
 
-        final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+        final SimpleDateFormat dateFormat = formatter.get();
 
         final String lastRunPreferenceAttributeName = getLastRunPreferenceAttributeName();
 
