@@ -167,7 +167,8 @@ public class ClusterServiceImpl implements ClusterService {
         for (final Message response : message.getResponses()) {
 
             final Object[] rsp = (Object[]) response.getPayload();
-            indexStatus.put(response.getSource(), new Pair<Long, Boolean>((Long) rsp[1], "DONE".equals(rsp[0])));
+            indexStatus.put(response.getSource(),
+                    new Pair<Long, Boolean>(Long.valueOf(ObjectUtils.defaultIfNull(rsp[1],"0").toString()), "DONE".equals(rsp[0])));
 
         }
         return indexStatus;
