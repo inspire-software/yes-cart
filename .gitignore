@@ -72,10 +72,6 @@ core-modules/core-module-payment-postfinance/core-module-payment-postfinance.iml
 
 core-modules/core-module-payment-postfinance/target/**
 
-core-modules/core-module-payment-robokassa/core-module-payment-robokassa.iml
-
-core-modules/core-module-payment-robokassa/target/**
-
 core-modules/core-module-reports/core-module-reports.iml
 
 core-modules/core-module-reports/target/**

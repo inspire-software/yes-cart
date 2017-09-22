@@ -33,7 +33,6 @@
         <module>core-module-payment-cybersource</module>
         <module>core-module-payment-authorizenet</module>
         <module>core-module-payment-liqpay</module>
-        <module>core-module-payment-robokassa</module>
         <module>core-module-payment-postfinance</module>
         <module>core-module-orderstate</module>
         <module>core-module-cluster-jgroups</module>
