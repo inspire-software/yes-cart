@@ -70,12 +70,16 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
 
         final Calendar time = Calendar.getInstance();
         final int minDays = getObsoleteMinDays();
+        time.set(Calendar.HOUR_OF_DAY, 0);
+        time.set(Calendar.MINUTE, 0);
+        time.set(Calendar.SECOND, 0);
+        time.set(Calendar.MILLISECOND, 0);
         time.add(Calendar.DAY_OF_YEAR, -minDays);
 
         final int batchSize = getObsoleteBatchSize();
 
         LOG.info("Remove obsolete products unavailable before {} (min days {}), batch: {}",
-                new Object[] { time, minDays, batchSize });
+                new Object[] { time.getTime(), minDays, batchSize });
 
         final List<Long> obsoleteIds = productService.findProductIdsByUnavailableBefore(time.getTime());
 
