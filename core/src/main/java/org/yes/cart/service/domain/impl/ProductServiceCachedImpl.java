@@ -33,6 +33,7 @@ import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
 import org.yes.cart.service.domain.ProductService;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -278,6 +279,13 @@ public class ProductServiceCachedImpl implements ProductService {
      */
     public List<Long> findProductIdsByPimCode(final String code) {
         return productService.findProductIdsByPimCode(code);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Long> findProductIdsByUnavailableBefore(final Date before) {
+        return productService.findProductIdsByUnavailableBefore(before);
     }
 
     /**

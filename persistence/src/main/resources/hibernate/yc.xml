@@ -1098,8 +1098,10 @@
             <column name="AVAILABILITY" not-null="true" default="1"/>
         </property>
 
-        <set name="attributes" inverse="true" lazy="true" cascade="all">
-            <key not-null="true" on-delete="cascade" column="PRODUCT_ID"/>
+        <set name="attributes" inverse="true" lazy="true" cascade="all-delete-orphan">
+            <key>
+                <column name="PRODUCT_ID" not-null="true"/>
+            </key>
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.AttrValueEntityProduct" />
         </set>
 
@@ -1227,7 +1229,7 @@
 
         <bag name="attributes" inverse="false" lazy="false" cascade="all-delete-orphan">
             <key>
-                <column name="SKU_ID" not-null="false"/>
+                <column name="SKU_ID" not-null="true"/>
             </key>
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.AttrValueEntityProductSku" />
         </bag>
@@ -3312,6 +3314,12 @@
         ]]>
     </query>
 
+    <query name="PRODUCT.IDS.BY.AVAILABLETO">
+        <![CDATA[
+                 select p.productId from ProductEntity p   where p.availableto is not null and p.availableto < ?1 order by p.availableto
+        ]]>
+    </query>
+
     <query name="PRODUCT.IDS.BY.ATTRIBUTE.CODE.AND.VALUE">
         <![CDATA[
                  select avp.product.productId from AttrValueEntityProduct avp   where avp.attributeCode = ?1 and avp.val = ?2
@@ -3727,6 +3735,18 @@
     <query name="REMOVE.ALL.SKUPRICE.BY.SKUCODE">
         <![CDATA[
             delete from SkuPriceEntity  sp   where sp.skuCode  = ?1
+        ]]>
+    </query>
+
+    <query name="REMOVE.ALL.WISHLIST.BY.SKUID">
+        <![CDATA[
+            delete from CustomerWishListEntity  wl   where wl.skus.skuId  = ?1
+        ]]>
+    </query>
+
+    <query name="REMOVE.ALL.ENSEMBLEOPTS.BY.SKUID">
+        <![CDATA[
+            delete from ProductEnsebleOptionEntity  eo   where eo.sku.skuId  = ?1
         ]]>
     </query>
 

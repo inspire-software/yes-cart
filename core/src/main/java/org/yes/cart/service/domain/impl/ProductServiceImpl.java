@@ -919,6 +919,13 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    public List<Long> findProductIdsByUnavailableBefore(final Date before) {
+        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.AVAILABLETO", before);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<Long> findProductIdsByAttributeValue(final String attrCode, final String attrValue) {
         return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.ATTRIBUTE.CODE.AND.VALUE", attrCode, attrValue);
     }

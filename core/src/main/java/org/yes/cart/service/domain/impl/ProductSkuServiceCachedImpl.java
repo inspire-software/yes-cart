@@ -136,6 +136,20 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    public void removeAllWishLists(final ProductSku sku) {
+        productSkuService.removeAllWishLists(sku);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeAllEnsembleOptions(final ProductSku sku) {
+        productSkuService.removeAllEnsembleOptions(sku);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<ProductSku> findAll() {
         return productSkuService.findAll();
     }

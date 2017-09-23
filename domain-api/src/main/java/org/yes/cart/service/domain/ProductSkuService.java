@@ -111,5 +111,19 @@ public interface ProductSkuService extends GenericService<ProductSku> {
      */
     void removeAllInventory(final ProductSku sku);
 
+    /**
+     * Remove all items for wishlists for given sku
+     *
+     * @param sku  given sku.
+     */
+    void removeAllWishLists(final ProductSku sku);
+
+    /**
+     * Remove all items for ensemble options for given sku
+     *
+     * @param sku  given sku.
+     */
+    void removeAllEnsembleOptions(final ProductSku sku);
+
 
 }

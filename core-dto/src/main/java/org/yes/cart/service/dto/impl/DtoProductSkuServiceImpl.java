@@ -282,17 +282,37 @@ public class DtoProductSkuServiceImpl
      * {@inheritDoc}
      */
     public void remove(long id) {
+
         ProductSku sku =  getService().findById(id);
+
+        if (sku == null) {
+            return;
+        }
+
         ((ProductSkuService)getService()).removeAllInventory(sku);
         ((ProductSkuService)getService()).removeAllPrices(sku);
-        getService().getGenericDao().evict(sku);
+        ((ProductSkuService)getService()).removeAllWishLists(sku);
+        ((ProductSkuService)getService()).removeAllEnsembleOptions(sku);
 
-        sku =  getService().findById(id);
+        final List<Long> avIds = new ArrayList<Long>();
+        for (final AttrValueProductSku av : sku.getAttributes()) {
+            avIds.add(av.getAttrvalueId());
+        }
+        sku = null;
+        getService().getGenericDao().clear(); // clear session
+
+        for (final Long avId : avIds) {
+            try {
+                deleteAttributeValue(avId);
+            } catch (Exception exp) {};
+        }
+        getService().getGenericDao().flushClear(); // ensure we flush delete and clear session
+
+        sku = getService().findById(id); // get sku again (should be without attributes)
         final Product prod = sku.getProduct();
         prod.getSku().remove(sku);
         sku.setProduct(null);
-        getService().getGenericDao().evict(prod);
-        getService().getGenericDao().delete(sku);
+        getService().delete(sku);
     }
 
     /**

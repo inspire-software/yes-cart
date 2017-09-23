@@ -190,4 +190,17 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
             getGenericDao().executeUpdate("REMOVE.ALL.SKU.INVENTORY", sku.getCode());
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void removeAllWishLists(final ProductSku sku) {
+        getGenericDao().executeUpdate("REMOVE.ALL.WISHLIST.BY.SKUID", sku.getSkuId());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeAllEnsembleOptions(final ProductSku sku) {
+        getGenericDao().executeUpdate("REMOVE.ALL.ENSEMBLEOPTS.BY.SKUID", sku.getSkuId());
+    }
 }

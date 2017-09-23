@@ -78,6 +78,14 @@ public interface AttributeNamesKeys {
          */
         String JOB_PRODUCT_INVENTORY_FULL_THRESHOLD = "JOB_PRODINVUP_FULL";
         /**
+         * Maximum number of days after which unavailable product becomes obsolete.
+         */
+        String JOB_PRODUCT_OBSOLETE_MAX_DAYS = "JOB_PROD_OBS_MAX";
+        /**
+         * Batch size for obsolete products removal.
+         */
+        String JOB_PRODUCT_OBSOLETE_BATCH_SIZE = "JOB_PROD_OBS_BATCH_SIZE";
+        /**
          * Timeout for backdoor WS call.
          */
         String SYSTEM_BACKDOOR_TIMEOUT_MS = "SYSTEM_BACKDOOR_TIMEOUT_MS";
