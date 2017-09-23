@@ -148,6 +148,11 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
                 return batch;
             }
 
+            @Override
+            public RemoveObsoleteProductProcessorInternal getSelf() {
+                return this;
+            }
+
         };
     }
 
