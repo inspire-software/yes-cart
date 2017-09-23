@@ -113,8 +113,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
                     if (LOG.isErrorEnabled()) {
                         LOG.error(Markers.alert(), "Node message failure [" + message + "] to  url ["
-                                + yesNode.getId() + "] . Blacklisting this node",
-                                wse);
+                                + yesNode.getId() + "] . Blacklisting this node");
                     }
 
                 } else {
