@@ -1,0 +1,185 @@
+/*
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package org.yes.cart.bulkjob.product;
+
+import org.apache.commons.lang.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.AttrValueProduct;
+import org.yes.cart.domain.entity.AttrValueProductSku;
+import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.service.domain.ProductCategoryService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ProductSkuService;
+import org.yes.cart.service.domain.SystemService;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+/**
+ * User: denispavlov
+ * Date: 22/09/2017
+ * Time: 23:28
+ */
+public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProductProcessorInternal {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RemoveObsoleteProductProcessorImpl.class);
+
+    private final ProductService productService;
+    private final ProductCategoryService productCategoryService;
+    private final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao;
+    private final ProductSkuService productSkuService;
+    private final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao;
+    private final SystemService systemService;
+
+    public RemoveObsoleteProductProcessorImpl(final ProductService productService,
+                                              final ProductCategoryService productCategoryService,
+                                              final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao,
+                                              final ProductSkuService productSkuService,
+                                              final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao,
+                                              final SystemService systemService) {
+        this.productService = productService;
+        this.productCategoryService = productCategoryService;
+        this.attrValueEntityProductDao = attrValueEntityProductDao;
+        this.productSkuService = productSkuService;
+        this.attrValueEntityProductSkuDao = attrValueEntityProductSkuDao;
+        this.systemService = systemService;
+    }
+
+
+    @Override
+    public void run() {
+
+        final Calendar time = Calendar.getInstance();
+        final int minDays = getObsoleteMinDays();
+        time.add(Calendar.DAY_OF_YEAR, -minDays);
+
+        final int batchSize = getObsoleteBatchSize();
+
+        LOG.info("Remove obsolete products unavailable before {} (min days {}), batch: {}",
+                new Object[] { time, minDays, batchSize });
+
+        final List<Long> obsoleteIds = productService.findProductIdsByUnavailableBefore(time.getTime());
+
+        int toIndex = batchSize > obsoleteIds.size() ? obsoleteIds.size() : batchSize;
+        final List<Long> batch = obsoleteIds.subList(0, toIndex);
+
+        LOG.info("Remove obsolete products {}", batch);
+
+        for (final Long id : batch) {
+            self().removeProduct(id);
+        }
+
+    }
+
+    @Override
+    public void removeProduct(final Long productId) {
+
+        productCategoryService.removeByProductIds(productId);
+
+        Product product = productService.findById(productId);
+
+        if (product == null) {
+            return;
+        }
+
+        LOG.info("Remove obsolete product {}", product.getCode());
+
+        final List<Long> pAvIds = new ArrayList<Long>();
+        for (final AttrValueProduct av : product.getAttributes()) {
+            pAvIds.add(av.getAttrvalueId());
+        }
+        final List<Long> skus = new ArrayList<Long>();
+        for (final ProductSku sku : product.getSku()) {
+            skus.add(sku.getSkuId());
+        }
+        product = null;
+        productService.getGenericDao().clear(); // clear session
+
+        for (final Long avId : pAvIds) {
+            attrValueEntityProductDao.delete(attrValueEntityProductDao.findById(avId));
+        }
+
+        productService.getGenericDao().flushClear(); // ensure we flush delete and clear session
+
+        for (final Long skuId : skus) {
+            ProductSku sku =  productSkuService.findById(skuId);
+
+            if (sku == null) {
+                return;
+            }
+
+            productSkuService.removeAllInventory(sku);
+            productSkuService.removeAllPrices(sku);
+            productSkuService.removeAllWishLists(sku);
+            productSkuService.removeAllEnsembleOptions(sku);
+
+            final List<Long> sAvIds = new ArrayList<Long>();
+            for (final AttrValueProductSku av : sku.getAttributes()) {
+                sAvIds.add(av.getAttrvalueId());
+            }
+            sku = null;
+            productSkuService.getGenericDao().clear(); // clear session
+
+            for (final Long avId : sAvIds) {
+                attrValueEntityProductSkuDao.delete(attrValueEntityProductSkuDao.findById(avId));
+            }
+            productSkuService.getGenericDao().flushClear(); // ensure we flush delete and clear session
+
+            sku = productSkuService.findById(skuId); // get sku again (should be without attributes)
+            final Product prod = sku.getProduct();
+            prod.getSku().remove(sku);
+            sku.setProduct(null);
+            productSkuService.delete(sku);
+        }
+
+        productSkuService.getGenericDao().flushClear(); // ensure we flush delete and clear session
+
+        productService.delete(productService.findById(productId));
+
+    }
+
+    protected int getObsoleteMinDays() {
+        return NumberUtils.toInt(systemService.getAttributeValue(AttributeNamesKeys.System.JOB_PRODUCT_OBSOLETE_MAX_DAYS), 365);
+    }
+
+    protected int getObsoleteBatchSize() {
+        return NumberUtils.toInt(systemService.getAttributeValue(AttributeNamesKeys.System.JOB_PRODUCT_OBSOLETE_BATCH_SIZE), 500);
+    }
+
+
+
+
+    private RemoveObsoleteProductProcessorInternal self;
+
+    private RemoveObsoleteProductProcessorInternal self() {
+        if (self == null) {
+            self = getSelf();
+        }
+        return self;
+    }
+
+    public RemoveObsoleteProductProcessorInternal getSelf() {
+        return null;
+    }
+
+
+}

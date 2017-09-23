@@ -107,5 +107,28 @@
         <property name="pausePreferenceDefault" value="false"/>
     </bean>
 
+
+    <bean id="removeObsoleteProductProcessorInternal" parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.bulkjob.product.RemoveObsoleteProductProcessorImpl">
+                <constructor-arg index="0" ref="productService"/>
+                <constructor-arg index="1" ref="productCategoryService"/>
+                <constructor-arg index="2" ref="attrValueEntityProductDao"/>
+                <constructor-arg index="3" ref="productSkuService"/>
+                <constructor-arg index="4" ref="attrValueEntityProductSkuDao"/>
+                <constructor-arg index="5" ref="systemService"/>
+                <lookup-method name="getSelf" bean="removeObsoleteProductProcessorInternal"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="removeObsoleteProductProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+        <property name="processor" ref="removeObsoleteProductProcessorInternal"/>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_PROD_OBS_PAUSE"/>
+        <property name="pausePreferenceDefault" value="true"/>
+    </bean>
+
+
 </beans>
         

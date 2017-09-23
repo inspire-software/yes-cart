@@ -28,6 +28,7 @@ import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -432,6 +433,15 @@ public interface ProductService extends GenericService<Product> {
      * @return product id if found otherwise null
      */
     List<Long> findProductIdsByPimCode(String code);
+
+    /**
+     * Get product id for products with availableto < before
+     *
+     * @param before before date
+     * @return product id if found otherwise null
+     */
+    List<Long> findProductIdsByUnavailableBefore(Date before);
+
 
     /**
      * Get product id by given code

@@ -644,8 +644,40 @@ public class DtoProductServiceImpl
         dtoProductCategoryService.removeByProductIds(id);
         getDtoProductSkuService().removeAllInventory(id);
         getDtoProductSkuService().removeAllPrices(id);
-        final Object obj = getService().findById(id);
-        getService().getGenericDao().evict(obj);
+
+        Product product = getService().findById(id);
+
+        if (product == null) {
+            return;
+        }
+
+        final List<Long> avIds = new ArrayList<Long>();
+        for (final AttrValueProduct av : product.getAttributes()) {
+            avIds.add(av.getAttrvalueId());
+        }
+        final List<Long> skus = new ArrayList<Long>();
+        for (final ProductSku sku : product.getSku()) {
+            skus.add(sku.getSkuId());
+        }
+        product = null;
+        getService().getGenericDao().clear(); // clear session
+
+        for (final Long avId : avIds) {
+            try {
+                deleteAttributeValue(avId);
+            } catch (Exception exp) {};
+        }
+
+        getService().getGenericDao().flushClear(); // ensure we flush delete and clear session
+
+        for (final Long sku : skus) {
+            try {
+                getDtoProductSkuService().remove(sku);
+            } catch (Exception exp) {};
+        }
+
+        getService().getGenericDao().flushClear(); // ensure we flush delete and clear session
+
         super.remove(id);
     }
 

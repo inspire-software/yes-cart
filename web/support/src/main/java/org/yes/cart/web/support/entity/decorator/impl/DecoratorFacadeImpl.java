@@ -23,6 +23,7 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.web.support.entity.decorator.*;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AttributableImageService;
@@ -72,6 +73,8 @@ public class DecoratorFacadeImpl implements DecoratorFacade {
             return (T) decorate((ProductSku) object, servletContextPath);
         } else if (object instanceof Category) {
             return (T) decorate((Category) object, servletContextPath);
+        } else if (object instanceof CartItem) {
+            return (T) decorate((CartItem) object, servletContextPath);
         }
         throw new IllegalArgumentException("Object is not decoratable: " + object.getClass());
     }
@@ -114,6 +117,17 @@ public class DecoratorFacadeImpl implements DecoratorFacade {
                 imageService,
                 skuImageService,
                 sku,
+                servletContextPath,
+                productService,
+                i18NWebSupport);
+    }
+
+    private ProductSkuDecorator decorate(final CartItem item,
+                                         final String servletContextPath) {
+        return new ProductSkuDecoratorImpl(
+                imageService,
+                skuImageService,
+                item,
                 servletContextPath,
                 productService,
                 i18NWebSupport);

@@ -27,6 +27,7 @@ import org.yes.cart.domain.entity.impl.ProductSkuEntity;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AttributableImageService;
@@ -70,6 +71,33 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
         if (productSkuEntity != null) {
             BeanUtils.copyProperties(productSkuEntity, this);
         }
+        this.httpServletContextPath = httpServletContextPath;
+        this.productSkuImageService = productSkuImageService;
+        this.imageService = imageService;
+    }
+
+    /**
+     * Construct product sku decorator.
+     *
+     * @param imageService             image service to get the image seo info
+     * @param productSkuImageService category image service to get the image.
+     * @param cartItem                 sku to decorate
+     * @param httpServletContextPath   servlet context path
+     * @param productService           product service
+     * @param i18NWebSupport           i18n
+     */
+    public ProductSkuDecoratorImpl(final ImageService imageService,
+                                   final AttributableImageService productSkuImageService,
+                                   final CartItem cartItem,
+                                   final String httpServletContextPath,
+                                   final ProductService productService,
+                                   final I18NWebSupport i18NWebSupport) {
+        this.productService = productService;
+        this.i18NWebSupport = i18NWebSupport;
+
+        this.setCode(cartItem.getProductSkuCode());
+        this.setName(cartItem.getProductName());
+
         this.httpServletContextPath = httpServletContextPath;
         this.productSkuImageService = productSkuImageService;
         this.imageService = imageService;

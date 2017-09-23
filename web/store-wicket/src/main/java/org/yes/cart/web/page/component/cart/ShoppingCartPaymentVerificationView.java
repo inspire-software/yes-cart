@@ -207,8 +207,11 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                                                 final CustomerOrderDeliveryDet det = customerOrderDeliveryDetListItem.getModelObject();
 
+                                                final ProductSku productSku = productServiceFacade.getProductSkuBySkuCode(det.getProductSkuCode());
+
+
                                                 final ProductSkuDecorator productSkuDecorator = getDecoratorFacade().decorate(
-                                                        productServiceFacade.getProductSkuBySkuCode(det.getProductSkuCode()),
+                                                        productSku != null ? productSku : det,
                                                         getWicketUtil().getHttpServletRequest().getContextPath(),
                                                         true);
 
@@ -256,14 +259,17 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                     showDeliveryTime = false;
                                                 }
 
+                                                final boolean linkToProduct = enableProductLinks && productSku != null;
+                                                final long linkId = productSkuDecorator.getId();
+                                                final String name = productSkuDecorator.getName(selectedLocale);
 
                                                 customerOrderDeliveryDetListItem
                                                         .add(
-                                                                links.newProductSkuLink(ITEM_NAME_LINK, productSkuDecorator.getId())
-                                                                        .add(new Label(ITEM_NAME_LINK_NAME, productSkuDecorator.getName(selectedLocale)))
-                                                                        .setVisible(enableProductLinks)
+                                                                links.newProductSkuLink(ITEM_NAME_LINK, linkId)
+                                                                        .add(new Label(ITEM_NAME_LINK_NAME, name))
+                                                                        .setVisible(linkToProduct)
                                                         ).add(
-                                                                new Label(ITEM_NAME, productSkuDecorator.getName(selectedLocale)).setVisible(!enableProductLinks)
+                                                                new Label(ITEM_NAME, name).setVisible(!linkToProduct)
                                                         )
                                                         .add(
                                                                 new Label(ITEM_CODE, det.getProductSkuCode())
