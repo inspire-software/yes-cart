@@ -60,6 +60,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
         txkey = System.getProperty("testPgAuthorizeNetAimTxKey");
         md5 = System.getProperty("testPgAuthorizeNetAimMD5");
 
+
         boolean testConfigured = StringUtils.isNotBlank(user) && StringUtils.isNotBlank(txkey) && StringUtils.isNotBlank(md5);
 
         if (enabled && !testConfigured) {
