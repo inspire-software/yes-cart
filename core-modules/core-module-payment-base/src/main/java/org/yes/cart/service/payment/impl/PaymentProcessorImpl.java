@@ -121,6 +121,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 LOG.error(
                         "Error", th
                 );
+                th.printStackTrace();
                 paymentResult = Payment.PAYMENT_STATUS_FAILED;
                 payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                 payment.setPaymentProcessorBatchSettlement(false);
@@ -670,14 +671,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                                          final String transactionGatewayLabel) {
 
         Address shippingAddr = order.getShippingAddressDetails();
-        if (shippingAddr == null) {
-            shippingAddr = order.getCustomer().getDefaultAddress(Address.ADDR_TYPE_SHIPPING);
-        }
-
         Address billingAddr = order.getBillingAddressDetails();
-        if (billingAddr == null) {
-            billingAddr = order.getCustomer().getDefaultAddress(Address.ADDR_TYPE_BILLING);
-        }
 
         if (billingAddr != null) {
             PaymentAddress addr = new PaymentAddressImpl();

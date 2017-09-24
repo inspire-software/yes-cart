@@ -87,22 +87,11 @@ public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractAut
      * @return anet customer.
      */
     protected net.authorize.data.Customer createAnetCustomer(final Payment payment) {
-
         final net.authorize.data.Customer anetCustomer = net.authorize.data.Customer.createCustomer();
-        anetCustomer.setFirstName(payment.getBillingAddress().getFirstname());
-        anetCustomer.setLastName(payment.getBillingAddress().getLastname());
-
-        anetCustomer.setAddress(
-            getStreetAddress(payment.getBillingAddress().getAddrline1(), payment.getBillingAddress().getAddrline2())
-        );
-
-        anetCustomer.setCity(payment.getBillingAddress().getCity());
-        anetCustomer.setCountry(payment.getBillingAddress().getCountryCode());
+        anetCustomer.setFirstName(payment.getCardHolderName());
+        anetCustomer.setAddress(payment.getBillingAddressString());
         anetCustomer.setCustomerId(payment.getBillingEmail());
         anetCustomer.setEmail(payment.getBillingEmail());
-        anetCustomer.setPhone(payment.getBillingAddress().getPhone1());
-        anetCustomer.setZipPostalCode(payment.getBillingAddress().getPostcode());
-        anetCustomer.setState(payment.getBillingAddress().getStateCode());
         anetCustomer.setCustomerIP(payment.getShopperIpAddress());
         return anetCustomer;
     }
@@ -115,15 +104,8 @@ public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractAut
      */
     protected net.authorize.data.ShippingAddress createShippingAddress(final Payment payment) {
         net.authorize.data.ShippingAddress shippingAddress = net.authorize.data.ShippingAddress.createShippingAddress();
-        shippingAddress.setFirstName(payment.getShippingAddress().getFirstname());
-        shippingAddress.setLastName(payment.getShippingAddress().getLastname());
-        shippingAddress.setAddress(
-                getStreetAddress(payment.getShippingAddress().getAddrline1(), payment.getShippingAddress().getAddrline2())
-        );
-        shippingAddress.setCity(payment.getShippingAddress().getCity());
-        shippingAddress.setCountry(payment.getBillingAddress().getCountryCode());
-        shippingAddress.setZipPostalCode(payment.getBillingAddress().getPostcode());
-        shippingAddress.setState(payment.getBillingAddress().getStateCode());
+        shippingAddress.setFirstName(payment.getCardHolderName());
+        shippingAddress.setAddress(payment.getShippingAddressString());
         return shippingAddress;
     }
 
