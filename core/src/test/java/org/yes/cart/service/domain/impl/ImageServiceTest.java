@@ -21,10 +21,8 @@ import org.dbunit.util.Base64;
 import org.hibernate.criterion.Criterion;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueProduct;
@@ -41,7 +39,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -52,7 +49,6 @@ import static org.junit.Assert.assertTrue;
  * Time: 14:12:54
  */
 //In case of IDE test should be run in core folder
-@RunWith(JMock.class)
 public class ImageServiceTest {
 
     private static final String BASE64_ENCODED_JPEG_0 = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9oGEw8qFiJ+pnwAAAQbSURBVDgRARAE7/sAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAACMeHr/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB0iIYBAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAB0iIYBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAjHh6/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdIiGAQAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAdIiGAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAjHh6/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdIiGAQAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADRyDyIlm2rZAAAAAElFTkSuQmCC";
@@ -171,6 +167,7 @@ public class ImageServiceTest {
         assertTrue(destination2.exists());
         assertTrue("At least some info must be in the file" , destination2.length() > 1000);
         assertTrue(save1.equals(save2));
+        mockery.assertIsSatisfied();
     }
 
     @Test
@@ -181,7 +178,7 @@ public class ImageServiceTest {
             will(returnValue(mediaFileNameStrategy));
             allowing(languageService).getSupportedLanguages();
             will(returnValue(Arrays.asList("en", "uk", "ru")));
-            allowing(seoImageDao).findByCriteria(with(any(Criterion.class)));
+            allowing(seoImageDao).findByCriteria(with(any(Criterion[].class)));
             will(returnValue(null));
             allowing(productDao).findQueryObjectByNamedQuery(with(equal("PRODUCT.CODE.BY.MEDIAFILE.NAME")), with(equal(new String[]{"some-seo-image-name_PRODUCT2.jpeg", "IMAGE%"})));
             will(returnValue(Collections.singletonList("PRODUCT2")));
@@ -232,5 +229,6 @@ public class ImageServiceTest {
         assertTrue(imageService.deleteImage(destination2.getName(), Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, "target/"));
         assertFalse(destination1.exists());
         assertFalse(destination2.exists());
+        mockery.assertIsSatisfied();
     }
 }

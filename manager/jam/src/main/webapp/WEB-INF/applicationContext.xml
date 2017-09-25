@@ -42,6 +42,7 @@
   </bean>
 
   <security:http auto-config="true" use-expressions="true">
+    <security:csrf disabled="true"/>
     <security:anonymous enabled="false"/>
     <security:intercept-url pattern="/pages/**" access="isFullyAuthenticated()" />
 
@@ -53,9 +54,11 @@
     <security:form-login
       login-page="/login.jsp"
       default-target-url="/pages/index.jsp"
+      always-use-default-target="true"
       authentication-failure-url="/login.jsp?error"
       username-parameter="j_username"
-      password-parameter="j_password" />
+      password-parameter="j_password"
+      login-processing-url="/j_spring_security_check"/>
 
     <security:logout
       logout-success-url="/login.jsp?logout"

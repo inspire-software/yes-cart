@@ -17,8 +17,8 @@
 package org.yes.cart.web.service.rest;
 
 import org.hamcrest.CustomMatchers;
+import org.hamcrest.core.StringContains;
 import org.junit.Test;
-import org.junit.internal.matchers.StringContains;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

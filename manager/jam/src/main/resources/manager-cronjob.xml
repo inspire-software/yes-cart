@@ -23,7 +23,7 @@
 
     <!-- ################################ Pre order inventory scanning  ###################################### -->
 
-    <bean name="preorderJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <bean name="preorderJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -34,14 +34,14 @@
         </property>
     </bean>
 
-    <bean id="preOrderJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="preOrderJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="preorderJob" />
         <property name="cronExpression" value="${admin.cron.preorderJob}" />
     </bean>
 
     <!-- ################################ Backorder/Delivery notifications  ################################# -->
 
-    <bean name="deliveryInfoUpdateJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <bean name="deliveryInfoUpdateJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -52,14 +52,14 @@
         </property>
     </bean>
 
-    <bean id="deliveryInfoUpdateJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="deliveryInfoUpdateJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="deliveryInfoUpdateJob" />
         <property name="cronExpression" value="${admin.cron.deliveryInfoUpdateJob}" />
     </bean>
 
     <!-- ################################ AutoExport notifications  ################################# -->
 
-    <bean name="orderAutoExportProcessorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <bean name="orderAutoExportProcessorJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -70,14 +70,14 @@
         </property>
     </bean>
 
-    <bean id="orderAutoExportProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="orderAutoExportProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="orderAutoExportProcessorJob" />
         <property name="cronExpression" value="${admin.cron.orderAutoExportProcessorJob}" />
     </bean>
 
     <!-- ################################ Abandon shopping cart clean up  ################################### -->
 
-    <bean name="abandonedShoppingCartJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <bean name="abandonedShoppingCartJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -88,12 +88,12 @@
         </property>
     </bean>
 
-    <bean id="abandonedShoppingCartJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="abandonedShoppingCartJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="abandonedShoppingCartJob" />
         <property name="cronExpression" value="${admin.cron.abandonedShoppingCartJob}" />
     </bean>
 
-    <bean name="emptyAnonymousShoppingCartJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <bean name="emptyAnonymousShoppingCartJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -104,14 +104,14 @@
         </property>
     </bean>
 
-    <bean id="emptyAnonymousShoppingCartJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="emptyAnonymousShoppingCartJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="emptyAnonymousShoppingCartJob" />
         <property name="cronExpression" value="${admin.cron.emptyAnonymousShoppingCartJob}" />
     </bean>
 
     <!-- ################################ Remove obsolete products  ######################################### -->
 
-    <bean name="removeObsoleteProductProcessorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <bean name="removeObsoleteProductProcessorJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -122,14 +122,14 @@
         </property>
     </bean>
 
-    <bean id="removeObsoleteProductProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="removeObsoleteProductProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="removeObsoleteProductProcessorJob" />
         <property name="cronExpression" value="${admin.cron.removeObsoleteProductProcessorJob}" />
     </bean>
 
     <!-- ################################ Expired guest accounts  ########################################### -->
 
-    <bean name="expiredGuestsJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <bean name="expiredGuestsJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -140,14 +140,14 @@
         </property>
     </bean>
 
-    <bean id="expiredGuestsJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="expiredGuestsJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="expiredGuestsJob" />
         <property name="cronExpression" value="${admin.cron.expiredGuestsJob}" />
     </bean>
 
     <!-- ################################ Customer tagging  ################################################# -->
 
-    <bean name="customerTagJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <bean name="customerTagJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -158,7 +158,7 @@
         </property>
     </bean>
 
-    <bean id="customerTagJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="customerTagJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="customerTagJob" />
         <property name="cronExpression" value="${admin.cron.customerTagJob}" />
     </bean>
@@ -180,7 +180,7 @@
         <property name="pausePreferenceDefault" value="true"/>
     </bean>
 
-    <bean name="sendMailJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <bean name="sendMailJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -191,7 +191,7 @@
         </property>
     </bean>
 
-    <bean id="sendMailJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="sendMailJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="sendMailJob" />
         <property name="cronExpression" value="${admin.cron.sendMailJob}" />
     </bean>
@@ -216,7 +216,7 @@
         <property name="pausePreferenceDefault" value="true"/>
     </bean>
 
-    <bean name="autoImportJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <bean name="autoImportJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -227,7 +227,7 @@
         </property>
     </bean>
 
-    <bean id="autoImportJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="autoImportJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="autoImportJob" />
         <property name="cronExpression" value="${admin.cron.autoImportJob}" />
     </bean>
@@ -298,7 +298,7 @@
         <property name="pausePreferenceDefault" value="true"/>
     </bean>
 
-    <bean name="imageVaultProcessorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <bean name="imageVaultProcessorJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -309,7 +309,7 @@
         </property>
     </bean>
 
-    <bean id="imageVaultProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="imageVaultProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="imageVaultProcessorJob" />
         <property name="cronExpression" value="${admin.cron.imageVaultProcessorJob}" />
     </bean>

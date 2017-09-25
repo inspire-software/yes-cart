@@ -23,17 +23,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.yes.cart.service.domain.SystemService;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 2011-May-17
  * Time: 10:11:01 AM
  */
-@RunWith(org.jmock.integration.junit4.JMock.class)
 public class ImageHttpRequestHandlerTest {
 
     private final Mockery mockery = new JUnit4Mockery();
 
-    // TODO fix or remove
     @Test
     public void testGetContentType() {
         final SystemService systemService = mockery.mock(SystemService.class, "systemService0");
@@ -41,14 +41,15 @@ public class ImageHttpRequestHandlerTest {
             allowing(systemService).getEtagExpirationForImages();
             will(returnValue(0));
         }});
-        /*ImageFilter imageFilter = new ImageFilter(null, systemService);
+        ImageFilter imageFilter = new ImageFilter(null, systemService);
         assertEquals("image/jpeg", imageFilter.getContentType("a.jpg"));
         assertEquals("image/jpeg", imageFilter.getContentType("a.JPEG"));
         assertEquals("image/jpeg", imageFilter.getContentType("a.JPE"));
         assertEquals("image/gif", imageFilter.getContentType("a.gif"));
-//        assertEquals("image/png", imageFilter.getContentType("a.png"));
+        assertEquals("image/png", imageFilter.getContentType("a.png"));
         assertEquals("image/bmp", imageFilter.getContentType("a.bmp"));
         assertEquals("application/x-shockwave-flash", imageFilter.getContentType("a.swf"));
-        assertEquals("application/octet-stream", imageFilter.getContentType("a.x3ext"));  */
+        assertEquals("application/octet-stream", imageFilter.getContentType("a.x3ext"));
+        mockery.assertIsSatisfied();
     }
 }

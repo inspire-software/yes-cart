@@ -16,10 +16,10 @@
 
 package org.yes.cart.shoppingcart.support.tokendriven.impl;
 
-import org.codehaus.jackson.Version;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.module.SimpleModule;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.*;
@@ -43,9 +43,9 @@ public class ShoppingCartStateSerializerJacksonImpl implements ShoppingCartState
     public ShoppingCartStateSerializerJacksonImpl() {
         mapper = new ObjectMapper();
 
-        mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        SimpleModule module = new SimpleModule("cart", new Version(2, 3, 0, null));
+        SimpleModule module = new SimpleModule("cart", new Version(2, 3, 0, null, "org.yes", "core-module-cart"));
         module.addAbstractTypeMapping(Total.class, TotalImpl.class);
         module.addAbstractTypeMapping(MutableShoppingContext.class, ShoppingContextImpl.class);
         module.addAbstractTypeMapping(MutableOrderInfo.class, OrderInfoImpl.class);

@@ -15,10 +15,10 @@
  */
 package org.yes.cart.remote.service.misc;
 
-import org.codehaus.jackson.Version;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.module.SimpleModule;
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 /**
  * Customized object mapper to support creation of particular dto classes from json.
@@ -28,8 +28,8 @@ public class DtoObjectMapper extends ObjectMapper {
 
     public DtoObjectMapper() {
         super();
-        configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        SimpleModule module = new SimpleModule("dto", new Version(1,0,0,""));
+        configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        SimpleModule module = new SimpleModule("dto", new Version( 3, 4, 0, null, "org.yes", "jam"));
         //module.addAbstractTypeMapping(ShopDTO.class, ShopDTOImpl.class);
         this.registerModule(module);
     }

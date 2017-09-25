@@ -21,7 +21,6 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -49,7 +48,6 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-@RunWith(org.jmock.integration.junit4.JMock.class)
 public class MailComposerImplTest {
 
     private Mockery mockery = new JUnit4Mockery();
@@ -340,15 +338,15 @@ public class MailComposerImplTest {
         final MailTemplateResourcesProvider mailTemplateResourcesProvider = mockery.mock(MailTemplateResourcesProvider.class);
 
         mockery.checking(new Expectations() {{
-            one(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".txt");
+            oneOf(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".txt");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.txt")), "UTF-8")));
-            one(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".html");
+            oneOf(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".html");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.html")), "UTF-8")));
-            one(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".properties");
+            oneOf(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".properties");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.properties")), "UTF-8")));
-            one(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", "test.gif");
+            oneOf(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", "test.gif");
             will(returnValue(IOUtils.toByteArray(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/resources/test.gif")))));
-            one(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", "test.jpeg");
+            oneOf(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", "test.jpeg");
             will(returnValue(IOUtils.toByteArray(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/resources/test.jpeg")))));
         }});
 
@@ -561,15 +559,15 @@ public class MailComposerImplTest {
         final MailTemplateResourcesProvider mailTemplateResourcesProvider = mockery.mock(MailTemplateResourcesProvider.class);
 
         mockery.checking(new Expectations() {{
-            one(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".txt");
+            oneOf(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".txt");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.txt")), "UTF-8")));
-            one(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".html");
+            oneOf(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".html");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.html")), "UTF-8")));
-            one(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".properties");
+            oneOf(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".properties");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.properties")), "UTF-8")));
-            one(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", "test.gif");
+            oneOf(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", "test.gif");
             will(returnValue(IOUtils.toByteArray(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/resources/test.gif")))));
-            one(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", "test.jpeg");
+            oneOf(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", "test.jpeg");
             will(returnValue(IOUtils.toByteArray(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/resources/test.jpeg")))));
         }});
 
@@ -741,6 +739,7 @@ public class MailComposerImplTest {
         assertFalse(attach.size() == model.size());
         assertEquals(1, attach.size());
         assertTrue(attach.entrySet().iterator().next().getKey().startsWith("attachment:"));
+        mockery.assertIsSatisfied();
 
     }
 
@@ -776,6 +775,7 @@ public class MailComposerImplTest {
         assertNotNull(ctaf);
         assertEquals("application/pdf", ctaf.getFirst());
         assertEquals("myfile.pdf", ctaf.getSecond());
+        mockery.assertIsSatisfied();
 
     }
 

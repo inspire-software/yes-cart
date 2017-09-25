@@ -16,8 +16,8 @@
 
 package org.yes.cart.web.service.rest;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.web.servlet.MockMvc;
@@ -105,7 +105,7 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
      */
     protected byte[] toJsonBytes(final Object object) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return mapper.writeValueAsBytes(object);
     }
 

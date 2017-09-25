@@ -17,8 +17,8 @@
 package org.yes.cart.shoppingcart.impl;
 
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.util.MoneyUtils;

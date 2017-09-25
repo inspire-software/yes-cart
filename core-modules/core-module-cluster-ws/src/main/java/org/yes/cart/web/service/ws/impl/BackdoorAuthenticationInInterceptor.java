@@ -20,11 +20,11 @@ package org.yes.cart.web.service.ws.impl;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
-import org.apache.ws.security.WSConstants;
-import org.apache.ws.security.WSSecurityEngineResult;
-import org.apache.ws.security.WSUsernameTokenPrincipal;
-import org.apache.ws.security.handler.WSHandlerConstants;
-import org.apache.ws.security.handler.WSHandlerResult;
+import org.apache.wss4j.common.principal.UsernameTokenPrincipal;
+import org.apache.wss4j.dom.WSConstants;
+import org.apache.wss4j.dom.engine.WSSecurityEngineResult;
+import org.apache.wss4j.dom.handler.WSHandlerConstants;
+import org.apache.wss4j.dom.handler.WSHandlerResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -94,11 +94,11 @@ public class BackdoorAuthenticationInInterceptor extends WSS4JInInterceptor impl
                         // determine if the action was a username token
                         if ((action & WSConstants.UT) > 0) {
                             // get the principal object
-                            final WSUsernameTokenPrincipal principal = (WSUsernameTokenPrincipal) securityResult.get(WSSecurityEngineResult.TAG_PRINCIPAL);
-                            if (principal.getPassword()==null){
-                                principal.setPassword("");
-                            }
-                            Authentication authentication = new UsernamePasswordAuthenticationToken(principal.getName(), principal.getPassword());
+                            final UsernameTokenPrincipal principal = (UsernameTokenPrincipal) securityResult.get(WSSecurityEngineResult.TAG_PRINCIPAL);
+                            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                                    principal.getName(),
+                                    principal.getPassword()==null ? "" : principal.getPassword()
+                            );
                             authentication = authenticationManager.authenticate(authentication);
                             if (!authentication.isAuthenticated()) {
                                 LOG.warn("User {} is not authentic.", principal.getName());

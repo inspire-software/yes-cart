@@ -16,10 +16,10 @@
 
 package org.yes.cart.domain.ro;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.yes.cart.domain.dto.matcher.impl.NoopMatcher;
 import org.yes.cart.shoppingcart.CartItem;
 

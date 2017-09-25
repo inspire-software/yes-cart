@@ -56,7 +56,7 @@
         <property name="pausePreferenceDefault" value="true"/>
     </bean>
 
-    <bean name="productsGlobalIndexProcessorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <bean name="productsGlobalIndexProcessorJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -67,7 +67,7 @@
         </property>
     </bean>
 
-    <bean id="productsGlobalIndexProcessorTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="productsGlobalIndexProcessorTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="productsGlobalIndexProcessorJob" />
         <property name="cronExpression" value="${ws.cron.productsGlobalIndexProcessorJob}" />
     </bean>
@@ -102,7 +102,7 @@
     </bean>
 
 
-    <bean name="reindexDiscontinuedProductsJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <bean name="reindexDiscontinuedProductsJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -113,7 +113,7 @@
         </property>
     </bean>
 
-    <bean id="reindexDiscontinuedProductsTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="reindexDiscontinuedProductsTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="reindexDiscontinuedProductsJob" />
         <property name="cronExpression" value="${ws.cron.reindexDiscontinuedProductsJob}" />
     </bean>
@@ -148,7 +148,7 @@
         <property name="pausePreferenceDefault" value="false"/>
     </bean>
 
-    <bean name="productInventoryChangedProcessorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <bean name="productInventoryChangedProcessorJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -159,7 +159,7 @@
         </property>
     </bean>
 
-    <bean id="productInventoryChangedProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <bean id="productInventoryChangedProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="productInventoryChangedProcessorJob" />
         <property name="startDelay" value="60000"/>
         <property name="cronExpression" value="${ws.cron.productInventoryChangedProcessorJob}" />

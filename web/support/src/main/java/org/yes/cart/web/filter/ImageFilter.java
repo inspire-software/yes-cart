@@ -80,6 +80,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
         this.systemService = systemService;
         fileTypeMap = new MimetypesFileTypeMap();
         fileTypeMap.addMimeTypes("image/bmp bmp");
+        fileTypeMap.addMimeTypes("image/png png");
         fileTypeMap.addMimeTypes("application/x-shockwave-flash swf");
     }
 

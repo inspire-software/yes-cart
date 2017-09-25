@@ -60,7 +60,7 @@
         <property name="defaultViews">
             <list>
                 <!-- JSON View -->
-                <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
                     <property name="modelKey" value="model"/>
                 </bean>
 

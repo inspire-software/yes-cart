@@ -16,14 +16,14 @@
 
 package org.yes.cart.search.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.*;
 import org.apache.lucene.facet.sortedset.SortedSetDocValuesFacetField;
 import org.apache.lucene.util.BytesRef;
-import org.codehaus.jackson.Version;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.module.SimpleModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.dto.StoredAttributesDTO;
@@ -55,9 +55,9 @@ public class LuceneDocumentAdapterUtils {
 
     static {
 
-        MAPPER.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
+        MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        SimpleModule module = new SimpleModule("search", new Version(3, 4, 0, null));
+        SimpleModule module = new SimpleModule("search", new Version(3, 4, 0, null, "org.yes", "search"));
         module.addAbstractTypeMapping(StoredAttributesDTO.class, StoredAttributesDTOImpl.class);
         module.addAbstractTypeMapping(I18NModel.class, StringI18NModel.class);
 

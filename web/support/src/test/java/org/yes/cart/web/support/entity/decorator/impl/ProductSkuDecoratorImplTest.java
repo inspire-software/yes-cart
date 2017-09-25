@@ -39,7 +39,6 @@ import static junit.framework.Assert.assertEquals;
  * Date: 03.01.14
  * Time: 11:50
  */
-@RunWith(org.jmock.integration.junit4.JMock.class)
 public class ProductSkuDecoratorImplTest {
 
     private final Mockery mockery = new JUnit4Mockery();
@@ -94,7 +93,7 @@ public class ProductSkuDecoratorImplTest {
         );
 
         assertEquals("Prod Description", productSkuDecorator.getDescription("en"));
-
+        mockery.assertIsSatisfied();
 
     }
 
@@ -146,12 +145,8 @@ public class ProductSkuDecoratorImplTest {
         final ProductService productService = mockery.mock(ProductService.class, "systemService0");
         mockery.checking(new Expectations() {{
             allowing(productService).getProductAttribute("en", 123, 0, "PRODUCT_DESCRIPTION_en" );
-            //allowing(productService).
             will(returnValue(new Pair<String, String>("en", "Localized product description")));
-        }});
-        mockery.checking(new Expectations() {{
             allowing(productService).getProductAttribute("ru", 123, 0, "PRODUCT_DESCRIPTION_ru" );
-            //allowing(productService).
             will(returnValue(null));
         }});
 
@@ -175,7 +170,7 @@ public class ProductSkuDecoratorImplTest {
 
         assertEquals("Localized product description", productSkuDecorator.getDescription("en"));
         assertEquals("Prod Description", productSkuDecorator.getDescription("ru"));
-
+        mockery.assertIsSatisfied();
 
     }
 

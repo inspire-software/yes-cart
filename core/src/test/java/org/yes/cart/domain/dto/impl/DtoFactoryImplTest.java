@@ -21,7 +21,6 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl;
 
 import java.util.List;
@@ -37,7 +36,6 @@ import static org.hamcrest.Matchers.notNullValue;
  * Date: Jan 22, 2011
  * Time: 11:51:21 PM
  */
-@RunWith(org.jmock.integration.junit4.JMock.class)
 public class DtoFactoryImplTest {
 
     private static final String KEY = "java.util.List";
@@ -53,6 +51,7 @@ public class DtoFactoryImplTest {
         }});
         factory = new DtoFactoryImpl(mapping);
         factory.getByIface(List.class);
+        mockery.assertIsSatisfied();
     }
 
     @Test(expected = InstantiationError.class)
@@ -65,6 +64,7 @@ public class DtoFactoryImplTest {
         }});
         factory = new DtoFactoryImpl(mapping);
         factory.getByIface(List.class);
+        mockery.assertIsSatisfied();
     }
 
     @Test
@@ -77,5 +77,6 @@ public class DtoFactoryImplTest {
         }});
         factory = new DtoFactoryImpl(mapping);
         MatcherAssert.assertThat(factory.getByIface(List.class), is(notNullValue()));
+        mockery.assertIsSatisfied();
     }
 }

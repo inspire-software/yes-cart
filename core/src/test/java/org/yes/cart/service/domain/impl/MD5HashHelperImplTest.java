@@ -81,7 +81,7 @@ public class MD5HashHelperImplTest {
         MD5HashHelperImpl hashHelper = new MD5HashHelperImpl();
         hashHelper.setSalt("YCPWSALT");
 
-        System.out.print("Your password hash is: '" + hashHelper.getHash("1234567") + "'");
+        System.out.println("Your password hash is: '" + hashHelper.getHash("1234567") + "'");
 
     }
 }

@@ -16,10 +16,10 @@
 
 package org.yes.cart.domain.ro;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
