@@ -45,7 +45,7 @@ public interface ContentEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
     @RequestMapping(value = "/shop/{shopId}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoContent> getFilteredContent(@PathVariable("shopId") long shopId, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+    List<VoContent> getFilteredContent(@PathVariable("shopId") long shopId, @RequestBody(required = false) String filter, @PathVariable("max") int max) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
     @RequestMapping(value = "/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

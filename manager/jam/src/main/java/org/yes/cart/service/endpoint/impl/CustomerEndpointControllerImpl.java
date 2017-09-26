@@ -52,7 +52,7 @@ public class CustomerEndpointControllerImpl implements CustomerEndpointControlle
 
     @Override
     public @ResponseBody
-    List<VoCustomerInfo> getFilteredCustomer(@RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    List<VoCustomerInfo> getFilteredCustomer(@RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voCustomerService.getFiltered(filter, max);
     }
 

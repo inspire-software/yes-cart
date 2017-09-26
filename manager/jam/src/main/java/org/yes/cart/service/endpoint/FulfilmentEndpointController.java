@@ -80,7 +80,7 @@ public interface FulfilmentEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMWAREHOUSEUSER"})
     @RequestMapping(value = "/inventory/centre/{id}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoInventory> getFilteredInventory(@PathVariable("id") long centreId, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+    List<VoInventory> getFilteredInventory(@PathVariable("id") long centreId, @RequestBody(required = false) String filter, @PathVariable("max") int max) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMWAREHOUSEUSER"})
     @RequestMapping(value = "/inventory/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

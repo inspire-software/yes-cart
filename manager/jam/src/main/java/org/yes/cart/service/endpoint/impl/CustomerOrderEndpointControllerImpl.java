@@ -51,7 +51,7 @@ public class CustomerOrderEndpointControllerImpl implements CustomerOrderEndpoin
 
     @Override
     public @ResponseBody
-    List<VoCustomerOrderInfo> getFilteredOrders(@PathVariable("lang") final String lang, @RequestBody final Map<String, Object> filter, @PathVariable("max") final int max) throws Exception {
+    List<VoCustomerOrderInfo> getFilteredOrders(@PathVariable("lang") final String lang, @RequestBody(required = false) final Map<String, Object> filter, @PathVariable("max") final int max) throws Exception {
         return voCustomerOrderService.getFiltered(lang, (String) filter.get("filter"), (List) filter.get("statuses"), max);
     }
 

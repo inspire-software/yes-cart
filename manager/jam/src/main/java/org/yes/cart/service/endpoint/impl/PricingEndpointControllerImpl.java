@@ -51,7 +51,7 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
     }
 
     @Override
-    public @ResponseBody List<VoPriceList> getFilteredPriceLists(@PathVariable("shopId") final long shopId, @PathVariable("currency") final String currency, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    public @ResponseBody List<VoPriceList> getFilteredPriceLists(@PathVariable("shopId") final long shopId, @PathVariable("currency") final String currency, @RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voPriceService.getFiltered(shopId, currency, filter, max);
     }
 
@@ -77,7 +77,7 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
 
 
     @Override
-    public @ResponseBody List<VoTax> getFilteredTax(@PathVariable("shopCode") final String shopCode, @PathVariable("currency") final String currency, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    public @ResponseBody List<VoTax> getFilteredTax(@PathVariable("shopCode") final String shopCode, @PathVariable("currency") final String currency, @RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voTaxService.getFilteredTax(shopCode, currency, filter, max);
     }
 
@@ -102,7 +102,7 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
     }
 
     @Override
-    public @ResponseBody List<VoTaxConfig> getFilteredTaxConfig(@PathVariable("taxId") final long taxId, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    public @ResponseBody List<VoTaxConfig> getFilteredTaxConfig(@PathVariable("taxId") final long taxId, @RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voTaxService.getFilteredTaxConfig(taxId, filter, max);
     }
 
@@ -122,7 +122,7 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
     }
 
     @Override
-    public @ResponseBody List<VoPromotion> getFilteredPromotion(@PathVariable("shopCode") final String shopCode, @PathVariable("currency") final String currency, @RequestBody final Map<String, Object> filter, @PathVariable("max") final int max) throws Exception {
+    public @ResponseBody List<VoPromotion> getFilteredPromotion(@PathVariable("shopCode") final String shopCode, @PathVariable("currency") final String currency, @RequestBody(required = false) final Map<String, Object> filter, @PathVariable("max") final int max) throws Exception {
         return voPromotionService.getFilteredPromotion(shopCode, currency, (String) filter.get("filter"), (List) filter.get("types"), (List) filter.get("actions"), max);
     }
 
@@ -152,7 +152,7 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
     }
 
     @Override
-    public @ResponseBody List<VoPromotionCoupon> getFilteredPromotionCoupons(@PathVariable("promoId") final long promotionId, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    public @ResponseBody List<VoPromotionCoupon> getFilteredPromotionCoupons(@PathVariable("promoId") final long promotionId, @RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voPromotionService.getFilteredPromotionCoupons(promotionId, filter, max);
     }
 

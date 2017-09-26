@@ -55,7 +55,7 @@ public interface AttributeEndpointController {
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/attribute/filtered/{group}/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoAttribute> getFilteredAttributes(@PathVariable("group") String group, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+    List<VoAttribute> getFilteredAttributes(@PathVariable("group") String group, @RequestBody(required = false) String filter, @PathVariable("max") int max) throws Exception;
 
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/attribute/producttype/{code}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

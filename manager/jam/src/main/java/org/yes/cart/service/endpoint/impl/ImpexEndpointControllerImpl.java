@@ -56,7 +56,7 @@ public class ImpexEndpointControllerImpl implements ImpexEndpointController {
     }
 
     public @ResponseBody
-    String doExport(@PathVariable("group") final String descriptorGroup, @RequestBody final String fileName) {
+    String doExport(@PathVariable("group") final String descriptorGroup, @RequestBody(required = false) final String fileName) {
         return this.exportDirectorService.doExport(descriptorGroup, fileName, true);
     }
 
@@ -71,7 +71,7 @@ public class ImpexEndpointControllerImpl implements ImpexEndpointController {
     }
 
     public @ResponseBody
-    String doImport(@PathVariable("group") final String descriptorGroup, @RequestBody final String fileName) {
+    String doImport(@PathVariable("group") final String descriptorGroup, @RequestBody(required = false) final String fileName) {
         return this.importDirectorService.doImport(descriptorGroup, fileName, true);
     }
 

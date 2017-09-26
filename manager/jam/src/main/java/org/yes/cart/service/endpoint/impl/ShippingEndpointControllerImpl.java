@@ -90,7 +90,7 @@ public class ShippingEndpointControllerImpl implements ShippingEndpointControlle
     }
 
     @Override
-    public @ResponseBody List<VoCarrierSla> getFilteredCarrierSlas(@RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    public @ResponseBody List<VoCarrierSla> getFilteredCarrierSlas(@RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voShippingService.getFilteredCarrierSlas(filter, max);
     }
 

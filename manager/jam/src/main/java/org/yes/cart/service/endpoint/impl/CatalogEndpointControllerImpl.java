@@ -51,7 +51,7 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
     }
 
     public @ResponseBody
-    List<VoBrand> getFilteredBrands(@RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    List<VoBrand> getFilteredBrands(@RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voBrandService.getFiltered(filter, max);
     }
 
@@ -86,7 +86,7 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
     }
 
     public @ResponseBody
-    List<VoProductTypeInfo> getFilteredProductTypes(@RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    List<VoProductTypeInfo> getFilteredProductTypes(@RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voProductTypeService.getFiltered(filter, max);
     }
 
@@ -127,7 +127,7 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
     }
 
     public @ResponseBody
-    List<VoCategory> getFilteredCategories(@RequestBody final String filter,
+    List<VoCategory> getFilteredCategories(@RequestBody(required = false) final String filter,
                                            @PathVariable("max") final int max) throws Exception {
         return voCategoryService.getFiltered(filter, max);
     }

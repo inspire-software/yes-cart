@@ -86,7 +86,7 @@ public class FulfilmentEndpointControllerImpl implements FulfilmentEndpointContr
 
 
     @Override
-    public @ResponseBody List<VoInventory> getFilteredInventory(@PathVariable("id") final long centreId, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    public @ResponseBody List<VoInventory> getFilteredInventory(@PathVariable("id") final long centreId, @RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voFulfilmentService.getFilteredInventory(centreId, filter, max);
     }
 

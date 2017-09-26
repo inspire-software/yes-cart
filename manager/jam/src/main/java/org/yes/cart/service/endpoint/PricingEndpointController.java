@@ -38,7 +38,7 @@ public interface PricingEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMMARKETINGUSER"})
     @RequestMapping(value = "/price/shop/{shopId}/currency/{currency}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoPriceList> getFilteredPriceLists(@PathVariable("shopId") long shopId, @PathVariable("currency") String currency, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+    List<VoPriceList> getFilteredPriceLists(@PathVariable("shopId") long shopId, @PathVariable("currency") String currency, @RequestBody(required = false) String filter, @PathVariable("max") int max) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMMARKETINGUSER"})
     @RequestMapping(value = "/price/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -67,7 +67,7 @@ public interface PricingEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMMARKETINGUSER"})
     @RequestMapping(value = "/tax/shop/{shopCode}/currency/{currency}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoTax> getFilteredTax(@PathVariable("shopCode") String shopCode, @PathVariable("currency") String currency, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+    List<VoTax> getFilteredTax(@PathVariable("shopCode") String shopCode, @PathVariable("currency") String currency, @RequestBody(required = false) String filter, @PathVariable("max") int max) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMMARKETINGUSER"})
     @RequestMapping(value = "/tax/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -97,7 +97,7 @@ public interface PricingEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMMARKETINGUSER"})
     @RequestMapping(value = "/taxconfig/tax/{taxId}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoTaxConfig> getFilteredTaxConfig(@PathVariable("taxId") long taxId, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+    List<VoTaxConfig> getFilteredTaxConfig(@PathVariable("taxId") long taxId, @RequestBody(required = false) String filter, @PathVariable("max") int max) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMMARKETINGUSER"})
     @RequestMapping(value = "/taxconfig/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -153,7 +153,7 @@ public interface PricingEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMMARKETINGUSER"})
     @RequestMapping(value = "/promotioncoupon/{promoId}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoPromotionCoupon> getFilteredPromotionCoupons(@PathVariable("promoId") long promotionId, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+    List<VoPromotionCoupon> getFilteredPromotionCoupons(@PathVariable("promoId") long promotionId, @RequestBody(required = false) String filter, @PathVariable("max") int max) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/promotioncoupon", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })

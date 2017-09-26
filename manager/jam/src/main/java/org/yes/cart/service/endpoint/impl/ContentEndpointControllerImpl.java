@@ -56,7 +56,7 @@ public class ContentEndpointControllerImpl implements ContentEndpointController 
     }
 
     public @ResponseBody
-    List<VoContent> getFilteredContent(@PathVariable("shopId") final long shopId, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    List<VoContent> getFilteredContent(@PathVariable("shopId") final long shopId, @RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voContentService.getFiltered(shopId, filter, max);
     }
 

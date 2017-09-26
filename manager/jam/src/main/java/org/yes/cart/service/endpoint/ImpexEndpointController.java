@@ -55,7 +55,7 @@ public interface ImpexEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/export/{group}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.TEXT_PLAIN_VALUE })
     @ResponseBody
-    String doExport(@PathVariable("group") String descriptorGroup, @RequestBody String fileName);
+    String doExport(@PathVariable("group") String descriptorGroup, @RequestBody(required = false) String fileName);
 
     /**
      * Get latest job status update for given token
@@ -90,7 +90,7 @@ public interface ImpexEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/import/{group}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.TEXT_PLAIN_VALUE })
     @ResponseBody
-    String doImport(@PathVariable("group") String descriptorGroup, @RequestBody String fileName);
+    String doImport(@PathVariable("group") String descriptorGroup, @RequestBody(required = false) String fileName);
 
     /**
      * Get latest job status update for given token

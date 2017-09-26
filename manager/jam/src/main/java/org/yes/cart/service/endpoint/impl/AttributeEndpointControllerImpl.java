@@ -60,7 +60,7 @@ public class AttributeEndpointControllerImpl implements AttributeEndpointControl
     }
 
     public @ResponseBody
-    List<VoAttribute> getFilteredAttributes(@PathVariable("group") final String group, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    List<VoAttribute> getFilteredAttributes(@PathVariable("group") final String group, @RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voAttributeService.getFilteredAttributes(group, filter, max);
     }
 

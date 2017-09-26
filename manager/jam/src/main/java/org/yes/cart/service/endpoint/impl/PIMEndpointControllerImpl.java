@@ -72,7 +72,7 @@ public class PIMEndpointControllerImpl implements PIMEndpointController {
 
     @Override
     public @ResponseBody
-    List<VoProduct> getFilteredProducts(@RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    List<VoProduct> getFilteredProducts(@RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voProductService.getFilteredProducts(filter, max);
     }
 
@@ -129,7 +129,7 @@ public class PIMEndpointControllerImpl implements PIMEndpointController {
 
     @Override
     public @ResponseBody
-    List<VoProductSku> getFilteredProductSkus(@RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    List<VoProductSku> getFilteredProductSkus(@RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voProductService.getFilteredProductSkus(filter, max);
     }
 
