@@ -20,7 +20,9 @@ import org.dbunit.AbstractDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -83,7 +85,16 @@ public abstract class BasePaymentModuleDBTestCase {
     }
 
     protected IDataSet createDataSet() throws Exception {
-        return new FlatXmlDataSet(getClass().getClassLoader().getResourceAsStream("payinitialdata.xml"), false);
+        final FlatXmlDataSet dataSet = new FlatXmlDataSetBuilder()
+                //.setColumnSensing(true) // This enables auto discovery of columns but breaks the tests, possibly our data needs clean up
+                .build(getClass().getClassLoader().getResourceAsStream(createDataSetFile()));
+        final ReplacementDataSet rDataSet = new ReplacementDataSet(dataSet);
+        rDataSet.addReplacementObject("[NULL]", null);
+        return rDataSet;
+    }
+
+    protected String createDataSetFile() {
+        return "payinitialdata.xml";
     }
 
     protected void dumpDataBase(String prefix, String[] tables) throws Exception {

@@ -32,6 +32,8 @@ import java.util.Properties;
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
+ *
+ * TODO: change to password encoder
  */
 public class MD5HashHelperImpl implements HashHelper, PasswordEncoder {
 

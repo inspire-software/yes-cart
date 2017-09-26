@@ -148,29 +148,29 @@ public class JGroupsNodeServiceImplTest {
         final Enumeration ctxe = context.mock(Enumeration.class, ctx + "e");
 
         context.checking(new Expectations() {{
-            one(ctx).getInitParameterNames(); will(returnValue(ctxe));
-            one(ctxe).hasMoreElements(); will(returnValue(true));
-            one(ctxe).nextElement(); will(returnValue(NodeService.NODE_ID));
-            one(ctx).getInitParameter(NodeService.NODE_ID); will(returnValue(node.getNodeId()));
-            one(ctxe).hasMoreElements(); will(returnValue(true));
-            one(ctxe).nextElement(); will(returnValue(NodeService.NODE_TYPE));
-            one(ctx).getInitParameter(NodeService.NODE_TYPE); will(returnValue(node.getNodeType()));
-            one(ctxe).hasMoreElements(); will(returnValue(true));
-            one(ctxe).nextElement(); will(returnValue(NodeService.NODE_CONFIG));
-            one(ctx).getInitParameter(NodeService.NODE_CONFIG); will(returnValue(node.getNodeConfig()));
-            one(ctxe).hasMoreElements(); will(returnValue(true));
-            one(ctxe).nextElement(); will(returnValue(NodeService.CLUSTER_ID));
-            one(ctx).getInitParameter(NodeService.CLUSTER_ID); will(returnValue(node.getClusterId()));
-            one(ctxe).hasMoreElements(); will(returnValue(true));
-            one(ctxe).nextElement(); will(returnValue(NodeService.VERSION));
-            one(ctx).getInitParameter(NodeService.VERSION); will(returnValue(node.getVersion()));
-            one(ctxe).hasMoreElements(); will(returnValue(true));
-            one(ctxe).nextElement(); will(returnValue(NodeService.BUILD_NO));
-            one(ctx).getInitParameter(NodeService.BUILD_NO); will(returnValue(node.getBuildNo()));
-            one(ctxe).hasMoreElements(); will(returnValue(true));
-            one(ctxe).nextElement(); will(returnValue(NodeService.LUCENE_INDEX_DISABLED));
-            one(ctx).getInitParameter(NodeService.LUCENE_INDEX_DISABLED); will(returnValue(String.valueOf(node.isFtIndexDisabled())));
-            one(ctxe).hasMoreElements(); will(returnValue(false));
+            oneOf(ctx).getInitParameterNames(); will(returnValue(ctxe));
+            oneOf(ctxe).hasMoreElements(); will(returnValue(true));
+            oneOf(ctxe).nextElement(); will(returnValue(NodeService.NODE_ID));
+            oneOf(ctx).getInitParameter(NodeService.NODE_ID); will(returnValue(node.getNodeId()));
+            oneOf(ctxe).hasMoreElements(); will(returnValue(true));
+            oneOf(ctxe).nextElement(); will(returnValue(NodeService.NODE_TYPE));
+            oneOf(ctx).getInitParameter(NodeService.NODE_TYPE); will(returnValue(node.getNodeType()));
+            oneOf(ctxe).hasMoreElements(); will(returnValue(true));
+            oneOf(ctxe).nextElement(); will(returnValue(NodeService.NODE_CONFIG));
+            oneOf(ctx).getInitParameter(NodeService.NODE_CONFIG); will(returnValue(node.getNodeConfig()));
+            oneOf(ctxe).hasMoreElements(); will(returnValue(true));
+            oneOf(ctxe).nextElement(); will(returnValue(NodeService.CLUSTER_ID));
+            oneOf(ctx).getInitParameter(NodeService.CLUSTER_ID); will(returnValue(node.getClusterId()));
+            oneOf(ctxe).hasMoreElements(); will(returnValue(true));
+            oneOf(ctxe).nextElement(); will(returnValue(NodeService.VERSION));
+            oneOf(ctx).getInitParameter(NodeService.VERSION); will(returnValue(node.getVersion()));
+            oneOf(ctxe).hasMoreElements(); will(returnValue(true));
+            oneOf(ctxe).nextElement(); will(returnValue(NodeService.BUILD_NO));
+            oneOf(ctx).getInitParameter(NodeService.BUILD_NO); will(returnValue(node.getBuildNo()));
+            oneOf(ctxe).hasMoreElements(); will(returnValue(true));
+            oneOf(ctxe).nextElement(); will(returnValue(NodeService.LUCENE_INDEX_DISABLED));
+            oneOf(ctx).getInitParameter(NodeService.LUCENE_INDEX_DISABLED); will(returnValue(String.valueOf(node.isFtIndexDisabled())));
+            oneOf(ctxe).hasMoreElements(); will(returnValue(false));
         }});
     }
 

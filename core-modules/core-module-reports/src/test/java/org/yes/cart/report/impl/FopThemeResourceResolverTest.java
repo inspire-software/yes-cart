@@ -38,7 +38,7 @@ public class FopThemeResourceResolverTest {
         context.checking(new Expectations() {{
             allowing(shop).getShopId(); will(returnValue(123L));
             allowing(shop).getCode(); will(returnValue("SHOP10"));
-            one(contentService).getContentBody("SHOP10_report_fop-config.xml", "en"); will(returnValue("xml contents"));
+            oneOf(contentService).getContentBody("SHOP10_report_fop-config.xml", "en"); will(returnValue("xml contents"));
         }});
 
         final FopThemeResourceResolver resolver =
@@ -63,7 +63,7 @@ public class FopThemeResourceResolverTest {
         context.checking(new Expectations() {{
             allowing(shop).getShopId(); will(returnValue(123L));
             allowing(shop).getCode(); will(returnValue("SHOP10"));
-            one(contentService).getContentBody("SHOP10_report_fop-config.content.xml", "en"); will(returnValue("xml contents"));
+            oneOf(contentService).getContentBody("SHOP10_report_fop-config.content.xml", "en"); will(returnValue("xml contents"));
         }});
 
         final FopThemeResourceResolver resolver =
@@ -89,10 +89,10 @@ public class FopThemeResourceResolverTest {
         context.checking(new Expectations() {{
             allowing(shop).getShopId(); will(returnValue(123L));
             allowing(shop).getCode(); will(returnValue("SHOP10"));
-            one(contentService).getContentBody("SHOP10_report_fop-config.xml", "en"); will(returnValue(null));
-            one(themeService).getReportsTemplateChainByShopId(123L); will(returnValue(Arrays.asList("theme1/reports/", "default/reports/")));
-            one(servletContext).getResourceAsStream("theme1/reports/fop-config.xml"); will(returnValue(null));
-            one(servletContext).getResourceAsStream("default/reports/fop-config.xml"); will(returnValue(new ByteArrayInputStream(new byte[0])));
+            oneOf(contentService).getContentBody("SHOP10_report_fop-config.xml", "en"); will(returnValue(null));
+            oneOf(themeService).getReportsTemplateChainByShopId(123L); will(returnValue(Arrays.asList("theme1/reports/", "default/reports/")));
+            oneOf(servletContext).getResourceAsStream("theme1/reports/fop-config.xml"); will(returnValue(null));
+            oneOf(servletContext).getResourceAsStream("default/reports/fop-config.xml"); will(returnValue(new ByteArrayInputStream(new byte[0])));
         }});
 
         final FopThemeResourceResolver resolver =
@@ -118,10 +118,10 @@ public class FopThemeResourceResolverTest {
         context.checking(new Expectations() {{
             allowing(shop).getShopId(); will(returnValue(123L));
             allowing(shop).getCode(); will(returnValue("SHOP10"));
-            one(contentService).getContentBody("SHOP10_report_fop-config.content.xml", "en"); will(returnValue(null));
-            one(themeService).getReportsTemplateChainByShopId(123L); will(returnValue(Arrays.asList("theme1/reports/", "default/reports/")));
-            one(servletContext).getResourceAsStream("theme1/reports/fop-config.file.xml"); will(returnValue(null));
-            one(servletContext).getResourceAsStream("default/reports/fop-config.file.xml"); will(returnValue(new ByteArrayInputStream(new byte[0])));
+            oneOf(contentService).getContentBody("SHOP10_report_fop-config.content.xml", "en"); will(returnValue(null));
+            oneOf(themeService).getReportsTemplateChainByShopId(123L); will(returnValue(Arrays.asList("theme1/reports/", "default/reports/")));
+            oneOf(servletContext).getResourceAsStream("theme1/reports/fop-config.file.xml"); will(returnValue(null));
+            oneOf(servletContext).getResourceAsStream("default/reports/fop-config.file.xml"); will(returnValue(new ByteArrayInputStream(new byte[0])));
         }});
 
         final FopThemeResourceResolver resolver =

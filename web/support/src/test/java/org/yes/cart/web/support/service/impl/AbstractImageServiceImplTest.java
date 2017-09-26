@@ -62,7 +62,7 @@ public class AbstractImageServiceImplTest {
     }
 
     @Test
-    public void testGetImageAttributeFileNamesNone() throws Exception {
+    public void testGetImageAttributeFileNamesNoneOf() throws Exception {
 
 
 
@@ -71,7 +71,7 @@ public class AbstractImageServiceImplTest {
         final List<AttrValue> none = Collections.emptyList();
 
         context.checking(new Expectations() {{
-            one(attributable).getAllAttributes(); will(returnValue(none));
+            oneOf(attributable).getAllAttributes(); will(returnValue(none));
         }});
 
         final List<Pair<String, String>> pairs = service.getImageAttributeFileNamesInternal(attributable, "en", "MY_IMAGE");
@@ -98,8 +98,8 @@ public class AbstractImageServiceImplTest {
         final List<AttrValue> avs = Arrays.asList(av1);
 
         context.checking(new Expectations() {{
-            one(attributable).getAllAttributes(); will(returnValue(avs));
-            one(av1).getAttributeCode(); will(returnValue("NON_IMAGE"));
+            oneOf(attributable).getAllAttributes(); will(returnValue(avs));
+            oneOf(av1).getAttributeCode(); will(returnValue("NON_IMAGE"));
         }});
 
         final List<Pair<String, String>> pairs = service.getImageAttributeFileNamesInternal(attributable, "en", "MY_IMAGE");
@@ -128,13 +128,13 @@ public class AbstractImageServiceImplTest {
         final List<AttrValue> avs = Arrays.asList(av1, av2, av3, av4);
 
         context.checking(new Expectations() {{
-            one(attributable).getAllAttributes(); will(returnValue(avs));
-            one(av1).getAttributeCode(); will(returnValue("NON_IMAGE"));
-            one(av2).getAttributeCode(); will(returnValue("MY_IMAGE2"));
+            oneOf(attributable).getAllAttributes(); will(returnValue(avs));
+            oneOf(av1).getAttributeCode(); will(returnValue("NON_IMAGE"));
+            oneOf(av2).getAttributeCode(); will(returnValue("MY_IMAGE2"));
             exactly(2).of(av2).getVal(); will(returnValue("image2.jpg"));
-            one(av3).getAttributeCode(); will(returnValue("MY_IMAGE1"));
+            oneOf(av3).getAttributeCode(); will(returnValue("MY_IMAGE1"));
             exactly(2).of(av3).getVal(); will(returnValue("image1.jpg"));
-            one(av4).getAttributeCode(); will(returnValue("NON_IMAGE"));
+            oneOf(av4).getAttributeCode(); will(returnValue("NON_IMAGE"));
 
         }});
 
@@ -166,14 +166,14 @@ public class AbstractImageServiceImplTest {
         final List<AttrValue> avs = Arrays.asList(av1, av2, av3, av4);
 
         context.checking(new Expectations() {{
-            one(attributable).getAllAttributes(); will(returnValue(avs));
-            one(av1).getAttributeCode(); will(returnValue("MY_IMAGE1_en"));
+            oneOf(attributable).getAllAttributes(); will(returnValue(avs));
+            oneOf(av1).getAttributeCode(); will(returnValue("MY_IMAGE1_en"));
             exactly(2).of(av1).getVal(); will(returnValue("image1_en.jpg"));
-            one(av2).getAttributeCode(); will(returnValue("MY_IMAGE2"));
+            oneOf(av2).getAttributeCode(); will(returnValue("MY_IMAGE2"));
             exactly(2).of(av2).getVal(); will(returnValue("image2.jpg"));
-            one(av3).getAttributeCode(); will(returnValue("MY_IMAGE1"));
-            one(av3).getVal(); will(returnValue("image1.jpg"));
-            one(av4).getAttributeCode(); will(returnValue("MY_IMAGE2_en"));
+            oneOf(av3).getAttributeCode(); will(returnValue("MY_IMAGE1"));
+            oneOf(av3).getVal(); will(returnValue("image1.jpg"));
+            oneOf(av4).getAttributeCode(); will(returnValue("MY_IMAGE2_en"));
             exactly(2).of(av4).getVal(); will(returnValue("image2_en.jpg"));
 
         }});
@@ -207,14 +207,14 @@ public class AbstractImageServiceImplTest {
         final List<AttrValue> avs = Arrays.asList(av1, av2, av3, av4);
 
         context.checking(new Expectations() {{
-            one(attributable).getAllAttributes(); will(returnValue(avs));
-            one(av1).getAttributeCode(); will(returnValue("MY_IMAGE1_en"));
+            oneOf(attributable).getAllAttributes(); will(returnValue(avs));
+            oneOf(av1).getAttributeCode(); will(returnValue("MY_IMAGE1_en"));
             exactly(2).of(av1).getVal(); will(returnValue("image1_en.jpg"));
-            one(av2).getAttributeCode(); will(returnValue("MY_IMAGE2"));
+            oneOf(av2).getAttributeCode(); will(returnValue("MY_IMAGE2"));
             exactly(2).of(av2).getVal(); will(returnValue("image2.jpg"));
-            one(av3).getAttributeCode(); will(returnValue("MY_IMAGE1"));
-            one(av3).getVal(); will(returnValue("image1.jpg"));
-            one(av4).getAttributeCode(); will(returnValue("MY_IMAGE3_en"));
+            oneOf(av3).getAttributeCode(); will(returnValue("MY_IMAGE1"));
+            oneOf(av3).getVal(); will(returnValue("image1.jpg"));
+            oneOf(av4).getAttributeCode(); will(returnValue("MY_IMAGE3_en"));
             exactly(2).of(av4).getVal(); will(returnValue("image3_en.jpg"));
 
         }});

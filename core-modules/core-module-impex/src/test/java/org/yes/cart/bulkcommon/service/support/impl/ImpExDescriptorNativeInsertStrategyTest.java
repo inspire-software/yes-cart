@@ -62,11 +62,11 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
 
         mockery.checking(new Expectations() {{
-            one(master).getId();
+            oneOf(master).getId();
             will(returnValue(10L));
-            one(descriptor).getColumn("code");
+            oneOf(descriptor).getColumn("code");
             will(returnValue(codeColumn));
-            one(tuple).getColumnValue(codeColumn, adapter);
+            oneOf(tuple).getColumnValue(codeColumn, adapter);
             will(returnValue("A''BC"));
         }});
 
@@ -102,11 +102,11 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
 
         mockery.checking(new Expectations() {{
-            one(master).getId();
+            oneOf(master).getId();
             will(returnValue(10L));
-            one(descriptor).getColumn("code");
+            oneOf(descriptor).getColumn("code");
             will(returnValue(codeColumn));
-            one(tuple).getColumnValue(codeColumn, adapter);
+            oneOf(tuple).getColumnValue(codeColumn, adapter);
             will(returnValue(null));
         }});
 
@@ -141,9 +141,9 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
 
         mockery.checking(new Expectations() {{
-            one(master).getId(); will(returnValue(10L));
-            one(descriptor).getColumn("code"); will(returnValue(codeColumn));
-            one(tuple).getColumnValue(codeColumn, adapter); will(returnValue(null));
+            oneOf(master).getId(); will(returnValue(10L));
+            oneOf(descriptor).getColumn("code"); will(returnValue(codeColumn));
+            oneOf(tuple).getColumnValue(codeColumn, adapter); will(returnValue(null));
         }});
 
         final LookUpQuery query = strategy.getQuery(descriptor, master, tuple, adapter,
@@ -177,9 +177,9 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
 
         mockery.checking(new Expectations() {{
-            one(master).getId(); will(returnValue(10L));
-            one(descriptor).getColumn("code"); will(returnValue(codeColumn));
-            one(tuple).getColumnValue(codeColumn, adapter); will(returnValue(null));
+            oneOf(master).getId(); will(returnValue(10L));
+            oneOf(descriptor).getColumn("code"); will(returnValue(codeColumn));
+            oneOf(tuple).getColumnValue(codeColumn, adapter); will(returnValue(null));
         }});
 
         final LookUpQuery query = strategy.getQuery(descriptor, master, tuple, adapter,
@@ -214,11 +214,11 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
 
         mockery.checking(new Expectations() {{
-            one(master).getId();
+            oneOf(master).getId();
             will(returnValue(10L));
-            one(descriptor).getColumn("code");
+            oneOf(descriptor).getColumn("code");
             will(returnValue(codeColumn));
-            one(tuple).getColumnValue(codeColumn, adapter);
+            oneOf(tuple).getColumnValue(codeColumn, adapter);
             will(returnValue("some (code)"));
         }});
 
@@ -256,11 +256,11 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
 
         mockery.checking(new Expectations() {{
-            one(master).getId();
+            oneOf(master).getId();
             will(returnValue(10L));
-            one(descriptor).getColumn("code");
+            oneOf(descriptor).getColumn("code");
             will(returnValue(codeColumn));
-            one(tuple).getColumnValue(codeColumn, adapter);
+            oneOf(tuple).getColumnValue(codeColumn, adapter);
             will(returnValue("some' code"));
         }});
 
@@ -295,7 +295,7 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
 
         mockery.checking(new Expectations() {{
-            one(master).getId();
+            oneOf(master).getId();
             will(returnValue(10L));
         }});
 

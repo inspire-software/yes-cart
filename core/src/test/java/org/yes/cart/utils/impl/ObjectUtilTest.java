@@ -126,7 +126,7 @@ public class ObjectUtilTest {
         final Auditable auditable = context.mock(Auditable.class, "auditable");
 
         context.checking(new Expectations() {{
-            one(auditable).getId(); will(returnValue(123L));
+            oneOf(auditable).getId(); will(returnValue(123L));
         }});
 
         // Object transformation

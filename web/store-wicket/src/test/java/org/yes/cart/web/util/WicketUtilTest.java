@@ -41,7 +41,7 @@ public class WicketUtilTest {
 
 
     @Test
-    public void testPageParametesAsMap() throws Exception {
+    public void testPageParametersAsMap() throws Exception {
 
         final CommandConfig commandConfig = context.mock(CommandConfig.class, "config");
 

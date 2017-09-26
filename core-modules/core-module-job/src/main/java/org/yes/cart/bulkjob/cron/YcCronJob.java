@@ -16,9 +16,7 @@
 
 package org.yes.cart.bulkjob.cron;
 
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.StatefulJob;
+import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
@@ -36,7 +34,9 @@ import org.yes.cart.util.log.Markers;
  * Date: 07/11/2013
  * Time: 09:33
  */
-public class YcCronJob extends QuartzJobBean implements StatefulJob {
+@PersistJobDataAfterExecution
+@DisallowConcurrentExecution
+public class YcCronJob extends QuartzJobBean implements Job {
 
     private static final Logger LOG = LoggerFactory.getLogger(YcCronJob.class);
 

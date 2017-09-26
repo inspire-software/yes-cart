@@ -43,7 +43,7 @@ public class InStockProductSearchQueryBuilderTest {
         final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
         this.context.checking(new Expectations() {{
-            one(navigationContext).getCustomerShopId(); will(returnValue(1010L));
+            oneOf(navigationContext).getCustomerShopId(); will(returnValue(1010L));
         }});
 
         final List<Query> query = new InStockProductSearchQueryBuilder().createQueryChain(navigationContext, "any", "1");
@@ -61,7 +61,7 @@ public class InStockProductSearchQueryBuilderTest {
         final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
         this.context.checking(new Expectations() {{
-            one(navigationContext).getCustomerShopId(); will(returnValue(1010L));
+            oneOf(navigationContext).getCustomerShopId(); will(returnValue(1010L));
         }});
 
         final List<Query> query = new InStockProductSearchQueryBuilder().createQueryChain(navigationContext, "any", "0");

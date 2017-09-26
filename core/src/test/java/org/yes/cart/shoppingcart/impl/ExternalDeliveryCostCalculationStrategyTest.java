@@ -44,7 +44,7 @@ public class ExternalDeliveryCostCalculationStrategyTest {
 
 
     @Test
-    public void testCalculateNone() throws Exception {
+    public void testCalculateNoneOf() throws Exception {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
@@ -69,7 +69,7 @@ public class ExternalDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
-            one(carrierSlaService).getById(123L); will(returnValue(null));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(null));
         }});
 
         final Total delTotal = new ExternalDeliveryCostCalculationStrategy(carrierSlaService).calculate(cart);
@@ -80,7 +80,7 @@ public class ExternalDeliveryCostCalculationStrategyTest {
     }
 
     @Test
-    public void testCalculateExternalOne() throws Exception {
+    public void testCalculateExternaloneOf() throws Exception {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
@@ -91,11 +91,11 @@ public class ExternalDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
-            one(carrierSla).getScript(); will(returnValue("customStrategy"));
-            one(applicationContext).getBean("customStrategy"); will(returnValue(customStrategy));
-            one(customStrategy).calculate(cart); will(returnValue(customStrategyTotal));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
+            oneOf(carrierSla).getScript(); will(returnValue("customStrategy"));
+            oneOf(applicationContext).getBean("customStrategy"); will(returnValue(customStrategy));
+            oneOf(customStrategy).calculate(cart); will(returnValue(customStrategyTotal));
         }});
 
         final ExternalDeliveryCostCalculationStrategy strategy = new ExternalDeliveryCostCalculationStrategy(carrierSlaService);
@@ -123,11 +123,11 @@ public class ExternalDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(carriers));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
-            one(carrierSla).getScript(); will(returnValue("customStrategy"));
-            one(applicationContext).getBean("customStrategy"); will(returnValue(customStrategy));
-            one(customStrategy).calculate(cart); will(returnValue(customStrategyTotal));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
+            oneOf(carrierSla).getScript(); will(returnValue("customStrategy"));
+            oneOf(applicationContext).getBean("customStrategy"); will(returnValue(customStrategy));
+            oneOf(customStrategy).calculate(cart); will(returnValue(customStrategyTotal));
         }});
 
         final ExternalDeliveryCostCalculationStrategy strategy = new ExternalDeliveryCostCalculationStrategy(carrierSlaService);
@@ -158,14 +158,14 @@ public class ExternalDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(carriers));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
-            one(carrierSla).getScript(); will(returnValue("customStrategy"));
-            one(carrierSlaService).getById(234L); will(returnValue(carrierSla2));
-            one(carrierSla2).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
-            one(carrierSla2).getScript(); will(returnValue("customStrategy"));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
+            oneOf(carrierSla).getScript(); will(returnValue("customStrategy"));
+            oneOf(carrierSlaService).getById(234L); will(returnValue(carrierSla2));
+            oneOf(carrierSla2).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
+            oneOf(carrierSla2).getScript(); will(returnValue("customStrategy"));
             allowing(applicationContext).getBean("customStrategy"); will(returnValue(customStrategy));
-            one(customStrategy).calculate(cart); will(returnValue(customStrategyTotal));
+            oneOf(customStrategy).calculate(cart); will(returnValue(customStrategyTotal));
         }});
 
         final ExternalDeliveryCostCalculationStrategy strategy = new ExternalDeliveryCostCalculationStrategy(carrierSlaService);
@@ -199,16 +199,16 @@ public class ExternalDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(carriers));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
-            one(carrierSla).getScript(); will(returnValue("customStrategy"));
-            one(carrierSlaService).getById(234L); will(returnValue(carrierSla2));
-            one(carrierSla2).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
-            one(carrierSla2).getScript(); will(returnValue("customStrategy2"));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
+            oneOf(carrierSla).getScript(); will(returnValue("customStrategy"));
+            oneOf(carrierSlaService).getById(234L); will(returnValue(carrierSla2));
+            oneOf(carrierSla2).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
+            oneOf(carrierSla2).getScript(); will(returnValue("customStrategy2"));
             allowing(applicationContext).getBean("customStrategy"); will(returnValue(customStrategy));
             allowing(applicationContext).getBean("customStrategy2"); will(returnValue(customStrategy2));
-            one(customStrategy).calculate(cart); will(returnValue(customStrategyTotal));
-            one(customStrategy2).calculate(cart); will(returnValue(customStrategyTotal2));
+            oneOf(customStrategy).calculate(cart); will(returnValue(customStrategyTotal));
+            oneOf(customStrategy2).calculate(cart); will(returnValue(customStrategyTotal2));
             allowing(customStrategyTotal).add(customStrategyTotal2); will(returnValue(customStrategyTotalAll));
             allowing(customStrategyTotal2).add(customStrategyTotal); will(returnValue(customStrategyTotalAll));
         }});
@@ -243,16 +243,16 @@ public class ExternalDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(carriers));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
-            one(carrierSla).getScript(); will(returnValue("customStrategy"));
-            one(carrierSlaService).getById(234L); will(returnValue(carrierSla2));
-            one(carrierSla2).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
-            one(carrierSla2).getScript(); will(returnValue("customStrategy2"));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
+            oneOf(carrierSla).getScript(); will(returnValue("customStrategy"));
+            oneOf(carrierSlaService).getById(234L); will(returnValue(carrierSla2));
+            oneOf(carrierSla2).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
+            oneOf(carrierSla2).getScript(); will(returnValue("customStrategy2"));
             allowing(applicationContext).getBean("customStrategy"); will(returnValue(customStrategy));
             allowing(applicationContext).getBean("customStrategy2"); will(returnValue(customStrategy2));
-            one(customStrategy).calculate(cart); will(returnValue(customStrategyTotal));
-            one(customStrategy2).calculate(cart); will(returnValue(customStrategyTotal2));
+            oneOf(customStrategy).calculate(cart); will(returnValue(customStrategyTotal));
+            oneOf(customStrategy2).calculate(cart); will(returnValue(customStrategyTotal2));
         }});
 
         final ExternalDeliveryCostCalculationStrategy strategy = new ExternalDeliveryCostCalculationStrategy(carrierSlaService);

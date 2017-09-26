@@ -63,7 +63,7 @@ public class CentralViewResolverSearchImplTest {
         CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
-            one(attributeService).getAllNavigatableAttributeCodes();
+            oneOf(attributeService).getAllNavigatableAttributeCodes();
             will(returnValue(NAV));
         }});
 
@@ -106,7 +106,7 @@ public class CentralViewResolverSearchImplTest {
         CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
-            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(NAV));
+            oneOf(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(NAV));
         }});
 
         final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
@@ -151,7 +151,7 @@ public class CentralViewResolverSearchImplTest {
         CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
-            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(NAV));
+            oneOf(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(NAV));
         }});
 
         final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
@@ -177,7 +177,7 @@ public class CentralViewResolverSearchImplTest {
         CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
-            one(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue(null));
+            oneOf(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue(null));
         }});
 
         try {
@@ -210,8 +210,8 @@ public class CentralViewResolverSearchImplTest {
         CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
-            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(NAV));
-            one(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue(null));
+            oneOf(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(NAV));
+            oneOf(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue(null));
         }});
 
         try {
@@ -246,7 +246,7 @@ public class CentralViewResolverSearchImplTest {
         CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
-            one(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue(""));
+            oneOf(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue(""));
         }});
 
 
@@ -280,8 +280,8 @@ public class CentralViewResolverSearchImplTest {
         CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
-            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(NAV));
-            one(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue(""));
+            oneOf(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(NAV));
+            oneOf(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue(""));
         }});
 
         try {
@@ -315,7 +315,7 @@ public class CentralViewResolverSearchImplTest {
         CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
-            one(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue("prodtypetemplate"));
+            oneOf(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue("prodtypetemplate"));
         }});
 
         try {
@@ -348,9 +348,9 @@ public class CentralViewResolverSearchImplTest {
         CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
-            one(attributeService).getAllNavigatableAttributeCodes();
+            oneOf(attributeService).getAllNavigatableAttributeCodes();
             will(returnValue(NAV));
-            one(shopService).getShopCategorySearchTemplate(2L, 1L);
+            oneOf(shopService).getShopCategorySearchTemplate(2L, 1L);
             will(returnValue("prodtypetemplate"));
         }});
 

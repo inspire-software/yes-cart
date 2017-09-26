@@ -83,28 +83,6 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testGetCategoryAttributeRecursive() {
-        String val = categoryService.getCategoryAttributeRecursive(null, 105L, "SOME_NOT_EXISTING_ATTR", null);
-        assertNull(val);
-        val = categoryService.getCategoryAttributeRecursive(null, 105L, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
-        assertEquals("10,20,50", val);
-        val = categoryService.getCategoryAttributeRecursive(null, 139L, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
-        assertEquals("6,12,24", val);
-        val = categoryService.getCategoryAttributeRecursive(null, 132L, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
-        assertNull(val);  // Must not failover to root, we use shop level attributes for this
-    }
-
-    @Test
-    public void testGetCategoryAttributeRecursiveMulti() {
-        String[] val = categoryService.getCategoryAttributeRecursive(null, 105L, new String[] { "SOME_NOT_EXISTING_ATTR", "SOME_NOT_EXISTING_ATTR_2" });
-        assertNull(val);
-        val = categoryService.getCategoryAttributeRecursive(null, 105L, new String[] { "SOME_NOT_EXISTING_ATTR", AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE });
-        assertNotNull(val);
-        assertNull(val[0]);
-        assertEquals("10,20,50", val[1]);
-    }
-
-    @Test
     public void testGetUIVariationTestNoFailover() {
         Category category = categoryService.findById(139L);
         assertNotNull(category);

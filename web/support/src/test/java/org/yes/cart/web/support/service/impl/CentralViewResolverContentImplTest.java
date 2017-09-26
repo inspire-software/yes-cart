@@ -76,7 +76,7 @@ public class CentralViewResolverContentImplTest {
         final ContentService contentService = context.mock(ContentService.class, "contentService");
 
         context.checking(new Expectations() {{
-            one(contentService).getContentTemplate(10L); will(returnValue(""));
+            oneOf(contentService).getContentTemplate(10L); will(returnValue(""));
         }});
 
         CentralViewResolverContentImpl resolver = new CentralViewResolverContentImpl(contentService);
@@ -98,7 +98,7 @@ public class CentralViewResolverContentImplTest {
         final ContentService contentService = context.mock(ContentService.class, "contentService");
 
         context.checking(new Expectations() {{
-            one(contentService).getContentTemplate(10L); will(returnValue(CentralViewLabel.DYNOCONTENT));
+            oneOf(contentService).getContentTemplate(10L); will(returnValue(CentralViewLabel.DYNOCONTENT));
         }});
 
         CentralViewResolverContentImpl resolver = new CentralViewResolverContentImpl(contentService);

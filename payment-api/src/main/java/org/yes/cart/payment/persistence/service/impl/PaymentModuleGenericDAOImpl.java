@@ -17,7 +17,7 @@
 package org.yes.cart.payment.persistence.service.impl;
 
 import org.hibernate.Criteria;
-import org.hibernate.LockMode;
+import org.hibernate.LockOptions;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -82,7 +82,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     public T findById(final PK id, final boolean lock) {
         T entity;
         if (lock) {
-            entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id, LockMode.UPGRADE);
+            entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id, LockOptions.UPGRADE);
         } else {
             entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id);
         }

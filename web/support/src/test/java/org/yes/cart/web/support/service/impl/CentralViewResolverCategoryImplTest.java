@@ -109,7 +109,7 @@ public class CentralViewResolverCategoryImplTest {
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
-            one(shopService).getShopCategoryTemplate(2L, 10L);
+            oneOf(shopService).getShopCategoryTemplate(2L, 10L);
             will(returnValue("cattemplate"));
         }});
 
@@ -146,7 +146,7 @@ public class CentralViewResolverCategoryImplTest {
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
-            one(shopService).getShopCategoryTemplate(2L, 10L);
+            oneOf(shopService).getShopCategoryTemplate(2L, 10L);
             will(returnValue("products"));
         }});
 
@@ -183,7 +183,7 @@ public class CentralViewResolverCategoryImplTest {
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
-            one(shopService).getShopCategoryTemplate(2L, 10L);
+            oneOf(shopService).getShopCategoryTemplate(2L, 10L);
             will(returnValue("subcats"));
         }});
 
@@ -221,11 +221,11 @@ public class CentralViewResolverCategoryImplTest {
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
-            one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
-            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
-            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, "en", Arrays.asList(10L), true, null); will(returnValue(hasProducts));
-            one(productService).getProductQty(hasProducts); will(returnValue(0));
-            one(categoryService).isCategoryHasChildren(10L); will(returnValue(false));
+            oneOf(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
+            oneOf(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
+            oneOf(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, "en", Arrays.asList(10L), true, null); will(returnValue(hasProducts));
+            oneOf(productService).getProductQty(hasProducts); will(returnValue(0));
+            oneOf(categoryService).isCategoryHasChildren(10L); will(returnValue(false));
         }});
 
         try {
@@ -262,11 +262,11 @@ public class CentralViewResolverCategoryImplTest {
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
-            one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
-            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), false)));
-            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, "en", Arrays.asList(10L), false, null); will(returnValue(hasProducts));
-            one(productService).getProductQty(hasProducts); will(returnValue(0));
-            one(categoryService).isCategoryHasChildren(10L); will(returnValue(true));
+            oneOf(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
+            oneOf(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), false)));
+            oneOf(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, "en", Arrays.asList(10L), false, null); will(returnValue(hasProducts));
+            oneOf(productService).getProductQty(hasProducts); will(returnValue(0));
+            oneOf(categoryService).isCategoryHasChildren(10L); will(returnValue(true));
         }});
 
         try {
@@ -304,11 +304,11 @@ public class CentralViewResolverCategoryImplTest {
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
-            one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
-            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
-            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, "en", Arrays.asList(10L), true, null); will(returnValue(hasProducts));
-            one(productService).getProductQty(hasProducts); will(returnValue(1));
-            one(shopService).getShopCategorySearchTemplate(11L, 10L); will(returnValue(null));
+            oneOf(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
+            oneOf(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
+            oneOf(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, "en", Arrays.asList(10L), true, null); will(returnValue(hasProducts));
+            oneOf(productService).getProductQty(hasProducts); will(returnValue(1));
+            oneOf(shopService).getShopCategorySearchTemplate(11L, 10L); will(returnValue(null));
         }});
 
         try {
@@ -346,11 +346,11 @@ public class CentralViewResolverCategoryImplTest {
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
-            one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
-            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), false)));
-            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, "en", Arrays.asList(10L), false, null); will(returnValue(hasProducts));
-            one(productService).getProductQty(hasProducts); will(returnValue(1));
-            one(shopService).getShopCategorySearchTemplate(11L, 10L); will(returnValue(" "));
+            oneOf(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
+            oneOf(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), false)));
+            oneOf(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, "en", Arrays.asList(10L), false, null); will(returnValue(hasProducts));
+            oneOf(productService).getProductQty(hasProducts); will(returnValue(1));
+            oneOf(shopService).getShopCategorySearchTemplate(11L, 10L); will(returnValue(" "));
         }});
 
         try {
@@ -388,11 +388,11 @@ public class CentralViewResolverCategoryImplTest {
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
         context.checking(new Expectations() {{
-            one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
-            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
-            one(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, "en", Arrays.asList(10L), true, null); will(returnValue(hasProducts));
-            one(productService).getProductQty(hasProducts); will(returnValue(1));
-            one(shopService).getShopCategorySearchTemplate(11L, 10L); will(returnValue("prodtypesearch"));
+            oneOf(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
+            oneOf(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
+            oneOf(searchQueryFactory).getFilteredNavigationQueryChain(11L, 11L, "en", Arrays.asList(10L), true, null); will(returnValue(hasProducts));
+            oneOf(productService).getProductQty(hasProducts); will(returnValue(1));
+            oneOf(shopService).getShopCategorySearchTemplate(11L, 10L); will(returnValue("prodtypesearch"));
         }});
 
         try {

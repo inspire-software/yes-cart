@@ -47,7 +47,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -834,8 +834,8 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listenerCarrierSla).notifyPing();
             allowing(listenerCarrierSla).notifyPing(with(any(String.class)));
             allowing(listenerCarrierSla).notifyMessage(with(any(String.class)));
-            one(listenerCarrierSla).notifyError(with(aStringStartingWith("during import row : CsvImportTupleImpl{sid=carrierslanames.csv:1, line=[NEW_V 1 day,,,New Vasuki express 1")), with(any(Exception.class)));
-            one(listenerCarrierSla).notifyError(with(aStringStartingWith("unexpected error during import")), with(any(Exception.class)));
+            oneOf(listenerCarrierSla).notifyError(with(aStringStartingWith("during import row : CsvImportTupleImpl{sid=carrierslanames.csv:1, line=[NEW_V 1 day,,,New Vasuki express 1")), with(any(Exception.class)));
+            oneOf(listenerCarrierSla).notifyError(with(aStringStartingWith("unexpected error during import")), with(any(Exception.class)));
         }});
 
         Set<String> importedFilesSet = new HashSet<String>();
@@ -1077,7 +1077,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         mockery.checking(new Expectations() {{
             allowing(listener).notifyPing();
             allowing(listener).notifyMessage(with(any(String.class)));
-            one(listener).notifyPing(with(aStringStartingWith("Skipping tuple (unresolved foreign key):")));
+            oneOf(listener).notifyPing(with(aStringStartingWith("Skipping tuple (unresolved foreign key):")));
             allowing(listener).notifyPing(with(aStringStartingWith("Importing tuple: ")));
         }});
 
@@ -1124,7 +1124,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listener2).notifyPing();
             allowing(listener2).notifyMessage(with(any(String.class)));
             allowing(listener2).notifyPing(with(aStringStartingWith("Importing tuple: ")));
-            one(listener2).notifyPing(with(aStringStartingWith("Skipping tuple (no change):")));
+            oneOf(listener2).notifyPing(with(aStringStartingWith("Skipping tuple (no change):")));
         }});
 
 

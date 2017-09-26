@@ -2,9 +2,10 @@ package org.yes.cart.payment.impl;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.dto.Payment;
@@ -201,7 +202,7 @@ public abstract class AbstractPayPalNVPPaymentGatewayImpl extends AbstractPayPal
         final HttpPost httpPost = new HttpPost(endpoint);
         httpPost.setEntity(new StringEntity(callParams));
 
-        final DefaultHttpClient client = new DefaultHttpClient();
+        final HttpClient client = HttpClientBuilder.create().build();
 
         final HttpResponse response = client.execute(httpPost);
         final BufferedReader rd = new BufferedReader(new InputStreamReader(

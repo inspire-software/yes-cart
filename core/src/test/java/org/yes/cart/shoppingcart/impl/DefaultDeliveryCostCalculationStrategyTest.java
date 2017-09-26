@@ -44,7 +44,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
 
 
     @Test
-    public void testCalculateNone() throws Exception {
+    public void testCalculateNoneOf() throws Exception {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
@@ -53,7 +53,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId();
             will(returnValue(Collections.emptyMap()));
-            one(cart).removeShipping();
+            oneOf(cart).removeShipping();
         }});
 
         final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.singletonMap("S", strategy)).calculate(cart);
@@ -73,8 +73,8 @@ public class DefaultDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
-            one(carrierSlaService).getById(123L); will(returnValue(null));
-            one(cart).removeShipping();
+            oneOf(carrierSlaService).getById(123L); will(returnValue(null));
+            oneOf(cart).removeShipping();
         }});
 
         final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.singletonMap("S", strategy)).calculate(cart);
@@ -85,7 +85,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
     }
 
     @Test
-    public void testCalculateStrategyOne() throws Exception {
+    public void testCalculateStrategyoneOf() throws Exception {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
@@ -95,10 +95,10 @@ public class DefaultDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getSlaType(); will(returnValue("S"));
-            one(cart).removeShipping();
-            one(strategy).calculate(cart); will(returnValue(strategyTotal));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getSlaType(); will(returnValue("S"));
+            oneOf(cart).removeShipping();
+            oneOf(strategy).calculate(cart); will(returnValue(strategyTotal));
         }});
 
         final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.singletonMap("S", strategy)).calculate(cart);
@@ -127,13 +127,13 @@ public class DefaultDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(carriers));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getSlaType(); will(returnValue("S"));
-            one(carrierSlaService).getById(234L); will(returnValue(carrierSlaB));
-            one(carrierSlaB).getSlaType(); will(returnValue("B"));
-            one(cart).removeShipping();
-            one(strategy).calculate(cart); will(returnValue(strategyTotal));
-            one(strategyB).calculate(cart); will(returnValue(strategyTotalB));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getSlaType(); will(returnValue("S"));
+            oneOf(carrierSlaService).getById(234L); will(returnValue(carrierSlaB));
+            oneOf(carrierSlaB).getSlaType(); will(returnValue("B"));
+            oneOf(cart).removeShipping();
+            oneOf(strategy).calculate(cart); will(returnValue(strategyTotal));
+            oneOf(strategyB).calculate(cart); will(returnValue(strategyTotalB));
             allowing(strategyTotal).add(strategyTotalB); will(returnValue(strategyTotalAll));
             allowing(strategyTotalB).add(strategyTotal); will(returnValue(strategyTotalAll));
         }});
@@ -167,13 +167,13 @@ public class DefaultDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(carriers));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getSlaType(); will(returnValue("S"));
-            one(carrierSlaService).getById(234L); will(returnValue(carrierSlaB));
-            one(carrierSlaB).getSlaType(); will(returnValue("B"));
-            one(cart).removeShipping();
-            one(strategy).calculate(cart); will(returnValue(strategyTotal));
-            one(strategyB).calculate(cart); will(returnValue(strategyTotalB));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getSlaType(); will(returnValue("S"));
+            oneOf(carrierSlaService).getById(234L); will(returnValue(carrierSlaB));
+            oneOf(carrierSlaB).getSlaType(); will(returnValue("B"));
+            oneOf(cart).removeShipping();
+            oneOf(strategy).calculate(cart); will(returnValue(strategyTotal));
+            oneOf(strategyB).calculate(cart); will(returnValue(strategyTotalB));
         }});
 
         final Map<String, DeliveryCostCalculationStrategy> strategies = new HashMap<String, DeliveryCostCalculationStrategy>();
@@ -205,13 +205,13 @@ public class DefaultDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(carriers));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getSlaType(); will(returnValue("S"));
-            one(carrierSlaService).getById(234L); will(returnValue(carrierSlaB));
-            one(carrierSlaB).getSlaType(); will(returnValue("B"));
-            one(cart).removeShipping();
-            one(strategy).calculate(cart); will(returnValue(strategyTotal));
-            one(strategyB).calculate(cart); will(returnValue(strategyTotalB));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getSlaType(); will(returnValue("S"));
+            oneOf(carrierSlaService).getById(234L); will(returnValue(carrierSlaB));
+            oneOf(carrierSlaB).getSlaType(); will(returnValue("B"));
+            oneOf(cart).removeShipping();
+            oneOf(strategy).calculate(cart); will(returnValue(strategyTotal));
+            oneOf(strategyB).calculate(cart); will(returnValue(strategyTotalB));
         }});
 
         final Map<String, DeliveryCostCalculationStrategy> strategies = new HashMap<String, DeliveryCostCalculationStrategy>();
@@ -234,9 +234,9 @@ public class DefaultDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             allowing(carrierSla).getSlaType(); will(returnValue("S"));
-            one(cart).removeShipping();
+            oneOf(cart).removeShipping();
         }});
 
         final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.EMPTY_MAP).calculate(cart);

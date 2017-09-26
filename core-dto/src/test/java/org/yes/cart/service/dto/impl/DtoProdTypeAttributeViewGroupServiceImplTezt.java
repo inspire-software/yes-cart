@@ -28,7 +28,7 @@ import org.yes.cart.service.dto.DtoProductTypeService;
 
 import java.util.List;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 /**
  * User: igora Igor Azarny

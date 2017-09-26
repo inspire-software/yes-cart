@@ -30,7 +30,7 @@ import org.yes.cart.service.domain.BrandService;
 
 import java.util.Collection;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov

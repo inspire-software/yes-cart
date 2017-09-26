@@ -44,9 +44,9 @@ public class MediaFileNameStrategyResolverImplTest {
         final MediaFileNameStrategy twoStrategy = context.mock(MediaFileNameStrategy.class, "twoStrategy");
 
         context.checking(new Expectations() {{
-            one(defStrategy).getUrlPath(); will(returnValue("/def/"));
-            one(oneStrategy).getUrlPath(); will(returnValue("/one/"));
-            one(twoStrategy).getUrlPath(); will(returnValue("/two/"));
+            oneOf(defStrategy).getUrlPath(); will(returnValue("/def/"));
+            oneOf(oneStrategy).getUrlPath(); will(returnValue("/one/"));
+            oneOf(twoStrategy).getUrlPath(); will(returnValue("/two/"));
         }});
 
         final MediaFileNameStrategyResolverImpl resolver =

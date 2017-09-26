@@ -45,7 +45,7 @@ public class PriceListDeliveryCostCalculationStrategyTest {
 
 
     @Test
-    public void testCalculateNone() throws Exception {
+    public void testCalculateNoneOf() throws Exception {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
@@ -71,9 +71,9 @@ public class PriceListDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
-            one(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
-            one(bucket1).getSupplier(); will(returnValue("Main"));
-            one(carrierSlaService).getById(123L); will(returnValue(null));
+            oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
+            oneOf(bucket1).getSupplier(); will(returnValue("Main"));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(null));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, null, null).calculate(cart);
@@ -99,26 +99,26 @@ public class PriceListDeliveryCostCalculationStrategyTest {
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
-            one(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
-            one(shoppingContext).getCountryCode(); will(returnValue("GB"));
-            one(shoppingContext).getStateCode(); will(returnValue("LON"));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getGuid(); will(returnValue("CSL001"));
-            one(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
-            one(carrierSla).getDisplayName(); will(returnValue(""));
-            one(carrierSla).getName(); will(returnValue("CSL001"));
-            one(cart).getCurrentLocale(); will(returnValue("en"));
-            one(cart).getCurrencyCode(); will(returnValue("USD"));
-            one(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
-            one(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
-            one(bucket1).getSupplier(); will(returnValue("Main"));
-            one(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
-            one(cost).getSkuPriceId(); will(returnValue(345L));
-            one(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            one(cost).getSalePriceForCalculation(); will(returnValue(null));
-            one(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
-            one(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("10.00"), new BigDecimal("10.00"));
+            oneOf(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
+            oneOf(shoppingContext).getCountryCode(); will(returnValue("GB"));
+            oneOf(shoppingContext).getStateCode(); will(returnValue("LON"));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
+            oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getName(); will(returnValue("CSL001"));
+            oneOf(cart).getCurrentLocale(); will(returnValue("en"));
+            oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
+            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
+            oneOf(bucket1).getSupplier(); will(returnValue("Main"));
+            oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
+            oneOf(cost).getSkuPriceId(); will(returnValue(345L));
+            oneOf(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
+            oneOf(cost).getSalePriceForCalculation(); will(returnValue(null));
+            oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
+            oneOf(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("10.00"), new BigDecimal("10.00"));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);
@@ -162,26 +162,26 @@ public class PriceListDeliveryCostCalculationStrategyTest {
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
-            one(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
-            one(shoppingContext).getCountryCode(); will(returnValue("GB"));
-            one(shoppingContext).getStateCode(); will(returnValue("LON"));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getGuid(); will(returnValue("CSL001"));
-            one(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
-            one(carrierSla).getDisplayName(); will(returnValue(""));
-            one(carrierSla).getName(); will(returnValue("CSL001"));
-            one(cart).getCurrentLocale(); will(returnValue("en"));
-            one(cart).getCurrencyCode(); will(returnValue("USD"));
-            one(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
-            one(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
-            one(bucket1).getSupplier(); will(returnValue("Main"));
-            one(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
-            one(cost).getSkuPriceId(); will(returnValue(345L));
-            one(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            one(cost).getSalePriceForCalculation(); will(returnValue(new BigDecimal("8.00")));
-            one(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
-            one(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("8.00"), new BigDecimal("8.00"));
+            oneOf(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
+            oneOf(shoppingContext).getCountryCode(); will(returnValue("GB"));
+            oneOf(shoppingContext).getStateCode(); will(returnValue("LON"));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
+            oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getName(); will(returnValue("CSL001"));
+            oneOf(cart).getCurrentLocale(); will(returnValue("en"));
+            oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
+            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
+            oneOf(bucket1).getSupplier(); will(returnValue("Main"));
+            oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
+            oneOf(cost).getSkuPriceId(); will(returnValue(345L));
+            oneOf(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
+            oneOf(cost).getSalePriceForCalculation(); will(returnValue(new BigDecimal("8.00")));
+            oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
+            oneOf(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("8.00"), new BigDecimal("8.00"));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);
@@ -226,22 +226,22 @@ public class PriceListDeliveryCostCalculationStrategyTest {
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
-            one(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
-            one(shoppingContext).getCountryCode(); will(returnValue("GB"));
-            one(shoppingContext).getStateCode(); will(returnValue("LON"));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getGuid(); will(returnValue("CSL001"));
-            one(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
-            one(carrierSla).getDisplayName(); will(returnValue(""));
-            one(carrierSla).getName(); will(returnValue("CSL001"));
-            one(cart).getCurrentLocale(); will(returnValue("en"));
-            one(cart).getCurrencyCode(); will(returnValue("USD"));
-            one(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
-            one(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
-            one(bucket1).getSupplier(); will(returnValue("Main"));
-            one(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
-            one(cost).getSkuPriceId(); will(returnValue(0L));
+            oneOf(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
+            oneOf(shoppingContext).getCountryCode(); will(returnValue("GB"));
+            oneOf(shoppingContext).getStateCode(); will(returnValue("LON"));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
+            oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getName(); will(returnValue("CSL001"));
+            oneOf(cart).getCurrentLocale(); will(returnValue("en"));
+            oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
+            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
+            oneOf(bucket1).getSupplier(); will(returnValue("Main"));
+            oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
+            oneOf(cost).getSkuPriceId(); will(returnValue(0L));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);
@@ -263,8 +263,8 @@ public class PriceListDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
-            one(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
-            one(bucket1).getSupplier(); will(returnValue(""));
+            oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
+            oneOf(bucket1).getSupplier(); will(returnValue(""));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);
@@ -296,29 +296,29 @@ public class PriceListDeliveryCostCalculationStrategyTest {
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
-            one(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
-            one(shoppingContext).getCountryCode(); will(returnValue("GB"));
-            one(shoppingContext).getStateCode(); will(returnValue("LON"));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getGuid(); will(returnValue("CSL001"));
-            one(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
-            one(carrierSla).getDisplayName(); will(returnValue(""));
-            one(carrierSla).getName(); will(returnValue("CSL001"));
-            one(cart).getCurrentLocale(); will(returnValue("en"));
-            one(cart).getCurrencyCode(); will(returnValue("USD"));
-            one(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
-            one(cart).getCartItemMap(); will(returnValue(buckets));
-            one(bucket1).getSupplier(); will(returnValue("Main"));
-            one(bucket2).getSupplier(); will(returnValue("Main"));
-            one(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
-            one(cost).getSkuPriceId(); will(returnValue(345L));
-            one(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            one(cost).getSalePriceForCalculation(); will(returnValue(null));
-            one(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
-            one(cart).addShippingToCart(bucket2, "CSL001", "CSL001", new BigDecimal("1.00"));
-            one(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("10.00"), new BigDecimal("10.00"));
-            one(cart).setShippingPrice("CSL001", bucket2, new BigDecimal("10.00"), new BigDecimal("10.00"));
+            oneOf(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
+            oneOf(shoppingContext).getCountryCode(); will(returnValue("GB"));
+            oneOf(shoppingContext).getStateCode(); will(returnValue("LON"));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
+            oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getName(); will(returnValue("CSL001"));
+            oneOf(cart).getCurrentLocale(); will(returnValue("en"));
+            oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
+            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCartItemMap(); will(returnValue(buckets));
+            oneOf(bucket1).getSupplier(); will(returnValue("Main"));
+            oneOf(bucket2).getSupplier(); will(returnValue("Main"));
+            oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
+            oneOf(cost).getSkuPriceId(); will(returnValue(345L));
+            oneOf(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
+            oneOf(cost).getSalePriceForCalculation(); will(returnValue(null));
+            oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
+            oneOf(cart).addShippingToCart(bucket2, "CSL001", "CSL001", new BigDecimal("1.00"));
+            oneOf(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("10.00"), new BigDecimal("10.00"));
+            oneOf(cart).setShippingPrice("CSL001", bucket2, new BigDecimal("10.00"), new BigDecimal("10.00"));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);
@@ -368,29 +368,29 @@ public class PriceListDeliveryCostCalculationStrategyTest {
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
-            one(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
-            one(shoppingContext).getCountryCode(); will(returnValue("GB"));
-            one(shoppingContext).getStateCode(); will(returnValue("LON"));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getGuid(); will(returnValue("CSL001"));
-            one(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
-            one(carrierSla).getDisplayName(); will(returnValue(""));
-            one(carrierSla).getName(); will(returnValue("CSL001"));
-            one(cart).getCurrentLocale(); will(returnValue("en"));
-            one(cart).getCurrencyCode(); will(returnValue("USD"));
-            one(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
-            one(cart).getCartItemMap(); will(returnValue(buckets));
-            one(bucket1).getSupplier(); will(returnValue("Main"));
-            one(bucket2).getSupplier(); will(returnValue("Main"));
-            one(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
-            one(cost).getSkuPriceId(); will(returnValue(345L));
-            one(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            one(cost).getSalePriceForCalculation(); will(returnValue(new BigDecimal("8.00")));
-            one(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
-            one(cart).addShippingToCart(bucket2, "CSL001", "CSL001", new BigDecimal("1.00"));
-            one(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("8.00"), new BigDecimal("8.00"));
-            one(cart).setShippingPrice("CSL001", bucket2, new BigDecimal("8.00"), new BigDecimal("8.00"));
+            oneOf(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
+            oneOf(shoppingContext).getCountryCode(); will(returnValue("GB"));
+            oneOf(shoppingContext).getStateCode(); will(returnValue("LON"));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
+            oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getName(); will(returnValue("CSL001"));
+            oneOf(cart).getCurrentLocale(); will(returnValue("en"));
+            oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
+            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCartItemMap(); will(returnValue(buckets));
+            oneOf(bucket1).getSupplier(); will(returnValue("Main"));
+            oneOf(bucket2).getSupplier(); will(returnValue("Main"));
+            oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
+            oneOf(cost).getSkuPriceId(); will(returnValue(345L));
+            oneOf(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
+            oneOf(cost).getSalePriceForCalculation(); will(returnValue(new BigDecimal("8.00")));
+            oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
+            oneOf(cart).addShippingToCart(bucket2, "CSL001", "CSL001", new BigDecimal("1.00"));
+            oneOf(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("8.00"), new BigDecimal("8.00"));
+            oneOf(cart).setShippingPrice("CSL001", bucket2, new BigDecimal("8.00"), new BigDecimal("8.00"));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);
@@ -441,23 +441,23 @@ public class PriceListDeliveryCostCalculationStrategyTest {
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
-            one(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
-            one(shoppingContext).getCountryCode(); will(returnValue("GB"));
-            one(shoppingContext).getStateCode(); will(returnValue("LON"));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getGuid(); will(returnValue("CSL001"));
-            one(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
-            one(carrierSla).getDisplayName(); will(returnValue(""));
-            one(carrierSla).getName(); will(returnValue("CSL001"));
-            one(cart).getCurrentLocale(); will(returnValue("en"));
-            one(cart).getCurrencyCode(); will(returnValue("USD"));
-            one(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
-            one(cart).getCartItemMap(); will(returnValue(buckets));
-            one(bucket1).getSupplier(); will(returnValue("Main"));
-            one(bucket2).getSupplier(); will(returnValue("Main"));
-            one(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
-            one(cost).getSkuPriceId(); will(returnValue(0L));
+            oneOf(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
+            oneOf(shoppingContext).getCountryCode(); will(returnValue("GB"));
+            oneOf(shoppingContext).getStateCode(); will(returnValue("LON"));
+            oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
+            oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
+            oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getName(); will(returnValue("CSL001"));
+            oneOf(cart).getCurrentLocale(); will(returnValue("en"));
+            oneOf(cart).getCurrencyCode(); will(returnValue("USD"));
+            oneOf(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            oneOf(cart).getCartItemMap(); will(returnValue(buckets));
+            oneOf(bucket1).getSupplier(); will(returnValue("Main"));
+            oneOf(bucket2).getSupplier(); will(returnValue("Main"));
+            oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
+            oneOf(cost).getSkuPriceId(); will(returnValue(0L));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);
@@ -483,9 +483,9 @@ public class PriceListDeliveryCostCalculationStrategyTest {
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
-            one(cart).getCartItemMap(); will(returnValue(buckets));
-            one(bucket1).getSupplier(); will(returnValue(""));
-            one(bucket2).getSupplier(); will(returnValue(""));
+            oneOf(cart).getCartItemMap(); will(returnValue(buckets));
+            oneOf(bucket1).getSupplier(); will(returnValue(""));
+            oneOf(bucket2).getSupplier(); will(returnValue(""));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);

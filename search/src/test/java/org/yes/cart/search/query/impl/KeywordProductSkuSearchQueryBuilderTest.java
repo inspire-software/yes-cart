@@ -59,7 +59,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
         final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
         this.context.checking(new Expectations() {{
-            one(navigationContext).getCustomerLanguage(); will(returnValue("en"));
+            oneOf(navigationContext).getCustomerLanguage(); will(returnValue("en"));
         }});
 
         final List<Query> query = new KeywordProductSkuSearchQueryBuilder().createQueryChain(navigationContext, "query", "SearchWord");
@@ -78,7 +78,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
         final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
         this.context.checking(new Expectations() {{
-            one(navigationContext).getCustomerLanguage(); will(returnValue("en"));
+            oneOf(navigationContext).getCustomerLanguage(); will(returnValue("en"));
         }});
 
         final List<Query> query = new KeywordProductSkuSearchQueryBuilder().createQueryChain(navigationContext, "query", "Search, Word");
@@ -99,7 +99,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
         final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
         this.context.checking(new Expectations() {{
-            one(navigationContext).getCustomerLanguage(); will(returnValue("de"));
+            oneOf(navigationContext).getCustomerLanguage(); will(returnValue("de"));
         }});
 
         final List<Query> query = new KeywordProductSkuSearchQueryBuilder().createQueryChain(navigationContext, "query", Arrays.asList("hp tonerpatrone", "für laserjet pro m452"));

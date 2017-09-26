@@ -20,9 +20,11 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.AttrValueCategory;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.domain.entity.impl.CategoryEntity;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
@@ -123,9 +125,14 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
     }
 
     private String getAttributeValue(final String locale, final String attribute, final String defaultValue) {
-        return categoryService.getCategoryAttributeRecursive(locale, this.getCategoryId(),
-                attribute,
-                defaultValue);
+        final AttrValueCategory avc = getAttributeByCode(attribute);
+        if (avc != null) {
+            final String rez = new FailoverStringI18NModel(avc.getDisplayVal(), avc.getVal()).getValue(locale);
+            if (StringUtils.isNotBlank(rez)) {
+                return rez;
+            }
+        }
+        return defaultValue;
     }
 
 

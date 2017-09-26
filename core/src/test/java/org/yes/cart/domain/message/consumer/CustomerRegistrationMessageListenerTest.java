@@ -72,11 +72,11 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         final List<String> templateChain = Arrays.asList("SHOIP1/mail/");
 
         mockery.checking(new Expectations() {{
-            one(mailTemplateResourcesProvider).getTemplate(templateChain, "SHOIP1", "en", "customerChangePassword", ".txt");
+            oneOf(mailTemplateResourcesProvider).getTemplate(templateChain, "SHOIP1", "en", "customerChangePassword", ".txt");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/SHOIP1/customerChangePassword/customerChangePassword.txt")), "UTF-8")));
-            one(mailTemplateResourcesProvider).getTemplate(templateChain, "SHOIP1", "en", "customerChangePassword", ".html");
+            oneOf(mailTemplateResourcesProvider).getTemplate(templateChain, "SHOIP1", "en", "customerChangePassword", ".html");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/SHOIP1/customerChangePassword/customerChangePassword.html")), "UTF-8")));
-            one(mailTemplateResourcesProvider).getTemplate(templateChain, "SHOIP1", "en", "customerChangePassword", ".properties");
+            oneOf(mailTemplateResourcesProvider).getTemplate(templateChain, "SHOIP1", "en", "customerChangePassword", ".properties");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/SHOIP1/customerChangePassword/customerChangePassword.properties")), "UTF-8")));
         }});
 

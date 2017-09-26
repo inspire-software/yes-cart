@@ -175,7 +175,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
     }
 
     @Test
-    public void testSkipWeekdayExclusionsNone() throws Exception {
+    public void testSkipWeekdayExclusionsNoneOf() throws Exception {
 
         final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
 
@@ -243,7 +243,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
 
     @Test
-    public void testGetCarrierSlaExcludedDatesNone() throws Exception {
+    public void testGetCarrierSlaExcludedDatesNoneOf() throws Exception {
 
         final CarrierSlaEntity sla = new CarrierSlaEntity();
         sla.setExcludeDates("");
@@ -281,7 +281,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
 
     @Test
-    public void testSkipDatesExclusionsNone() throws Exception {
+    public void testSkipDatesExclusionsNoneOf() throws Exception {
 
         final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
 
@@ -467,9 +467,9 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("CED"));
             // expectations:
-            one(delivery).setDeliveryGuaranteed(null);
-            one(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-20"))));
-            one(delivery).setDeliveryEstimatedMax(with(equal(df.parse("2017-02-24"))));
+            oneOf(delivery).setDeliveryGuaranteed(null);
+            oneOf(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-20"))));
+            oneOf(delivery).setDeliveryEstimatedMax(with(equal(df.parse("2017-02-24"))));
 
         }});
 
@@ -573,9 +573,9 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("CED"));
             // expectations: NONE, requested date is valid
-            one(delivery).setDeliveryGuaranteed(with(equal(df.parse("2017-02-20"))));
-            one(delivery).setDeliveryEstimatedMin(null);
-            one(delivery).setDeliveryEstimatedMax(null);
+            oneOf(delivery).setDeliveryGuaranteed(with(equal(df.parse("2017-02-20"))));
+            oneOf(delivery).setDeliveryEstimatedMin(null);
+            oneOf(delivery).setDeliveryEstimatedMax(null);
 
         }});
 
@@ -627,9 +627,9 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("CED"));
             // expectations: NONE, requested date is valid
-            one(delivery).setDeliveryGuaranteed(null);
-            one(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-20"))));
-            one(delivery).setDeliveryEstimatedMax(null);
+            oneOf(delivery).setDeliveryGuaranteed(null);
+            oneOf(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-20"))));
+            oneOf(delivery).setDeliveryEstimatedMax(null);
 
         }});
 
@@ -679,9 +679,9 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("ABC"));
             // expectations:
-            one(delivery).setDeliveryGuaranteed(null);
-            one(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-20"))));
-            one(delivery).setDeliveryEstimatedMax(with(equal(df.parse("2017-02-24"))));
+            oneOf(delivery).setDeliveryGuaranteed(null);
+            oneOf(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-20"))));
+            oneOf(delivery).setDeliveryEstimatedMax(with(equal(df.parse("2017-02-24"))));
 
         }});
 
@@ -730,9 +730,9 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("CED"));
             // expectations:
-            one(delivery).setDeliveryGuaranteed(with(equal(df.parse("2017-02-18"))));
-            one(delivery).setDeliveryEstimatedMin(null);
-            one(delivery).setDeliveryEstimatedMax(null);
+            oneOf(delivery).setDeliveryGuaranteed(with(equal(df.parse("2017-02-18"))));
+            oneOf(delivery).setDeliveryEstimatedMin(null);
+            oneOf(delivery).setDeliveryEstimatedMax(null);
 
         }});
 
@@ -782,9 +782,9 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("ABC"));
             // expectations:
-            one(delivery).setDeliveryGuaranteed(with(equal(df.parse("2017-02-18"))));
-            one(delivery).setDeliveryEstimatedMin(null);
-            one(delivery).setDeliveryEstimatedMax(null);
+            oneOf(delivery).setDeliveryGuaranteed(with(equal(df.parse("2017-02-18"))));
+            oneOf(delivery).setDeliveryEstimatedMin(null);
+            oneOf(delivery).setDeliveryEstimatedMax(null);
 
         }});
 
@@ -832,9 +832,9 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("CED"));
             // expectations:
-            one(delivery).setDeliveryGuaranteed(null);
-            one(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-18"))));
-            one(delivery).setDeliveryEstimatedMax(null);
+            oneOf(delivery).setDeliveryGuaranteed(null);
+            oneOf(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-18"))));
+            oneOf(delivery).setDeliveryEstimatedMax(null);
 
         }});
 
@@ -883,9 +883,9 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("ABC"));
             // expectations:
-            one(delivery).setDeliveryGuaranteed(null);
-            one(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-18"))));
-            one(delivery).setDeliveryEstimatedMax(null);
+            oneOf(delivery).setDeliveryGuaranteed(null);
+            oneOf(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-18"))));
+            oneOf(delivery).setDeliveryEstimatedMax(null);
 
 
         }});
@@ -950,11 +950,11 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
             allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue(null));
             // expectations:
-            one(orderInfo).putDetail("deliveryDate0", null);
-            one(orderInfo).putDetail("deliveryDateMin0", null);
-            one(orderInfo).putDetail("deliveryDateMax0", null);
-            one(orderInfo).putDetail("deliveryDateDExcl0", null);
-            one(orderInfo).putDetail("deliveryDateWExcl0", null);
+            oneOf(orderInfo).putDetail("deliveryDate0", null);
+            oneOf(orderInfo).putDetail("deliveryDateMin0", null);
+            oneOf(orderInfo).putDetail("deliveryDateMax0", null);
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0", null);
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0", null);
         }});
 
         visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, null);
@@ -990,11 +990,11 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(warehouse).getCode(); will(returnValue("ABC"));
             allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
             // expectations:
-            one(orderInfo).putDetail("deliveryDate0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDate0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
         }});
 
         visitor.determineDeliveryAvailableTimeRange(shoppingCart, 123L, warehouse);
@@ -1034,16 +1034,16 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
             allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue(null));
             // expectations:
-            one(orderInfo).putDetail("deliveryDate0", null);
-            one(orderInfo).putDetail("deliveryDateMin0", null);
-            one(orderInfo).putDetail("deliveryDateMax0", null);
-            one(orderInfo).putDetail("deliveryDateDExcl0", null);
-            one(orderInfo).putDetail("deliveryDateWExcl0", null);
-            one(orderInfo).putDetail("deliveryDate0", time("2017-02-18")); // Sat 18th Feb (this is min)
-            one(orderInfo).putDetail("deliveryDateMin0", time("2017-02-18")); // Sat 18th Feb (since we skip)
-            one(orderInfo).putDetail("deliveryDateMax0", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
-            one(orderInfo).putDetail("deliveryDateDExcl0", time("2017-02-19")); // Sun 19th Feb Thu+Sun between 18th and 22nd
-            one(orderInfo).putDetail("deliveryDateWExcl0", "1,5");
+            oneOf(orderInfo).putDetail("deliveryDate0", null);
+            oneOf(orderInfo).putDetail("deliveryDateMin0", null);
+            oneOf(orderInfo).putDetail("deliveryDateMax0", null);
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0", null);
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0", null);
+            oneOf(orderInfo).putDetail("deliveryDate0", time("2017-02-18")); // Sat 18th Feb (this is min)
+            oneOf(orderInfo).putDetail("deliveryDateMin0", time("2017-02-18")); // Sat 18th Feb (since we skip)
+            oneOf(orderInfo).putDetail("deliveryDateMax0", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0", time("2017-02-19")); // Sun 19th Feb Thu+Sun between 18th and 22nd
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0", "1,5");
         }});
 
 
@@ -1084,17 +1084,17 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
             allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue(null));
             // expectations:
-            one(orderInfo).putDetail("deliveryDate0", null);
-            one(orderInfo).putDetail("deliveryDateMin0", null);
-            one(orderInfo).putDetail("deliveryDateMax0", null);
-            one(orderInfo).putDetail("deliveryDateDExcl0", null);
-            one(orderInfo).putDetail("deliveryDateWExcl0", null);
-            one(orderInfo).putDetail("deliveryDate0", time("2017-02-09"));  // Thu 9th Feb  (this is min)
-            one(orderInfo).putDetail("deliveryDateMin0", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
-            one(orderInfo).putDetail("deliveryDateMax0", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
+            oneOf(orderInfo).putDetail("deliveryDate0", null);
+            oneOf(orderInfo).putDetail("deliveryDateMin0", null);
+            oneOf(orderInfo).putDetail("deliveryDateMax0", null);
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0", null);
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0", null);
+            oneOf(orderInfo).putDetail("deliveryDate0", time("2017-02-09"));  // Thu 9th Feb  (this is min)
+            oneOf(orderInfo).putDetail("deliveryDateMin0", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
+            oneOf(orderInfo).putDetail("deliveryDateMax0", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
             // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fri 17th Feb  Sun 19th Feb
-            one(orderInfo).putDetail("deliveryDateDExcl0", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19"));
-            one(orderInfo).putDetail("deliveryDateWExcl0", "1");
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19"));
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0", "1");
         }});
 
 
@@ -1135,17 +1135,17 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
             allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue(time("2017-02-11"))); // Sat 11th Feb
             // expectations:
-            one(orderInfo).putDetail("deliveryDate0", null);
-            one(orderInfo).putDetail("deliveryDateMin0", null);
-            one(orderInfo).putDetail("deliveryDateMax0", null);
-            one(orderInfo).putDetail("deliveryDateDExcl0", null);
-            one(orderInfo).putDetail("deliveryDateWExcl0", null);
-            one(orderInfo).putDetail("deliveryDate0", time("2017-02-16"));  // Thu 16th Feb  (this first available after 11th)
-            one(orderInfo).putDetail("deliveryDateMin0", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
-            one(orderInfo).putDetail("deliveryDateMax0", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
+            oneOf(orderInfo).putDetail("deliveryDate0", null);
+            oneOf(orderInfo).putDetail("deliveryDateMin0", null);
+            oneOf(orderInfo).putDetail("deliveryDateMax0", null);
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0", null);
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0", null);
+            oneOf(orderInfo).putDetail("deliveryDate0", time("2017-02-16"));  // Thu 16th Feb  (this first available after 11th)
+            oneOf(orderInfo).putDetail("deliveryDateMin0", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
+            oneOf(orderInfo).putDetail("deliveryDateMax0", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
             // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fir 17th Feb  Sun 19th Feb
-            one(orderInfo).putDetail("deliveryDateDExcl0", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19"));
-            one(orderInfo).putDetail("deliveryDateWExcl0", "1");
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19"));
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0", "1");
         }});
 
 
@@ -1188,17 +1188,17 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
             allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue(time("2017-02-22"))); // Wed 22nd Feb
             // expectations:
-            one(orderInfo).putDetail("deliveryDate0", null);
-            one(orderInfo).putDetail("deliveryDateMin0", null);
-            one(orderInfo).putDetail("deliveryDateMax0", null);
-            one(orderInfo).putDetail("deliveryDateDExcl0", null);
-            one(orderInfo).putDetail("deliveryDateWExcl0", null);
-            one(orderInfo).putDetail("deliveryDate0", time("2017-02-21"));  // Thu 21st Feb  (adjusted to be in range)
-            one(orderInfo).putDetail("deliveryDateMin0", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
-            one(orderInfo).putDetail("deliveryDateMax0", time("2017-02-21")); // Tue 21st Feb (7th + 15days max, 22nd exluded)
+            oneOf(orderInfo).putDetail("deliveryDate0", null);
+            oneOf(orderInfo).putDetail("deliveryDateMin0", null);
+            oneOf(orderInfo).putDetail("deliveryDateMax0", null);
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0", null);
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0", null);
+            oneOf(orderInfo).putDetail("deliveryDate0", time("2017-02-21"));  // Thu 21st Feb  (adjusted to be in range)
+            oneOf(orderInfo).putDetail("deliveryDateMin0", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
+            oneOf(orderInfo).putDetail("deliveryDateMax0", time("2017-02-21")); // Tue 21st Feb (7th + 15days max, 22nd exluded)
             // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fri 17th Feb  Sun 19th Feb  Wed 22nd Feb
-            one(orderInfo).putDetail("deliveryDateDExcl0", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19","2017-02-22"));
-            one(orderInfo).putDetail("deliveryDateWExcl0", "1");
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19","2017-02-22"));
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0", "1");
         }});
 
 
@@ -1241,17 +1241,17 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
             allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue(time("2017-03-25"))); // Sat 25th Mar
             // expectations:
-            one(orderInfo).putDetail("deliveryDate0", null);
-            one(orderInfo).putDetail("deliveryDateMin0", null);
-            one(orderInfo).putDetail("deliveryDateMax0", null);
-            one(orderInfo).putDetail("deliveryDateDExcl0", null);
-            one(orderInfo).putDetail("deliveryDateWExcl0", null);
-            one(orderInfo).putDetail("deliveryDate0", time("2017-02-21"));  // Thu 21st Feb  (adjusted to be in range)
-            one(orderInfo).putDetail("deliveryDateMin0", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
-            one(orderInfo).putDetail("deliveryDateMax0", time("2017-02-21")); // Tue 21st Feb (7th + 15days max, 22nd exluded)
+            oneOf(orderInfo).putDetail("deliveryDate0", null);
+            oneOf(orderInfo).putDetail("deliveryDateMin0", null);
+            oneOf(orderInfo).putDetail("deliveryDateMax0", null);
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0", null);
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0", null);
+            oneOf(orderInfo).putDetail("deliveryDate0", time("2017-02-21"));  // Thu 21st Feb  (adjusted to be in range)
+            oneOf(orderInfo).putDetail("deliveryDateMin0", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
+            oneOf(orderInfo).putDetail("deliveryDateMax0", time("2017-02-21")); // Tue 21st Feb (7th + 15days max, 22nd exluded)
             // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fri 17th Feb  Sun 19th Feb  Wed 22nd Feb
-            one(orderInfo).putDetail("deliveryDateDExcl0", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19","2017-02-22"));
-            one(orderInfo).putDetail("deliveryDateWExcl0", "1");
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19","2017-02-22"));
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0", "1");
         }});
 
 
@@ -1293,17 +1293,17 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
             allowing(orderInfo).getDetailByKey("deliveryDate0"); will(returnValue(time("2017-02-18"))); // Sat 18th Feb
             // expectations:
-            one(orderInfo).putDetail("deliveryDate0", null);
-            one(orderInfo).putDetail("deliveryDateMin0", null);
-            one(orderInfo).putDetail("deliveryDateMax0", null);
-            one(orderInfo).putDetail("deliveryDateDExcl0", null);
-            one(orderInfo).putDetail("deliveryDateWExcl0", null);
-            one(orderInfo).putDetail("deliveryDate0", time("2017-02-18"));  // Thu 18th Feb  (selection preserved)
-            one(orderInfo).putDetail("deliveryDateMin0", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
-            one(orderInfo).putDetail("deliveryDateMax0", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
+            oneOf(orderInfo).putDetail("deliveryDate0", null);
+            oneOf(orderInfo).putDetail("deliveryDateMin0", null);
+            oneOf(orderInfo).putDetail("deliveryDateMax0", null);
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0", null);
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0", null);
+            oneOf(orderInfo).putDetail("deliveryDate0", time("2017-02-18"));  // Thu 18th Feb  (selection preserved)
+            oneOf(orderInfo).putDetail("deliveryDateMin0", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
+            oneOf(orderInfo).putDetail("deliveryDateMax0", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
             // 10th-15th + 17th + Sun between 8th and 22nd> Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fri 17th Feb  Sun 19th Feb
-            one(orderInfo).putDetail("deliveryDateDExcl0", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19"));
-            one(orderInfo).putDetail("deliveryDateWExcl0", "1");
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19"));
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0", "1");
         }});
 
 
@@ -1348,16 +1348,16 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
             allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
             // expectations:
-            one(orderInfo).putDetail("deliveryDate0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDate0ABC", time("2017-02-18")); // Sat 18th Feb (this is min)
-            one(orderInfo).putDetail("deliveryDateMin0ABC", time("2017-02-18")); // Sat 18th Feb (since we skip)
-            one(orderInfo).putDetail("deliveryDateMax0ABC", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", time("2017-02-19")); // Sun 19th Feb Thu+Sun between 18th and 22nd
-            one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1,5");
+            oneOf(orderInfo).putDetail("deliveryDate0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDate0ABC", time("2017-02-18")); // Sat 18th Feb (this is min)
+            oneOf(orderInfo).putDetail("deliveryDateMin0ABC", time("2017-02-18")); // Sat 18th Feb (since we skip)
+            oneOf(orderInfo).putDetail("deliveryDateMax0ABC", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0ABC", time("2017-02-19")); // Sun 19th Feb Thu+Sun between 18th and 22nd
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0ABC", "1,5");
         }});
 
 
@@ -1401,17 +1401,17 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
             allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
             // expectations:
-            one(orderInfo).putDetail("deliveryDate0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDate0ABC", time("2017-02-09"));  // Thu 9th Feb  (this is min)
-            one(orderInfo).putDetail("deliveryDateMin0ABC", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
-            one(orderInfo).putDetail("deliveryDateMax0ABC", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
+            oneOf(orderInfo).putDetail("deliveryDate0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDate0ABC", time("2017-02-09"));  // Thu 9th Feb  (this is min)
+            oneOf(orderInfo).putDetail("deliveryDateMin0ABC", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
+            oneOf(orderInfo).putDetail("deliveryDateMax0ABC", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
             // 10th-15th + 17th + Sun between 8th and 22nd>    Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fir 17th Feb  Sun 19th Feb
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19"));
-            one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0ABC", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19"));
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
         }});
 
 
@@ -1456,17 +1456,17 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
             allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue("1486771200000")); // Sat 11th Feb
             // expectations:
-            one(orderInfo).putDetail("deliveryDate0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDate0ABC", time("2017-02-16"));  // Thu 16th Feb  (this first available after 11th)
-            one(orderInfo).putDetail("deliveryDateMin0ABC", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
-            one(orderInfo).putDetail("deliveryDateMax0ABC", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
+            oneOf(orderInfo).putDetail("deliveryDate0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDate0ABC", time("2017-02-16"));  // Thu 16th Feb  (this first available after 11th)
+            oneOf(orderInfo).putDetail("deliveryDateMin0ABC", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
+            oneOf(orderInfo).putDetail("deliveryDateMax0ABC", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
             // 10th-15th + 17th + Sun between 8th and 22nd>    Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fir 17th Feb  Sun 19th Feb
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19"));
-            one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0ABC", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19"));
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
         }});
 
 
@@ -1513,17 +1513,17 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
             allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(time("2017-02-18"))); // Sat 18th Feb
             // expectations:
-            one(orderInfo).putDetail("deliveryDate0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDate0ABC", time("2017-02-18"));  // Thu 18th Feb  (selection preserved)
-            one(orderInfo).putDetail("deliveryDateMin0ABC", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
-            one(orderInfo).putDetail("deliveryDateMax0ABC", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
+            oneOf(orderInfo).putDetail("deliveryDate0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDate0ABC", time("2017-02-18"));  // Thu 18th Feb  (selection preserved)
+            oneOf(orderInfo).putDetail("deliveryDateMin0ABC", time("2017-02-09")); // Thu 9th Feb (1day lead 8th skipped)
+            oneOf(orderInfo).putDetail("deliveryDateMax0ABC", time("2017-02-22")); // Wed 22nd Feb (7th + 15days max)
             // 10th-15th + 17th + Sun between 8th and 22nd>    Sun 10th Feb  Sat 11th Feb  Sun 12th Feb  Mon 13th Feb  Tue 14th Feb  Wed 15th Feb  Fir 17th Feb  Sun 19th Feb
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19"));
-            one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0ABC", time("2017-02-10","2017-02-11","2017-02-12","2017-02-13","2017-02-14","2017-02-15","2017-02-17","2017-02-19"));
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
         }});
 
 
@@ -1573,17 +1573,17 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(10));
             allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
             // expectations:
-            one(orderInfo).putDetail("deliveryDate0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDate0ABC", time("2017-02-18")); // Sat 18th Feb (this is min)
-            one(orderInfo).putDetail("deliveryDateMin0ABC", time("2017-02-18")); // Sat 18th Feb (since we skip)
-            one(orderInfo).putDetail("deliveryDateMax0ABC", time("2017-03-04")); // Sat 4th Mar (7th + 10days lead + 15days max)
+            oneOf(orderInfo).putDetail("deliveryDate0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDate0ABC", time("2017-02-18")); // Sat 18th Feb (this is min)
+            oneOf(orderInfo).putDetail("deliveryDateMin0ABC", time("2017-02-18")); // Sat 18th Feb (since we skip)
+            oneOf(orderInfo).putDetail("deliveryDateMax0ABC", time("2017-03-04")); // Sat 4th Mar (7th + 10days lead + 15days max)
             // Thu+Sun between 18th and 22nd >                 Sun 19th Feb  Thu 23rd Feb  Sun 26th Feb  Thu 2nd Mar
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", time("2017-02-19","2017-02-23","2017-02-26","2017-03-02"));
-            one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1,5");
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0ABC", time("2017-02-19","2017-02-23","2017-02-26","2017-03-02"));
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0ABC", "1,5");
         }});
 
 
@@ -1632,17 +1632,17 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(15));
             allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
             // expectations:
-            one(orderInfo).putDetail("deliveryDate0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMin0ABC", null);
-            one(orderInfo).putDetail("deliveryDateMax0ABC", null);
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
-            one(orderInfo).putDetail("deliveryDate0ABC", time("2017-02-23"));  // Thu 23rd Feb  (this is min)
-            one(orderInfo).putDetail("deliveryDateMin0ABC", time("2017-02-23"));  // Thu 23rd Feb (15+1day lead 8th skipped)
-            one(orderInfo).putDetail("deliveryDateMax0ABC", time("2017-04-22")); // Sat Apr 22nd (22nd + 60days max)
+            oneOf(orderInfo).putDetail("deliveryDate0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateMin0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateMax0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0ABC", null);
+            oneOf(orderInfo).putDetail("deliveryDate0ABC", time("2017-02-23"));  // Thu 23rd Feb  (this is min)
+            oneOf(orderInfo).putDetail("deliveryDateMin0ABC", time("2017-02-23"));  // Thu 23rd Feb (15+1day lead 8th skipped)
+            oneOf(orderInfo).putDetail("deliveryDateMax0ABC", time("2017-04-22")); // Sat Apr 22nd (22nd + 60days max)
             // 10th-15th + 17th + Sun between 23rd and 21st>   Sun 26th Feb  Sun 5th Mar   Fri 10th Mar  Sat 11th Mar  Sun 12th Mar  Mon 13th Mar  Tue 14th Mar  Wed 15th Mar  Fri 17th Mar  Sun 19th Mar  Sun 26th Mar  Sun 2nd Apr   Sun 9th Apr   Sun 16th Apr  Sun 23rd Apr
-            one(orderInfo).putDetail("deliveryDateDExcl0ABC", time("2017-02-26","2017-03-05","2017-03-10","2017-03-11","2017-03-12","2017-03-13","2017-03-14","2017-03-15","2017-03-17","2017-03-19","2017-03-26","2017-04-02","2017-04-09","2017-04-16","2017-04-23"));
-            one(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
+            oneOf(orderInfo).putDetail("deliveryDateDExcl0ABC", time("2017-02-26","2017-03-05","2017-03-10","2017-03-11","2017-03-12","2017-03-13","2017-03-14","2017-03-15","2017-03-17","2017-03-19","2017-03-26","2017-04-02","2017-04-09","2017-04-16","2017-04-23"));
+            oneOf(orderInfo).putDetail("deliveryDateWExcl0ABC", "1");
         }});
 
 

@@ -72,7 +72,7 @@ public class DefaultAmountCalculationStrategyTest {
         final ShopService shopService = context.mock(ShopService.class, "shopService");
 
         context.checking(new Expectations() {{
-            one(orderDelivery).getPrice();
+            oneOf(orderDelivery).getPrice();
             will(returnValue(null));
         }});
 
@@ -143,13 +143,13 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item2).isTaxExclusiveOfPrice(); will(returnValue(false));
             allowing(item2).getQty(); will(returnValue(new BigDecimal("1")));
-            one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-001"); will(returnValue(tax));
-            one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
+            oneOf(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-001"); will(returnValue(tax));
+            oneOf(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
             allowing(tax).getCode(); will(returnValue("VAT"));
             allowing(tax).getRate(); will(returnValue(TAX));
             allowing(tax).isExcluded(); will(returnValue(false));
-            one(cart).setProductSkuTax("A-001", new BigDecimal("16.66"), new BigDecimal("20.00"), new BigDecimal("20.00"), "VAT", false);
-            one(cart).setProductSkuTax("A-002", new BigDecimal("33.33"), new BigDecimal("40.00"), new BigDecimal("20.00"), "VAT", false);
+            oneOf(cart).setProductSkuTax("A-001", new BigDecimal("16.66"), new BigDecimal("20.00"), new BigDecimal("20.00"), "VAT", false);
+            oneOf(cart).setProductSkuTax("A-002", new BigDecimal("33.33"), new BigDecimal("40.00"), new BigDecimal("20.00"), "VAT", false);
         }});
 
 
@@ -219,13 +219,13 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item2).isTaxExclusiveOfPrice(); will(returnValue(true));
             allowing(item2).getQty(); will(returnValue(new BigDecimal("1")));
-            one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-001"); will(returnValue(tax));
-            one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
+            oneOf(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-001"); will(returnValue(tax));
+            oneOf(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
             allowing(tax).getCode(); will(returnValue("VAT"));
             allowing(tax).getRate(); will(returnValue(TAX));
             allowing(tax).isExcluded(); will(returnValue(true));
-            one(cart).setProductSkuTax("A-001", new BigDecimal("20.00"), new BigDecimal("24.00"), new BigDecimal("20.00"), "VAT", true);
-            one(cart).setProductSkuTax("A-002", new BigDecimal("40.00"), new BigDecimal("48.00"), new BigDecimal("20.00"), "VAT", true);
+            oneOf(cart).setProductSkuTax("A-001", new BigDecimal("20.00"), new BigDecimal("24.00"), new BigDecimal("20.00"), "VAT", true);
+            oneOf(cart).setProductSkuTax("A-002", new BigDecimal("40.00"), new BigDecimal("48.00"), new BigDecimal("20.00"), "VAT", true);
         }});
 
 
@@ -292,11 +292,11 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item2).isTaxExclusiveOfPrice(); will(returnValue(false));
             allowing(item2).getQty(); will(returnValue(new BigDecimal("1")));
-            one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
+            oneOf(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
             allowing(tax).getCode(); will(returnValue("VAT"));
             allowing(tax).getRate(); will(returnValue(TAX));
             allowing(tax).isExcluded(); will(returnValue(false));
-            one(cart).setProductSkuTax("A-002", new BigDecimal("33.33"), new BigDecimal("40.00"), new BigDecimal("20.00"), "VAT", false);
+            oneOf(cart).setProductSkuTax("A-002", new BigDecimal("33.33"), new BigDecimal("40.00"), new BigDecimal("20.00"), "VAT", false);
 
         }});
 
@@ -364,11 +364,11 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item2).isTaxExclusiveOfPrice(); will(returnValue(true));
             allowing(item2).getQty(); will(returnValue(new BigDecimal("1")));
-            one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
+            oneOf(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
             allowing(tax).getCode(); will(returnValue("VAT"));
             allowing(tax).getRate(); will(returnValue(TAX));
             allowing(tax).isExcluded(); will(returnValue(true));
-            one(cart).setProductSkuTax("A-002", new BigDecimal("40.00"), new BigDecimal("48.00"), new BigDecimal("20.00"), "VAT", true);
+            oneOf(cart).setProductSkuTax("A-002", new BigDecimal("40.00"), new BigDecimal("48.00"), new BigDecimal("20.00"), "VAT", true);
 
         }});
 
@@ -435,11 +435,11 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item2).isTaxExclusiveOfPrice(); will(returnValue(false));
             allowing(item2).getQty(); will(returnValue(new BigDecimal("1")));
-            one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
+            oneOf(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
             allowing(tax).getCode(); will(returnValue("VAT"));
             allowing(tax).getRate(); will(returnValue(TAX));
             allowing(tax).isExcluded(); will(returnValue(false));
-            one(cart).setProductSkuTax("A-002", new BigDecimal("33.33"), new BigDecimal("40.00"), new BigDecimal("20.00"), "VAT", false);
+            oneOf(cart).setProductSkuTax("A-002", new BigDecimal("33.33"), new BigDecimal("40.00"), new BigDecimal("20.00"), "VAT", false);
 
         }});
 
@@ -506,11 +506,11 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item2).isTaxExclusiveOfPrice(); will(returnValue(true));
             allowing(item2).getQty(); will(returnValue(new BigDecimal("1")));
-            one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
+            oneOf(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
             allowing(tax).getCode(); will(returnValue("VAT"));
             allowing(tax).getRate(); will(returnValue(TAX));
             allowing(tax).isExcluded(); will(returnValue(true));
-            one(cart).setProductSkuTax("A-002", new BigDecimal("40.00"), new BigDecimal("48.00"), new BigDecimal("20.00"), "VAT", true);
+            oneOf(cart).setProductSkuTax("A-002", new BigDecimal("40.00"), new BigDecimal("48.00"), new BigDecimal("20.00"), "VAT", true);
 
         }});
 
@@ -1184,13 +1184,13 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(item2).getSalePrice(); will(returnValue(new BigDecimal("40.00")));
             allowing(item2).getListPrice(); will(returnValue(new BigDecimal("40.00")));
             allowing(item2).getQty(); will(returnValue(new BigDecimal("1")));
-            one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-001"); will(returnValue(tax));
-            one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
+            oneOf(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-001"); will(returnValue(tax));
+            oneOf(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
             allowing(tax).getCode(); will(returnValue("VAT"));
             allowing(tax).getRate(); will(returnValue(TAX));
             allowing(tax).isExcluded(); will(returnValue(false));
-            one(cart).setProductSkuTax("A-001", new BigDecimal("16.66"), new BigDecimal("20.00"), new BigDecimal("20.00"), "VAT", false);
-            one(cart).setProductSkuTax("A-002", new BigDecimal("33.33"), new BigDecimal("40.00"), new BigDecimal("20.00"), "VAT", false);
+            oneOf(cart).setProductSkuTax("A-001", new BigDecimal("16.66"), new BigDecimal("20.00"), new BigDecimal("20.00"), "VAT", false);
+            oneOf(cart).setProductSkuTax("A-002", new BigDecimal("33.33"), new BigDecimal("40.00"), new BigDecimal("20.00"), "VAT", false);
             allowing(cart).getShippingList(); will(returnValue(Arrays.asList(ship1)));
             allowing(ship1).getProductSkuCode(); will(returnValue("B-001"));
             allowing(ship1).getPrice(); will(returnValue(new BigDecimal("10.00")));
@@ -1204,8 +1204,8 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(ship1).isPromoApplied(); will(returnValue(true));
             allowing(ship1).getAppliedPromo(); will(returnValue("SHIP-50%"));
             allowing(ship1).getDeliveryBucket(); will(returnValue(bucket1));
-            one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "B-001"); will(returnValue(tax));
-            one(cart).setShippingTax("B-001", bucket1, new BigDecimal("8.33"), new BigDecimal("10.00"), new BigDecimal("20.00"), "VAT", false);
+            oneOf(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "B-001"); will(returnValue(tax));
+            oneOf(cart).setShippingTax("B-001", bucket1, new BigDecimal("8.33"), new BigDecimal("10.00"), new BigDecimal("20.00"), "VAT", false);
 
         }});
 
@@ -1335,13 +1335,13 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(item2).getGrossPrice(); will(returnValue(new BigDecimal("48.00")));
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item2).isTaxExclusiveOfPrice(); will(returnValue(true));
-            one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-001"); will(returnValue(tax));
-            one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
+            oneOf(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-001"); will(returnValue(tax));
+            oneOf(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "A-002"); will(returnValue(tax));
             allowing(tax).getCode(); will(returnValue("VAT"));
             allowing(tax).getRate(); will(returnValue(TAX));
             allowing(tax).isExcluded(); will(returnValue(true));
-            one(cart).setProductSkuTax("A-001", new BigDecimal("20.00"), new BigDecimal("24.00"), new BigDecimal("20.00"), "VAT", true);
-            one(cart).setProductSkuTax("A-002", new BigDecimal("40.00"), new BigDecimal("48.00"), new BigDecimal("20.00"), "VAT", true);
+            oneOf(cart).setProductSkuTax("A-001", new BigDecimal("20.00"), new BigDecimal("24.00"), new BigDecimal("20.00"), "VAT", true);
+            oneOf(cart).setProductSkuTax("A-002", new BigDecimal("40.00"), new BigDecimal("48.00"), new BigDecimal("20.00"), "VAT", true);
             allowing(cart).getShippingList(); will(returnValue(Arrays.asList(ship1)));
             allowing(ship1).getProductSkuCode(); will(returnValue("B-001"));
             allowing(ship1).getPrice(); will(returnValue(new BigDecimal("10.00")));
@@ -1355,8 +1355,8 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(ship1).isPromoApplied(); will(returnValue(true));
             allowing(ship1).getAppliedPromo(); will(returnValue("SHIP-50%"));
             allowing(ship1).getDeliveryBucket(); will(returnValue(bucket1));
-            one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "B-001"); will(returnValue(tax));
-            one(cart).setShippingTax("B-001", bucket1, new BigDecimal("10.00"), new BigDecimal("12.00"), new BigDecimal("20.00"), "VAT", true);
+            oneOf(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "B-001"); will(returnValue(tax));
+            oneOf(cart).setShippingTax("B-001", bucket1, new BigDecimal("10.00"), new BigDecimal("12.00"), new BigDecimal("20.00"), "VAT", true);
         }});
 
         final Total rezTaxExcluded = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService) {

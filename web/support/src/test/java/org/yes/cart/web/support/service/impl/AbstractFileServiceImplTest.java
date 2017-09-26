@@ -62,7 +62,7 @@ public class AbstractFileServiceImplTest {
     }
 
     @Test
-    public void testGetFileAttributeFileNamesNone() throws Exception {
+    public void testGetFileAttributeFileNamesNoneOf() throws Exception {
 
 
 
@@ -71,7 +71,7 @@ public class AbstractFileServiceImplTest {
         final List<AttrValue> none = Collections.emptyList();
 
         context.checking(new Expectations() {{
-            one(attributable).getAllAttributes(); will(returnValue(none));
+            oneOf(attributable).getAllAttributes(); will(returnValue(none));
         }});
 
         final List<Pair<String, String>> pairs = service.getFileAttributeFileNamesInternal(attributable, "en", "MY_FILE");
@@ -98,8 +98,8 @@ public class AbstractFileServiceImplTest {
         final List<AttrValue> avs = Arrays.asList(av1);
 
         context.checking(new Expectations() {{
-            one(attributable).getAllAttributes(); will(returnValue(avs));
-            one(av1).getAttributeCode(); will(returnValue("NON_IMAGE"));
+            oneOf(attributable).getAllAttributes(); will(returnValue(avs));
+            oneOf(av1).getAttributeCode(); will(returnValue("NON_IMAGE"));
         }});
 
         final List<Pair<String, String>> pairs = service.getFileAttributeFileNamesInternal(attributable, "en", "MY_FILE");
@@ -128,13 +128,13 @@ public class AbstractFileServiceImplTest {
         final List<AttrValue> avs = Arrays.asList(av1, av2, av3, av4);
 
         context.checking(new Expectations() {{
-            one(attributable).getAllAttributes(); will(returnValue(avs));
-            one(av1).getAttributeCode(); will(returnValue("NON_FILE"));
-            one(av2).getAttributeCode(); will(returnValue("MY_FILE2"));
+            oneOf(attributable).getAllAttributes(); will(returnValue(avs));
+            oneOf(av1).getAttributeCode(); will(returnValue("NON_FILE"));
+            oneOf(av2).getAttributeCode(); will(returnValue("MY_FILE2"));
             exactly(2).of(av2).getVal(); will(returnValue("file2.txt"));
-            one(av3).getAttributeCode(); will(returnValue("MY_FILE1"));
+            oneOf(av3).getAttributeCode(); will(returnValue("MY_FILE1"));
             exactly(2).of(av3).getVal(); will(returnValue("file1.pdf"));
-            one(av4).getAttributeCode(); will(returnValue("NON_FILE"));
+            oneOf(av4).getAttributeCode(); will(returnValue("NON_FILE"));
 
         }});
 
@@ -166,14 +166,14 @@ public class AbstractFileServiceImplTest {
         final List<AttrValue> avs = Arrays.asList(av1, av2, av3, av4);
 
         context.checking(new Expectations() {{
-            one(attributable).getAllAttributes(); will(returnValue(avs));
-            one(av1).getAttributeCode(); will(returnValue("MY_FILE1_en"));
+            oneOf(attributable).getAllAttributes(); will(returnValue(avs));
+            oneOf(av1).getAttributeCode(); will(returnValue("MY_FILE1_en"));
             exactly(2).of(av1).getVal(); will(returnValue("file1_en.jpg"));
-            one(av2).getAttributeCode(); will(returnValue("MY_FILE2"));
+            oneOf(av2).getAttributeCode(); will(returnValue("MY_FILE2"));
             exactly(2).of(av2).getVal(); will(returnValue("file2.jpg"));
-            one(av3).getAttributeCode(); will(returnValue("MY_FILE1"));
-            one(av3).getVal(); will(returnValue("file1.jpg"));
-            one(av4).getAttributeCode(); will(returnValue("MY_FILE2_en"));
+            oneOf(av3).getAttributeCode(); will(returnValue("MY_FILE1"));
+            oneOf(av3).getVal(); will(returnValue("file1.jpg"));
+            oneOf(av4).getAttributeCode(); will(returnValue("MY_FILE2_en"));
             exactly(2).of(av4).getVal(); will(returnValue("file2_en.jpg"));
 
         }});
@@ -207,14 +207,14 @@ public class AbstractFileServiceImplTest {
         final List<AttrValue> avs = Arrays.asList(av1, av2, av3, av4);
 
         context.checking(new Expectations() {{
-            one(attributable).getAllAttributes(); will(returnValue(avs));
-            one(av1).getAttributeCode(); will(returnValue("MY_FILE1_en"));
+            oneOf(attributable).getAllAttributes(); will(returnValue(avs));
+            oneOf(av1).getAttributeCode(); will(returnValue("MY_FILE1_en"));
             exactly(2).of(av1).getVal(); will(returnValue("file1_en.jpg"));
-            one(av2).getAttributeCode(); will(returnValue("MY_FILE2"));
+            oneOf(av2).getAttributeCode(); will(returnValue("MY_FILE2"));
             exactly(2).of(av2).getVal(); will(returnValue("file2.jpg"));
-            one(av3).getAttributeCode(); will(returnValue("MY_FILE1"));
-            one(av3).getVal(); will(returnValue("file1.jpg"));
-            one(av4).getAttributeCode(); will(returnValue("MY_FILE3_en"));
+            oneOf(av3).getAttributeCode(); will(returnValue("MY_FILE1"));
+            oneOf(av3).getVal(); will(returnValue("file1.jpg"));
+            oneOf(av4).getAttributeCode(); will(returnValue("MY_FILE3_en"));
             exactly(2).of(av4).getVal(); will(returnValue("file3_en.jpg"));
 
         }});

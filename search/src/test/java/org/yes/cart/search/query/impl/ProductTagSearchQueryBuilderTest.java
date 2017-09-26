@@ -118,9 +118,9 @@ public class ProductTagSearchQueryBuilderTest {
         final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
         context.checking(new Expectations() {{
-            one(shopSearchSupportService).getCategoryNewArrivalDate(0L, 10L); will(returnValue(earliest));
-            one(navigationContext).getCategories(); will(returnValue(null));
-            one(navigationContext).getShopId(); will(returnValue(10L));
+            oneOf(shopSearchSupportService).getCategoryNewArrivalDate(0L, 10L); will(returnValue(earliest));
+            oneOf(navigationContext).getCategories(); will(returnValue(null));
+            oneOf(navigationContext).getShopId(); will(returnValue(10L));
         }});
 
 
@@ -144,9 +144,9 @@ public class ProductTagSearchQueryBuilderTest {
         final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
         context.checking(new Expectations() {{
-            one(shopSearchSupportService).getCategoryNewArrivalDate(123L, 10L); will(returnValue(earliest));
+            oneOf(shopSearchSupportService).getCategoryNewArrivalDate(123L, 10L); will(returnValue(earliest));
             atLeast(2).of(navigationContext).getCategories(); will(returnValue(Collections.singletonList(123L)));
-            one(navigationContext).getShopId(); will(returnValue(10L));
+            oneOf(navigationContext).getShopId(); will(returnValue(10L));
         }});
 
 
@@ -171,8 +171,8 @@ public class ProductTagSearchQueryBuilderTest {
         final Date earliest234 = formatter.parse("20141218000000");
 
         context.checking(new Expectations() {{
-            one(shopSearchSupportService).getCategoryNewArrivalDate(123L, 10L); will(returnValue(earliest123));
-            one(shopSearchSupportService).getCategoryNewArrivalDate(234L, 10L); will(returnValue(earliest234));
+            oneOf(shopSearchSupportService).getCategoryNewArrivalDate(123L, 10L); will(returnValue(earliest123));
+            oneOf(shopSearchSupportService).getCategoryNewArrivalDate(234L, 10L); will(returnValue(earliest234));
             atLeast(2).of(navigationContext).getCategories(); will(returnValue(Arrays.asList(123L, 234L)));
             atLeast(2).of(navigationContext).getShopId(); will(returnValue(10L));
         }});

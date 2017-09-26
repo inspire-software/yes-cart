@@ -80,39 +80,6 @@ public class CategoryServiceCachedImpl implements CategoryService {
         return categoryService.getCategoryProductTypeId(categoryId);
     }
 
-    /**
-     * Get the value of given attribute. If value not present in given category
-     * failover to parent category will be used.
-     *
-     *
-     * @param locale        locale for localisable value (or null for raw)
-     * @param categoryId    given category
-     * @param attributeName attribute name
-     * @param defaultValue  default value will be returned if value not found in hierarchy
-     * @return value of given attribute name or defaultValue if value not found in category hierarchy
-     */
-    @Cacheable(value = "categoryService-categoryAttributeRecursive")
-    public String getCategoryAttributeRecursive(final String locale, final long categoryId, final String attributeName, final String defaultValue) {
-        return categoryService.getCategoryAttributeRecursive(locale, categoryId, attributeName, defaultValue);
-    }
-
-
-    /**
-     * Get the values of given attributes. If value not present in given category
-     * failover to parent category will be used.  In case if attribute value for first
-     * attribute will be found, the rest values also will be collected form the same category.
-     *
-     *
-     * @param locale           locale for localisable value (or null for raw)
-     * @param categoryId       given category
-     * @param attributeNames set of attributes, to collect values.
-     * @return value of given attribute name or defaultValue if value not found in category hierarchy
-     */
-    @Cacheable(value = "categoryService-categoryAttributesRecursive")
-    public String[] getCategoryAttributeRecursive(final String locale, final long categoryId, final String[] attributeNames) {
-        return categoryService.getCategoryAttributeRecursive(locale, categoryId, attributeNames);
-    }
-
 
     /**
      * {@inheritDoc}
@@ -284,8 +251,6 @@ public class CategoryServiceCachedImpl implements CategoryService {
             "categoryService-searchCategoriesIds",
             "categoryService-categoryNewArrivalLimit",
             "categoryService-categoryNewArrivalDate",
-            "categoryService-categoryAttributeRecursive",
-            "categoryService-categoryAttributesRecursive",
             "categoryService-categoryHasChildren",
             "categoryService-childCategories",
             "categoryService-childCategoriesRecursive",
@@ -320,8 +285,6 @@ public class CategoryServiceCachedImpl implements CategoryService {
             "categoryService-searchCategoriesIds",
             "categoryService-categoryNewArrivalLimit",
             "categoryService-categoryNewArrivalDate",
-            "categoryService-categoryAttributeRecursive",
-            "categoryService-categoryAttributesRecursive",
             "categoryService-categoryHasChildren",
             "categoryService-childCategories",
             "categoryService-childCategoriesRecursive",

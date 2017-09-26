@@ -54,14 +54,14 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
         final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
 
         mockery.checking(new Expectations() {{
-            one(genericDAO).getEntityIdentifier(master); will(returnValue(10L));
+            oneOf(genericDAO).getEntityIdentifier(master); will(returnValue(10L));
             allowing(codeColumn).getColumnIndex(); will(returnValue(3));
             allowing(codeColumn).getName(); will(returnValue("code"));
             allowing(codeColumn).getLookupQuery(); will(returnValue("queryString"));
             allowing(codeColumn).isUseMasterObject(); will(returnValue(true));
-            one(sqlStrategy).getQuery(descriptor, master, tuple, adapter, "queryString"); will(returnValue(query));
-            one(query).getQueryString(); will(returnValue("queryString"));
-            one(query).getParameters(); will(returnValue(new Object[] { "p1", "p2" }));
+            oneOf(sqlStrategy).getQuery(descriptor, master, tuple, adapter, "queryString"); will(returnValue(query));
+            oneOf(query).getQueryString(); will(returnValue("queryString"));
+            oneOf(query).getParameters(); will(returnValue(new Object[] { "p1", "p2" }));
         }});
 
         final EntityCacheKeyStrategy strategy = new ColumnLookUpQueryCacheKeyStrategy(sqlStrategy, genericDAO);
@@ -89,9 +89,9 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
             allowing(codeColumn).getName(); will(returnValue("code"));
             allowing(codeColumn).getLookupQuery(); will(returnValue("queryString"));
             allowing(codeColumn).isUseMasterObject(); will(returnValue(true));
-            one(sqlStrategy).getQuery(descriptor, null, tuple, adapter, "queryString"); will(returnValue(query));
-            one(query).getQueryString(); will(returnValue("queryString"));
-            one(query).getParameters(); will(returnValue(new Object[] { "p1", "p2" }));
+            oneOf(sqlStrategy).getQuery(descriptor, null, tuple, adapter, "queryString"); will(returnValue(query));
+            oneOf(query).getQueryString(); will(returnValue("queryString"));
+            oneOf(query).getParameters(); will(returnValue(new Object[] { "p1", "p2" }));
         }});
 
         final EntityCacheKeyStrategy strategy = new ColumnLookUpQueryCacheKeyStrategy(sqlStrategy, genericDAO);
@@ -120,9 +120,9 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
             allowing(codeColumn).getName(); will(returnValue("code"));
             allowing(codeColumn).getLookupQuery(); will(returnValue("queryString"));
             allowing(codeColumn).isUseMasterObject(); will(returnValue(false));
-            one(sqlStrategy).getQuery(descriptor, null, tuple, adapter, "queryString"); will(returnValue(query));
-            one(query).getQueryString(); will(returnValue("queryString"));
-            one(query).getParameters(); will(returnValue(new Object[] { "p1", "p2" }));
+            oneOf(sqlStrategy).getQuery(descriptor, null, tuple, adapter, "queryString"); will(returnValue(query));
+            oneOf(query).getQueryString(); will(returnValue("queryString"));
+            oneOf(query).getParameters(); will(returnValue(new Object[] { "p1", "p2" }));
         }});
 
         final EntityCacheKeyStrategy strategy = new ColumnLookUpQueryCacheKeyStrategy(sqlStrategy, genericDAO);
@@ -151,9 +151,9 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
             allowing(codeColumn).getName(); will(returnValue("code"));
             allowing(codeColumn).getLookupQuery(); will(returnValue("queryString"));
             allowing(codeColumn).isUseMasterObject(); will(returnValue(false));
-            one(sqlStrategy).getQuery(descriptor, null, tuple, adapter, "queryString"); will(returnValue(query));
-            one(query).getQueryString(); will(returnValue("queryString"));
-            one(query).getParameters(); will(returnValue(new Object[0]));
+            oneOf(sqlStrategy).getQuery(descriptor, null, tuple, adapter, "queryString"); will(returnValue(query));
+            oneOf(query).getQueryString(); will(returnValue("queryString"));
+            oneOf(query).getParameters(); will(returnValue(new Object[0]));
         }});
 
         final EntityCacheKeyStrategy strategy = new ColumnLookUpQueryCacheKeyStrategy(sqlStrategy, genericDAO);

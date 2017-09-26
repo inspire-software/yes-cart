@@ -80,8 +80,8 @@ public class PriceSearchQueryBuilderTest {
         final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
         context.checking(new Expectations() {{
-            one(priceNavigation).decomposePriceRequestParams("EUR-_-10-_-20"); will(returnValue(priceRange));
-            one(navigationContext).getCustomerShopId(); will(returnValue(1010L));
+            oneOf(priceNavigation).decomposePriceRequestParams("EUR-_-10-_-20"); will(returnValue(priceRange));
+            oneOf(navigationContext).getCustomerShopId(); will(returnValue(1010L));
         }});
 
         final List<Query> query = buider.createQueryChain(navigationContext, "price", "EUR-_-10-_-20");

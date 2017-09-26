@@ -26,7 +26,7 @@ import org.yes.cart.domain.entity.Product;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ProductService;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov

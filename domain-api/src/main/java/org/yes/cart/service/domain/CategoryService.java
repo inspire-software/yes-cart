@@ -144,43 +144,6 @@ public interface CategoryService extends GenericService<Category> {
      */
     List<Long> getCategoryIdsWithLinks(long categoryId);
 
-
-    /**
-     * Get the value of given attribute. If value not present in given category
-     * failover to parent category will be used.
-     *
-     *
-     * @param locale        locale for localised value (or null for raw value)
-     * @param categoryId    given category
-     * @param attributeName attribute name
-     * @param defaultValue  default value will be returned if value not found in hierarchy
-     * @return value of given attribute name or defaultValue if value not found in category hierarchy
-     *
-     * @deprecated this method does not take into account linked categories all attribute access should be done via CategoryServiceFacade
-     *             that resolves parent correctly
-     */
-    @Deprecated
-    String getCategoryAttributeRecursive(String locale, long categoryId, String attributeName, String defaultValue);
-
-    /**
-     * Get the values of given attributes. If value not present in given category
-     * failover to parent category will be used.  In case if attribute value for first
-     * attribute will be found, the rest values also will be collected form the same category.
-     *
-     *
-     * @param locale         locale for localised value (or null for raw value)
-     * @param categoryId     given category
-     * @param attributeNames set of attributes, to collect values.
-     * @return value of given attribute name or defaultValue if value not found in category hierarchy
-     *
-     * @deprecated this method does not take into account linked categories all attribute access should be done via CategoryServiceFacade
-     *             that resolves parent correctly
-     */
-    @Deprecated
-    String[] getCategoryAttributeRecursive(String locale, long categoryId, String[] attributeNames);
-
-
-
     /**
      * Get category by id.
      *

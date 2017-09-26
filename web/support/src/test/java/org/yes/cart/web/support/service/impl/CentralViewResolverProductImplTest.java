@@ -81,7 +81,7 @@ public class CentralViewResolverProductImplTest {
         CentralViewResolverProductImpl resolver = new CentralViewResolverProductImpl(productService);
 
         context.checking(new Expectations() {{
-            one(productService).getSkuById(1L, true); will(returnValue(null));
+            oneOf(productService).getSkuById(1L, true); will(returnValue(null));
         }});
 
         final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
@@ -103,10 +103,10 @@ public class CentralViewResolverProductImplTest {
         CentralViewResolverProductImpl resolver = new CentralViewResolverProductImpl(productService);
 
         context.checking(new Expectations() {{
-            one(productService).getSkuById(1L, true); will(returnValue(sku));
-            one(sku).getProduct(); will(returnValue(product));
-            one(product).getProducttype(); will(returnValue(type));
-            one(type).getUitemplate(); will(returnValue("skutemplate1"));
+            oneOf(productService).getSkuById(1L, true); will(returnValue(sku));
+            oneOf(sku).getProduct(); will(returnValue(product));
+            oneOf(product).getProducttype(); will(returnValue(type));
+            oneOf(type).getUitemplate(); will(returnValue("skutemplate1"));
         }});
 
         final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
@@ -130,10 +130,10 @@ public class CentralViewResolverProductImplTest {
         CentralViewResolverProductImpl resolver = new CentralViewResolverProductImpl(productService);
 
         context.checking(new Expectations() {{
-            one(productService).getSkuById(1L, true); will(returnValue(sku));
-            one(sku).getProduct(); will(returnValue(product));
-            one(product).getProducttype(); will(returnValue(type));
-            one(type).getUitemplate(); will(returnValue(""));
+            oneOf(productService).getSkuById(1L, true); will(returnValue(sku));
+            oneOf(sku).getProduct(); will(returnValue(product));
+            oneOf(product).getProducttype(); will(returnValue(type));
+            oneOf(type).getUitemplate(); will(returnValue(""));
         }});
 
         final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
@@ -169,7 +169,7 @@ public class CentralViewResolverProductImplTest {
         CentralViewResolverProductImpl resolver = new CentralViewResolverProductImpl(productService);
 
         context.checking(new Expectations() {{
-            one(productService).getProductById(1L, true); will(returnValue(null));
+            oneOf(productService).getProductById(1L, true); will(returnValue(null));
         }});
 
         final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
@@ -190,9 +190,9 @@ public class CentralViewResolverProductImplTest {
         CentralViewResolverProductImpl resolver = new CentralViewResolverProductImpl(productService);
 
         context.checking(new Expectations() {{
-            one(productService).getProductById(1L, true); will(returnValue(product));
-            one(product).getProducttype(); will(returnValue(type));
-            one(type).getUitemplate(); will(returnValue("producttemplate1"));
+            oneOf(productService).getProductById(1L, true); will(returnValue(product));
+            oneOf(product).getProducttype(); will(returnValue(type));
+            oneOf(type).getUitemplate(); will(returnValue("producttemplate1"));
         }});
 
         final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
@@ -215,9 +215,9 @@ public class CentralViewResolverProductImplTest {
         CentralViewResolverProductImpl resolver = new CentralViewResolverProductImpl(productService);
 
         context.checking(new Expectations() {{
-            one(productService).getProductById(1L, true); will(returnValue(product));
-            one(product).getProducttype(); will(returnValue(type));
-            one(type).getUitemplate(); will(returnValue(""));
+            oneOf(productService).getProductById(1L, true); will(returnValue(product));
+            oneOf(product).getProducttype(); will(returnValue(type));
+            oneOf(type).getUitemplate(); will(returnValue(""));
         }});
 
         final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{

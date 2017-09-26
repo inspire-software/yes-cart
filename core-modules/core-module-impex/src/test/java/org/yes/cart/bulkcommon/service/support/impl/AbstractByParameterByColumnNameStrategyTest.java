@@ -81,9 +81,9 @@ public class AbstractByParameterByColumnNameStrategyTest {
 
 
         mockery.checking(new Expectations() {{
-            one(master).getId(); will(returnValue(10L));
-            one(descriptor).getColumn("code"); will(returnValue(codeColumn));
-            one(tuple).getColumnValue(codeColumn, adapter); will(returnValue("A'''BC"));
+            oneOf(master).getId(); will(returnValue(10L));
+            oneOf(descriptor).getColumn("code"); will(returnValue(codeColumn));
+            oneOf(tuple).getColumnValue(codeColumn, adapter); will(returnValue("A'''BC"));
         }});
 
         final StringBuilder query = new StringBuilder();

@@ -45,7 +45,7 @@ public class ShopCustomerCustomisationSupportImplTest {
         final Shop shop = context.mock(Shop.class);
 
         context.checking(new Expectations() {{
-            one(shop).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES); will(returnValue(null));
+            oneOf(shop).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES); will(returnValue(null));
         }});
 
         final List<Pair<String, I18NModel>> types = new ShopCustomerCustomisationSupportImpl(null, null).getSupportedCustomerTypes(shop);
@@ -64,7 +64,7 @@ public class ShopCustomerCustomisationSupportImplTest {
         final AttrValueShop av = context.mock(AttrValueShop.class);
 
         context.checking(new Expectations() {{
-            one(shop).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES); will(returnValue(av));
+            oneOf(shop).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES); will(returnValue(av));
             allowing(av).getVal(); will(returnValue(""));
         }});
 
@@ -84,7 +84,7 @@ public class ShopCustomerCustomisationSupportImplTest {
         final AttrValueShop av = context.mock(AttrValueShop.class);
 
         context.checking(new Expectations() {{
-            one(shop).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES); will(returnValue(av));
+            oneOf(shop).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES); will(returnValue(av));
             allowing(av).getVal(); will(returnValue("B2B,B2C"));
             allowing(av).getDisplayVal(); will(returnValue(null));
         }});
@@ -109,7 +109,7 @@ public class ShopCustomerCustomisationSupportImplTest {
         final AttrValueShop av = context.mock(AttrValueShop.class);
 
         context.checking(new Expectations() {{
-            one(shop).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES); will(returnValue(av));
+            oneOf(shop).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES); will(returnValue(av));
             allowing(av).getVal(); will(returnValue("B2B,B2C"));
             allowing(av).getDisplayVal(); will(returnValue("en#~#Private#~#de#~#Private DE,Company DE"));
         }});
