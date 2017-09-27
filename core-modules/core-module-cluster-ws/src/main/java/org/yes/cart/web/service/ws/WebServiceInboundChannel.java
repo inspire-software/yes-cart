@@ -27,7 +27,7 @@ import javax.xml.ws.BindingType;
  * Date: 17/06/2015
  * Time: 13:23
  */
-@WebService
+@WebService(targetNamespace = "http://org.yes.cart.web.service.ws")
 @BindingType(value=javax.xml.ws.soap.SOAPBinding.SOAP11HTTP_MTOM_BINDING)
 public interface WebServiceInboundChannel {
 
