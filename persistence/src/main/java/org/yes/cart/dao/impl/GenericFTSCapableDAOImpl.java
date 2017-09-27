@@ -105,13 +105,6 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
-    public List<T> findByExample(final T exampleInstance, final String[] excludeProperty) {
-        return genericDAO.findByExample(exampleInstance, excludeProperty);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public T findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
         return genericDAO.findSingleByNamedQuery(namedQueryName, parameters);
     }
@@ -149,13 +142,6 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
      */
     public Object getScalarResultByNamedQuery(final String namedQueryName, final Object... parameters) {
         return genericDAO.getScalarResultByNamedQuery(namedQueryName, parameters);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object getScalarResultByNamedQueryWithInit(final String namedQueryName, final Object... parameters) {
-        return genericDAO.getScalarResultByNamedQueryWithInit(namedQueryName, parameters);
     }
 
     /**

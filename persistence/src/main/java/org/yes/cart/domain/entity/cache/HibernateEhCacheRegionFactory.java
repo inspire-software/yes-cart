@@ -16,11 +16,11 @@
 
 package org.yes.cart.domain.entity.cache;
 
+import org.hibernate.boot.spi.SessionFactoryOptions;
 import org.hibernate.cache.CacheException;
 import org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory;
 import org.hibernate.cache.spi.*;
 import org.hibernate.cache.spi.access.AccessType;
-import org.hibernate.cfg.Settings;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 
 import java.util.Properties;
@@ -38,8 +38,8 @@ public class HibernateEhCacheRegionFactory implements RegionFactory {
 
     /** {@inheritDoc} */
     @Override
-    public void start(final Settings settings, final Properties properties) throws CacheException {
-        // manager by Spring container
+    public void start(final SessionFactoryOptions settings, final Properties properties) throws CacheException {
+        // managed by Spring container
     }
 
     /** {@inheritDoc} */

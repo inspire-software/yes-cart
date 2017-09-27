@@ -83,16 +83,6 @@ public interface GenericDAO<T, PK extends Serializable> {
     ResultsIterator<T> findAllIterator();
 
     /**
-     * Find entities, that mach given example.
-     *
-     * @param exampleInstance pattern
-     * @param excludeProperty property to exclude
-     *
-     * @return list of found entities
-     */
-    List<T> findByExample(T exampleInstance, String[] excludeProperty);
-
-    /**
      * Find single entity, that returned by named query.
      *
      * @param namedQueryName name of query
@@ -153,16 +143,6 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @return single entity
      */
     Object getScalarResultByNamedQuery(String namedQueryName, Object... parameters);
-
-    /**
-     * Executes aggregate named query, that return single scalar value. And force load collections .
-     *
-     * @param namedQueryName      name of query
-     * @param parameters          optional parameters for named query
-     *
-     * @return single entity
-     */
-    Object getScalarResultByNamedQueryWithInit(String namedQueryName,  Object... parameters);
 
 
     /**

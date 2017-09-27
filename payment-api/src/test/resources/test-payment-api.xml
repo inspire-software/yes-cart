@@ -46,7 +46,7 @@
 
 
 
-    <bean id="paySessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <bean id="paySessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="payDataSource"/>
         <property name="mappingResources">
             <list>
@@ -69,7 +69,7 @@
     </bean>
 
 
-    <bean id="payTransactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <bean id="payTransactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="paySessionFactory"/>
     </bean>
 

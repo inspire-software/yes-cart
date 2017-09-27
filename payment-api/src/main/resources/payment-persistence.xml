@@ -26,7 +26,7 @@
         <property name="proxyInterface" value="javax.sql.DataSource"/>
     </bean>
 
-    <bean id="payTransactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <bean id="payTransactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="paySessionFactory"/>
     </bean>
 

@@ -36,25 +36,7 @@
             <version>${project.parent.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
-            <version>${ehcache-core.version}</version>
-        </dependency>
 
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-ehcache</artifactId>
-            <version>${hibernate.core.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>ehcache-core</artifactId>
-                    <groupId>net.sf.ehcache</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
         <!-- ################################## spring begin ####################################### -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -134,22 +116,35 @@
 
 
         <!-- ################################## spring end ######################################### -->
+
         <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>${commons-dbcp.version}</version>
-            <scope>runtime</scope>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache-core</artifactId>
+            <version>${ehcache-core.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate.core.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>ejb3-persistence</artifactId>
-            <version>1.0.2.GA</version>
+            <artifactId>hibernate-ehcache</artifactId>
+            <version>${hibernate.core.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>ehcache-core</artifactId>
+                    <groupId>net.sf.ehcache</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.sf.ehcache</groupId>
+                    <artifactId>ehcache</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
@@ -167,13 +162,6 @@
             <version>${jackson.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>${hsqldb.version}</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
 
@@ -188,15 +176,6 @@
                 <version>2.2</version>
                 <configuration>
                     <filesets>
-<!--
-                        <fileset>
-                            <directory>src/main/java/org/yes/cart/domain/entity</directory>
-                            <includes>
-                                <include>*.java</include>
-                            </includes>
-                            <followSymlinks>false</followSymlinks>
-                        </fileset>
--->
                         <fileset>
                             <directory>${basedir}</directory>
                             <includes>
@@ -215,67 +194,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>hibernate3-maven-plugin</artifactId>
-                <configuration>
-                    <components>
-                        <component>
-                            <name>hbm2java</name>
-                            <implementation>annotationconfiguration</implementation>
-                            <outputDirectory>src/main/java</outputDirectory>
-                        </component>
-                        <component>
-                            <name>hbm2ddl</name>
-                            <outputDirectory>.</outputDirectory>
-                        </component>
-                    </components>
-                    <componentProperties>
-                        <configurationfile>src/main/resources/hibernate/hibernate.cfg.xml</configurationfile>
-                        <drop>false</drop>
-                        <create>true</create>
-                        <export>false</export>
-                        <jdk5>true</jdk5>
-                        <ejb3>true</ejb3>
-                        <format>true</format>
-                    </componentProperties>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>create-entity</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>hbm2java</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>export-derby</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>hbm2ddl</goal>
-                        </goals>
-                        <configuration>
-                            <componentProperties>
-                                <propertyfile>src/main/resources/derby/hibernate.properties</propertyfile>
-                                <outputfilename>sql/resources/derby/create-tables.sql</outputfilename>
-                            </componentProperties>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>export-mysql</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>hbm2ddl</goal>
-                        </goals>
-                        <configuration>
-                            <componentProperties>
-                                <propertyfile>src/main/resources/mysql/hibernate.properties</propertyfile>
-                                <outputfilename>sql/resources/mysql/create-tables.sql</outputfilename>
-                            </componentProperties>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>-->
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <executions>

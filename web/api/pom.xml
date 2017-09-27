@@ -124,21 +124,6 @@
             <version>${jackson.version}</version>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>${hsqldb.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>dumbster</groupId>
-            <artifactId>dumbster</artifactId>
-            <version>1.6</version>
-            <scope>test</scope>
-        </dependency>
-
-
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>

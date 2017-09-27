@@ -18,10 +18,10 @@ package org.yes.cart.payment.persistence.service.impl;
 
 import org.hibernate.Criteria;
 import org.hibernate.LockOptions;
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
+import org.hibernate.query.Query;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 
 import java.io.Serializable;

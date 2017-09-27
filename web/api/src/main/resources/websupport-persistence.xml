@@ -21,7 +21,7 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
           autowire="byName"><!-- add if using 2nd lvl cache: depends-on="hibernateCacheManagerProvider" -->
         <!--
             YC-315 investigation showed that we should not use 2nd level cache as it created adverse
@@ -81,7 +81,7 @@
 
 
 
-    <bean id="paySessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <bean id="paySessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="payDataSource"/>
         <property name="mappingResources">
             <list>

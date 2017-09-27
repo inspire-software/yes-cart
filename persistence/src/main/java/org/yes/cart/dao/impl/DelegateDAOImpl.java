@@ -87,13 +87,6 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
-    public List<T> findByExample(final T exampleInstance, final String[] excludeProperty) {
-        return delegate.findByExample(exampleInstance, excludeProperty);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public T findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
         return delegate.findSingleByNamedQuery(namedQueryName, parameters);
     }
@@ -131,13 +124,6 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
      */
     public Object getScalarResultByNamedQuery(final String namedQueryName, final Object... parameters) {
         return delegate.getScalarResultByNamedQuery(namedQueryName, parameters);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object getScalarResultByNamedQueryWithInit(final String namedQueryName, final Object... parameters) {
-        return delegate.getScalarResultByNamedQueryWithInit(namedQueryName, parameters);
     }
 
     /**

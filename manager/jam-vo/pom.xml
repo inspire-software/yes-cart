@@ -34,11 +34,6 @@
       <artifactId>domain-api</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>${commons-lang3.version}</version>
-    </dependency>
 
     <dependency>
       <groupId>com.inspire-software.lib.dto.geda</groupId>

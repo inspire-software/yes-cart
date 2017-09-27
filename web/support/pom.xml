@@ -111,11 +111,6 @@
             <artifactId>commons-fileupload</artifactId>
             <version>${commons-fileupload.version}</version>
         </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>tomcat</groupId>
@@ -127,12 +122,6 @@
             <groupId>tomcat</groupId>
             <artifactId>tomcat-naming</artifactId>
             <version>1.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>${hsqldb.version}</version>
             <scope>test</scope>
         </dependency>
 

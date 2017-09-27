@@ -18,10 +18,11 @@ package org.yes.cart.dao.impl;
 
 import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.RowCountProjection;
 import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.CriteriaTuner;
@@ -29,7 +30,6 @@ import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Identifiable;
-import org.yes.cart.domain.entity.Product;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -124,20 +124,6 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public List<T> findByExample(final T exampleInstance, final String[] excludeProperty) {
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        Example example = Example.create(exampleInstance);
-        for (String exclude : excludeProperty) {
-            example.excludeProperty(exclude);
-        }
-        crit.add(example);
-        return crit.list();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     public T findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
         List<T> rez = (List<T>) this.findByNamedQuery(namedQueryName, parameters);
         if (!rez.isEmpty()) {
@@ -165,20 +151,6 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         setQueryParameters(query, parameters);
         return query.uniqueResult();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object getScalarResultByNamedQueryWithInit(final String namedQueryName,  final Object... parameters) {
-        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
-        setQueryParameters(query, parameters);
-        final Object obj = query.uniqueResult();
-        if (obj instanceof Product) {
-            Hibernate.initialize(((Product) obj).getAttributes());
-
-        }
-        return obj;
     }
 
     /**
@@ -622,7 +594,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
      * {@inheritDoc}
      */
     public int executeNativeUpdate(final String nativeQuery, final Object... parameters) {
-        SQLQuery sqlQuery = sessionFactory.getCurrentSession().createSQLQuery(nativeQuery);
+        NativeQuery sqlQuery = sessionFactory.getCurrentSession().createNativeQuery(nativeQuery);
         setQueryParameters(sqlQuery, parameters);
         return sqlQuery.executeUpdate();
     }

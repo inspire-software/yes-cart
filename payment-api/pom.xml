@@ -33,16 +33,6 @@
             <version>${hibernate.core.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>ejb3-persistence</artifactId>
-            <version>1.0.2.GA</version>
-        </dependency>
-        <!--<dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-annotations</artifactId>
-            <version>${hibernate.annotations.vesrion}</version>
-        </dependency>-->
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
@@ -62,25 +52,7 @@
             <artifactId>spring-security-core</artifactId>
             <version>${spring-security.version}</version>
         </dependency>
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>${commons-dbcp.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!--dependency>
-            <groupId>hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>1.8.0.7</version>
-            <scope>test</scope>
-        </dependency-->
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>${hsqldb.version}</version>
-            <scope>test</scope>
-        </dependency>
-            
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>

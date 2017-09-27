@@ -63,7 +63,7 @@
         <webapp.admin.war.name>yes-manager</webapp.admin.war.name>
 
         <!-- Core frameworks globals versions -->
-        <hibernate.core.version>4.2.21.Final</hibernate.core.version>
+        <hibernate.core.version>5.2.11.Final</hibernate.core.version>
         <lucene.version>6.5.0</lucene.version>
         <cxf.version>3.2.0</cxf.version>
         <spring-security.version>4.2.3.RELEASE</spring-security.version>
@@ -193,16 +193,21 @@
         </pluginRepository>
     </pluginRepositories>
     <dependencies>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
         </dependency>
+
+        <!-- Logging -->
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.6.4</version>
         </dependency>
+
         <!--<dependency>-->
             <!--<groupId>org.slf4j</groupId>-->
             <!--<artifactId>slf4j-log4j12</artifactId>-->
@@ -214,6 +219,7 @@
             <!--<scope>runtime</scope>-->
             <!--<version>1.2.16</version>-->
         <!--</dependency>-->
+
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -237,32 +243,58 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>${commons-logging.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <version>1.7.12</version>
         </dependency>
+
+        <!-- Commons -->
+
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>${commons-dbcp.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>${commons-lang.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
             <version>${commons-collections.version}</version>
         </dependency>
+
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>${commons-codec.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
@@ -274,11 +306,64 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>javax.activation</groupId>
             <artifactId>activation</artifactId>
             <version>1.1</version>
         </dependency>
+
+        <!-- XML + XSLT 2.0 support -->
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>9.8.0-4</version>
+        </dependency>
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+
+        <!-- Aspects & bytecode -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectjweaver.version}</version>
+        </dependency>
+
+        <dependency>
+            <artifactId>cglib</artifactId>
+            <groupId>cglib</groupId>
+            <version>${cglib.version}</version>
+        </dependency>
+
+        <dependency>
+            <artifactId>asm</artifactId>
+            <groupId>org.ow2.asm</groupId>
+            <version>${asm.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>${javassist.version}</version>
+        </dependency>
+
+
+        <!-- Testing -->
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -345,57 +430,25 @@
             </exclusions>
         </dependency>
 
-        <!-- XML + XSLT 2.0 support -->
         <dependency>
-            <groupId>net.sf.saxon</groupId>
-            <artifactId>Saxon-HE</artifactId>
-            <version>9.8.0-4</version>
-        </dependency>
-        <dependency>
-            <groupId>xalan</groupId>
-            <artifactId>xalan</artifactId>
-            <version>2.7.2</version>
-        </dependency>
-        <dependency>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
-            <version>2.11.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
-            <version>1.2</version>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>${hsqldb.version}</version>
+            <scope>test</scope>
         </dependency>
 
-
-        <!-- Aspects & bytecode -->
+        <!-- Fake SMTP -->
         <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>${aspectjweaver.version}</version>
-        </dependency>
-
-        <dependency>
-            <artifactId>cglib</artifactId>
-            <groupId>cglib</groupId>
-            <version>${cglib.version}</version>
-        </dependency>
-
-        <dependency>
-            <artifactId>asm</artifactId>
-            <groupId>org.ow2.asm</groupId>
-            <version>${asm.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>${javassist.version}</version>
+            <groupId>dumbster</groupId>
+            <artifactId>dumbster</artifactId>
+            <version>1.6</version>
+            <scope>test</scope>
         </dependency>
 
 
 
     </dependencies>
+    
     <build>
         <resources>
             <resource>

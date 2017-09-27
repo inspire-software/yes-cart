@@ -945,7 +945,7 @@
         <property name="name" column="NAME" type="string" length="255" not-null="true"/>
         <property name="displayName" column="DISPLAYNAME" type="string" length="4000"/>
         <property name="description" column="DESCRIPTION" type="string" length="4000"/>
-        <property name="uitemplate" type="string" length="255" not-null="true">
+        <property name="uitemplate" type="string" length="255">
             <column name="UITEMPLATE">
                 <comment>point to a products in list template. Can be used parent template if it not set. In case of
                     no templates at all, store product in list template will be used
