@@ -897,8 +897,8 @@
         <entry key="SkuWarehouseEntity"        value-ref="SkuWarehouseCUD"/>
         <entry key="ProductEntity"             value-ref="ProductCUD"/>
         <entry key="ProductSkuEntity"          value-ref="ProductCUD"/>
-        <entry key="AttrValueEntityProduct"    value-ref="ProductCUD"/>
-        <entry key="AttrValueEntityProductSku" value-ref="ProductCUD"/>
+        <!--<entry key="AttrValueEntityProduct"    value-ref="ProductCUD"/> TODO: YC-824 -->
+        <!--<entry key="AttrValueEntityProductSku" value-ref="ProductCUD"/> TODO: YC-824 -->
         <entry key="ProductTypeEntity"         value-ref="ProductTypeCUD"/>
         <entry key="ShopEntity"                value-ref="ShopCUD"/>
         <entry key="AttrValueEntityShop"       value-ref="ShopCUD"/>
