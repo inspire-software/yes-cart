@@ -135,7 +135,7 @@
     <entry key="negativePaymentNotes">Beim Bezahlen ist ein Problem aufgetreten</entry>
     <entry key="positivePaymentNotes">Bezahlung ist erfolgreich abgeschlossen</entry>
     <entry key="checkStatus">Status der Bestellung überprüfen</entry>
-    <entry key="negativeItemAllocationNotes">Leider ist der Artikel in der gewünschten Anzahl ${product} mit Artikel Nummer ${sku} nicht an Lager. Versuchen Sie ein vergleichbares Produkt zu kaufen.</entry>
+    <entry key="negativeItemAllocationNotes">Leider ist der Artikel in der gewünschten Anzahl ${product} mit Artikel Nummer ${sku} nicht auf Lager. Versuchen Sie ein vergleichbares Produkt zu kaufen.</entry>
 
     <!-- RegistrationPage -->
 
@@ -245,7 +245,7 @@
     <entry key="addressTypeB">Rechnungsadresse</entry>
 
     <!-- LoginPanel -->
-    <entry key="wrongPassword">Falsches Passwort</entry>
+    <entry key="wrongPassword">Das eingegebene Passwort ist nicht korrekt</entry>
     <entry key="customerNotExists">Kein Konto vorhanden. Bitte registrieren Sie sich zuerst.</entry>
     <entry key="customerNotActiveInShop">Ihre E-Mail Adresse ist im Shop noch nicht aktiviert. Zum Aktivieren loggen Sie sich bitte nochmals mit Ihren Logindaten ein und klicken auf "Anmelden".</entry>
     <entry key="existingUser">Registrierter Kunde</entry>
@@ -428,7 +428,7 @@
     <entry key="resultPageTitle">Abschluss der Zahlung</entry>
     <entry key="paymentWasFailed">Fehler bei der Zahlung</entry>
     <entry key="paymentResult">Resultat der Zahlung</entry>
-    <entry key="orderErrorCancelled">Die Bestellung wurde annuliert oder die Artikel sind nicht mehr an Lager. Das kann der Grund für den Abbruch der Zahlung sein</entry>
+    <entry key="orderErrorCancelled">Die Bestellung wurde annuliert oder die Artikel sind nicht mehr auf Lager. Das kann der Grund für den Abbruch der Zahlung sein</entry>
     <entry key="orderErrorNotFound">Bestellung nicht gefunden</entry>
     <entry key="orderSuccess">Bestellung erfolgreich getätigt</entry>
 

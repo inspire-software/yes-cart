@@ -35,7 +35,7 @@ import java.util.List;
  * Processor that scrolls though all modified inventory and re-indexes products so that
  * all latest information is propagated to all nodes.
  *
- * Last time this job runs is stored in system preferences: JOB_PROD_INV_UPDATE_LAST_RUN_[NODEID]
+ * Last time this job runs is stored in system preferences: JOB_PRODINVUP_LR_[NODEID]
  * So that next run we only scan orders that have changed since last job run.
  *
  * User: denispavlov
