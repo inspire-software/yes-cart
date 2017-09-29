@@ -27,7 +27,7 @@ import javax.xml.ws.BindingType;
  * Date: 17/06/2015
  * Time: 13:23
  */
-@WebService(targetNamespace = "http://org.yes.cart.web.service.ws")
+@WebService(targetNamespace = "http://ws.service.web.cart.yes.org/")
 @BindingType(value=javax.xml.ws.soap.SOAPBinding.SOAP11HTTP_MTOM_BINDING)
 public interface WebServiceInboundChannel {
 
@@ -35,7 +35,7 @@ public interface WebServiceInboundChannel {
      * Ping call to test if WS is accessible
      */
     @WebMethod
-    @WebResult(name = "ping")
+    @WebResult(name = "ping", targetNamespace = "http://ws.service.web.cart.yes.org/")
     void ping();
 
     /**
@@ -46,8 +46,8 @@ public interface WebServiceInboundChannel {
      * @return response to this message
      */
     @WebMethod
-    @WebResult(name = "response")
-    WsMessage accept(@WebParam(name = "inbound") WsMessage inbound);
+    @WebResult(name = "response", targetNamespace = "http://ws.service.web.cart.yes.org/")
+    WsMessage accept(@WebParam(name = "inbound", targetNamespace = "http://ws.service.web.cart.yes.org/") WsMessage inbound);
 
 
 }

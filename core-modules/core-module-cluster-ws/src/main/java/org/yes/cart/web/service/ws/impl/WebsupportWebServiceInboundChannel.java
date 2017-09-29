@@ -35,7 +35,7 @@ import javax.xml.ws.BindingType;
  */
 @WebService(endpointInterface = "org.yes.cart.web.service.ws.WebServiceInboundChannel",
             serviceName = "WebServiceInboundChannel",
-            targetNamespace = "http://org.yes.cart.web.service.ws")
+            targetNamespace = "http://ws.service.web.cart.yes.org/")
 @BindingType(value=javax.xml.ws.soap.SOAPBinding.SOAP11HTTP_MTOM_BINDING)
 public class WebsupportWebServiceInboundChannel implements WebServiceInboundChannel {
 

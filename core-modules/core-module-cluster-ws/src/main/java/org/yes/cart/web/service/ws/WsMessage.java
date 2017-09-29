@@ -19,10 +19,7 @@ package org.yes.cart.web.service.ws;
 import org.springframework.util.SerializationUtils;
 import org.yes.cart.cluster.node.Message;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -31,7 +28,8 @@ import java.util.ArrayList;
  * Date: 17/06/2015
  * Time: 22:16
  */
-@XmlRootElement(name = "message")
+@XmlRootElement(name = "message", namespace = "http://ws.service.web.cart.yes.org/")
+@XmlType(name = "message", namespace = "http://ws.service.web.cart.yes.org/")
 public class WsMessage {
 
     private String source;
