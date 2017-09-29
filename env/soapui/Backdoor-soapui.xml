@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project activeEnvironment="Default" name="Backdoor" resourceRoot="" soapui-version="5.0.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="WebServiceInboundChannelSoapBinding" type="wsdl" bindingName="{http://ws.service.web.cart.yes.org/}WebServiceInboundChannelSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/yes-shop/services/backdoor?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/yes-shop/services/backdoor?wsdl"><con:part><con:url>http://localhost:8080/yes-shop/services/backdoor?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="WebServiceInboundChannel" targetNamespace="http://ws.service.web.cart.yes.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ws.service.web.cart.yes.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://ws.service.web.cart.yes.org/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="accept" type="tns:accept"/>
+      <xs:element name="acceptResponse" type="tns:acceptResponse"/>
+      <xs:element name="message" type="tns:message"/>
+      <xs:element name="ping" type="tns:ping"/>
+      <xs:element name="pingResponse" type="tns:pingResponse"/>
+      <xs:complexType name="accept">
+        <xs:sequence>
+          <xs:element form="qualified" minOccurs="0" name="inbound" type="tns:message"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="message">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="payload" type="xs:base64Binary"/>
+          <xs:element minOccurs="0" name="targets">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="target" type="xs:string"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="source" type="xs:string"/>
+        <xs:attribute name="subject" type="xs:string"/>
+      </xs:complexType>
+      <xs:complexType name="acceptResponse">
+        <xs:sequence>
+          <xs:element form="qualified" minOccurs="0" name="response" type="tns:message"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ping">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="pingResponse">
+        <xs:sequence/>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="ping">
+    <wsdl:part element="tns:ping" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="pingResponse">
+    <wsdl:part element="tns:pingResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="accept">
+    <wsdl:part element="tns:accept" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="acceptResponse">
+    <wsdl:part element="tns:acceptResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="WebServiceInboundChannel">
+    <wsdl:operation name="accept">
+      <wsdl:input message="tns:accept" name="accept"></wsdl:input>
+      <wsdl:output message="tns:acceptResponse" name="acceptResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ping">
+      <wsdl:input message="tns:ping" name="ping"></wsdl:input>
+      <wsdl:output message="tns:pingResponse" name="pingResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WebServiceInboundChannelSoapBinding" type="tns:WebServiceInboundChannel">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="accept">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="accept">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="acceptResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ping">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="ping">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="pingResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WebServiceInboundChannel">
+    <wsdl:port binding="tns:WebServiceInboundChannelSoapBinding" name="WebsupportWebServiceInboundChannelPort">
+      <soap:address location="http://localhost:8080/yes-shop/services/backdoor"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/yes-shop/services/backdoor</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="accept" bindingOperationName="accept" type="Request-Response" outputName="acceptResponse" inputName="accept" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/yes-shop/services/backdoor</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.service.web.cart.yes.org/">
+   <soapenv:Header>
+	   <wsse:Security  xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+	      <wsse:UsernameToken>
+	        <wsse:Username>admin@yes-cart.com</wsse:Username>
+	        <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-
+wss-username-token-profile-1.0#PasswordText">d89c77010dedf89c10d1293bd02b53c7</wsse:Password>
+	      </wsse:UsernameToken>
+	    </wsse:Security>
+   </soapenv:Header>
+   <soapenv:Body>
+      <ws:accept>
+         <!--Optional:-->
+         <ws:inbound source="?" subject="?">
+            <!--Optional:-->
+            <payload>cid:359161019809</payload>
+            <!--Optional:-->
+            <targets>
+               <!--Zero or more repetitions:-->
+               <target>?</target>
+            </targets>
+         </ws:inbound>
+      </ws:accept>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.service.web.cart.yes.org/WebServiceInboundChannel/accept"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="ping" bindingOperationName="ping" type="Request-Response" outputName="pingResponse" inputName="ping" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/yes-shop/services/backdoor</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.service.web.cart.yes.org/">
+   <soapenv:Header>
+	   <wsse:Security  xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+	      <wsse:UsernameToken>
+	        <wsse:Username>admin@yes-cart.com</wsse:Username>
+	        <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-
+wss-username-token-profile-1.0#PasswordText">d89c77010dedf89c10d1293bd02b53c7</wsse:Password>
+	      </wsse:UsernameToken>
+	    </wsse:Security>
+   </soapenv:Header>
+   <soapenv:Body>
+      <ws:ping/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.service.web.cart.yes.org/WebServiceInboundChannel/ping"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/></con:soapui-project>
