@@ -1348,28 +1348,6 @@
         <constructor-arg index="2" ref="orderSplittingStrategy"/>
     </bean>
 
-
-    <!-- ################################## service locator ################################# -->
-
-    <bean id="springInstantiationService" class="org.yes.cart.service.locator.impl.SpringInstantiationStrategyImpl"/>
-    <bean id="webInstantiationService" class="org.yes.cart.service.locator.impl.WebServiceInstantiationStrategyImpl"/>
-    <bean id="jnpInstantiationService" class="org.yes.cart.service.locator.impl.JnpInstantiationStrategyImpl"/>
-
-    <bean id="serviceLocator" class="org.yes.cart.service.locator.impl.ServiceLocatorImpl">
-        <constructor-arg index="0">
-            <map>
-                <entry key="http" value-ref="webInstantiationService"/>
-                <entry key="https" value-ref="webInstantiationService"/>
-                <entry key="jnp" value-ref="jnpInstantiationService"/>
-                <entry>
-                    <key><null/></key>
-                    <ref bean="springInstantiationService"/>
-                </entry>
-            </map>
-        </constructor-arg>
-
-    </bean>
-
     <!-- ############################################ misc ####################################### -->
 
     <bean id="themeService" class="org.yes.cart.service.theme.impl.ThemeServiceImpl">
@@ -1399,12 +1377,6 @@
     <bean id="currencyService" class="org.yes.cart.service.misc.impl.CurrencyServiceImpl">
         <constructor-arg index="0" value="classpath:yc-config.properties"/>
         <constructor-arg index="1" ref="shopService"/>
-    </bean>
-
-    <!-- ########################################## WS support ########################## -->
-
-    <bean id="wsAbstractFactoryClientFactory" class="org.yes.cart.web.service.ws.client.impl.WsClientAbstractFactoryImpl">
-        <constructor-arg index="0" ref="passwordHashHelper"/>
     </bean>
 
 </beans>

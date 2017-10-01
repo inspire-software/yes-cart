@@ -64,18 +64,23 @@
         <property name="proxyInterface" value="javax.sql.DataSource"/>
     </bean>
 
-    <security:authentication-manager alias="authenticationManager">
-        <security:authentication-provider>
-            <!--<security:password-encoder hash="md5"/> Encoding is done on the client end to prevent plain text passwords-->
-            <security:jdbc-user-service
-                    data-source-ref="dataSourceSec"
-                    group-authorities-by-username-query=""
-                    users-by-username-query="SELECT m.email as username, m.password, m.enabled FROM TMANAGER m where m.email = ?"
-                    authorities-by-username-query="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
-        </security:authentication-provider>
-    </security:authentication-manager>
+    <!-- Standalone definition of authentication manager that is not linked to Spring security -->
+    <bean id="backDoorAuthenticationManager" class="org.springframework.security.authentication.ProviderManager">
+        <constructor-arg index="0">
+            <bean class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+                <!--<property name="passwordEncoder" ref="passwordHashHelper"/> Encoding is done on the client end to prevent plain text passwords -->
+                <property name="userDetailsService">
+                    <bean class="org.springframework.security.provisioning.JdbcUserDetailsManager">
+                        <property name="dataSource" ref="dataSourceSec"/>
+                        <property name="authoritiesByUsernameQuery" value="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
+                        <property name="usersByUsernameQuery" value="SELECT m.email as username, m.password, m.enabled FROM TMANAGER m where m.email = ?"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
 
-    <bean id="wsAuthenticationInterceptor" class="org.yes.cart.web.service.ws.impl.BackdoorAuthenticationInInterceptor">
+    <bean id="wsAuthenticationInterceptor" class="org.yes.cart.web.service.ws.impl.AuthenticationInInterceptor">
         <constructor-arg>
             <map>
                 <entry key="action" value="UsernameToken"/>
@@ -83,7 +88,7 @@
                 <!--                <entry key="passwordCallbackClass" value="org.yes.cart.web.service.ws.impl.BackdoorCallback"/>-->
             </map>
         </constructor-arg>
-        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="authenticationManager" ref="backDoorAuthenticationManager"/>
     </bean>
 
     <bean id="wsLoggingInInterceptor" class="org.apache.cxf.interceptor.Slf4JLoggingInInterceptor">

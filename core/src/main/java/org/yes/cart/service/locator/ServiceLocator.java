@@ -54,5 +54,11 @@ public interface ServiceLocator {
      */
     <T> T getServiceInstance(String serviceUrl, Class<T> iface, String loginName, String password) throws RuntimeException;
 
+    /**
+     * Register strategy.
+     *
+     * @param instantiationStrategy strategy
+     */
+    void register(InstantiationStrategy instantiationStrategy);
 
 }

@@ -28,7 +28,10 @@ import org.yes.cart.bulkcommon.service.ImportService;
 import org.yes.cart.bulkcommon.service.model.JobContextDecoratorImpl;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
+import org.yes.cart.cluster.node.Node;
 import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.cluster.node.RspMessage;
+import org.yes.cart.cluster.node.impl.ContextRspMessageImpl;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.entity.DataGroup;
@@ -47,7 +50,7 @@ import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.utils.impl.ZipUtils;
-import org.yes.cart.web.service.ws.client.AsyncContextFactory;
+import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -159,11 +162,46 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     private AsyncContext getAsyncContext() {
         try {
             // This is manual access via admin
-            return this.asyncContextFactory.getInstance(new HashMap<String, Object>());
+            return this.asyncContextFactory.getInstance(
+                    Collections.singletonMap(AsyncContext.NO_BROADCAST, AsyncContext.NO_BROADCAST)
+            );
         } catch (IllegalStateException exp) {
             // This is auto access with thread local
-            return new BulkJobAutoContextImpl(new HashMap<String, Object>());
+            return new BulkJobAutoContextImpl(
+                    Collections.singletonMap(AsyncContext.NO_BROADCAST, AsyncContext.NO_BROADCAST)
+            );
         }
+    }
+
+    private void clearCacheAfterImport(final JobContext context) {
+
+        try {
+            final List<Node> cluster = nodeService.getSfNodes();
+            final List<String> targets = new ArrayList<String>();
+            for (final Node node : cluster) {
+                targets.add(node.getId());
+            }
+
+            final JobContext contextWithBroadcast = new JobContextDecoratorImpl(
+                    context,
+                    Collections.singletonMap(AsyncContext.NO_BROADCAST, "false")
+            );
+
+            final RspMessage message = new ContextRspMessageImpl(
+                    nodeService.getCurrentNodeId(),
+                    targets,
+                    "CacheDirector.evictAllCache",
+                    false,
+                    contextWithBroadcast
+            );
+
+            nodeService.broadcast(message);
+
+            context.getListener().notifyMessage("Performing full cache evict");
+        } catch (Exception exp) {
+            context.getListener().notifyError("Unable to perform full clear cache: " + exp.getMessage(), exp);
+        }
+
     }
 
     protected Runnable createJobRunnable(final JobContext ctx) {
@@ -189,8 +227,12 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                     } else {
                         doImportInternal(context); //single file import
                     }
+
+                    clearCacheAfterImport(context);
+
                     listener.notifyMessage("Import Job completed");
                     listener.notifyCompleted();
+
                 } catch (IOException ioe) {
                     // if we are here this is probably due images failure
                     listener.notifyError(ioe.getMessage(), ioe);

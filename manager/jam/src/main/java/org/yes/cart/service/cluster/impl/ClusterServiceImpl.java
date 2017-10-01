@@ -30,9 +30,9 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.cluster.ClusterService;
-import org.yes.cart.web.service.ws.AlertDirector;
-import org.yes.cart.web.service.ws.BackdoorService;
-import org.yes.cart.web.service.ws.CacheDirector;
+import org.yes.cart.cluster.service.AlertDirector;
+import org.yes.cart.cluster.service.BackdoorService;
+import org.yes.cart.cluster.service.CacheDirector;
 
 import java.util.*;
 

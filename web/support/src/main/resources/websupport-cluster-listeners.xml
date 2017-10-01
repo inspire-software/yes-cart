@@ -54,7 +54,7 @@
 
     <bean id="backDoor" parent="txProxyTemplate">
         <property name="target">
-            <bean class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
+            <bean class="org.yes.cart.cluster.service.impl.BackdoorServiceImpl">
                 <property name="productService" ref="productService"/>
                 <property name="productIndexCaches" ref="backDoorProductCacheHelper"/>
                 <property name="systemService" ref="systemService"/>
@@ -73,7 +73,7 @@
         </property>
     </bean>
 
-    <bean id="cacheDirector" class="org.yes.cart.web.service.ws.impl.WsCacheDirectorImpl">
+    <bean id="cacheDirector" class="org.yes.cart.cluster.service.impl.WsCacheDirectorImpl">
         <property name="entityOperationCache" ref="evictionConfig"/>
         <property name="cacheManager" ref="cacheManager"/>
         <property name="nodeService" ref="nodeService"/>
@@ -84,7 +84,7 @@
         </property>
     </bean>
 
-    <bean id="alertDirector" class="org.yes.cart.web.service.ws.impl.WsAlertDirectorImpl">
+    <bean id="alertDirector" class="org.yes.cart.cluster.service.impl.WsAlertDirectorImpl">
         <property name="cacheManager" ref="cacheManager"/>
         <property name="nodeService" ref="nodeService"/>
     </bean>

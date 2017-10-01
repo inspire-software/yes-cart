@@ -26,7 +26,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.service.ws.AlertDirector;
+import org.yes.cart.cluster.service.AlertDirector;
 
 /**
  * User: denispavlov

@@ -36,7 +36,7 @@ import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.media.MediaFileNameStrategy;
 import org.yes.cart.stream.io.FileSystemIOProvider;
-import org.yes.cart.web.service.ws.client.AsyncContextFactory;
+import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.io.File;
 import java.io.FileInputStream;

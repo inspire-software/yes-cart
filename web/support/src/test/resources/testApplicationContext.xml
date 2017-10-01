@@ -63,14 +63,14 @@
         </property>
     </bean>
 
-    <bean id="backDoor" class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
+    <bean id="backDoor" class="org.yes.cart.cluster.service.impl.BackdoorServiceImpl">
         <property name="productService" ref="productService"/>
         <property name="productIndexCaches" ref="backDoorProductCacheHelper"/>
         <property name="systemService" ref="systemService"/>
     </bean>
 
 
-    <bean id="cacheDirectorBean" class="org.yes.cart.web.service.ws.impl.WsCacheDirectorImpl">
+    <bean id="cacheDirectorBean" class="org.yes.cart.cluster.service.impl.WsCacheDirectorImpl">
         <property name="entityOperationCache" ref="evictionConfig"/>
         <property name="cacheManager" ref="cacheManager"/>
     </bean>

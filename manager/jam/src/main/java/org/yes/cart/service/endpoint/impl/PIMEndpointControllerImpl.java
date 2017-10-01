@@ -34,7 +34,7 @@ import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.cluster.ClusterService;
 import org.yes.cart.service.endpoint.PIMEndpointController;
 import org.yes.cart.service.vo.VoProductService;
-import org.yes.cart.web.service.ws.client.AsyncContextFactory;
+import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.util.HashMap;
 import java.util.List;

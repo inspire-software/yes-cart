@@ -33,4 +33,13 @@
 
     <import resource="core-aspects.xml"/>
 
+    <!-- ################################## service locator ################################# -->
+
+    <bean id="testServiceLocator" class="org.yes.cart.service.locator.impl.ServiceLocatorImpl"/>
+
+    <!-- Default locator -->
+    <bean id="springInstantiationTestService" class="org.yes.cart.service.locator.impl.SpringInstantiationStrategyImpl">
+        <property name="serviceLocator" ref="testServiceLocator"/>
+    </bean>
+
 </beans>

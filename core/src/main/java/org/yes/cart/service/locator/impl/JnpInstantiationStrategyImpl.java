@@ -19,12 +19,13 @@ package org.yes.cart.service.locator.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.service.locator.InstantiationStrategy;
+import org.yes.cart.service.locator.ServiceLocator;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -36,6 +37,14 @@ public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
     private static final Logger LOG = LoggerFactory.getLogger(JnpInstantiationStrategyImpl.class);
 
     private static final String AT_DELIMITER = "@"; // delimiter between server and jndi name
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public Set<String> getProtocols() {
+        return Collections.singleton("jnp");
+    }
 
     /**
      * {@inheritDoc}
@@ -103,9 +112,18 @@ public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
      */
     private String getJndiName(final String url) {
         if (url.indexOf(AT_DELIMITER) > -1) {
-            return url.split("@")[1];
+            return url.split(AT_DELIMITER)[1];
         }
         return url;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param serviceLocator locator
+     */
+    public void setServiceLocator(final ServiceLocator serviceLocator) {
+        serviceLocator.register(this);
     }
 
 

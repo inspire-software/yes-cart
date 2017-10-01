@@ -22,6 +22,8 @@ import org.yes.cart.service.locator.InstantiationStrategy;
 import org.yes.cart.service.locator.ServiceLocator;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,16 +38,26 @@ public class ServiceLocatorImpl implements ServiceLocator {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceLocatorImpl.class);
 
-    private final Map<String, InstantiationStrategy> protocolStrategyMap;
+    private final Map<String, InstantiationStrategy> protocolStrategyMap = new HashMap<String, InstantiationStrategy>();
+
+    /**
+     * Construct the service locator.
+     */
+    public ServiceLocatorImpl() {
+    }
 
 
     /**
      * Construct the service locator.
      *
-     * @param protocolStrategyMap strategy  map to instantiate service.
+     * @param strategies strategy  map to instantiate service.
      */
-    public ServiceLocatorImpl(final Map<String, InstantiationStrategy> protocolStrategyMap) {
-        this.protocolStrategyMap = protocolStrategyMap;
+    public ServiceLocatorImpl(final List<InstantiationStrategy> strategies) {
+        if (strategies != null) {
+            for (final InstantiationStrategy strategy : strategies) {
+                register(strategy);
+            }
+        }
     }
 
 
@@ -104,4 +116,10 @@ public class ServiceLocatorImpl implements ServiceLocator {
         }
     }
 
+    /** {@inheritDoc} */
+    public void register(final InstantiationStrategy instantiationStrategy) {
+        for (final String protocol : instantiationStrategy.getProtocols()) {
+            protocolStrategyMap.put(protocol, instantiationStrategy);
+        }
+    }
 }

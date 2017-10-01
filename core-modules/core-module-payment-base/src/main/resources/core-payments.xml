@@ -28,8 +28,29 @@
     <import resource="classpath:payment-api.xml"/>
     <import resource="classpath:core-services.xml"/>
 
+    <!-- ################################## service locator ################################# -->
+
+    <bean id="paymentServiceLocator" class="org.yes.cart.service.locator.impl.ServiceLocatorImpl"/>
+
+    <!-- Default locator -->
+    <bean id="springInstantiationPaymentService" class="org.yes.cart.service.locator.impl.SpringInstantiationStrategyImpl">
+        <property name="serviceLocator" ref="paymentServiceLocator"/>
+    </bean>
+    <!-- WebService locator in core-module-ws, if used by a payment gateway should be registered as follows
+    <bean id="webInstantiationPaymentService" class="org.yes.cart.service.locator.impl.WebServiceInstantiationStrategyImpl">
+        <property name="serviceLocator" ref="serviceLocator"/>
+    </bean>
+    -->
+    <!-- JNP locator, if used by a payment gateway should be registered as follows
+    <bean id="jnpInstantiationPaymentService" class="org.yes.cart.service.locator.impl.JnpInstantiationStrategyImpl">
+        <property name="serviceLocator" ref="serviceLocator"/>
+    </bean>
+    -->
+
+    <!-- ################################## payment manager ################################# -->
+
     <bean id="paymentModulesManager" class="org.yes.cart.service.payment.impl.PaymentModulesManagerImpl">
-        <constructor-arg index="0" ref="serviceLocator"/>
+        <constructor-arg index="0" ref="paymentServiceLocator"/>
         <constructor-arg index="1" ref="systemService"/>
         <constructor-arg index="2" ref="shopService"/>
     </bean>

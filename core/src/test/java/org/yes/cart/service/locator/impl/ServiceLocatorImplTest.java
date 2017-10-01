@@ -36,21 +36,18 @@ public class ServiceLocatorImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp()  {
-        serviceLocator = (ServiceLocator) ctx().getBean(ServiceSpringKeys.SERVICE_LOCATOR);
+        serviceLocator = (ServiceLocator) ctx().getBean("testServiceLocator");
         super.setUp();
     }
 
     @Test
     public void testGetServiceInstance() throws Exception {
         //find self
-        assertTrue(serviceLocator.getServiceInstance(ServiceSpringKeys.SERVICE_LOCATOR, ServiceLocator.class, null, null)
+        assertTrue(serviceLocator.getServiceInstance("testServiceLocator", ServiceLocator.class, null, null)
                 instanceof ServiceLocator);
         //find another bean
         assertTrue(serviceLocator.getServiceInstance(ServiceSpringKeys.DELIVERY_ASSEMBLER, DeliveryAssembler.class, null, null)
                 instanceof DeliveryAssembler);
-        //find another bean in different module
-        assertTrue(serviceLocator.getServiceInstance("serviceLocator", ServiceLocator.class, null, null)
-                instanceof ServiceLocator);
     }
 
     @Test

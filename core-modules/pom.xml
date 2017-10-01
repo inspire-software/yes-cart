@@ -28,6 +28,7 @@
     <name>Yes cart core modules</name>
     <modules>
         <module>core-module-http</module>
+        <module>core-module-ws</module>
         <module>core-module-payment-base</module>
         <module>core-module-payment-paypal</module>
         <module>core-module-payment-cybersource</module>

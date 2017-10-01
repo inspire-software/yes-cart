@@ -56,7 +56,7 @@ public class FSFileManagerImpl implements FileManager {
                     files.addAll(scanDir(file, prefix.concat("/").concat(file.getName())));
                 } else {
                     files.add(MutablePair.of(
-                            file.getAbsoluteFile(),
+                            file.getAbsolutePath(),
                             prefix.concat("/").concat(file.getName())
                     ));
                 }

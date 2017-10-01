@@ -33,7 +33,7 @@ import org.yes.cart.service.cluster.ClusterService;
 import org.yes.cart.service.cluster.ReindexService;
 import org.yes.cart.service.endpoint.SystemEndpointController;
 import org.yes.cart.service.vo.VoAssemblySupport;
-import org.yes.cart.web.service.ws.client.AsyncContextFactory;
+import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;

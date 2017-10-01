@@ -24,6 +24,10 @@
 
     <!-- ################################ Clustering begin ###################################### -->
 
+    <bean id="wsAbstractFactoryClientFactory" class="org.yes.cart.web.service.ws.client.impl.WsClientAbstractFactoryImpl">
+        <constructor-arg index="0" ref="passwordHashHelper"/>
+    </bean>
+
     <bean id="nodeService" class="org.yes.cart.cluster.node.impl.ManagerWsNodeServiceImpl">
         <constructor-arg index="0" ref="systemService"/>
         <constructor-arg index="1" ref="wsAbstractFactoryClientFactory"/>

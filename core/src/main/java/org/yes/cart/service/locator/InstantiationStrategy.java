@@ -16,12 +16,19 @@
 
 package org.yes.cart.service.locator;
 
+import java.util.Set;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
 public interface InstantiationStrategy {
+
+    /**
+     * @return service URI protocol that this strategy supports
+     */
+    Set<String> getProtocols();
 
     /**
      * Get service instance or proxy or home interface.

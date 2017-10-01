@@ -22,6 +22,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.service.locator.InstantiationStrategy;
+import org.yes.cart.service.locator.ServiceLocator;
+
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * Used to locate services in local spring context.
@@ -36,6 +40,13 @@ public class SpringInstantiationStrategyImpl implements InstantiationStrategy, A
     private static final Logger LOG = LoggerFactory.getLogger(SpringInstantiationStrategyImpl.class);
 
     private ApplicationContext applicationContext;
+
+    /**
+     * {@inheritDoc}
+     */
+    public Set<String> getProtocols() {
+        return Collections.singleton(null);
+    }
 
     /**
      * {@inheritDoc}
@@ -55,5 +66,16 @@ public class SpringInstantiationStrategyImpl implements InstantiationStrategy, A
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
+
+
+    /**
+     * Spring IoC.
+     *
+     * @param serviceLocator locator
+     */
+    public void setServiceLocator(final ServiceLocator serviceLocator) {
+        serviceLocator.register(this);
+    }
+
 
 }

@@ -39,7 +39,7 @@
 
     <bean id="localBackdoorService" parent="txProxyTemplate">
         <property name="target">
-            <bean class="org.yes.cart.web.service.ws.impl.LocalBackdoorServiceImpl">
+            <bean class="org.yes.cart.cluster.service.impl.LocalBackdoorServiceImpl">
                 <property name="productService" ref="productService"/>
             </bean>
         </property>
@@ -53,7 +53,7 @@
         </property>
     </bean>
 
-    <bean id="localCacheDirector" class="org.yes.cart.web.service.ws.impl.LocalCacheDirectorImpl">
+    <bean id="localCacheDirector" class="org.yes.cart.cluster.service.impl.LocalCacheDirectorImpl">
         <property name="entityOperationCache" ref="evictionConfig"/>
         <property name="cacheManager" ref="cacheManager"/>
         <property name="skipEvictAll">
@@ -63,13 +63,13 @@
         </property>
     </bean>
 
-    <bean id="localAlertDirector" class="org.yes.cart.web.service.ws.impl.LocalAlertDirectorImpl">
+    <bean id="localAlertDirector" class="org.yes.cart.cluster.service.impl.LocalAlertDirectorImpl">
         <property name="cacheManager" ref="cacheManager"/>
     </bean>
 
     <bean id="alertTurboFilter" class="org.yes.cart.util.log.AlertTurboFilter"/>
 
-    <bean id="webAppManagerAsyncContextFactory" class="org.yes.cart.web.service.ws.client.WebAppManagerAsyncContextFactory">
+    <bean id="webAppManagerAsyncContextFactory" class="org.yes.cart.service.async.WebAppManagerAsyncContextFactory">
         <constructor-arg index="0" ref="managerService"/>
     </bean>
 

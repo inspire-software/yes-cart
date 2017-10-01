@@ -37,8 +37,8 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.utils.RunAsUserAuthentication;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
-import org.yes.cart.web.service.ws.CacheDirector;
-import org.yes.cart.web.service.ws.client.AsyncContextFactory;
+import org.yes.cart.cluster.service.CacheDirector;
+import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.io.Serializable;
 import java.util.*;
@@ -118,8 +118,9 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
             }
 
             final Runnable evictCache = this.createEvictCacheRunnable(op, entityName, pk);
-
-            this.executor.execute(evictCache);
+            if (evictCache != null) {
+                this.executor.execute(evictCache);
+            }
         }
 
     }
@@ -127,6 +128,11 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
     private Runnable createEvictCacheRunnable(final String op, final String entityName, final Long pk) {
 
         final AsyncContext jobContext = ThreadLocalAsyncContextUtils.getContext();
+
+        if (jobContext != null && AsyncContext.NO_BROADCAST.equals(jobContext.getAttribute(AsyncContext.NO_BROADCAST))) {
+            return null; // cache evict is off
+        }
+
         final Authentication auth = SecurityContextHolder.getContext() != null ? SecurityContextHolder.getContext().getAuthentication() : null;
         final String username = auth != null && auth.isAuthenticated() ? auth.getName() : null;
 

@@ -28,7 +28,7 @@ import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
 import org.yes.cart.service.vo.VoDashboardWidgetService;
-import org.yes.cart.web.service.ws.client.AsyncContextFactory;
+import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.util.*;
 

@@ -45,7 +45,7 @@ import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.web.service.ws.client.AsyncContextFactory;
+import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -145,10 +145,14 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
     private AsyncContext getAsyncContext() {
         try {
             // This is manual access via admin
-            return this.asyncContextFactory.getInstance(new HashMap<String, Object>());
+            return this.asyncContextFactory.getInstance(
+                    Collections.singletonMap(AsyncContext.NO_BROADCAST, AsyncContext.NO_BROADCAST)
+            );
         } catch (IllegalStateException exp) {
             // This is auto access with thread local
-            return new BulkJobAutoContextImpl(new HashMap<String, Object>());
+            return new BulkJobAutoContextImpl(
+                    Collections.singletonMap(AsyncContext.NO_BROADCAST, AsyncContext.NO_BROADCAST)
+            );
         }
     }
 

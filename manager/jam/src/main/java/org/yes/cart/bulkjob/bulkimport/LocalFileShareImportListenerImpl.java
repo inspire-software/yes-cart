@@ -39,7 +39,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.util.log.Markers;
-import org.yes.cart.web.service.ws.client.AsyncContextFactory;
+import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
