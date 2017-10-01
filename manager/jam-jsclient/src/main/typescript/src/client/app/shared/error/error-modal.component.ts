@@ -73,7 +73,7 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
   protected onErrorResult(modalresult: ModalResult) {
     LogUtil.debug('ErrorModalComponent onErrorResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
-      window.location.href = '../j_spring_security_logout'; //.reload();
+      window.location.href = '../logout.jsp'; //.reload();
     }
   }
 

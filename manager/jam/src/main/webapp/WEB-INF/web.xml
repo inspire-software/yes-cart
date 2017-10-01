@@ -73,11 +73,11 @@
   </filter-mapping>
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
-    <url-pattern>/j_spring_security_check</url-pattern>
+    <url-pattern>/logincheck.jsp</url-pattern>
   </filter-mapping>
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
-    <url-pattern>/j_spring_security_logout</url-pattern>
+    <url-pattern>/logout.jsp</url-pattern>
   </filter-mapping>
 
 

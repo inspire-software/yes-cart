@@ -58,9 +58,10 @@
       authentication-failure-url="/login.jsp?error"
       username-parameter="j_username"
       password-parameter="j_password"
-      login-processing-url="/j_spring_security_check"/>
+      login-processing-url="/logincheck.jsp"/>
 
     <security:logout
+      logout-url="/logout.jsp"
       logout-success-url="/login.jsp?logout"
       delete-cookies="JSESSIONID"
       invalidate-session="true"/>

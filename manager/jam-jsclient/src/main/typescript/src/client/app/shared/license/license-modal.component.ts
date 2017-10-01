@@ -73,7 +73,7 @@ export class LicenseModalComponent implements OnInit, AfterViewInit {
         _sub.unsubscribe();
       });
     } else if (!this.license.agreed) {
-      window.location.href = '../j_spring_security_logout';
+      window.location.href = '../logout.jsp';
     }
   }
 

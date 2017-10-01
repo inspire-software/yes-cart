@@ -32,7 +32,7 @@
 <div class="container gear-top">
     <div class="row gear-bottom">
         <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 vcenter">
-            <form class="whitebg" name='loginForm' action='<c:url value="/j_spring_security_check"/>' method='POST'>
+            <form class="whitebg" name='loginForm' action='<c:url value="/logincheck.jsp"/>' method='POST'>
                 <div class="text-center clearfix">
                     <a href="http://yes-cart.org" target="_blank">
                         <img border="0" src="${pageContext.servletContext.contextPath}/resources/assets/img/logo-button-100x100.png"/>
