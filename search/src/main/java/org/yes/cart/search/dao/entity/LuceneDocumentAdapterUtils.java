@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.*;
 import org.apache.lucene.facet.sortedset.SortedSetDocValuesFacetField;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.util.BytesRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +91,7 @@ public class LuceneDocumentAdapterUtils {
      */
     public static <T> T readObjectField(final Document document, final String name, final Class<T> clazz) {
 
-        final String serialized = document.get(FIELD_OBJECT);
+        final String serialized = document.get(name);
         if (StringUtils.isNotBlank(serialized)) {
             return readObjectFieldValue(serialized, clazz);
         }
@@ -155,6 +156,18 @@ public class LuceneDocumentAdapterUtils {
         addObjectField(document, FIELD_OBJECT, object);
     }
 
+    /** Indexed, not tokenized, omits norms, indexes
+     *  DOCS_ONLY, stored */
+    public static final FieldType TYPE_OBJECT = new FieldType();
+    static {
+        TYPE_OBJECT.setOmitNorms(true);
+        TYPE_OBJECT.setIndexOptions(IndexOptions.NONE);
+        TYPE_OBJECT.setStored(true);
+        TYPE_OBJECT.setTokenized(false);
+        TYPE_OBJECT.freeze();
+    }
+
+
     /**
      * Adds serialised version of object into stored field.
      *
@@ -165,7 +178,7 @@ public class LuceneDocumentAdapterUtils {
     public static void addObjectField(final Document document, final String name, final Object object) {
         if (object != null) {
             try {
-                document.add(new StringField(name, MAPPER.writeValueAsString(object), Field.Store.YES));
+                document.add(new Field(name, MAPPER.writeValueAsString(object), TYPE_OBJECT));
             } catch (Exception exp) {
                 LOGFTQ.error("Unable to serialise the object into field: " + name + ", object: " + object, exp);
             }
