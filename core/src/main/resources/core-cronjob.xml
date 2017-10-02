@@ -116,7 +116,8 @@
                 <constructor-arg index="2" ref="attrValueEntityProductDao"/>
                 <constructor-arg index="3" ref="productSkuService"/>
                 <constructor-arg index="4" ref="attrValueEntityProductSkuDao"/>
-                <constructor-arg index="5" ref="systemService"/>
+                <constructor-arg index="5" ref="productAssociationDao"/>
+                <constructor-arg index="6" ref="systemService"/>
                 <lookup-method name="getSelf" bean="removeObsoleteProductProcessorInternal"/>
             </bean>
         </property>

@@ -21,10 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.AttrValueProduct;
-import org.yes.cart.domain.entity.AttrValueProductSku;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.ProductCategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
@@ -48,6 +45,7 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
     private final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao;
     private final ProductSkuService productSkuService;
     private final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao;
+    private final GenericDAO<ProductAssociation, Long> productAssociationDao;
     private final SystemService systemService;
 
     public RemoveObsoleteProductProcessorImpl(final ProductService productService,
@@ -55,12 +53,14 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
                                               final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao,
                                               final ProductSkuService productSkuService,
                                               final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao,
+                                              final GenericDAO<ProductAssociation, Long> productAssociationDao,
                                               final SystemService systemService) {
         this.productService = productService;
         this.productCategoryService = productCategoryService;
         this.attrValueEntityProductDao = attrValueEntityProductDao;
         this.productSkuService = productSkuService;
         this.attrValueEntityProductSkuDao = attrValueEntityProductSkuDao;
+        this.productAssociationDao = productAssociationDao;
         this.systemService = systemService;
     }
 
@@ -105,7 +105,7 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
             return;
         }
 
-        LOG.info("Remove obsolete product {}", product.getCode());
+        LOG.info("Remove obsolete product {}/{}", product.getProductId(), product.getCode());
 
         final List<Long> pAvIds = new ArrayList<Long>();
         for (final AttrValueProduct av : product.getAttributes()) {
@@ -115,11 +115,21 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
         for (final ProductSku sku : product.getSku()) {
             skus.add(sku.getSkuId());
         }
+        final List<Long> assoc = new ArrayList<Long>();
+        for (final ProductAssociation productAssociation : product.getProductAssociations()) {
+            assoc.add(productAssociation.getProductassociationId());
+        }
         product = null;
         productService.getGenericDao().clear(); // clear session
 
         for (final Long avId : pAvIds) {
             attrValueEntityProductDao.delete(attrValueEntityProductDao.findById(avId));
+        }
+
+        productService.getGenericDao().flushClear(); // ensure we flush delete and clear session
+
+        for (final Long aid : assoc) {
+            productAssociationDao.delete(productAssociationDao.findById(aid));
         }
 
         productService.getGenericDao().flushClear(); // ensure we flush delete and clear session

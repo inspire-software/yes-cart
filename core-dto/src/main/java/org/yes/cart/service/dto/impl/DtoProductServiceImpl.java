@@ -77,6 +77,7 @@ public class DtoProductServiceImpl
     private final GenericService<Attribute> attributeService;
 
     private final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao;
+    private final GenericDAO<ProductAssociation, Long> productAssociationDao;
 
     private final ProductTypeAttrService productTypeAttrService;
     private final DtoProductTypeAttrService dtoProductTypeAttrService;
@@ -93,14 +94,14 @@ public class DtoProductServiceImpl
 
     /**
      * IoC constructor.
-     *
-     * @param dtoFactory         factory for creating DTO object instances
+     *  @param dtoFactory         factory for creating DTO object instances
      * @param productService     domain objects product service
      * @param adaptersRepository value converter repository
      * @param dtoAttributeGroupService attribute group service
      * @param dtoEtypeService    etype service
-     * @param imageService       {@link org.yes.cart.service.domain.ImageService} to manipulate  related images.
+     * @param imageService       {@link ImageService} to manipulate  related images.
      * @param fileService {@link FileService} to manipulate related files
+     * @param productAssociationDao
      * @param systemService      system service
      */
     public DtoProductServiceImpl(
@@ -111,6 +112,7 @@ public class DtoProductServiceImpl
             final DtoAttributeGroupService dtoAttributeGroupService,
             final DtoEtypeService dtoEtypeService,
             final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao,
+            final GenericDAO<ProductAssociation, Long> productAssociationDao,
             final ImageService imageService,
             final FileService fileService,
             final DtoProductTypeAttrService dtoProductTypeAttrService,
@@ -123,6 +125,7 @@ public class DtoProductServiceImpl
 
         this.imageService = imageService;
         this.fileService = fileService;
+        this.productAssociationDao = productAssociationDao;
         this.systemService = systemService;
 
 
@@ -659,6 +662,10 @@ public class DtoProductServiceImpl
         for (final ProductSku sku : product.getSku()) {
             skus.add(sku.getSkuId());
         }
+        final List<Long> assoc = new ArrayList<Long>();
+        for (final ProductAssociation productAssociation : product.getProductAssociations()) {
+            assoc.add(productAssociation.getProductassociationId());
+        }
         product = null;
         getService().getGenericDao().clear(); // clear session
 
@@ -674,6 +681,12 @@ public class DtoProductServiceImpl
             try {
                 getDtoProductSkuService().remove(sku);
             } catch (Exception exp) {};
+        }
+
+        getService().getGenericDao().flushClear(); // ensure we flush delete and clear session
+
+        for (final Long aid : assoc) {
+            productAssociationDao.delete(productAssociationDao.findById(aid));
         }
 
         getService().getGenericDao().flushClear(); // ensure we flush delete and clear session
