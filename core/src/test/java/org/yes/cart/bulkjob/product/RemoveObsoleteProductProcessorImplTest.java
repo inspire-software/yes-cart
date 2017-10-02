@@ -26,12 +26,12 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.entity.AttrValueProductSku;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductAssociation;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -128,6 +128,7 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
         final ProductCategoryService productCategoryService = (ProductCategoryService) ctx().getBean(ServiceSpringKeys.PRODUCT_CATEGORY_SERVICE);
         final GenericDAO<AttrValueProduct, Long> productAvDao = (GenericDAO<AttrValueProduct, Long>) ctx().getBean("attrValueEntityProductDao");
         final GenericDAO<AttrValueProductSku, Long> productSkuAvDao = (GenericDAO<AttrValueProductSku, Long>) ctx().getBean("attrValueEntityProductSkuDao");
+        final GenericDAO<ProductAssociation, Long> productAssociationDao = (GenericDAO<ProductAssociation, Long>) ctx().getBean("productAssociationDao");
 
         return new RemoveObsoleteProductProcessorImpl(
                 productService,
@@ -135,7 +136,7 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
                 productAvDao,
                 productSkuService,
                 productSkuAvDao,
-                null
+                productAssociationDao, null
         ) {
 
             @Override
