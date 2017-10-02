@@ -31,7 +31,7 @@ import org.yes.cart.service.dto.DtoImageService;
 import java.io.File;
 import java.util.UUID;
 
-import static junit.framework.Assert.assertNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNotNull;
 

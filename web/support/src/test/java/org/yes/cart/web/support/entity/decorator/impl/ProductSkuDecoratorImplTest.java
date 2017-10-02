@@ -32,7 +32,7 @@ import org.yes.cart.web.support.i18n.impl.I18NWebSupportImpl;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: igor

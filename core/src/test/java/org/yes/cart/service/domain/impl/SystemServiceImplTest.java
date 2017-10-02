@@ -24,7 +24,7 @@ import org.yes.cart.service.domain.SystemService;
 
 import java.util.UUID;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
