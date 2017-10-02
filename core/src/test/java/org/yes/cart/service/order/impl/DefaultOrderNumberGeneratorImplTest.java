@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.order.impl;
 
-import org.hibernate.criterion.Criterion;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -75,6 +74,12 @@ public class DefaultOrderNumberGeneratorImplTest {
         final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         final Calendar now = Calendar.getInstance();
         now.setTime(format.parse("2017-12-25 11:11:11"));
+        final Calendar dec01 = Calendar.getInstance();
+        dec01.setTime(format.parse("2017-12-01 00:00:00"));
+        final Calendar jan01 = Calendar.getInstance();
+        jan01.setTime(format.parse("2018-01-01 00:00:00"));
+        final Calendar feb01 = Calendar.getInstance();
+        feb01.setTime(format.parse("2018-02-01 00:00:00"));
 
         DefaultOrderNumberGeneratorImpl defaultOrderNumberGenerator = new DefaultOrderNumberGeneratorImpl(customerOrderDao) {
             @Override
@@ -84,7 +89,18 @@ public class DefaultOrderNumberGeneratorImplTest {
         };
 
         this.mockery.checking(new Expectations() {{
-            allowing(customerOrderDao).findCountByCriteria(with(any(Criterion[].class))); will(returnValue(0));
+            oneOf(customerOrderDao).findCountByCriteria(
+                    " where e.orderTimestamp >= ?1 and e.orderStatus <> ?2",
+                    dec01.getTime(), CustomerOrder.ORDER_STATUS_NONE
+            ); will(returnValue(0));
+            oneOf(customerOrderDao).findCountByCriteria(
+                    " where e.orderTimestamp >= ?1 and e.orderStatus <> ?2",
+                    jan01.getTime(), CustomerOrder.ORDER_STATUS_NONE
+            ); will(returnValue(0));
+            oneOf(customerOrderDao).findCountByCriteria(
+                    " where e.orderTimestamp >= ?1 and e.orderStatus <> ?2",
+                    feb01.getTime(), CustomerOrder.ORDER_STATUS_NONE
+            ); will(returnValue(0));
         }});
 
         int prevMonth = 11;

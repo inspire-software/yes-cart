@@ -309,15 +309,8 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
-    public int findCountByCriteria(final Criterion... criterion) {
-        return categoryService.findCountByCriteria(criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return categoryService.findCountByCriteria(criteriaTuner, criterion);
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+        return categoryService.findCountByCriteria(eCriteria, parameters);
     }
 
     /**

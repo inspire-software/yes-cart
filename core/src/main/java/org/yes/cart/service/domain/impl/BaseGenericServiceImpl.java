@@ -94,15 +94,8 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
     /**
      * {@inheritDoc}
      */
-    public int findCountByCriteria(final Criterion... criterion) {
-        return genericDao.findCountByCriteria(criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return genericDao.findCountByCriteria(criteriaTuner, criterion);
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+        return genericDao.findCountByCriteria(eCriteria, parameters);
     }
 
     /**

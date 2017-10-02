@@ -16,11 +16,9 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.apache.lucene.search.Query;
 import org.hibernate.criterion.Criterion;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.ProductSku;
@@ -211,15 +209,8 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
-    public int findCountByCriteria(final Criterion... criterion) {
-        return productSkuService.findCountByCriteria(criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return productSkuService.findCountByCriteria(criteriaTuner, criterion);
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+        return productSkuService.findCountByCriteria(eCriteria, parameters);
     }
 
     /**

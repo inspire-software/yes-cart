@@ -191,13 +191,8 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     }
 
     /** {@inheritDoc} */
-    public int findCountByCriteria(final Criterion... criterion) {
-        return skuWarehouseService.findCountByCriteria(criterion);
-    }
-
-    /** {@inheritDoc} */
-    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return skuWarehouseService.findCountByCriteria(criteriaTuner, criterion);
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+        return skuWarehouseService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */

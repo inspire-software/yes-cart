@@ -16,19 +16,18 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
 import org.yes.cart.domain.vo.VoManagerRole;
 import org.yes.cart.domain.vo.VoManagerShop;
+import org.yes.cart.service.async.AsyncContextFactory;
 import org.yes.cart.service.cluster.ClusterService;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
 import org.yes.cart.service.vo.VoDashboardWidgetService;
-import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.util.*;
 
@@ -88,7 +87,7 @@ public class VoDashboardWidgetPluginAlerts implements VoDashboardWidgetPlugin {
         final List<MutablePair<String, Integer>> data = new ArrayList<>();
 
         // Mail alert
-        final int mailCount = this.mailService.findCountByCriteria(Restrictions.in("shopCode", shops));
+        final int mailCount = this.mailService.findCountByCriteria(" where e.shopCode in (?1)", shops);
         if (mailCount > 0) {
             data.add(MutablePair.of("mailQueue", mailCount));
         }

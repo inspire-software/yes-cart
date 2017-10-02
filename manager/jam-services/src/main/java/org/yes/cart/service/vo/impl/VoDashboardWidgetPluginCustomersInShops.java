@@ -16,10 +16,6 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.transform.DistinctRootEntityResultTransformer;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
 import org.yes.cart.domain.vo.VoManagerRole;
@@ -80,18 +76,10 @@ public class VoDashboardWidgetPluginCustomersInShops implements VoDashboardWidge
 
         final int date = today.get(Calendar.DATE);
 
-        final CriteriaTuner tuner = new CriteriaTuner() {
-            @Override
-            public void tune(final Criteria crit) {
-                crit.createAlias("shops", "cshop");
-                crit.setResultTransformer(DistinctRootEntityResultTransformer.INSTANCE);
-            }
-        };
+        final String criteria = " join e.shops cshop where cshop.shop.shopId in (?1) and e.createdTimestamp >= ?2";
 
         final int ordersToday = this.customerService.findCountByCriteria(
-                tuner,
-                Restrictions.in("cshop.shop.shopId", shops),
-                Restrictions.ge("createdTimestamp", today.getTime())
+                criteria, shops, today.getTime()
         );
 
         if (today.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
@@ -103,9 +91,7 @@ public class VoDashboardWidgetPluginCustomersInShops implements VoDashboardWidge
         }
 
         final int ordersWeek = this.customerService.findCountByCriteria(
-                tuner,
-                Restrictions.in("cshop.shop.shopId", shops),
-                Restrictions.ge("createdTimestamp", today.getTime())
+                criteria, shops, today.getTime()
         );
 
         if (today.get(Calendar.DATE) > date) {
@@ -117,9 +103,7 @@ public class VoDashboardWidgetPluginCustomersInShops implements VoDashboardWidge
         }
 
         final int ordersMonth = this.customerService.findCountByCriteria(
-                tuner,
-                Restrictions.in("cshop.shop.shopId", shops),
-                Restrictions.ge("createdTimestamp", today.getTime())
+                criteria, shops, today.getTime()
         );
 
 

@@ -269,13 +269,8 @@ public class AttributeServiceCachedImpl implements AttributeService {
     }
 
     /** {@inheritDoc} */
-    public int findCountByCriteria(final Criterion... criterion) {
-        return attributeService.findCountByCriteria(criterion);
-    }
-
-    /** {@inheritDoc} */
-    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return attributeService.findCountByCriteria(criteriaTuner, criterion);
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+        return attributeService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */

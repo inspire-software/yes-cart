@@ -302,11 +302,12 @@ public interface GenericDAO<T, PK extends Serializable> {
     /**
      * Find count by criteria.
      *
-     * @param criterion given criteria
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " e.attr1 = ? and e.attr2 = ?"
+     * @param parameters parameters to fill in for question marks
      *
      * @return list of found entities.
      */
-    int findCountByCriteria(Criterion... criterion);
+    int findCountByCriteria(final String eCriteria, final Object... parameters);
 
     /**
      * Find entities by criteria.
@@ -352,17 +353,6 @@ public interface GenericDAO<T, PK extends Serializable> {
                            Order[] order);
 
     /**
-     * Find entities by criteria.
-     *
-     * @param criteriaTuner optional criteria tuner.
-     * @param criterion     given criteria
-     *
-     * @return count of found entities.
-     */
-    int findCountByCriteria(CriteriaTuner criteriaTuner,
-                            Criterion... criterion);
-
-    /**
      * Find single entity by criteria.
      *
      * @param criterion given criteria
@@ -380,17 +370,6 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @return single entity or null if not found.
      */
     T findSingleByCriteria(CriteriaTuner criteriaTuner, Criterion... criterion);
-
-    /**
-     * Find entities by criteria.
-     *
-     * @param firstResult scroll to first result.
-     * @param criterion   given criteria
-     *
-     * @return list of found entities.
-     */
-    T findUniqueByCriteria(int firstResult, Criterion... criterion);
-
 
     /**
      * Persist the new entity in DB.

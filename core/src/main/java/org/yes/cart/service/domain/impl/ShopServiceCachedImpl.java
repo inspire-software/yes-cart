@@ -321,13 +321,8 @@ public class ShopServiceCachedImpl implements ShopService {
     }
 
     /** {@inheritDoc} */
-    public int findCountByCriteria(final Criterion... criterion) {
-        return shopService.findCountByCriteria(criterion);
-    }
-
-    /** {@inheritDoc} */
-    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return shopService.findCountByCriteria(criteriaTuner, criterion);
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+        return shopService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */

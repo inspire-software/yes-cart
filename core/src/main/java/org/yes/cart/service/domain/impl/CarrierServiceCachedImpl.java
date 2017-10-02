@@ -102,15 +102,8 @@ public class CarrierServiceCachedImpl implements CarrierService {
     /**
      * {@inheritDoc}
      */
-    public int findCountByCriteria(final Criterion... criterion) {
-        return carrierService.findCountByCriteria(criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return carrierService.findCountByCriteria(criteriaTuner, criterion);
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+        return carrierService.findCountByCriteria(eCriteria, parameters);
     }
 
     /**

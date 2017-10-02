@@ -180,15 +180,8 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
-    public int findCountByCriteria(final Criterion... criterion) {
-        return imageService.findCountByCriteria(criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return imageService.findCountByCriteria(criteriaTuner, criterion);
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+        return imageService.findCountByCriteria(eCriteria, parameters);
     }
 
     /**

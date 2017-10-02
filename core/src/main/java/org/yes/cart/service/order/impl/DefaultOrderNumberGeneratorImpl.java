@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.order.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.order.OrderNumberGenerator;
@@ -111,8 +110,8 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
                     // Restart count for current month
                     orderSequence.set(
                             customerOrderDao.findCountByCriteria(
-                                    Restrictions.ge("orderTimestamp", calendar.getTime()),
-                                    Restrictions.ne("orderStatus", CustomerOrder.ORDER_STATUS_NONE)
+                                    " where e.orderTimestamp >= ?1 and e.orderStatus <> ?2",
+                                    calendar.getTime(), CustomerOrder.ORDER_STATUS_NONE
                             )
                     );
                     lastCheck = calendar.getTime();

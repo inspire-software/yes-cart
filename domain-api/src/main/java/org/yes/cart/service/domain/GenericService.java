@@ -17,7 +17,6 @@
 package org.yes.cart.service.domain;
 
 import org.hibernate.criterion.Criterion;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 
 import java.util.List;
@@ -76,21 +75,14 @@ public interface GenericService<T> {
     List<T> findByCriteria(Criterion... criterion);
 
     /**
-     * Count by criteria.
+     * Find count by criteria.
      *
-     * @param criterion given criteria
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " e.attr1 = ? and e.attr2 = ?"
+     * @param parameters parameters to fill in for question marks
+     *
      * @return list of found entities.
      */
-    int findCountByCriteria(Criterion... criterion);
-
-    /**
-     * Count by criteria.
-     *
-     * @param criteriaTuner tuner
-     * @param criterion given criteria
-     * @return list of found entities.
-     */
-    int findCountByCriteria(CriteriaTuner criteriaTuner, Criterion... criterion);
+    int findCountByCriteria(String eCriteria, Object... parameters);
 
     /**
      * Find single entity by criteria.

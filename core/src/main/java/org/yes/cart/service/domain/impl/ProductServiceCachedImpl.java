@@ -526,13 +526,8 @@ public class ProductServiceCachedImpl implements ProductService {
     }
 
     /** {@inheritDoc} */
-    public int findCountByCriteria(final Criterion... criterion) {
-        return productService.findCountByCriteria(criterion);
-    }
-
-    /** {@inheritDoc} */
-    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return productService.findCountByCriteria(criteriaTuner, criterion);
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+        return productService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */

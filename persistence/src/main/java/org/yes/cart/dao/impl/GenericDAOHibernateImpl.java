@@ -19,7 +19,6 @@ package org.yes.cart.dao.impl;
 import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.RowCountProjection;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
@@ -49,6 +48,9 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     private final EntityFactory entityFactory;
     protected SessionFactory sessionFactory;
 
+    private final String selectAllHql;
+    private final String selectCountHql;
+
     /**
      * Set the Hibernate SessionFactory to be used by this DAO.
      * Will automatically create a HibernateTemplate for the given SessionFactory.
@@ -68,6 +70,9 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     public GenericDAOHibernateImpl(final Class<T> type, final EntityFactory entityFactory) {
         this.persistentClass = type;
         this.entityFactory = entityFactory;
+
+        this.selectAllHql = "select e from " + type.getSimpleName() + " e ";
+        this.selectCountHql = "select count(e) from " + type.getSimpleName() + " e ";
     }
 
     /**
@@ -332,8 +337,8 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
      * {@inheritDoc}
      */
     public ResultsIterator<T> findAllIterator() {
-        final Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        final ScrollableResults results = crit.scroll(ScrollMode.FORWARD_ONLY);
+        final Query query = sessionFactory.getCurrentSession().createQuery(this.selectAllHql);
+        final ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
         return new ResultsIteratorImpl<T>(results);
     }
 
@@ -432,14 +437,14 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
         return crit.list();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public int findCountByCriteria(final Criterion... criterion) {
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        for (Criterion c : criterion) {
-            crit.add(c);
-        }
-        crit.setProjection(new RowCountProjection());
-        return ((Number) crit.uniqueResult()).intValue();
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().createQuery(eCriteria != null ? this.selectCountHql.concat(eCriteria) : this.selectCountHql);
+        setQueryParameters(query, parameters);
+        return ((Number) query.uniqueResult()).intValue();
     }
 
     /**
@@ -505,40 +510,6 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
-    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        for (Criterion c : criterion) {
-            crit.add(c);
-        }
-        if (criteriaTuner != null) {
-            criteriaTuner.tune(crit);
-        }
-        crit.setProjection(new RowCountProjection());
-        return ((Number) crit.uniqueResult()).intValue();
-    }
-
-    /**
-     * Find entities by criteria.
-     * @param firstResult scroll to first result.
-     * @param criterion given criteria
-     * @return list of found entities.
-     */
-    @SuppressWarnings("unchecked")
-    public T findUniqueByCriteria(final int firstResult, final Criterion... criterion) {
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        for (Criterion c : criterion) {
-            crit.add(c);
-        }
-        return (T)  crit.setFirstResult(firstResult).setMaxResults(1).uniqueResult();
-
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
     public T findSingleByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
         Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
         for (Criterion c : criterion) {
@@ -559,7 +530,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
      * {@inheritDoc}
      */
     public int executeNativeUpdate(final String nativeQuery) {
-        SQLQuery sqlQuery = sessionFactory.getCurrentSession().createSQLQuery(nativeQuery);
+        NativeQuery sqlQuery = sessionFactory.getCurrentSession().createNativeQuery(nativeQuery);
         return sqlQuery.executeUpdate();
     }
 
@@ -567,7 +538,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
      * {@inheritDoc}
      */
     public List executeNativeQuery(final String nativeQuery) {
-        SQLQuery sqlQuery = sessionFactory.getCurrentSession().createSQLQuery(nativeQuery);
+        NativeQuery sqlQuery = sessionFactory.getCurrentSession().createNativeQuery(nativeQuery);
         return sqlQuery.list();
     }
 

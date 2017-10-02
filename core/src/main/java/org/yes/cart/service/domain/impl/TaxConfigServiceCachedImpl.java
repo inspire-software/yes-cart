@@ -87,13 +87,8 @@ public class TaxConfigServiceCachedImpl implements TaxConfigService {
     }
 
     /** {@inheritDoc} */
-    public int findCountByCriteria(final Criterion... criterion) {
-        return taxConfigService.findCountByCriteria(criterion);
-    }
-
-    /** {@inheritDoc} */
-    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return taxConfigService.findCountByCriteria(criteriaTuner, criterion);
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+        return taxConfigService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */

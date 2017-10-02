@@ -238,8 +238,8 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
-    public int findCountByCriteria(final Criterion... criterion) {
-        return genericDAO.findCountByCriteria(criterion);
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+        return genericDAO.findCountByCriteria(eCriteria, parameters);
     }
 
     /**
@@ -266,13 +266,6 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
-    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return genericDAO.findCountByCriteria(criteriaTuner, criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public T findSingleByCriteria(final Criterion... criterion) {
         return genericDAO.findSingleByCriteria(criterion);
     }
@@ -282,13 +275,6 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
      */
     public T findSingleByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
         return genericDAO.findSingleByCriteria(criteriaTuner, criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public T findUniqueByCriteria(final int firstResult, final Criterion... criterion) {
-        return genericDAO.findUniqueByCriteria(firstResult, criterion);
     }
 
     /**

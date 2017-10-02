@@ -78,10 +78,10 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
 
         final int date = today.get(Calendar.DATE);
 
+        final String criteria = " where e.shop.shopId in (?1) and e.createdTimestamp >= ?2 and e.orderStatus <> ?3";
+
         final int ordersToday = this.customerOrderService.findCountByCriteria(
-                Restrictions.in("shop.shopId", shops),
-                Restrictions.ge("createdTimestamp", today.getTime()),
-                Restrictions.ne("orderStatus", CustomerOrder.ORDER_STATUS_NONE)
+                criteria, shops, today.getTime(), CustomerOrder.ORDER_STATUS_NONE
         );
 
         if (today.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
@@ -93,9 +93,7 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
         }
 
         final int ordersWeek = this.customerOrderService.findCountByCriteria(
-                Restrictions.in("shop.shopId", shops),
-                Restrictions.ge("createdTimestamp", today.getTime()),
-                Restrictions.ne("orderStatus", CustomerOrder.ORDER_STATUS_NONE)
+                criteria, shops, today.getTime(), CustomerOrder.ORDER_STATUS_NONE
         );
 
         if (today.get(Calendar.DATE) > date) {
@@ -107,15 +105,13 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
         }
 
         final int ordersMonth = this.customerOrderService.findCountByCriteria(
-                Restrictions.in("shop.shopId", shops),
-                Restrictions.ge("createdTimestamp", today.getTime()),
-                Restrictions.ne("orderStatus", CustomerOrder.ORDER_STATUS_NONE)
+                criteria, shops, today.getTime(), CustomerOrder.ORDER_STATUS_NONE
         );
 
+        final String waiting = " where e.shop.shopId in (?1) and e.orderStatus <> ?2";
 
         final int ordersWaiting = this.customerOrderService.findCountByCriteria(
-                Restrictions.in("shop.shopId", shops),
-                Restrictions.eq("orderStatus", CustomerOrder.ORDER_STATUS_WAITING)
+                waiting, shops, CustomerOrder.ORDER_STATUS_WAITING
         );
 
 

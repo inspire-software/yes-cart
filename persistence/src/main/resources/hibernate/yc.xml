@@ -2801,6 +2801,13 @@
        ]]>
     </query>
 
+    <query name="PRODUCT.IN.CATEGORY.ONE">
+        <![CDATA[
+       select pc from  ProductCategoryEntity pc
+            where  pc.category.categoryId = ?1
+       ]]>
+    </query>
+
     <query name="PRODUCT.IN.CATEGORY">
         <![CDATA[
        select pc from  ProductCategoryEntity pc

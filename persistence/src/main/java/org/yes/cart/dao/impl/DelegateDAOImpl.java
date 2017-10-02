@@ -220,8 +220,8 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
-    public int findCountByCriteria(final Criterion... criterion) {
-        return delegate.findCountByCriteria(criterion);
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+        return delegate.findCountByCriteria(eCriteria, parameters);
     }
 
     /**
@@ -248,13 +248,6 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
-    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return delegate.findCountByCriteria(criteriaTuner, criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public T findSingleByCriteria(final Criterion... criterion) {
         return delegate.findSingleByCriteria(criterion);
     }
@@ -264,13 +257,6 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
      */
     public T findSingleByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
         return delegate.findSingleByCriteria(criteriaTuner, criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public T findUniqueByCriteria(final int firstResult, final Criterion... criterion) {
-        return delegate.findUniqueByCriteria(firstResult, criterion);
     }
 
     /**

@@ -58,7 +58,7 @@ public class ProductIndexingPerformanceTest extends AbstractTestDAO {
         getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                System.out.println("Starting " + entity + " test with count: " + dao.findCountByCriteria());
+                System.out.println("Starting " + entity + " test with count: " + dao.findCountByCriteria(null));
 
                 final long start = System.currentTimeMillis();
                 for (int i = 0; i < maxIterations; i++) {

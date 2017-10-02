@@ -105,13 +105,8 @@ public class ProductAssociationServiceCachedImpl implements ProductAssociationSe
     }
 
     /** {@inheritDoc} */
-    public int findCountByCriteria(final Criterion... criterion) {
-        return productAssociationService.findCountByCriteria(criterion);
-    }
-
-    /** {@inheritDoc} */
-    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return productAssociationService.findCountByCriteria(criteriaTuner, criterion);
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+        return productAssociationService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */

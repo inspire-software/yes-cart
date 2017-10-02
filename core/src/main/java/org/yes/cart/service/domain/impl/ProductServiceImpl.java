@@ -148,13 +148,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         final int qty = getProductQty(category.getCategoryId());
         if (qty > 0) {
             final int idx = rand.nextInt(qty);
-            final ProductCategory productCategory = productCategoryDao.findUniqueByCriteria(
-                    idx,
-                    Restrictions.eq("category.categoryId", category.getCategoryId())
-            );
+            final List<ProductCategory> productCategory =
+                    productCategoryDao.findRangeByNamedQuery("PRODUCT.IN.CATEGORY.ONE", idx, 1, category.getCategoryId());
 
-            if (productCategory != null) {
-                final Product product = productDao.findById(productCategory.getProduct().getProductId());
+            if (!CollectionUtils.isEmpty(productCategory)) {
+                final Product product = productDao.findById(productCategory.get(0).getProduct().getProductId());
                 product.getAttributes().size(); // initialise attributes
                 return product;
             }
@@ -532,18 +530,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     public Pair<Integer, Integer> getProductQtyAll() {
 
-        final int total = getGenericDao().findCountByCriteria();
+        final int total = getGenericDao().findCountByCriteria(null);
         final Date now = new Date();
         final int active = getGenericDao().findCountByCriteria(
-                Restrictions.or(
-                        Restrictions.isNull("availablefrom"),
-                        Restrictions.eq("availability", Product.AVAILABILITY_PREORDER),
-                        Restrictions.le("availablefrom", now)
-                ),
-                Restrictions.or(
-                        Restrictions.isNull("availableto"),
-                        Restrictions.ge("availableto", now)
-                )
+                " where (e.availablefrom is null or e.availability = ?1 or e.availablefrom <= ?2) and (e.availableto is null or e.availableto >= ?2)",
+                Product.AVAILABILITY_PREORDER, now
         );
 
         return new Pair<>(total, active);
