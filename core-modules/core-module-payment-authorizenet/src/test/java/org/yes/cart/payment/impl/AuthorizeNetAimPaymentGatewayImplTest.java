@@ -54,11 +54,18 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
 
     private boolean isTestAllowed() {
 
+        enabled = true;
+
+        user = "3g5KQdad4b";
+        txkey = "759X2KMCga4sh69a";
+        md5 = "Simon";
+/*
         enabled = Boolean.valueOf(System.getProperty("testPgAuthorizeNetAim"));
 
         user = System.getProperty("testPgAuthorizeNetAimUser");
         txkey = System.getProperty("testPgAuthorizeNetAimTxKey");
         md5 = System.getProperty("testPgAuthorizeNetAimMD5");
+*/
 
 
         boolean testConfigured = StringUtils.isNotBlank(user) && StringUtils.isNotBlank(txkey) && StringUtils.isNotBlank(md5);
