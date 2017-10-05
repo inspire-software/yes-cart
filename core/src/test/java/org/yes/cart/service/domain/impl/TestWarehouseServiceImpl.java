@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.transaction.TransactionStatus;

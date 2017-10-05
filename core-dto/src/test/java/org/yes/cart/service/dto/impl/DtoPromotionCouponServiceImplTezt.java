@@ -92,6 +92,20 @@ public class DtoPromotionCouponServiceImplTezt extends BaseCoreDBTestCase {
         assertNotNull(coupons);
         assertEquals(10, coupons.size());
 
+        // find all
+        List<PromotionCouponDTO> find = dtoPromotionCouponService.findBy(promotionDTO.getPromotionId(), null, 0, 15);
+        assertNotNull(find);
+        assertEquals(10, find.size());
+        // find by code
+        find = dtoPromotionCouponService.findBy(promotionDTO.getPromotionId(), coupons.get(0).getCode(), 0, 10);
+        assertNotNull(find);
+        assertEquals(1, find.size());
+        // created 60 sec ago
+        find = dtoPromotionCouponService.findBy(promotionDTO.getPromotionId(), new Date(System.currentTimeMillis() - 60000L));
+        assertNotNull(find);
+        assertEquals(10, find.size());
+
+
         for (final PromotionCouponDTO coupon : coupons) {
             assertNotNull(coupon.getCode());
             assertEquals(promotionDTO.getPromotionId(), coupon.getPromotionId());

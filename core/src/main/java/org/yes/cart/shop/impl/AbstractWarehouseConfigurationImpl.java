@@ -16,7 +16,6 @@
 
 package org.yes.cart.shop.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -53,7 +52,7 @@ public abstract class AbstractWarehouseConfigurationImpl implements ShopConfigur
     /** {@inheritDoc} */
     @Override
     public void afterPropertiesSet() throws Exception {
-        final Warehouse warehouse = this.warehouseService.findSingleByCriteria(Restrictions.eq("code", this.warehouseCode));
+        final Warehouse warehouse = this.warehouseService.findSingleByCriteria(" where e.code = ?1", this.warehouseCode);
         if (warehouse != null) {
             this.doConfigurations(warehouse);
         } else {

@@ -78,4 +78,26 @@ public class DtoProductTypeServiceImplTezt extends BaseCoreDBTestCase {
         assertTrue(names.contains("Robots"));
 
     }
+
+
+    @Test
+    public void testFindBy() throws Exception {
+
+        // basic
+        List<ProductTypeDTO> list = dtoService.findBy("play", 0, 10);
+        assertFalse(list.isEmpty());
+
+        // exact
+        list = dtoService.findBy("!player", 0, 10);
+        assertTrue(list.isEmpty());
+        list = dtoService.findBy("!mp3 player", 0, 10);
+        assertFalse(list.isEmpty());
+
+        // by attribute code
+        list = dtoService.findBy("#MATERIAL", 0, 10);
+        assertFalse(list.isEmpty());
+
+    }
+
+
 }

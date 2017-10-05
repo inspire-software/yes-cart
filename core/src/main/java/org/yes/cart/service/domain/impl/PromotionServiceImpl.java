@@ -16,15 +16,11 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.domain.PromotionService;
+import org.yes.cart.utils.HQLUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -57,44 +53,17 @@ public class PromotionServiceImpl extends BaseGenericServiceImpl<Promotion> impl
                                             final String action,
                                             final Boolean enabled) {
 
-        final List<Criterion> criterionList = new ArrayList<Criterion>();
+        return getGenericDao().findByNamedQuery(
+                "PROMOTION.BY.CODE.SHOPCODE.CURRENCY.TAG.TYPE.ACTION.ACTIVE",
+                HQLUtils.criteriaEq(shopCode),
+                HQLUtils.criteriaEq(currency),
+                HQLUtils.criteriaIlikeAnywhere(code),
+                HQLUtils.criteriaIlikeAnywhere(tag),
+                HQLUtils.criteriaEq(type),
+                HQLUtils.criteriaEq(action),
+                enabled
+        );
 
-        if (StringUtils.isNotBlank(code)) {
-            criterionList.add(Restrictions.like("code", code, MatchMode.ANYWHERE));
-        }
-
-        if (StringUtils.isNotBlank(shopCode)) {
-            criterionList.add(Restrictions.like("shopCode", shopCode, MatchMode.ANYWHERE));
-        }
-
-        if (StringUtils.isNotBlank(currency)) {
-            criterionList.add(Restrictions.like("currency", currency, MatchMode.ANYWHERE));
-        }
-
-        if (StringUtils.isNotBlank(tag)) {
-            criterionList.add(Restrictions.like("tag", tag, MatchMode.ANYWHERE));
-        }
-
-        if (StringUtils.isNotBlank(type)) {
-            criterionList.add(Restrictions.like("promoType", type, MatchMode.ANYWHERE));
-        }
-
-        if (StringUtils.isNotBlank(action)) {
-            criterionList.add(Restrictions.like("promoAction", action, MatchMode.ANYWHERE));
-        }
-        if (enabled != null) {
-            criterionList.add(Restrictions.eq("enabled", enabled));
-        }
-
-        if (criterionList.isEmpty()) {
-            return getGenericDao().findAll();
-
-        } else {
-            return getGenericDao().findByCriteria(
-                    criterionList.toArray(new Criterion[criterionList.size()])
-            );
-
-        }
     }
 
 

@@ -23,7 +23,6 @@ import org.yes.cart.payment.service.PaymentGatewayParameterService;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -55,10 +54,10 @@ public class PaymentGatewayParametersServiceTest extends BasePaymentModuleDBTest
         long pkValue = parameter.getPaymentGatewayParameterId();
         parameter.setValue("black");
         service.update(parameter);
-        parameter = service.getById(pkValue);
+        parameter = service.findById(pkValue);
         assertEquals("black", parameter.getValue());
         service.delete(parameter);
-        parameter = service.getById(pkValue);
+        parameter = service.findById(pkValue);
         assertNull(parameter);
     }
 
@@ -70,7 +69,7 @@ public class PaymentGatewayParametersServiceTest extends BasePaymentModuleDBTest
         assertTrue(parameter.getPaymentGatewayParameterId() > 0);
         long pkValue = parameter.getPaymentGatewayParameterId();
         service.deleteByLabel("pgLabel", "label");
-        parameter = service.getById(pkValue);
+        parameter = service.findById(pkValue);
         assertNull(parameter);
     }
 

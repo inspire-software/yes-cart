@@ -46,6 +46,18 @@ public class DtoBrandServiceImplTezt extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testFindBy() throws Exception {
+        // full name
+        List<BrandDTO> dto = dtoService.findBy("sony", 0, 10);
+        assertFalse(dto.isEmpty());
+        assertEquals("Sony", dto.get(0).getName());
+        // partial
+        dto = dtoService.findBy("future", 0, 10);
+        assertFalse(dto.isEmpty());
+        assertEquals("FutureRobots", dto.get(0).getName());
+    }
+
+    @Test
     public void testCreate() throws Exception {
         BrandDTO dto = getDto();
         dto = dtoService.create(dto);

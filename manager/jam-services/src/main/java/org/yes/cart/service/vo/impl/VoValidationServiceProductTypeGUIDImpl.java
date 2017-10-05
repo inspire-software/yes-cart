@@ -16,10 +16,7 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.hibernate.criterion.Restrictions;
-import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.entity.ProductType;
-import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.ProductTypeService;
 import org.yes.cart.service.vo.VoValidationService;
 
@@ -40,7 +37,7 @@ public class VoValidationServiceProductTypeGUIDImpl extends AbstractVoValidation
 
     @Override
     protected Long getDuplicateId(final long currentId, final String valueToCheck) {
-        final List<ProductType> type = this.productTypeService.findByCriteria(Restrictions.eq("guid", valueToCheck));
+        final List<ProductType> type = this.productTypeService.findByCriteria(" where e.guid = ?1 ", valueToCheck);
         return type != null && type.size() > 0 && type.get(0).getProducttypeId() != currentId ? type.get(0).getProducttypeId() : null;
     }
 }

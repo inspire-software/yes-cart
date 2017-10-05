@@ -28,6 +28,7 @@ import org.yes.cart.service.domain.AttributeGroupService;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.EtypeService;
 import org.yes.cart.service.dto.DtoAttributeService;
+import org.yes.cart.utils.HQLUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -164,16 +165,24 @@ public class DtoAttributeServiceImpl
 
         final Pair<String, String> byCode = ComplexSearchUtils.checkSpecialSearch(filter, CODE);
         if (byCode != null) {
-            final Attribute attr = ((AttributeService) service).findByAttributeCode(byCode.getSecond());
+            final List<Attribute> attr = service.getGenericDao().findByCriteria(
+                    " where lower(e.code) like ?1 order by e.name",
+                    HQLUtils.criteriaIeq(byCode.getSecond())
+            );
             if (attr != null) {
-                final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(1);
-                fillDTOs(Arrays.asList(attr), attributesDTO);
+                final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>();
+                fillDTOs(attr, attributesDTO);
                 return attributesDTO;
             }
             return Collections.emptyList();
         }
 
-        final List<Attribute> attrs = ((AttributeService)service).findAttributesBy(attributeGroupCode, filter, filter, filter, page, pageSize);
+        final List<Attribute> attrs = service.getGenericDao().findRangeByCriteria(
+                " where e.attributeGroup.code = ?1 and (lower(e.code) like ?2 or lower(e.name) like ?2 or lower(e.description) like ?2) order by e.name",
+                page * pageSize, pageSize,
+                attributeGroupCode,
+                HQLUtils.criteriaIlikeAnywhere(filter)
+        );
         if (attrs != null) {
             final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attrs.size());
             fillDTOs(attrs, attributesDTO);

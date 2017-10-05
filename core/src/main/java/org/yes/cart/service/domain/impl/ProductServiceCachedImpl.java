@@ -16,10 +16,8 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.Criterion;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Category;
@@ -422,12 +420,11 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
-    public List<Product> getProductByCodeNameBrandType(final CriteriaTuner criteriaTuner,
-                                                       final String code,
+    public List<Product> getProductByCodeNameBrandType(final String code,
                                                        final String name,
                                                        final Long brandId,
                                                        final Long productTypeId) {
-        return productService.getProductByCodeNameBrandType(criteriaTuner, code, name, brandId, productTypeId);
+        return productService.getProductByCodeNameBrandType(code, name, brandId, productTypeId);
     }
 
 
@@ -521,8 +518,8 @@ public class ProductServiceCachedImpl implements ProductService {
     }
 
     /** {@inheritDoc} */
-    public List<Product> findByCriteria(final Criterion... criterion) {
-        return productService.findByCriteria(criterion);
+    public List<Product> findByCriteria(final String eCriteria, final Object... parameters) {
+        return productService.findByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
@@ -531,8 +528,8 @@ public class ProductServiceCachedImpl implements ProductService {
     }
 
     /** {@inheritDoc} */
-    public Product findSingleByCriteria(final Criterion... criterion) {
-        return productService.findSingleByCriteria(criterion);
+    public Product findSingleByCriteria(final String eCriteria, final Object... parameters) {
+        return productService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */

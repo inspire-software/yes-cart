@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttributeGroup;
 import org.yes.cart.service.domain.AttributeGroupService;
@@ -47,7 +46,7 @@ public class AttributeGroupServiceImpl extends BaseGenericServiceImpl<AttributeG
      * @return {@link AttributeGroup} if found, otherwise null.
      */
     public AttributeGroup getAttributeGroupByCode(final String code) {
-        return attributeGroupDao.findSingleByCriteria(Restrictions.eq("code", code));
+        return attributeGroupDao.findSingleByCriteria(" where e.code = ?1", code);
     }
 
 

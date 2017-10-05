@@ -25,6 +25,7 @@ import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.dto.DtoPromotionService;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -87,6 +88,160 @@ public class DtoPromotionServiceImplTezt extends BaseCoreDBTestCase {
                 null,
                 null,
                 null);
+
+        assertNotNull(promos);
+        assertEquals(0, promos.size());
+
+        dtoPromotionService.remove(promotionDTO.getPromotionId());
+    }
+
+    @Test
+    public void testFindBy() throws Exception {
+        PromotionDTO promotionDTO = getDto();
+        promotionDTO = dtoPromotionService.create(promotionDTO);
+
+        // retrieve all
+        List<PromotionDTO> promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                null,
+                null,
+                null,
+                0,
+                10);
+
+        assertNotNull(promos);
+        assertEquals(1, promos.size());
+
+
+        // basic
+        promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                promotionDTO.getCode(),
+                null,
+                null,
+                0,
+                10);
+
+        assertNotNull(promos);
+        assertEquals(1, promos.size());
+
+
+        // basic with types
+        promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                promotionDTO.getCode(),
+                Collections.singletonList(promotionDTO.getPromoType()),
+                Collections.singletonList(promotionDTO.getPromoAction()),
+                0,
+                10);
+
+        assertNotNull(promos);
+        assertEquals(1, promos.size());
+
+        // all enabled
+        promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                "++",
+                Collections.singletonList(promotionDTO.getPromoType()),
+                Collections.singletonList(promotionDTO.getPromoAction()),
+                0,
+                10);
+
+        assertNotNull(promos);
+        assertEquals(1, promos.size());
+
+        // all disabled
+        promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                "--",
+                Collections.singletonList(promotionDTO.getPromoType()),
+                Collections.singletonList(promotionDTO.getPromoAction()),
+                0,
+                10);
+
+        assertNotNull(promos);
+        assertEquals(0, promos.size());
+
+        // condition
+        promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                "?order.amount",
+                Collections.singletonList(promotionDTO.getPromoType()),
+                Collections.singletonList(promotionDTO.getPromoAction()),
+                0,
+                10);
+
+        assertNotNull(promos);
+        assertEquals(1, promos.size());
+
+        // enabled condition
+        promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                "+?order.amount",
+                Collections.singletonList(promotionDTO.getPromoType()),
+                Collections.singletonList(promotionDTO.getPromoAction()),
+                0,
+                10);
+
+        assertNotNull(promos);
+        assertEquals(1, promos.size());
+
+        // disabled condition
+        promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                "-?order.amount",
+                Collections.singletonList(promotionDTO.getPromoType()),
+                Collections.singletonList(promotionDTO.getPromoAction()),
+                0,
+                10);
+
+        assertNotNull(promos);
+        assertEquals(0, promos.size());
+
+
+        // code
+        promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                "#" + promotionDTO.getCode(),
+                Collections.singletonList(promotionDTO.getPromoType()),
+                Collections.singletonList(promotionDTO.getPromoAction()),
+                0,
+                10);
+
+        assertNotNull(promos);
+        assertEquals(1, promos.size());
+
+        // enabled code
+        promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                "+#" + promotionDTO.getCode(),
+                Collections.singletonList(promotionDTO.getPromoType()),
+                Collections.singletonList(promotionDTO.getPromoAction()),
+                0,
+                10);
+
+        assertNotNull(promos);
+        assertEquals(1, promos.size());
+
+        // disabled code
+        promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                "-#" + promotionDTO.getCode(),
+                Collections.singletonList(promotionDTO.getPromoType()),
+                Collections.singletonList(promotionDTO.getPromoAction()),
+                0,
+                10);
 
         assertNotNull(promos);
         assertEquals(0, promos.size());

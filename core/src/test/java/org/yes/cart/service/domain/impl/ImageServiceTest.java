@@ -18,7 +18,6 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.io.FileUtils;
 import org.dbunit.util.Base64;
-import org.hibernate.criterion.Criterion;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -178,7 +177,7 @@ public class ImageServiceTest {
             will(returnValue(mediaFileNameStrategy));
             allowing(languageService).getSupportedLanguages();
             will(returnValue(Arrays.asList("en", "uk", "ru")));
-            allowing(seoImageDao).findByCriteria(with(any(Criterion[].class)));
+            allowing(seoImageDao).findByCriteria(with(equal(" where e.imageName = ?1")), with(equal(new String[] {"/imgvault/product/some-seo-image-name_PRODUCT2.jpeg"})));
             will(returnValue(null));
             allowing(productDao).findQueryObjectByNamedQuery(with(equal("PRODUCT.CODE.BY.MEDIAFILE.NAME")), with(equal(new String[]{"some-seo-image-name_PRODUCT2.jpeg", "IMAGE%"})));
             will(returnValue(Collections.singletonList("PRODUCT2")));

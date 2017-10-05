@@ -17,7 +17,6 @@
 package org.yes.cart.service.domain.impl;
 
 import org.hibernate.Hibernate;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
@@ -93,7 +92,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      * {@inheritDoc}
      */
     public CustomerOrderDelivery findDeliveryByNumber(final String deliveryNum) {
-        return customerOrderDeliveryDao.findSingleByCriteria(Restrictions.eq("deliveryNum", deliveryNum));
+        return customerOrderDeliveryDao.findSingleByCriteria(" where e.deliveryNum = ?1", deliveryNum);
     }
 
     /**
@@ -197,12 +196,11 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     public List<CustomerOrder> findCustomerOrders(final Customer customer, final Date since) {
         if (since == null) {
             return getGenericDao().findByCriteria(
-                    Restrictions.eq("customer", customer)
+                    " where e.customer = ?1", customer
             );
         }
         return getGenericDao().findByCriteria(
-                Restrictions.eq("customer", customer),
-                Restrictions.gt("orderTimestamp", since)
+                " where e.customer = ?1 and e.orderTimestamp >= ?2", customer, since
         );
     }
 
@@ -235,9 +233,8 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             onePhysicalDelivery.put(isAllowed.getKey(), !shoppingCart.getOrderInfo().isMultipleDelivery() || !isAllowed.getValue());
         }
 
-        final CustomerOrder customerOrderToDelete = getGenericDao().findSingleByCriteria(
-                Restrictions.eq("cartGuid", shoppingCart.getGuid())
-        );
+        final CustomerOrder customerOrderToDelete = findByGuid(shoppingCart.getGuid());
+
         if (customerOrderToDelete != null) {
 
             if (!CustomerOrder.ORDER_STATUS_NONE.equals(customerOrderToDelete.getOrderStatus())) {
@@ -312,7 +309,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      */
     public CustomerOrder findByGuid(final String shoppingCartGuid) {
         return getGenericDao().findSingleByCriteria(
-                Restrictions.eq("cartGuid", shoppingCartGuid)
+                " where e.cartGuid = ?1", shoppingCartGuid
         );
     }
 
@@ -321,7 +318,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      */
     public CustomerOrder findByOrderNumber(final String orderNumber) {
         return getGenericDao().findSingleByCriteria(
-                Restrictions.eq("ordernum", orderNumber)
+                " where e.ordernum = ?1", orderNumber
         );
     }
 

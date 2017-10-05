@@ -34,13 +34,6 @@ public interface VoPromotionService {
      * @return list of promotions
      * @throws Exception
      */
-    List<VoPromotion> getFilteredPromotion(String shopCode, String currency, String filter, int max) throws Exception;
-
-    /**
-     * Get all promotions in the system, filtered by criteria and according to rights, up to max
-     * @return list of promotions
-     * @throws Exception
-     */
     List<VoPromotion> getFilteredPromotion(String shopCode, String currency, String filter, List<String> types, List<String> actions, int max) throws Exception;
 
     /**

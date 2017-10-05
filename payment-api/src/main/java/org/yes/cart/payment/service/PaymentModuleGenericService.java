@@ -16,7 +16,6 @@
 
 package org.yes.cart.payment.service;
 
-import org.hibernate.criterion.Criterion;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 
 import java.util.List;
@@ -42,7 +41,7 @@ public interface PaymentModuleGenericService<T> {
      * @param pk pk value.
      * @return instance if found, otherwise null.
      */
-    T getById(long pk);
+    T findById(long pk);
 
     /**
      * Persist instance.
@@ -70,18 +69,22 @@ public interface PaymentModuleGenericService<T> {
     /**
      * Find entities by criteria.
      *
-     * @param criterion given criteria
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
+     * @param parameters parameters to fill in for question marks
+     *
      * @return list of found entities.
      */
-    List<T> findByCriteria(Criterion... criterion);
+    List<T> findByCriteria(String eCriteria, Object... parameters);
 
     /**
      * Find single entity by criteria.
      *
-     * @param criterion given criteria
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
+     * @param parameters parameters to fill in for question marks
+     *
      * @return single entity or null if not found.
      */
-    T findSingleByCriteria(Criterion... criterion);
+    T findSingleByCriteria(String eCriteria, Object... parameters);
 
     /**
      * Get generic dao

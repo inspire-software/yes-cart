@@ -25,7 +25,6 @@ import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.PriceListDTOImpl;
 import org.yes.cart.service.dto.DtoPriceListsService;
-import org.yes.cart.service.dto.support.impl.PriceListFilterImpl;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -33,7 +32,6 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * User: denispavlov
@@ -104,22 +102,17 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
 
         assertNotNull(shop);
 
-        final PriceListFilterImpl filter = new PriceListFilterImpl();
-
         // No price list without shop
-        List<PriceListDTO> pl = dtoService.getPriceList(filter);
+        List<PriceListDTO> pl = dtoService.findBy(0L, null, null, 0, 10);
         assertTrue(pl.isEmpty());
 
 
         // Price list available for shop and currency
-        filter.setShop(shop);
-        filter.setCurrencyCode("EUR");
-        pl = dtoService.getPriceList(filter);
+        pl = dtoService.findBy(shop.getShopId(), "EUR", null, 0, 10);
         assertFalse(pl.isEmpty());
 
         // Test partial SKU match
-        filter.setProductCode("CC_TEST");
-        pl = dtoService.getPriceList(filter);
+        pl = dtoService.findBy(shop.getShopId(), "EUR", "CC_TEST", 0, 10);
         assertFalse(pl.isEmpty());
 
         Set<String> sku = new HashSet<String>();
@@ -133,8 +126,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
 
 
         // Test name SKU match
-        filter.setProductCode("cc test 11");
-        pl = dtoService.getPriceList(filter);
+        pl = dtoService.findBy(shop.getShopId(), "EUR", "cc test 11", 0, 10);
         assertFalse(pl.isEmpty());
 
         for (final PriceListDTO price : pl) {
@@ -142,9 +134,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
         }
 
         // Test exact SKU match
-        filter.setProductCode("CC_TEST1");
-        filter.setProductCodeExact(true);
-        pl = dtoService.getPriceList(filter);
+        pl = dtoService.findBy(shop.getShopId(), "EUR", "!CC_TEST1", 0, 10);
         assertFalse(pl.isEmpty());
 
         for (final PriceListDTO price : pl) {
@@ -152,10 +142,12 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
         }
 
         // Test SKU no match
-        filter.setProductCode("something really weird not matching");
-        filter.setProductCodeExact(true);
-        pl = dtoService.getPriceList(filter);
+        pl = dtoService.findBy(shop.getShopId(), "EUR", "!something really weird not matching", 0, 10);
         assertTrue(pl.isEmpty());
+
+        // Pricing policy
+        pl = dtoService.findBy(shop.getShopId(), "EUR", "#P1", 0, 10);
+        assertFalse(pl.isEmpty());
 
 
 
@@ -173,12 +165,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
 
         assertNotNull(shop);
 
-        final PriceListFilterImpl filter = new PriceListFilterImpl();
-        filter.setShop(shop);
-        filter.setProductCode("133456-a");
-        filter.setProductCodeExact(true);
-        filter.setCurrencyCode("EUR");
-        assertTrue(dtoService.getPriceList(filter).isEmpty());
+        assertTrue(dtoService.findBy(shop.getShopId(), "EUR", "!133456-a", 0, 10).isEmpty());
 
         PriceListDTO skuPriceDTO = new PriceListDTOImpl();
         skuPriceDTO.setRegularPrice(new BigDecimal("1.23"));
@@ -190,7 +177,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
         skuPriceDTO.setQuantity(BigDecimal.ONE);
         dtoService.createPrice(skuPriceDTO);
 
-        final List<PriceListDTO> saved = dtoService.getPriceList(filter);
+        final List<PriceListDTO> saved = dtoService.findBy(shop.getShopId(), "EUR", "!133456-A", 0, 10);
         assertFalse(saved.isEmpty());
 
         final PriceListDTO pl = saved.get(0);
@@ -215,12 +202,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
 
         assertNotNull(shop);
 
-        final PriceListFilterImpl filter = new PriceListFilterImpl();
-        filter.setShop(shop);
-        filter.setProductCode("133456-a0");
-        filter.setProductCodeExact(true);
-        filter.setCurrencyCode("EUR");
-        assertTrue(dtoService.getPriceList(filter).isEmpty());
+        assertTrue(dtoService.findBy(shop.getShopId(), "EUR", "!133456-a0", 0, 10).isEmpty());
 
         PriceListDTO skuPriceDTO = new PriceListDTOImpl();
         skuPriceDTO.setRegularPrice(new BigDecimal("0.00"));
@@ -232,7 +214,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
         skuPriceDTO.setQuantity(BigDecimal.ONE);
         dtoService.createPrice(skuPriceDTO);
 
-        final List<PriceListDTO> saved = dtoService.getPriceList(filter);
+        final List<PriceListDTO> saved = dtoService.findBy(shop.getShopId(), "EUR", "!133456-a0", 0, 10);
         assertFalse(saved.isEmpty());
 
         final PriceListDTO pl = saved.get(0);
@@ -258,12 +240,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
 
         assertNotNull(shop);
 
-        final PriceListFilterImpl filter = new PriceListFilterImpl();
-        filter.setShop(shop);
-        filter.setProductCode("133456-b");
-        filter.setProductCodeExact(true);
-        filter.setCurrencyCode("EUR");
-        assertTrue(dtoService.getPriceList(filter).isEmpty());
+        assertTrue(dtoService.findBy(shop.getShopId(), "EUR", "!133456-b", 0, 10).isEmpty());
 
         PriceListDTO skuPriceDTO = new PriceListDTOImpl();
         skuPriceDTO.setRegularPrice(new BigDecimal("1.23"));
@@ -275,7 +252,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
         skuPriceDTO.setQuantity(BigDecimal.ONE);
         dtoService.createPrice(skuPriceDTO);
 
-        List<PriceListDTO> saved = dtoService.getPriceList(filter);
+        List<PriceListDTO> saved = dtoService.findBy(shop.getShopId(), "EUR", "!133456-b", 0, 10);
         assertFalse(saved.isEmpty());
 
         PriceListDTO pl = saved.get(0);
@@ -293,7 +270,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
 
         dtoService.updatePrice(pl);
 
-        saved = dtoService.getPriceList(filter);
+        saved = dtoService.findBy(shop.getShopId(), "EUR", "!133456-b", 0, 10);
         assertFalse(saved.isEmpty());
 
         pl = saved.get(0);
@@ -318,12 +295,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
 
         assertNotNull(shop);
 
-        final PriceListFilterImpl filter = new PriceListFilterImpl();
-        filter.setShop(shop);
-        filter.setProductCode("133456-b0");
-        filter.setProductCodeExact(true);
-        filter.setCurrencyCode("EUR");
-        assertTrue(dtoService.getPriceList(filter).isEmpty());
+        assertTrue(dtoService.findBy(shop.getShopId(), "EUR", "133456-b0", 0, 10).isEmpty());
 
         PriceListDTO skuPriceDTO = new PriceListDTOImpl();
         skuPriceDTO.setRegularPrice(new BigDecimal("1.23"));
@@ -335,7 +307,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
         skuPriceDTO.setQuantity(BigDecimal.ONE);
         dtoService.createPrice(skuPriceDTO);
 
-        List<PriceListDTO> saved = dtoService.getPriceList(filter);
+        List<PriceListDTO> saved = dtoService.findBy(shop.getShopId(), "EUR", "133456-B0", 0, 10);
         assertFalse(saved.isEmpty());
 
         PriceListDTO pl = saved.get(0);
@@ -353,7 +325,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
 
         dtoService.updatePrice(pl);
 
-        saved = dtoService.getPriceList(filter);
+        saved = dtoService.findBy(shop.getShopId(), "EUR", "133456-b0", 0, 10);
         assertFalse(saved.isEmpty());
 
         pl = saved.get(0);
@@ -378,12 +350,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
 
         assertNotNull(shop);
 
-        final PriceListFilterImpl filter = new PriceListFilterImpl();
-        filter.setShop(shop);
-        filter.setProductCode("133456-c");
-        filter.setProductCodeExact(true);
-        filter.setCurrencyCode("EUR");
-        assertTrue(dtoService.getPriceList(filter).isEmpty());
+        assertTrue(dtoService.findBy(shop.getShopId(), "EUR", "133456-c", 0, 10).isEmpty());
 
         PriceListDTO skuPriceDTO = new PriceListDTOImpl();
         skuPriceDTO.setRegularPrice(new BigDecimal("1.23"));
@@ -393,7 +360,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
         skuPriceDTO.setQuantity(BigDecimal.ONE);
         dtoService.createPrice(skuPriceDTO);
 
-        List<PriceListDTO> saved = dtoService.getPriceList(filter);
+        List<PriceListDTO> saved = dtoService.findBy(shop.getShopId(), "EUR", "133456-c", 0, 10);
         assertFalse(saved.isEmpty());
 
         PriceListDTO pl = saved.get(0);
@@ -404,7 +371,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
 
         dtoService.removePrice(pl.getSkuPriceId());
 
-        saved = dtoService.getPriceList(filter);
+        saved = dtoService.findBy(shop.getShopId(), "EUR", "133456-c", 0, 10);
         assertTrue(saved.isEmpty());
 
     }

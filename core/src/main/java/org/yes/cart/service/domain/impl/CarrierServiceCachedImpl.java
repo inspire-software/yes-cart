@@ -16,10 +16,8 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.Criterion;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.service.domain.CarrierService;
@@ -95,8 +93,8 @@ public class CarrierServiceCachedImpl implements CarrierService {
     /**
      * {@inheritDoc}
      */
-    public List<Carrier> findByCriteria(final Criterion... criterion) {
-        return carrierService.findByCriteria(criterion);
+    public List<Carrier> findByCriteria(final String eCriteria, final Object... parameters) {
+        return carrierService.findByCriteria(eCriteria, parameters);
     }
 
     /**
@@ -109,8 +107,8 @@ public class CarrierServiceCachedImpl implements CarrierService {
     /**
      * {@inheritDoc}
      */
-    public Carrier findSingleByCriteria(final Criterion... criterion) {
-        return carrierService.findSingleByCriteria(criterion);
+    public Carrier findSingleByCriteria(final String eCriteria, final Object... parameters) {
+        return carrierService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /**

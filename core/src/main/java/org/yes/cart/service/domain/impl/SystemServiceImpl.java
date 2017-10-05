@@ -17,7 +17,6 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
@@ -148,7 +147,7 @@ public class SystemServiceImpl implements SystemService {
 
         final System system = getSystem();
 
-        AttrValueSystem attrVal = attrValueEntitySystemDao.findSingleByCriteria(Restrictions.eq("attributeCode", key));
+        AttrValueSystem attrVal = attrValueEntitySystemDao.findSingleByCriteria(" where e.attributeCode = ?1", key);
 
 
         if (attrVal == null) {

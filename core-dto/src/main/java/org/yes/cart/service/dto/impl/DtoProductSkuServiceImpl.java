@@ -22,10 +22,7 @@ import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
@@ -43,6 +40,7 @@ import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.service.dto.DtoProductSkuService;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
 import java.math.BigDecimal;
@@ -139,12 +137,10 @@ public class DtoProductSkuServiceImpl
         return result;
     }
 
-    private final static char[] CODE = new char[] { '!' };
+    private final static char[] CODE = new char[] { '!', '*' };
     static {
         Arrays.sort(CODE);
     }
-
-    private final static Order[] PRODUCT_ORDER = new Order[] { Order.asc("code") };
 
 
     /**
@@ -154,39 +150,47 @@ public class DtoProductSkuServiceImpl
 
         final List<ProductSkuDTO> dtos = new ArrayList<ProductSkuDTO>();
 
-        final List<Criterion> criteria = new ArrayList<Criterion>();
+        List<ProductSku> entities = Collections.emptyList();
 
-        if (org.springframework.util.StringUtils.hasLength(filter)) {
+        if (StringUtils.isNotBlank(filter)) {
 
             final Pair<String, String> code = ComplexSearchUtils.checkSpecialSearch(filter, CODE);
 
             if (code != null) {
 
-                if ("!".equals(code.getFirst())) {
+                if ("*".equals(code.getFirst())) {
 
-                    criteria.add(Restrictions.or(
-                            Restrictions.ilike("guid", code.getSecond(), MatchMode.EXACT),
-                            Restrictions.ilike("code", code.getSecond(), MatchMode.EXACT),
-                            Restrictions.ilike("manufacturerCode", code.getSecond(), MatchMode.EXACT),
-                            Restrictions.ilike("barCode", code.getSecond(), MatchMode.EXACT)
-                    ));
+                    // If this by PK then to by PK
+                    final long byPk = NumberUtils.toLong(code.getSecond());
+                    if (page == 0 && byPk > 0) {
+                        final ProductSkuDTO product = getById(byPk);
+                        if (product != null) {
+                            dtos.add(product);
+                        }
+                    }
+                    return dtos;
+
+                } else if ("!".equals(code.getFirst())) {
+
+                    entities = getService().getGenericDao().findRangeByCriteria(
+                            " where lower(e.guid) like ?1 or lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.barCode) like ?1 order by e.code",
+                            page * pageSize, pageSize,
+                            HQLUtils.criteriaIeq(code.getSecond())
+                    );
 
                 }
 
             } else {
 
-                criteria.add(Restrictions.or(
-                        Restrictions.ilike("code", filter, MatchMode.ANYWHERE),
-                        Restrictions.ilike("manufacturerCode", filter, MatchMode.ANYWHERE),
-                        Restrictions.ilike("name", filter, MatchMode.ANYWHERE),
-                        Restrictions.ilike("description", filter, MatchMode.ANYWHERE)
-                ));
+                entities = getService().getGenericDao().findRangeByCriteria(
+                        " where lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.name) like ?1 order by e.code",
+                        page * pageSize, pageSize,
+                        HQLUtils.criteriaIlikeAnywhere(filter)
+                );
 
             }
 
         }
-
-        final List<ProductSku> entities = getService().getGenericDao().findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), PRODUCT_ORDER);
 
         fillDTOs(entities, dtos);
 

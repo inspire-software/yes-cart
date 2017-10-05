@@ -16,10 +16,8 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.Criterion;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.AttrValueCustomer;
@@ -233,8 +231,8 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
-    public List<Customer> findByCriteria(final Criterion... criterion) {
-        return customerService.findByCriteria(criterion);
+    public List<Customer> findByCriteria(final String eCriteria, final Object... parameters) {
+        return customerService.findByCriteria(eCriteria, parameters);
     }
 
     /**
@@ -247,8 +245,8 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
-    public Customer findSingleByCriteria(final Criterion... criterion) {
-        return customerService.findSingleByCriteria(criterion);
+    public Customer findSingleByCriteria(final String eCriteria, final Object... parameters) {
+        return customerService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /**

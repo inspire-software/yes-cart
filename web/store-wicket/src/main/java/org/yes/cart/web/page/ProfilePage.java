@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -25,7 +26,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.springframework.util.StringUtils;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -75,7 +75,7 @@ public class ProfilePage extends AbstractWebPage {
 
         final String email = getCurrentCart().getCustomerEmail();
         final Customer customer;
-        if (StringUtils.hasLength(email)) {
+        if (StringUtils.isNotBlank(email)) {
             customer = customerServiceFacade.getCustomerByEmail(getCurrentShop(), email);
         } else {
             customer = null;

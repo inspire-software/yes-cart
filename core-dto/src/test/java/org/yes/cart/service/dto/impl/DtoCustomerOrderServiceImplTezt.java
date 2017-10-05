@@ -24,6 +24,7 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.DtoServiceSpringKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
 import org.yes.cart.domain.entity.Customer;
@@ -146,6 +147,43 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
         assertEquals(6, details.size());
 
     }
+
+
+    @Test
+    public void testFindBy()      throws Exception {
+        final Customer customer = createCustomer();
+        final ShoppingCart shoppingCart = getShoppingCart(true);
+        final CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
+
+        // by PK
+        List<CustomerOrderDTO> orders = dtoService.findBy("*" + order.getCustomerorderId(), 0, 10);
+        assertEquals(1, orders.size());
+
+        // by reference
+        orders = dtoService.findBy("#" + order.getOrdernum(), 0, 10);
+        assertEquals(1, orders.size());
+
+        // by customer
+        orders = dtoService.findBy("?" + order.getFirstname(), 0, 10);
+        assertEquals(1, orders.size());
+
+        // by address
+        orders = dtoService.findBy("@" + order.getBillingAddress(), 0, 10);
+        assertFalse(orders.isEmpty());
+
+        // by shop
+        orders = dtoService.findBy("^" + order.getShop().getCode(), 0, 10);
+        assertFalse(orders.isEmpty());
+
+        // basic
+        orders = dtoService.findBy(order.getOrdernum(), 0, 10);
+        assertEquals(1, orders.size());
+
+        // all
+        orders = dtoService.findBy(null, 0, 10);
+        assertFalse(orders.isEmpty());
+    }
+
 
 
 }

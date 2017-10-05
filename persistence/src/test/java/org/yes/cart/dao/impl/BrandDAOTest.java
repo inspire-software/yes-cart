@@ -16,14 +16,10 @@
 
 package org.yes.cart.dao.impl;
 
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
-import org.hibernate.criterion.Restrictions;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.AttrValueBrand;
@@ -32,10 +28,7 @@ import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.domain.entity.impl.AttrValueEntityBrand;
 import org.yes.cart.domain.entity.impl.BrandEntity;
 
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -68,8 +61,8 @@ public class BrandDAOTest extends AbstractTestDAO {
                 long pk = brandDAO.create(entity).getBrandId();
                 assertTrue(entity.getBrandId() != 0);
                 assertTrue(entity.getAttributes().isEmpty());
-                List<Brand> brands = brandDAO.findByCriteria(Restrictions.eq("brandId", pk));
-                assertEquals(1, brands.size());
+                Brand brand = brandDAO.findById(pk);
+                assertNotNull(brand);
 
                 status.setRollbackOnly();
 
@@ -105,17 +98,9 @@ public class BrandDAOTest extends AbstractTestDAO {
                 //BRAND_IMAGE
                 entityWithAttributes.getAttributes().add(attrValueBrandEntity);
                 long pk = brandDAO.create(entityWithAttributes).getBrandId();
-                List<Brand> brands = brandDAO.findByCriteria(
-                        new CriteriaTuner() {
-                            public void tune(final Criteria crit) {
-                                crit.setFetchMode("attributes", FetchMode.JOIN);
-                            }
-                        },
-                        Restrictions.eq("brandId", pk)
-                );
-                assertEquals(1, brands.size());
-                entityWithAttributes = brands.get(0);
-                assertEquals(1, entityWithAttributes.getAttributes().size());
+                Brand brand = brandDAO.findById(pk);
+                assertNotNull(brand);
+                assertEquals(1, brand.getAttributes().size());
 
                 status.setRollbackOnly();
 

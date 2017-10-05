@@ -54,46 +54,31 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testFindBy() throws Exception {
+
+        List<CategoryDTO> list = dtoService.findBy("^big boys gadgets", 0, 10);
+        assertTrue(list.size() > 1);
+
+        list = dtoService.findBy("big boys gadgets", 0, 10);
+        assertEquals(1, list.size());
+
+    }
+
+    @Test
     public void testGetAll() throws Exception {
 
-
-        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
-            public void doInTransactionWithoutResult(TransactionStatus status) {
-                try {
-                    List<CategoryDTO> list = dtoService.getAll();
-                    assertFalse(list.isEmpty());
-                } catch (Exception e) {
-                    assertTrue(e.getMessage(), false);
-
-                }
-
-                status.setRollbackOnly();
-            }
-        });
-
+        List<CategoryDTO> list = dtoService.getAll();
+        assertFalse(list.isEmpty());
 
     }
 
     @Test
     public void testGetAllWithAvailabilityFilter() throws Exception {
 
-
-        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
-            public void doInTransactionWithoutResult(TransactionStatus status) {
-                try {
-                    List<CategoryDTO> list = dtoService.getAllWithAvailabilityFilter(true);
-                    assertFalse(list.isEmpty());
-                    assertFalse(isCategoryPresent(list, 141L));  //xmas category 2008
-                    assertFalse(isCategoryPresent(list, 142L));  //xmas category 2108
-                } catch (Exception e) {
-                    assertTrue(e.getMessage(), false);
-
-                }
-
-                status.setRollbackOnly();
-            }
-        });
-
+        List<CategoryDTO> list = dtoService.getAllWithAvailabilityFilter(true);
+        assertFalse(list.isEmpty());
+        assertFalse(isCategoryPresent(list, 141L));  //xmas category 2008
+        assertFalse(isCategoryPresent(list, 142L));  //xmas category 2108
 
     }
 

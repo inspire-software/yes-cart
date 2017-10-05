@@ -19,14 +19,10 @@ package org.yes.cart.service.domain.impl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.Hibernate;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
@@ -54,6 +50,7 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ProductTypeAttrService;
+import org.yes.cart.utils.HQLUtils;
 
 import java.util.*;
 
@@ -1057,35 +1054,18 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public List<Product> getProductByCodeNameBrandType(final CriteriaTuner criteriaTuner,
-                                                       final String code,
+    public List<Product> getProductByCodeNameBrandType(final String code,
                                                        final String name,
                                                        final Long brandId,
                                                        final Long productTypeId) {
 
-        final List<Criterion> criterionList = new ArrayList<Criterion>();
-        if (StringUtils.isNotBlank(code)) {
-            criterionList.add(Restrictions.or(
-                    Restrictions.like("code", code, MatchMode.ANYWHERE),
-                    Restrictions.like("manufacturerCode", code, MatchMode.ANYWHERE),
-                    Restrictions.eq("pimCode", code),
-                    Restrictions.eq("guid", code),
-                    Restrictions.eq("productId", NumberUtils.toLong(code))
-            ));
-        }
-        if (StringUtils.isNotBlank(name)) {
-            criterionList.add(Restrictions.like("name", name, MatchMode.ANYWHERE));
-        }
-        if (brandId != null) {
-            criterionList.add(Restrictions.eq("brand.brandId", brandId));
-        }
-        if (productTypeId != null) {
-            criterionList.add(Restrictions.eq("producttype.producttypeId", productTypeId));
-        }
-
-        return productDao.findByCriteria(
-                criteriaTuner,
-                criterionList.toArray(new Criterion[criterionList.size()])
+        return productDao.findByNamedQuery(
+                "PRODUCT.BY.CODE.NAME.BRAND.TYPE",
+                HQLUtils.criteriaIlikeAnywhere(code),
+                NumberUtils.toLong(code),
+                HQLUtils.criteriaIlikeAnywhere(name),
+                brandId,
+                productTypeId
         );
 
     }

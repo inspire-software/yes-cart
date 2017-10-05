@@ -16,10 +16,10 @@
 
 package org.yes.cart.service.domain;
 
-import org.hibernate.criterion.Criterion;
 import org.yes.cart.dao.GenericDAO;
 
 import java.util.List;
+
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -69,15 +69,17 @@ public interface GenericService<T> {
     /**
      * Find entities by criteria.
      *
-     * @param criterion given criteria
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
+     * @param parameters parameters to fill in for question marks
+     *
      * @return list of found entities.
      */
-    List<T> findByCriteria(Criterion... criterion);
+    List<T> findByCriteria(String eCriteria, Object... parameters);
 
     /**
      * Find count by criteria.
      *
-     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " e.attr1 = ? and e.attr2 = ?"
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
      * @param parameters parameters to fill in for question marks
      *
      * @return list of found entities.
@@ -87,10 +89,12 @@ public interface GenericService<T> {
     /**
      * Find single entity by criteria.
      *
-     * @param criterion given criteria
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
+     * @param parameters parameters to fill in for question marks
+     *
      * @return single entity or null if not found.
      */
-    T findSingleByCriteria(Criterion... criterion);
+    T findSingleByCriteria(String eCriteria, Object... parameters);
 
     /**
      * Get generic dao

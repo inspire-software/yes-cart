@@ -20,7 +20,6 @@ import org.yes.cart.domain.dto.InventoryDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.dto.support.InventoryFilter;
 
 import java.util.List;
 
@@ -39,14 +38,6 @@ public interface DtoInventoryService {
      * @return list of warehouses
      */
     List<WarehouseDTO> getWarehouses() throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
-    /**
-     * Inventory by filter.
-     *
-     * @param filter inventory filter
-     * @return inventory
-     */
-    List<InventoryDTO> getInventoryList(InventoryFilter filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Inventory by filter.

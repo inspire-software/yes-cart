@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.hibernate.criterion.Restrictions;
-import org.joda.time.DateMidnight;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.PromotionCouponDTO;
 import org.yes.cart.domain.dto.PromotionDTO;
@@ -55,23 +53,6 @@ public class VoPromotionServiceImpl implements VoPromotionService {
         this.dtoPromotionCouponService = dtoPromotionCouponService;
         this.federationFacade = federationFacade;
         this.voAssemblySupport = voAssemblySupport;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<VoPromotion> getFilteredPromotion(final String shopCode, final String currency, final String filter, final int max) throws Exception {
-
-        final List<VoPromotion> list = new ArrayList<>();
-
-        if (federationFacade.isManageable(shopCode, ShopDTO.class)) {
-
-            final List<PromotionDTO> dtos = dtoPromotionService.findBy(shopCode, currency, filter, 0, max);
-            return voAssemblySupport.assembleVos(VoPromotion.class, PromotionDTO.class, dtos);
-
-        }
-
-        return list;
     }
 
     /**

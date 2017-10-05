@@ -16,14 +16,14 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Manager;
 import org.yes.cart.domain.entity.ManagerShop;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ManagerService;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -59,7 +59,10 @@ public class ManagerServiceImpl extends BaseGenericServiceImpl<Manager> implemen
 
     /** {@inheritDoc } */
     public List<Manager> findByEmail(final String email) {
-        return findByCriteria(Restrictions.like("email", email, MatchMode.ANYWHERE));
+        if (StringUtils.isBlank(email)) {
+            return Collections.emptyList();
+        }
+        return findByCriteria(" where lower(e.email) = ?1 ", email.toLowerCase());
 
     }
 

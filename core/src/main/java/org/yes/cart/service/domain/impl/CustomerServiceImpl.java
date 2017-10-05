@@ -19,9 +19,6 @@ package org.yes.cart.service.domain.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
@@ -32,6 +29,7 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.impl.AttributeRankComparator;
 
 import java.util.*;
@@ -81,7 +79,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     public Customer getCustomerByEmail(final String email, Shop shop) {
-        Customer customer = getGenericDao().findSingleByNamedQuery("CUSTOMER.BY.EMAIL.SHOP", email, shop.getShopId(), Boolean.FALSE);
+        Customer customer = getGenericDao().findSingleByNamedQuery("CUSTOMER.BY.EMAIL.SHOP", email.toLowerCase(), shop.getShopId(), Boolean.FALSE);
         if (customer != null) {
             Hibernate.initialize(customer.getAttributes());
         }
@@ -92,7 +90,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     public Customer getCustomerByToken(final String token) {
-        Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("authToken", token));
+        Customer customer = getGenericDao().findSingleByCriteria(" where e.authToken = ?1", token);
         if (customer != null) {
             Hibernate.initialize(customer.getAttributes());
         }
@@ -103,7 +101,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     public Customer getCustomerByPublicKey(final String publicKey, final String lastName) {
-        Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("publicKey", publicKey), Restrictions.eq("lastname", lastName));
+        Customer customer = getGenericDao().findSingleByCriteria(" where e.publicKey = ?1 and e.lastname = ?2", publicKey, lastName);
         if (customer != null) {
             Hibernate.initialize(customer.getAttributes());
         }
@@ -152,48 +150,19 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
                                        final String lastname,
                                        final String middlename,
                                        final String tag,
-                                       final String customerType, final String pricingPolicy) {
+                                       final String customerType,
+                                       final String pricingPolicy) {
 
-        final List<Criterion> criterionList = new ArrayList<Criterion>();
-
-        if (StringUtils.isNotBlank(email)) {
-            criterionList.add(Restrictions.like("email", email, MatchMode.ANYWHERE));
-        }
-
-        if (StringUtils.isNotBlank(firstname)) {
-            criterionList.add(Restrictions.like("firstname", firstname, MatchMode.ANYWHERE));
-        }
-
-        if (StringUtils.isNotBlank(lastname)) {
-            criterionList.add(Restrictions.like("lastname", lastname, MatchMode.ANYWHERE));
-        }
-
-        if (StringUtils.isNotBlank(middlename)) {
-            criterionList.add(Restrictions.like("middlename", middlename, MatchMode.ANYWHERE));
-        }
-
-        if (StringUtils.isNotBlank(tag)) {
-            criterionList.add(Restrictions.like("tag", tag, MatchMode.ANYWHERE));
-        }
-
-        if (StringUtils.isNotBlank(customerType)) {
-            criterionList.add(Restrictions.like("customerType", customerType, MatchMode.ANYWHERE));
-        }
-
-        if (StringUtils.isNotBlank(pricingPolicy)) {
-            criterionList.add(Restrictions.like("pricingPolicy", pricingPolicy, MatchMode.ANYWHERE));
-        }
-
-        if (criterionList.isEmpty()) {
-            return getGenericDao().findAll();
-
-        } else {
-            return getGenericDao().findByCriteria(
-                    criterionList.toArray(new Criterion[criterionList.size()])
-            );
-
-        }
-
+        return getGenericDao().findByNamedQuery(
+                "CUSTOMER.BY.EMAIL.NAME.TAG.TYPE",
+                HQLUtils.criteriaIlikeAnywhere(email),
+                HQLUtils.criteriaIlikeAnywhere(firstname),
+                HQLUtils.criteriaIlikeAnywhere(lastname),
+                HQLUtils.criteriaIlikeAnywhere(middlename),
+                HQLUtils.criteriaIlikeAnywhere(tag),
+                HQLUtils.criteriaIlikeAnywhere(customerType),
+                HQLUtils.criteriaIlikeAnywhere(pricingPolicy)
+        );
 
     }
 
@@ -201,7 +170,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     public boolean isCustomerExists(final String email, final Shop shop) {
-        final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("EMAIL.CHECK", email, shop.getShopId());
+        final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("EMAIL.CHECK", email.toLowerCase(), shop.getShopId());
         if (CollectionUtils.isNotEmpty(counts)) {
             return ((Number) counts.get(0)).intValue() > 0;
         }
@@ -214,14 +183,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     public boolean isPasswordValid(final String email, final Shop shop, final String password) {
         try {
 
-            final List<Criterion> criterionList = new ArrayList<Criterion>();
-
             final String hash = passwordHashHelper.getHash(password);
 
-            criterionList.add(Restrictions.eq("email", email));
-            criterionList.add(Restrictions.eq("password", hash));
-
-            final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("PASS.CHECK", email, shop.getShopId(), hash, Boolean.FALSE);
+            final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("PASS.CHECK", email.toLowerCase(), shop.getShopId(), hash, Boolean.FALSE);
 
             if (CollectionUtils.isNotEmpty(counts)) {
                 return ((Number) counts.get(0)).intValue() == 1;

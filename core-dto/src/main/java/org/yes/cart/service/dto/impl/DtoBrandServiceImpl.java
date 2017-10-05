@@ -20,10 +20,6 @@ import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
@@ -47,6 +43,7 @@ import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoBrandService;
+import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
 import java.util.ArrayList;
@@ -214,13 +211,11 @@ public class DtoBrandServiceImpl
 
         final List<Brand> entities;
         if (StringUtils.isNotBlank(name)) {
-            entities = service.getGenericDao().findByCriteria(
-                    Restrictions.or(
-                            Restrictions.ilike("guid", name, MatchMode.ANYWHERE),
-                            Restrictions.ilike("name", name, MatchMode.ANYWHERE),
-                            Restrictions.ilike("description", name, MatchMode.ANYWHERE)
-                    )
-            );
+            final String iName = HQLUtils.criteriaIlikeAnywhere(name);
+            entities = service.getGenericDao().findByNamedQuery(
+                    "BRAND.BY.GUID.NAME.DESCRIPTION.ORDBY.NAME",
+                    iName, iName, iName
+                    );
         } else {
             entities = service.findAll();
         }
@@ -230,26 +225,18 @@ public class DtoBrandServiceImpl
 
     }
 
-    private final static Order[] BRAND_ORDER = new Order[] { Order.asc("name") };
-
     /**
      * {@inheritDoc}
      */
     public List<BrandDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Criterion[] criterion;
-        if (StringUtils.isNotBlank(filter)) {
-            criterion = new Criterion[] {
-                    Restrictions.or(
-                            Restrictions.ilike("guid", filter, MatchMode.ANYWHERE),
-                            Restrictions.ilike("name", filter, MatchMode.ANYWHERE),
-                            Restrictions.ilike("description", filter, MatchMode.ANYWHERE)
-                    )
-            };
-        } else {
-            criterion = new Criterion[0];
-        }
-        final List<Brand> entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize, criterion, BRAND_ORDER);
+        final String iFilter = HQLUtils.criteriaIlikeAnywhere(filter);
+
+        final List<Brand> entities = service.getGenericDao().findRangeByNamedQuery(
+                "BRAND.BY.GUID.NAME.DESCRIPTION.ORDBY.NAME",
+                page * pageSize, pageSize,
+                iFilter, iFilter, iFilter);
+
         final List<BrandDTO> dtos = new ArrayList<BrandDTO>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;

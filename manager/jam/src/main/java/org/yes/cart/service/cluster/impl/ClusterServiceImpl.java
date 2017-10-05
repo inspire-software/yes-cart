@@ -18,6 +18,8 @@ package org.yes.cart.service.cluster.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.cluster.node.Message;
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.cluster.node.NodeService;
@@ -34,12 +36,15 @@ import org.yes.cart.cluster.service.AlertDirector;
 import org.yes.cart.cluster.service.BackdoorService;
 import org.yes.cart.cluster.service.CacheDirector;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * User: denispavlov
  */
 public class ClusterServiceImpl implements ClusterService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ClusterServiceImpl.class);
 
     private final NodeService nodeService;
     private final BackdoorService localBackdoorService;
@@ -311,7 +316,13 @@ public class ClusterServiceImpl implements ClusterService {
     public List<Object[]> sqlQuery(final AsyncContext context, final String query, final String node) {
 
         if (nodeService.getCurrentNodeId().equals(node)) {
-            return localBackdoorService.sqlQuery(query);
+            try {
+                return localBackdoorService.sqlQuery(query);
+            } catch (Exception e) {
+                final String msg = "Cant parse SQL query : " + query + " Error : " + e.getMessage();
+                LOG.warn(msg);
+                return new ArrayList<Object[]>(Collections.singletonList(new Object[]{e.getMessage()}));
+            }
         }
 
         final RspMessage message = new ContextRspMessageImpl(
@@ -340,7 +351,13 @@ public class ClusterServiceImpl implements ClusterService {
     public List<Object[]> hsqlQuery(final AsyncContext context, final String query, final String node) {
 
         if (nodeService.getCurrentNodeId().equals(node)) {
-            return localBackdoorService.hsqlQuery(query);
+            try {
+                return localBackdoorService.hsqlQuery(query);
+            } catch (Exception e) {
+                final String msg = "Cant parse HQL query : " + query + " Error : " + e.getMessage();
+                LOG.warn(msg);
+                return new ArrayList<Object[]>(Collections.singletonList(new Object[]{e.getMessage()}));
+            }
         }
 
         final RspMessage message = new ContextRspMessageImpl(

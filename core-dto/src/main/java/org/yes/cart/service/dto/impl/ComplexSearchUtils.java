@@ -16,8 +16,8 @@
 
 package org.yes.cart.service.dto.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.springframework.util.StringUtils;
 import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
@@ -114,7 +114,7 @@ class ComplexSearchUtils {
 
 
     private static Date stringToDate(String string) {
-        if (StringUtils.hasLength(string)) {
+        if (StringUtils.isNotBlank(string)) {
             try {
                 final String[] dateParts = org.apache.commons.lang.StringUtils.split(string, '-');
                 final Calendar cal = Calendar.getInstance();

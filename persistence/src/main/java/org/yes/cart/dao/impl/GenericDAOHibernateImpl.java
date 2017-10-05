@@ -17,14 +17,11 @@
 package org.yes.cart.dao.impl;
 
 import org.hibernate.*;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
@@ -51,14 +48,17 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     private final String selectAllHql;
     private final String selectCountHql;
 
-    /**
-     * Set the Hibernate SessionFactory to be used by this DAO.
-     * Will automatically create a HibernateTemplate for the given SessionFactory.
-     */
-    public final void setSessionFactory(final SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
 
-    }
+    /**
+	 * Set the Hibernate SessionFactory to be used by this DAO.
+	 * Will automatically create a HibernateTemplate for the given SessionFactory.
+	 */
+	public final void setSessionFactory(final SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+
+	}
+
+
 
     /**
      * Default constructor.
@@ -109,8 +109,6 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
         return findById(id, false);
     }
 
-    private static final LockOptions UPDATE = new LockOptions(LockMode.PESSIMISTIC_WRITE);
-
     /**
      * {@inheritDoc}
      */
@@ -118,7 +116,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     public T findById(final PK id, final boolean lock) {
         T entity;
         if (lock) {
-            entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id, UPDATE);
+            entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id, LockOptions.UPGRADE);
         } else {
             entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id);
         }
@@ -330,8 +328,10 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
      */
     @SuppressWarnings("unchecked")
     public List<T> findAll() {
-        return findByCriteria();
+        final Query query = sessionFactory.getCurrentSession().createQuery(this.selectAllHql);
+        return query.list();
     }
+
 
     /**
      * {@inheritDoc}
@@ -346,7 +346,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public T saveOrUpdate(T entity) {
+    public T saveOrUpdate(final T entity) {
         sessionFactory.getCurrentSession().saveOrUpdate(entity);
         return entity;
     }
@@ -356,8 +356,8 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public T create(T entity) {
-        sessionFactory.getCurrentSession().save(entity);
+    public T create(final T entity) {
+        sessionFactory.getCurrentSession().saveOrUpdate(entity);
         return entity;
     }
 
@@ -365,8 +365,8 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public T update(T entity) {
-        sessionFactory.getCurrentSession().update(entity);
+    public T update(final T entity) {
+        sessionFactory.getCurrentSession().saveOrUpdate(entity);
         return entity;
     }
 
@@ -378,6 +378,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
             sessionFactory.getCurrentSession().delete(entity);
         }
     }
+
 
     /**
      * {@inheritDoc}
@@ -398,43 +399,22 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public List<T> findByCriteria(Criterion... criterion) {
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        for (Criterion c : criterion) {
-            crit.add(c);
-        }
-        return crit.list();
+    public List<T> findByCriteria(final String eCriteria, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().createQuery(eCriteria != null ? this.selectAllHql.concat(eCriteria) : this.selectAllHql);
+        setQueryParameters(query, parameters);
+        return query.list();
     }
 
     /**
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion... criterion) {
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        for (Criterion c : criterion) {
-            crit.add(c);
-        }
-        crit.setFirstResult(firstResult);
-        crit.setMaxResults(maxResults);
-        return crit.list();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
-    public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion[] criterion, final Order[] order) {
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        for (Criterion c : criterion) {
-            crit.add(c);
-        }
-        for (Order o : order) {
-            crit.addOrder(o);
-        }
-        crit.setFirstResult(firstResult);
-        crit.setMaxResults(maxResults);
-        return crit.list();
+    public List<T> findRangeByCriteria(final String eCriteria, final int firstResult, final int maxResults, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().createQuery(eCriteria != null ? this.selectAllHql.concat(eCriteria) : this.selectAllHql);
+        setQueryParameters(query, parameters);
+        query.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+        return query.list();
     }
 
     /**
@@ -450,77 +430,16 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
-    public T findSingleByCriteria(final Criterion... criterion) {
-        return findSingleByCriteria(null, criterion);
+    public T findSingleByCriteria(final String eCriteria, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().createQuery(eCriteria != null ? this.selectAllHql.concat(eCriteria) : this.selectAllHql);
+        setQueryParameters(query, parameters);
+        query.setMaxResults(1);
+        final List<T> rez = query.list();
+        if (!rez.isEmpty()) {
+            return rez.get(0);
+        }
+        return null;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
-    public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        for (Criterion c : criterion) {
-            crit.add(c);
-        }
-        if (criteriaTuner != null) {
-            criteriaTuner.tune(crit);
-        }
-        return crit.list();
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
-    public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final int firstResult, final int maxResults, final Criterion... criterion) {
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        for (Criterion c : criterion) {
-            crit.add(c);
-        }
-        if (criteriaTuner != null) {
-            criteriaTuner.tune(crit);
-        }
-        crit.setFirstResult(firstResult);
-        crit.setMaxResults(maxResults);
-        return crit.list();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
-    public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final int firstResult, final int maxResults, final Criterion[] criterion, final Order[] order) {
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        for (Criterion c : criterion) {
-            crit.add(c);
-        }
-        for (Order o : order) {
-            crit.addOrder(o);
-        }
-        if (criteriaTuner != null) {
-            criteriaTuner.tune(crit);
-        }
-        crit.setFirstResult(firstResult);
-        crit.setMaxResults(maxResults);
-        return crit.list();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public T findSingleByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        for (Criterion c : criterion) {
-            crit.add(c);
-        }
-        if (criteriaTuner != null) {
-            criteriaTuner.tune(crit);
-        }
-        return (T) crit.uniqueResult();
-    }
-
 
     private Class<T> getPersistentClass() {
         return persistentClass;

@@ -20,9 +20,6 @@ import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.annotation.CacheEvict;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.ManagerDTO;
@@ -38,6 +35,7 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.ManagerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.ManagementService;
+import org.yes.cart.utils.HQLUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -51,10 +49,6 @@ import java.util.*;
  * Time: 14:12:54
  */
 public class ManagementServiceImpl implements ManagementService {
-
-    private static final String EMAIL = "email";
-    private static final String CODE = "code";
-
 
     private final ManagerService managerService;
 
@@ -120,19 +114,12 @@ public class ManagementServiceImpl implements ManagementService {
                                         final String firstNameFilter,
                                         final String lastNameFilter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<Criterion> criteriaList = new ArrayList<Criterion>();
-        if (StringUtils.isNotBlank(emailFilter)) {
-            criteriaList.add(Restrictions.like(EMAIL, emailFilter, MatchMode.ANYWHERE));
-        }
-        if (StringUtils.isNotBlank(firstNameFilter)) {
-            criteriaList.add(Restrictions.like("firstname", firstNameFilter, MatchMode.ANYWHERE));
-        }
-        if (StringUtils.isNotBlank(lastNameFilter)) {
-            criteriaList.add(Restrictions.like("lastname", lastNameFilter, MatchMode.ANYWHERE));
-        }
-
         final List<Manager> managers = managerService.findByCriteria(
-                criteriaList.toArray(new Criterion[criteriaList.size()]));
+                " where (?1 is null or lower(e.email) like ?1) and (?2 is null or lower(e.firstname) like ?2) and (?3 is null or lower(e.lastname) like ?3) order by e.email",
+                StringUtils.isNotBlank(emailFilter) ? HQLUtils.criteriaIlikeAnywhere(emailFilter) : null,
+                StringUtils.isNotBlank(firstNameFilter) ? HQLUtils.criteriaIlikeAnywhere(firstNameFilter) : null,
+                StringUtils.isNotBlank(lastNameFilter) ? HQLUtils.criteriaIlikeAnywhere(lastNameFilter) : null
+        );
 
         final List<ManagerDTO> managersDTO = new ArrayList<ManagerDTO>(managers.size());
 
@@ -152,7 +139,7 @@ public class ManagementServiceImpl implements ManagementService {
      */
     public List<RoleDTO> getAssignedManagerRoles(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<RoleDTO> result = new ArrayList<RoleDTO>();
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         if (manager != null) {
             List<Role> roles = roleDao.findByNamedQuery(
                     "ASSIGNED.ROLES.BY.USER.EMAIL",
@@ -167,7 +154,7 @@ public class ManagementServiceImpl implements ManagementService {
      */
     public List<RoleDTO> getAvailableManagerRoles(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<RoleDTO> result = new ArrayList<RoleDTO>();
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         if (manager != null) {
             List<Role> roles = roleDao.findByNamedQuery(
                     "AVAILABLE.ROLES.BY.USER.EMAIL",
@@ -213,7 +200,7 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     public void updateUser(final String userId, final String firstName, final String lastName) {
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         if (manager != null) {
             manager.setFirstname(firstName);
             manager.setLastname(lastName);
@@ -227,7 +214,7 @@ public class ManagementServiceImpl implements ManagementService {
      */
     public void resetPassword(final String userId) {
 
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         if (manager != null) {
             managerService.resetPassword(manager);
         }
@@ -237,9 +224,9 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     public void deleteUser(final String userId) {
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         if (manager != null) {
-            final List<ManagerRole> assignedRoles = managerRoleDao.findByCriteria(Restrictions.eq(EMAIL, userId));
+            final List<ManagerRole> assignedRoles = managerRoleDao.findByCriteria(" where e.email = ?1 ", userId);
             for (ManagerRole managerRole : assignedRoles) {
                 managerRoleDao.delete(managerRole);
             }
@@ -269,7 +256,7 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     public void updateRole(final String role, final String description) {
-        final Role roleEntity = roleDao.findSingleByCriteria(Restrictions.eq(CODE, role));
+        final Role roleEntity = roleDao.findSingleByCriteria(" where e.code = ?1 ", role);
         if (roleEntity != null) {
             roleEntity.setDescription(description);
             roleDao.update(roleEntity);
@@ -280,9 +267,9 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     public void deleteRole(final String role) {
-        final Role roleEntity = roleDao.findSingleByCriteria(Restrictions.eq(CODE, role));
+        final Role roleEntity = roleDao.findSingleByCriteria(" where e.code = ?1 ", role);
         if (roleEntity != null) {
-            final List<ManagerRole> assignedRoles = managerRoleDao.findByCriteria(Restrictions.eq(CODE, role));
+            final List<ManagerRole> assignedRoles = managerRoleDao.findByCriteria(" where e.code = ?1 ", role);
             for (ManagerRole managerRole : assignedRoles) {
                 managerRoleDao.delete(managerRole);
             }
@@ -300,8 +287,8 @@ public class ManagementServiceImpl implements ManagementService {
             "shopFederationStrategy-shopCode",
     }, allEntries = true)
     public void grantRole(final String userId, final String role) {
-        final Role roleEntity = roleDao.findSingleByCriteria(Restrictions.eq(CODE, role));
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
+        final Role roleEntity = roleDao.findSingleByCriteria(" where e.code = ?1 ", role);
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         if (roleEntity != null && manager != null) {
             final ManagerRole managerRole = managerRoleDao.getEntityFactory().getByIface(ManagerRole.class);
             managerRole.setCode(role);
@@ -321,8 +308,8 @@ public class ManagementServiceImpl implements ManagementService {
     }, allEntries = true)
     public void revokeRole(final String userId, final String role) {
         final List<ManagerRole> managerRole = managerRoleDao.findByCriteria(
-                Restrictions.eq(CODE, role),
-                Restrictions.eq(EMAIL, userId)
+                " where e.code = ?1 and e.email = ?2",
+                role, userId
         );
         if (managerRole != null && !managerRole.isEmpty()) {
             for (final ManagerRole roleAssignment : managerRole) {
@@ -335,7 +322,7 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     public List<ShopDTO> getAssignedManagerShops(final String userId, final boolean includeSubs) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         if (manager == null) {
             return Collections.emptyList();
         }
@@ -349,7 +336,7 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     public List<ShopDTO> getAvailableManagerShops(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         if (manager == null) {
             return Collections.emptyList();
         }
@@ -411,7 +398,7 @@ public class ManagementServiceImpl implements ManagementService {
             "shopFederationStrategy-shopCode",
     }, allEntries = true)
     public void grantShop(final String userId, final String shopCode) {
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         final Collection<ManagerShop> assigned = manager.getShops();
         for (final ManagerShop shop : assigned) {
             if (shop.getShop().getCode().equals(shopCode)) {
@@ -438,7 +425,7 @@ public class ManagementServiceImpl implements ManagementService {
             "shopFederationStrategy-shopCode",
     }, allEntries = true)
     public void revokeShop(final String userId, final String shopCode) {
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         final Iterator<ManagerShop> assigned = manager.getShops().iterator();
         while (assigned.hasNext()) {
             final ManagerShop shop = assigned.next();
@@ -454,7 +441,7 @@ public class ManagementServiceImpl implements ManagementService {
      */
     public void enableAccount(final String userId) {
 
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         manager.setEnabled(true);
         managerService.update(manager);
 
@@ -465,7 +452,7 @@ public class ManagementServiceImpl implements ManagementService {
      */
     public void disableAccount(final String userId) {
 
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         manager.setEnabled(false);
         managerService.update(manager);
 

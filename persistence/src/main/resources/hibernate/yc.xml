@@ -2727,7 +2727,7 @@
     <query name="CATEGORIES.BY.CODE.NAME.URI">
         <![CDATA[
        select c from CategoryEntity c
-        where (lower(c.guid) like ?1 or ?1 is null) OR (lower(c.name) like ?2 or ?2 is null) OR (lower(c.seoInternal.uri) like ?3 or ?3 is null)
+        where (?1 is null or lower(c.guid) like ?1) OR (?2 is null or lower(c.name) like ?2) OR (?3 is null or lower(c.seoInternal.uri) like ?3)
        ]]>
     </query>
 
@@ -2777,6 +2777,16 @@
     <query name="CONTENTBODY.ATTRIBUTES">
         <![CDATA[
        select a from AttributeEntity a where a.code like ?1 order by a.code asc
+       ]]>
+    </query>
+
+
+    <query name="PRODUCTS.BY.CATEGORYIDS.ALL">
+        <![CDATA[
+       select p from ProductEntity p, ProductCategoryEntity pc
+            where p.productId = pc.product.productId
+            and pc.category.categoryId in (?1)
+            order by pc.rank, p.code
        ]]>
     </query>
 
@@ -3202,6 +3212,24 @@
     </query>
 
 
+    <query name="PRODUCT.BY.CODE.NAME.BRAND.TYPE">
+        <![CDATA[
+       select a
+       from ProductEntity a fetch all properties
+       where
+        (?1 is null or
+            lower(a.code) like ?1 or
+            lower(a.manufacturerCode) like ?1 or
+            lower(a.supplierCode) like ?1 or
+            lower(a.pimCode) like ?1 or
+            lower(a.guid) like ?1 or
+            a.productId = ?2) and
+         (?3 is null or lower(a.name) like ?3) and
+         (?4 is null or a.brand.brandId = ?4) and
+         (?5 is null or a.producttype.producttypeId = ?5)
+       ]]>
+    </query>
+
     <query name="PRODUCT.SKU.BY.CODE">
         <![CDATA[
        select a
@@ -3256,7 +3284,7 @@
 
     <query name="CATEGORY.IDS.BY.NAME.OR.GUID">
         <![CDATA[
-                  select c.categoryId from CategoryEntity c  where c.guid like ?1 or c.name like ?1
+                  select c.categoryId from CategoryEntity c  where lower(c.guid) like ?1 or lower(c.name) like ?1
        ]]>
     </query>
 
@@ -3387,6 +3415,16 @@
     <query name="BRAND.BY.GUID">
         <![CDATA[
                  select b from BrandEntity b  where b.guid =?1
+        ]]>
+    </query>
+
+    <query name="BRAND.BY.GUID.NAME.DESCRIPTION.ORDBY.NAME">
+        <![CDATA[
+                 select b from BrandEntity b  where
+                    (?1 is null or lower(b.guid) like ?1) or
+                    (?2 is null or lower(b.name) like ?2) or
+                    (?3 is null or lower(b.description) like ?3)
+                    order by b.name
         ]]>
     </query>
 
@@ -3572,22 +3610,35 @@
         ]]>
     </query>
 
+    <query name="CUSTOMER.BY.EMAIL.NAME.TAG.TYPE">
+        <![CDATA[
+            select c from CustomerEntity c where
+                (?1 is null or lower(c.email) like ?1) and
+                (?2 is null or lower(c.firstname) like ?2) and
+                (?3 is null or lower(c.lastname) like ?3) and
+                (?4 is null or lower(c.middlename) like ?4) and
+                (?5 is null or lower(c.tag) like ?5) and
+                (?6 is null or lower(c.customerType) like ?6) and
+                (?7 is null or lower(c.pricingPolicy) like ?7)
+
+        ]]>
+    </query>
 
     <query name="CUSTOMER.BY.EMAIL.SHOP">
         <![CDATA[
-            select cse.customer from CustomerShopEntity cse where cse.customer.email = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.disabled = ?3
+            select cse.customer from CustomerShopEntity cse where lower(cse.customer.email) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.disabled = ?3
         ]]>
     </query>
 
     <query name="EMAIL.CHECK">
         <![CDATA[
-            select count(customerShopId) from CustomerShopEntity cse where cse.customer.email = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2)
+            select count(customerShopId) from CustomerShopEntity cse where lower(cse.customer.email) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2)
         ]]>
     </query>
 
     <query name="PASS.CHECK">
         <![CDATA[
-            select count(customerShopId) from CustomerShopEntity cse where cse.customer.email = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.customer.password = ?3 and cse.disabled = ?4
+            select count(customerShopId) from CustomerShopEntity cse where lower(cse.customer.email) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.customer.password = ?3 and cse.disabled = ?4
         ]]>
     </query>
 
@@ -3769,6 +3820,21 @@
         ]]>
     </query>
 
+    <query name="PROMOTION.BY.CODE.SHOPCODE.CURRENCY.TAG.TYPE.ACTION.ACTIVE">
+        <![CDATA[
+            select p from PromotionEntity p where
+                (?1 is null or p.shopCode = ?1) and
+                (?2 is null or p.currency = ?2) and
+                (?3 is null or lower(p.code) like ?3) and
+                (?4 is null or lower(p.tag) like ?4) and
+                (?5 is null or p.promoType = ?5) and
+                (?6 is null or p.promoAction = ?6) and
+                (?7 is null or p.enabled = ?7)
+
+        ]]>
+    </query>
+
+
     <query name="PROMOTION.BY.SHOPCODE.CURRENCY">
         <![CDATA[
             select p from PromotionEntity p where p.shopCode = ?1 and p.currency = ?2
@@ -3831,10 +3897,28 @@
         ]]>
     </query>
 
+    <query name="TAX.BY.CODE.SHOPCODE.CURRENCY">
+        <![CDATA[
+            select t from TaxEntity t where
+                (?1 is null or t.shopCode = ?1) and
+                (?2 is null or t.currency = ?2) and
+                (?3 is null or lower(t.code) like ?3)
+        ]]>
+    </query>
 
     <query name="TAX.BY.SHOPCODE.CURRENCY">
         <![CDATA[
             select t from TaxEntity t where t.shopCode = ?1 and t.currency = ?2
+        ]]>
+    </query>
+
+    <query name="TAXCONFIG.BY.TAX.COUNTRY.STATE.PRODUCT">
+        <![CDATA[
+            select tc from TaxConfigEntity tc where
+                tc.tax.taxId = ?1 and
+                (?2 is null or tc.countryCode = ?2) and
+                (?3 is null or tc.stateCode = ?3) and
+                (?4 is null or tc.productCode = ?4)
         ]]>
     </query>
 

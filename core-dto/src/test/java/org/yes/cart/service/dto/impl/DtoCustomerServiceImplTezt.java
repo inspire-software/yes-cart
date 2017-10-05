@@ -52,6 +52,44 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
         super.setUp();
     }
 
+
+    @Test
+    public void testFindBy() throws Exception {
+        CustomerDTO jane = getCustomerDto(getTestName() + "_a");
+        jane = dtoService.createForShop(jane, 10L);
+        assertTrue(jane.getCustomerId() > 0);
+        jane.setFirstname("Jane");
+        jane.setLastname("Gav");
+        jane.setCustomerType("B2C");
+        jane = dtoService.update(jane);
+        CustomerDTO bob = getCustomerDto(getTestName() + "_b");
+        bob = dtoService.createForShop(bob, 10L);
+        assertTrue(bob.getCustomerId() > 0);
+        bob.setFirstname("Bob");
+        bob.setLastname("Doe");
+        bob.setCustomerType("B2B");
+        bob = dtoService.update(bob);
+
+        // check by id
+        List<CustomerDTO> rez = dtoService.findBy("#" + jane.getCustomerId(), 0, 10);
+        assertEquals(1, rez.size());
+        assertEquals("Jane", rez.get(0).getFirstname());
+
+        // check by name
+        rez = dtoService.findBy("?bob", 0, 10);
+        assertEquals(1, rez.size());
+        assertEquals("Bob", rez.get(0).getFirstname());
+
+        // check by type
+        rez = dtoService.findBy("$b2c", 0, 10);
+        assertFalse(rez.isEmpty());
+        assertEquals("B2C", rez.get(0).getCustomerType());
+
+        dtoService.remove(bob.getCustomerId());
+        dtoService.remove(jane.getCustomerId());
+    }
+
+
     @Test
     public void testCreate() throws Exception {
         CustomerDTO dto = getCustomerDto(getTestName());

@@ -48,25 +48,6 @@ public class VoPaymentServiceImpl implements VoPaymentService {
     }
 
     @Override
-    public List<VoPayment> getFiltered(final String filter, final int max) throws Exception {
-
-        final List<VoPayment> results = new ArrayList<>();
-
-        int start = 0;
-        do {
-            final List<CustomerOrderPayment> batch = dtoCustomerOrderPaymentService.findBy(filter, start, max);
-            if (batch.isEmpty()) {
-                break;
-            }
-            federationFacade.applyFederationFilter(batch, CustomerOrderPayment.class);
-
-            results.addAll(voAssemblySupport.assembleVos(VoPayment.class, CustomerOrderPayment.class, batch));
-            start++;
-        } while (results.size() < max && max != Integer.MAX_VALUE);
-        return results.size() > max ? results.subList(0, max) : results;
-    }
-
-    @Override
     public List<VoPayment> getFiltered(final String filter, final List<String> operations, final List<String> statuses, final int max) throws Exception {
 
         final List<VoPayment> results = new ArrayList<>();

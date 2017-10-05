@@ -17,9 +17,7 @@
 package org.yes.cart.payment.service.impl;
 
 
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
@@ -107,43 +105,21 @@ public class CustomerOrderPaymentServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<CustomerOrderPayment> findBy(
-            final String orderNumber,
-            final Date fromDate,
-            final Date tillDate,
-            final String lastCardDigits,
-            final String cardHolderName,
-            final String paymentGateway
-    ) {
-
-        final ArrayList<Criterion> creterias = new ArrayList<Criterion>(6);
-
-        if (orderNumber != null) {
-            creterias.add(Restrictions.like("orderNumber", orderNumber, MatchMode.ANYWHERE));
-        }
-
-        if (fromDate != null) {
-            creterias.add(Restrictions.ge("orderDate", fromDate));
-        }
-
-        if (tillDate != null) {
-            creterias.add(Restrictions.le("orderDate", tillDate));
-        }
-
-        if (lastCardDigits != null) {
-            creterias.add(Restrictions.eq("cardNumber", lastCardDigits));
-        }
-
-        if (cardHolderName != null) {
-            creterias.add(Restrictions.like("cardHolderName", cardHolderName, MatchMode.ANYWHERE));
-        }
-
-        if (paymentGateway != null) {
-            creterias.add(Restrictions.eq("transactionGatewayLabel", paymentGateway));
-        }
+    public List<CustomerOrderPayment> findBy(final String orderNumber,
+                                             final Date fromDate,
+                                             final Date tillDate,
+                                             final String lastCardDigits,
+                                             final String cardHolderName,
+                                             final String paymentGateway) {
 
         return getGenericDao().findByCriteria(
-                creterias.toArray(new Criterion[creterias.size()])
+                " where (?1 is null or e.orderNumber like ?1) and (?2 is null or e.orderDate >= ?2) and (?3 is null or e.orderDate <= ?3) and (?4 is null or e.cardNumber like ?4) and (?5 is null or lower(e.cardHolderName) like ?5) and (?6 is null or e.transactionGatewayLabel like ?6)",
+                StringUtils.isNotBlank(orderNumber) ? "%" + orderNumber + "%" : null,
+                fromDate,
+                tillDate,
+                StringUtils.isNotBlank(lastCardDigits) ? "%" + lastCardDigits + "%" : null,
+                StringUtils.isNotBlank(cardHolderName) ? "%" + cardHolderName.toLowerCase() + "%" : null,
+                StringUtils.isNotBlank(paymentGateway) ? paymentGateway : null
         );
 
     }
@@ -157,25 +133,13 @@ public class CustomerOrderPaymentServiceImpl
                                              final String paymentProcessorResult,
                                              final String transactionOperation) {
 
-        final ArrayList<Criterion> creteria = new ArrayList<Criterion>(4);
-
-        if (orderNumber != null) {
-            creteria.add(Restrictions.eq("orderNumber", orderNumber));
-        }
-
-        if (shipmentNumber != null) {
-            creteria.add(Restrictions.eq("orderShipment", shipmentNumber));
-        }
-
-        if (paymentProcessorResult != null) {
-            creteria.add(Restrictions.eq("paymentProcessorResult", paymentProcessorResult));
-        }
-
-        if (transactionOperation != null) {
-            creteria.add(Restrictions.eq("transactionOperation", transactionOperation));
-        }
-
-        return getGenericDao().findByCriteria(creteria.toArray(new Criterion[creteria.size()]));
+        return getGenericDao().findByCriteria(
+                " where (?1 is null or e.orderNumber = ?1) and (?2 is null or e.orderShipment = ?2) and (?3 is null or e.paymentProcessorResult = (?3)) and (?4 is null or e.transactionOperation = (?4))",
+                orderNumber,
+                shipmentNumber,
+                paymentProcessorResult,
+                transactionOperation
+        );
 
     }
 
@@ -187,25 +151,15 @@ public class CustomerOrderPaymentServiceImpl
                                              final String[] paymentProcessorResult,
                                              final String[] transactionOperation) {
 
-        final ArrayList<Criterion> creteria = new ArrayList<Criterion>(4);
-
-        if (orderNumber != null) {
-            creteria.add(Restrictions.eq("orderNumber", orderNumber));
-        }
-
-        if (shipmentNumber != null) {
-            creteria.add(Restrictions.eq("orderShipment", shipmentNumber));
-        }
-
-        if (paymentProcessorResult != null) {
-            creteria.add(Restrictions.in("paymentProcessorResult", paymentProcessorResult));
-        }
-
-        if (transactionOperation != null) {
-            creteria.add(Restrictions.in("transactionOperation", transactionOperation));
-        }
-
-        return getGenericDao().findByCriteria(creteria.toArray(new Criterion[creteria.size()]));
+        return getGenericDao().findByCriteria(
+                " where (?1 is null or e.orderNumber = ?1) and (?2 is null or e.orderShipment = ?2) and (?3 is null or e.paymentProcessorResult in (?4)) and (?5 is null or e.transactionOperation in (?6))",
+                orderNumber,
+                shipmentNumber,
+                paymentProcessorResult != null ? "1" : null,
+                paymentProcessorResult != null ? Arrays.asList(paymentProcessorResult) : Collections.singletonList("x"),
+                transactionOperation != null ? "1" : null,
+                transactionOperation != null ? Arrays.asList(transactionOperation) : Collections.singletonList("x")
+        );
 
     }
 }

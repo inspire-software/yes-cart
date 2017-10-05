@@ -16,15 +16,11 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Tax;
 import org.yes.cart.service.domain.TaxService;
+import org.yes.cart.utils.HQLUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,29 +47,13 @@ public class TaxServiceImpl  extends BaseGenericServiceImpl<Tax> implements TaxS
     /** {@inheritDoc} */
     public List<Tax> findByParameters(final String code, final String shopCode, final String currency) {
 
-        final List<Criterion> criterionList = new ArrayList<Criterion>();
+        return getGenericDao().findByNamedQuery(
+                "TAX.BY.CODE.SHOPCODE.CURRENCY",
+                shopCode,
+                currency,
+                HQLUtils.criteriaIlikeAnywhere(code)
+        );
 
-        if (StringUtils.isNotBlank(code)) {
-            criterionList.add(Restrictions.like("code", code, MatchMode.ANYWHERE));
-        }
-
-        if (StringUtils.isNotBlank(shopCode)) {
-            criterionList.add(Restrictions.like("shopCode", shopCode, MatchMode.ANYWHERE));
-        }
-
-        if (StringUtils.isNotBlank(currency)) {
-            criterionList.add(Restrictions.like("currency", currency, MatchMode.ANYWHERE));
-        }
-
-        if (criterionList.isEmpty()) {
-            return getGenericDao().findAll();
-
-        } else {
-            return getGenericDao().findByCriteria(
-                    criterionList.toArray(new Criterion[criterionList.size()])
-            );
-
-        }
     }
 
     private void regenerateGuid(final Tax entity) {

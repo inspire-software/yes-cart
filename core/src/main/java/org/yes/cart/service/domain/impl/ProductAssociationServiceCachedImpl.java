@@ -17,9 +17,7 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.Criterion;
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.ProductAssociation;
 import org.yes.cart.service.domain.ProductAssociationService;
@@ -100,8 +98,8 @@ public class ProductAssociationServiceCachedImpl implements ProductAssociationSe
     }
 
     /** {@inheritDoc} */
-    public List<ProductAssociation> findByCriteria(final Criterion... criterion) {
-        return productAssociationService.findByCriteria(criterion);
+    public List<ProductAssociation> findByCriteria(final String eCriteria, final Object... parameters) {
+        return productAssociationService.findByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
@@ -110,8 +108,8 @@ public class ProductAssociationServiceCachedImpl implements ProductAssociationSe
     }
 
     /** {@inheritDoc} */
-    public ProductAssociation findSingleByCriteria(final Criterion... criterion) {
-        return productAssociationService.findSingleByCriteria(criterion);
+    public ProductAssociation findSingleByCriteria(final String eCriteria, final Object... parameters) {
+        return productAssociationService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */

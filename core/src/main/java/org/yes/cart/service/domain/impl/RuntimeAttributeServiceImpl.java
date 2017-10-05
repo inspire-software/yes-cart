@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.service.domain.AttributeGroupService;
 import org.yes.cart.service.domain.AttributeService;
@@ -54,7 +53,7 @@ public class RuntimeAttributeServiceImpl implements RuntimeAttributeService {
             attribute.setCode(attributeCode);
             attribute.setName(attributeCode);
             attribute.setAttributeGroup(attributeGroupService.getAttributeGroupByCode(attributeGroup));
-            attribute.setEtype(etypeService.findSingleByCriteria(Restrictions.eq("businesstype", eType)));
+            attribute.setEtype(etypeService.findSingleByCriteria(" where e.businesstype = ?1", eType));
             attribute.setGuid(attributeCode);
             attributeService.create(attribute);
             return attribute;

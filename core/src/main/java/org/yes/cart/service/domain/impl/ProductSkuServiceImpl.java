@@ -17,7 +17,6 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
@@ -74,7 +73,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      */
     public ProductSku findProductSkuBySkuCode(final String skuCode) {
         return getGenericDao().findSingleByCriteria(
-                Restrictions.eq("code", skuCode)
+                " where e.code = ?1", skuCode
         );
     }
 
@@ -145,7 +144,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * {@inheritDoc}
      */
     public void removeAllPrices(final long productId) {
-        final List<ProductSku> skus = getGenericDao().findByCriteria(Restrictions.eq("product.productId" , productId));
+        final List<ProductSku> skus = getGenericDao().findByCriteria(" where e.product.productId = ?1" , productId);
         for (ProductSku sku : skus) {
             removeAllPrices( sku);
         }
@@ -163,7 +162,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * {@inheritDoc}
      */
     public void removeAllInventory(final long productId) {
-        final List<ProductSku> skus = getGenericDao().findByCriteria(Restrictions.eq("product.productId" , productId));
+        final List<ProductSku> skus = getGenericDao().findByCriteria(" where e.product.productId = ?1" , productId);
         for (ProductSku sku : skus) {
             removeAllInventory(sku);
         }

@@ -136,7 +136,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
 
 
     @Test
-    public void testGetProductByConeNameBrandType() throws Exception {
+    public void testGetProductByCodeNameBrandType() throws Exception {
         List<ProductDTO> list = dtoService.getProductByCodeNameBrandType(null, null, 104L, 0);
         assertFalse(list.isEmpty());
         assertTrue(26 == list.size() || 28 == list.size());             //26 products with brand samsung
@@ -232,37 +232,6 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testRemove() throws Exception {
-       /* ProductDTO dto = getDto();
-        dto = dtoService.create(dto);
-        assertTrue(dto.getProductId() > 0);
-        dtoService.remove(dto.getProductId());
-        dto = dtoService.findById(dto.getProductId());
-        assertNull(dto);
-
-
-        dto = getDto();
-        dto = dtoService.create(dto);
-        assertTrue(dto.getProductId() > 0);
-
-
-        AttrValueProductDTO attrValueProductDTO = dtoFactory.getByIface(AttrValueProductDTO.class);
-        attrValueProductDTO.setAttributeDTO(dtoAttrService.findById(2010L)); //POWERSUPPLY
-        attrValueProductDTO.setProductId(dto.getProductId());
-        attrValueProductDTO.setVal("Дрова"); //Firewood
-        attrValueProductDTO = (AttrValueProductDTO) dtoService.createEntityAttributeValue(attrValueProductDTO);
-
-        ProductCategoryDTO productCategoryDTO =  dtoProductCategoryService.getNew();
-        productCategoryDTO.setProductId(dto.getProductId());
-        productCategoryDTO.setCategoryId(117L);
-
-        productCategoryDTO = dtoProductCategoryService.create(productCategoryDTO);
-
-
-        dtoService.remove(dto.getProductId());
-        dto = dtoService.findById(dto.getProductId());
-        assertNull(dto);         */
-
-
         dtoService.remove(15300L); //remove_me
         ProductDTO dto = dtoService.getById(15300L);
         assertNull(dto);
@@ -288,4 +257,47 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         dto.setAvailability(Product.AVAILABILITY_STANDARD);
         return dto;
     }
+
+
+    @Test
+    public void testFindBy() throws Exception {
+
+        // code exact
+        List<ProductDTO> list = dtoService.findBy("!FEATURED-PRODUCT3", 0, 10);
+        assertEquals(1, list.size());
+        assertEquals("FEATURED-PRODUCT3", list.get(0).getCode());
+
+        // code partial
+        list = dtoService.findBy("#featured", 0, 10);
+        assertEquals(9, list.size());
+        assertTrue(list.get(0).getCode().startsWith("FEATURED-PRODUCT"));
+
+        // PK
+        list = dtoService.findBy("*15053", 0, 10);
+        assertEquals(1, list.size());
+        assertEquals("FEATURED-PRODUCT3", list.get(0).getCode());
+
+        // Dates
+        list = dtoService.findBy("2000-04-09<2001-04-08", 0, 10);
+        assertEquals(1, list.size());
+        assertEquals("FEATURED-PRODUCT3", list.get(0).getCode());
+
+        // by brand
+        list = dtoService.findBy("?samsung", 0, 10);
+        assertFalse(list.isEmpty());
+        assertEquals("Samsung", list.get(0).getBrandDTO().getName());
+
+        // by category
+        list = dtoService.findBy("^featured products", 0, 10);
+        assertFalse(list.isEmpty());
+        assertEquals("Featured products", list.get(0).getProductCategoryDTOs().iterator().next().getCategoryName());
+
+        // basic
+        list = dtoService.findBy("bender", 0, 10);
+        assertFalse(list.isEmpty());
+        assertTrue(list.get(0).getCode().startsWith("BENDER"));
+
+    }
+
+
 }

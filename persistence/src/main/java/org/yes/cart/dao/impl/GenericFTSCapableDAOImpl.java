@@ -17,9 +17,10 @@
 package org.yes.cart.dao.impl;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
-import org.yes.cart.dao.*;
+import org.yes.cart.dao.EntityFactory;
+import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.GenericFTSCapableDAO;
+import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.GenericFTS;
 import org.yes.cart.search.dao.IndexBuilder;
@@ -217,22 +218,15 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
-    public List<T> findByCriteria(final Criterion... criterion) {
-        return genericDAO.findByCriteria(criterion);
+    public List<T> findByCriteria(final String eCriteria, final Object... parameters) {
+        return genericDAO.findByCriteria(eCriteria, parameters);
     }
 
     /**
      * {@inheritDoc}
      */
-    public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion... criterion) {
-        return genericDAO.findByCriteria(firstResult, maxResults, criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion[] criterion, final Order[] order) {
-        return genericDAO.findByCriteria(firstResult, maxResults, criterion, order);
+    public List<T> findRangeByCriteria(final String eCriteria, final int firstResult, final int maxResults, final Object... parameters) {
+        return genericDAO.findRangeByCriteria(eCriteria, firstResult, maxResults, parameters);
     }
 
     /**
@@ -245,36 +239,8 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
-    public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return genericDAO.findByCriteria(criteriaTuner, criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final int firstResult, final int maxResults, final Criterion... criterion) {
-        return genericDAO.findByCriteria(criteriaTuner, firstResult, maxResults, criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final int firstResult, final int maxResults, final Criterion[] criterion, final Order[] order) {
-        return genericDAO.findByCriteria(criteriaTuner, firstResult, maxResults, criterion, order);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public T findSingleByCriteria(final Criterion... criterion) {
-        return genericDAO.findSingleByCriteria(criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public T findSingleByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return genericDAO.findSingleByCriteria(criteriaTuner, criterion);
+    public T findSingleByCriteria(final String eCriteria, final Object... parameters) {
+        return genericDAO.findSingleByCriteria(eCriteria, parameters);
     }
 
     /**

@@ -24,7 +24,6 @@ import org.yes.cart.domain.dto.InventoryDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.service.dto.DtoInventoryService;
-import org.yes.cart.service.dto.support.impl.InventoryFilterImpl;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -54,20 +53,18 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testGetInventoryList() throws Exception {
 
-        final InventoryFilterImpl filter = new InventoryFilterImpl();
+        final WarehouseDTO wh = dtoService.getWarehouses().get(0);
 
         // Test no stock when no warehouse
-        List<InventoryDTO> stock = dtoService.getInventoryList(filter);
+        List<InventoryDTO> stock = dtoService.findBy(0L, null, 0, 10);
         assertTrue(stock.isEmpty());
 
         // Has stock when warehouse selected
-        filter.setWarehouse(dtoService.getWarehouses().get(0));
-        stock = dtoService.getInventoryList(filter);
+        stock = dtoService.findBy(wh.getWarehouseId(), null, 0, 10);
         assertFalse(stock.isEmpty());
 
         // Test partial SKU match
-        filter.setProductCode("CC_TEST");
-        stock = dtoService.getInventoryList(filter);
+        stock = dtoService.findBy(wh.getWarehouseId(), "CC_TEST", 0, 10);
         assertFalse(stock.isEmpty());
 
         Set<String> sku = new HashSet<String>();
@@ -80,8 +77,7 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
         assertTrue(sku.contains("CC_TEST3"));
 
         // Test name SKU match
-        filter.setProductCode("cc test 11");
-        stock = dtoService.getInventoryList(filter);
+        stock = dtoService.findBy(wh.getWarehouseId(), "cc test 11", 0, 10);
         assertFalse(stock.isEmpty());
 
         for (final InventoryDTO inventory : stock) {
@@ -89,9 +85,7 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
         }
 
         // Test exact SKU match
-        filter.setProductCode("CC_TEST1");
-        filter.setProductCodeExact(true);
-        stock = dtoService.getInventoryList(filter);
+        stock = dtoService.findBy(wh.getWarehouseId(), "!CC_TEST1", 0, 10);
         assertFalse(stock.isEmpty());
 
         for (final InventoryDTO inventory : stock) {
@@ -99,10 +93,15 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
         }
 
         // Test SKU no match
-        filter.setProductCode("something really weird not matching");
-        filter.setProductCodeExact(true);
-        stock = dtoService.getInventoryList(filter);
+        stock = dtoService.findBy(wh.getWarehouseId(), "!something really weird not matching", 0, 10);
         assertTrue(stock.isEmpty());
+
+        // Test high reserved stock reserved >= X
+        stock = dtoService.findBy(wh.getWarehouseId(), "+1", 0, 10);
+        assertTrue(stock.isEmpty());
+        // Test low stock qty <= X
+        stock = dtoService.findBy(wh.getWarehouseId(), "-5", 0, 10);
+        assertFalse(stock.isEmpty());
 
     }
 
@@ -141,20 +140,18 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testCreateInventory() throws Exception {
 
-        final InventoryFilterImpl filter = new InventoryFilterImpl();
-        filter.setWarehouse(dtoService.getWarehouses().get(0));
-        filter.setProductCode("ABC-0001");
+        final WarehouseDTO wh = dtoService.getWarehouses().get(0);
 
-        assertTrue(dtoService.getInventoryList(filter).isEmpty());
+        assertTrue(dtoService.findBy(wh.getWarehouseId(), "!ABC-0002", 0, 10).isEmpty());
 
-        InventoryDTO dto = getDto(filter.getProductCode(), filter.getWarehouse().getCode());
+        InventoryDTO dto = getDto("ABC-0002", wh.getCode());
         dto = dtoService.createInventory(dto);
         assertTrue(dto.getSkuWarehouseId() > 0L);
 
-        final List<InventoryDTO> stock = dtoService.getInventoryList(filter);
+        final List<InventoryDTO> stock = dtoService.findBy(wh.getWarehouseId(), "!ABC-0002", 0, 10);
         assertFalse(stock.isEmpty());
 
-        assertEquals(filter.getProductCode(), stock.get(0).getSkuCode());
+        assertEquals("ABC-0002", stock.get(0).getSkuCode());
         assertEquals(BigDecimal.TEN.setScale(2), stock.get(0).getQuantity());
 
     }
@@ -162,29 +159,27 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testUpdateInventory() throws Exception {
 
-        final InventoryFilterImpl filter = new InventoryFilterImpl();
-        filter.setWarehouse(dtoService.getWarehouses().get(0));
-        filter.setProductCode("ABC-0002");
+        final WarehouseDTO wh = dtoService.getWarehouses().get(0);
 
-        assertTrue(dtoService.getInventoryList(filter).isEmpty());
+        assertTrue(dtoService.findBy(wh.getWarehouseId(), "!ABC-0003", 0, 10).isEmpty());
 
-        InventoryDTO dto = getDto(filter.getProductCode(), filter.getWarehouse().getCode());
+        InventoryDTO dto = getDto("ABC-0003", wh.getCode());
         dto = dtoService.createInventory(dto);
         assertTrue(dto.getSkuWarehouseId() > 0L);
 
-        List<InventoryDTO> stock = dtoService.getInventoryList(filter);
+        List<InventoryDTO> stock = dtoService.findBy(wh.getWarehouseId(), "!ABC-0003", 0, 10);
         assertFalse(stock.isEmpty());
 
-        assertEquals(filter.getProductCode(), stock.get(0).getSkuCode());
+        assertEquals("ABC-0003", stock.get(0).getSkuCode());
         assertEquals(BigDecimal.TEN.setScale(2), stock.get(0).getQuantity());
 
         dto.setQuantity(BigDecimal.ONE);
         dto = dtoService.updateInventory(dto);
 
-        stock = dtoService.getInventoryList(filter);
+        stock = dtoService.findBy(wh.getWarehouseId(), "!ABC-0003", 0, 10);
         assertFalse(stock.isEmpty());
 
-        assertEquals(filter.getProductCode(), stock.get(0).getSkuCode());
+        assertEquals("ABC-0003", stock.get(0).getSkuCode());
         assertEquals(BigDecimal.ONE.setScale(2), stock.get(0).getQuantity());
 
 

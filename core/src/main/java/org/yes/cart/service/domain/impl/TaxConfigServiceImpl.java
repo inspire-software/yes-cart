@@ -17,15 +17,13 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Tax;
 import org.yes.cart.domain.entity.TaxConfig;
 import org.yes.cart.service.domain.TaxConfigService;
 import org.yes.cart.service.domain.TaxService;
+import org.yes.cart.utils.HQLUtils;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -119,25 +117,13 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
                                        final String stateCode,
                                        final String productCode) {
 
-        final List<Criterion> criterionList = new ArrayList<Criterion>();
-
-        criterionList.add(Restrictions.eq("tax.taxId", taxId));
-
-        if (StringUtils.isNotBlank(countryCode)) {
-            criterionList.add(Restrictions.eq("countryCode", countryCode));
-        }
-
-        if (StringUtils.isNotBlank(stateCode)) {
-            criterionList.add(Restrictions.eq("stateCode", stateCode));
-        }
-
-        if (StringUtils.isNotBlank(productCode)) {
-            criterionList.add(Restrictions.eq("productCode", productCode));
-        }
-
-        return getGenericDao().findByCriteria(
-                criterionList.toArray(new Criterion[criterionList.size()])
-        );
+        return getGenericDao().findByNamedQuery(
+                "TAXCONFIG.BY.TAX.COUNTRY.STATE.PRODUCT",
+                taxId,
+                HQLUtils.criteriaEq(countryCode),
+                HQLUtils.criteriaEq(stateCode),
+                HQLUtils.criteriaEq(productCode)
+            );
     }
 
 

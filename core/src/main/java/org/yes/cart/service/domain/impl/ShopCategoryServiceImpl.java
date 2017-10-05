@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.annotation.CacheEvict;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Category;
@@ -59,11 +58,13 @@ public class ShopCategoryServiceImpl extends BaseGenericServiceImpl<ShopCategory
      * {@inheritDoc}
      */
     public void deleteAll(final Category category) {
-        final Collection<ShopCategory> shopCategories = shopCategoryDao.findByCriteria(
-                Restrictions.eq("category", category));
-        for (ShopCategory shopCategory : shopCategories) {
-            shopCategoryDao.delete(shopCategory);
-        }        
+        if (category != null) {
+            final Collection<ShopCategory> shopCategories = shopCategoryDao.findByCriteria(
+                    " where e.category.categoryId = ?1", category.getCategoryId());
+            for (ShopCategory shopCategory : shopCategories) {
+                shopCategoryDao.delete(shopCategory);
+            }
+        }
     }
 
     /**
@@ -71,8 +72,9 @@ public class ShopCategoryServiceImpl extends BaseGenericServiceImpl<ShopCategory
      */
     public ShopCategory findByShopCategory(final Shop shop, final Category category) {
         return shopCategoryDao.findSingleByCriteria(
-                Restrictions.eq("category", category),
-                Restrictions.eq("shop", shop)
+                " where e.category = ?1 and e.shop = ?2",
+                category,
+                shop
         );
     }
 

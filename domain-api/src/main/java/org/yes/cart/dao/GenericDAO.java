@@ -16,9 +16,6 @@
 
 package org.yes.cart.dao;
 
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -265,111 +262,47 @@ public interface GenericDAO<T, PK extends Serializable> {
     /**
      * Find entities by criteria.
      *
-     * @param criterion given criteria
-     *
-     * @return list of found entities.
-     */
-    List<T> findByCriteria(Criterion... criterion);
-
-    /**
-     * Find entities by criteria.
-     *
-     * @param firstResult first result
-     * @param maxResults max results
-     * @param criterion given criteria
-     *
-     * @return list of found entities.
-     */
-    List<T> findByCriteria(int firstResult,
-                           int maxResults,
-                           Criterion... criterion);
-
-    /**
-     * Find entities by criteria.
-     *
-     * @param firstResult first result
-     * @param maxResults max results
-     * @param criterion given criteria
-     * @param order sorting
-     *
-     * @return list of found entities.
-     */
-    List<T> findByCriteria(int firstResult,
-                           int maxResults,
-                           Criterion[] criterion,
-                           Order[] order);
-
-    /**
-     * Find count by criteria.
-     *
-     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " e.attr1 = ? and e.attr2 = ?"
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
      * @param parameters parameters to fill in for question marks
      *
      * @return list of found entities.
      */
-    int findCountByCriteria(final String eCriteria, final Object... parameters);
+    List<T> findByCriteria(String eCriteria, Object... parameters);
 
     /**
      * Find entities by criteria.
      *
-     * @param criteriaTuner optional criteria tuner.
-     * @param criterion     given criteria
-     *
-     * @return list of found entities.
-     */
-    List<T> findByCriteria(CriteriaTuner criteriaTuner,
-                           Criterion... criterion);
-
-    /**
-     * Find entities by criteria.
-     *
-     * @param criteriaTuner optional criteria tuner.
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
      * @param firstResult first result
      * @param maxResults max results
-     * @param criterion     given criteria
+     * @param parameters parameters to fill in for question marks
      *
      * @return list of found entities.
      */
-    List<T> findByCriteria(CriteriaTuner criteriaTuner,
-                           int firstResult,
-                           int maxResults,
-                           Criterion... criterion);
+    List<T> findRangeByCriteria(String eCriteria,
+                                int firstResult,
+                                int maxResults,
+                                Object... parameters);
 
     /**
-     * Find entities by criteria.
+     * Find count by criteria.
      *
-     * @param criteriaTuner optional criteria tuner.
-     * @param firstResult first result
-     * @param maxResults max results
-     * @param criterion     given criteria
-     * @param order sorting
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
+     * @param parameters parameters to fill in for question marks
      *
      * @return list of found entities.
      */
-    List<T> findByCriteria(CriteriaTuner criteriaTuner,
-                           int firstResult,
-                           int maxResults,
-                           Criterion[] criterion,
-                           Order[] order);
+    int findCountByCriteria(String eCriteria, Object... parameters);
 
     /**
      * Find single entity by criteria.
      *
-     * @param criterion given criteria
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
+     * @param parameters parameters to fill in for question marks
      *
      * @return single entity or null if not found.
      */
-    T findSingleByCriteria(Criterion... criterion);
-
-    /**
-     * Find single entity by criteria.
-     *
-     * @param criteriaTuner optional criteria tuner.
-     * @param criterion     given criteria
-     *
-     * @return single entity or null if not found.
-     */
-    T findSingleByCriteria(CriteriaTuner criteriaTuner, Criterion... criterion);
+    T findSingleByCriteria(String eCriteria, Object... parameters);
 
     /**
      * Persist the new entity in DB.
@@ -392,9 +325,9 @@ public interface GenericDAO<T, PK extends Serializable> {
     /**
      * Save or update the entity. Please, use #create or #update instead of this method.
      *
-     * @param entity entity to update
+     * @param entity entity to save or update
      *
-     * @return updated entity.
+     * @return saved or updated entity
      */
     T saveOrUpdate(T entity);
 

@@ -60,20 +60,6 @@ public interface DtoPromotionService extends GenericDTOService<PromotionDTO> {
      * @param shopCode shop
      * @param currency currency
      * @param filter filter
-     * @param page start page
-     * @param pageSize page size
-     * @return promotions
-     */
-    List<PromotionDTO> findBy(String shopCode, String currency, String filter, int page, int pageSize)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
-
-    /**
-     * Promotions by filter
-     *
-     * @param shopCode shop
-     * @param currency currency
-     * @param filter filter
      * @param types types
      * @param actions actions
      * @param page start page

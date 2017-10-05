@@ -16,8 +16,6 @@
 
 package org.yes.cart.payment.service.impl;
 
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
@@ -47,8 +45,9 @@ public class PaymentGatewayParameterServiceImpl
      */
     public void deleteByLabel(final String paymentGatewayLabel, final String parameterLabel) {
         PaymentGatewayParameter toDelete = getGenericDao().findSingleByCriteria(
-                Restrictions.eq("pgLabel", paymentGatewayLabel),
-                Restrictions.eq("label", parameterLabel)
+                " where e.pgLabel = ?1 and e.label = ?2",
+                paymentGatewayLabel,
+                parameterLabel
 
         );
         if (toDelete != null) {
@@ -62,20 +61,16 @@ public class PaymentGatewayParameterServiceImpl
     public Collection<PaymentGatewayParameter> findAll(final String label, final String shopCode) {
         if (shopCode != null && !"DEFAULT".equals(shopCode)) {
             return getGenericDao().findByCriteria(
-                    Restrictions.and(
-                            Restrictions.eq("pgLabel", label),
-                            Restrictions.or(
-                                    Restrictions.not(Restrictions.like("label", "#", MatchMode.START)),
-                                    Restrictions.like("label", "#" + shopCode + "_", MatchMode.START)
-                            )
-                        )
+                    " where e.pgLabel = ?1 and (e.label not like ?2 or e.label like ?3)",
+                    label,
+                    "#%",  // not shop specific
+                    "#" + shopCode + "_%" // shop code specific
             );
         }
         return getGenericDao().findByCriteria(
-                Restrictions.and(
-                        Restrictions.eq("pgLabel", label),
-                        Restrictions.not(Restrictions.like("label", "#", MatchMode.START))
-                )
+                " where e.pgLabel = ?1 and e.label not like ?2",
+                label,
+                "#%" // not shop specific
         );
     }
 }

@@ -288,6 +288,11 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     this.customerorderFilter = '!';
   }
 
+  protected onSearchInshop() {
+    this.searchHelpShow = false;
+    this.customerorderFilter = '^';
+  }
+
   protected onSearchDate() {
     this.searchHelpShow = false;
     this.customerorderFilter = UiUtil.exampleDateSearch();

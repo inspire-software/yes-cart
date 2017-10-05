@@ -17,8 +17,6 @@
 package org.yes.cart.cluster.service.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.cluster.service.BackdoorService;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
@@ -36,8 +34,6 @@ import java.util.List;
 public class LocalBackdoorServiceImpl implements BackdoorService {
 
     private static final long serialVersionUID = 20130820L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(LocalBackdoorServiceImpl.class);
 
     private ProductService productService;
 
@@ -131,28 +127,20 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
      */
     public List<Object[]> sqlQuery(final String query) {
 
-        try {
+        if (StringUtils.isNotBlank(query)) {
 
-            if (StringUtils.isNotBlank(query)) {
+            if (query.toLowerCase().contains("select ")) {
 
-                if (query.toLowerCase().contains("select ")) {
+                return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().executeNativeQuery(query));
 
-                    return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().executeNativeQuery(query));
+            } else {
 
-                } else {
+                return Collections.singletonList(ObjectUtil.escapeXml(getGenericDao().executeNativeUpdate(query)));
 
-                    return Collections.singletonList(ObjectUtil.escapeXml(getGenericDao().executeNativeUpdate(query)));
-
-                }
             }
-
-            return Collections.EMPTY_LIST;
-
-        } catch (Exception e) {
-            final String msg = "Cant parse query : " + query + " Error : " + e.getMessage();
-            LOG.warn(msg);
-            return Collections.singletonList(new Object[]{msg});
         }
+
+        return Collections.EMPTY_LIST;
 
     }
 
@@ -161,25 +149,19 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
      * {@inheritDoc}
      */
     public List<Object[]> hsqlQuery(final String query) {
-        try {
 
-            if (StringUtils.isNotBlank(query)) {
+        if (StringUtils.isNotBlank(query)) {
 
-                if (query.toLowerCase().contains("select ")) {
+            if (query.toLowerCase().contains("select ")) {
 
-                    final List queryRez = getGenericDao().executeHsqlQuery(query);
-                    return ObjectUtil.transformTypedResultListToArrayList(queryRez);
+                final List queryRez = getGenericDao().executeHsqlQuery(query);
+                return ObjectUtil.transformTypedResultListToArrayList(queryRez);
 
-                } else {
-                    return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().executeHsqlQuery(query));
-                }
+            } else {
+                return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().executeHsqlQuery(query));
             }
-            return Collections.EMPTY_LIST;
-        } catch (Exception e) {
-            final String msg = "Cant parse query : " + query + " Error : " + e.getMessage();
-            LOG.warn(msg);
-            return Collections.singletonList(new Object[]{msg});
         }
+        return Collections.EMPTY_LIST;
 
     }
 
@@ -188,7 +170,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
      * {@inheritDoc}
      */
     public List<Object[]> luceneQuery(final String luceneQuery) {
-        throw new UnsupportedOperationException("ADMIN does nto support product index");
+        throw new UnsupportedOperationException("ADMIN does not support product index");
     }
 
     /**

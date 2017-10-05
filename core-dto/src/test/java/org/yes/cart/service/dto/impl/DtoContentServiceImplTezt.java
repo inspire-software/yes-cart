@@ -58,47 +58,34 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
         super.setUp();
     }
 
+
+    @Test
+    public void testFindBy() throws Exception {
+
+        List<CategoryDTO> list = dtoService.findBy(10L,"^SHOIP1", 0, 10);
+        assertTrue(list.size() > 1);
+
+        list = dtoService.findBy(10L,"@SHOIP1_mail_customer-registered.html", 0, 10);
+        assertEquals(1, list.size());
+
+    }
+
+
     @Test
     public void testGetAll() throws Exception {
 
-
-        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
-            public void doInTransactionWithoutResult(TransactionStatus status) {
-                try {
-                    List<CategoryDTO> list = dtoService.getAllByShopId(20L);
-                    assertFalse(list.isEmpty());
-                } catch (Exception e) {
-                    assertTrue(e.getMessage(), false);
-
-                }
-
-                status.setRollbackOnly();
-            }
-        });
-
+        List<CategoryDTO> list = dtoService.getAllByShopId(20L);
+        assertFalse(list.isEmpty());
 
     }
 
     @Test
     public void testGetAllWithAvailabilityFilter() throws Exception {
 
-
-        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
-            public void doInTransactionWithoutResult(TransactionStatus status) {
-                try {
-                    List<CategoryDTO> list = dtoService.getAllWithAvailabilityFilter(20L, true);
-                    assertFalse(list.isEmpty());
-                    assertFalse(isCategoryPresent(list, 10110L));  //content 2008
-                    assertFalse(isCategoryPresent(list, 10111L));  //content 2108
-                } catch (Exception e) {
-                    assertTrue(e.getMessage(), false);
-
-                }
-
-                status.setRollbackOnly();
-            }
-        });
-
+        List<CategoryDTO> list = dtoService.getAllWithAvailabilityFilter(20L, true);
+        assertFalse(list.isEmpty());
+        assertFalse(isCategoryPresent(list, 10110L));  //content 2008
+        assertFalse(isCategoryPresent(list, 10111L));  //content 2108
 
     }
 

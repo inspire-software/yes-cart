@@ -32,6 +32,21 @@ import java.util.Map;
  */
 public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, GenericAttrValueService {
 
+
+    /**
+     * Find customer by given search criteria.
+     *
+     *
+     * @param email         optional email
+     *
+     * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of dto mapping errors
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of config errors
+     */
+    List<CustomerDTO> findCustomer(String email) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
     /**
      * Find customer by given search criteria. Search will be performed using like operation.
      *

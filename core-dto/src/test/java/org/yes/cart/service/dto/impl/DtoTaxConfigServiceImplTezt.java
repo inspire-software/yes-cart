@@ -98,6 +98,64 @@ public class DtoTaxConfigServiceImplTezt extends BaseCoreDBTestCase {
         dtoTaxService.remove(taxDTO.getTaxId());
     }
 
+    @Test
+    public void testFindBy() throws Exception {
+        TaxDTO taxDTO = getDto();
+        taxDTO = dtoTaxService.create(taxDTO);
+
+        TaxConfigDTO taxConfigDTO1 = getDto(taxDTO, "CC_TEST1", "UA");
+        taxConfigDTO1 = dtoTaxConfigService.create(taxConfigDTO1);
+
+        TaxConfigDTO taxConfigDTO2 = getDto(taxDTO, "CC_TEST2");
+        taxConfigDTO2 = dtoTaxConfigService.create(taxConfigDTO2);
+
+        // retrieve specific
+        List<TaxConfigDTO> taxCfgs = dtoTaxConfigService.findBy(
+                taxDTO.getTaxId(),
+                "!CC_TEST1",
+                0,
+                10);
+
+        assertNotNull(taxCfgs);
+        assertEquals(1, taxCfgs.size());
+        assertEquals("CC_TEST1", taxCfgs.get(0).getProductCode());
+
+        // retrieve all
+        taxCfgs = dtoTaxConfigService.findBy(
+                taxDTO.getTaxId(),
+                "#CC_TEST",
+                0,
+                10);
+
+        assertNotNull(taxCfgs);
+        assertEquals(2, taxCfgs.size());
+
+        // retrieve by country
+        taxCfgs = dtoTaxConfigService.findBy(
+                taxDTO.getTaxId(),
+                "@ua",
+                0,
+                10);
+
+        assertNotNull(taxCfgs);
+        assertEquals(1, taxCfgs.size());
+        assertEquals("UA", taxCfgs.get(0).getCountryCode());
+
+        // retrieve partial
+        taxCfgs = dtoTaxConfigService.findBy(
+                taxDTO.getTaxId(),
+                "CC",
+                0,
+                10);
+
+        assertNotNull(taxCfgs);
+        assertEquals(2, taxCfgs.size());
+
+        dtoTaxConfigService.remove(taxConfigDTO1.getTaxConfigId());
+        dtoTaxConfigService.remove(taxConfigDTO2.getTaxConfigId());
+        dtoTaxService.remove(taxDTO.getTaxId());
+    }
+
 
     @Test
     public void testCreate() throws Exception {
@@ -160,6 +218,17 @@ public class DtoTaxConfigServiceImplTezt extends BaseCoreDBTestCase {
 
         TaxConfigDTO taxCfgDTO = dtoFactory.getByIface(TaxConfigDTO.class);
         taxCfgDTO.setTaxId(taxDTO.getTaxId());
+        taxCfgDTO.setProductCode(sku);
+
+        return taxCfgDTO;
+
+    }
+
+    private TaxConfigDTO getDto(TaxDTO taxDTO, String sku, String country) {
+
+        TaxConfigDTO taxCfgDTO = dtoFactory.getByIface(TaxConfigDTO.class);
+        taxCfgDTO.setTaxId(taxDTO.getTaxId());
+        taxCfgDTO.setCountryCode(country);
         taxCfgDTO.setProductCode(sku);
 
         return taxCfgDTO;

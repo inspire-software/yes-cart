@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
@@ -77,7 +76,10 @@ public class VoDashboardWidgetPluginUnprocessedPgCallbacks implements VoDashboar
 
         final Map<String, Integer> counts = new HashMap<>();
         final List<PaymentGatewayCallback> callbacks = this.paymentModuleGenericService.findByCriteria(
-                Restrictions.eq("processed", Boolean.FALSE), Restrictions.in("shopCode", shops));
+                " where e.processed = ?1 and e.shopCode in (?2)",
+                Boolean.FALSE,
+                shops
+        );
         for (final PaymentGatewayCallback callback : callbacks) {
 
             final Integer count = counts.get(callback.getLabel());

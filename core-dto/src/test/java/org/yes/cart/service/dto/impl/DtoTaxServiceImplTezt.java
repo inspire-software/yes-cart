@@ -25,6 +25,7 @@ import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.service.dto.DtoTaxService;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -84,6 +85,86 @@ public class DtoTaxServiceImplTezt extends BaseCoreDBTestCase {
 
 
     @Test
+    public void testFindBy() throws Exception {
+        TaxDTO taxDTO = getDto();
+        taxDTO = dtoTaxService.create(taxDTO);
+
+        // retrieve specific
+        List<TaxDTO> taxes = dtoTaxService.findBy(
+                taxDTO.getShopCode(),
+                taxDTO.getCurrency(),
+                taxDTO.getCode(),
+                0,
+                10);
+
+        assertNotNull(taxes);
+        assertEquals(1, taxes.size());
+
+        // retrieve all EUR
+        taxes = dtoTaxService.findBy(
+                "SHOIP1",
+                "EUR",
+                null,
+                0,
+                10);
+
+        assertNotNull(taxes);
+        assertEquals(7, taxes.size());
+
+
+        // retrieve exclusive EUR
+        taxes = dtoTaxService.findBy(
+                "SHOIP1",
+                "EUR",
+                "--",
+                0,
+                10);
+
+        assertNotNull(taxes);
+        assertEquals(6, taxes.size());
+
+        // retrieve exclusive EUR
+        taxes = dtoTaxService.findBy(
+                "SHOIP1",
+                "EUR",
+                "++",
+                0,
+                10);
+
+        assertNotNull(taxes);
+        assertEquals(1, taxes.size());
+
+
+        // retrieve exclusive EUR 10%
+        taxes = dtoTaxService.findBy(
+                "SHOIP1",
+                "EUR",
+                "-%10",
+                0,
+                10);
+
+        assertNotNull(taxes);
+        assertEquals(2, taxes.size());
+        assertEquals(10, taxes.get(0).getTaxRate().setScale(0, RoundingMode.HALF_UP).intValue());
+
+
+        // retrieve EUR 5%
+        taxes = dtoTaxService.findBy(
+                "SHOIP1",
+                "EUR",
+                "%5",
+                0,
+                10);
+
+        assertNotNull(taxes);
+        assertEquals(3, taxes.size());
+        assertEquals(5, taxes.get(0).getTaxRate().setScale(0, RoundingMode.HALF_UP).intValue());
+
+
+        dtoTaxService.remove(taxDTO.getTaxId());
+    }
+
+    @Test
     public void testCreate() throws Exception {
         TaxDTO taxDTO = getDto();
         taxDTO = dtoTaxService.create(taxDTO);
@@ -117,7 +198,7 @@ public class DtoTaxServiceImplTezt extends BaseCoreDBTestCase {
     private TaxDTO getDto() {
 
         TaxDTO taxDTO = dtoFactory.getByIface(TaxDTO.class);
-        taxDTO.setShopCode("SHOP10");
+        taxDTO.setShopCode("SHOIP1");
         taxDTO.setCurrency("EUR");
         taxDTO.setCode("TESTCODE");
         taxDTO.setTaxRate(new BigDecimal("20.00"));

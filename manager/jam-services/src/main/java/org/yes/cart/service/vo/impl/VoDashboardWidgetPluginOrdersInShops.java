@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;

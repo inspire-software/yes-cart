@@ -16,10 +16,8 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.Criterion;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.domain.PromotionService;
@@ -111,8 +109,8 @@ public class PromotionServiceCachedImpl implements PromotionService {
     /**
      * {@inheritDoc}
      */
-    public List<Promotion> findByCriteria(final Criterion... criterion) {
-        return promotionService.findByCriteria(criterion);
+    public List<Promotion> findByCriteria(final String eCriteria, final Object... parameters) {
+        return promotionService.findByCriteria(eCriteria, parameters);
     }
 
     /**
@@ -125,8 +123,8 @@ public class PromotionServiceCachedImpl implements PromotionService {
     /**
      * {@inheritDoc}
      */
-    public Promotion findSingleByCriteria(final Criterion... criterion) {
-        return promotionService.findSingleByCriteria(criterion);
+    public Promotion findSingleByCriteria(final String eCriteria, final Object... parameters) {
+        return promotionService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /**

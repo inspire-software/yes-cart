@@ -18,10 +18,6 @@ package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.dto.ProductTypeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ProductTypeDTOImpl;
@@ -32,6 +28,7 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.ProductTypeService;
 import org.yes.cart.service.dto.DtoProductTypeService;
+import org.yes.cart.utils.HQLUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -97,11 +94,8 @@ public class DtoProductTypeServiceImpl
 
         if (StringUtils.isNotBlank(name)) {
             entities = service.getGenericDao().findByCriteria(
-                    Restrictions.or(
-                            Restrictions.ilike("guid", name, MatchMode.ANYWHERE),
-                            Restrictions.ilike("name", name, MatchMode.ANYWHERE),
-                            Restrictions.ilike("description", name, MatchMode.ANYWHERE)
-                    )
+                    " where lower(e.guid) like ?1 or lower(e.name) like ?1 or lower(e.description) like ?1 order by e.name",
+                    HQLUtils.criteriaIlikeAnywhere(name)
             );
         } else {
             entities = service.findAll();
@@ -115,8 +109,6 @@ public class DtoProductTypeServiceImpl
     static {
         Arrays.sort(EXACT_OR_CODE);
     }
-
-    private final static Order[] TYPE_ORDER = new Order[] { Order.asc("name") };
 
     /**
      * {@inheritDoc}
@@ -133,15 +125,10 @@ public class DtoProductTypeServiceImpl
 
                 if ("!".equals(exactOrCode.getFirst())) {
 
-                    entities = service.getGenericDao().findByCriteria(
+                    entities = service.getGenericDao().findRangeByCriteria(
+                            " where lower(e.guid) like ?1 or lower(e.name) like ?1 order by e.name",
                             page * pageSize, pageSize,
-                            new Criterion[] {
-                                    Restrictions.or(
-                                            Restrictions.ilike("guid", exactOrCode.getSecond(), MatchMode.EXACT),
-                                            Restrictions.ilike("name", exactOrCode.getSecond(), MatchMode.EXACT)
-                                    )
-                            },
-                            TYPE_ORDER
+                            HQLUtils.criteriaIeq(exactOrCode.getSecond())
                     );
 
                 } else {
@@ -152,21 +139,15 @@ public class DtoProductTypeServiceImpl
 
             } else {
 
-                entities = service.getGenericDao().findByCriteria(
+                entities = service.getGenericDao().findRangeByCriteria(
+                        " where lower(e.guid) like ?1 or lower(e.name) like ?1 or lower(e.description) like ?1 order by e.name",
                         page * pageSize, pageSize,
-                        new Criterion[] {
-                                Restrictions.or(
-                                        Restrictions.ilike("guid", name, MatchMode.ANYWHERE),
-                                        Restrictions.ilike("name", name, MatchMode.ANYWHERE),
-                                        Restrictions.ilike("description", name, MatchMode.ANYWHERE)
-                                )
-                        },
-                        TYPE_ORDER
+                        HQLUtils.criteriaIlikeAnywhere(name)
                 );
 
             }
         } else {
-            entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize, new Criterion[0], TYPE_ORDER);
+            entities = service.getGenericDao().findRangeByCriteria(" order by e.name", page * pageSize, pageSize);
         }
         final List<ProductTypeDTO> dtos = new ArrayList<ProductTypeDTO>(entities.size());
         fillDTOs(entities, dtos);

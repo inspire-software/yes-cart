@@ -686,6 +686,7 @@
   "SEARCH_HELP_CUSTOMER_ORDERS_CUSTOMER": "Nur nach Kundendaten suchen (E-Mail, Vorname und Name). Format: '?Schlüsselwort'",
   "SEARCH_HELP_CUSTOMER_ORDERS_ADDRESS": "Nur nach Kundendaten suchen (E-Mail, Vorname und Name). Format: '?Schlüsselwort'",
   "SEARCH_HELP_CUSTOMER_ORDERS_RESERVED": "Zur Suche von Aufträgen, bei denen SKU reserviert ist und die noch nicht zugeteilt wurden (exakter Abgleich). Format: '!SKU'",
+  "SEARCH_HELP_CUSTOMER_SHOP": "Nur nach Shopcode suchen (exakter Abgleich). Format: '^Code'",
 
   "SEARCH_HELP_PRODUCTTYPE_ATTR_SI": "Um Attribute aufzulisten, welche Suchindex-Flags verwenden, verwenden Sie '#SI'",
   "SEARCH_HELP_PRODUCTTYPE_ATTR_VISIBLE": "Um sichtbare Attribute anzuzeigen, verwenden Sie '+V'",

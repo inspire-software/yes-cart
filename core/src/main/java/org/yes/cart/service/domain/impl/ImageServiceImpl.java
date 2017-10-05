@@ -18,7 +18,6 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -37,6 +36,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -482,7 +482,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
      * {@inheritDoc}
      */
     public SeoImage getSeoImage(final String imageName) {
-        java.util.List<SeoImage> seoImages = seoImageDao.findByCriteria(Restrictions.eq("imageName", imageName));
+        final List<SeoImage> seoImages = seoImageDao.findByCriteria(" where e.imageName = ?1", imageName);
         if (seoImages == null || seoImages.isEmpty()) {
             return null;
         }

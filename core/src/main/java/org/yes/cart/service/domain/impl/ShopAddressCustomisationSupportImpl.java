@@ -17,7 +17,6 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
@@ -172,7 +171,7 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
     public List<Country> getAllCountries(final String shopCode, final String addressType) {
         final Shop shop = shopService.getShopByCode(shopCode);
         final List<String> supported;
-        if ("S".equals(addressType)) {
+        if (Address.ADDR_TYPE_SHIPPING.equals(addressType)) {
             supported = shop.getSupportedShippingCountriesAsList();
         } else {
             supported = shop.getSupportedBillingCountriesAsList();
@@ -181,7 +180,7 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
             LOG.warn("No '{}' countries configured for shop {}", addressType, shopCode);
             return Collections.emptyList();
         }
-        return countryService.findByCriteria(Restrictions.in("countryCode", supported));
+        return countryService.findByCriteria(" where e.countryCode in (?1)", supported);
     }
 
     /** {@inheritDoc} */

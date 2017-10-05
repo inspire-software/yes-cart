@@ -22,16 +22,10 @@ import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -47,6 +41,7 @@ import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.*;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
 import java.math.BigDecimal;
@@ -132,13 +127,6 @@ public class DtoProductServiceImpl
         this.productService = (ProductService) productService;
         this.dtoFactory = dtoFactory;
         this.dtoProductCategoryService = dtoProductCategoryService;
-/*
-        this.AdaptersRepository = AdaptersRepository.getByKeysAsMap(
-                "bigDecimalToFloat",
-                "brandDTO2Brand",
-                "availabilityDto2Availability",
-                "productTypeDTO2ProductType");
-*/
         this.dtoAttributeService = dtoAttributeService;
 
 
@@ -175,14 +163,12 @@ public class DtoProductServiceImpl
         return null;
     }
 
-    private final static char[] TAG_OR_CODE_OR_BRAND_OR_TYPE = new char[] { '#', '?', '!', '^' };
+    private final static char[] TAG_OR_CODE_OR_BRAND_OR_TYPE = new char[] { '#', '?', '!', '^', '*' };
     private final static char[] AVAILABILITY = new char[] { '@' };
     static {
         Arrays.sort(TAG_OR_CODE_OR_BRAND_OR_TYPE);
         Arrays.sort(AVAILABILITY);
     }
-
-    private final static Order[] PRODUCT_ORDER = new Order[] { Order.asc("code") };
 
     /**
      * {@inheritDoc}
@@ -192,27 +178,20 @@ public class DtoProductServiceImpl
 
         final List<ProductDTO> dtos = new ArrayList<ProductDTO>();
 
-        final List<Criterion> criteria = new ArrayList<Criterion>();
-        CriteriaTuner tuner = null;
+        List<Product> entities = Collections.emptyList();
 
-        if (org.springframework.util.StringUtils.hasLength(filter)) {
+        if (StringUtils.isNotBlank(filter)) {
 
             final Pair<Date, Date> dateSearch = ComplexSearchUtils.checkDateRangeSearch(filter);
 
             if (dateSearch != null) {
 
-                if (dateSearch.getFirst() != null) {
-
-                    criteria.add(Restrictions.le("availablefrom", dateSearch.getFirst()));
-
-                }
-
-                if (dateSearch.getSecond() != null) {
-
-                    criteria.add(Restrictions.ge("availableto", dateSearch.getSecond()));
-
-                }
-
+                entities = getService().getGenericDao().findRangeByCriteria(
+                        " where (?1 is null or e.availablefrom <= ?1) and (?2 is null or e.availableto >= ?2) order by e.code",
+                        page * pageSize, pageSize,
+                        dateSearch.getFirst(),
+                        dateSearch.getSecond()
+                );
 
             } else {
 
@@ -220,84 +199,69 @@ public class DtoProductServiceImpl
 
                 if (tagOrCodeOrBrandOrType != null) {
 
-                    if ("!".equals(tagOrCodeOrBrandOrType.getFirst())) {
+                    if ("*".equals(tagOrCodeOrBrandOrType.getFirst())) {
 
-                        criteria.add(Restrictions.or(
-                                Restrictions.ilike("guid", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
-                                Restrictions.ilike("code", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
-                                Restrictions.ilike("manufacturerCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
-                                Restrictions.ilike("manufacturerPartCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
-                                Restrictions.ilike("supplierCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
-                                Restrictions.ilike("pimCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
-                                Restrictions.ilike("tag", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT)
-                        ));
+                        // If this by PK then to by PK
+                        final long byPk = NumberUtils.toLong(tagOrCodeOrBrandOrType.getSecond());
+                        if (page == 0 && byPk > 0) {
+                            final ProductDTO product = getById(byPk);
+                            if (product != null) {
+                                dtos.add(product);
+                            }
+                        }
+                        return dtos;
+
+                    } else if ("!".equals(tagOrCodeOrBrandOrType.getFirst())) {
+
+                        entities = getService().getGenericDao().findRangeByCriteria(
+                                " where lower(e.guid) like ?1 or lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.manufacturerPartCode) like ?1 or lower(e.supplierCode) like ?1 or lower(e.pimCode) like ?1 or lower(e.tag) like ?1 order by e.code",
+                                page * pageSize, pageSize,
+                                HQLUtils.criteriaIeq(tagOrCodeOrBrandOrType.getSecond())
+                        );
 
                     } else if ("#".equals(tagOrCodeOrBrandOrType.getFirst())) {
 
-                        criteria.add(Restrictions.or(
-                                Restrictions.ilike("guid", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
-                                Restrictions.ilike("code", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
-                                Restrictions.ilike("manufacturerCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
-                                Restrictions.ilike("manufacturerPartCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
-                                Restrictions.ilike("supplierCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
-                                Restrictions.ilike("pimCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
-                                Restrictions.ilike("tag", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE)
-                        ));
+                        entities = getService().getGenericDao().findRangeByCriteria(
+                                " where lower(e.guid) like ?1 or lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.manufacturerPartCode) like ?1 or lower(e.supplierCode) like ?1 or lower(e.pimCode) like ?1 or lower(e.tag) like ?1 order by e.code",
+                                page * pageSize, pageSize,
+                                HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrBrandOrType.getSecond())
+                        );
 
                     } else if ("?".equals(tagOrCodeOrBrandOrType.getFirst())) {
 
-                        tuner = new CriteriaTuner() {
-                            @Override
-                            public void tune(final Criteria crit) {
-                                crit.createAlias("brand", "brand");
-                                crit.createAlias("producttype", "producttype");
-                            }
-                        };
-
-                        criteria.add(Restrictions.or(
-                                Restrictions.ilike("brand.guid", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
-                                Restrictions.ilike("brand.name", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
-                                Restrictions.ilike("producttype.guid", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
-                                Restrictions.ilike("producttype.name", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE)
-                        ));
+                        entities = getService().getGenericDao().findRangeByCriteria(
+                                " where lower(e.brand.guid) like ?1 or lower(e.brand.name) like ?1 or lower(e.producttype.guid) like ?1 or lower(e.producttype.name) like ?1 order by e.code",
+                                page * pageSize, pageSize,
+                                HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrBrandOrType.getSecond())
+                        );
 
                     } else if ("^".equals(tagOrCodeOrBrandOrType.getFirst())) {
 
-                        final List<Object> categoryIds = productService.getGenericDao().findQueryObjectByNamedQuery("CATEGORY.IDS.BY.NAME.OR.GUID", '%' + tagOrCodeOrBrandOrType.getSecond() + '%');
+                        final List<Object> categoryIds = productService.getGenericDao().findQueryObjectByNamedQuery("CATEGORY.IDS.BY.NAME.OR.GUID", HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrBrandOrType.getSecond()));
                         if (CollectionUtils.isEmpty(categoryIds)) {
                             return Collections.emptyList();
                         }
 
-                        tuner = new CriteriaTuner() {
-                            @Override
-                            public void tune(final Criteria crit) {
-                                crit.createAlias("productCategory", "productCategory");
-                            }
-                        };
-
-                        criteria.add(Restrictions.in("productCategory.category.categoryId", categoryIds));
+                        entities = getService().getGenericDao().findRangeByNamedQuery(
+                                "PRODUCTS.BY.CATEGORYIDS.ALL",
+                                page * pageSize, pageSize,
+                                categoryIds
+                        );
 
                     }
 
                 } else {
 
-                    criteria.add(Restrictions.or(
-                            Restrictions.ilike("code", filter, MatchMode.ANYWHERE),
-                            Restrictions.ilike("manufacturerCode", filter, MatchMode.ANYWHERE),
-                            Restrictions.ilike("manufacturerPartCode", filter, MatchMode.ANYWHERE),
-                            Restrictions.ilike("supplierCode", filter, MatchMode.ANYWHERE),
-                            Restrictions.ilike("pimCode", filter, MatchMode.ANYWHERE),
-                            Restrictions.ilike("name", filter, MatchMode.ANYWHERE),
-                            Restrictions.ilike("description", filter, MatchMode.ANYWHERE)
-                    ));
+                    entities = getService().getGenericDao().findRangeByCriteria(
+                            " where lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.manufacturerPartCode) like ?1 or lower(e.supplierCode) like ?1 or lower(e.pimCode) like ?1 or lower(e.name) like ?1 order by e.code",
+                            page * pageSize, pageSize,
+                            HQLUtils.criteriaIlikeAnywhere(filter)
+                    );
 
                 }
             }
 
         }
-
-        final List<Product> entities = getService().getGenericDao().findByCriteria(tuner,
-                page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), PRODUCT_ORDER);
 
         fillDTOs(entities, dtos);
 
@@ -465,7 +429,7 @@ public class DtoProductServiceImpl
             productType = productTypeId;
         }
         final List<Product> products = ((ProductService) service).getProductByCodeNameBrandType(
-                DEFAULT_SEARCH_CRITERIA_TUNER, code, name, brand, productType);
+                code, name, brand, productType);
 
         final List<ProductDTO> dtos = new ArrayList<ProductDTO>(products.size());
         fillDTOs(products, dtos);
@@ -473,18 +437,6 @@ public class DtoProductServiceImpl
 
     }
 
-
-    /**
-     * Default criteria tuner to serrch products
-     */
-    public static CriteriaTuner DEFAULT_SEARCH_CRITERIA_TUNER = new CriteriaTuner() {
-
-        /** {@inheritDoc} */
-        public void tune(final Criteria crit) {
-            crit.setFetchMode("productCategory", FetchMode.SELECT);
-        }
-
-    };
 
     /**
      * {@inheritDoc}
@@ -586,9 +538,9 @@ public class DtoProductServiceImpl
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        Attribute attribute = attributeService.findSingleByCriteria(Restrictions.eq("code", attrName));
+        Attribute attribute = attributeService.findSingleByCriteria(" where e.code = ?1", attrName);
         if (attribute == null) {
-            attribute = attributeService.findSingleByCriteria(Restrictions.eq("name", attrName));
+            attribute = attributeService.findSingleByCriteria(" where e.name = ?1", attrName);
         }
 
         AttributeDTO attrDto = null;
@@ -601,7 +553,7 @@ public class DtoProductServiceImpl
             }
 
             final AttributeGroupDTO groupDTO = dtoAttributeGroupService.getAttributeGroupByCode(AttributeGroupNames.PRODUCT);
-            final Etype etype = (Etype) dtoEtypeService.getService().findSingleByCriteria(Restrictions.eq("businesstype", Etype.STRING_BUSINESS_TYPE));
+            final Etype etype = (Etype) dtoEtypeService.getService().findSingleByCriteria(" where e.businesstype = ?1", Etype.STRING_BUSINESS_TYPE);
 
             attrDto = dtoFactory.getByIface(AttributeDTO.class);
             attrDto.setName(attrName);

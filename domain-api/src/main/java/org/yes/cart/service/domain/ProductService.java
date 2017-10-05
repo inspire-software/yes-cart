@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.domain;
 
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
@@ -497,19 +496,16 @@ public interface ProductService extends GenericService<Product> {
     /**
      * Find product by given optional filtering criteria.
      *
-     * @param criteriaTuner criteria tuner
      * @param code          product code.  use like %%
      * @param name          product name.  use like %%
      * @param brandId       brand id. use exact match
      * @param productTypeId product type id. use exact match
      * @return list of founded products
      */
-     List<Product> getProductByCodeNameBrandType(
-            CriteriaTuner criteriaTuner,
-            String code,
-            String name,
-            Long brandId,
-            Long productTypeId);
+     List<Product> getProductByCodeNameBrandType(String code,
+                                                 String name,
+                                                 Long brandId,
+                                                 Long productTypeId);
 
 
     /**

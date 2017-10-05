@@ -17,7 +17,6 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -58,7 +57,7 @@ public class CustomerOrderTransitionServiceImpl implements CustomerOrderTransiti
                                    final String deliveryNumber,
                                    final Map params) throws OrderException {
 
-        final CustomerOrder order = customerOrderService.findSingleByCriteria(Restrictions.eq("ordernum", orderNumber));
+        final CustomerOrder order = customerOrderService.findSingleByCriteria(" where e.ordernum = ?1", orderNumber);
         if (order == null) {
             return false;
         }

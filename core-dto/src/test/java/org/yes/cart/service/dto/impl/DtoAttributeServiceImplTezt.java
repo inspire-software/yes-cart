@@ -94,6 +94,23 @@ public class DtoAttributeServiceImplTezt extends BaseCoreDBTestCase {
         assertTrue(dtos.isEmpty());
     }
 
+
+    @Test
+    public void testFindAttributesBy() throws Exception {
+        // by code
+        List<AttributeDTO> dtos = dtoAttributeService.findAttributesBy("CATEGORY", "#image0", 0, 10);
+        assertNotNull(dtos);
+        assertEquals(1, dtos.size());
+        // invalid code
+        dtos = dtoAttributeService.findAttributesBy("CATEGORY", "#image", 0, 10);
+        assertNotNull(dtos);
+        assertEquals(0, dtos.size());
+        dtos = dtoAttributeService.findAttributesBy("CATEGORY", "category description", 0, 10);
+        assertNotNull(dtos);
+        assertEquals(1, dtos.size());
+    }
+
+
     @Test
     public void testFindAvailableAttributes() throws Exception {
         List<AttributeDTO> dtos = dtoAttributeService.findAvailableAttributes(

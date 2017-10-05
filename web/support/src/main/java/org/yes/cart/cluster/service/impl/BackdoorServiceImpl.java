@@ -26,6 +26,7 @@ import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.Message;
 import org.yes.cart.cluster.node.MessageListener;
 import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.cluster.service.BackdoorService;
 import org.yes.cart.cluster.service.WarmUpService;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericFTSCapableDAO;
@@ -35,7 +36,6 @@ import org.yes.cart.search.query.impl.AsIsAnalyzer;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.utils.impl.ObjectUtil;
-import org.yes.cart.cluster.service.BackdoorService;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -224,28 +224,20 @@ public class BackdoorServiceImpl implements BackdoorService {
      */
     public List<Object[]> sqlQuery(final String query) {
 
-        try {
+        if (StringUtils.isNotBlank(query)) {
 
-            if (StringUtils.isNotBlank(query)) {
+            if (query.toLowerCase().contains("select ")) {
 
-                if (query.toLowerCase().contains("select ")) {
+                return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().executeNativeQuery(query));
 
-                    return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().executeNativeQuery(query));
+            } else {
 
-                } else {
+                return Collections.singletonList(ObjectUtil.escapeXml(getGenericDao().executeNativeUpdate(query)));
 
-                    return Collections.singletonList(ObjectUtil.escapeXml(getGenericDao().executeNativeUpdate(query)));
-
-                }
             }
-
-            return Collections.EMPTY_LIST;
-
-        } catch (Exception e) {
-            final String msg = "Cant parse query : " + query + " Error : " + e.getMessage();
-            LOG.warn(msg);
-            return Collections.singletonList(new Object[]{msg});
         }
+
+        return Collections.EMPTY_LIST;
 
     }
 
@@ -254,25 +246,19 @@ public class BackdoorServiceImpl implements BackdoorService {
      * {@inheritDoc}
      */
     public List<Object[]> hsqlQuery(final String query) {
-        try {
 
-            if (StringUtils.isNotBlank(query)) {
+        if (StringUtils.isNotBlank(query)) {
 
-                if (query.toLowerCase().contains("select ")) {
+            if (query.toLowerCase().contains("select ")) {
 
-                    final List queryRez = getGenericDao().executeHsqlQuery(query);
-                    return ObjectUtil.transformTypedResultListToArrayList(queryRez);
+                final List queryRez = getGenericDao().executeHsqlQuery(query);
+                return ObjectUtil.transformTypedResultListToArrayList(queryRez);
 
-                } else {
-                    return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().executeHsqlQuery(query));
-                }
+            } else {
+                return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().executeHsqlQuery(query));
             }
-            return Collections.EMPTY_LIST;
-        } catch (Exception e) {
-            final String msg = "Cant parse query : " + query + " Error : " + e.getMessage();
-            LOG.warn(msg);
-            return Collections.singletonList(new Object[]{msg});
         }
+        return Collections.EMPTY_LIST;
 
     }
 
@@ -296,7 +282,7 @@ public class BackdoorServiceImpl implements BackdoorService {
 
             LOG.warn(msg);
 
-            return Collections.singletonList(new Object[]{msg});
+            throw new IllegalArgumentException(msg, e);
 
         }
 
@@ -394,19 +380,37 @@ public class BackdoorServiceImpl implements BackdoorService {
         this.nodeService.subscribe("BackdoorService.sqlQuery", new MessageListener() {
             @Override
             public Serializable onMessageReceived(final Message message) {
-                return new ArrayList<Serializable[]>((List) self().sqlQuery((String) message.getPayload()));
+                try {
+                    return new ArrayList<Serializable[]>((List) self().sqlQuery((String) message.getPayload()));
+                } catch (Exception e) {
+                    final String msg = "Cant parse SQL query : " + message.getPayload() + " Error : " + e.getMessage();
+                    LOG.warn(msg);
+                    return new ArrayList<Serializable[]>(Collections.singletonList(new Serializable[]{e.getMessage()}));
+                }
             }
         });
         this.nodeService.subscribe("BackdoorService.hsqlQuery", new MessageListener() {
             @Override
             public Serializable onMessageReceived(final Message message) {
-                return new ArrayList<Serializable[]>((List) self().hsqlQuery((String) message.getPayload()));
+                try {
+                    return new ArrayList<Serializable[]>((List) self().hsqlQuery((String) message.getPayload()));
+                } catch (Exception e) {
+                    final String msg = "Cant parse HQL query : " + message.getPayload() + " Error : " + e.getMessage();
+                    LOG.warn(msg);
+                    return new ArrayList<Serializable[]>(Collections.singletonList(new Serializable[]{e.getMessage()}));
+                }
             }
         });
         this.nodeService.subscribe("BackdoorService.luceneQuery", new MessageListener() {
             @Override
             public Serializable onMessageReceived(final Message message) {
-                return new ArrayList<Serializable[]>((List) self().luceneQuery((String) message.getPayload()));
+                try {
+                    return new ArrayList<Serializable[]>((List) self().luceneQuery((String) message.getPayload()));
+                } catch (Exception e) {
+                    final String msg = "Cant parse FT query : " + message.getPayload() + " Error : " + e.getMessage();
+                    LOG.warn(msg);
+                    return new ArrayList<Serializable[]>(Collections.singletonList(new Serializable[]{e.getMessage()}));
+                }
             }
         });
     }

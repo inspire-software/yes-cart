@@ -16,9 +16,6 @@
 
 package org.yes.cart.payment.persistence.service;
 
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -32,6 +29,7 @@ public interface PaymentModuleGenericDAO<T, PK extends Serializable> {
      *
      * @param id   primary key
      * @param lock true if need lock for update.
+     *
      * @return instance of T or null if not found
      */
     T findById(PK id, boolean lock);
@@ -40,22 +38,34 @@ public interface PaymentModuleGenericDAO<T, PK extends Serializable> {
      * Find entity by Id.
      *
      * @param id primary key
+     *
      * @return instance of T or null if not found
      */
     T findById(PK id);
 
     /**
-     * Get the All entities.
+     * Get all entities.
      *
-     * @return lis tof all entities
+     * @return list of all entities
      */
     List<T> findAll();
+
+    /**
+     * Find by hsql query.
+     *
+     * @param hsqlQuery  query
+     * @param parameters parameters
+     *
+     * @return list of objects.
+     */
+    List<Object> findByQuery(String hsqlQuery, Object... parameters);
 
     /**
      * Find entities within named query .
      *
      * @param namedQueryName name of query
      * @param parameters     optional parameters for named query
+     *
      * @return list of found entities
      */
     List<T> findByNamedQuery(String namedQueryName, Object... parameters);
@@ -65,69 +75,61 @@ public interface PaymentModuleGenericDAO<T, PK extends Serializable> {
      *
      * @param namedQueryName name of query
      * @param parameters     optional parameters for named query
-     * @return single entity   or null if not found
+     *
+     * @return entity or null if not found
      */
     <T> T findSingleByNamedQuery(String namedQueryName, Object... parameters);
 
     /**
      * Find entities by criteria.
      *
-     * @param criterion given criterias
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
+     * @param parameters parameters to fill in for question marks
+     *
      * @return list of found entities.
      */
-    List<T> findByCriteria(Criterion... criterion);
-
+    List<T> findByCriteria(String eCriteria, Object... parameters);
 
     /**
      * Find entities by criteria.
      *
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
      * @param firstResult first result
      * @param maxResults max results
-     * @param criterion given criteria
+     * @param parameters parameters to fill in for question marks
      *
      * @return list of found entities.
      */
-    List<T> findByCriteria(int firstResult,
-                           int maxResults,
-                           Criterion... criterion);
-
-
-    /**
-     * Find entities by criteria.
-     *
-     * @param firstResult first result
-     * @param maxResults max results
-     * @param criterion given criteria
-     * @param order sorting
-     *
-     * @return list of found entities.
-     */
-    List<T> findByCriteria(int firstResult,
-                           int maxResults,
-                           Criterion[] criterion,
-                           Order[] order);
+    List<T> findRangeByCriteria(String eCriteria,
+                                int firstResult,
+                                int maxResults,
+                                Object... parameters);
 
 
     /**
      * Find single entity by criteria.
      *
-     * @param criterion given criterias
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
+     * @param parameters parameters to fill in for question marks
+     *
      * @return single entity or null if not found.
      */
-    T findSingleByCriteria(Criterion... criterion);
+    T findSingleByCriteria(String eCriteria, Object... parameters);
 
     /**
-     * Persist the new enitity in DB.
+     * Persist the new entity in DB.
      *
      * @param entity entity to persist
+     *
      * @return persisted entity.
      */
     T create(T entity);
 
     /**
-     * Update the enitity in DB.
+     * Update the entity in DB.
      *
      * @param entity entity to update
+     *
      * @return updated entity.
      */
     T update(T entity);
@@ -135,9 +137,9 @@ public interface PaymentModuleGenericDAO<T, PK extends Serializable> {
     /**
      * Save or update the entity. Please, use #create or #update instead of this method.
      *
-     * @param entity entity to save
+     * @param entity entity to save or update
      *
-     * @return saved entity
+     * @return saved or updated entity
      */
     T saveOrUpdate(T entity);
 
@@ -147,15 +149,5 @@ public interface PaymentModuleGenericDAO<T, PK extends Serializable> {
      * @param entity to delete
      */
     void delete(T entity);
-
-
-    /**
-     * Find by hsql query.
-     * @param hsqlQuery query
-     * @param parameters parameters
-     * @return list of objects.
-     */
-    List<Object> findByQuery(String hsqlQuery, Object... parameters);
-
 
 }

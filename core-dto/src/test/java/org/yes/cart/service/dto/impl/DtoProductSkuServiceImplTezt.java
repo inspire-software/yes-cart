@@ -450,4 +450,24 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         dto.setRank(5);
         return dto;
     }
+
+    @Test
+    public void testFindBy() throws Exception {
+
+        // code exact
+        List<ProductSkuDTO> list = dtoService.findBy("!BENDER", 0, 10);
+        assertEquals(1, list.size());
+        assertEquals("BENDER", list.get(0).getCode());
+
+        // code partial
+        list = dtoService.findBy("bender", 0, 10);
+        assertTrue(list.size() > 1);
+
+        // PK
+        list = dtoService.findBy("*9998", 0, 10);
+        assertEquals(1, list.size());
+        assertEquals("BENDER-ua", list.get(0).getCode());
+
+    }
+    
 }

@@ -20,7 +20,6 @@ import org.yes.cart.domain.dto.PriceListDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.dto.support.PriceListFilter;
 
 import java.util.List;
 
@@ -47,14 +46,6 @@ public interface DtoPriceListsService {
      * @return list of currencies
      */
     List<String> getShopCurrencies(ShopDTO shop) throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
-    /**
-     * Price lists by filter.
-     *
-     * @param filter price list filter
-     * @return price lists
-     */
-    List<PriceListDTO> getPriceList(PriceListFilter filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Price lists by filter

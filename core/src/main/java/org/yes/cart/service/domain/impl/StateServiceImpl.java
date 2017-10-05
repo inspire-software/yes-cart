@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.State;
 import org.yes.cart.service.domain.StateService;
@@ -40,7 +39,7 @@ public class StateServiceImpl extends BaseGenericServiceImpl<State> implements S
     public List<State> findByCountry(final String countryCode) {
 
         return getGenericDao().findByCriteria(
-                Restrictions.eq("countryCode", countryCode));
+                " where e.countryCode = ?1", countryCode);
 
     }
 

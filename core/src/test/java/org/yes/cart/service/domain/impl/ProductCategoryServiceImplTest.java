@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.junit.Test;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -75,7 +74,7 @@ public class ProductCategoryServiceImplTest extends BaseCoreDBTestCase {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
                 final List<ProductCategory> pc = productCategoryDAO.findByCriteria(
-                        Restrictions.eq("product.productId", product1pk));
+                        " where e.product.productId = ?1", product1pk);
                 assertEquals(1, pc.size());
                 transactionStatus.setRollbackOnly();
             }
@@ -87,7 +86,7 @@ public class ProductCategoryServiceImplTest extends BaseCoreDBTestCase {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
                 final List<ProductCategory> pc = productCategoryDAO.findByCriteria(
-                        Restrictions.eq("product.productId", product1pk));
+                        " where e.product.productId = ?1", product1pk);
                 assertEquals(0, pc.size());
                 transactionStatus.setRollbackOnly();
             }
@@ -110,7 +109,7 @@ public class ProductCategoryServiceImplTest extends BaseCoreDBTestCase {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
                 final List<ProductCategory> pc = productCategoryDAO.findByCriteria(
-                        Restrictions.eq("product.productId", product1pk));
+                        " where e.product.productId = ?1", product1pk);
                 assertEquals(1, pc.size());
                 product1categorypk[0] = pc.get(0).getCategory().getCategoryId();
                 transactionStatus.setRollbackOnly();
@@ -125,7 +124,7 @@ public class ProductCategoryServiceImplTest extends BaseCoreDBTestCase {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
                 final List<ProductCategory> pc = productCategoryDAO.findByCriteria(
-                        Restrictions.eq("product.productId", product1pk));
+                        " where e.product.productId = ?1", product1pk);
                 assertEquals(0, pc.size());
                 transactionStatus.setRollbackOnly();
             }

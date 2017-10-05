@@ -17,25 +17,21 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.PromotionCouponDTO;
-import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.PromotionCouponDTOImpl;
-import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.service.dto.DtoPromotionCouponService;
+import org.yes.cart.utils.HQLUtils;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -71,24 +67,32 @@ public class DtoPromotionCouponServiceImpl
         return dtos;
     }
 
-    private final static Order[] COUPON_ORDER = new Order[] { Order.asc("code") };
-
     /** {@inheritDoc} */
     public List<PromotionCouponDTO> findBy(final long promotionId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<PromotionCouponDTO> dtos = new ArrayList<PromotionCouponDTO>();
 
         if (promotionId > 0L) {
 
-            final List<Criterion> criteria = new ArrayList<Criterion>();
-            criteria.add(Restrictions.eq("promotion.promotionId", promotionId));
-            if (StringUtils.hasLength(filter)) {
+            List<PromotionCoupon> entities = Collections.emptyList();
 
-                criteria.add(Restrictions.ilike("code", filter, MatchMode.ANYWHERE));
+            if (StringUtils.isNotBlank(filter)) {
+
+                entities = getService().getGenericDao().findRangeByCriteria(
+                        " where e.promotion.promotionId = ?1 and lower(e.code) like ?2 order by e.code",
+                        page * pageSize, pageSize,
+                        promotionId,
+                        HQLUtils.criteriaIlikeAnywhere(filter)
+                );
+
+            } else {
+
+                entities = getService().getGenericDao().findRangeByCriteria(
+                        " where e.promotion.promotionId = ?1 order by e.code",
+                        page * pageSize, pageSize,
+                        promotionId
+                );
 
             }
-
-            final List<PromotionCoupon> entities = getService().getGenericDao().findByCriteria(
-                    page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), COUPON_ORDER);
 
             fillDTOs(entities, dtos);
 
@@ -103,15 +107,24 @@ public class DtoPromotionCouponServiceImpl
 
         if (promotionId > 0L) {
 
-            final List<Criterion> criteria = new ArrayList<Criterion>();
-            criteria.add(Restrictions.eq("promotion.promotionId", promotionId));
+            List<PromotionCoupon> entities = Collections.emptyList();
+
             if (createdAfter != null) {
 
-                criteria.add(Restrictions.ge("createdTimestamp", createdAfter));
+                entities = getService().getGenericDao().findByCriteria(
+                        " where e.promotion.promotionId = ?1 and e.createdTimestamp >= ?2 order by e.code",
+                        promotionId,
+                        createdAfter
+                );
+
+            } else {
+
+                entities = getService().getGenericDao().findByCriteria(
+                        " where e.promotion.promotionId = ?1 order by e.code",
+                        promotionId
+                );
 
             }
-
-            final List<PromotionCoupon> entities = getService().getGenericDao().findByCriteria(criteria.toArray(new Criterion[criteria.size()]));
 
             fillDTOs(entities, dtos);
 

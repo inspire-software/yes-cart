@@ -16,15 +16,13 @@
 
 package org.yes.cart.payment.persistence.service.impl;
 
-import org.hibernate.Criteria;
 import org.hibernate.LockOptions;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
 import org.hibernate.query.Query;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -39,11 +37,12 @@ import java.util.List;
 public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
         implements PaymentModuleGenericDAO<T, PK> {
 
-    private final static String UNCHECKED = "unchecked";
+    private final Class<T> persistentClass;
 
-    private final  Class<T> persistentClass;
+    protected SessionFactory sessionFactory;
 
-    private   SessionFactory sessionFactory;
+    private final String selectAllHql;
+    private final String selectCountHql;
 
 
     /**
@@ -62,10 +61,12 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
      *
      * @param type - entity type
      */
-    @SuppressWarnings(UNCHECKED)
-    public PaymentModuleGenericDAOImpl(
-            final Class<T> type) {
+    @SuppressWarnings("unchecked")
+    public PaymentModuleGenericDAOImpl(final Class<T> type) {
         this.persistentClass = type;
+
+        this.selectAllHql = "select e from " + type.getSimpleName() + " e ";
+        this.selectCountHql = "select count(e) from " + type.getSimpleName() + " e ";
     }
 
     /**
@@ -78,7 +79,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings(UNCHECKED)
+    @SuppressWarnings("unchecked")
     public T findById(final PK id, final boolean lock) {
         T entity;
         if (lock) {
@@ -90,96 +91,10 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     }
 
     /**
-     * Get persistent class.
-     *
-     * @return persistent class.
-     */
-    public Class<T> getPersistentClass() {
-        return persistentClass;
-    }
-
-
-    /**
      * {@inheritDoc}
      */
-    @SuppressWarnings(UNCHECKED)
-    public List<T> findAll() {
-        return findByCriteria();
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings(UNCHECKED)
-    public T saveOrUpdate(final T entity) {
-        sessionFactory.getCurrentSession().saveOrUpdate(entity);
-        return entity;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings(UNCHECKED)
-    public T create(final T entity) {
-        sessionFactory.getCurrentSession().saveOrUpdate(entity);
-        return entity;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings(UNCHECKED)
-    public T update(final T entity) {
-        sessionFactory.getCurrentSession().saveOrUpdate(entity);
-        return entity;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void delete(final T entity) {
-        sessionFactory.getCurrentSession().delete(entity);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<Object> findByQuery(final String hsqlQuery, final Object... parameters) {
-        Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
-        int idx = 1;
-        if (parameters != null) {
-            for (Object param : parameters) {
-                query.setParameter(String.valueOf(idx), param);
-                idx++;
-            }
-        }
-        return query.list();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings(UNCHECKED)
-    public List<T> findByNamedQuery(final String namedQueryName, final Object... parameters) {
-        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
-        if (parameters != null) {
-            int idx = 1;
-            for (Object param : parameters) {
-                query.setParameter(String.valueOf(idx), param);
-                idx++;
-            }
-        }
-        return query.list();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings(UNCHECKED)
-    public <T> T findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
+    @SuppressWarnings("unchecked")
+    public T findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
         List<T> rez = (List<T>) this.findByNamedQuery(namedQueryName, parameters);
         if (!rez.isEmpty()) {
             return rez.get(0);
@@ -190,55 +105,126 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings(UNCHECKED)
-    public List<T> findByCriteria(final Criterion... criterion) {
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        for (Criterion c : criterion) {
-            crit.add(c);
+    public List<Object> findByQuery(final String hsqlQuery, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
+        setQueryParameters(query, parameters);
+        return query.list();
+    }
+
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public List<T> findByNamedQuery(final String namedQueryName, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
+        if (parameters != null) {
+            setQueryParameters(query, parameters);
         }
-        return crit.list();
+        return query.list();
     }
 
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings(UNCHECKED)
-    public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion... criterion) {
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        for (Criterion c : criterion) {
-            crit.add(c);
-        }
-        crit.setFirstResult(firstResult);
-        crit.setMaxResults(maxResults);
-        return crit.list();
+    @SuppressWarnings("unchecked")
+    public List<T> findAll() {
+        final Query query = sessionFactory.getCurrentSession().createQuery(this.selectAllHql);
+        return query.list();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public T saveOrUpdate(final T entity) {
+        sessionFactory.getCurrentSession().saveOrUpdate(entity);
+        return entity;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public T create(final T entity) {
+        sessionFactory.getCurrentSession().saveOrUpdate(entity);
+        return entity;
     }
 
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings(UNCHECKED)
-    public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion[] criterion, Order[] order) {
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        for (Criterion c : criterion) {
-            crit.add(c);
-        }
-        for (Order o : order) {
-            crit.addOrder(o);
-        }
-        crit.setFirstResult(firstResult);
-        crit.setMaxResults(maxResults);
-        return crit.list();
+    @SuppressWarnings("unchecked")
+    public T update(final T entity) {
+        sessionFactory.getCurrentSession().saveOrUpdate(entity);
+        return entity;
     }
 
     /**
      * {@inheritDoc}
      */
-    public T findSingleByCriteria(final Criterion... criterion) {
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
-        for (Criterion c : criterion) {
-            crit.add(c);
+    public void delete(final T entity) {
+        if (entity != null) {
+            sessionFactory.getCurrentSession().delete(entity);
         }
-        return (T) crit.uniqueResult();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public List<T> findByCriteria(final String eCriteria, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().createQuery(eCriteria != null ? this.selectAllHql.concat(eCriteria) : this.selectAllHql);
+        setQueryParameters(query, parameters);
+        return query.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public List<T> findRangeByCriteria(final String eCriteria, final int firstResult, final int maxResults, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().createQuery(eCriteria != null ? this.selectAllHql.concat(eCriteria) : this.selectAllHql);
+        setQueryParameters(query, parameters);
+        query.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+        return query.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public T findSingleByCriteria(final String eCriteria, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().createQuery(eCriteria != null ? this.selectAllHql.concat(eCriteria) : this.selectAllHql);
+        setQueryParameters(query, parameters);
+        query.setMaxResults(1);
+        final List<T> rez = query.list();
+        if (!rez.isEmpty()) {
+            return rez.get(0);
+        }
+        return null;
+    }
+
+    private Class<T> getPersistentClass() {
+        return persistentClass;
+    }
+
+    private void setQueryParameters(final Query query, final Object[] parameters) {
+        if (parameters != null) {
+            int idx = 1;
+            for (Object param : parameters) {
+                if (param instanceof Collection) {
+                    query.setParameterList(String.valueOf(idx), (Collection) param);
+                } else {
+                    query.setParameter(String.valueOf(idx), param);
+                }
+                idx++;
+            }
+        }
     }
 
 

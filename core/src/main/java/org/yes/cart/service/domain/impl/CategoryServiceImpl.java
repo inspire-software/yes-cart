@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.utils.HQLUtils;
 
 import java.util.*;
 
@@ -229,9 +230,9 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     @Override
     public List<Category> findBy(final String code, final String name, final String uri, final int page, final int pageSize) {
 
-        final String codeP = StringUtils.isNotBlank(code) ? "%" + code.toLowerCase() + "%" : null;
-        final String nameP = StringUtils.isNotBlank(name) ? "%" + name.toLowerCase() + "%" : null;
-        final String uriP = StringUtils.isNotBlank(uri) ? "%" + uri.toLowerCase() + "%" : null;
+        final String codeP = HQLUtils.criteriaIlikeAnywhere(code);
+        final String nameP = HQLUtils.criteriaIlikeAnywhere(name);
+        final String uriP = HQLUtils.criteriaIlikeAnywhere(uri);
 
         final Category root = proxy().getRootCategory();
         List<Category> cats = new ArrayList<Category>();

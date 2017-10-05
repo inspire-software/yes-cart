@@ -17,12 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
-import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.PromotionDTOImpl;
@@ -33,6 +28,7 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.dto.DtoPromotionService;
+import org.yes.cart.utils.HQLUtils;
 
 import java.util.*;
 
@@ -80,119 +76,6 @@ public class DtoPromotionServiceImpl
         Arrays.sort(TAG_OR_CODE_OR_CONDITION_OR_ACTION);
         Arrays.sort(ENABLED);
     }
-    private final static Order[] PROMO_ORDER = new Order[] { Order.asc("enabledFrom"), Order.asc("enabledTo"), Order.asc("name") };
-
-    @Override
-    public List<PromotionDTO> findBy(final String shopCode, final String currency, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        final List<PromotionDTO> dtos = new ArrayList<>();
-
-
-        if (StringUtils.hasLength(shopCode) && StringUtils.hasLength(currency)) {
-            // only allow lists for shop+currency selection
-
-            final List<Criterion> criteria = new ArrayList<Criterion>();
-            criteria.add(Restrictions.eq("shopCode", shopCode));
-            criteria.add(Restrictions.eq("currency", currency));
-            if (StringUtils.hasLength(filter)) {
-
-                final Pair<Date, Date> dateSearch = ComplexSearchUtils.checkDateRangeSearch(filter);
-
-                if (dateSearch != null) {
-
-                    if (dateSearch.getFirst() != null) {
-
-                        criteria.add(Restrictions.le("enabledFrom", dateSearch.getFirst()));
-
-                    }
-
-                    if (dateSearch.getSecond() != null) {
-
-                        criteria.add(Restrictions.ge("enabledTo", dateSearch.getSecond()));
-
-                    }
-
-
-                } else {
-
-                    final Pair<String, String> enabled = ComplexSearchUtils.checkSpecialSearch(filter, ENABLED);
-
-                    boolean enabledOnly = enabled != null && "+".equals(enabled.getFirst());
-                    boolean disabledOnly = enabled != null && "-".equals(enabled.getFirst());
-
-                    if (enabledOnly) {
-                        final Date now = new Date();
-                        criteria.add(Restrictions.eq("enabled", Boolean.TRUE));
-                        criteria.add(Restrictions.or(
-                                Restrictions.isNull("enabledFrom"),
-                                Restrictions.le("enabledFrom", now)
-                        ));
-                        criteria.add(Restrictions.or(
-                                Restrictions.isNull("enabledTo"),
-                                Restrictions.gt("enabledTo", now)
-                        ));
-                    }
-                    if (disabledOnly) {
-                        final Date now = new Date();
-                        criteria.add(Restrictions.or(
-                                Restrictions.eq("enabled", Boolean.FALSE),
-                                Restrictions.gt("enabledFrom", now),
-                                Restrictions.lt("enabledTo", now)
-                        ));
-                    }
-
-                    if (enabled == null || !enabled.getFirst().equals(enabled.getSecond())) {
-
-                        final Pair<String, String> tagOrCodeOrConditionOrAction = ComplexSearchUtils.checkSpecialSearch(enabled != null ? enabled.getSecond() : filter, TAG_OR_CODE_OR_CONDITION_OR_ACTION);
-
-                        if (tagOrCodeOrConditionOrAction != null) {
-
-                            if ("#".equals(tagOrCodeOrConditionOrAction.getFirst())) {
-
-                                criteria.add(Restrictions.or(
-                                        Restrictions.ilike("code", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE),
-                                        Restrictions.ilike("tag", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE)
-                                ));
-
-                            } else if ("!".equals(tagOrCodeOrConditionOrAction.getFirst())) {
-
-                                criteria.add(Restrictions.or(
-                                        Restrictions.ilike("promoType", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.EXACT),
-                                        Restrictions.ilike("promoAction", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.EXACT)
-                                ));
-
-                            } else if ("?".equals(tagOrCodeOrConditionOrAction.getFirst())) {
-
-                                criteria.add(Restrictions.or(
-                                        Restrictions.ilike("eligibilityCondition", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE),
-                                        Restrictions.ilike("promoActionContext", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE)
-                                ));
-
-                            }
-
-                        } else {
-
-                            criteria.add(Restrictions.or(
-                                    Restrictions.ilike("code", filter, MatchMode.ANYWHERE),
-                                    Restrictions.ilike("name", filter, MatchMode.ANYWHERE),
-                                    Restrictions.ilike("description", filter, MatchMode.ANYWHERE)
-                            ));
-
-                        }
-                    }
-                }
-
-            }
-
-            final List<Promotion> entities = getService().getGenericDao().findByCriteria(
-                    page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), PROMO_ORDER);
-
-            fillDTOs(entities, dtos);
-        }
-
-        return dtos;
-    }
-
 
     @Override
     public List<PromotionDTO> findBy(final String shopCode, final String currency, final String filter, final List<String> types, final List<String> actions, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
@@ -200,30 +83,31 @@ public class DtoPromotionServiceImpl
         final List<PromotionDTO> dtos = new ArrayList<>();
 
 
-        if (StringUtils.hasLength(shopCode) && StringUtils.hasLength(currency)) {
+        if (StringUtils.isNotBlank(shopCode) && StringUtils.isNotBlank(currency)) {
             // only allow lists for shop+currency selection
 
-            final List<Criterion> criteria = new ArrayList<Criterion>();
-            criteria.add(Restrictions.eq("shopCode", shopCode));
-            criteria.add(Restrictions.eq("currency", currency));
-            if (StringUtils.hasLength(filter)) {
+            List<Promotion> entities = Collections.emptyList();
+
+            final String orderBy = " order by e.enabledFrom, e.enabledTo, e.name";
+
+            if (StringUtils.isNotBlank(filter)) {
 
                 final Pair<Date, Date> dateSearch = ComplexSearchUtils.checkDateRangeSearch(filter);
 
                 if (dateSearch != null) {
 
-                    if (dateSearch.getFirst() != null) {
-
-                        criteria.add(Restrictions.le("enabledFrom", dateSearch.getFirst()));
-
-                    }
-
-                    if (dateSearch.getSecond() != null) {
-
-                        criteria.add(Restrictions.ge("enabledTo", dateSearch.getSecond()));
-
-                    }
-
+                    entities = getService().getGenericDao().findRangeByCriteria(
+                            " where e.shopCode = ?1 and e.currency = ?2 and (?3 is null or e.enabledFrom is null or e.enabledFrom <= ?3) and (?4 is null or e.enabledTo is null or e.enabledTo >= ?4) and (?5 = 0 or e.promoType in (?6)) and (?7 = 0 or e.promoAction in (?8)) " + orderBy,
+                            page * pageSize, pageSize,
+                            shopCode,
+                            currency,
+                            dateSearch.getFirst(),
+                            dateSearch.getSecond(),
+                            HQLUtils.criteriaInTest(types),
+                            HQLUtils.criteriaIn(types),
+                            HQLUtils.criteriaInTest(actions),
+                            HQLUtils.criteriaIn(actions)
+                    );
 
                 } else {
 
@@ -231,27 +115,6 @@ public class DtoPromotionServiceImpl
 
                     boolean enabledOnly = enabled != null && "+".equals(enabled.getFirst());
                     boolean disabledOnly = enabled != null && "-".equals(enabled.getFirst());
-
-                    if (enabledOnly) {
-                        final Date now = new Date();
-                        criteria.add(Restrictions.eq("enabled", Boolean.TRUE));
-                        criteria.add(Restrictions.or(
-                                Restrictions.isNull("enabledFrom"),
-                                Restrictions.le("enabledFrom", now)
-                        ));
-                        criteria.add(Restrictions.or(
-                                Restrictions.isNull("enabledTo"),
-                                Restrictions.gt("enabledTo", now)
-                        ));
-                    }
-                    if (disabledOnly) {
-                        final Date now = new Date();
-                        criteria.add(Restrictions.or(
-                                Restrictions.eq("enabled", Boolean.FALSE),
-                                Restrictions.gt("enabledFrom", now),
-                                Restrictions.lt("enabledTo", now)
-                        ));
-                    }
 
                     if (enabled == null || !enabled.getFirst().equals(enabled.getSecond())) {
 
@@ -261,43 +124,207 @@ public class DtoPromotionServiceImpl
 
                             if ("#".equals(tagOrCodeOrConditionOrAction.getFirst())) {
 
-                                criteria.add(Restrictions.or(
-                                        Restrictions.ilike("code", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE),
-                                        Restrictions.ilike("tag", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE)
-                                ));
+                                if (enabledOnly) {
+                                    final Date now = new Date();
+                                    entities = getService().getGenericDao().findRangeByCriteria(
+                                            " where e.shopCode = ?1 and e.currency = ?2 and e.enabled = ?3 and (e.enabledFrom is null or e.enabledFrom <= ?4) and (e.enabledTo is null or e.enabledTo >= ?4) and (lower(e.code) like ?5 or lower(e.tag) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9)) " + orderBy,
+                                            page * pageSize, pageSize,
+                                            shopCode,
+                                            currency,
+                                            Boolean.TRUE,
+                                            now,
+                                            HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrConditionOrAction.getSecond()),
+                                            HQLUtils.criteriaInTest(types),
+                                            HQLUtils.criteriaIn(types),
+                                            HQLUtils.criteriaInTest(actions),
+                                            HQLUtils.criteriaIn(actions)
+                                    );
+                                } else if (disabledOnly) {
+                                    final Date now = new Date();
+                                    entities = getService().getGenericDao().findRangeByCriteria(
+                                            " where e.shopCode = ?1 and e.currency = ?2 and (e.enabled = ?3 or e.enabledFrom > ?4 or e.enabledTo < ?4) and (lower(e.code) like ?5 or lower(e.tag) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9)) " + orderBy,
+                                            page * pageSize, pageSize,
+                                            shopCode,
+                                            currency,
+                                            Boolean.FALSE,
+                                            now,
+                                            HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrConditionOrAction.getSecond()),
+                                            HQLUtils.criteriaInTest(types),
+                                            HQLUtils.criteriaIn(types),
+                                            HQLUtils.criteriaInTest(actions),
+                                            HQLUtils.criteriaIn(actions)
+                                    );
+                                } else {
+                                    entities = getService().getGenericDao().findRangeByCriteria(
+                                            " where e.shopCode = ?1 and e.currency = ?2 and (lower(e.code) like ?3 or lower(e.tag) like ?3)  and (?4 = 0 or e.promoType in (?5)) and (?6 = 0 or e.promoAction in (?7)) " + orderBy,
+                                            page * pageSize, pageSize,
+                                            shopCode,
+                                            currency,
+                                            HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrConditionOrAction.getSecond()),
+                                            HQLUtils.criteriaInTest(types),
+                                            HQLUtils.criteriaIn(types),
+                                            HQLUtils.criteriaInTest(actions),
+                                            HQLUtils.criteriaIn(actions)
+                                    );
+                                }
+
+
 
                             } else if ("?".equals(tagOrCodeOrConditionOrAction.getFirst())) {
 
-                                criteria.add(Restrictions.or(
-                                        Restrictions.ilike("eligibilityCondition", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE),
-                                        Restrictions.ilike("promoActionContext", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE)
-                                ));
+                                if (enabledOnly) {
+                                    final Date now = new Date();
+                                    entities = getService().getGenericDao().findRangeByCriteria(
+                                            " where e.shopCode = ?1 and e.currency = ?2 and e.enabled = ?3 and (e.enabledFrom is null or e.enabledFrom <= ?4) and (e.enabledTo is null or e.enabledTo >= ?4) and (lower(e.eligibilityCondition) like ?5 or lower(e.promoActionContext) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9))  " + orderBy,
+                                            page * pageSize, pageSize,
+                                            shopCode,
+                                            currency,
+                                            Boolean.TRUE,
+                                            now,
+                                            HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrConditionOrAction.getSecond()),
+                                            HQLUtils.criteriaInTest(types),
+                                            HQLUtils.criteriaIn(types),
+                                            HQLUtils.criteriaInTest(actions),
+                                            HQLUtils.criteriaIn(actions)
+                                    );
+                                } else if (disabledOnly) {
+                                    final Date now = new Date();
+                                    entities = getService().getGenericDao().findRangeByCriteria(
+                                            " where e.shopCode = ?1 and e.currency = ?2 and (e.enabled = ?3 or e.enabledFrom > ?4 or e.enabledTo < ?4) and (lower(e.eligibilityCondition) like ?5 or lower(e.promoActionContext) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9))  " + orderBy,
+                                            page * pageSize, pageSize,
+                                            shopCode,
+                                            currency,
+                                            Boolean.FALSE,
+                                            now,
+                                            HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrConditionOrAction.getSecond()),
+                                            HQLUtils.criteriaInTest(types),
+                                            HQLUtils.criteriaIn(types),
+                                            HQLUtils.criteriaInTest(actions),
+                                            HQLUtils.criteriaIn(actions)
+                                    );
+                                } else {
+                                    entities = getService().getGenericDao().findRangeByCriteria(
+                                            " where e.shopCode = ?1 and e.currency = ?2 and (lower(e.eligibilityCondition) like ?3 or lower(e.promoActionContext) like ?3)  and (?4 = 0 or e.promoType in (?5)) and (?6 = 0 or e.promoAction in (?7))  " + orderBy,
+                                            page * pageSize, pageSize,
+                                            shopCode,
+                                            currency,
+                                            HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrConditionOrAction.getSecond()),
+                                            HQLUtils.criteriaInTest(types),
+                                            HQLUtils.criteriaIn(types),
+                                            HQLUtils.criteriaInTest(actions),
+                                            HQLUtils.criteriaIn(actions)
+                                    );
+                                }
 
                             }
 
                         } else {
 
-                            criteria.add(Restrictions.or(
-                                    Restrictions.ilike("code", filter, MatchMode.ANYWHERE),
-                                    Restrictions.ilike("name", filter, MatchMode.ANYWHERE),
-                                    Restrictions.ilike("description", filter, MatchMode.ANYWHERE)
-                            ));
+                            if (enabledOnly) {
+                                final Date now = new Date();
+                                entities = getService().getGenericDao().findRangeByCriteria(
+                                        " where e.shopCode = ?1 and e.currency = ?2 and e.enabled = ?3 and (e.enabledFrom is null or e.enabledFrom <= ?4) and (e.enabledTo is null or e.enabledTo >= ?4) and (lower(e.code) like ?5 or lower(e.name) like ?5 or lower(e.description) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9))  " + orderBy,
+                                        page * pageSize, pageSize,
+                                        shopCode,
+                                        currency,
+                                        Boolean.TRUE,
+                                        now,
+                                        HQLUtils.criteriaIlikeAnywhere(filter),
+                                        HQLUtils.criteriaInTest(types),
+                                        HQLUtils.criteriaIn(types),
+                                        HQLUtils.criteriaInTest(actions),
+                                        HQLUtils.criteriaIn(actions)
+                                );
+                            } else if (disabledOnly) {
+                                final Date now = new Date();
+                                entities = getService().getGenericDao().findRangeByCriteria(
+                                        " where e.shopCode = ?1 and e.currency = ?2 and (e.enabled = ?3 or e.enabledFrom > ?4 or e.enabledTo < ?4) and (lower(e.code) like ?5 or lower(e.name) like ?5 or lower(e.description) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9))  " + orderBy,
+                                        page * pageSize, pageSize,
+                                        shopCode,
+                                        currency,
+                                        Boolean.FALSE,
+                                        now,
+                                        HQLUtils.criteriaIlikeAnywhere(filter),
+                                        HQLUtils.criteriaInTest(types),
+                                        HQLUtils.criteriaIn(types),
+                                        HQLUtils.criteriaInTest(actions),
+                                        HQLUtils.criteriaIn(actions)
+                                );
+                            } else {
+                                entities = getService().getGenericDao().findRangeByCriteria(
+                                        " where e.shopCode = ?1 and e.currency = ?2 and (lower(e.code) like ?3 or lower(e.name) like ?3 or lower(e.description) like ?3)  and (?4 = 0 or e.promoType in (?5)) and (?6 = 0 or e.promoAction in (?7))  " + orderBy,
+                                        page * pageSize, pageSize,
+                                        shopCode,
+                                        currency,
+                                        HQLUtils.criteriaIlikeAnywhere(filter),
+                                        HQLUtils.criteriaInTest(types),
+                                        HQLUtils.criteriaIn(types),
+                                        HQLUtils.criteriaInTest(actions),
+                                        HQLUtils.criteriaIn(actions)
+                                );
+                            }
 
                         }
+                    } else {
+
+                        if (enabledOnly) {
+                            final Date now = new Date();
+                            entities = getService().getGenericDao().findRangeByCriteria(
+                                    " where e.shopCode = ?1 and e.currency = ?2 and e.enabled = ?3 and (e.enabledFrom is null or e.enabledFrom <= ?4) and (e.enabledTo is null or e.enabledTo >= ?4)  and (?5 = 0 or e.promoType in (?6)) and (?7 = 0 or e.promoAction in (?8))  " + orderBy,
+                                    page * pageSize, pageSize,
+                                    shopCode,
+                                    currency,
+                                    Boolean.TRUE,
+                                    now,
+                                    HQLUtils.criteriaInTest(types),
+                                    HQLUtils.criteriaIn(types),
+                                    HQLUtils.criteriaInTest(actions),
+                                    HQLUtils.criteriaIn(actions)
+                            );
+                        } else if (disabledOnly) {
+                            final Date now = new Date();
+                            entities = getService().getGenericDao().findRangeByCriteria(
+                                    " where e.shopCode = ?1 and e.currency = ?2 and (e.enabled = ?3 or e.enabledFrom > ?4 or e.enabledTo < ?4)  and (?5 = 0 or e.promoType in (?6)) and (?7 = 0 or e.promoAction in (?8))   " + orderBy,
+                                    page * pageSize, pageSize,
+                                    shopCode,
+                                    currency,
+                                    Boolean.FALSE,
+                                    now,
+                                    HQLUtils.criteriaInTest(types),
+                                    HQLUtils.criteriaIn(types),
+                                    HQLUtils.criteriaInTest(actions),
+                                    HQLUtils.criteriaIn(actions)
+                            );
+                        } else {
+                            entities = getService().getGenericDao().findRangeByCriteria(
+                                    " where e.shopCode = ?1 and e.currency = ?2 and (?3 = 0 or e.promoType in (?4)) and (?6 = 0 or e.promoAction in (?7))   " + orderBy,
+                                    page * pageSize, pageSize,
+                                    shopCode,
+                                    currency,
+                                    HQLUtils.criteriaInTest(types),
+                                    HQLUtils.criteriaIn(types),
+                                    HQLUtils.criteriaInTest(actions),
+                                    HQLUtils.criteriaIn(actions)
+                            );
+                        }
+
                     }
                 }
 
-            }
+            } else {
 
-            if (CollectionUtils.isNotEmpty(types)) {
-                criteria.add(Restrictions.in("promoType", types));
-            }
-            if (CollectionUtils.isNotEmpty(actions)) {
-                criteria.add(Restrictions.in("promoAction", actions));
-            }
+                entities = getService().getGenericDao().findRangeByCriteria(
+                        " where e.shopCode = ?1 and e.currency = ?2  and (?3 = 0 or e.promoType in (?4)) and (?5 = 0 or e.promoAction in (?6)) " + orderBy,
+                        page * pageSize, pageSize,
+                        shopCode,
+                        currency,
+                        HQLUtils.criteriaInTest(types),
+                        HQLUtils.criteriaIn(types),
+                        HQLUtils.criteriaInTest(actions),
+                        HQLUtils.criteriaIn(actions)
+                );
 
-            final List<Promotion> entities = getService().getGenericDao().findByCriteria(
-                    page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), PROMO_ORDER);
+            }
 
             fillDTOs(entities, dtos);
         }
@@ -308,7 +335,7 @@ public class DtoPromotionServiceImpl
 
     @Override
     public List<PromotionDTO> findByCodes(final Set<String> codes) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Promotion> promos = service.findByCriteria(Restrictions.in("code", codes));
+        final List<Promotion> promos = service.findByCriteria(" where e.code in (?1)", codes);
         final List<PromotionDTO> dtos = new ArrayList<PromotionDTO>();
         fillDTOs(promos, dtos);
         return dtos;

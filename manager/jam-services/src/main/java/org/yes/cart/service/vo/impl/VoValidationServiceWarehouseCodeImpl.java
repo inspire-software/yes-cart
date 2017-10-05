@@ -16,10 +16,7 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.hibernate.criterion.Restrictions;
-import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Warehouse;
-import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.vo.VoValidationService;
 
@@ -40,7 +37,7 @@ public class VoValidationServiceWarehouseCodeImpl extends AbstractVoValidationSe
 
     @Override
     protected Long getDuplicateId(final long currentId, final String valueToCheck) {
-        final List<Warehouse> wh = this.warehouseService.findByCriteria(Restrictions.eq("code", valueToCheck));
+        final List<Warehouse> wh = this.warehouseService.findByCriteria(" where e.code = ?1 ", valueToCheck);
         return wh != null && wh.size() > 0 && wh.get(0).getWarehouseId() != currentId ? wh.get(0).getWarehouseId() : null;
     }
 }

@@ -16,9 +16,6 @@
 
 package org.yes.cart.dao.impl;
 
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
@@ -199,22 +196,15 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
-    public List<T> findByCriteria(final Criterion... criterion) {
-        return delegate.findByCriteria(criterion);
+    public List<T> findByCriteria(final String eCriteria, final Object... parameters) {
+        return delegate.findByCriteria(eCriteria, parameters);
     }
 
     /**
      * {@inheritDoc}
      */
-    public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion... criterion) {
-        return delegate.findByCriteria(firstResult, maxResults, criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion[] criterion, final Order[] order) {
-        return delegate.findByCriteria(firstResult, maxResults, criterion, order);
+    public List<T> findRangeByCriteria(final String eCriteria, final int firstResult, final int maxResults, final Object... parameters) {
+        return delegate.findRangeByCriteria(eCriteria, firstResult, maxResults, parameters);
     }
 
     /**
@@ -227,36 +217,8 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
-    public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return delegate.findByCriteria(criteriaTuner, criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final int firstResult, final int maxResults, final Criterion... criterion) {
-        return delegate.findByCriteria(criteriaTuner, firstResult, maxResults, criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final int firstResult, final int maxResults, final Criterion[] criterion, final Order[] order) {
-        return delegate.findByCriteria(criteriaTuner, firstResult, maxResults, criterion, order);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public T findSingleByCriteria(final Criterion... criterion) {
-        return delegate.findSingleByCriteria(criterion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public T findSingleByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        return delegate.findSingleByCriteria(criteriaTuner, criterion);
+    public T findSingleByCriteria(final String eCriteria, final Object... parameters) {
+        return delegate.findSingleByCriteria(eCriteria, parameters);
     }
 
     /**

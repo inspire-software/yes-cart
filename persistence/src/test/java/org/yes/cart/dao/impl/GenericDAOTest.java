@@ -16,7 +16,6 @@
 
 package org.yes.cart.dao.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.transaction.TransactionStatus;
@@ -54,18 +53,17 @@ public class GenericDAOTest extends AbstractTestDAO {
 
                 String sql = "update tbrand set description = 'zzz' where brand_id = :1";
                 assertEquals(1, brandDao.executeNativeUpdate(sql, 101));
-                Brand brand = brandDao.findSingleByCriteria(Restrictions.eq("brandId", 101L));
+                Brand brand = brandDao.findSingleByCriteria(" where e.brandId = ?1", 101L);
                 assertEquals("zzz", brand.getDescription());
                 brandDao.flushClear();
                 sql = "update tbrand set description = 'NewRobotics' where name = :1";
                 assertEquals(1, brandDao.executeNativeUpdate(sql, "FutureRobots"));
-                brand = brandDao.findSingleByCriteria(Restrictions.eq("name", "FutureRobots"));
+                brand = brandDao.findSingleByCriteria(" where e.name = ?1", "FutureRobots");
                 assertEquals("NewRobotics", brand.getDescription());
                 brandDao.flushClear();
                 sql = "update tbrand set description = 'OldRobotics' where brand_id = :1 and name = :2";
                 assertEquals(1, brandDao.executeNativeUpdate(sql, 101, "FutureRobots"));
-                brand = brandDao.findSingleByCriteria(Restrictions.eq("brandId", 101L),
-                        Restrictions.eq("name", "FutureRobots"));
+                brand = brandDao.findSingleByCriteria(" where e.brandId = ?1 and e.name = ?2", 101L,"FutureRobots");
                 assertEquals("OldRobotics", brand.getDescription());
 
                 status.setRollbackOnly();
@@ -87,7 +85,7 @@ public class GenericDAOTest extends AbstractTestDAO {
                 brand = brandDao.create(brand);
                 String sql = "delete from tbrand where brand_id = :1";
                 assertEquals(1, brandDao.executeNativeUpdate(sql, brand.getBrandId()));
-                brand = brandDao.findSingleByCriteria(Restrictions.eq("brandId", brand.getBrandId()));
+                brand = brandDao.findSingleByCriteria(" where e.brandId = ?1", brand.getBrandId());
                 assertNull(brand);
                 brand = entityFactory.getByIface(Brand.class);
                 brand.setName("name2");
@@ -95,7 +93,7 @@ public class GenericDAOTest extends AbstractTestDAO {
                 brand = brandDao.create(brand);
                 sql = "delete from tbrand where name = :1 and description= :2 ";
                 assertEquals(1, brandDao.executeNativeUpdate(sql, "name2", "description2"));
-                brand = brandDao.findSingleByCriteria(Restrictions.eq("name", "name2"));
+                brand = brandDao.findSingleByCriteria(" where e.name = ?1", "name2");
                 assertNull(brand);
 
                 status.setRollbackOnly();

@@ -32,18 +32,6 @@ public interface VoPaymentService {
      * Get all payments for given filter
      *
      * @param filter filter
-     * @param max max results
-     *
-     * @return orders
-     *
-     * @throws Exception
-     */
-    List<VoPayment> getFiltered(String filter, int max) throws Exception;
-
-    /**
-     * Get all payments for given filter
-     *
-     * @param filter filter
      * @param operations operations
      * @param statuses statuses
      * @param max max results

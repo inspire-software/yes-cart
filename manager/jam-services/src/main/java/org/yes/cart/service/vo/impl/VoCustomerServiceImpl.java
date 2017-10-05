@@ -28,7 +28,10 @@ import org.yes.cart.domain.dto.CustomerDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.vo.*;
+import org.yes.cart.domain.vo.VoAttrValueCustomer;
+import org.yes.cart.domain.vo.VoCustomer;
+import org.yes.cart.domain.vo.VoCustomerInfo;
+import org.yes.cart.domain.vo.VoCustomerShopLink;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCustomerService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -232,7 +235,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
      */
     public VoCustomer create(final VoCustomer vo) throws Exception {
 
-        final List<CustomerDTO> existing = dtoCustomerService.findCustomer(vo.getEmail(), null, null, null, null, null, null);
+        final List<CustomerDTO> existing = dtoCustomerService.findCustomer(vo.getEmail());
         final Map<String, Set<Long>> registered = new HashMap<>();
         if (!existing.isEmpty()) {
             for (final CustomerDTO existingDto : existing) {

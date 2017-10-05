@@ -21,10 +21,6 @@ import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
@@ -43,6 +39,7 @@ import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCustomerService;
+import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
 import java.util.*;
@@ -264,6 +261,20 @@ public class DtoCustomerServiceImpl
     }
 
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<CustomerDTO> findCustomer(final String email) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Customer> entities = ((CustomerService)service).findByCriteria(
+                " where lower(e.email) = ?1",
+                email.toLowerCase()
+        );
+        final List<CustomerDTO> dtos  = new ArrayList<CustomerDTO>(entities.size());
+        fillDTOs(entities, dtos);
+        return dtos;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -292,8 +303,7 @@ public class DtoCustomerServiceImpl
 
         final List<CustomerDTO> customers = new ArrayList<>();
 
-        final List<Criterion> criteria = new ArrayList<Criterion>();
-        final List<Order> order = new ArrayList<Order>();
+        List<Customer> entities = Collections.emptyList();
 
         if (StringUtils.isNotBlank(filter)) {
 
@@ -305,45 +315,53 @@ public class DtoCustomerServiceImpl
                 if ("#".equals(refOrCustomerOrAddressOrPolicy.getFirst())) {
                     // order number search
                     final String refNumber = refOrCustomerOrAddressOrPolicy.getSecond();
-                    criteria.add(Restrictions.or(
-                            Restrictions.eq("customerId", NumberUtils.toLong(refNumber)),
-                            Restrictions.ilike("email", refNumber, MatchMode.ANYWHERE),
-                            Restrictions.ilike("tag", refNumber, MatchMode.ANYWHERE)
-                    ));
-                    order.add(Order.asc("email"));
+
+                    entities = service.getGenericDao().findRangeByCriteria(
+                            " where e.customerId = ?1 or lower(e.email) like ?2 or lower(e.tag) like ?2 order by e.email",
+                            page * pageSize, pageSize,
+                            NumberUtils.toLong(refNumber),
+                            HQLUtils.criteriaIlikeAnywhere(refNumber)
+                        );
+
                 } else if ("?".equals(refOrCustomerOrAddressOrPolicy.getFirst())) {
                     // customer search
                     final String customer = refOrCustomerOrAddressOrPolicy.getSecond();
-                    criteria.add(Restrictions.or(
-                            Restrictions.ilike("email", customer, MatchMode.ANYWHERE),
-                            Restrictions.ilike("firstname", customer, MatchMode.ANYWHERE),
-                            Restrictions.ilike("lastname", customer, MatchMode.ANYWHERE)
-                    ));
-                    order.add(Order.asc("lastname"));
-                    order.add(Order.asc("email"));
+
+                    entities = service.getGenericDao().findRangeByCriteria(
+                            " where lower(e.email) like ?1 or lower(e.firstname) like ?1 or lower(e.lastname) like ?1 order by e.lastname, e.email",
+                            page * pageSize, pageSize,
+                            HQLUtils.criteriaIlikeAnywhere(customer)
+                    );
+
                 } else if ("@".equals(refOrCustomerOrAddressOrPolicy.getFirst())) {
                     // address search
                     final String address = refOrCustomerOrAddressOrPolicy.getSecond();
                     final List<Long> ids = (List) this.addressDao.
-                            findQueryObjectsRangeByNamedQuery("CUSTOMER.IDS.BY.ADDRESS", page * pageSize, pageSize, "%" + address.toLowerCase() + "%");
+                            findQueryObjectsRangeByNamedQuery(
+                                    "CUSTOMER.IDS.BY.ADDRESS",
+                                    page * pageSize, pageSize,
+                                    HQLUtils.criteriaIlikeAnywhere(address)
+                            );
 
                     if (ids.isEmpty()) {
                         return Collections.emptyList();
                     }
 
-                    criteria.add(Restrictions.in("customerId", ids));
-                    order.add(Order.asc("lastname"));
-                    order.add(Order.asc("email"));
+                    entities = service.getGenericDao().findByCriteria(
+                            " where e.customerId in (?1) order by e.lastname, e.email",
+                            ids
+                    );
 
                 } else if ("$".equals(refOrCustomerOrAddressOrPolicy.getFirst())) {
                     // address search
                     final String policy = refOrCustomerOrAddressOrPolicy.getSecond();
-                    criteria.add(Restrictions.or(
-                            Restrictions.ilike("customerType", policy, MatchMode.EXACT),
-                            Restrictions.ilike("pricingPolicy", policy, MatchMode.EXACT)
-                    ));
-                    order.add(Order.asc("lastname"));
-                    order.add(Order.asc("email"));
+
+                    entities = service.getGenericDao().findRangeByCriteria(
+                            " where lower(e.customerType) = ?1 or lower(e.pricingPolicy) = ?1 order by e.lastname, e.email",
+                            page * pageSize, pageSize,
+                            HQLUtils.criteriaIeq(policy)
+                    );
+
                 }
 
             } else if (dateSearch != null) {
@@ -352,38 +370,31 @@ public class DtoCustomerServiceImpl
                 final Date to = dateSearch.getSecond();
 
                 // time search
-                if (from != null) {
-                    criteria.add(Restrictions.ge("createdTimestamp", from));
-                }
-                if (to != null) {
-                    criteria.add(Restrictions.le("createdTimestamp", to));
-                }
-
-                order.add(Order.desc("createdTimestamp"));
+                entities = service.getGenericDao().findRangeByCriteria(
+                        " where (?1 is null or e.orderTimestamp >= ?1) and (?2 is null or e.orderTimestamp >= ?2) order by e.orderTimestamp desc",
+                        page * pageSize, pageSize,
+                        from, to
+                );
 
             } else {
 
-                criteria.add(Restrictions.or(
-                        Restrictions.ilike("email", filter, MatchMode.ANYWHERE),
-                        Restrictions.ilike("firstname", filter, MatchMode.ANYWHERE),
-                        Restrictions.ilike("lastname", filter, MatchMode.ANYWHERE),
-                        Restrictions.ilike("customerType", filter, MatchMode.EXACT),
-                        Restrictions.ilike("pricingPolicy", filter, MatchMode.EXACT)
-                ));
-                order.add(Order.desc("createdTimestamp"));
-                order.add(Order.asc("lastname"));
-                order.add(Order.asc("email"));
+                entities = service.getGenericDao().findRangeByCriteria(
+                        " where lower(e.email) like ?1 or lower(e.firstname) like ?1 or lower(e.lastname) like ?1 or lower(e.customerType) = ?2 or lower(e.pricingPolicy) = ?2 order by e.orderTimestamp desc, e.lastname, e.email",
+                        page * pageSize, pageSize,
+                        HQLUtils.criteriaIlikeAnywhere(filter),
+                        HQLUtils.criteriaIeq(filter)
+                );
 
             }
 
         } else {
-            order.add(Order.desc("createdTimestamp"));
-            order.add(Order.asc("lastname"));
-            order.add(Order.asc("email"));
-        }
 
-        final List<Customer> entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize,
-                criteria.toArray(new Criterion[criteria.size()]), order.toArray(new Order[order.size()]));
+            entities = service.getGenericDao().findRangeByCriteria(
+                    " order by e.orderTimestamp desc, e.lastname, e.email",
+                    page * pageSize, pageSize
+            );
+
+        }
 
         fillDTOs(entities, customers);
 

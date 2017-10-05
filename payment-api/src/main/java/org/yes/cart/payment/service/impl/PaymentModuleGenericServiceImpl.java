@@ -16,7 +16,6 @@
 
 package org.yes.cart.payment.service.impl;
 
-import org.hibernate.criterion.Criterion;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 import org.yes.cart.payment.service.PaymentModuleGenericService;
 
@@ -45,7 +44,7 @@ public class PaymentModuleGenericServiceImpl<ENTITY> implements PaymentModuleGen
     /**
      * {@inheritDoc}
      */
-    public ENTITY getById(final long pk) {
+    public ENTITY findById(final long pk) {
         return genericDao.findById(pk);
     }
 
@@ -84,16 +83,16 @@ public class PaymentModuleGenericServiceImpl<ENTITY> implements PaymentModuleGen
     /**
      * {@inheritDoc}
      */
-    public List<ENTITY> findByCriteria(final Criterion... criterion) {
-        return genericDao.findByCriteria(criterion);
+    public List<ENTITY> findByCriteria(final String eCriteria, final Object... parameters) {
+        return genericDao.findByCriteria(eCriteria, parameters);
 
     }
 
     /**
      * {@inheritDoc}
      */
-    public ENTITY findSingleByCriteria(final Criterion... criterion) {
-        return genericDao.findSingleByCriteria(criterion);
+    public ENTITY findSingleByCriteria(final String eCriteria, final Object... parameters) {
+        return genericDao.findSingleByCriteria(eCriteria, parameters);
 
     }
 

@@ -17,11 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.TaxConfigDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.TaxConfigDTOImpl;
@@ -33,9 +29,11 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.TaxConfigService;
 import org.yes.cart.service.dto.DtoTaxConfigService;
+import org.yes.cart.utils.HQLUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -81,8 +79,6 @@ public class DtoTaxConfigServiceImpl
         Arrays.sort(SKU);
     }
 
-    private final static Order[] CONFIG_ORDER = new Order[] { Order.asc("countryCode"), Order.asc("stateCode"), Order.asc("productCode") };
-
     /** {@inheritDoc} */
     public List<TaxConfigDTO> findBy(final long taxId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
@@ -92,10 +88,9 @@ public class DtoTaxConfigServiceImpl
         if (taxId > 0) {
             // only allow lists for tax selection
 
-            final List<Criterion> criteria = new ArrayList<Criterion>();
-            criteria.add(Restrictions.eq("tax.taxId", taxId));
+            List<TaxConfig> entities = Collections.emptyList();
 
-            if (StringUtils.hasLength(filter)) {
+            if (StringUtils.isNotBlank(filter)) {
 
                 final Pair<String, String> locationSearch = ComplexSearchUtils.checkSpecialSearch(filter, LOCATION);
                 final Pair<String, String> skuSearch = locationSearch != null ? null : ComplexSearchUtils.checkSpecialSearch(filter, SKU);
@@ -104,39 +99,50 @@ public class DtoTaxConfigServiceImpl
 
                     final String location = locationSearch.getSecond();
 
-                    criteria.add(Restrictions.or(
-                            Restrictions.eq("countryCode", location),
-                            Restrictions.ilike("stateCode", location, MatchMode.ANYWHERE)
-                    ));
+                    entities = getService().getGenericDao().findRangeByCriteria(
+                            " where e.tax.taxId = ?1 and (lower(e.countryCode) = ?2 or lower(e.stateCode) like ?3) order by e.countryCode, e.countryCode, e.productCode",
+                            page * pageSize, pageSize,
+                            taxId,
+                            HQLUtils.criteriaIeq(location),
+                            HQLUtils.criteriaIlikeAnywhere(location)
+                    );
 
                 } else if (skuSearch != null) {
 
                     final String sku = skuSearch.getSecond();
 
                     if ("!".equals(sku)) {
-                        criteria.add(Restrictions.or(
-                                Restrictions.isNull("productCode"),
-                                Restrictions.eq("productCode", "")
-                        ));
+
+                        entities = getService().getGenericDao().findRangeByCriteria(
+                                " where e.tax.taxId = ?1 and (e.productCode = '' or e.productCode is null) order by e.countryCode, e.countryCode",
+                                page * pageSize, pageSize,
+                                taxId
+                        );
+
                     } else {
-                        criteria.add(Restrictions.ilike("productCode", sku,
-                            "!".equals(skuSearch.getFirst()) ? MatchMode.EXACT : MatchMode.ANYWHERE));
+
+                        entities = getService().getGenericDao().findRangeByCriteria(
+                                " where e.tax.taxId = ?1 and lower(e.productCode) like ?2 order by e.countryCode, e.countryCode",
+                                page * pageSize, pageSize,
+                                taxId,
+                                "!".equals(skuSearch.getFirst()) ? HQLUtils.criteriaIeq(sku) : HQLUtils.criteriaIlikeAnywhere(sku)
+                        );
+
                     }
 
                 } else {
 
-                    criteria.add(Restrictions.or(
-                            Restrictions.ilike("countryCode", filter, MatchMode.ANYWHERE),
-                            Restrictions.ilike("stateCode", filter, MatchMode.ANYWHERE),
-                            Restrictions.ilike("productCode", filter, MatchMode.ANYWHERE)
-                    ));
+                    entities = getService().getGenericDao().findRangeByCriteria(
+                            " where e.tax.taxId = ?1 and (lower(e.countryCode) = ?2 or lower(e.stateCode) like ?3 or lower(e.productCode) like ?3) order by e.countryCode, e.countryCode, e.productCode",
+                            page * pageSize, pageSize,
+                            taxId,
+                            HQLUtils.criteriaIeq(filter),
+                            HQLUtils.criteriaIlikeAnywhere(filter)
+                    );
 
                 }
 
             }
-
-            final List<TaxConfig> entities = getService().getGenericDao().findByCriteria(
-                    page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), CONFIG_ORDER);
 
             fillDTOs(entities, dtos);
         }

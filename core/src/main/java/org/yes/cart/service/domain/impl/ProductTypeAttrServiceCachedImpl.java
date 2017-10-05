@@ -16,10 +16,8 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.Criterion;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.ProdTypeAttributeViewGroup;
 import org.yes.cart.domain.entity.ProductTypeAttr;
@@ -99,8 +97,8 @@ public class ProductTypeAttrServiceCachedImpl implements ProductTypeAttrService 
     }
 
     /** {@inheritDoc} */
-    public List<ProductTypeAttr> findByCriteria(final Criterion... criterion) {
-        return productTypeAttrService.findByCriteria(criterion);
+    public List<ProductTypeAttr> findByCriteria(final String eCriteria, final Object... parameters) {
+        return productTypeAttrService.findByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
@@ -109,8 +107,8 @@ public class ProductTypeAttrServiceCachedImpl implements ProductTypeAttrService 
     }
 
     /** {@inheritDoc} */
-    public ProductTypeAttr findSingleByCriteria(final Criterion... criterion) {
-        return productTypeAttrService.findSingleByCriteria(criterion);
+    public ProductTypeAttr findSingleByCriteria(final String eCriteria, final Object... parameters) {
+        return productTypeAttrService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */

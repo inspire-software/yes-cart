@@ -16,10 +16,8 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.Criterion;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.TaxConfig;
 import org.yes.cart.service.domain.TaxConfigService;
@@ -82,8 +80,8 @@ public class TaxConfigServiceCachedImpl implements TaxConfigService {
     }
 
     /** {@inheritDoc} */
-    public List<TaxConfig> findByCriteria(final Criterion... criterion) {
-        return taxConfigService.findByCriteria(criterion);
+    public List<TaxConfig> findByCriteria(final String eCriteria, final Object... parameters) {
+        return taxConfigService.findByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
@@ -92,8 +90,8 @@ public class TaxConfigServiceCachedImpl implements TaxConfigService {
     }
 
     /** {@inheritDoc} */
-    public TaxConfig findSingleByCriteria(final Criterion... criterion) {
-        return taxConfigService.findSingleByCriteria(criterion);
+    public TaxConfig findSingleByCriteria(final String eCriteria, final Object... parameters) {
+        return taxConfigService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */

@@ -17,10 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.CarrierSlaDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.CarrierSlaDTOImpl;
@@ -31,9 +28,11 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoCarrierSlaService;
+import org.yes.cart.utils.HQLUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -74,8 +73,6 @@ public class DtoCarrierSlaServiceImpl
         Arrays.sort(CODE);
     }
 
-    private final static Order[] SLA_ORDER = new Order[] { Order.asc("name") };
-
 
     /**
      * {@inheritDoc}
@@ -84,9 +81,9 @@ public class DtoCarrierSlaServiceImpl
 
         final List<CarrierSlaDTO> dtos = new ArrayList<CarrierSlaDTO>();
 
-        final List<Criterion> criteria = new ArrayList<Criterion>();
+        List<CarrierSla> entities = Collections.emptyList();
 
-        if (org.springframework.util.StringUtils.hasLength(filter)) {
+        if (StringUtils.isNotBlank(filter)) {
 
             final Pair<String, String> code = ComplexSearchUtils.checkSpecialSearch(filter, CODE);
 
@@ -94,22 +91,25 @@ public class DtoCarrierSlaServiceImpl
 
                 if ("!".equals(code.getFirst())) {
 
-                    criteria.add(Restrictions.ilike("guid", code.getSecond(), MatchMode.EXACT));
+                    entities = getService().getGenericDao().findRangeByCriteria(
+                            " where lower(e.guid) = ?1 order by e.name",
+                            page * pageSize, pageSize,
+                            HQLUtils.criteriaIeq(code.getSecond())
+                    );
 
                 }
 
             } else {
 
-                criteria.add(Restrictions.or(
-                        Restrictions.ilike("guid", filter, MatchMode.ANYWHERE),
-                        Restrictions.ilike("name", filter, MatchMode.ANYWHERE)
-                ));
+                entities = getService().getGenericDao().findRangeByCriteria(
+                        " where lower(e.guid) like ?1 or lower(e.name) like ?1 order by e.name",
+                        page * pageSize, pageSize,
+                        HQLUtils.criteriaIlikeAnywhere(filter)
+                );
 
             }
 
         }
-
-        final List<CarrierSla> entities = getService().getGenericDao().findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), SLA_ORDER);
 
         fillDTOs(entities, dtos);
 
