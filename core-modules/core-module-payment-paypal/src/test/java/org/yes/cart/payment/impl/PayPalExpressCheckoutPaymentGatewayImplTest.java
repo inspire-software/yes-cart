@@ -52,11 +52,20 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends PaymentModuleDB
 
     private boolean isTestAllowed() {
 
+/*
         enabled = Boolean.valueOf(System.getProperty("testPgPayPalExpress"));
 
         user = System.getProperty("testPgPayPalExpressUser");
         pass = System.getProperty("testPgPayPalExpressPass");
         sign = System.getProperty("testPgPayPalExpressSignature");
+*/
+
+        enabled = true;
+
+        user = "azarny-facilitator_api1.gmail.com";
+        pass = "X9EEQB357EBY93DL";
+        sign = "AFcWxV21C7fd0v3bYYYRCpSSRl31AuSnAp1bbnZwJT5fiQDqP1ozthHs";
+
 
         boolean testConfigured = StringUtils.isNotBlank(user) && StringUtils.isNotBlank(pass) && StringUtils.isNotBlank(sign);
 

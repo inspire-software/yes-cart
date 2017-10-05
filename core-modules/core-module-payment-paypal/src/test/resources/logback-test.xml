@@ -59,7 +59,7 @@
     <!--<logger name="org.hibernate.cache" level="INFO">-->
         <!--<appender-ref ref="stdout"/>-->
     <!--</logger>-->
-    <root level="ERROR"><!-- Lower logging level to diagnose problems with tests -->
+    <root level="INFO"><!-- Lower logging level to diagnose problems with tests -->
         <appender-ref ref="stdout"/>
     </root>
 </configuration>

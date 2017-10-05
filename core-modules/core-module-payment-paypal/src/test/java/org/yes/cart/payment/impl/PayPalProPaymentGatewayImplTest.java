@@ -57,6 +57,15 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
 
     private boolean isTestAllowed() {
 
+        enabled = true;
+
+        user = "azarny-pro_api1.gmail.com";
+        pass = "Q8HENHM7G2BVVJ65";
+        sign = "AFcWxV21C7fd0v3bYYYRCpSSRl31AY.Z9vzTu8lfg6aIY.S3TFtOxYuq";
+        card = "4032034990150040";// "4032037455820262";
+        expMM = "11";
+        expYYYY = "2022";
+/*
         enabled = Boolean.valueOf(System.getProperty("testPgPayPro"));
 
         user = System.getProperty("testPgPayProUser");
@@ -65,6 +74,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         card = System.getProperty("testPgPayProCard");
         expMM = System.getProperty("testPgPayProCardMM");
         expYYYY = System.getProperty("testPgPayProCardYYYY");
+*/
 
         boolean testConfigured = StringUtils.isNotBlank(user) && StringUtils.isNotBlank(pass) && StringUtils.isNotBlank(sign)
                 && StringUtils.isNotBlank(card) && StringUtils.isNotBlank(expMM) && StringUtils.isNotBlank(expYYYY);
