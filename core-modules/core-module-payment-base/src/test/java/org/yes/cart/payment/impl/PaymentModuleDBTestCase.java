@@ -134,6 +134,10 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
         customerOrder.setNetPrice(net);
 
         customerOrder.setOrderStatus(CustomerOrder.ORDER_STATUS_IN_PROGRESS);
+
+        customerOrder.setBillingAddressDetails(customerOrder.getCustomer().getDefaultAddress(Address.ADDR_TYPE_BILLING));
+        customerOrder.setShippingAddressDetails(customerOrder.getCustomer().getDefaultAddress(Address.ADDR_TYPE_SHIPPING));
+
         return customerOrder;
     }
 

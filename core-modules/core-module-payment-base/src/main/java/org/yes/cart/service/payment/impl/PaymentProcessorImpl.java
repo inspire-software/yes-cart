@@ -669,7 +669,6 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                                          final Payment templatePayment,
                                          final String transactionOperation,
                                          final String transactionGatewayLabel) {
-
         Address shippingAddr = order.getShippingAddressDetails();
         Address billingAddr = order.getBillingAddressDetails();
 
@@ -688,7 +687,13 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         templatePayment.setBillingAddressString(order.getBillingAddress());
         templatePayment.setShippingAddressString(order.getShippingAddress());
 
-        templatePayment.setBillingEmail(order.getEmail());
+        // email must be set, because some payment gateways like cybersource
+        // will reject payments without email
+        if (order.getEmail() != null) {
+            templatePayment.setBillingEmail(order.getEmail());
+        } else {
+            templatePayment.setBillingEmail(order.getCustomer().getEmail());
+        }
 
         templatePayment.setOrderDate(order.getOrderTimestamp());
         templatePayment.setOrderCurrency(order.getCurrency());
