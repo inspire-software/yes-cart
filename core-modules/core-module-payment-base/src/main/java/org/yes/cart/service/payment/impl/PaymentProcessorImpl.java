@@ -687,13 +687,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         templatePayment.setBillingAddressString(order.getBillingAddress());
         templatePayment.setShippingAddressString(order.getShippingAddress());
 
-        // email must be set, because some payment gateways like cybersource
-        // will reject payments without email
-        if (order.getEmail() != null) {
-            templatePayment.setBillingEmail(order.getEmail());
-        } else {
-            templatePayment.setBillingEmail(order.getCustomer().getEmail());
-        }
+        templatePayment.setBillingEmail(order.getEmail());
 
         templatePayment.setOrderDate(order.getOrderTimestamp());
         templatePayment.setOrderCurrency(order.getCurrency());

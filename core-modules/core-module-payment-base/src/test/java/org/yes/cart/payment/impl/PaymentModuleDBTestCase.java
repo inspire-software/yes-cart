@@ -137,6 +137,7 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
 
         customerOrder.setBillingAddressDetails(customerOrder.getCustomer().getDefaultAddress(Address.ADDR_TYPE_BILLING));
         customerOrder.setShippingAddressDetails(customerOrder.getCustomer().getDefaultAddress(Address.ADDR_TYPE_SHIPPING));
+        customerOrder.setEmail(customerOrder.getCustomer().getEmail());
 
         return customerOrder;
     }
