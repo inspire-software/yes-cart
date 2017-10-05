@@ -135,9 +135,16 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
 
         customerOrder.setOrderStatus(CustomerOrder.ORDER_STATUS_IN_PROGRESS);
 
+        // During checkout we always have Customer object (for gues accounts a temporary entry is created Customer.isGuest())
+        // Addresses are copied in OrderAssembler if CarrierSla requires billing/shipping addresses
+        // Basic information is also copied in the OrderAssembler
         customerOrder.setBillingAddressDetails(customerOrder.getCustomer().getDefaultAddress(Address.ADDR_TYPE_BILLING));
         customerOrder.setShippingAddressDetails(customerOrder.getCustomer().getDefaultAddress(Address.ADDR_TYPE_SHIPPING));
         customerOrder.setEmail(customerOrder.getCustomer().getEmail());
+        customerOrder.setSalutation(customerOrder.getCustomer().getSalutation());
+        customerOrder.setFirstname(customerOrder.getCustomer().getFirstname());
+        customerOrder.setLastname(customerOrder.getCustomer().getLastname());
+        customerOrder.setMiddlename(customerOrder.getCustomer().getMiddlename());
 
         return customerOrder;
     }
