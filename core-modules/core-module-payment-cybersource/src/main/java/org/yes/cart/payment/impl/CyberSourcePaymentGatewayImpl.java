@@ -47,6 +47,10 @@ import java.util.UUID;
  * <p/>
  * API (http://www.cybersource.com/support_center/implementation/downloads/simple_order/).
  * <p/>
+ * <p>
+ *     To use cyber source payment gateway please install
+ *     Java Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy Files
+ *     http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -424,15 +428,11 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
         payment.setTransactionOperation(operation);
 
         try {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(HttpParamsUtils.stringify("Cybersource request:", request));
-            }
+            LOG.info(HttpParamsUtils.stringify("Cybersource request:", request));
 
             final Map<String, String> reply = Client.runTransaction(request, getProperties());
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(HttpParamsUtils.stringify("Cybersource response:", reply));
-            }
+            LOG.info(HttpParamsUtils.stringify("Cybersource response:", reply));
 
             /*
                 See http://apps.cybersource.com/library/documentation/sbc/SB_API_SP_UG/html/api.htm#API_8156_59537

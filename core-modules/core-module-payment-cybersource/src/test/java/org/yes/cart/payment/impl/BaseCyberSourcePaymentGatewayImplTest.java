@@ -36,7 +36,7 @@ import static org.junit.Assert.assertNull;
  * Date: 28/09/2014
  * Time: 11:57
  */
-public class AbstractCyberSourcePaymentGatewayImplTest {
+public class BaseCyberSourcePaymentGatewayImplTest {
 
     private Mockery mockery = new JUnit4Mockery();
 

@@ -669,7 +669,6 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                                          final Payment templatePayment,
                                          final String transactionOperation,
                                          final String transactionGatewayLabel) {
-
         Address shippingAddr = order.getShippingAddressDetails();
         Address billingAddr = order.getBillingAddressDetails();
 
