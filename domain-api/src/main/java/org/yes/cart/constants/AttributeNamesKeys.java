@@ -150,6 +150,12 @@ public interface AttributeNamesKeys {
          */
         String SYSTEM_ALLOWED_IMAGE_SIZES = "SYSTEM_ALLOWED_IMAGE_SIZES";
 
+
+        /**
+         * Shop customisation properties
+         */
+        String SYSTEM_EXTENSION_CFG_PROPERTIES = "SYSTEM_EXTENSION_CFG_PROPERTIES";
+
     }
 
 

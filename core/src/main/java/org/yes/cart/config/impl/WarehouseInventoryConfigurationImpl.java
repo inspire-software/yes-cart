@@ -14,13 +14,16 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.shop.impl;
+package org.yes.cart.config.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.shoppingcart.InventoryResolver;
+
+import java.util.Properties;
 
 /**
  * User: denispavlov
@@ -31,30 +34,23 @@ public class WarehouseInventoryConfigurationImpl extends AbstractWarehouseConfig
 
     private static final Logger LOG = LoggerFactory.getLogger(WarehouseInventoryConfigurationImpl.class);
 
-    private InventoryResolver inventoryResolver;
-
-    public WarehouseInventoryConfigurationImpl(final String warehouseCode, final WarehouseService warehouseService) {
-        super(warehouseCode, warehouseService);
+    public WarehouseInventoryConfigurationImpl(final SystemService systemService,
+                                               final WarehouseService warehouseService) {
+        super(systemService, warehouseService);
     }
 
-    void registerCustomInventoryResolver(final Warehouse warehouse) {
+    void registerCustomInventoryResolver(final Warehouse warehouse, final Properties properties) {
+
+        final InventoryResolver inventoryResolver = determineConfiguration(properties, warehouse.getCode() + ".inventoryResolver", InventoryResolver.class);
+
         if (inventoryResolver != null) {
-            configureWarehouse(warehouse.getCode(), inventoryResolver);
+            customise(warehouse.getCode(), warehouse.getCode(), inventoryResolver);
         }
     }
 
     /** {@inheritDoc} */
-    protected void doConfigurations(final Warehouse warehouse) {
-        this.registerCustomInventoryResolver(warehouse);
-    }
-
-    /**
-     * Spring IoC.
-     *
-     * @param inventoryResolver resolver
-     */
-    public void setInventoryResolver(final InventoryResolver inventoryResolver) {
-        this.inventoryResolver = inventoryResolver;
+    protected void doConfigurations(final Warehouse warehouse, final Properties properties) {
+        this.registerCustomInventoryResolver(warehouse, properties);
     }
 
 }

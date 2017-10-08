@@ -34,6 +34,23 @@
     <context:annotation-config/>
 
     <import resource="core-services.xml"/>
-    <import resource="core-payments.xml"/>
+    <import resource="classpath:core-payments.xml"/>
+
+    <!-- ###################### Extension points ################################################################### -->
+
+    <bean id="shopInventoryConfiguration" class="org.yes.cart.config.impl.ShopInventoryConfigurationImpl">
+        <constructor-arg index="0" ref="systemService"/>
+        <constructor-arg index="1" ref="shopService"/>
+    </bean>
+
+    <bean id="shopPricingConfiguration" class="org.yes.cart.config.impl.ShopPricingConfigurationImpl">
+        <constructor-arg index="0" ref="systemService"/>
+        <constructor-arg index="1" ref="shopService"/>
+    </bean>
+
+    <bean id="warehouseInventoryConfiguration" class="org.yes.cart.config.impl.WarehouseInventoryConfigurationImpl">
+        <constructor-arg index="0" ref="systemService"/>
+        <constructor-arg index="1" ref="warehouseService"/>
+    </bean>
 
 </beans>

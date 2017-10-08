@@ -14,16 +14,16 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.shop.impl;
+package org.yes.cart.config.impl;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.ProductAvailabilityStrategy;
 
 import java.util.List;
+import java.util.Properties;
 
 /**
  * User: denispavlov
@@ -32,37 +32,30 @@ import java.util.List;
  */
 public class ShopInventoryConfigurationImpl extends AbstractShopConfigurationImpl {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopInventoryConfigurationImpl.class);
-
-    private ProductAvailabilityStrategy productAvailabilityStrategy;
-
-    public ShopInventoryConfigurationImpl(final String shopCode, final ShopService shopService) {
-        super(shopCode, shopService);
+    public ShopInventoryConfigurationImpl(final SystemService systemService,
+                                          final ShopService shopService) {
+        super(systemService, shopService);
     }
 
-    void registerCustomProductAvailabilityStrategy(final Shop shop, final List<Shop> subs) {
-        if (productAvailabilityStrategy != null) {
-            configureShop(shop.getShopId(), productAvailabilityStrategy);
+    void registerCustomProductAvailabilityStrategy(final Shop shop, final List<Shop> subs, final Properties properties) {
+
+        final ProductAvailabilityStrategy pas = determineConfiguration(properties, shop.getCode() + ".productAvailabilityStrategy", ProductAvailabilityStrategy.class);
+
+        if (pas != null) {
+            customise(shop.getCode(), shop.getShopId(), pas);
             if (CollectionUtils.isNotEmpty(subs)) {
                 for (final Shop sub : subs) {
-                    configureShop(sub.getShopId(), productAvailabilityStrategy);
+                    customise(sub.getCode(), sub.getShopId(), pas);
                 }
             }
         }
     }
 
     /** {@inheritDoc} */
-    protected void doConfigurations(final Shop shop, final List<Shop> subs) {
-        this.registerCustomProductAvailabilityStrategy(shop, subs);
-    }
+    protected void doConfigurations(final Shop shop, final List<Shop> subs, final Properties properties) {
 
-    /**
-     * Spring IoC.
-     *
-     * @param productAvailabilityStrategy strategy
-     */
-    public void setProductAvailabilityStrategy(final ProductAvailabilityStrategy productAvailabilityStrategy) {
-        this.productAvailabilityStrategy = productAvailabilityStrategy;
+        this.registerCustomProductAvailabilityStrategy(shop, subs, properties);
+
     }
 
 }

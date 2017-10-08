@@ -34,6 +34,8 @@ import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -137,7 +139,11 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public Map<String, AttrValueSystem> findAttributeValues() {
-        return getSystem().getAttributes();
+        final System system = getSystem();
+        if (system == null) {
+            return Collections.emptyMap();
+        }
+        return system.getAttributes();
     }
 
     /**
@@ -145,10 +151,7 @@ public class SystemServiceImpl implements SystemService {
      */
     public synchronized void updateAttributeValue(final String key, final String value) {
 
-        final System system = getSystem();
-
         AttrValueSystem attrVal = attrValueEntitySystemDao.findSingleByCriteria(" where e.attributeCode = ?1", key);
-
 
         if (attrVal == null) {
 
@@ -156,15 +159,24 @@ public class SystemServiceImpl implements SystemService {
                 LOG.debug("updating system preference {} with {} (previous value was absent)", key, value);
             }
 
-            Attribute attr = attributeService.findByAttributeCode(key);
+            final System system = getSystem();
 
-            if (attr != null) {
+            if (system != null) {
 
-                attrVal = systemDao.getEntityFactory().getByIface(AttrValueSystem.class);
-                attrVal.setVal(value);
-                attrVal.setAttributeCode(attr.getCode());
-                attrVal.setSystem(system);
-                system.getAttributes().put(key, attrVal);
+                Attribute attr = attributeService.findByAttributeCode(key);
+
+                if (attr != null) {
+
+                    attrVal = systemDao.getEntityFactory().getByIface(AttrValueSystem.class);
+                    attrVal.setVal(value);
+                    attrVal.setAttributeCode(attr.getCode());
+                    attrVal.setSystem(system);
+                    system.getAttributes().put(key, attrVal);
+                } else {
+                    LOG.warn("Unable to update system preference because {} attribute does not exists", key);
+                }
+            } else {
+                LOG.error("TSYSTEM entry is not found");
             }
         } else {
 
@@ -293,7 +305,11 @@ public class SystemServiceImpl implements SystemService {
 
 
     private System getSystem() {
-        return systemDao.findAll().get(0);
+        final List<System> sys = systemDao.findAll();
+        if (sys.isEmpty()) {
+            return null;
+        }
+        return sys.get(0);
     }
 
 

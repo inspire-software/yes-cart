@@ -83,3 +83,15 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11220,  'JOB_PROD_OBS_BATCH_SIZE', 'JOB_PROD_OBS_BATCH_SIZE',  0,  NULL,  'Job\\Obsolete product removal: batch size',
     'Maximum products to remove per each run. Default: 500',  1006, 1000, 0, 0, 0, 0);
 
+--
+-- YC-826 Configurable shop specific integrations
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8025,  'SYSTEM_EXTENSION_CFG_PROPERTIES', 'SYSTEM_EXTENSION_CFG_PROPERTIES',  0,  NULL,  'System\\Customisations',
+    'Property mapping for system customisations. E.g.
+SHOP10.pricingPolicyProvider=[bean name]
+SHOP10.priceResolver=[bean name]
+SHOP10.taxProvider=[bean name]
+SHOP10.productAvailabilityStrategy=[bean name]
+Main.inventoryResolver=[bean name]',  1012, 1000, 0, 0, 0, 0);

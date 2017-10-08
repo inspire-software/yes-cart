@@ -294,7 +294,14 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 E.g. MAIN.INITPAID=sales@warehouse.com,admin@warehouse.com
 SECOND.INITPAID=sales@wahouse2.com',  1012, 1001, 0, 0, 0, 0);
 
-
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8025,  'SYSTEM_EXTENSION_CFG_PROPERTIES', 'SYSTEM_EXTENSION_CFG_PROPERTIES',  0,  NULL,  'System\\Customisations',
+    'Property mapping for system customisations. E.g.
+SHOP10.pricingPolicyProvider=[bean name]
+SHOP10.priceResolver=[bean name]
+SHOP10.taxProvider=[bean name]
+SHOP10.productAvailabilityStrategy=[bean name]
+Main.inventoryResolver=[bean name]',  1012, 1000, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11000,  'SYSTEM_DEFAULT_SHOP', 'SYSTEM_DEFAULT_SHOP',  1,  NULL,  'SF\\Behaviour Default shop URL',
