@@ -79,11 +79,14 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     public Customer getCustomerByEmail(final String email, Shop shop) {
-        Customer customer = getGenericDao().findSingleByNamedQuery("CUSTOMER.BY.EMAIL.SHOP", email.toLowerCase(), shop.getShopId(), Boolean.FALSE);
-        if (customer != null) {
-            Hibernate.initialize(customer.getAttributes());
+        if (StringUtils.isNotBlank(email)) {
+            Customer customer = getGenericDao().findSingleByNamedQuery("CUSTOMER.BY.EMAIL.SHOP", email.toLowerCase(), shop.getShopId(), Boolean.FALSE);
+            if (customer != null) {
+                Hibernate.initialize(customer.getAttributes());
+            }
+            return customer;
         }
-        return customer;
+        return null;
     }
 
     /**
