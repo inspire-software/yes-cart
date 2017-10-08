@@ -17,12 +17,7 @@
 package org.yes.cart.util;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -33,8 +28,6 @@ public class ShopCodeContext {
 
     private static ThreadLocal<String> shopCode = new ThreadLocal<String>();
     private static ThreadLocal<Long> shopId = new ThreadLocal<Long>();
-
-    private static final Map<String, Logger> LOGS = new ConcurrentHashMap<String, Logger>();
 
     /**
      * Get current shop code.

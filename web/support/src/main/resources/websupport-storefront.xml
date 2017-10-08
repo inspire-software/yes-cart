@@ -20,8 +20,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="applicationDirector" class="org.yes.cart.web.application.ApplicationDirector"/>
-
     <!-- ################################### filter delegates begin ################################### -->
 
     <bean id="shopResolverFilter" class="org.yes.cart.web.filter.ShopResolverFilter">
@@ -30,6 +28,7 @@
         <constructor-arg index="2">
             <bean class="org.yes.cart.web.support.request.impl.HeaderOrientedIPResolverImpl"/>
         </constructor-arg>
+        <constructor-arg index="3" ref="themeService"/>
     </bean>
 
     <bean id="imageFilter" class="org.yes.cart.web.filter.ImageFilter">
@@ -43,9 +42,10 @@
     </bean>
 
     <bean id="shoppingCartFilter" class="org.yes.cart.web.filter.ShoppingCartFilter">
-        <constructor-arg index="0" ref="tuplizerPool"/>
-        <constructor-arg index="1" ref="amountCalculationStrategy"/>
-        <constructor-arg index="2" ref="shoppingCartCommandFactory"/>
+        <constructor-arg index="0" ref="shopService"/>
+        <constructor-arg index="1" ref="tuplizerPool"/>
+        <constructor-arg index="2" ref="amountCalculationStrategy"/>
+        <constructor-arg index="3" ref="shoppingCartCommandFactory"/>
     </bean>
 
     <bean id="shopRequireLoginFilter" class="org.yes.cart.web.filter.ShopRequireLoginFilter"/>

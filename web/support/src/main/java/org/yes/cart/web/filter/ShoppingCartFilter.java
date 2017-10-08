@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.TargetSource;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.shoppingcart.support.CartDetuplizationException;
@@ -47,21 +48,25 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartFilter.class);
 
+    private final ShopService shopService;
+
     private final TargetSource tuplizerPool;
 
     private final AmountCalculationStrategy calculationStrategy;
-
     private final ShoppingCartCommandFactory cartCommandFactory;
 
 
     /**
+     * @param shopService         shop service
      * @param tuplizerPool        pool of tuplizer to manage cookie to object to cookie transformation
      * @param calculationStrategy calculation strategy
      * @param cartCommandFactory  cart command factory
      */
-    public ShoppingCartFilter(final TargetSource tuplizerPool,
+    public ShoppingCartFilter(final ShopService shopService,
+                              final TargetSource tuplizerPool,
                               final AmountCalculationStrategy calculationStrategy,
                               final ShoppingCartCommandFactory cartCommandFactory) {
+        this.shopService = shopService;
         this.tuplizerPool = tuplizerPool;
         this.calculationStrategy = calculationStrategy;
         this.cartCommandFactory = cartCommandFactory;
@@ -96,6 +101,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
             }
             cart.initialise(calculationStrategy);
             setDefaultValuesIfNecessary(ApplicationDirector.getCurrentShop(), cart);
+            ApplicationDirector.setCurrentCustomerShop(getCurrentCustomerShop(ApplicationDirector.getCurrentShop(), cart));
             ApplicationDirector.setShoppingCart(cart);
             request.setAttribute("ShoppingCart", cart);
 
@@ -112,6 +118,21 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
         }
 
         return request;
+    }
+
+    /**
+     * Determine current customer shop.
+     *
+     * @param shop current shop
+     * @param cart current cart
+     *
+     * @return current customer shop
+     */
+    private Shop getCurrentCustomerShop(final Shop shop, final ShoppingCart cart) {
+        if (cart != null && cart.getShoppingContext().getCustomerShopId() != shop.getShopId()) {
+            return this.shopService.getById(cart.getShoppingContext().getCustomerShopId());
+        }
+        return shop;
     }
 
 

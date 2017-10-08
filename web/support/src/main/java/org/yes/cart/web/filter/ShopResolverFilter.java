@@ -23,6 +23,7 @@ import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.request.IPResolver;
@@ -51,16 +52,19 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
     private final ShopService shopService;
     private final SystemService systemService;
     private final IPResolver ipResolver;
+    private final ThemeService themeService;
 
     private ServletContext servletContext;
 
 
     public ShopResolverFilter(final ShopService shopService,
                               final SystemService systemService,
-                              final IPResolver ipResolver) {
+                              final IPResolver ipResolver,
+                              final ThemeService themeService) {
         this.shopService = shopService;
         this.systemService = systemService;
         this.ipResolver = ipResolver;
+        this.themeService = themeService;
     }
 
     /**
@@ -91,7 +95,9 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
 
         ApplicationDirector.setCurrentDomain(serverDomainName);
         ApplicationDirector.setCurrentShop(shop);
+        ApplicationDirector.setCurrentCustomerShop(shop);
         ApplicationDirector.setShopperIPAddress(getRemoteIpAddr(servletRequest));
+        ApplicationDirector.setCurrentThemeChain(themeService.getThemeChainByShopId(shop.getShopId(), serverDomainName));
         ShopCodeContext.setShopCode(shop.getCode());
         ShopCodeContext.setShopId(shop.getShopId());
 
