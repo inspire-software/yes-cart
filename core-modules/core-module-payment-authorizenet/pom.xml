@@ -97,6 +97,12 @@
             <groupId>net.authorize</groupId>
             <artifactId>anet-java-sdk</artifactId>
             <version>1.9.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- ANET END -->
 
