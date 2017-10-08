@@ -142,6 +142,14 @@ public class DtoTaxConfigServiceImpl
 
                 }
 
+            } else {
+
+                entities = getService().getGenericDao().findRangeByCriteria(
+                        " where e.tax.taxId = ?1 order by e.countryCode, e.countryCode, e.productCode",
+                        page * pageSize, pageSize,
+                        taxId
+                );
+
             }
 
             fillDTOs(entities, dtos);

@@ -234,7 +234,11 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('ShopTaxesComponent refresh handler');
-    this.getFilteredTax();
+    if (this.viewMode == ShopTaxesComponent.CONFIGS) {
+      this.getFilteredTaxConfig();
+    } else {
+      this.getFilteredTax();
+    }
   }
 
   protected onTaxSelected(data:TaxVO) {
