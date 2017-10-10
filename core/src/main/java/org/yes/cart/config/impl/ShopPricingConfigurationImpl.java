@@ -65,7 +65,7 @@ public class ShopPricingConfigurationImpl extends AbstractShopConfigurationImpl 
             customise(shop.getCode(), shop.getShopId(), priceResolver);
             if (CollectionUtils.isNotEmpty(subs)) {
                 for (final Shop sub : subs) {
-                    customise(shop.getCode(), sub.getShopId(), priceResolver);
+                    customise(sub.getCode(), sub.getShopId(), priceResolver);
                 }
             }
         }
