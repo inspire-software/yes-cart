@@ -16,8 +16,10 @@
 
 package org.yes.cart.cluster.service.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.cluster.service.BackdoorService;
+import org.yes.cart.config.ConfigurationListener;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.service.domain.ProductService;
@@ -36,6 +38,8 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     private static final long serialVersionUID = 20130820L;
 
     private ProductService productService;
+
+    private List<ConfigurationListener> configurationListeners;
 
     /**
      * {@inheritDoc}
@@ -174,12 +178,34 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public void reloadConfigurations() {
+
+        if (CollectionUtils.isNotEmpty(this.configurationListeners)) {
+            for (final ConfigurationListener listener : this.configurationListeners) {
+                listener.reload();
+            }
+        }
+
+    }
+
+    /**
      * IoC. Set product service.
      *
      * @param productService product service to use.
      */
     public void setProductService(final ProductService productService) {
         this.productService = productService;
+    }
+
+    /**
+     * IoC. Set configuration listener.
+     *
+     * @param configurationListeners configuration listener.
+     */
+    public void setConfigurationListeners(final List<ConfigurationListener> configurationListeners) {
+        this.configurationListeners = configurationListeners;
     }
 
     @SuppressWarnings("unchecked")

@@ -11,6 +11,10 @@
         <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
       </form>
 
+      <button type="button" (click)="onReloadHandler()" class="btn btn-danger btn-circle btn-xl" title="{{ 'CLUSTER_CFG_REFRESH' | translate }}">
+        <i class="fa fa-gears"></i>
+      </button>
+
       <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
         <i class="fa fa-refresh"></i>
       </button>

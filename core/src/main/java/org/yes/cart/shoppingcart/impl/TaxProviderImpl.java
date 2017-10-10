@@ -56,15 +56,20 @@ public class TaxProviderImpl implements TaxProvider, ConfigurationRegistry<Strin
 
     /** {@inheritDoc} */
     public boolean supports(final Object configuration) {
-        return configuration instanceof TaxProvider;
+        return configuration instanceof TaxProvider ||
+                (configuration instanceof Class && TaxProvider.class.isAssignableFrom((Class<?>) configuration));
     }
 
     /** {@inheritDoc} */
     public void register(final String shopCode, final TaxProvider provider) {
 
-        LOG.info("Custom shop settings for {} Registering tax provider {}", shopCode, provider.getClass());
-
-        customTaxProviders.put(shopCode, provider);
+        if (provider != null) {
+            LOG.info("Custom shop settings for {} Registering tax provider {}", shopCode, provider.getClass());
+            customTaxProviders.put(shopCode, provider);
+        } else {
+            LOG.info("Custom shop settings for {} Registering tax provider DEFAULT", shopCode);
+            customTaxProviders.remove(shopCode);
+        }
 
     }
 }

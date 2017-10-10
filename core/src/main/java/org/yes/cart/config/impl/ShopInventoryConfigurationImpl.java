@@ -41,12 +41,10 @@ public class ShopInventoryConfigurationImpl extends AbstractShopConfigurationImp
 
         final ProductAvailabilityStrategy pas = determineConfiguration(properties, shop.getCode() + ".productAvailabilityStrategy", ProductAvailabilityStrategy.class);
 
-        if (pas != null) {
-            customise(shop.getCode(), shop.getShopId(), pas);
-            if (CollectionUtils.isNotEmpty(subs)) {
-                for (final Shop sub : subs) {
-                    customise(sub.getCode(), sub.getShopId(), pas);
-                }
+        customise(shop.getCode(), shop.getShopId(), ProductAvailabilityStrategy.class, pas);
+        if (CollectionUtils.isNotEmpty(subs)) {
+            for (final Shop sub : subs) {
+                customise(sub.getCode(), sub.getShopId(), ProductAvailabilityStrategy.class, pas);
             }
         }
     }

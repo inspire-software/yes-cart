@@ -27,13 +27,13 @@ import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.domain.vo.VoCacheInfo;
 import org.yes.cart.domain.vo.VoClusterNode;
 import org.yes.cart.domain.vo.VoJobStatus;
+import org.yes.cart.service.async.AsyncContextFactory;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.cluster.ClusterService;
 import org.yes.cart.service.cluster.ReindexService;
 import org.yes.cart.service.endpoint.SystemEndpointController;
 import org.yes.cart.service.vo.VoAssemblySupport;
-import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,6 +72,18 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
         final List<Node> cluster = clusterService.getClusterInfo(createCtx(param));
         return voAssemblySupport.assembleVos(VoClusterNode.class, Node.class, cluster);
     }
+
+
+    /** {@inheritDoc} */
+    public @ResponseBody
+    List<VoClusterNode> reloadConfigurations() throws Exception {
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
+        clusterService.reloadConfigurations(createCtx(param));
+        evictAllCache();
+        return getClusterInfo();
+    }
+
 
     /** {@inheritDoc} */
     public @ResponseBody

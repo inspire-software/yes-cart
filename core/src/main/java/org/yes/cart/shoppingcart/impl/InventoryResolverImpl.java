@@ -90,16 +90,20 @@ public class InventoryResolverImpl implements InventoryResolver, ConfigurationRe
 
     /** {@inheritDoc} */
     public boolean supports(final Object configuration) {
-        return configuration instanceof InventoryResolver;
+        return configuration instanceof InventoryResolver ||
+                (configuration instanceof Class && InventoryResolver.class.isAssignableFrom((Class<?>) configuration));
     }
 
     /** {@inheritDoc} */
     public void register(final String warehouseCode, final InventoryResolver provider) {
 
-        LOG.info("Custom shop settings for {} Registering inventory resolver {}", warehouseCode, provider.getClass());
-
-        customInventoryResolvers.put(warehouseCode, provider);
-
+        if (provider != null) {
+            LOG.info("Custom shop settings for {} Registering inventory resolver {}", warehouseCode, provider.getClass());
+            customInventoryResolvers.put(warehouseCode, provider);
+        } else {
+            LOG.info("Custom shop settings for {} Registering inventory resolver DEFAULT", warehouseCode);
+            customInventoryResolvers.remove(warehouseCode);
+        }
     }
 
 

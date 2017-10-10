@@ -78,15 +78,20 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
 
     /** {@inheritDoc} */
     public boolean supports(final Object configuration) {
-        return configuration instanceof ProductAvailabilityStrategy;
+        return configuration instanceof ProductAvailabilityStrategy ||
+                (configuration instanceof Class && ProductAvailabilityStrategy.class.isAssignableFrom((Class<?>) configuration));
     }
 
     /** {@inheritDoc} */
     public void register(final Long shopCode, final ProductAvailabilityStrategy strategy) {
 
-        LOG.info("Custom shop settings for {} Registering availability strategy {}", shopCode, strategy.getClass());
-
-        customAvailabilityStrategies.put(shopCode, strategy);
+        if (strategy != null) {
+            LOG.info("Custom shop settings for {} Registering availability strategy {}", shopCode, strategy.getClass());
+            customAvailabilityStrategies.put(shopCode, strategy);
+        } else {
+            LOG.info("Custom shop settings for {} Registering availability strategy DEFAULT", shopCode);
+            customAvailabilityStrategies.remove(shopCode);
+        }
 
     }
 

@@ -131,4 +131,9 @@ public interface BackdoorService {
      */
     List<Object[]> luceneQuery(String query);
 
+    /**
+     * Reload system configurations.
+     */
+    void reloadConfigurations();
+
 }

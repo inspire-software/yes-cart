@@ -25,6 +25,9 @@ import org.yes.cart.cluster.node.Node;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.node.RspMessage;
 import org.yes.cart.cluster.node.impl.ContextRspMessageImpl;
+import org.yes.cart.cluster.service.AlertDirector;
+import org.yes.cart.cluster.service.BackdoorService;
+import org.yes.cart.cluster.service.CacheDirector;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
@@ -32,11 +35,7 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.cluster.ClusterService;
-import org.yes.cart.cluster.service.AlertDirector;
-import org.yes.cart.cluster.service.BackdoorService;
-import org.yes.cart.cluster.service.CacheDirector;
 
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -404,6 +403,33 @@ public class ClusterServiceImpl implements ClusterService {
         return Collections.emptyList();
 
     }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public void reloadConfigurations(final AsyncContext context) {
+
+        final List<Node> cluster = nodeService.getSfNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            targets.add(node.getId());
+        }
+
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                "BackdoorService.reloadConfigurations",
+                null,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        localBackdoorService.reloadConfigurations();
+
+    }
+
 
     /**
      * {@inheritDoc}

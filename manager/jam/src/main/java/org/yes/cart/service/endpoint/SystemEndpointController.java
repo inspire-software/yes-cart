@@ -47,6 +47,16 @@ public interface SystemEndpointController {
     @ResponseBody
     List<VoClusterNode> getClusterInfo() throws Exception;
 
+
+    /**
+     * Reload system configurations on all nodes.
+     */
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/reloadconfigurations", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoClusterNode> reloadConfigurations() throws Exception;
+
+
     /**
      * Execute sql and return result.
      * DML operation also allowed, in this case result has quantity of affected rows.
@@ -138,6 +148,7 @@ public interface SystemEndpointController {
     @RequestMapping(value = "/cache/statsoff/{name}", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoCacheInfo> disableStats(@PathVariable("name") String name) throws Exception;
+
 
     /**
      * Warm up all storefront servers.

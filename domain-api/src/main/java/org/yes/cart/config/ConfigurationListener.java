@@ -24,6 +24,11 @@ package org.yes.cart.config;
  * Date: 09/07/2017
  * Time: 16:45
  */
-public interface ShopConfiguration {
+public interface ConfigurationListener {
+
+    /**
+     * Reload system configurations
+     */
+    void reload();
 
 }

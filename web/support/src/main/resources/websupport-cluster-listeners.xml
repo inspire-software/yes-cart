@@ -60,6 +60,13 @@
                 <property name="systemService" ref="systemService"/>
                 <property name="warmUpService" ref="warmUpService"/>
                 <property name="nodeService" ref="nodeService"/>
+                <property name="configurationListeners">
+                    <list>
+                        <ref bean="shopInventoryConfiguration"/>
+                        <ref bean="shopPricingConfiguration"/>
+                        <ref bean="warehouseInventoryConfiguration"/>
+                    </list>
+                </property>
                 <lookup-method name="getSelf" bean="backDoor"/>
             </bean>
         </property>

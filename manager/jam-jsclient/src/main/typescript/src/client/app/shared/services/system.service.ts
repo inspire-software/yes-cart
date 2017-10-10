@@ -138,6 +138,20 @@ export class SystemService {
 
 
   /**
+   * Reload system configurations and evict all cache.
+   * @returns {Observable<R>}
+   */
+  reloadConfigurations() {
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/reloadconfigurations', null, options)
+      .map(res => <ClusterNodeVO[]> this.json(res))
+      .catch(this.handleError);
+  }
+
+
+  /**
    * Get index job info.
    * @param token job token
    * @returns {Observable<R>}

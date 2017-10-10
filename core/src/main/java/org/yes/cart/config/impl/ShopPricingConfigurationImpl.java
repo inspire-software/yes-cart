@@ -43,30 +43,24 @@ public class ShopPricingConfigurationImpl extends AbstractShopConfigurationImpl 
 
         final TaxProvider taxProvider = determineConfiguration(properties, shop.getCode() + ".taxProvider", TaxProvider.class);
 
-        if (taxProvider != null) {
-            customise(shop.getCode(), shop.getCode(), taxProvider);
-        }
+        customise(shop.getCode(), shop.getCode(), TaxProvider.class, taxProvider);
     }
 
     void registerCustomPricingPolicyProvider(final Shop shop, final List<Shop> subs, final Properties properties) {
 
         final PricingPolicyProvider pricingPolicyProvider = determineConfiguration(properties, shop.getCode() + ".pricingPolicyProvider", PricingPolicyProvider.class);
 
-        if (pricingPolicyProvider != null) {
-            customise(shop.getCode(), shop.getCode(), pricingPolicyProvider);
-        }
+        customise(shop.getCode(), shop.getCode(), PricingPolicyProvider.class, pricingPolicyProvider);
     }
 
     void registerCustomPriceResolver(final Shop shop, final List<Shop> subs, final Properties properties) {
 
         final PriceResolver priceResolver = determineConfiguration(properties, shop.getCode() + ".priceResolver", PriceResolver.class);
 
-        if (priceResolver != null) {
-            customise(shop.getCode(), shop.getShopId(), priceResolver);
-            if (CollectionUtils.isNotEmpty(subs)) {
-                for (final Shop sub : subs) {
-                    customise(sub.getCode(), sub.getShopId(), priceResolver);
-                }
+        customise(shop.getCode(), shop.getShopId(), PriceResolver.class, priceResolver);
+        if (CollectionUtils.isNotEmpty(subs)) {
+            for (final Shop sub : subs) {
+                customise(sub.getCode(), sub.getShopId(), PriceResolver.class, priceResolver);
             }
         }
     }

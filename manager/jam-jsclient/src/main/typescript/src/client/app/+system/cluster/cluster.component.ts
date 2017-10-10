@@ -95,6 +95,11 @@ export class ClusterComponent implements OnInit {
     this.getClusterInfo();
   }
 
+  protected onReloadHandler() {
+    LogUtil.debug('ClusterComponent reload handler');
+    this.reloadConfigurations();
+  }
+
   protected onFilterChange() {
 
     this.delayedFiltering.delay();
@@ -143,6 +148,25 @@ export class ClusterComponent implements OnInit {
     });
 
   }
+
+
+  private reloadConfigurations() {
+    LogUtil.debug('ClusterComponent reload configurations');
+
+    this.loading = true;
+    var _sub:any = this._systemService.reloadConfigurations().subscribe(cluster => {
+
+      LogUtil.debug('ClusterComponent cluster', cluster);
+      this.cluster = cluster;
+      this.selectedRow = null;
+      this.filterCluster();
+      this.loading = false;
+      _sub.unsubscribe();
+
+    });
+
+  }
+
 
   private filterCluster() {
     if (this.clusterFilter) {

@@ -55,9 +55,9 @@ public abstract class AbstractShopConfigurationImpl extends AbstractConfiguratio
 
     /**
      * Perform configurations necessary.
-     *  @param shop shop
+     * @param shop shop
      * @param subs its subs (if any)
-     * @param properties
+     * @param properties configuration properties
      */
     protected abstract void doConfigurations(final Shop shop, final List<Shop> subs, final Properties properties);
 

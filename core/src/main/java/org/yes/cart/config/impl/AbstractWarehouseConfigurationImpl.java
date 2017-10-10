@@ -56,6 +56,7 @@ public abstract class AbstractWarehouseConfigurationImpl extends AbstractConfigu
      * Perform configurations necessary.
      *
      * @param warehouse warehouse
+     * @param properties configuration properties
      */
     protected abstract void doConfigurations(final Warehouse warehouse, final Properties properties);
 

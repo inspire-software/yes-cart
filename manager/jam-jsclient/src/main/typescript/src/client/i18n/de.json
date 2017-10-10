@@ -373,9 +373,10 @@
   "CACHE_SIZE_DISK": "Disk Grösse",
 
   "CLUSTER_ID": "ID",
-  "CLUSTER_TYPE": "Type",
+  "CLUSTER_TYPE": "Art",
   "CLUSTER_CONFIG": "Config",
-  "CLUSTER_FT_DISABLED": "FT Updates",
+  "CLUSTER_FT_DISABLED": "FT Aktualisierungen",
+  "CLUSTER_CFG_REFRESH": "Systemkonfigurationen neu laden",
 
   "REINDEX_MESSAGE": "Die Neu-Indexierung zum Update der Produkte Indizes läuft im Hintergrund ab. Das kann ein paar Minuten dauern. Der Update Status wird alle 15 Sekunden geprüft.",
   "REINDEX_COMPLETED_OK": "Indexierung ausgeführt",

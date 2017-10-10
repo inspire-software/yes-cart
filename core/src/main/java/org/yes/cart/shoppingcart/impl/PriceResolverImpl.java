@@ -65,16 +65,20 @@ public class PriceResolverImpl implements PriceResolver, ConfigurationRegistry<L
 
     /** {@inheritDoc} */
     public boolean supports(final Object configuration) {
-        return configuration instanceof PriceResolver;
+        return configuration instanceof PriceResolver ||
+                (configuration instanceof Class && PriceResolver.class.isAssignableFrom((Class<?>) configuration));
     }
 
     /** {@inheritDoc} */
     public void register(final Long shopCode, final PriceResolver provider) {
 
-        LOG.info("Custom shop settings for {} Registering pricing resolver {}", shopCode, provider.getClass());
-
-        customPriceResolvers.put(shopCode, provider);
-
+        if (provider != null) {
+            LOG.info("Custom shop settings for {} Registering pricing resolver {}", shopCode, provider.getClass());
+            customPriceResolvers.put(shopCode, provider);
+        } else {
+            LOG.info("Custom shop settings for {} Registering pricing resolver DEFAULT", shopCode);
+            customPriceResolvers.remove(shopCode);
+        }
     }
 
 

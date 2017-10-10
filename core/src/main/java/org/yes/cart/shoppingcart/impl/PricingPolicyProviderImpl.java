@@ -59,15 +59,20 @@ public class PricingPolicyProviderImpl implements PricingPolicyProvider, Configu
 
     /** {@inheritDoc} */
     public boolean supports(final Object configuration) {
-        return configuration instanceof PricingPolicyProvider;
+        return configuration instanceof PricingPolicyProvider ||
+                (configuration instanceof Class && PricingPolicyProvider.class.isAssignableFrom((Class<?>) configuration));
     }
 
     /** {@inheritDoc} */
     public void register(final String shopCode, final PricingPolicyProvider provider) {
 
-        LOG.info("Custom shop settings for {} Registering pricing provider {}", shopCode, provider.getClass());
-
-        customPricingPolicyProviders.put(shopCode, provider);
+        if (provider != null) {
+            LOG.info("Custom shop settings for {} Registering pricing provider {}", shopCode, provider.getClass());
+            customPricingPolicyProviders.put(shopCode, provider);
+        } else {
+            LOG.info("Custom shop settings for {} Registering pricing provider DEFAULT", shopCode);
+            customPricingPolicyProviders.remove(shopCode);
+        }
 
     }
 }

@@ -16,6 +16,7 @@
 
 package org.yes.cart.cluster.service.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -28,6 +29,7 @@ import org.yes.cart.cluster.node.MessageListener;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.service.BackdoorService;
 import org.yes.cart.cluster.service.WarmUpService;
+import org.yes.cart.config.ConfigurationListener;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.domain.entity.Product;
@@ -68,6 +70,8 @@ public class BackdoorServiceImpl implements BackdoorService {
     private WarmUpService warmUpService;
 
     private NodeService nodeService;
+
+    private List<ConfigurationListener> configurationListeners;
 
     /*
      * Once a product is reindexed we need to flush all cached information
@@ -289,6 +293,20 @@ public class BackdoorServiceImpl implements BackdoorService {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public void reloadConfigurations() {
+
+        if (CollectionUtils.isNotEmpty(this.configurationListeners)) {
+            for (final ConfigurationListener listener : this.configurationListeners) {
+                listener.reload();
+            }
+        }
+
+    }
+
+
+    /**
      * IoC. node service
      *
      * @param nodeService node service to use
@@ -413,6 +431,13 @@ public class BackdoorServiceImpl implements BackdoorService {
                 }
             }
         });
+        this.nodeService.subscribe("BackdoorService.reloadConfigurations", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                BackdoorServiceImpl.this.reloadConfigurations();
+                return "OK";
+            }
+        });
     }
 
     /**
@@ -449,6 +474,16 @@ public class BackdoorServiceImpl implements BackdoorService {
      */
     public void setProductIndexCaches(final CacheBundleHelper productIndexCaches) {
         this.productIndexCaches = productIndexCaches;
+    }
+
+
+    /**
+     * IoC. Set configuration listener.
+     *
+     * @param configurationListeners configuration listener.
+     */
+    public void setConfigurationListeners(final List<ConfigurationListener> configurationListeners) {
+        this.configurationListeners = configurationListeners;
     }
 
     @SuppressWarnings("unchecked")

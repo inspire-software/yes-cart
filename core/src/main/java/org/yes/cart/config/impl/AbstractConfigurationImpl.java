@@ -24,8 +24,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.yes.cart.config.ConfigurationListener;
 import org.yes.cart.config.ConfigurationRegistry;
-import org.yes.cart.config.ShopConfiguration;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.service.domain.SystemService;
 
@@ -38,7 +38,7 @@ import java.util.Properties;
  * Date: 07/10/2017
  * Time: 16:47
  */
-public abstract class AbstractConfigurationImpl implements ShopConfiguration, ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
+public abstract class AbstractConfigurationImpl implements ConfigurationListener, ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractConfigurationImpl.class);
 
@@ -53,24 +53,31 @@ public abstract class AbstractConfigurationImpl implements ShopConfiguration, Ap
 
     /** {@inheritDoc} */
     @Override
-    public final void onApplicationEvent(final ContextRefreshedEvent contextRefreshedEvent) {
+    public final void reload() {
 
-        LOG.info("Loading custom configurations {} ...", this.getClass());
+        LOG.info("Loading custom configurations {} ...", this);
 
         final String cfg = this.systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_EXTENSION_CFG_PROPERTIES);
 
-        if (StringUtils.isNotBlank(cfg)) {
-
-            try {
-                final Properties properties = new Properties();
+        try {
+            final Properties properties = new Properties();
+            if (StringUtils.isNotBlank(cfg)) {
                 properties.load(new StringReader(cfg));
-                this.onConfigureEvent(properties);
-            } catch (Exception exp) {
-                LOG.error("Loading custom configurations ... error reading configurations", exp);
             }
+            this.onConfigureEvent(properties);
+        } catch (Exception exp) {
+            LOG.error("Loading custom configurations ... error reading configurations", exp);
         }
 
-        LOG.info("Loading custom configurations {} ... completed", this.getClass());
+        LOG.info("Loading custom configurations {} ... completed", this);
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public final void onApplicationEvent(final ContextRefreshedEvent contextRefreshedEvent) {
+
+        this.reload();
 
     }
 
@@ -96,7 +103,11 @@ public abstract class AbstractConfigurationImpl implements ShopConfiguration, Ap
         final String cfg = properties.getProperty(key);
         if (StringUtils.isNotBlank(cfg)) {
             try {
-                return this.applicationContext.getBean(cfg.trim(), clazz);
+                if (this.applicationContext.containsBean(cfg.trim())) {
+                    return this.applicationContext.getBean(cfg.trim(), clazz);
+                } else {
+                    LOG.error("Loading custom configurations ... error retrieving bean " + cfg);
+                }
             } catch (Exception exp) {
                 LOG.error("Loading custom configurations ... error retrieving bean " + cfg, exp);
             }
@@ -110,17 +121,16 @@ public abstract class AbstractConfigurationImpl implements ShopConfiguration, Ap
      *
      * @param ref reference, e.g. code
      * @param key shop key
+     * @param configurationType configuration type
      * @param configuration configuration to set
      */
-    protected void customise(final String ref, final Object key, final Object configuration) {
+    protected void customise(final String ref, final Object key, final Class configurationType, final Object configuration) {
 
-        if (configuration != null) {
-            final Map<String, ConfigurationRegistry> registries = this.applicationContext.getBeansOfType(ConfigurationRegistry.class);
-            for (final ConfigurationRegistry registry : registries.values()) {
-                if (registry.supports(configuration)) {
-                    registry.register(key, configuration);
-                    LOG.info("Custom shop configurations for {} ... registering {}", ref, configuration);
-                }
+        final Map<String, ConfigurationRegistry> registries = this.applicationContext.getBeansOfType(ConfigurationRegistry.class);
+        for (final ConfigurationRegistry registry : registries.values()) {
+            if (registry.supports(configurationType)) {
+                registry.register(key, configuration);
+                LOG.info("Custom shop configurations for {} ... registering {}", ref, configuration);
             }
         }
 

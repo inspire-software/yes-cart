@@ -41,6 +41,13 @@
         <property name="target">
             <bean class="org.yes.cart.cluster.service.impl.LocalBackdoorServiceImpl">
                 <property name="productService" ref="productService"/>
+                <property name="configurationListeners">
+                    <list>
+                        <ref bean="shopInventoryConfiguration"/>
+                        <ref bean="shopPricingConfiguration"/>
+                        <ref bean="warehouseInventoryConfiguration"/>
+                    </list>
+                </property>
             </bean>
         </property>
         <property name="transactionAttributes">

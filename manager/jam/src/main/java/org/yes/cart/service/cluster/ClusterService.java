@@ -149,6 +149,13 @@ public interface ClusterService {
     List<Object[]> luceneQuery(AsyncContext context, String query, String node);
 
     /**
+     * Reload system configurations.
+     *
+     * @param context web service context
+     */
+    void reloadConfigurations(AsyncContext context);
+
+    /**
      * Get cache information.
      *
      * @param context web service context
