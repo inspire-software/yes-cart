@@ -17,6 +17,8 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.AttributeDTOImpl;
@@ -163,27 +165,30 @@ public class DtoAttributeServiceImpl
     /** {@inheritDoc}  */
     public List<AttributeDTO> findAttributesBy(final String attributeGroupCode, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Pair<String, String> byCode = ComplexSearchUtils.checkSpecialSearch(filter, CODE);
-        if (byCode != null) {
-            final List<Attribute> attr = service.getGenericDao().findByCriteria(
-                    " where lower(e.code) like ?1 order by e.name",
-                    HQLUtils.criteriaIeq(byCode.getSecond())
-            );
-            if (attr != null) {
-                final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>();
-                fillDTOs(attr, attributesDTO);
-                return attributesDTO;
+        List<Attribute> attrs = Collections.emptyList();
+        if (StringUtils.isNotBlank(filter)) {
+            final Pair<String, String> byCode = ComplexSearchUtils.checkSpecialSearch(filter, CODE);
+            if (byCode != null) {
+                attrs = service.getGenericDao().findByCriteria(
+                        " where lower(e.code) like ?1 order by e.name",
+                        HQLUtils.criteriaIeq(byCode.getSecond())
+                );
+            } else {
+                attrs = service.getGenericDao().findRangeByCriteria(
+                        " where e.attributeGroup.code = ?1 and (lower(e.code) like ?2 or lower(e.name) like ?2 or lower(e.description) like ?2) order by e.name",
+                        page * pageSize, pageSize,
+                        attributeGroupCode,
+                        HQLUtils.criteriaIlikeAnywhere(filter)
+                );
             }
-            return Collections.emptyList();
+        } else {
+            attrs = service.getGenericDao().findRangeByCriteria(
+                    " where e.attributeGroup.code = ?1 order by e.name",
+                    page * pageSize, pageSize,
+                    attributeGroupCode
+            );
         }
-
-        final List<Attribute> attrs = service.getGenericDao().findRangeByCriteria(
-                " where e.attributeGroup.code = ?1 and (lower(e.code) like ?2 or lower(e.name) like ?2 or lower(e.description) like ?2) order by e.name",
-                page * pageSize, pageSize,
-                attributeGroupCode,
-                HQLUtils.criteriaIlikeAnywhere(filter)
-        );
-        if (attrs != null) {
+        if (CollectionUtils.isNotEmpty(attrs)) {
             final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attrs.size());
             fillDTOs(attrs, attributesDTO);
             return attributesDTO;
