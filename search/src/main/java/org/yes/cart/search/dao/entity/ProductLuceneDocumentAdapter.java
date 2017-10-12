@@ -99,6 +99,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 addSimpleField(document, PRODUCT_ID_FIELD, String.valueOf(entity.getProductId()));
 
                 addSimpleField(document, PRODUCT_CODE_FIELD, entity.getCode());
+                addSearchField(document, PRODUCT_CODE_FIELD_SEARCH, entity.getCode());
                 addSortField(document, PRODUCT_CODE_SORT_FIELD, entity.getCode());
                 addStemField(document, PRODUCT_CODE_STEM_FIELD, entity.getCode());
 
@@ -106,6 +107,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
                 for (final ProductSku sku : entity.getSku()) {
                     addSimpleField(document, SKU_PRODUCT_CODE_FIELD, sku.getCode());
+                    addSearchField(document, SKU_PRODUCT_CODE_FIELD_SEARCH, sku.getCode());
                     addSimpleField(document, SKU_ID_FIELD, String.valueOf(sku.getSkuId()));
                     addStemFields(document, SKU_PRODUCT_CODE_STEM_FIELD, sku.getCode(), sku.getManufacturerCode(), sku.getManufacturerPartCode(), sku.getSupplierCode());
                     addSearchField(document, PRODUCT_NAME_FIELD, sku.getName());
@@ -119,6 +121,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 addSortField(document, SKU_PRODUCT_CODE_SORT_FIELD, entity.getDefaultSku().getCode());
 
                 addSimpleField(document, PRODUCT_MANUFACTURER_CODE_FIELD, entity.getManufacturerCode());
+                addSearchField(document, PRODUCT_MANUFACTURER_CODE_FIELD_SEARCH, entity.getManufacturerCode());
                 addSortField(document, PRODUCT_MANUFACTURER_CODE_SORT_FIELD, entity.getManufacturerCode());
                 addStemFields(document, PRODUCT_MANUFACTURER_CODE_STEM_FIELD, entity.getManufacturerCode(), entity.getManufacturerPartCode(), entity.getSupplierCode());
 
@@ -155,6 +158,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                     }
                 }
 
+                addSearchField(document, BRAND_FIELD_SEARCH, entity.getBrand().getName());
                 addSimpleField(document, BRAND_FIELD, entity.getBrand().getName());
                 addFacetField(document, "facet_brand", entity.getBrand().getName());;
                 addStemField(document, BRAND_STEM_FIELD, entity.getBrand().getName());

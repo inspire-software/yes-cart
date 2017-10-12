@@ -69,11 +69,14 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
             addSimpleField(document, PRODUCT_ID_FIELD, String.valueOf(entity.getProduct().getProductId()));
 
             addSimpleField(document, SKU_PRODUCT_CODE_FIELD, entity.getCode());
+            addSearchField(document, SKU_PRODUCT_CODE_FIELD_SEARCH, entity.getCode());
             addSimpleField(document, SKU_PRODUCT_CODE_FIELD, entity.getBarCode());
+            addSearchField(document, SKU_PRODUCT_CODE_FIELD_SEARCH, entity.getBarCode());
             addSortField(document, SKU_PRODUCT_CODE_SORT_FIELD, entity.getCode());
             addStemFields(document, SKU_PRODUCT_CODE_STEM_FIELD, entity.getCode(), entity.getProduct().getCode());
 
             addSimpleField(document, SKU_PRODUCT_MANUFACTURER_CODE_FIELD, entity.getManufacturerCode());
+            addSearchField(document, SKU_PRODUCT_MANUFACTURER_CODE_FIELD_SEARCH, entity.getManufacturerCode());
             addSortField(document, SKU_PRODUCT_MANUFACTURER_CODE_SORT_FIELD, entity.getManufacturerCode());
             addStemFields(document, SKU_PRODUCT_MANUFACTURER_CODE_STEM_FIELD, entity.getManufacturerCode(), entity.getManufacturerPartCode(), entity.getSupplierCode());
 

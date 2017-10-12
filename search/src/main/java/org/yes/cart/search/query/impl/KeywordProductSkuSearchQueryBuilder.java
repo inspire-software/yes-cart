@@ -48,9 +48,9 @@ public class KeywordProductSkuSearchQueryBuilder extends AbstractKeywordSearchQu
         query.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_STEM_FIELD, escapedTerm, 1, 1f), BooleanClause.Occur.SHOULD);
 
         // product code matches (5/4~1) so that exact code match brings top result
-        query.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedTerm, 1,5f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD_SEARCH, escapedTerm, 1,5f), BooleanClause.Occur.SHOULD);
         query.add(createFuzzyQuery(SKU_PRODUCT_CODE_STEM_FIELD, escapedTerm, 1, 2f), BooleanClause.Occur.SHOULD);
-        query.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD, escapedTerm, 1, 5f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD_SEARCH, escapedTerm, 1, 5f), BooleanClause.Occur.SHOULD);
         query.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_STEM_FIELD, escapedTerm, 1,2f), BooleanClause.Occur.SHOULD);
 
         // attribute primary (4~1)

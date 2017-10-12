@@ -52,6 +52,8 @@ public class LuceneDocumentAdapterUtils {
     public static final String FIELD_OBJECT = "_OBJECT";
     public static final String FIELD_INDEXTIME = "_IDXTIME";
 
+    public static final int CHAR_THRESHOLD = 2;
+
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     static {
@@ -279,7 +281,7 @@ public class LuceneDocumentAdapterUtils {
     public static void addSearchField(final Document document, final String name, final String value) {
         if (value != null) {
             final String lower = value.toLowerCase();
-            for (final String part : SearchUtil.splitForSearch(lower,2)) {
+            for (final String part : SearchUtil.splitForSearch(lower,CHAR_THRESHOLD)) {
                 document.add(new StringField(name, part, Field.Store.NO));
             }
         }
@@ -296,7 +298,7 @@ public class LuceneDocumentAdapterUtils {
     public static void addSearchI18nField(final Document document, final String lang, final String name, final String value) {
         if (value != null) {
             final String lower = value.toLowerCase();
-            for (final String part : SearchUtil.splitForSearch(lower,2)) {
+            for (final String part : SearchUtil.splitForSearch(lower, CHAR_THRESHOLD)) {
                 document.add(new StringField(name, part, Field.Store.NO));
             }
             for (final String part : SearchUtil.analyseForSearch(lang, lower)) {

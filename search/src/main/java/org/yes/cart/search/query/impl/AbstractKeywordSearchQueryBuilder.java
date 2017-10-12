@@ -20,6 +20,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
+import org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
@@ -38,8 +39,6 @@ import java.util.List;
 public abstract class AbstractKeywordSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder<Query> {
 
     private final boolean fullStrictMatch;
-
-    private int minWordLength = 2;
 
     protected AbstractKeywordSearchQueryBuilder(final boolean fullStrictMatch) {
         this.fullStrictMatch = fullStrictMatch;
@@ -68,7 +67,7 @@ public abstract class AbstractKeywordSearchQueryBuilder extends AbstractSearchQu
 
         final String full = all.toString().toLowerCase();
 
-        final List<String> words = SearchUtil.splitForSearch(full, minWordLength);
+        final List<String> words = SearchUtil.splitForSearch(full, LuceneDocumentAdapterUtils.CHAR_THRESHOLD);
         if (CollectionUtils.isEmpty(words)) {
             return null;
         }
@@ -306,16 +305,6 @@ public abstract class AbstractKeywordSearchQueryBuilder extends AbstractSearchQu
 
         return null; // single words already tried in lvl2
 
-    }
-
-
-    /**
-     * Set minimum length of a searchable word.
-     *
-     * @param minWordLength min char length
-     */
-    public void setMinWordLength(final int minWordLength) {
-        this.minWordLength = minWordLength;
     }
 
 

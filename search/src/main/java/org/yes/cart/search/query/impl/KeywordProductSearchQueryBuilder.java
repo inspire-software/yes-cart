@@ -47,7 +47,7 @@ public class KeywordProductSearchQueryBuilder extends AbstractKeywordSearchQuery
         query.add(createTermQuery(PRODUCT_DISPLAYNAME_FIELD, escapedTerm, 3f), BooleanClause.Occur.SHOULD);
 
         // product brand weight (5) must be higher than name (e.g. "hp notebook" must show hp brand first)
-        query.add(createTermQuery(BRAND_FIELD, escapedTerm, 5f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(BRAND_FIELD_SEARCH, escapedTerm, 5f), BooleanClause.Occur.SHOULD);
 
         // category name weight (5~2) higher then name as names sometimes contains fuzzy terms (e.g. "notebook with usb")
         query.add(createFuzzyQuery(PRODUCT_CATEGORYNAME_FIELD, escapedTerm, 2, 5f), BooleanClause.Occur.SHOULD);
@@ -56,10 +56,10 @@ public class KeywordProductSearchQueryBuilder extends AbstractKeywordSearchQuery
         query.add(createFuzzyQuery(PRODUCT_TYPE_FIELD, escapedTerm, 2, 7f), BooleanClause.Occur.SHOULD);
 
         // product code matches (10) so that exact code match brings top result
-        query.add(createTermQuery(PRODUCT_CODE_FIELD, escapedTerm,  10f), BooleanClause.Occur.SHOULD);
-        query.add(createTermQuery(PRODUCT_MANUFACTURER_CODE_FIELD, escapedTerm, 10f), BooleanClause.Occur.SHOULD);
-        query.add(createTermQuery(SKU_PRODUCT_CODE_FIELD, escapedTerm, 10f), BooleanClause.Occur.SHOULD);
-        query.add(createTermQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD, escapedTerm, 10f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(PRODUCT_CODE_FIELD_SEARCH, escapedTerm,  10f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(PRODUCT_MANUFACTURER_CODE_FIELD_SEARCH, escapedTerm, 10f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(SKU_PRODUCT_CODE_FIELD_SEARCH, escapedTerm, 10f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD_SEARCH, escapedTerm, 10f), BooleanClause.Occur.SHOULD);
 
         // attribute primary (10)
         query.add(createTermQuery(ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD, escapedTerm, 10f), BooleanClause.Occur.SHOULD);
@@ -86,7 +86,7 @@ public class KeywordProductSearchQueryBuilder extends AbstractKeywordSearchQuery
         query.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_STEM_FIELD, escapedTerm, 1, 1f), BooleanClause.Occur.SHOULD);
 
         // product brand weight (5) must be higher than name (e.g. "hp notebook" must show hp brand first)
-        query.add(createTermQuery(BRAND_FIELD, escapedTerm, 5f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(BRAND_FIELD_SEARCH, escapedTerm, 5f), BooleanClause.Occur.SHOULD);
 
         // category name weight (5~2/1.5~1) higher then name as names sometimes contains fuzzy terms (e.g. "notebook with usb")
         query.add(createFuzzyQuery(PRODUCT_CATEGORYNAME_FIELD, escapedTerm, 2, 5f), BooleanClause.Occur.SHOULD);
@@ -97,17 +97,17 @@ public class KeywordProductSearchQueryBuilder extends AbstractKeywordSearchQuery
         query.add(createFuzzyQuery(PRODUCT_TYPE_STEM_FIELD, escapedTerm, 1, 2f), BooleanClause.Occur.SHOULD);
 
         // product code matches (10/7~1/2~1) so that exact code match brings top result
-        query.add(createTermQuery(PRODUCT_CODE_FIELD, escapedTerm,  10f), BooleanClause.Occur.SHOULD);
-        query.add(createFuzzyQuery(PRODUCT_CODE_FIELD, escapedTerm,  1,7f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(PRODUCT_CODE_FIELD_SEARCH, escapedTerm,  10f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(PRODUCT_CODE_FIELD_SEARCH, escapedTerm,  1,7f), BooleanClause.Occur.SHOULD);
         query.add(createFuzzyQuery(PRODUCT_CODE_STEM_FIELD, escapedTerm, 1, 2f), BooleanClause.Occur.SHOULD);
-        query.add(createTermQuery(PRODUCT_MANUFACTURER_CODE_FIELD, escapedTerm, 10f), BooleanClause.Occur.SHOULD);
-        query.add(createFuzzyQuery(PRODUCT_MANUFACTURER_CODE_FIELD, escapedTerm, 1, 7f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(PRODUCT_MANUFACTURER_CODE_FIELD_SEARCH, escapedTerm, 10f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(PRODUCT_MANUFACTURER_CODE_FIELD_SEARCH, escapedTerm, 1, 7f), BooleanClause.Occur.SHOULD);
         query.add(createFuzzyQuery(PRODUCT_MANUFACTURER_CODE_STEM_FIELD, escapedTerm, 1, 2f), BooleanClause.Occur.SHOULD);
-        query.add(createTermQuery(SKU_PRODUCT_CODE_FIELD, escapedTerm, 10f), BooleanClause.Occur.SHOULD);
-        query.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedTerm, 1,7f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(SKU_PRODUCT_CODE_FIELD_SEARCH, escapedTerm, 10f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD_SEARCH, escapedTerm, 1,7f), BooleanClause.Occur.SHOULD);
         query.add(createFuzzyQuery(SKU_PRODUCT_CODE_STEM_FIELD, escapedTerm, 1, 2f), BooleanClause.Occur.SHOULD);
-        query.add(createTermQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD, escapedTerm, 10f), BooleanClause.Occur.SHOULD);
-        query.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD, escapedTerm, 1, 7f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD_SEARCH, escapedTerm, 10f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD_SEARCH, escapedTerm, 1, 7f), BooleanClause.Occur.SHOULD);
         query.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_STEM_FIELD, escapedTerm, 1,2f), BooleanClause.Occur.SHOULD);
 
         // attribute primary (10/7~1)
@@ -137,7 +137,7 @@ public class KeywordProductSearchQueryBuilder extends AbstractKeywordSearchQuery
         query.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_STEM_FIELD, escapedStem, 1, 1f), BooleanClause.Occur.SHOULD);
 
         // product brand weight (5) must be higher than name (e.g. "hp notebook" must show hp brand first)
-        query.add(createTermQuery(BRAND_FIELD, escapedStem, 5f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(BRAND_FIELD_SEARCH, escapedStem, 5f), BooleanClause.Occur.SHOULD);
 
         // category name weight (5/1.5~1) higher then name as names sometimes contains fuzzy terms (e.g. "notebook with usb")
         query.add(createTermQuery(PRODUCT_CATEGORYNAME_FIELD, escapedStem, 5f), BooleanClause.Occur.SHOULD);
@@ -148,13 +148,13 @@ public class KeywordProductSearchQueryBuilder extends AbstractKeywordSearchQuery
         query.add(createFuzzyQuery(PRODUCT_TYPE_STEM_FIELD, escapedStem, 1, 1f), BooleanClause.Occur.SHOULD);
 
         // product code matches (10/2~1) so that exact code match brings top result
-        query.add(createTermQuery(PRODUCT_CODE_FIELD, escapedStem, 10f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(PRODUCT_CODE_FIELD_SEARCH, escapedStem, 10f), BooleanClause.Occur.SHOULD);
         query.add(createFuzzyQuery(PRODUCT_CODE_STEM_FIELD, escapedStem, 1, 2f), BooleanClause.Occur.SHOULD);
-        query.add(createTermQuery(PRODUCT_MANUFACTURER_CODE_FIELD, escapedStem, 10f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(PRODUCT_MANUFACTURER_CODE_FIELD_SEARCH, escapedStem, 10f), BooleanClause.Occur.SHOULD);
         query.add(createFuzzyQuery(PRODUCT_MANUFACTURER_CODE_STEM_FIELD, escapedStem, 1, 2f), BooleanClause.Occur.SHOULD);
-        query.add(createTermQuery(SKU_PRODUCT_CODE_FIELD, escapedStem, 10f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(SKU_PRODUCT_CODE_FIELD_SEARCH, escapedStem, 10f), BooleanClause.Occur.SHOULD);
         query.add(createFuzzyQuery(SKU_PRODUCT_CODE_STEM_FIELD, escapedStem, 1, 2f), BooleanClause.Occur.SHOULD);
-        query.add(createTermQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD, escapedStem, 10f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD_SEARCH, escapedStem, 10f), BooleanClause.Occur.SHOULD);
         query.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_STEM_FIELD, escapedStem, 1,2f), BooleanClause.Occur.SHOULD);
 
         // attribute primary (10/7~1)

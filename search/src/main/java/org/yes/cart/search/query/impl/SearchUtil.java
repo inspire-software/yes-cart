@@ -43,7 +43,7 @@ public class SearchUtil {
      * Tokenize search phraze and clean from empty strings.
      *
      * @param phraze optional phraze
-     * @param charThreshold character threshold. e.g. if set to 3 will skip words less than 3 characters
+     * @param charThreshold character threshold for single words. e.g. if set to 3 will skip words less than 3 characters
      *
      * @return list of tokens, that found in phraze.
      */
@@ -233,6 +233,5 @@ public class SearchUtil {
         }
         return "0";
     }
-
 
 }
