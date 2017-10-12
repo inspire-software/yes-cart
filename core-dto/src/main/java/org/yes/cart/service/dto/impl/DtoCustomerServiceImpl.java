@@ -371,7 +371,7 @@ public class DtoCustomerServiceImpl
 
                 // time search
                 entities = service.getGenericDao().findRangeByCriteria(
-                        " where (?1 is null or e.orderTimestamp >= ?1) and (?2 is null or e.orderTimestamp >= ?2) order by e.orderTimestamp desc",
+                        " where (?1 is null or e.createdTimestamp >= ?1) and (?2 is null or e.createdTimestamp >= ?2) order by e.createdTimestamp desc",
                         page * pageSize, pageSize,
                         from, to
                 );
@@ -379,7 +379,7 @@ public class DtoCustomerServiceImpl
             } else {
 
                 entities = service.getGenericDao().findRangeByCriteria(
-                        " where lower(e.email) like ?1 or lower(e.firstname) like ?1 or lower(e.lastname) like ?1 or lower(e.customerType) = ?2 or lower(e.pricingPolicy) = ?2 order by e.orderTimestamp desc, e.lastname, e.email",
+                        " where lower(e.email) like ?1 or lower(e.firstname) like ?1 or lower(e.lastname) like ?1 or lower(e.customerType) = ?2 or lower(e.pricingPolicy) = ?2 order by e.createdTimestamp desc, e.lastname, e.email",
                         page * pageSize, pageSize,
                         HQLUtils.criteriaIlikeAnywhere(filter),
                         HQLUtils.criteriaIeq(filter)
@@ -390,7 +390,7 @@ public class DtoCustomerServiceImpl
         } else {
 
             entities = service.getGenericDao().findRangeByCriteria(
-                    " order by e.orderTimestamp desc, e.lastname, e.email",
+                    " order by e.createdTimestamp desc, e.lastname, e.email",
                     page * pageSize, pageSize
             );
 
