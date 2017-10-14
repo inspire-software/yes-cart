@@ -68,6 +68,9 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
         list = dtoService.findBy(10L,"@SHOIP1_mail_customer-registered.html", 0, 10);
         assertEquals(1, list.size());
 
+        list = dtoService.findBy(10L,null, 0, 1);
+        assertTrue(list.size() > 1); // TODO: fix this, there is a check to find content belongs to shop, so page size cannot be applied
+
     }
 
 

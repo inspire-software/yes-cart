@@ -262,49 +262,55 @@ public class DtoCategoryServiceImpl
 
         final List<CategoryDTO> categoriesDTO = new ArrayList<CategoryDTO>(pageSize);
 
-        final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(filter, PARENT_OR_URI);
+        if (StringUtils.isNotBlank(filter)) {
+            final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(filter, PARENT_OR_URI);
 
-        if (parentOrUri == null) {
+            if (parentOrUri == null) {
 
-            fillDTOs(categoryService.findBy(filter, filter, filter, page, pageSize), categoriesDTO);
+                fillDTOs(categoryService.findBy(filter, filter, filter, page, pageSize), categoriesDTO);
 
-        } else {
+            } else {
 
-            if ("@".equals(parentOrUri.getFirst())) {
+                if ("@".equals(parentOrUri.getFirst())) {
 
-                fillDTOs(categoryService.findBy(null, null, parentOrUri.getSecond(), page, pageSize), categoriesDTO);
+                    fillDTOs(categoryService.findBy(null, null, parentOrUri.getSecond(), page, pageSize), categoriesDTO);
 
-            } else if ("^".equals(parentOrUri.getFirst())) {
+                } else if ("^".equals(parentOrUri.getFirst())) {
 
-                final List<Category> parents = categoryService.findBy(parentOrUri.getSecond(), parentOrUri.getSecond(), parentOrUri.getSecond(), page, pageSize);
+                    final List<Category> parents = categoryService.findBy(parentOrUri.getSecond(), parentOrUri.getSecond(), parentOrUri.getSecond(), page, pageSize);
 
-                if (!parents.isEmpty()) {
+                    if (!parents.isEmpty()) {
 
-                    final Set<Long> dedup = new HashSet<Long>();
-                    final List<Category> parentsWithChildren = new ArrayList<Category>();
-                    for (final Category parent : parents) {
+                        final Set<Long> dedup = new HashSet<Long>();
+                        final List<Category> parentsWithChildren = new ArrayList<Category>();
+                        for (final Category parent : parents) {
 
-                        if (!dedup.contains(parent.getCategoryId())) {
-                            parentsWithChildren.add(parent);
-                            dedup.add(parent.getCategoryId());
-                        }
-                        for (final Category child : categoryService.findChildCategoriesWithAvailability(parent.getCategoryId(), false)) {
-                            if (!dedup.contains(child.getCategoryId())) {
-                                parentsWithChildren.add(child);
-                                dedup.add(child.getCategoryId());
+                            if (!dedup.contains(parent.getCategoryId())) {
+                                parentsWithChildren.add(parent);
+                                dedup.add(parent.getCategoryId());
                             }
+                            for (final Category child : categoryService.findChildCategoriesWithAvailability(parent.getCategoryId(), false)) {
+                                if (!dedup.contains(child.getCategoryId())) {
+                                    parentsWithChildren.add(child);
+                                    dedup.add(child.getCategoryId());
+                                }
+                            }
+
                         }
+
+                        fillDTOs(parentsWithChildren, categoriesDTO);
 
                     }
-
-                    fillDTOs(parentsWithChildren, categoriesDTO);
 
                 }
 
             }
 
-        }
+        } else {
 
+            fillDTOs(categoryService.findBy( null, null, null, page, pageSize), categoriesDTO);
+
+        }
 
         return categoriesDTO;
     }

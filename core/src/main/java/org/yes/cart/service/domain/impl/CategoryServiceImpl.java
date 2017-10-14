@@ -241,7 +241,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         } else if (codeP == null && nameP == null && uriP != null) {
             cats = getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.URI", page * pageSize, pageSize, uriP);
         } else {
-            cats = getGenericDao().findAll();
+            cats = getGenericDao().findRangeByCriteria(null, page * pageSize, pageSize);
         }
 
         final Iterator<Category> catsIt = cats.iterator();

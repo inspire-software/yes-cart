@@ -346,7 +346,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         } else if (codeP == null && nameP == null && uriP != null) {
             cats = getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.URI", page * pageSize, pageSize, uriP);
         } else {
-            cats = getGenericDao().findAll();
+            cats = findChildContentWithAvailability(root.getCategoryId(), false);
         }
 
         final Iterator<Category> catsIt = cats.iterator();

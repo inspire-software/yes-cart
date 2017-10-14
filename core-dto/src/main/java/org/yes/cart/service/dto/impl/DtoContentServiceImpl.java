@@ -233,49 +233,55 @@ public class DtoContentServiceImpl
 
         final List<CategoryDTO> contentDTO = new ArrayList<CategoryDTO>(pageSize);
 
-        final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(filter, PARENT_OR_URI);
+        if (StringUtils.isNotBlank(filter)) {
+            final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(filter, PARENT_OR_URI);
 
-        if (parentOrUri == null) {
+            if (parentOrUri == null) {
 
-            fillDTOs(contentService.findBy(shopId, filter, filter, filter, page, pageSize), contentDTO);
+                fillDTOs(contentService.findBy(shopId, filter, filter, filter, page, pageSize), contentDTO);
 
-        } else {
+            } else {
 
-            if ("@".equals(parentOrUri.getFirst())) {
+                if ("@".equals(parentOrUri.getFirst())) {
 
-                fillDTOs(contentService.findBy(shopId, null, null, parentOrUri.getSecond(), page, pageSize), contentDTO);
+                    fillDTOs(contentService.findBy(shopId, null, null, parentOrUri.getSecond(), page, pageSize), contentDTO);
 
-            } else if ("^".equals(parentOrUri.getFirst())) {
+                } else if ("^".equals(parentOrUri.getFirst())) {
 
-                final List<Category> parents = contentService.findBy(shopId, parentOrUri.getSecond(), parentOrUri.getSecond(), parentOrUri.getSecond(), page, pageSize);
+                    final List<Category> parents = contentService.findBy(shopId, parentOrUri.getSecond(), parentOrUri.getSecond(), parentOrUri.getSecond(), page, pageSize);
 
-                if (!parents.isEmpty()) {
+                    if (!parents.isEmpty()) {
 
-                    final Set<Long> dedup = new HashSet<Long>();
-                    final List<Category> parentsWithChildren = new ArrayList<Category>();
-                    for (final Category parent : parents) {
+                        final Set<Long> dedup = new HashSet<Long>();
+                        final List<Category> parentsWithChildren = new ArrayList<Category>();
+                        for (final Category parent : parents) {
 
-                        if (!dedup.contains(parent.getCategoryId())) {
-                            parentsWithChildren.add(parent);
-                            dedup.add(parent.getCategoryId());
-                        }
-                        for (final Category child : contentService.findChildContentWithAvailability(parent.getCategoryId(), false)) {
-                            if (!dedup.contains(child.getCategoryId())) {
-                                parentsWithChildren.add(child);
-                                dedup.add(child.getCategoryId());
+                            if (!dedup.contains(parent.getCategoryId())) {
+                                parentsWithChildren.add(parent);
+                                dedup.add(parent.getCategoryId());
                             }
+                            for (final Category child : contentService.findChildContentWithAvailability(parent.getCategoryId(), false)) {
+                                if (!dedup.contains(child.getCategoryId())) {
+                                    parentsWithChildren.add(child);
+                                    dedup.add(child.getCategoryId());
+                                }
+                            }
+
                         }
+
+                        fillDTOs(parentsWithChildren, contentDTO);
 
                     }
-
-                    fillDTOs(parentsWithChildren, contentDTO);
 
                 }
 
             }
 
-        }
+        } else {
 
+            fillDTOs(contentService.findBy(shopId, null, null, null, page, pageSize), contentDTO);
+
+        }
 
         return contentDTO;
     }

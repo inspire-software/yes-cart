@@ -58,9 +58,14 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
 
         List<CategoryDTO> list = dtoService.findBy("^big boys gadgets", 0, 10);
         assertTrue(list.size() > 1);
+        assertEquals("Big Boys Gadgets", list.get(0).getName());
 
         list = dtoService.findBy("big boys gadgets", 0, 10);
         assertEquals(1, list.size());
+        assertEquals("Big Boys Gadgets", list.get(0).getName());
+
+        list = dtoService.findBy(null, 0, 10);
+        assertTrue(list.size() > 1);
 
     }
 
