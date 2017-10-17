@@ -62,7 +62,7 @@ public class AbstractFileServiceImplTest {
     }
 
     @Test
-    public void testGetFileAttributeFileNamesNoneOf() throws Exception {
+    public void testGetFileAttributeFileNamesNone() throws Exception {
 
 
 
