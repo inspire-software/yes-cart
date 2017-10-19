@@ -19,6 +19,7 @@ package org.yes.cart.service.domain.impl;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.domain.PromotionService;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
 import java.util.Date;
@@ -38,10 +39,14 @@ public class PromotionServiceImpl extends BaseGenericServiceImpl<Promotion> impl
     /** {@inheritDoc} */
     public List<Promotion> getPromotionsByShopCode(final String shopCode, final String currency, final boolean active) {
         if (active) {
-            final Date now = new Date();
+            final Date now = now();
             return getGenericDao().findByNamedQuery("PROMOTION.BY.SHOPCODE.CURRENCY.ACTIVE", shopCode, currency, active, now, now);
         }
         return getGenericDao().findByNamedQuery("PROMOTION.BY.SHOPCODE.CURRENCY", shopCode, currency);
+    }
+
+    Date now() {
+        return TimeContext.getTime();
     }
 
     /** {@inheritDoc} */

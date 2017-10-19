@@ -1,5 +1,6 @@
 package org.yes.cart.search.dao.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -19,9 +20,10 @@ import java.io.Serializable;
  */
 public class IndexBuilderLuceneHibernateTxAwareImpl<T, PK extends Serializable> extends IndexBuilderLuceneImpl<T, PK> {
 
-    private final GenericDAO<T, PK> genericDao;
+    protected final GenericDAO<T, PK> genericDao;
     protected SessionFactory sessionFactory;
     protected PlatformTransactionManager platformTransactionManager;
+    protected String findAllNamedQuery;
 
     public IndexBuilderLuceneHibernateTxAwareImpl(final LuceneDocumentAdapter<T, PK> documentAdapter,
                                                   final LuceneIndexProvider indexProvider,
@@ -39,7 +41,10 @@ public class IndexBuilderLuceneHibernateTxAwareImpl<T, PK extends Serializable> 
     /** {@inheritDoc} */
     @Override
     protected ResultsIterator<T> findAllIterator() {
-        return genericDao.findAllIterator();
+        if (StringUtils.isBlank(this.findAllNamedQuery)) {
+            return genericDao.findAllIterator();
+        }
+        return genericDao.findByNamedQueryIterator(this.findAllNamedQuery);
     }
 
     /** {@inheritDoc} */
@@ -88,5 +93,14 @@ public class IndexBuilderLuceneHibernateTxAwareImpl<T, PK extends Serializable> 
      */
     public void setPlatformTransactionManager(final PlatformTransactionManager platformTransactionManager) {
         this.platformTransactionManager = platformTransactionManager;
+    }
+
+    /**
+     * Sprig IoC.
+     *
+     * @param findAllNamedQuery named query to perform find all
+     */
+    public void setFindAllNamedQuery(final String findAllNamedQuery) {
+        this.findAllNamedQuery = findAllNamedQuery;
     }
 }

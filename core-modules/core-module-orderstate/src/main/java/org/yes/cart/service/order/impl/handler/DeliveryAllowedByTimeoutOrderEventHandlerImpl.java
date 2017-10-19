@@ -28,6 +28,7 @@ import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
+import org.yes.cart.util.TimeContext;
 
 import java.util.Collection;
 import java.util.Date;
@@ -55,7 +56,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
      */
     public boolean handle(final OrderEvent orderEvent)  throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
-            final Date now = getCurrentDate();
+            final Date now = now();
 
             final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderEvent.getCustomerOrderDelivery().getDetail();
 
@@ -82,8 +83,8 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
         this.applicationContext = applicationContext;
     }
 
-    private Date getCurrentDate() {
-        return new Date(); //TODO: V2 time machine
+    Date now() {
+        return TimeContext.getTime();
     }
 
     private synchronized OrderStateManager getOrderStateManager() {

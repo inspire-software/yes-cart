@@ -26,6 +26,7 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.shoppingcart.ProductAvailabilityStrategy;
 import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -105,11 +106,15 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
     }
 
     private boolean isAvailableNow(final int availability, final Date from, final Date to) {
-        final Date now = new Date();
+        final Date now = now();
         if (availability == Product.AVAILABILITY_PREORDER) {
             return DomainApiUtils.isObjectAvailableNow(true, null, to, now);
         }
         return DomainApiUtils.isObjectAvailableNow(true, from, to, now);
+    }
+
+    private Date now() {
+        return TimeContext.getTime();
     }
 
 }

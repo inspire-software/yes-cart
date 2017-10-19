@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
 import java.util.*;
@@ -159,7 +160,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         ));
         if (withAvailability) {
 
-            final Date now = new Date();
+            final Date now = now();
             final Iterator<Category> it = cats.iterator();
             while (it.hasNext()) {
 
@@ -176,6 +177,10 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         }
         return cats;
 
+    }
+
+    Date now() {
+        return TimeContext.getTime();
     }
 
 

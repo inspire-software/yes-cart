@@ -25,6 +25,7 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.AbstractCentralView;
 import org.yes.cart.web.page.component.EmptyCentralView;
@@ -167,23 +168,31 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
      */
     private boolean isCategoryVisibleInShop(final Long categoryId) {
 
-        final Set<Long> catIds = shopService.getShopCategoriesIds(ApplicationDirector.getShoppingCart().getShoppingContext().getCustomerShopId());
-        Category category = categoryService.getById(categoryId);
-        final Date now = new Date();
-
-        while (category != null
-                && DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)
-                && category.getCategoryId() != category.getParentId()) { // while enabled and not reached root
-
+        if (categoryId != null) {
+            final Set<Long> catIds = shopService.getShopCategoriesIds(ApplicationDirector.getShoppingCart().getShoppingContext().getCustomerShopId());
             if (catIds.contains(categoryId)) {
+                Category category = categoryService.getById(categoryId);
+                final Date now = now();
 
-                return true;
+                while (category != null
+                        && DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)
+                        && category.getCategoryId() != category.getParentId()) { // while enabled and not reached root
 
+                    if (catIds.contains(categoryId)) {
+
+                        return true;
+
+                    }
+                    category = categoryService.getById(category.getParentId());
+
+                }
             }
-            category = categoryService.getById(category.getParentId());
-
         }
         return false;
+    }
+
+    private Date now() {
+        return TimeContext.getTime();
     }
 
     /**
@@ -202,24 +211,28 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
      */
     private boolean isContentVisibleInShop(final Long contentId) {
 
-        final Set<Long> catIds = shopService.getShopContentIds(ApplicationDirector.getShoppingCart().getShoppingContext().getShopId());
-        Category content = categoryService.getById(contentId);
-        final Date now = new Date();
+        if (contentId != null) {
+            final Set<Long> catIds = shopService.getShopContentIds(ApplicationDirector.getShoppingCart().getShoppingContext().getShopId());
+            if (catIds.contains(contentId)) {
+                Category content = categoryService.getById(contentId);
+                final Date now = now();
 
-        if (DomainApiUtils.isObjectAvailableNow(true, content.getAvailablefrom(), content.getAvailableto(), now)) {
+                if (DomainApiUtils.isObjectAvailableNow(true, content.getAvailablefrom(), content.getAvailableto(), now)) {
 
-            while (content != null && content.getCategoryId() != content.getParentId()) {
+                    while (content != null && content.getCategoryId() != content.getParentId()) {
 
-                if (catIds.contains(content.getCategoryId())) {
+                        if (catIds.contains(content.getCategoryId())) {
 
-                    return true;
+                            return true;
+
+                        }
+
+                        content = categoryService.getById(content.getParentId());
+
+                    }
 
                 }
-
-                content = categoryService.getById(content.getParentId());
-
             }
-
         }
         return false;
     }

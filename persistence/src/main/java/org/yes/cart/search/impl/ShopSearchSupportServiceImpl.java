@@ -26,6 +26,8 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.ShopSearchSupportService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.TimeContext;
 
 import java.util.*;
 
@@ -45,39 +47,47 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
         this.categoryService = categoryService;
     }
 
+    private final static Pair<List<Long>, Boolean> SHOP = new Pair<List<Long>, Boolean>(null, Boolean.FALSE);
+
     /**
      * {@inheritDoc}
      */
     @Cacheable(value = "categoryService-searchCategoriesIds")
     public Pair<List<Long>, Boolean> getSearchCategoriesIds(final long categoryId, final long shopId) {
-        // If template is not set try to figure out the view
 
-        Boolean lookInSubCats = null;
+        if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
 
-        Category category = categoryService.getById(categoryId);
+            Boolean lookInSubCats = null;
 
-        while (category != null) {
-            final String searchInSub = category.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_INCLUDE_SUBCATEGORIES_IN_SEARCH);
-            if (StringUtils.isBlank(searchInSub)) {
-                final Long parentId = shopService.getShopCategoryParentId(shopId, category.getCategoryId());
-                if (parentId != null) {
-                    category = categoryService.getById(parentId);
-                } else {
-                    break;
+            Category category = categoryService.getById(categoryId);
+
+            if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now())) {
+
+                while (category != null) {
+                    final String searchInSub = category.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_INCLUDE_SUBCATEGORIES_IN_SEARCH);
+                    if (StringUtils.isBlank(searchInSub)) {
+                        final Long parentId = shopService.getShopCategoryParentId(shopId, category.getCategoryId());
+                        if (parentId != null) {
+                            category = categoryService.getById(parentId);
+                        } else {
+                            break;
+                        }
+                    } else {
+                        lookInSubCats = Boolean.valueOf(searchInSub);
+                        break;
+                    }
                 }
-            } else {
-                lookInSubCats = Boolean.valueOf(searchInSub);
-                break;
+
+                if (lookInSubCats == null) {
+                    lookInSubCats = shopService.getById(shopId).isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
+                }
+
+                final List<Long> catIds = categoryService.getCategoryIdsWithLinks(categoryId);
+
+                return new Pair<List<Long>, Boolean>(catIds, lookInSubCats);
             }
         }
-
-        if (lookInSubCats == null) {
-            lookInSubCats = shopService.getById(shopId).isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
-        }
-
-        final List<Long> catIds = categoryService.getCategoryIdsWithLinks(categoryId);
-
-        return new Pair<List<Long>, Boolean>(catIds, lookInSubCats);
+        return SHOP;
     }
 
 
@@ -111,13 +121,22 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
             }
         }
 
-        final Calendar date = Calendar.getInstance();
+        final Calendar date = calendar();
         date.add(Calendar.DAY_OF_YEAR, -beforeDays);
         date.set(Calendar.HOUR, 0);
         date.set(Calendar.MINUTE, 0);
         date.set(Calendar.SECOND, 0);
         date.set(Calendar.MILLISECOND, 0);
         return date.getTime();
+    }
+
+
+    Date now() {
+        return TimeContext.getTime();
+    }
+
+    Calendar calendar() {
+        return TimeContext.getCalendar();
     }
 
 

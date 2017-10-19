@@ -121,7 +121,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopCategoriesIds"/*, key ="shop.getShopId()"*/)
+    // @Cacheable(value = "shopService-shopCategoriesIds") already cached at shopCategorySupport
     public Set<Long> getShopCategoriesIds(final long shopId) {
         return shopService.getShopCategoriesIds(shopId);
     }
@@ -129,7 +129,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopContentIds"/*, key ="shop.getShopId()"*/)
+    // @Cacheable(value = "shopService-shopContentIds")  already cached at shopCategorySupport
     public Set<Long> getShopContentIds(final long shopId) {
         return shopService.getShopContentIds(shopId);
     }
@@ -137,7 +137,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopAllCategoriesIds"/*, key ="shop.getShopId()"*/)
+    @Cacheable(value = "shopService-shopAllCategoriesIds")
     public Set<Long> getShopAllCategoriesIds(final long shopId) {
         return shopService.getShopAllCategoriesIds(shopId);
     }
@@ -247,6 +247,7 @@ public class ShopServiceCachedImpl implements ShopService {
 
     /** {@inheritDoc} */
     @CacheEvict(value ={
+            "shopService-allCategoriesIdsMap",
             "shopService-shopCategoriesIds",
             "shopService-shopContentIds",
             "shopService-shopAllCategoriesIds",
@@ -297,6 +298,7 @@ public class ShopServiceCachedImpl implements ShopService {
             "shopService-allShopsFulfilmentMap",
             "shopService-allNonSubShops",
             "shopService-subShopsByMaster",
+            "shopService-allCategoriesIdsMap",
             "shopService-shopCategoriesIds",
             "shopService-shopContentIds",
             "shopService-shopAllCategoriesIds",

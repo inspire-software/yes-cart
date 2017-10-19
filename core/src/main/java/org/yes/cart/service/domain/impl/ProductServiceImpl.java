@@ -50,8 +50,10 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ProductTypeAttrService;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
+import java.lang.System;
 import java.util.*;
 
 /**
@@ -101,7 +103,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         this.productTypeAttrDao = productTypeAttrDao;
         this.shopCategoryRelationshipSupport = shopCategoryRelationshipSupport;
         rand = new Random();
-        rand.setSeed((new Date().getTime()));
+        rand.setSeed(System.currentTimeMillis());
     }
 
     /** {@inheritDoc} */
@@ -135,7 +137,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     public List<Product> getProductByCategory(final long categoryId) {
-        return productDao.findByNamedQuery("PRODUCTS.BY.CATEGORYID", categoryId, new Date());
+        return productDao.findByNamedQuery("PRODUCTS.BY.CATEGORYID", categoryId, now());
+    }
+
+    Date now() {
+        return TimeContext.getTime();
     }
 
     /**
@@ -528,7 +534,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     public Pair<Integer, Integer> getProductQtyAll() {
 
         final int total = getGenericDao().findCountByCriteria(null);
-        final Date now = new Date();
+        final Date now = now();
         final int active = getGenericDao().findCountByCriteria(
                 " where (e.availablefrom is null or e.availability = ?1 or e.availablefrom <= ?2) and (e.availableto is null or e.availableto >= ?2)",
                 Product.AVAILABILITY_PREORDER, now
@@ -547,7 +553,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 firstResult,
                 maxResults,
                 categoryId,
-                new Date()   //TODO: V2 time machine
+                now()
         );
     }
 
@@ -950,7 +956,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     public int getProductQty(final long categoryId) {
         return Integer.valueOf(
-                String.valueOf(productDao.getScalarResultByNamedQuery("PRODUCTS.QTY.BY.CATEGORYID", categoryId, new Date())));  //TODO: V2 time machine
+                String.valueOf(productDao.getScalarResultByNamedQuery("PRODUCTS.QTY.BY.CATEGORYID", categoryId, now())));
     }
 
 

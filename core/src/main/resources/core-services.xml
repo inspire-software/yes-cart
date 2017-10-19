@@ -144,6 +144,7 @@
                         <constructor-arg type="org.yes.cart.service.domain.CategoryService" ref="categoryService"/>
                         <constructor-arg type="org.yes.cart.service.domain.ContentService" ref="contentService"/>
                         <constructor-arg type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
+                        <constructor-arg type="org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport" ref="shopCategoryRelationshipSupport"/>
                         <lookup-method name="getSelf" bean="shopService"/>
                     </bean>
                 </property>

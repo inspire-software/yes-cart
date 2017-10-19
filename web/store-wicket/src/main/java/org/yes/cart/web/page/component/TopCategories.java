@@ -100,10 +100,10 @@ public class TopCategories extends BaseComponent {
                     if (parentId != null) {
                         categories = categoryServiceFacade.getCurrentCategoryMenu(parentId, browsingShopId, lang);
                     } else {
-                        categories = categoryMenu;
+                        categories = categoryServiceFacade.getCurrentCategoryMenu(0L, browsingShopId, lang);
                     }
                 } else {
-                    categories = categoryMenu;
+                    categories = categoryServiceFacade.getCurrentCategoryMenu(0L, browsingShopId, lang);
                 }
             } else {
                 categories = categoryMenu;

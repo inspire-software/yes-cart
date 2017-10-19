@@ -23,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 import org.yes.cart.search.ShopSearchSupportService;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
+import org.yes.cart.util.TimeContext;
 
 import java.util.*;
 
@@ -34,13 +35,6 @@ import java.util.*;
 public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder<Query> {
 
     private static final String TAG_NEWARRIVAL = "newarrival";
-
-    private final ThreadLocal<Calendar> format = new ThreadLocal<Calendar>() {
-        @Override
-        protected Calendar initialValue() {
-            return Calendar.getInstance();
-        }
-    };
 
     private final ShopSearchSupportService shopSearchSupportService;
 
@@ -122,7 +116,7 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
 
 
     protected Long getDateOnly(final Date value) {
-        final Calendar calendar = format.get();
+        final Calendar calendar = TimeContext.getCalendar();
         calendar.setTime(value);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -135,7 +129,7 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
 
     private Date earliestNewArrivalDate(final NavigationContext<Query> navigationContext) {
 
-        Date beforeDays = new Date();
+        Date beforeDays = now();
         if (CollectionUtils.isEmpty(navigationContext.getCategories())) {
 
             beforeDays = shopSearchSupportService.getCategoryNewArrivalDate(0L, navigationContext.getShopId());
@@ -149,6 +143,10 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
             }
         }
         return beforeDays;
+    }
+
+    private Date now() {
+        return TimeContext.getTime();
     }
 
 

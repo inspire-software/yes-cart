@@ -2703,6 +2703,28 @@
        ]]>
     </query>
 
+    <query name="CATEGORYRELATION.BY.ID">
+        <![CDATA[
+       select new org.yes.cart.domain.dto.impl.CategoryRelationDTOImpl(
+         l.guid,
+         l.categoryId,
+         l.parentId,
+         l.linkToId,
+         l.rank,
+         l.name,
+         l.displayName,
+         l.availablefrom,
+         l.availableto
+       ) from CategoryEntity l where l.categoryId = ?1
+       ]]>
+    </query>
+
+    <query name="CATEGORY.PARENT.LINK.ALL">
+        <![CDATA[
+       select l.categoryId, l.parentId, l.linkToId from CategoryEntity l
+       ]]>
+    </query>
+
     <query name="ROOTCATEGORY">
         <![CDATA[
        select c from CategoryEntity c WHERE c.categoryId = c.parentId 
@@ -2721,6 +2743,22 @@
     <query cacheable="true" name="CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING">
         <![CDATA[
        select c from CategoryEntity c where c.parentId = ?1 and c.categoryId <> c.parentId
+       ]]>
+    </query>
+
+    <query name="CATEGORIESRELATION.BY.PARENTID.WITHOUT.DATE.FILTERING">
+        <![CDATA[
+       select new org.yes.cart.domain.dto.impl.CategoryRelationDTOImpl(
+         c.guid,
+         c.categoryId,
+         c.parentId,
+         c.linkToId,
+         c.rank,
+         c.name,
+         c.displayName,
+         c.availablefrom,
+         c.availableto
+       ) from CategoryEntity c where c.parentId = ?1 and c.categoryId <> c.parentId
        ]]>
     </query>
 
@@ -2780,6 +2818,17 @@
        ]]>
     </query>
 
+    <query name="PRODUCTS.ALL.FOR.INDEX">
+        <![CDATA[
+       select p from ProductEntity p left join fetch p.productCategory
+       ]]>
+    </query>
+
+    <query name="PRODUCT.SKUS.ALL.FOR.INDEX">
+        <![CDATA[
+       select s from ProductSkuEntity s inner join fetch s.product
+       ]]>
+    </query>
 
     <query name="PRODUCTS.BY.CATEGORYIDS.ALL">
         <![CDATA[

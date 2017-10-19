@@ -32,6 +32,7 @@ import org.yes.cart.search.dto.impl.FilteredNavigationRecordImpl;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -214,7 +215,7 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
     }
 
     Date now() {
-        return new Date(); //TODO: time machine
+        return TimeContext.getTime();
     }
 
     /**

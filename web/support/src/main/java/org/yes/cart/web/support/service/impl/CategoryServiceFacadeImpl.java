@@ -28,6 +28,8 @@ import org.yes.cart.search.ShopSearchSupportService;
 import org.yes.cart.service.domain.CategoryRankDisplayNameComparator;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 
@@ -57,23 +59,21 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
      */
     public Category getCategory(final long categoryId, final long shopId) {
         if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
-            return categoryService.getById(categoryId);
+            final Category category = categoryService.getById(categoryId);
+            if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now())) {
+                return category;
+            }
         }
         return null;
     }
-
-    private final static Pair<List<Long>, Boolean> SHOP = new Pair<List<Long>, Boolean>(null, Boolean.FALSE);
 
     /**
      * {@inheritDoc}
      */
     public Pair<List<Long>, Boolean> getSearchCategoriesIds(final long categoryId, final long shopId) {
-        if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
 
-            return shopSearchSupportService.getSearchCategoriesIds(categoryId, shopId);
+        return shopSearchSupportService.getSearchCategoriesIds(categoryId, shopId);
 
-        }
-        return SHOP;
     }
 
     /**
@@ -448,4 +448,9 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
                 AttributeNamesKeys.Shop.SHOP_CATEGORY_FILTERNAV_LIMIT,
                 Constants.CATEGORY_FILTERNAV_LIMIT);
     }
+
+    Date now() {
+        return TimeContext.getTime();
+    }
+
 }

@@ -28,6 +28,7 @@ import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.TimeContext;
 
 import java.util.*;
 
@@ -358,7 +359,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
     }
 
     Date now() {
-        return new Date();
+        return TimeContext.getTime();
     }
 
 }

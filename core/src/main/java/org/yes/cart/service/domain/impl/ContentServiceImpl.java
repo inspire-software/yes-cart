@@ -28,6 +28,7 @@ import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ContentServiceTemplateSupport;
 import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
 import java.util.*;
@@ -150,7 +151,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      */
     public String getContentBody(final long contentId, final String locale) {
         final String attributeKey = "CONTENT_BODY_" + locale + "_%";
-        final List<Object> bodyList = categoryDao.findQueryObjectByNamedQuery("CONTENTBODY.BY.CONTENTID", contentId, attributeKey, new Date());
+        final List<Object> bodyList = categoryDao.findQueryObjectByNamedQuery("CONTENTBODY.BY.CONTENTID", contentId, attributeKey, now());
         if (bodyList != null && bodyList.size() > 0) {
             final StringBuilder content = new StringBuilder();
             for (final Object bodyPart : bodyList) {
@@ -161,6 +162,10 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             return content.toString();
         }
         return "";
+    }
+
+    Date now() {
+        return TimeContext.getTime();
     }
 
     /**
@@ -286,7 +291,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         ));
         if (withAvailability) {
 
-            final Date now = new Date();
+            final Date now = now();
             final Iterator<Category> it = cats.iterator();
             while (it.hasNext()) {
 

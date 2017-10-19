@@ -284,7 +284,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
 
     @Override
     public boolean isRoot() {
-        return (getParentId() == 0l || getParentId() == getCategoryId());
+        return (getParentId() == 0L || getParentId() == getCategoryId());
     }
 
     public String toString() {

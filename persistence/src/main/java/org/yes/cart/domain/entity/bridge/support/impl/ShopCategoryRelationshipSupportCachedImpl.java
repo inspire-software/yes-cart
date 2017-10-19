@@ -17,11 +17,13 @@
 package org.yes.cart.domain.entity.bridge.support.impl;
 
 import org.springframework.cache.annotation.Cacheable;
+import org.yes.cart.domain.dto.CategoryRelationDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -37,7 +39,9 @@ public class ShopCategoryRelationshipSupportCachedImpl implements ShopCategoryRe
         this.support = support;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Cacheable(value = "shopService-allShops")
     public List<Shop> getAll() {
         return support.getAll();
@@ -46,17 +50,41 @@ public class ShopCategoryRelationshipSupportCachedImpl implements ShopCategoryRe
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopCategoriesIds"/*, key ="shop.getShopId()"*/)
+    @Cacheable(value = "shopService-allCategoriesIdsMap")
+    public Map<Long, Set<Long>> getAllCategoriesIdsMap() {
+        return support.getAllCategoriesIdsMap();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "shopService-shopCategoriesIds")
     public Set<Long> getShopCategoriesIds(final long shopId) {
         return support.getShopCategoriesIds(shopId);
     }
 
     /**
-     * {@inheritDoc} Just to cache
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "shopService-shopContentIds")
+    public Set<Long> getShopContentIds(final long shopId) {
+        return support.getShopContentIds(shopId);
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Cacheable(value = "categoryService-byId")
     public Category getCategoryById(final long categoryId) {
         return support.getCategoryById(categoryId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "categoryService-relationById")
+    public CategoryRelationDTO getCategoryRelationById(final long categoryId) {
+        return support.getCategoryRelationById(categoryId);
     }
 
     /**

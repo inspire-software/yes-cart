@@ -16,17 +16,16 @@
 
 package org.yes.cart.domain.entity.bridge.support.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.dto.CategoryRelationDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Extra logic to determine relationship between categories and shops.
@@ -51,62 +50,8 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
         return this.shopDao.findAll();
     }
 
-    private Set<Category> getShopCategories(final long shopId) {
-
-        final Set<Category> result = new HashSet<Category>();
-
-        for (ShopCategory shopCategory : shopDao.findById(shopId).getShopCategory()) {
-
-            loadChildCategoriesRecursiveInternal(result, shopCategory.getCategory().getCategoryId());
-
-        }
-
-        return result;
-    }
-
-    private void loadChildCategoriesRecursiveInternal(final Set<Category> result, final Long categoryId) {
-
-        final Category cat = categoryDao.findById(categoryId);
-        if (cat == null) {
-            return;
-        }
-
-        Hibernate.initialize(cat);
-        result.add(cat);
-
-        final long parentId;
-        if (cat.getLinkToId() != null) {
-            // linked
-            final Category linked = categoryDao.findById(cat.getLinkToId());
-            if (linked == null) {
-                return;
-            }
-
-            Hibernate.initialize(linked);
-            result.add(linked);
-            parentId = cat.getLinkToId();
-        } else {
-            parentId = categoryId;
-        }
-
-        final List<Category> categories = categoryDao.findByNamedQuery(
-                "CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING",
-                parentId
-        );
-
-        result.addAll(categories);
-
-        for (Category subCategory : categories) {
-
-            loadChildCategoriesRecursiveInternal(result, subCategory.getCategoryId());
-
-        }
-
-    }
-
-
     /**
-     * {@inheritDoc} Just to cache
+     * {@inheritDoc}
      */
     public Category getCategoryById(final long pk) {
         final Category cat = categoryDao.findById(pk);
@@ -117,35 +62,146 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
     /**
      * {@inheritDoc}
      */
+    public CategoryRelationDTO getCategoryRelationById(final long categoryId) {
+        final List rez = categoryDao.findQueryObjectByNamedQuery("CATEGORYRELATION.BY.ID", categoryId);
+        if (CollectionUtils.isNotEmpty(rez)) {
+            return (CategoryRelationDTO) rez.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Set<Long> getCategoryParentsIds(final long categoryId) {
-        final Category category = proxy().getCategoryById(categoryId);
+        final CategoryRelationDTO category = proxy().getCategoryRelationById(categoryId);
         final Set<Long> parents = new HashSet<Long>();
         if (category != null && !category.isRoot()) {
-
-            final Category parent = proxy().getCategoryById(category.getParentId());
+            parents.addAll((List) categoryDao.findQueryObjectByNamedQuery("LINKED.CATEGORY.IDS.BY.ID", category.getCategoryId()));
+            final CategoryRelationDTO parent = proxy().getCategoryRelationById(category.getParentId());
             if (parent != null && !parent.isRoot()) {
                 parents.add(category.getParentId());
                 parents.addAll((List) categoryDao.findQueryObjectByNamedQuery("LINKED.CATEGORY.IDS.BY.ID", category.getParentId()));
             }
 
         }
-        return parents;
+        return Collections.unmodifiableSet(parents);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<Long, Set<Long>> getAllCategoriesIdsMap() {
+        return loadCategoryMapping();
     }
 
     /**
      * {@inheritDoc}
      */
     public Set<Long> getShopCategoriesIds(final long shopId) {
-        return transform(getShopCategories(shopId));
+
+        final Set<Long> result = new HashSet<Long>();
+
+        final Map<Long, Set<Long>> map = proxy().getAllCategoriesIdsMap();
+
+        for (ShopCategory shopCategory : shopDao.findById(shopId).getShopCategory()) {
+
+            appendChildren(result, shopCategory.getCategory().getCategoryId(), map);
+
+        }
+
+        return Collections.unmodifiableSet(result);
+
     }
 
-    public Set<Long> transform(final Collection<Category> categories) {
-        final Set<Long> result = new HashSet<Long>(categories.size());
-        for (Category category : categories) {
-            result.add(category.getCategoryId());
+    /**
+     * {@inheritDoc}
+     */
+    public Set<Long> getShopContentIds(final long shopId) {
+
+        final Set<Long> result = new HashSet<Long>();
+
+        final Map<Long, Set<Long>> map = proxy().getAllCategoriesIdsMap();
+
+        final Category category = categoryDao.findSingleByNamedQuery("ROOTCONTENT.BY.SHOP.ID", shopId);
+
+        if (category != null) {
+            appendChildren(result, category.getCategoryId(), map);
         }
-        return result;
+
+        return Collections.unmodifiableSet(result);
+
     }
+
+    private void appendChildren(final Set<Long> result, final long currentId, final Map<Long, Set<Long>> map) {
+
+        result.add(currentId);
+
+        final Set<Long> immediateChildren = map.get(currentId);
+        if (CollectionUtils.isNotEmpty(immediateChildren)) {
+            for (final Long child : immediateChildren) {
+                appendChildren(result, child, map);
+            }
+        }
+
+    }
+
+    Map<Long, Set<Long>> loadCategoryMapping() {
+
+        final List<Object[]> idParentLinkList = (List) this.categoryDao.findQueryObjectByNamedQuery("CATEGORY.PARENT.LINK.ALL");
+
+        final Map<Long, Set<Long>> all = new HashMap<Long, Set<Long>>(idParentLinkList.size() + 100);
+        final List<Object[]> idParentLinkList2 = new ArrayList<Object[]>(idParentLinkList.size() > 100 ? 10 : idParentLinkList.size() / 10);
+
+        for (final Object[] idParentLink : idParentLinkList) {
+
+            final Long id = (Long) idParentLink[0];
+            final Long parent = (Long) idParentLink[1];
+            final Long link = (Long) idParentLink[2];
+
+            if (parent > 0L && !id.equals(parent)) {
+
+                Set<Long> children = all.get(parent);
+                if (children == null) {
+                    children = new HashSet<Long>();
+                    all.put(parent, children);
+                }
+                children.add(id);
+                if (link != null) {
+                    children.add(link); // Add linked category as a linked child
+                }
+
+            }
+
+            if (link != null) {
+
+                idParentLinkList2.add(idParentLink); // save for second pass
+
+            }
+        }
+
+        for (final Object[] idParentLink : idParentLinkList2) {
+
+            final Long id = (Long) idParentLink[0];
+            final Long parent = (Long) idParentLink[1];
+            final Long link = (Long) idParentLink[2];
+
+            Set<Long> linkedChildren = all.get(link);
+            if (linkedChildren != null) {
+                all.put(id, linkedChildren);
+            }
+
+        }
+
+        for (final Map.Entry<Long, Set<Long>> entry : all.entrySet()) {
+
+            all.put(entry.getKey(), Collections.unmodifiableSet(entry.getValue()));
+
+        }
+
+        return Collections.unmodifiableMap(all);
+    }
+
 
     private ShopCategoryRelationshipSupport proxy;
 

@@ -19,6 +19,7 @@ package org.yes.cart.service.order.impl;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.order.OrderNumberGenerator;
+import org.yes.cart.util.TimeContext;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -64,7 +65,7 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
     }
 
     Calendar now() {
-        return Calendar.getInstance();
+        return TimeContext.getCalendar();
     }
 
     /**

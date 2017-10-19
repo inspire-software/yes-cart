@@ -30,6 +30,7 @@ import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -204,7 +205,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
     }
 
     Date now() {
-        return new Date();
+        return TimeContext.getTime();
     }
 
     /**

@@ -23,11 +23,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.dto.CategoryRelationDTO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.StoredAttributesDTO;
 import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
-import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.dto.impl.StoredAttributesDTOImpl;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -36,6 +37,7 @@ import org.yes.cart.search.dao.support.*;
 import org.yes.cart.search.query.impl.SearchUtil;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.TimeContext;
 
 import java.lang.System;
 import java.math.BigDecimal;
@@ -483,7 +485,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
             if (isCategoryAvailable(productCategory.getCategory().getCategoryId(), now)) {
 
-                final Category category = shopCategorySupport.getCategoryById(productCategory.getCategory().getCategoryId());
+                final CategoryRelationDTO category =
+                        shopCategorySupport.getCategoryRelationById(productCategory.getCategory().getCategoryId());
 
                 if (LOGFTQ.isTraceEnabled()) {
                     addStoredField(document, PRODUCT_CATEGORY_FIELD + "_debug", String.valueOf(category.getCategoryId()));
@@ -518,7 +521,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
         if (CollectionUtils.isNotEmpty(availableCategories)) {
 
-            // Global search is done on this field. There is a disparity in the sence that after assigning category to
+            // Global search is done on this field. There is a disparity in the sense that after assigning category to
             // shop the product will become reachable in category search but will still be unavailable in global searches
             // since it is done on shop field below. So full reindexing is required to synchronise fully
 
@@ -560,7 +563,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
         if (currentId != null) {
 
-            final Category category = shopCategorySupport.getCategoryById(currentId);
+            final CategoryRelationDTO category = shopCategorySupport.getCategoryRelationById(currentId);
             if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)) {
 
                 final Set<Long> parentIds = shopCategorySupport.getCategoryParentsIds(category.getCategoryId());
@@ -590,7 +593,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      * @param document  index document
      * @param category  category
      */
-    protected void addCategoryNameFields(final Document document, final Category category) {
+    protected void addCategoryNameFields(final Document document, final CategoryRelationDTO category) {
 
         addSearchField(document, PRODUCT_CATEGORYNAME_FIELD, category.getName());
         addStemField(document, PRODUCT_CATEGORYNAME_STEM_FIELD, category.getName());
@@ -604,7 +607,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      * Recursion function to traverse up the category hierarchy (including category links) and fill in category id's in which
      * current product can be found.
      *
-     * Note that this function goe right up to the "root" since catalogs are independent of shops and hence any shop can link
+     * Note that this function goes right up to the "root" since catalogs are independent of shops and hence any shop can link
      * to category at any level of the hierarchy thus we cannot distinguish between what level is specific to specific shop.
      *
      * This is not a bug but a feature since catalog is viewed as taxonomy tool and not a container tree for storing products.
@@ -612,7 +615,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      * @param document       index document
      * @param category       current category
      */
-    protected void addCategoryParentIdsFields(final Document document, final Category category) {
+    protected void addCategoryParentIdsFields(final Document document, final CategoryRelationDTO category) {
 
         if (LOGFTQ.isTraceEnabled()) {
             addStoredField(document, PRODUCT_CATEGORY_INC_PARENTS_FIELD + "_debug", String.valueOf(category.getCategoryId()));
@@ -623,7 +626,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
         for (final Long parentId : parentIds) {
 
-            final Category parent = shopCategorySupport.getCategoryById(parentId);
+            final CategoryRelationDTO parent = shopCategorySupport.getCategoryRelationById(parentId);
 
             addCategoryNameFields(document, parent);
             addCategoryParentIdsFields(document, parent);
@@ -792,7 +795,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
     }
 
     long now() {
-        return System.currentTimeMillis();
+        return TimeContext.getMillis();
     }
 
     /**

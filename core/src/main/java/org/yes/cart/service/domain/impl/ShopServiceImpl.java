@@ -19,11 +19,13 @@ package org.yes.cart.service.domain.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.TimeContext;
 
 import java.util.*;
 
@@ -41,23 +43,28 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     private final CategoryService categoryService;
     private final ContentService contentService;
 
+    private final ShopCategoryRelationshipSupport shopCategoryRelationshipSupport;
+
 
     /**
      * Construct shop service.
      * @param shopDao shop doa.
-     * @param categoryService {@link org.yes.cart.service.domain.CategoryService}
+     * @param categoryService {@link CategoryService}
+     * @param contentService {@link ContentService}
      * @param attributeService attribute service
-     * @param contentService {@link org.yes.cart.service.domain.ContentService}
+     * @param shopCategoryRelationshipSupport support
      */
     public ShopServiceImpl(final GenericDAO<Shop, Long> shopDao,
                            final CategoryService categoryService,
                            final ContentService contentService,
-                           final AttributeService attributeService) {
+                           final AttributeService attributeService,
+                           final ShopCategoryRelationshipSupport shopCategoryRelationshipSupport) {
         super(shopDao);
         this.shopDao = shopDao;
         this.categoryService = categoryService;
         this.attributeService = attributeService;
         this.contentService = contentService;
+        this.shopCategoryRelationshipSupport = shopCategoryRelationshipSupport;
     }
 
     /**
@@ -148,40 +155,18 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
         return shopDao.findSingleByNamedQuery("SHOP.BY.URL", serverName);
     }
 
-    private Set<Category> getShopCategories(final long shopId) {
-        Set<Category> result = new HashSet<Category>();
-        for (ShopCategory category : shopDao.findById(shopId).getShopCategory()) {
-            result.addAll(
-                    categoryService.getChildCategoriesRecursive(category.getCategory().getCategoryId())
-            );
-        }
-        return result;
-    }
-
     /**
      * {@inheritDoc}
      */
     public Set<Long> getShopCategoriesIds(final long shopId) {
-        return transform(getShopCategories(shopId));
-    }
-
-
-    private Set<Category> getShopContent(final long shopId) {
-        Set<Category> result = new HashSet<Category>();
-        final Category root = contentService.getRootContent(shopId);
-        if (root != null) {
-            result.addAll(
-                    contentService.getChildContentRecursive(root.getCategoryId())
-            );
-        }
-        return result;
+        return shopCategoryRelationshipSupport.getShopCategoriesIds(shopId);
     }
 
     /**
      * {@inheritDoc}
      */
     public Set<Long> getShopContentIds(final long shopId) {
-        return transform(getShopContent(shopId));
+        return shopCategoryRelationshipSupport.getShopContentIds(shopId);
     }
 
     /**
@@ -189,12 +174,8 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      */
     public Set<Long> getShopAllCategoriesIds(final long shopId) {
         final Set<Long> all = new HashSet<Long>();
-        all.addAll(proxy().getShopCategoriesIds(shopId));
-        all.addAll(proxy().getShopContentIds(shopId));
-        final Category root = contentService.getRootContent(shopId);
-        if (root != null) {
-            all.add(root.getCategoryId());
-        }
+        all.addAll(getShopCategoriesIds(shopId));
+        all.addAll(getShopContentIds(shopId));
         return all;
     }
 
@@ -232,7 +213,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
 
         final List<ShopCategory> top = (List) shopDao.findQueryObjectByNamedQuery("ALL.TOPCATEGORIES.BY.SHOPID", shopId);
         final Set<Category> cats = new HashSet<Category>();
-        final Date now = new Date();
+        final Date now = now();
         for (final ShopCategory shopCategory : top) {
             final Category category = categoryService.getById(shopCategory.getCategory().getCategoryId());
             if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)) {
@@ -241,6 +222,10 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
         }
         return cats;
 
+    }
+
+    Date now() {
+        return TimeContext.getTime();
     }
 
     /**
@@ -263,7 +248,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      */
     public Long getShopCategoryParentId(final long shopId, final long categoryId) {
 
-        final Set<Long> shopCatIds = proxy().getShopCategoriesIds(shopId);
+        final Set<Long> shopCatIds = getShopCategoriesIds(shopId);
 
         if (shopCatIds.contains(categoryId)) {
 
@@ -281,8 +266,10 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
                     }
                 }
 
-                // Use master catalog parent
-                return category.getParentId();
+                if (shopCatIds.contains(category.getParentId())) {
+                    // Use master catalog parent
+                    return category.getParentId();
+                }
             }
         }
         return null;

@@ -223,7 +223,9 @@ public class CategoryServiceCachedImpl implements CategoryService {
             "categoryService-categoryIdsWithLinks",
             "categoryService-categoryHasSubcategory",
             "categoryService-byId",
+            "categoryService-relationById",
             "categoryService-categoryParentsIds",
+            "shopService-allCategoriesIdsMap",
             "shopService-shopCategoriesIds",
             "shopService-shopAllCategoriesIds"
     }, allEntries = true)
@@ -257,7 +259,9 @@ public class CategoryServiceCachedImpl implements CategoryService {
             "categoryService-categoryIdsWithLinks",
             "categoryService-categoryHasSubcategory",
             "categoryService-byId",
+            "categoryService-relationById",
             "categoryService-categoryParentsIds",
+            "shopService-allCategoriesIdsMap",
             "shopService-shopCategoriesIds",
             "shopService-shopAllCategoriesIds"
     }, allEntries = true)
@@ -291,6 +295,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
             "categoryService-categoryIdsWithLinks",
             "categoryService-categoryHasSubcategory",
             "categoryService-byId",
+            "categoryService-relationById",
             "categoryService-categoryParentsIds"
     }, allEntries = true)
     public void delete(final Category instance) {

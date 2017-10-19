@@ -35,6 +35,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.impl.CustomerOrderComparator;
 import org.yes.cart.web.page.OrderPage;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -188,7 +189,7 @@ public class CustomerOrderPanel extends BaseComponent {
             return null;
         }
 
-        final Calendar calendar = Calendar.getInstance();
+        final Calendar calendar = now();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
@@ -207,7 +208,7 @@ public class CustomerOrderPanel extends BaseComponent {
 
             calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
 
-            final Calendar now = Calendar.getInstance();
+            final Calendar now = now();
             if (now.before(calendar)) {
                 calendar.add(Calendar.DATE, -7);
             }
@@ -215,6 +216,10 @@ public class CustomerOrderPanel extends BaseComponent {
         }
 
         return calendar.getTime();
+    }
+
+    private Calendar now() {
+        return TimeContext.getCalendar();
     }
 
     private List<CustomerOrder> getValidCustomerOrderInChronologicalOrder(final Customer customer, final Date date) {

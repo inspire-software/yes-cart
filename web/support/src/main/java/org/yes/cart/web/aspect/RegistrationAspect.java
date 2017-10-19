@@ -42,6 +42,7 @@ import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 
 import java.io.Serializable;
@@ -144,7 +145,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
                 if (!isCallcenterToken(shop, token)) {
                     if (!token.equals(registeredPerson.getAuthToken())
                             || registeredPerson.getAuthTokenExpiry() == null
-                            || new Date().after(registeredPerson.getAuthTokenExpiry())) {
+                            || now().after(registeredPerson.getAuthTokenExpiry())) {
                         throw new BadCredentialsException(Constants.PASSWORD_RESET_AUTH_TOKEN_INVALID);
                     }
                 }
@@ -288,10 +289,14 @@ public class RegistrationAspect extends BaseNotificationAspect {
         if (attrVal != null) {
             secondsTimeout = NumberUtils.toInt(attrVal, secondsTimeout);
         }
-        final Calendar calendar = Calendar.getInstance();
+        final Calendar calendar = now();
         calendar.add(Calendar.SECOND, secondsTimeout);
         return calendar.getTime();
 
+    }
+
+    Calendar now() {
+        return TimeContext.getCalendar();
     }
 
     private boolean isCallcenterToken(final Shop shop, final String token) {

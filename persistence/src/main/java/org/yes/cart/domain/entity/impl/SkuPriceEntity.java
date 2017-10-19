@@ -17,6 +17,7 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -103,7 +104,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
             if (saleto == null) {
                 return this.salePrice;
             } else {
-                if (System.currentTimeMillis() < saleto.getTime()) {
+                if (now() < saleto.getTime()) {
                     return this.salePrice;  //sale not yet end
                 } else {
                     return null; //the sale is end;
@@ -111,19 +112,24 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
             }
         } else {
             if (saleto == null) {
-                if (System.currentTimeMillis() > salefrom.getTime()) {
+                if (now() > salefrom.getTime()) {
                     return this.salePrice; //endless sale
                 } else {
                     return null; // sale not yet started
                 }
             } else {
-                if (System.currentTimeMillis() > salefrom.getTime() && System.currentTimeMillis() < saleto.getTime()) {
+                final long now = now();
+                if (now > salefrom.getTime() && now < saleto.getTime()) {
                     return this.salePrice; //sale in time range
                 } else {
                     return null;
                 }
             }
         }
+    }
+
+    private long now() {
+        return TimeContext.getMillis();
     }
 
     public void setSalePrice(BigDecimal salePrice) {

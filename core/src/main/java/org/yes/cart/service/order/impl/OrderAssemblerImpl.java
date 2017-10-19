@@ -33,8 +33,8 @@ import org.yes.cart.shoppingcart.PriceResolver;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.TimeContext;
 
-import java.lang.System;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -143,7 +143,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setLocale(shoppingCart.getCurrentLocale());
         customerOrder.setCurrency(shoppingCart.getCurrencyCode());
         customerOrder.setOrderStatus(CustomerOrder.ORDER_STATUS_NONE);
-        customerOrder.setOrderTimestamp(new Date());
+        customerOrder.setOrderTimestamp(nowOrder());
         customerOrder.setGuid(shoppingCart.getGuid());
         customerOrder.setCartGuid(shoppingCart.getGuid());
         customerOrder.setOrderIp(shoppingCart.getShoppingContext().getResolvedIp());
@@ -322,10 +322,18 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setB2bRemarks(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_REMARKS_ID));
 
         final long requestedDate = NumberUtils.toLong(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID), 0);
-        if (requestedDate > System.currentTimeMillis()) {
+        if (requestedDate > now()) {
             customerOrder.setRequestedDeliveryDate(new Date(requestedDate));
         }
 
+    }
+
+    long now() {
+        return TimeContext.getMillis();
+    }
+
+    Date nowOrder() {
+        return TimeContext.getTime();
     }
 
     /**

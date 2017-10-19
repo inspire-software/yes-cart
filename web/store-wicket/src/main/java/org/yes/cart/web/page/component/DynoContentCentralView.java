@@ -22,6 +22,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
@@ -59,7 +60,7 @@ public class DynoContentCentralView extends AbstractCentralView {
             contentBody = contentServiceFacade.getDynamicContentBody(getCategoryId(), getCurrentShopId(), lang, new HashMap<String, Object>() {{
                 put("shoppingCart", getCurrentCart());
                 put("shop", getCurrentShop());
-                put("datetime", new Date());
+                put("datetime", TimeContext.getTime());
             }});
         } else {
             contentBody = "";

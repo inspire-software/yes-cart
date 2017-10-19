@@ -16,10 +16,12 @@
 
 package org.yes.cart.search.dao.support;
 
+import org.yes.cart.domain.dto.CategoryRelationDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -36,6 +38,15 @@ public interface ShopCategoryRelationshipSupport {
      */
     List<Shop> getAll();
 
+
+    /**
+     * Get all categories with their corresponding child categories.
+     *
+     * @return mapped level representation of category tree
+     */
+    Map<Long, Set<Long>> getAllCategoriesIdsMap();
+
+
     /**
      * Get all categories including child categories, that belong to given shop.
      *
@@ -45,12 +56,28 @@ public interface ShopCategoryRelationshipSupport {
     Set<Long> getShopCategoriesIds(long shopId);
 
     /**
+     * Get all content including child content, that belong to given shop.
+     *
+     * @param shopId given shop
+     * @return linear representation of category tree
+     */
+    Set<Long> getShopContentIds(long shopId);
+
+    /**
      * Get category by id.
      *
      * @param categoryId given category id
      * @return category
      */
     Category getCategoryById(long categoryId);
+
+    /**
+     * Get category by id.
+     *
+     * @param categoryId given category id
+     * @return category
+     */
+    CategoryRelationDTO getCategoryRelationById(long categoryId);
 
 
     /**

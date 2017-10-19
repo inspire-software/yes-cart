@@ -32,6 +32,7 @@ import org.yes.cart.search.dao.IndexBuilder;
 import org.yes.cart.search.dao.LuceneDocumentAdapter;
 import org.yes.cart.search.dao.LuceneIndexProvider;
 import org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils;
+import org.yes.cart.util.TimeContext;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -92,7 +93,7 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
             remove = documents == null || documents.getSecond() == null || documents.getSecond().length == 0;
         }
 
-        final long indexTime = System.currentTimeMillis();
+        final long indexTime = now();
         final String name = indexProvider.getName();
         final IndexWriter iw = indexProvider.provideIndexWriter();
         try {
@@ -271,7 +272,7 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
 
                 Object tx = null;
                 try {
-
+                    TimeContext.setNow(); // TODO: Time Machine
                     currentIndexingCount.set(0);
 
                     final String name = indexProvider.getName();
@@ -284,9 +285,8 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
                         tx = startTx();
                     }
 
-                    final long indexTime = System.currentTimeMillis();
+                    final long indexTime = now();
                     final IndexWriter iw = indexProvider.provideIndexWriter();
-                    final FacetsConfig facetsConfig = new FacetsConfig();
 
                     final ResultsIterator<T> all = findAllIterator();
 
@@ -333,6 +333,7 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
                     LOGFTQ.error("Error during indexing", exp);
                 } finally {
                     asyncRunningState.set(COMPLETED);
+                    TimeContext.clear();
                     if (async) {
                         try {
                             endTx(tx);
@@ -344,6 +345,10 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
                 }
             }
         };
+    }
+
+    long now() {
+        return TimeContext.getMillis();
     }
 
     static class FTIndexStateImpl implements FTIndexState {

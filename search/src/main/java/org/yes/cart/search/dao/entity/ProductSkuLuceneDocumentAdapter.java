@@ -32,6 +32,7 @@ import org.yes.cart.search.dao.LuceneDocumentAdapter;
 import org.yes.cart.search.dao.support.NavigatableAttributesSupport;
 import org.yes.cart.search.query.impl.SearchUtil;
 import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.TimeContext;
 
 import java.lang.System;
 import java.util.*;
@@ -121,7 +122,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
     }
 
     long now() {
-        return System.currentTimeMillis();
+        return TimeContext.getMillis();
     }
 
 

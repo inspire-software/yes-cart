@@ -31,6 +31,7 @@ import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.DeliveryTimeEstimationVisitor;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.util.TimeContext;
 
 import java.util.*;
 
@@ -160,8 +161,6 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
         minDeliveryTime.set(Calendar.SECOND, 0);
         minDeliveryTime.set(Calendar.MILLISECOND, 0);
 
-        Calendar maxDeliveryTime = Calendar.getInstance();
-
         if (ff != null && ff.getDefaultBackorderStockLeadTime() > 0) {
             for (final CartItem item : shoppingCart.getCartItemList()) {
                 final String dgroup = item.getDeliveryBucket().getGroup();
@@ -181,6 +180,7 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
             minDeliveryTime.add(Calendar.DAY_OF_YEAR, minDays);
         }
 
+        Calendar maxDeliveryTime = Calendar.getInstance();
         // Set hard lower limit, before skipping exclusions
         maxDeliveryTime.setTime(minDeliveryTime.getTime());
 
@@ -406,7 +406,7 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
     }
 
     protected Calendar now() {
-        return Calendar.getInstance();
+        return TimeContext.getCalendar();
     }
 
     protected Map<Date, Date> getCarrierSlaExcludedDates(final CarrierSla sla) {

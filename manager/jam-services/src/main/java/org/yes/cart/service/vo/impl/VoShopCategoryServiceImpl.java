@@ -29,6 +29,7 @@ import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoShopCategoryService;
 import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.TimeContext;
 
 import java.util.Date;
 import java.util.List;
@@ -81,11 +82,15 @@ public class VoShopCategoryServiceImpl implements VoShopCategoryService {
                     name = dto.getDisplayNames().get(lang);
                 }
 
-                summary.getCategories().add(MutablePair.of(name, !DomainApiUtils.isObjectAvailableNow(true, dto.getAvailablefrom(), dto.getAvailableto(), new Date())));
+                summary.getCategories().add(MutablePair.of(name, !DomainApiUtils.isObjectAvailableNow(true, dto.getAvailablefrom(), dto.getAvailableto(), now())));
             }
         } else {
             throw new AccessDeniedException("Access is denied");
         }
+    }
+
+    Date now() {
+        return TimeContext.getTime();
     }
 
     /** {@inheritDoc} */

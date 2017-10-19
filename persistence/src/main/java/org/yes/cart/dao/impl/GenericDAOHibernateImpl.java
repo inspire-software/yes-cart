@@ -221,7 +221,15 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
         if (parameters != null) {
             setQueryParameters(query, parameters);
         }
-        return new ResultsIteratorImpl<T>(query.scroll(ScrollMode.FORWARD_ONLY));
+        // TODO: figure out how to perform HQL queries with "fetch collection" using FORWARD_ONLY scroll mode
+        /*
+            DerbyDriver complains about scrolling with on FORWARD_ONLY with fetch collections
+
+            Example: select p from ProductEntity p left join fetch p.productCategory
+                     would fail at Derby ResultSet level complaining about type TYPE_SCROLL_INSENSITIVE
+
+         */
+        return new ResultsIteratorImpl<T>(query.scroll(ScrollMode.SCROLL_INSENSITIVE));
     }
 
     /**

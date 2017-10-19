@@ -41,6 +41,7 @@
         <constructor-arg index="3" ref="cacheManager"/>
         <constructor-arg index="4">
             <list>
+                <value>shopService-allCategoriesIdsMap</value>
                 <value>shopService-shopCategoriesIds</value>
                 <value>shopService-shopContentIds</value>
                 <value>shopService-shopAllCategoriesIds</value>

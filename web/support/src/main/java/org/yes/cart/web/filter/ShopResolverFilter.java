@@ -25,6 +25,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.request.IPResolver;
 import org.yes.cart.web.support.request.impl.HttpServletRequestWrapper;
@@ -100,6 +101,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
         ApplicationDirector.setCurrentThemeChain(themeService.getThemeChainByShopId(shop.getShopId(), serverDomainName));
         ShopCodeContext.setShopCode(shop.getCode());
         ShopCodeContext.setShopId(shop.getShopId());
+        TimeContext.setNow(); // TODO: Time Machine
 
         return getModifiedRequest(servletRequest, ApplicationDirector.getCurrentThemeChain());
 
@@ -144,6 +146,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
 
         ApplicationDirector.clear();
         ShopCodeContext.clear();
+        TimeContext.clear();
 
     }
 

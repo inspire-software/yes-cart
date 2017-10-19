@@ -52,6 +52,7 @@
                 <property name="maxPoolSize" value="1"/>
             </bean>
         </property>
+        <property name="findAllNamedQuery" value="PRODUCTS.ALL.FOR.INDEX"/>
     </bean>
 
     <bean id="productDao" class="org.yes.cart.dao.impl.GenericFTSCapableDAOImpl">
@@ -86,6 +87,7 @@
                 <property name="maxPoolSize" value="1"/>
             </bean>
         </property>
+        <property name="findAllNamedQuery" value="PRODUCT.SKUS.ALL.FOR.INDEX"/>
     </bean>
 
     <bean id="productSkuDao" class="org.yes.cart.dao.impl.GenericFTSCapableDAOImpl">

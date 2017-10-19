@@ -28,6 +28,7 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -331,13 +332,17 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
             Product product = sku.getProduct();
             if (Product.AVAILABILITY_PREORDER == product.getAvailability()) {
                 // for preorder do not check from date
-                return !checkAvailabilityDates || DomainApiUtils.isObjectAvailableNow(true, null, product.getAvailableto(), new Date());
+                return !checkAvailabilityDates || DomainApiUtils.isObjectAvailableNow(true, null, product.getAvailableto(), now());
             } else if (Product.AVAILABILITY_BACKORDER == product.getAvailability()) {
                 // for back order check both dates
-                return !checkAvailabilityDates || DomainApiUtils.isObjectAvailableNow(true, product.getAvailablefrom(), product.getAvailableto(), new Date());
+                return !checkAvailabilityDates || DomainApiUtils.isObjectAvailableNow(true, product.getAvailablefrom(), product.getAvailableto(), now());
             }
         }
         return false;
+    }
+
+    Date now() {
+        return TimeContext.getTime();
     }
 
     /** IoC.*/

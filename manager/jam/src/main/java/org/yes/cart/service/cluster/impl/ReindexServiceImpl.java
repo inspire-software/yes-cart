@@ -46,6 +46,8 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
     private static final Logger LOG = LoggerFactory.getLogger(ReindexServiceImpl.class);
 
+    private static final long REINDEX_CHECK_SLEEP = 5000L;
+
     private final ClusterService clusterService;
 
     private final NodeService nodeService;
@@ -127,7 +129,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                             }
                         }
                         listener.notifyPing(state.toString());
-                        Thread.sleep(5000l);
+                        Thread.sleep(REINDEX_CHECK_SLEEP);
 
                     }
 
@@ -168,7 +170,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                             }
                         }
                         listener.notifyPing(state.toString());
-                        Thread.sleep(5000l);
+                        Thread.sleep(REINDEX_CHECK_SLEEP);
 
                     }
                     final StringBuilder summarySku = new StringBuilder("SKU indexing completed. Last traceable SKU count:\n");

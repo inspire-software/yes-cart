@@ -92,12 +92,12 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     /** {@inheritDoc} */
     public void initialise(final AmountCalculationStrategy calculationStrategy) {
         this.calculationStrategy = calculationStrategy;
-        this.processingStartTimestamp = System.currentTimeMillis();
+        this.processingStartTimestamp = now();
     }
 
     /** {@inheritDoc} */
     public void markDirty() {
-        this.modifiedTimestamp = System.currentTimeMillis();
+        this.modifiedTimestamp = now();
         if (!isModified()) {
             // New carts need artificial time lag.
             this.modifiedTimestamp += 1;
@@ -112,7 +112,11 @@ public class ShoppingCartImpl implements MutableShoppingCart {
         coupons.clear();
         orderInfo.clearInfo();
         total = new TotalImpl();
-        modifiedTimestamp = System.currentTimeMillis();
+        modifiedTimestamp = now();
+    }
+
+    long now() {
+        return System.currentTimeMillis();
     }
 
     /** {@inheritDoc} */

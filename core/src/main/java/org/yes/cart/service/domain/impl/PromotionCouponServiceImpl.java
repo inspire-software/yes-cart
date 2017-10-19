@@ -23,6 +23,7 @@ import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.promotion.PromotionCouponCodeGenerator;
 import org.yes.cart.service.domain.PromotionCouponService;
+import org.yes.cart.util.TimeContext;
 
 import java.util.Date;
 import java.util.List;
@@ -115,7 +116,7 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
     public PromotionCoupon findValidPromotionCoupon(String coupon, String customerEmail) {
 
         // Get enabled coupon code usage limit of which is greater than usage count
-        final Date now = new Date();
+        final Date now = now();
         final PromotionCoupon couponEntity = getGenericDao().findSingleByNamedQuery("ENABLED.COUPON.BY.CODE",
                 coupon, true, now, now);
         if (couponEntity == null) {
@@ -139,6 +140,10 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
         }
 
         return couponEntity;
+    }
+
+    Date now() {
+        return TimeContext.getTime();
     }
 
     /** {@inheritDoc} */

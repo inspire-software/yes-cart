@@ -30,6 +30,7 @@ import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -148,7 +149,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
                 final String requestedDateKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + customerOrderDelivery.getCarrierSla().getCarrierslaId() + entry.getKey().getSupplier();
                 final long requestedDate = NumberUtils.toLong(shoppingCart.getOrderInfo().getDetailByKey(requestedDateKey), 0);
-                if (requestedDate > System.currentTimeMillis()) {
+                if (requestedDate > now()) {
                     customerOrderDelivery.setRequestedDeliveryDate(new Date(requestedDate));
                 }
 
@@ -163,6 +164,10 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
         return order;
 
+    }
+
+    long now() {
+        return TimeContext.getMillis();
     }
 
     /**
