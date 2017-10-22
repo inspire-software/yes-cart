@@ -76,6 +76,7 @@ export class CategorySelectComponent implements OnInit {
 
   onRequest(parent:ITreeNode) {
     LogUtil.debug('CategorySelectComponent onRequest node', parent);
+    parent.expanded = !parent.expanded;
   }
 
   onRefresh() {
@@ -166,8 +167,9 @@ export class CategorySelectComponent implements OnInit {
       var id:string = catVo.categoryId.toString();
       var node:ITreeNode = {
         'id': id,
-        'name': catVo.name,
+        'name': catVo.name + (catVo.linkToName != null ? (' ( + ' + catVo.linkToName +' )') : ''),
         'children': [],
+        'childrenLoaded': true,
         'expanded': catVo.categoryId === 100 || catVo.parentId === current || expanded.hasOwnProperty('ID' + id), //the root is expanded by default
         'selected': catVo.categoryId === current, //treat root as already selected
         'disabled': false,
@@ -179,10 +181,10 @@ export class CategorySelectComponent implements OnInit {
           if (child.selected || child.expanded) {
             node.expanded = true; // Expand parent if child is selected or expanded
           }
+          if (child.source.parentId != catVo.categoryId) {
+            child.name += ' ( + )';
+          }
         });
-      }
-      if (node.selected) {
-        this.onSelectNode(node);
       }
       rez.push(node);
     }

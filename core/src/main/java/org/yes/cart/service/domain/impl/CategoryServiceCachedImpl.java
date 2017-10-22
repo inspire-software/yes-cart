@@ -122,8 +122,8 @@ public class CategoryServiceCachedImpl implements CategoryService {
      * {@inheritDoc}
      */
     @Cacheable(value = "categoryService-childCategoriesRecursiveIdsWithLinks")
-    public List<Long> getChildCategoriesRecursiveIdsWithLinks(final long categoryId) {
-        return categoryService.getChildCategoriesRecursiveIdsWithLinks(categoryId);
+    public List<Long> getChildCategoriesRecursiveIdsAndLinkIds(final long categoryId) {
+        return categoryService.getChildCategoriesRecursiveIdsAndLinkIds(categoryId);
     }
 
     /**
@@ -137,8 +137,8 @@ public class CategoryServiceCachedImpl implements CategoryService {
      * {@inheritDoc}
      */
     @Cacheable(value = "categoryService-categoryIdsWithLinks")
-    public List<Long> getCategoryIdsWithLinks(final long categoryId) {
-        return categoryService.getCategoryIdsWithLinks(categoryId);
+    public List<Long> getCategoryIdAndLinkId(final long categoryId) {
+        return categoryService.getCategoryIdAndLinkId(categoryId);
     }
 
     /**

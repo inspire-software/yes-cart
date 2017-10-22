@@ -21,7 +21,7 @@ import { FormValidationEvent, Futures, Future } from './../../shared/event/index
 import { WindowMessageEventBus } from './../../shared/services/index';
 import { UiUtil } from './../../shared/ui/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
-import { ContentSelectComponent } from './../../shared/content/index';
+import { ContentMinSelectComponent } from './../../shared/content/index';
 import { AttributeValuesComponent } from './../../shared/attributes/index';
 import { LogUtil } from './../../shared/log/index';
 import { LRUCache } from './../../shared/model/internal/cache.model';
@@ -61,7 +61,7 @@ export class ContentComponent implements OnInit, OnDestroy {
   private attributeValuesComponent:AttributeValuesComponent;
 
   @ViewChild('contentParentSelectComponent')
-  private contentParentSelectComponent:ContentSelectComponent;
+  private contentParentSelectComponent:ContentMinSelectComponent;
 
   @ViewChild('rawEditConfirmationModalDialog')
   private rawEditConfirmationModalDialog:ModalComponent;

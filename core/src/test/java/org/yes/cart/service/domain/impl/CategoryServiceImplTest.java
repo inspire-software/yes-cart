@@ -19,7 +19,6 @@ package org.yes.cart.service.domain.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.entity.*;
@@ -132,7 +131,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
     public void testGetChildCategoriesRecursiveIdsWithLinksTest() {
         Set<Long> categoryIds = new HashSet<Long>();
         categoryIds.addAll(Arrays.asList(101L, 102L, 103L, 104L, 105L, 143L, 144L));
-        List<Long> categories = categoryService.getChildCategoriesRecursiveIdsWithLinks(101L);
+        List<Long> categories = categoryService.getChildCategoriesRecursiveIdsAndLinkIds(101L);
         assertEquals(categoryIds.size(), categories.size());
         assertTrue(categoryIds.containsAll(categories));
     }
@@ -160,7 +159,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
     public void testGetChildCategoriesRecursiveIdsWithLinksLinkedTest() {
         Set<Long> categoryIds = new HashSet<Long>();
         categoryIds.addAll(Arrays.asList(401L, 411L, 312L, 313L));
-        List<Long> categories = categoryService.getChildCategoriesRecursiveIdsWithLinks(401L);
+        List<Long> categories = categoryService.getChildCategoriesRecursiveIdsAndLinkIds(401L);
         assertEquals(categoryIds.size(), categories.size());
         assertTrue(categoryIds.containsAll(categories));
     }

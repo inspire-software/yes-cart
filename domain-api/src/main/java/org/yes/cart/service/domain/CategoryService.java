@@ -134,7 +134,7 @@ public interface CategoryService extends GenericService<Category> {
      * @param categoryId given categoryId
      * @return list of child categories
      */
-    List<Long> getChildCategoriesRecursiveIdsWithLinks(long categoryId);
+    List<Long> getChildCategoriesRecursiveIdsAndLinkIds(long categoryId);
 
     /**
      * Get category id including linkToId.
@@ -142,7 +142,7 @@ public interface CategoryService extends GenericService<Category> {
      * @param categoryId given categoryId
      * @return list of categories
      */
-    List<Long> getCategoryIdsWithLinks(long categoryId);
+    List<Long> getCategoryIdAndLinkId(long categoryId);
 
     /**
      * Get category by id.

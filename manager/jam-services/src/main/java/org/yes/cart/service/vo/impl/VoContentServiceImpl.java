@@ -111,6 +111,50 @@ public class VoContentServiceImpl implements VoContentService {
         return Collections.emptyList();
     }
 
+    /** {@inheritDoc} */
+    public List<VoContent> getBranch(final long shopId, final long contentId, final List<Long> expanded) throws Exception {
+        if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
+            final List<CategoryDTO> categoryDTOs = dtoContentService.getBranchById(shopId, contentId, expanded);
+            final List<VoContent> vos = new ArrayList<VoContent>();
+            final Iterator<CategoryDTO> categoryDTOit = categoryDTOs.iterator();
+            while (categoryDTOit.hasNext()) {
+                if (!federationFacade.isManageable(categoryDTOit.next().getCategoryId(), CategoryDTO.class)) {
+                    categoryDTOit.remove();
+                }
+            }
+            adaptCategories(categoryDTOs, vos);
+            return vos;
+        }
+        return Collections.emptyList();
+    }
+
+    /** {@inheritDoc} */
+    public List<Long> getBranchPaths(final long shopId, final long contentId) throws Exception {
+        final List<Long> path = new ArrayList<Long>();
+        if (federationFacade.isShopAccessibleByCurrentManager(shopId) && federationFacade.isManageable(contentId, CategoryDTO.class)) {
+
+            path.add(contentId);
+
+            final long parentId = dtoContentService.getById(contentId).getParentId();
+
+            if (contentId != parentId && parentId > 0) {
+                path.addAll(getBranchPaths(shopId, parentId));
+            }
+        }
+        return path;
+    }
+
+    /** {@inheritDoc} */
+    public List<Long> getBranchesPaths(final long shopId, final List<Long> contentIds) throws Exception {
+        final List<Long> path = new ArrayList<Long>();
+        if (contentIds != null) {
+            for (final Long categoryId : contentIds) {
+                path.addAll(getBranchPaths(shopId, categoryId));
+            }
+        }
+        return path;
+    }
+
     /**
      * Adapt dto to vo recursively.
      * @param content list of dto
@@ -121,8 +165,10 @@ public class VoContentServiceImpl implements VoContentService {
             VoContent voCategory =
                     voAssemblySupport.assembleVo(VoContent.class, CategoryDTO.class, new VoContent(), dto);
             voContent.add(voCategory);
-            voCategory.setChildren(new ArrayList<VoContent>(dto.getChildren().size()));
-            adaptCategories(dto.getChildren(), voCategory.getChildren());
+            if (dto.getChildren() != null) {
+                voCategory.setChildren(new ArrayList<VoContent>(dto.getChildren().size()));
+                adaptCategories(dto.getChildren(), voCategory.getChildren());
+            }
         }
     }
 

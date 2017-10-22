@@ -25,17 +25,15 @@ import { LogUtil } from './../../shared/log/index';
 import { Util } from './../../shared/services/util';
 
 @Component({
-  selector: 'yc-product-categories',
+  selector: 'yc-product-categories-min',
   moduleId: module.id,
-  templateUrl: 'product-categories.component.html',
+  templateUrl: 'product-categories-min.component.html',
 })
 
 /**
  * Manage categories assigned to product.
  */
-export class ProductCategoryComponent implements OnInit, OnDestroy {
-
-  private static _categories:Array<CategoryVO> = null;
+export class ProductCategoryMinComponent implements OnInit, OnDestroy {
 
   @Output() dataChanged: EventEmitter<Array<ProductCategoryVO>> = new EventEmitter<Array<ProductCategoryVO>>();
 
@@ -76,7 +74,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
    */
   constructor(private _categoryService:CatalogService,
               fb: FormBuilder) {
-    LogUtil.debug('ProductCategoryComponent constructed');
+    LogUtil.debug('ProductCategoryMinComponent constructed');
 
     this.newCategory = this.newCategoryInstance();
     this.editCategory = this.newProductCategoryInstance();
@@ -129,22 +127,14 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
     return this._product;
   }
 
-  get categories():Array<CategoryVO> {
-    return ProductCategoryComponent._categories;
-  }
-
-  set categories(categories:Array<CategoryVO>) {
-    ProductCategoryComponent._categories = categories;
-  }
-
   ngOnInit() {
-    LogUtil.debug('ProductCategoryComponent ngOnInit product', this.product);
+    LogUtil.debug('ProductCategoryMinComponent ngOnInit product', this.product);
     this.formBindAdd();
     this.formBindEdit();
   }
 
   ngOnDestroy() {
-    LogUtil.debug('ProductCategoryComponent ngOnDestroy');
+    LogUtil.debug('ProductCategoryMinComponent ngOnDestroy');
     this.formUnbindAdd();
     this.formUnbindEdit();
   }
@@ -166,7 +156,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
   }
 
   formChangeAdd():void {
-    LogUtil.debug('ProductCategoryComponent formChangeAdd', this.newCategoryForm.valid, this.newCategory);
+    LogUtil.debug('ProductCategoryMinComponent formChangeAdd', this.newCategoryForm.valid, this.newCategory);
     this.validForSave = this.newCategoryForm.valid;
   }
 
@@ -182,37 +172,79 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
 
 
   formChangeEdit():void {
-    LogUtil.debug('ProductCategoryComponent formChangeEdit', this.editCategoryForm.valid, this.editCategory);
+    LogUtil.debug('ProductCategoryMinComponent formChangeEdit', this.editCategoryForm.valid, this.editCategory);
     this.validForEdit = this.editCategoryForm.valid;
   }
 
   /**
    * Load data and adapt time.
    */
-  loadData() {
-    LogUtil.debug('ProductCategoryComponent loading categories', this.product);
+  loadData(current:number = 0) {
+    LogUtil.debug('ProductCategoryMinComponent loading categories', this.product);
     this.existingProduct = this.product != null;
     if (this.existingProduct) {
 
-        this.loading = true;
+      this.assigned = this._product.productCategories;
+      var _assignedIds:Array<number> = this.adaptToIds(this.assigned);
 
-        this.assigned = this._product.productCategories;
-        var _assignedIds:Array<number> = this.adaptToIds(this.assigned);
-
-        var _subc:any = this._categoryService.getAllCategories().subscribe(
+        if (current > 0) {
+          // expanding single node
+          this.loading = true;
+          var _subc:any = this._categoryService.getBranchCategories(current, []).subscribe(
             cats => {
-              LogUtil.debug('ProductCategoryComponent all categories', cats, _assignedIds);
-              this.categories = cats;
-              this.nodes = this.adaptToTree(cats, _assignedIds);
-              this.selectedNode = null;
-              UiUtil.formInitialise(this, 'initialisingAdd', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
-              UiUtil.formInitialise(this, 'initialisingEdit', 'editCategoryForm', 'editCategory', this.newProductCategoryInstance());
-              this.changed = false;
-              this._reload = false;
+              LogUtil.debug('ProductCategoryMinComponent branch categories', cats, _assignedIds);
+              let branchNodes = this.adaptToTree(cats, _assignedIds);
+
+              LogUtil.debug('ProductCategoryMinComponent adaptToTree', branchNodes);
+
+              let branch = this.resetCurrent(this.nodes, branchNodes[0]);
+              if (branch == null) {
+                this.nodes = branchNodes;
+                LogUtil.debug('ProductCategoryMinComponent root categories', this.nodes);
+              } else {
+                LogUtil.debug('ProductCategoryMinComponent branch categories', this.nodes, branch);
+              }
+
+              // this.selectedNode = null;
+              // UiUtil.formInitialise(this, 'initialisingAdd', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+              // UiUtil.formInitialise(this, 'initialisingEdit', 'editCategoryForm', 'editCategory', this.newProductCategoryInstance());
+              // this.changed = false;
+              // this._reload = false;
               this.loading = false;
               _subc.unsubscribe();
-          }
-        );
+            }
+          );
+
+        } else {
+          // expanding initial
+          this.loading = true;
+          var _subc:any = this._categoryService.getBranchesCategoriesPaths(_assignedIds).subscribe(
+            cats => {
+              LogUtil.debug('ProductCategoryMinComponent loading branch path', cats);
+              _subc.unsubscribe();
+
+              this.loading = true;
+
+              var _subc2:any = this._categoryService.getBranchCategories(0, cats).subscribe(
+                cats => {
+                  LogUtil.debug('ProductCategoryMinComponent initial categories', cats, _assignedIds);
+                  this.nodes = this.adaptToTree(cats, _assignedIds);
+                  this.selectedNode = null;
+                  UiUtil.formInitialise(this, 'initialisingAdd', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+                  UiUtil.formInitialise(this, 'initialisingEdit', 'editCategoryForm', 'editCategory', this.newProductCategoryInstance());
+                  this.changed = false;
+                  this._reload = false;
+                  this.loading = false;
+                  _subc2.unsubscribe();
+                }
+              );
+
+            }
+          );
+
+
+        }
+
     }
   }
 
@@ -238,7 +270,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
         'id': catVo.categoryId.toString(),
         'name': catVo.name,
         'children': [],
-        'childrenLoaded': true,
+        'childrenLoaded': catVo.children != null,
         'expanded': catVo.categoryId === 100, //the root is expanded by default
         'selected': catVo.categoryId === 100, //treat root as already selected
         'disabled': disabled.indexOf(catVo.categoryId) !== -1,
@@ -257,15 +289,43 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
     return rez;
   }
 
+
+  resetCurrent(nodes:Array<ITreeNode>, current:ITreeNode):ITreeNode {
+    if (nodes != null) {
+
+      LogUtil.debug('ProductCategoryMinComponent resetCurrent', nodes, current);
+
+      for (var idx = 0; idx < nodes.length; idx++) {
+        let node:ITreeNode = nodes[idx];
+        LogUtil.debug('ProductCategoryMinComponent resetCurrent matching', node, current);
+        if (node.id == current.id) {
+          LogUtil.debug('ProductCategoryMinComponent resetCurrent matched', node, current);
+          current.expanded = true;
+          nodes[idx] = current;
+          return current;
+        }
+        if (node.children != null && node.children.length > 0) {
+          let child = this.resetCurrent(node.children, current);
+          if (child != null) {
+            return child;
+          }
+        }
+      }
+    }
+    LogUtil.debug('ProductCategoryMinComponent resetCurrent no match');
+    return null;
+  }
+
+
   /**
    * Assign selected category to product.
    * @param node
    */
   assignToProductClick(node:ITreeNode) {
-    LogUtil.debug('ProductCategoryComponent assignToProduct ', node);
+    LogUtil.debug('ProductCategoryMinComponent assignToProduct ', node);
     let catVo = node.source;
     this.assigned.push({ productCategoryId: 0,  productId: this._product.productId, categoryId: catVo.categoryId, categoryCode: catVo.guid, categoryName: catVo.name, rank: 0 });
-    LogUtil.debug('ProductCategoryComponent disabled node', node);
+    LogUtil.debug('ProductCategoryMinComponent disabled node', node);
     this.changeDisabledState(catVo, this.nodes, true);
     this.selectedNode = null;
     this.changed = true;
@@ -277,11 +337,11 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
    * @param cat category
      */
   onAssignedClick(cat:CategoryVO) {
-    LogUtil.debug('ProductCategoryComponent onAssigned', cat);
+    LogUtil.debug('ProductCategoryMinComponent onAssigned', cat);
     for (var idx = 0; idx < this.assigned.length; idx++) {
       var catVo : ProductCategoryVO = this.assigned[idx];
       if (catVo.categoryId === cat.categoryId) {
-        LogUtil.debug('ProductCategoryComponent remove from assigned', catVo);
+        LogUtil.debug('ProductCategoryMinComponent remove from assigned', catVo);
         this.assigned.splice(idx, 1);
         this.changeDisabledState(catVo, this.nodes, false);
         this.changed = true;
@@ -300,7 +360,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
         if (disabled) {
           node.expanded = false;
         }
-        LogUtil.debug('ProductCategoryComponent enabled node', node);
+        LogUtil.debug('ProductCategoryMinComponent enabled node', node);
         changed = true;
       } else if (node.children && this.changeDisabledState(cat, node.children, disabled)) {
         changed = true;
@@ -314,7 +374,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
    * @param node
    */
   onSelectNode(node:ITreeNode) {
-    LogUtil.debug('ProductCategoryComponent selected node', node);
+    LogUtil.debug('ProductCategoryMinComponent selected node', node);
     if (node.disabled === false) {
       node.expanded = false; // collapse on selection, to prevent recursive selection (i.e. sub categories from same branch)
       this.selectedNode = node;
@@ -322,8 +382,12 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
   }
 
   onRequest(parent:ITreeNode) {
-    LogUtil.debug('ProductCategoryComponent onRequest node', parent);
+    LogUtil.debug('ProductCategoryMinComponent onRequest node', parent);
     parent.expanded = !parent.expanded;
+    if (!parent.childrenLoaded) {
+      this.loadData(parent.source.categoryId);
+    }
+
   }
 
 
@@ -332,7 +396,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
    * @param parent parent of new catecory
    */
   createNew(parent:ITreeNode) {
-    LogUtil.debug('ProductCategoryComponent createNew for parent', parent);
+    LogUtil.debug('ProductCategoryMinComponent createNew for parent', parent);
     this.validForSave = false;
     UiUtil.formInitialise(this, 'initialisingAdd', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
     this.editNewCategoryName.show();
@@ -343,7 +407,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
    * @param modalresult
      */
   editNewCategoryNameModalResult(modalresult:ModalResult) {
-    LogUtil.debug('ProductCategoryComponent editNewCategoryNameModalResult modal result', modalresult);
+    LogUtil.debug('ProductCategoryMinComponent editNewCategoryNameModalResult modal result', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       this._categoryService.createCategory(this.newCategory, +this.selectedNode.id).subscribe(
         catVo => {
@@ -357,7 +421,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
 
 
   onRankClick(cat:ProductCategoryVO) {
-    LogUtil.debug('ProductCategoryComponent onRank', cat);
+    LogUtil.debug('ProductCategoryMinComponent onRank', cat);
 
     this.validForEdit = false;
     UiUtil.formInitialise(this, 'initialisingEdit', 'editCategoryForm', 'editCategory', Util.clone(cat));
@@ -371,7 +435,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
    * @param modalresult
    */
   editCategoryRankModalResult(modalresult:ModalResult) {
-    LogUtil.debug('ProductCategoryComponent editCategoryRankModalResult modal result', modalresult);
+    LogUtil.debug('ProductCategoryMinComponent editCategoryRankModalResult modal result', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       let _cat = this.assigned.find( cat => {

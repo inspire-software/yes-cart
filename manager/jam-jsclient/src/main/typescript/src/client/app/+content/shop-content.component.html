@@ -80,7 +80,7 @@
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
   </yc-modal>
 
-  <yc-content-select #contentSelectComponent [shop]="shop"
-                     (dataSelected)="onContentTreeDataSelected($event)"></yc-content-select>
+  <yc-content-min-select #contentSelectComponent [shop]="shop"
+                         (dataSelected)="onContentTreeDataSelected($event)"></yc-content-min-select>
 
 </div>

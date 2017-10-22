@@ -34,12 +34,39 @@ public interface VoContentService {
     List<VoContent> getAll(long shopId) throws Exception;
 
     /**
+     * Get content branch with expanded sub-branches, filtered according to rights
+     *
+     * @param contentId branch to determine path for
+     * @param expanded ids with paths to expand (must be full top-down paths)
+     * @return list of content
+     * @throws Exception
+     */
+    List<VoContent> getBranch(long shopId, long contentId, List<Long> expanded) throws Exception;
+
+    /**
+     * Get path for given content branch path
+     *
+     * @param contentId branch to determine path for
+     * @return path to given category (full top-down path)
+     * @throws Exception
+     */
+    List<Long> getBranchPaths(long shopId, long contentId) throws Exception;
+
+    /**
+     * Get paths for given content branch path
+     *
+     * @param contentIds branches to determine path for
+     * @return path to given category (full top-down paths)
+     * @throws Exception
+     */
+    List<Long> getBranchesPaths(long shopId, List<Long> contentIds) throws Exception;
+
+    /**
      * Get all categories in the system, filtered by criteria and according to rights, up to max
      * @return list of categories
      * @throws Exception
      */
     List<VoContent> getFiltered(long shopId, String filter, int max) throws Exception;
-
 
     /**
      * Get summary information for given shop.

@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ShopService, ContentService, ShopEventBus } from './../shared/services/index';
-import { ContentSelectComponent } from './../shared/content/index';
+import { ContentMinSelectComponent } from './../shared/content/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { ShopVO, ShopUrlVO, ContentWithBodyVO, ContentVO, AttrValueContentVO, Pair } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
@@ -71,7 +71,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   private deleteValue:String;
 
   @ViewChild('contentSelectComponent')
-  private contentSelectComponent:ContentSelectComponent;
+  private contentSelectComponent:ContentMinSelectComponent;
 
   private loading:boolean = false;
 

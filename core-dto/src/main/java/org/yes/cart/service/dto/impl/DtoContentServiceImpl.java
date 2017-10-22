@@ -52,6 +52,8 @@ public class DtoContentServiceImpl
         extends AbstractDtoServiceImpl<CategoryDTO, CategoryDTOImpl, Category>
         implements DtoContentService {
 
+    private static final CategoryRankNameComparator CATEGORY_RANK_NAME_COMPARATOR = new CategoryRankNameComparator();
+
     private final GenericService<ProductType> productTypeService;
 
     private final GenericService<Attribute> attributeService;
@@ -123,31 +125,67 @@ public class DtoContentServiceImpl
      */
     public List<CategoryDTO> getAllWithAvailabilityFilter(final long shopId, final boolean withAvailabilityFiltering)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ContentService categoryService = (ContentService) service;
-        Category root = categoryService.getRootContent(shopId);
+        ContentService contentService = (ContentService) service;
+        Category root = contentService.getRootContent(shopId);
         if (root != null) {
             CategoryDTO rootDTO = getById(root.getCategoryId());
-            getAllFromRoot(rootDTO, withAvailabilityFiltering);
+            loadBranch(rootDTO, withAvailabilityFiltering, Integer.MAX_VALUE, Collections.emptyList());
             return Collections.singletonList(rootDTO);
         }
         return null;
     }
 
 
-    private List<CategoryDTO> getAllFromRoot(final CategoryDTO rootDTO, final boolean withAvailalilityFiltering)
+    private List<CategoryDTO> loadBranch(final CategoryDTO rootDTO,
+                                         final boolean withAvailabilityFiltering,
+                                         final int expandLevel,
+                                         final List<Long> expandNodes)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final ContentService categoryService = (ContentService) service;
-        final List<Category> childCategories = new ArrayList<Category>(categoryService.findChildContentWithAvailability(
-                rootDTO.getCategoryId(),
-                withAvailalilityFiltering));
-        Collections.sort(childCategories, new CategoryRankNameComparator());
-        final List<CategoryDTO> childCategoriesDTO = new ArrayList<CategoryDTO>(childCategories.size());
-        fillDTOs(childCategories, childCategoriesDTO);
-        rootDTO.setChildren(childCategoriesDTO);
-        for (CategoryDTO dto : childCategoriesDTO) {
-            dto.setChildren(getAllFromRoot(dto, withAvailalilityFiltering));
+        if (rootDTO != null) {
+            final ContentService contentService = (ContentService) service;
+            final List<Category> childContent = new ArrayList<Category>(contentService.findChildContentWithAvailability(
+                    rootDTO.getCategoryId(),
+                    withAvailabilityFiltering));
+            Collections.sort(childContent, CATEGORY_RANK_NAME_COMPARATOR);
+            final List<CategoryDTO> childCategoriesDTO = new ArrayList<CategoryDTO>(childContent.size());
+            fillDTOs(childContent, childCategoriesDTO);
+            rootDTO.setChildren(childCategoriesDTO);
+            if (expandLevel > 1 || !expandNodes.isEmpty()) {
+                for (CategoryDTO dto : childCategoriesDTO) {
+                    if (expandLevel > 1 || expandNodes.contains(dto.getCategoryId())) {
+                        dto.setChildren(loadBranch(dto, withAvailabilityFiltering, expandLevel - 1, expandNodes));
+                    }
+                }
+            }
+            return childCategoriesDTO;
         }
-        return childCategoriesDTO;
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<CategoryDTO> getBranchById(final long shopId, final long categoryId, final List<Long> expand)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return getBranchByIdWithAvailabilityFilter(shopId, categoryId, false, expand);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<CategoryDTO> getBranchByIdWithAvailabilityFilter(final long shopId, final long contentId, final boolean withAvailabilityFiltering, final List<Long> expand)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        ContentService contentService = (ContentService) service;
+        final Category branchRoot = contentId > 0L ? contentService.getById(contentId) : contentService.getRootContent(shopId);
+        if (branchRoot != null) {
+            CategoryDTO rootDTO = getById(branchRoot.getCategoryId());
+            if (rootDTO != null) {
+                loadBranch(rootDTO, withAvailabilityFiltering, 1, expand != null ? expand : Collections.emptyList());
+            }
+            return Collections.singletonList(rootDTO);
+        }
+        return Collections.emptyList();
     }
 
     /**

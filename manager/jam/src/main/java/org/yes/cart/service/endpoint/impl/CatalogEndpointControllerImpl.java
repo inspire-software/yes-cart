@@ -15,10 +15,13 @@
  */
 package org.yes.cart.service.endpoint.impl;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
@@ -27,6 +30,7 @@ import org.yes.cart.service.vo.VoBrandService;
 import org.yes.cart.service.vo.VoCategoryService;
 import org.yes.cart.service.vo.VoProductTypeService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -124,6 +128,30 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
     public @ResponseBody
     List<VoCategory> getAllCategories() throws Exception {
         return voCategoryService.getAll();
+    }
+
+    public @ResponseBody
+    List<VoCategory> getBranchCategories(@PathVariable("branch") final long branch,
+                                         @RequestParam(value = "expand", required = false) final String expand) throws Exception {
+        return voCategoryService.getBranch(branch, determineBranchIds(expand));
+    }
+
+    public @ResponseBody
+    List<Long> getBranchesCategoriesPaths(@RequestParam(value = "expand", required = false) final String expand) throws Exception {
+        return voCategoryService.getBranchesPaths(determineBranchIds(expand));
+    }
+
+    private List<Long> determineBranchIds(final @RequestParam(value = "expand", required = false) String expand) {
+        List<Long> expandIds = new ArrayList<Long>(50);
+        if (StringUtils.isNotBlank(expand)) {
+            for (final String expandItem : StringUtils.split(expand, '|')) {
+                final long id = NumberUtils.toLong(expandItem);
+                if (id > 0L) {
+                    expandIds.add(id);
+                }
+            }
+        }
+        return expandIds;
     }
 
     public @ResponseBody

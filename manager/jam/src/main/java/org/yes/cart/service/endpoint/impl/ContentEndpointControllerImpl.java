@@ -15,6 +15,8 @@
  */
 package org.yes.cart.service.endpoint.impl;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +32,7 @@ import org.yes.cart.service.endpoint.ContentEndpointController;
 import org.yes.cart.service.vo.VoContentService;
 import org.yes.cart.service.vo.VoMailService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,6 +56,29 @@ public class ContentEndpointControllerImpl implements ContentEndpointController 
     public @ResponseBody
     List<VoContent> getShopContent(@PathVariable("shopId") final long shopId) throws Exception {
         return voContentService.getAll(shopId);
+    }
+
+    public @ResponseBody
+    List<VoContent> getShopBranchContent(@PathVariable("shopId") final long shopId, @PathVariable("branch") final long branch, @RequestParam(value = "expand", required = false) final String expand) throws Exception {
+        return voContentService.getBranch(shopId, branch, determineBranchIds(expand));
+    }
+
+    public @ResponseBody
+    List<Long> getShopBranchesContentPaths(@PathVariable("shopId") final long shopId, @RequestParam(value = "expand", required = false) final String expand) throws Exception {
+        return voContentService.getBranchesPaths(shopId, determineBranchIds(expand));
+    }
+
+    private List<Long> determineBranchIds(final @RequestParam(value = "expand", required = false) String expand) {
+        List<Long> expandIds = new ArrayList<Long>(50);
+        if (StringUtils.isNotBlank(expand)) {
+            for (final String expandItem : StringUtils.split(expand, '|')) {
+                final long id = NumberUtils.toLong(expandItem);
+                if (id > 0L) {
+                    expandIds.add(id);
+                }
+            }
+        }
+        return expandIds;
     }
 
     public @ResponseBody

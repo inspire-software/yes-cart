@@ -3327,7 +3327,7 @@
 
     <query name="CATEGORY.SUBCATEGORY.COUNT">
         <![CDATA[
-                  select count(c.categoryId) from CategoryEntity c  where c.parentId = ?1
+                  select count(c.categoryId) from CategoryEntity c  where c.parentId in (?1)
        ]]>
     </query>
 

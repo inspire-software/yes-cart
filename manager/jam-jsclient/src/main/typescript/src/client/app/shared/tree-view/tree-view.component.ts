@@ -19,6 +19,7 @@ export interface ITreeNode {
   id: string;
   name: string;
   children: Array<ITreeNode>;
+  childrenLoaded: boolean;
   expanded: boolean;
   selected: boolean;
   disabled: boolean;
@@ -48,11 +49,12 @@ export class TreeViewComponent {
 
   onExpand(node:ITreeNode):void {
     if (!node.disabled) {
-      node.expanded = !node.expanded;
-      if (node.expanded && node.children.length === 0) {
-        this.onRequestNodes.emit(node);
-      }
+      this.onRequestNodes.emit(node);
     }
+  }
+
+  hasChildren(node:ITreeNode):boolean {
+    return node.childrenLoaded == false || node.children.length > 0;
   }
 
   isExpanded(node:ITreeNode):boolean {
@@ -61,6 +63,10 @@ export class TreeViewComponent {
 
   isDisabled(node:ITreeNode):boolean {
     return node.disabled;
+  }
+
+  isChildrenVisible(node:ITreeNode):boolean {
+    return !node.disabled && node.expanded;
   }
 
 }

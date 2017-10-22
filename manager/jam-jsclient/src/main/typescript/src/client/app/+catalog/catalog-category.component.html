@@ -83,7 +83,7 @@
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
   </yc-modal>
 
-  <yc-category-select #categorySelectComponent
-                      (dataSelected)="onCatalogTreeDataSelected($event)"></yc-category-select>
+  <yc-category-min-select #categorySelectComponent
+                          (dataSelected)="onCatalogTreeDataSelected($event)"></yc-category-min-select>
 
 </div>

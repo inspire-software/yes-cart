@@ -21,9 +21,7 @@ import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.TimeContext;
@@ -119,9 +117,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * {@inheritDoc}
      */
     public boolean isCategoryHasChildren(final long categoryId) {
-        final Category category = proxy().getById(categoryId);
-        if (category != null) {
-            final long id = category.getLinkToId() != null ? category.getLinkToId() : categoryId;
+        final List<Long> id = getCategoryIdAndLinkId(categoryId);
+        if (id != null) {
             List<Object> count = categoryDao.findQueryObjectByNamedQuery("CATEGORY.SUBCATEGORY.COUNT", id);
             if (count != null && count.size() == 1) {
                 int qty = ((Number) count.get(0)).intValue();
@@ -141,7 +138,10 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         final Category current = proxy().getById(categoryId);
         if (current != null) {
             if (current.getLinkToId() != null) {
-                return findChildCategoriesWithAvailability(current.getLinkToId(), true);
+                final List<Category> cats = new ArrayList<Category>();
+                cats.addAll(findChildCategoriesWithAvailability(current.getLinkToId(), true));
+                cats.addAll(findChildCategoriesWithAvailability(categoryId, true));
+                return cats;
             }
 
             return findChildCategoriesWithAvailability(categoryId, true);
@@ -206,18 +206,18 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         if (cats.isEmpty()) {
             return Collections.emptyList();
         }
-        return Collections.unmodifiableList(transform(cats));
+        return Collections.unmodifiableList(transformToId(cats));
     }
 
     /**
      * {@inheritDoc}
      */
-    public List<Long> getChildCategoriesRecursiveIdsWithLinks(final long categoryId) {
+    public List<Long> getChildCategoriesRecursiveIdsAndLinkIds(final long categoryId) {
         final Set<Category> cats = proxy().getChildCategoriesRecursive(categoryId);
         if (cats.isEmpty()) {
             return Collections.emptyList();
         }
-        return Collections.unmodifiableList(transformWithLinks(cats));
+        return Collections.unmodifiableList(transformToIdAndLinkId(cats));
     }
 
     private void loadChildCategoriesRecursiveInternal(final Set<Category> result, final Category category) {
@@ -280,7 +280,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    public List<Long> getCategoryIdsWithLinks(final long categoryId) {
+    public List<Long> getCategoryIdAndLinkId(final long categoryId) {
         final Category category = proxy().getById(categoryId);
         if (category != null) {
             if (category.getLinkToId() != null) {
@@ -333,7 +333,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         return cat;
     }
 
-    private List<Long> transform(final Collection<Category> categories) {
+    private List<Long> transformToId(final Collection<Category> categories) {
         final Set<Long> result = new LinkedHashSet<Long>(categories.size());
         for (Category category : categories) {
             result.add(category.getCategoryId());
@@ -341,7 +341,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         return new ArrayList<Long>(result);
     }
 
-    private List<Long> transformWithLinks(final Collection<Category> categories) {
+    private List<Long> transformToIdAndLinkId(final Collection<Category> categories) {
         final Set<Long> result = new LinkedHashSet<Long>(categories.size());
         for (Category category : categories) {
             result.add(category.getCategoryId());

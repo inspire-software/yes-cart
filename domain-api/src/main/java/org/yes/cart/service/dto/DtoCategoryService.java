@@ -72,6 +72,35 @@ public interface DtoCategoryService extends GenericDTOService<CategoryDTO>, Gene
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
+     * Get categories branch.
+     *
+     * @param categoryId category id branch (or 0L for root)
+     * @param expand category IDs if need to further expand specific paths in a branch
+     * @return list of assigned categories
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    List<CategoryDTO> getBranchById(long categoryId, List<Long> expand)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Get categories branch.
+     *
+     * @param categoryId category id branch (or 0L for root)
+     * @param withAvailabilityFiltering true if need to filter
+     * @param expand category IDs if need to further expand specific paths in a branch
+     * @return list of assigned categories
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    List<CategoryDTO> getBranchByIdWithAvailabilityFilter(long categoryId, boolean withAvailabilityFiltering, List<Long> expand)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
      * Assign category to shop.
      *
      * @param categoryId category id

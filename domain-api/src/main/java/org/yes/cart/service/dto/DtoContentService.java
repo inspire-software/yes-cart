@@ -78,9 +78,39 @@ public interface DtoContentService extends GenericDTOService<CategoryDTO>, Gener
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration problem
      */
-    List<CategoryDTO> getAllWithAvailabilityFilter(final long shopId, boolean withAvailabilityFiltering)
+    List<CategoryDTO> getAllWithAvailabilityFilter(long shopId, boolean withAvailabilityFiltering)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Get content branch.
+     *
+     * @param shopId shop id
+     * @param categoryId content id branch (or 0L for root)
+     * @param expand content IDs if need to further expand specific paths in a branch
+     * @return list of assigned content
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    List<CategoryDTO> getBranchById(long shopId, long categoryId, List<Long> expand)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Get content branch.
+     *
+     * @param shopId shop id
+     * @param contentId content id branch (or 0L for root)
+     * @param withAvailabilityFiltering true if need to filter
+     * @param expand content IDs if need to further expand specific paths in a branch
+     * @return list of assigned content
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    List<CategoryDTO> getBranchByIdWithAvailabilityFilter(long shopId, long contentId, boolean withAvailabilityFiltering, List<Long> expand)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Get the business entity attributes values, that contains two set of attribute values: with values

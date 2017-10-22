@@ -8,7 +8,7 @@ import { AddressBookPagesModule } from '../+address/address.pages.module';
 
 import { SystemPagesModule } from '../+system/system.pages.module';
 
-import { ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCurrencyComponent,
+import { ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCatalogMinComponent, ShopCurrencyComponent,
   ShopFulfilmentCentreComponent, ShopLanguageComponent, ShopLocationComponent, ShopMainComponent,
   ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent, ShopAliasComponent,
   ShopSummaryComponent, ShopSubsComponent } from './components/index';
@@ -17,14 +17,14 @@ import { ShopComponent, SubShopComponent } from './index';
 @NgModule({
     imports: [CommonModule, SharedModule, ServicesModule, SystemPagesModule, AddressBookPagesModule],
     declarations: [
-      ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCurrencyComponent,
+      ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCatalogMinComponent, ShopCurrencyComponent,
       ShopFulfilmentCentreComponent, ShopLanguageComponent, ShopLocationComponent, ShopMainComponent,
       ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent, ShopAliasComponent,
       ShopSummaryComponent, ShopSubsComponent,
       ShopComponent, SubShopComponent
     ],
     exports: [
-      ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCurrencyComponent,
+      ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCatalogMinComponent, ShopCurrencyComponent,
       ShopFulfilmentCentreComponent, ShopLanguageComponent, ShopLocationComponent, ShopMainComponent,
       ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent, ShopAliasComponent,
       ShopSummaryComponent, ShopSubsComponent,

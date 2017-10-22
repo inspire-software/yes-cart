@@ -78,6 +78,7 @@ export class ContentSelectComponent implements OnInit {
 
   onRequest(parent:ITreeNode) {
     LogUtil.debug('ContentSelectComponent onRequest node', parent);
+    parent.expanded = !parent.expanded;
   }
 
   onRefresh() {
@@ -172,6 +173,7 @@ export class ContentSelectComponent implements OnInit {
         'id': id,
         'name': catVo.name,
         'children': [],
+        'childrenLoaded': true,
         'expanded': catVo.parentId === 0 || expanded.hasOwnProperty('ID' + id), //the root is expanded by default
         'selected': catVo.contentId === current, //treat root as already selected
         'disabled': false,

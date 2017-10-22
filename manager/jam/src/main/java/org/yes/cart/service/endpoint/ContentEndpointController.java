@@ -43,6 +43,16 @@ public interface ContentEndpointController {
     List<VoContent> getShopContent(@PathVariable("shopId") long shopId) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
+    @RequestMapping(value = "/shop/{shopId}/branch/{branch}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoContent> getShopBranchContent(@PathVariable("shopId") long shopId, @PathVariable("branch") long branch, @RequestParam(value = "expand", required = false) String expand) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
+    @RequestMapping(value = "/shop/{shopId}/branchpaths", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<Long> getShopBranchesContentPaths(@PathVariable("shopId") long shopId, @RequestParam(value = "expand", required = false) String expand) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
     @RequestMapping(value = "/shop/{shopId}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoContent> getFilteredContent(@PathVariable("shopId") long shopId, @RequestBody(required = false) String filter, @PathVariable("max") int max) throws Exception;

@@ -1,0 +1,19 @@
+<yc-modal #contentTreeModalDialog
+       title="{{ 'PANEL_CMS_CONTENT' | translate }}"
+       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+       positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+       [valid]="validForSelect"
+       (closed)="onSelectConfirmationResult($event)">
+  <div class="pull-right">
+    <button type="button" (click)="onRefresh()" class="btn btn-info btn-circle" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
+      <i class="fa fa-refresh"></i>
+    </button>
+  </div>
+  <div style="max-height: 400px;overflow-y: auto" class="{{ loading ? 'loading-data' : '' }}">
+    <yc-tree-view [nodes]="nodes"
+                  [selectedNode]="selectedNode"
+                  (onSelectedChanged)="onSelectNode($event)"
+                  (onRequestNodes)="onRequest($event)">
+    </yc-tree-view>
+  </div>
+</yc-modal>

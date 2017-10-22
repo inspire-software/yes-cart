@@ -26,6 +26,7 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.VoAttrValueCategory;
 import org.yes.cart.domain.vo.VoCategory;
+import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCategoryService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -104,6 +105,50 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     /** {@inheritDoc} */
     public List<VoCategory> getAll() throws Exception {
         final List<CategoryDTO> categoryDTOs = dtoCategoryService.getAll();
+        return loadCategoryTree(categoryDTOs);
+    }
+
+    /** {@inheritDoc} */
+    public List<VoCategory> getBranch(final long categoryId, final List<Long> expanded) throws Exception {
+        final List<CategoryDTO> categoryDTOs = dtoCategoryService.getBranchById(categoryId, expanded);
+        return loadCategoryTree(categoryDTOs);
+    }
+
+    /** {@inheritDoc} */
+    public List<Long> getBranchPaths(final long categoryId) throws Exception {
+        final List<Long> path = new ArrayList<Long>();
+        if (federationFacade.isManageable(categoryId, CategoryDTO.class)) {
+
+            path.add(categoryId);
+
+            final long parentId = dtoCategoryService.getById(categoryId).getParentId();
+
+            if (categoryId != parentId && parentId > 0) {
+                path.addAll(getBranchPaths(parentId));
+            }
+
+            final CategoryService service = (CategoryService) dtoCategoryService.getService();
+            for (final Long linked : service.getCategoryLinks(categoryId)) {
+
+                path.addAll(getBranchPaths(linked));
+
+            }
+        }
+        return path;
+    }
+
+    /** {@inheritDoc} */
+    public List<Long> getBranchesPaths(final List<Long> categoryIds) throws Exception {
+        final List<Long> path = new ArrayList<Long>();
+        if (categoryIds != null) {
+            for (final Long categoryId : categoryIds) {
+                path.addAll(getBranchPaths(categoryId));
+            }
+        }
+        return path;
+    }
+
+    private List<VoCategory> loadCategoryTree(final List<CategoryDTO> categoryDTOs) {
         for (final CategoryDTO root : categoryDTOs) {
             applyFilterToCategoryTree(root);
         }
@@ -145,8 +190,10 @@ public class VoCategoryServiceImpl implements VoCategoryService {
             VoCategory voCategory =
                     voAssemblySupport.assembleVo(VoCategory.class, CategoryDTO.class, new VoCategory(), dto);
             voCategories.add(voCategory);
-            voCategory.setChildren(new ArrayList<VoCategory>(dto.getChildren().size()));
-            adaptCategories(dto.getChildren(), voCategory.getChildren());
+            if (dto.getChildren() != null) {
+                voCategory.setChildren(new ArrayList<VoCategory>(dto.getChildren().size()));
+                adaptCategories(dto.getChildren(), voCategory.getChildren());
+            }
         }
     }
 
@@ -199,7 +246,8 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     /** {@inheritDoc} */
     public VoCategory create(VoCategory voCategory)  throws Exception {
         final CategoryDTO categoryDTO = dtoCategoryService.getNew();
-        if (voCategory != null && federationFacade.isManageable(voCategory.getParentId(), CategoryDTO.class)){
+        if (voCategory != null && federationFacade.isManageable(voCategory.getParentId(), CategoryDTO.class)) {
+
             CategoryDTO persistent = voAssemblySupport.assembleDto(CategoryDTO.class, VoCategory.class, categoryDTO, voCategory);
             ensureValidNullValues(persistent);
             persistent = dtoCategoryService.create(persistent);

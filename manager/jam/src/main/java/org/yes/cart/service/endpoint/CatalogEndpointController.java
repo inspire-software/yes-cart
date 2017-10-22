@@ -118,6 +118,16 @@ public interface CatalogEndpointController {
     @ResponseBody
     List<VoCategory> getAllCategories() throws Exception;
 
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMCATALOGADMIN","ROLE_SMCATALOGUSER","ROLE_SMPIMADMIN","ROLE_SMPIMUSER"})
+    @RequestMapping(value = "/category/branch/{branch}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoCategory> getBranchCategories(@PathVariable("branch") long branch, @RequestParam(value = "expand", required = false) String expand) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMCATALOGADMIN","ROLE_SMCATALOGUSER","ROLE_SMPIMADMIN","ROLE_SMPIMUSER"})
+    @RequestMapping(value = "/category/branchpaths/", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<Long> getBranchesCategoriesPaths(@RequestParam(value = "expand", required = false) String expand) throws Exception;
+
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCATALOGADMIN","ROLE_SMCATALOGUSER","ROLE_SMPIMADMIN","ROLE_SMPIMUSER"})
     @RequestMapping(value = "/category/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody

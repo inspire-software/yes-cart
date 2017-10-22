@@ -82,7 +82,7 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
                     lookInSubCats = shopService.getById(shopId).isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
                 }
 
-                final List<Long> catIds = categoryService.getCategoryIdsWithLinks(categoryId);
+                final List<Long> catIds = categoryService.getCategoryIdAndLinkId(categoryId);
 
                 return new Pair<List<Long>, Boolean>(catIds, lookInSubCats);
             }

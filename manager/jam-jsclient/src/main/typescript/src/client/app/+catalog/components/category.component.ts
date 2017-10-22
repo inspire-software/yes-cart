@@ -20,7 +20,7 @@ import { CategoryVO, AttrValueCategoryVO, ProductTypeInfoVO, Pair, CategoryNavig
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { Util } from './../../shared/services/index';
 import { UiUtil } from './../../shared/ui/index';
-import { CategorySelectComponent, ProductTypeSelectComponent } from './../../shared/catalog/index';
+import { CategoryMinSelectComponent, ProductTypeSelectComponent } from './../../shared/catalog/index';
 import { AttributeValuesComponent } from './../../shared/attributes/index';
 import { ModalComponent, ModalAction, ModalResult } from './../../shared/modal/index';
 import { LogUtil } from './../../shared/log/index';
@@ -56,7 +56,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   private attributeValuesComponent:AttributeValuesComponent;
 
   @ViewChild('categoryParentSelectComponent')
-  private categoryParentSelectComponent:CategorySelectComponent;
+  private categoryParentSelectComponent:CategoryMinSelectComponent;
 
   @ViewChild('categoryProductTypeSelectComponent')
   private categoryProductTypeSelectComponent:ProductTypeSelectComponent;

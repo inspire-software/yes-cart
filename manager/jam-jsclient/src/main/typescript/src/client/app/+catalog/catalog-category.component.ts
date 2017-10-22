@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CatalogService, Util } from './../shared/services/index';
-import { CategorySelectComponent } from './../shared/catalog/index';
+import { CategoryMinSelectComponent } from './../shared/catalog/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { CategoryVO, AttrValueCategoryVO, Pair } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
@@ -59,7 +59,7 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
   private deleteValue:String;
 
   @ViewChild('categorySelectComponent')
-  private categorySelectComponent:CategorySelectComponent;
+  private categorySelectComponent:CategoryMinSelectComponent;
 
   private loading:boolean = false;
 

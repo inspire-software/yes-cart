@@ -17,9 +17,9 @@ import { ModalComponent } from './modal/index';
 
 import { I18nComponent } from './i18n/index';
 
-import { BrandSelectComponent, CategorySelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent } from './catalog/index';
+import { BrandSelectComponent, CategorySelectComponent, CategoryMinSelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent } from './catalog/index';
 
-import { ContentSelectComponent, MailPreviewComponent } from './content/index';
+import { ContentSelectComponent, ContentMinSelectComponent, MailPreviewComponent } from './content/index';
 
 import { FulfilmentCentreSelectComponent, InventoryInfoComponent } from './fulfilment/index';
 
@@ -54,8 +54,8 @@ import { CurrencySelectComponent } from './price/index';
     YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe,
     ModalComponent,
     I18nComponent,
-    BrandSelectComponent, CategorySelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent,
-    ContentSelectComponent, MailPreviewComponent,
+    BrandSelectComponent, CategorySelectComponent, CategoryMinSelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent,
+    ContentSelectComponent, ContentMinSelectComponent, MailPreviewComponent,
     FulfilmentCentreSelectComponent, InventoryInfoComponent,
     FileSelectComponent, DataGroupSelectComponent,
     AttributeValuesComponent, ProductAttributeSelectComponent, ProductAttributeUsageComponent,
@@ -71,8 +71,8 @@ import { CurrencySelectComponent } from './price/index';
     YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe,
     ModalComponent,
     I18nComponent,
-    BrandSelectComponent, CategorySelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent,
-    ContentSelectComponent, MailPreviewComponent,
+    BrandSelectComponent, CategorySelectComponent, CategoryMinSelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent,
+    ContentSelectComponent, ContentMinSelectComponent, MailPreviewComponent,
     FulfilmentCentreSelectComponent, InventoryInfoComponent,
     FileSelectComponent, DataGroupSelectComponent,
     AttributeValuesComponent, ProductAttributeSelectComponent, ProductAttributeUsageComponent,

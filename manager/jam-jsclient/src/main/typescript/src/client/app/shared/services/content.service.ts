@@ -51,6 +51,41 @@ export class ContentService {
       .catch(this.handleError);
   }
 
+
+  /**
+   * Get list of all categories, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getShopBranchContent(shopId:number, root:number, expand:string[]) {
+    if (expand != null && expand.length > 0) {
+      let param = '';
+      expand.forEach(node => {
+        param += node + '|';
+      });
+      return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branch/' + root + '/?expand=' + param)
+        .map(res => <ContentVO[]> this.json(res))
+        .catch(this.handleError);
+    }
+    return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branch/' + root + '/')
+      .map(res => <ContentVO[]> this.json(res))
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get list of all category ids leading to given category, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getShopBranchesContentPaths(shopId:number, expand:number[]) {
+    let param = '';
+    expand.forEach(node => {
+      param += node + '|';
+    });
+    return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branchpaths/?expand=' + param)
+      .map(res => <number[]> this.json(res))
+      .catch(this.handleError);
+  }
+
+
   /**
    * Get list of all filtered content, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}

@@ -35,6 +35,34 @@ public interface VoCategoryService {
     List<VoCategory> getAll() throws Exception;
 
     /**
+     * Get category branch with expanded sub-branches, filtered according to rights
+     *
+     * @param categoryId branch to determine path for
+     * @param expanded ids with paths to expand (must be full top-down paths)
+     * @return list of categories
+     * @throws Exception
+     */
+    List<VoCategory> getBranch(long categoryId, List<Long> expanded) throws Exception;
+
+    /**
+     * Get path for given category branch path
+     *
+     * @param categoryId branch to determine path for
+     * @return path to given category (full top-down path)
+     * @throws Exception
+     */
+    List<Long> getBranchPaths(long categoryId) throws Exception;
+
+    /**
+     * Get paths for given categories branch path
+     *
+     * @param categoryIds branches to determine path for
+     * @return path to given category (full top-down paths)
+     * @throws Exception
+     */
+    List<Long> getBranchesPaths(List<Long> categoryIds) throws Exception;
+
+    /**
      * Get all categories in the system, filtered by criteria and according to rights, up to max
      * @return list of categories
      * @throws Exception
