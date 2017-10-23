@@ -88,6 +88,7 @@
     <entry key="shipMethodStep">Метод доставки</entry>
     <entry key="paymentStep">Проверка и оплата</entry>
     <entry key="loginStep">Вход</entry>
+    <entry key="guestStep">Гость</entry>
     <entry key="billingAddrTheSame">Одинаковый адрес доставки и выставления счета</entry>
     <entry key="shipmentStep">Доставка</entry>
     <entry key="paymentStep">Оплата</entry>
@@ -290,6 +291,14 @@
     <entry key="os.returned.waiting.payment">Возвращен</entry>
     <entry key="os.partially.shipped">Частично выполнен</entry>
     <entry key="os.completed">Выполнен</entry>
+
+    <entry key="qs.none">-</entry>
+    <entry key="qs.pending">Ожидает обработки</entry>
+    <entry key="qs.cancelled">Отменен</entry>
+    <entry key="qs.ready">Готов</entry>
+    <entry key="qs.rejected">Не принят</entry>
+    <entry key="qs.expired">Срок истек</entry>
+    <entry key="qs.ordered">Заказан</entry>
 
     <entry key="orderNumHead">Номер</entry>
     <entry key="orderDateHead">Дата</entry>

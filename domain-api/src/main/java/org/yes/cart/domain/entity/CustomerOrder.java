@@ -44,6 +44,11 @@ public interface CustomerOrder extends Auditable {
     String ORDER_STATUS_PENDING = "os.pending";
 
     /**
+     * Order in pending state.
+     */
+    String ORDER_STATUS_APPROVE = "os.waiting.approve";
+
+    /**
      * Waiting for payment confirmation.
      */
     String ORDER_STATUS_WAITING_PAYMENT = "os.waiting.payment";
@@ -90,6 +95,44 @@ public interface CustomerOrder extends Auditable {
      * Order completed.
      */
     String ORDER_STATUS_COMPLETED = "os.completed";
+
+
+
+    /**
+     * New quote state.
+     */
+    String QUOTE_STATUS_NONE = "qs.none";
+
+    /**
+     * Quote in pending state.
+     */
+    String QUOTE_STATUS_PENDING = "qs.pending";
+
+    /**
+     * Quote canceled.
+     */
+    String QUOTE_STATUS_CANCELLED = "qs.cancelled";
+
+    /**
+     * Quote ready for customer.
+     */
+    String QUOTE_STATUS_READY = "qs.ready";
+
+    /**
+     * Customer cancels or rejects Quote.
+     */
+    String QUOTE_STATUS_REJECTED = "qs.rejected";
+
+    /**
+     * Quote has expired.
+     */
+    String QUOTE_STATUS_EXPIRED = "qs.expired";
+
+    /**
+     * Order has been placed using this Quote.
+     */
+    String QUOTE_STATUS_ORDERED = "qs.ordered";
+
 
     /**
      * Get order pk value.

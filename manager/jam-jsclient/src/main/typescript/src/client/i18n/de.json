@@ -99,6 +99,7 @@
   "MODAL_BUTTON_SELECTCATEGORY": "Hierarchie des Katalogs anzeigen",
   "MODAL_BUTTON_CREATECATLINK": "Link zu gewählter Kategorie erstellen",
   "MODAL_BUTTON_ORDERAPPROVE": "Bestellung mit Offline Zahlungsmethode genehmigen",
+  "MODAL_BUTTON_ORDERAPPROVEVALID": "Der genehmigte Kundenauftrag ist gültig",
   "MODAL_BUTTON_ORDERCANCEL": "Komplette Bestellung löschen",
   "MODAL_BUTTON_ORDERRETURN": "Komplette Bestellung retournieren",
   "MODAL_BUTTON_ORDERREFUND": "Komplette Bestellung rückvergüten",
@@ -145,6 +146,7 @@
   "PANEL_PIM_CATEGORIES": "Katalog",
   "PANEL_PIM_BRANDS": "Marken/Brands",
   "PANEL_PIM_PRODUCT_TYPES": "Produktgruppierung",
+  "PANEL_PIM_EXTERNAL": "Externes PIM",
   "PANEL_CMS": "CMS",
   "PANEL_CMS_CONTENT": "Inhalt",
   "PANEL_MARKETING": "Marketing & Preise",
@@ -243,6 +245,7 @@
   "SHOP_TAB_PGS": "Zahlungs Gateways",
   "SHOP_TAB_OVERVIEW": "Übersicht",
   "SHOP_TAB_B2B": "B2B",
+  "SHOP_PRIMARY_EMAIL": "Primäre E-Mail Adresse",
   "SHOP_MISCONFIGURED": "Dieser Shop ist noch nicht vollständig aufgesetzt. Die roten Markierungen bezeichnen fehlende Angaben.",
   "SAVEDSHOP_REQUIRED": "Um einen neuen Shop aufzusetzen, müssen zuerst die Details im 'Basis' Tab eingegeben werden. Verschiedene wichtige Einstellungen sind notwendig bis der Shop einsetzbar sein wird. Sobald die Basisdetails gespeichert sind, sehen Sie in dieser Übersicht was alles noch fehlend ist und aufgesetzt werden muss.",
   "SUBSHOP_TIP": "Beim Erstellen von Subshops werden die B2B Profile für diese Shops freigeschaltet. Jeder Subshop kann über eigene Katalog-, Versand- und Dienstleistungs-Optionen verfügen. Die Preise für alle Subshops werden im Mastershop festgelegt. Zu beachten dabei, welche Preisregeln eingesetzt werden.",
@@ -545,6 +548,7 @@
 
   "os.none": "Temporär",
   "os.pending": "Ausstehend",
+  "os.waiting.approve": "Erfordert Freigabe",
   "os.waiting.payment": "Warten auf neue Zahlung",
   "os.waiting": "Warten auf neue Zahlungsbestätigung",
   "os.in.progress": "In Bearbeitung",
@@ -571,6 +575,14 @@
   "ds.shipment.inprogress.waiting.payment": "Versandt, auf Zahlung warten",
   "ds.shipped": "Ausgeliefert",
 
+  "qs.none": "Angebot temporär",
+  "qs.pending": "Angebot hängig",
+  "qs.cancelled": "Angebot annuliert",
+  "qs.ready": "Angebot bereit",
+  "qs.rejected": "Angebot abgelehnt",
+  "qs.expired": "Angebot abgelaufen",
+  "qs.ordered": "Angebot bestellt",
+
   "cancel.order": "Möchten Sie die Bestellung stornieren? '{{order}}'?",
   "cancel.order.offlinenote": "Hinweis: Wenn dies eine offline Zahlungsmethode ist, bitte die Zahlung jetzt zurückerstatten",
   "cancel.order.manual.refund": "Möchten Sie die Transaktion für die Bestellung '{{order}}' manuell zurückerstatten?",
@@ -578,6 +590,8 @@
   "cancel.order.refund": "Rückerstattung für '{{order}}' ist fehlgeschlagen oder befindet sich im Bearbeitungszustand. Sind Sie sicher, dass du die Rückerstattung erneut starten möchten?",
   "approve.order": "Möchten Sie den Auftrag '{{order}}' genehmigen?",
   "approve.order.offlinenote": "Hinweis: Wenn dies eine offline Zahlung ist, nehmen Sie bitte die Zahlung jetzt vor",
+  "approve.pending.order": "Möchten Sie den Auftrag genehmigen '{{order}}'?",
+  "approve.pending.order.offlinenote": "Hinweis: Bestellung wird zur Freigabe an den Lieferanten weitergegeben",
   "return.order": "Möchten Sie die Rücksendung für die Bestellung '{{order}} bearbeiten'?",
   "return.order.offlinenote": "Hinweis: Wenn dies eine offline Zahlungsmethode ist, bitte die Zahlung jetzt zurückerstatten",
 
@@ -601,6 +615,9 @@
   "error.order.cancel.retry.manual.fatal": "Bestellung mit Nummer {{params.value.p0}} kann nicht storniert werden. (Manuelle Rückerstattung fehlgeschlagen)",
   "error.order.cancel.retry.manual.fatal.no.notes": "Bestellung mit Nummer {{params.value.p0}} kann nicht storniert werden, da eine Stornierungsberechtigung fehlt. (Manuelle Rückerstattung fehlgeschlagen)",
   "error.order.payment.confirm.fatal": "Die Zahlung kann nicht bestätigt werden {{params.value.p0}}",
+  "error.order.approve.no.manager": "Kann Auftrag nicht genehmigen {{ params.value.p0 }}, Genehmiger anfordern",
+  "error.order.approve.fatal": "Kann Auftrag nicht genehmigen {{ params.value.p0 }} (Könnte bereits genehmigt worden sein)",
+  "error.order.approve.fatal.error": "Kann Auftrag nicht genehmigen {{ params.value.p0 }} (Fehler: {{ params.value.p1 }})",
 
   "CUSTOMER_EMAIL": "E-Mail",
   "CUSTOMER_SALUTATION": "Anrede",
@@ -688,6 +705,8 @@
   "SEARCH_HELP_CUSTOMER_ORDERS_ADDRESS": "Nur nach Kundendaten suchen (E-Mail, Vorname und Name). Format: '?Schlüsselwort'",
   "SEARCH_HELP_CUSTOMER_ORDERS_RESERVED": "Zur Suche von Aufträgen, bei denen SKU reserviert ist und die noch nicht zugeteilt wurden (exakter Abgleich). Format: '!SKU'",
   "SEARCH_HELP_CUSTOMER_SHOP": "Nur nach Shopcode suchen (exakter Abgleich). Format: '^Code'",
+
+  "SEARCH_HELP_CUSTOMER_RFQ_ALL": "Alle Angebotsstatis: ",
 
   "SEARCH_HELP_PRODUCTTYPE_ATTR_SI": "Um Attribute aufzulisten, welche Suchindex-Flags verwenden, verwenden Sie '#SI'",
   "SEARCH_HELP_PRODUCTTYPE_ATTR_VISIBLE": "Um sichtbare Attribute anzuzeigen, verwenden Sie '+V'",

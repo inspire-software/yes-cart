@@ -90,7 +90,7 @@
 
     <div *ngIf="searchHelpShow">
       <div class="bg-info text-padding block-margin-spacer">
-        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_ALL' | translate }} <span><button type="button" (click)="onSearchStatusAllOrders()" class="btn btn-circle"><i class="fa fa-arrows-alt"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_ALL' | translate }} <span><button type="button" (click)="onSearchStatusAllOrders()" class="btn btn-circle"><i class="fa fa-arrows-alt"></i></button></span> <span class="text-muted">{{ 'SEARCH_HELP_CUSTOMER_RFQ_ALL' | translate }} <span><button type="button" (click)="onSearchStatusAllRFQ()" class="btn btn-circle"><i class="fa fa-arrows-alt"></i></button></span></span> <span class="label label-info">YCE</span></p>
         <ul><li *ngFor="let status of statuses"><input type="checkbox" name="{{status.first}}" [(ngModel)]="status.second" (ngModelChange)="onFilterChange($event)"/> {{status.first | translate }}</li></ul>
         <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_DEFAULT' | translate }}</p>
         <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_OPEN' | translate }} <span><button type="button" (click)="onSearchStatusOpen()" class="btn btn-circle"><i class="fa fa-exclamation"></i></button></span></p>

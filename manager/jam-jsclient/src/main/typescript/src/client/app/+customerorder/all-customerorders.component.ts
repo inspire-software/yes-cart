@@ -37,6 +37,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   private static _statuses:Pair<string, boolean>[] = [
     { first: 'os.none', second: false },
     { first: 'os.pending', second: true },
+    { first: 'os.waiting.approve', second: true },
     { first: 'os.waiting.payment', second: true },
     { first: 'os.waiting', second: true },
     { first: 'os.in.progress', second: true },
@@ -46,10 +47,17 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     { first: 'os.returned.waiting.payment', second: true },
     { first: 'os.partially.shipped', second: true },
     { first: 'os.completed', second: true },
+    { first: 'qs.none', second: false },
+    { first: 'qs.pending', second: false },
+    { first: 'qs.cancelled', second: false },
+    { first: 'qs.ready', second: false },
+    { first: 'qs.rejected', second: false },
+    { first: 'qs.expired', second: false },
+    { first: 'qs.ordered', second: false },
   ];
 
   private static _open:string[] = [
-    'os.pending', 'os.waiting', 'os.waiting.payment', 'os.in.progress', 'os.partially.shipped'
+    'os.pending', 'os.waiting.approve', 'os.waiting', 'os.waiting.payment', 'os.in.progress', 'os.partially.shipped'
   ];
 
   private static _pendingPayments:string[] = [
@@ -344,6 +352,21 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     });
     this.statuses.forEach((_st:Pair<string, boolean>) => {
       if (_st.first.indexOf('os.') == 0) {
+        _st.second = !_state;
+      }
+    });
+    this.getFilteredCustomerorders();
+  }
+
+  protected onSearchStatusAllRFQ() {
+    let _state:boolean = false;
+    this.statuses.forEach((_st:Pair<string, boolean>) => {
+      if (_st.first.indexOf('qs.') == 0) {
+        _state = _state || _st.second;
+      }
+    });
+    this.statuses.forEach((_st:Pair<string, boolean>) => {
+      if (_st.first.indexOf('qs.') == 0) {
         _st.second = !_state;
       }
     });

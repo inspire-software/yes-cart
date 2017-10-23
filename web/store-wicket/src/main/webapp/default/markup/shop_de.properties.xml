@@ -88,6 +88,7 @@
     <entry key="shipMethodStep">Versandart</entry>
     <entry key="paymentStep">Überprüfen und Bezahlen</entry>
     <entry key="loginStep">Login</entry>
+    <entry key="guestStep">Als Gast Einkaufen</entry>
     <entry key="billingAddrTheSame">Rechnungsadresse gleich wie Versandadresse</entry>
     <entry key="shipmentStep">Versandart</entry>
     <entry key="paymentStep">Zahlung</entry>
@@ -290,6 +291,14 @@
     <entry key="os.returned.waiting.payment">Retourniert</entry>
     <entry key="os.partially.shipped">Teillieferung</entry>
     <entry key="os.completed">Abgeschlossen</entry>
+
+    <entry key="qs.none">-</entry>
+    <entry key="qs.pending">Anhängig</entry>
+    <entry key="qs.cancelled">Annuliert</entry>
+    <entry key="qs.ready">Bereit</entry>
+    <entry key="qs.rejected">Abgelehnt</entry>
+    <entry key="qs.expired">Abgelaufen</entry>
+    <entry key="qs.ordered">Komplet</entry>
 
     <entry key="orderNumHead">Bestellnummer</entry>
     <entry key="orderDateHead">Datum</entry>

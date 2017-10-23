@@ -88,6 +88,7 @@
     <entry key="shipMethodStep">Shipping Method</entry>
     <entry key="paymentStep">Verification and Payment</entry>
     <entry key="loginStep">Log In</entry>
+    <entry key="guestStep">Guest checkout</entry>
     <entry key="billingAddrTheSame">Billing address is the same as shipping</entry>
     <entry key="shipmentStep">Shipment method</entry>
     <entry key="paymentStep">Payment</entry>
@@ -290,6 +291,14 @@
     <entry key="os.returned.waiting.payment">Returned</entry>
     <entry key="os.partially.shipped">Shipped partially</entry>
     <entry key="os.completed">Completed</entry>
+
+    <entry key="qs.none">-</entry>
+    <entry key="qs.pending">Pending</entry>
+    <entry key="qs.cancelled">Cancelled</entry>
+    <entry key="qs.ready">Ready</entry>
+    <entry key="qs.rejected">Rejected</entry>
+    <entry key="qs.expired">Expired</entry>
+    <entry key="qs.ordered">Ordered</entry>
 
     <entry key="orderNumHead">Num</entry>
     <entry key="orderDateHead">Date</entry>

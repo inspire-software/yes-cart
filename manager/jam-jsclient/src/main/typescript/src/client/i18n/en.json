@@ -99,6 +99,7 @@
   "MODAL_BUTTON_SELECTCATEGORY": "View catalog hierarchy",
   "MODAL_BUTTON_CREATECATLINK": "Create link to selected category",
   "MODAL_BUTTON_ORDERAPPROVE": "Approve order with offline payment",
+  "MODAL_BUTTON_ORDERAPPROVEVALID": "Approve customer order",
   "MODAL_BUTTON_ORDERCANCEL": "Cancel whole order",
   "MODAL_BUTTON_ORDERRETURN": "Return whole order",
   "MODAL_BUTTON_ORDERREFUND": "Refund whole order",
@@ -145,6 +146,7 @@
   "PANEL_PIM_CATEGORIES": "Catalog",
   "PANEL_PIM_BRANDS": "Brands",
   "PANEL_PIM_PRODUCT_TYPES": "Product types",
+  "PANEL_PIM_EXTERNAL": "External PIM",
   "PANEL_CMS": "CMS",
   "PANEL_CMS_CONTENT": "Content",
   "PANEL_MARKETING": "Marketing & Pricing",
@@ -243,6 +245,7 @@
   "SHOP_TAB_PGS": "Payment Gateways",
   "SHOP_TAB_OVERVIEW": "Overview",
   "SHOP_TAB_B2B": "B2B",
+  "SHOP_PRIMARY_EMAIL": "Primary Email",
   "SHOP_MISCONFIGURED": "This shop has not been fully setup yet. Red labels denote mandatory settings that are missing.",
   "SAVEDSHOP_REQUIRED": "To create new shop please fill in the details on the 'Main' tab. There are several important configurations required before your shop can be operational. Once main details are saved this overview will help you identify what active settings are and what settings are missing.",
   "SUBSHOP_TIP": "Creating sub shops will enable B2B profile for this shop. Each sub shop can have its own catalog, shipping and fulfilment options. Prices for all sub shops are defined in master shop.",
@@ -545,6 +548,7 @@
 
   "os.none": "Temporary",
   "os.pending": "Pending",
+  "os.waiting.approve": "Require Approval",
   "os.waiting.payment": "New awaiting payment",
   "os.waiting": "New awaiting approval",
   "os.in.progress": "In progress",
@@ -571,6 +575,14 @@
   "ds.shipment.inprogress.waiting.payment": "Shipping awaiting payment",
   "ds.shipped": "Delivered",
 
+  "qs.none": "RFQ Temporary",
+  "qs.pending": "RFQ Pending",
+  "qs.cancelled": "RFQ Cancelled",
+  "qs.ready": "RFQ Ready",
+  "qs.rejected": "RFQ Rejected",
+  "qs.expired": "RFQ Expired",
+  "qs.ordered": "RFQ Ordered",
+
   "cancel.order": "Do you want to cancel the order '{{order}}'?",
   "cancel.order.offlinenote": "Note: if this is offline payment mode please refund payments now",
   "cancel.order.manual.refund": "Do you want to refund transaction for order '{{order}}' manually?",
@@ -578,6 +590,8 @@
   "cancel.order.refund": "Refund for '{{order}}' is failed or is in processing state. Are you sure you would like to re-try request for refund?",
   "approve.order": "Do you want to approve the order '{{order}}'?",
   "approve.order.offlinenote": "Note: if this is offline payment mode please take payment now",
+  "approve.pending.order": "Do you want to approve the order '{{order}}'?",
+  "approve.pending.order.offlinenote": "Note: order will be passed onto supplier for processing",
   "return.order": "Do you want to process return for the order '{{order}}'?",
   "return.order.offlinenote": "Note: if this is offline payment mode please refund payments now",
 
@@ -601,6 +615,9 @@
   "error.order.cancel.retry.manual.fatal": "Order with number {{ params.value.p0 }} cannot be cancelled. (Manual refund failed)",
   "error.order.cancel.retry.manual.fatal.no.notes": "Order with number {{ params.value.p0 }} cannot be cancelled because cancellation authorisation is missing. (Manual refund failed)",
   "error.order.payment.confirm.fatal": "Cannot confirm payment for order {{ params.value.p0 }}",
+  "error.order.approve.no.manager": "Cannot approve order {{ params.value.p0 }}, require approval manager",
+  "error.order.approve.fatal": "Cannot approve order {{ params.value.p0 }} (it could be already approved)",
+  "error.order.approve.fatal.error": "Cannot approve order {{ params.value.p0 }} (Error: {{ params.value.p1 }})",
 
   "CUSTOMER_EMAIL": "Email",
   "CUSTOMER_SALUTATION": "Salutation",
@@ -688,6 +705,8 @@
   "SEARCH_HELP_CUSTOMER_ORDERS_ADDRESS": "To search only by address details. Format: '@keyword'",
   "SEARCH_HELP_CUSTOMER_ORDERS_RESERVED": "To search orders where SKU is reserved and pending allocation (exact match). Format: '!SKU'",
   "SEARCH_HELP_CUSTOMER_SHOP": "To search orders by shop code (exact match). Format: '^code'",
+
+  "SEARCH_HELP_CUSTOMER_RFQ_ALL": "all RFQ statuses: ",
 
   "SEARCH_HELP_PRODUCTTYPE_ATTR_SI": "To list attributes that have search index flags use '#SI'",
   "SEARCH_HELP_PRODUCTTYPE_ATTR_VISIBLE": "To list attributes that are visible use '+V'",
