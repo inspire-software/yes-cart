@@ -107,10 +107,10 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
                 criteria, shops, today.getTime(), CustomerOrder.ORDER_STATUS_NONE
         );
 
-        final String waiting = " where e.shop.shopId in (?1) and e.orderStatus <> ?2";
+        final String waiting = " where e.shop.shopId in (?1) and e.orderStatus in (?2)";
 
         final int ordersWaiting = this.customerOrderService.findCountByCriteria(
-                waiting, shops, CustomerOrder.ORDER_STATUS_WAITING
+                waiting, shops, Arrays.asList(CustomerOrder.ORDER_STATUS_WAITING, CustomerOrder.ORDER_STATUS_APPROVE)
         );
 
 
