@@ -62,6 +62,16 @@ export class FulfilmentService {
   }
 
   /**
+   * Get list of all fulfilment centres, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getFulfilmentCentreById(centreId:number) {
+    return this.http.get(this._serviceBaseUrl + '/centre/' + centreId)
+      .map(res => <ShopFulfilmentCentreVO> this.json(res))
+      .catch(this.handleError);
+  }
+
+  /**
    * Create/update centre.
    * @param centre centre
    * @returns {Observable<R>}

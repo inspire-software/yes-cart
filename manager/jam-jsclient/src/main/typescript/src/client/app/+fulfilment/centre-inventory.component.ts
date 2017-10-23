@@ -25,6 +25,7 @@ import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
 import { LogUtil } from './../shared/log/index';
+import { CookieUtil } from './../shared/cookies/index';
 
 @Component({
   selector: 'yc-centre-inventory',
@@ -33,6 +34,8 @@ import { LogUtil } from './../shared/log/index';
 })
 
 export class CentreInventoryComponent implements OnInit, OnDestroy {
+
+  private static COOKIE_CENTRE:string = 'YCJAM_UI_FFCENTRE';
 
   private static _selectedCentre:FulfilmentCentreInfoVO;
 
@@ -106,6 +109,24 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('CentreInventoryComponent ngOnInit');
+    if (this.selectedCentre == null) {
+      let ffCode = CookieUtil.readCookie(CentreInventoryComponent.COOKIE_CENTRE, null);
+      if (ffCode != null) {
+        var _sub:any = this._fulfilmentService.getAllFulfilmentCentres().subscribe(
+          rez => {
+            _sub.unsubscribe();
+            let ffs:FulfilmentCentreInfoVO[] = rez;
+            ffs.forEach(ff => {
+              if (ffCode == ff.code) {
+                this.selectedCentre = ff;
+                LogUtil.debug('CentreInventoryComponent ngOnInit preselect ff centre', ff);
+              }
+            });
+          }
+        );
+
+      }
+    }
     this.onRefreshHandler();
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
@@ -141,6 +162,9 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
   protected onFulfilmentCentreSelected(event:FulfilmentCentreInfoVO) {
     LogUtil.debug('CentreInventoryComponent onFulfilmentCentreSelected');
     this.selectedCentre = event;
+    if (this.selectedCentre != null) {
+      CookieUtil.createCookie(CentreInventoryComponent.COOKIE_CENTRE, this.selectedCentre.code, 360);
+    }
   }
 
   protected onSelectCentreResult(modalresult: ModalResult) {

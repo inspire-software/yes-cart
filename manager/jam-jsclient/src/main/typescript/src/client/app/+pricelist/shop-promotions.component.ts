@@ -14,13 +14,14 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { PricingService, Util } from './../shared/services/index';
+import { ShopEventBus, PricingService, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { PromotionVO, ShopVO, Pair } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
 import { LogUtil } from './../shared/log/index';
+import { CookieUtil } from './../shared/cookies/index';
 
 @Component({
   selector: 'yc-shop-promotions',
@@ -32,6 +33,9 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   private static PROMOTIONS:string = 'promotions';
   private static PROMOTION:string = 'promotion';
+
+  private static COOKIE_SHOP:string = 'YCJAM_UI_PROMO_SHOP';
+  private static COOKIE_CURRENCY:string = 'YCJAM_UI_PROMO_CURR';
 
   private static _selectedShop:ShopVO;
   private static _selectedCurrency:string;
@@ -142,6 +146,27 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('ShopPromotionsComponent ngOnInit');
+    if (this.selectedShop == null) {
+      let shopCode = CookieUtil.readCookie(ShopPromotionsComponent.COOKIE_SHOP, null);
+      if (shopCode != null) {
+        let shops = ShopEventBus.getShopEventBus().currentAll();
+        if (shops != null) {
+          shops.forEach(shop => {
+             if (shop.code == shopCode) {
+               this.selectedShop = shop;
+               LogUtil.debug('ShopPromotionsComponent ngOnInit presetting shop from cookie', shop);
+             }
+          });
+        }
+      }
+    }
+    if (this.selectedCurrency == null) {
+      let curr = CookieUtil.readCookie(ShopPromotionsComponent.COOKIE_CURRENCY, null);
+      if (curr != null) {
+        this.selectedCurrency = curr;
+        LogUtil.debug('ShopPromotionsComponent ngOnInit presetting currency from cookie', curr);
+      }
+    }
     this.onRefreshHandler();
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
@@ -163,6 +188,9 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   protected onShopSelected(event:ShopVO) {
     LogUtil.debug('ShopPromotionsComponent onShopSelected');
     this.selectedShop = event;
+    if (this.selectedShop != null) {
+      CookieUtil.createCookie(ShopPromotionsComponent.COOKIE_SHOP, this.selectedShop.code, 360);
+    }
   }
 
   protected onSelectShopResult(modalresult: ModalResult) {
@@ -184,6 +212,9 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   protected onCurrencySelected(event:string) {
     LogUtil.debug('ShopPromotionsComponent onCurrencySelected');
     this.selectedCurrency = event;
+    if (this.selectedCurrency != null) {
+      CookieUtil.createCookie(ShopPromotionsComponent.COOKIE_CURRENCY, this.selectedCurrency, 360);
+    }
   }
 
   protected onSelectCurrencyResult(modalresult: ModalResult) {

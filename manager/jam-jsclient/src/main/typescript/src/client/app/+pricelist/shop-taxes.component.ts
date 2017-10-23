@@ -16,13 +16,14 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../shared/validation/validators';
-import { PricingService, Util } from './../shared/services/index';
+import { ShopEventBus, PricingService, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { TaxVO, ShopVO, TaxConfigVO } from './../shared/model/index';
 import { Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
 import { LogUtil } from './../shared/log/index';
+import { CookieUtil } from './../shared/cookies/index';
 
 @Component({
   selector: 'yc-shop-taxes',
@@ -34,6 +35,9 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
   private static TAXES:string = 'taxes';
   private static CONFIGS:string = 'taxconfigs';
+
+  private static COOKIE_SHOP:string = 'YCJAM_UI_TAX_SHOP';
+  private static COOKIE_CURRENCY:string = 'YCJAM_UI_TAX_CURR';
 
   private static _selectedShop:ShopVO;
   private static _selectedCurrency:string;
@@ -140,6 +144,27 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('ShopTaxesComponent ngOnInit');
+    if (this.selectedShop == null) {
+      let shopCode = CookieUtil.readCookie(ShopTaxesComponent.COOKIE_SHOP, null);
+      if (shopCode != null) {
+        let shops = ShopEventBus.getShopEventBus().currentAll();
+        if (shops != null) {
+          shops.forEach(shop => {
+            if (shop.code == shopCode) {
+              this.selectedShop = shop;
+              LogUtil.debug('ShopTaxesComponent ngOnInit presetting shop from cookie', shop);
+            }
+          });
+        }
+      }
+    }
+    if (this.selectedCurrency == null) {
+      let curr = CookieUtil.readCookie(ShopTaxesComponent.COOKIE_CURRENCY, null);
+      if (curr != null) {
+        this.selectedCurrency = curr;
+        LogUtil.debug('ShopTaxesComponent ngOnInit presetting currency from cookie', curr);
+      }
+    }
     this.onRefreshHandler();
     let that = this;
     this.delayedFilteringTax = Futures.perpetual(function() {
@@ -188,6 +213,9 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   protected onShopSelected(event:ShopVO) {
     LogUtil.debug('ShopTaxesComponent onShopSelected');
     this.selectedShop = event;
+    if (this.selectedShop != null) {
+      CookieUtil.createCookie(ShopTaxesComponent.COOKIE_SHOP, this.selectedShop.code, 360);
+    }
   }
 
   protected onSelectShopResult(modalresult: ModalResult) {
@@ -209,6 +237,9 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   protected onCurrencySelected(event:string) {
     LogUtil.debug('ShopTaxesComponent onCurrencySelected');
     this.selectedCurrency = event;
+    if (this.selectedCurrency != null) {
+      CookieUtil.createCookie(ShopTaxesComponent.COOKIE_CURRENCY, this.selectedCurrency, 360);
+    }
   }
 
   protected onSelectCurrencyResult(modalresult: ModalResult) {

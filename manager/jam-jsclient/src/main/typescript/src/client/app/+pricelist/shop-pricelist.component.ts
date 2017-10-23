@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../shared/validation/validators';
-import { PricingService, Util } from './../shared/services/index';
+import { ShopEventBus, PricingService, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { ProductSkuSelectComponent } from './../shared/catalog/index';
 import { CarrierSlaSelectComponent } from './../shared/shipping/index';
@@ -25,6 +25,7 @@ import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
 import { LogUtil } from './../shared/log/index';
+import { CookieUtil } from './../shared/cookies/index';
 
 @Component({
   selector: 'yc-shop-pricelist',
@@ -33,6 +34,9 @@ import { LogUtil } from './../shared/log/index';
 })
 
 export class ShopPriceListComponent implements OnInit, OnDestroy {
+
+  private static COOKIE_SHOP:string = 'YCJAM_UI_PRICE_SHOP';
+  private static COOKIE_CURRENCY:string = 'YCJAM_UI_PRICE_CURR';
 
   private static _selectedShop:ShopVO;
   private static _selectedCurrency:string;
@@ -151,6 +155,27 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('ShopPriceListComponent ngOnInit');
+    if (this.selectedShop == null) {
+      let shopCode = CookieUtil.readCookie(ShopPriceListComponent.COOKIE_SHOP, null);
+      if (shopCode != null) {
+        let shops = ShopEventBus.getShopEventBus().currentAll();
+        if (shops != null) {
+          shops.forEach(shop => {
+            if (shop.code == shopCode) {
+              this.selectedShop = shop;
+              LogUtil.debug('ShopPriceListComponent ngOnInit presetting shop from cookie', shop);
+            }
+          });
+        }
+      }
+    }
+    if (this.selectedCurrency == null) {
+      let curr = CookieUtil.readCookie(ShopPriceListComponent.COOKIE_CURRENCY, null);
+      if (curr != null) {
+        this.selectedCurrency = curr;
+        LogUtil.debug('ShopPriceListComponent ngOnInit presetting currency from cookie', curr);
+      }
+    }
     this.onRefreshHandler();
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
@@ -186,6 +211,9 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
   protected onShopSelected(event:ShopVO) {
     LogUtil.debug('ShopPriceListComponent onShopSelected');
     this.selectedShop = event;
+    if (this.selectedShop != null) {
+      CookieUtil.createCookie(ShopPriceListComponent.COOKIE_SHOP, this.selectedShop.code, 360);
+    }
   }
 
   protected onSelectShopResult(modalresult: ModalResult) {
@@ -207,6 +235,9 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
   protected onCurrencySelected(event:string) {
     LogUtil.debug('ShopPriceListComponent onCurrencySelected');
     this.selectedCurrency = event;
+    if (this.selectedCurrency != null) {
+      CookieUtil.createCookie(ShopPriceListComponent.COOKIE_CURRENCY, this.selectedCurrency, 360);
+    }
   }
 
   protected onSelectCurrencyResult(modalresult: ModalResult) {
