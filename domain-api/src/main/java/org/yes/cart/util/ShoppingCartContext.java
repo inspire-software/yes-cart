@@ -26,7 +26,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
  */
 public class ShoppingCartContext {
 
-    private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal = new ThreadLocal<ShoppingCart>();
+    private static final ThreadLocal<ShoppingCart> shoppingCartThreadLocal = new ThreadLocal<ShoppingCart>();
 
     /**
      * Get shopping cart from local thread storage.

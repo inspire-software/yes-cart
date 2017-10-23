@@ -33,13 +33,11 @@ import java.util.List;
 
 public class ApplicationDirector {
 
-    private static ApplicationDirector applicationDirector;
-
-    private static ThreadLocal<String> domainThreadLocal = new ThreadLocal<String>();
-    private static ThreadLocal<Shop> shopThreadLocal = new ThreadLocal<Shop>();
-    private static ThreadLocal<Shop> customerShopThreadLocal = new ThreadLocal<Shop>();
-    private static ThreadLocal<List<String>> currentThemeChainThreadLocal = new ThreadLocal<List<String>>();
-    private static ThreadLocal<String> shopperIPAddressThreadLocal = new ThreadLocal<String>();
+    private static final ThreadLocal<String> domainThreadLocal = new ThreadLocal<String>();
+    private static final ThreadLocal<Shop> shopThreadLocal = new ThreadLocal<Shop>();
+    private static final ThreadLocal<Shop> customerShopThreadLocal = new ThreadLocal<Shop>();
+    private static final ThreadLocal<List<String>> currentThemeChainThreadLocal = new ThreadLocal<List<String>>();
+    private static final ThreadLocal<String> shopperIPAddressThreadLocal = new ThreadLocal<String>();
 
     /**
      * Get shopper ip address.
@@ -55,22 +53,6 @@ public class ApplicationDirector {
      */
     public static void setShopperIPAddress(final String shopperIPAddress) {
         shopperIPAddressThreadLocal.set(shopperIPAddress);
-    }
-
-    /**
-     * Get app director instance.
-     *
-     * @return app director instance.
-     */
-    public static ApplicationDirector getInstance() {
-        return applicationDirector;
-    }
-
-    /**
-     * Construct application director.
-     */
-    public ApplicationDirector() {
-        applicationDirector = this;
     }
 
 

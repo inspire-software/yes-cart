@@ -26,8 +26,8 @@ import org.slf4j.MDC;
  */
 public class ShopCodeContext {
 
-    private static ThreadLocal<String> shopCode = new ThreadLocal<String>();
-    private static ThreadLocal<Long> shopId = new ThreadLocal<Long>();
+    private static final ThreadLocal<String> shopCode = new ThreadLocal<String>();
+    private static final ThreadLocal<Long> shopId = new ThreadLocal<Long>();
 
     /**
      * Get current shop code.

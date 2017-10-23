@@ -30,7 +30,7 @@ import java.util.Date;
  */
 public class StringValueToDateConverter implements Converter<String, Date> {
 
-    private final ThreadLocal<SimpleDateFormat> format = new ThreadLocal<SimpleDateFormat>();
+    private static final ThreadLocal<SimpleDateFormat> format = new ThreadLocal<SimpleDateFormat>();
 
     /** {@inheritDoc} */
     public Date convert(final String str) {

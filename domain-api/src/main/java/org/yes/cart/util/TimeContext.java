@@ -26,7 +26,7 @@ import java.util.Date;
  */
 public class TimeContext {
 
-    private static ThreadLocal<Date> NOW = new ThreadLocal<Date>();
+    private static final ThreadLocal<Date> NOW = new ThreadLocal<Date>();
 
     private static final ThreadLocal<Calendar> CALENDAR = new ThreadLocal<Calendar>() {
         @Override

@@ -47,7 +47,7 @@ public abstract class AbstractLastRunDependentProcessorImpl implements Runnable 
     private boolean lastRunInitialised = false;
     private Date lastRun;
 
-    private final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
+    private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
         @Override
         protected SimpleDateFormat initialValue() {
             return new SimpleDateFormat(DATE_FORMAT);

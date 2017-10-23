@@ -36,7 +36,7 @@ public class AlertDirectorImpl implements AlertDirector {
 
     private CacheManager cacheManager;
 
-    private final ThreadLocal<SimpleDateFormat> formater = new ThreadLocal<SimpleDateFormat>() {
+    private static final ThreadLocal<SimpleDateFormat> formater = new ThreadLocal<SimpleDateFormat>() {
         @Override
         protected SimpleDateFormat initialValue() {
             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
