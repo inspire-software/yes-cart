@@ -374,6 +374,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
         final Map<Pattern, Map<String, String>> patternGroupMap = new HashMap<Pattern, Map<String, String>>();
 
+        boolean hasAtLeastOneConfig = false;
         for (int i = 0; true; i++) {
 
             final String cfgGroup = configuration.getProperty("config." + i + ".group");
@@ -408,18 +409,22 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                 final Pattern regex = Pattern.compile(cfgRegex);
 
                 final Map<String, String> data = new HashMap<String, String>();
-                data.put("group", cfgGroup);
-                data.put("user", cfgUser);
-                data.put("pass", cfgPass);
-                data.put("reindex", cfgIndex);
+                data.put("group", cfgGroup.trim());
+                data.put("user", cfgUser.trim());
+                data.put("pass", cfgPass.trim());
+                data.put("reindex", cfgIndex.trim());
 
                 patternGroupMap.put(regex, data);
 
-                LOG.info("Configuration {} has regex {}", cfgGroup, cfgRegex);
+                LOG.info("Configuration loaded for group: {} has regex {}", cfgGroup, cfgRegex);
 
+                hasAtLeastOneConfig = true;
             } catch (Exception exp) {
                 LOG.warn("Configuration {} has INVALID regex {} ... skipping", cfgGroup, cfgRegex);
             }
+        }
+        if (LOG.isWarnEnabled() && !hasAtLeastOneConfig) {
+            LOG.warn("Configuration file {} does not have any configurations", configProps.getAbsolutePath());
         }
         return patternGroupMap;
     }
