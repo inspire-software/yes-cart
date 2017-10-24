@@ -242,7 +242,7 @@ export class CatalogService {
       expand.forEach(node => {
         param += node + '|';
       });
-      return this.http.get(this._serviceBaseUrl + '/category/branch/' + root + '/?expand=' + param)
+      return this.http.get(this._serviceBaseUrl + '/category/branch/' + root + '/?expand=' + encodeURIComponent(param))
         .map(res => <CategoryVO[]> this.json(res))
         .catch(this.handleError);
     }
@@ -260,7 +260,7 @@ export class CatalogService {
     expand.forEach(node => {
       param += node + '|';
     });
-    return this.http.get(this._serviceBaseUrl + '/category/branchpaths/?expand=' + param)
+    return this.http.get(this._serviceBaseUrl + '/category/branchpaths/?expand=' + encodeURIComponent(param))
       .map(res => <number[]> this.json(res))
       .catch(this.handleError);
   }

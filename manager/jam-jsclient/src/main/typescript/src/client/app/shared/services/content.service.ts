@@ -62,7 +62,7 @@ export class ContentService {
       expand.forEach(node => {
         param += node + '|';
       });
-      return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branch/' + root + '/?expand=' + param)
+      return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branch/' + root + '/?expand=' + encodeURIComponent(param))
         .map(res => <ContentVO[]> this.json(res))
         .catch(this.handleError);
     }
@@ -80,7 +80,7 @@ export class ContentService {
     expand.forEach(node => {
       param += node + '|';
     });
-    return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branchpaths/?expand=' + param)
+    return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branchpaths/?expand=' + encodeURIComponent(param))
       .map(res => <number[]> this.json(res))
       .catch(this.handleError);
   }
