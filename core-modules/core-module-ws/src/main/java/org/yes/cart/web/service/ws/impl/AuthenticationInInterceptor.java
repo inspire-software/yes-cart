@@ -99,17 +99,15 @@ public class AuthenticationInInterceptor extends WSS4JInInterceptor implements I
                                     principal.getName(),
                                     principal.getPassword()==null ? "" : principal.getPassword()
                             );
+                            LOG.debug("Receiving WS request from user {}", principal.getName());
                             authentication = authenticationManager.authenticate(authentication);
-                            if (!authentication.isAuthenticated()) {
-                                LOG.warn("User {} is not authentic.", principal.getName());
-                            }
                             SecurityContextHolder.getContext().setAuthentication(authentication);
                         }
                     }
                 }
             }
         } catch (RuntimeException ex) {
-            LOG.error(ex.getMessage(), ex);
+            LOG.error("Failed to authenticate WS request: " + ex.getMessage(), ex);
             throw ex;
         }
     }
