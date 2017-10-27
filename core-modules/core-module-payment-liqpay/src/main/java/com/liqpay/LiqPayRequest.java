@@ -66,6 +66,8 @@ public class LiqPayRequest {
                 if(lp.getProxyUser() != null)
                     con.setRequestProperty("Proxy-Authorization", "Basic " + lp.getProxyUser());
             }
+            con.setConnectTimeout(60000);
+            con.setReadTimeout(60000);
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             con.setRequestProperty("charset", "utf-8");
