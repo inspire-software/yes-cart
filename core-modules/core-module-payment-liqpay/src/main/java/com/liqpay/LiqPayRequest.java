@@ -43,6 +43,9 @@ public class LiqPayRequest {
 
     private static final Logger LOG = LoggerFactory.getLogger(LiqPayPaymentGatewayImpl.class);
 
+    private static final int CONNECT_TIMEOUT = 60000;
+    private static final int READ_TIMEOUT = 60000;
+
     public static String post(String url, HashMap<String, String> list, LiqPay lp) throws Exception {
 
 
@@ -66,8 +69,8 @@ public class LiqPayRequest {
                 if(lp.getProxyUser() != null)
                     con.setRequestProperty("Proxy-Authorization", "Basic " + lp.getProxyUser());
             }
-            con.setConnectTimeout(60000);
-            con.setReadTimeout(60000);
+            con.setConnectTimeout(CONNECT_TIMEOUT);
+            con.setReadTimeout(READ_TIMEOUT);
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             con.setRequestProperty("charset", "utf-8");
@@ -88,6 +91,8 @@ public class LiqPayRequest {
                 if(lp.getProxyUser() != null)
                     con.setRequestProperty("Proxy-Authorization", "Basic " + lp.getProxyUser());
             }
+            con.setConnectTimeout(CONNECT_TIMEOUT);
+            con.setReadTimeout(READ_TIMEOUT);
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             con.setRequestProperty("charset", "utf-8");
