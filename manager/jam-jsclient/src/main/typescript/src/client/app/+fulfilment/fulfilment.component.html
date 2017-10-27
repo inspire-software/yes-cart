@@ -40,7 +40,7 @@
     <yc-fulfilment-centres [centres]="centres" [filter]="centreFilter" (dataSelected)="onCentreSelected($event)"></yc-fulfilment-centres>
   </div>
 
-  <div [hidden]="viewMode !== 'centre'">
+  <div [hidden]="viewMode !== 'centre'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-fulfilment-centre [centre]="centreEdit" [shops]="shops" (dataChanged)="onCentreChanged($event)"></yc-fulfilment-centre>
   </div>
 

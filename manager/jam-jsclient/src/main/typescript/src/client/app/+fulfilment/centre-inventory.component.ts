@@ -283,6 +283,7 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('CentreInventoryComponent Save handler inventory', this.inventoryEdit);
 
+        this.loading = true;
         var _sub:any = this._fulfilmentService.saveInventory(this.inventoryEdit).subscribe(
             rez => {
               _sub.unsubscribe();
@@ -294,6 +295,7 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
               if (pk == 0) {
                 this.inventoryFilter = '!' + rez.skuCode;
               }
+              this.loading = false;
               this.getFilteredInventory();
           }
         );
@@ -328,11 +330,13 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
       if (this.selectedInventory != null) {
         LogUtil.debug('CentreInventoryComponent onDeleteConfirmationResult', this.selectedInventory);
 
+        this.loading = true;
         var _sub:any = this._fulfilmentService.removeInventory(this.selectedInventory).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('CentreInventoryComponent removeInventory', this.selectedInventory);
           this.selectedInventory = null;
           this.inventoryEdit = this.newInventoryInstance();
+          this.loading = false;
           this.getFilteredInventory();
         });
       }

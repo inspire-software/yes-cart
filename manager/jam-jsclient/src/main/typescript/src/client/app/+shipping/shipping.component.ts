@@ -227,6 +227,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('ShippingComponent Save handler sla', this.slaEdit);
 
+        this.loading = true;
         var _sub:any = this._shippingService.saveCarrierSla(this.slaEdit).subscribe(
             rez => {
             if (this.slaEdit.carrierslaId > 0) {
@@ -244,6 +245,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
             this.changed = false;
             this.selectedSla = rez;
             this.slaEdit = null;
+              this.loading = false;
             this.viewMode = ShippingComponent.SLAS;
             _sub.unsubscribe();
           }
@@ -252,6 +254,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('ShippingComponent Save handler carrier', this.carrierEdit);
 
+       this.loading = true;
         var _sub:any = this._shippingService.saveCarrier(this.carrierEdit).subscribe(
             rez => {
             if (this.carrierEdit.carrierId > 0) {
@@ -269,6 +272,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
             this.changed = false;
             this.selectedCarrier = rez;
             this.carrierEdit = null;
+              this.loading = false;
             this.viewMode = ShippingComponent.CARRIERS;
             _sub.unsubscribe();
           }
@@ -304,6 +308,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
      if (this.selectedSla != null) {
         LogUtil.debug('ShippingComponent onDeleteConfirmationResult', this.selectedSla);
 
+       this.loading = true;
         var _sub:any = this._shippingService.removeCarrierSla(this.selectedSla).subscribe(res => {
           LogUtil.debug('ShippingComponent removeSla', this.selectedSla);
           let idx = this.slas.indexOf(this.selectedSla);
@@ -311,12 +316,14 @@ export class ShippingComponent implements OnInit, OnDestroy {
           this.slas = this.slas.slice(0, this.slas.length); // reset to propagate changes
           this.selectedSla = null;
           this.slaEdit = null;
+          this.loading = false;
           _sub.unsubscribe();
         });
 
       } else if (this.selectedCarrier != null) {
         LogUtil.debug('ShippingComponent onDeleteConfirmationResult', this.selectedCarrier);
 
+        this.loading = true;
         var _sub:any = this._shippingService.removeCarrier(this.selectedCarrier).subscribe(res => {
           LogUtil.debug('ShippingComponent removeCarrier', this.selectedCarrier);
           let idx = this.carriers.indexOf(this.selectedCarrier);
@@ -324,6 +331,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
           this.carriers = this.carriers.slice(0, this.carriers.length); // reset to propagate changes
           this.selectedCarrier = null;
           this.carrierEdit = null;
+          this.loading = false;
           _sub.unsubscribe();
         });
       }

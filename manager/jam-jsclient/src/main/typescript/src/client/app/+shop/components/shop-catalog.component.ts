@@ -327,10 +327,12 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
   onSaveHandler() {
     LogUtil.debug('ShopCatalogComponent Save handler for shop', this.shop);
     if (this.shop.shopId > 0) {
+      this.loading = true;
       var _sub:any = this._shopService.saveShopCategories(this.shop.shopId, this.assigned).subscribe(
           cats => {
             this.assigned = cats;
             this.changed = false;
+            this.loading = false;
             _sub.unsubscribe();
         }
       );

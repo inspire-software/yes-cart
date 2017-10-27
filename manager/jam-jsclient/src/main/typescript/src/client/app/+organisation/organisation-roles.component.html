@@ -40,7 +40,7 @@
     <yc-roles [roles]="roles" [filter]="roleFilter" (dataSelected)="onRoleSelected($event)"></yc-roles>
   </div>
 
-  <div [hidden]="viewMode !== 'role'">
+  <div [hidden]="viewMode !== 'role'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-role [role]="roleEdit" (dataChanged)="onRoleChanged($event)"></yc-role>
   </div>
 

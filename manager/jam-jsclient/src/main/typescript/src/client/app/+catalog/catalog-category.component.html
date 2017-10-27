@@ -69,7 +69,7 @@
     <yc-categories [categories]="categories" (dataSelected)="onCategorySelected($event)"></yc-categories>
   </div>
 
-  <div [hidden]="viewMode !== 'category'">
+  <div [hidden]="viewMode !== 'category'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-category [category]="categoryEdit" [attributes]="categoryEditAttributes"
                  (dataChanged)="onCategoryChanged($event)"></yc-category>
   </div>

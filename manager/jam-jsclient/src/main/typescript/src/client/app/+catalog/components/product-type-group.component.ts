@@ -238,6 +238,13 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
     LogUtil.debug('ProductTypeGroupComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
   }
 
+  getCount(arr:string[]):number {
+    if (arr != null) {
+      return arr.length;
+    }
+    return 0;
+  }
+
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
     LogUtil.debug('ProductTypeGroupComponent onDeleteConfirmationResult modal result is ', modalresult);

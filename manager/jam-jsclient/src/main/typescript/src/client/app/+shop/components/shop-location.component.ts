@@ -115,12 +115,14 @@ export class ShopLocationComponent implements OnInit {
   onSaveHandler() {
     LogUtil.debug('ShopLocationComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.locs) {
+      this.loading = true;
       var _sub:any = this._shopService.saveShopLocations(this.locs).subscribe(shopLocationsVo => {
         this.shopLocationsVO = Util.clone(shopLocationsVo);
         this.locs = Util.clone(shopLocationsVo);
         this.remapSelections();
         this.changed = false;
         this._reload = false;
+        this.loading = false;
         _sub.unsubscribe();
       });
     }

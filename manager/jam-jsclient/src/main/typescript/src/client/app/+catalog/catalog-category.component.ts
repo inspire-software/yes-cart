@@ -196,8 +196,10 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
     this.validForSave = false;
     this.viewMode = CatalogCategoryComponent.CATEGORY;
     if (this.categoryEdit.categoryId > 0) {
+      this.loading = true;
       var _sub:any = this._categoryService.getCategoryAttributes(this.categoryEdit.categoryId).subscribe(attrs => {
         this.categoryEditAttributes = attrs;
+        this.loading = false;
         _sub.unsubscribe();
       });
     }
@@ -231,6 +233,7 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('CatalogCategoryComponent Save handler category', this.categoryEdit);
 
+        this.loading = true;
         var _sub:any = this._categoryService.saveCategory(this.categoryEdit).subscribe(
             rez => {
               _sub.unsubscribe();
@@ -239,6 +242,7 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
               this.changed = false;
               this.selectedCategory = rez;
               this.categoryEdit = null;
+              this.loading = false;
               this.viewMode = CatalogCategoryComponent.CATEGORIES;
 
               if (pk > 0 && this.categoryAttributesUpdate != null && this.categoryAttributesUpdate.length > 0) {
@@ -281,11 +285,13 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
       if (this.selectedCategory != null) {
         LogUtil.debug('CatalogCategoryComponent onDeleteConfirmationResult', this.selectedCategory);
 
+        this.loading = true;
         var _sub:any = this._categoryService.removeCategory(this.selectedCategory).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('CatalogCategoryComponent removeCategory', this.selectedCategory);
           this.selectedCategory = null;
           this.categoryEdit = null;
+          this.loading = false;
           this.getFilteredCategories();
         });
       }

@@ -132,11 +132,13 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
   protected onRowEditManager(row:ManagerInfoVO) {
     LogUtil.debug('OrganisationManagerComponent onRowEditManager handler', row);
+    this.loading = true;
     var _sub:any = this._organisationService.getManagerByEmail(row.email).subscribe( manager => {
       LogUtil.debug('OrganisationManagerComponent get manager by email', manager);
       this.managerEdit = manager;
       this.changed = false;
       this.validForSave = false;
+      this.loading = false;
       this.viewMode = OrganisationManagerComponent.MANAGER;
       _sub.unsubscribe();
     });
@@ -156,6 +158,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('OrganisationManagerComponent Save handler manager', this.managerEdit);
 
+        this.loading = true;
         var _sub:any = this._organisationService.saveManager(this.managerEdit).subscribe(
             rez => {
               this.selectedManager = rez;
@@ -174,6 +177,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
               this.changed = false;
               this.validForSave = false;
               this.managerEdit = rez;
+              this.loading = false;
               this.viewMode = OrganisationManagerComponent.MANAGERS;
               _sub.unsubscribe();
           }
@@ -202,6 +206,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
       if (this.selectedManager != null) {
         LogUtil.debug('OrganisationManagerComponent onDeleteConfirmationResult', this.selectedManager);
 
+        this.loading = true;
         var _sub:any = this._organisationService.removeManager(this.selectedManager.email).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('OrganisationManagerComponent removeManager', this.selectedManager);
@@ -210,6 +215,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
           this.managers = this.managers.slice(0, this.managers.length); // reset to propagate changes
           this.selectedManager = null;
           this.managerEdit = null;
+          this.loading = false;
           this.viewMode = OrganisationManagerComponent.MANAGERS;
         });
       }
@@ -229,11 +235,13 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedManager != null) {
+        this.loading = true;
         var _sub:any = this._organisationService.updateDisabledFlag(this.selectedManager.email, this.selectedManager.enabled).subscribe( done => {
           LogUtil.debug('OrganisationManagerComponent updateDisabledFlag', done);
           this.selectedManager.enabled = !this.selectedManager.enabled;
           this.changed = false;
           this.validForSave = false;
+          this.loading = false;
           _sub.unsubscribe();
         });
       }
@@ -254,10 +262,12 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedManager != null) {
+        this.loading = true;
         var _sub:any = this._organisationService.resetPassword(this.selectedManager.email).subscribe( done => {
           LogUtil.debug('OrganisationManagerComponent resetPassword', done);
           this.changed = false;
           this.validForSave = false;
+          this.loading = false;
           _sub.unsubscribe();
         });
       }
@@ -287,9 +297,11 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
   }
 
   private getAllRoles() {
+    this.loading = true;
     var _sub:any = this._organisationService.getAllRoles().subscribe( allroles => {
       LogUtil.debug('OrganisationManagerComponent getAllManagers', allroles);
       this.roles = allroles;
+      this.loading = false;
       _sub.unsubscribe();
     });
   }

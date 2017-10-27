@@ -117,6 +117,7 @@ export class ShopAttributesComponent implements OnInit {
 
       LogUtil.debug('ShopAttributeComponent Save handler update', this.update);
 
+      this.loading = true;
       var _sub:any = this._shopService.saveShopAttributes(this.update).subscribe(
           rez => {
             LogUtil.debug('ShopAttributeComponent attributes', rez);
@@ -125,6 +126,7 @@ export class ShopAttributesComponent implements OnInit {
             this.validForSave = false;
             this._reload = false;
             this.selectedRow = null;
+            this.loading = false;
             _sub.unsubscribe();
         }
       );

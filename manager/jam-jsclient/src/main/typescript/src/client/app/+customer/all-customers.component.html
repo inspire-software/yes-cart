@@ -64,7 +64,7 @@
     <yc-customers [customers]="customers" (dataSelected)="onCustomerSelected($event)"></yc-customers>
   </div>
 
-  <div [hidden]="viewMode !== 'customer'">
+  <div [hidden]="viewMode !== 'customer'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-customer [customer]="customerEdit" [shops]="shops" [attributes]="customerEditAttributes"
                  (dataChanged)="onCustomerChanged($event)"
                  (passwordReset)="onCustomerReset($event)"></yc-customer>

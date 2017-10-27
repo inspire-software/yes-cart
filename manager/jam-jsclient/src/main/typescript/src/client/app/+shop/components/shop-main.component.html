@@ -15,7 +15,7 @@
 
   <div>
     <div class="col-md-9 col-lg-6">
-      <div class="panel-body">
+      <div class="panel-body {{ loading ? 'loading-data' : '' }}">
         <form role="form" [formGroup]="shopMainForm">
           <fieldset>
             <div class="form-group">

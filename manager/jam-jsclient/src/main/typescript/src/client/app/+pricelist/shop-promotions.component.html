@@ -99,7 +99,7 @@
     <yc-promotions [promotions]="promotions" (dataSelected)="onPromotionSelected($event)"></yc-promotions>
   </div>
 
-  <div [hidden]="viewMode !== 'promotion'">
+  <div [hidden]="viewMode !== 'promotion'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-promotion [promotion]="promotionEdit"
                   (dataChanged)="onPromotionChanged($event)"></yc-promotion>
   </div>

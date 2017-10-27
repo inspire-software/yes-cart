@@ -203,11 +203,13 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
 
   protected onRowEditCustomer(row:CustomerInfoVO) {
     LogUtil.debug('AllCustomersComponent onRowEditCustomer handler', row);
+    this.loading = true;
     var _sub:any = this._customerService.getCustomerById(this.selectedCustomer.customerId).subscribe(customer => {
       this.customerEdit = customer;
       this.customerEditAttributes = customer.attributes;
       this.changed = false;
       this.validForSave = false;
+      this.loading = false;
       this.viewMode = AllCustomersComponent.CUSTOMER;
       _sub.unsubscribe();
     });
@@ -227,6 +229,7 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('AllCustomersComponent Save handler customer', this.customerEdit);
 
+        this.loading = true;
         var _sub:any = this._customerService.saveCustomer(this.customerEdit).subscribe(
             rez => {
               _sub.unsubscribe();
@@ -235,6 +238,7 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
               this.changed = false;
               this.selectedCustomer = rez;
               this.customerEdit = null;
+              this.loading = false;
               this.viewMode = AllCustomersComponent.CUSTOMERS;
 
               if (pk > 0 && this.customerAttributesUpdate != null && this.customerAttributesUpdate.length > 0) {
@@ -275,11 +279,13 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
       if (this.selectedCustomer != null) {
         LogUtil.debug('AllCustomersComponent onDeleteConfirmationResult', this.selectedCustomer);
 
+        this.loading = true;
         var _sub:any = this._customerService.removeCustomer(this.selectedCustomer).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('AllCustomersComponent removeCustomer', this.selectedCustomer);
           this.selectedCustomer = null;
           this.customerEdit = null;
+          this.loading = false;
           this.getFilteredCustomers();
         });
       }

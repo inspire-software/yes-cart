@@ -164,8 +164,10 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
     LogUtil.debug('PaymentGatewaysComponent onDisableConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
+      this.loading = true;
       var _sub:any = this._paymentService.updateDisabledFlag(this.shopCode, this.selectedGateway.label, this.selectedGateway.active).subscribe( done => {
         LogUtil.debug('PaymentGatewaysComponent updateDisabledFlag', done);
+        this.loading = false;
         if (this.system || this.selectedGateway.active) {
           this.selectedGateway.active = !this.selectedGateway.active;
           this.changed = false;

@@ -74,7 +74,7 @@
     <yc-products [products]="products" [filter]="productFilter" (dataSelected)="onProductSelected($event)"></yc-products>
   </div>
 
-  <div [hidden]="viewMode !== 'product'">
+  <div [hidden]="viewMode !== 'product'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-product [product]="productEdit" [attributes]="productEditAttributes"
                 (dataChanged)="onProductChanged($event)"
                 (dataSelected)="onSkuSelected($event)"></yc-product>
@@ -84,7 +84,7 @@
     <yc-skus [skus]="skus" [filter]="skuFilter" (dataSelected)="onSkuSelected($event)"></yc-skus>
   </div>
 
-  <div [hidden]="viewMode !== 'sku'">
+  <div [hidden]="viewMode !== 'sku'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-sku [sku]="skuEdit" [attributes]="skuEditAttributes" (dataChanged)="onSkuChanged($event)"></yc-sku>
   </div>
 

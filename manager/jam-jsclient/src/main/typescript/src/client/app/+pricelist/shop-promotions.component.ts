@@ -354,6 +354,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('ShopPromotionsComponent Save handler promotion', this.promotionEdit);
 
+        this.loading = true;
         var _sub:any = this._promotionService.savePromotion(this.promotionEdit).subscribe(
             rez => {
               _sub.unsubscribe();
@@ -367,6 +368,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
               if (pk == 0) {
                 this.promotionFilter = rez.name;
               }
+              this.loading = false;
               this.getFilteredPromotions();
             }
         );
@@ -394,11 +396,13 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
       if (this.selectedPromotion != null) {
         LogUtil.debug('ShopPromotionsComponent onDeleteConfirmationResult', this.selectedPromotion);
 
+        this.loading = true;
         var _sub:any = this._promotionService.removePromotion(this.selectedPromotion).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('ShopPromotionsComponent removePromotion', this.selectedPromotion);
           this.selectedPromotion = null;
           this.promotionEdit = null;
+          this.loading = false;
           this.getFilteredPromotions();
         });
       }
@@ -411,6 +415,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedPromotion != null) {
+        this.loading = true;
         var _sub:any = this._promotionService.updatePromotionDisabledFlag(this.selectedPromotion, this.selectedPromotion.enabled).subscribe( done => {
           LogUtil.debug('ShopPromotionsComponent updateDisabledFlag', done);
           this.selectedPromotion.enabled = !this.selectedPromotion.enabled;
@@ -424,6 +429,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
             this.changed = false;
             this.validForSave = false;
           }
+          this.loading = false;
           _sub.unsubscribe();
         });
       }

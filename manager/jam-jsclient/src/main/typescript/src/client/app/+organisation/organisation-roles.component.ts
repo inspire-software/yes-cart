@@ -138,6 +138,7 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('OrganisationRoleComponent Save handler role', this.roleEdit);
 
+        this.loading = true;
         var _sub:any = this._roleService.saveRole(this.roleEdit).subscribe(
             rez => {
             if (this.roleEdit.roleId > 0) {
@@ -156,6 +157,7 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
             this.validForSave = false;
             this.selectedRole = rez;
             this.roleEdit = rez;
+              this.loading = false;
             this.viewMode = OrganisationRoleComponent.ROLES;
             _sub.unsubscribe();
           }
@@ -184,6 +186,7 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
       if (this.selectedRole != null) {
         LogUtil.debug('OrganisationRoleComponent onDeleteConfirmationResult', this.selectedRole);
 
+        this.loading = true;
         var _sub:any = this._roleService.removeRole(this.selectedRole).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('OrganisationRoleComponent removeRole', this.selectedRole);
@@ -194,6 +197,7 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
           this.changed = false;
           this.validForSave = false;
           //this.roleEdit = null;
+          this.loading = false;
           this.viewMode = OrganisationRoleComponent.ROLES;
         });
       }

@@ -130,9 +130,11 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
   editNewCarrierNameModalResult(modalresult:ModalResult) {
     LogUtil.debug('ShopCarrierComponent editNewCarrierNameModalResult modal result', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
+      this.loading = true;
       this._shippingService.createCarrier(this.newCarrier, this.shop.shopId).subscribe(
           carVo => {
             this.validForSave = false;
+            this.loading = false;
             this.onRefreshHandler();
         }
       );
@@ -144,11 +146,13 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
   onSaveHandler() {
     LogUtil.debug('ShopCarrierComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.shopCarriersVO) {
+      this.loading = true;
       var _sub:any = this._shippingService.saveShopCarriers(this.shopCarriersVO).subscribe(shopLanguagesVo => {
         this.shopCarriersVO = Util.clone(shopLanguagesVo);
         this.remapCarriers();
         this.changed = false;
         this._reload = false;
+        this.loading = false;
         _sub.unsubscribe();
       });
     }

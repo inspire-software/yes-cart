@@ -242,8 +242,10 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('AttributeDefinitionsComponent Save handler attribute', this.attributeEdit);
 
+        this.loading = true;
         var _sub:any = this._attributeService.saveAttribute(this.attributeEdit).subscribe(
             rez => {
+              this.loading = false;
               _sub.unsubscribe();
               if (this.attributeEdit.attributeId > 0) {
                 let idx = this.attributes.findIndex(rez => rez.attributeId == this.attributeEdit.attributeId);
@@ -286,6 +288,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
       if (this.selectedAttribute != null) {
         LogUtil.debug('AttributeDefinitionsComponent onDeleteConfirmationResult', this.selectedAttribute);
 
+        this.loading = true;
         var _sub:any = this._attributeService.removeAttribute(this.selectedAttribute).subscribe(res => {
           LogUtil.debug('AttributeDefinitionsComponent removeAttribute', this.selectedAttribute);
           let idx = this.attributes.indexOf(this.selectedAttribute);
@@ -293,6 +296,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
           this.attributes = this.attributes.slice(0, this.attributes.length); // reset to propagate changes
           this.selectedAttribute = null;
           this.attributeEdit = null;
+          this.loading = false;
           this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
           _sub.unsubscribe();
         });
@@ -324,9 +328,11 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
 
   private getAllEtypes() {
+    this.loading = true;
     var _sub:any = this._attributeService.getAllEtypes().subscribe( alletypes => {
       LogUtil.debug('AttributeDefinitionsComponent getAllEtypes', alletypes);
       this.etypes = alletypes;
+      this.loading = false;
       _sub.unsubscribe();
     });
   }

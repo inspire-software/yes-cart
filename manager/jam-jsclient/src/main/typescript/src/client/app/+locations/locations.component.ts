@@ -207,6 +207,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('LocationsComponent Save handler state', this.stateEdit);
 
+        this.loading = true;
         var _sub:any = this._locationService.saveState(this.stateEdit).subscribe(
             rez => {
             if (this.stateEdit.stateId > 0) {
@@ -224,6 +225,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
             this.changed = false;
             this.selectedState = rez;
             this.stateEdit = null;
+              this.loading = false;
             this.viewMode = LocationsComponent.STATES;
             _sub.unsubscribe();
           }
@@ -232,6 +234,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('LocationsComponent Save handler country', this.countryEdit);
 
+        this.loading = true;
         var _sub:any = this._locationService.saveCountry(this.countryEdit).subscribe(
             rez => {
             if (this.countryEdit.countryId > 0) {
@@ -249,6 +252,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
             this.changed = false;
             this.selectedCountry = rez;
             this.countryEdit = null;
+              this.loading = false;
             this.viewMode = LocationsComponent.COUNTRIES;
             _sub.unsubscribe();
           }
@@ -284,6 +288,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
       if (this.selectedState != null) {
         LogUtil.debug('LocationsComponent onDeleteConfirmationResult', this.selectedState);
 
+        this.loading = true;
         var _sub:any = this._locationService.removeState(this.selectedState).subscribe(res => {
           LogUtil.debug('LocationsComponent removeState', this.selectedState);
           let idx = this.states.indexOf(this.selectedState);
@@ -291,12 +296,14 @@ export class LocationsComponent implements OnInit, OnDestroy {
           this.states = this.states.slice(0, this.states.length); // reset to propagate changes
           this.selectedState = null;
           this.stateEdit = null;
+          this.loading = false;
           _sub.unsubscribe();
         });
 
       } else if (this.selectedCountry != null) {
         LogUtil.debug('LocationsComponent onDeleteConfirmationResult', this.selectedCountry);
 
+        this.loading = true;
         var _sub:any = this._locationService.removeCountry(this.selectedCountry).subscribe(res => {
           LogUtil.debug('LocationsComponent removeCountry', this.selectedCountry);
           let idx = this.countries.indexOf(this.selectedCountry);
@@ -304,6 +311,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
           this.countries = this.countries.slice(0, this.countries.length); // reset to propagate changes
           this.selectedCountry = null;
           this.countryEdit = null;
+          this.loading = false;
           _sub.unsubscribe();
         });
       }

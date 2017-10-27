@@ -6,10 +6,10 @@
       <div class="col-xs-12 col-md-4">
         <ul class="nav nav-second-level item-list">
           <li *ngFor="let row of filteredObjectGroups">
-            <a (click)="onSelectRow(row)" class="{{ (selectedRow != null && selectedRow.name == row.name) ? 'bg-info js-click' : 'js-click' }}"><span>{{row.rank}} {{row.name}}</span><span class="label label-default pull-right">{{row.attrCodeList.length}}</span></a>
+            <a (click)="onSelectRow(row)" class="{{ (selectedRow != null && selectedRow.name == row.name) ? 'bg-info js-click' : 'js-click' }}"><span>{{row.rank}} {{row.name}}</span><span class="label label-default pull-right">{{getCount(row.attrCodeList)}}</span></a>
           </li>
           <li *ngFor="let row of removedObjectGroups">
-            <a class="js-click bg-danger text-strikethrough"><span>{{row.name}}</span><span class="label label-default pull-right">{{row.attrCodeList.length}}</span></a>
+            <a class="js-click bg-danger text-strikethrough"><span>{{row.name}}</span><span class="label label-default pull-right">{{getCount(row.attrCodeList)}}</span></a>
           </li>
         </ul>
       </div>

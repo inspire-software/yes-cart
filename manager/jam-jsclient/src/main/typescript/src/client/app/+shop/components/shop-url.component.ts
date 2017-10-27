@@ -212,12 +212,14 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   protected onSaveHandler() {
     LogUtil.debug('ShopUrlComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.shopUrl) {
+      this.loading = true;
       var _sub:any = this._shopService.saveShopUrls(this.shopUrl).subscribe(
           rez => {
             this.shopUrl = rez;
             this.changed = false;
             this._reload = false;
             this.selectedRow = null;
+            this.loading = false;
             this.filterUrls();
             _sub.unsubscribe();
         }

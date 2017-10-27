@@ -46,7 +46,7 @@
     <yc-managers [managers]="managers" [filter]="managerFilter" (dataSelected)="onManagerSelected($event)"></yc-managers>
   </div>
 
-  <div [hidden]="viewMode !== 'manager'">
+  <div [hidden]="viewMode !== 'manager'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-manager [manager]="managerEdit" [shops]="shops" [roles]="roles" (dataChanged)="onManagerChanged($event)"></yc-manager>
   </div>
 

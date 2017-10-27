@@ -43,7 +43,7 @@
           <div>
             <textarea class="js-query" [(ngModel)]="tab.query"></textarea>
           </div>
-          <div>
+          <div class="{{ loading ? 'loading-data' : '' }}">
             <div *ngIf="tab.resultQuery !== '' && tab.result === ''">
               <p class="bg-warning text-padding">{{ 'QUERY_NO_RESULTS' | translate: { query: tab.resultQuery } }}</p>
             </div>

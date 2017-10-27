@@ -177,12 +177,13 @@ export class ShopSubsComponent implements OnInit, OnDestroy {
   protected onEditModalResult(modalresult: ModalResult) {
     LogUtil.debug('ShopSubsComponent onEditModalResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
-
+      this.loading = true;
       var _sub:any = this._shopService.saveSubShop(this.subShopToEdit).subscribe(
           rez => {
           this.changed = false;
           this._reload = false;
           this.selectedRow = null;
+            this.loading = false;
           _sub.unsubscribe();
           this.getShopSubs();
         }

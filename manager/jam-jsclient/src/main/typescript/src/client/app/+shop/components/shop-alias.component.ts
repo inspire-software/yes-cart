@@ -211,12 +211,14 @@ export class ShopAliasComponent implements OnInit, OnDestroy {
   protected onSaveHandler() {
     LogUtil.debug('ShopAliasComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.shopAlias) {
+      this.loading = true;
       var _sub:any = this._shopService.saveShopAliases(this.shopAlias).subscribe(
           rez => {
             this.shopAlias = rez;
             this.changed = false;
             this._reload = false;
             this.selectedRow = null;
+            this.loading = false;
             this.filterAliases();
             _sub.unsubscribe();
         }

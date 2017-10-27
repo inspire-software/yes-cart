@@ -123,6 +123,7 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
   onSaveHandler() {
     LogUtil.debug('ShopSEOComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.shopLocalization) {
+      this.loading = true;
       var _sub:any = this._shopService.saveShopLocalization(this.shopLocalization).subscribe(shopLocalization => {
         LogUtil.debug('ShopSEOComponent Saved i18n', shopLocalization);
         this.initialising = true;
@@ -132,6 +133,7 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
         this._reload = false;
         this.validForSave = false;
         this.initialising = false;
+        this.loading = false;
         _sub.unsubscribe();
       });
     }

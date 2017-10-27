@@ -396,6 +396,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   protected onRowEditCustomerorder(row:CustomerOrderInfoVO) {
     LogUtil.debug('AllCustomerOrdersComponent onRowEditCustomerorder handler', row);
 
+    this.loading = true;
     let lang = I18nEventBus.getI18nEventBus().current();
     var _sub:any = this._customerorderService.getOrderById(lang, row.customerorderId).subscribe( customerorder => {
       LogUtil.debug('AllCustomerOrdersComponent getOrderById', customerorder);
@@ -403,6 +404,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       this.customerorderEdit = customerorder;
       this.changed = false;
       this.validForSave = false;
+      this.loading = false;
       this.viewMode = AllCustomerOrdersComponent.CUSTOMERORDER;
 
       _sub.unsubscribe();

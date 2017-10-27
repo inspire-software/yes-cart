@@ -73,6 +73,7 @@ export class ShopLanguageComponent implements OnInit {
   onSaveHandler() {
     LogUtil.debug('ShopLanguageComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.lang) {
+      this.loading = true;
       var _sub:any = this._shopService.saveShopLanguages(this.lang).subscribe(shopLanguagesVo => {
         this.shopLanguagesVO = Util.clone(shopLanguagesVo);
         this.lang = Util.clone(shopLanguagesVo);
@@ -81,6 +82,7 @@ export class ShopLanguageComponent implements OnInit {
         });
         this.changed = false;
         this._reload = false;
+        this.loading = false;
         _sub.unsubscribe();
       });
     }

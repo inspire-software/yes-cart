@@ -370,6 +370,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('ShopPriceListComponent Save handler pricelist', this.pricelistEdit);
 
+        this.loading = true;
         var _sub:any = this._priceService.savePriceList(this.pricelistEdit).subscribe(
             rez => {
               _sub.unsubscribe();
@@ -381,6 +382,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
               if (pk == 0) {
                 this.pricelistFilter = '!' + rez.skuCode;
               }
+              this.loading = false;
               this.getFilteredPricelist();
           }
         );
@@ -415,11 +417,13 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
       if (this.selectedPricelist != null) {
         LogUtil.debug('ShopPriceListComponent onDeleteConfirmationResult', this.selectedPricelist);
 
+        this.loading = true;
         var _sub:any = this._priceService.removePriceList(this.selectedPricelist).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('ShopPriceListComponent removePricelist', this.selectedPricelist);
           this.selectedPricelist = null;
           this.pricelistEdit = null;
+          this.loading = false;
           this.getFilteredPricelist();
         });
       }

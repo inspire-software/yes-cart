@@ -61,7 +61,7 @@
     <yc-product-types [productTypes]="types" (dataSelected)="onTypeSelected($event)"></yc-product-types>
   </div>
 
-  <div [hidden]="viewMode !== 'type'">
+  <div [hidden]="viewMode !== 'type'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-product-type [productType]="typeEdit" [attributes]="typeEditAttributes"
                      (dataChanged)="onTypeChanged($event)"></yc-product-type>
   </div>

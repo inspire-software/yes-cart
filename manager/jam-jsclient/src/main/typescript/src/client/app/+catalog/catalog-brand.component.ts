@@ -153,8 +153,10 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
     this.validForSave = false;
     this.viewMode = CatalogBrandComponent.BRAND;
     if (this.brandEdit.brandId > 0) {
+      this.loading = true;
       var _sub:any = this._brandService.getBrandAttributes(this.brandEdit.brandId).subscribe(attrs => {
         this.brandEditAttributes = attrs;
+        this.loading = false;
         _sub.unsubscribe();
       });
     }
@@ -174,6 +176,7 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('CatalogBrandComponent Save handler brand', this.brandEdit);
 
+        this.loading = true;
         var _sub:any = this._brandService.saveBrand(this.brandEdit).subscribe(
             rez => {
               _sub.unsubscribe();
@@ -182,14 +185,17 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
               this.changed = false;
               this.selectedBrand = rez;
               this.brandEdit = null;
+              this.loading = false;
               this.viewMode = CatalogBrandComponent.BRANDS;
 
               if (pk > 0 && this.brandAttributesUpdate != null && this.brandAttributesUpdate.length > 0) {
 
+                this.loading = true;
                 var _sub2:any = this._brandService.saveBrandAttributes(this.brandAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
                   LogUtil.debug('CatalogBrandComponent brand attributes updated', rez);
                   this.brandAttributesUpdate = null;
+                  this.loading = false;
                   this.getFilteredBrands();
                 });
               } else {
@@ -222,11 +228,13 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
       if (this.selectedBrand != null) {
         LogUtil.debug('CatalogBrandComponent onDeleteConfirmationResult', this.selectedBrand);
 
+        this.loading = true;
         var _sub:any = this._brandService.removeBrand(this.selectedBrand).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('CatalogBrandComponent removeBrand', this.selectedBrand);
           this.selectedBrand = null;
           this.brandEdit = null;
+          this.loading = false;
           this.getFilteredBrands();
         });
       }

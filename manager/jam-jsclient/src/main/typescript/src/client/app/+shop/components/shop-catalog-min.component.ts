@@ -375,9 +375,11 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
   editNewCategoryNameModalResult(modalresult:ModalResult) {
     LogUtil.debug('ShopCatalogMinComponent editNewCategoryNameModalResult modal result', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
+      this.loading = true;
       this._categoryService.createCategory(this.newCategory, +this.selectedNode.id).subscribe(
         catVo => {
           this.validForSave = false;
+          this.loading = false;
           this.onRefreshHandler();
         }
       );

@@ -164,17 +164,21 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
   protected onRowEditType(row:ProductTypeInfoVO) {
     LogUtil.debug('CatalogTypeComponent onRowEditType handler', row);
     let typeId = row.producttypeId;
+    this.loading = true;
     var _sub:any = this._typeService.getProductTypeById(typeId).subscribe(typ => {
       _sub.unsubscribe();
       this.typeEdit = typ;
       this.typeEditAttributes = [];
       this.changed = false;
       this.validForSave = false;
+      this.loading = false;
       this.viewMode = CatalogTypeComponent.TYPE;
       if (this.typeEdit.producttypeId > 0) {
+        this.loading = true;
         var _sub2:any = this._typeService.getProductTypeAttributes(this.typeEdit.producttypeId).subscribe(attrs => {
           _sub2.unsubscribe();
           this.typeEditAttributes = attrs;
+          this.loading = false;
         });
       }
 
@@ -195,6 +199,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('CatalogTypeComponent Save handler type', this.typeEdit);
 
+        this.loading = true;
         var _sub:any = this._typeService.saveProductType(this.typeEdit).subscribe(
             rez => {
               _sub.unsubscribe();
@@ -203,14 +208,17 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
               this.changed = false;
               this.selectedType = rez;
               this.typeEdit = null;
+              this.loading = false;
               this.viewMode = CatalogTypeComponent.TYPES;
 
               if (pk > 0 && this.typeAttributesUpdate != null && this.typeAttributesUpdate.length > 0) {
 
+                this.loading = true;
                 var _sub2:any = this._typeService.saveProductTypeAttributes(this.typeAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
                   LogUtil.debug('CatalogTypeComponent type attributes updated', rez);
                   this.typeAttributesUpdate = null;
+                  this.loading = false;
                   this.getFilteredTypes();
                 });
               } else {
@@ -243,11 +251,13 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
       if (this.selectedType != null) {
         LogUtil.debug('CatalogTypeComponent onDeleteConfirmationResult', this.selectedType);
 
+        this.loading = true;
         var _sub:any = this._typeService.removeProductType(this.selectedType).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('CatalogTypeComponent removeType', this.selectedType);
           this.selectedType = null;
           this.typeEdit = null;
+          this.loading = false;
           this.getFilteredTypes();
         });
       }

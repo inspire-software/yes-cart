@@ -165,9 +165,11 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
   editNewCentreNameModalResult(modalresult:ModalResult) {
     LogUtil.debug('ShopFulfilmentCentreComponent editNewCentreNameModalResult modal result', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
+      this.loading = true;
       let _sub:any = this._fulfilmentService.createFulfilmentCentre(this.newCentre, this.shop.shopId).subscribe(
           carVo => {
             this.validForSave = false;
+            this.loading = false;
             _sub.unsubscribe();
             this.onRefreshHandler();
         }
@@ -180,11 +182,13 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
   onSaveHandler() {
     LogUtil.debug('ShopFulfilmentCentreComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.shopCentresVO) {
+      this.loading = true;
       var _sub:any = this._fulfilmentService.saveShopFulfilmentCentres(this.shopCentresVO).subscribe(shopLanguagesVo => {
         this.shopCentresVO = Util.clone(shopLanguagesVo);
         this.remapCentres();
         this.changed = false;
         this._reload = false;
+        this.loading = false;
         _sub.unsubscribe();
       });
     }

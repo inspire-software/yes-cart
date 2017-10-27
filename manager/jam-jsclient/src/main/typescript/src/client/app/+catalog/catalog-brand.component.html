@@ -52,7 +52,7 @@
     <yc-brands [brands]="brands" (dataSelected)="onBrandSelected($event)"></yc-brands>
   </div>
 
-  <div [hidden]="viewMode !== 'brand'">
+  <div [hidden]="viewMode !== 'brand'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-brand [brand]="brandEdit" [attributes]="brandEditAttributes"
               (dataChanged)="onBrandChanged($event)"></yc-brand>
   </div>

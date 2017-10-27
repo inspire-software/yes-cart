@@ -73,6 +73,7 @@ export class ShopCurrencyComponent implements OnInit {
   onSaveHandler() {
     LogUtil.debug('ShopCurrencyComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.curr) {
+      this.loading = true;
       var _sub:any = this._shopService.saveShopCurrencies(this.curr).subscribe(shopSupportedCurrenciesVO => {
         LogUtil.debug('ShopCurrencyComponent Saved currencies', shopSupportedCurrenciesVO);
         this.shopSupportedCurrenciesVO = Util.clone(shopSupportedCurrenciesVO);
@@ -80,6 +81,7 @@ export class ShopCurrencyComponent implements OnInit {
         Util.remove(this.curr.all, this.curr.supported);
         this.changed = false;
         this._reload = false;
+        this.loading = false;
         _sub.unsubscribe();
       });
     }

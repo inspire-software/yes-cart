@@ -148,6 +148,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('FulfilmentComponent Save handler centre', this.centreEdit);
 
+        this.loading = true;
         var _sub:any = this._fulfilmentService.saveFulfilmentCentre(this.centreEdit).subscribe(
             rez => {
             if (this.centreEdit.warehouseId > 0) {
@@ -165,6 +166,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
             this.changed = false;
             this.selectedCentre = rez;
             this.centreEdit = null;
+              this.loading = false;
             this.viewMode = FulfilmentComponent.CENTRES;
             _sub.unsubscribe();
           }
@@ -193,6 +195,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
      if (this.selectedCentre != null) {
         LogUtil.debug('FulfilmentComponent onDeleteConfirmationResult', this.selectedCentre);
 
+       this.loading = true;
         var _sub:any = this._fulfilmentService.removeFulfilmentCentre(this.selectedCentre).subscribe(res => {
           LogUtil.debug('FulfilmentComponent removeCentre', this.selectedCentre);
           let idx = this.centres.indexOf(this.selectedCentre);
@@ -200,6 +203,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
           this.centres = this.centres.slice(0, this.centres.length); // reset to propagate changes
           this.selectedCentre = null;
           this.centreEdit = null;
+          this.loading = false;
           _sub.unsubscribe();
         });
       }

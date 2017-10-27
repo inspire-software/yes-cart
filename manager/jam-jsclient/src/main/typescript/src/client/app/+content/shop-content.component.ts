@@ -226,6 +226,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
 
   protected onRowEditContent(row:ContentVO) {
     LogUtil.debug('ShopContentComponent onRowEditContent handler', row);
+    this.loading = true;
     var _sub:any = this._contentService.getContentById(this.selectedContent.contentId).subscribe(content => {
       LogUtil.debug('ShopContentComponent getContentById', content);
       this.contentEdit = content;
@@ -236,6 +237,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
       this.viewMode = ShopContentComponent.CONTENT;
       var _sub2:any = this._contentService.getContentAttributes(this.contentEdit.contentId).subscribe(attrs => {
         this.contentEditAttributes = attrs;
+        this.loading = false;
         _sub2.unsubscribe();
       });
     });
@@ -255,6 +257,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('ShopContentComponent Save handler content', this.contentEdit);
 
+        this.loading = true;
         var _sub:any = this._contentService.saveContent(this.contentEdit).subscribe(
             rez => {
               _sub.unsubscribe();
@@ -263,14 +266,17 @@ export class ShopContentComponent implements OnInit, OnDestroy {
               this.changed = false;
               this.selectedContent = rez;
               this.contentEdit = null;
+              this.loading = false;
               this.viewMode = ShopContentComponent.CONTENTS;
 
               if (pk > 0 && this.contentAttributesUpdate != null && this.contentAttributesUpdate.length > 0) {
 
+                this.loading = true;
                 var _sub2:any = this._contentService.saveContentAttributes(this.contentAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
                   LogUtil.debug('ShopContentComponent content attributes updated', rez);
                   this.contentAttributesUpdate = null;
+                  this.loading = false;
                   this.getFilteredContents();
                 });
               } else {
@@ -305,11 +311,13 @@ export class ShopContentComponent implements OnInit, OnDestroy {
       if (this.selectedContent != null) {
         LogUtil.debug('ShopContentComponent onDeleteConfirmationResult', this.selectedContent);
 
+        this.loading = true;
         var _sub:any = this._contentService.removeContent(this.selectedContent).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('ShopContentComponent removeContent', this.selectedContent);
           this.selectedContent = null;
           this.contentEdit = null;
+          this.loading = false;
           this.getFilteredContents();
         });
       }

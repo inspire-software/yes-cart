@@ -35,6 +35,8 @@ export class QueryComponent implements OnInit {
 
   private selectedTab:number = 0;
 
+  private loading:boolean = false;
+
   /**
    * Construct shop attribute panel
    *
@@ -80,6 +82,7 @@ export class QueryComponent implements OnInit {
     let data = this.tabs[this.selectedTab];
     let node = this.selectedNode;
 
+    this.loading = true;
     var _sub:any = this._systemService.runQuery(node, data.qtype, data.query).subscribe(res => {
 
       LogUtil.debug('QueryComponent res', res);
@@ -97,6 +100,7 @@ export class QueryComponent implements OnInit {
       let data = this.tabs[this.selectedTab];
       data.result = _csv;
       data.resultQuery = data.query;
+      this.loading = false;
       _sub.unsubscribe();
 
     });

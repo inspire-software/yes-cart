@@ -426,6 +426,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('ShopTaxesComponent Save handler config', this.taxconfigEdit);
 
+        this.loading = true;
         var _sub:any = this._taxService.createTaxConfig(this.taxconfigEdit).subscribe(
             rez => {
               _sub.unsubscribe();
@@ -435,6 +436,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
               if (pk == 0) {
                 this.taxconfigsFilter = rez.code;
               }
+              this.loading = false;
               this.getFilteredTaxConfig();
           }
         );
@@ -446,6 +448,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
         LogUtil.debug('ShopTaxesComponent Save handler tax', this.taxEdit);
 
+        this.loading = true;
         var _sub:any = this._taxService.saveTax(this.taxEdit).subscribe(
             rez => {
               _sub.unsubscribe();
@@ -455,6 +458,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
               if (pk == 0) {
                 this.taxesFilter = rez.code;
               }
+              this.loading = false;
               this.getFilteredTax();
           }
         );
@@ -497,20 +501,24 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
       if (this.selectedTaxconfig != null) {
         LogUtil.debug('ShopTaxesComponent onDeleteConfirmationResult', this.selectedTaxconfig);
 
+        this.loading = true;
         var _sub:any = this._taxService.removeTaxConfig(this.selectedTaxconfig).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('ShopTaxesComponent removeTax', this.selectedTaxconfig);
           this.selectedTaxconfig = null;
+          this.loading = false;
           this.getFilteredTaxConfig();
         });
 
       } else if (this.selectedTax != null) {
         LogUtil.debug('ShopTaxesComponent onDeleteConfirmationResult', this.selectedTax);
 
+        this.loading = true;
         var _sub:any = this._taxService.removeTax(this.selectedTax).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('ShopTaxesComponent removeTax', this.selectedTax);
           this.selectedTax = null;
+          this.loading = false;
           this.getFilteredTax();
         });
       }
