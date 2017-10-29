@@ -606,6 +606,28 @@ $(document).ready(function() {
 
     });
 
+    // -- Featured items carousel
+    $('#featuredProducts').owlCarousel({
+        items: 6,
+        loop: true,
+        nav: false,
+        autoplay: true,
+        slideBy: 6,
+        responsive : {
+            // breakpoint from 768 up
+            768: {
+                items: 4,
+                slideBy: 4,
+                dots: false
+            },
+            // breakpoint from 992 up
+            992: {
+                items: 6,
+                slideBy: 6
+            }
+        }
+    });
+
     // -- Utility functions ------------------------------------------------------------------------
 
     // modal messages
