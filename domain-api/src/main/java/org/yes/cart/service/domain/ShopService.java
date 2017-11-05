@@ -19,7 +19,6 @@ package org.yes.cart.service.domain;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +28,7 @@ import java.util.Set;
  * Date: 07-May-2011
  * Time: 11:13:01
  */
-public interface ShopService extends AttributeManageGenericService<Shop> {
+public interface ShopService extends GenericService<Shop> {
 
     /**
      * Get the {@link Shop} by given server name.
@@ -204,6 +203,16 @@ public interface ShopService extends AttributeManageGenericService<Shop> {
      * @return shop id if found otherwise null
      */
     Long findShopIdByCode(String code);
+
+    /**
+     * Set attribute value. New attribute value will be created,
+     * if attribute has not value for given shop.
+     *
+     * @param entityId       entity pk value
+     * @param attributeKey   attribute key
+     * @param attributeValue attribute value.
+     */
+    void updateAttributeValue(long entityId, String attributeKey, String attributeValue);
 
 
 }

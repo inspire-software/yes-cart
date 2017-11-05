@@ -30,29 +30,31 @@
     <select-sql>select v from AttrValueEntityProductSku v where v.attributeCode = {attributeCode} and v.productSku.guid = {product}</select-sql>
 
     <!--
-      Product attributes are very slow therefore a native query is run to make it faster
+        Product attributes are very slow therefore a native query is run to make it faster
 
-      Delete should remove the previous value only if Attribute.ALLOWDUPLICATE returns false,
-      so for multi-value attributes the delete operation should not have any effect.
+        Delete should remove the previous value only if Attribute.ALLOWDUPLICATE returns false,
+        so for multi-value attributes the delete operation should not have any effect.
 
-      '#~#' is default separator for localised text fields the syntax is:
-          'locale1#~#value1#~#locale2#~#value2 ... #~#localeN#~#valueN'
-      where locales match YeS locale settings.
-    -->
+        '#~#' is default separator for localised text fields the syntax is:
+            'locale1#~#value1#~#locale2#~#value2 ... #~#localeN#~#valueN'
+        where locales match YeS locale settings.
+
+        DISPLAYVAL languages must be in alpha order.
+      -->
     <insert-sql>
         DELETE FROM TPRODUCTSKUATTRVALUE
-        WHERE SKU_ID = (SELECT p.SKU_ID FROM TSKU p WHERE p.GUID = '{product}')
-        AND CODE = '{attributeCode}' AND 0 = (SELECT a.ALLOWDUPLICATE FROM TATTRIBUTE a WHERE a.CODE = '{attributeCode}');
+            WHERE SKU_ID = (SELECT p.SKU_ID FROM TSKU p WHERE p.GUID = '{product}')
+                AND CODE = '{attributeCode}' AND 0 = (SELECT a.ALLOWDUPLICATE FROM TATTRIBUTE a WHERE a.CODE = '{attributeCode}');
         INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL, DISPLAYVAL)
-        VALUES (0,
-        (SELECT p.SKU_ID FROM TSKU p WHERE p.GUID = '{product}'),
-        '{GUID}', '{attributeCode}','{val}','en#~#{displayValEn}#~#ru#~#{displayValRu}#~#uk#~#{displayValUk}')
+            VALUES (0,
+                (SELECT p.SKU_ID FROM TSKU p WHERE p.GUID = '{product}'),
+            '{GUID}', '{attributeCode}','{val}','de#~#{displayValDe}#~#en#~#{displayValEn}#~#ru#~#{displayValRu}#~#uk#~#{displayValUk}')
     </insert-sql>
 
 
     <import-columns>
 
-        <!-- SKU by Product GUID -->
+        <!-- SKU by GUID -->
         <column-descriptor>
             <column-index>0</column-index>
             <!-- field-type>FK_FIELD</field-type -->
@@ -113,6 +115,15 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
-    </import-columns>
+        <!-- Attr DE value -->
+        <column-descriptor>
+            <column-index>8</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayValDe</name>
+            <language>de</language>
+            <value-regex>(.{0,1300})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
 
+    </import-columns>
 </import-descriptor>

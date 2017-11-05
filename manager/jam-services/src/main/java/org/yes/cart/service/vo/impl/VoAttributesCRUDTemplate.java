@@ -175,6 +175,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                 // update mode
                 final D dto = existing.get(item.getFirst().getAttrvalueId());
                 if (dto != null) {
+                    boolean shouldIndex = false;
                     if (Etype.IMAGE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
                         final String existingImage = voIOSupport.
                                 getImageAsBase64(dto.getVal(), imageCode, this.imageStoragePrefix);
@@ -189,6 +190,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                                             this.imageStoragePrefix
                                     );
                             item.getFirst().setVal(formattedFilename);
+                            shouldIndex = true;
                             // TODO Image SEO
                         }
                     } else if (Etype.FILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
@@ -202,6 +204,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                                         this.fileStoragePrefix
                                 );
                         item.getFirst().setVal(formattedFilename);
+                        shouldIndex = true;
                     } else if (Etype.SYSFILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
                         String formattedFilename = item.getFirst().getVal();
                         formattedFilename = voIOSupport.
@@ -213,8 +216,12 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                                         this.fileStoragePrefix
                                 );
                         item.getFirst().setVal(formattedFilename);
+                        shouldIndex = true;
                     }
                     asm.assembleDto(dto, item.getFirst());
+                    if (shouldIndex) {
+                        dto.setIndexedVal(dto.getVal());
+                    }
                     genericAttrValueService.updateEntityAttributeValue(dto);
                 } else {
                     LOG.warn("Update skipped for inexistent ID {}", item.getFirst().getAttrvalueId());
@@ -223,6 +230,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                 // insert mode
                 final D dto = (D) genericAttrValueService.getNewAttribute(objectId);
                 dto.setAttributeDTO(dtoAttributeService.getById(item.getFirst().getAttribute().getAttributeId()));
+                boolean shouldIndex = false;
                 if (Etype.IMAGE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
                     String formattedFilename = item.getFirst().getVal();
                     formattedFilename = voIOSupport.
@@ -234,6 +242,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                                     this.imageStoragePrefix
                             );
                     item.getFirst().setVal(formattedFilename);
+                    shouldIndex = true;
                     // TODO Image SEO
                 } else if (Etype.FILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
                     String formattedFilename = item.getFirst().getVal();
@@ -246,6 +255,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                                     this.fileStoragePrefix
                             );
                     item.getFirst().setVal(formattedFilename);
+                    shouldIndex = true;
                 } else if (Etype.SYSFILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
                     String formattedFilename = item.getFirst().getVal();
                     formattedFilename = voIOSupport.
@@ -257,8 +267,12 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                                     this.sysfileStoragePrefix
                             );
                     item.getFirst().setVal(formattedFilename);
+                    shouldIndex = true;
                 }
                 asm.assembleDto(dto, item.getFirst());
+                if (shouldIndex) {
+                    dto.setIndexedVal(dto.getVal());
+                }
                 this.genericAttrValueService.createEntityAttributeValue(dto);
             }
 

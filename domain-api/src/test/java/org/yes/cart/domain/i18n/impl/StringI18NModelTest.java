@@ -85,4 +85,39 @@ public class StringI18NModelTest {
         assertEquals("Some text", restored.getValue("EN"));
         assertNull(restored.getValue("RU"));
     }
+
+
+    @Test
+    public void testGetNull() throws Exception {
+
+        assertNull(new StringI18NModel().getValue(null));
+        assertNull(new StringI18NModel("RU#~#Текст#~#EN#~#Some text").getValue(null));
+    }
+
+    @Test
+    public void testToString() throws Exception {
+
+        final String sorted = "EN#~#Some text#~#RU#~#Текст";
+
+        assertNotNull(sorted, new StringI18NModel("EN#~#Some text#~#RU#~#Текст").toString());
+        assertNotNull(sorted, new StringI18NModel("RU#~#Текст#~#EN#~#Some text").toString());
+    }
+
+    @Test
+    public void testEquals() throws Exception {
+
+        final I18NModel m1 = new StringI18NModel("EN#~#Some text#~#RU#~#Текст");
+        final I18NModel m2 = new StringI18NModel("EN#~#Some text#~#RU#~#Текст");
+
+        assertTrue(m1.equals(m2));
+        assertTrue(m2.equals(m1));
+        assertEquals(m2.hashCode(), m1.hashCode());
+
+        final I18NModel m3 = new StringI18NModel("EN#~#Some text#~#RU#~#Текст1");
+
+        assertFalse(m3.equals(m2));
+        assertFalse(m2.equals(m3));
+        assertNotEquals(m2.hashCode(), m3.hashCode());
+
+    }
 }

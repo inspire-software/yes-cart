@@ -19,13 +19,13 @@ package org.yes.cart.service.domain.impl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.dto.ProductSearchResultNavDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.IndexBuilder;
-import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.ProductService;
@@ -110,14 +110,6 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productService-productAttribute")
-    public Pair<String, String> getProductAttribute(final String locale, final long productId, final long skuId, final String attributeCode) {
-        return productService.getProductAttribute(locale, productId, skuId, attributeCode);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Cacheable(value = "productService-allProductsAttributeValues")
     public Map<Long, String> getAllProductsAttributeValues(final String attributeCode) {
         return productService.getAllProductsAttributeValues(attributeCode);
@@ -169,7 +161,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
-    public Map<String, List<Pair<String, Integer>>> findFilteredNavigationRecords(final NavigationContext baseNavigationContext, final List<FilteredNavigationRecordRequest> request) {
+    public ProductSearchResultNavDTO findFilteredNavigationRecords(final NavigationContext baseNavigationContext, final List<FilteredNavigationRecordRequest> request) {
         return productService.findFilteredNavigationRecords(baseNavigationContext, request);
     }
 
@@ -205,28 +197,6 @@ public class ProductServiceCachedImpl implements ProductService {
     @Cacheable(value = "productService-productByIdList")
     public List<Product> getProductByIdList(final List idList) {
         return productService.getProductByIdList(idList);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "productService-distinctBrands")
-    public List<FilteredNavigationRecord> getDistinctBrands(final String locale) {
-        return productService.getDistinctBrands(locale);
-    }
-
-
-    /**
-     * Get the ranked by ProductTypeAttr.rank list of unique product attribute values by given product type
-     * and attribute code.
-     *
-     * @param locale        locale
-     * @param productTypeId product type id
-     * @return list of distinct attrib values
-     */
-    @Cacheable(value = "productService-distinctAttributeValues")
-    public List<FilteredNavigationRecord> getDistinctAttributeValues(final String locale, final long productTypeId) {
-        return productService.getDistinctAttributeValues(locale, productTypeId);
     }
 
     /**
@@ -454,8 +424,6 @@ public class ProductServiceCachedImpl implements ProductService {
             "productService-productSearchResultDTOByQuery",
             "productService-productQtyByQuery",
             "productService-productByIdList",
-            "productService-distinctAttributeValues",
-            "productService-distinctBrands",
             "productService-productQtyByCategoryId"
 
     }, allEntries = true)
@@ -469,7 +437,6 @@ public class ProductServiceCachedImpl implements ProductService {
             "productService-defaultImage",
             "productService-randomProductByCategory",
             "productService-productAttributes",
-            "productService-productAttribute",
             "productService-allProductsAttributeValues",
             "productService-productAssociationsIds",
             "productService-featuredProducts",
@@ -480,8 +447,6 @@ public class ProductServiceCachedImpl implements ProductService {
             "productService-productByQuery",
             "productService-productSearchResultDTOByQuery",
             "productService-productQtyByQuery",
-            "productService-distinctAttributeValues",
-            "productService-distinctBrands",
             "productService-productByIdList",
             "productService-productQtyByCategoryId"
 
@@ -496,7 +461,6 @@ public class ProductServiceCachedImpl implements ProductService {
             "productService-defaultImage",
             "productService-randomProductByCategory",
             "productService-productAttributes",
-            "productService-productAttribute",
             "productService-allProductsAttributeValues",
             "productService-productAssociationsIds",
             "productService-featuredProducts",
@@ -507,8 +471,6 @@ public class ProductServiceCachedImpl implements ProductService {
             "productService-productByQuery",
             "productService-productSearchResultDTOByQuery",
             "productService-productQtyByQuery",
-            "productService-distinctAttributeValues",
-            "productService-distinctBrands",
             "productService-productByIdList",
             "productService-productQtyByCategoryId"
 

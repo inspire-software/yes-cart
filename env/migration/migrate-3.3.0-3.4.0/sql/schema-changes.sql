@@ -95,3 +95,34 @@ SHOP10.priceResolver=[bean name]
 SHOP10.taxProvider=[bean name]
 SHOP10.productAvailabilityStrategy=[bean name]
 Main.inventoryResolver=[bean name]',  1012, 1000, 0, 0, 0, 0);
+
+--
+-- YC-830 Performance improvements 3.4.x
+-- YC-832 Refactor object images API
+--
+
+alter table TBRANDATTRVALUE add column INDEXVAL varchar(255);
+update TBRANDATTRVALUE set INDEXVAL = VAL where CODE like 'BRAND_IMAGE%' or CODE like 'BRAND_FILE%';
+create index AV_BRAND_VAL on TBRANDATTRVALUE (INDEXVAL);
+
+alter table TCATEGORYATTRVALUE add column INDEXVAL varchar(255);
+update TCATEGORYATTRVALUE set INDEXVAL = VAL where CODE like 'CATEGORY_IMAGE%' or CODE like 'CATEGORY_FILE%';
+create index AV_CATEGORY_VAL on TCATEGORYATTRVALUE (INDEXVAL);
+
+alter table TCUSTOMERATTRVALUE add column INDEXVAL varchar(255);
+create index AV_CUSTOMER_VAL on TCUSTOMERATTRVALUE (INDEXVAL);
+
+alter table TPRODUCTATTRVALUE add column INDEXVAL varchar(255);
+update TPRODUCTATTRVALUE set INDEXVAL = VAL where CODE like 'IMAGE%' or CODE like 'FILE%';
+create index AV_PRODUCT_VAL on TPRODUCTATTRVALUE (INDEXVAL);
+
+alter table TPRODUCTSKUATTRVALUE add column INDEXVAL varchar(255);
+update TPRODUCTSKUATTRVALUE set INDEXVAL = VAL where CODE like 'IMAGE%' or CODE like 'FILE%';
+create index AV_SKU_VAL on TPRODUCTSKUATTRVALUE (INDEXVAL);
+
+alter table TSHOPATTRVALUE add column INDEXVAL varchar(255);
+update TSHOPATTRVALUE set INDEXVAL = VAL where CODE like 'SHOP_IMAGE%' or CODE like 'SHOP_FILE%' or CODE like 'SHOP_SYSFILE%';
+create index AV_SHOP_VAL on TSHOPATTRVALUE (INDEXVAL);
+
+alter table TSYSTEMATTRVALUE add column INDEXVAL varchar(255);
+create index AV_SYSTEM_VAL on TSYSTEMATTRVALUE (INDEXVAL);

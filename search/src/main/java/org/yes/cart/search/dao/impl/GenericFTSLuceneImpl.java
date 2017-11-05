@@ -29,6 +29,8 @@ import org.apache.lucene.search.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.GenericFTS;
 import org.yes.cart.search.dao.LuceneIndexProvider;
@@ -209,7 +211,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
      * {@inheritDoc}
      */
     @Override
-    public Map<String, List<Pair<String, Integer>>> fullTextSearchNavigation(final Query query, final List<FilteredNavigationRecordRequest> facetingRequest) {
+    public Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> fullTextSearchNavigation(final Query query, final List<FilteredNavigationRecordRequest> facetingRequest) {
 
         if (facetingRequest == null || facetingRequest.isEmpty()) {
             return Collections.emptyMap();
@@ -217,7 +219,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
         LOGFTQ.debug("Run facet query {}", query);
 
-        final Map<String, List<Pair<String, Integer>>> result = new LinkedHashMap<String, List<Pair<String, Integer>>>();
+        final Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> result = new LinkedHashMap<String, List<Pair<Pair<String, I18NModel>, Integer>>>();
 
         final FacetsCollector fc = new FacetsCollector();
 
@@ -230,7 +232,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
                 try {
                     // always reset to empty first (could be multiple attribute mappings with invalid fields type in index, so hard reset)
-                    final List<Pair<String, Integer>> values = new ArrayList<Pair<String, Integer>>();
+                    final List<Pair<Pair<String, I18NModel>, Integer>> values = new ArrayList<Pair<Pair<String, I18NModel>, Integer>>();
                     result.put(request.getFacetName(), values);
 
                     final FacetsConfig facetsConfig = new FacetsConfig();
@@ -267,7 +269,23 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                         if (topValues != null && topValues.value != null && topValues.value.intValue() > 0) {
 
                             for (final LabelAndValue lav : topValues.labelValues) {
-                                values.add(new Pair<String, Integer>(lav.label, lav.value.intValue()));
+
+                                final Pair<String, I18NModel> label;
+                                final int pos = lav.label.indexOf(Constants.FACET_NAVIGATION_DELIMITER);
+                                if (pos != -1) {
+                                    final String value = lav.label.substring(0, pos);
+                                    final String displayValue = lav.label.substring(pos + Constants.FACET_NAVIGATION_DELIMITER.length());
+                                    label = new Pair<String, I18NModel>(
+                                            value,
+                                            new StringI18NModel(displayValue)
+                                    );
+                                } else {
+                                    label = new Pair<String, I18NModel>(
+                                            lav.label,
+                                            null
+                                    );
+                                }
+                                values.add(new Pair<Pair<String, I18NModel>, Integer>(label, lav.value.intValue()));
                             }
 
                         }

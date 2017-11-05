@@ -200,33 +200,6 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         }
     }
 
-
-    /**
-     * Add new attribute to customer. If attribute already exists, his value will be changed.
-     * This method not perform any actions to persist changes.
-     *
-     * @param customer       given customer
-     * @param attributeCode  given attribute code
-     * @param attributeValue given attribute value
-     */
-    public void addAttribute(final Customer customer, final String attributeCode, final String attributeValue) {
-        if (StringUtils.isNotBlank(attributeValue)) {
-            AttrValueCustomer attrVal = customer.getAttributeByCode(attributeCode);
-            if (attrVal != null) {
-                attrVal.setVal(attributeValue);
-            } else {
-                final Attribute attr = attributeService.findByAttributeCode(attributeCode);
-                if (attr != null) {
-                    attrVal = getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
-                    attrVal.setVal(attributeValue);
-                    attrVal.setAttributeCode(attr.getCode());
-                    attrVal.setCustomer(customer);
-                    customer.getAttributes().add(attrVal);
-                }
-            }
-        }
-    }
-
     /**
      * {@inheritDoc}
      */

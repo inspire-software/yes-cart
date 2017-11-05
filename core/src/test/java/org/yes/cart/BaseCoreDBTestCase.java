@@ -27,9 +27,12 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.impl.AbstractTestDAO;
 import org.yes.cart.domain.entity.Address;
+import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.service.domain.AddressService;
+import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 
@@ -38,7 +41,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Collections.singletonMap;
-import static org.junit.Assert.fail;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -282,11 +284,11 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
         CustomerService customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         Customer customer = createCustomer("B2B" + number);
-        customerService.addAttribute(customer, AttributeNamesKeys.Customer.B2B_REF, "REF-001");
-        customerService.addAttribute(customer, AttributeNamesKeys.Customer.B2B_CHARGE_ID, "CHARGE-001");
-        customerService.addAttribute(customer, AttributeNamesKeys.Customer.B2B_EMPLOYEE_ID, "EMP-001");
-        customerService.addAttribute(customer, AttributeNamesKeys.Customer.B2B_REQUIRE_APPROVE, String.valueOf(requireApproveOrder));
-        customerService.addAttribute(customer, AttributeNamesKeys.Customer.BLOCK_CHECKOUT, String.valueOf(blockCheckout));
+        addAttribute(customerService, customer, AttributeNamesKeys.Customer.B2B_REF, "REF-001");
+        addAttribute(customerService, customer, AttributeNamesKeys.Customer.B2B_CHARGE_ID, "CHARGE-001");
+        addAttribute(customerService, customer, AttributeNamesKeys.Customer.B2B_EMPLOYEE_ID, "EMP-001");
+        addAttribute(customerService, customer, AttributeNamesKeys.Customer.B2B_REQUIRE_APPROVE, String.valueOf(requireApproveOrder));
+        addAttribute(customerService, customer, AttributeNamesKeys.Customer.BLOCK_CHECKOUT, String.valueOf(blockCheckout));
         customerService.update(customer);
         customer = customerService.getCustomerByEmail(customer.getEmail(), shopService.getById(10L));
         return customer;
@@ -300,11 +302,11 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
         CustomerService customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         Customer customer = createCustomer("B2B" + number, 1010L);
-        customerService.addAttribute(customer, AttributeNamesKeys.Customer.B2B_REF, "REF-001");
-        customerService.addAttribute(customer, AttributeNamesKeys.Customer.B2B_CHARGE_ID, "CHARGE-001");
-        customerService.addAttribute(customer, AttributeNamesKeys.Customer.B2B_EMPLOYEE_ID, "EMP-001");
-        customerService.addAttribute(customer, AttributeNamesKeys.Customer.B2B_REQUIRE_APPROVE, String.valueOf(requireApproveOrder));
-        customerService.addAttribute(customer, AttributeNamesKeys.Customer.BLOCK_CHECKOUT, String.valueOf(blockCheckout));
+        addAttribute(customerService, customer, AttributeNamesKeys.Customer.B2B_REF, "REF-001");
+        addAttribute(customerService, customer, AttributeNamesKeys.Customer.B2B_CHARGE_ID, "CHARGE-001");
+        addAttribute(customerService, customer, AttributeNamesKeys.Customer.B2B_EMPLOYEE_ID, "EMP-001");
+        addAttribute(customerService, customer, AttributeNamesKeys.Customer.B2B_REQUIRE_APPROVE, String.valueOf(requireApproveOrder));
+        addAttribute(customerService, customer, AttributeNamesKeys.Customer.BLOCK_CHECKOUT, String.valueOf(blockCheckout));
         customerService.update(customer);
         customer = customerService.getCustomerByEmail(customer.getEmail(), shopService.getById(1010L));
         return customer;
@@ -324,7 +326,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         customer.setFirstname(prefix + "John");
         customer.setLastname(prefix + "Doe");
         customer.setPassword("rawpassword");
-        customerService.addAttribute(customer, AttributeNamesKeys.Customer.CUSTOMER_PHONE, "555-55-51");
+        addAttribute(customerService, customer, AttributeNamesKeys.Customer.CUSTOMER_PHONE, "555-55-51");
         final Shop shop = shopService.getById(shopId);
         customer = customerService.create(customer, shop);
         Address address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);
@@ -353,6 +355,17 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         //customer = customerDao.findSingleByCriteria(Restrictions.eq("email", prefix + "jd@domain.com"));
         customer = customerService.getCustomerByEmail(prefix + "jd@domain.com", shop);
         return customer;
+    }
+
+    protected void addAttribute(final CustomerService customerService,
+                                final Customer customer,
+                                final String code,
+                                final String val) {
+        final AttrValueCustomer av = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
+        av.setVal(val);
+        av.setAttributeCode(code);
+        av.setCustomer(customer);
+        customer.getAttributes().add(av);
     }
 
 

@@ -487,42 +487,6 @@ public class ProductDAOTest extends AbstractTestDAO {
         return productCategory;
     }
 
-    /**
-     * Test for PRODUCTS.BRANDS.ALL named query
-     */
-    @Test
-    public void testGetUniqueBrandsByCategoriesTest() throws InterruptedException {
-
-
-        getTx().execute(new TransactionCallbackWithoutResult() {
-            public void doInTransactionWithoutResult(TransactionStatus status) {
-
-                //productDao.fullTextSearchReindex(false);
-
-                List<Object[]> brands = productDao.findQueryObjectsByNamedQuery("PRODUCTS.BRANDS.ALL");
-
-                assertNotNull(brands);
-                assertFalse(brands.isEmpty());
-
-                final Set<String> brandNames = new HashSet<String>();
-                for (final Object[] rec : brands) {
-                    brandNames.add(String.valueOf(rec[0]));
-                }
-
-                assertTrue(brandNames.containsAll(Arrays.asList("Unknown", "FutureRobots", "LG", "Sony", "Samsung", "cc tests", "PreorderCompany")));
-
-                status.setRollbackOnly();
-
-            }
-        });
-
-
-
-
-
-
-    }
-
     private long createProduct(long brandId, String productCode, String productName, long productTypeId, long productCategoryId) {
         Product product = new ProductEntity();
         product.setAvailability(Product.AVAILABILITY_STANDARD);
@@ -562,58 +526,6 @@ public class ProductDAOTest extends AbstractTestDAO {
         productDao.fullTextSearchReindex(product.getProductId());
         skuWareHouseDao.flushClear();
         return pk;
-    }
-
-
-    @Test
-    public void testGetRankedUniqueCodeAttribValues() {
-
-
-        getTx().execute(new TransactionCallbackWithoutResult() {
-            public void doInTransactionWithoutResult(TransactionStatus status) {
-
-                List<Object[]> codesByProductId = productDao.findQueryObjectsByNamedQuery("ATTRIBUTE.CODES.AND.RANK.SINGLE.NAVIGATION.UNIQUE.BY.PRODUCTTYPE.ID",
-                        1L, true, true);
-                final Map<String, Integer> map = new HashMap<String, Integer>();
-                for (final Object[] codeAndRank : codesByProductId) {
-                    map.put((String) codeAndRank[0], (Integer) codeAndRank[1]);
-                }
-
-                List<Object[]> list;
-                list = productDao.findQueryObjectsByNamedQuery("PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES",
-                        map.keySet());
-                assertNotNull(list);
-                final Map<String, List<String>> expected = new HashMap<String, List<String>>();
-                expected.put("MATERIAL", Arrays.asList("Plastik", "metal"));
-                expected.put("BATTERY_TYPE", Arrays.asList("Plutonium"));
-                assertEquals(3, list.size());
-                for (final Object[] value : list) {
-                    final List<String> exp = expected.get(value[0]);
-                    assertNotNull(exp);
-                    assertTrue(exp.contains(value[1]));
-                }
-
-                list = productDao.findQueryObjectsByNamedQuery("PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES",
-                        map.keySet());
-                assertNotNull(list);
-                final Map<String, List<String>> expectedSku = new HashMap<String, List<String>>();
-                expectedSku.put("SIZE", Arrays.asList("small", "large", "medium", "xxl"));
-                assertEquals(4, list.size());
-                for (final Object[] value : list) {
-                    final List<String> exp = expectedSku.get(value[0]);
-                    assertNotNull(exp);
-                    assertTrue(exp.contains(value[1]));
-                }
-
-                // no need to check for sorting by rank since this is done in code,
-                // in fact it should only be done in code as raking sort in SQL has low
-                // performance
-
-                status.setRollbackOnly();
-
-            }
-        });
-
     }
 
 }

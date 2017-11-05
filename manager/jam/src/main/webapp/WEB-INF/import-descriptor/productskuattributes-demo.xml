@@ -17,6 +17,10 @@
 <import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/schema/import-descriptor.xsd">
 
+    <!--
+        Demo fast insert import (no safe guard deletion for native inserts)
+    -->
+
     <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
 
     <import-file-descriptor>
@@ -30,20 +34,22 @@
     <select-sql>select v from AttrValueEntityProductSku v where v.attributeCode = {attributeCode} and v.productSku.guid = {product}</select-sql>
 
     <!--
-      Product attributes are very slow therefore a native query is run to make it faster
+        Product attributes are very slow therefore a native query is run to make it faster
 
-      Delete should remove the previous value only if Attribute.ALLOWDUPLICATE returns false,
-      so for multi-value attributes the delete operation should not have any effect.
+        Delete should remove the previous value only if Attribute.ALLOWDUPLICATE returns false,
+        so for multi-value attributes the delete operation should not have any effect.
 
-      '#~#' is default separator for localised text fields the syntax is:
-          'locale1#~#value1#~#locale2#~#value2 ... #~#localeN#~#valueN'
-      where locales match YeS locale settings.
-    -->
+        '#~#' is default separator for localised text fields the syntax is:
+            'locale1#~#value1#~#locale2#~#value2 ... #~#localeN#~#valueN'
+        where locales match YeS locale settings.
+
+        DISPLAYVAL languages must be in alpha order.
+      -->
     <insert-sql>
         INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL, DISPLAYVAL)
-        VALUES (0,
-        (SELECT p.SKU_ID FROM TSKU p WHERE p.GUID = '{product}'),
-        '{GUID}', '{attributeCode}','{val}','en#~#{displayValEn}#~#ru#~#{displayValRu}#~#uk#~#{displayValUk}#~#de#~#{displayValDe}')
+            VALUES (0,
+                (SELECT p.SKU_ID FROM TSKU p WHERE p.GUID = '{product}'),
+            '{GUID}', '{attributeCode}','{val}','de#~#{displayValDe}#~#en#~#{displayValEn}#~#ru#~#{displayValRu}#~#uk#~#{displayValUk}')
     </insert-sql>
 
 

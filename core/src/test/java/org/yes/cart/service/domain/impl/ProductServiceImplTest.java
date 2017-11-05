@@ -32,7 +32,6 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.SearchQueryFactory;
-import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.BrandService;
@@ -80,21 +79,6 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(product.getSku().isEmpty());
         //code the same
         assertEquals(product.getCode(), product.getSku().iterator().next().getCode());
-    }
-
-    @Test
-    public void testGetRangeValueNavigationRecords() {
-
-        final List<FilteredNavigationRecord> all = productService.getDistinctAttributeValues("en", 1);
-        final List<FilteredNavigationRecord> rez = new ArrayList<FilteredNavigationRecord>();
-        for (final FilteredNavigationRecord rec : all) {
-            if ("R".equals(rec.getType())) {
-                rez.add(rec);
-            }
-        }
-
-        assertEquals("Ten range navigation records was configured for 32 type", 10, rez.size());
-
     }
 
     @Test

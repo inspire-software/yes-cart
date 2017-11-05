@@ -304,6 +304,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="val" column="VAL" type="string" length="4000"/>
+        <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_CUSTOMER_VAL"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="customer" class="org.yes.cart.domain.entity.impl.CustomerEntity"  not-null="true" column="CUSTOMER_ID" foreign-key="FK_AV_CUSTOMER_CUSTOMERID"/>
         <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_CUSTOMER_CODE"/>
@@ -325,6 +326,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="val" column="VAL" type="string" length="4000"/>
+        <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_SHOP_VAL"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity"  not-null="true" column="SHOP_ID" foreign-key="FK_AV_SHOP_SHOPID"/>
         <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_SHOP_CODE"/>
@@ -348,6 +350,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="val" column="VAL" type="string" length="4000"/>
+        <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_SYSTEM_VAL"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="system" class="org.yes.cart.domain.entity.impl.SystemEntity"  not-null="true" column="SYSTEM_ID" foreign-key="FK_AV_SYSTEM_SYSTEMID"/>
         <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_SYSTEM_CODE"/>
@@ -375,6 +378,7 @@
 
         <many-to-one name="brand" class="org.yes.cart.domain.entity.impl.BrandEntity"  not-null="true" column="BRAND_ID" foreign-key="FK_AV_BRAND_BRANDID"/>
         <property name="val" column="VAL" type="string" length="4000"/>
+        <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_BRAND_VAL"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
         <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_BRAND_CODE"/>
 
@@ -397,6 +401,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="val" column="VAL" type="string" length="4000"/>
+        <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_PRODUCT_VAL"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="product" class="org.yes.cart.domain.entity.impl.ProductEntity" lazy="proxy" not-null="true" column="PRODUCT_ID" foreign-key="FK_AV_PRODUCT_PRODUCTID"/>
         <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_PRODUCT_CODE"/>
@@ -420,6 +425,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="val" column="VAL" type="string" length="4000"/>
+        <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_SKU_VAL"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="productSku" class="org.yes.cart.domain.entity.impl.ProductSkuEntity"  not-null="true" column="SKU_ID" foreign-key="FK_AV_SKU_SKUID"/>
         <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_SKU_CODE"/>
@@ -443,6 +449,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="val" column="VAL" type="string" length="4000"/>
+        <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_CATEGORY_VAL"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="category" class="org.yes.cart.domain.entity.impl.CategoryEntity"  not-null="true" column="CATEGORY_ID" foreign-key="FK_AV_CATEGORY_CATEGORYID"/>
         <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_CATEGORY_CODE"/>
@@ -2972,22 +2979,6 @@
        ]]>
     </query>
 
-    <query name="PRODUCT.ATTRIBUTE.VALUES.BY.CODE">
-        <![CDATA[
-       select a.val, a.displayVal
-       from   ProductEntity p inner join p.attributes a
-            where p.productId = ?1 and a.attributeCode = ?2
-       ]]>
-    </query>
-
-    <query name="PRODUCTSKU.ATTRIBUTE.VALUES.BY.CODE">
-        <![CDATA[
-       select a.val, a.displayVal
-       from   ProductSkuEntity p inner join p.attributes a
-            where p.skuId = ?1 and a.attributeCode = ?2
-       ]]>
-    </query>
-
     <query name="PRODUCT.ATTRIBUTE.DISPLAYVALUES.BY.VALUE">
         <![CDATA[
        select a.displayVal
@@ -3087,20 +3078,6 @@
        ]]>
     </query>
 
-    <query name="PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES">
-        <![CDATA[
-       select a.attributeCode, a.val, a.displayVal from  AttrValueEntityProduct a
-       where a.attributeCode in (?1) group by a.attributeCode, a.val, a.displayVal
-       ]]>
-    </query>
-
-    <query name="PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES">
-        <![CDATA[
-       select a.attributeCode, a.val, a.displayVal from AttrValueEntityProductSku a
-       where a.attributeCode in (?1) group by a.attributeCode, a.val, a.displayVal
-       ]]>
-    </query>
-
 
     <query name="PRODUCTS.RANGE.ATTR.CODE.VALUES.BY.PRODUCTTYPEID">
         <![CDATA[
@@ -3110,12 +3087,6 @@
             and pta.navigationType = 'R'
             and pta.attribute.navigation = ?2
             and pta.visible = ?3
-       ]]>
-    </query>
-
-    <query name="PRODUCTS.BRANDS.ALL">
-        <![CDATA[
-       select b.name, b.name, b.name, 0 from BrandEntity b
        ]]>
     </query>
 
@@ -3589,7 +3560,7 @@
     <query name="SHOP.CODE.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.shop.code from AttrValueEntityShop a
-            where a.attributeCode like ?2 and a.val = ?1
+            where a.attributeCode like ?2 and a.indexedVal = ?1
         ]]>
     </query>
 
@@ -3603,28 +3574,28 @@
     <query name="BRAND.NAME.AND.GUID.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.brand.name, a.brand.guid from AttrValueEntityBrand a
-            where a.attributeCode like ?2 and a.val = ?1
+            where a.attributeCode like ?2 and a.indexedVal = ?1
         ]]>
     </query>
 
     <query name="CATEGORY.URI.AND.GUID.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.category.seoInternal.uri, a.category.guid from AttrValueEntityCategory a
-            where a.attributeCode like ?2 and a.val = ?1
+            where a.attributeCode like ?2 and a.indexedVal = ?1
         ]]>
     </query>
 
     <query name="PRODUCT.CODE.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.product.code from AttrValueEntityProduct a
-            where a.attributeCode like ?2 and a.val = ?1
+            where a.attributeCode like ?2 and a.indexedVal = ?1
         ]]>
     </query>
 
     <query name="SKU.CODE.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.productSku.code from AttrValueEntityProductSku a
-            where a.attributeCode like ?2 and a.val = ?1
+            where a.attributeCode like ?2 and a.indexedVal = ?1
         ]]>
     </query>
 

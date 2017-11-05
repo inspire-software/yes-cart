@@ -33,6 +33,7 @@ public class AttrValueEntityCustomer implements org.yes.cart.domain.entity.AttrV
 
     private Customer customer;
     private String val;
+    private String indexedVal;
     private String displayVal;
     private String attributeCode;
     private Date createdTimestamp;
@@ -59,6 +60,14 @@ public class AttrValueEntityCustomer implements org.yes.cart.domain.entity.AttrV
 
     public void setVal(String val) {
         this.val = val;
+    }
+
+    public String getIndexedVal() {
+        return indexedVal;
+    }
+
+    public void setIndexedVal(final String indexedVal) {
+        this.indexedVal = indexedVal;
     }
 
     public String getDisplayVal() {

@@ -356,7 +356,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     }
 
     /**
-     * Set attribute value. New attribute value will be created, if attribute has not value for given shop.
+     * Set attribute value. New attribute value will be created, if attribute has no value for given shop.
      *
      * @param shopId shop id
      * @param attributeKey attribute key

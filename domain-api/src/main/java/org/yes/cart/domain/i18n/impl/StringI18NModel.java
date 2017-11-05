@@ -19,8 +19,8 @@ package org.yes.cart.domain.i18n.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.i18n.I18NModel;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * User: denispavlov
@@ -31,7 +31,10 @@ public class StringI18NModel implements I18NModel {
 
     public static final String SEPARATOR = "#~#";
 
-    private final Map<String, String> values = new HashMap<String, String>();
+    // Must be sorted so that we preserve order in the toString();
+    private final Map<String, String> values = new TreeMap<String, String>();
+
+    private String toStringCache = null;
 
     public StringI18NModel(final Map<String, String> values) {
         if (values != null && !values.isEmpty()) {
@@ -57,11 +60,15 @@ public class StringI18NModel implements I18NModel {
 
     /** {@inheritDoc} */
     public String getValue(final String locale) {
-        return values.get(locale);
+        if (locale != null) {
+            return values.get(locale);
+        }
+        return null;
     }
 
     /** {@inheritDoc} */
     public void putValue(final String locale, final String value) {
+        toStringCache = null;
         values.put(locale, value);
     }
 
@@ -72,13 +79,33 @@ public class StringI18NModel implements I18NModel {
 
     /** {@inheritDoc} */
     @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StringI18NModel)) return false;
+
+        final StringI18NModel that = (StringI18NModel) o;
+
+        return toString().equals(that.toString());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public String toString() {
-        final StringBuilder out = new StringBuilder();
-        for (final Map.Entry<String, String> entry : values.entrySet()) {
-            if (StringUtils.isNotBlank(entry.getValue())) {
-                out.append(entry.getKey()).append(SEPARATOR).append(entry.getValue()).append(SEPARATOR);
+        if (toStringCache == null) {
+            final StringBuilder out = new StringBuilder();
+            for (final Map.Entry<String, String> entry : values.entrySet()) {
+                if (StringUtils.isNotBlank(entry.getValue())) {
+                    out.append(entry.getKey()).append(SEPARATOR).append(entry.getValue()).append(SEPARATOR);
+                }
             }
+            toStringCache = out.toString();
         }
-        return out.toString();
+        return toStringCache;
     }
 }

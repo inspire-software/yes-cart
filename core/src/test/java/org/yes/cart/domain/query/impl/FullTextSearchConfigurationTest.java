@@ -30,6 +30,8 @@ import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.*;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.SearchQueryFactory;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
@@ -583,8 +585,8 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
-                Map<String, List<Pair<String, Integer>>> facets;
-                List<Pair<String, Integer>> brandFacetResults;
+                Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> facets;
+                List<Pair<Pair<String, I18NModel>, Integer>> brandFacetResults;
                 final FilteredNavigationRecordRequest brands =
                         new FilteredNavigationRecordRequestImpl(
                                 "brandFacet",
@@ -600,12 +602,12 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertNotNull(brandFacetResults);
                 assertEquals(2, brandFacetResults.size());
 
-                final List<Pair<String, Integer>> expectedInCategory = Arrays.asList(
-                        new Pair<String, Integer>("FutureRobots", 1),
-                        new Pair<String, Integer>("Unknown", 1)
+                final List<Pair<Pair<String, I18NModel>, Integer>> expectedInCategory = Arrays.asList(
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("FutureRobots", null), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("Unknown", null), 1)
                 );
 
-                for (final Pair<String, Integer> brandFacetResultItem : brandFacetResults) {
+                for (final Pair<Pair<String, I18NModel>, Integer> brandFacetResultItem : brandFacetResults) {
                     assertTrue("Unexpected pair: " + brandFacetResultItem, expectedInCategory.contains(brandFacetResultItem));
                 }
 
@@ -617,16 +619,16 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertNotNull(brandFacetResults);
                 assertEquals(6, brandFacetResults.size());
 
-                final List<Pair<String, Integer>> expectedInShop = Arrays.asList(
-                        new Pair<String, Integer>("cc tests", 13),
-                        new Pair<String, Integer>("FutureRobots", 3),
-                        new Pair<String, Integer>("Samsung", 2),
-                        new Pair<String, Integer>("Sony", 1),
-                        new Pair<String, Integer>("LG", 1),
-                        new Pair<String, Integer>("Unknown", 1)
+                final List<Pair<Pair<String, I18NModel>, Integer>> expectedInShop = Arrays.asList(
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("cc tests", null), 13),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("FutureRobots", null), 3),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("Samsung", null), 2),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("Sony", null), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("LG", null), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("Unknown", null), 1)
                 );
 
-                for (final Pair<String, Integer> brandFacetResultItem : brandFacetResults) {
+                for (final Pair<Pair<String, I18NModel>, Integer> brandFacetResultItem : brandFacetResults) {
                     assertTrue("Unexpected pair: " + brandFacetResultItem, expectedInShop.contains(brandFacetResultItem));
                 }
 
@@ -641,12 +643,12 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertNotNull(brandFacetResults);
                 assertEquals(2, brandFacetResults.size());
 
-                final List<Pair<String, Integer>> subExpectedInCategory = Arrays.asList(
-                        new Pair<String, Integer>("FutureRobots", 1),
-                        new Pair<String, Integer>("Unknown", 1)
+                final List<Pair<Pair<String, I18NModel>, Integer>> subExpectedInCategory = Arrays.asList(
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("FutureRobots", null), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("Unknown", null), 1)
                 );
 
-                for (final Pair<String, Integer> brandFacetResultItem : brandFacetResults) {
+                for (final Pair<Pair<String, I18NModel>, Integer> brandFacetResultItem : brandFacetResults) {
                     assertTrue("Unexpected pair: " + brandFacetResultItem, subExpectedInCategory.contains(brandFacetResultItem));
                 }
 
@@ -669,8 +671,8 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
-                Map<String, List<Pair<String, Integer>>> facets;
-                List<Pair<String, Integer>> priceFacetResults;
+                Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> facets;
+                List<Pair<Pair<String, I18NModel>, Integer>> priceFacetResults;
 
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, Arrays.asList(129L, 130L, 131L, 132L), false, null);
 
@@ -701,17 +703,17 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 priceFacetResults = facets.get("priceFacet");
                 assertNotNull(priceFacetResults);
                 assertEquals(6, priceFacetResults.size());
-                assertEquals("00000000-_-00001500", priceFacetResults.get(0).getFirst());
+                assertEquals("00000000-_-00001500", priceFacetResults.get(0).getFirst().getFirst());
                 assertEquals(Integer.valueOf(0), priceFacetResults.get(0).getSecond());
-                assertEquals("00001500-_-00001600", priceFacetResults.get(1).getFirst());
+                assertEquals("00001500-_-00001600", priceFacetResults.get(1).getFirst().getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(1).getSecond());
-                assertEquals("00001600-_-00030000", priceFacetResults.get(2).getFirst());
+                assertEquals("00001600-_-00030000", priceFacetResults.get(2).getFirst().getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(2).getSecond());
-                assertEquals("00025000-_-00030000", priceFacetResults.get(3).getFirst());
+                assertEquals("00025000-_-00030000", priceFacetResults.get(3).getFirst().getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(3).getSecond());
-                assertEquals("00030000-_-00040000", priceFacetResults.get(4).getFirst());
+                assertEquals("00030000-_-00040000", priceFacetResults.get(4).getFirst().getFirst());
                 assertEquals(Integer.valueOf(0), priceFacetResults.get(4).getSecond());
-                assertEquals("00030000-_-01000000", priceFacetResults.get(5).getFirst());
+                assertEquals("00030000-_-01000000", priceFacetResults.get(5).getFirst().getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(5).getSecond());
 
                 context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, null, false, null);
@@ -806,17 +808,17 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 priceFacetResults = facets.get("priceFacet");
                 assertNotNull(priceFacetResults);
                 assertEquals(6, priceFacetResults.size());
-                assertEquals("00000000-_-00001500", priceFacetResults.get(0).getFirst());
+                assertEquals("00000000-_-00001500", priceFacetResults.get(0).getFirst().getFirst());
                 assertEquals(Integer.valueOf(5), priceFacetResults.get(0).getSecond());
-                assertEquals("00001500-_-00001600", priceFacetResults.get(1).getFirst());
+                assertEquals("00001500-_-00001600", priceFacetResults.get(1).getFirst().getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(1).getSecond());
-                assertEquals("00001600-_-00030000", priceFacetResults.get(2).getFirst());
+                assertEquals("00001600-_-00030000", priceFacetResults.get(2).getFirst().getFirst());
                 assertEquals(Integer.valueOf(12), priceFacetResults.get(2).getSecond());
-                assertEquals("00025000-_-00030000", priceFacetResults.get(3).getFirst());
+                assertEquals("00025000-_-00030000", priceFacetResults.get(3).getFirst().getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(3).getSecond());
-                assertEquals("00030000-_-00040000", priceFacetResults.get(4).getFirst());
+                assertEquals("00030000-_-00040000", priceFacetResults.get(4).getFirst().getFirst());
                 assertEquals(Integer.valueOf(0), priceFacetResults.get(4).getSecond());
-                assertEquals("00030000-_-01000000", priceFacetResults.get(5).getFirst());
+                assertEquals("00030000-_-01000000", priceFacetResults.get(5).getFirst().getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(5).getSecond());
 
                 final FilteredNavigationRecordRequest priceInShop2 =
@@ -840,19 +842,19 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 priceFacetResults = facets.get("priceFacet");
                 assertNotNull(priceFacetResults);
                 assertEquals(7, priceFacetResults.size());
-                assertEquals("00000000-_-00001000", priceFacetResults.get(0).getFirst());
+                assertEquals("00000000-_-00001000", priceFacetResults.get(0).getFirst().getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(0).getSecond());
-                assertEquals("00001000-_-00001500", priceFacetResults.get(1).getFirst());
+                assertEquals("00001000-_-00001500", priceFacetResults.get(1).getFirst().getFirst());
                 assertEquals(Integer.valueOf(3), priceFacetResults.get(1).getSecond());
-                assertEquals("00001500-_-00002000", priceFacetResults.get(2).getFirst());
+                assertEquals("00001500-_-00002000", priceFacetResults.get(2).getFirst().getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(2).getSecond());
-                assertEquals("00002000-_-00002500", priceFacetResults.get(3).getFirst());
+                assertEquals("00002000-_-00002500", priceFacetResults.get(3).getFirst().getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(3).getSecond());
-                assertEquals("00002500-_-00006000", priceFacetResults.get(4).getFirst());
+                assertEquals("00002500-_-00006000", priceFacetResults.get(4).getFirst().getFirst());
                 assertEquals(Integer.valueOf(5), priceFacetResults.get(4).getSecond());
-                assertEquals("00006000-_-00010000", priceFacetResults.get(5).getFirst());
+                assertEquals("00006000-_-00010000", priceFacetResults.get(5).getFirst().getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(5).getSecond());
-                assertEquals("00010000-_-01000000", priceFacetResults.get(6).getFirst());
+                assertEquals("00010000-_-01000000", priceFacetResults.get(6).getFirst().getFirst());
                 assertEquals(Integer.valueOf(5), priceFacetResults.get(6).getSecond());
 
 
@@ -888,17 +890,17 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 priceFacetResults = facets.get("priceFacet");
                 assertNotNull(priceFacetResults);
                 assertEquals(6, priceFacetResults.size());
-                assertEquals("00000000-_-00001500", priceFacetResults.get(0).getFirst());
+                assertEquals("00000000-_-00001500", priceFacetResults.get(0).getFirst().getFirst());
                 assertEquals(Integer.valueOf(0), priceFacetResults.get(0).getSecond());
-                assertEquals("00001500-_-00001600", priceFacetResults.get(1).getFirst());
+                assertEquals("00001500-_-00001600", priceFacetResults.get(1).getFirst().getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(1).getSecond());
-                assertEquals("00001600-_-00030000", priceFacetResults.get(2).getFirst());
+                assertEquals("00001600-_-00030000", priceFacetResults.get(2).getFirst().getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(2).getSecond());
-                assertEquals("00025000-_-00030000", priceFacetResults.get(3).getFirst());
+                assertEquals("00025000-_-00030000", priceFacetResults.get(3).getFirst().getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(3).getSecond());
-                assertEquals("00030000-_-00040000", priceFacetResults.get(4).getFirst());
+                assertEquals("00030000-_-00040000", priceFacetResults.get(4).getFirst().getFirst());
                 assertEquals(Integer.valueOf(0), priceFacetResults.get(4).getSecond());
-                assertEquals("00030000-_-01000000", priceFacetResults.get(5).getFirst());
+                assertEquals("00030000-_-01000000", priceFacetResults.get(5).getFirst().getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(5).getSecond());
 
 
@@ -920,9 +922,9 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
-                Map<String, List<Pair<String, Integer>>> facets;
-                List<Pair<String, Integer>> materialFacetResults;
-                List<Pair<String, Integer>> sizeFacetResults;
+                Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> facets;
+                List<Pair<Pair<String, I18NModel>, Integer>> materialFacetResults;
+                List<Pair<Pair<String, I18NModel>, Integer>> sizeFacetResults;
                 final FilteredNavigationRecordRequest material =
                         new FilteredNavigationRecordRequestImpl("MATERIAL", "facet_MATERIAL");
                 final FilteredNavigationRecordRequest size =
@@ -937,12 +939,12 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertNotNull(materialFacetResults);
                 assertEquals(2, materialFacetResults.size());
 
-                final List<Pair<String, Integer>> expectedMaterialInCategory = Arrays.asList(
-                        new Pair<String, Integer>("Plastik", 1),
-                        new Pair<String, Integer>("metal", 1)
+                final List<Pair<Pair<String, I18NModel>, Integer>> expectedMaterialInCategory = Arrays.asList(
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("Plastik", new StringI18NModel("en#~#Plastiс#~#ru#~#Пластик#~#ua#~#Пластик#~#")), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("metal", new StringI18NModel("en#~#Metal#~#ru#~#Сталь#~#ua#~#Сталь#~#")), 1)
                 );
 
-                for (final Pair<String, Integer> materialFacetResultItem : materialFacetResults) {
+                for (final Pair<Pair<String, I18NModel>, Integer> materialFacetResultItem : materialFacetResults) {
                     assertTrue("Unexpected pair: " + materialFacetResultItem, expectedMaterialInCategory.contains(materialFacetResultItem));
                 }
 
@@ -950,14 +952,14 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertNotNull(sizeFacetResults);
                 assertEquals(4, sizeFacetResults.size());
 
-                final List<Pair<String, Integer>> expectedSizeInCategory = Arrays.asList(
-                        new Pair<String, Integer>("small", 1),
-                        new Pair<String, Integer>("medium", 1),
-                        new Pair<String, Integer>("large", 1),
-                        new Pair<String, Integer>("xxl", 1)
+                final List<Pair<Pair<String, I18NModel>, Integer>> expectedSizeInCategory = Arrays.asList(
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("small", null), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("medium", null), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("large", null), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("xxl", null), 1)
                 );
 
-                for (final Pair<String, Integer> sizeFacetResultItem : sizeFacetResults) {
+                for (final Pair<Pair<String, I18NModel>, Integer> sizeFacetResultItem : sizeFacetResults) {
                     assertTrue("Unexpected pair: " + sizeFacetResultItem, expectedSizeInCategory.contains(sizeFacetResultItem));
                 }
 
@@ -971,12 +973,12 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertNotNull(materialFacetResults);
                 assertEquals(2, materialFacetResults.size());
 
-                final List<Pair<String, Integer>> expectedMaterialInShop = Arrays.asList(
-                        new Pair<String, Integer>("Plastik", 1),
-                        new Pair<String, Integer>("metal", 1)
+                final List<Pair<Pair<String, I18NModel>, Integer>> expectedMaterialInShop = Arrays.asList(
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("Plastik", new StringI18NModel("en#~#Plastiс#~#ru#~#Пластик#~#ua#~#Пластик#~#")), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("metal", new StringI18NModel("en#~#Metal#~#ru#~#Сталь#~#ua#~#Сталь#~#")), 1)
                 );
 
-                for (final Pair<String, Integer> materialFacetResultItem : materialFacetResults) {
+                for (final Pair<Pair<String, I18NModel>, Integer> materialFacetResultItem : materialFacetResults) {
                     assertTrue("Unexpected pair: " + materialFacetResultItem, expectedMaterialInShop.contains(materialFacetResultItem));
                 }
 
@@ -984,14 +986,14 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertNotNull(sizeFacetResults);
                 assertEquals(4, sizeFacetResults.size());
 
-                final List<Pair<String, Integer>> expectedSizeInShop = Arrays.asList(
-                        new Pair<String, Integer>("small", 1),
-                        new Pair<String, Integer>("medium", 1),
-                        new Pair<String, Integer>("large", 1),
-                        new Pair<String, Integer>("xxl", 1)
+                final List<Pair<Pair<String, I18NModel>, Integer>> expectedSizeInShop = Arrays.asList(
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("small", null), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("medium", null), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("large", null), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("xxl", null), 1)
                 );
 
-                for (final Pair<String, Integer> sizeFacetResultItem : sizeFacetResults) {
+                for (final Pair<Pair<String, I18NModel>, Integer> sizeFacetResultItem : sizeFacetResults) {
                     assertTrue("Unexpected pair: " + sizeFacetResultItem, expectedSizeInShop.contains(sizeFacetResultItem));
                 }
 
@@ -1006,12 +1008,12 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertNotNull(materialFacetResults);
                 assertEquals(2, materialFacetResults.size());
 
-                final List<Pair<String, Integer>> subExpectedMaterialInCategory = Arrays.asList(
-                        new Pair<String, Integer>("Plastik", 1),
-                        new Pair<String, Integer>("metal", 1)
+                final List<Pair<Pair<String, I18NModel>, Integer>> subExpectedMaterialInCategory = Arrays.asList(
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("Plastik", new StringI18NModel("en#~#Plastiс#~#ru#~#Пластик#~#ua#~#Пластик#~#")), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("metal", new StringI18NModel("en#~#Metal#~#ru#~#Сталь#~#ua#~#Сталь#~#")), 1)
                 );
 
-                for (final Pair<String, Integer> materialFacetResultItem : materialFacetResults) {
+                for (final Pair<Pair<String, I18NModel>, Integer> materialFacetResultItem : materialFacetResults) {
                     assertTrue("Unexpected pair: " + materialFacetResultItem, subExpectedMaterialInCategory.contains(materialFacetResultItem));
                 }
 
@@ -1019,14 +1021,14 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertNotNull(sizeFacetResults);
                 assertEquals(4, sizeFacetResults.size());
 
-                final List<Pair<String, Integer>> subExpectedSizeInCategory = Arrays.asList(
-                        new Pair<String, Integer>("small", 1),
-                        new Pair<String, Integer>("medium", 1),
-                        new Pair<String, Integer>("large", 1),
-                        new Pair<String, Integer>("xxl", 1)
+                final List<Pair<Pair<String, I18NModel>, Integer>> subExpectedSizeInCategory = Arrays.asList(
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("small", null), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("medium", null), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("large", null), 1),
+                        new Pair<Pair<String, I18NModel>, Integer>(new Pair<String, I18NModel>("xxl", null), 1)
                 );
 
-                for (final Pair<String, Integer> sizeFacetResultItem : sizeFacetResults) {
+                for (final Pair<Pair<String, I18NModel>, Integer> sizeFacetResultItem : sizeFacetResults) {
                     assertTrue("Unexpected pair: " + sizeFacetResultItem, subExpectedSizeInCategory.contains(sizeFacetResultItem));
                 }
 

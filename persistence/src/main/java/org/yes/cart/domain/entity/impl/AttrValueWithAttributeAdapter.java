@@ -55,6 +55,16 @@ public class AttrValueWithAttributeAdapter implements AttrValueWithAttribute {
     }
 
     @Override
+    public String getIndexedVal() {
+        return value.getIndexedVal();
+    }
+
+    @Override
+    public void setIndexedVal(final String val) {
+        value.setIndexedVal(val);
+    }
+
+    @Override
     public String getDisplayVal() {
         return value.getDisplayVal();
     }

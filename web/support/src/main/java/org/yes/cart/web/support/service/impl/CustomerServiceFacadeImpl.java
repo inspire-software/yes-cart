@@ -356,7 +356,21 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
                     } else {
 
-                        customerService.addAttribute(customer, entry.getKey(), entry.getValue());
+                        if (StringUtils.isNotBlank(entry.getValue())) {
+                            AttrValueCustomer attrVal = customer.getAttributeByCode(entry.getKey());
+                            if (attrVal != null) {
+                                attrVal.setVal(entry.getValue());
+                            } else {
+                                final Attribute attr = attributeService.findByAttributeCode(entry.getKey());
+                                if (attr != null) {
+                                    attrVal = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
+                                    attrVal.setVal(entry.getValue());
+                                    attrVal.setAttributeCode(attr.getCode());
+                                    attrVal.setCustomer(customer);
+                                    customer.getAttributes().add(attrVal);
+                                }
+                            }
+                        }
 
                     }
 

@@ -27,6 +27,7 @@ import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.util.BytesRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.StoredAttributesDTO;
 import org.yes.cart.domain.dto.impl.StoredAttributesDTOImpl;
 import org.yes.cart.domain.i18n.I18NModel;
@@ -462,7 +463,7 @@ public class LuceneDocumentAdapterUtils {
      * @param document      document
      * @param name          field name
      * @param positiveValue value
-     * @param zeroNull true if null values are to be filled with 0, false if to be filled with 9's
+     * @param zeroNull      true if null values are to be filled with 0, false if to be filled with 9's
      */
     public static void addSortField(final Document document,
                                     final String name,
@@ -573,6 +574,44 @@ public class LuceneDocumentAdapterUtils {
                 differently in Lucene for efficiency and hence are not suitable.
              */
             document.add(new SortedSetDocValuesFacetField(name, value));
+        }
+    }
+
+
+    /**
+     * Adds a simple facet field (not taxonomy)
+     *
+     * @param document      document
+     * @param name          field name
+     * @param value         value
+     * @param model         i18n values
+     */
+    public static void addFacetField(final Document document, final String name, final String value, final I18NModel model) {
+        if (value != null) {
+            if (model != null) {
+                addFacetField(document, name, value + "|" + model.toString());
+            } else {
+                addFacetField(document, name, value);
+            }
+        }
+    }
+
+
+    /**
+     * Adds a simple facet field (not taxonomy)
+     *
+     * @param document      document
+     * @param name          field name
+     * @param value         value
+     * @param displayValue  i18n values
+     */
+    public static void addFacetField(final Document document, final String name, final String value, final String displayValue) {
+        if (value != null) {
+            if (StringUtils.isNotBlank(displayValue)) {
+                addFacetField(document, name, value + Constants.FACET_NAVIGATION_DELIMITER + displayValue);
+            } else {
+                addFacetField(document, name, value);
+            }
         }
     }
 

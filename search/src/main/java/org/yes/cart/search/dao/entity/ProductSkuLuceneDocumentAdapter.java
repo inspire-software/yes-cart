@@ -209,10 +209,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                         addSearchField(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, searchValue);
                         addSearchFields(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, displayValue);
 
-                        // Sometimes values are yes/no flags and some are meaningless without the attribute name
-                        // so we add attribute name to search values in case someone searches by features
-                        // (e.g. "notebook with optical drive", where attribute name "optical drive" and value is Y/N)
-                        if (!"N".equalsIgnoreCase(searchValue)) { // TODO: improve
+                        if (isEnabledFlagAttributeValue(searchValue)) {
 
                             final Attribute attribute = attributesSupport.getByAttributeCode(attrValue.getAttributeCode());
                             if (attribute != null) {
@@ -233,7 +230,25 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                 // strict attribute navigation only for filtered navigation
                 final String navVal = cleanFacetValue(attrValue.getVal());
                 if (StringUtils.isNotBlank(navVal)) {
-                    addFacetField(document, "facet_" + code, navVal);
+
+                    /*
+                        Attribute values can be used by many different product types. However we cannot enforce usage of
+                        product types in determination of distinct values since we want to use product type definitions
+                        in polymorphic fashion.
+
+                        For example Category can define pseudo type PC which has attribute PROCESSOR. However we may want to
+                        refine PC into Notebook product type. Nootebooks may also reside in this category. Thefore when we
+                        access filtered navigation for Category PC we want distinct values of PROCESSOR for both
+                        PCs and Notebooks.
+
+                        Therefore distinct grouping must only be done on Attribute.CODE.
+
+                        However a causion must be taken here because this means that values for attribute must be consistent
+                        accross all product types, otherwise there is no guarantee on what displayable name will appear in
+                        filtered navigation.
+                     */
+
+                    addFacetField(document, "facet_" + code, navVal, attrValue.getDisplayVal());
                     addSimpleField(document, code, navVal);
                     final Long decNavVal = SearchUtil.valToLong(navVal, 3);
                     // If this is a decimal value choose the lowers value for range navigation
@@ -259,6 +274,17 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
         }
 
 
+    }
+
+    /*
+        Sometimes values are yes/no flags and some are meaningless without the attribute name
+        so we add attribute name to search values in case someone searches by features
+        (e.g. "notebook with optical drive", where attribute name "optical drive" and value is Y/N)
+
+         // TODO: improve
+     */
+    protected boolean isEnabledFlagAttributeValue(final String searchValue) {
+        return !"N".equalsIgnoreCase(searchValue);
     }
 
     private String cleanFacetValue(final String val) {

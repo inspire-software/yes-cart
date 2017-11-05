@@ -113,6 +113,7 @@
         VERSION bigint not null default 0,
         BRAND_ID bigint not null,
         VAL longtext,
+        INDEXVAL varchar(255),
         DISPLAYVAL longtext,
         CODE varchar(255) not null,
         CREATED_TIMESTAMP datetime,
@@ -223,6 +224,7 @@
         ATTRVALUE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         VAL longtext,
+        INDEXVAL varchar(255),
         DISPLAYVAL longtext,
         CATEGORY_ID bigint not null,
         CODE varchar(255) not null,
@@ -232,7 +234,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (ATTRVALUE_ID)
-    ) ;
+    );
 
     create table TCOUNTRY (
         COUNTRY_ID bigint not null auto_increment,
@@ -278,6 +280,7 @@
         ATTRVALUE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         VAL longtext,
+        INDEXVAL varchar(255),
         DISPLAYVAL longtext,
         CUSTOMER_ID bigint not null,
         CODE varchar(255) not null,
@@ -287,7 +290,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (ATTRVALUE_ID)
-    ) ;
+    );
 
     create table TCUSTOMERORDER (
         CUSTOMERORDER_ID bigint not null auto_increment,
@@ -376,7 +379,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (CUSTOMERORDERDELIVERY_ID)
-    ) ;
+    );
 
     create table TCUSTOMERORDERDELIVERYDET (
         CUSTOMERORDERDELIVERYDET_ID bigint not null auto_increment,
@@ -462,7 +465,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (CUSTOMERSHOP_ID)
-    ) ;
+    );
 
     create table TCUSTOMERWISHLIST (
         CUSTOMERWISHLIST_ID bigint not null auto_increment,
@@ -524,7 +527,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (MAILTEMPLATE_ID)
-    ) ;
+    );
 
     create table TMAILTEMPLATEGROUP (
         MAILTEMPLATEGROUP_ID bigint not null auto_increment,
@@ -537,7 +540,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (MAILTEMPLATEGROUP_ID)
-    ) ;
+    );
 
     create table TMANAGER (
         MANAGER_ID bigint not null auto_increment,
@@ -661,6 +664,7 @@
         ATTRVALUE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         VAL longtext,
+        INDEXVAL varchar(255),
         DISPLAYVAL longtext,
         PRODUCT_ID bigint not null,
         CODE varchar(255) not null,
@@ -670,7 +674,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (ATTRVALUE_ID)
-    ) ;
+    );
 
     create table TPRODUCTCATEGORY (
         PRODUCTCATEGORY_ID bigint not null auto_increment,
@@ -684,12 +688,13 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (PRODUCTCATEGORY_ID)
-    ) ;
+    );
 
     create table TPRODUCTSKUATTRVALUE (
         ATTRVALUE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         VAL longtext,
+        INDEXVAL varchar(255),
         DISPLAYVAL longtext,
         SKU_ID bigint not null,
         CODE varchar(255) not null,
@@ -699,7 +704,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (ATTRVALUE_ID)
-    ) ;
+    );
 
     create table TPRODUCTTYPE (
         PRODUCTTYPE_ID bigint not null auto_increment,
@@ -739,7 +744,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (PRODTYPEATTR_ID)
-    ) ;
+    );
 
     create table TROLE (
         ROLE_ID bigint not null auto_increment,
@@ -792,7 +797,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (SHOP_ID)
-    ) ;
+    );
 
     create table TSHOPADVPLACE (
         SHOPADVPLACE_ID bigint not null auto_increment,
@@ -830,6 +835,7 @@
         ATTRVALUE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         VAL longtext,
+        INDEXVAL varchar(255),
         DISPLAYVAL longtext,
         SHOP_ID bigint not null,
         CODE varchar(255) not null,
@@ -839,7 +845,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (ATTRVALUE_ID)
-    ) ;
+    );
 
     create table TSHOPCATEGORY (
         SHOPCATEGORY_ID bigint not null auto_increment,
@@ -853,7 +859,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (SHOPCATEGORY_ID)
-    ) ;
+    );
 
     create table TSHOPTOPSELLER (
         SHOPTOPSELLER_ID bigint not null auto_increment,
@@ -882,7 +888,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (STOREURL_ID)
-    ) ;
+    );
 
     create table TSHOPALIAS (
         STOREALIAS_ID bigint not null auto_increment,
@@ -895,7 +901,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (STOREALIAS_ID)
-    ) ;
+    );
 
     create table TSHOPWAREHOUSE (
         SHOPWAREHOUSE_ID bigint not null auto_increment,
@@ -939,7 +945,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (SKU_ID)
-    ) ;
+    );
 
     create table TSKUPRICE (
         SKUPRICE_ID bigint not null auto_increment,
@@ -1006,12 +1012,13 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (SYSTEM_ID)
-    ) ;
+    );
 
     create table TSYSTEMATTRVALUE (
         ATTRVALUE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         VAL longtext,
+        INDEXVAL varchar(255),
         DISPLAYVAL longtext,
         CODE varchar(255) not null,
         SYSTEM_ID bigint not null,
@@ -1021,7 +1028,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (ATTRVALUE_ID)
-    ) ;
+    );
 
     create table TWAREHOUSE (
         WAREHOUSE_ID bigint not null auto_increment,
@@ -1043,8 +1050,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (WAREHOUSE_ID)
-    ) ;
-
+    );
 
 
     create table TPROMOTION (
@@ -1126,7 +1132,6 @@
         primary key (MAIL_ID)
     );
 
-
     create table TMAILPART (
         MAILPART_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
@@ -1157,7 +1162,6 @@
         ORDERNUM varchar(255),
         primary key (TSHOPPINGCARTSTATE_ID)
     );
-
 
 
     create table TTAX (
@@ -1192,7 +1196,7 @@
         primary key (TAXCONFIG_ID)
     );
 
-        create table TDATAGROUP (
+    create table TDATAGROUP (
         DATAGROUP_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         NAME varchar(255) not null unique,
@@ -1206,7 +1210,6 @@
         UPDATED_BY varchar(64),
         primary key (DATAGROUP_ID)
     );
-
 
     create table TDATADESCRIPTOR (
         DATADESCRIPTOR_ID bigint not null auto_increment,
@@ -1222,11 +1225,7 @@
     );
 
 
-	create table HIBERNATE_UNIQUE_KEYS (
-         value integer 
-    );
-
-    alter table TADDRESS 
+    alter table TADDRESS
         add index FKADDRCUSTOMER (CUSTOMER_ID), 
         add constraint FKADDRCUSTOMER 
         foreign key (CUSTOMER_ID) 
@@ -1256,6 +1255,7 @@
         on delete cascade;
 
     create index AV_BRAND_CODE on TBRANDATTRVALUE (CODE);
+    create index AV_BRAND_VAL on TBRANDATTRVALUE (INDEXVAL);
 
     alter table TCARRIERSLA 
         add index FK_CSLA_CARR (CARRIER_ID), 
@@ -1292,9 +1292,10 @@
         on delete cascade;
 
     create index AV_CATEGORY_CODE on TCATEGORYATTRVALUE (CODE);
+    create index AV_CATEGORY_VAL on TCATEGORYATTRVALUE (INDEXVAL);
 
 
-    alter table TCUSTOMERATTRVALUE 
+    alter table TCUSTOMERATTRVALUE
         add index FK_AV_CUSTOMER_CUSTOMERID (CUSTOMER_ID),
         add constraint FK_AV_CUSTOMER_CUSTOMERID
         foreign key (CUSTOMER_ID) 
@@ -1302,7 +1303,7 @@
         on delete cascade;
 
     create index AV_CUSTOMER_CODE on TCUSTOMERATTRVALUE (CODE);
-
+    create index AV_CUSTOMER_VAL on TCUSTOMERATTRVALUE (INDEXVAL);
 
 
     alter table TCUSTOMERORDER 
@@ -1456,6 +1457,7 @@
         on delete cascade;
 
     create index AV_PRODUCT_CODE on TPRODUCTATTRVALUE (CODE);
+    create index AV_PRODUCT_VAL on TPRODUCTATTRVALUE (INDEXVAL);
 
 
     alter table TPRODUCTCATEGORY 
@@ -1480,6 +1482,7 @@
         references TSKU (SKU_ID);
 
     create index AV_SKU_CODE on TPRODUCTSKUATTRVALUE (CODE);
+    create index AV_SKU_VAL on TPRODUCTSKUATTRVALUE (INDEXVAL);
 
     alter table TPRODUCTTYPEATTR 
         add index FK_PTA_PRODTYPE (PRODUCTTYPE_ID), 
@@ -1518,6 +1521,7 @@
         references TSHOP (SHOP_ID);
 
     create index AV_SHOP_CODE on TSHOPATTRVALUE (CODE);
+    create index AV_SHOP_VAL on TSHOPATTRVALUE (INDEXVAL);
 
 
     alter table TSHOPCATEGORY 
@@ -1615,6 +1619,7 @@
         references TSYSTEM (SYSTEM_ID);
 
     create index AV_SYSTEM_CODE on TSYSTEMATTRVALUE (CODE);
+    create index AV_SYSTEM_VAL on TSYSTEMATTRVALUE (INDEXVAL);
 
     create index IMAGE_NAME_IDX on TSEOIMAGE (IMAGE_NAME);
 
@@ -1691,4 +1696,9 @@
         add constraint FK_SH_MASTER
         foreign key (MASTER_ID)
         references TSHOP (SHOP_ID);
+
+    create table HIBERNATE_UNIQUE_KEYS (
+         value integer
+    );
+
 

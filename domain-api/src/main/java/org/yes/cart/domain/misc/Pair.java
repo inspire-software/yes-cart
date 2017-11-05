@@ -54,24 +54,14 @@ public class Pair<FIRST, SECOND> implements Serializable {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Pair)) return false;
 
-        final Pair pair = (Pair) obj;
+        final Pair<?, ?> pair = (Pair<?, ?>) o;
 
-        if (!first.equals(pair.first)) {
-            return false;
-        }
-        if (!second.equals(pair.second)) {
-            return false;
-        }
-
-        return true;
+        if (first != null ? !first.equals(pair.first) : pair.first != null) return false;
+        return second != null ? second.equals(pair.second) : pair.second == null;
     }
 
     /**
@@ -79,7 +69,9 @@ public class Pair<FIRST, SECOND> implements Serializable {
      */
     @Override
     public int hashCode() {
-        return (first == null   ? 0 : first.hashCode()) ^   (second == null ? 0 : second.hashCode());
+        int result = first != null ? first.hashCode() : 0;
+        result = 31 * result + (second != null ? second.hashCode() : 0);
+        return result;
     }
 
     @Override

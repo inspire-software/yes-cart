@@ -20,6 +20,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
+import org.yes.cart.domain.dto.ProductSearchResultNavDTO;
+import org.yes.cart.domain.dto.ProductSearchResultNavItemDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
@@ -42,7 +44,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -117,10 +118,10 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
             }
             final FilteredNavigationRecordRequest request = new FilteredNavigationRecordRequestImpl("priceFacet", priceFacet, rangeValues);
 
-            final Map<String, List<Pair<String, Integer>>> counts =
+            final ProductSearchResultNavDTO counts =
                     getProductService().findFilteredNavigationRecords(navigationContext, Collections.singletonList(request));
 
-            final List<Pair<String, Integer>> rangeCounts = counts.get("priceFacet");
+            final List<ProductSearchResultNavItemDTO> rangeCounts = counts.getItems("priceFacet");
 
             if (CollectionUtils.isEmpty(rangeCounts)) {
                 LOGFTQ.debug("Unable to get price filtered navigation for query: {}, request: {}", navigationContext.getProductQuery(), request);
@@ -133,7 +134,7 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
             }
 
             for (int i = 0; i < allNavigationRecords.size(); i++) {
-                final Integer candidateResultCount = rangeCounts.get(i).getSecond();
+                final Integer candidateResultCount = rangeCounts.get(i).getCount();
                 if (candidateResultCount != null && candidateResultCount > 0) {
                     FilteredNavigationRecord record = allNavigationRecords.get(i);
                     record.setName(recordName);

@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.support.entity.decorator.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
@@ -177,12 +176,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      */
     public String getDescription(final String locale) {
         if (this.attrValueMap.isEmpty()) {
-            final Pair<String, String> desc = productService.getProductAttribute(
-                    locale, getProductId(), 0L, AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
-            if (desc == null || StringUtils.isBlank(desc.getSecond())) {
-                return getDescription();
-            }
-            return desc.getSecond();
+            return getDescription();
         }
         return getAttributeValue(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
     }

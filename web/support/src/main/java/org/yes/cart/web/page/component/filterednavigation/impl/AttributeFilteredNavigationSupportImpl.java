@@ -21,14 +21,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.dto.ProductSearchResultNavDTO;
+import org.yes.cart.domain.dto.ProductSearchResultNavItemDTO;
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.ProductTypeAttr;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.navigation.range.DisplayValue;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
 import org.yes.cart.search.SearchQueryFactory;
 import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
+import org.yes.cart.search.dto.impl.FilteredNavigationRecordImpl;
 import org.yes.cart.search.dto.impl.FilteredNavigationRecordRequestImpl;
 import org.yes.cart.search.query.impl.SearchUtil;
 import org.yes.cart.service.domain.ProductService;
@@ -46,6 +53,29 @@ import java.util.*;
 public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavigationSupportImpl implements AttributeFilteredNavigationSupport {
 
     private final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
+
+    private static final Comparator<FilteredNavigationRecord> COMPARATOR = new Comparator<FilteredNavigationRecord>() {
+        public int compare(final FilteredNavigationRecord record1, final FilteredNavigationRecord record2) {
+            int rez = record1.getRank() - record2.getRank();
+            if (rez == 0) {
+                if (record1.getDisplayName() != null && record2.getDisplayName() != null) {
+                    rez = record1.getDisplayName().compareToIgnoreCase(record2.getDisplayName());
+                    if (rez != 0) {
+                        return rez;
+                    }
+                }
+                rez = record1.getName().compareToIgnoreCase(record2.getName());
+                if (rez == 0 && !"R".equals(record1.getType())) {
+                    if (record1.getDisplayValue() != null && record2.getDisplayValue() != null) {
+                        rez = record1.getDisplayValue().compareToIgnoreCase(record2.getDisplayValue());
+                    } else {
+                        rez = record1.getValue().compareToIgnoreCase(record2.getValue());
+                    }
+                }
+            }
+            return rez;
+        }
+    };
 
     private final ProductTypeAttrService productTypeAttrService;
 
@@ -76,9 +106,11 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
             final List<FilteredNavigationRecordRequest> requests = new ArrayList<FilteredNavigationRecordRequest>();
             final Map<String, FilteredNavigationRecordRequest> requestsMap = new HashMap<String, FilteredNavigationRecordRequest>();
+            final Map<String, ProductTypeAttr> pTypes = new HashMap<String, ProductTypeAttr>();
             for (final ProductTypeAttr pta : ptas) {
 
                 final String facetName = pta.getAttribute().getCode();
+                pTypes.put(facetName, pta);
 
                 if (ProductTypeAttr.NAVIGATION_TYPE_SINGLE.equals(pta.getNavigationType())) {
 
@@ -129,55 +161,116 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
             }
 
 
-            final List<FilteredNavigationRecord> allNavigationRecordsTemplates =
-                    getProductService().getDistinctAttributeValues(locale, productTypeId);
-            final Map<String, List<Pair<String, Integer>>> facets =
+            final ProductSearchResultNavDTO facets =
                     getProductService().findFilteredNavigationRecords(navigationContext, requests);
 
-            for (final FilteredNavigationRecord recordTemplate : allNavigationRecordsTemplates) {
+            for (final String code : facets.getNavCodes()) {
 
-                if (navigationContext.isFilteredBy(recordTemplate.getCode()) || StringUtils.isBlank(recordTemplate.getValue())) {
+                if (navigationContext.isFilteredBy(code)) {
                     continue; // do not show already filtered or blank ones
                 }
 
-                final FilteredNavigationRecordRequest request = requestsMap.get(recordTemplate.getCode());
+                final FilteredNavigationRecordRequest request = requestsMap.get(code);
                 if (request == null) {
-                    LOGFTQ.debug("Unable to get filtered navigation request for record: {}", recordTemplate);
+                    LOGFTQ.debug("Unable to get filtered navigation request for record: {}", code);
                     continue;
                 }
-                final List<Pair<String, Integer>> counts = facets.get(recordTemplate.getCode());
+                final List<ProductSearchResultNavItemDTO> counts = facets.getItems(code);
                 if (counts == null) {
-                    LOGFTQ.debug("Unable to get filtered navigation counts for record: {}, request: {}", recordTemplate, request);
+                    LOGFTQ.debug("Unable to get filtered navigation counts for record: {}, request: {}", code, request);
                     continue;
                 }
 
+                final ProductTypeAttr pta = pTypes.get(code);
+                final Attribute attribute = pta.getAttribute();
 
-                final Iterator<Pair<String, Integer>> countIt = counts.iterator();
-                while (countIt.hasNext()) {
+                final String displayName = new StringI18NModel(attribute.getDisplayName()).getValue(locale);
 
-                    final Pair<String, Integer> count = countIt.next();
+                if (ProductTypeAttr.NAVIGATION_TYPE_RANGE.equals(pta.getNavigationType())) {
 
-                    if (recordTemplate.getValue().equals(count.getFirst())) { // range value match
+                    final RangeList rangeList = pta.getRangeList();
+                    if (rangeList != null && rangeList.getRanges() != null) {
+                        for (RangeNode node : rangeList.getRanges()) {
 
-                        final Integer candidateResultCount = count.getSecond();
+                            final Map<String, String> i18n = getRangeValueDisplayNames(node.getI18n());
+                            final String value = getRangeValueRepresentation(node.getFrom(), node.getTo());
+                            final String displayValue = getRangeDisplayValueRepresentation(locale, i18n, node.getFrom(), node.getTo());
 
-                        if (candidateResultCount != null && candidateResultCount > 0) {
-                            final FilteredNavigationRecord record = recordTemplate.clone();
-                            record.setCount(candidateResultCount);
-                            navigationList.add(record);
+                            Integer candidateResultCount = null;
+                            for (final ProductSearchResultNavItemDTO item : counts) {
+                                if (item.getValue().equals(value)) {
+                                    candidateResultCount = item.getCount();
+                                    break;
+                                }
+                            }
+
+                            if (candidateResultCount != null && candidateResultCount > 0) {
+                                navigationList.add(new FilteredNavigationRecordImpl(
+                                        attribute.getName(),
+                                        displayName,
+                                        code,
+                                        value,
+                                        displayValue,
+                                        candidateResultCount,
+                                        pta.getRank(),
+                                        ProductTypeAttr.NAVIGATION_TYPE_RANGE
+                                ));
+                            }
                         }
-
-                        countIt.remove();
-                        break;
                     }
 
+                } else {
+                    for (final ProductSearchResultNavItemDTO item : counts) {
+
+                        final Integer candidateResultCount = item.getCount();
+                        if (candidateResultCount != null && candidateResultCount > 0) {
+                            navigationList.add(new FilteredNavigationRecordImpl(
+                                    attribute.getName(),
+                                    displayName,
+                                    code,
+                                    item.getValue(), item.getDisplayValue(locale),
+                                    item.getCount(),
+                                    pta.getRank(),
+                                    ProductTypeAttr.NAVIGATION_TYPE_SINGLE
+                            ));
+                        }
+                    }
                 }
 
             }
+
+            // Alpha sort
+            Collections.sort(navigationList, COMPARATOR);
+
         }
 
         return navigationList;
 
     }
+
+    private String getRangeValueRepresentation(final String from, final String to) {
+        return SearchUtil.valToLong(from, Constants.NUMERIC_NAVIGATION_PRECISION) + Constants.RANGE_NAVIGATION_DELIMITER + SearchUtil.valToLong(to, Constants.NUMERIC_NAVIGATION_PRECISION);
+    }
+
+    private String getRangeDisplayValueRepresentation(final String locale, final Map<String, String> display, final String from, final String to) {
+        final I18NModel toI18n = new StringI18NModel(display);
+        final String localName = toI18n.getValue(locale);
+        if (StringUtils.isBlank(localName)) {
+            return from + " - " + to;
+        }
+        return localName;
+    }
+
+    private Map<String, String> getRangeValueDisplayNames(final List<DisplayValue> displayValues) {
+
+        final Map<String, String> display = new HashMap<String, String>();
+        if (displayValues != null) {
+            for (final DisplayValue dv :displayValues) {
+                display.put(dv.getLang(), dv.getValue());
+            }
+        }
+        return display;
+    }
+
 
 }

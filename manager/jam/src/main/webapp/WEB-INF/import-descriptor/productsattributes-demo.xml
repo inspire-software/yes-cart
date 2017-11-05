@@ -42,12 +42,14 @@
         '#~#' is default separator for localised text fields the syntax is:
             'locale1#~#value1#~#locale2#~#value2 ... #~#localeN#~#valueN'
         where locales match YeS locale settings.
+
+        DISPLAYVAL languages must be in alpha order.
       -->
     <insert-sql>
         INSERT INTO TPRODUCTATTRVALUE (VERSION, PRODUCT_ID, GUID, CODE, VAL, DISPLAYVAL)
             VALUES (0,
                 (SELECT p.PRODUCT_ID FROM TPRODUCT p WHERE p.GUID = '{product}'),
-            '{GUID}', '{attributeCode}','{val}','en#~#{displayValEn}#~#ru#~#{displayValRu}#~#uk#~#{displayValUk}#~#de#~#{displayValDe}')
+            '{GUID}', '{attributeCode}','{val}','de#~#{displayValDe}#~#en#~#{displayValEn}#~#ru#~#{displayValRu}#~#uk#~#{displayValUk}')
     </insert-sql>
 
 

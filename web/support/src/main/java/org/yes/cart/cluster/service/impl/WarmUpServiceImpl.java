@@ -120,14 +120,6 @@ public class WarmUpServiceImpl implements WarmUpService {
         attributeService.getAllAttributeCodes();
         attributeService.getAllAttributeNames();
 
-        final List<String> supportedLanguages = languageService.getSupportedLanguages();
-        final List<ProductType> navigatableTypes = productTypeService.findAllAssignedToCategories();
-        for (final ProductType type : navigatableTypes) {
-            for (final String language : supportedLanguages) {
-                // This is used for Filtered navigation by attributes
-                productService.getDistinctAttributeValues(language, type.getProducttypeId());
-            }
-        }
     }
 
     private void loadShopData() {

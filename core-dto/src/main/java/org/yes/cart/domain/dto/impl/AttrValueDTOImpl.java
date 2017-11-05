@@ -40,6 +40,9 @@ public class AttrValueDTOImpl implements AttrValueDTO {
     @DtoField(value = "val")
     private String val;
 
+    @DtoField(value = "indexedVal")
+    private String indexedVal;
+
     @DtoField(value = "displayVal", converter = "i18nStringConverter")
     private Map<String, String> displayVals;
 
@@ -73,6 +76,16 @@ public class AttrValueDTOImpl implements AttrValueDTO {
     /** {@inheritDoc} */
     public void setVal(final String val) {
         this.val = val;
+    }
+
+    /** {@inheritDoc} */
+    public String getIndexedVal() {
+        return indexedVal;
+    }
+
+    /** {@inheritDoc} */
+    public void setIndexedVal(final String indexedVal) {
+        this.indexedVal = indexedVal;
     }
 
     /** {@inheritDoc} */

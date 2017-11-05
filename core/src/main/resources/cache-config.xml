@@ -481,10 +481,6 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-productAttribute"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="productService-allProductsAttributeValues"/>
             <constructor-arg index="1" value="all"/>
         </bean>
@@ -529,23 +525,7 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-distinctAttributeValues"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-distinctBrands"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="productService-productByIdList"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-distinctAttributeValues"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-distinctBrands"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
@@ -609,14 +589,6 @@
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="productService-productByIdList"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-distinctAttributeValues"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-distinctBrands"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">

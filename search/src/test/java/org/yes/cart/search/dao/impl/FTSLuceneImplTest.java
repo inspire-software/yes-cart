@@ -28,6 +28,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.dao.ResultsIterator;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.LuceneDocumentAdapter;
 import org.yes.cart.search.dao.LuceneIndexProvider;
@@ -415,8 +416,8 @@ public class FTSLuceneImplTest {
         indexBuilderLucene.fullTextSearchReindex(false, 2);
 
 
-        Map<String, List<Pair<String, Integer>>> rez;
-        List<Pair<String, Integer>> facets;
+        Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> rez;
+        List<Pair<Pair<String, I18NModel>, Integer>> facets;
 
         final FilteredNavigationRecordRequest r1 = new FilteredNavigationRecordRequestImpl("PK Range", "_PK_facet", Arrays.asList(new Pair<String, String>("000000", "100001"), new Pair<String, String>("100001", "999999")));
         final FilteredNavigationRecordRequest f1 = new FilteredNavigationRecordRequestImpl("Names", "name_facet", false);
@@ -488,9 +489,9 @@ public class FTSLuceneImplTest {
 
     }
 
-    private void checkFacetValue(List<Pair<String, Integer>> facets, String expectedValue, Integer expectedCount) {
-        for (final Pair<String, Integer> facet : facets) {
-            if (expectedValue.equals(facet.getFirst())) {
+    private void checkFacetValue(List<Pair<Pair<String, I18NModel>, Integer>> facets, String expectedValue, Integer expectedCount) {
+        for (final Pair<Pair<String, I18NModel>, Integer> facet : facets) {
+            if (expectedValue.equals(facet.getFirst().getFirst())) {
                 assertEquals("Unexpected count for " + facet.getFirst(), expectedCount, facet.getSecond());
                 return;
             }

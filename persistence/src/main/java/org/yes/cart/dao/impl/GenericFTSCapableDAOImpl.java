@@ -21,6 +21,7 @@ import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.dao.ResultsIterator;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.GenericFTS;
 import org.yes.cart.search.dao.IndexBuilder;
@@ -392,7 +393,7 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
-    public Map<String, List<Pair<String, Integer>>> fullTextSearchNavigation(final org.apache.lucene.search.Query query, final List<FilteredNavigationRecordRequest> facetingRequest) {
+    public Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> fullTextSearchNavigation(final org.apache.lucene.search.Query query, final List<FilteredNavigationRecordRequest> facetingRequest) {
         return genericFTS.fullTextSearchNavigation(query, facetingRequest);
     }
 

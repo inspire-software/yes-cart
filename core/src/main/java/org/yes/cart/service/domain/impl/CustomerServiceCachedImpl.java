@@ -105,23 +105,6 @@ public class CustomerServiceCachedImpl implements CustomerService {
         return customerService.isPasswordValid(email, shop, password);
     }
 
-
-
-    /**
-     * Add new attribute to customer. If attribute already exists, his value will be changed.
-     * This method not perform any actions to persist changes.
-     *
-     * @param customer       given customer
-     * @param attributeCode  given attribute code
-     * @param attributeValue given attribute value
-     */
-    @CacheEvict(value = {
-            "customerService-customerByEmail"
-    }, allEntries = true)
-    public void addAttribute(final Customer customer, final String attributeCode, final String attributeValue) {
-        customerService.addAttribute(customer, attributeCode, attributeValue);
-    }
-
     /**
      * {@inheritDoc}
      */

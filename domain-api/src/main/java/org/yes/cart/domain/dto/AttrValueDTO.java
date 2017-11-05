@@ -57,6 +57,20 @@ public interface AttrValueDTO extends Identifiable {
     void setVal(String val);
 
     /**
+     * Get the string representation of attribute value.
+     *
+     * @return attribute value.
+     */
+    String getIndexedVal();
+
+    /**
+     * Set attribute value.
+     *
+     * @param val value
+     */
+    void setIndexedVal(String val);
+
+    /**
      * Get the localised attribute values.
      *
      * @return localised attribute values.

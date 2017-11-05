@@ -73,8 +73,8 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
         validateAccessBeforeUpdate(productSku, ProductSku.class);
 
         final String attributeCode = AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + suffix + (StringUtils.isNotEmpty(locale) ? "_" + locale : "");
-        AttrValueProductSku imageAttibute = (AttrValueProductSku) productSku.getAttributeByCode(attributeCode);
-        if (imageAttibute == null) {
+        AttrValueProductSku imageAttributeValue = (AttrValueProductSku) productSku.getAttributeByCode(attributeCode);
+        if (imageAttributeValue == null) {
             final List<Attribute> imageAttributes = attributeService.getAvailableImageAttributesByGroupCode(AttributeGroupNames.PRODUCT);
             Attribute attribute = null;
             for (final Attribute imageAttribute : imageAttributes) {
@@ -88,14 +88,15 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
                 statusListener.notifyWarning(warn);
                 return false;
             }
-            imageAttibute = productSkuService.getGenericDao().getEntityFactory().getByIface(AttrValueProductSku.class);
-            imageAttibute.setProductSku(productSku);
-            imageAttibute.setAttributeCode(attribute.getCode());
-            productSku.getAttributes().add(imageAttibute);
+            imageAttributeValue = productSkuService.getGenericDao().getEntityFactory().getByIface(AttrValueProductSku.class);
+            imageAttributeValue.setProductSku(productSku);
+            imageAttributeValue.setAttributeCode(attribute.getCode());
+            productSku.getAttributes().add(imageAttributeValue);
         } else if (isInsertOnly()) {
             return false;
         }
-        imageAttibute.setVal(fileName);
+        imageAttributeValue.setVal(fileName);
+        imageAttributeValue.setIndexedVal(fileName);
         final String info = MessageFormat.format("file {0} attached as {1} to product sku {2}",
                 fileName,
                 attributeCode,

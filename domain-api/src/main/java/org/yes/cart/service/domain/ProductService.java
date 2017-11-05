@@ -16,13 +16,13 @@
 
 package org.yes.cart.service.domain;
 
+import org.yes.cart.domain.dto.ProductSearchResultNavDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.IndexBuilder;
-import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
 
@@ -156,20 +156,6 @@ public interface ProductService extends GenericService<Product> {
                                                                                                                        List<Long> skuId);
 
 
-
-    /**
-     *
-     * @param locale locale
-     * @param productId product id
-     * @param skuId sku id
-     * @param attributeCode code
-     * @return raw and display value pair
-     */
-    Pair<String, String> getProductAttribute(String locale,
-                                             long productId,
-                                             long skuId,
-                                             String attributeCode);
-
     /**
      * @param attributeCode code
      * @return raw and display value pair
@@ -213,25 +199,6 @@ public interface ProductService extends GenericService<Product> {
     List<Product> getProductByIdList(List idList);
 
     /**
-     * Get the ranked by ProductTypeAttr.rank list of unique product attribute values by given product type
-     * and attribute code.
-     *
-     * @param locale locale
-     * @param productTypeId product type id
-     * @return list of distinct attrib values
-     */
-    List<FilteredNavigationRecord> getDistinctAttributeValues(String locale, long productTypeId);
-
-    /**
-     * Get all distinct brands in given categories list
-     *
-     * @param locale locale
-     * @return list of distinct brands
-     */
-    List<FilteredNavigationRecord> getDistinctBrands(String locale);
-
-
-    /**
      * Get the quantity of products in particular category.
      *
      * @param categoryId category id
@@ -263,8 +230,8 @@ public interface ProductService extends GenericService<Product> {
      *
      * @return list of facets with values and their counts
      */
-    Map<String, List<Pair<String, Integer>>> findFilteredNavigationRecords(NavigationContext baseNavigationContext,
-                                                                           List<FilteredNavigationRecordRequest> request);
+    ProductSearchResultNavDTO findFilteredNavigationRecords(NavigationContext baseNavigationContext,
+                                                            List<FilteredNavigationRecordRequest> request);
 
     /**
      * Get the quantity of products in particular category.

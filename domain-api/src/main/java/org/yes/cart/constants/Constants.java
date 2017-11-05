@@ -187,6 +187,11 @@ public interface Constants {
     String RANGE_NAVIGATION_DELIMITER = "-_-";
 
     /**
+     * Delimiter for facet navigation display value.
+     */
+    String FACET_NAVIGATION_DELIMITER = "|||";
+
+    /**
      * Number precision to use. All decimals need to be converted to long to allow for long point
      * range queries. Therefore with this precision the decimal point is moved to right and then
      * the value is rounded to get the long.

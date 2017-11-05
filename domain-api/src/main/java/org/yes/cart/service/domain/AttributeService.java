@@ -82,7 +82,7 @@ public interface AttributeService extends GenericService<Attribute> {
      *
      * @param productTypeId product type
      *
-     * @return set of attribute codes.
+     * @return set of attribute codes and ranks.
      */
     Map<String, Integer> getSingleNavigatableAttributeCodesByProductType(long productTypeId);
 

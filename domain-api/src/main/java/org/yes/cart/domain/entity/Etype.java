@@ -25,7 +25,7 @@ package org.yes.cart.domain.entity;
  */
 public interface Etype extends Auditable {
 
-    // The OOTB business types
+    // The OOTB basic business types
     String IMAGE_BUSINESS_TYPE = "Image";
     String FILE_BUSINESS_TYPE = "File";
     String SYSFILE_BUSINESS_TYPE = "SystemFile";
@@ -72,20 +72,6 @@ public interface Etype extends Auditable {
      * @param businesstype business type.
      */
     void setBusinesstype(String businesstype);
-
-    /**
-     * Get attributes, that has this type
-     *
-     * @return attributes.
-     */
-   // Set<Attribute> getAttributes();
-
-    /**
-     * Set attributes.
-     *
-     * @param attributes attribute collection
-     */
-    //void setAttributes(Set<Attribute> attributes);
 
 }
 

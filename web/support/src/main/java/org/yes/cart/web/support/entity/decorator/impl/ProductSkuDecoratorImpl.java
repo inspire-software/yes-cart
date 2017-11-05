@@ -187,12 +187,11 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
 
             if (StringUtils.isBlank(getDescription())) {
                 //failover to product description
-                final Pair<String, String> prodDesc = productService.getProductAttribute(
-                        locale, getProduct().getProductId(), 0L, AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
-                if (prodDesc == null || StringUtils.isBlank(prodDesc.getSecond())) {
+                final String pDesc = getProduct().getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
+                if (StringUtils.isBlank(pDesc)) {
                     return getProduct().getDescription();
                 }
-                return prodDesc.getSecond();
+                return pDesc;
 
             } else {
 

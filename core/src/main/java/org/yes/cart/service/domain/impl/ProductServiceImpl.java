@@ -16,36 +16,28 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.Hibernate;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSearchResultNavDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
+import org.yes.cart.domain.dto.impl.ProductSearchResultNavDTOImpl;
 import org.yes.cart.domain.dto.impl.ProductSearchResultPageDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
-import org.yes.cart.domain.i18n.impl.NonI18NModel;
-import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.misc.navigation.range.DisplayValue;
-import org.yes.cart.domain.misc.navigation.range.RangeList;
-import org.yes.cart.domain.misc.navigation.range.RangeNode;
 import org.yes.cart.search.dao.IndexBuilder;
 import org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils;
 import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
-import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
-import org.yes.cart.search.dto.impl.FilteredNavigationRecordImpl;
-import org.yes.cart.search.query.impl.SearchUtil;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
@@ -401,36 +393,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    public Pair<String, String> getProductAttribute(final String locale, final long productId, final long skuId, final String attributeCode) {
-        if (skuId > 0L) {
-            final List skuAvs =
-                    getGenericDao().findByNamedQuery("PRODUCTSKU.ATTRIBUTE.VALUES.BY.CODE", skuId, attributeCode);
-            if (skuAvs != null && skuAvs.size() > 0) {
-                final Object[] av = (Object[]) skuAvs.get(0);
-                return new Pair<String, String>(
-                        (String) av[0],
-                        new FailoverStringI18NModel((String) av[1], (String) av[0]).getValue(locale)
-                );
-            }
-        }
-        if (productId > 0L) {
-            final List prodAvs =
-                    getGenericDao().findByNamedQuery("PRODUCT.ATTRIBUTE.VALUES.BY.CODE", productId, attributeCode);
-            if (prodAvs != null && prodAvs.size() > 0) {
-                final Object[] av = (Object[]) prodAvs.get(0);
-                return new Pair<String, String>(
-                        (String) av[0],
-                        new FailoverStringI18NModel((String) av[1], (String) av[0]).getValue(locale)
-                );
-            }
-        }
-        return null;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -516,8 +478,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public Map<String, List<Pair<String, Integer>>> findFilteredNavigationRecords(final NavigationContext baseNavigationContext, final List<FilteredNavigationRecordRequest> request) {
-        return productDao.fullTextSearchNavigation(baseNavigationContext.getProductQuery(), request);
+    public ProductSearchResultNavDTO findFilteredNavigationRecords(final NavigationContext baseNavigationContext, final List<FilteredNavigationRecordRequest> request) {
+        return new ProductSearchResultNavDTOImpl(productDao.fullTextSearchNavigation(baseNavigationContext.getProductQuery(), request));
     }
 
     /**
@@ -566,230 +528,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             return Collections.EMPTY_LIST;
         }
         return productDao.findByNamedQuery("PRODUCTS.LIST.BY.IDS", idList);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<FilteredNavigationRecord> getDistinctBrands(final String locale) {
-        List<Object[]> list = productDao.findQueryObjectsByNamedQuery("PRODUCTS.BRANDS.ALL");
-
-        final List<FilteredNavigationRecord> records = constructBrandFilteredNavigationRecords(list);
-        Collections.sort(
-                records,
-                new Comparator<FilteredNavigationRecord>() {
-                    public int compare(final FilteredNavigationRecord record1, final FilteredNavigationRecord record2) {
-                        int rez = record1.getName().compareTo(record2.getName());
-                        if (rez == 0) {
-                            rez = record1.getValue().compareTo(record2.getValue());
-                        }
-                        return rez;
-                    }
-                });
-        return records;
-    }
-
-
-    /**
-     * Get the ranked by ProductTypeAttr.rank list of unique product attribute values by given product type
-     * and attribute code.
-     *
-     * @param locale        locale
-     * @param productTypeId product type id
-     * @return list of distinct attrib values
-     */
-    public List<FilteredNavigationRecord> getDistinctAttributeValues(final String locale, final long productTypeId) {
-        final List<FilteredNavigationRecord> records = new ArrayList<FilteredNavigationRecord>();
-        records.addAll(getSingleValueNavigationRecords(locale, productTypeId));
-        records.addAll(getRangeValueNavigationRecords(locale, productTypeId));
-        Collections.sort(
-                records,
-                new Comparator<FilteredNavigationRecord>() {
-                    public int compare(final FilteredNavigationRecord record1, final FilteredNavigationRecord record2) {
-                        int rez = record1.getRank() - record2.getRank();
-                        if (rez == 0) {
-                            rez = record1.getName().compareTo(record2.getName());
-                            if (rez == 0 && !"R".equals(record1.getType())) {
-                                rez = record1.getValue().compareTo(record2.getValue());
-                            }
-                        }
-                        return rez;
-                    }
-                });
-        return records;
-    }
-
-    /**
-     * Collect the single attribute value navigation see ProductTypeAttr#navigationType
-     *
-     * @param locale        locale
-     * @param productTypeId product type id
-     * @return list of {@link FilteredNavigationRecord}
-     */
-    List<FilteredNavigationRecord> getSingleValueNavigationRecords(final String locale, final long productTypeId) {
-        List<Object[]> list;
-        final Map<FilteredNavigationRecord, FilteredNavigationRecord> records = new HashMap<FilteredNavigationRecord, FilteredNavigationRecord>();
-
-        final Map<String, Integer> singleNavAttrCodes = attributeService.getSingleNavigatableAttributeCodesByProductType(productTypeId);
-        if (!singleNavAttrCodes.isEmpty()) {
-            final Map<String, I18NModel> attrNames = attributeService.getAllAttributeNames();
-
-            /*
-                Attribute values can be used by many different product types. However we cannot enforce usage of
-                product types in determination of distinct values since we want to use product type definitions
-                in polymorphic fashion.
-
-                For example Category can define pseudo type PC which has attribute PROCESSOR. However we may want to
-                refine PC into Notebook product type. Nootebooks may also reside in this category. Thefore when we
-                access filtered navigation for Category PC we want distinct values of PROCESSOR for both
-                PCs and Notebooks.
-
-                Therefore distinct grouping must only be done on Attribute.CODE.
-
-                However a causion must be taken here because this means that values for attribute must be consistent
-                accross all product types, otherwise there is no guarantee on what displayable name will appear in
-                filtered navigation.
-             */
-
-            list = productDao.findQueryObjectsByNamedQuery(
-                    "PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
-            appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
-
-            list = productDao.findQueryObjectsByNamedQuery(
-                    "PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
-            appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
-        }
-        return new ArrayList<FilteredNavigationRecord>(records.values());
-    }
-
-
-    /**
-     * Get the navigation records for range values.
-     *
-     * @param locale        locale
-     * @param productTypeId product type id
-     * @return list of {@link FilteredNavigationRecord}
-     */
-    List<FilteredNavigationRecord> getRangeValueNavigationRecords(final String locale, final long productTypeId) {
-
-        final List<ProductTypeAttr> rangeNavigationInType = productTypeAttrDao.findByNamedQuery(
-                "PRODUCTS.RANGE.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
-                productTypeId, Boolean.TRUE, Boolean.TRUE);
-
-
-        final List<FilteredNavigationRecord> records = new ArrayList<FilteredNavigationRecord>();
-
-        for (ProductTypeAttr entry : rangeNavigationInType) {
-            RangeList rangeList = entry.getRangeList();
-            if (rangeList != null && rangeList.getRanges() != null) {
-                for (RangeNode node : rangeList.getRanges()) {
-
-                    final Map<String, String> i18n = getRangeValueDisplayNames(node.getI18n());
-
-                    records.add(
-                            new FilteredNavigationRecordImpl(
-                                    entry.getAttribute().getName(),
-                                    getAttributeNameRepresentation(locale, entry),
-                                    entry.getAttribute().getCode(),
-                                    getRangeValueRepresentation(node.getFrom(), node.getTo()),
-                                    getRangeDisplayValueRepresentation(locale, i18n, node.getFrom(), node.getTo()),
-                                    0, // put zero initially as this this be populated by FT query
-                                    entry.getRank(),
-                                    "R"
-                            )
-                    );
-                }
-            }
-        }
-        return records;
-    }
-
-    private String getAttributeNameRepresentation(final String locale, final ProductTypeAttr entry) {
-        return new FailoverStringI18NModel(entry.getAttribute().getDisplayName(), entry.getAttribute().getName()).getValue(locale);
-    }
-
-    private String getRangeValueRepresentation(final String from, final String to) {
-        return SearchUtil.valToLong(from, Constants.NUMERIC_NAVIGATION_PRECISION) + Constants.RANGE_NAVIGATION_DELIMITER + SearchUtil.valToLong(to, Constants.NUMERIC_NAVIGATION_PRECISION);
-    }
-
-    private String getRangeDisplayValueRepresentation(final String locale, final Map<String, String> display, final String from, final String to) {
-        final I18NModel toI18n = new StringI18NModel(display);
-        final String localName = toI18n.getValue(locale);
-        if (StringUtils.isBlank(localName)) {
-            return from + " - " + to;
-        }
-        return localName;
-    }
-
-    private Map<String, String> getRangeValueDisplayNames(final List<DisplayValue> displayValues) {
-
-        final Map<String, String> display = new HashMap<String, String>();
-        if (displayValues != null) {
-            for (final DisplayValue dv :displayValues) {
-                display.put(dv.getLang(), dv.getValue());
-            }
-        }
-        return display;
-    }
-
-    private static final I18NModel BLANK = new NonI18NModel("-");
-
-    private void appendFilteredNavigationRecords(final Map<FilteredNavigationRecord, FilteredNavigationRecord> toAppendTo,
-                                                 final String locale,
-                                                 final List<Object[]> list,
-                                                 final Map<String, I18NModel> attrNames,
-                                                 final Map<String, Integer> attrRanks) {
-        for (Object[] objArray : list) {
-
-            final String attrCode = (String) objArray[0];
-            final I18NModel attrName = attrNames.containsKey(attrCode) ? attrNames.get(attrCode) : BLANK;
-            final Integer attrRank = attrRanks.containsKey(attrCode) ? attrRanks.get(attrCode) : Integer.MAX_VALUE;
-
-            final FilteredNavigationRecord fnr = new FilteredNavigationRecordImpl(
-                    attrName.getValue("-"),
-                    attrName.getValue(locale),
-                    attrCode,
-                    (String) objArray[1],
-                    new StringI18NModel((String) objArray[2]).getValue(locale),
-                    0, // put zero initially as this this be populated by FT query
-                    attrRank,
-                    "S"
-            );
-
-            final FilteredNavigationRecord oldFnr = toAppendTo.get(fnr);
-            if (oldFnr == null) {
-                toAppendTo.put(fnr, fnr);
-            } else {
-                final String displayValue = oldFnr.getDisplayValue();
-                if (displayValue == null) {
-                    toAppendTo.put(fnr, fnr);
-                }
-            }
-
-        }
-    }
-
-
-    /**
-     * Construct filtered navigation records.
-     *
-     * @param list of raw object arrays after, result of named query
-     * @return constructed list of navigation records.
-     */
-    private List<FilteredNavigationRecord> constructBrandFilteredNavigationRecords(final List<Object[]> list) {
-        List<FilteredNavigationRecord> result = new ArrayList<FilteredNavigationRecord>(list.size());
-        for (Object[] objArray : list) {
-            result.add(
-                    new FilteredNavigationRecordImpl(
-                            (String) objArray[0],
-                            (String) objArray[1],
-                            (String) objArray[2],
-                            (Integer) objArray[3]
-                    )
-            );
-
-        }
-        return result;
     }
 
 

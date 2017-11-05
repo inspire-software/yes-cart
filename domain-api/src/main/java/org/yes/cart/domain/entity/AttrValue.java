@@ -55,6 +55,20 @@ public interface AttrValue extends Auditable {
     void setVal(String val);
 
     /**
+     * Get the string representation of attribute value.
+     *
+     * @return attribute value.
+     */
+    String getIndexedVal();
+
+    /**
+     * Set attribute value.
+     *
+     * @param val value
+     */
+    void setIndexedVal(String val);
+
+    /**
      * Get display value to show on the web. The some
      * correct attributes value does not look good on the web,
      * so need to use display value to eliminate this situation.

@@ -16,6 +16,7 @@
 
 package org.yes.cart.dao;
 
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.IndexBuilder;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
@@ -118,8 +119,8 @@ public interface GenericFTSCapableDAO<T, PK extends Serializable, FTQ> extends G
      *
      * @return list of facets with values and their counts
      */
-    Map<String, List<Pair<String, Integer>>> fullTextSearchNavigation(FTQ query,
-                                                                      List<FilteredNavigationRecordRequest> facetingRequest);
+    Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> fullTextSearchNavigation(FTQ query,
+                                                                                       List<FilteredNavigationRecordRequest> facetingRequest);
 
 
     /**
