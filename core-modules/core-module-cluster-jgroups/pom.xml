@@ -22,7 +22,7 @@
     <parent>
         <artifactId>core-modules</artifactId>
         <groupId>org.yes</groupId>
-        <version>3.3.1-SNAPSHOT</version>
+        <version>3.3.1</version>
     </parent>
     <artifactId>core-module-cluster-jgroups</artifactId>
     <name>Yes cart core: JGroups cluster support</name>
