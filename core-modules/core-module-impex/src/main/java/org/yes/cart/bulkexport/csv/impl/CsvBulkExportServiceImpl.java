@@ -152,6 +152,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                     headers.toArray(new String[headers.size()]),
                     csvExportDescriptor.getExportFileDescriptor().getColumnDelimiter(),
                     csvExportDescriptor.getExportFileDescriptor().getTextQualifier(),
+                    csvExportDescriptor.getExportFileDescriptor().getLineEnd(),
                     csvExportDescriptor.getExportFileDescriptor().getFileEncoding(),
                     csvExportDescriptor.getExportFileDescriptor().isPrintHeader());
 
@@ -227,7 +228,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                             csvExportDescriptorName,
                             object
                     );
-                    statusListener.notifyWarning(message);
+                    statusListener.notifyPing(message);
                     return null;
                 }
             }
@@ -239,11 +240,13 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
 
                 if (ImpExColumn.SLAVE_TUPLE_FIELD.equals(column.getFieldType()) || ImpExColumn.SLAVE_INLINE_FIELD.equals(column.getFieldType())) {
 
+                    final CsvExportFile subDescriptor = ((CsvExportFile) column.getDescriptor().getExportFileDescriptor());
                     final CsvStringWriter subWriter = new CsvStringWriterImpl();
                     subWriter.open(
                             null,
-                            ((CsvExportFile) column.getDescriptor().getExportFileDescriptor()).getColumnDelimiter(),
-                            ((CsvExportFile) column.getDescriptor().getExportFileDescriptor()).getTextQualifier(),
+                            subDescriptor.getColumnDelimiter(),
+                            subDescriptor.getTextQualifier(),
+                            subDescriptor.getLineEnd(),
                             column.getDescriptor().getExportFileDescriptor().getFileEncoding(),
                             false
                     );
@@ -276,7 +279,12 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                         }
                     }
 
-                    csv[i] = subWriter.close().trim();
+                    String out = subWriter.close();
+                    if (StringUtils.isNotBlank(subDescriptor.getLineEnd()) &&
+                            out.endsWith(subDescriptor.getLineEnd())) {
+                        out = out.substring(0, out.length() - subDescriptor.getLineEnd().length());
+                    }
+                    csv[i] = out.trim();
 
                 } else {
 

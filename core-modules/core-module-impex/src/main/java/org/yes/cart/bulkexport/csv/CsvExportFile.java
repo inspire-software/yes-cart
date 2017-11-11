@@ -71,4 +71,19 @@ public interface CsvExportFile extends ExportFile {
     void setTextQualifier(char textQualifier);
 
 
+    /**
+     * Get line end.
+     *
+     * @return line end
+     */
+    String getLineEnd();
+
+    /**
+     * Set line end.
+     *
+     * @param lineEnd line end
+     */
+    void setLineEnd(String lineEnd);
+
+
 }

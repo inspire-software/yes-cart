@@ -50,12 +50,20 @@ public class CustomerImpexFederationFilterImpl extends AbstractImpexFederationFi
 
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
 
-        final Customer customer = (Customer) object;
+        if (object instanceof Customer) {
+            final Customer customer = (Customer) object;
 
-        for (final CustomerShop cShop : customer.getShops()) {
-            if (manageableShopIds.contains(cShop.getShop().getShopId())) {
+            for (final CustomerShop cShop : customer.getShops()) {
+                if (manageableShopIds.contains(cShop.getShop().getShopId())) {
+                    return true;
+                }
+            }
+        } else if (object instanceof CustomerShop) {
+
+            if (manageableShopIds.contains(((CustomerShop) object).getShop().getShopId())) {
                 return true;
             }
+
         }
 
         return false;

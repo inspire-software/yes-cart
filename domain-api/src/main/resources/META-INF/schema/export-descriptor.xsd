@@ -90,8 +90,27 @@
             <xs:element name="file-encoding" type="xs:string"/>
             <xs:element name="file-name" type="xs:string"/>
             <xs:element name="print-header" type="xs:boolean"/>
-            <xs:element name="column-delimiter" type="xs:string"/>
-            <xs:element name="text-qualifier" type="xs:string"/>
+            <xs:element name="column-delimiter" minOccurs="0">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="text-qualifier" minOccurs="0">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="line-end" minOccurs="0">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
 

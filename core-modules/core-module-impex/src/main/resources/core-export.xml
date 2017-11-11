@@ -73,6 +73,10 @@
         <constructor-arg index="0" ref="extendedConversionService"/>
     </bean>
 
+    <bean id="exportCsvDatePatternValueAdapter" class="org.yes.cart.bulkexport.csv.impl.CsvDateValueAdapterImpl">
+        <property name="extensibleValueAdapter" ref="exportCsvExportValueAdapter"/>
+    </bean>
+
     <bean id="exportCsvAttributeValueByCodeValueAdapter" class="org.yes.cart.bulkexport.csv.impl.CsvAttributeValueByCodeValueAdapterImpl">
         <property name="extensibleValueAdapter" ref="exportCsvExportValueAdapter"/>
     </bean>

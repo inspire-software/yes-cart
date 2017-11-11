@@ -29,6 +29,7 @@ public class CsvExportFileImpl implements CsvExportFile, Serializable {
 
     private char columnDelimiter;
     private char textQualifier;
+    private String lineEnd;
     private boolean printHeader;
     private String fileName;
     private String fileEncoding;
@@ -59,6 +60,20 @@ public class CsvExportFileImpl implements CsvExportFile, Serializable {
      */
     public void setTextQualifier(char textQualifier) {
         this.textQualifier = textQualifier;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getLineEnd() {
+        return lineEnd;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setLineEnd(final String lineEnd) {
+        this.lineEnd = lineEnd;
     }
 
     /**

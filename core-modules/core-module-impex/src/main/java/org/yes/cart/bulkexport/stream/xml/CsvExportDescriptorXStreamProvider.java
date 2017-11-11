@@ -77,6 +77,7 @@ public class CsvExportDescriptorXStreamProvider implements XStreamProvider<CsvEx
             xStream.aliasField("print-header", CsvExportFileImpl.class, "printHeader");
             xStream.aliasField("column-delimiter", CsvExportFileImpl.class, "columnDelimiter");
             xStream.aliasField("text-qualifier", CsvExportFileImpl.class, "textQualifier");
+            xStream.aliasField("line-end", CsvExportFileImpl.class, "lineEnd");
             xStream.aliasField("file-encoding", CsvExportFileImpl.class, "fileEncoding");
             xStream.aliasField("file-name", CsvExportFileImpl.class, "fileName");
 

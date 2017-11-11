@@ -47,11 +47,16 @@ public class CsvStringWriterImpl implements CsvStringWriter {
     public void open(final String[] headers,
                      final char columnDelimiter,
                      final char textQualifier,
+                     final String lineEnd,
                      final String encoding,
                      final boolean printHeaders) throws UnsupportedEncodingException {
 
         outputStreamWriter = new StringWriter();
-        csvWriter = new CSVWriter(new BufferedWriter(outputStreamWriter), columnDelimiter, textQualifier);
+        if (lineEnd == null) {
+            csvWriter = new CSVWriter(new BufferedWriter(outputStreamWriter), columnDelimiter, textQualifier);
+        } else {
+            csvWriter = new CSVWriter(new BufferedWriter(outputStreamWriter), columnDelimiter, textQualifier, lineEnd);
+        }
         this.printHeaders = printHeaders;
         this.headers = headers;
         this.rowsWritten = 0;

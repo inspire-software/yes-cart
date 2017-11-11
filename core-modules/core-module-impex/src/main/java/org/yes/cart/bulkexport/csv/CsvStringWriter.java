@@ -34,6 +34,7 @@ public interface CsvStringWriter {
      * @param headers         the column headers
      * @param columnDelimiter the column delimiter
      * @param textQualifier   the text qualifer
+     * @param lineEnd         line end
      * @param encoding        csv file encoding
      * @param printHeaders    print headers flag.
      * @throws UnsupportedEncodingException
@@ -42,6 +43,7 @@ public interface CsvStringWriter {
     void open(String[] headers,
               char columnDelimiter,
               char textQualifier,
+              String lineEnd,
               String encoding,
               boolean printHeaders) throws UnsupportedEncodingException;
 
