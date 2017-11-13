@@ -242,6 +242,34 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
     }
 
 
+    protected void setCustomItemDetail(final ShoppingCart shoppingCart, final String sku, final String detail, final String value) {
+
+        setCustomDetail(shoppingCart, AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + sku + "_" + detail + ":" + value);
+
+    }
+
+    protected void setCustomOrderDetail(final ShoppingCart shoppingCart, final String detail, final String value) {
+
+        setCustomDetail(shoppingCart, AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + "_" + detail + ":" + value);
+
+    }
+
+    protected void setCustomDetail(final ShoppingCart shoppingCart, final String detail) {
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+        Map<String, String> params;
+        params = new HashMap<String, String>();
+        params.put(ShoppingCartCommand.CMD_SETORDERDETAILS, detail);
+        commands.execute(shoppingCart, (Map) params);
+    }
+
+    protected void setIPAddress(final ShoppingCart shoppingCart, final String ip) {
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+        Map<String, String> params;
+        params = new HashMap<String, String>();
+        params.put(ShoppingCartCommand.CMD_INTERNAL_SETIP, ip);
+        commands.execute(shoppingCart, (Map) params);
+    }
+
     protected void prepareDeliveriesAndRecalculate(ShoppingCart shoppingCart) {
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);

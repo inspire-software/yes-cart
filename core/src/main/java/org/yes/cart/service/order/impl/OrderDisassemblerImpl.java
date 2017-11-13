@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.service.order.OrderDisassembler;
@@ -77,13 +78,10 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                         shoppingCart.setProductSkuOffer(orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
                     }
                     shoppingCart.setProductSkuDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
-                    if (StringUtils.isNotBlank(orderDet.getB2bRemarks())) {
-                        shoppingCart.getOrderInfo().putDetail(
-                                AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID + orderDet.getProductSkuCode(),
-                                orderDet.getB2bRemarks()
-                        );
-                    }
                 }
+
+                copyLineRemarks(shoppingCart, orderDet.getProductSkuCode(), orderDet.getB2bRemarks());
+                copyLineCustomAttributes(shoppingCart, orderDet.getProductSkuCode(), orderDet.getAllValues());
             }
         } else {
             // fill from delivery details
@@ -101,13 +99,10 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                             shoppingCart.setProductSkuOffer(orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
                         }
                         shoppingCart.setProductSkuDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
-                        if (StringUtils.isNotBlank(orderDet.getB2bRemarks())) {
-                            shoppingCart.getOrderInfo().putDetail(
-                                    AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID + orderDet.getProductSkuCode(),
-                                    orderDet.getB2bRemarks()
-                            );
-                        }
                     }
+
+                    copyLineRemarks(shoppingCart, orderDet.getProductSkuCode(), orderDet.getB2bRemarks());
+                    copyLineCustomAttributes(shoppingCart, orderDet.getProductSkuCode(), orderDet.getAllValues());
                 }
             }
         }
@@ -210,10 +205,51 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
         }
         mutableShoppingContext.setResolvedIp(customerOrder.getOrderIp());
 
+        copyOrderCustomAttributes(shoppingCart, customerOrder.getAllValues());
+
         shoppingCart.recalculate();
         shoppingCart.markDirty();
 
         return shoppingCart;
+    }
+
+    private void copyLineRemarks(final ShoppingCartImpl shoppingCart, final String skuCode, final String remarks) {
+        if (StringUtils.isNotBlank(remarks)) {
+            shoppingCart.getOrderInfo().putDetail(
+                    AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID + skuCode,
+                    remarks
+            );
+        }
+    }
+
+    private void copyLineCustomAttributes(final ShoppingCartImpl shoppingCart, final String skuCode, final Map<String, Pair<String, String>> attributes) {
+
+        final String attributeIdPrefix = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + ":";
+        for (final Map.Entry<String, Pair<String, String>> custom : attributes.entrySet()) {
+            if (custom.getKey().startsWith(attributeIdPrefix)) {
+                final String avCode = custom.getKey().substring(attributeIdPrefix.length());
+                shoppingCart.getOrderInfo().putDetail(
+                        AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + skuCode + "_" + avCode,
+                        custom.getValue().getFirst()
+                );
+            }
+        }
+
+    }
+
+    private void copyOrderCustomAttributes(final ShoppingCartImpl shoppingCart, final Map<String, Pair<String, String>> attributes) {
+
+        final String attributeIdPrefix = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + ":";
+        for (final Map.Entry<String, Pair<String, String>> custom : attributes.entrySet()) {
+            if (custom.getKey().startsWith(attributeIdPrefix)) {
+                final String avCode = custom.getKey().substring(attributeIdPrefix.length());
+                shoppingCart.getOrderInfo().putDetail(
+                        AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + "_" + avCode,
+                        custom.getValue().getFirst()
+                );
+            }
+        }
+
     }
 
 

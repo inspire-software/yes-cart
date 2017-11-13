@@ -19,18 +19,17 @@ package org.yes.cart.service.order.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDet;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -57,11 +56,14 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
 
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
         setIPAddress(shoppingCart, "127.0.0.1");
+        setCustomOrderDetail(shoppingCart, "someDetail", "order detail");
+        setCustomItemDetail(shoppingCart, "CC_TEST1", "someDetail", "item detail");
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         assertNotNull(customerOrder);
         customerOrder =  customerOrderService.create(customerOrder);
         assertNotNull(customerOrder);
+
         assertNotNull(customerOrder.getBillingAddress());
         assertEquals("By default billing and shipping addresses the same",
                 customerOrder.getBillingAddress(),
@@ -83,13 +85,25 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(new BigDecimal("5463.91"), customerOrder.getPrice());
         assertEquals(new BigDecimal("4551.88"), customerOrder.getNetPrice());
         assertEquals(new BigDecimal("5463.91"), customerOrder.getGrossPrice());
+
+        final Pair<String, String> orderDetail = customerOrder.getValue(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + ":someDetail");
+        assertNotNull(orderDetail);
+        assertEquals("order detail", orderDetail.getFirst());
+        assertEquals("someDetail: order detail", orderDetail.getSecond());
+
+        CustomerOrderDet detCC_TEST1 = null;
+        for (final CustomerOrderDet det : customerOrder.getOrderDetail()) {
+            if (det.getProductSkuCode().equals("CC_TEST1")) {
+                detCC_TEST1 = det;
+                break;
+            }
+        }
+
+        final Pair<String, String> orderDetCC_TEST1 = detCC_TEST1.getValue(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + ":someDetail");
+        assertNotNull(orderDetCC_TEST1);
+        assertEquals("item detail", orderDetCC_TEST1.getFirst());
+        assertEquals("someDetail: item detail", orderDetCC_TEST1.getSecond());
+
     }
 
-    private void setIPAddress(final ShoppingCart shoppingCart, final String ip) {
-        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
-        Map<String, String> params;
-        params = new HashMap<String, String>();
-        params.put(ShoppingCartCommand.CMD_INTERNAL_SETIP, ip);
-        commands.execute(shoppingCart, (Map) params);
-    }
 }

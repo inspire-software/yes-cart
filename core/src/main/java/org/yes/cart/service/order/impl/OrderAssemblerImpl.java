@@ -32,6 +32,7 @@ import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.PriceResolver;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.TimeContext;
 
@@ -134,12 +135,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
             throw new OrderAssemblyException("No order total");
         }
 
-        fillCustomerData(customerOrder, shoppingCart, temp);
-
-        fillB2BData(customerOrder, shoppingCart, temp);
-
-        fillOrderDetails(customerOrder, shoppingCart, temp);
-
+        // Basic data
         customerOrder.setLocale(shoppingCart.getCurrentLocale());
         customerOrder.setCurrency(shoppingCart.getCurrencyCode());
         customerOrder.setOrderStatus(CustomerOrder.ORDER_STATUS_NONE);
@@ -154,6 +150,12 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setAppliedPromo(cartTotal.getAppliedOrderPromo());
         customerOrder.setGrossPrice(cartTotal.getSubTotalAmount());
         customerOrder.setNetPrice(cartTotal.getSubTotalAmount().subtract(cartTotal.getSubTotalTax()));
+
+        fillCustomerData(customerOrder, shoppingCart, temp);
+
+        fillB2BData(customerOrder, shoppingCart, temp);
+
+        fillOrderDetails(customerOrder, shoppingCart, temp);
 
         if (!temp) {
             customerOrder.setOrdernum(orderNumberGenerator.getNextOrderNumber());
@@ -326,6 +328,31 @@ public class OrderAssemblerImpl implements OrderAssembler {
             customerOrder.setRequestedDeliveryDate(new Date(requestedDate));
         }
 
+
+        /*
+            Copy cart order custom attributes.
+            The details will be stored in "attributeOrder_" + attribute code, e.g. attributeOrder_GIFT_MESSAGE
+
+            The values are stored by code ("attributeOrder:" + code) with value being value and display value being name
+            of 'attribute + ":" + value'
+         */
+        if (!temp) {
+
+            final Map<String, I18NModel> attrI18n = this.attributeService.getAllAttributeNames();
+
+            final String attributeIdPrefix = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + "_";
+            for (final Map.Entry<String, String> entry : shoppingCart.getOrderInfo().getDetails().entrySet()) {
+                if (entry.getKey().startsWith(attributeIdPrefix)) {
+                    final String avCode = entry.getKey().substring(attributeIdPrefix.length());
+                    final I18NModel nameModel = attrI18n.get(avCode);
+                    final String name = nameModel != null ? nameModel.getValue(customerOrder.getLocale()) : avCode;
+                    customerOrder.putValue(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + ":" + avCode,
+                            entry.getValue(), name + ": " + entry.getValue());
+                }
+            }
+        }
+
+
     }
 
     long now() {
@@ -427,13 +454,52 @@ public class OrderAssemblerImpl implements OrderAssembler {
     protected void fillOrderDetail(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final CartItem item, final CustomerOrderDet customerOrderDet, final boolean temp) throws OrderAssemblyException {
 
         if (!item.isGift()) {
+            // Copy line remark which will be stored in "b2bRemarksLine" + SKU detail, e.g. b2bRemarksLineABC0001
             customerOrderDet.setB2bRemarks(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID + item.getProductSkuCode()));
         }
 
+        /*
+            Copy cart item custom attributes.
+            The details will be stored in "attributeLine" + SKU + "_" + attribute code, e.g. attributeLineABC0001_GIFT_MESSAGE
+
+            The values are stored by code ("attributeLine:" + code) with value being value and display value being name
+            of 'attribute + ":" + value'
+         */
+        if (!temp) {
+
+            final Map<String, I18NModel> attrI18n = this.attributeService.getAllAttributeNames();
+
+            final String attributeIdPrefix = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + item.getProductSkuCode() + "_";
+            for (final Map.Entry<String, String> entry : shoppingCart.getOrderInfo().getDetails().entrySet()) {
+                if (entry.getKey().startsWith(attributeIdPrefix)) {
+                    final String avCode = entry.getKey().substring(attributeIdPrefix.length());
+                    final I18NModel nameModel = attrI18n.get(avCode);
+                    final String name = nameModel != null ? nameModel.getValue(customerOrder.getLocale()) : avCode;
+                    customerOrderDet.putValue(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + ":" + avCode,
+                            entry.getValue(), name + ": " + entry.getValue());
+                }
+            }
+        }
+
+        /*
+            Copy product specific attributes that are defined at shop level in SHOP_PRODUCT_STORED_ATTRIBUTES
+            The value will be looked up at product level first and then SKU level so that SKU specific overrides work
+            This is needed to preserve basic details about the product in the long run (say if product is deleted)
+
+            The values are stored by code with value being av.val and display value being name of
+            'attribute + ":" + displayable value'
+         */
         final ProductSku sku = productSkuService.getProductSkuBySkuCode(item.getProductSkuCode());
         if (sku != null) {
-            if (Product.AVAILABILITY_SHOWROOM == sku.getProduct().getAvailability()) {
-                throw new OrderAssemblyException("Sku is for showroom only " + item.getProductSkuCode());
+
+            final long now = now();
+            final int availability = sku.getProduct().getAvailability();
+            final boolean isAvailableNow = availability != Product.AVAILABILITY_SHOWROOM && DomainApiUtils.isObjectAvailableNow(true, sku.getProduct().getAvailablefrom(), sku.getProduct().getAvailableto(), now);
+            final boolean isAvailableLater = availability == Product.AVAILABILITY_PREORDER && DomainApiUtils.isObjectAvailableNow(true, null, sku.getProduct().getAvailableto(), now);
+
+            if (!isAvailableNow && !isAvailableLater) {
+                final I18NModel name = new FailoverStringI18NModel(sku.getDisplayName(), sku.getName());
+                throw new SkuUnavailableException(item.getProductSkuCode(), name.getValue(customerOrder.getLocale()), false);
             }
             if (!temp) {
                 // stored attributes are configured per customer group

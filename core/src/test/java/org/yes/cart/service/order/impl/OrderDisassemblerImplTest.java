@@ -19,6 +19,7 @@ package org.yes.cart.service.order.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -62,6 +63,8 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
 
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), true);
         setIPAddress(shoppingCart, "127.0.0.1");
+        setCustomOrderDetail(shoppingCart, "someDetail", "order detail");
+        setCustomItemDetail(shoppingCart, "CC_TEST1", "someDetail", "item detail");
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         assertNotNull(customerOrder);
@@ -175,6 +178,8 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertNotNull(reassembledOI.getBillingAddressId());
         assertNotNull(reassembledOI.getDeliveryAddressId());
 
+        assertEquals("item detail", reassembledOI.getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + "CC_TEST1_someDetail"));
+        assertEquals("order detail", reassembledOI.getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + "_someDetail"));
 
     }
 
@@ -185,6 +190,8 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
 
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), true);
         setIPAddress(shoppingCart, "127.0.0.1");
+        setCustomOrderDetail(shoppingCart, "someDetail", "order detail");
+        setCustomItemDetail(shoppingCart, "CC_TEST1", "someDetail", "item detail");
         setOffer(shoppingCart, "CC_TEST1", new BigDecimal("150.00"));
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
@@ -298,6 +305,8 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertNotNull(reassembledOI.getBillingAddressId());
         assertNotNull(reassembledOI.getDeliveryAddressId());
 
+        assertEquals("item detail", reassembledOI.getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + "CC_TEST1_someDetail"));
+        assertEquals("order detail", reassembledOI.getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + "_someDetail"));
 
     }
 
@@ -309,6 +318,8 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
 
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), true);
         setIPAddress(shoppingCart, "127.0.0.1");
+        setCustomOrderDetail(shoppingCart, "someDetail", "order detail");
+        setCustomItemDetail(shoppingCart, "CC_TEST1", "someDetail", "item detail");
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
@@ -440,6 +451,8 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertNotNull(reassembledOI.getBillingAddressId());
         assertNotNull(reassembledOI.getDeliveryAddressId());
 
+        assertEquals("item detail", reassembledOI.getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + "CC_TEST1_someDetail"));
+        assertEquals("order detail", reassembledOI.getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + "_someDetail"));
 
     }
 
@@ -451,6 +464,8 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
 
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), true);
         setIPAddress(shoppingCart, "127.0.0.1");
+        setCustomOrderDetail(shoppingCart, "someDetail", "order detail");
+        setCustomItemDetail(shoppingCart, "CC_TEST1", "someDetail", "item detail");
         setOffer(shoppingCart, "CC_TEST1", new BigDecimal("150.00"));
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
@@ -583,16 +598,9 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertNotNull(reassembledOI.getBillingAddressId());
         assertNotNull(reassembledOI.getDeliveryAddressId());
 
+        assertEquals("item detail", reassembledOI.getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + "CC_TEST1_someDetail"));
+        assertEquals("order detail", reassembledOI.getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + "_someDetail"));
 
-    }
-
-
-    private void setIPAddress(final ShoppingCart shoppingCart, final String ip) {
-        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
-        Map<String, String> params;
-        params = new HashMap<String, String>();
-        params.put(ShoppingCartCommand.CMD_INTERNAL_SETIP, ip);
-        commands.execute(shoppingCart, (Map) params);
     }
 
     private void setOffer(final ShoppingCart shoppingCart, final String sku, final BigDecimal offer) {
