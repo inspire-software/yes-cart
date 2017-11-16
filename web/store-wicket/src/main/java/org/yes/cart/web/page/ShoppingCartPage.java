@@ -92,14 +92,11 @@ public class ShoppingCartPage extends AbstractWebPage {
 
         }
 
-        final ShoppingCart cart = getCurrentCart();
-        if (cart.getCartItemsCount() == 0) {
-            info(getLocalizer().getString("emptyCart", this));
-        }
-
         addOrReplace(new WishListNotification("wishListNotification"));
 
         super.onBeforeRender();
+
+        final ShoppingCart cart = getCurrentCart();
 
         final boolean cartModified = cart.isModified();
 

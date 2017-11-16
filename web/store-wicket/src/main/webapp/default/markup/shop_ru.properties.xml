@@ -147,6 +147,7 @@
     <entry key="orderErrorGeneral">Произошла ошибка при создании Вашего заказа. Попробуйте еще раз.</entry>
     <entry key="orderErrorCouponInvalid">Промо-код '${coupon}' не может быть применен. Пожалуйста удалите его из корзины.</entry>
     <entry key="orderErrorSkuInvalid">${sku} снят с продаж. Пожалуйста удалите его из корзины.</entry>
+    <entry key="orderErrorCheckoutDisabled">Вы не можете размещать заказы. Пожалуйста, обратитесь к администратору магазина.</entry>
 
     <!-- COMPONENTS -->
     <!-- BreadCrumbsView -->

@@ -25,8 +25,10 @@ import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.*;
+import org.yes.cart.shoppingcart.CartContentsValidator;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.text.MessageFormat;
@@ -47,6 +49,8 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
     private final OrderSplittingStrategy orderSplittingStrategy;
 
+    private final CartContentsValidator cartContentsValidator;
+
     private final GenericDAO<Customer, Long> customerDao;
 
     private final GenericDAO<Object, Long> genericDao;
@@ -56,13 +60,13 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
     /**
      * Construct order service.
-     *
-     * @param customerOrderDao customer order dao.
+     *  @param customerOrderDao customer order dao.
      * @param customerDao customer dao to use
      * @param customerOrderDeliveryDao to get deliveries, awiting for inventory
      * @param orderAssembler order assembler
      * @param deliveryAssembler delivery assembler
      * @param orderSplittingStrategy order splitting strategy
+     * @param cartContentsValidator cart contents validator
      */
     public CustomerOrderServiceImpl(
             final GenericDAO<CustomerOrder, Long> customerOrderDao,
@@ -71,7 +75,8 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             final GenericDAO<CustomerOrderDelivery, Long> customerOrderDeliveryDao,
             final OrderAssembler orderAssembler,
             final DeliveryAssembler deliveryAssembler,
-            final OrderSplittingStrategy orderSplittingStrategy) {
+            final OrderSplittingStrategy orderSplittingStrategy,
+            final CartContentsValidator cartContentsValidator) {
         super(customerOrderDao);
         this.orderAssembler = orderAssembler;
         this.deliveryAssembler = deliveryAssembler;
@@ -79,6 +84,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
         this.genericDao = genericDao;
         this.customerOrderDeliveryDao = customerOrderDeliveryDao;
         this.orderSplittingStrategy = orderSplittingStrategy;
+        this.cartContentsValidator = cartContentsValidator;
     }
 
     /**
@@ -219,6 +225,17 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    public Pair<Boolean, List<Pair<String, Map<String, Object>>>> validateCart(final ShoppingCart shoppingCart) {
+        final CartContentsValidator.ValidationResult rez = cartContentsValidator.validate(shoppingCart);
+        return new Pair<Boolean, List<Pair<String, Map<String, Object>>>>(
+                rez.isCheckoutBlocked(),
+                rez.getMessages()
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public CustomerOrder createFromCart(final ShoppingCart shoppingCart)
             throws OrderAssemblyException {
 
@@ -226,6 +243,10 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
         final boolean checkoutBlocked = Boolean.valueOf(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT));
         if (checkoutBlocked) {
             throw new PlaceOrderDisabledException(shoppingCart.getCustomerEmail());
+        }
+
+        if (validateCart(shoppingCart).getFirst()) {
+            throw new OrderAssemblyException("Cart validation failed");
         }
 
         final Map<String, Boolean> onePhysicalDelivery = new HashMap<String, Boolean>();

@@ -180,6 +180,16 @@ public interface CheckoutServiceFacade {
     CustomerOrder createFromCart(ShoppingCart shoppingCart) throws OrderAssemblyException;
 
     /**
+     * Validate cart. Returns a pair of flag and list of messages.
+     * If the flag is true is indicates that checkout must be blocked.
+     *
+     * @param shoppingCart cart to validate
+     *
+     * @return pair of flag and message options
+     */
+    Pair<Boolean, List<Pair<String, Map<String, Object>>>> validateCart(ShoppingCart shoppingCart);
+
+    /**
      * Estimate the delivery time according to carrier sla and ietms in the order. This method is
      * aimed at online PG's only. The rationale is that we can estimate delivery for paid (or confirmed)
      * orders. For online PG orders the payment is taken straight away and thus it is safe to

@@ -48,6 +48,11 @@
         <constructor-arg index="1" ref="shopService"/>
     </bean>
 
+    <bean id="shopCartConfiguration" class="org.yes.cart.config.impl.ShopCartConfigurationImpl">
+        <constructor-arg index="0" ref="systemService"/>
+        <constructor-arg index="1" ref="shopService"/>
+    </bean>
+
     <bean id="warehouseInventoryConfiguration" class="org.yes.cart.config.impl.WarehouseInventoryConfigurationImpl">
         <constructor-arg index="0" ref="systemService"/>
         <constructor-arg index="1" ref="warehouseService"/>

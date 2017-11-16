@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrategy, ConfigurationRegistry<Long, ProductAvailabilityStrategy> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PricingPolicyProviderImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProductAvailabilityStrategyImpl.class);
 
     private final ProductAvailabilityStrategy defaultAvailabilityStrategy;
     private final Map<Long, ProductAvailabilityStrategy> customAvailabilityStrategies = new HashMap<Long, ProductAvailabilityStrategy>();

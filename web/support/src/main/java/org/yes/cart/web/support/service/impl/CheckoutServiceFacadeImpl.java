@@ -318,6 +318,12 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
     /** {@inheritDoc} */
     @Override
+    public Pair<Boolean, List<Pair<String, Map<String, Object>>>> validateCart(final ShoppingCart shoppingCart) {
+        return customerOrderService.validateCart(shoppingCart);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public CustomerOrder createFromCart(final ShoppingCart shoppingCart) throws OrderAssemblyException {
         return customerOrderService.createFromCart(shoppingCart);
     }

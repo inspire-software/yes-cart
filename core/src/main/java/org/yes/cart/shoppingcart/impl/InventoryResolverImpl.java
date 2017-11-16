@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class InventoryResolverImpl implements InventoryResolver, ConfigurationRegistry<String, InventoryResolver> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PricingPolicyProviderImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InventoryResolverImpl.class);
 
     private final InventoryResolver defaultInventoryResolver;
     private final Map<String, InventoryResolver> customInventoryResolvers = new HashMap<String, InventoryResolver>();

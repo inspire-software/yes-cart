@@ -27,9 +27,11 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.Total;
@@ -37,11 +39,14 @@ import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -87,6 +92,9 @@ public class ShoppingCartView extends BaseComponent {
     @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
     private ProductServiceFacade productServiceFacade;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.CHECKOUT_SERVICE_FACADE)
+    private CheckoutServiceFacade checkoutServiceFacade;
+
     /**
      * Construct shopping cart view.
      *
@@ -101,8 +109,21 @@ public class ShoppingCartView extends BaseComponent {
 
         final boolean allowMessages = shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG);
 
-
         final ShoppingCart cart = getCurrentCart();
+
+        final Pair<Boolean, List<Pair<String, Map<String, Object>>>> validation = checkoutServiceFacade.validateCart(cart);
+
+        if (validation.getFirst() && !validation.getSecond().isEmpty()) {
+            for (final Pair<String, Map<String, Object>> message : validation.getSecond()) {
+                try {
+                    warn(getLocalizer().getString(message.getFirst(), this,
+                            new Model<ValueMap>(new ValueMap(message.getSecond()))));
+                } catch (MissingResourceException exp) {
+                    warn(message.getFirst());
+                }
+            }
+        }
+
         final ProductPriceModel model = productServiceFacade.getCartItemsTotal(cart);
         final Total total = cart.getTotal();
 
@@ -123,11 +144,13 @@ public class ShoppingCartView extends BaseComponent {
         couponsList.setVisible(allowCoupons);
         cartForm.addOrReplace(couponsList);
 
+        final boolean disabledCheckout = validation.getFirst();
+
         // TOTALS
         final boolean cartIsNotEmpty = cart.getCartItemsCount() > 0;
         cartForm.addOrReplace(new Label(SUBTOTAL_INCLUDE, "").setVisible(cartIsNotEmpty));
 
-        cartForm.addOrReplace(new BookmarkablePageLink<CheckoutPage>(CHECKOUT_LINK, CheckoutPage.class).setVisible(cartIsNotEmpty));
+        cartForm.addOrReplace(new BookmarkablePageLink<CheckoutPage>(CHECKOUT_LINK, CheckoutPage.class).setVisible(cartIsNotEmpty && !disabledCheckout));
 
         // COUPONS
         cartForm.addOrReplace(new Label(COUPON_INCLUDE, "").setVisible(allowCoupons));

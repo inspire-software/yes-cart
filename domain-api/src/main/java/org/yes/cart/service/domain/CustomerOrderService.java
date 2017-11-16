@@ -20,6 +20,7 @@ import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -133,6 +134,15 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      */
     ResultsIterator<CustomerOrderDelivery> findAwaitingDeliveries(List<String> skuCodes, String deliveryStatus, List<String> orderStatus);
 
+    /**
+     * Validate cart. Returns a pair of flag and list of messages.
+     * If the flag is true is indicates that checkout must be blocked.
+     *
+     * @param shoppingCart cart to validate
+     *
+     * @return pair of flag and message options
+     */
+    Pair<Boolean, List<Pair<String, Map<String, Object>>>> validateCart(ShoppingCart shoppingCart);
 
     /**
      * Create customer order from shopping cart.

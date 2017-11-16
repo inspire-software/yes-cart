@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class PriceResolverImpl implements PriceResolver, ConfigurationRegistry<Long, PriceResolver> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PricingPolicyProviderImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PriceResolverImpl.class);
 
     private final PriceResolver defaultPriceResolver;
     private final Map<Long, PriceResolver> customPriceResolvers = new HashMap<Long, PriceResolver>();

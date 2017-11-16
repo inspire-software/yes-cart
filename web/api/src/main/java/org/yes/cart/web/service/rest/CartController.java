@@ -2138,6 +2138,96 @@ public class CartController {
 
 
     /**
+     * Interface: GET /yes-api/rest/cart/validate
+     * <p>
+     * <p>
+     * Display cart validation result.
+     * "checkoutBlocked=true" indicates that checkout should not be engaged as there is a problem with cart contents,
+     * "checkoutBlocked=false" indicates that cart is valid
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * NONE
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * {
+     *      "checkoutBlocked":true,
+     *      "items":[
+     *          {
+     *              "messageKey":"emptyCart","
+     *              parameters":null
+     *          }
+     *      ]
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * &lt;cart-validation checkout-blocked="true"&gt;
+     *    &lt;cart-validation-item message-key="emptyCart"/&gt;
+     * &lt;/cart-validation&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     *
+     * @param request request
+     * @param response response
+     *
+     * @return list of payment gateways options
+     */
+    @RequestMapping(
+            value = "/cart/validate",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
+    public @ResponseBody CartValidationRO cartValidate(final HttpServletRequest request,
+                                                       final HttpServletResponse response) {
+
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
+        cartMixin.persistShoppingCart(request, response);
+
+        final Pair<Boolean, List<Pair<String, Map<String, Object>>>> validation =
+                checkoutServiceFacade.validateCart(cartMixin.getCurrentCart());
+
+        final CartValidationRO ro = new CartValidationRO();
+
+        ro.setCheckoutBlocked(validation.getFirst());
+
+        if (validation.getSecond() != null) {
+            ro.setItems(new ArrayList<CartValidationItemRO>());
+            for (final Pair<String, Map<String, Object>> item: validation.getSecond()) {
+                final CartValidationItemRO itemRo = new CartValidationItemRO();
+                itemRo.setMessageKey(item.getFirst());
+                if (MapUtils.isNotEmpty(item.getSecond())) {
+                    final Map<String, String> param = new HashMap<String, String>();
+                    for (final Map.Entry<String, Object> itemParam : item.getSecond().entrySet()) {
+                        param.put(itemParam.getKey(), String.valueOf(itemParam.getValue()));
+                    }
+                    itemRo.setParameters(param);
+                }
+                ro.getItems().add(itemRo);
+            }
+        }
+
+
+        return ro;
+
+    }
+
+
+
+    /**
      * Interface: PUT /order/preview
      * <p>
      * <p>

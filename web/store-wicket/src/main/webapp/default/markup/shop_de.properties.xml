@@ -147,6 +147,7 @@
     <entry key="orderErrorGeneral">Beim Erstellen Ihrer Bestellung ist ein Fehler aufgetreten. Bitte versuchen Sie es nochmals.</entry>
     <entry key="orderErrorCouponInvalid">Der Gutschein '${coupon}' ist leider nicht mehr gültig, bite löschen Sie ihn im Warenkorb.</entry>
     <entry key="orderErrorSkuInvalid">${sku} ist nicht mehr erhältlich, bitte löschen Sie den Artikel in Ihrem Warenkorb.</entry>
+    <entry key="orderErrorCheckoutDisabled">Sie können nicht bestellen. Bitte wenden Sie sich an den Händler.</entry>
 
     <!-- COMPONENTS -->
     <!-- BreadCrumbsView -->

@@ -164,6 +164,18 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("GB")))
                 .andExpect(header().string("yc", uuid));
 
+        mockMvc.perform(get("/cart/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":true")))
+                .andExpect(content().string(StringContains.containsString("\"messageKey\":\"emptyCart\"")))
+                .andExpect(header().string("yc", uuid));
+
+
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
         }});
@@ -184,6 +196,18 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("shopId\":10,")))
                 .andExpect(content().string(StringContains.containsString("customerShopId\":10,")))
                 .andExpect(header().string("yc", uuid));
+
+
+        mockMvc.perform(get("/cart/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":false")))
+                .andExpect(header().string("yc", uuid));
+
 
 
         final AddressOptionRO shipAddressOptionRO = new AddressOptionRO();
@@ -471,6 +495,17 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("GB")))
                 .andExpect(header().string("yc", uuid));
 
+        mockMvc.perform(get("/cart/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":true")))
+                .andExpect(content().string(StringContains.containsString("\"messageKey\":\"emptyCart\"")))
+                .andExpect(header().string("yc", uuid));
+
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
         }});
@@ -490,6 +525,17 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
                 .andExpect(content().string(StringContains.containsString("shopId\":10,")))
                 .andExpect(content().string(StringContains.containsString("customerShopId\":1010,")))
+                .andExpect(header().string("yc", uuid));
+
+
+        mockMvc.perform(get("/cart/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":false")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -757,6 +803,19 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("[]")))
                 .andExpect(header().string("yc", uuid));
 
+
+        mockMvc.perform(get("/cart/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":true")))
+                .andExpect(content().string(StringContains.containsString("\"messageKey\":\"emptyCart\"")))
+                .andExpect(header().string("yc", uuid));
+
+
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
         }});
@@ -774,6 +833,17 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
+                .andExpect(header().string("yc", uuid));
+
+
+        mockMvc.perform(get("/cart/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":false")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -1064,6 +1134,19 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("GB")))
                 .andExpect(header().string("yc", uuid));
 
+
+        mockMvc.perform(get("/cart/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":true")))
+                .andExpect(content().string(StringContains.containsString("\"messageKey\":\"emptyCart\"")))
+                .andExpect(header().string("yc", uuid));
+
+
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
         }});
@@ -1083,6 +1166,17 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
                 .andExpect(content().string(StringContains.containsString("shopId\":10,")))
                 .andExpect(content().string(StringContains.containsString("customerShopId\":10,")))
+                .andExpect(header().string("yc", uuid));
+
+
+        mockMvc.perform(get("/cart/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"checkoutBlocked\":false")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -1350,6 +1444,17 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
+        mockMvc.perform(get("/cart/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("checkout-blocked=\"true\"")))
+                .andExpect(content().string(StringContains.containsString("message-key=\"emptyCart\"")))
+                .andExpect(header().string("yc", uuid));
+
 
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
@@ -1368,6 +1473,17 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false\"")))
                 .andExpect(content().string(StringContains.containsString("shop-id=\"10\"")))
                 .andExpect(content().string(StringContains.containsString("customer-shop-id=\"10\"")))
+                .andExpect(header().string("yc", uuid));
+
+
+        mockMvc.perform(get("/cart/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("checkout-blocked=\"false\"")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -1657,6 +1773,17 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
+        mockMvc.perform(get("/cart/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("checkout-blocked=\"true\"")))
+                .andExpect(content().string(StringContains.containsString("message-key=\"emptyCart\"")))
+                .andExpect(header().string("yc", uuid));
+
 
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
@@ -1674,6 +1801,17 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("currency=\"EUR\"")))
                 .andExpect(content().string(StringContains.containsString("shop-id=\"10\"")))
                 .andExpect(content().string(StringContains.containsString("customer-shop-id=\"1010\"")))
+                .andExpect(header().string("yc", uuid));
+
+
+        mockMvc.perform(get("/cart/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("checkout-blocked=\"false\"")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -2256,6 +2394,18 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
+        mockMvc.perform(get("/cart/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("checkout-blocked=\"true\"")))
+                .andExpect(content().string(StringContains.containsString("message-key=\"emptyCart\"")))
+                .andExpect(header().string("yc", uuid));
+
+
 
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
@@ -2274,6 +2424,17 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false\"")))
                 .andExpect(content().string(StringContains.containsString("shop-id=\"10\"")))
                 .andExpect(content().string(StringContains.containsString("customer-shop-id=\"10\"")))
+                .andExpect(header().string("yc", uuid));
+
+
+        mockMvc.perform(get("/cart/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("checkout-blocked=\"false\"")))
                 .andExpect(header().string("yc", uuid));
 
 

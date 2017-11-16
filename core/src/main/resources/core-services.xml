@@ -886,6 +886,7 @@
                 <constructor-arg index="4"  ref="orderAssembler"/>
                 <constructor-arg index="5"  ref="deliveryAssembler"/>
                 <constructor-arg index="6"  ref="orderSplittingStrategy"/>
+                <constructor-arg index="7"  ref="cartContentsValidator"/>
             </bean>
         </property>
     </bean>
@@ -1295,6 +1296,19 @@
                 <constructor-arg index="0" ref="skuWarehouseService"/>
             </bean>
         </constructor-arg>
+    </bean>
+
+    <bean id="baseCartContentsValidator" class="org.yes.cart.shoppingcart.impl.CompoundCartContentsValidator">
+        <constructor-arg index="0">
+            <list>
+                <bean class="org.yes.cart.shoppingcart.impl.CheckoutBlockedValidator"/>
+                <bean class="org.yes.cart.shoppingcart.impl.ItemsAvailableValidator"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="cartContentsValidator" class="org.yes.cart.shoppingcart.impl.DefaultCartContentsValidator">
+        <constructor-arg index="0" ref="baseCartContentsValidator"/>
     </bean>
 
     <bean id="orderNumberGenerator" class="org.yes.cart.service.order.impl.DefaultOrderNumberGeneratorImpl">
