@@ -12,11 +12,11 @@
       <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
 
-    <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+    <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
 
-    <button type="button" (click)="onRowInfoPaymentSelected()" [disabled]="selectedPayment == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
+    <button type="button" (click)="onRowInfoPaymentSelected()" [disabled]="selectedPayment == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
       <i class="fa fa-info"></i>
     </button>
 
@@ -34,15 +34,15 @@
         <ul><li *ngFor="let operation of operations"><input type="checkbox" name="{{operation.first}}" [(ngModel)]="operation.second" (ngModelChange)="onFilterChange($event)"/> {{operation.first}}</li></ul>
         <ul><li *ngFor="let status of statuses"><input type="checkbox" name="{{status.first}}" [(ngModel)]="status.second" (ngModelChange)="onFilterChange($event)"/> {{status.first}}</li></ul>
         <p>{{ 'SEARCH_HELP_PAYMENT_DEFAULT' | translate }}</p>
-        <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_PENDING' | translate }} <span><button type="button" (click)="onSearchStatusOpen()" class="btn btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_FAILED' | translate }} <span><button type="button" (click)="onSearchStatusCancelled()" class="btn btn-circle"><i class="fa fa-remove"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_COMPLETED' | translate }} <span><button type="button" (click)="onSearchStatusCompleted()" class="btn btn-circle"><i class="fa fa-check"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_PAYMENT_INCOMING' | translate }} <span><button type="button" (click)="onSearchStatusPaymentIncoming()" class="btn btn-circle"><i class="fa fa-dollar"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_PAYMENT_OUTGOING' | translate }} <span><button type="button" (click)="onSearchStatusPaymentOutgoing()" class="btn btn-circle"><i class="fa fa-dollar"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_PAYMENT_NUMBER' | translate }} <span><button type="button" (click)="onSearchNumber()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_PAYMENT_CUSTOMER' | translate }} <span><button type="button" (click)="onSearchCustomer()" class="btn btn-circle"><i class="fa fa-user"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_PAYMENT_DETAILS' | translate }} <span><button type="button" (click)="onSearchDetails()" class="btn btn-circle"><i class="fa fa-home"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-circle"><i class="fa fa-calendar"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_PENDING' | translate }} <span><button type="button" (click)="onSearchStatusOpen()" class="btn btn-default btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_FAILED' | translate }} <span><button type="button" (click)="onSearchStatusCancelled()" class="btn btn-default btn-circle"><i class="fa fa-remove"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_COMPLETED' | translate }} <span><button type="button" (click)="onSearchStatusCompleted()" class="btn btn-default btn-circle"><i class="fa fa-check"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_INCOMING' | translate }} <span><button type="button" (click)="onSearchStatusPaymentIncoming()" class="btn btn-default btn-circle"><i class="fa fa-dollar"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_OUTGOING' | translate }} <span><button type="button" (click)="onSearchStatusPaymentOutgoing()" class="btn btn-default btn-circle"><i class="fa fa-dollar"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_NUMBER' | translate }} <span><button type="button" (click)="onSearchNumber()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_CUSTOMER' | translate }} <span><button type="button" (click)="onSearchCustomer()" class="btn btn-default btn-circle"><i class="fa fa-user"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_DETAILS' | translate }} <span><button type="button" (click)="onSearchDetails()" class="btn btn-default btn-circle"><i class="fa fa-home"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-default btn-circle"><i class="fa fa-calendar"></i></button></span></p>
       </div>
     </div>
 

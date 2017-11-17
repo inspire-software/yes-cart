@@ -188,11 +188,11 @@
                   <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
                 </form>
 
-                <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+                <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
                   <i class="fa fa-filter"></i>
                 </button>
 
-                <button type="button" (click)="onCouponGenerate()" [disabled]="!(promotion.promotionId > 0 && promotion.couponTriggered)" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                <button type="button" (click)="onCouponGenerate()" [disabled]="!(promotion.promotionId > 0 && promotion.couponTriggered)" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
                   <i class="fa fa-plus"></i>
                 </button>
 

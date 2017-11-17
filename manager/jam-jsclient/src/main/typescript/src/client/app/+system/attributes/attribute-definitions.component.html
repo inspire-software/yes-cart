@@ -21,27 +21,27 @@
       <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
 
-    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'attributes'" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'attributes'" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
 
-    <button type="button" (click)="onRowListSelected()" [disabled]="selectedGroup == null" [hidden]="viewMode === 'attributes' || viewMode === 'attribute'" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DETAILS' | translate }}">
+    <button type="button" (click)="onRowListSelected()" [disabled]="selectedGroup == null" [hidden]="viewMode === 'attributes' || viewMode === 'attribute'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DETAILS' | translate }}">
       <i class="fa fa-list"></i>
     </button>
 
-    <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedAttribute == null" [hidden]="viewMode === 'groups' || (selectedGroup != null && selectedGroup.code !== 'PRODUCT')" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
+    <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedAttribute == null" [hidden]="viewMode === 'groups' || (selectedGroup != null && selectedGroup.code !== 'PRODUCT')" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
       <i class="fa fa-info"></i>
     </button>
 
-    <button type="button" (click)="onRowCopySelected()" [disabled]="selectedAttribute == null || (attributeEdit != null && attributeEdit.attributeId === 0)" [hidden]="viewMode === 'groups'" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
+    <button type="button" (click)="onRowCopySelected()" [disabled]="selectedAttribute == null || (attributeEdit != null && attributeEdit.attributeId === 0)" [hidden]="viewMode === 'groups'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
       <i class="fa fa-copy"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" [disabled]="attributeEdit != null" [hidden]="viewMode === 'groups'" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+    <button type="button" (click)="onRowNew()" [disabled]="attributeEdit != null" [hidden]="viewMode === 'groups'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedAttribute == null || (attributeEdit != null && attributeEdit.attributeId === 0)" [hidden]="viewMode === 'groups'" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedAttribute == null || (attributeEdit != null && attributeEdit.attributeId === 0)" [hidden]="viewMode === 'groups'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 
@@ -73,7 +73,7 @@
     </div>
 
     <div *ngIf="searchHelpShow">
-      <p class="bg-info text-padding">{{ 'SEARCH_HELP_ATTRIBUTE_CODE' | translate }} <span><button type="button" (click)="onSearchAttrCode()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
+      <p class="bg-info text-padding">{{ 'SEARCH_HELP_ATTRIBUTE_CODE' | translate }} <span><button type="button" (click)="onSearchAttrCode()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
     </div>
 
     <yc-attributes [group]="selectedGroup" [attributes]="attributes" (dataSelected)="onAttributeSelected($event)"></yc-attributes>

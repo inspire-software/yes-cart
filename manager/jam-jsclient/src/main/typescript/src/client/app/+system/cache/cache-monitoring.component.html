@@ -12,7 +12,7 @@
         <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
       </form>
 
-      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CACHESTATS' | translate }}">
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CACHESTATS' | translate }}">
         <i class="fa {{ selectedRow != null && selectedRow.stats ? 'fa-toggle-off' : 'fa-toggle-on' }}"></i>
       </button>
 
@@ -34,8 +34,8 @@
 
       <div *ngIf="searchHelpShow">
         <div class="bg-info text-padding block-margin-spacer">
-          <p>{{ 'SEARCH_HELP_CACHE_TOP' | translate }} <span><button type="button" (click)="onTopSelected()" class="btn btn-circle"><i class="fa fa-sort-numeric-desc"></i></button></span></p>
-          <p>{{ 'SEARCH_HELP_CACHE_SIZE' | translate }} <span><button type="button" (click)="onSizeSelected()" class="btn btn-circle"><i class="fa fa-calculator"></i></button></span></p>
+          <p>{{ 'SEARCH_HELP_CACHE_TOP' | translate }} <span><button type="button" (click)="onTopSelected()" class="btn btn-default btn-circle"><i class="fa fa-sort-numeric-desc"></i></button></span></p>
+          <p>{{ 'SEARCH_HELP_CACHE_SIZE' | translate }} <span><button type="button" (click)="onSizeSelected()" class="btn btn-default btn-circle"><i class="fa fa-calculator"></i></button></span></p>
         </div>
       </div>
 

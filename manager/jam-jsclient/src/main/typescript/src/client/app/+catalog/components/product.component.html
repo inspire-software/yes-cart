@@ -398,11 +398,11 @@
                   <a class="js-click" (click)="onSearchHelpAttributeToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
                 </form>
 
-                <button type="button" (click)="onRowAddAttribute()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                <button type="button" (click)="onRowAddAttribute()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
                   <i class="fa fa-plus"></i>
                 </button>
 
-                <button type="button" (click)="onRowEditSelectedAttribute()" [disabled]="selectedRowAttribute == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                <button type="button" (click)="onRowEditSelectedAttribute()" [disabled]="selectedRowAttribute == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
                   <i class="fa fa-edit"></i>
                 </button>
 
@@ -417,10 +417,10 @@
 
               <div *ngIf="searchHelpShowAttribute">
                 <div class="bg-info text-padding">
-                  <p>{{ 'SEARCH_HELP_AV_VALUES' | translate }} <span><button type="button" (click)="onSearchValues()" class="btn btn-circle"><i class="fa fa-circle"></i></button></span></p>
-                  <p>{{ 'SEARCH_HELP_AV_VALUES_CHANGES' | translate }} <span><button type="button" (click)="onSearchValuesChanges()" class="btn btn-circle"><i class="fa fa-edit"></i></button></span></p>
-                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW' | translate }} <span><button type="button" (click)="onSearchValuesNew()" class="btn btn-circle"><i class="fa fa-plus"></i></button></span></p>
-                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW_ONLY' | translate }} <span><button type="button" (click)="onSearchValuesNewOnly()" class="btn btn-circle"><i class="fa fa-plus-circle"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES' | translate }} <span><button type="button" (click)="onSearchValues()" class="btn btn-default btn-circle"><i class="fa fa-circle"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_CHANGES' | translate }} <span><button type="button" (click)="onSearchValuesChanges()" class="btn btn-default btn-circle"><i class="fa fa-edit"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW' | translate }} <span><button type="button" (click)="onSearchValuesNew()" class="btn btn-default btn-circle"><i class="fa fa-plus"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW_ONLY' | translate }} <span><button type="button" (click)="onSearchValuesNewOnly()" class="btn btn-default btn-circle"><i class="fa fa-plus-circle"></i></button></span></p>
                 </div>
               </div>
 
@@ -484,11 +484,11 @@
                   <a class="js-click" (click)="onSearchHelpAssociationToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
                 </form>
 
-                <button type="button" (click)="onRowAddAssociation()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                <button type="button" (click)="onRowAddAssociation()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
                   <i class="fa fa-plus"></i>
                 </button>
 
-                <button type="button" (click)="onRowEditSelectedAssociation()" [disabled]="selectedRowAssociation == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                <button type="button" (click)="onRowEditSelectedAssociation()" [disabled]="selectedRowAssociation == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
                   <i class="fa fa-edit"></i>
                 </button>
 
@@ -503,7 +503,7 @@
 
               <div *ngIf="searchHelpShowAssociation">
                 <div class="bg-info text-padding">
-                  <p>{{ 'SEARCH_HELP_ASSOCIATION_TYPE' | translate }} <span><button type="button" (click)="onSearchAssociation()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_ASSOCIATION_TYPE' | translate }} <span><button type="button" (click)="onSearchAssociation()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
                 </div>
               </div>
 

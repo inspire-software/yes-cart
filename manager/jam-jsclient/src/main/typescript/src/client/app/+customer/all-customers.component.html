@@ -16,15 +16,15 @@
       <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
 
-    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'customers'" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'customers'" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+    <button type="button" (click)="onRowNew()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedCustomer == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedCustomer == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 
@@ -45,11 +45,11 @@
     <div *ngIf="searchHelpShow">
       <div class="bg-info text-padding block-margin-spacer">
         <p>{{ 'SEARCH_HELP_CUSTOMER_DEFAULT' | translate }}</p>
-        <p>{{ 'SEARCH_HELP_CUSTOMER_NUMBER' | translate }} <span><button type="button" (click)="onSearchNumber()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CUSTOMER_CUSTOMER' | translate }} <span><button type="button" (click)="onSearchCustomer()" class="btn btn-circle"><i class="fa fa-user"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CUSTOMER_ADDRESS' | translate }} <span><button type="button" (click)="onSearchAddress()" class="btn btn-circle"><i class="fa fa-home"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CUSTOMER_POLICY' | translate }} <span><button type="button" (click)="onSearchPolicy()" class="btn btn-circle"><i class="fa fa-dollar"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-circle"><i class="fa fa-calendar"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_NUMBER' | translate }} <span><button type="button" (click)="onSearchNumber()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_CUSTOMER' | translate }} <span><button type="button" (click)="onSearchCustomer()" class="btn btn-default btn-circle"><i class="fa fa-user"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ADDRESS' | translate }} <span><button type="button" (click)="onSearchAddress()" class="btn btn-default btn-circle"><i class="fa fa-home"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_POLICY' | translate }} <span><button type="button" (click)="onSearchPolicy()" class="btn btn-default btn-circle"><i class="fa fa-dollar"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-default btn-circle"><i class="fa fa-calendar"></i></button></span></p>
       </div>
     </div>
 

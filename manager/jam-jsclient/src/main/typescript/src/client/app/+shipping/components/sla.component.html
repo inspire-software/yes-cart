@@ -197,7 +197,7 @@
                       <input class="form-control" placeholder="{{ 'CARRIERSLA_EXCLUDE_DATES_ONE_TO' | translate }}" formControlName="excludeto" name="excludeto" type="text" [(ngModel)]="excludeto">
                     </div>
                     <div class="col-xs-12 col-md-2">
-                      <button type="button" (click)="onExclusionDateNew()" [disabled]="!(slaForm.controls['excludefrom'].valid) || !(slaForm.controls['excludeto'].valid)" class="js-click btn btn-circle" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                      <button type="button" (click)="onExclusionDateNew()" [disabled]="!(slaForm.controls['excludefrom'].valid) || !(slaForm.controls['excludeto'].valid)" class="js-click btn btn-default btn-circle" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
                         <i class="fa fa-plus"></i>
                       </button>
                     </div>

@@ -20,15 +20,15 @@
       <a class="js-click" (click)="onClearFilterSla()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
     </form>
 
-    <button type="button" (click)="onRowListSelected()" [disabled]="selectedCarrier == null" [hidden]="viewMode === 'slas' || viewMode === 'sla'" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DETAILS' | translate }}">
+    <button type="button" (click)="onRowListSelected()" [disabled]="selectedCarrier == null" [hidden]="viewMode === 'slas' || viewMode === 'sla'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DETAILS' | translate }}">
       <i class="fa fa-list"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" [disabled]="carrierEdit != null || slaEdit != null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+    <button type="button" (click)="onRowNew()" [disabled]="carrierEdit != null || slaEdit != null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="carrierEdit != null || slaEdit != null || (selectedCarrier == null && selectedSla == null)" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="carrierEdit != null || slaEdit != null || (selectedCarrier == null && selectedSla == null)" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 

@@ -37,7 +37,7 @@
           <option *ngFor="let shop of shops" value="{{ shop.shopId }}">{{ shop.code }}: {{ shop.name }}</option>
         </select>
 
-        <button type="button" (click)="onRowAddSelected()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+        <button type="button" (click)="onRowAddSelected()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
           <i class="fa fa-plus"></i>
         </button>
 
@@ -53,7 +53,7 @@
       <div *ngFor="let address of addresses" class="col-xs-6 col-md-3">
         <span><i class="fa fa-check-circle text-success" [hidden]="!address.defaultAddress"></i> <strong>{{ (address.addressType == 'B' ? 'BILLING' : 'SHIPPING') | translate }}</strong></span>
         <pre [innerHTML]="getFormattedAddress(address)"></pre>
-        <button type="button" (click)="onRowEditSelected(address)" class="btn btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+        <button type="button" (click)="onRowEditSelected(address)" class="btn btn-default btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
           <i class="fa fa-edit"></i>
         </button>
         <button type="button" (click)="onRowDeleteSelected(address)" class="btn btn-danger btn-circle" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">

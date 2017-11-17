@@ -16,7 +16,7 @@
         <i class="fa fa-play"></i>
       </button>
 
-      <button type="button" (click)="onNewTabHandler()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REPORTADD' | translate }}">
+      <button type="button" (click)="onNewTabHandler()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REPORTADD' | translate }}">
         <i class="fa fa-plus"></i>
       </button>
 
@@ -34,7 +34,7 @@
     <div>
 
       <div [hidden]="tabs.length > 0">
-        <p class="bg-info text-padding">{{ 'REPORT_SELECT_TIP' | translate }} <span><button type="button" (click)="onNewTabHandler()" class="btn btn-circle"><i class="fa fa-plus"></i></button></span></p>
+        <p class="bg-info text-padding">{{ 'REPORT_SELECT_TIP' | translate }} <span><button type="button" (click)="onNewTabHandler()" class="btn btn-default btn-circle"><i class="fa fa-plus"></i></button></span></p>
       </div>
 
       <tabset>

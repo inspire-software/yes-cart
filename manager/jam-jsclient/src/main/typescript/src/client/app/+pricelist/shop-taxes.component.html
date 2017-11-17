@@ -22,31 +22,31 @@
       <a class="js-click" (click)="onSearchHelpToggleTaxConfig()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
 
-    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode === 'taxes'" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode === 'taxes'" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
 
-    <button type="button" (click)="onShopSelect()" [hidden]="viewMode !== 'taxes'" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTSHOP' | translate }}">
+    <button type="button" (click)="onShopSelect()" [hidden]="viewMode !== 'taxes'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTSHOP' | translate }}">
       <i class="fa fa-sitemap"></i>
     </button>
 
-    <button type="button" (click)="onCurrencySelect()" [disabled]="selectedShop == null" [hidden]="viewMode !== 'taxes'" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCURRENCY' | translate }}">
+    <button type="button" (click)="onCurrencySelect()" [disabled]="selectedShop == null" [hidden]="viewMode !== 'taxes'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCURRENCY' | translate }}">
       <i class="fa fa-dollar"></i>
     </button>
 
-    <button type="button" (click)="onRowListSelected()" [disabled]="selectedTax == null" [hidden]="viewMode === 'taxconfigs'" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DETAILS' | translate }}">
+    <button type="button" (click)="onRowListSelected()" [disabled]="selectedTax == null" [hidden]="viewMode === 'taxconfigs'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DETAILS' | translate }}">
       <i class="fa fa-list"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" [disabled]="selectedShop == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+    <button type="button" (click)="onRowNew()" [disabled]="selectedShop == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowCopySelected()" [disabled]="selectedTax == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
+    <button type="button" (click)="onRowCopySelected()" [disabled]="selectedTax == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
       <i class="fa fa-copy"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedTax == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedTax == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 
@@ -61,16 +61,16 @@
   <div *ngIf="searchHelpTaxShow">
     <div class="bg-info text-padding block-margin-spacer">
       <p>{{ 'SEARCH_HELP_TAX_DEFAULT' | translate }}</p>
-      <p>{{ 'SEARCH_HELP_TAX_RATE' | translate }} <span><button type="button" (click)="onSearchRate()" class="btn btn-circle"><i class="fa fa-calculator"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_TAX_TYPE' | translate }} <span><button type="button" (click)="onSearchType()" class="btn btn-circle"><i class="fa fa-adjust"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_TAX_RATE' | translate }} <span><button type="button" (click)="onSearchRate()" class="btn btn-default btn-circle"><i class="fa fa-calculator"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_TAX_TYPE' | translate }} <span><button type="button" (click)="onSearchType()" class="btn btn-default btn-circle"><i class="fa fa-adjust"></i></button></span></p>
     </div>
   </div>
 
   <div *ngIf="searchHelpTaxConfigShow">
     <div class="bg-info text-padding block-margin-spacer">
-      <p>{{ 'SEARCH_HELP_TAXCFG_LOCATION' | translate }} <span><button type="button" (click)="onSearchLocation()" class="btn btn-circle"><i class="fa fa-home"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_TAXCFG_SKU' | translate }} <span><button type="button" (click)="onSearchSKU()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_TAXCFG_SKU_EXACT' | translate }} <span><button type="button" (click)="onSearchSKUExact()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_TAXCFG_LOCATION' | translate }} <span><button type="button" (click)="onSearchLocation()" class="btn btn-default btn-circle"><i class="fa fa-home"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_TAXCFG_SKU' | translate }} <span><button type="button" (click)="onSearchSKU()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_TAXCFG_SKU_EXACT' | translate }} <span><button type="button" (click)="onSearchSKUExact()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
     </div>
   </div>
 
@@ -78,7 +78,7 @@
     <p class="bg-danger text-padding">
       {{ 'SHOP_SELECTION_REQUIRED' | translate }}
       <span>
-        <button type="button" (click)="onShopSelect()" class="btn btn-circle"><i class="fa fa-sitemap"></i></button>
+        <button type="button" (click)="onShopSelect()" class="btn btn-default btn-circle"><i class="fa fa-sitemap"></i></button>
       </span>
     </p>
   </div>
@@ -87,7 +87,7 @@
     <p class="bg-danger text-padding">
       {{ 'CURRENCY_SELECTION_REQUIRED' | translate }}
       <span>
-        <button type="button" (click)="onCurrencySelect()" class="btn btn-circle"><i class="fa fa-dollar"></i></button>
+        <button type="button" (click)="onCurrencySelect()" class="btn btn-default btn-circle"><i class="fa fa-dollar"></i></button>
       </span>
     </p>
   </div>

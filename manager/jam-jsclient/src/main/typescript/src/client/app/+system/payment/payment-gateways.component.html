@@ -21,7 +21,7 @@
       <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
 
-    <button type="button" (click)="onRowListSelected()" [disabled]="selectedGateway == null" [hidden]="viewMode === 'params'" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DETAILS' | translate }}">
+    <button type="button" (click)="onRowListSelected()" [disabled]="selectedGateway == null" [hidden]="viewMode === 'params'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DETAILS' | translate }}">
       <i class="fa fa-list"></i>
     </button>
 
@@ -29,15 +29,15 @@
       <i class="fa fa fa-power-off"></i>
     </button>
 
-    <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedGateway == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
+    <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedGateway == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
       <i class="fa fa-info"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" [hidden]="system === false || viewMode !== 'params'" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+    <button type="button" (click)="onRowNew()" [hidden]="system === false || viewMode !== 'params'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedParam == null" [hidden]="viewMode !== 'params'" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedParam == null" [hidden]="viewMode !== 'params'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 
@@ -67,10 +67,10 @@
 
       <div class="col-xs-12 block-padding-spacer">
         <div class="bg-info text-padding">
-          <p>{{ 'SEARCH_HELP_AV_VALUES' | translate }} <span><button type="button" (click)="onSearchValues()" class="btn btn-circle"><i class="fa fa-circle"></i></button></span></p>
-          <p>{{ 'SEARCH_HELP_AV_VALUES_CHANGES' | translate }} <span><button type="button" (click)="onSearchValuesChanges()" class="btn btn-circle"><i class="fa fa-edit"></i></button></span></p>
-          <p>{{ 'SEARCH_HELP_AV_VALUES_NEW' | translate }} <span><button type="button" (click)="onSearchValuesNew()" class="btn btn-circle"><i class="fa fa-plus"></i></button></span></p>
-          <p>{{ 'SEARCH_HELP_AV_VALUES_NEW_ONLY' | translate }} <span><button type="button" (click)="onSearchValuesNewOnly()" class="btn btn-circle"><i class="fa fa-plus-circle"></i></button></span></p>
+          <p>{{ 'SEARCH_HELP_AV_VALUES' | translate }} <span><button type="button" (click)="onSearchValues()" class="btn btn-default btn-circle"><i class="fa fa-circle"></i></button></span></p>
+          <p>{{ 'SEARCH_HELP_AV_VALUES_CHANGES' | translate }} <span><button type="button" (click)="onSearchValuesChanges()" class="btn btn-default btn-circle"><i class="fa fa-edit"></i></button></span></p>
+          <p>{{ 'SEARCH_HELP_AV_VALUES_NEW' | translate }} <span><button type="button" (click)="onSearchValuesNew()" class="btn btn-default btn-circle"><i class="fa fa-plus"></i></button></span></p>
+          <p>{{ 'SEARCH_HELP_AV_VALUES_NEW_ONLY' | translate }} <span><button type="button" (click)="onSearchValuesNewOnly()" class="btn btn-default btn-circle"><i class="fa fa-plus-circle"></i></button></span></p>
         </div>
       </div>
 

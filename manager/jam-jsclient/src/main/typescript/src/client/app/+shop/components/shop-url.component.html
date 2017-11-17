@@ -18,15 +18,15 @@
       <input class="filter-input" type="text" name="urlFilter" [(ngModel)]="urlFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
       <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>    </form>
 
-    <button type="button" (click)="onRowPrimarySelected()" [disabled]="selectedRow == null || selectedRow.primary" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowPrimarySelected()" [disabled]="selectedRow == null || selectedRow.primary" class="btn btn-default btn-circle btn-xl">
       <i class="fa {{selectedRow != null && selectedRow.primary ? 'fa-toggle-on' : 'fa-toggle-off'}}" title="{{ (selectedRow != null && selectedRow.primary ? 'MODAL_BUTTON_URLPRIMARY':'MODAL_BUTTON_URLPRIMARYON') | translate }}"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+    <button type="button" (click)="onRowNew()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 

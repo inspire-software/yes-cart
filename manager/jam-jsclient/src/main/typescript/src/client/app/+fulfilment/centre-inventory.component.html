@@ -12,23 +12,23 @@
       <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
 
-    <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+    <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
 
-    <button type="button" (click)="onFulfilmentCentreSelect()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCENTRE' | translate }}">
+    <button type="button" (click)="onFulfilmentCentreSelect()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCENTRE' | translate }}">
       <i class="fa fa-sitemap"></i>
     </button>
 
-    <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedInventory == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
+    <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedInventory == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
       <i class="fa fa-info"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" [disabled]="selectedCentre == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+    <button type="button" (click)="onRowNew()" [disabled]="selectedCentre == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedInventory == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedInventory == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 
@@ -44,9 +44,9 @@
   <div *ngIf="searchHelpShow">
     <div class="bg-info text-padding block-margin-spacer">
       <p>{{ 'SEARCH_HELP_INVENTORY_DEFAULT' | translate }}</p>
-      <p>{{ 'SEARCH_HELP_INVENTORY_EXACT' | translate }} <span><button type="button" (click)="onSearchExact()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_INVENTORY_LOW' | translate }} <span><button type="button" (click)="onSearchLow()" class="btn btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_INVENTORY_RESERVED' | translate }} <span><button type="button" (click)="onSearchReserved()" class="btn btn-circle"><i class="fa fa-truck"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_INVENTORY_EXACT' | translate }} <span><button type="button" (click)="onSearchExact()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_INVENTORY_LOW' | translate }} <span><button type="button" (click)="onSearchLow()" class="btn btn-default btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_INVENTORY_RESERVED' | translate }} <span><button type="button" (click)="onSearchReserved()" class="btn btn-default btn-circle"><i class="fa fa-truck"></i></button></span></p>
     </div>
   </div>
 
@@ -54,7 +54,7 @@
     <p class="bg-danger text-padding">
       {{ 'FULFILMENT_CENTRE_SELECTION_REQUIRED' | translate }}
       <span>
-        <button type="button" (click)="onFulfilmentCentreSelect()" class="btn btn-circle"><i class="fa fa-sitemap"></i></button>
+        <button type="button" (click)="onFulfilmentCentreSelect()" class="btn btn-default btn-circle"><i class="fa fa-sitemap"></i></button>
       </span>
     </p>
   </div>

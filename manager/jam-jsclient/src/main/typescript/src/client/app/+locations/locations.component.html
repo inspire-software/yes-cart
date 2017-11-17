@@ -20,15 +20,15 @@
       <a class="js-click" (click)="onClearFilterState()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
     </form>
 
-    <button type="button" (click)="onRowListSelected()" [disabled]="selectedCountry == null" [hidden]="viewMode === 'states' || viewMode === 'state'" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DETAILS' | translate }}">
+    <button type="button" (click)="onRowListSelected()" [disabled]="selectedCountry == null" [hidden]="viewMode === 'states' || viewMode === 'state'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DETAILS' | translate }}">
       <i class="fa fa-list"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" [disabled]="countryEdit != null || stateEdit != null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+    <button type="button" (click)="onRowNew()" [disabled]="countryEdit != null || stateEdit != null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="countryEdit != null || stateEdit != null || (selectedCountry == null && selectedState == null)" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="countryEdit != null || stateEdit != null || (selectedCountry == null && selectedState == null)" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 

@@ -21,19 +21,19 @@
       <a class="js-click" (click)="onClearFilterSKU()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
     </form>
 
-    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'products'" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'products'" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
 
-    <button type="button" (click)="onRowListSelected()" [disabled]="selectedProduct == null" [hidden]="viewMode === 'skus' || viewMode === 'sku'" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowListSelected()" [disabled]="selectedProduct == null" [hidden]="viewMode === 'skus' || viewMode === 'sku'" class="btn btn-default btn-circle btn-xl">
       <i class="fa fa-list"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" [disabled]="(productEdit != null && changed) || skuEdit != null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+    <button type="button" (click)="onRowNew()" [disabled]="(productEdit != null && changed) || skuEdit != null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="(productEdit != null && selectedSku == null) || skuEdit != null || (selectedProduct == null && selectedSku == null)" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="(productEdit != null && selectedSku == null) || skuEdit != null || (selectedProduct == null && selectedSku == null)" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 
@@ -55,11 +55,11 @@
     <div *ngIf="searchHelpShow">
       <div class="bg-info text-padding block-margin-spacer">
         <p>{{ 'SEARCH_HELP_PRODUCT_DEFAULT' | translate }}</p>
-        <p>{{ 'SEARCH_HELP_PRODUCT_EXACT' | translate }} <span><button type="button" (click)="onSearchCodeExact()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_PRODUCT_CODE' | translate }} <span><button type="button" (click)="onSearchCode()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_PRODUCT_TYPE' | translate }} <span><button type="button" (click)="onSearchType()" class="btn btn-circle"><i class="fa fa-cogs"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_PRODUCT_CATEGORY' | translate }} <span><button type="button" (click)="onSearchCategories()" class="btn btn-circle"><i class="fa fa-sitemap"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-circle"><i class="fa fa-calendar"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PRODUCT_EXACT' | translate }} <span><button type="button" (click)="onSearchCodeExact()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PRODUCT_CODE' | translate }} <span><button type="button" (click)="onSearchCode()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PRODUCT_TYPE' | translate }} <span><button type="button" (click)="onSearchType()" class="btn btn-default btn-circle"><i class="fa fa-cogs"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PRODUCT_CATEGORY' | translate }} <span><button type="button" (click)="onSearchCategories()" class="btn btn-default btn-circle"><i class="fa fa-sitemap"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-default btn-circle"><i class="fa fa-calendar"></i></button></span></p>
       </div>
     </div>
 

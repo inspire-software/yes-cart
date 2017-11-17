@@ -16,19 +16,19 @@
       <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
 
-    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'contents'" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'contents'" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
 
-    <button type="button" (click)="onViewTree()" [hidden]="viewMode !== 'contents'" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCONTENT' | translate }}">
+    <button type="button" (click)="onViewTree()" [hidden]="viewMode !== 'contents'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCONTENT' | translate }}">
       <i class="fa fa-sitemap"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" [disabled]="shop == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+    <button type="button" (click)="onRowNew()" [disabled]="shop == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedContent == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedContent == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 
@@ -49,8 +49,8 @@
     <div *ngIf="searchHelpShow">
       <div class="bg-info text-padding block-margin-spacer">
         <p>{{ 'SEARCH_HELP_CONTENT_DEFAULT' | translate }}</p>
-        <p>{{ 'SEARCH_HELP_CONTENT_PARENT' | translate }} <span><button type="button" (click)="onSearchParent()" class="btn btn-circle"><i class="fa fa-sitemap"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CONTENT_URI' | translate }} <span><button type="button" (click)="onSearchURI()" class="btn btn-circle"><i class="fa fa-globe"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CONTENT_PARENT' | translate }} <span><button type="button" (click)="onSearchParent()" class="btn btn-default btn-circle"><i class="fa fa-sitemap"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CONTENT_URI' | translate }} <span><button type="button" (click)="onSearchURI()" class="btn btn-default btn-circle"><i class="fa fa-globe"></i></button></span></p>
       </div>
     </div>
 

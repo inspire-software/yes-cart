@@ -16,7 +16,7 @@
       <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
 
-    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'customerorders'" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'customerorders'" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
 
@@ -32,7 +32,7 @@
       <i class="fa fa-reply"></i>
     </button>
 
-    <button type="button" (click)="onRefundSelected()" [hidden]="!selectedCustomerorderRefundable" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERREFUND' | translate }}">
+    <button type="button" (click)="onRefundSelected()" [hidden]="!selectedCustomerorderRefundable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERREFUND' | translate }}">
       <i class="fa fa-dollar"></i>
     </button>
 
@@ -42,15 +42,15 @@
 
 
 
-    <button type="button" (click)="onPackDeliverySelected()" [hidden]="!selectedCustomerdeliveryPackable" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYPACK' | translate }}">
+    <button type="button" (click)="onPackDeliverySelected()" [hidden]="!selectedCustomerdeliveryPackable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYPACK' | translate }}">
       <i class="fa fa-archive"></i>
     </button>
 
-    <button type="button" (click)="onMarkReadyForShippingDeliverySelected()" [hidden]="!selectedCustomerdeliveryPacked" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIP' | translate }}">
+    <button type="button" (click)="onMarkReadyForShippingDeliverySelected()" [hidden]="!selectedCustomerdeliveryPacked" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIP' | translate }}">
       <i class="fa fa-check"></i>
     </button>
 
-    <button type="button" (click)="onStartDeliverySelected()" [hidden]="!selectedCustomerdeliveryShippable" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIPPED' | translate }}">
+    <button type="button" (click)="onStartDeliverySelected()" [hidden]="!selectedCustomerdeliveryShippable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIPPED' | translate }}">
       <i class="fa fa-truck"></i>
     </button>
 
@@ -62,7 +62,7 @@
       <i class="fa fa-check"></i>
     </button>
 
-    <button type="button" (click)="onUpdateDeliveryRefSelected()" [hidden]="selectedCustomerdelivery == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYREF' | translate }}">
+    <button type="button" (click)="onUpdateDeliveryRefSelected()" [hidden]="selectedCustomerdelivery == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYREF' | translate }}">
       <i class="fa fa-external-link"></i>
     </button>
 
@@ -70,11 +70,11 @@
 
 
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedCustomerorder == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedCustomerorder == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 
-    <button type="button" (click)="onShowGrossTotalClick()" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onShowGrossTotalClick()" class="btn btn-default btn-circle btn-xl">
       <i class="fa {{showGrossTotal ? 'fa-toggle-on' : 'fa-toggle-off'}}" title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_NO_TAX' : 'CUSTOMERORDER_TOTAL_WITH_TAX') | translate }}"></i>
     </button>
 
@@ -90,20 +90,20 @@
 
     <div *ngIf="searchHelpShow">
       <div class="bg-info text-padding block-margin-spacer">
-        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_ALL' | translate }} <span><button type="button" (click)="onSearchStatusAllOrders()" class="btn btn-circle"><i class="fa fa-arrows-alt"></i></button></span> <span class="text-muted">{{ 'SEARCH_HELP_CUSTOMER_RFQ_ALL' | translate }} <span><button type="button" (click)="onSearchStatusAllRFQ()" class="btn btn-circle"><i class="fa fa-arrows-alt"></i></button></span></span> <span class="label label-info">YCE</span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_ALL' | translate }} <span><button type="button" (click)="onSearchStatusAllOrders()" class="btn btn-default btn-circle"><i class="fa fa-arrows-alt"></i></button></span> <span class="text-muted">{{ 'SEARCH_HELP_CUSTOMER_RFQ_ALL' | translate }} <span><button type="button" (click)="onSearchStatusAllRFQ()" class="btn btn-default btn-circle"><i class="fa fa-arrows-alt"></i></button></span></span> <span class="label label-info">YCE</span></p>
         <ul><li *ngFor="let status of statuses"><input type="checkbox" name="{{status.first}}" [(ngModel)]="status.second" (ngModelChange)="onFilterChange($event)"/> {{status.first | translate }}</li></ul>
         <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_DEFAULT' | translate }}</p>
-        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_OPEN' | translate }} <span><button type="button" (click)="onSearchStatusOpen()" class="btn btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_PAYMENT' | translate }} <span><button type="button" (click)="onSearchStatusPayment()" class="btn btn-circle"><i class="fa fa-dollar"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_CANCELLED' | translate }} <span><button type="button" (click)="onSearchStatusCancelled()" class="btn btn-circle"><i class="fa fa-remove"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_COMPLETED' | translate }} <span><button type="button" (click)="onSearchStatusCompleted()" class="btn btn-circle"><i class="fa fa-check"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_NUMBER' | translate }} <span><button type="button" (click)="onSearchNumber()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_CUSTOMER' | translate }} <span><button type="button" (click)="onSearchCustomer()" class="btn btn-circle"><i class="fa fa-user"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_ADDRESS' | translate }} <span><button type="button" (click)="onSearchAddress()" class="btn btn-circle"><i class="fa fa-home"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_ID' | translate }} <span><button type="button" (click)="onSearchId()" class="btn btn-circle"><i class="fa fa-asterisk"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-circle"><i class="fa fa-calendar"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_RESERVED' | translate }} <span><button type="button" (click)="onSearchReserved()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_CUSTOMER_SHOP' | translate }} <span><button type="button" (click)="onSearchInshop()" class="btn btn-circle"><i class="fa fa-sitemap"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_OPEN' | translate }} <span><button type="button" (click)="onSearchStatusOpen()" class="btn btn-default btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_PAYMENT' | translate }} <span><button type="button" (click)="onSearchStatusPayment()" class="btn btn-default btn-circle"><i class="fa fa-dollar"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_CANCELLED' | translate }} <span><button type="button" (click)="onSearchStatusCancelled()" class="btn btn-default btn-circle"><i class="fa fa-remove"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_COMPLETED' | translate }} <span><button type="button" (click)="onSearchStatusCompleted()" class="btn btn-default btn-circle"><i class="fa fa-check"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_NUMBER' | translate }} <span><button type="button" (click)="onSearchNumber()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_CUSTOMER' | translate }} <span><button type="button" (click)="onSearchCustomer()" class="btn btn-default btn-circle"><i class="fa fa-user"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_ADDRESS' | translate }} <span><button type="button" (click)="onSearchAddress()" class="btn btn-default btn-circle"><i class="fa fa-home"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_ID' | translate }} <span><button type="button" (click)="onSearchId()" class="btn btn-default btn-circle"><i class="fa fa-asterisk"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-default btn-circle"><i class="fa fa-calendar"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_RESERVED' | translate }} <span><button type="button" (click)="onSearchReserved()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_SHOP' | translate }} <span><button type="button" (click)="onSearchInshop()" class="btn btn-default btn-circle"><i class="fa fa-sitemap"></i></button></span></p>
       </div>
     </div>
 

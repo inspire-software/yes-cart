@@ -9,11 +9,11 @@
       <i class="fa fa-play"></i>
     </button>
 
-    <button type="button" (click)="onNewTabHandler()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_IMPEXADD' | translate }}">
+    <button type="button" (click)="onNewTabHandler()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_IMPEXADD' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onFileDownload()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DOWNLOAD' | translate }}">
+    <button type="button" (click)="onFileDownload()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DOWNLOAD' | translate }}">
       <i class="fa fa-download"></i>
     </button>
 
@@ -30,7 +30,7 @@
 
   <div>
     <div *ngIf="tabs.length == 0">
-      <p class="bg-info text-padding">{{ 'IMPEX_NEW_TIP' | translate }} <span><button type="button" (click)="onNewTabHandler()" class="btn btn-circle"><i class="fa fa-plus"></i></button></span></p>
+      <p class="bg-info text-padding">{{ 'IMPEX_NEW_TIP' | translate }} <span><button type="button" (click)="onNewTabHandler()" class="btn btn-default btn-circle"><i class="fa fa-plus"></i></button></span></p>
     </div>
   </div>
 
@@ -69,7 +69,7 @@
             <p class="bg-success text-padding">{{ 'IMPEX_COMPLETED_OK' | translate }}</p>
           </div>
           <div *ngIf="tab.status.completion != null && tab.status.completion == 'OK'">
-            <p class="bg-success text-padding">{{ 'IMPEX_DOWNLOAD_TIP' | translate }} <span><button type="button" (click)="onFileDownload()" class="btn btn-circle"><i class="fa fa-download"></i></button></span></p>
+            <p class="bg-success text-padding">{{ 'IMPEX_DOWNLOAD_TIP' | translate }} <span><button type="button" (click)="onFileDownload()" class="btn btn-default btn-circle"><i class="fa fa-download"></i></button></span></p>
           </div>
           <div *ngIf="tab.status.completion != null && tab.status.completion != 'OK'">
             <p class="bg-danger text-padding">{{ 'IMPEX_COMPLETED_ERROR' | translate }}</p>
