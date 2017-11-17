@@ -400,7 +400,14 @@ public class CheckoutPage extends AbstractWebPage {
     private MarkupContainer createPaymentFragment() {
 
         final MarkupContainer rez = new Fragment(CONTENT_VIEW, PAYMENT_FRAGMENT, this);
+
         final ShoppingCart shoppingCart = getCurrentCart();
+
+        final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(shoppingCart.getGuid());
+        if (customerOrder == null) {
+            return rez;
+        }
+
         final OrderInfo orderInfo = shoppingCart.getOrderInfo();
         boolean showMultipleDelivery = false;
         for (final Map.Entry<String, Boolean> available : orderInfo.getMultipleDeliveryAvailable().entrySet()) {
