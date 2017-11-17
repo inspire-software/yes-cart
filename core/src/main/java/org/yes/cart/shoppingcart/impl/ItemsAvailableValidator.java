@@ -17,9 +17,10 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.CartValidityModel;
+import org.yes.cart.shoppingcart.CartValidityModelMessage;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.ArrayList;
@@ -36,13 +37,14 @@ public class ItemsAvailableValidator extends AbstractCartContentsValidatorImpl {
 
     /** {@inheritDoc} */
     @Override
-    public ValidationResult validate(final ShoppingCart cart) {
+    public CartValidityModel validate(final ShoppingCart cart) {
 
         if (cart.getCartItemsCount() == 0) {
 
-            return new ValidationResultImpl(
-                    true,
-                    new Pair<String, Map<String, Object>>(
+            return new CartValidityModelImpl(
+                    new CartValidityModelMessageImpl(
+                            true,
+                            CartValidityModelMessage.MessageType.WARNING,
                             "emptyCart",
                             Collections.emptyMap()
                     )
@@ -50,7 +52,7 @@ public class ItemsAvailableValidator extends AbstractCartContentsValidatorImpl {
 
         }
 
-        final List<Pair<String, Map<String, Object>>> unavailable = new ArrayList<Pair<String, Map<String, Object>>>();
+        final List<CartValidityModelMessage> unavailable = new ArrayList<CartValidityModelMessage>();
         for (final Map.Entry<DeliveryBucket, List<CartItem>> bucketAndItems : cart.getCartItemMap().entrySet()) {
 
             if (CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP.equals(bucketAndItems.getKey().getGroup()) ||
@@ -59,7 +61,9 @@ public class ItemsAvailableValidator extends AbstractCartContentsValidatorImpl {
                 for (final CartItem item : bucketAndItems.getValue()) {
 
                     unavailable.add(
-                            new Pair<String, Map<String, Object>>(
+                            new CartValidityModelMessageImpl(
+                                    true,
+                                    CartValidityModelMessage.MessageType.WARNING,
                                     "orderErrorSkuInvalid",
                                     Collections.singletonMap("sku", "(" + item.getProductSkuCode() + ") " + item.getProductName())
                             )
@@ -73,8 +77,7 @@ public class ItemsAvailableValidator extends AbstractCartContentsValidatorImpl {
 
         if (!unavailable.isEmpty()) {
 
-            return new ValidationResultImpl(
-                    true,
+            return new CartValidityModelImpl(
                     unavailable
             );
 

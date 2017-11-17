@@ -16,20 +16,43 @@
 
 package org.yes.cart.shoppingcart;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
- * Date: 15/11/2017
- * Time: 13:52
+ * Date: 17/11/2017
+ * Time: 08:34
  */
-public interface CartContentsValidator {
+public interface CartValidityModelMessage {
+
+    enum MessageType { INFO, SUCCESS, WARNING, ERROR }
 
     /**
-     * Validate shopping cart.
+     * Flag if checkout should be blocked
      *
-     * @param cart cart to validate
-     *
-     * @return validation result
+     * @return block flag
      */
-    CartValidityModel validate(ShoppingCart cart);
+    boolean isCheckoutBlocking();
+
+    /**
+     * Type of this message. Used for UI styles.
+     *
+     * @return message type
+     */
+    MessageType getMessageType();
+
+    /**
+     * Validation notification message key
+     *
+     * @return message key
+     */
+    String getMessageKey();
+
+    /**
+     * Parameters to message (optional).
+     *
+     * @return message parameter objects
+     */
+    Map<String, String> getMessageArgs();
 
 }

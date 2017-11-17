@@ -318,7 +318,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
     /** {@inheritDoc} */
     @Override
-    public Pair<Boolean, List<Pair<String, Map<String, Object>>>> validateCart(final ShoppingCart shoppingCart) {
+    public CartValidityModel validateCart(final ShoppingCart shoppingCart) {
         return customerOrderService.validateCart(shoppingCart);
     }
 

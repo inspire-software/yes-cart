@@ -16,20 +16,34 @@
 
 package org.yes.cart.shoppingcart;
 
+import java.util.List;
+
 /**
  * User: denispavlov
- * Date: 15/11/2017
- * Time: 13:52
+ * Date: 17/11/2017
+ * Time: 08:33
  */
-public interface CartContentsValidator {
+public interface CartValidityModel {
 
     /**
-     * Validate shopping cart.
+     * Flag if checkout should be blocked
      *
-     * @param cart cart to validate
-     *
-     * @return validation result
+     * @return block flag
      */
-    CartValidityModel validate(ShoppingCart cart);
+    boolean isCheckoutBlocked();
+
+    /**
+     * Validation messages.
+     *
+     * @return validation messages
+     */
+    List<CartValidityModelMessage> getMessages();
+
+    /**
+     * Append cart validity model (for compound validation)
+     *
+     * @param model model
+     */
+    void append(CartValidityModel model);
 
 }

@@ -31,10 +31,7 @@ import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -44,7 +41,6 @@ import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 
@@ -111,15 +107,26 @@ public class ShoppingCartView extends BaseComponent {
 
         final ShoppingCart cart = getCurrentCart();
 
-        final Pair<Boolean, List<Pair<String, Map<String, Object>>>> validation = checkoutServiceFacade.validateCart(cart);
+        final CartValidityModel validation = checkoutServiceFacade.validateCart(cart);
 
-        if (validation.getFirst() && !validation.getSecond().isEmpty()) {
-            for (final Pair<String, Map<String, Object>> message : validation.getSecond()) {
+        if (validation.getMessages() != null) {
+            for (final CartValidityModelMessage message : validation.getMessages()) {
                 try {
-                    warn(getLocalizer().getString(message.getFirst(), this,
-                            new Model<ValueMap>(new ValueMap(message.getSecond()))));
+                    if (CartValidityModelMessage.MessageType.ERROR == message.getMessageType()) {
+                        error(getLocalizer().getString(message.getMessageKey(), this,
+                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
+                    } else if (CartValidityModelMessage.MessageType.INFO == message.getMessageType()) {
+                        info(getLocalizer().getString(message.getMessageKey(), this,
+                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
+                    } else if (CartValidityModelMessage.MessageType.SUCCESS == message.getMessageType()) {
+                        success(getLocalizer().getString(message.getMessageKey(), this,
+                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
+                    } else {
+                        warn(getLocalizer().getString(message.getMessageKey(), this,
+                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
+                    }
                 } catch (MissingResourceException exp) {
-                    warn(message.getFirst());
+                    warn(message.getMessageKey());
                 }
             }
         }
@@ -144,7 +151,7 @@ public class ShoppingCartView extends BaseComponent {
         couponsList.setVisible(allowCoupons);
         cartForm.addOrReplace(couponsList);
 
-        final boolean disabledCheckout = validation.getFirst();
+        final boolean disabledCheckout = validation.isCheckoutBlocked();
 
         // TOTALS
         final boolean cartIsNotEmpty = cart.getCartItemsCount() > 0;

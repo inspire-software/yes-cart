@@ -2165,8 +2165,10 @@ public class CartController {
      *      "checkoutBlocked":true,
      *      "items":[
      *          {
-     *              "messageKey":"emptyCart","
-     *              parameters":null
+     *              "checkoutBlocking":true,
+     *              "messageType":"WARNING",
+     *              "messageKey":"emptyCart",
+     *              "parameters":null
      *          }
      *      ]
      * }
@@ -2175,7 +2177,7 @@ public class CartController {
      *     <tr><td>XML example</td><td>
      * <pre><code>
      * &lt;cart-validation checkout-blocked="true"&gt;
-     *    &lt;cart-validation-item message-key="emptyCart"/&gt;
+     *    &lt;cart-validation-item checkout-blocking="true" message-key="emptyCart" message-type="WARNING"/&gt;
      * &lt;/cart-validation&gt;
      * </code></pre>
      *     </td></tr>
@@ -2197,25 +2199,21 @@ public class CartController {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
-        final Pair<Boolean, List<Pair<String, Map<String, Object>>>> validation =
+        final CartValidityModel validation =
                 checkoutServiceFacade.validateCart(cartMixin.getCurrentCart());
 
         final CartValidationRO ro = new CartValidationRO();
 
-        ro.setCheckoutBlocked(validation.getFirst());
+        ro.setCheckoutBlocked(validation.isCheckoutBlocked());
 
-        if (validation.getSecond() != null) {
+        if (validation.getMessages() != null) {
             ro.setItems(new ArrayList<CartValidationItemRO>());
-            for (final Pair<String, Map<String, Object>> item: validation.getSecond()) {
+            for (final CartValidityModelMessage message: validation.getMessages()) {
                 final CartValidationItemRO itemRo = new CartValidationItemRO();
-                itemRo.setMessageKey(item.getFirst());
-                if (MapUtils.isNotEmpty(item.getSecond())) {
-                    final Map<String, String> param = new HashMap<String, String>();
-                    for (final Map.Entry<String, Object> itemParam : item.getSecond().entrySet()) {
-                        param.put(itemParam.getKey(), String.valueOf(itemParam.getValue()));
-                    }
-                    itemRo.setParameters(param);
-                }
+                itemRo.setCheckoutBlocking(message.isCheckoutBlocking());
+                itemRo.setMessageType(message.getMessageType() != null ? message.getMessageType().name() : CartValidityModelMessage.MessageType.INFO.name());
+                itemRo.setMessageKey(message.getMessageKey());
+                itemRo.setParameters(message.getMessageArgs());
                 ro.getItems().add(itemRo);
             }
         }

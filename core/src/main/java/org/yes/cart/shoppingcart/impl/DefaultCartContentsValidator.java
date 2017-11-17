@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.shoppingcart.CartContentsValidator;
+import org.yes.cart.shoppingcart.CartValidityModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class DefaultCartContentsValidator extends AbstractCartContentsValidatorI
 
     /** {@inheritDoc} */
     @Override
-    public ValidationResult validate(final ShoppingCart cart) {
+    public CartValidityModel validate(final ShoppingCart cart) {
 
         return getValidator(cart.getShoppingContext().getShopCode()).validate(cart);
 

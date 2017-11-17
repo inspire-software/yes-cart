@@ -17,11 +17,11 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.shoppingcart.CartValidityModel;
+import org.yes.cart.shoppingcart.CartValidityModelMessage;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.Collections;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -32,16 +32,17 @@ public class CheckoutBlockedValidator extends AbstractCartContentsValidatorImpl 
 
     /** {@inheritDoc} */
     @Override
-    public ValidationResult validate(final ShoppingCart cart) {
+    public CartValidityModel validate(final ShoppingCart cart) {
 
         final boolean checkoutBlocked = Boolean.valueOf(cart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT));
         if (checkoutBlocked) {
 
-            return new ValidationResultImpl(
-                    true,
-                    new Pair<String, Map<String, Object>>(
-                        "orderErrorCheckoutDisabled",
-                        Collections.singletonMap("email", cart.getCustomerEmail())
+            return new CartValidityModelImpl(
+                    new CartValidityModelMessageImpl(
+                            true,
+                            CartValidityModelMessage.MessageType.ERROR,
+                            "orderErrorCheckoutDisabled",
+                            Collections.singletonMap("email", cart.getCustomerEmail())
                     )
             );
         }

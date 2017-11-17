@@ -25,10 +25,10 @@ import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.CartContentsValidator;
+import org.yes.cart.shoppingcart.CartValidityModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.text.MessageFormat;
@@ -225,12 +225,8 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
-    public Pair<Boolean, List<Pair<String, Map<String, Object>>>> validateCart(final ShoppingCart shoppingCart) {
-        final CartContentsValidator.ValidationResult rez = cartContentsValidator.validate(shoppingCart);
-        return new Pair<Boolean, List<Pair<String, Map<String, Object>>>>(
-                rez.isCheckoutBlocked(),
-                rez.getMessages()
-        );
+    public CartValidityModel validateCart(final ShoppingCart shoppingCart) {
+        return cartContentsValidator.validate(shoppingCart);
     }
 
     /**
@@ -245,7 +241,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             throw new PlaceOrderDisabledException(shoppingCart.getCustomerEmail());
         }
 
-        if (validateCart(shoppingCart).getFirst()) {
+        if (validateCart(shoppingCart).isCheckoutBlocked()) {
             throw new OrderAssemblyException("Cart validation failed");
         }
 

@@ -16,7 +16,10 @@
 
 package org.yes.cart.web.support.service;
 
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
@@ -24,6 +27,7 @@ import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.CartValidityModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
@@ -187,7 +191,7 @@ public interface CheckoutServiceFacade {
      *
      * @return pair of flag and message options
      */
-    Pair<Boolean, List<Pair<String, Map<String, Object>>>> validateCart(ShoppingCart shoppingCart);
+    CartValidityModel validateCart(ShoppingCart shoppingCart);
 
     /**
      * Estimate the delivery time according to carrier sla and ietms in the order. This method is

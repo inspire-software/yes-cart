@@ -16,8 +16,9 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.CartContentsValidator;
+import org.yes.cart.shoppingcart.CartValidityModel;
+import org.yes.cart.shoppingcart.CartValidityModelMessage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,50 +32,93 @@ import java.util.Map;
  */
 public abstract class AbstractCartContentsValidatorImpl implements CartContentsValidator {
 
-    protected static final ValidationResult OK = new ValidationResultImpl(false) {
+    protected static final CartValidityModelImpl OK = new CartValidityModelImpl() {
         @Override
-        public void append(final ValidationResult validationResult) {
+        public void append(final CartValidityModel model) {
             throw new UnsupportedOperationException("Cannot append to OK result");
         }
     };
 
+    protected static class CartValidityModelMessageImpl implements CartValidityModelMessage {
 
-    protected static class ValidationResultImpl implements ValidationResult {
+        private final boolean checkoutBlocking;
+        private final MessageType messageType;
+        private final String messageKey;
+        private final Map<String, String> messageArgs;
 
-        private boolean checkoutBlocked;
-        private List<Pair<String, Map<String, Object>>> messages = new ArrayList<Pair<String, Map<String, Object>>>();
 
-        protected ValidationResultImpl(final boolean checkoutBlocked) {
-            this.checkoutBlocked = checkoutBlocked;
+        public CartValidityModelMessageImpl(final boolean checkoutBlocking,
+                                            final MessageType messageType,
+                                            final String messageKey,
+                                            final Map<String, String> messageArgs) {
+            this.checkoutBlocking = checkoutBlocking;
+            this.messageType = messageType;
+            this.messageKey = messageKey;
+            this.messageArgs = messageArgs;
         }
 
-        protected ValidationResultImpl(final boolean checkoutBlocked, final Pair<String, Map<String, Object>> message) {
-            this.checkoutBlocked = checkoutBlocked;
+        /** {@inheritDoc} */
+        @Override
+        public boolean isCheckoutBlocking() {
+            return checkoutBlocking;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public MessageType getMessageType() {
+            return messageType;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public String getMessageKey() {
+            return messageKey;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public Map<String, String> getMessageArgs() {
+            return messageArgs;
+        }
+        
+    }
+
+    protected static class CartValidityModelImpl implements CartValidityModel {
+
+        private final List<CartValidityModelMessage> messages = new ArrayList<CartValidityModelMessage>();
+
+        protected CartValidityModelImpl() {
+        }
+
+        protected CartValidityModelImpl(final CartValidityModelMessage message) {
             this.messages.add(message);
         }
 
-        protected ValidationResultImpl(final boolean checkoutBlocked, final List<Pair<String, Map<String, Object>>> messages) {
-            this.checkoutBlocked = checkoutBlocked;
+        protected CartValidityModelImpl(final List<CartValidityModelMessage> messages) {
             this.messages.addAll(messages);
         }
 
         /** {@inheritDoc} */
         @Override
         public boolean isCheckoutBlocked() {
-            return checkoutBlocked;
+            for (final CartValidityModelMessage message : this.messages) {
+                if (message.isCheckoutBlocking()) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /** {@inheritDoc} */
         @Override
-        public List<Pair<String, Map<String, Object>>> getMessages() {
+        public List<CartValidityModelMessage> getMessages() {
             return Collections.unmodifiableList(this.messages);
         }
 
         /** {@inheritDoc} */
         @Override
-        public void append(final ValidationResult validationResult) {
-            this.checkoutBlocked = this.checkoutBlocked || validationResult.isCheckoutBlocked();
-            this.messages.addAll(validationResult.getMessages());
+        public void append(final CartValidityModel model) {
+            this.messages.addAll(model.getMessages());
         }
 
     }

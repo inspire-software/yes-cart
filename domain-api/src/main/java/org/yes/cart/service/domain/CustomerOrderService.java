@@ -20,12 +20,10 @@ import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.order.OrderAssemblyException;
-import org.yes.cart.service.order.OrderException;
+import org.yes.cart.shoppingcart.CartValidityModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -142,7 +140,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      *
      * @return pair of flag and message options
      */
-    Pair<Boolean, List<Pair<String, Map<String, Object>>>> validateCart(ShoppingCart shoppingCart);
+    CartValidityModel validateCart(ShoppingCart shoppingCart);
 
     /**
      * Create customer order from shopping cart.

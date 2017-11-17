@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.shoppingcart.CartContentsValidator;
+import org.yes.cart.shoppingcart.CartValidityModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.List;
@@ -36,21 +37,19 @@ public class CompoundCartContentsValidator extends AbstractCartContentsValidator
 
     /** {@inheritDoc} */
     @Override
-    public ValidationResult validate(final ShoppingCart cart) {
+    public CartValidityModel validate(final ShoppingCart cart) {
 
-
-
-        final ValidationResult rez = new ValidationResultImpl(false);
+        final CartValidityModel rez = new CartValidityModelImpl();
 
         for (final CartContentsValidator validator : this.validators) {
 
-            final ValidationResult subRez = validator.validate(cart);
+            final CartValidityModel subRez = validator.validate(cart);
             if (subRez != null) {
                 rez.append(subRez);
             }
 
             if (rez.isCheckoutBlocked()) {
-                return rez; // Stop at first checkout blocking rezult
+                return rez; // Stop at first checkout blocking result
             }
 
         }

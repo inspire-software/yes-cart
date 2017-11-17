@@ -32,8 +32,28 @@ import java.util.Map;
 @XmlRootElement(name = "cart-validation-item")
 public class CartValidationItemRO {
 
+    private boolean checkoutBlocking;
+    private String messageType;
     private String messageKey;
     private Map<String, String> parameters;
+
+    @XmlAttribute(name = "checkout-blocking")
+    public boolean isCheckoutBlocking() {
+        return checkoutBlocking;
+    }
+
+    public void setCheckoutBlocking(final boolean checkoutBlocking) {
+        this.checkoutBlocking = checkoutBlocking;
+    }
+
+    @XmlAttribute(name = "message-type")
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(final String messageType) {
+        this.messageType = messageType;
+    }
 
     @XmlAttribute(name = "message-key")
     public String getMessageKey() {
