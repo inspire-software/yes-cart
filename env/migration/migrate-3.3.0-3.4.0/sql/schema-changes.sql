@@ -126,3 +126,15 @@ create index AV_SHOP_VAL on TSHOPATTRVALUE (INDEXVAL);
 
 alter table TSYSTEMATTRVALUE add column INDEXVAL varchar(255);
 create index AV_SYSTEM_VAL on TSYSTEMATTRVALUE (INDEXVAL);
+
+--
+-- YC-837 Extendable API for cart items validation
+--
+
+update TATTRIBUTE set DESCRIPTION = 'Property mapping for system customisations. E.g.
+SHOP10.pricingPolicyProvider=[bean name]
+SHOP10.priceResolver=[bean name]
+SHOP10.taxProvider=[bean name]
+SHOP10.productAvailabilityStrategy=[bean name]
+SHOP10.cartContentsValidator=[bean name]
+Main.inventoryResolver=[bean name]' where CODE = 'SYSTEM_EXTENSION_CFG_PROPERTIES';

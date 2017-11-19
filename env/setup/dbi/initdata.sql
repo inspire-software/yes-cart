@@ -301,6 +301,7 @@ SHOP10.pricingPolicyProvider=[bean name]
 SHOP10.priceResolver=[bean name]
 SHOP10.taxProvider=[bean name]
 SHOP10.productAvailabilityStrategy=[bean name]
+SHOP10.cartContentsValidator=[bean name]
 Main.inventoryResolver=[bean name]',  1012, 1000, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
