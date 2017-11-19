@@ -76,6 +76,8 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
         today.set(Calendar.MILLISECOND, 0);
 
         final int date = today.get(Calendar.DATE);
+        final int month = today.get(Calendar.MONTH);
+        final int year = today.get(Calendar.YEAR);
 
         final String criteria = " where e.shop.shopId in (?1) and e.createdTimestamp >= ?2 and e.orderStatus <> ?3";
 
@@ -95,13 +97,9 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
                 criteria, shops, today.getTime(), CustomerOrder.ORDER_STATUS_NONE
         );
 
-        if (today.get(Calendar.DATE) > date) {
-            // We moved one month back when going to start of the week
-            today.set(Calendar.DATE, 1);
-            today.add(Calendar.MONTH, 1);
-        } else {
-            today.set(Calendar.DATE, 1);
-        }
+        today.set(Calendar.DATE, 1);
+        today.set(Calendar.MONTH, month);
+        today.set(Calendar.YEAR, year);
 
         final int ordersMonth = this.customerOrderService.findCountByCriteria(
                 criteria, shops, today.getTime(), CustomerOrder.ORDER_STATUS_NONE
