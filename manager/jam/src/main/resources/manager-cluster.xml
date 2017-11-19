@@ -45,6 +45,7 @@
                     <list>
                         <ref bean="shopInventoryConfiguration"/>
                         <ref bean="shopPricingConfiguration"/>
+                        <ref bean="shopCartConfiguration"/>
                         <ref bean="warehouseInventoryConfiguration"/>
                     </list>
                 </property>
