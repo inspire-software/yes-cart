@@ -147,6 +147,7 @@
     <entry key="orderErrorGeneral">Сталася помилка при створені Вашого замовлення. Спробуйте ще раз.</entry>
     <entry key="orderErrorCouponInvalid">Промо-код '${coupon}' не може бути прийнятий. Будь-ласка видаліть його із кошика.</entry>
     <entry key="orderErrorSkuInvalid">${sku} знятий з продажу. Будь-ласка видаліть його із кошика.</entry>
+    <entry key="orderErrorSkuInvalidQty">Недостатньо ${sku} в наявності, будь ласка, спробуйте ввести меншу кількість в кошику.</entry>
     <entry key="orderErrorCheckoutDisabled">Ви не можете розміщувати замовлення. Будь ласка, зверніться до адміністратора магазину.</entry>
 
     <!-- COMPONENTS -->

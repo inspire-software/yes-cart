@@ -22,7 +22,9 @@ import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.CartValidityModel;
 import org.yes.cart.shoppingcart.CartValidityModelMessage;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.util.MoneyUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,16 +57,22 @@ public class ItemsAvailableValidator extends AbstractCartContentsValidatorImpl {
         final List<CartValidityModelMessage> unavailable = new ArrayList<CartValidityModelMessage>();
         for (final Map.Entry<DeliveryBucket, List<CartItem>> bucketAndItems : cart.getCartItemMap().entrySet()) {
 
-            if (CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP.equals(bucketAndItems.getKey().getGroup()) ||
-                    CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP.equals(bucketAndItems.getKey().getGroup())) {
+            final boolean offline = CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP.equals(bucketAndItems.getKey().getGroup());
+            final boolean nostock = offline || CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP.equals(bucketAndItems.getKey().getGroup());
+
+            if (offline || nostock) {
 
                 for (final CartItem item : bucketAndItems.getValue()) {
+
+                    final String messageKey =
+                            !offline && nostock && MoneyUtils.isFirstBiggerThanSecond(item.getQty(), BigDecimal.ONE) ?
+                                    "orderErrorSkuInvalidQty" : "orderErrorSkuInvalid";
 
                     unavailable.add(
                             new CartValidityModelMessageImpl(
                                     true,
                                     CartValidityModelMessage.MessageType.WARNING,
-                                    "orderErrorSkuInvalid",
+                                    messageKey,
                                     Collections.singletonMap("sku", "(" + item.getProductSkuCode() + ") " + item.getProductName())
                             )
                     );
