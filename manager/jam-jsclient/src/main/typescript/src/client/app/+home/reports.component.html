@@ -61,7 +61,7 @@
                       <div class="input-group">
                         <input class="form-control" name="{{ 'filename_' + i }}" type="text" [ngModel]="tab.filename" [disabled]="true">
                         <span class="input-group-btn">
-                          <button type="button" (click)="onDownloadClick()" class="btn" [disabled]="!tab.completed || !tab.success">
+                          <button type="button" (click)="onDownloadClick()" class="btn btn-default" [disabled]="!tab.completed || !tab.success">
                             <i class="fa fa-download"></i>
                           </button>
                         </span>

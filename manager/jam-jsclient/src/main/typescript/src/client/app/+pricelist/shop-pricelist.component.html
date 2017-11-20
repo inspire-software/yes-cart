@@ -110,10 +110,10 @@
               <div class="input-group">
                 <input class="form-control" formControlName="skuCode" name="skuCode" type="text" [(ngModel)]="pricelistEdit.skuCode">
                 <span class="input-group-btn">
-                  <button type="button" (click)="onSearchSKU()" class="btn" [disabled]="pricelistEdit == null || pricelistEdit.skuPriceId > 0">
+                  <button type="button" (click)="onSearchSKU()" class="btn btn-default" [disabled]="pricelistEdit == null || pricelistEdit.skuPriceId > 0">
                     <i class="fa fa-search"></i>
                   </button>
-                  <button type="button" (click)="onSearchSLA()" class="btn" [disabled]="pricelistEdit == null || pricelistEdit.skuPriceId > 0">
+                  <button type="button" (click)="onSearchSLA()" class="btn btn-default" [disabled]="pricelistEdit == null || pricelistEdit.skuPriceId > 0">
                     <i class="fa fa-truck"></i>
                   </button>
                 </span>

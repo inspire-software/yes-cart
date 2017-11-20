@@ -15,7 +15,7 @@
                   <div class="input-group">
                     <input class="form-control" placeholder="{{ 'CATEGORY_PARENT' | translate }}" formControlName="parentName" name="parentName" type="text" [(ngModel)]="category.parentName" [readonly]="true"/>
                     <span class="input-group-btn">
-                      <button type="button" (click)="onEditParent()" class="btn">
+                      <button type="button" (click)="onEditParent()" class="btn btn-default">
                         <i class="fa fa-edit"></i>
                       </button>
                     </span>
@@ -211,10 +211,10 @@
                   <div class="input-group">
                     <input class="form-control" placeholder="{{ 'CATEGORY_NAV_PRODUCT_TYPE' | translate }}" formControlName="productTypeName" name="parentName" type="text" [(ngModel)]="category.productTypeName" [readonly]="true"/>
                     <span class="input-group-btn">
-                      <button type="button" (click)="onClearProductType()" class="btn">
+                      <button type="button" (click)="onClearProductType()" class="btn btn-default">
                         <i class="fa fa-remove"></i>
                       </button>
-                      <button type="button" (click)="onEditProductType()" class="btn">
+                      <button type="button" (click)="onEditProductType()" class="btn btn-default">
                         <i class="fa fa-edit"></i>
                       </button>
                     </span>
@@ -341,7 +341,7 @@
           <div class="input-group">
             <input class="form-control" placeholder="{{ 'CURRENCY' | translate }}" name="currency" type="text" [(ngModel)]="navigationByPriceTiersAddCurrency"/>
             <span class="input-group-btn">
-              <button type="button" (click)="onEditPriceTiersAddCurrency()" class="btn">
+              <button type="button" (click)="onEditPriceTiersAddCurrency()" class="btn btn-default">
                 <i class="fa fa-plus"></i>
               </button>
             </span>

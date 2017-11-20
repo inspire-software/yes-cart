@@ -66,7 +66,7 @@
                   <div class="input-group">
                     <input class="form-control" placeholder="{{ 'PRODUCT_BRAND' | translate }}" formControlName="brandName" name="brandName" type="text" [ngModel]="product.brand?.name" [readonly]="true"/>
                     <span class="input-group-btn">
-                      <button type="button" (click)="onEditBrand()" class="btn">
+                      <button type="button" (click)="onEditBrand()" class="btn btn-default">
                         <i class="fa fa-edit"></i>
                       </button>
                     </span>
@@ -80,7 +80,7 @@
                   <div class="input-group">
                     <input class="form-control" placeholder="{{ 'PRODUCT_TYPE' | translate }}" formControlName="productTypeName" name="productTypeName" type="text" [ngModel]="product.productType?.name" [readonly]="true"/>
                     <span class="input-group-btn">
-                      <button type="button" (click)="onEditProductType()" class="btn">
+                      <button type="button" (click)="onEditProductType()" class="btn btn-default">
                         <i class="fa fa-edit"></i>
                       </button>
                     </span>

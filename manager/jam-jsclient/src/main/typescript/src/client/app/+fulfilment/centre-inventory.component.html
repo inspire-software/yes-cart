@@ -97,7 +97,7 @@
               <div class="input-group">
                 <input class="form-control" formControlName="skuCode" name="skuCode" type="text" [(ngModel)]="inventoryEdit.skuCode">
                 <span class="input-group-btn">
-                  <button type="button" (click)="onSearchSKU()" class="btn" [disabled]="inventoryEdit == null || inventoryEdit.skuWarehouseId > 0">
+                  <button type="button" (click)="onSearchSKU()" class="btn btn-default" [disabled]="inventoryEdit == null || inventoryEdit.skuWarehouseId > 0">
                     <i class="fa fa-search"></i>
                   </button>
                 </span>
