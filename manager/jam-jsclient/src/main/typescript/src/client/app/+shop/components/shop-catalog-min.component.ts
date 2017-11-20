@@ -187,27 +187,34 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
             _subs.unsubscribe();
             var _assignedIds: Array<number> = this.adaptToIds(cats);
 
-            var _subc:any = this._categoryService.getBranchCategories(current, []).subscribe(
+            var _subc:any = this._categoryService.getBranchesCategoriesPaths(_assignedIds).subscribe(
               cats => {
-                LogUtil.debug('ShopCatalogMinComponent branch categories', cats, _assignedIds);
-                let branchNodes = this.adaptToTree(cats, _assignedIds);
-
-                LogUtil.debug('ShopCatalogMinComponent adaptToTree', branchNodes);
-
-                let branch = this.resetCurrent(this.nodes, branchNodes[0]);
-                if (branch == null) {
-                  this.nodes = branchNodes;
-                  LogUtil.debug('ShopCatalogMinComponent root categories', this.nodes);
-                } else {
-                  LogUtil.debug('ShopCatalogMinComponent branch categories', this.nodes, branch);
-                }
-
-                this.selectedNode = null;
-                UiUtil.formInitialise(this, 'initialising', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
-                this.changed = false;
-                this._reload = false;
-                this.loading = false;
+                LogUtil.debug('ShopCatalogMinComponent loading branch path', cats);
                 _subc.unsubscribe();
+
+                var _subc2:any = this._categoryService.getBranchCategories(current, cats).subscribe(
+                  cats => {
+                    LogUtil.debug('ShopCatalogMinComponent branch categories', cats, _assignedIds);
+                    let branchNodes = this.adaptToTree(cats, _assignedIds);
+
+                    LogUtil.debug('ShopCatalogMinComponent adaptToTree', branchNodes);
+
+                    let branch = this.resetCurrent(this.nodes, branchNodes[0]);
+                    if (branch == null) {
+                      this.nodes = branchNodes;
+                      LogUtil.debug('ShopCatalogMinComponent root categories', this.nodes);
+                    } else {
+                      LogUtil.debug('ShopCatalogMinComponent branch categories', this.nodes, branch);
+                    }
+
+                    this.selectedNode = null;
+                    UiUtil.formInitialise(this, 'initialising', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+                    this.changed = false;
+                    this._reload = false;
+                    this.loading = false;
+                    _subc2.unsubscribe();
+                  }
+                );
               }
             );
           }

@@ -114,27 +114,32 @@ public class VoCategoryServiceImpl implements VoCategoryService {
         return loadCategoryTree(categoryDTOs);
     }
 
-    /** {@inheritDoc} */
-    public List<Long> getBranchPaths(final long categoryId) throws Exception {
+    private List<Long> getBranchPathsInternal(final long categoryId, final boolean checkAccess) throws Exception {
         final List<Long> path = new ArrayList<Long>();
-        if (federationFacade.isManageable(categoryId, CategoryDTO.class)) {
+        if (!checkAccess || federationFacade.isManageable(categoryId, CategoryDTO.class)) {
 
             path.add(categoryId);
 
             final long parentId = dtoCategoryService.getById(categoryId).getParentId();
 
             if (categoryId != parentId && parentId > 0) {
-                path.addAll(getBranchPaths(parentId));
+                // Check parents without access check because we may have mid-tree access
+                path.addAll(getBranchPathsInternal(parentId, false));
             }
 
             final CategoryService service = (CategoryService) dtoCategoryService.getService();
             for (final Long linked : service.getCategoryLinks(categoryId)) {
-
-                path.addAll(getBranchPaths(linked));
-
+                // Check links with access
+                path.addAll(getBranchPathsInternal(linked, true));
             }
         }
         return path;
+    }
+
+
+    /** {@inheritDoc} */
+    public List<Long> getBranchPaths(final long categoryId) throws Exception {
+        return getBranchPathsInternal(categoryId, true);
     }
 
     /** {@inheritDoc} */
