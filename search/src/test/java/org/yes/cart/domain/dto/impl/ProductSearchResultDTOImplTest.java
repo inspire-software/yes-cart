@@ -26,6 +26,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: Denis
@@ -47,6 +48,11 @@ public class ProductSearchResultDTOImplTest {
         first.setDisplayDescription("FirstDisplayDescription");
         first.setType("typeA");
         first.setDisplayType("displayTypeA");
+        first.setService(true);
+        first.setEnsemble(true);
+        first.setShippable(true);
+        first.setDigital(true);
+        first.setDownloadable(true);
         first.setTag("tag");
         first.setBrand("brand");
         first.setAvailablefrom(new Date());
@@ -73,6 +79,11 @@ public class ProductSearchResultDTOImplTest {
         assertEquals(first.getDisplayDescription(), copy.getDisplayDescription());
         assertEquals(first.getType(), copy.getType());
         assertEquals(first.getDisplayType(), copy.getDisplayType());
+        assertTrue(copy.isService());
+        assertTrue(copy.isEnsemble());
+        assertTrue(copy.isShippable());
+        assertTrue(copy.isDigital());
+        assertTrue(copy.isDownloadable());
         assertEquals(first.getTag(), copy.getTag());
         assertEquals(first.getBrand(), copy.getBrand());
         assertEquals(first.getAvailablefrom(), copy.getAvailablefrom());
@@ -90,5 +101,69 @@ public class ProductSearchResultDTOImplTest {
         assertFalse(first.equals(copy));
         assertFalse(first.hashCode() == copy.hashCode());
 
+    }
+
+    @Test
+    public void testTypeMask() throws Exception {
+
+        final ProductSearchResultDTOImpl dto = new ProductSearchResultDTOImpl();
+
+        assertFalse(dto.isService());
+        assertFalse(dto.isEnsemble());
+        assertFalse(dto.isShippable());
+        assertFalse(dto.isDigital());
+        assertFalse(dto.isDownloadable());
+
+        dto.setService(true);
+
+        assertTrue(dto.isService());
+        assertFalse(dto.isEnsemble());
+        assertFalse(dto.isShippable());
+        assertFalse(dto.isDigital());
+        assertFalse(dto.isDownloadable());
+
+        dto.setService(false);
+        dto.setEnsemble(true);
+
+        assertFalse(dto.isService());
+        assertTrue(dto.isEnsemble());
+        assertFalse(dto.isShippable());
+        assertFalse(dto.isDigital());
+        assertFalse(dto.isDownloadable());
+
+        dto.setEnsemble(false);
+        dto.setShippable(true);
+
+        assertFalse(dto.isService());
+        assertFalse(dto.isEnsemble());
+        assertTrue(dto.isShippable());
+        assertFalse(dto.isDigital());
+        assertFalse(dto.isDownloadable());
+
+        dto.setShippable(false);
+        dto.setDigital(true);
+
+        assertFalse(dto.isService());
+        assertFalse(dto.isEnsemble());
+        assertFalse(dto.isShippable());
+        assertTrue(dto.isDigital());
+        assertFalse(dto.isDownloadable());
+
+        dto.setDigital(false);
+        dto.setDownloadable(true);
+
+        assertFalse(dto.isService());
+        assertFalse(dto.isEnsemble());
+        assertFalse(dto.isShippable());
+        assertFalse(dto.isDigital());
+        assertTrue(dto.isDownloadable());
+
+        dto.setDownloadable(false);
+
+        assertFalse(dto.isService());
+        assertFalse(dto.isEnsemble());
+        assertFalse(dto.isShippable());
+        assertFalse(dto.isDigital());
+        assertFalse(dto.isDownloadable());
     }
 }

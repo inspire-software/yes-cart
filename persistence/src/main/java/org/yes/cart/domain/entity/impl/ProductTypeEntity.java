@@ -43,7 +43,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     private String uisearchtemplate;
     private boolean service;
     private boolean ensemble;
-    private boolean shippable;
+    private boolean shippable = true; // New types are shippable by default
     private boolean digital;
     private boolean downloadable;
     private Date createdTimestamp;

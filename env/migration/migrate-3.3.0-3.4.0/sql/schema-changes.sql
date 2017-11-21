@@ -138,3 +138,13 @@ SHOP10.taxProvider=[bean name]
 SHOP10.productAvailabilityStrategy=[bean name]
 SHOP10.cartContentsValidator=[bean name]
 Main.inventoryResolver=[bean name]' where CODE = 'SYSTEM_EXTENSION_CFG_PROPERTIES';
+
+
+--
+-- YC-838 Expose product type flags in Search DTO
+--
+
+-- OPTIONAL!!!! - Update shippable flag to true for all product types, since before this task
+-- the product type's shippable flag was set to false by default and on some legacy systems
+-- no one bothers to change it. If this was maintained then this update is not needed
+update TPRODUCTTYPE set SHIPPABLE = 1;

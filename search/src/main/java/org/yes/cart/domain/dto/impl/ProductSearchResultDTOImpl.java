@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.dto.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.dto.StoredAttributesDTO;
@@ -47,6 +48,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private String displayDescription;
     private String type;
     private String displayType;
+    private int typeMask;
     private String tag;
     private String brand;
     private Date availablefrom;
@@ -300,6 +302,70 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     }
 
+    // JSON accessor
+    public int getTypeMask() {
+        return typeMask;
+    }
+
+    public void setTypeMask(final int typeMask) {
+        this.typeMask = typeMask;
+    }
+
+    /** {@inheritDoc} */
+    @JsonIgnore
+    public boolean isService() {
+        return (this.typeMask & 2) != 0;
+    }
+
+    /** {@inheritDoc} */
+    public void setService(final boolean service) {
+        this.typeMask = service ? this.typeMask | 2 : this.typeMask ^ 2;
+    }
+
+    /** {@inheritDoc} */
+    @JsonIgnore
+    public boolean isEnsemble() {
+        return (this.typeMask & 4) != 0;
+    }
+
+    /** {@inheritDoc} */
+    public void setEnsemble(final boolean ensemble) {
+        this.typeMask = ensemble ? this.typeMask | 4 : this.typeMask ^ 4;
+    }
+
+    /** {@inheritDoc} */
+    @JsonIgnore
+    public boolean isShippable() {
+        return (this.typeMask & 8) != 0;
+    }
+
+    /** {@inheritDoc} */
+    public void setShippable(final boolean shippable) {
+        this.typeMask = shippable ? this.typeMask | 8 : this.typeMask ^ 8;
+    }
+
+    /** {@inheritDoc} */
+    @JsonIgnore
+    public boolean isDigital() {
+        return (this.typeMask & 16) != 0;
+    }
+
+    /** {@inheritDoc} */
+    public void setDigital(final boolean digital) {
+        this.typeMask = digital ? this.typeMask | 16 : this.typeMask ^ 16;
+    }
+
+    /** {@inheritDoc} */
+    @JsonIgnore
+    public boolean isDownloadable() {
+        return (this.typeMask & 32) != 0;
+    }
+
+    /** {@inheritDoc} */
+    public void setDownloadable(final boolean downloadable) {
+        this.typeMask = downloadable ? this.typeMask | 32 : this.typeMask ^ 32;
+    }
+
     /** {@inheritDoc} */
     public String getTag() {
         return tag;
@@ -419,6 +485,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         copy.setDisplayDescription(this.displayDescription);
         copy.setType(this.type);
         copy.setDisplayType(this.displayType);
+        copy.setTypeMask(this.typeMask);
         copy.setTag(this.tag);
         copy.setBrand(this.brand);
         copy.setAvailablefrom(this.availablefrom);

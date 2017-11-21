@@ -312,6 +312,78 @@ public interface ProductSearchResultDTO extends Identifiable {
 
 
     /**
+     * Is this product type service.
+     *
+     * @return true is this product service
+     */
+    boolean isService();
+
+    /**
+     * Set this product type as service. For example - Gift wrap
+     *
+     * @param service service flag to set.
+     */
+    void setService(boolean service);
+
+    /**
+     * Is this product type ensemble.
+     *
+     * @return true if ensemble
+     */
+    boolean isEnsemble();
+
+    /**
+     * Set product type to ensemble
+     *
+     * @param ensemble true is ensemble
+     */
+    void setEnsemble(boolean ensemble);
+
+    /**
+     * Is this product type can be shipped
+     *
+     * @return true if product shippable
+     */
+    boolean isShippable();
+
+
+    /**
+     * Set product type to shippable.
+     *
+     * @param shippable true if shippable
+     */
+    void setShippable(boolean shippable);
+
+    /**
+     * Is product digital.
+     *
+     * @return true if product digital.
+     */
+    boolean isDigital();
+
+    /**
+     * Set digital flag to product.
+     *
+     * @param digital flag to set
+     */
+    void setDigital(boolean digital);
+
+    /**
+     * Is digital product downloadable ?
+     *
+     * @return true in case if digital product can be downloaded.
+     */
+    boolean isDownloadable();
+
+    /**
+     * Set downloadable flag.
+     *
+     * @param downloadable flag to set.
+     */
+    void setDownloadable(boolean downloadable);
+
+
+    /**
      * Get the featured flag for product.
      *
      * @return set featured flag.

@@ -23,6 +23,7 @@ import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.dto.matcher.impl.NoopMatcher;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -67,6 +68,16 @@ public class ProductSearchResultRO implements Serializable {
     private String type;
     @DtoField(readOnly = true, converter = "i18nStringConverter")
     private Map<String, String> displayType;
+    @DtoField(readOnly = true)
+    private boolean service;
+    @DtoField(readOnly = true)
+    private boolean ensemble;
+    @DtoField(readOnly = true)
+    private boolean shippable;
+    @DtoField(readOnly = true)
+    private boolean digital;
+    @DtoField(readOnly = true)
+    private boolean downloadable;
     @DtoField(readOnly = true)
     private String tag;
     @DtoField(readOnly = true)
@@ -258,6 +269,51 @@ public class ProductSearchResultRO implements Serializable {
 
     public void setDisplayType(final Map<String, String> displayType) {
         this.displayType = displayType;
+    }
+
+    @XmlAttribute(name = "type-service")
+    public boolean isService() {
+        return service;
+    }
+
+    public void setService(final boolean service) {
+        this.service = service;
+    }
+
+    @XmlAttribute(name = "type-ensemble")
+    public boolean isEnsemble() {
+        return ensemble;
+    }
+
+    public void setEnsemble(final boolean ensemble) {
+        this.ensemble = ensemble;
+    }
+
+    @XmlAttribute(name = "type-shippable")
+    public boolean isShippable() {
+        return shippable;
+    }
+
+    public void setShippable(final boolean shippable) {
+        this.shippable = shippable;
+    }
+
+    @XmlAttribute(name = "type-digital")
+    public boolean isDigital() {
+        return digital;
+    }
+
+    public void setDigital(final boolean digital) {
+        this.digital = digital;
+    }
+
+    @XmlAttribute(name = "type-downloadable")
+    public boolean isDownloadable() {
+        return downloadable;
+    }
+
+    public void setDownloadable(final boolean downloadable) {
+        this.downloadable = downloadable;
     }
 
     public String getTag() {

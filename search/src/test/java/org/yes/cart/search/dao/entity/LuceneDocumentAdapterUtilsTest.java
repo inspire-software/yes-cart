@@ -42,6 +42,8 @@ public class LuceneDocumentAdapterUtilsTest {
         dto.setCode("CODE");
         dto.setAvailability(1);
         dto.setAvailablefrom(new Date());
+        dto.setShippable(true);
+        dto.setEnsemble(true);
         dto.setMaxOrderQuantity(BigDecimal.ONE);
         dto.setQtyOnWarehouse(new HashMap<Long, Map<String, BigDecimal>>() {{
             put(123L, new HashMap<String, BigDecimal>() {{
@@ -59,14 +61,19 @@ public class LuceneDocumentAdapterUtilsTest {
         assertEquals(1, dtoCopy.getAvailability());
         assertNotNull(dtoCopy.getAvailablefrom());
         assertEquals(BigDecimal.ONE, dtoCopy.getMaxOrderQuantity());
-        assertNotNull(dto.getQtyOnWarehouse());
-        assertNotNull(dto.getQtyOnWarehouse(123L));
-        assertEquals(BigDecimal.TEN, dto.getQtyOnWarehouse(123L).get("ABC"));
-        assertNotNull(dto.getAttributes());
-        assertNotNull(dto.getAttributes().getValue("attr1"));
-        assertEquals("val1", dto.getAttributes().getValue("attr1").getFirst());
-        assertNotNull(dto.getAttributes().getValue("attr1").getSecond());
-        assertEquals("name1", dto.getAttributes().getValue("attr1").getSecond().getValue("en"));
+        assertNotNull(((ProductSearchResultDTOImpl) dtoCopy).getQtyOnWarehouse());
+        assertNotNull(dtoCopy.getQtyOnWarehouse(123L));
+        assertEquals(BigDecimal.TEN, dtoCopy.getQtyOnWarehouse(123L).get("ABC"));
+        assertNotNull(dtoCopy.getAttributes());
+        assertNotNull(dtoCopy.getAttributes().getValue("attr1"));
+        assertEquals("val1", dtoCopy.getAttributes().getValue("attr1").getFirst());
+        assertNotNull(dtoCopy.getAttributes().getValue("attr1").getSecond());
+        assertEquals("name1", dtoCopy.getAttributes().getValue("attr1").getSecond().getValue("en"));
+        assertFalse(dtoCopy.isService());
+        assertTrue(dtoCopy.isShippable());
+        assertFalse(dtoCopy.isDigital());
+        assertFalse(dtoCopy.isDownloadable());
+        assertTrue(dtoCopy.isEnsemble());
 
     }
 
