@@ -57,13 +57,15 @@ public class PaymentGatewayCallbackEntityTest {
         values1.put("key1", new String[] { "value1" });
         values1.put("key2", new String[] { "value21", "value22", "value23" });
         values1.put("key3", new String[] { "value3" });
+        values1.put("key4", new String[] { "" });
 
         entity1.setParameterMap(values1);
 
         assertEquals(
                 "key1=value1\n" +
                 "key2=value21\tvalue22\tvalue23\n" +
-                "key3=value3",
+                "key3=value3\n" +
+                "key4=",
                 entity1.getParameterMapInternal()
         );
 
@@ -72,11 +74,12 @@ public class PaymentGatewayCallbackEntityTest {
         final Map<String, String[]> values2 = entity2.getParameterMap();
 
         final List<String> keys = new ArrayList<String>(values2.keySet());
-        assertArrayEquals(new String[] { "key1", "key2", "key3" }, keys.toArray());
+        assertArrayEquals(new String[] { "key1", "key2", "key3", "key4" }, keys.toArray());
 
         assertArrayEquals(new String[] { "value1" }, values2.get("key1"));
         assertArrayEquals(new String[] { "value21", "value22", "value23" }, values2.get("key2"));
         assertArrayEquals(new String[] { "value3" }, values2.get("key3"));
+        assertArrayEquals(new String[] { "" }, values2.get("key4"));
 
     }
 }

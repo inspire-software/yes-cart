@@ -134,8 +134,10 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
         final Map<String, String[]> map = new LinkedHashMap<String, String[]>();
         final String[] params = StringUtils.split(parameters, '\n');
         for (final String param : params) {
-            final String[] nameAndValues = StringUtils.split(param, '=');
-            map.put(nameAndValues[0], StringUtils.split(nameAndValues[1], '\t'));
+            final String[] nameAndValues = StringUtils.splitPreserveAllTokens(param, '=');
+            map.put(nameAndValues[0],
+                    nameAndValues.length > 1 && StringUtils.isNotBlank(nameAndValues[1]) ?
+                            StringUtils.split(nameAndValues[1], '\t') : new String[] { "" });
         }
         return map;
     }
