@@ -23,6 +23,7 @@ import org.yes.cart.domain.dto.matcher.impl.NoopMatcher;
 import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -81,6 +82,20 @@ public class ProductRO implements Serializable {
 
     @DtoField(value = "producttype.name", readOnly = true)
     private String productTypeName;
+
+    @DtoField(value = "producttype.displayName", converter = "i18nStringConverter", readOnly = true)
+    private Map<String, String> productTypeDisplayNames;
+
+    @DtoField(value = "producttype.service", readOnly = true)
+    private boolean service;
+    @DtoField(value = "producttype.ensemble", readOnly = true)
+    private boolean ensemble;
+    @DtoField(value = "producttype.shippable", readOnly = true)
+    private boolean shippable;
+    @DtoField(value = "producttype.digital", readOnly = true)
+    private boolean digital;
+    @DtoField(value = "producttype.downloadable", readOnly = true)
+    private boolean downloadable;
 
     @DtoField(value = "name")
     private String name;
@@ -250,6 +265,62 @@ public class ProductRO implements Serializable {
 
     public void setProductTypeName(final String productTypeName) {
         this.productTypeName = productTypeName;
+    }
+
+    @XmlJavaTypeAdapter(I18nMapAdapter.class)
+    @XmlElement(name = "product-type-display-names")
+    public Map<String, String> getProductTypeDisplayNames() {
+        return productTypeDisplayNames;
+    }
+
+    public void setProductTypeDisplayNames(final Map<String, String> productTypeDisplayNames) {
+        this.productTypeDisplayNames = productTypeDisplayNames;
+    }
+
+
+    @XmlAttribute(name = "type-service")
+    public boolean isService() {
+        return service;
+    }
+
+    public void setService(final boolean service) {
+        this.service = service;
+    }
+
+    @XmlAttribute(name = "type-ensemble")
+    public boolean isEnsemble() {
+        return ensemble;
+    }
+
+    public void setEnsemble(final boolean ensemble) {
+        this.ensemble = ensemble;
+    }
+
+    @XmlAttribute(name = "type-shippable")
+    public boolean isShippable() {
+        return shippable;
+    }
+
+    public void setShippable(final boolean shippable) {
+        this.shippable = shippable;
+    }
+
+    @XmlAttribute(name = "type-digital")
+    public boolean isDigital() {
+        return digital;
+    }
+
+    public void setDigital(final boolean digital) {
+        this.digital = digital;
+    }
+
+    @XmlAttribute(name = "type-downloadable")
+    public boolean isDownloadable() {
+        return downloadable;
+    }
+
+    public void setDownloadable(final boolean downloadable) {
+        this.downloadable = downloadable;
     }
 
     public String getName() {
