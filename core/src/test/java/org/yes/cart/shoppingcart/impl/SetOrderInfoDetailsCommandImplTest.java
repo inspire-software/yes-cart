@@ -65,6 +65,13 @@ public class SetOrderInfoDetailsCommandImplTest extends BaseCoreDBTestCase {
         assertEquals("002", shoppingCart.getOrderInfo().getDetailByKey("detail2"));
         assertEquals("003", shoppingCart.getOrderInfo().getDetailByKey("detail3"));
 
+        params.put(ShoppingCartCommand.CMD_SETORDERDETAILS, "detail3:");
+        commands.execute(shoppingCart, params);
+        assertEquals(2, shoppingCart.getOrderInfo().getDetails().size());
+        assertEquals("001", shoppingCart.getOrderInfo().getDetailByKey("detail1"));
+        assertEquals("002", shoppingCart.getOrderInfo().getDetailByKey("detail2"));
+
+
         params.put(ShoppingCartCommand.CMD_SETORDERDETAILS, null);
 
         commands.execute(shoppingCart, params);

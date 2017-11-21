@@ -70,15 +70,17 @@ public class OrderInfoImpl implements MutableOrderInfo {
 
     /** {@inheritDoc} */
     public void putDetail(final String key, final String detail) {
-        if (StringUtils.isBlank(detail)) {
-            getDetailsInternal().remove(key);
-            if (ORDER_MSG_KEY.equals(key)) {
-                this.orderMessage = null;
-            }
-        } else {
-            getDetailsInternal().put(key == null ? "" : key, detail);
-            if (ORDER_MSG_KEY.equals(key)) {
-                this.orderMessage = detail;
+        if (StringUtils.isNotBlank(key)) {
+            if (StringUtils.isBlank(detail)) {
+                getDetailsInternal().remove(key);
+                if (ORDER_MSG_KEY.equals(key)) {
+                    this.orderMessage = null;
+                }
+            } else {
+                getDetailsInternal().put(key, detail);
+                if (ORDER_MSG_KEY.equals(key)) {
+                    this.orderMessage = detail;
+                }
             }
         }
     }
