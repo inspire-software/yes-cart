@@ -96,6 +96,9 @@ export class ProductTypesComponent implements OnInit, OnDestroy {
 
   protected getFlags(row:ProductTypeInfoVO) {
     let flags = '';
+    if (row.service) {
+      flags += '<i class="fa fa-users"></i>&nbsp;';
+    }
     if (row.ensemble) {
       flags += '<i class="fa fa-gears"></i>&nbsp;';
     }

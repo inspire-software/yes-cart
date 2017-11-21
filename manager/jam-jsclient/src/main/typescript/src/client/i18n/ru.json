@@ -405,6 +405,7 @@
   "PRODUCT_TYPE_UITEMPLATE": "Шаблон товара",
   "PRODUCT_TYPE_UISEARCHTEMPLATE": "Шаблон категории",
   "PRODUCT_TYPE_FLAGS": "Конфигурации",
+  "PRODUCT_TYPE_FLAG_SERVICE": "Услуги",
   "PRODUCT_TYPE_FLAG_ENSEMBLE": "Сборный",
   "PRODUCT_TYPE_FLAG_SHIPPABLE": "Доставляемый",
   "PRODUCT_TYPE_FLAG_DOWNLOADABLE": "Загружаемый",

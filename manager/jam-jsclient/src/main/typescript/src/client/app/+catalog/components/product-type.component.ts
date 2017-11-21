@@ -84,6 +84,7 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
       'description': [''],
       'uitemplate': ['', YcValidators.noWhitespace],
       'uisearchtemplate': ['', YcValidators.noWhitespace],
+      'service': [''],
       'ensemble': [''],
       'shippable': [''],
       'downloadable': [''],

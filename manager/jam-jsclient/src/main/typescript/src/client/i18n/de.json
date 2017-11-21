@@ -405,6 +405,7 @@
   "PRODUCT_TYPE_UITEMPLATE": "Produkt Template",
   "PRODUCT_TYPE_UISEARCHTEMPLATE": "Kategorie Template",
   "PRODUCT_TYPE_FLAGS": "Konfigurationen",
+  "PRODUCT_TYPE_FLAG_SERVICE": "Dienstleistungen",
   "PRODUCT_TYPE_FLAG_ENSEMBLE": "Ensemble",
   "PRODUCT_TYPE_FLAG_SHIPPABLE": "Lieferbar",
   "PRODUCT_TYPE_FLAG_DOWNLOADABLE": "Downloadbar",

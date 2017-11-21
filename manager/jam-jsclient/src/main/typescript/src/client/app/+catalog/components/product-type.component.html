@@ -82,6 +82,10 @@
             <div class="panel-body">
               <fieldset>
                 <div>
+                  <input formControlName="service" name="service" type="checkbox" [(ngModel)]="productType.service">
+                  <label>{{ 'PRODUCT_TYPE_FLAG_SERVICE' | translate }}</label>
+                </div>
+                <div>
                   <input formControlName="ensemble" name="ensemble" type="checkbox" [(ngModel)]="productType.ensemble">
                   <label>{{ 'PRODUCT_TYPE_FLAG_ENSEMBLE' | translate }}</label>
                 </div>
