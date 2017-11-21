@@ -115,6 +115,10 @@ public class ProductSearchResultDTOImplTest {
         assertFalse(dto.isDownloadable());
 
         dto.setService(true);
+        dto.setEnsemble(false);
+        dto.setShippable(false);
+        dto.setDigital(false);
+        dto.setDownloadable(false);
 
         assertTrue(dto.isService());
         assertFalse(dto.isEnsemble());
@@ -124,6 +128,9 @@ public class ProductSearchResultDTOImplTest {
 
         dto.setService(false);
         dto.setEnsemble(true);
+        dto.setShippable(false);
+        dto.setDigital(false);
+        dto.setDownloadable(false);
 
         assertFalse(dto.isService());
         assertTrue(dto.isEnsemble());
@@ -131,8 +138,11 @@ public class ProductSearchResultDTOImplTest {
         assertFalse(dto.isDigital());
         assertFalse(dto.isDownloadable());
 
+        dto.setService(false);
         dto.setEnsemble(false);
         dto.setShippable(true);
+        dto.setDigital(false);
+        dto.setDownloadable(false);
 
         assertFalse(dto.isService());
         assertFalse(dto.isEnsemble());
@@ -140,8 +150,11 @@ public class ProductSearchResultDTOImplTest {
         assertFalse(dto.isDigital());
         assertFalse(dto.isDownloadable());
 
+        dto.setService(false);
+        dto.setEnsemble(false);
         dto.setShippable(false);
         dto.setDigital(true);
+        dto.setDownloadable(false);
 
         assertFalse(dto.isService());
         assertFalse(dto.isEnsemble());
@@ -149,6 +162,9 @@ public class ProductSearchResultDTOImplTest {
         assertTrue(dto.isDigital());
         assertFalse(dto.isDownloadable());
 
+        dto.setService(false);
+        dto.setEnsemble(false);
+        dto.setShippable(false);
         dto.setDigital(false);
         dto.setDownloadable(true);
 
@@ -158,6 +174,10 @@ public class ProductSearchResultDTOImplTest {
         assertFalse(dto.isDigital());
         assertTrue(dto.isDownloadable());
 
+        dto.setService(false);
+        dto.setEnsemble(false);
+        dto.setShippable(false);
+        dto.setDigital(false);
         dto.setDownloadable(false);
 
         assertFalse(dto.isService());
@@ -165,5 +185,42 @@ public class ProductSearchResultDTOImplTest {
         assertFalse(dto.isShippable());
         assertFalse(dto.isDigital());
         assertFalse(dto.isDownloadable());
+
+        dto.setService(false);
+        dto.setEnsemble(false);
+        dto.setShippable(false);
+        dto.setDigital(false);
+        dto.setDownloadable(false);
+
+        assertFalse(dto.isService());
+        assertFalse(dto.isEnsemble());
+        assertFalse(dto.isShippable());
+        assertFalse(dto.isDigital());
+        assertFalse(dto.isDownloadable());
+
+        dto.setService(true);
+        dto.setEnsemble(true);
+        dto.setShippable(true);
+        dto.setDigital(true);
+        dto.setDownloadable(true);
+
+        assertTrue(dto.isService());
+        assertTrue(dto.isEnsemble());
+        assertTrue(dto.isShippable());
+        assertTrue(dto.isDigital());
+        assertTrue(dto.isDownloadable());
+
+        dto.setService(false);
+        dto.setEnsemble(false);
+        dto.setShippable(false);
+        dto.setDigital(false);
+        dto.setDownloadable(false);
+
+        assertFalse(dto.isService());
+        assertFalse(dto.isEnsemble());
+        assertFalse(dto.isShippable());
+        assertFalse(dto.isDigital());
+        assertFalse(dto.isDownloadable());
+
     }
 }

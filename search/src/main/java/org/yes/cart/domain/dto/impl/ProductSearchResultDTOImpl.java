@@ -319,7 +319,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     /** {@inheritDoc} */
     public void setService(final boolean service) {
-        this.typeMask = service ? this.typeMask | 2 : this.typeMask ^ 2;
+        this.typeMask = service ? this.typeMask | 2 : this.typeMask & ~ 2;
     }
 
     /** {@inheritDoc} */
@@ -330,7 +330,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     /** {@inheritDoc} */
     public void setEnsemble(final boolean ensemble) {
-        this.typeMask = ensemble ? this.typeMask | 4 : this.typeMask ^ 4;
+        this.typeMask = ensemble ? this.typeMask | 4 : this.typeMask & ~ 4;
     }
 
     /** {@inheritDoc} */
@@ -341,7 +341,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     /** {@inheritDoc} */
     public void setShippable(final boolean shippable) {
-        this.typeMask = shippable ? this.typeMask | 8 : this.typeMask ^ 8;
+        this.typeMask = shippable ? this.typeMask | 8 : this.typeMask & ~ 8;
     }
 
     /** {@inheritDoc} */
@@ -352,7 +352,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     /** {@inheritDoc} */
     public void setDigital(final boolean digital) {
-        this.typeMask = digital ? this.typeMask | 16 : this.typeMask ^ 16;
+        this.typeMask = digital ? this.typeMask | 16 : this.typeMask & ~ 16;
     }
 
     /** {@inheritDoc} */
@@ -363,7 +363,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     /** {@inheritDoc} */
     public void setDownloadable(final boolean downloadable) {
-        this.typeMask = downloadable ? this.typeMask | 32 : this.typeMask ^ 32;
+        this.typeMask = downloadable ? this.typeMask | 32 : this.typeMask & ~ 32;
     }
 
     /** {@inheritDoc} */
