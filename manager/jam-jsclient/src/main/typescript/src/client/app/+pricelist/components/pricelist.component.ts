@@ -93,6 +93,14 @@ export class PriceListComponent implements OnInit, OnDestroy {
     this.dataSelected.emit(this.selectedPricelist);
   }
 
+  protected isAvailableFromNow(row:PriceListVO) {
+    return row.salefrom === null || (row.salefrom < new Date());
+  }
+
+  protected isAvailableToNow(row:PriceListVO) {
+    return row.saleto === null || (row.saleto > new Date());
+  }
+
   private filterPricelist() {
 
     this.filteredPricelist = this._pricelist;
