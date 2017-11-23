@@ -1995,7 +1995,7 @@
 
         <property name="b2bRef" column="B2B_REF" type="string" length="64"/>
         <property name="b2bEmployeeId" column="B2B_EMPLOYEEID" type="string" length="64"/>
-        <property name="b2bChargeId" column="B2B_CHARGEID" type="string" length="64"/>
+        <property name="b2bChargeId" column="B2B_CHARGEID" type="string" length="255"/>
         <property name="b2bRequireApprove" column="B2B_APPROVE_REQUIRE" type="boolean" length="1" not-null="true"/>
         <property name="b2bApprovedBy" column="B2B_APPROVEDBY" type="string" length="64"/>
         <property name="b2bApprovedDate" column="B2B_APPROVED_DATE" type="timestamp"/>

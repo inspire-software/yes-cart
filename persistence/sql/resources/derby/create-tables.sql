@@ -328,7 +328,7 @@
         EXPORT_LAST_ORDERSTATUS varchar(64),
         B2B_REF varchar(64),
         B2B_EMPLOYEEID varchar(64),
-        B2B_CHARGEID varchar(64),
+        B2B_CHARGEID varchar(255),
         B2B_APPROVE_REQUIRE smallint not null default 0,
         B2B_APPROVEDBY varchar(64),
         B2B_APPROVED_DATE timestamp,

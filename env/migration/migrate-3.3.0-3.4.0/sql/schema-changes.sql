@@ -148,3 +148,10 @@ Main.inventoryResolver=[bean name]' where CODE = 'SYSTEM_EXTENSION_CFG_PROPERTIE
 -- the product type's shippable flag was set to false by default and on some legacy systems
 -- no one bothers to change it. If this was maintained then this update is not needed
 update TPRODUCTTYPE set SHIPPABLE = 1;
+
+--
+-- YC-000 increase size of B2B charge ID
+
+alter table TCUSTOMERORDER modify B2B_CHARGEID varchar(255);
+-- alter table TCUSTOMERORDER alter column B2B_CHARGEID set data type varchar(255);
+
