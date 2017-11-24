@@ -54,6 +54,13 @@ public interface IndexBuilder<T, PK extends Serializable> {
     }
 
     /**
+     * Index name.
+     *
+     * @return name
+     */
+    String getName();
+
+    /**
      * @return state of full text index.
      */
     FTIndexState getFullTextIndexState();

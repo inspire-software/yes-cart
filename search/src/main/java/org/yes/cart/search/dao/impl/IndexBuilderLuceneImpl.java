@@ -181,7 +181,12 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
     private final AtomicInteger asyncRunningState = new AtomicInteger(IDLE);
     private final AtomicLong currentIndexingCount = new AtomicLong(0);
 
-
+    /**
+     * {@inheritDoc}
+     */
+    public String getName() {
+        return indexProvider.getName();
+    }
 
     /**
      * {@inheritDoc}
