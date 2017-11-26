@@ -44,7 +44,7 @@
          [valid]="validForSave"
          (closed)="onEditModalResult($event)">
 
-    <template [ngIf]="isBooleanEditor()">
+    <template [ngIf]="booleanEditor">
 
       <form role="form">
         <fieldset>
@@ -64,7 +64,7 @@
 
     </template>
 
-    <template [ngIf]="isMiniTextEditor()">
+    <template [ngIf]="miniTextEditor">
 
       <form role="form">
         <fieldset>
@@ -85,7 +85,7 @@
     </template>
 
 
-    <template [ngIf]="isTextEditor()">
+    <template [ngIf]="textEditor">
 
       <form role="form">
         <fieldset>
@@ -106,7 +106,7 @@
     </template>
 
 
-    <template [ngIf]="isTextAreaEditor()">
+    <template [ngIf]="textAreaEditor">
 
       <form role="form">
         <fieldset>
@@ -127,7 +127,7 @@
     </template>
 
 
-    <template [ngIf]="isLocalisableEditor()">
+    <template [ngIf]="localisableEditor">
 
       <form role="form">
         <fieldset>
@@ -150,7 +150,7 @@
 
     </template>
 
-    <template [ngIf]="isImageEditor()">
+    <template [ngIf]="imageEditor">
 
       <form role="form">
         <fieldset>
@@ -184,7 +184,7 @@
     </template>
 
 
-    <template [ngIf]="isFileEditor()">
+    <template [ngIf]="fileEditor">
 
       <form role="form">
         <fieldset>
@@ -213,6 +213,20 @@
 
     </template>
 
+
+    <template [ngIf]="lockedEditor">
+
+      <form role="form">
+        <fieldset>
+          <div class="row" [hidden]="!attributeToEdit.attribute.description">
+            <div class="col-xs-12">
+              <pre class="bg-success">{{ attributeToEdit.attribute.description }}</pre>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </template>
 
   </yc-modal>
 

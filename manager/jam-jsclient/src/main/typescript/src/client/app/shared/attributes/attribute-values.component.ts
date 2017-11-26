@@ -76,6 +76,15 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   private attributeToEditImagePreviewAvailable:boolean = true;
   private attributeToEditImagePreview:string = '';
 
+  private booleanEditor:boolean = false;
+  private miniTextEditor:boolean = false;
+  private textEditor:boolean = false;
+  private textAreaEditor:boolean = false;
+  private localisableEditor:boolean = false;
+  private imageEditor:boolean = false;
+  private fileEditor:boolean = false;
+  private lockedEditor:boolean = false;
+
   /**
    * Construct attribute panel
    */
@@ -153,6 +162,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     LogUtil.debug('AttributeValuesComponent onRowEdit handler', row);
     this.validForSave = false;
     this.attributeToEdit = Util.clone(row);
+    this.detectAttributeEditor(this.attributeToEdit);
     this.processImageView(this.attributeToEdit);
     this.editModalDialog.show();
   }
@@ -252,6 +262,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
   protected onEditModalResult(modalresult: ModalResult) {
     LogUtil.debug('AttributeValuesComponent onEditModalResult modal result is ', modalresult);
+    this.detectAttributeEditor(null);
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.attributeToEdit.attrvalueId === 0) { // add new
         LogUtil.debug('AttributeValuesComponent onEditModalResult add new attribute', this._objectAttributes);
@@ -372,47 +383,52 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     return '&nbsp;';
   }
 
-  protected isBooleanEditor():boolean {
-    return this.attributeToEdit && this.attributeToEdit.attribute.etypeName === 'Boolean';
-  }
+  detectAttributeEditor(av:AttrValueVO) {
 
-  protected isImageEditor():boolean {
-    return this.attributeToEdit && this.attributeToEdit.attribute.etypeName === 'Image';
-  }
+    this.booleanEditor = false;
+    this.miniTextEditor = false;
+    this.textEditor = false;
+    this.textAreaEditor = false;
+    this.localisableEditor = false;
+    this.imageEditor = false;
+    this.fileEditor = false;
+    this.lockedEditor = false;
 
-  protected isFileEditor():boolean {
-    return this.attributeToEdit &&
-      (this.attributeToEdit.attribute.etypeName === 'File'
-      || this.attributeToEdit.attribute.etypeName === 'SystemFile');
-  }
+    if (av != null) {
 
-  protected isLocalisableEditor():boolean {
-    return this.attributeToEdit && this.attributeToEdit.attribute.etypeName === 'String';
-  }
-
-  protected isTextAreaEditor():boolean {
-    return this.attributeToEdit &&
-      (this.attributeToEdit.attribute.etypeName === 'CommaSeparatedList'
-      || this.attributeToEdit.attribute.etypeName === 'HTML'
-      || this.attributeToEdit.attribute.etypeName === 'Any'
-      || this.attributeToEdit.attribute.etypeName === 'Properties');
-  }
-
-  protected isMiniTextEditor():boolean {
-    return this.attributeToEdit &&
-      (this.attributeToEdit.attribute.etypeName === 'Float'
-      || this.attributeToEdit.attribute.etypeName === 'Integer'
-      || this.attributeToEdit.attribute.etypeName === 'Date');
-  }
-
-  protected isTextEditor():boolean {
-    return this.attributeToEdit &&
-      !this.isBooleanEditor()
-      && !this.isImageEditor()
-      && !this.isFileEditor()
-      && !this.isLocalisableEditor()
-      && !this.isTextAreaEditor()
-      && !this.isMiniTextEditor();
+      switch (av.attribute.etypeName) {
+        case 'String':
+          this.localisableEditor = true;
+          break;
+        case 'Boolean':
+          this.booleanEditor = true;
+          break;
+        case 'Image':
+          this.imageEditor = true;
+          break;
+        case 'File':
+        case 'SystemFile':
+          this.fileEditor = true;
+          break;
+        case 'CommaSeparatedList':
+        case 'HTML':
+        case 'Any':
+        case 'Properties':
+          this.textAreaEditor = true;
+          break;
+        case 'Float':
+        case 'Integer':
+        case 'Date':
+          this.miniTextEditor = true;
+          break;
+        case 'Locked':
+          this.lockedEditor = true;
+          break;
+        default:
+          this.textEditor = true;
+          break;
+      }
+    }
   }
 
   processImageView(av:AttrValueVO) {

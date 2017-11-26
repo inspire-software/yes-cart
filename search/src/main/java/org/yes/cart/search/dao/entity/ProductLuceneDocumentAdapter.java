@@ -142,8 +142,10 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 addSortFields(document, PRODUCT_DISPLAYNAME_SORT_FIELD, displayName);
 
                 final I18NModel displayType = new StringI18NModel(entity.getProducttype().getDisplayName());
-                addSearchField(document, PRODUCT_TYPE_FIELD, entity.getProducttype().getName());
-                addSearchFields(document, PRODUCT_TYPE_FIELD, displayType);
+                addSearchField(document, PRODUCT_TYPE_FIELD_SEARCH, entity.getProducttype().getName());
+                addSearchFields(document, PRODUCT_TYPE_FIELD_SEARCH, displayType);
+                addSimpleField(document, PRODUCT_TYPE_FIELD, entity.getProducttype().getName());
+                addFacetField(document, "facet_productType", entity.getProducttype().getName(), entity.getProducttype().getDisplayName());
                 addStemField(document, PRODUCT_TYPE_STEM_FIELD, entity.getProducttype().getName());
                 addStemFields(document, PRODUCT_TYPE_STEM_FIELD, displayType);
 

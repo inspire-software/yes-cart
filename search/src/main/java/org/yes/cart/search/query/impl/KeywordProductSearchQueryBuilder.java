@@ -53,7 +53,7 @@ public class KeywordProductSearchQueryBuilder extends AbstractKeywordSearchQuery
         query.add(createFuzzyQuery(PRODUCT_CATEGORYNAME_FIELD, escapedTerm, 2, 5f), BooleanClause.Occur.SHOULD);
 
         // product type weight (7~2) higher then name and category for searching general type products (e.g. "usb stick")
-        query.add(createFuzzyQuery(PRODUCT_TYPE_FIELD, escapedTerm, 2, 7f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(PRODUCT_TYPE_FIELD_SEARCH, escapedTerm, 2, 7f), BooleanClause.Occur.SHOULD);
 
         // product code matches (10) so that exact code match brings top result
         query.add(createTermQuery(PRODUCT_CODE_FIELD_SEARCH, escapedTerm,  10f), BooleanClause.Occur.SHOULD);
@@ -93,7 +93,7 @@ public class KeywordProductSearchQueryBuilder extends AbstractKeywordSearchQuery
         query.add(createFuzzyQuery(PRODUCT_CATEGORYNAME_STEM_FIELD, escapedTerm, 1, 1.5f), BooleanClause.Occur.SHOULD);
 
         // product type weight (7~2/2~1) higher then name and category for searching general type products (e.g. "usb stick")
-        query.add(createFuzzyQuery(PRODUCT_TYPE_FIELD, escapedTerm, 2, 7f), BooleanClause.Occur.SHOULD);
+        query.add(createFuzzyQuery(PRODUCT_TYPE_FIELD_SEARCH, escapedTerm, 2, 7f), BooleanClause.Occur.SHOULD);
         query.add(createFuzzyQuery(PRODUCT_TYPE_STEM_FIELD, escapedTerm, 1, 2f), BooleanClause.Occur.SHOULD);
 
         // product code matches (10/7~1/2~1) so that exact code match brings top result
@@ -144,7 +144,7 @@ public class KeywordProductSearchQueryBuilder extends AbstractKeywordSearchQuery
         query.add(createFuzzyQuery(PRODUCT_CATEGORYNAME_STEM_FIELD, escapedStem, 1, 1.5f), BooleanClause.Occur.SHOULD);
 
         // product type weight (7/2~1) higher then name and category for searching general type products (e.g. "usb stick")
-        query.add(createTermQuery(PRODUCT_TYPE_FIELD, escapedStem, 7f), BooleanClause.Occur.SHOULD);
+        query.add(createTermQuery(PRODUCT_TYPE_FIELD_SEARCH, escapedStem, 7f), BooleanClause.Occur.SHOULD);
         query.add(createFuzzyQuery(PRODUCT_TYPE_STEM_FIELD, escapedStem, 1, 1f), BooleanClause.Occur.SHOULD);
 
         // product code matches (10/2~1) so that exact code match brings top result

@@ -31,8 +31,9 @@ public interface ProductSearchQueryBuilder<T> extends SearchQueryBuilder<T> {
     String PRODUCT_DISPLAYNAME_STEM_FIELD = "displayName_stem";
     String PRODUCT_CATEGORYNAME_FIELD = "categoryName";
     String PRODUCT_CATEGORYNAME_STEM_FIELD = "categoryName_stem";
-    String PRODUCT_TYPE_FIELD = "type";
-    String PRODUCT_TYPE_STEM_FIELD = "type_stem";
+    String PRODUCT_TYPE_FIELD_SEARCH = "productType_search";
+    String PRODUCT_TYPE_FIELD = "productType";
+    String PRODUCT_TYPE_STEM_FIELD = "productType_stem";
     String PRODUCT_CODE_FIELD = "code";
     String PRODUCT_CODE_FIELD_SEARCH = "code_search";
     String PRODUCT_CODE_SORT_FIELD = "code_sort";

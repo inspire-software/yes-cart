@@ -155,3 +155,13 @@ update TPRODUCTTYPE set SHIPPABLE = 1;
 alter table TCUSTOMERORDER modify B2B_CHARGEID varchar(255);
 -- alter table TCUSTOMERORDER alter column B2B_CHARGEID set data type varchar(255);
 
+--
+-- YC-821 Allow product type filter navigation
+--
+
+INSERT INTO TETYPE (ETYPE_ID, JAVATYPE, BUSINESSTYPE, GUID) VALUES (1099, 'java.lang.String', 'Locked', 'Locked');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11026,  'productType', 'productType',  0,  NULL,  'Product type',  'Product type (used for product type navigation)',  1099, 1003, 0, 0, 0, 0);
+
+

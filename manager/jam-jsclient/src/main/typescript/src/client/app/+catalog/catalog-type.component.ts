@@ -264,6 +264,13 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onClearFilter() {
+
+    this.typeFilter = '';
+    this.getFilteredTypes();
+
+  }
+
   private getFilteredTypes() {
     this.typeFilterRequired = !this.forceShowAll && (this.typeFilter == null || this.typeFilter.length < 2);
 
