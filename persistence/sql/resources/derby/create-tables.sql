@@ -215,7 +215,6 @@
         DISPLAY_METAKEYWORDS varchar(4000),
         DISPLAY_METADESCRIPTION varchar(4000),
         NAV_BY_ATTR smallint,
-        NAV_BY_BRAND smallint,
         NAV_BY_PRICE smallint,
         NAV_BY_PRICE_TIERS varchar(4000),
         CREATED_TIMESTAMP timestamp,

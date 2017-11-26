@@ -44,7 +44,6 @@
     <bean id="priceLuceneQueryBuilder" class="org.yes.cart.search.query.impl.PriceSearchQueryBuilder">
         <constructor-arg index="0" ref="priceNavigation"/>
     </bean>
-    <bean id="brandLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductBrandSearchQueryBuilder"/>
     <bean id="productCategoryLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductCategorySearchQueryBuilder"/>
     <bean id="productCategoryIncludingParentsLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductCategoryIncludingParentsSearchQueryBuilder"/>
     <bean id="productShopLuceneQueryBuilder" class="org.yes.cart.search.query.impl.ProductShopSearchQueryBuilder"/>
@@ -74,7 +73,6 @@
                 <entry key="code"           value-ref="productCodeLuceneQueryBuilder"/>
 
                 <!-- Searching from url -->
-                <entry key="brand"          value-ref="brandLuceneQueryBuilder"/>
                 <entry key="query"          value-ref="keywordProductLuceneQueryBuilder"/>
                 <entry key="tag"            value-ref="productTagLuceneQueryBuilder"/>
                 <entry key="price"          value-ref="priceLuceneQueryBuilder"/>

@@ -209,7 +209,6 @@
         DISPLAY_METAKEYWORDS longtext,
         DISPLAY_METADESCRIPTION longtext,
         NAV_BY_ATTR bit comment 'Filtered navigation by attribute values',
-        NAV_BY_BRAND bit comment 'Filtered navigation by brand',
         NAV_BY_PRICE bit comment 'Filtered navigation by price range',
         NAV_BY_PRICE_TIERS longtext comment 'Optional price range configuration. Default shop price tiers configuration will used if empty',
         CREATED_TIMESTAMP datetime,

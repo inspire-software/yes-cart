@@ -45,7 +45,6 @@ public interface BreadCrumbsBuilder {
      * @param categoryId            current category id
      * @param pageParameters        current query string
      * @param shopCategoryIds       all categoryIds, that belong to shop
-     * @param brandPrefix           prefix for brand
      * @param pricePrefix           prefix for price
      * @param queryPrefix           prefix for search
      * @param tagPrefix             prefix for tag
@@ -57,7 +56,6 @@ public interface BreadCrumbsBuilder {
                                long categoryId,
                                PageParameters pageParameters,
                                Set<Long> shopCategoryIds,
-                               String brandPrefix,
                                String pricePrefix,
                                String queryPrefix,
                                String tagPrefix);

@@ -91,25 +91,23 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                                       final long categoryId,
                                       final PageParameters pageParameters,
                                       final Set<Long> shopCategoryIds,
-                                      final String brandPrefix,
                                       final String pricePrefix,
                                       final String queryPrefix,
                                       final String tagPrefix) {
 
         final List<Crumb> crumbs = new ArrayList<Crumb>();
         crumbs.addAll(getCategoriesCrumbs(shopId, categoryId, shopCategoryIds, pageParameters.getNamedKeys().contains(WebParametersKeys.CONTENT_ID)));
-        crumbs.addAll(getFilteredNavigationCrumbs(locale, pageParameters, brandPrefix, pricePrefix, queryPrefix, tagPrefix));
+        crumbs.addAll(getFilteredNavigationCrumbs(locale, pageParameters, pricePrefix, queryPrefix, tagPrefix));
         return crumbs;
     }
 
     private List<Crumb> getFilteredNavigationCrumbs(final String locale,
                                                     final PageParameters pageParameters,
-                                                    final String brandPrefix,
                                                     final String pricePrefix,
                                                     final String queryPrefix,
                                                     final String tagPrefix) {
         final List<Crumb> navigationCrumbs = new ArrayList<Crumb>();
-        fillAttributes(locale, navigationCrumbs, pageParameters, brandPrefix, pricePrefix, queryPrefix, tagPrefix);
+        fillAttributes(locale, navigationCrumbs, pageParameters, pricePrefix, queryPrefix, tagPrefix);
         return navigationCrumbs;
     }
 
@@ -185,7 +183,6 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
     private void fillAttributes(final String locale,
                                 final List<Crumb> navigationCrumbs,
                                 final PageParameters pageParameters,
-                                final String brandPrefix,
                                 final String pricePrefix,
                                 final String queryPrefix,
                                 final String tagPrefix) {
@@ -218,7 +215,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
             final String displayValueName = determineDisplayValueName(namedPair.getKey(), namedPair.getValue(), locale);
             navigationCrumbs.add(createFilteredNavigationCrumb(
                     base, namedPair.getKey(), namedPair.getValue(), displayValueName, locale, pageParameters,
-                    brandPrefix, pricePrefix, queryPrefix, tagPrefix, attributeCodeName));
+                    pricePrefix, queryPrefix, tagPrefix, attributeCodeName));
         }
     }
 
@@ -269,7 +266,6 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                                                 final String displayValue,
                                                 final String locale,
                                                 final PageParameters pageParameters,
-                                                final String brandPrefix,
                                                 final String pricePrefix,
                                                 final String queryPrefix,
                                                 final String tagPrefix,
@@ -281,7 +277,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                 value
         );
 
-        String linkName = getLinkNamePrefix(key, locale, brandPrefix, pricePrefix, queryPrefix, tagPrefix, attributeCodeName);
+        String linkName = getLinkNamePrefix(key, locale, pricePrefix, queryPrefix, tagPrefix, attributeCodeName);
         if (StringUtils.isNotBlank(linkName)) {
             linkName += "::" + getLinkName(key, value, displayValue);
         } else {
@@ -294,15 +290,12 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
 
     private String getLinkNamePrefix(final String key,
                                      final String locale,
-                                     final String brandPrefix,
                                      final String pricePrefix,
                                      final String queryPrefix,
                                      final String tagPrefix,
                                      final Map<String, I18NModel> attributeCodeName) {
         final String name;
-        if (ProductSearchQueryBuilder.BRAND_FIELD.equals(key)) {
-            name = brandPrefix;
-        } else if (ProductSearchQueryBuilder.PRODUCT_PRICE.equals(key)) {
+        if (ProductSearchQueryBuilder.PRODUCT_PRICE.equals(key)) {
             name = pricePrefix;
         } else if (ProductSearchQueryBuilder.PRODUCT_TAG_FIELD.equals(key)) {
             name = tagPrefix;

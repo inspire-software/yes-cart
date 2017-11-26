@@ -274,11 +274,6 @@
         <constructor-arg index="2" ref="productTypeAttrService"/>
     </bean>
 
-    <bean id="brandFilteredNavigationSupport" class="org.yes.cart.web.page.component.filterednavigation.impl.BrandFilteredNavigationSupportImpl">
-        <constructor-arg index="0" ref="luceneQueryFactory"/>
-        <constructor-arg index="1" ref="productService"/>
-    </bean>
-
     <bean id="priceFilteredNavigationSupport" class="org.yes.cart.web.page.component.filterednavigation.impl.PriceFilteredNavigationSupportImpl">
         <constructor-arg index="0" ref="luceneQueryFactory"/>
         <constructor-arg index="1" ref="productService"/>

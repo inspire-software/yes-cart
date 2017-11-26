@@ -242,19 +242,6 @@ public interface Category extends Auditable, Attributable, Seoable  {
     void setNavigationByAttributes(Boolean navigationByAttributes);
 
     /**
-     * @return true if filtered navigation by brand allowed
-     * @see Category#getProductType()
-     */
-    Boolean getNavigationByBrand();
-
-    /**
-     * Set navigation by brands in this category.
-     *
-     * @param navigationByBrand navigation by brands flag
-     */
-    void setNavigationByBrand(Boolean navigationByBrand);
-
-    /**
      * @return true if filtered navigation by price ranges allowed
      * @see Category#getProductType()
      */

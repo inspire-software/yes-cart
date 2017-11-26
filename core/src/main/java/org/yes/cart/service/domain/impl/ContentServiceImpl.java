@@ -125,7 +125,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         root.setAvailableto(new Date(7226600400000L));
         root.setNavigationByPrice(false);
         root.setNavigationByPriceTiers("");
-        root.setNavigationByBrand(false);
         root.setNavigationByAttributes(false);
         categoryDao.saveOrUpdate(root);
         return root;

@@ -98,9 +98,6 @@ public class VoCategory {
     @DtoField(value = "navigationByAttributes")
     private Boolean navigationByAttributes;
 
-    @DtoField(value = "navigationByBrand")
-    private Boolean navigationByBrand;
-
     @DtoField(value = "navigationByPrice")
     private Boolean navigationByPrice;
 
@@ -300,14 +297,6 @@ public class VoCategory {
 
     public void setNavigationByAttributes(Boolean navigationByAttributes) {
         this.navigationByAttributes = navigationByAttributes;
-    }
-
-    public Boolean getNavigationByBrand() {
-        return navigationByBrand;
-    }
-
-    public void setNavigationByBrand(Boolean navigationByBrand) {
-        this.navigationByBrand = navigationByBrand;
     }
 
     public Boolean getNavigationByPrice() {

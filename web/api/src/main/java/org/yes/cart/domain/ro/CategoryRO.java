@@ -101,9 +101,6 @@ public class CategoryRO implements Serializable {
     @DtoField(value = "navigationByAttributes", readOnly = true)
     private Boolean navigationByAttributes;
 
-    @DtoField(value = "navigationByBrand", readOnly = true)
-    private Boolean navigationByBrand;
-
     @DtoField(value = "navigationByPrice", readOnly = true)
     private Boolean navigationByPrice;
 
@@ -245,15 +242,6 @@ public class CategoryRO implements Serializable {
 
     public void setNavigationByAttributes(final Boolean navigationByAttributes) {
         this.navigationByAttributes = navigationByAttributes;
-    }
-
-    @XmlAttribute(name = "navigation-by-brand")
-    public Boolean getNavigationByBrand() {
-        return navigationByBrand;
-    }
-
-    public void setNavigationByBrand(final Boolean navigationByBrand) {
-        this.navigationByBrand = navigationByBrand;
     }
 
     @XmlAttribute(name = "navigation-by-price")

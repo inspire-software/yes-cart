@@ -989,12 +989,6 @@
             </column>
         </property>
 
-        <property name="navigationByBrand" length="1" type="java.lang.Boolean" not-null="true">
-            <column name="NAV_BY_BRAND" length="1" not-null="false">
-                <comment>Filtered navigation by brand</comment>
-            </column>
-        </property>
-
         <property name="navigationByPrice" length="1" type="java.lang.Boolean" not-null="true">
             <column name="NAV_BY_PRICE" length="1" not-null="false">
                 <comment>Filtered navigation by price range</comment>

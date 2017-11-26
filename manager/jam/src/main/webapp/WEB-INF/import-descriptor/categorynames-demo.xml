@@ -255,16 +255,6 @@
             <value-constant>true</value-constant>
         </column-descriptor>
 
-        <!-- navigation by brand -->
-        <column-descriptor>
-            <column-index>-1</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>BOOLEAN</data-type>
-            <name>navigationByBrand</name>
-            <value-constant>true</value-constant>
-        </column-descriptor>
-
-
         <!-- navigation by price -->
         <column-descriptor>
             <column-index>-1</column-index>

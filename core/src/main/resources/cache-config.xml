@@ -545,10 +545,6 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="filteredNavigationSupport-brandFilteredNavigationRecords"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="web.imageService-imageURI"/>
             <constructor-arg index="1" value="all"/>
         </bean>
@@ -605,10 +601,6 @@
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="productSkuService-productSkuBySkuCode"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="filteredNavigationSupport-brandFilteredNavigationRecords"/>
             <constructor-arg index="1" value="all"/>
         </bean>
     </util:set>

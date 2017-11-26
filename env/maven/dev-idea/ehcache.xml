@@ -385,10 +385,6 @@
            overflowToDisk="false"
            eternal="false" timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
-    <cache name="filteredNavigationSupport-brandFilteredNavigationRecords" maxElementsInMemory="500"
-           overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
-
     <cache name="filteredNavigationSupport-priceFilteredNavigationRecords" maxElementsInMemory="500"
            overflowToDisk="false"
            eternal="false" timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>

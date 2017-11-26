@@ -19,6 +19,8 @@ package org.yes.cart.search.query.impl;
 import org.apache.lucene.search.Query;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -83,6 +85,34 @@ public class AttributeSearchQueryBuilderTest {
         assertNotNull(query);
         assertEquals(1, query.size());
         assertEquals("(size_range:[-9223372036854775808 TO 49])^3.5", query.get(0).toString());
+
+    }
+
+    @Test
+    public void testCreateQueryChainMulti() throws Exception {
+
+        final List<Query> query = new AttributeSearchQueryBuilder().createQueryChain(null, "brand", Arrays.asList("Toshiba", "LG", "Sobot"));
+        assertNotNull(query);
+        assertEquals(1, query.size());
+        assertEquals("(brand:toshiba)^3.5 (brand:lg)^3.5 (brand:sobot)^3.5", query.get(0).toString());
+
+    }
+
+    @Test
+    public void testCreateQueryChainMultiWithEmpty() throws Exception {
+
+        final List<Query> query = new AttributeSearchQueryBuilder().createQueryChain(null, "brand", Arrays.asList("Toshiba", "", "Sobot"));
+        assertNotNull(query);
+        assertEquals(1, query.size());
+        assertEquals("(brand:toshiba)^3.5 (brand:sobot)^3.5", query.get(0).toString());
+
+    }
+
+    @Test
+    public void testCreateQueryChainMultiCollectionEmpty() throws Exception {
+
+        final List<Query> query = new AttributeSearchQueryBuilder().createQueryChain(null, "brand", Collections.emptyList());
+        assertNull(query);
 
     }
 

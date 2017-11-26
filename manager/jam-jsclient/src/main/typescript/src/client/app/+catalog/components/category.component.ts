@@ -112,7 +112,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
       'availableto': ['', YcValidators.validDate],
       'uri': ['', validUri],
       'navigationByAttributes': [''],
-      'navigationByBrand': [''],
       'navigationByPrice': [''],
       'productTypeName': [''],
       'name': [''],

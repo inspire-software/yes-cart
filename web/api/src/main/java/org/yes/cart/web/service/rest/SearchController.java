@@ -29,17 +29,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.ProductAvailabilityModel;
+import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.ProductTypeAttr;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.search.SearchQueryFactory;
+import org.yes.cart.domain.ro.*;
 import org.yes.cart.search.PriceNavigation;
-import org.yes.cart.search.query.ProductSearchQueryBuilder;
+import org.yes.cart.search.SearchQueryFactory;
 import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.search.dto.NavigationContext;
-import org.yes.cart.domain.ro.*;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.page.component.filterednavigation.AttributeFilteredNavigationSupport;
-import org.yes.cart.web.page.component.filterednavigation.BrandFilteredNavigationSupport;
 import org.yes.cart.web.page.component.filterednavigation.PriceFilteredNavigationSupport;
 import org.yes.cart.web.service.rest.impl.BookmarkMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
@@ -75,8 +77,6 @@ public class SearchController {
     private CurrencySymbolService currencySymbolService;
     @Autowired
     private SearchQueryFactory searchQueryFactory;
-    @Autowired
-    private BrandFilteredNavigationSupport brandsFilteredNavigationSupport;
     @Autowired
     private PriceFilteredNavigationSupport priceFilteredNavigationSupport;
     @Autowired
@@ -544,17 +544,6 @@ public class SearchController {
 
             final FilteredNavigationRO navigationRo = new FilteredNavigationRO();
 
-            final boolean byBrand = category.getNavigationByBrand() == null ? false : category.getNavigationByBrand();
-
-            if (byBrand && !context.isFilteredBy(ProductSearchQueryBuilder.BRAND_FIELD)) {
-
-                populateFilteredNavigationRecords(navigationRo,
-                        brandsFilteredNavigationSupport.getFilteredNavigationRecords(context, locale, ProductSearchQueryBuilder.BRAND_FIELD));
-
-                enhanceFilteredNavigationByBrand(navigationRo);
-
-            }
-
             if (!context.isFilteredBy(ProductSearchQueryBuilder.PRODUCT_PRICE)) {
 
                 populateFilteredNavigationRecords(navigationRo,
@@ -614,35 +603,6 @@ public class SearchController {
                     }
 
                     valueRo.setDisplayValue(displayPrice.toString());
-
-                }
-
-            }
-
-        }
-    }
-
-    private void enhanceFilteredNavigationByBrand(final FilteredNavigationRO navigationRo) {
-
-        FilteredNavigationAttributeRO brand = null;
-        for (final FilteredNavigationAttributeRO attributeRo : navigationRo.getFnAttributes()) {
-            if (ProductSearchQueryBuilder.BRAND_FIELD.equals(attributeRo.getCode())) {
-                brand = attributeRo;
-                break;
-            }
-        }
-
-        if (brand != null) {
-
-            if (StringUtils.isBlank(brand.getNavigationType())) {
-                brand.setNavigationType(ProductTypeAttr.NAVIGATION_TYPE_SINGLE);
-            }
-
-            for (final FilteredNavigationAttributeValueRO valueRo : brand.getFnValues()) {
-
-                if (StringUtils.isBlank(valueRo.getDisplayValue())) {
-
-                    valueRo.setDisplayValue(valueRo.getValue());
 
                 }
 

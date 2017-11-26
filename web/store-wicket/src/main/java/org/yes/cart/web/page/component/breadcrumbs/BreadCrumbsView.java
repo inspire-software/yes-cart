@@ -85,14 +85,13 @@ public class BreadCrumbsView extends BaseComponent {
     public List<Crumb> getCrumbs() {
         if (crumbs == null) {
 
-            final String brandPrefix = getLocalizer().getString(ProductSearchQueryBuilder.BRAND_FIELD, this);
             final String pricePrefix = getLocalizer().getString(ProductSearchQueryBuilder.PRODUCT_PRICE, this);
             final String queryPrefix = getLocalizer().getString(WebParametersKeys.QUERY, this);
             final String tagPrefix = StringUtils.EMPTY;
 
             crumbs = breadCrumbsBuilder.getBreadCrumbs(getLocale().getLanguage(),
                     shopId, categoryId, getPage().getPageParameters(), shopService.getShopAllCategoriesIds(shopId),
-                    brandPrefix, pricePrefix, queryPrefix, tagPrefix);
+                    pricePrefix, queryPrefix, tagPrefix);
 
         }
         return crumbs;

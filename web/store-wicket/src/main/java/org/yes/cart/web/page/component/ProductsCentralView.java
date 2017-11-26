@@ -28,7 +28,6 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.web.page.component.data.SortableProductDataProvider;
 import org.yes.cart.web.page.component.filterednavigation.AttributeProductFilter;
-import org.yes.cart.web.page.component.filterednavigation.BrandProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.PriceProductFilter;
 import org.yes.cart.web.page.component.navigation.ProductPerPageListView;
 import org.yes.cart.web.page.component.navigation.ProductSorter;
@@ -102,7 +101,6 @@ public class ProductsCentralView extends AbstractCentralView {
         final NavigationContext context = getNavigationContext();
 
         add(new TopCategories("topCategories"));
-        add(new BrandProductFilter("brandFilter", categoryId, context));
         add(new AttributeProductFilter("attributeFilter", categoryId, context));
         add(new PriceProductFilter("priceFilter", categoryId, context));
 

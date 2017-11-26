@@ -249,18 +249,6 @@ public interface CategoryDTO extends Identifiable, Guidable {
     void setNavigationByAttributes(Boolean navigationByAttributes);
 
     /**
-     * @return true if filtered navigation by brand allowed
-     */
-    Boolean getNavigationByBrand();
-
-    /**
-     * Set navigation by brand in category.
-     *
-     * @param navigationByBrand flag to set
-     */
-    void setNavigationByBrand(Boolean navigationByBrand);
-
-    /**
      * @return true if filtered navigation by price ranges allowed
      */
     Boolean getNavigationByPrice();

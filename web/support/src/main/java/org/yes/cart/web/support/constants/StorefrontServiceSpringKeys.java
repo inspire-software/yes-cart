@@ -41,11 +41,6 @@ public interface StorefrontServiceSpringKeys {
     /**
      * Filtered navigation support
      */
-    public String FILTERNAV_SUPPORT_BRANDS = "brandFilteredNavigationSupport";
-
-    /**
-     * Filtered navigation support
-     */
     public String FILTERNAV_SUPPORT_PRICE = "priceFilteredNavigationSupport";
 
     /**

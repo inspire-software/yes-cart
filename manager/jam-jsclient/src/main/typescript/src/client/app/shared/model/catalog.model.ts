@@ -171,7 +171,6 @@ export interface CategoryVO {
   displayMetadescriptions : Pair<string, string>[];
 
   navigationByAttributes : boolean;
-  navigationByBrand : boolean;
   navigationByPrice : boolean;
   navigationByPriceTiers  : CategoryNavigationPriceTiersVO;
 

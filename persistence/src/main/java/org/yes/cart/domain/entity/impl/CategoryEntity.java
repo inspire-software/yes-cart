@@ -49,7 +49,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     private SeoEntity seoInternal;
     private Set<ProductCategory> productCategory = new HashSet<ProductCategory>(0);
     private Boolean navigationByAttributes;
-    private Boolean navigationByBrand;
     private Boolean navigationByPrice;
     private String navigationByPriceTiers;
     private Date createdTimestamp;
@@ -173,14 +172,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
 
     public void setNavigationByAttributes(Boolean navigationByAttributes) {
         this.navigationByAttributes = navigationByAttributes;
-    }
-
-    public Boolean getNavigationByBrand() {
-        return this.navigationByBrand;
-    }
-
-    public void setNavigationByBrand(Boolean navigationByBrand) {
-        this.navigationByBrand = navigationByBrand;
     }
 
     public Boolean getNavigationByPrice() {

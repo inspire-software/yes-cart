@@ -102,9 +102,6 @@ public class CategoryDTOImpl implements CategoryDTO {
     @DtoField(value = "navigationByAttributes")
     private Boolean navigationByAttributes;
 
-    @DtoField(value = "navigationByBrand")
-    private Boolean navigationByBrand;
-
     @DtoField(value = "navigationByPrice")
     private Boolean navigationByPrice;
 
@@ -372,20 +369,6 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
-    public Boolean getNavigationByBrand() {
-        return navigationByBrand;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setNavigationByBrand(final Boolean navigationByBrand) {
-        this.navigationByBrand = navigationByBrand;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public Boolean getNavigationByPrice() {
         return navigationByPrice;
     }
@@ -537,7 +520,6 @@ public class CategoryDTOImpl implements CategoryDTO {
                 ", availablefrom=" + availablefrom +
                 ", availableto=" + availableto +
                 ", navigationByAttributes=" + navigationByAttributes +
-                ", navigationByBrand=" + navigationByBrand +
                 ", navigationByPrice=" + navigationByPrice +
                 ", navigationByPriceTiers='" + navigationByPriceTiers + '\'' +
                 ", attribute=" + attributes +

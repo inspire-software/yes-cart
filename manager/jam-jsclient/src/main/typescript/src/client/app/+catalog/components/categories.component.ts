@@ -113,9 +113,6 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     if (row.navigationByAttributes) {
       flags += '<i title="' + (row.productTypeName ? row.productTypeName : '') + '" class="fa fa-list-alt"></i>&nbsp;';
     }
-    if (row.navigationByBrand) {
-      flags += '<i class="fa fa-copyright"></i>&nbsp;';
-    }
     if (row.navigationByPrice) {
       flags += '<i class="fa fa-dollar"></i>&nbsp;';
     }
