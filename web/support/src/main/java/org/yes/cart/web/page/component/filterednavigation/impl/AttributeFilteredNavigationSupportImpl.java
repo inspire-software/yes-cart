@@ -213,7 +213,8 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
                                         displayValue,
                                         candidateResultCount,
                                         pta.getRank(),
-                                        ProductTypeAttr.NAVIGATION_TYPE_RANGE
+                                        ProductTypeAttr.NAVIGATION_TYPE_RANGE,
+                                        pta.getNavigationTemplate()
                                 ));
                             }
                         }
@@ -231,7 +232,8 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
                                     item.getValue(), item.getDisplayValue(locale),
                                     item.getCount(),
                                     pta.getRank(),
-                                    ProductTypeAttr.NAVIGATION_TYPE_SINGLE
+                                    ProductTypeAttr.NAVIGATION_TYPE_SINGLE,
+                                    pta.getNavigationTemplate()
                             ));
                         }
                     }

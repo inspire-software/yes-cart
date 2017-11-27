@@ -40,6 +40,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     private int rank;
     private boolean visible;
     private boolean similarity;
+    private String navigationTemplate;
     private String navigationType;
     private String rangeNavigation;
     private Date createdTimestamp;
@@ -122,6 +123,14 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
 
     public void setNavigation(boolean navigation) {
         throw new UnsupportedOperationException("Set this attribute on AttributeEntity");
+    }
+
+    public String getNavigationTemplate() {
+        return navigationTemplate;
+    }
+
+    public void setNavigationTemplate(final String navigationTemplate) {
+        this.navigationTemplate = navigationTemplate;
     }
 
     public String getNavigationType() {

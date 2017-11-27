@@ -785,6 +785,12 @@
             </column>
         </property>
 
+        <property name="navigationTemplate" type="string" length="64" not-null="false">
+            <column name="NAV_TEMPLATE" length="64">
+                <comment>Optional navigation template to use</comment>
+            </column>
+        </property>
+
         <property name="navigationType" type="string" length="1">
             <column name="NAV_TYPE" default="'S'" length="1">
                 <comment>S - single, R- range</comment>

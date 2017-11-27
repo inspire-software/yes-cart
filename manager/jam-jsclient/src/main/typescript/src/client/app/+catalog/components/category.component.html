@@ -231,10 +231,10 @@
                   </button>
                 </div>
                 <div class="form-group" [hidden]="!category.navigationByPrice">
-                  <div *ngFor="let currencyTier of category.navigationByPriceTiers.tiers">
-                    <label>{{ currencyTier.first }}</label>
-                    <ul>
-                      <li *ngFor="let priceTier of currencyTier.second">{{priceTier.from}}-{{priceTier.to}}</li>
+                  <div  class="panel panel-default" *ngFor="let currencyTier of category.navigationByPriceTiers.tiers">
+                    <div class="panel-heading">{{ currencyTier.first }}</div>
+                    <ul class="list-group">
+                      <li class="list-group-item" *ngFor="let priceTier of currencyTier.second">{{priceTier.from}} &le; &chi; &lt; {{priceTier.to}} <span class="badge">&Sigma;</span></li>
                     </ul>
                   </div>
                 </div>

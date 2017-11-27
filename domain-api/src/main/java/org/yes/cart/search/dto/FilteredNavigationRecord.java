@@ -145,6 +145,22 @@ public interface FilteredNavigationRecord extends Rankable, Cloneable, Serializa
      */
     void setType(final String type);
 
+
+    /**
+     * Template to use for navigation. null is default single/range rendering.
+     *
+     * @return template variant
+     */
+    String getTemplate();
+
+    /**
+     * Template to use for navigation. null is default single/range rendering.
+     *
+     * @param template template variant (if needed)
+     */
+    void setTemplate(String template);
+
+
     /**
      * Filter nav record are cached but we want to set quantity counts
      * therefore we need a copy of these to make sure we are not altering cached objects.

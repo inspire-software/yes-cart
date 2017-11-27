@@ -21,8 +21,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 
@@ -45,9 +43,16 @@ public class BaseFilterView extends BaseComponent {
     private final static String QUANTITY = "quantity";
     // ------------------------------------- MARKUP IDs END   ---------------------------------- //
 
+    private static final Comparator<AbstractProductFilter.Value> VALUE_COMPARATOR = new Comparator<AbstractProductFilter.Value>() {
+        public int compare(final AbstractProductFilter.Value o1,
+                           final AbstractProductFilter.Value o2) {
+            return o1.getLabel().compareToIgnoreCase(o2.getLabel());
+        }
+    };
+
     private final String code;
     private final String head;
-    private final List<Pair<Pair<String, Integer>, PageParameters>> linkList;
+    private final List<AbstractProductFilter.Value> linkList;
 
 
     /**
@@ -59,12 +64,11 @@ public class BaseFilterView extends BaseComponent {
      * @param linkList the content of filtering widget.
      * @param recordLimit max number of records to display
      */
-    public BaseFilterView(
-            final String id,
-            final String code,
-            final String head,
-            final List<Pair<Pair<String, Integer>, PageParameters>> linkList,
-            final int recordLimit) {
+    public BaseFilterView(final String id,
+                          final String code,
+                          final String head,
+                          final List<AbstractProductFilter.Value> linkList,
+                          final int recordLimit) {
         super(id);
         this.linkList = cutTheTail(linkList, recordLimit);
         this.code = code;
@@ -73,21 +77,16 @@ public class BaseFilterView extends BaseComponent {
 
 
     /**
-     * Cut the extrac records.
+     * Cut the extract records.
      * @param navigationList list to reduce
      * @return  reduced nav list.
      */
-    private List<Pair<Pair<String, Integer>, PageParameters>> cutTheTail(final List<Pair<Pair<String, Integer>, PageParameters>> navigationList, final int recordLimit) {
+    private List<AbstractProductFilter.Value> cutTheTail(final List<AbstractProductFilter.Value> navigationList, final int recordLimit) {
 
         if (navigationList.size() > recordLimit && recordLimit > 0) {
             Collections.sort(
                     navigationList,
-                    new Comparator<Pair<Pair<String, Integer>, PageParameters>>() {
-                        public int compare(final Pair<Pair<String, Integer>, PageParameters> o1,
-                                           final Pair<Pair<String, Integer>, PageParameters> o2) {
-                            return o1.getFirst().getSecond() < o2.getFirst().getSecond() ? 1 : (o1.getFirst().getSecond().equals(o2.getFirst().getSecond()) ? 0 : -1);
-                        }
-                    }
+                    VALUE_COMPARATOR
             );
 
             return navigationList.subList(0, recordLimit);
@@ -109,23 +108,24 @@ public class BaseFilterView extends BaseComponent {
                             .setEscapeModelStrings(false)
             );
             add(
-                    new ListView<Pair<Pair<String, Integer>, PageParameters>>(LINK_LIST, linkList) {
-                        protected void populateItem(final ListItem<Pair<Pair<String, Integer>, PageParameters>> pairListItem) {
-                            final Pair<Pair<String, Integer>, PageParameters> keyValue = pairListItem.getModelObject();
-                            final Link link = links.newLink(LINK, keyValue.getSecond());
+                    new ListView<AbstractProductFilter.Value>(LINK_LIST, linkList) {
+                        protected void populateItem(final ListItem<AbstractProductFilter.Value> pairListItem) {
+                            final AbstractProductFilter.Value value = pairListItem.getModelObject();
+                            final Link link = links.newLink(LINK, value.getParameters());
 
                             /*
                                 This css class can be used to style specific values. E.g. for COLOR attribute these can
                                 be rendered as square divs with background color corresponding to the attribute value.
                              */
-                            final String cssClass = constructValueCssClass(keyValue.getSecond());
+                            final String cssClass = getValueCssClass(value);
                             link.add(new AttributeModifier("class", cssClass));
 
-                            final Label valueVabel = new Label(LINK_NAME, keyValue.getFirst().getFirst());
+                            final Label valueVabel = new Label(LINK_NAME, getValueLabel(value));
                             valueVabel.setEscapeModelStrings(false);
-
                             link.add(valueVabel);
-                            link.add( new Label(QUANTITY, keyValue.getFirst().getSecond().toString()));
+
+                            final String quantity = getValueQuantity(value);
+                            link.add( new Label(QUANTITY, quantity).setVisible(quantity != null));
 
                             pairListItem.add(link);
                         }
@@ -134,6 +134,28 @@ public class BaseFilterView extends BaseComponent {
 
         }
         super.onBeforeRender();
+    }
+
+    /**
+     * Get the quantity badge number.
+     *
+     * @param keyValue key value
+     *
+     * @return quantity to display (use null to skip badge)
+     */
+    protected String getValueQuantity(final AbstractProductFilter.Value keyValue) {
+        return keyValue.getCount().toString();
+    }
+
+    /**
+     * Get the value label
+     *
+     * @param keyValue key value
+     *
+     * @return displayable label for this value
+     */
+    protected String getValueLabel(final AbstractProductFilter.Value keyValue) {
+        return keyValue.getLabel();
     }
 
     /*
@@ -145,8 +167,8 @@ public class BaseFilterView extends BaseComponent {
      *
      * This may not be ideal as it is not human readable but it is safer to use latin in css
      */
-    private String constructValueCssClass(final PageParameters second) {
-        return getWicketUtil().constructLatinStringValue(code, second.get(code).toString(""));
+    protected String getValueCssClass(final AbstractProductFilter.Value keyValue) {
+        return getWicketUtil().constructLatinStringValue(code, keyValue.getParameters().get(code).toString(""));
     }
 
 

@@ -71,6 +71,9 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
     @DtoField(value = "navigation", readOnly = true)
     private boolean navigation;
 
+    @DtoField(value = "navigationTemplate")
+    private String navigationTemplate;
+
     @DtoField(value = "navigationType")
     private String navigationType;
 
@@ -186,6 +189,16 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
     }
 
     /** {@inheritDoc} */
+    public String getNavigationTemplate() {
+        return navigationTemplate;
+    }
+
+    /** {@inheritDoc} */
+    public void setNavigationTemplate(final String navigationTemplate) {
+        this.navigationTemplate = navigationTemplate;
+    }
+
+    /** {@inheritDoc} */
     public String getNavigationType() {
         return navigationType;
     }
@@ -218,6 +231,7 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
                 ", search=" + search +
                 ", primary=" + primary +
                 ", navigation=" + navigation +
+                ", navigationTemplate='" + navigationTemplate + '\'' +
                 ", navigationType='" + navigationType + '\'' +
                 ", rangeNavigation='" + rangeNavigation + '\'' +
                 '}';

@@ -170,6 +170,20 @@ public interface ProductTypeAttrDTO extends Identifiable {
     void setNavigation(boolean navigation);
 
     /**
+     * Template to use for navigation. null is default single/range rendering.
+     *
+     * @return template variant
+     */
+    String getNavigationTemplate();
+
+    /**
+     * Template to use for navigation. null is default single/range rendering.
+     *
+     * @param navigationTemplate template variant (if needed)
+     */
+    void setNavigationTemplate(String navigationTemplate);
+
+    /**
      * Get the filtered navigation type: S - single,  R - range.
      * Xml range list must be defined for for range navigation.
      *

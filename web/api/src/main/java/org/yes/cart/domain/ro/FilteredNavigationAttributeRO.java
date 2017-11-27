@@ -37,6 +37,7 @@ public class FilteredNavigationAttributeRO implements Serializable {
     private String name;
     private String displayName;
     private int rank;
+    private String navigationTemplate;
     private String navigationType;
 
     private List<FilteredNavigationAttributeValueRO> fnValues = new ArrayList<FilteredNavigationAttributeValueRO>();
@@ -72,6 +73,15 @@ public class FilteredNavigationAttributeRO implements Serializable {
 
     public void setRank(final int rank) {
         this.rank = rank;
+    }
+
+    @XmlElement(name = "navigation-template")
+    public String getNavigationTemplate() {
+        return navigationTemplate;
+    }
+
+    public void setNavigationTemplate(final String navigationTemplate) {
+        this.navigationTemplate = navigationTemplate;
     }
 
     @XmlElement(name = "navigation-type")

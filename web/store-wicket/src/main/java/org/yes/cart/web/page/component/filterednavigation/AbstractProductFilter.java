@@ -140,41 +140,36 @@ public abstract class AbstractProductFilter extends BaseComponent {
     }
 
     /**
-     * Adapt list of  {@link FilteredNavigationRecord} into ugly
-     * list of attribute name - list of attributes values pair .
+     * Adapt list of  {@link FilteredNavigationRecord} into Blocks.
      *
      * @param records navigation records
      * @return list of pairs
      */
-    protected List<Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>>>
-                adaptNavigationRecords(final List<FilteredNavigationRecord> records) {
-        String head = StringUtils.EMPTY;
-        Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>> currentPair = null;
+    protected List<Block> adaptNavigationRecords(final List<FilteredNavigationRecord> records) {
 
-        final List<Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>>> headValueList =
-                new ArrayList<Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>>>();
+        final List<Block> navBlocks = new ArrayList<Block>();
+
+        String head = StringUtils.EMPTY;
+        Block currentBlock = null;
 
         for (FilteredNavigationRecord navigationRecord : records) {
             if (!navigationRecord.getName().equalsIgnoreCase(head)) {
-                currentPair = new Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>>(
-                        new Pair<String, String>(
-                                navigationRecord.getCode(),
-                                (String) ObjectUtils.defaultIfNull(navigationRecord.getDisplayName(), navigationRecord.getName())
-                        ),
-                        new ArrayList<Pair<Pair<String, Integer>, PageParameters>>());
-                headValueList.add(currentPair);
+                currentBlock = new Block(
+                        navigationRecord.getCode(),
+                        navigationRecord.getTemplate(),
+                        (String) ObjectUtils.defaultIfNull(navigationRecord.getDisplayName(), navigationRecord.getName())
+                );
+
+                navBlocks.add(currentBlock);
                 head = navigationRecord.getName();
             }
-            currentPair.getSecond().add(
-                    new Pair<Pair<String, Integer>, PageParameters>(
-                            new Pair<String, Integer>(
-                                    adaptValueForLinkLabel(navigationRecord.getValue(), navigationRecord.getDisplayValue()),
-                                    navigationRecord.getCount()),
-                            getNavigationParameter(navigationRecord.getCode(), navigationRecord.getValue())
-                    )
-            );
+            currentBlock.getValues().add(new Value(
+                        adaptValueForLinkLabel(navigationRecord.getValue(), navigationRecord.getDisplayValue()),
+                        navigationRecord.getCount(),
+                        getNavigationParameter(navigationRecord.getCode(), navigationRecord.getValue())
+            ));
         }
-        return headValueList;
+        return navBlocks;
     }
 
     /**
@@ -208,18 +203,32 @@ public abstract class AbstractProductFilter extends BaseComponent {
     /** {@inheritDoc} */
     protected void onBeforeRender() {
         add(
-                new ListView<Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>>>(
+                new ListView<Block>(
                         FILTERED_NAVIGATION_LIST,
                         adaptNavigationRecords(navigationRecords)) {
-                    protected void populateItem(ListItem<Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>>> pairListItem) {
-                        final Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>> headValues = pairListItem.getModelObject();
-                        pairListItem.add(
-                                new BaseFilterView(
-                                        FILTER,
-                                        headValues.getFirst().getFirst(), headValues.getFirst().getSecond(), headValues.getSecond(),
-                                        getCategoryFilterLimitConfig(headValues.getFirst().getFirst(), recordLimit)
-                                )
-                        );
+                    protected void populateItem(ListItem<Block> pairListItem) {
+                        final Block block = pairListItem.getModelObject();
+                        if ("i18n".equalsIgnoreCase(block.getTemplate())) {
+                            pairListItem.add(
+                                    new I18nFilterView(
+                                            FILTER,
+                                            block.code,
+                                            block.label,
+                                            block.getValues(),
+                                            getCategoryFilterLimitConfig(block.getCode(), recordLimit)
+                                    )
+                            );
+                        } else {
+                            pairListItem.add(
+                                    new BaseFilterView(
+                                            FILTER,
+                                            block.code,
+                                            block.label,
+                                            block.getValues(),
+                                            getCategoryFilterLimitConfig(block.getCode(), recordLimit)
+                                    )
+                            );
+                        }
                     }
                 }
         );
@@ -275,4 +284,61 @@ public abstract class AbstractProductFilter extends BaseComponent {
     public NavigationContext getNavigationContext() {
         return navigationContext;
     }
+
+    static class Value {
+
+        private final String label;
+        private final Integer count;
+        private final PageParameters parameters;
+
+        Value(final String label, final Integer count, final PageParameters parameters) {
+            this.label = label;
+            this.count = count;
+            this.parameters = parameters;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public Integer getCount() {
+            return count;
+        }
+
+        public PageParameters getParameters() {
+            return parameters;
+        }
+    }
+
+    static class Block {
+
+        private final String label;
+        private final String code;
+        private final String template;
+
+        private final List<Value> values = new ArrayList<Value>();
+
+        Block(final String code, final String template, final String label) {
+            this.code = code;
+            this.template = template;
+            this.label = label;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getTemplate() {
+            return template;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public List<Value> getValues() {
+            return values;
+        }
+    }
+
 }

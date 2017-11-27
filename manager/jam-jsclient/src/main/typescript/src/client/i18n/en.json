@@ -415,6 +415,7 @@
   "PRODUCT_TYPE_ATTR_CONFIG_SIMILARITY": "Similarity",
   "PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_S": "Single",
   "PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_R": "Range",
+  "PRODUCT_TYPE_ATTR_CONFIG_NAV_TEMPLATE": "Filter template",
   "PRODUCT_TYPE_ATTR_NEW_DUPLICATE": "Selected attribute is already assigned to this type",
 
   "PRODUCT_TYPE_TAB_GROUPS": "Attribute Groups",

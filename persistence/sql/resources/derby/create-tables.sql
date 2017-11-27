@@ -749,6 +749,7 @@
         VISIBLE smallint,
         SIMILARITY smallint,
         NAV smallint,
+        NAV_TEMPLATE varchar(64),
         NAV_TYPE varchar(1) default 'S',
         RANGE_NAV varchar(4000),
         CREATED_TIMESTAMP timestamp,

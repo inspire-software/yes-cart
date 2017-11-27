@@ -45,6 +45,8 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
 
     private String type;
 
+    private String template;
+
     /**
      * {@inheritDoc}
      */
@@ -146,6 +148,20 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    public String getTemplate() {
+        return template;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setTemplate(final String template) {
+        this.template = template;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getDisplayValue() {
         return displayValue;
     }
@@ -166,7 +182,10 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
      * @param value value
      * @param count count of objects.
      */
-    public FilteredNavigationRecordImpl(final String name, final String code, final String value, final int count) {
+    public FilteredNavigationRecordImpl(final String name,
+                                        final String code,
+                                        final String value,
+                                        final int count) {
         this.name = name;
         this.code = code;
         this.value = value;
@@ -184,11 +203,17 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
      * @param count count of objects.
      * @param rank  rank
      * @param type  type of navigation S - single value R - range value
+     * @param template  navigation template
      */
-    public FilteredNavigationRecordImpl(final String name, final String displayName,
+    public FilteredNavigationRecordImpl(final String name,
+                                        final String displayName,
                                         final String code,
-                                        final String value, final String displayValue,
-                                        final int count, final int rank, final String type) {
+                                        final String value,
+                                        final String displayValue,
+                                        final int count,
+                                        final int rank,
+                                        final String type,
+                                        final String template) {
         this.name = name;
         this.displayName = displayName;
         this.code = code;
@@ -197,7 +222,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
         this.count = count;
         this.rank = rank;
         this.type = type;
-
+        this.template = template;
     }
 
     /**
@@ -224,6 +249,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
         if (code != null ? !code.equals(that.code) : that.code != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (value != null ? !value.equals(that.value) : that.value != null) return false;
+        if (template != null ? !template.equals(that.template) : that.template != null) return false;
 
         return true;
     }
@@ -236,6 +262,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
         result = 31 * result + (value != null ? value.hashCode() : 0);
         result = 31 * result + rank;
         result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (template != null ? template.hashCode() : 0);
         return result;
     }
 }

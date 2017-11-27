@@ -94,6 +94,7 @@ export interface ProductTypeAttrVO {
   search : boolean;
   primary : boolean;
   navigation : boolean;
+  navigationTemplate : string;
   navigationType : string;
 
   rangeNavigation : ProductTypeAttrNavigationRangesVO;

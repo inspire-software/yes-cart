@@ -636,6 +636,7 @@ public class SearchController {
                     attributeRo.setDisplayName(record.getDisplayName());
                     attributeRo.setRank(record.getRank());
                     attributeRo.setNavigationType(record.getType());
+                    attributeRo.setNavigationTemplate(record.getTemplate());
                     head = record.getName();
 
                 }

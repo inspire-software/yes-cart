@@ -114,20 +114,30 @@
             <div class="col-md-6">{{ 'ATTRIBUTE_SI_NAV' | translate }} <i class="fa fa-question-circle" title="{{ 'ATTRIBUTE_SI_TIP' | translate }}"></i></div>
             <div class="col-md-6">
               <input name="navigation" type="checkbox" [ngModel]="attributeToEdit.navigation" [hidden]="attributeToEdit.navigation" disabled="disabled">
-              <select name="navigationType" [(ngModel)]="attributeToEdit.navigationType"  (ngModelChange)="onDataChange($event)"
+              <select name="navigationType" class="form-control" [(ngModel)]="attributeToEdit.navigationType"  (ngModelChange)="onDataChange($event)"
                       [hidden]="!attributeToEdit.navigation" [disabled]="!attributeToEdit.navigation">
                 <option value="S">{{ 'PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_S' | translate }}</option>
                 <option value="R">{{ 'PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_R' | translate }}</option>
               </select>
-              <button class="btn {{ editRanges ? '' : 'btn-info' }} btn-circle btn-sm" (click)="onToggleEditRanges()" [hidden]="!rangeNav"  title="{{ (editRanges ? 'ATTRIBUTE_SI_RANGE_TIP_EDIT' : 'ATTRIBUTE_SI_RANGE_TIP_READ') | translate }}">
+            </div>
+
+            <div class="col-md-6" [hidden]="!attributeToEdit.navigation">{{ 'PRODUCT_TYPE_ATTR_CONFIG_NAV_TEMPLATE' | translate }}</div>
+            <div class="col-md-6" [hidden]="!attributeToEdit.navigation">
+              <input name="navigationTemplate" class="form-control" type="text" [(ngModel)]="attributeToEdit.navigationTemplate" (ngModelChange)="onDataChange($event)">
+            </div>
+
+            <div class="col-md-6" [hidden]="!rangeNav">
+              {{ 'PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_R' | translate }}
+              <button class="btn {{ editRanges ? 'btn-default ' : 'btn-info' }} btn-circle btn-sm" (click)="onToggleEditRanges()" title="{{ (editRanges ? 'ATTRIBUTE_SI_RANGE_TIP_EDIT' : 'ATTRIBUTE_SI_RANGE_TIP_READ') | translate }}">
                 <i class="fa fa-edit"></i>
               </button>
             </div>
-
-            <div class="col-md-offset-5 col-md-7 product-type-nav-ranges" [hidden]="!showRanges">
-              <ul>
-                <li *ngFor="let navRange of attributeToEdit.rangeNavigation.ranges">{{navRange.range}}</li>
-              </ul>
+            <div class="col-md-6" [hidden]="!rangeNav">
+              <div class="product-type-nav-ranges" [hidden]="!showRanges">
+                <ul class="list-group">
+                  <li class="list-group-item" *ngFor="let navRange of attributeToEdit.rangeNavigation.ranges">{{navRange.range}} <span class="badge">&Sigma;</span></li>
+                </ul>
+              </div>
             </div>
 
             <div class="col-xs-12 product-type-nav-ranges" [hidden]="!editRanges">

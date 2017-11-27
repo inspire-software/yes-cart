@@ -735,6 +735,7 @@
         VISIBLE bit comment 'Is attribute visible on storefront',
         SIMILARITY bit comment 'Will attribute be used for calculate products similarity',
         NAV bit comment 'Will be used in filtered navigation',
+        NAV_TEMPLATE varchar(64),
         NAV_TYPE varchar(1) default 'S' comment 'S - single, R- range',
         RANGE_NAV longtext comment 'In case of range navigation hold the ranges values',
         CREATED_TIMESTAMP datetime,

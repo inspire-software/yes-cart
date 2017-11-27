@@ -159,6 +159,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 if (entity.getTag() != null) {
                     for (final String tag : StringUtils.split(entity.getTag(), ' ')) {
                         addSimpleField(document, PRODUCT_TAG_FIELD, tag);
+                        addFacetField(document, "facet_tag", tag);
                     }
                 }
 

@@ -118,7 +118,7 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
       productTypeAttrId: 0, producttypeId: this.masterObject.producttypeId,
       attribute:null, rank:500,
       visible:true, similarity:false, store:false, search:false, primary:false, navigation:false,
-      navigationType:null, rangeNavigation: { ranges: [] }
+      navigationTemplate: null, navigationType:null, rangeNavigation: { ranges: [] }
     };
 
     this.onRowEdit(_attr);
@@ -320,9 +320,9 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
     }
     if (row.navigation) {
       if (row.navigationType === 'R') {
-        flags += '<i class="fa fa-sliders"></i>&nbsp;';
+        flags += '<i class="fa fa-sliders"></i>&nbsp;' + (row.navigationTemplate != null ? row.navigationTemplate : '');
       } else {
-        flags += '<i class="fa fa-list-alt"></i>&nbsp;';
+        flags += '<i class="fa fa-list-alt"></i>&nbsp;' + (row.navigationTemplate != null ? row.navigationTemplate : '');
       }
     }
     return flags;
@@ -391,7 +391,9 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
 
       let _update = <Array<Pair<ProductTypeAttrVO, boolean>>>[];
       this._objectAttributes.forEach(attr => {
-        _update.push(new Pair(attr, this.isRemovedAttribute(attr)));
+        if (this.isNewAttribute(attr) || this.isEditedAttribute(attr) || this.isRemovedAttribute(attr)) {
+          _update.push(new Pair(attr, this.isRemovedAttribute(attr)));
+        }
       });
 
       LogUtil.debug('ProductTypeAttributeComponent data changes update', _update);

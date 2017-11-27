@@ -59,6 +59,9 @@ public class VoProductTypeAttr {
     @DtoField(value = "navigation", readOnly = true)
     private boolean navigation;
 
+    @DtoField(value = "navigationTemplate")
+    private String navigationTemplate;
+
     @DtoField(value = "navigationType")
     private String navigationType;
 
@@ -151,6 +154,14 @@ public class VoProductTypeAttr {
 
     public void setNavigationType(final String navigationType) {
         this.navigationType = navigationType;
+    }
+
+    public String getNavigationTemplate() {
+        return navigationTemplate;
+    }
+
+    public void setNavigationTemplate(final String navigationTemplate) {
+        this.navigationTemplate = navigationTemplate;
     }
 
     public VoProductTypeAttrNavigationRanges getRangeNavigation() {
