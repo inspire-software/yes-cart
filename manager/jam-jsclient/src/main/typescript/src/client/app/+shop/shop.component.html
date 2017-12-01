@@ -1,4 +1,4 @@
-<template [ngIf]="shop">
+<ng-template [ngIf]="shop">
 
   <div class="row">
     <div>
@@ -62,9 +62,9 @@
 
     <tab  (select)="tabSelected('B2B')">
 
-      <template tabHeading>
+      <ng-template tabHeading>
         {{ 'CUSTOMERORDER_TAB_B2B' | translate }} <span class="label label-info">YCE</span>
-      </template>
+      </ng-template>
 
       <yc-shop-subs [shop]="shop" [reload]="reloadB2b"></yc-shop-subs>
     </tab>
@@ -72,9 +72,9 @@
 
     <tab  (select)="tabSelected('Addressbook')">
 
-      <template tabHeading>
+      <ng-template tabHeading>
         {{ 'TAB_ADDRESSBOOK' | translate }} <span class="label label-info">YCE</span>
-      </template>
+      </ng-template>
 
       <yc-addressbook [customer]="shopCustomer" [reload]="reloadAddressbook" [shops]="addressShops"></yc-addressbook>
     </tab>
@@ -82,4 +82,4 @@
 
   </tabset>
 
-</template>
+</ng-template>

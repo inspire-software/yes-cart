@@ -18,7 +18,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredPromotions; let i = index" class="{{row == selectedPromotion ? 'active' : ''}}">
-        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
           <td title="{{ 'AV_RANK' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.rank}}</a></td>
@@ -29,7 +29,7 @@
           <td title="{{ 'PROMOTION_ENABLED_FROM' | translate }}" class="{{ isAvailableFromNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.enabledFrom | ycdatetime }}</a>&nbsp;</td>
           <td title="{{ 'PROMOTION_ENABLED_TO' | translate }}" class="{{ isAvailableToNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.enabledTo | ycdatetime }}</a>&nbsp;</td>
           <td title="{{ 'PROMOTION_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.enabled ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
-        </template>
+        </ng-template>
       </tr>
       </tbody>
     </table>

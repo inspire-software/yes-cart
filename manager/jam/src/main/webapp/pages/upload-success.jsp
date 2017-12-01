@@ -21,6 +21,7 @@
     <link href="${pageContext.servletContext.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="${pageContext.servletContext.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="${pageContext.servletContext.contextPath}/resources/css/yc-main.css" rel="stylesheet"/>
+    <link rel="icon" href="${pageContext.servletContext.contextPath}/resources/assets/favicon.ico" type="image/x-icon">
     <script>
         window.opener.postMessage("ok", '*');
     </script>

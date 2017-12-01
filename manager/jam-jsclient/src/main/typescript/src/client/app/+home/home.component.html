@@ -93,12 +93,12 @@
                     <i class="fa fa-rotate-left fa-5x"></i>
                   </div>
                   <div class="col-xs-9 text-right">
-                    <template [ngIf]="!widgets.UnprocessedPgCallbacks.data.hasUnprocessed">
+                    <ng-template [ngIf]="!widgets.UnprocessedPgCallbacks.data.hasUnprocessed">
                       <div class="huge">0</div>
-                    </template>
-                    <template [ngIf]="widgets.UnprocessedPgCallbacks.data.hasUnprocessed">
+                    </ng-template>
+                    <ng-template [ngIf]="widgets.UnprocessedPgCallbacks.data.hasUnprocessed">
                       <div *ngFor="let node of widgets.UnprocessedPgCallbacks.data.unprocessed" title="{{ node.first }}">{{ node.first.length > 15 ? (node.first.substring(0, 15) + '...') : node.first }} {{ node.second }}</div>
-                    </template>
+                    </ng-template>
                   </div>
                 </div>
               </div>

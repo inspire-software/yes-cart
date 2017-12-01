@@ -1,4 +1,4 @@
-<template [ngIf]="customer == null">
+<ng-template [ngIf]="customer == null">
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-xs-12 block-padding-spacer">
@@ -8,9 +8,9 @@
     </div>
   </div>
 
-</template>
+</ng-template>
 
-<template [ngIf]="customer == null || addressBook == null">
+<ng-template [ngIf]="customer == null || addressBook == null">
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-xs-12 block-padding-spacer">
@@ -20,9 +20,9 @@
     </div>
   </div>
 
-</template>
+</ng-template>
 
-<template [ngIf]="addressBook != null">
+<ng-template [ngIf]="addressBook != null">
 
   <div class="panel-body">
     <div class="row">
@@ -63,7 +63,7 @@
 
     </div>
   </div>
-</template>
+</ng-template>
 
 
 <yc-modal #editModalDialog
@@ -73,7 +73,7 @@
           [valid]="validForSave"
           (closed)="onEditConfirmationResult($event)">
 
-  <template [ngIf]="addressEdit != null">
+  <ng-template [ngIf]="addressEdit != null">
     <div [hidden]="addressForm.valid || addressForm.pristine" class="alert alert-warning">{{ 'ADDRESS_REQUIRED' | translate }}</div>
     <div  style="max-height: 400px;overflow-y: auto; overflow-x: hidden">
       <form role="form" [formGroup]="addressForm">
@@ -344,7 +344,7 @@
         </fieldset>
       </form>
     </div>
-  </template>
+  </ng-template>
 
 </yc-modal>
 
@@ -355,10 +355,10 @@
           [valid]="true"
           (closed)="onDeleteConfirmationResult($event)">
 
-  <template [ngIf]="addressEdit != null">
+  <ng-template [ngIf]="addressEdit != null">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (addressEdit.addrline1 + ' ' + addressEdit.postcode) } }}
     <pre [innerHTML]="getFormattedAddress(addressEdit)"></pre>
-  </template>
+  </ng-template>
 
 </yc-modal>
 

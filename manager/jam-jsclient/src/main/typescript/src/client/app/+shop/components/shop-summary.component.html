@@ -1,4 +1,4 @@
-<template [ngIf]="shopSummary == null">
+<ng-template [ngIf]="shopSummary == null">
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-xs-12 block-padding-spacer">
@@ -8,9 +8,9 @@
     </div>
   </div>
 
-</template>
+</ng-template>
 
-<template [ngIf]="shopSummary">
+<ng-template [ngIf]="shopSummary">
 
   <div class="text-right data-control">
     <yc-data-control [changed]="false"
@@ -323,6 +323,6 @@
     </div>
   </div>
 
-</template>
+</ng-template>
 
 <yc-mail-preview #mailPreviewComponent></yc-mail-preview>

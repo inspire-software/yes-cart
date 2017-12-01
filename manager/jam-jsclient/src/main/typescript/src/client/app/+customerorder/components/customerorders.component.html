@@ -19,7 +19,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredCustomerorders; let i = index" class="{{row == selectedCustomerorder ? 'active' : ''}}">
-        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'CUSTOMERORDER_SHOP_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
           <td title="{{ 'CUSTOMERORDER_NUM' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.ordernum}}</a></td>
           <td title="{{ 'CUSTOMERORDER_DATE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.orderTimestamp | ycdatetime}}</a></td>
@@ -29,7 +29,7 @@
           <td title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{ (showGrossTotal ? row.orderGrossTotal : row.orderNetTotal) | ycprice}}</a></td>
           <td title="{{ 'CUSTOMERORDER_PG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.pgName}}</a></td>
           <td title="{{ 'CUSTOMERORDER_BALANCE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.orderPaymentBalance | ycprice}}</a></td>
-        </template>
+        </ng-template>
       </tr>
       </tbody>
     </table>

@@ -13,13 +13,13 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredProductTypes; let i = index" class="{{row == selectedProductType ? 'active' : ''}}">
-        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.guid}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
           <td title="{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.uitemplate}}</a>&nbsp;</td>
           <td title="{{ 'PRODUCT_TYPE_UISEARCHTEMPLATE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.uisearchtemplate}}</a>&nbsp;</td>
           <td title="{{ 'PRODUCT_TYPE_FLAGS' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span [innerHTML]="getFlags(row)"></span></a>&nbsp;</td>
-        </template>
+        </ng-template>
       </tr>
       </tbody>
     </table>

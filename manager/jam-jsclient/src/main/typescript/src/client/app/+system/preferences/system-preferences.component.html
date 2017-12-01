@@ -42,7 +42,7 @@
     </div>
 
     <div class="{{ loading ? 'loading-data' : '' }}">
-      <template [ngIf]="systemAttributes">
+      <ng-template [ngIf]="systemAttributes">
         <yc-attribute-values #attributeValuesComponent
                              [masterObject]="system"
                              masterObjectType="system"
@@ -50,7 +50,7 @@
                              [attributeFilter]="attributeFilter"
                              (dataSelected)="onSelectRow($event)"
                              (dataChanged)="onDataChange($event)"></yc-attribute-values>
-      </template>
+      </ng-template>
     </div>
 
   </div>

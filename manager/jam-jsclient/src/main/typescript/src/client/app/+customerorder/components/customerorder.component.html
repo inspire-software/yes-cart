@@ -1,4 +1,4 @@
-<template [ngIf]="customerorder">
+<ng-template [ngIf]="customerorder">
 
     <tabset>
 
@@ -67,10 +67,10 @@
                     <td title="{{ 'CUSTOMERORDER_DELIVERY' | translate }}">
                       <a class="{{ isLineDeliveryHasNext(row) ? 'js-click' : 'disabled' }}" (click)="onSelectLineRow(row)">{{row.deliveryNum}}</a><br/>
                       {{row.supplierCode ? (row.supplierCode + ': ') : ''}}{{ row.deliveryStatusLabel | translate }}
-                      <template [ngIf]="row.deliveryGuaranteed"><br/><i class="fa fa-calendar-check-o"></i> {{ row.deliveryGuaranteed | ycdate }}</template>
-                      <template [ngIf]="row.deliveryEstimatedMin"><br/><i class="fa fa-calendar"></i> {{ row.deliveryEstimatedMin | ycdate }}</template><template [ngIf]="row.deliveryEstimatedMax"> - {{ row.deliveryEstimatedMax | ycdate }}</template>
-                      <template [ngIf]="row.deliveryConfirmed"><br/><i class="fa fa-check-square-o"></i> {{ row.deliveryConfirmed | ycdate }}</template>
-                      <template [ngIf]="row.deliveryRemarks"><i class="fa fa-info-circle" title="{{ row.deliveryRemarks }}"></i></template>
+                      <ng-template [ngIf]="row.deliveryGuaranteed"><br/><i class="fa fa-calendar-check-o"></i> {{ row.deliveryGuaranteed | ycdate }}</ng-template>
+                      <ng-template [ngIf]="row.deliveryEstimatedMin"><br/><i class="fa fa-calendar"></i> {{ row.deliveryEstimatedMin | ycdate }}</ng-template><ng-template [ngIf]="row.deliveryEstimatedMax"> - {{ row.deliveryEstimatedMax | ycdate }}</ng-template>
+                      <ng-template [ngIf]="row.deliveryConfirmed"><br/><i class="fa fa-check-square-o"></i> {{ row.deliveryConfirmed | ycdate }}</ng-template>
+                      <ng-template [ngIf]="row.deliveryRemarks"><i class="fa fa-info-circle" title="{{ row.deliveryRemarks }}"></i></ng-template>
                     </td>
                     <td title="{{ 'NAME' | translate }}">
                       <div>{{row.skuCode}}<br/>{{row.skuName}}</div>
@@ -79,7 +79,7 @@
                     </td>
                     <td title="{{ 'QUANTITY' | translate }}" class="text-right">
                       <span class="{{ row.deliveryRejected ? 'text-danger' : (row.deliveryDifferent ? 'text-warning' : '') }}">{{row.qty | ycquantity}}</span>
-                      <template [ngIf]="row.deliveryDifferent"><br/><span><i class="fa fa-truck"></i> {{ row.deliveredQuantity | ycquantity }}</span></template>
+                      <ng-template [ngIf]="row.deliveryDifferent"><br/><span><i class="fa fa-truck"></i> {{ row.deliveredQuantity | ycquantity }}</span></ng-template>
                     </td>
                     <td title="{{ 'COST' | translate }}" class="text-right">{{ getLineCost(row) | ycprice}}</td>
                     <td title="{{ 'PRICE' | translate }}" class="text-right"><span [innerHTML]="getLinePriceFlags(row)"></span> {{ (showGrossTotal ? row.grossPrice : row.netPrice) | ycprice}}</td>
@@ -100,10 +100,10 @@
                   <tr *ngFor="let delivery of customerorder.deliveries" class="{{delivery == selectedDelivery ? 'active' : ''}}">
                     <th colspan="6">
                       {{ 'CUSTOMERORDER_DELIVERY_' + delivery.deliveryGroup | translate }}: <a class="{{ isDeliveryHasNextOption(delivery) ? 'js-click' : 'disabled' }} " (click)="onSelectDeliveryRow(delivery)">{{ delivery.deliveryNum }}</a> ( {{ delivery.carrierSlaName }} {{delivery.refNo}} )
-                      <template [ngIf]="delivery.requestedDeliveryDate"><br/><i class="fa fa-user"></i> {{ delivery.requestedDeliveryDate | ycdate }}</template>
-                      <template [ngIf]="delivery.deliveryGuaranteed"><br/><i class="fa fa-calendar-check-o"></i> {{ delivery.deliveryGuaranteed | ycdate }}</template>
-                      <template [ngIf]="delivery.deliveryEstimatedMin"><br/><i class="fa fa-calendar"></i> {{ delivery.deliveryEstimatedMin | ycdate }}</template><template [ngIf]="delivery.deliveryEstimatedMax"> - {{ delivery.deliveryEstimatedMax | ycdate }}</template>
-                      <template [ngIf]="delivery.deliveryConfirmed"><br/><i class="fa fa-check-square-o"></i> {{ delivery.deliveryConfirmed | ycdate }}</template>
+                      <ng-template [ngIf]="delivery.requestedDeliveryDate"><br/><i class="fa fa-user"></i> {{ delivery.requestedDeliveryDate | ycdate }}</ng-template>
+                      <ng-template [ngIf]="delivery.deliveryGuaranteed"><br/><i class="fa fa-calendar-check-o"></i> {{ delivery.deliveryGuaranteed | ycdate }}</ng-template>
+                      <ng-template [ngIf]="delivery.deliveryEstimatedMin"><br/><i class="fa fa-calendar"></i> {{ delivery.deliveryEstimatedMin | ycdate }}</ng-template><ng-template [ngIf]="delivery.deliveryEstimatedMax"> - {{ delivery.deliveryEstimatedMax | ycdate }}</ng-template>
+                      <ng-template [ngIf]="delivery.deliveryConfirmed"><br/><i class="fa fa-check-square-o"></i> {{ delivery.deliveryConfirmed | ycdate }}</ng-template>
                       {{ delivery.deliveryRemarks }}
                     </th>
                     <td class="text-right">{{ (showGrossTotal ? delivery.grossPrice : delivery.netPrice) | ycprice }}</td>
@@ -114,7 +114,7 @@
                   <tr>
                     <th colspan="6">
                       {{ 'CUSTOMERORDER_TOTAL_ORDER' | translate }} {{ customerorder.currency }}
-                      <template [ngIf]="customerorder.requestedDeliveryDate"><br/><i class="fa fa-user"></i> {{ customerorder.requestedDeliveryDate | ycdate }}</template>
+                      <ng-template [ngIf]="customerorder.requestedDeliveryDate"><br/><i class="fa fa-user"></i> {{ customerorder.requestedDeliveryDate | ycdate }}</ng-template>
                     </th>
                     <td class="text-right">{{ (showGrossTotal ? customerorder.orderGrossTotal : customerorder.orderNetTotal) | ycprice }}</td>
                     <td>&nbsp;</td>
@@ -188,9 +188,9 @@
 
       <tab  (select)="tabSelected('B2B')">
 
-        <template tabHeading>
+        <ng-template tabHeading>
           {{ 'CUSTOMERORDER_TAB_B2B' | translate }} <span class="label label-info">YCE</span>
-        </template>
+        </ng-template>
 
         <div class="row">
           <div class="col-xs-12">
@@ -251,7 +251,7 @@
                       </td>
                       <td title="{{ 'QUANTITY' | translate }}" class="text-right">
                         &nbsp;<span class="{{ row.deliveryRejected ? 'text-danger' : (row.deliveryDifferent ? 'text-warning' : '') }}">{{row.qty | ycquantity}}</span>
-                        <template [ngIf]="row.deliveryDifferent"><br/><span><i class="fa fa-truck"></i> {{ row.deliveredQuantity | ycquantity }}</span></template>
+                        <ng-template [ngIf]="row.deliveryDifferent"><br/><span><i class="fa fa-truck"></i> {{ row.deliveredQuantity | ycquantity }}</span></ng-template>
                       </td>
                       <td title="{{ 'COST' | translate }}" class="text-right">&nbsp;{{ getLineCost(row) | ycprice}}</td>
                       <td title="{{ 'CUSTOMERORDER_TAB_EXTRADETAILS' | translate }}">
@@ -320,9 +320,9 @@
 
       <tab (select)="tabSelected('Export')">
 
-        <template tabHeading>
+        <ng-template tabHeading>
           {{ 'CUSTOMERORDER_TAB_AUDIT' | translate }} <span class="label label-info">YCE</span>
-        </template>
+        </ng-template>
 
         <div class="row">
           <div class="col-xs-12">
@@ -358,9 +358,9 @@
                     <strong>{{ customerorder.ordernum }}</strong> {{ customerorder.eligibleForExport }}
                   </div>
                   <div *ngFor=" let exportDelivery of customerorder.deliveries">
-                    <template [ngIf]="exportDelivery.eligibleForExport != null">
+                    <ng-template [ngIf]="exportDelivery.eligibleForExport != null">
                       <strong>{{ exportDelivery.deliveryNum }}</strong> {{ exportDelivery.eligibleForExport }}
-                    </template>
+                    </ng-template>
                   </div>
                 </div>
               </div>
@@ -372,10 +372,10 @@
                     <pre *ngIf="customerorder.lastExportStatus != null">{{ customerorder.lastExportStatus }}</pre>
                   </div>
                   <div *ngFor=" let exportedDelivery of customerorder.deliveries">
-                    <template [ngIf]="exportedDelivery.lastExportDeliveryStatus != null">
+                    <ng-template [ngIf]="exportedDelivery.lastExportDeliveryStatus != null">
                       <strong class="{{ exportedDelivery.lastExportStatus != null ? 'text-danger' : '' }}">{{ exportedDelivery.deliveryNum }}</strong> {{ exportedDelivery.lastExportDeliveryStatus | translate }} {{ exportedDelivery.lastExportDate | ycdatetime }}
                       <pre *ngIf="exportedDelivery.lastExportStatus != null">{{ exportedDelivery.lastExportStatus }}</pre>
-                    </template>
+                    </ng-template>
                   </div>
                 </div>
               </div>
@@ -391,4 +391,4 @@
 
     </tabset>
 
-</template>
+</ng-template>

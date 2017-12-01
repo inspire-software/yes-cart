@@ -1,4 +1,4 @@
-<template [ngIf]="sku">
+<ng-template [ngIf]="sku">
 
   <form role="form" [formGroup]="skuForm">
     <tabset>
@@ -202,7 +202,7 @@
 
       <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
 
-        <template [ngIf]="!(sku.skuId > 0)">
+        <ng-template [ngIf]="!(sku.skuId > 0)">
 
           <div class="row">
             <div class="col-xs-12 block-padding-spacer">
@@ -212,9 +212,9 @@
             </div>
           </div>
 
-        </template>
+        </ng-template>
 
-        <template [ngIf]="sku.skuId > 0">
+        <ng-template [ngIf]="sku.skuId > 0">
 
           <div class="panel-body">
             <div class="row">
@@ -265,11 +265,11 @@
                                    (dataChanged)="onAttributeDataChanged($event)"></yc-attribute-values>
             </div>
           </div>
-        </template>
+        </ng-template>
 
       </tab>
 
     </tabset>
   </form>
 
-</template>
+</ng-template>

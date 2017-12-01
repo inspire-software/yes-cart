@@ -1,4 +1,4 @@
-<template [ngIf]="shopCode == null">
+<ng-template [ngIf]="shopCode == null">
 
   <div class="row">
     <div class="col-xs-12 block-padding-spacer">
@@ -8,10 +8,10 @@
     </div>
   </div>
 
-</template>
+</ng-template>
 
-<template [ngIf]="shopCode">
+<ng-template [ngIf]="shopCode">
 
    <yc-payment-gateways [system]="false" [shopCode]="shopCode"></yc-payment-gateways>
 
-</template>
+</ng-template>

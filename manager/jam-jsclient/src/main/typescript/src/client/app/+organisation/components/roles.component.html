@@ -10,10 +10,10 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredRoles; let i = index" class="{{row == selectedRole ? 'active' : ''}}">
-        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
           <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.description}}</a></td>
-        </template>
+        </ng-template>
       </tr>
       </tbody>
     </table>

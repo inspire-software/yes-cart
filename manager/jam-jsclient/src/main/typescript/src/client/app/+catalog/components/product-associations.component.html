@@ -1,4 +1,4 @@
-<template [ngIf]="masterObject">
+<ng-template [ngIf]="masterObject">
 
   <section class="no-more-tables">
     <table class="table-bordered table-striped table-condensed cf">
@@ -12,12 +12,12 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredObjectAssociations; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
-        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="js-click">{{getAssociationType(row)}}</a></td>
           <td title="{{ 'AV_RANK' | translate }}"><a (click)="onSelectRow(row)" class="js-click">{{row.rank}}</a></td>
           <td title="{{ 'CODE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="js-click">{{row.associatedCode}}</a></td>
           <td title="{{ 'NAME' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="js-click">{{row.associatedName}}</a></td>
-        </template>
+        </ng-template>
       </tr>
       </tbody>
     </table>
@@ -46,7 +46,7 @@
          [valid]="validForSave"
          (closed)="onEditModalResult($event)">
 
-    <template [ngIf]="associationToEdit != null">
+    <ng-template [ngIf]="associationToEdit != null">
       <form role="form">
         <fieldset>
           <div class="row">
@@ -69,7 +69,7 @@
           </div>
         </fieldset>
       </form>
-    </template>
+    </ng-template>
 
   </yc-modal>
 
@@ -80,7 +80,7 @@
          [valid]="validForSave"
          (closed)="onEditModalResult($event)">
 
-    <template [ngIf]="associationToEdit != null">
+    <ng-template [ngIf]="associationToEdit != null">
       <form role="form">
         <fieldset>
           <div class="row">
@@ -118,10 +118,10 @@
           </div>
         </fieldset>
       </form>
-    </template>
+    </ng-template>
 
   </yc-modal>
 
   <yc-product-select #productSelectDialog (dataSelected)="onProductSelected($event)"></yc-product-select>
 
-</template>
+</ng-template>

@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_BASE_HREF } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { AppComponent } from './app.component';
-import { routes } from './app.routes';
+import { AppRoutingModule } from './app-routing.module';
 
-import { TranslateModule } from 'ng2-translate/bundles/index';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { CatalogPagesModule } from './+catalog/catalog.pages.module';
 import { ContentPagesModule } from './+content/content.pages.module';
@@ -27,10 +28,21 @@ import { SharedModule } from './shared/shared.module';
 
 import { ServicesModule } from './shared/services/services.module';
 
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './i18n/', '.json');
+}
+
 @NgModule({
   imports: [
-    BrowserModule, HttpModule, RouterModule.forRoot(routes),
-    TranslateModule.forRoot(),
+    BrowserModule, HttpModule, AppRoutingModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      }
+    }),
     CatalogPagesModule,
     ContentPagesModule,
     AddressBookPagesModule,

@@ -1,4 +1,4 @@
-<template [ngIf]="curr == null">
+<ng-template [ngIf]="curr == null">
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-xs-12 block-padding-spacer">
@@ -8,9 +8,9 @@
     </div>
   </div>
 
-</template>
+</ng-template>
 
-<template [ngIf]="curr">
+<ng-template [ngIf]="curr">
 
   <div class="text-right data-control">
     <yc-data-control [changed]="changed"
@@ -35,4 +35,4 @@
     </div>
   </div>
 
-</template>
+</ng-template>

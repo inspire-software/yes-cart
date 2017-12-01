@@ -1,4 +1,4 @@
-<template [ngIf]="masterObject">
+<ng-template [ngIf]="masterObject">
 
   <section class="no-more-tables">
     <table class="table-bordered table-striped table-condensed cf">
@@ -11,11 +11,11 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredObjectAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
-        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click" [title]="row.attribute.code">{{row.attribute.name}}</a></td>
           <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click" [title]="row.attribute.code">{{row.attribute.etypeName}} <span [innerHTML]="getSearchFlags(row.attribute)"></span></a></td>
           <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click text-force-break"><div [innerHTML]="getDisplayValue(row)"></div></a></td>
-        </template>
+        </ng-template>
       </tr>
       </tbody>
     </table>
@@ -44,7 +44,7 @@
          [valid]="validForSave"
          (closed)="onEditModalResult($event)">
 
-    <template [ngIf]="booleanEditor">
+    <ng-template [ngIf]="booleanEditor">
 
       <form role="form">
         <fieldset>
@@ -62,9 +62,9 @@
         </fieldset>
       </form>
 
-    </template>
+    </ng-template>
 
-    <template [ngIf]="miniTextEditor">
+    <ng-template [ngIf]="miniTextEditor">
 
       <form role="form">
         <fieldset>
@@ -82,10 +82,10 @@
         </fieldset>
       </form>
 
-    </template>
+    </ng-template>
 
 
-    <template [ngIf]="textEditor">
+    <ng-template [ngIf]="textEditor">
 
       <form role="form">
         <fieldset>
@@ -103,10 +103,10 @@
         </fieldset>
       </form>
 
-    </template>
+    </ng-template>
 
 
-    <template [ngIf]="textAreaEditor">
+    <ng-template [ngIf]="textAreaEditor">
 
       <form role="form">
         <fieldset>
@@ -124,10 +124,10 @@
         </fieldset>
       </form>
 
-    </template>
+    </ng-template>
 
 
-    <template [ngIf]="localisableEditor">
+    <ng-template [ngIf]="localisableEditor">
 
       <form role="form">
         <fieldset>
@@ -148,9 +148,9 @@
         </fieldset>
       </form>
 
-    </template>
+    </ng-template>
 
-    <template [ngIf]="imageEditor">
+    <ng-template [ngIf]="imageEditor">
 
       <form role="form">
         <fieldset>
@@ -181,10 +181,10 @@
         </fieldset>
       </form>
 
-    </template>
+    </ng-template>
 
 
-    <template [ngIf]="fileEditor">
+    <ng-template [ngIf]="fileEditor">
 
       <form role="form">
         <fieldset>
@@ -211,10 +211,10 @@
         </fieldset>
       </form>
 
-    </template>
+    </ng-template>
 
 
-    <template [ngIf]="lockedEditor">
+    <ng-template [ngIf]="lockedEditor">
 
       <form role="form">
         <fieldset>
@@ -226,7 +226,7 @@
         </fieldset>
       </form>
 
-    </template>
+    </ng-template>
 
   </yc-modal>
 
@@ -245,4 +245,4 @@
 
   </yc-modal>
 
-</template>
+</ng-template>

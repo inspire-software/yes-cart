@@ -6,11 +6,12 @@ import { ServicesModule } from '../shared/services/services.module';
 
 import { AddressBookPagesModule } from '../+address/address.pages.module';
 
+import { CustomerRoutingModule } from './customer-routing.module';
 import { CustomerComponent, CustomersComponent } from './components/index';
 import { AllCustomersComponent } from './index';
 
 @NgModule({
-    imports: [CommonModule, SharedModule, ServicesModule, AddressBookPagesModule],
+    imports: [CustomerRoutingModule, CommonModule, SharedModule, ServicesModule, AddressBookPagesModule],
     declarations: [
       CustomerComponent, CustomersComponent,
       AllCustomersComponent

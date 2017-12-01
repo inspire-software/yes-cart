@@ -1,4 +1,4 @@
-<template [ngIf]="shopAlias == null">
+<ng-template [ngIf]="shopAlias == null">
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-xs-12 block-padding-spacer">
@@ -8,9 +8,9 @@
     </div>
   </div>
 
-</template>
+</ng-template>
 
-<template [ngIf]="shopAlias">
+<ng-template [ngIf]="shopAlias">
 
   <div class="text-right data-control">
 
@@ -49,9 +49,9 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredShopAlias; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
-        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.alias}}</a></td>
-        </template>
+        </ng-template>
       </tr>
       </tbody>
     </table>
@@ -102,4 +102,4 @@
 
   </yc-modal>
 
-</template>
+</ng-template>

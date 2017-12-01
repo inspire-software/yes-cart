@@ -1,4 +1,4 @@
-<template [ngIf]="shopAttributes == null">
+<ng-template [ngIf]="shopAttributes == null">
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-xs-12 block-padding-spacer">
@@ -8,9 +8,9 @@
     </div>
   </div>
 
-</template>
+</ng-template>
 
-<template [ngIf]="shopAttributes">
+<ng-template [ngIf]="shopAttributes">
 
   <div class="text-right data-control">
 
@@ -59,4 +59,4 @@
                        (dataSelected)="onSelectRow($event)"
                        (dataChanged)="onDataChange($event)"></yc-attribute-values>
 
-</template>
+</ng-template>

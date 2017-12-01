@@ -1,4 +1,4 @@
-<template [ngIf]="shopCentresVO == null">
+<ng-template [ngIf]="shopCentresVO == null">
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-xs-12 block-padding-spacer">
@@ -8,9 +8,9 @@
     </div>
   </div>
 
-</template>
+</ng-template>
 
-<template [ngIf]="shopCentresVO">
+<ng-template [ngIf]="shopCentresVO">
 
   <div class="text-right data-control">
 
@@ -76,4 +76,4 @@
     </form>
   </yc-modal>
 
-</template>
+</ng-template>

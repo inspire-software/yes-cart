@@ -11,7 +11,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredCarriers; let i = index" class="{{row == selectedCarrier ? 'active' : ''}}">
-        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
           <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.description}}&nbsp;</a></td>
           <td title="{{ 'TAB_SHOPS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">
@@ -19,7 +19,7 @@
               <li *ngFor="let carrierShop of getShopNames(row)" [ngClass]="carrierShop.active ? '' : 'text-strikethrough text-muted'">{{carrierShop.name}}</li>
             </ul>
           </a></td>
-        </template>
+        </ng-template>
       </tr>
       </tbody>
     </table>

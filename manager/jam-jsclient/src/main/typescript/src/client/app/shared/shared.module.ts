@@ -3,15 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { TranslateModule } from 'ng2-translate/bundles/index';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe } from './pipes/index';
 
 import { ServicesModule } from './services/services.module';
 
-import { PaginationModule } from 'ng2-bootstrap/components/pagination';
-import { AccordionModule } from 'ng2-bootstrap/components/accordion';
-import { TabsModule } from 'ng2-bootstrap/components/tabs';
+import { PaginationModule, AccordionModule, TabsModule } from 'ngx-bootstrap';
 
 import { ModalComponent } from './modal/index';
 
@@ -48,7 +46,7 @@ import { CurrencySelectComponent } from './price/index';
     CommonModule, RouterModule,
     FormsModule, ReactiveFormsModule,
     TranslateModule, ServicesModule,
-    AccordionModule, PaginationModule, TabsModule
+    AccordionModule.forRoot(), PaginationModule.forRoot(), TabsModule.forRoot()
   ],
   declarations: [
     YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe,

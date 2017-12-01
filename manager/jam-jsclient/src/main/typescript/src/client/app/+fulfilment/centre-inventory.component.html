@@ -88,7 +88,7 @@
             [valid]="validForSave"
             (closed)="onEditInventoryResult($event)">
 
-    <template [ngIf]="inventoryEdit">
+    <ng-template [ngIf]="inventoryEdit">
       <form role="form" [formGroup]="inventoryEditForm">
         <fieldset>
           <div class="row">
@@ -142,7 +142,7 @@
           </div>
         </fieldset>
       </form>
-    </template>
+    </ng-template>
   </yc-modal>
 
   <yc-modal #selectCentreModalDialog

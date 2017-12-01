@@ -1,4 +1,4 @@
-<template [ngIf]="shopSubs == null">
+<ng-template [ngIf]="shopSubs == null">
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-xs-12 block-padding-spacer">
@@ -8,9 +8,9 @@
     </div>
   </div>
 
-</template>
+</ng-template>
 
-<template [ngIf]="shopSubs">
+<ng-template [ngIf]="shopSubs">
 
   <div class="text-right data-control">
 
@@ -40,10 +40,10 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredShopSub; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
-        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'NAME' | translate }}"><a class="js-click" [routerLink]="['/subshop', row.shopId ]"><span [ngClass]="row.disabled ? 'label label-danger': 'label label-success'">{{row.code}}</span> {{row.name}}</a></td>
           <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" [routerLink]="['/subshop', row.shopId ]">{{row.description}}</a>&nbsp;</td>
-        </template>
+        </ng-template>
       </tr>
       </tbody>
     </table>
@@ -104,4 +104,4 @@
 
   </yc-modal>
 
-</template>
+</ng-template>

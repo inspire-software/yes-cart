@@ -101,7 +101,7 @@
             [valid]="validForSave"
             (closed)="onEditPricelistResult($event)">
 
-    <template [ngIf]="pricelistEdit">
+    <ng-template [ngIf]="pricelistEdit">
       <form role="form" [formGroup]="pricelistEditForm">
         <fieldset>
           <div class="row">
@@ -224,7 +224,7 @@
           </div>
         </fieldset>
       </form>
-    </template>
+    </ng-template>
   </yc-modal>
 
   <yc-modal #selectShopModalDialog

@@ -11,11 +11,11 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredGateways; let i = index" class="{{row == selectedGateway ? 'active' : ''}}">
-        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.label}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
           <td title="{{ 'PG_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.active ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
-        </template>
+        </ng-template>
       </tr>
       </tbody>
     </table>

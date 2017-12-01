@@ -1,4 +1,4 @@
-<template [ngIf]="!existingShop">
+<ng-template [ngIf]="!existingShop">
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-xs-12 block-padding-spacer">
@@ -8,9 +8,9 @@
     </div>
   </div>
 
-</template>
+</ng-template>
 
-<template [ngIf]="existingShop">
+<ng-template [ngIf]="existingShop">
 
   <div class="text-right data-control">
 
@@ -82,4 +82,4 @@
     </div>
   </div>
 
-</template>
+</ng-template>

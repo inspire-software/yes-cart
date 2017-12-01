@@ -125,7 +125,7 @@
             [valid]="validForSaveTax"
             (closed)="onEditTaxResult($event)">
 
-    <template [ngIf]="taxEdit">
+    <ng-template [ngIf]="taxEdit">
       <form role="form" [formGroup]="taxEditForm">
         <fieldset>
           <div class="row">
@@ -178,7 +178,7 @@
           </div>
         </fieldset>
       </form>
-    </template>
+    </ng-template>
   </yc-modal>
 
 
@@ -190,7 +190,7 @@
             [valid]="validForSaveTaxconfig"
             (closed)="onEditTaxResult($event)">
 
-    <template [ngIf]="taxconfigEdit">
+    <ng-template [ngIf]="taxconfigEdit">
       <form role="form" [formGroup]="taxconfigEditForm">
         <fieldset>
           <div class="row">
@@ -222,7 +222,7 @@
           </div>
         </fieldset>
       </form>
-    </template>
+    </ng-template>
   </yc-modal>
 
 

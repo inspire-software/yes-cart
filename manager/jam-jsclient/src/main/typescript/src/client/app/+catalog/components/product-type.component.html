@@ -1,4 +1,4 @@
-<template [ngIf]="productType">
+<ng-template [ngIf]="productType">
 
   <form role="form" [formGroup]="productTypeForm">
     <tabset>
@@ -109,7 +109,7 @@
 
       <tab heading="{{ 'PRODUCT_TYPE_TAB_GROUPS' | translate }}" (select)="tabSelected('Groups')">
 
-        <template [ngIf]="!(productType.producttypeId > 0)">
+        <ng-template [ngIf]="!(productType.producttypeId > 0)">
 
           <div class="row">
             <div class="col-xs-12 block-padding-spacer">
@@ -119,9 +119,9 @@
             </div>
           </div>
 
-        </template>
+        </ng-template>
 
-        <template [ngIf]="productType.producttypeId > 0">
+        <ng-template [ngIf]="productType.producttypeId > 0">
           <div class="panel-body">
             <div class="row">
               <div class="text-right data-control">
@@ -156,12 +156,12 @@
                                    (dataChanged)="onGroupDataChanged($event)"></yc-product-type-group>
           </div>
 
-        </template>
+        </ng-template>
       </tab>
 
       <tab heading="{{ 'TAB_TYPE_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
 
-        <template [ngIf]="!(productType.producttypeId > 0)">
+        <ng-template [ngIf]="!(productType.producttypeId > 0)">
 
           <div class="row">
             <div class="col-xs-12 block-padding-spacer">
@@ -171,9 +171,9 @@
             </div>
           </div>
 
-        </template>
+        </ng-template>
 
-        <template [ngIf]="productType.producttypeId > 0">
+        <ng-template [ngIf]="productType.producttypeId > 0">
 
           <div class="panel-body">
             <div class="row">
@@ -218,11 +218,11 @@
                                          (dataChanged)="onAttributeDataChanged($event)"></yc-product-type-attribute>
             </div>
           </div>
-        </template>
+        </ng-template>
 
       </tab>
 
     </tabset>
   </form>
 
-</template>
+</ng-template>

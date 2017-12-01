@@ -1,4 +1,4 @@
-<template [ngIf]="masterObject">
+<ng-template [ngIf]="masterObject">
 
   <div class="panel-body">
     <div class="row">
@@ -15,7 +15,7 @@
       </div>
 
       <div class="col-xs-12 col-md-8">
-         <template [ngIf]="selectedRow">
+         <ng-template [ngIf]="selectedRow">
            <div class="row">
              <div class="col-xs-12">
                 <h3>{{selectedRow.name}}</h3>
@@ -46,12 +46,12 @@
                </ul>
              </div>
            </div>
-         </template>
+         </ng-template>
       </div>
     </div>
   </div>
 
-</template>
+</ng-template>
 
 <yc-modal #deleteConfirmationModalDialog
           title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
@@ -70,7 +70,7 @@
           [valid]="validForSave"
           (closed)="onEditModalResult($event)">
 
-  <template [ngIf]="groupToEdit">
+  <ng-template [ngIf]="groupToEdit">
 
     <form role="form">
       <fieldset>
@@ -93,7 +93,7 @@
       </fieldset>
     </form>
 
-  </template>
+  </ng-template>
 
 </yc-modal>
 

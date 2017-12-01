@@ -1,11 +1,11 @@
-<template [ngIf]="manager">
+<ng-template [ngIf]="manager">
 
   <form role="form" [formGroup]="managerForm">
     <tabset>
 
       <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
 
-        <template [ngIf]="manager != null && !(manager.managerId > 0) && (manager.managerShops == null || manager.managerShops.length == 0)">
+        <ng-template [ngIf]="manager != null && !(manager.managerId > 0) && (manager.managerShops == null || manager.managerShops.length == 0)">
           <div class="row">
             <div class="col-xs-12 block-padding-spacer">
               <div class="bg-info text-padding">
@@ -13,7 +13,7 @@
               </div>
             </div>
           </div>
-        </template>
+        </ng-template>
 
         <div class="col-md-9 col-lg-6">
           <div class="panel-body">
@@ -55,9 +55,9 @@
 
       <tab heading="{{ 'TAB_SHOPS' | translate }}"  (select)="tabSelected('Shops')">
 
-        <template [ngIf]="manager != null">
+        <ng-template [ngIf]="manager != null">
 
-          <template [ngIf]="!(manager.managerId > 0) && (manager.managerShops == null || manager.managerShops.length == 0)">
+          <ng-template [ngIf]="!(manager.managerId > 0) && (manager.managerShops == null || manager.managerShops.length == 0)">
             <div class="row">
               <div class="col-xs-12 block-padding-spacer">
                 <div class="bg-info text-padding">
@@ -65,7 +65,7 @@
                 </div>
               </div>
             </div>
-          </template>
+          </ng-template>
 
           <div class="row">
             <div class="col-md-6 col-lg-5">
@@ -82,13 +82,13 @@
             </div>
           </div>
 
-        </template>
+        </ng-template>
 
       </tab>
 
       <tab heading="{{ 'TAB_ROLES' | translate }}"  (select)="tabSelected('Roles')">
 
-        <template [ngIf]="manager != null">
+        <ng-template [ngIf]="manager != null">
 
           <div class="row">
             <div class="col-md-6 col-lg-5">
@@ -105,11 +105,11 @@
             </div>
           </div>
 
-        </template>
+        </ng-template>
 
       </tab>
 
     </tabset>
   </form>
 
-</template>
+</ng-template>

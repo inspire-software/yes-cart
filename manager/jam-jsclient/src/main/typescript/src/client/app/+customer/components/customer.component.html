@@ -1,11 +1,11 @@
-<template [ngIf]="customer">
+<ng-template [ngIf]="customer">
 
   <form role="form" [formGroup]="customerForm">
     <tabset>
 
       <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
 
-        <template [ngIf]="customer != null && !(customer.customerId > 0) && (customer.customerShops == null || customer.customerShops.length == 0)">
+        <ng-template [ngIf]="customer != null && !(customer.customerId > 0) && (customer.customerShops == null || customer.customerShops.length == 0)">
           <div class="row">
             <div class="col-xs-12 block-padding-spacer">
               <div class="bg-warning text-padding">
@@ -13,7 +13,7 @@
               </div>
             </div>
           </div>
-        </template>
+        </ng-template>
 
         <div class="row">
           <div class="col-md-9 col-lg-6">
@@ -88,9 +88,9 @@
 
       <tab  (select)="tabSelected('B2B')">
 
-        <template tabHeading>
+        <ng-template tabHeading>
           {{ 'CUSTOMER_TAB_B2B' | translate }} <span class="label label-info">YCE</span>
-        </template>
+        </ng-template>
 
         <div class="row">
           <div class="col-xs-12">
@@ -120,9 +120,9 @@
 
       <tab heading="{{ 'TAB_SHOPS' | translate }}"  (select)="tabSelected('Shops')">
 
-        <template [ngIf]="customer != null">
+        <ng-template [ngIf]="customer != null">
 
-          <template [ngIf]="!(customer.customerId > 0) && (customer.customerShops == null || customer.customerShops.length == 0)">
+          <ng-template [ngIf]="!(customer.customerId > 0) && (customer.customerShops == null || customer.customerShops.length == 0)">
             <div class="row">
               <div class="col-xs-12 block-padding-spacer">
                 <div class="bg-warning text-padding">
@@ -130,7 +130,7 @@
                 </div>
               </div>
             </div>
-          </template>
+          </ng-template>
 
           <div class="row">
             <div class="col-md-6 col-lg-5">
@@ -147,13 +147,13 @@
             </div>
           </div>
 
-        </template>
+        </ng-template>
 
       </tab>
 
       <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
 
-        <template [ngIf]="!(customer.customerId > 0)">
+        <ng-template [ngIf]="!(customer.customerId > 0)">
 
           <div class="row">
             <div class="col-xs-12 block-padding-spacer">
@@ -163,9 +163,9 @@
             </div>
           </div>
 
-        </template>
+        </ng-template>
 
-        <template [ngIf]="customer.customerId > 0">
+        <ng-template [ngIf]="customer.customerId > 0">
 
           <div class="panel-body">
             <div class="row">
@@ -211,7 +211,7 @@
                                    (dataChanged)="onAttributeDataChanged($event)"></yc-attribute-values>
             </div>
           </div>
-        </template>
+        </ng-template>
 
       </tab>
 
@@ -225,7 +225,7 @@
     </tabset>
   </form>
 
-</template>
+</ng-template>
 
 <yc-modal #typeHelpModalDialog
           title="{{ 'CUSTOMER_TYPES_AVAILABLE' | translate }}"

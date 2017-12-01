@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { ServicesModule } from '../shared/services/services.module';
 
+import { PriceListRoutingModule } from './pricelist-routing.module';
 import { PriceListComponent, PromotionComponent, PromotionCouponsComponent, PromotionsComponent, TaxConfigsComponent, TaxesComponent } from './components/index';
 import { ShopPriceListComponent, ShopPromotionsComponent, ShopTaxesComponent } from './index';
 
 @NgModule({
-    imports: [CommonModule, SharedModule, ServicesModule],
+    imports: [PriceListRoutingModule, CommonModule, SharedModule, ServicesModule],
     declarations: [
       PriceListComponent, PromotionComponent, PromotionCouponsComponent, PromotionsComponent, TaxConfigsComponent, TaxesComponent,
       ShopPriceListComponent, ShopPromotionsComponent, ShopTaxesComponent,

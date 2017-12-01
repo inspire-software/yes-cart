@@ -1,4 +1,4 @@
-<template [ngIf]="product">
+<ng-template [ngIf]="product">
 
   <form role="form" [formGroup]="productForm">
     <tabset>
@@ -7,7 +7,7 @@
 
         <div class="panel-body">
 
-          <template [ngIf]="product != null && !(product.productId > 0) && (product.productCategories == null || product.productCategories.length == 0)">
+          <ng-template [ngIf]="product != null && !(product.productId > 0) && (product.productCategories == null || product.productCategories.length == 0)">
             <div class="row">
               <div class="col-xs-12 block-padding-spacer">
                 <div class="bg-warning text-padding">
@@ -15,7 +15,7 @@
                 </div>
               </div>
             </div>
-          </template>
+          </ng-template>
 
           <div class="row">
             <div class="col-md-9 col-lg-6">
@@ -181,7 +181,7 @@
 
       <tab heading="{{ 'SKU' | translate }}"  (select)="tabSelected('SKU')">
 
-        <template [ngIf]="!(product.productId > 0)">
+        <ng-template [ngIf]="!(product.productId > 0)">
 
           <div class="row">
             <div class="col-xs-12 block-padding-spacer">
@@ -191,9 +191,9 @@
             </div>
           </div>
 
-        </template>
+        </ng-template>
 
-        <template [ngIf]="product.productId > 0">
+        <ng-template [ngIf]="product.productId > 0">
 
           <div class="panel-body">
 
@@ -201,7 +201,7 @@
               <yc-skus [skus]="product.sku" (dataSelected)="onSkuSelected($event)"></yc-skus>
             </div>
           </div>
-        </template>
+        </ng-template>
 
       </tab>
 
@@ -374,7 +374,7 @@
 
       <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
 
-        <template [ngIf]="!(product.productId > 0)">
+        <ng-template [ngIf]="!(product.productId > 0)">
 
           <div class="row">
             <div class="col-xs-12 block-padding-spacer">
@@ -384,9 +384,9 @@
             </div>
           </div>
 
-        </template>
+        </ng-template>
 
-        <template [ngIf]="product.productId > 0">
+        <ng-template [ngIf]="product.productId > 0">
 
           <div class="panel-body">
             <div class="row">
@@ -437,13 +437,13 @@
                                    (dataChanged)="onAttributeDataChanged($event)"></yc-attribute-values>
             </div>
           </div>
-        </template>
+        </ng-template>
 
       </tab>
 
       <tab heading="{{ 'PRODUCT_TAB_CATALOG' | translate }}" (select)="tabSelected('Catalogue')">
 
-        <template [ngIf]="product != null && !(product.productId > 0) && (product.productCategories == null || product.productCategories.length == 0)">
+        <ng-template [ngIf]="product != null && !(product.productId > 0) && (product.productCategories == null || product.productCategories.length == 0)">
           <div class="row">
             <div class="col-xs-12 block-padding-spacer">
               <div class="bg-warning text-padding">
@@ -451,7 +451,7 @@
               </div>
             </div>
           </div>
-        </template>
+        </ng-template>
 
         <yc-product-categories-min [product]="product" [reload]="reloadCatalogue"
                                    (dataChanged)="onCategoriesDataChanged($event)"></yc-product-categories-min>
@@ -460,7 +460,7 @@
 
       <tab heading="{{ 'PRODUCT_TAB_ASSOCIATIONS' | translate }}"  (select)="tabSelected('Associations')">
 
-        <template [ngIf]="!(product.productId > 0)">
+        <ng-template [ngIf]="!(product.productId > 0)">
 
           <div class="row">
             <div class="col-xs-12 block-padding-spacer">
@@ -470,9 +470,9 @@
             </div>
           </div>
 
-        </template>
+        </ng-template>
 
-        <template [ngIf]="product.productId > 0">
+        <ng-template [ngIf]="product.productId > 0">
 
           <div class="panel-body">
             <div class="row">
@@ -518,7 +518,7 @@
 
             </div>
           </div>
-        </template>
+        </ng-template>
 
       </tab>
 
@@ -526,7 +526,7 @@
     </tabset>
   </form>
 
-</template>
+</ng-template>
 
 <yc-brand-select #brandsModalDialog
                  (dataSelected)="onBrandSelected($event)"></yc-brand-select>

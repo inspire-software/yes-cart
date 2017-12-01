@@ -67,13 +67,36 @@ export class QueryComponent implements OnInit {
   protected onNewTabHandler() {
 
     let qtype = this.selectedTabType ? this.selectedTabType : 'SQL';
-
     this.tabs.push({ query: '', qtype: qtype, result: '', resultQuery: '' });
+    if (this.tabs.length == 1) {
+      this.selectedTab = 0;
+    }
+
   }
 
   protected onTabDeleteSelected() {
     this.tabs.splice(this.selectedTab, 1);
     this.tabs = this.tabs.slice(0, this.tabs.length);
+    if (this.tabs.length == 1) {
+      this.selectedTab = 0;
+    } else {
+      this.selectedTab = -1;
+    }
+  }
+
+  protected onTabDeleteTab(tab:QueryTabData) {
+    if (tab != null) {
+      let idx = this.tabs.indexOf(tab);
+      if (idx != -1) {
+        this.tabs.splice(idx, 1);
+        this.tabs = this.tabs.slice(0, this.tabs.length);
+        if (this.tabs.length == 1) {
+          this.selectedTab = 0;
+        } else {
+          this.selectedTab = -1;
+        }
+      }
+    }
   }
 
   protected onRunHandler() {

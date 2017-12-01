@@ -64,7 +64,7 @@
             positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
             [valid]="true">
 
-    <template [ngIf]="selectedPayment">
+    <ng-template [ngIf]="selectedPayment">
 
       <div class="row">
         <div class="col-xs-4"><strong>{{ 'PAYMENT_DATE' | translate }}</strong></div>
@@ -127,7 +127,7 @@
         <div class="col-xs-8">{{ selectedPayment.shopperIpAddress }}</div>
       </div>
 
-    </template>
+    </ng-template>
 
   </yc-modal>
 

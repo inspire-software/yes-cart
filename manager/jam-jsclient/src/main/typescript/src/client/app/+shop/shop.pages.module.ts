@@ -8,6 +8,7 @@ import { AddressBookPagesModule } from '../+address/address.pages.module';
 
 import { SystemPagesModule } from '../+system/system.pages.module';
 
+import { ShopRoutingModule } from './shop-routing.module';
 import { ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCatalogMinComponent, ShopCurrencyComponent,
   ShopFulfilmentCentreComponent, ShopLanguageComponent, ShopLocationComponent, ShopMainComponent,
   ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent, ShopAliasComponent,
@@ -15,7 +16,7 @@ import { ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, Sh
 import { ShopComponent, SubShopComponent } from './index';
 
 @NgModule({
-    imports: [CommonModule, SharedModule, ServicesModule, SystemPagesModule, AddressBookPagesModule],
+    imports: [ShopRoutingModule, CommonModule, SharedModule, ServicesModule, SystemPagesModule, AddressBookPagesModule],
     declarations: [
       ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCatalogMinComponent, ShopCurrencyComponent,
       ShopFulfilmentCentreComponent, ShopLanguageComponent, ShopLocationComponent, ShopMainComponent,

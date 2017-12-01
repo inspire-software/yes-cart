@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { ServicesModule } from '../shared/services/services.module';
 
+import { LocationsRoutingModule } from './locations-routing.module';
 import { CountriesComponent, CountryComponent, StatesComponent, StateComponent } from './components/index';
 import { LocationsComponent } from './index';
 
 @NgModule({
-    imports: [CommonModule, SharedModule, ServicesModule],
+    imports: [LocationsRoutingModule, CommonModule, SharedModule, ServicesModule],
     declarations: [
       CountriesComponent, CountryComponent, StatesComponent, StateComponent,
       LocationsComponent,

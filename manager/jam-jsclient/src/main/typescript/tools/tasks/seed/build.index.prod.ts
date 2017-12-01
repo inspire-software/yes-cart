@@ -4,7 +4,7 @@ import { join, sep, normalize } from 'path';
 import * as slash from 'slash';
 
 import Config from '../../config';
-import { templateLocals } from '../../utils';
+import { TemplateLocalsBuilder } from '../../utils';
 
 const plugins = <any>gulpLoadPlugins();
 
@@ -16,7 +16,7 @@ export = () => {
   return gulp.src(join(Config.APP_SRC, 'index.html'))
     .pipe(injectJs())
     .pipe(injectCss())
-    .pipe(plugins.template(templateLocals()))
+    .pipe(plugins.template(new TemplateLocalsBuilder().withoutStringifiedEnvConfig().build()))
     .pipe(gulp.dest(Config.APP_DEST));
 };
 
@@ -42,7 +42,7 @@ function injectJs() {
  * Injects the bundled CSS files for the production environment.
  */
 function injectCss() {
-  return inject(join(Config.CSS_DEST, Config.CSS_PROD_BUNDLE));
+  return inject(join(Config.CSS_DEST, `${Config.CSS_BUNDLE_NAME}.css`));
 }
 
 /**
@@ -53,12 +53,16 @@ function transformPath() {
   return function(filepath: string) {
     let path: Array<string> = normalize(filepath).split(sep);
     let slice_after = path.indexOf(Config.APP_DEST);
-    if (slice_after>-1) {
+    if (slice_after > -1) {
       slice_after++;
     } else {
       slice_after = 3;
     }
-    arguments[0] = Config.APP_BASE + path.slice(slice_after, path.length).join(sep) + `?${Date.now()}`;
+    arguments[0] = Config.APP_BASE + path.slice(slice_after, path.length).join(sep);
+    const queryString = Config.QUERY_STRING_GENERATOR();
+    if (queryString) {
+      arguments[0] += `?${queryString}`;
+    }
     return slash(plugins.inject.transform.apply(plugins.inject.transform, arguments));
   };
 }

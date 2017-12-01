@@ -16,20 +16,20 @@ var onlyDirs = function (es: any) {
 
 /**
  * Executes the build process, copying the assets located in `src/client` over to the appropriate
- * `dist/prod` directory.  #YC#
+ * `dist/prod` directory.  #YC# Must comment out css/html/js in assets to include tinymce+upload scripts
  */
 export = () => {
   let es: any = require('event-stream');
   return gulp.src([
     join(Config.APP_SRC, '**'),
+    join(Config.NPM_BASE, '@angular', 'service-worker', 'bundles', 'worker-basic.min.js'),
     '!' + join(Config.APP_SRC, 'tsconfig.json'),
     '!' + join(Config.APP_SRC, '**', '*.ts'),
     '!' + join(Config.APP_SRC + '/app', '**', '*.css'),
     '!' + join(Config.APP_SRC + '/app', '**', '*.html'),
-    '!' + join(Config.APP_SRC, '**', 'index.html'),
-    '!' + join(Config.APP_SRC, '**', '*.scss'),
-    '!' + join(Config.APP_SRC, '**', '*.sass'),
-  /*  '!' + join(Config.ASSETS_SRC, '**', '*.js') */
+      '!' + join(Config.APP_SRC, '**', '*.scss'),
+      '!' + join(Config.APP_SRC, '**', '*.sass'),
+    /*  '!' + join(Config.ASSETS_SRC, '**', '*.js') */
   ].concat(Config.TEMP_FILES.map((p) => { return '!' + p; })))
     .pipe(onlyDirs(es))
     .pipe(gulp.dest(Config.APP_DEST));

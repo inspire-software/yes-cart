@@ -1,4 +1,4 @@
-<template [ngIf]="promotion">
+<ng-template [ngIf]="promotion">
 
   <div *ngIf="promotion.enabled">
     <p class="bg-warning text-padding">{{ 'PROMOTION_ENABLED_TIP' | translate }}</p>
@@ -153,7 +153,7 @@
 
       <tab heading="{{ 'PROMOTION_COUPONS' | translate }}"  (select)="tabSelected('Coupons')">
 
-        <template [ngIf]="!(promotion.promotionId > 0)">
+        <ng-template [ngIf]="!(promotion.promotionId > 0)">
 
           <div class="row">
             <div class="col-xs-12 block-padding-spacer">
@@ -163,9 +163,9 @@
             </div>
           </div>
 
-        </template>
+        </ng-template>
 
-        <template [ngIf]="!(promotion.promotionId > 0 && promotion.couponTriggered)">
+        <ng-template [ngIf]="!(promotion.promotionId > 0 && promotion.couponTriggered)">
 
           <div class="row">
             <div class="col-xs-12 block-padding-spacer">
@@ -175,9 +175,9 @@
             </div>
           </div>
 
-        </template>
+        </ng-template>
 
-        <template [ngIf]="promotion.promotionId > 0">
+        <ng-template [ngIf]="promotion.promotionId > 0">
 
           <div class="panel-body">
             <div class="row">
@@ -221,7 +221,7 @@
                                     (dataSelected)="onCouponSelected($event)"></yc-promotion-coupons>
             </div>
           </div>
-        </template>
+        </ng-template>
 
       </tab>
 
@@ -265,7 +265,7 @@
     </div>
   </yc-modal>
 
-</template>
+</ng-template>
 
 
 <yc-modal #deleteConfirmationModalDialog
@@ -288,7 +288,7 @@
     <p class="bg-success text-padding">{{ 'PROMOTION_COUPONS_GENERATE_TIP' | translate }}</p>
   </div>
 
-  <template [ngIf]="generateCoupons">
+  <ng-template [ngIf]="generateCoupons">
     <form role="form" [formGroup]="couponForm">
       <fieldset>
         <div class="row">
@@ -320,7 +320,7 @@
         </div>
       </fieldset>
     </form>
-  </template>
+  </ng-template>
 
 </yc-modal>
 

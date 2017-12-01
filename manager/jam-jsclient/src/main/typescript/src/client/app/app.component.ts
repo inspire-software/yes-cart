@@ -1,5 +1,5 @@
 import { Component, OnDestroy, Inject } from '@angular/core';
-import { Config } from './shared/index';
+import { Config } from './shared/config/env.config';
 import './operators';
 
 import { ShopEventBus, ErrorEventBus, I18nEventBus, WindowMessageEventBus, UserEventBus, ValidationService, ManagementService, ShopService } from './shared/services/index';
@@ -7,7 +7,7 @@ import { YcValidators } from './shared/validation/validators';
 import { CookieUtil } from './shared/cookies/index';
 import { LogUtil } from './shared/log/index';
 
-import { TranslateService } from 'ng2-translate/bundles/index';
+import { TranslateService } from '@ngx-translate/core';
 
 
 /**
@@ -43,7 +43,7 @@ export class AppComponent implements OnDestroy {
     YcValidators.init(_validationService);
 
     var userLang = navigator.language.split('-')[0]; // use navigator lang if available
-    userLang = /(uk|ru|en|de)/gi.test(userLang) ? userLang : 'en';     // TODO: move languages to config
+    userLang = (new RegExp(Config.SUPPORTED_LANGS, 'gi')).test(userLang) ? userLang : Config.DEFAULT_LANG;
     LogUtil.debug('AppComponent language', userLang);
     translate.setDefaultLang(userLang);
 

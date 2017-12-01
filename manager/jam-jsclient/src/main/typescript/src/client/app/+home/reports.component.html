@@ -1,4 +1,4 @@
-<template [ngIf]="reports">
+<ng-template [ngIf]="reports">
   <div class="row">
     <div>
       <h1 class="page-header">{{ 'PANEL_REPORTS' | translate }}</h1>
@@ -47,14 +47,14 @@
                   <fieldset>
                     <div class="form-group" *ngFor="let requestParam of tab.request.parameters">
                       <label>{{ 'REPORT_PARAM_' + requestParam.parameterId | translate }} {{ requestParam.mandatory ? ' *': ''}}</label>
-                      <template [ngIf]="requestParam.options != null">
+                      <ng-template [ngIf]="requestParam.options != null">
                         <select class="form-control" name="{{ requestParam.parameterId + '_' + i }}"  [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running || tab.completed">
                           <option *ngFor="let opt of requestParam.options" value="{{ opt.first}}">{{ opt.second }}</option>
                         </select>
-                      </template>
-                      <template [ngIf]="requestParam.options == null">
+                      </ng-template>
+                      <ng-template [ngIf]="requestParam.options == null">
                         <input class="form-control" name="{{ requestParam.parameterId + '_' + i }}" type="text" [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running || tab.completed">
-                      </template>
+                      </ng-template>
                     </div>
                     <div class="form-group {{ tab.running && !tab.completed ? 'running-job-log' : '' }}" [hidden]="!tab.running && !tab.completed">
                       <label>{{ 'REPORT_FILENAME' | translate }}</label>
@@ -89,7 +89,7 @@
     </div>
 
   </div>
-</template>
+</ng-template>
 
 
 <yc-modal #selectFileModalDialog

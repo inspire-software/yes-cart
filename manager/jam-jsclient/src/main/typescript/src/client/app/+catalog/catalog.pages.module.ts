@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { ServicesModule } from '../shared/services/services.module';
 
+import { CatalogRoutingModule } from './catalog-routing.module';
 import {
   BrandsComponent, BrandComponent,
   CategoriesComponent, CategoryComponent,
@@ -13,7 +14,7 @@ import {
 import { CatalogBrandComponent, CatalogCategoryComponent, CatalogProductsComponent, CatalogTypeComponent } from './index';
 
 @NgModule({
-    imports: [CommonModule, SharedModule, ServicesModule],
+    imports: [CatalogRoutingModule, CommonModule, SharedModule, ServicesModule],
     declarations: [
       BrandsComponent, BrandComponent,
       CategoriesComponent, CategoryComponent,

@@ -1,4 +1,4 @@
-<template [ngIf]="shopLocalization == null">
+<ng-template [ngIf]="shopLocalization == null">
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-xs-12 block-padding-spacer">
@@ -8,9 +8,9 @@
     </div>
   </div>
 
-</template>
+</ng-template>
 
-<template [ngIf]="shopLocalization">
+<ng-template [ngIf]="shopLocalization">
 
 
   <div class="text-right data-control">
@@ -56,4 +56,4 @@
 
     </div>
   </form>
-</template>
+</ng-template>

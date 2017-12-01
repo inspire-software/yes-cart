@@ -1,4 +1,4 @@
-<template [ngIf]="shop">
+<ng-template [ngIf]="shop">
 
   <div class="row">
     <div>
@@ -38,13 +38,13 @@
 
     <tab  (select)="tabSelected('Addressbook')">
 
-      <template tabHeading>
+      <ng-template tabHeading>
         {{ 'TAB_ADDRESSBOOK' | translate }} <span class="label label-info">YCE</span>
-      </template>
+      </ng-template>
 
       <yc-addressbook [customer]="shopCustomer" [reload]="reloadAddressbook" [shops]="addressShops"></yc-addressbook>
     </tab>
 
   </tabset>
 
-</template>
+</ng-template>

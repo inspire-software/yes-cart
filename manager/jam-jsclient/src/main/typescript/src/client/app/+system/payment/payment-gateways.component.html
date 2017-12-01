@@ -89,7 +89,7 @@
             positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
             [valid]="true">
 
-    <template [ngIf]="selectedGateway">
+    <ng-template [ngIf]="selectedGateway">
       <ul class="no-bullet">
         <li><i class="fa {{ selectedGateway.feature.onlineGateway ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_ONLINE' | translate }}</li>
         <li><i class="fa {{ selectedGateway.feature.externalFormProcessing ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_FORM' | translate }}</li>
@@ -105,7 +105,7 @@
         <li><i class="fa {{ selectedGateway.feature.requireDetails ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_DETAILS' | translate }}</li>
         <li>{{ selectedGateway.feature.additionalFeatures }}&nbsp;</li>
       </ul>
-    </template>
+    </ng-template>
 
   </yc-modal>
 

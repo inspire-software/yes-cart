@@ -103,7 +103,7 @@ export class ExportManagerComponent implements OnInit {
           status : { token: null, state: 'UNDEFINED', completion: null, report: null },
           running : false
         });
-        if (this.selectedTab < 0) {
+        if (this.tabs.length == 1) {
           this.selectedTab = 0;
         }
       }
@@ -149,7 +149,24 @@ export class ExportManagerComponent implements OnInit {
       if (!data.running) {
         this.tabs.splice(this.selectedTab, 1);
         this.tabs = this.tabs.slice(0, this.tabs.length);
-        if (this.tabs.length == 0) {
+        if (this.tabs.length == 1) {
+          this.selectedTab = 0;
+        } else {
+          this.selectedTab = -1;
+        }
+      }
+    }
+  }
+
+  protected onTabDeleteTab(tab:ExportTabData) {
+    if (tab != null && !tab.running) {
+      let idx = this.tabs.indexOf(tab);
+      if (idx != -1) {
+        this.tabs.splice(idx, 1);
+        this.tabs = this.tabs.slice(0, this.tabs.length);
+        if (this.tabs.length == 1) {
+          this.selectedTab = 0;
+        } else {
           this.selectedTab = -1;
         }
       }
