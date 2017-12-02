@@ -19,6 +19,7 @@ package org.yes.cart.service.domain.impl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.domain.CarrierSlaService;
 
@@ -51,6 +52,11 @@ public class CarrierSlaServiceCachedImpl implements CarrierSlaService {
     /** {@inheritDoc} */
     public List<CarrierSla> findAll() {
         return carrierSlaService.findAll();
+    }
+
+    /** {@inheritDoc} */
+    public void findAllIterator(final ResultsIteratorCallback<CarrierSla> callback) {
+        carrierSlaService.findAllIterator(callback);
     }
 
     /** {@inheritDoc} */

@@ -19,6 +19,7 @@ package org.yes.cart.service.domain.impl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
 
@@ -198,6 +199,13 @@ public class CategoryServiceCachedImpl implements CategoryService {
      */
     public List<Category> findAll() {
         return categoryService.findAll();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void findAllIterator(final ResultsIteratorCallback<Category> callback) {
+        categoryService.findAllIterator(callback);
     }
 
     /**

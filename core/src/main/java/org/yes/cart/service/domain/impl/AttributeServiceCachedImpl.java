@@ -19,6 +19,7 @@ package org.yes.cart.service.domain.impl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.service.domain.AttributeService;
@@ -196,6 +197,14 @@ public class AttributeServiceCachedImpl implements AttributeService {
     public List<Attribute> findAll() {
         return attributeService.findAll();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void findAllIterator(final ResultsIteratorCallback<Attribute> callback) {
+        attributeService.findAllIterator(callback);
+    }
+
 
     /**
      * {@inheritDoc}

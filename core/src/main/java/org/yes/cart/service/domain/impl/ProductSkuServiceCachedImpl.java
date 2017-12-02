@@ -19,6 +19,7 @@ package org.yes.cart.service.domain.impl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
@@ -150,6 +151,13 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
      */
     public List<ProductSku> findAll() {
         return productSkuService.findAll();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void findAllIterator(final ResultsIteratorCallback<ProductSku> callback) {
+        productSkuService.findAllIterator(callback);
     }
 
     /**

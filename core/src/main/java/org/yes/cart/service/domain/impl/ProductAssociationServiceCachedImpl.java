@@ -19,6 +19,7 @@ package org.yes.cart.service.domain.impl;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.ProductAssociation;
 import org.yes.cart.service.domain.ProductAssociationService;
 
@@ -75,6 +76,13 @@ public class ProductAssociationServiceCachedImpl implements ProductAssociationSe
     /** {@inheritDoc} */
     public List<ProductAssociation> findAll() {
         return productAssociationService.findAll();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void findAllIterator(final ResultsIteratorCallback<ProductAssociation> callback) {
+        productAssociationService.findAllIterator(callback);
     }
 
     /** {@inheritDoc} */

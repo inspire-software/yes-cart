@@ -20,6 +20,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
+import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
@@ -202,6 +203,13 @@ public class CustomerServiceCachedImpl implements CustomerService {
      */
     public List<Customer> findAll() {
         return customerService.findAll();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void findAllIterator(final ResultsIteratorCallback<Customer> callback) {
+        customerService.findAllIterator(callback);
     }
 
     /**

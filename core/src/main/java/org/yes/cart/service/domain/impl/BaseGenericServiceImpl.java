@@ -18,6 +18,8 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIterator;
+import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.service.domain.GenericService;
 
 import java.util.List;
@@ -40,6 +42,38 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
      */
     public List<ENTITY> findAll() {
         return genericDao.findAll();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void findAllIterator(final ResultsIteratorCallback<ENTITY> callback) {
+
+        ResultsIterator<ENTITY> entities = null;
+
+        try {
+
+            entities = genericDao.findAllIterator();
+
+            while (entities.hasNext()) {
+
+                final ENTITY entity = entities.next();
+                if (entity != null) {
+                    if (!callback.withNext(entity)) {
+                        break;
+                    }
+                }
+
+            }
+
+        } finally {
+
+            if (entities != null) {
+                entities.close();
+            }
+
+        }
+
     }
 
     /**

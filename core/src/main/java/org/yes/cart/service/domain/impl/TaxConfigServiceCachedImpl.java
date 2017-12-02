@@ -19,6 +19,7 @@ package org.yes.cart.service.domain.impl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.TaxConfig;
 import org.yes.cart.service.domain.TaxConfigService;
 
@@ -72,6 +73,13 @@ public class TaxConfigServiceCachedImpl implements TaxConfigService {
     /** {@inheritDoc} */
     public List<TaxConfig> findAll() {
         return taxConfigService.findAll();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void findAllIterator(final ResultsIteratorCallback<TaxConfig> callback) {
+        taxConfigService.findAllIterator(callback);
     }
 
     /** {@inheritDoc} */

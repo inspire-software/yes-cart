@@ -16,50 +16,88 @@
 
 package org.yes.cart.web.resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.wicket.request.resource.AbstractResource;
+import org.apache.wicket.request.resource.ResourceStreamResource;
+import org.apache.wicket.util.resource.AbstractResourceStream;
+import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.seo.SitemapXmlService;
 
-import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * User: denispavlov
  * Date: 13-08-28
  * Time: 3:49 PM
  */
-public class SitemapXmlResource extends AbstractDynamicResource {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SitemapXmlResource.class);
+public class SitemapXmlResource extends AbstractResource {
 
     private final SitemapXmlService sitemapXmlService;
 
     public SitemapXmlResource(final SitemapXmlService sitemapXmlService) {
-        super("text/xml");
         this.sitemapXmlService = sitemapXmlService;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected byte[] getData(final Attributes attributes) {
+    protected ResourceResponse newResourceResponse(final Attributes attributes) {
+
+        final SitemapResource rsr = new SitemapResource(getStream(attributes));
+        return rsr.getResponse(attributes);
+        
+    }
+
+    /**
+     * Hook to get sitemap stream
+     *
+     * @param attributes attributes
+     *
+     * @return sitemap
+     */
+    protected InputStream getStream(final Attributes attributes) {
 
         final String shopCode = ShopCodeContext.getShopCode();
 
         if (shopCode != null) {
 
-            final String sitemap = sitemapXmlService.generateSitemapXml(shopCode);
-
-            if (sitemap != null) {
-                try {
-                    return sitemap.getBytes("UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    LOG.error(e.getMessage(), e);
-                }
-            }
+            return sitemapXmlService.generateSitemapXmlStream(shopCode);
 
         }
 
-        return new byte[0];
+        return new ByteArrayInputStream(new byte[0]);
+    }
+
+    private static class SitemapResource extends ResourceStreamResource {
+
+        SitemapResource(final InputStream stream) {
+            super(new AbstractResourceStream() {
+
+                /** {@inheritDoc} */
+                @Override
+                public String getContentType() {
+                    return "text/xml";
+                }
+
+                /** {@inheritDoc} */
+                @Override
+                public InputStream getInputStream() throws ResourceStreamNotFoundException {
+                    return stream;
+                }
+
+                /** {@inheritDoc} */
+                @Override
+                public void close() throws IOException {
+                    stream.close();
+                }
+            });
+        }
+
+        ResourceResponse getResponse(final Attributes attributes) {
+            return newResourceResponse(attributes);
+        }
+
     }
 
 }

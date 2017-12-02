@@ -19,6 +19,7 @@ package org.yes.cart.service.domain.impl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.ProdTypeAttributeViewGroup;
 import org.yes.cart.domain.entity.ProductTypeAttr;
 import org.yes.cart.service.domain.ProductTypeAttrService;
@@ -59,6 +60,11 @@ public class ProductTypeAttrServiceCachedImpl implements ProductTypeAttrService 
     /** {@inheritDoc} */
     public List<ProductTypeAttr> findAll() {
         return productTypeAttrService.findAll();
+    }
+
+    /** {@inheritDoc} */
+    public void findAllIterator(final ResultsIteratorCallback<ProductTypeAttr> callback) {
+        productTypeAttrService.findAllIterator(callback);
     }
 
     /** {@inheritDoc} */

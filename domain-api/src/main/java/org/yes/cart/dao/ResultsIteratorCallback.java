@@ -14,33 +14,22 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.support.seo;
-
-import java.io.InputStream;
+package org.yes.cart.dao;
 
 /**
  * User: denispavlov
- * Date: 13-08-28
- * Time: 3:44 PM
+ * Date: 02/12/2017
+ * Time: 11:12
  */
-public interface SitemapXmlService {
+public interface ResultsIteratorCallback<T> {
 
     /**
-     * Generate sitemap XML file.
+     * Callback for the results iterator scrolling
      *
-     * @param shopCode code of the shop to generate sitemap.xml for
+     * @param entity entity
      *
-     * @return XML
+     * @return true to continue, false to stop
      */
-    String generateSitemapXml(final String shopCode);
-
-    /**
-     * Generate sitemap XML file.
-     *
-     * @param shopCode code of the shop to generate sitemap.xml for
-     *
-     * @return XML
-     */
-    InputStream generateSitemapXmlStream(final String shopCode);
+    boolean withNext(T entity);
 
 }

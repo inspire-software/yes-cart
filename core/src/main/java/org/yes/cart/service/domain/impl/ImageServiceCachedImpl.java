@@ -19,6 +19,7 @@ package org.yes.cart.service.domain.impl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.media.MediaFileNameStrategy;
@@ -142,6 +143,13 @@ public class ImageServiceCachedImpl implements ImageService {
      */
     public List<SeoImage> findAll() {
         return imageService.findAll();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void findAllIterator(final ResultsIteratorCallback<SeoImage> callback) {
+        imageService.findAllIterator(callback);
     }
 
     /**

@@ -16,6 +16,11 @@
 
 package org.yes.cart.web.support.seo.impl;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
@@ -29,10 +34,9 @@ import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.seo.SitemapXmlService;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -40,6 +44,8 @@ import java.util.Set;
  * Time: 3:46 PM
  */
 public class SitemapXmlServiceImpl implements SitemapXmlService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SitemapXmlServiceImpl.class);
 
     private final ShopService shopService;
     private final CategoryService categoryService;
@@ -64,169 +70,256 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
     /** {@inheritDoc} */
     @Override
-    public String generateSitemapXml(final String shopCode) {
+    public InputStream generateSitemapXmlStream(final String shopCode) {
 
-        final StringBuilder xml = new StringBuilder();
+        try {
 
-        xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        xml.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\">\n");
-        xml.append("<!-- YecCart sitemap generator. ").append(new Date()).append(" -->\n");
+            final File sitemap = File.createTempFile("sitemap-" + shopCode, ".tmp");
 
-        final Shop shop = shopService.getShopByCode(shopCode);
-        if (shop != null) {
+            final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(sitemap), StandardCharsets.UTF_8);
 
-            List<String> supportedLanguages = languageService.getSupportedLanguages(shopCode);
-            if (supportedLanguages == null) {
-                supportedLanguages = Arrays.asList("en", "ru");
-            }
+            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            writer.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\">\n");
+            writer.write("<!-- YecCart sitemap generator. ");
+            writer.write(new Date().toString());
+            writer.write(" -->\n");
 
-            appendShopUrls(xml, shop, supportedLanguages);
+            final Shop shop = shopService.getShopByCode(shopCode);
+            if (shop != null) {
 
-        }
-
-        xml.append("</urlset>");
-        return xml.toString();
-    }
-
-    private void appendShopUrls(final StringBuilder xml, final Shop shop, final List<String> languages) {
-
-        final String urlBase = getShopBaseUrl(shop);
-
-        xml.append("<!-- Main -->\n");
-
-        appendHomeLoc(xml, languages, urlBase);
-
-        xml.append("<!-- Categories -->\n");
-
-        final Date now = new Date();
-
-        final Set<Category> categories = shopService.findAllByShopId(shop.getShopId());
-        for (final Category category : categories) {
-
-            if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now) &&
-                    !CentralViewLabel.INCLUDE.equals(category.getUitemplate())) {
-
-                final Set<Category> children = categoryService.getChildCategoriesRecursive(category.getCategoryId());
-
-                if (children != null) {
-
-                    for (final Category child : children) {
-
-                        if (DomainApiUtils.isObjectAvailableNow(true, child.getAvailablefrom(), child.getAvailableto(), now) &&
-                                !CentralViewLabel.INCLUDE.equals(child.getUitemplate())) {
-
-                            appendCategoryLoc(xml, child, languages, urlBase);
-
-                        }
-
-                    }
-
+                List<String> supportedLanguages = languageService.getSupportedLanguages(shopCode);
+                if (supportedLanguages == null) {
+                    supportedLanguages = Arrays.asList("en", "ru");
                 }
 
+                appendShopUrls(writer, shop, supportedLanguages);
+
+            }
+
+            writer.write("</urlset>");
+
+            writer.close();
+
+            return new DeleteOnCloseFileInputStream(sitemap);
+
+
+        } catch (Exception exp) {
+
+            LOG.error("Error generating sitemap for " + shopCode, exp);
+
+        }
+
+        return new ByteArrayInputStream(new byte[0]);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String generateSitemapXml(final String shopCode) {
+
+        try {
+
+            return IOUtils.toString(generateSitemapXmlStream(shopCode), StandardCharsets.UTF_8.name());
+
+        } catch (IOException exp) {
+
+            LOG.error("Error generating sitemap for " + shopCode, exp);
+
+        }
+
+        return "";
+
+    }
+
+
+
+    private void appendShopUrls(final OutputStreamWriter writer, final Shop shop, final List<String> languages) throws IOException {
+
+        if (shop.isDisabled()) {
+            return;
+        }
+
+        final Date now = new Date();
+        final String urlBase = getShopBaseUrl(shop);
+
+        appendHomeLoc(writer, urlBase, languages);
+
+        final Set<Long> accessible = appendCategories(writer, shop, urlBase, languages, now);
+
+        appendContent(writer, shop, urlBase, languages, now);
+
+        appendProducts(writer, shop, accessible, urlBase, languages, now);
+
+    }
+
+
+    private void appendHomeLoc(final OutputStreamWriter writer, final String urlBase, final List<String> languages) throws IOException {
+
+        writer.write("<!-- Main URL -->\n");
+
+        appendLoc(writer, urlBase, languages);
+
+        writer.write("<!-- End of Main URL -->\n");
+
+    }
+
+
+    private Set<Long> appendCategories(final OutputStreamWriter writer, final Shop shop, final String urlBase, final List<String> languages, final Date now) throws IOException {
+
+        final Set<Long> accessible = new HashSet<Long>();
+
+        writer.write("<!-- Categories -->\n");
+
+        final Set<Category> categories = shopService.getTopLevelCategories(shop.getShopId());
+        for (final Category category : categories) {
+
+            appendCategory(writer, category, accessible, urlBase, languages, now);
+
+        }
+
+        writer.write("<!-- End of Categories -->\n");
+
+        return accessible;
+
+    }
+
+
+    private void appendCategory(final OutputStreamWriter writer, final Category category, final Set<Long> accessible, final String urlBase, final List<String> languages, final Date now) throws IOException {
+
+        if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)) {
+
+            appendCategoryLoc(writer, category, languages, urlBase);
+
+            accessible.add(category.getCategoryId());
+
+            for (final Category child : categoryService.getChildCategories(category.getCategoryId())) {
+
+                appendCategory(writer, child, accessible, urlBase, languages, now);
+
             }
 
         }
 
-        xml.append("<!-- Content -->\n");
+    }
+
+    private void appendCategoryLoc(final OutputStreamWriter writer, final Category category, final List<String> languages, final String urlBase) throws IOException {
+        appendLoc(writer, seoUrl(category.getSeo(), category.getCategoryId(), urlBase, WebParametersKeys.CATEGORY_ID), languages);
+    }
+
+
+    private void appendContent(final OutputStreamWriter writer, final Shop shop, final String urlBase, final List<String> languages, final Date now) throws IOException {
+
+        writer.write("<!-- Content -->\n");
 
         final Category root = contentService.getRootContent(shop.getShopId());
         if (root != null) {
 
-            final Set<Category> content = contentService.getChildContentRecursive(root.getId());
+            appendContent(writer, root, false, urlBase, languages, now);
 
-            if (content != null) {
+        }
 
-                for (final Category contentItem : content) {
+        writer.write("<!-- End of Content -->\n");
 
-
-                    if (DomainApiUtils.isObjectAvailableNow(true, contentItem.getAvailablefrom(), contentItem.getAvailableto(), now) &&
-                            !CentralViewLabel.INCLUDE.equals(contentItem.getUitemplate())) {
+    }
 
 
-                        if (contentItem.getCategoryId() != root.getCategoryId()) {
+    private void appendContent(final OutputStreamWriter writer, final Category content, final boolean childInclude, final String urlBase, final List<String> languages, final Date now) throws IOException {
 
-                            appendContentLoc(xml, contentItem, languages, urlBase);
+        if (DomainApiUtils.isObjectAvailableNow(true, content.getAvailablefrom(), content.getAvailableto(), now)) {
 
-                        }
-                    }
-                }
+            final boolean include = CentralViewLabel.INCLUDE.equals(content.getUitemplate()) ||
+                    childInclude && StringUtils.isBlank(content.getUitemplate());
+
+            if (!include) {
+
+                appendContentLoc(writer, content, languages, urlBase);
+
+            }
+
+            for (final Category contentItem : contentService.getChildContent(content.getCategoryId())) {
+
+                appendContent(writer, contentItem, include, urlBase, languages, now);
 
             }
 
         }
 
-        xml.append("<!-- Products -->\n");
+    }
 
-        for (final Category category : categories) {
 
-            final Set<Category> children = categoryService.getChildCategoriesRecursive(category.getCategoryId());
+    private void appendContentLoc(final OutputStreamWriter writer, final Category category, final List<String> languages, final String urlBase) throws IOException {
+        appendLoc(writer, seoUrl(category.getSeo(), category.getCategoryId(), urlBase, WebParametersKeys.CONTENT_ID), languages);
+    }
 
-            if (children != null) {
 
-                for (final Category child : children) {
+    private void appendProducts(final OutputStreamWriter writer, final Shop shop, final Set<Long> accessible, final String urlBase, final List<String> languages, final Date now) throws IOException {
 
-                    final List<Product> products = productService.getProductByCategory(child.getCategoryId());
+        writer.write("<!-- Products -->\n");
 
-                    if (products != null) {
+        productService.findAllIterator(new ResultsIteratorCallback<Product>() {
+            @Override
+            public boolean withNext(final Product product) {
 
-                        for (final Product product : products) {
+                if (DomainApiUtils.isObjectAvailableNow(true, product.getAvailablefrom(), product.getAvailableto(), now)) {
 
-                            if (DomainApiUtils.isObjectAvailableNow(true, product.getAvailablefrom(), product.getAvailableto(), now)) {
+                    try {
+                        for (final ProductCategory productCategory : product.getProductCategory()) {
+                            if (accessible.contains(productCategory.getCategory().getCategoryId())) {
 
-                                appendProductLoc(xml, product, languages, urlBase);
+                                appendProductLoc(writer, product, languages, urlBase);
 
                                 if (product.isMultiSkuProduct()) {
 
                                     for (final ProductSku sku : product.getSku()) {
 
-                                        appendSkuLoc(xml, sku, languages, urlBase);
+                                        appendSkuLoc(writer, sku, languages, urlBase);
 
                                     }
 
                                 }
+
+                                break;
                             }
+
                         }
+                    } catch (IOException ioe) {
+
+                        LOG.error("Error generating sitemap for " + shop.getCode(), ioe);
+                        return false; // no point to continue if we have IO failure
 
                     }
 
                 }
 
+                return true; // read fully
+
             }
+        });
 
-        }
-
-
+        writer.write("<!-- End of Products -->\n");
     }
 
-    private void appendHomeLoc(final StringBuilder xml, final List<String> languages, final String urlBase) {
-        appendLoc(xml, urlBase, languages);
+    private void appendProductLoc(final OutputStreamWriter writer, final Product product, final List<String> languages, final String urlBase) throws IOException {
+        appendLoc(writer, seoUrl(product.getSeo(), product.getProductId(), urlBase, WebParametersKeys.PRODUCT_ID), languages);
     }
 
-    private void appendCategoryLoc(final StringBuilder xml, final Category category, final List<String> languages, final String urlBase) {
-        appendLoc(xml, seoUrl(category.getSeo(), category.getCategoryId(), urlBase, WebParametersKeys.CATEGORY_ID), languages);
-    }
-
-    private void appendContentLoc(final StringBuilder xml, final Category category, final List<String> languages, final String urlBase) {
-        appendLoc(xml, seoUrl(category.getSeo(), category.getCategoryId(), urlBase, WebParametersKeys.CONTENT_ID), languages);
-    }
-
-    private void appendProductLoc(final StringBuilder xml, final Product product, final List<String> languages, final String urlBase) {
-        appendLoc(xml, seoUrl(product.getSeo(), product.getProductId(), urlBase, WebParametersKeys.PRODUCT_ID), languages);
-    }
-
-    private void appendSkuLoc(final StringBuilder xml, final ProductSku product, final List<String> languages, final String urlBase) {
-        appendLoc(xml, seoUrl(product.getSeo(), product.getSkuId(), urlBase, WebParametersKeys.SKU_ID), languages);
+    private void appendSkuLoc(final OutputStreamWriter writer, final ProductSku product, final List<String> languages, final String urlBase) throws IOException {
+        appendLoc(writer, seoUrl(product.getSeo(), product.getSkuId(), urlBase, WebParametersKeys.SKU_ID), languages);
     }
 
 
-    private void appendLoc(final StringBuilder xml, final String loc, final List<String> languages) {
+    private void appendLoc(final OutputStreamWriter writer, final String loc, final List<String> languages) throws IOException {
         for (final String urlLang : languages) {
-            xml.append("<url><loc><![CDATA[").append(alternativeUrl(loc, urlLang)).append("]]></loc>");
+            writer.write("<url><loc><![CDATA[");
+            writer.write(alternativeUrl(loc, urlLang));
+            writer.write("]]></loc>");
             for (final String language : languages) {
-                xml.append("<xhtml:link rel=\"alternate\" hreflang=\"").append(language).append("\" href=\"")
-                        .append(alternativeUrl(loc, language)).append("\" />");
+                writer.write("<xhtml:link rel=\"alternate\" hreflang=\"");
+                writer.write(language);
+                writer.write("\" href=\"");
+                writer.write(alternativeUrl(loc, language));
+                writer.write("\" />");
             }
-            xml.append("<changefreq>daily</changefreq></url>\n");
+            writer.write("<changefreq>daily</changefreq></url>\n");
         }
     }
 
@@ -253,4 +346,26 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
         }
         return urlBase + this.contextPath + "/";
     }
+
+    private static class DeleteOnCloseFileInputStream extends FileInputStream {
+
+        private File file;
+
+        public DeleteOnCloseFileInputStream(File file) throws FileNotFoundException{
+            super(file);
+            this.file = file;
+        }
+
+        public void close() throws IOException {
+            try {
+                super.close();
+            } finally {
+                if(file != null) {
+                    file.delete();
+                    file = null;
+                }
+            }
+        }
+    }
+
 }

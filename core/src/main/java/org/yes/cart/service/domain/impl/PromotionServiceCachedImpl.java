@@ -19,6 +19,7 @@ package org.yes.cart.service.domain.impl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.domain.PromotionService;
 
@@ -66,6 +67,13 @@ public class PromotionServiceCachedImpl implements PromotionService {
      */
     public List<Promotion> findAll() {
         return promotionService.findAll();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void findAllIterator(final ResultsIteratorCallback<Promotion> callback) {
+        promotionService.findAllIterator(callback);
     }
 
     /**

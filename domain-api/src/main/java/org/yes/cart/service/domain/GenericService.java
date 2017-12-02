@@ -17,6 +17,7 @@
 package org.yes.cart.service.domain;
 
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIteratorCallback;
 
 import java.util.List;
 
@@ -34,6 +35,13 @@ public interface GenericService<T> {
      * @return list of all entities
      */
     List<T> findAll();
+
+    /**
+     * Scroll all entities.
+     *
+     * @param callback callback for next item (return false to terminate forcefully)
+     */
+    void findAllIterator(ResultsIteratorCallback<T> callback);
 
     /**
      * Get object by given primary key.
