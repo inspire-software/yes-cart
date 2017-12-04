@@ -36,8 +36,10 @@ mvn install -Pmysql -PpaymentAll -Pdev -DskipTests=true
 
 ## Build steps
 
+ **IMPORTANT** do not omit clean flag at first build
+
 ```
 git clone https://github.com/inspire-software/yes-cart.git --depth 30
 cd yes-cart
-mvn install -Pmysql -PpaymentAll -Pdev -DskipTests=true
+mvn clean install -Pmysql -PpaymentAll -Pdev -DskipTests=true
 ```
