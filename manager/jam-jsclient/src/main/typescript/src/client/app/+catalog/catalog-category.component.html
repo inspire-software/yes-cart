@@ -15,11 +15,11 @@
       <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
       <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
-
+<!-- Disable this as in multi-tenancy browsing categories does not work and may be confuse by showing empty
     <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'categories'" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
-
+-->
     <button type="button" (click)="onViewTree()" [hidden]="viewMode !== 'categories'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCATEGORY' | translate }}">
       <i class="fa fa-sitemap"></i>
     </button>

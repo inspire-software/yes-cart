@@ -20,11 +20,11 @@
       <input class="filter-input" type="text" name="skuFilter" [(ngModel)]="skuFilter" autocomplete="off"/>
       <a class="js-click" (click)="onClearFilterSKU()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
     </form>
-
+<!-- Disable this as in multi-tenancy browsing products does not work and may be confuse by showing empty
     <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'products'" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
-
+-->
     <button type="button" (click)="onRowListSelected()" [disabled]="selectedProduct == null" [hidden]="viewMode === 'skus' || viewMode === 'sku'" class="btn btn-default btn-circle btn-xl">
       <i class="fa fa-list"></i>
     </button>

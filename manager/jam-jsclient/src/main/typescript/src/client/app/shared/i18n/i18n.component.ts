@@ -31,15 +31,15 @@ import { Util } from '../services/index';
 
 export class I18nComponent {
 
-  @Input()  title : string;
-
-  @Input()  i18n : string ;
-
-  @Input()  value : string;
+  @Input()  title:string = null;
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<any>> = new EventEmitter<FormValidationEvent<any>>();
 
-  private   _source:any;
+  private   _source:any = null;
+
+  private   _valueI18n:string = null;
+
+  private   _value:string = null;
 
   private dataI18n:Array<Pair<string, string>> = [];
   private dataValue:string = '';
@@ -54,7 +54,7 @@ export class I18nComponent {
   private delayedChange:Future;
 
   constructor(fb: FormBuilder) {
-    LogUtil.debug('I18nComponent constructed', this.title);
+    LogUtil.debug('I18nComponent constructed', this.title, this.value, this.valueI18n);
     this.i18nForm = fb.group({
        'addLang':  ['', YcValidators.validLanguageCode],
        'addVal':  ['', YcValidators.nonBlankTrimmed],
@@ -74,11 +74,11 @@ export class I18nComponent {
   set defaultRequired(required:string) {
     this._defaultRequired = required === 'true';
     if (this._defaultRequired) {
-      LogUtil.debug('I18nComponent resetting validator to required non-blank', this.value);
+      LogUtil.debug('I18nComponent resetting validator to required non-blank', this._value);
       this.i18nForm.controls['dataValue'].validator = YcValidators.requiredNonBlankTrimmed;
       this.i18nForm.controls['dataValueXL'].validator = YcValidators.requiredNonBlankTrimmed;
     } else {
-      LogUtil.debug('I18nComponent resetting validator to non-blank', this.value);
+      LogUtil.debug('I18nComponent resetting validator to non-blank', this._value);
       this.i18nForm.controls['dataValue'].validator = YcValidators.nonBlankTrimmed;
       this.i18nForm.controls['dataValueXL'].validator = YcValidators.nonBlankTrimmed;
     }
@@ -87,6 +87,7 @@ export class I18nComponent {
   @Input()
   set source(source:any) {
     this._source = source;
+    LogUtil.debug('I18nComponent source', this._source);
     this.reloadModel();
   }
 
@@ -94,25 +95,49 @@ export class I18nComponent {
     return this._source;
   }
 
+  @Input()
+  set valueI18n(value: string) {
+    this._valueI18n = value;
+    LogUtil.debug('I18nComponent valueI18n', this._valueI18n);
+    this.reloadModel();
+  }
+
+  get valueI18n(): string {
+    return this._valueI18n;
+  }
+
+  @Input()
+  set value(value: string) {
+    this._value = value;
+    LogUtil.debug('I18nComponent value', this._value);
+    this.reloadModel();
+  }
+
+  get value(): string {
+    return this._value;
+  }
+
   reloadModel():void {
-    LogUtil.debug('I18nComponent source', this.source, this.value, this.i18n);
-    if (this.source[this.i18n] !== null) {
-      this.dataI18n = this.source[this.i18n];
-    } else {
-      this.dataI18n = [];
-      this.source[this.i18n] = this.dataI18n;
+    if (this.source != null && this.value != null && this.valueI18n != null) {
+      LogUtil.debug('I18nComponent source', this.source, this.value, this.valueI18n);
+      if (this.source[this.valueI18n] !== null) {
+        this.dataI18n = this.source[this.valueI18n];
+      } else {
+        this.dataI18n = [];
+        this.source[this.valueI18n] = this.dataI18n;
+      }
+      if (this.source[this.value] !== null) {
+        this.dataValue = '' + this.source[this.value];
+      } else {
+        this.dataValue = '';
+      }
+      this.i18nForm.reset({
+        dataValue: this.dataValue,
+        dataValueXL: this.dataValue,
+        addLang: null,
+        addVal: null,
+      });
     }
-    if (this.source[this.value] !== null) {
-      this.dataValue = '' + this.source[this.value];
-    } else {
-      this.dataValue = '';
-    }
-    this.i18nForm.reset({
-      dataValue: this.dataValue,
-      dataValueXL: this.dataValue,
-      addLang: null,
-      addVal: null,
-    });
   }
 
   onExpandDefault() {
@@ -132,7 +157,7 @@ export class I18nComponent {
         this.dataI18n.splice(idx,1);
         this.selectedRow = new Pair('','');
         this.formChange();
-        LogUtil.debug('I18nComponent Removed ' + idx, this.i18n);
+        LogUtil.debug('I18nComponent Removed ' + idx, this.valueI18n);
         return;
       }
     }

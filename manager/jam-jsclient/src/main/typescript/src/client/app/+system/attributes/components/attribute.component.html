@@ -56,7 +56,7 @@
               <yc-i18n-table title="{{ 'NAME' | translate }}"
                              [source]="attribute"
                              value="name"
-                             i18n="displayNames"
+                             valueI18n="displayNames"
                              defaultRequired="true"
                              (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
             </div>
@@ -91,7 +91,7 @@
               <yc-i18n-table title="{{ 'ATTRIBUTE_REGEX' | translate }}"
                              [source]="attribute"
                              value="regexp"
-                             i18n="validationFailedMessage"
+                             valueI18n="validationFailedMessage"
                              (dataChanged)="onRegExpDataChange($event)"></yc-i18n-table>
             </div>
           </div>
@@ -108,7 +108,7 @@
               <yc-i18n-table title="{{ 'ATTRIBUTE_VALUES' | translate }}"
                              [source]="attribute"
                              value="val"
-                             i18n="choiceData"
+                             valueI18n="choiceData"
                              (dataChanged)="onValDataChange($event)"></yc-i18n-table>
             </div>
           </div>

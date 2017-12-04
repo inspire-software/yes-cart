@@ -77,7 +77,7 @@
               <yc-i18n-table title="{{ 'NAME' | translate }}"
                              [source]="sla"
                              value="name"
-                             i18n="displayNames"
+                             valueI18n="displayNames"
                              defaultRequired="true"
                              (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
             </div>
@@ -88,7 +88,7 @@
               <yc-i18n-table title="{{ 'DESCRIPTION' | translate }}"
                              [source]="sla"
                              value="description"
-                             i18n="displayDescriptions"
+                             valueI18n="displayDescriptions"
                              [formGroup]="slaForm"
                              (dataChanged)="onDescriptionDataChange($event)"></yc-i18n-table>
             </div>

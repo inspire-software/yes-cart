@@ -78,7 +78,7 @@
                              [source]="promotion"
                              value="name"
                              defaultRequired="true"
-                             i18n="displayNames"
+                             valueI18n="displayNames"
                              (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
             </div>
           </div>
@@ -88,7 +88,7 @@
               <yc-i18n-table title="{{ 'DESCRIPTION' | translate }}"
                              [source]="promotion"
                              value="description"
-                             i18n="displayDescriptions"
+                             valueI18n="displayDescriptions"
                              (dataChanged)="onDescriptionDataChange($event)"></yc-i18n-table>
             </div>
           </div>
