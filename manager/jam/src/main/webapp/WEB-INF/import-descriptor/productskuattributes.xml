@@ -17,6 +17,8 @@
 <import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/schema/import-descriptor.xsd">
 
+    <mode>INSERT_ONLY</mode>
+
     <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
 
     <import-file-descriptor>

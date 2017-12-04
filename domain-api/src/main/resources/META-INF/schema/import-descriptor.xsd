@@ -95,6 +95,8 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="MERGE"/>
             <xs:enumeration value="DELETE"/>
+            <xs:enumeration value="INSERT_ONLY"/>
+            <xs:enumeration value="UPDATE_ONLY"/>
         </xs:restriction>
     </xs:simpleType>
 

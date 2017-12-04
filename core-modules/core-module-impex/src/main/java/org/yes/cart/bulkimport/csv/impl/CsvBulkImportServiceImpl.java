@@ -355,59 +355,83 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
 
             if (descriptor.getInsertSql() != null) {
-                // this is dirty hack , because of import speed
-                if (masterObject == null) {
-                    // No need to validate sub imports
-                    validateAccessBeforeUpdate(null, null); // only allowed by system admins
-                }
-                executeNativeQuery(descriptor, masterObject, tuple, descriptor.getInsertSql());
 
+                if (descriptor.getMode() == ImportDescriptor.ImportMode.INSERT_ONLY) {
+
+                    // this is dirty hack , because of import speed
+                    if (masterObject == null) {
+                        // No need to validate sub imports
+                        validateAccessBeforeUpdate(null, null); // only allowed by system admins
+                    }
+                    executeNativeQuery(descriptor, masterObject, tuple, descriptor.getInsertSql());
+
+                } else {
+
+                    throw new IllegalArgumentException("Insert SQL can only be specified in INSERT_ONLY mode (Current mode: "
+                            + descriptor.getMode() + ") ... skipping insert");
+
+                }
 
             } else {
+
+                final boolean restrictInsert = descriptor.getMode() == ImportDescriptor.ImportMode.UPDATE_ONLY;
+                final boolean restrictUpdate = descriptor.getMode() == ImportDescriptor.ImportMode.INSERT_ONLY;
 
                 final Pair<Object, Boolean> objectAndState = getEntity(tuple, null, masterObject, descriptor, entityCache);
                 object = objectAndState != null ? objectAndState.getFirst() : null;
                 final boolean insert = objectAndState != null ? objectAndState.getSecond() : false;
 
-                final boolean valueChanged = fillEntityFields(tuple, object, insert, descriptor.getColumns(ImpExColumn.FIELD));
-                final Boolean fkChanged = fillEntityForeignKeys(tuple, object, insert, descriptor.getColumns(ImpExColumn.FK_FIELD), masterObject, descriptor, entityCache);
+                if (insert && restrictInsert) {
 
-                if (fkChanged == null) {
+                    statusListener.notifyPing("Skipping tuple (insert restricted): " + tuple);
 
-                    statusListener.notifyPing("Skipping tuple (unresolved foreign key): " + tuple);
+                } else if (!insert && restrictUpdate) {
+
+                    statusListener.notifyPing("Skipping tuple (update restricted): " + tuple);
 
                 } else {
 
-                    /*
-                        Note: for correct data federation processing we need ALL-OR-NOTHING update for all import.
-                              Once validation fails we fail the whole import with a rollback. Necessary to facilitate
-                              objects with complex relationships to shop (e.g. products, SKU)
-                     */
+                    final boolean valueChanged = fillEntityFields(tuple, object, insert, descriptor.getColumns(ImpExColumn.FIELD));
+                    final Boolean fkChanged = fillEntityForeignKeys(tuple, object, insert, descriptor.getColumns(ImpExColumn.FK_FIELD), masterObject, descriptor, entityCache);
 
-                    if (masterObject == null) {
-                        // No need to validate sub imports
-                        // Preliminary validation - not always applicable for transient object (e.g. products need category assignments)
-                        validateAccessBeforeUpdate(object, descriptor.getEntityTypeClass());
-                    }
+                    if (fkChanged == null) {
 
-                    if (valueChanged || fkChanged) {
-                        genericDAO.saveOrUpdate(object); // If no changed are made then we do not need to save
+                        statusListener.notifyPing("Skipping tuple (unresolved foreign key): " + tuple);
+
                     } else {
-                        statusListener.notifyPing("Skipping tuple (no change): " + tuple.getSourceId());
+
+                        /*
+                            Note: for correct data federation processing we need ALL-OR-NOTHING update for all import.
+                                  Once validation fails we fail the whole import with a rollback. Necessary to facilitate
+                                  objects with complex relationships to shop (e.g. products, SKU)
+                         */
+
+                        if (masterObject == null) {
+                            // No need to validate sub imports
+                            // Preliminary validation - not always applicable for transient object (e.g. products need category assignments)
+                            validateAccessBeforeUpdate(object, descriptor.getEntityTypeClass());
+                        }
+
+                        if (valueChanged || fkChanged) {
+                            genericDAO.saveOrUpdate(object); // If no changed are made then we do not need to save
+                        } else {
+                            statusListener.notifyPing("Skipping tuple (no change): " + tuple.getSourceId());
+                        }
+
+                        performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
+                                descriptor.getColumns(ImpExColumn.SLAVE_INLINE_FIELD), entityCache);
+                        performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
+                                descriptor.getColumns(ImpExColumn.SLAVE_TUPLE_FIELD), entityCache);
+
+                        if (masterObject == null) {
+                            // No need to validate sub imports
+                            // This validation is after sub imports to facilitate objects with complex relationships to shop (e.g. products)
+                            validateAccessAfterUpdate(object, descriptor.getEntityTypeClass());
+                        }
+
+                        genericDAO.flushClear();
+
                     }
-
-                    performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
-                            descriptor.getColumns(ImpExColumn.SLAVE_INLINE_FIELD), entityCache);
-                    performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
-                            descriptor.getColumns(ImpExColumn.SLAVE_TUPLE_FIELD), entityCache);
-
-                    if (masterObject == null) {
-                        // No need to validate sub imports
-                        // This validation is after sub imports to facilitate objects with complex relationships to shop (e.g. products)
-                        validateAccessAfterUpdate(object, descriptor.getEntityTypeClass());
-                    }
-
-                    genericDAO.flushClear();
                 }
 
             }

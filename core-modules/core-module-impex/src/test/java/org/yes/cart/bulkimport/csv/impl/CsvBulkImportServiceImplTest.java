@@ -1179,4 +1179,167 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
+
+
+
+    @Test
+    public void testDoImportWithModeInsertOnly() throws Exception {
+
+        final JobStatusListener listener1 = mockery.mock(JobStatusListener.class, "listener1");
+        final JobStatusListener listener2 = mockery.mock(JobStatusListener.class, "listener2");
+
+        mockery.checking(new Expectations() {{
+            allowing(listener1).notifyPing();
+            allowing(listener1).notifyMessage(with(any(String.class)));
+            allowing(listener1).notifyPing(with(aStringStartingWith("Importing tuple: ")));
+
+            allowing(listener2).notifyPing();
+            allowing(listener2).notifyMessage(with(any(String.class)));
+            allowing(listener2).notifyPing(with(aStringStartingWith("Importing tuple: ")));
+            oneOf(listener2).notifyPing(with(aStringStartingWith("Skipping tuple (update restricted):")));
+        }});
+
+
+        Set<String> importedFilesSet = new HashSet<String>();
+
+        bulkImportService.doImport(createContext("src/test/resources/import/modeinsertonly001a.xml", listener1, importedFilesSet));
+
+        try {
+            ResultSet rs;
+
+            rs = getConnection().getConnection().createStatement().executeQuery(
+                    "select GUID, VERSION, NAME from TBRAND where NAME='INSERTONLY'");
+            assertTrue(rs.next()); // Imported
+            assertEquals(0, rs.getLong(2)); // insert
+            rs.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+
+        }
+
+        importedFilesSet.clear();
+
+        bulkImportService.doImport(createContext("src/test/resources/import/modeinsertonly001b.xml", listener2, importedFilesSet));
+
+        try {
+            ResultSet rs;
+
+            rs = getConnection().getConnection().createStatement().executeQuery(
+                    "select GUID, VERSION, NAME from TBRAND where NAME='INSERTONLY'");
+            assertTrue(rs.next()); // Already imported
+            assertEquals(0, rs.getLong(2)); // no update, version is at 0
+            rs.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+
+        }
+
+        importedFilesSet.clear();
+
+
+        mockery.assertIsSatisfied();
+
+    }
+
+
+
+
+    @Test
+    public void testDoImportWithModeUpdateOnly() throws Exception {
+
+        final JobStatusListener listener1 = mockery.mock(JobStatusListener.class, "listener1");
+        final JobStatusListener listener2 = mockery.mock(JobStatusListener.class, "listener2");
+        final JobStatusListener listener3 = mockery.mock(JobStatusListener.class, "listener3");
+
+        mockery.checking(new Expectations() {{
+            allowing(listener1).notifyPing();
+            allowing(listener1).notifyMessage(with(any(String.class)));
+            allowing(listener1).notifyPing(with(aStringStartingWith("Importing tuple: ")));
+            oneOf(listener1).notifyPing(with(aStringStartingWith("Skipping tuple (insert restricted):")));
+
+            allowing(listener2).notifyPing();
+            allowing(listener2).notifyMessage(with(any(String.class)));
+            allowing(listener2).notifyPing(with(aStringStartingWith("Importing tuple: ")));
+
+            allowing(listener3).notifyPing();
+            allowing(listener3).notifyMessage(with(any(String.class)));
+            allowing(listener3).notifyPing(with(aStringStartingWith("Importing tuple: ")));
+        }});
+
+
+        Set<String> importedFilesSet = new HashSet<String>();
+
+        bulkImportService.doImport(createContext("src/test/resources/import/modeupdateonly001a.xml", listener1, importedFilesSet));
+
+        try {
+            ResultSet rs;
+
+            rs = getConnection().getConnection().createStatement().executeQuery(
+                    "select GUID, VERSION, NAME from TBRAND where NAME='UPDATEONLY'");
+            assertFalse(rs.next()); // Not imported
+            rs.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+
+        }
+
+        importedFilesSet.clear();
+
+        bulkImportService.doImport(createContext("src/test/resources/import/modeupdateonly001b.xml", listener2, importedFilesSet));
+
+        try {
+            ResultSet rs;
+
+            rs = getConnection().getConnection().createStatement().executeQuery(
+                    "select GUID, VERSION, NAME, DESCRIPTION from TBRAND where NAME='UPDATEONLY'");
+            assertTrue(rs.next()); // Imported
+            assertEquals("UPDATEONLY", rs.getString(4));
+            assertEquals(0, rs.getLong(2)); // insert, version is at 0
+            rs.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+
+        }
+
+        importedFilesSet.clear();
+
+
+        bulkImportService.doImport(createContext("src/test/resources/import/modeupdateonly001c.xml", listener3, importedFilesSet));
+
+        try {
+            ResultSet rs;
+
+            rs = getConnection().getConnection().createStatement().executeQuery(
+                    "select GUID, VERSION, NAME, DESCRIPTION from TBRAND where NAME='UPDATEONLY'");
+            assertTrue(rs.next()); // Already imported
+            assertEquals("UPDATEONLY changed", rs.getString(4));
+            assertEquals(1, rs.getLong(2)); // updated, version is at 1
+            rs.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+
+        }
+
+        importedFilesSet.clear();
+
+        mockery.assertIsSatisfied();
+
+    }
+
+
 }

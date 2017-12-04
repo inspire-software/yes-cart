@@ -21,6 +21,8 @@
         Demo fast insert import (no safe guard deletion for native inserts)
     -->
 
+    <mode>INSERT_ONLY</mode>
+
     <entity-type>org.yes.cart.domain.entity.AttrValueProduct</entity-type>
 
     <import-file-descriptor>

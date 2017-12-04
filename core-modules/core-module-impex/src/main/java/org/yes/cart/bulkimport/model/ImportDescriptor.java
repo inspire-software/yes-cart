@@ -25,7 +25,7 @@ import org.yes.cart.bulkcommon.model.ImpExDescriptor;
  */
 public interface ImportDescriptor extends ImpExDescriptor<ImportContext, ImportColumn> {
 
-    enum ImportMode { MERGE, DELETE }
+    enum ImportMode { MERGE, DELETE, INSERT_ONLY, UPDATE_ONLY }
 
     /**
      * Get import mode for given descriptor.

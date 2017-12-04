@@ -133,6 +133,7 @@
             <field-type>SLAVE_INLINE_FIELD</field-type>
             <name/>
             <import-descriptor>
+                <mode>INSERT_ONLY</mode>
                 <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
@@ -161,6 +162,7 @@
             <field-type>SLAVE_INLINE_FIELD</field-type>
             <name/>
             <import-descriptor>
+                <mode>INSERT_ONLY</mode>
                 <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
@@ -189,6 +191,7 @@
             <field-type>SLAVE_INLINE_FIELD</field-type>
             <name/>
             <import-descriptor>
+                <mode>INSERT_ONLY</mode>
                 <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
@@ -217,6 +220,7 @@
             <field-type>SLAVE_INLINE_FIELD</field-type>
             <name/>
             <import-descriptor>
+                <mode>INSERT_ONLY</mode>
                 <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
