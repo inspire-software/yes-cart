@@ -15,9 +15,9 @@ else
         apt-get install -y oracle-java8-installer
 
 
-        wget http://apache.ip-connect.vn.ua/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz
-        tar xzvf apache-maven-3.5.0-bin.tar.gz -C /usr/local/
-        ln -s /usr/local/apache-maven-3.5.0/bin/mvn /usr/bin/mvn
+        wget http://www-eu.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
+        tar xzvf apache-maven-3.5.2-bin.tar.gz -C /usr/local/
+        ln -s /usr/local/apache-maven-3.5.2/bin/mvn /usr/bin/mvn
 
         sudo apt-get install -y tomcat7
 
