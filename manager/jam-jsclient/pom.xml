@@ -133,6 +133,35 @@
             </plugin>
             <!-- Build node js application end  -->
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-node_modules-exist</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireFilesExist>
+                                    <files>
+                                        <file>${project.basedir}/src/main/typescript/node_modules/@angular</file>
+                                    </files>
+                                    <message>
+${project.basedir}/src/main/typescript/node_modules is missing!
+If you are running your first build you must use "clean install"
+"clean" phase will run "npm install" which will create node_modules and download all dependencies
+                                    </message>
+                                </requireFilesExist>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
 
     </build>
