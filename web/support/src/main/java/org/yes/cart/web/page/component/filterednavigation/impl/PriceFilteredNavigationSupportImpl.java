@@ -84,9 +84,10 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
 
         final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
 
-        if (!navigationContext.isGlobal() && !navigationContext.isFilteredBy(ProductSearchQueryBuilder.PRODUCT_PRICE)) {
+        if (!navigationContext.isFilteredBy(ProductSearchQueryBuilder.PRODUCT_PRICE)) {
 
-            final Category category = categoryService.getById(categoryId);
+            final Category category = navigationContext.isGlobal() ?
+                    shopService.getDefaultNavigationCategory(navigationContext.getCustomerShopId()) : categoryService.getById(categoryId);
             if (category == null) {
                 return Collections.emptyList();
             }
@@ -98,13 +99,13 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
                 return Collections.emptyList();
             }
 
-            final Shop shop = shopService.getById(navigationContext.getShopId());
+            final Shop shop = shopService.getById(navigationContext.getCustomerShopId());
             final List<FilteredNavigationRecord> allNavigationRecords = priceService.getPriceNavigationRecords(
                     priceTierTree,
                     currency,
                     shop);
 
-            final String priceFacet = "facet_price_" + navigationContext.getShopId() + "_" + currency;
+            final String priceFacet = SearchUtil.priceFacetName(navigationContext.getCustomerShopId(), currency);
             final List<Pair<String, String>> rangeValues = new ArrayList<Pair<String, String>>();
             for (FilteredNavigationRecord record : allNavigationRecords) {
 

@@ -147,6 +147,14 @@ public interface ShopService extends GenericService<Shop> {
      */
     Set<Category> findAllByShopId(long shopId);
 
+    /**
+     * Get the default category for navigation configuration for shop.
+     *
+     * @param shopId PK of shop
+     *
+     * @return category with default navigation.
+     */
+    Category getDefaultNavigationCategory(long shopId);
 
     /**
      * Get all supported currencies by all shops.

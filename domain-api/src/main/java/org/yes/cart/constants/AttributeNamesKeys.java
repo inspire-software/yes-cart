@@ -649,6 +649,11 @@ public interface AttributeNamesKeys {
          */
         String ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS = "ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS";
 
+        /**
+         * Default navigation category GUID
+         */
+        String SHOP_DEFAULT_NAVIGATION_CATEGORY = "SHOP_DEFAULT_NAVIGATION_CATEGORY";
+
     }
 
     interface Brand {

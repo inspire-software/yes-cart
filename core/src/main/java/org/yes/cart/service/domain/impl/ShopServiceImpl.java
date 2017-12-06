@@ -16,7 +16,11 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
@@ -26,6 +30,7 @@ import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.TimeContext;
+import org.yes.cart.util.log.Markers;
 
 import java.util.*;
 
@@ -35,6 +40,8 @@ import java.util.*;
  * Time: 14:12:54
  */
 public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements ShopService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShopServiceImpl.class);
 
     private final GenericDAO<Shop, Long> shopDao;
 
@@ -246,6 +253,36 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    public Category getDefaultNavigationCategory(final long shopId) {
+
+        final Shop shop = proxy().getById(shopId);
+
+        final String categoryGuid = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_DEFAULT_NAVIGATION_CATEGORY);
+
+        if (StringUtils.isNotBlank(categoryGuid)) {
+
+            final List<Category> categories = categoryService.findByCriteria(" where e.guid = ?1", categoryGuid);
+
+            if (CollectionUtils.isNotEmpty(categories)) {
+
+                return categories.get(0);
+
+            }
+
+            LOG.warn(Markers.alert(), "Invalid default navigation category setting for shop {}", shop.getCode());
+
+        } else if (shop.getMaster() != null) {
+
+            return proxy().getDefaultNavigationCategory(shop.getMaster().getShopId());
+
+        }
+
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Long getShopCategoryParentId(final long shopId, final long categoryId) {
 
         final Set<Long> shopCatIds = getShopCategoriesIds(shopId);
@@ -291,6 +328,14 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
                 return category.getUitemplate();
             }
         }
+
+        final Category defaultCategory = proxy().getDefaultNavigationCategory(shopId);
+        if (defaultCategory != null && StringUtils.isNotBlank(defaultCategory.getUitemplate())) {
+
+            return defaultCategory.getUitemplate();
+
+        }
+
         return null;
     }
 
@@ -312,6 +357,15 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
                 return template;
             }
         }
+
+        final Category defaultCategory = proxy().getDefaultNavigationCategory(shopId);
+        if (defaultCategory != null && defaultCategory.getProductType() != null &&
+                StringUtils.isNotBlank(defaultCategory.getProductType().getUisearchtemplate())) {
+
+            return defaultCategory.getProductType().getUisearchtemplate();
+
+        }
+
         return null;
     }
 
@@ -330,6 +384,14 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
                 return category.getProductType().getProducttypeId();
             }
         }
+
+        final Category defaultCategory = proxy().getDefaultNavigationCategory(shopId);
+        if (defaultCategory != null && defaultCategory.getProductType() != null) {
+
+            return defaultCategory.getProductType().getProducttypeId();
+
+        }
+
         return null;
     }
 

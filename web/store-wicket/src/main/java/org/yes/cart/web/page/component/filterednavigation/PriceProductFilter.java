@@ -95,32 +95,26 @@ public class PriceProductFilter extends AbstractProductFilter {
      */
     public boolean isVisible() {
 
-        if (getCategoryId() > 0) {
+        if(visibilityRezult == null) {
 
-            if(visibilityRezult == null) {
+            final ShoppingCart cart = getCurrentCart();
 
-                final ShoppingCart cart = getCurrentCart();
+            setNavigationRecords(
+                    priceFilteredNavigationSupport.getFilteredNavigationRecords(
+                            getNavigationContext(), getCategoryId(),
+                            cart.getCurrencyCode(),
+                            cart.getCurrentLocale(),
+                            getLocalizer().getString("price", this)
+                    )
+            );
 
-                setNavigationRecords(
-                        priceFilteredNavigationSupport.getFilteredNavigationRecords(
-                                getNavigationContext(), getCategoryId(),
-                                cart.getCurrencyCode(),
-                                cart.getCurrentLocale(),
-                                getLocalizer().getString("price", this)
-                        )
-                );
-
-                visibilityRezult = super.isVisible()
-                        && getNavigationRecords() != null
-                        && !getNavigationRecords().isEmpty();
-
-            }
-
-            return visibilityRezult;
+            visibilityRezult = super.isVisible()
+                    && getNavigationRecords() != null
+                    && !getNavigationRecords().isEmpty();
 
         }
 
-        return false;
+        return visibilityRezult;
 
     }
 

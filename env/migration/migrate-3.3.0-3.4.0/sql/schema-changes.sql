@@ -195,3 +195,12 @@ INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK,
   VALUES (502,'DefaultProductProductTag', 'tag', 500, 500, 1, 'S', 0, 'i18n');
 INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, NAV_TYPE, SIMILARITY, NAV_TEMPLATE)
   VALUES (552,'DefaultAccessoryProductTag', 'tag', 500, 501, 1, 'S', 0, 'i18n');
+
+--
+-- YC-820 Allow setting default product type for shop to allow filter navigation in global search
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  5020,  'SHOP_DEF_NAV_CAT', 'SHOP_DEFAULT_NAVIGATION_CATEGORY',  0,  NULL,  'Search: default shop navigation category (GUID)',
+    'GUID of category which contains default navigation settings',  1000, 1001, 0, 0, 0, 0);
+

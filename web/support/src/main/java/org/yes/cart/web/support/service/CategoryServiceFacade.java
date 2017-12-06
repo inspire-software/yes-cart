@@ -49,6 +49,15 @@ public interface CategoryServiceFacade {
     Category getCategory(long categoryId, long shopId);
 
     /**
+     * Get the default category for navigation configuration for shop.
+     *
+     * @param shopId PK of shop
+     *
+     * @return category with default navigation.
+     */
+    Category getDefaultNavigationCategory(long shopId);
+
+    /**
      * Get category id applicable for given current category. Depending on whether category permits
      * search in subcategories or not this method returns one of more category PK.
      *

@@ -17,6 +17,8 @@
 package org.yes.cart.web.page.component.filterednavigation;
 
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 
@@ -67,6 +69,30 @@ public class AttributeProductFilter extends AbstractProductFilter {
                 );
 
             }
+
+        } else {
+
+            final Category defaultCategory = getDefaultCategory();
+
+            if (defaultCategory != null) {
+
+                final String selectedLocale = getLocale().getLanguage();
+
+                filteredNavigationByAttribute = defaultCategory.getNavigationByAttributes() == null ? false : defaultCategory.getNavigationByAttributes();
+
+                final ProductType productType = defaultCategory.getProductType();
+
+                if (filteredNavigationByAttribute && productType != null) {
+
+                    setNavigationRecords(
+                            attributeFilteredNavigationSupport.getFilteredNavigationRecords(
+                                    getNavigationContext(), selectedLocale, productType.getProducttypeId())
+                    );
+
+                }
+
+            }
+
         }
 
     }

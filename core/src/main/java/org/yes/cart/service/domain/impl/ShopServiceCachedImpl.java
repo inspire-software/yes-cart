@@ -166,6 +166,13 @@ public class ShopServiceCachedImpl implements ShopService {
         return shopService.findAllByShopId(shopId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "categoryService-defaultNavigationCategory")
+    public Category getDefaultNavigationCategory(final long shopId) {
+        return shopService.getDefaultNavigationCategory(shopId);
+    }
 
     /**
      * {@inheritDoc}

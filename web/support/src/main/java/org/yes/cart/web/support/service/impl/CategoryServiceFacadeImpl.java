@@ -70,6 +70,13 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    public Category getDefaultNavigationCategory(final long shopId) {
+        return shopService.getDefaultNavigationCategory(shopId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Pair<List<Long>, Boolean> getSearchCategoriesIds(final long categoryId, final long shopId) {
 
         return shopSearchSupportService.getSearchCategoriesIds(categoryId, shopId);

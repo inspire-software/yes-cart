@@ -67,6 +67,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
 
     private final long categoryId;
     private Category category;
+    private Category defaultCategory;
 
     private List<FilteredNavigationRecord> navigationRecords = null;
 
@@ -128,6 +129,18 @@ public abstract class AbstractProductFilter extends BaseComponent {
             category = categoryServiceFacade.getCategory(categoryId, getCurrentCustomerShopId());
         }
         return category;
+    }
+
+    /**
+     * Get default category.
+     *
+     * @return {@link Category}
+     */
+    public Category getDefaultCategory() {
+        if (defaultCategory == null) {
+            defaultCategory = categoryServiceFacade.getDefaultNavigationCategory(getCurrentCustomerShopId());
+        }
+        return defaultCategory;
     }
 
     /**

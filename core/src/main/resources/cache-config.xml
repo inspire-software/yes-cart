@@ -215,6 +215,10 @@
             <constructor-arg index="1" value="key"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-defaultNavigationCategory"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="categoryService-relationById"/>
             <constructor-arg index="1" value="key"/>
         </bean>
@@ -331,6 +335,10 @@
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="categoryService-byId"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-defaultNavigationCategory"/>
             <constructor-arg index="1" value="key"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">

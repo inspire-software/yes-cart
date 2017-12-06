@@ -96,7 +96,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
         final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
 
-        if (!navigationContext.isGlobal()) {
+        if (productTypeId > 0L) {
 
             final List<ProductTypeAttr> ptas = productTypeAttrService.getNavigatableByProductTypeId(productTypeId);
 
