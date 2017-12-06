@@ -502,7 +502,7 @@ public class SearchController {
 
         populateSearchResults(context, result, cart);
 
-        if (!context.isGlobal() && search.getIncludeNavigation()) {
+        if (search.getIncludeNavigation()) {
 
             populateFilteredNavigation(
                     categoryId,
@@ -564,6 +564,39 @@ public class SearchController {
             }
 
             result.setFilteredNavigation(navigationRo);
+
+        } else {
+
+            final Category defaultCategory = categoryServiceFacade.getDefaultNavigationCategory(shopId);
+
+            if (defaultCategory != null) {
+
+                final FilteredNavigationRO navigationRo = new FilteredNavigationRO();
+
+                if (!context.isFilteredBy(ProductSearchQueryBuilder.PRODUCT_PRICE)) {
+
+                    populateFilteredNavigationRecords(navigationRo,
+                            priceFilteredNavigationSupport.getFilteredNavigationRecords(context, defaultCategory.getCategoryId(), currencyCode, locale, ProductSearchQueryBuilder.PRODUCT_PRICE));
+
+                    enhanceFilteredNavigationByPrice(navigationRo);
+
+                }
+
+                final boolean byAttr = defaultCategory.getNavigationByAttributes() == null ? false : defaultCategory.getNavigationByAttributes();
+                final Long productType = defaultCategory.getProductType() != null ? defaultCategory.getProductType().getProducttypeId() : null;
+
+                if (byAttr && productType != null) {
+
+                    populateFilteredNavigationRecords(navigationRo,
+                            attributeFilteredNavigationSupport.getFilteredNavigationRecords(context, locale, productType));
+
+                }
+
+                result.setFilteredNavigation(navigationRo);
+
+
+            }
+
 
         }
 
