@@ -237,14 +237,14 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                         in polymorphic fashion.
 
                         For example Category can define pseudo type PC which has attribute PROCESSOR. However we may want to
-                        refine PC into Notebook product type. Nootebooks may also reside in this category. Thefore when we
+                        refine PC into Notebook product type. Notebooks may also reside in this category. Therefore when we
                         access filtered navigation for Category PC we want distinct values of PROCESSOR for both
                         PCs and Notebooks.
 
                         Therefore distinct grouping must only be done on Attribute.CODE.
 
-                        However a causion must be taken here because this means that values for attribute must be consistent
-                        accross all product types, otherwise there is no guarantee on what displayable name will appear in
+                        However a caution must be taken here because this means that values for attribute must be consistent
+                        across all product types, otherwise there is no guarantee on what displayable name will appear in
                         filtered navigation.
                      */
 

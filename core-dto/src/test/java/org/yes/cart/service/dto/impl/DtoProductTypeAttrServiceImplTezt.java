@@ -23,6 +23,7 @@ import org.yes.cart.constants.DtoServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductTypeAttrDTO;
 import org.yes.cart.domain.dto.ProductTypeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.entity.ProductTypeAttr;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoProductTypeAttrService;
 import org.yes.cart.service.dto.DtoProductTypeService;
@@ -66,7 +67,7 @@ public class DtoProductTypeAttrServiceImplTezt extends BaseCoreDBTestCase {
         dtoProductTypeAttr = dtoService.create(dtoProductTypeAttr);
         assertTrue(dtoProductTypeAttr.getProductTypeAttrId() > 0);
         dtoProductTypeAttr.setNavigation(true);
-        dtoProductTypeAttr.setNavigationType("R");
+        dtoProductTypeAttr.setNavigationType(ProductTypeAttr.NAVIGATION_TYPE_RANGE);
         dtoProductTypeAttr.setProducttypeId(1L);
         dtoProductTypeAttr.setRangeNavigation(RANGE_NAV);
         dtoProductTypeAttr.setSimilarity(true);
@@ -75,7 +76,7 @@ public class DtoProductTypeAttrServiceImplTezt extends BaseCoreDBTestCase {
         assertFalse(dtoProductTypeAttr.isNavigation()); // Nav is updated on the Attribute
         assertTrue(dtoProductTypeAttr.isSimilarity());
         assertTrue(dtoProductTypeAttr.isVisible());
-        assertEquals("R", dtoProductTypeAttr.getNavigationType());
+        assertEquals(ProductTypeAttr.NAVIGATION_TYPE_RANGE, dtoProductTypeAttr.getNavigationType());
         assertEquals(1, dtoProductTypeAttr.getProducttypeId());
         assertEquals(RANGE_NAV, dtoProductTypeAttr.getRangeNavigation());
     }
@@ -84,7 +85,7 @@ public class DtoProductTypeAttrServiceImplTezt extends BaseCoreDBTestCase {
         ProductTypeAttrDTO dtoProductTypeAttr = dtoFactory.getByIface(ProductTypeAttrDTO.class);
         dtoProductTypeAttr.setAttributeDTO(dtoAttributeService.getById(7000L));
         dtoProductTypeAttr.setNavigation(false);
-        dtoProductTypeAttr.setNavigationType("S");
+        dtoProductTypeAttr.setNavigationType(ProductTypeAttr.NAVIGATION_TYPE_SINGLE);
         ProductTypeDTO productTypeDTO = dtoProductTypeService.getById(1L);
         dtoProductTypeAttr.setProducttypeId(productTypeDTO.getProducttypeId());
         dtoProductTypeAttr.setRangeNavigation(null);

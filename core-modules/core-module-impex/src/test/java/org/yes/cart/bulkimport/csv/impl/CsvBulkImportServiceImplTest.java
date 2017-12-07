@@ -30,6 +30,7 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.bulkcommon.service.ImportService;
 import org.yes.cart.bulkimport.csv.CsvFileReader;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
+import org.yes.cart.domain.entity.ProductTypeAttr;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
@@ -445,7 +446,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
             assertEquals("1496", prodAttrCode);
             assertEquals(ptypeId, prodAttrPtypeId);
-            assertEquals("S", prodAttrNavType);
+            assertEquals(ProductTypeAttr.NAVIGATION_TYPE_SINGLE, prodAttrNavType);
             assertEquals("", prodAttrNavRange);
 
 

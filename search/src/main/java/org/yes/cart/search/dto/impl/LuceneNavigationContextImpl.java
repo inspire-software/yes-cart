@@ -88,7 +88,10 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
      * {@inheritDoc}
      */
     public List<Long> getCategories() {
-        return categories;
+        if (categories == null) {
+            return null;
+        }
+        return Collections.unmodifiableList(categories);
     }
 
     /**

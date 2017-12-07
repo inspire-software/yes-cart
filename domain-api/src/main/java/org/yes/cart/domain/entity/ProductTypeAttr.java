@@ -28,6 +28,7 @@ import org.yes.cart.domain.misc.navigation.range.RangeList;
 public interface ProductTypeAttr extends Auditable, Rankable {
 
     String NAVIGATION_TYPE_SINGLE = "S";
+    String NAVIGATION_TYPE_MULTI = "M";
     String NAVIGATION_TYPE_RANGE = "R";
 
     /**

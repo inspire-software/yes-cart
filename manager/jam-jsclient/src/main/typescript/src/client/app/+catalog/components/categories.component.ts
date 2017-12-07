@@ -110,11 +110,11 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   protected getNavFlags(row:CategoryVO) {
 
     let flags = '';
-    if (row.navigationByAttributes) {
-      flags += '<i title="' + (row.productTypeName ? row.productTypeName : '') + '" class="fa fa-list-alt"></i>&nbsp;';
-    }
     if (row.navigationByPrice) {
       flags += '<i class="fa fa-dollar"></i>&nbsp;';
+    }
+    if (row.navigationByAttributes) {
+      flags += '<i class="fa fa-list-alt"></i>&nbsp;' + (row.productTypeName ? row.productTypeName : '');
     }
     return flags;
   }

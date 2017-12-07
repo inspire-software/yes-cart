@@ -65,7 +65,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
                     }
                 }
                 rez = record1.getName().compareToIgnoreCase(record2.getName());
-                if (rez == 0 && !"R".equals(record1.getType())) {
+                if (rez == 0 && !ProductTypeAttr.NAVIGATION_TYPE_RANGE.equals(record1.getType())) {
                     if (record1.getDisplayValue() != null && record2.getDisplayValue() != null) {
                         rez = record1.getDisplayValue().compareToIgnoreCase(record2.getDisplayValue());
                     } else {
@@ -112,15 +112,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
                 final String facetName = pta.getAttribute().getCode();
                 pTypes.put(facetName, pta);
 
-                if (ProductTypeAttr.NAVIGATION_TYPE_SINGLE.equals(pta.getNavigationType())) {
-
-                    final String fieldName = "facet_" + facetName;
-
-                    final FilteredNavigationRecordRequest singleMultiValue = new FilteredNavigationRecordRequestImpl(facetName, fieldName, true);
-                    requests.add(singleMultiValue);
-                    requestsMap.put(facetName, singleMultiValue);
-
-                } else {
+                if (ProductTypeAttr.NAVIGATION_TYPE_RANGE.equals(pta.getNavigationType())) {
 
                     final String fieldName = "facetr_" + facetName;
 
@@ -153,6 +145,15 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
                     }
 
+                } else {
+
+                    final String fieldName = "facet_" + facetName;
+
+                    final boolean multi = ProductTypeAttr.NAVIGATION_TYPE_MULTI.equals(pta.getNavigationType());
+                    final FilteredNavigationRecordRequest singleMultiValue = new FilteredNavigationRecordRequestImpl(facetName, fieldName, multi);
+                    requests.add(singleMultiValue);
+                    requestsMap.put(facetName, singleMultiValue);
+
                 }
             }
 
@@ -164,82 +165,8 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
             final ProductSearchResultNavDTO facets =
                     getProductService().findFilteredNavigationRecords(navigationContext, requests);
 
-            for (final String code : facets.getNavCodes()) {
+            appendNavigationRecords(navigationList, requestsMap, pTypes, navigationContext, locale, facets);
 
-                if (navigationContext.isFilteredBy(code)) {
-                    continue; // do not show already filtered or blank ones
-                }
-
-                final FilteredNavigationRecordRequest request = requestsMap.get(code);
-                if (request == null) {
-                    LOGFTQ.debug("Unable to get filtered navigation request for record: {}", code);
-                    continue;
-                }
-                final List<ProductSearchResultNavItemDTO> counts = facets.getItems(code);
-                if (counts == null) {
-                    LOGFTQ.debug("Unable to get filtered navigation counts for record: {}, request: {}", code, request);
-                    continue;
-                }
-
-                final ProductTypeAttr pta = pTypes.get(code);
-                final Attribute attribute = pta.getAttribute();
-
-                final String displayName = new StringI18NModel(attribute.getDisplayName()).getValue(locale);
-
-                if (ProductTypeAttr.NAVIGATION_TYPE_RANGE.equals(pta.getNavigationType())) {
-
-                    final RangeList rangeList = pta.getRangeList();
-                    if (rangeList != null && rangeList.getRanges() != null) {
-                        for (RangeNode node : rangeList.getRanges()) {
-
-                            final Map<String, String> i18n = getRangeValueDisplayNames(node.getI18n());
-                            final String value = getRangeValueRepresentation(node.getFrom(), node.getTo());
-                            final String displayValue = getRangeDisplayValueRepresentation(locale, i18n, node.getFrom(), node.getTo());
-
-                            Integer candidateResultCount = null;
-                            for (final ProductSearchResultNavItemDTO item : counts) {
-                                if (item.getValue().equals(value)) {
-                                    candidateResultCount = item.getCount();
-                                    break;
-                                }
-                            }
-
-                            if (candidateResultCount != null && candidateResultCount > 0) {
-                                navigationList.add(new FilteredNavigationRecordImpl(
-                                        attribute.getName(),
-                                        displayName,
-                                        code,
-                                        value,
-                                        displayValue,
-                                        candidateResultCount,
-                                        pta.getRank(),
-                                        ProductTypeAttr.NAVIGATION_TYPE_RANGE,
-                                        pta.getNavigationTemplate()
-                                ));
-                            }
-                        }
-                    }
-
-                } else {
-                    for (final ProductSearchResultNavItemDTO item : counts) {
-
-                        final Integer candidateResultCount = item.getCount();
-                        if (candidateResultCount != null && candidateResultCount > 0) {
-                            navigationList.add(new FilteredNavigationRecordImpl(
-                                    attribute.getName(),
-                                    displayName,
-                                    code,
-                                    item.getValue(), item.getDisplayValue(locale),
-                                    item.getCount(),
-                                    pta.getRank(),
-                                    ProductTypeAttr.NAVIGATION_TYPE_SINGLE,
-                                    pta.getNavigationTemplate()
-                            ));
-                        }
-                    }
-                }
-
-            }
 
             // Alpha sort
             Collections.sort(navigationList, COMPARATOR);
@@ -248,6 +175,91 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
         return navigationList;
 
+    }
+
+    protected void appendNavigationRecords(final List<FilteredNavigationRecord> navigationList,
+                                           final Map<String, FilteredNavigationRecordRequest> requestsMap,
+                                           final Map<String, ProductTypeAttr> pTypes,
+                                           final NavigationContext facetContext,
+                                           final String locale,
+                                           final ProductSearchResultNavDTO facets) {
+
+        for (final String code : facets.getNavCodes()) {
+
+            if (facetContext.isFilteredBy(code)) {
+                continue; // do not show already filtered or blank ones
+            }
+
+            final FilteredNavigationRecordRequest request = requestsMap.get(code);
+            if (request == null) {
+                LOGFTQ.debug("Unable to get filtered navigation request for record: {}", code);
+                continue;
+            }
+            final List<ProductSearchResultNavItemDTO> counts = facets.getItems(code);
+            if (counts == null) {
+                LOGFTQ.debug("Unable to get filtered navigation counts for record: {}, request: {}", code, request);
+                continue;
+            }
+
+            final ProductTypeAttr pta = pTypes.get(code);
+            final Attribute attribute = pta.getAttribute();
+
+            final String displayName = new StringI18NModel(attribute.getDisplayName()).getValue(locale);
+
+            if (ProductTypeAttr.NAVIGATION_TYPE_RANGE.equals(pta.getNavigationType())) {
+
+                final RangeList rangeList = pta.getRangeList();
+                if (rangeList != null && rangeList.getRanges() != null) {
+                    for (RangeNode node : rangeList.getRanges()) {
+
+                        final Map<String, String> i18n = getRangeValueDisplayNames(node.getI18n());
+                        final String value = getRangeValueRepresentation(node.getFrom(), node.getTo());
+                        final String displayValue = getRangeDisplayValueRepresentation(locale, i18n, node.getFrom(), node.getTo());
+
+                        Integer candidateResultCount = null;
+                        for (final ProductSearchResultNavItemDTO item : counts) {
+                            if (item.getValue().equals(value)) {
+                                candidateResultCount = item.getCount();
+                                break;
+                            }
+                        }
+
+                        if (candidateResultCount != null && candidateResultCount > 0) {
+                            navigationList.add(new FilteredNavigationRecordImpl(
+                                    attribute.getName(),
+                                    displayName,
+                                    code,
+                                    value,
+                                    displayValue,
+                                    candidateResultCount,
+                                    pta.getRank(),
+                                    ProductTypeAttr.NAVIGATION_TYPE_RANGE,
+                                    pta.getNavigationTemplate()
+                            ));
+                        }
+                    }
+                }
+
+            } else {
+                for (final ProductSearchResultNavItemDTO item : counts) {
+
+                    final Integer candidateResultCount = item.getCount();
+                    if (candidateResultCount != null && candidateResultCount > 0) {
+                        navigationList.add(new FilteredNavigationRecordImpl(
+                                attribute.getName(),
+                                displayName,
+                                code,
+                                item.getValue(), item.getDisplayValue(locale),
+                                item.getCount(),
+                                pta.getRank(),
+                                pta.getNavigationType(),
+                                pta.getNavigationTemplate()
+                        ));
+                    }
+                }
+            }
+
+        }
     }
 
     private String getRangeValueRepresentation(final String from, final String to) {

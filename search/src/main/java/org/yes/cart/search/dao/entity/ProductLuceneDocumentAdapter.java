@@ -142,11 +142,12 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 addSortFields(document, PRODUCT_DISPLAYNAME_SORT_FIELD, displayName);
 
                 final I18NModel displayType = new StringI18NModel(entity.getProducttype().getDisplayName());
-                addSearchField(document, PRODUCT_TYPE_FIELD_SEARCH, entity.getProducttype().getName());
+                final String productType = cleanFacetValue(entity.getProducttype().getName());
+                addSearchField(document, PRODUCT_TYPE_FIELD_SEARCH, productType);
                 addSearchFields(document, PRODUCT_TYPE_FIELD_SEARCH, displayType);
-                addSimpleField(document, PRODUCT_TYPE_FIELD, entity.getProducttype().getName());
-                addFacetField(document, "facet_productType", entity.getProducttype().getName(), entity.getProducttype().getDisplayName());
-                addStemField(document, PRODUCT_TYPE_STEM_FIELD, entity.getProducttype().getName());
+                addSimpleField(document, PRODUCT_TYPE_FIELD, productType);
+                addFacetField(document, "facet_productType", productType, entity.getProducttype().getDisplayName());
+                addStemField(document, PRODUCT_TYPE_STEM_FIELD, productType);
                 addStemFields(document, PRODUCT_TYPE_STEM_FIELD, displayType);
 
                 // Description is a bad field to index as it contain a lot of information, most of which is irrelevant
@@ -163,11 +164,12 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                     }
                 }
 
-                addSearchField(document, BRAND_FIELD_SEARCH, entity.getBrand().getName());
-                addSimpleField(document, BRAND_FIELD, entity.getBrand().getName());
-                addFacetField(document, "facet_brand", entity.getBrand().getName());
-                addStemField(document, BRAND_STEM_FIELD, entity.getBrand().getName());
-                addSortField(document, BRAND_SORT_FIELD, entity.getBrand().getName());
+                final String brand = cleanFacetValue(entity.getBrand().getName());
+                addSearchField(document, BRAND_FIELD_SEARCH, brand);
+                addSimpleField(document, BRAND_FIELD, brand);
+                addFacetField(document, "facet_brand", brand);
+                addStemField(document, BRAND_STEM_FIELD, brand);
+                addSortField(document, BRAND_SORT_FIELD, brand);
 
                 addSimpleField(document, PRODUCT_FEATURED_FIELD, entity.getFeatured() != null && entity.getFeatured() ? "true" : "false");
                 addStoredField(document, "featured_boost", entity.getFeatured() != null && entity.getFeatured() ? 1.25f : 1.0f);
@@ -286,14 +288,14 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                         in polymorphic fashion.
 
                         For example Category can define pseudo type PC which has attribute PROCESSOR. However we may want to
-                        refine PC into Notebook product type. Nootebooks may also reside in this category. Thefore when we
+                        refine PC into Notebook product type. Notebooks may also reside in this category. Therefore when we
                         access filtered navigation for Category PC we want distinct values of PROCESSOR for both
                         PCs and Notebooks.
 
                         Therefore distinct grouping must only be done on Attribute.CODE.
 
-                        However a causion must be taken here because this means that values for attribute must be consistent
-                        accross all product types, otherwise there is no guarantee on what displayable name will appear in
+                        However a caution must be taken here because this means that values for attribute must be consistent
+                        across all product types, otherwise there is no guarantee on what displayable name will appear in
                         filtered navigation.
                      */
 
@@ -304,7 +306,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                         sortFields.put(code, navVal);
                     }
                     final Long decNavVal = SearchUtil.valToLong(navVal, 3);
-                    // If this is a decimal value choose the lowers value for range navigation
+                    // If this is a decimal value choose the lowest value for range navigation
                     if (decNavVal != null && (!numRangeFields.containsKey(code) || decNavVal.compareTo(numRangeFields.get(code)) < 0)) {
                         numRangeFields.put(code, decNavVal);
                     }

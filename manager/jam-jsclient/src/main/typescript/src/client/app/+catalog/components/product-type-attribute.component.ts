@@ -320,9 +320,9 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
     }
     if (row.navigation) {
       if (row.navigationType === 'R') {
-        flags += '<i class="fa fa-sliders"></i>&nbsp;' + (row.navigationTemplate != null ? row.navigationTemplate : '');
+        flags += '<i class="fa fa-sliders"></i>&nbsp;(' + row.navigationType + ')&nbsp;' + (row.navigationTemplate != null ? row.navigationTemplate : '');
       } else {
-        flags += '<i class="fa fa-list-alt"></i>&nbsp;' + (row.navigationTemplate != null ? row.navigationTemplate : '');
+        flags += '<i class="fa fa-list-alt"></i>&nbsp;(' + row.navigationType + ')&nbsp;' + (row.navigationTemplate != null ? row.navigationTemplate : '');
       }
     }
     return flags;

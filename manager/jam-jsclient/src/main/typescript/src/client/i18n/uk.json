@@ -414,6 +414,7 @@
   "PRODUCT_TYPE_ATTR_CONFIG_VISIBLE": "Видимий",
   "PRODUCT_TYPE_ATTR_CONFIG_SIMILARITY": "Подібність",
   "PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_S": "Значення",
+  "PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_M": "Декілька",
   "PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_R": "Діапазон",
   "PRODUCT_TYPE_ATTR_CONFIG_NAV_TEMPLATE": "Шаблон фільтру",
   "PRODUCT_TYPE_ATTR_NEW_DUPLICATE": "Обраний атрибут вже призначений для цього типу",

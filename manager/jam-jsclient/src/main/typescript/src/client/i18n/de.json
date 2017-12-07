@@ -414,6 +414,7 @@
   "PRODUCT_TYPE_ATTR_CONFIG_VISIBLE": "Sichtbar",
   "PRODUCT_TYPE_ATTR_CONFIG_SIMILARITY": "Ähnlichkeit",
   "PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_S": "Einzeln",
+  "PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_M": "Multi",
   "PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_R": "Bereich",
   "PRODUCT_TYPE_ATTR_CONFIG_NAV_TEMPLATE": "Filter template",
   "PRODUCT_TYPE_ATTR_NEW_DUPLICATE": "Das ausgewählte Attribut ist diesem Typ bereits zugeordnet",

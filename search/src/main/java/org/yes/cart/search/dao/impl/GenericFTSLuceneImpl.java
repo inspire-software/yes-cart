@@ -268,6 +268,9 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
                         if (topValues != null && topValues.value != null && topValues.value.intValue() > 0) {
 
+                            final Map<String, Pair<Pair<String, I18NModel>, Integer>> distinctFacetValues =
+                                    new LinkedHashMap<String, Pair<Pair<String, I18NModel>, Integer>>(topValues.labelValues.length * 2);
+
                             for (final LabelAndValue lav : topValues.labelValues) {
 
                                 final Pair<String, I18NModel> label;
@@ -285,12 +288,40 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                                             null
                                     );
                                 }
-                                values.add(new Pair<Pair<String, I18NModel>, Integer>(label, lav.value.intValue()));
+
+                                Pair<Pair<String, I18NModel>, Integer> existing = distinctFacetValues.get(label.getFirst());
+                                if (existing != null) {
+                                    // if we have this value then need to de-duplicate
+                                    // we choose more complete I18n model (assumed to be the one with most translations)
+                                    if (existing.getFirst().getSecond().getAllValues().size() >
+                                            label.getSecond().getAllValues().size()) {
+                                        distinctFacetValues.put(
+                                                label.getFirst(),
+                                                new Pair<Pair<String, I18NModel>, Integer>(existing.getFirst(), lav.value.intValue() + existing.getSecond())
+                                        );
+                                    } else {
+                                        distinctFacetValues.put(
+                                                label.getFirst(),
+                                                new Pair<Pair<String, I18NModel>, Integer>(label, lav.value.intValue() + existing.getSecond())
+                                        );
+                                    }
+                                } else {
+                                    distinctFacetValues.put(
+                                            label.getFirst(),
+                                            new Pair<Pair<String, I18NModel>, Integer>(label, lav.value.intValue())
+                                    );
+                                }
+
                             }
+
+                            // populate with distinct facet values only
+                            values.addAll(distinctFacetValues.values());
 
                         }
 
                     }
+                } catch (IllegalArgumentException iae) {
+                    LOG.warn(Markers.alert(), "Failed to create facet for request " + request + ", caused: " + iae.getMessage());
                 } catch (IllegalStateException ise) {
                     LOG.warn(Markers.alert(), "Failed to create facet for request " + request + ", caused: " + ise.getMessage());
                 } catch (Exception exp) {

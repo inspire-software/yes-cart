@@ -117,6 +117,7 @@
               <select name="navigationType" class="form-control" [(ngModel)]="attributeToEdit.navigationType"  (ngModelChange)="onDataChange($event)"
                       [hidden]="!attributeToEdit.navigation" [disabled]="!attributeToEdit.navigation">
                 <option value="S">{{ 'PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_S' | translate }}</option>
+                <option value="M" disabled="disabled">{{ 'PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_M' | translate }} (YCE)</option>
                 <option value="R">{{ 'PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_R' | translate }}</option>
               </select>
             </div>
