@@ -23,7 +23,7 @@
     <ul class="nav nav-second-level item-list">
 
       <li *ngFor="let carrierSla of filteredCarrierSlas">
-        <a (click)="onSelectClick(carrierSla)" class="{{ (selectedCarrierSla != null && carrierSla != null && selectedCarrierSla.carrierslaId == carrierSla.carrierslaId) ? 'bg-info js-click' : 'js-click' }}">{{carrierSla.code}}: {{carrierSla.name}}</a>
+        <a (click)="onSelectClick(carrierSla)" class="{{ (selectedCarrierSla != null && carrierSla != null && selectedCarrierSla.carrierslaId == carrierSla.carrierslaId) ? 'bg-info js-click' : 'js-click' }}"><span class="label label-info">{{carrierSla.code}}</span> {{carrierSla.name}}</a>
       </li>
 
     </ul>

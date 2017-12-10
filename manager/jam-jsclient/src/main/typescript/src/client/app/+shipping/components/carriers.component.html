@@ -15,9 +15,10 @@
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
           <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.description}}&nbsp;</a></td>
           <td title="{{ 'TAB_SHOPS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">
-            <ul class="list-unstyled">
-              <li *ngFor="let carrierShop of getShopNames(row)" [ngClass]="carrierShop.active ? '' : 'text-strikethrough text-muted'">{{carrierShop.name}}</li>
-            </ul>
+            <span *ngFor="let carrierShop of getShopNames(row)">
+              <span class="label {{ carrierShop.active ? 'label-info' : 'label-default'}}">{{carrierShop.name}}</span>&nbsp;
+            </span>
+            &nbsp;
           </a></td>
         </ng-template>
       </tr>

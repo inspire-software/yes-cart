@@ -16,7 +16,7 @@
           <td title="{{ 'CUSTOMER_EMAIL' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.email}}</a></td>
           <td title="{{ 'CUSTOMER_FIRSTNAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.firstName}}</a></td>
           <td title="{{ 'CUSTOMER_LASTNAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.lastName}}</a></td>
-          <td title="{{ 'MANAGER_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.enabled ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
+          <td title="{{ 'MANAGER_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.enabled ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
         </ng-template>
       </tr>
       </tbody>

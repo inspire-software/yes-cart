@@ -136,13 +136,13 @@
             <div class="col-md-6" [hidden]="!rangeNav">
               <div class="product-type-nav-ranges" [hidden]="!showRanges">
                 <ul class="list-group">
-                  <li class="list-group-item" *ngFor="let navRange of attributeToEdit.rangeNavigation.ranges">{{navRange.range}} <span class="badge">&Sigma;</span></li>
+                  <li *ngFor="let navRange of attributeToEdit.rangeNavigation.ranges" class="list-group-item">{{navRange.range}} <span class="badge">&Sigma;</span></li>
                 </ul>
               </div>
             </div>
 
             <div class="col-xs-12 product-type-nav-ranges" [hidden]="!editRanges">
-              <div class="product-type-nav-range" *ngFor="let navRange of attributeToEdit.rangeNavigation.ranges">
+              <div *ngFor="let navRange of attributeToEdit.rangeNavigation.ranges" class="product-type-nav-range">
                 <button class="pull-left btn btn-danger btn-circle btn-sm" (click)="onNavRangeDelete(navRange)">
                   <i class="fa fa-remove"></i>
                 </button>

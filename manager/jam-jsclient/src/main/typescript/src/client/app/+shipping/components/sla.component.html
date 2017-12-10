@@ -62,6 +62,14 @@
                     {{ 'NUM_REQUIRED' | translate }}
                   </div>
                 </div>
+                <div>
+                  <input formControlName="billingAddressNotRequired" name="billingAddressNotRequired" type="checkbox" [(ngModel)]="sla.billingAddressNotRequired">
+                  <label>{{ 'CARRIERSLA_NO_BILL' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="deliveryAddressNotRequired" name="deliveryAddressNotRequired" type="checkbox" [(ngModel)]="sla.deliveryAddressNotRequired">
+                  <label>{{ 'CARRIERSLA_NO_SHIP' | translate }}</label>
+                </div>
               </fieldset>
             </div>
 
@@ -93,24 +101,41 @@
                              (dataChanged)="onDescriptionDataChange($event)"></yc-i18n-table>
             </div>
           </div>
-
         </div>
       </tab>
 
       <tab heading="{{ 'TAB_PG' | translate }}"  (select)="tabSelected('PG')">
 
-        <div class="row">
-          <div class="col-md-6 col-lg-5">
-            <h3>{{ 'ASSIGNED' | translate }}</h3>
-            <span *ngFor="let supportedPg of supportedPgs">
-              <a class="btn js-click" (click)=onSupportedPgClick(supportedPg)><span [ngClass]="supportedPg.active ? '' : 'text-strikethrough text-muted'">{{supportedPg.name}}</span> <i class="fa fa-remove"></i></a>
-            </span>
-          </div>
-          <div class="col-md-6 col-lg-5">
-            <h3>{{ 'AVAILABLE' | translate }}</h3>
-            <span *ngFor="let availablePg of availablePgs">
-              <a class="btn js-click" (click)=onAvailablePgClick(availablePg)>{{availablePg.name}} <i class="fa fa-plus"></i></a>
-            </span>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-6 col-lg-5">
+              <div class="panel panel-default">
+                <div class="panel-heading">{{ 'ASSIGNED' | translate }}</div>
+                <ul class="list-group">
+                  <li *ngFor="let supportedPg of supportedPgs" class="list-group-item {{ supportedPg.active ? '' : 'disabled text-muted' }}">
+                    <h5>
+                      {{supportedPg.name}}
+                      <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedPgClick(supportedPg)><i class="fa fa-unlink"></i></button>
+                    </h5>
+                    <p><small>{{supportedPg.label}}</small></p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-5">
+              <div class="panel panel-default">
+                <div class="panel-heading">{{ 'AVAILABLE' | translate }}</div>
+                <ul class="list-group">
+                  <li *ngFor="let availablePg of availablePgs" class="list-group-item {{ availablePg.active ? '' : 'disabled text-muted' }}">
+                    <h5>
+                      {{availablePg.name}}
+                      <button class="pull-right btn btn-default btn-circle btn-sm" (click)=onAvailablePgClick(availablePg)><i class="fa fa-link"></i></button>
+                    </h5>
+                    <p><small>{{availablePg.label}}</small></p>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -118,18 +143,46 @@
 
       <tab heading="{{ 'SHOP_TAB_WAREHOUSES' | translate }}"  (select)="tabSelected('FC')">
 
-        <div class="row">
-          <div class="col-md-6 col-lg-5">
-            <h3>{{ 'ASSIGNED' | translate }}</h3>
-            <span *ngFor="let supportedFc of supportedFcs">
-              <a class="btn js-click" (click)=onSupportedFcClick(supportedFc)><span>{{supportedFc.name}}</span> <i class="fa fa-remove"></i></a>
-            </span>
-          </div>
-          <div class="col-md-6 col-lg-5">
-            <h3>{{ 'AVAILABLE' | translate }}</h3>
-            <span *ngFor="let availableFc of availableFcs">
-              <a class="btn js-click" (click)=onAvailableFcClick(availableFc)>{{availableFc.name}} <i class="fa fa-plus"></i></a>
-            </span>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-6 col-lg-5">
+              <div class="panel panel-default">
+                <div class="panel-heading">{{ 'ASSIGNED' | translate }}</div>
+                <ul class="list-group">
+                  <li *ngFor="let supportedFc of supportedFcs" class="list-group-item">
+                    <h5>
+                      <span class="label label-info">{{supportedFc.code}}</span> {{supportedFc.name}}
+                      <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedFcClick(supportedFc)><i class="fa fa-unlink"></i></button>
+                    </h5>
+                    <p>
+                      <small>{{ 'FULFILMENT_CENTRE_STD_LEAD' | translate }}: {{supportedFc.defaultStandardStockLeadTime}}</small><br/>
+                      <small>{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}: {{supportedFc.defaultBackorderStockLeadTime}}</small><br/>
+                      <ng-template [ngIf]="supportedFc.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-success"></i></small></ng-template>
+                      <ng-template [ngIf]="!supportedFc.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-remove text-danger"></i></small></ng-template>
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-5">
+              <div class="panel panel-default">
+                <div class="panel-heading">{{ 'AVAILABLE' | translate }}</div>
+                <ul class="list-group">
+                  <li *ngFor="let availableFc of availableFcs" class="list-group-item">
+                    <h5>
+                      <span class="label label-info">{{availableFc.code}}</span> {{availableFc.name}}
+                      <button class="pull-right btn btn-default btn-circle btn-sm" (click)=onAvailableFcClick(availableFc)><i class="fa fa-link"></i></button>
+                    </h5>
+                    <p>
+                      <small>{{ 'FULFILMENT_CENTRE_STD_LEAD' | translate }}: {{availableFc.defaultStandardStockLeadTime}}</small><br/>
+                      <small>{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}: {{availableFc.defaultBackorderStockLeadTime}}</small><br/>
+                      <ng-template [ngIf]="availableFc.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-success"></i></small></ng-template>
+                      <ng-template [ngIf]="!availableFc.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-remove text-danger"></i></small></ng-template>
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -177,7 +230,7 @@
                 <div class="form-group">
                   <label>{{ 'CARRIERSLA_EXCLUDE_DATES' | translate }}</label>
                   <div>
-                    <ul>
+                    <ul class="list-unstyled">
                       <li *ngFor="let range of sla.excludeDates">
                         {{ range.first | ycdate }}{{ range.second ? (' - ' + (range.second | ycdate)) : '' }}
                         <button type="button" (click)="onExclusionDateRemove(range)" class="js-click btn btn-danger btn-circle" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
@@ -188,7 +241,6 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label>{{ 'CARRIERSLA_EXCLUDE_DATES_ONE' | translate }}</label>
                   <div class="row">
                     <div class="col-xs-12 col-md-5">
                       <input class="form-control" placeholder="{{ 'CARRIERSLA_EXCLUDE_DATES_ONE_FROM' | translate }}" formControlName="excludefrom" name="excludefrom" type="text" [(ngModel)]="excludefrom">
@@ -200,19 +252,13 @@
                       <button type="button" (click)="onExclusionDateNew()" [disabled]="!(slaForm.controls['excludefrom'].valid) || !(slaForm.controls['excludeto'].valid)" class="js-click btn btn-default btn-circle" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
                         <i class="fa fa-plus"></i>
                       </button>
+                      &nbsp;
+                      <i title="{{ 'CARRIERSLA_EXCLUDE_DATES_ONE' | translate }}" class="fa fa-question-circle"></i>
                     </div>
                   </div>
                   <div [hidden]="(slaForm.controls['excludefrom'].valid || slaForm.controls['excludefrom'].pristine) && (slaForm.controls['excludeto'].valid || slaForm.controls['excludeto'].pristine)" class="alert alert-danger">
                     {{ 'DATE_REQUIRED' | translate }}
                   </div>
-                </div>
-                <div>
-                  <input formControlName="billingAddressNotRequired" name="billingAddressNotRequired" type="checkbox" [(ngModel)]="sla.billingAddressNotRequired">
-                  <label>{{ 'CARRIERSLA_NO_BILL' | translate }}</label>
-                </div>
-                <div>
-                  <input formControlName="deliveryAddressNotRequired" name="deliveryAddressNotRequired" type="checkbox" [(ngModel)]="sla.deliveryAddressNotRequired">
-                  <label>{{ 'CARRIERSLA_NO_SHIP' | translate }}</label>
                 </div>
               </fieldset>
             </div>

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component,  OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ShopVO, ShopSupportedCurrenciesVO } from './../model/index';
+import { ShopVO, ShopSupportedCurrenciesVO, Pair } from './../model/index';
 import { ShopService } from './../services/index';
 import { Futures, Future } from './../event/index';
 import { Config } from './../config/env.config';
@@ -32,9 +32,9 @@ export class CurrencySelectComponent implements OnInit, OnDestroy {
 
   private _shop : ShopVO;
 
-  private currencies : string[] = [];
-  private shopCurrencies : string[] = [];
-  private filteredCurrencies : string[] = [];
+  private currencies : Pair<string, string>[] = [];
+  private shopCurrencies : Pair<string, string>[] = [];
+  private filteredCurrencies : Pair<string, string>[] = [];
   private currencyFilter : string;
 
   private selectedCurrency : string = null;
@@ -78,8 +78,10 @@ export class CurrencySelectComponent implements OnInit, OnDestroy {
     this.dataSelected.emit(this.selectedCurrency);
   }
 
-  protected isShopCurrency(currency:string) {
-    return this.shopCurrencies.indexOf(currency) != -1;
+  protected isShopCurrency(currency:Pair<string, string>) {
+    return this.shopCurrencies.find(val => {
+      return val.first == currency.first;
+    }) != null;
   }
 
   protected onFilterChange() {
@@ -112,7 +114,8 @@ export class CurrencySelectComponent implements OnInit, OnDestroy {
 
     if (_filter) {
       this.filteredCurrencies = this.currencies.filter(currency =>
-        currency.toLowerCase().indexOf(_filter) !== -1
+        currency.first.toLowerCase().indexOf(_filter) !== -1 ||
+        currency.second.toLowerCase().indexOf(_filter) !== -1
       );
       LogUtil.debug('CurrencySelectComponent filterCurrencies', _filter);
     } else {
@@ -125,7 +128,7 @@ export class CurrencySelectComponent implements OnInit, OnDestroy {
     }
 
     let that = this;
-    var _sort = function(a:string, b:string):number {
+    var _sort = function(a:Pair<string, string>, b:Pair<string, string>):number {
 
       let aShop = that.isShopCurrency(a);
       let bShop = that.isShopCurrency(b);
@@ -136,11 +139,7 @@ export class CurrencySelectComponent implements OnInit, OnDestroy {
         return 1;
       }
 
-      if (a < b)
-        return -1;
-      if (a > b)
-        return 1;
-      return 0;
+      return (a.first < b.first) ? -1 : 1;
 
     };
 

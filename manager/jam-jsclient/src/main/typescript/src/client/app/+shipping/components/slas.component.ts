@@ -132,7 +132,7 @@ export class SlasComponent implements OnInit, OnDestroy {
 
     let supported = row.supportedPaymentGateways;
     if (!supported) {
-      return [ { name: '-', label: '-', active: true } ];
+      return [];
     }
 
     let labels = <Array<PaymentGatewayInfoVO>>[];
@@ -143,6 +143,11 @@ export class SlasComponent implements OnInit, OnDestroy {
         labels.push({ name: label, label: label, active: false });
       }
     });
+
+    labels.sort((a, b) => {
+       return (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1;
+    });
+
     return labels;
   }
 
@@ -151,13 +156,7 @@ export class SlasComponent implements OnInit, OnDestroy {
 
     let supported = row.supportedFulfilmentCentres;
     if (!supported) {
-      return [ {
-        warehouseId: 0, code: '-', name: '-', description: null,
-        countryCode: null, stateCode: null, city: null, postcode: null,
-        defaultStandardStockLeadTime: 0, defaultBackorderStockLeadTime: 0,
-        multipleShippingSupported: false,
-        displayNames: []
-      } ];
+      return [];
     }
 
     let labels = <Array<FulfilmentCentreInfoVO>>[];
@@ -174,6 +173,11 @@ export class SlasComponent implements OnInit, OnDestroy {
         });
       }
     });
+
+    labels.sort((a, b) => {
+       return (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1;
+    });
+
     return labels;
   }
 

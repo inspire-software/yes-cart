@@ -25,9 +25,18 @@ import java.util.List;
  */
 public class VoPaymentGateway extends VoPaymentGatewayInfo {
 
+    private int rank;
     private String shopCode;
     private VoPaymentGatewayFeature feature;
     private List<VoPaymentGatewayParameter> parameters;
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(final int rank) {
+        this.rank = rank;
+    }
 
     public String getShopCode() {
         return shopCode;
@@ -56,10 +65,12 @@ public class VoPaymentGateway extends VoPaymentGatewayInfo {
     public VoPaymentGateway(final String label,
                             final String name,
                             final boolean active,
+                            final int rank,
                             final String shopCode,
                             final VoPaymentGatewayFeature feature,
                             final List<VoPaymentGatewayParameter> parameters) {
         super(label, name, active);
+        this.rank = rank;
         this.shopCode = shopCode;
         this.feature = feature;
         this.parameters = parameters;

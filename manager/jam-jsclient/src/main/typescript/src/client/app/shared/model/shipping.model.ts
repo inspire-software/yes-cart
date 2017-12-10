@@ -25,7 +25,7 @@ export interface CarrierShopLinkVO {
   disabled : boolean;
 }
 
-export interface CarrierLocaleVO {
+export interface CarrierInfoVO {
 
   carrierId : number;
 
@@ -37,39 +37,48 @@ export interface CarrierLocaleVO {
 
 }
 
-export interface CarrierVO extends CarrierLocaleVO {
+export interface CarrierVO extends CarrierInfoVO {
 
   carrierShops : Array<CarrierShopLinkVO>;
 
 }
 
-export interface ShopCarrierVO extends CarrierLocaleVO {
+export interface ShopCarrierVO extends CarrierInfoVO {
 
   carrierShop : CarrierShopLinkVO;
 
 }
 
-export interface CarrierSlaVO {
+export interface CarrierSlaInfoVO {
 
   carrierslaId : number;
   carrierId : number;
 
   code  : string;
   name  : string;
+
+  maxDays : number;
+  minDays : number;
+  guaranteed : boolean;
+  namedDay : boolean;
+
+  slaType : string;
+
+  externalRef : string;
+
+}
+
+export interface CarrierSlaVO extends CarrierSlaInfoVO {
+
   description : string;
 
   displayNames : Pair<string, string>[];
   displayDescriptions : Pair<string, string>[];
 
-  maxDays : number;
-  minDays : number;
   excludeWeekDays : string[];
   excludeDates : Pair<Date, Date>[];
-  guaranteed : boolean;
-  namedDay : boolean;
   excludeCustomerTypes : string;
 
-  slaType : string;
   script : string;
 
   billingAddressNotRequired : boolean;
@@ -78,6 +87,12 @@ export interface CarrierSlaVO {
   supportedPaymentGateways : Array<string>;
   supportedFulfilmentCentres : Array<string>;
 
-  externalRef : string;
+}
+
+
+export interface ShopCarrierAndSlaVO extends ShopCarrierVO {
+
+  carrierSlas : CarrierSlaInfoVO[];
 
 }
+

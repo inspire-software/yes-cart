@@ -27,16 +27,42 @@
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-md-6 col-lg-5">
-      <h3>{{ 'ASSIGNED' | translate }}</h3>
-      <span *ngFor="let supported of selectedCentres">
-        <a class="btn js-click" (click)=onSupportedCentreClick(supported)>{{supported.name}} <i class="fa fa-remove"></i></a>
-      </span>
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'ASSIGNED' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let supported of selectedCentres" class="list-group-item">
+            <h5>
+              <span class="label label-info">{{supported.code}}</span> {{supported.name}}
+              <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedCentreClick(supported)><i class="fa fa-unlink"></i></button>
+            </h5>
+            <p>
+              <small>{{ 'FULFILMENT_CENTRE_STD_LEAD' | translate }}: {{supported.defaultStandardStockLeadTime}}</small><br/>
+              <small>{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}: {{supported.defaultBackorderStockLeadTime}}</small><br/>
+              <ng-template [ngIf]="supported.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-success"></i></small></ng-template>
+              <ng-template [ngIf]="!supported.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-remove text-danger"></i></small></ng-template>
+            </p>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="col-md-6 col-lg-5">
-      <h3>{{ 'AVAILABLE' | translate }}</h3>
-      <span *ngFor="let available of availableCentres">
-        <a class="btn js-click" (click)=onAvailableCentreClick(available)>{{available.name}} <i class="fa fa-plus"></i></a>
-      </span>
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'AVAILABLE' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let available of availableCentres" class="list-group-item">
+            <h5>
+              <span class="label label-info">{{available.code}}</span> {{available.name}}
+              <button class="pull-right btn btn-default btn-circle btn-sm" (click)=onAvailableCentreClick(available)><i class="fa fa-link"></i></button>
+            </h5>
+            <p>
+              <small>{{ 'FULFILMENT_CENTRE_STD_LEAD' | translate }}: {{available.defaultStandardStockLeadTime}}</small><br/>
+              <small>{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}: {{available.defaultBackorderStockLeadTime}}</small><br/>
+              <ng-template [ngIf]="available.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-check-circle-o text-success"></i></small></ng-template>
+              <ng-template [ngIf]="!available.multipleShippingSupported"><small>{{ 'FULFILMENT_CENTRE_MULTI_DELIVERY' | translate }}: <i class="fa fa-remove text-danger"></i></small></ng-template>
+            </p>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 

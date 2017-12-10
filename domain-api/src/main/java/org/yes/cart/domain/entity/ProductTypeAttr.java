@@ -196,7 +196,7 @@ public interface ProductTypeAttr extends Auditable, Rankable {
     /**
      * Navigation type.
      *
-     * @param navigationType
+     * @param navigationType nav type constant
      */
     void setNavigationType(String navigationType);
 

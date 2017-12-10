@@ -55,6 +55,7 @@ export interface PaymentGatewayParameterVO {
 
 export interface PaymentGatewayVO extends PaymentGatewayInfoVO {
 
+  rank : number;
   shopCode : string;
   feature : PaymentGatewayFeatureVO;
   parameters : Array<PaymentGatewayParameterVO>;

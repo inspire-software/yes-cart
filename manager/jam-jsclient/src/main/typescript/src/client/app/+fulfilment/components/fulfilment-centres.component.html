@@ -7,6 +7,7 @@
         <th>{{ 'CODE' | translate }}</th>
         <th>{{ 'NAME' | translate }}</th>
         <th>{{ 'DESCRIPTION' | translate }}</th>
+        <th>{{ 'TAB_CONFIGURATIONS' | translate }}</th>
       </tr>
       </thead>
       <tbody>
@@ -15,6 +16,7 @@
           <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
           <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.description}}&nbsp;</a></td>
+          <td title="{{ 'TAB_CONFIGURATIONS' | translate }}"><a class="js-click" (click)="onSelectRow(row)"> <span [innerHTML]="getFfFlags(row)"></span>&nbsp;</a></td>
         </ng-template>
       </tr>
       </tbody>

@@ -17,19 +17,21 @@
       <tr *ngFor="let row of filteredSlas; let i = index" class="{{row == selectedSla ? 'active' : ''}}">
         <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'CARRIERSLA_CODE' | translate }} / {{ 'CARRIERSLA_REF' | translate}}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}} {{ row.externalRef != null ? ('/ ' + row.externalRef) : '' }}</a></td>
-          <td title="{{ 'CARRIERSLA_SLATYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ ('CARRIERSLA_SLATYPE_' + row.slaType) | translate }} <i class="fa {{ row.guaranteed ? 'fa-calendar-check-o' : 'fa-calendar' }}"></i><ng-template [ngIf]="row.namedDay">+<i class="fa fa-user"></i></ng-template> {{ row.minDays > 0 ? row.minDays : '0' }}{{ row.maxDays > 0 ? ' - ' + row.maxDays : '' }} <span class="text-muted">{{ row.excludeCustomerTypes }}</span></a></td>
+          <td title="{{ 'CARRIERSLA_SLATYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ ('CARRIERSLA_SLATYPE_' + row.slaType) | translate }} <i class="fa {{ row.guaranteed ? 'fa-calendar-check-o' : 'fa-calendar' }}"></i><ng-template [ngIf]="row.namedDay">+<i class="fa fa-user"></i></ng-template> {{ row.minDays > 0 ? row.minDays : '0' }}{{ row.maxDays > 0 ? ' - ' + row.maxDays : '' }} <span class="text-danger">{{ row.excludeCustomerTypes }}</span></a></td>
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
           <td title="{{ 'CARRIERSLA_BILL' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.billingAddressNotRequired ? 'fa-times-circle' : 'fa-check-circle' }}"></i></a></td>
           <td title="{{ 'CARRIERSLA_SHIP' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.deliveryAddressNotRequired ? 'fa-times-circle' : 'fa-check-circle' }}"></i></a></td>
           <td title="{{ 'CARRIERSLA_PG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">
-            <ul class="list-unstyled">
-              <li *ngFor="let pg of getPGNames(row)" [ngClass]="pg.active ? '' : 'text-strikethrough text-muted'">{{pg.name}}</li>
-            </ul>
+            <span *ngFor="let pg of getPGNames(row)">
+              <span class="label {{ pg.active ? 'label-info' : 'label-default'}}">{{pg.name}}</span>&nbsp;
+            </span>
+            &nbsp;
           </a></td>
           <td title="{{ 'CARRIERSLA_FC' | translate }}"><a class="js-click" (click)="onSelectRow(row)">
-            <ul class="list-unstyled">
-              <li *ngFor="let fc of getFCNames(row)">{{fc.name}}</li>
-            </ul>
+            <span *ngFor="let fc of getFCNames(row)">
+              <span class="label label-info">{{fc.name}}</span>&nbsp;
+            </span>
+            &nbsp;
           </a></td>
         </ng-template>
       </tr>

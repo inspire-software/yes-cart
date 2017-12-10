@@ -245,11 +245,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
     });
 
     var _sort = function(a:ShopFulfilmentCentreVO, b:ShopFulfilmentCentreVO):number {
-      if (a.name < b.name)
-        return -1;
-      if (a.name > b.name)
-        return 1;
-      return 0;
+      return (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1;
     };
 
     availableCentres.sort(_sort);

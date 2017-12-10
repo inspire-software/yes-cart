@@ -209,7 +209,7 @@
 
           <ng-template [ngIf]="content.contentId > 0">
 
-            <div class="panel panel-default" *ngFor="let body of content.contentBodies">
+            <div *ngFor="let body of content.contentBodies" class="panel panel-default">
               <div class="panel-heading">
                 <h3 class="panel-title"><span><button type="button" (click)="onCMSEdit(body)" class="btn btn-default btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}"><i class="fa fa-edit"></i></button></span> <span><button type="button" (click)="onCMSEditRaw(body)" class="btn btn-default btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}"><i class="fa fa-code"></i></button></span> {{ content.name }} <span [ngClass]="body.text ? 'label label-success' : 'label label-danger'">{{ body.lang }}</span></h3>
               </div>

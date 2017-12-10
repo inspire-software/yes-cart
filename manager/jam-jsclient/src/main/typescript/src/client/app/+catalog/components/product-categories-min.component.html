@@ -3,7 +3,7 @@
   <div class="text-right data-control">
 
     <button type="button" (click)="assignToProductClick(selectedNode)" class="btn btn-default btn-circle btn-xl" [disabled]="selectedNode == null || selectedNode.id == '100'">
-      <i class="fa fa-exchange"></i>
+      <i class="fa fa-link"></i>
     </button>
 
     <button type="button" (click)="createNew(selectedNode)" class="btn btn-default btn-circle btn-xl" [disabled]="selectedNode == null">
@@ -72,18 +72,33 @@
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-md-6 col-lg-5">
-      <h3>{{ 'ASSIGNED' | translate }}</h3>
-      <ul class="treenodes lvl-1">
-        <li class="treenode" *ngFor="let cat of assigned"><a class="js-click" (click)=onAssignedClick(cat) title="{{cat.categoryCode}}">{{cat.categoryName}} <i class="fa fa-remove"></i></a> (<a class="js-click" (click)=onRankClick(cat)>{{cat.rank}}</a>)</li>
-      </ul>
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'ASSIGNED' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let cat of assigned" class="list-group-item">
+            <h5>
+              <span>{{cat.categoryName}}</span>
+              <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onAssignedClick(cat)><i class="fa fa-unlink"></i></button>
+              <button class="pull-right btn btn-info btn-circle btn-sm" style="margin-right: 3px" title="{{ 'AV_RANK' | translate }}" (click)=onRankClick(cat)>{{cat.rank}}</button>
+            </h5>
+            <p>
+              <small>{{cat.categoryCode}}</small>
+            </p>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="col-md-6 col-lg-5">
-      <h3>{{ 'SHOP_TAB_CATALOG' | translate }}</h3>
-      <yc-tree-view [nodes]="nodes"
-                    [selectedNode]="selectedNode"
-                    (onSelectedChanged)="onSelectNode($event)"
-                    (onRequestNodes)="onRequest($event)">
-      </yc-tree-view>
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'SHOP_TAB_CATALOG' | translate }}</div>
+        <div class="panel-body">
+          <yc-tree-view [nodes]="nodes"
+                        [selectedNode]="selectedNode"
+                        (onSelectedChanged)="onSelectNode($event)"
+                        (onRequestNodes)="onRequest($event)">
+          </yc-tree-view>
+        </div>
+      </div>
     </div>
   </div>
 

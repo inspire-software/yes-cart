@@ -95,8 +95,8 @@ export interface ShopAliasVO {
  */
 export interface ShopSupportedCurrenciesVO {
   shopId : number;
-  all : Array<string>;
-  supported : Array<string>;
+  all : Pair<string, string>[];
+  supported : Pair<string, string>[];
 }
 
 

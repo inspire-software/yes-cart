@@ -23,7 +23,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
  * Time: 21:32
  */
 @Dto
-public class VoShopCarrier extends VoCarrierLocale {
+public class VoShopCarrier extends VoCarrierInfo {
 
     private VoCarrierShopLink carrierShop;
 

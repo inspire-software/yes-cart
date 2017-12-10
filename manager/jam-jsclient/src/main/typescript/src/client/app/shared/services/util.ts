@@ -51,22 +51,6 @@ export class Util {
   }
 
   /**
-   * Remove from <code>arr</code> all items from itemsToRemove list.
-   * @param arr
-   * @param itemsToRemove
-   * @returns {Array<any>}
-   */
-  public static remove(arr:Array<any>, itemsToRemove:Array<any>) : Array<any> {
-    for (var i =0; i < itemsToRemove.length ; i++) {
-      var index = arr.indexOf(itemsToRemove[i], 0);
-      if (index > -1) {
-        arr.splice(index, 1);
-      }
-    }
-    return arr;
-  }
-
-  /**
    * Utility to deduce the correct error message from various error object that
    * may arise during services invocation.
    *

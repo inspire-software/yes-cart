@@ -23,7 +23,7 @@
     <ul class="nav nav-second-level item-list">
 
       <li *ngFor="let productSku of filteredProductSkus">
-        <a (click)="onSelectClick(productSku)" class="{{ (selectedProductSku != null && productSku != null && selectedProductSku.skuId == productSku.skuId) ? 'bg-info js-click' : 'js-click' }}">{{productSku.code}}: {{productSku.name}}</a>
+        <a (click)="onSelectClick(productSku)" class="{{ (selectedProductSku != null && productSku != null && selectedProductSku.skuId == productSku.skuId) ? 'bg-info js-click' : 'js-click' }}"><span class="label label-info">{{productSku.code}}</span> {{productSku.name}}</a>
       </li>
 
     </ul>

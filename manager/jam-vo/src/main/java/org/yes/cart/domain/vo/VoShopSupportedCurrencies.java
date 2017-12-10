@@ -16,6 +16,7 @@
 package org.yes.cart.domain.vo;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.yes.cart.domain.misc.MutablePair;
 
 import java.util.List;
 
@@ -26,9 +27,9 @@ public class VoShopSupportedCurrencies {
 
     private long shopId;
 
-    private List<String> supported;
+    private List<MutablePair<String, String>> supported;
 
-    private List<String> all;
+    private List<MutablePair<String, String>> all;
 
     public long getShopId() {
         return shopId;
@@ -38,19 +39,19 @@ public class VoShopSupportedCurrencies {
         this.shopId = shopId;
     }
 
-    public List<String> getSupported() {
+    public List<MutablePair<String, String>> getSupported() {
         return supported;
     }
 
-    public void setSupported(List<String> supported) {
+    public void setSupported(List<MutablePair<String, String>> supported) {
         this.supported = supported;
     }
 
-    public List<String> getAll() {
+    public List<MutablePair<String, String>> getAll() {
         return all;
     }
 
-    public void setAll(List<String> all) {
+    public void setAll(List<MutablePair<String, String>> all) {
         this.all = all;
     }
 

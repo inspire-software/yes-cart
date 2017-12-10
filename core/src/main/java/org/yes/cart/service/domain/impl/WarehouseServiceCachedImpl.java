@@ -107,16 +107,37 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
     }
 
     /** {@inheritDoc} */
+    @CacheEvict(value = {
+            "shopService-shopWarehouses",
+            "shopService-shopWarehousesMap",
+            "shopService-shopWarehousesIds",
+            "skuWarehouseService-productOnWarehouse",
+            "skuWarehouseService-productSkusOnWarehouse"
+    }, allEntries = true)
     public Warehouse create(final Warehouse instance) {
         return warehouseService.create(instance);
     }
 
     /** {@inheritDoc} */
+    @CacheEvict(value = {
+            "shopService-shopWarehouses",
+            "shopService-shopWarehousesMap",
+            "shopService-shopWarehousesIds",
+            "skuWarehouseService-productOnWarehouse",
+            "skuWarehouseService-productSkusOnWarehouse"
+    }, allEntries = true)
     public Warehouse update(final Warehouse instance) {
         return warehouseService.update(instance);
     }
 
     /** {@inheritDoc} */
+    @CacheEvict(value = {
+            "shopService-shopWarehouses",
+            "shopService-shopWarehousesMap",
+            "shopService-shopWarehousesIds",
+            "skuWarehouseService-productOnWarehouse",
+            "skuWarehouseService-productSkusOnWarehouse"
+    }, allEntries = true)
     public void delete(final Warehouse instance) {
         warehouseService.delete(instance);
     }

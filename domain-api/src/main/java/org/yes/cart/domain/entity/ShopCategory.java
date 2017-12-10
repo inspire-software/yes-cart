@@ -23,7 +23,7 @@ package org.yes.cart.domain.entity;
  * <p/>
  * Need to use this rank instead of Category@rank in future version.
  */
-public interface ShopCategory extends Auditable {
+public interface ShopCategory extends Auditable, Rankable {
 
     /**
      * Primary key.

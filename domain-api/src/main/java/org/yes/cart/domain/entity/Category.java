@@ -29,7 +29,7 @@ import java.util.Set;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface Category extends Auditable, Attributable, Seoable  {
+public interface Category extends Auditable, Attributable, Rankable, Nameable, Seoable  {
 
     /**
      * Price navigation in category.

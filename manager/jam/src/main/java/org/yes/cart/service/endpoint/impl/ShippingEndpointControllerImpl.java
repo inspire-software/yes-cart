@@ -20,10 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.yes.cart.domain.vo.VoCarrier;
-import org.yes.cart.domain.vo.VoCarrierLocale;
-import org.yes.cart.domain.vo.VoCarrierSla;
-import org.yes.cart.domain.vo.VoShopCarrier;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.endpoint.ShippingEndpointController;
 import org.yes.cart.service.vo.VoShippingService;
 
@@ -50,8 +47,8 @@ public class ShippingEndpointControllerImpl implements ShippingEndpointControlle
     }
 
     @Override
-    public @ResponseBody List<VoShopCarrier> getShopCarriers(@PathVariable("id") final long shopId) throws Exception {
-        return voShippingService.getShopCarriers(shopId);
+    public @ResponseBody List<VoShopCarrierAndSla> getShopCarriers(@PathVariable("id") final long shopId) throws Exception {
+        return voShippingService.getShopCarriersAnsSla(shopId);
     }
 
     @Override
@@ -65,7 +62,7 @@ public class ShippingEndpointControllerImpl implements ShippingEndpointControlle
     }
 
     @Override
-    public @ResponseBody VoCarrier createShopCarrier(@RequestBody final VoCarrierLocale vo, @PathVariable("id") final long shopId) throws Exception {
+    public @ResponseBody VoCarrier createShopCarrier(@RequestBody final VoCarrierInfo vo, @PathVariable("id") final long shopId) throws Exception {
         return voShippingService.createShopCarrier(vo, shopId);
     }
 

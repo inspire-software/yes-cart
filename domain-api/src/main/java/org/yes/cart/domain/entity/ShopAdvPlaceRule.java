@@ -27,7 +27,7 @@ import java.util.Date;
  * Time: 11:12:54
  */
 
-public interface ShopAdvPlaceRule extends Auditable {
+public interface ShopAdvPlaceRule extends Auditable, Rankable, Nameable {
 
     /**
      */

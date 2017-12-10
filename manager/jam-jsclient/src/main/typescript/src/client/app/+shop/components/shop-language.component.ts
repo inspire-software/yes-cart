@@ -134,4 +134,14 @@ export class ShopLanguageComponent implements OnInit {
     this.changed = true;
   }
 
+  getLanguageName(code:string):string {
+    let _lang = this.shopLanguagesVO.all.find(_val => {
+      return _val.first == code;
+    });
+    if (_lang != null) {
+      return _lang.second;
+    }
+    return '';
+  }
+
 }

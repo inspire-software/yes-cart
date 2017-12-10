@@ -129,9 +129,12 @@ export class CarriersComponent implements OnInit, OnDestroy {
           shops.push({ code: shop.code, name: shop.name, active: !shop.disabled && !carrierShop.disabled });
         }
       });
-    } else {
-      shops.push({ code: '-', name: '-', active: false });
     }
+
+    shops.sort((a, b) => {
+      return (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1;
+    });
+
     return shops;
   }
 

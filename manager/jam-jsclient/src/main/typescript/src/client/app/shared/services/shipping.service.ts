@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { CarrierLocaleVO, CarrierVO, ShopCarrierVO, CarrierSlaVO } from '../model/index';
+import { CarrierInfoVO, CarrierVO, ShopCarrierVO, CarrierSlaVO, ShopCarrierAndSlaVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -57,7 +57,7 @@ export class ShippingService {
    */
   getShopCarriers(shopId:number) {
     return this.http.get(this._serviceBaseUrl + '/carrier/shop/' + shopId)
-      .map(res => <ShopCarrierVO[]> this.json(res))
+      .map(res => <ShopCarrierAndSlaVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -89,7 +89,7 @@ export class ShippingService {
    * @param shopId shop id
    * @returns {Observable<R>}
      */
-  createCarrier(carrier:CarrierLocaleVO, shopId : number) {
+  createCarrier(carrier:CarrierInfoVO, shopId : number) {
     let body = JSON.stringify(carrier);
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
@@ -112,7 +112,7 @@ export class ShippingService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/carrier/shop', body, options)
-      .map(res => <Array<ShopCarrierVO>> this.json(res))
+      .map(res => <Array<ShopCarrierAndSlaVO>> this.json(res))
       .catch(this.handleError);
   }
 

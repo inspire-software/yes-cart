@@ -25,8 +25,8 @@ import org.yes.cart.service.vo.VoShopService;
 import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -111,12 +111,12 @@ public class VoShopServiceDerivedImplTest extends BaseCoreDBTestCase {
         VoShopSupportedCurrencies voSsc = voShopService.getShopCurrencies(voShop.getShopId());
         assertThat(voSsc.getSupported().size(), equalTo(0));
 
-        voSsc.setSupported(Arrays.asList("USD,EUR".split(",")));
+        voSsc.setSupported(Arrays.asList(MutablePair.of("USD", "US Dollar"), MutablePair.of("EUR", "Euro")));
         voSsc = voShopService.update(voSsc);
 
         assertThat(voSsc.getSupported().size(), equalTo(2));
-        assertThat(voSsc.getSupported().get(0), equalTo("USD"));
-        assertThat(voSsc.getSupported().get(1), equalTo("EUR"));
+        assertThat(voSsc.getSupported().get(0).getFirst(), equalTo("USD"));
+        assertThat(voSsc.getSupported().get(1).getFirst(), equalTo("EUR"));
     }
 
     private VoShop getTestVoShop(String suf) {

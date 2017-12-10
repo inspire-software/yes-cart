@@ -29,28 +29,10 @@ import java.util.List;
  * Time: 17:54
  */
 @Dto
-public class VoCarrierSla {
-
-    @DtoField(value = "carrierslaId", readOnly = true)
-    private long carrierslaId;
-
-    @DtoField(value = "carrierId", readOnly = true)
-    private long carrierId;
-
-    @DtoField(value = "code")
-    private String code;
-
-    @DtoField(value = "name")
-    private String name;
+public class VoCarrierSla extends VoCarrierSlaInfo {
 
     @DtoField(value = "description")
     private String description;
-
-    @DtoField(value = "maxDays")
-    private Integer maxDays;
-
-    @DtoField(value = "minDays")
-    private Integer minDays;
 
     @DtoField(value = "excludeWeekDays", converter = "CSVToList")
     private List<String> excludeWeekDays;
@@ -58,17 +40,8 @@ public class VoCarrierSla {
     @DtoField(value = "excludeDates", converter = "CSVToListDatesPairs")
     private List<MutablePair<Date, Date>> excludeDates;
 
-    @DtoField(value = "guaranteed")
-    private boolean guaranteed;
-
-    @DtoField(value = "namedDay")
-    private boolean namedDay;
-
     @DtoField(value = "excludeCustomerTypes")
     private String excludeCustomerTypes;
-
-    @DtoField(value = "slaType")
-    private String slaType;
 
     @DtoField(value = "script")
     private String script;
@@ -94,52 +67,12 @@ public class VoCarrierSla {
     @DtoField(value = "externalRef")
     private String externalRef;
 
-    public long getCarrierslaId() {
-        return carrierslaId;
-    }
-
-    public void setCarrierslaId(final long carrierslaId) {
-        this.carrierslaId = carrierslaId;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(final String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(final String description) {
         this.description = description;
-    }
-
-    public Integer getMaxDays() {
-        return maxDays;
-    }
-
-    public void setMaxDays(final Integer maxDays) {
-        this.maxDays = maxDays;
-    }
-
-    public Integer getMinDays() {
-        return minDays;
-    }
-
-    public void setMinDays(final Integer minDays) {
-        this.minDays = minDays;
     }
 
     public List<String> getExcludeWeekDays() {
@@ -158,22 +91,6 @@ public class VoCarrierSla {
         this.excludeDates = excludeDates;
     }
 
-    public boolean isGuaranteed() {
-        return guaranteed;
-    }
-
-    public void setGuaranteed(final boolean guaranteed) {
-        this.guaranteed = guaranteed;
-    }
-
-    public boolean isNamedDay() {
-        return namedDay;
-    }
-
-    public void setNamedDay(final boolean namedDay) {
-        this.namedDay = namedDay;
-    }
-
     public String getExcludeCustomerTypes() {
         return excludeCustomerTypes;
     }
@@ -182,28 +99,12 @@ public class VoCarrierSla {
         this.excludeCustomerTypes = excludeCustomerTypes;
     }
 
-    public String getSlaType() {
-        return slaType;
-    }
-
-    public void setSlaType(final String slaType) {
-        this.slaType = slaType;
-    }
-
     public String getScript() {
         return script;
     }
 
     public void setScript(final String script) {
         this.script = script;
-    }
-
-    public long getCarrierId() {
-        return carrierId;
-    }
-
-    public void setCarrierId(final long carrierId) {
-        this.carrierId = carrierId;
     }
 
     public List<MutablePair<String, String>> getDisplayNames() {
@@ -252,13 +153,5 @@ public class VoCarrierSla {
 
     public void setDeliveryAddressNotRequired(final boolean deliveryAddressNotRequired) {
         this.deliveryAddressNotRequired = deliveryAddressNotRequired;
-    }
-
-    public String getExternalRef() {
-        return externalRef;
-    }
-
-    public void setExternalRef(final String externalRef) {
-        this.externalRef = externalRef;
     }
 }

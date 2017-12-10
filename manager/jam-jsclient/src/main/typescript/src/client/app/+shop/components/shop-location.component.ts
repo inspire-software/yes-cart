@@ -94,11 +94,7 @@ export class ShopLocationComponent implements OnInit {
     });
 
     var _sort = function(a:Pair<string, string>, b:Pair<string, string>):number {
-      if (a.second < b.second)
-        return -1;
-      if (a.second > b.second)
-        return 1;
-      return 0;
+      return (a.second < b.second) ? -1 : 1;
     };
 
     availableBilling.sort(_sort);

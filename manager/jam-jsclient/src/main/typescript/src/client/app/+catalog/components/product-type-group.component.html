@@ -4,46 +4,65 @@
     <div class="row">
 
       <div class="col-xs-12 col-md-4">
-        <ul class="nav nav-second-level item-list">
-          <li *ngFor="let row of filteredObjectGroups">
-            <a (click)="onSelectRow(row)" class="{{ (selectedRow != null && selectedRow.name == row.name) ? 'bg-info js-click' : 'js-click' }}"><span>{{row.rank}} {{row.name}}</span><span class="label label-default pull-right">{{getCount(row.attrCodeList)}}</span></a>
-          </li>
-          <li *ngFor="let row of removedObjectGroups">
-            <a class="js-click bg-danger text-strikethrough"><span>{{row.name}}</span><span class="label label-default pull-right">{{getCount(row.attrCodeList)}}</span></a>
-          </li>
-        </ul>
+        <div class="panel panel-default">
+          <ul class="list-group">
+            <li *ngFor="let row of filteredObjectGroups" class="list-group-item {{ (selectedRow != null && selectedRow.name == row.name) ? 'list-group-item-info' : '' }}">
+              <a (click)="onSelectRow(row)" class="js-click"><span>{{row.name}} ({{row.rank}})</span></a>
+              <span class="badge">{{getCount(row.attrCodeList)}}</span>
+            </li>
+            <li *ngFor="let row of removedObjectGroups" class="list-group-item list-group-item-danger">
+              <a class="js-click text-strikethrough"><span>{{row.name}}</span></a>
+              <span class="badge">{{getCount(row.attrCodeList)}}</span>
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div class="col-xs-12 col-md-8">
          <ng-template [ngIf]="selectedRow">
            <div class="row">
-             <div class="col-xs-12">
-                <h3>{{selectedRow.name}}</h3>
-             </div>
-           </div>
-           <div class="row">
              <div class="col-md-6">
-               <h4>{{ 'ASSIGNED' | translate }}</h4>
-               <ul class="treenodes lvl-1">
-                 <li class="treenode" *ngFor="let attr of selectedRowAssigned"><a class="js-click" (click)=onAssignedAttrClick(attr)>{{attr.attribute.name}} <span [innerHTML]="getAttrFlags(attr)"></span> <i class="fa fa-remove"></i></a></li>
-               </ul>
-               <ul class="treenodes lvl-1">
-                 <li class="treenode bg-danger" *ngFor="let attrCode of selectedRowAssignedExtra"><a class="js-click" (click)=onAssignedAttrCodeClick(attrCode)>{{ attrCode }} <i class="fa fa-remove"></i></a></li>
-               </ul>
+               <div class="panel panel-default">
+                 <div class="panel-heading">{{selectedRow.name}} {{ 'ASSIGNED' | translate }}</div>
+                 <ul class="list-group">
+                   <li *ngFor="let attr of selectedRowAssigned" class="list-group-item">
+                     <h5>
+                       {{attr.attribute.name}}
+                       <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onAssignedAttrClick(attr)><i class="fa fa-remove"></i></button>
+                     </h5>
+                     <p>
+                       <small>{{ attr.attribute.code }}</small> <small [innerHTML]="getAttrFlags(attr)"></small>
+                     </p>
+                   </li>
+                   <li *ngFor="let attrCode of selectedRowAssignedExtra" class="list-group-item list-group-item-danger">
+                     <h5>
+                       {{ attrCode }}
+                       <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onAssignedAttrCodeClick(attrCode)><i class="fa fa-remove"></i></button>
+                     </h5>
+                   </li>
+                 </ul>
+               </div>
              </div>
              <div class="col-md-6">
-               <h4>{{ 'AVAILABLE' | translate }}</h4>
-               <ul class="nav nav-second-level item-list-control">
-                 <li>
-                   <form>
-                     <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" (ngModelChange)="onAttributeFilterChange()" autocomplete="off"/>
-                   </form>
-                 </li>
-
-               </ul>
-               <ul class="treenodes lvl-1">
-                 <li class="treenode" *ngFor="let attr of selectedRowAvailableFiltered"><a class="js-click" (click)=onAvailableAttrClick(attr)>{{attr.attribute.name}} <span [innerHTML]="getAttrFlags(attr)"></span> <i class="fa fa-plus"></i></a></li>
-               </ul>
+               <div class="panel panel-default">
+                 <div class="panel-heading">{{selectedRow.name}} {{ 'AVAILABLE' | translate }}</div>
+                 <ul class="list-group">
+                   <li class="list-group-item nav nav-second-level item-list-control">
+                     <form>
+                       <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" (ngModelChange)="onAttributeFilterChange()" autocomplete="off"/>
+                     </form>
+                   </li>
+                   <li *ngFor="let attr of selectedRowAvailableFiltered" class="list-group-item">
+                     <h5>
+                       {{attr.attribute.name}}
+                       <button class="pull-right btn btn-default btn-circle btn-sm" (click)=onAvailableAttrClick(attr)><i class="fa fa-plus"></i></button>
+                     </h5>
+                     <p>
+                       <small>{{ attr.attribute.code }}</small> <small [innerHTML]="getAttrFlags(attr)"></small>
+                     </p>
+                   </li>
+                 </ul>
+               </div>
              </div>
            </div>
          </ng-template>

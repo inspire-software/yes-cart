@@ -9,7 +9,7 @@
 <ul class="nav nav-second-level item-list">
 
   <li *ngFor="let currency of filteredCurrencies">
-    <a (click)="onSelectClick(currency)" class="{{ (selectedCurrency != null && selectedCurrency == currency) ? 'bg-info js-click' : (isShopCurrency(currency) ? 'bg-success js-click' : 'js-click') }}">{{currency}}</a>
+    <a (click)="onSelectClick(currency.first)" class="{{ (selectedCurrency != null && selectedCurrency == currency.first) ? 'bg-info js-click' : (isShopCurrency(currency) ? 'bg-success js-click' : 'js-click') }}"><span class="label label-info">{{currency.first}}</span> {{currency.first == currency.second ? '' : currency.second }}</a>
   </li>
 
 </ul>

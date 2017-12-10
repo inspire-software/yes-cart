@@ -27,7 +27,7 @@ import java.util.List;
  * Time: 17:50
  */
 @Dto
-public class VoCarrierLocale {
+public class VoCarrierInfo {
 
 
     @DtoField(value = "carrierId", readOnly = true)

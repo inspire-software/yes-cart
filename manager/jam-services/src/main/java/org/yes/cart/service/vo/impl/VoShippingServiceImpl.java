@@ -90,11 +90,47 @@ public class VoShippingServiceImpl implements VoShippingService {
                     voAssemblySupport.with(VoShopCarrier.class, CarrierDTO.class);
             for (final Map.Entry<CarrierDTO, Boolean> dto : all.entrySet()) {
                 final VoShopCarrier vo = asm.assembleVo(new VoShopCarrier(), dto.getKey());
+
                 final VoCarrierShopLink link = new VoCarrierShopLink();
                 link.setShopId(shopId);
                 link.setCarrierId(vo.getCarrierId());
                 link.setDisabled(dto.getValue());
                 vo.setCarrierShop(link);
+
+                vos.add(vo);
+            }
+            return vos;
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    @Override
+    public List<VoShopCarrierAndSla> getShopCarriersAnsSla(final long shopId) throws Exception {
+
+        if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
+            final Map<CarrierDTO, Boolean> all = dtoCarrierService.findAllByShopId(shopId);
+
+            final List<VoShopCarrierAndSla> vos = new ArrayList<>(all.size());
+            final VoAssemblySupport.VoAssembler<VoShopCarrierAndSla, CarrierDTO> asmC =
+                    voAssemblySupport.with(VoShopCarrierAndSla.class, CarrierDTO.class);
+            final VoAssemblySupport.VoAssembler<VoCarrierSlaInfo, CarrierSlaDTO> asmS =
+                    voAssemblySupport.with(VoCarrierSlaInfo.class, CarrierSlaDTO.class);
+            for (final Map.Entry<CarrierDTO, Boolean> dto : all.entrySet()) {
+                final VoShopCarrierAndSla vo = asmC.assembleVo(new VoShopCarrierAndSla(), dto.getKey());
+
+                final VoCarrierShopLink link = new VoCarrierShopLink();
+                link.setShopId(shopId);
+                link.setCarrierId(vo.getCarrierId());
+                link.setDisabled(dto.getValue());
+                vo.setCarrierShop(link);
+
+                for (final CarrierSlaDTO sla : dtoCarrierSlaService.findByCarrier(dto.getKey().getCarrierId())) {
+                    final VoCarrierSlaInfo slaVo = asmS.assembleVo(new VoCarrierSlaInfo(), sla);
+                    vo.getCarrierSlas().add(slaVo);
+                }
+
                 vos.add(vo);
             }
             return vos;
@@ -164,7 +200,7 @@ public class VoShippingServiceImpl implements VoShippingService {
 
             CarrierDTO dto = dtoCarrierService.getNew();
             dto = dtoCarrierService.create(
-                    voAssemblySupport.assembleDto(CarrierDTO.class, VoCarrierLocale.class, dto, vo)
+                    voAssemblySupport.assembleDto(CarrierDTO.class, VoCarrierInfo.class, dto, vo)
             );
 
             if (CollectionUtils.isNotEmpty(shops)) {
@@ -183,12 +219,12 @@ public class VoShippingServiceImpl implements VoShippingService {
     }
 
     @Override
-    public VoCarrier createShopCarrier(final VoCarrierLocale vo, final long shopId) throws Exception {
+    public VoCarrier createShopCarrier(final VoCarrierInfo vo, final long shopId) throws Exception {
         if (federationFacade.isManageable(shopId, ShopDTO.class)) {
 
             CarrierDTO dto = dtoCarrierService.getNew();
             dto = dtoCarrierService.create(
-                    voAssemblySupport.assembleDto(CarrierDTO.class, VoCarrierLocale.class, dto, vo)
+                    voAssemblySupport.assembleDto(CarrierDTO.class, VoCarrierInfo.class, dto, vo)
             );
             dtoCarrierService.assignToShop(dto.getCarrierId(), shopId, false);
             return getCarrierById(dto.getCarrierId());
@@ -206,7 +242,7 @@ public class VoShippingServiceImpl implements VoShippingService {
 
             CarrierDTO dto = dtoCarrierService.getById(vo.getCarrierId());
             dto = dtoCarrierService.update(
-                    voAssemblySupport.assembleDto(CarrierDTO.class, VoCarrierLocale.class, dto, vo)
+                    voAssemblySupport.assembleDto(CarrierDTO.class, VoCarrierInfo.class, dto, vo)
             );
 
             final List<VoCarrierShopLink> existingLinks = existing.getCarrierShops();

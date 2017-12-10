@@ -360,6 +360,10 @@ export class SlaComponent implements OnInit, OnDestroy {
       }
     }
 
+    labels.sort((a, b) => {
+      return (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1;
+    });
+
     return labels;
   }
 
@@ -378,6 +382,11 @@ export class SlaComponent implements OnInit, OnDestroy {
         labels.push({ name: label, label: label, active: false });
       }
     });
+
+    labels.sort((a, b) => {
+       return (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1;
+    });
+
     return labels;
   }
 
@@ -399,6 +408,10 @@ export class SlaComponent implements OnInit, OnDestroy {
         labels.push(this._fcs[key]);
       }
     }
+
+    labels.sort((a, b) => {
+      return (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1;
+    });
 
     return labels;
   }
@@ -424,6 +437,11 @@ export class SlaComponent implements OnInit, OnDestroy {
         });
       }
     });
+
+    labels.sort((a, b) => {
+      return (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1;
+    });
+
     return labels;
   }
 

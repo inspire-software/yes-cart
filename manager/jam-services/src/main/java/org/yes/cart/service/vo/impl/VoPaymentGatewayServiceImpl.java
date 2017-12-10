@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
@@ -45,6 +46,26 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     private static final Logger LOG = LoggerFactory.getLogger(VoPaymentGatewayServiceImpl.class);
 
     private static final String DEFAULT_SHOP_CODE = "DEFAULT";
+
+    private static final Comparator<VoPaymentGatewayInfo> VO_PAYMENT_GATEWAY_INFO_COMPARATOR = new Comparator<VoPaymentGatewayInfo>() {
+
+        /** {@inheritDoc} */
+        public int compare(VoPaymentGatewayInfo o1, VoPaymentGatewayInfo o2) {
+            return o1.getName().compareTo(o2.getName());
+        }
+    };
+
+    private static final Comparator<VoPaymentGateway> VO_PAYMENT_GATEWAY_COMPARATOR = new Comparator<VoPaymentGateway>() {
+
+        /** {@inheritDoc} */
+        public int compare(VoPaymentGateway o1, VoPaymentGateway o2) {
+            final int rez = Integer.compare(o1.getRank(), o2.getRank());
+            if (rez == 0) {
+                return o1.getName().compareTo(o2.getName());
+            }
+            return rez;
+        }
+    };
 
     private final PaymentModulesManager paymentModulesManager;
 
@@ -161,13 +182,14 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     private void sortPgInfo(final List<VoPaymentGatewayInfo> rez) {
         Collections.sort(
                 rez,
-                new Comparator<VoPaymentGatewayInfo>() {
+                VO_PAYMENT_GATEWAY_INFO_COMPARATOR
+        );
+    }
 
-                    /** {@inheritDoc} */
-                    public int compare(VoPaymentGatewayInfo o1, VoPaymentGatewayInfo o2) {
-                        return o1.getName().compareTo(o2.getName());
-                    }
-                }
+    private void sortPg(final List<VoPaymentGateway> rez) {
+        Collections.sort(
+                rez,
+                VO_PAYMENT_GATEWAY_COMPARATOR
         );
     }
 
@@ -265,6 +287,8 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
             }
 
+            sortPg(vos);
+
             return vos;
         } else {
             throw new AccessDeniedException("Access is denied");
@@ -284,6 +308,8 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
                 vos.add(getPaymentGatewayWithParameters(pgInfo, shopCode));
 
             }
+
+            sortPg(vos);
 
             return vos;
         } else {
@@ -306,8 +332,17 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
                 new ArrayList<PaymentGatewayParameter>(getPaymentGatewayParameters(paymentGateway, shopCode))
         );
 
+        int rank = 100; // default priority in modules
+
+        for (final VoPaymentGatewayParameter parameter : parameters) {
+            if ("priority".equals(parameter.getLabel())) {
+                rank = NumberUtils.toInt(parameter.getValue(), rank);
+                break;
+            }
+        }
+
         return new VoPaymentGateway(
-                pgInfo.getLabel(), pgInfo.getName(), pgInfo.isActive(), DEFAULT_SHOP_CODE,
+                pgInfo.getLabel(), pgInfo.getName(), pgInfo.isActive(), rank, shopCode,
                 feature, parameters
         );
     }

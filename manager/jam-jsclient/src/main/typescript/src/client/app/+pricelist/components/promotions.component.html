@@ -28,7 +28,7 @@
           <td title="{{ 'PROMOTION_TAG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.tag}}&nbsp;</a></td>
           <td title="{{ 'PROMOTION_ENABLED_FROM' | translate }}" class="{{ isAvailableFromNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.enabledFrom | ycdatetime }}</a>&nbsp;</td>
           <td title="{{ 'PROMOTION_ENABLED_TO' | translate }}" class="{{ isAvailableToNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.enabledTo | ycdatetime }}</a>&nbsp;</td>
-          <td title="{{ 'PROMOTION_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.enabled ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
+          <td title="{{ 'PROMOTION_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.enabled ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
         </ng-template>
       </tr>
       </tbody>

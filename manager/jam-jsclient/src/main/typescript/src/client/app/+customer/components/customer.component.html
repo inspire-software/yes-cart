@@ -132,18 +132,37 @@
             </div>
           </ng-template>
 
-          <div class="row">
-            <div class="col-md-6 col-lg-5">
-              <h3>{{ 'ASSIGNED' | translate }}</h3>
-                <span *ngFor="let supported of supportedShops">
-                  <a class="btn js-click" (click)=onSupportedShopClick(supported)><span>{{supported.first.name}} ( {{supported.first.code}} ) </span> <i class="fa fa-remove"></i></a> <span><button type="button" (click)="onRowReset(supported.first)" class="btn btn-danger btn-circle"><i class="fa fa-repeat"></i></button></span>
-                </span>
-            </div>
-            <div class="col-md-6 col-lg-5">
-              <h3>{{ 'AVAILABLE' | translate }}</h3>
-                <span *ngFor="let available of availableShops">
-                  <a class="btn js-click" (click)=onAvailableShopClick(available)><span [ngClass]="available.second.disabled ? 'text-danger' : '' ">{{available.first.name}} ( {{available.first.code}} ) </span> <i class="fa {{available.second.disabled ? 'text-danger fa-check' : 'fa-plus'}}"></i></a>
-                </span>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-6 col-lg-5">
+                <div class="panel panel-default">
+                  <div class="panel-heading">{{ 'ASSIGNED' | translate }}</div>
+                  <ul class="list-group">
+                    <li *ngFor="let supported of supportedShops" class="list-group-item {{ supported.second.disabled ? 'disabled text-muted' : '' }}">
+                      <h5>
+                        <span class="{{ supported.first.disabled ? 'label label-danger': (supported.first.masterCode != null ? 'label label-info' : 'label label-success') }}">{{supported.first.masterCode != null ? supported.first.masterCode + ': ' : ''}}{{supported.first.code}}</span> {{supported.first.name}}
+                        <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedShopClick(supported)><i class="fa fa-power-off"></i></button>
+                        <button class="pull-right btn btn-info btn-circle btn-sm" style="margin-right: 3px" (click)=onRowReset(supported.first)><i class="fa fa-repeat"></i></button>
+                      </h5>
+                      <p><small>{{supported.first.description}}</small></p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-5">
+                <div class="panel panel-default">
+                  <div class="panel-heading">{{ 'AVAILABLE' | translate }}</div>
+                  <ul class="list-group">
+                    <li *ngFor="let available of availableShops" class="list-group-item">
+                      <h5>
+                        <span class="{{ available.first.disabled ? 'label label-danger': (available.first.masterCode != null ? 'label label-info' : 'label label-success') }}">{{available.first.masterCode != null ? available.first.masterCode + ': ' : ''}}{{available.first.code}}</span> <span class="{{ available.second.disabled ? 'text-success' : '' }}">{{available.first.name}}</span>
+                        <button class="pull-right btn {{ available.second.disabled ? 'btn-success' : 'btn-default' }} btn-circle btn-sm" (click)=onAvailableShopClick(available)><i class="fa {{ available.second.disabled ? 'fa-power-off' : 'fa-link' }}"></i></button>
+                      </h5>
+                      <p><small class="{{ available.second.disabled ? 'text-success' : '' }}">{{available.first.description}}</small></p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
 

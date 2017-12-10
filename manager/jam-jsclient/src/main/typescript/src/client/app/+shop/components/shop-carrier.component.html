@@ -27,16 +27,36 @@
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-md-6 col-lg-5">
-      <h3>{{ 'ASSIGNED' | translate }}</h3>
-      <span *ngFor="let supported of selectedCarriers">
-        <a class="btn js-click" (click)=onSupportedCarrierClick(supported)>{{supported.name}} <i class="fa fa-remove"></i></a>
-      </span>
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'ASSIGNED' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let supported of selectedCarriers" class="list-group-item">
+            <h5>
+              {{supported.name}}
+              <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedCarrierClick(supported)><i class="fa fa-unlink"></i></button>
+            </h5>
+            <p *ngFor="let carrierSla of supported.carrierSlas">
+              <small>{{carrierSla.code}} {{carrierSla.name}} ({{ ('CARRIERSLA_SLATYPE_' + carrierSla.slaType) | translate }} <i class="fa {{ carrierSla.guaranteed ? 'fa-calendar-check-o' : 'fa-calendar' }}"></i><ng-template [ngIf]="carrierSla.namedDay">+<i class="fa fa-user"></i></ng-template> {{ carrierSla.minDays > 0 ? carrierSla.minDays : '0' }}{{ carrierSla.maxDays > 0 ? ' - ' + carrierSla.maxDays : '' }})</small><br/>
+            </p>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="col-md-6 col-lg-5">
-      <h3>{{ 'AVAILABLE' | translate }}</h3>
-      <span *ngFor="let available of availableCarriers">
-        <a class="btn js-click" (click)=onAvailableCarrierClick(available)>{{available.name}} <i class="fa fa-plus"></i></a>
-      </span>
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'AVAILABLE' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let available of availableCarriers" class="list-group-item">
+            <h5>
+              {{available.name}}
+              <button class="pull-right btn btn-default btn-circle btn-sm" (click)=onAvailableCarrierClick(available)><i class="fa fa-link"></i></button>
+            </h5>
+            <p *ngFor="let carrierSla of available.carrierSlas">
+              <small>{{carrierSla.code}} {{carrierSla.name}} ({{ ('CARRIERSLA_SLATYPE_' + carrierSla.slaType) | translate }} <i class="fa {{ carrierSla.guaranteed ? 'fa-calendar-check-o' : 'fa-calendar' }}"></i><ng-template [ngIf]="carrierSla.namedDay">+<i class="fa fa-user"></i></ng-template> {{ carrierSla.minDays > 0 ? carrierSla.minDays : '0' }}{{ carrierSla.maxDays > 0 ? ' - ' + carrierSla.maxDays : '' }})</small><br/>
+            </p>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 

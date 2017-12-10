@@ -24,7 +24,7 @@ package org.yes.cart.domain.entity;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface Attribute extends Auditable, Rankable, Codable, Cloneable {
+public interface Attribute extends Auditable, Rankable, Codable, Nameable, Cloneable {
 
     /**
      * Get primary key.

@@ -23,7 +23,7 @@ import java.util.Date;
  * Date: 13-10-18
  * Time: 5:04 PM
  */
-public interface Promotion extends Auditable, Codable, Taggable {
+public interface Promotion extends Auditable, Codable, Taggable, Rankable, Nameable {
 
     String TYPE_ORDER           = "O";
     String TYPE_SHIPPING        = "S";

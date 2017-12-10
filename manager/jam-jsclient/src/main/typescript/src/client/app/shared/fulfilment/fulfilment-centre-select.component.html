@@ -9,7 +9,7 @@
 <ul class="nav nav-second-level item-list">
 
   <li *ngFor="let centre of filteredCentres">
-    <a (click)="onSelectClick(centre)" class="{{ (selectedCentre != null && centre != null && selectedCentre.warehouseId == centre.warehouseId) ? 'bg-info js-click' : 'js-click' }}"  [title]="centre.code">{{centre.name}}</a>
+    <a (click)="onSelectClick(centre)" class="{{ (selectedCentre != null && centre != null && selectedCentre.warehouseId == centre.warehouseId) ? 'bg-info js-click' : 'js-click' }}"><span class="label label-info">{{centre.code}}</span> {{centre.name}}</a>
   </li>
 
 </ul>

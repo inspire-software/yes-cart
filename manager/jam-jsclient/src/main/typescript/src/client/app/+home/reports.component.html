@@ -45,7 +45,7 @@
               <div class="panel-body">
                 <form>
                   <fieldset>
-                    <div class="form-group" *ngFor="let requestParam of tab.request.parameters">
+                    <div *ngFor="let requestParam of tab.request.parameters" class="form-group">
                       <label>{{ 'REPORT_PARAM_' + requestParam.parameterId | translate }} {{ requestParam.mandatory ? ' *': ''}}</label>
                       <ng-template [ngIf]="requestParam.options != null">
                         <select class="form-control" name="{{ requestParam.parameterId + '_' + i }}"  [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running || tab.completed">

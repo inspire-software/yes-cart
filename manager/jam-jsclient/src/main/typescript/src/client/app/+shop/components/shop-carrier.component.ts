@@ -16,11 +16,12 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
-import { ShopVO, ShopCarrierVO, CarrierLocaleVO } from './../../shared/model/index';
+import { ShopVO, ShopCarrierVO, CarrierInfoVO } from './../../shared/model/index';
 import { ShippingService, Util } from './../../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
+import { ShopCarrierAndSlaVO } from '../../shared/model/shipping.model';
 
 @Component({
   selector: 'yc-shop-carrier',
@@ -33,13 +34,13 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
   private _shop:ShopVO;
   private _reload:boolean = false;
 
-  private shopCarriersVO:Array<ShopCarrierVO>;
-  private availableCarriers:Array<ShopCarrierVO>;
-  private selectedCarriers:Array<ShopCarrierVO>;
+  private shopCarriersVO:Array<ShopCarrierAndSlaVO>;
+  private availableCarriers:Array<ShopCarrierAndSlaVO>;
+  private selectedCarriers:Array<ShopCarrierAndSlaVO>;
 
   private changed:boolean = false;
 
-  private newCarrier:CarrierLocaleVO;
+  private newCarrier:CarrierInfoVO;
   @ViewChild('editNewCarrierName')
   private editNewCarrierName:ModalComponent;
   private initialising:boolean = false; // tslint:disable-line:no-unused-variable
@@ -90,7 +91,7 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
     this.formUnbind();
   }
 
-  newCarrierInstance():CarrierLocaleVO {
+  newCarrierInstance():CarrierInfoVO {
     return { carrierId: 0, name: '', description: null, displayNames: [], displayDescriptions: [] };
   }
 
@@ -148,12 +149,11 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
     if (this.shop.shopId > 0 && this.shopCarriersVO) {
       this.loading = true;
       var _sub:any = this._shippingService.saveShopCarriers(this.shopCarriersVO).subscribe(shopLanguagesVo => {
-        this.shopCarriersVO = Util.clone(shopLanguagesVo);
-        this.remapCarriers();
         this.changed = false;
         this._reload = false;
         this.loading = false;
         _sub.unsubscribe();
+        this.onRefreshHandler();
       });
     }
   }
@@ -197,8 +197,8 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
 
   private remapCarriers() {
 
-    var availableCarriers:Array<ShopCarrierVO> = [];
-    var selectedCarriers:Array<ShopCarrierVO> = [];
+    var availableCarriers:Array<ShopCarrierAndSlaVO> = [];
+    var selectedCarriers:Array<ShopCarrierAndSlaVO> = [];
 
     this.shopCarriersVO.forEach(carrier => {
       if (carrier.carrierShop.disabled) {
@@ -209,11 +209,7 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
     });
 
     var _sort = function(a:ShopCarrierVO, b:ShopCarrierVO):number {
-      if (a.name < b.name)
-        return -1;
-      if (a.name > b.name)
-        return 1;
-      return 0;
+      return (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1;
     };
 
     availableCarriers.sort(_sort);

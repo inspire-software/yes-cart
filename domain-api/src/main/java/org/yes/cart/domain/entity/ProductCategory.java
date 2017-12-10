@@ -25,7 +25,7 @@ package org.yes.cart.domain.entity;
  * Time: 11:12:54
  */
 
-public interface ProductCategory extends Auditable {
+public interface ProductCategory extends Auditable, Rankable {
 
     /**
      * Get pk.

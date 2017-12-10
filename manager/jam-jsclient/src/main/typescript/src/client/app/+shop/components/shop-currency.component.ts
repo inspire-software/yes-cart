@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, Input } from '@angular/core';
-import { ShopVO, ShopSupportedCurrenciesVO } from './../../shared/model/index';
+import { ShopVO, ShopSupportedCurrenciesVO, Pair } from './../../shared/model/index';
 import { ShopService, Util } from './../../shared/services/index';
 import { LogUtil } from './../../shared/log/index';
 
@@ -78,7 +78,7 @@ export class ShopCurrencyComponent implements OnInit {
         LogUtil.debug('ShopCurrencyComponent Saved currencies', shopSupportedCurrenciesVO);
         this.shopSupportedCurrenciesVO = Util.clone(shopSupportedCurrenciesVO);
         this.curr = Util.clone(shopSupportedCurrenciesVO);
-        Util.remove(this.curr.all, this.curr.supported);
+        this.removeItems(this.curr.all, this.curr.supported);
         this.changed = false;
         this._reload = false;
         this.loading = false;
@@ -91,7 +91,7 @@ export class ShopCurrencyComponent implements OnInit {
     LogUtil.debug('ShopCurrencyComponent discard handler', this.shop);
     if (this.shop.shopId > 0 && this.shopSupportedCurrenciesVO) {
       this.curr = Util.clone(this.shopSupportedCurrenciesVO);
-      Util.remove(this.curr.all, this.curr.supported);
+      this.removeItems(this.curr.all, this.curr.supported);
       this.changed = false;
     }
   }
@@ -103,7 +103,7 @@ export class ShopCurrencyComponent implements OnInit {
       var _sub:any = this._shopService.getShopCurrencies(this.shop.shopId).subscribe(shopSupportedCurrenciesVO => {
         this.shopSupportedCurrenciesVO = Util.clone(shopSupportedCurrenciesVO);
         this.curr = Util.clone(shopSupportedCurrenciesVO);
-        Util.remove(this.curr.all, this.curr.supported);
+        this.removeItems(this.curr.all, this.curr.supported);
         this.changed = false;
         this._reload = false;
         _sub.unsubscribe();
@@ -117,7 +117,7 @@ export class ShopCurrencyComponent implements OnInit {
   onAvailableCurrencyClick(event:any) {
     LogUtil.debug('ShopCurrencyComponent onAvailableCurrencyClick', event);
     this.curr.supported.push(event);
-    Util.remove(this.curr.all, this.curr.supported);
+    this.removeItems(this.curr.all, this.curr.supported);
     this.changed = true;
   }
 
@@ -125,8 +125,26 @@ export class ShopCurrencyComponent implements OnInit {
     LogUtil.debug('ShopCurrencyComponent onSupportedCurrencyClick', event);
     this.curr.supported = this.curr.supported.filter( obj => {return obj !== event;});
     this.curr.all = Util.clone(this.shopSupportedCurrenciesVO.all);
-    Util.remove(this.curr.all, this.curr.supported);
+    this.removeItems(this.curr.all, this.curr.supported);
     this.changed = true;
   }
+
+
+  private removeItems(arr:Pair<string, string>[], itemsToRemove:Pair<string, string>[]) {
+
+    itemsToRemove.forEach(_item => {
+
+      let idx = arr.findIndex(_val => {
+        return _val.first == _item.first;
+      });
+
+      if (idx != -1) {
+        arr.splice(idx, 1);
+      }
+
+    });
+
+  }
+
 
 }

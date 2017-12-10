@@ -418,6 +418,34 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
     this.loadData();
   }
 
+
+  protected isAvailable(row:CategoryVO) {
+    let now = new Date();
+    return (row.availablefrom === null || (row.availablefrom < now)) &&
+      (row.availableto === null || (row.availableto > now));
+  }
+
+
+  protected getUri(row:CategoryVO) {
+    if (row.uri) {
+      return '<i  title="' + row.uri + '" class="fa fa-globe"></i>';
+    }
+    return '';
+  }
+
+  protected getNavFlags(row:CategoryVO) {
+
+    let flags = '';
+    if (row.navigationByPrice) {
+      flags += '<i class="fa fa-dollar"></i>&nbsp;';
+    }
+    if (row.navigationByAttributes) {
+      flags += '<i class="fa fa-list-alt"></i>&nbsp;' + (row.productTypeName ? row.productTypeName : '');
+    }
+    return flags;
+  }
+
+
   private reloadData() {
     this.onRefreshHandler();
   }

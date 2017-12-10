@@ -22,31 +22,59 @@
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-md-6 col-lg-5">
-      <h3>{{ 'BILLING' | translate }} {{ 'ASSIGNED' | translate }}</h3>
-      <span *ngFor="let supported of selectedBilling">
-        <a class="btn js-click" (click)=onSupportedBillingClick(supported)>{{supported.second}} ( {{supported.first}} ) <i class="fa fa-remove"></i></a>
-      </span>
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'BILLING' | translate }} {{ 'ASSIGNED' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let supported of selectedBilling" class="list-group-item">
+            <h5>
+              <span class="label label-info">{{supported.first}}</span> {{supported.second}}
+              <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedBillingClick(supported)><i class="fa fa-unlink"></i></button>
+            </h5>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="col-md-6 col-lg-5">
-      <h3>{{ 'BILLING' | translate }} {{ 'AVAILABLE' | translate }}</h3>
-      <span *ngFor="let available of availableBilling">
-        <a class="btn js-click" (click)=onAvailableBillingClick(available)>{{available.second}} ( {{available.first}} ) <i class="fa fa-plus"></i></a>
-      </span>
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'BILLING' | translate }} {{ 'AVAILABLE' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let available of availableBilling" class="list-group-item">
+            <h5>
+              <span class="label label-info">{{available.first}}</span> {{available.second}}
+              <button class="pull-right btn btn-default btn-circle btn-sm" (click)=onAvailableBillingClick(available)><i class="fa fa-link"></i></button>
+            </h5>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-6 col-lg-5">
-      <h3>{{ 'SHIPPING' | translate }} {{ 'ASSIGNED' | translate }}</h3>
-      <span *ngFor="let supported of selectedShipping">
-        <a class="btn js-click" (click)=onSupportedShippingClick(supported)>{{supported.second}} ( {{supported.first}} ) <i class="fa fa-remove"></i></a>
-      </span>
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'SHIPPING' | translate }} {{ 'ASSIGNED' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let supported of selectedShipping" class="list-group-item">
+            <h5>
+              {{supported.first}} {{supported.second}}
+              <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedShippingClick(supported)><i class="fa fa-unlink"></i></button>
+            </h5>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="col-md-6 col-lg-5">
-      <h3>{{ 'SHIPPING' | translate }} {{ 'AVAILABLE' | translate }}</h3>
-      <span *ngFor="let available of availableShipping">
-        <a class="btn js-click" (click)=onAvailableShippingClick(available)>{{available.second}} ( {{available.first}} ) <i class="fa fa-plus"></i></a>
-      </span>
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'SHIPPING' | translate }} {{ 'AVAILABLE' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let available of availableShipping" class="list-group-item">
+            <h5>
+              {{available.first}} {{available.second}}
+              <button class="pull-right btn btn-default btn-circle btn-sm" (click)=onAvailableShippingClick(available)><i class="fa fa-link"></i></button>
+            </h5>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 

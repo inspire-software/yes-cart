@@ -353,8 +353,10 @@ export class CustomerComponent implements OnInit, OnDestroy {
       let idx = keepKeys.indexOf(key);
       if (idx != -1) {
         let shop = this._shops[key];
-        let customerShop = this._customer.customerShops[idx];
-        labels.push({ first: shop, second: customerShop });
+        labels.push({
+          first: shop,
+          second: { customerId: this._customer.customerId, shopId: shop.shopId, disabled: false }
+        });
       }
     }
 

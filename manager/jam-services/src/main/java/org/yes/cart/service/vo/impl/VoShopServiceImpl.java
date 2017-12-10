@@ -586,9 +586,7 @@ public class VoShopServiceImpl implements VoShopService {
 
     protected void addShopCurrencies(final VoShopSummary summary, final long shopId) throws Exception {
         final VoShopSupportedCurrencies curr = getShopCurrenciesInternal(shopId);
-        for (final String code : curr.getSupported()) {
-            summary.getCurrencies().add(MutablePair.of(code, code));
-        }
+        summary.getCurrencies().addAll(curr.getSupported());
     }
 
     protected void addShopLocales(final VoShopSummary summary, final long shopId, final String lang, final Map<String, VoAttrValueShop> attrsMap) throws Exception {
@@ -878,11 +876,30 @@ public class VoShopServiceImpl implements VoShopService {
     private VoShopSupportedCurrencies getShopCurrenciesInternal(long shopId) throws Exception {
         VoShopSupportedCurrencies ssc = new VoShopSupportedCurrencies();
         ssc.setShopId(shopId);
-        ssc.setAll(currencyService.getSupportedCurrencies());
-        String curr = dtoShopService.getSupportedCurrencies(shopId);
-        ssc.setSupported(
-                curr == null ? Collections.<String>emptyList() : Arrays.asList(curr.split(","))
-        );
+        ssc.setAll(new ArrayList<MutablePair<String, String>>());
+        ssc.setSupported(new ArrayList<MutablePair<String, String>>());
+
+        final List<String> all = currencyService.getSupportedCurrencies();
+        final String supportedStr = dtoShopService.getSupportedCurrencies(shopId);
+        final List<String> supported = supportedStr == null ? Collections.<String>emptyList() : Arrays.asList(supportedStr.split(","));
+        final Map<String, String> names = currencyService.getCurrencyName();
+
+        for (final String one : all) {
+            if (names.containsKey(one)) {
+                ssc.getAll().add(MutablePair.of(one, names.get(one)));
+            } else {
+                ssc.getAll().add(MutablePair.of(one, one));
+            }
+        }
+
+        for (final String one : supported) {
+            if (names.containsKey(one)) {
+                ssc.getSupported().add(MutablePair.of(one, names.get(one)));
+            } else {
+                ssc.getSupported().add(MutablePair.of(one, one));
+            }
+        }
+
         return ssc;
     }
 
@@ -892,9 +909,24 @@ public class VoShopServiceImpl implements VoShopService {
      */
     public VoShopSupportedCurrencies update(VoShopSupportedCurrencies vo) throws Exception {
         if (vo != null && federationFacade.isShopAccessibleByCurrentManager(vo.getShopId())) {
+
+            final List<String> all = currencyService.getSupportedCurrencies();
+            final List<String> supported = new ArrayList<String>();
+            if (vo.getSupported() != null) {
+
+                for (final MutablePair<String, String> currency : vo.getSupported()) {
+
+                    if (all.contains(currency.getFirst())) {
+                        supported.add(currency.getFirst());
+                    }
+
+                }
+
+            }
+
             dtoShopService.updateSupportedCurrencies(
                     vo.getShopId(),
-                    StringUtils.join(vo.getSupported().toArray(), ",")
+                    StringUtils.join(supported.toArray(), ",")
             );
             return getShopCurrencies(vo.getShopId());
         } else {

@@ -256,6 +256,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
     return labels;
   }
 
+
   private getAvailableRoleNames():Array<Pair<RoleVO, ManagerRoleLinkVO>> {
 
     let supported = this._manager != null ? this._manager.managerRoles : [];
@@ -277,6 +278,10 @@ export class ManagerComponent implements OnInit, OnDestroy {
         });
       }
     }
+
+    labels.sort((a, b) => {
+      return (a.first.description.toLowerCase() < b.first.description.toLowerCase()) ? -1 : 1;
+    });
 
     LogUtil.debug('ManagerComponent available roles', labels);
     return labels;
@@ -301,6 +306,10 @@ export class ManagerComponent implements OnInit, OnDestroy {
         labels.push({ first: role, second: managerRole });
       }
     }
+
+    labels.sort((a, b) => {
+      return (a.first.description.toLowerCase() < b.first.description.toLowerCase()) ? -1 : 1;
+    });
 
     LogUtil.debug('ManagerComponent supported roles', labels);
     return labels;

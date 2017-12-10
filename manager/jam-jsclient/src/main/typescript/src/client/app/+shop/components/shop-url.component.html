@@ -57,7 +57,7 @@
         <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'SHOP_URL' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.url}}</a></td>
           <td title="{{ 'SHOP_THEME_CHAIN' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.theme == null || row.theme == '' ? 'default' : row.theme}}</a></td>
-          <td title="{{ 'SHOP_URL_PRIMARY' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.primary ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
+          <td title="{{ 'SHOP_URL_PRIMARY' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.primary ? 'fa-check-circle-o text-success' : 'fa-circle-thin'}}"></i></a></td>
         </ng-template>
       </tr>
       </tbody>

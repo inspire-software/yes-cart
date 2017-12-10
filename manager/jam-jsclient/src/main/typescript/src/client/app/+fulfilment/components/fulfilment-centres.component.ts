@@ -110,6 +110,20 @@ export class FulfilmentCentresComponent implements OnInit, OnDestroy {
   }
 
 
+  protected getFfFlags(row:FulfilmentCentreVO) {
+
+    let flags = '';
+    flags += '<i class="fa fa-truck"></i>&nbsp;' + row.defaultStandardStockLeadTime + '/' + row.defaultBackorderStockLeadTime + '&nbsp;';
+    if (row.multipleShippingSupported) {
+      flags += '<i class="fa fa-object-ungroup"></i>&nbsp;';
+    } else {
+      flags += '<i class="fa fa-object-group"></i>&nbsp;';
+    }
+    return flags;
+  }
+
+
+
   private filterCentres() {
     if (this._filter) {
       this.filteredCentres = this._centres.filter(centre =>

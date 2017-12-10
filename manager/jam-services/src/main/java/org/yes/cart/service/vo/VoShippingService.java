@@ -43,6 +43,14 @@ public interface VoShippingService {
      */
     List<VoShopCarrier> getShopCarriers(long shopId) throws Exception;
 
+    /**
+     * Get all vo in the system, filtered according to rights
+     * @param shopId pk
+     * @return all carriers for shop
+     * @throws Exception
+     */
+    List<VoShopCarrierAndSla> getShopCarriersAnsSla(long shopId) throws Exception;
+
 
     /**
      * Get summary information for given shop.
@@ -79,7 +87,7 @@ public interface VoShippingService {
      * @return persistent version
      * @throws Exception
      */
-    VoCarrier createShopCarrier(VoCarrierLocale vo, long shopId)  throws Exception;
+    VoCarrier createShopCarrier(VoCarrierInfo vo, long shopId)  throws Exception;
 
 
     /**

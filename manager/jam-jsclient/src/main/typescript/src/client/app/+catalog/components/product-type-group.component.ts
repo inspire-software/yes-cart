@@ -135,9 +135,9 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
     }
     if (row.navigation) {
       if (row.navigationType === 'R') {
-        flags += '<i class="fa fa-sliders"></i>&nbsp;' + (row.navigationTemplate != null ? row.navigationTemplate : '');
+        flags += '<i class="fa fa-sliders"></i>&nbsp;(' + row.navigationType + ')&nbsp;' + (row.navigationTemplate != null ? row.navigationTemplate : '');
       } else {
-        flags += '<i class="fa fa-list-alt"></i>&nbsp;' + (row.navigationTemplate != null ? row.navigationTemplate : '');
+        flags += '<i class="fa fa-list-alt"></i>&nbsp;(' + row.navigationType + ')&nbsp;' + (row.navigationTemplate != null ? row.navigationTemplate : '');
       }
     }
     return flags;
@@ -152,6 +152,14 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
       this.selectedRowAssigned.splice(idx2, 1);
       this.selectedRowAssigned = this.selectedRowAssigned.slice(0, this.selectedRowAssigned.length);
       this.selectedRowAvailable.push(row);
+      this.selectedRowAvailable.sort((a, b) => {
+        var rank:number = a.rank - b.rank;
+        if (rank == 0) {
+          return a.attribute.name > b.attribute.name ? 1 : -1;
+        }
+        return rank;
+      });
+
       this.changed = true;
       this.filterAttributes();
       this.processDataChangesEvent();
@@ -179,6 +187,13 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
       let idx2 = this.selectedRowAvailable.indexOf(row);
       this.selectedRowAvailable.splice(idx2, 1);
       this.selectedRowAssigned.push(row);
+      this.selectedRowAssigned.sort((a, b) => {
+        var rank:number = a.rank - b.rank;
+        if (rank == 0) {
+          return a.attribute.name > b.attribute.name ? 1 : -1;
+        }
+        return rank;
+      });
       this.changed = true;
       this.filterAttributes();
       this.processDataChangesEvent();

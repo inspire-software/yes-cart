@@ -177,7 +177,7 @@
                   <div *ngFor="let pItem of customerorder.promotions">{{ pItem.code }} {{ pItem.name }}</div>
                 </div>
               </div>
-              <div class="row" *ngFor="let allValue of getCustomValuesExclude(customerorder.allValues, ['AUDITEXPORT', 'SUPPLIER'])">
+              <div *ngFor="let allValue of getCustomValuesExclude(customerorder.allValues, ['AUDITEXPORT', 'SUPPLIER'])" class="row">
                 <div class="col-xs-3"><strong>{{ allValue.first }}</strong></div>
                 <div class="col-xs-9">{{ allValue.second.first }} {{ allValue.second.second }}</div>
               </div>
@@ -379,7 +379,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row" *ngFor="let allValue of getCustomValuesInclude(customerorder.allValues, ['AUDITEXPORT', 'SUPPLIER'])">
+              <div *ngFor="let allValue of getCustomValuesInclude(customerorder.allValues, ['AUDITEXPORT', 'SUPPLIER'])" class="row">
                 <div class="col-xs-3"><strong>{{ allValue.first }}</strong></div>
                 <div class="col-xs-9">{{ allValue.second.first }}</div>
               </div>

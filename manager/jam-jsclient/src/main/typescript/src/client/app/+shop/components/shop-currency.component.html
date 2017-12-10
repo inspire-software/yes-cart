@@ -22,16 +22,30 @@
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-md-6 col-lg-5">
-      <h3>{{ 'ASSIGNED' | translate }}</h3>
-      <span *ngFor="let supported of curr.supported">
-        <a class="btn js-click" (click)=onSupportedCurrencyClick(supported)>{{supported}} <i class="fa fa-remove"></i></a>
-      </span>
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'ASSIGNED' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let supported of curr.supported" class="list-group-item">
+            <h5>
+              <span class="label label-info">{{supported.first}}</span> {{supported.first == supported.second ? '' : supported.second }}
+              <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedCurrencyClick(supported)><i class="fa fa-remove"></i></button>
+            </h5>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="col-md-6 col-lg-5">
-      <h3>{{ 'AVAILABLE' | translate }}</h3>
-      <span *ngFor="let available of curr.all">
-        <a class="btn js-click" (click)=onAvailableCurrencyClick(available)>{{available}} <i class="fa fa-plus"></i></a>
-      </span>
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ 'AVAILABLE' | translate }}</div>
+        <ul class="list-group">
+          <li *ngFor="let available of curr.all" class="list-group-item">
+            <h5>
+              <span class="label label-info">{{available.first}}</span> {{available.first == available.second ? '' : available.second }}
+              <button class="pull-right btn btn-default btn-circle btn-sm" (click)=onAvailableCurrencyClick(available)><i class="fa fa-plus"></i></button>
+            </h5>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 

@@ -4,6 +4,7 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
+        <th>{{ 'AV_RANK' | translate }}</th>
         <th>{{ 'CODE' | translate }}</th>
         <th>{{ 'NAME' | translate }}</th>
         <th>{{ 'PG_ENABLED' | translate }}</th>
@@ -12,9 +13,10 @@
       <tbody>
       <tr *ngFor="let row of filteredGateways; let i = index" class="{{row == selectedGateway ? 'active' : ''}}">
         <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'AV_RANK' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.rank}}</a></td>
           <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.label}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
-          <td title="{{ 'PG_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.active ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
+          <td title="{{ 'PG_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.active ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
         </ng-template>
       </tr>
       </tbody>

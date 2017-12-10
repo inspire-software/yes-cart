@@ -22,19 +22,19 @@ import java.util.List;
 
 /**
  * User: denispavlov
- * Date: 28/07/2016
- * Time: 21:30
+ * Date: 08/12/2017
+ * Time: 08:32
  */
 @Dto
-public class VoCarrier extends VoCarrierInfo {
+public class VoShopCarrierAndSla extends VoShopCarrier {
 
-    private List<VoCarrierShopLink> carrierShops = new ArrayList<VoCarrierShopLink>();
+    private List<VoCarrierSlaInfo> carrierSlas = new ArrayList<VoCarrierSlaInfo>();
 
-    public List<VoCarrierShopLink> getCarrierShops() {
-        return carrierShops;
+    public List<VoCarrierSlaInfo> getCarrierSlas() {
+        return carrierSlas;
     }
 
-    public void setCarrierShops(final List<VoCarrierShopLink> carrierShops) {
-        this.carrierShops = carrierShops;
+    public void setCarrierSlas(final List<VoCarrierSlaInfo> carrierSlas) {
+        this.carrierSlas = carrierSlas;
     }
 }

@@ -19,10 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.yes.cart.domain.vo.VoCarrier;
-import org.yes.cart.domain.vo.VoCarrierLocale;
-import org.yes.cart.domain.vo.VoCarrierSla;
-import org.yes.cart.domain.vo.VoShopCarrier;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -43,7 +40,7 @@ public interface ShippingEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
     @RequestMapping(value = "/carrier/shop/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoShopCarrier> getShopCarriers(@PathVariable("id") long shopId) throws Exception;
+    List<VoShopCarrierAndSla> getShopCarriers(@PathVariable("id") long shopId) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
     @RequestMapping(value = "/carrier/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -58,7 +55,7 @@ public interface ShippingEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
     @RequestMapping(value = "/carrier/shop/{id}", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCarrier createShopCarrier(@RequestBody VoCarrierLocale vo, @PathVariable("id") long shopId)  throws Exception;
+    VoCarrier createShopCarrier(@RequestBody VoCarrierInfo vo, @PathVariable("id") long shopId)  throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
     @RequestMapping(value = "/carrier", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
