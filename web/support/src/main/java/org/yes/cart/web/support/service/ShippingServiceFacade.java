@@ -87,6 +87,16 @@ public interface ShippingServiceFacade {
     Pair<Carrier, CarrierSla> getCarrierSla(ShoppingCart shoppingCart, String supplier, List<Carrier> carriersChoices);
 
     /**
+     * Get SLA from list of carrier choices.
+     *
+     * @param slaId carrier sla ID
+     * @param carriersChoices choices given to this cart (e.g. from #findCarriers method)
+     *
+     * @return selected Carrier and SLA pair or pair with null's if none selected
+     */
+    Pair<Carrier, CarrierSla> getCarrierSla(long slaId, List<Carrier> carriersChoices);
+
+    /**
      * Get cart total price model (or blank object) with respect to current shop tax display settings.
      *
      * If tax info is enabled then prices can be shown as net or gross.

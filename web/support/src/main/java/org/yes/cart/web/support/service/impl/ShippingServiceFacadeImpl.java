@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.support.service.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
@@ -239,6 +240,18 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
         final Long slaId = shoppingCart.getCarrierSlaId().get(supplier);
 
         if (slaId != null) {
+            return getCarrierSla(slaId, carriersChoices);
+        }
+
+        return new Pair<Carrier, CarrierSla>(null, null);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public Pair<Carrier, CarrierSla> getCarrierSla(final long slaId, final List<Carrier> carriersChoices) {
+
+        if (slaId > 0 && CollectionUtils.isNotEmpty(carriersChoices)) {
             for (Carrier carrier : carriersChoices) {
                 for (CarrierSla carrierSla : carrier.getCarrierSla()) {
                     if (slaId == carrierSla.getCarrierslaId()) {

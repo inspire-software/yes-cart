@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.service.rest;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -1257,16 +1256,7 @@ public class CartController {
                     CarrierSla carrierSla = null;
                     if (slaPkvalue > 0) {
                         final List<Carrier> carriers = shippingServiceFacade.findCarriers(cart, supplier);
-                        if (CollectionUtils.isNotEmpty(carriers)) {
-                            for (final Carrier carrier : carriers) {
-                                for (final CarrierSla sla : carrier.getCarrierSla()) {
-                                    if (sla.getCarrierslaId() == slaPkvalue) {
-                                        carrierSla = sla;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
+                        carrierSla = shippingServiceFacade.getCarrierSla(slaPkvalue, carriers).getSecond();
                     }
 
                     if (slaPkvalue <= 0 || carrierSla != null) {
