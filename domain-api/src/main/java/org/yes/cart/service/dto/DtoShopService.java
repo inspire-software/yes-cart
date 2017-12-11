@@ -142,4 +142,39 @@ public interface DtoShopService extends GenericDTOService<ShopDTO>, GenericAttrV
      * @return shop dto if found otherwise null.
      */
     ShopDTO updateDisabledFlag(long shopId, boolean disabled);
+
+    /**
+     * Get CSV of PKs for disabled carrier SLA for given shop.
+     *
+     * @param shopId shop PK
+     *
+     * @return CSV of carrier SLA PKs
+     */
+    String getDisabledCarrierSla(long shopId);
+
+    /**
+     * Update CSV of PKs for disabled carrier SLA for given shop.
+     *
+     * @param shopId  shop PK
+     * @param disabledPks CSV of carrier SLA PKs
+     */
+    void updateDisabledCarrierSla(long shopId, String disabledPks);
+
+    /**
+     * Get properties of PKs and ranks for carrier SLA for given shop.
+     *
+     * @param shopId shop PK
+     *
+     * @return Properties of pk=rank
+     */
+    String getSupportedCarrierSlaRanks(long shopId);
+
+    /**
+     * Set properties of PKs and ranks for carrier SLA for given shop.
+     *
+     * @param shopId shop PK
+     * @param pksAndRanks Properties of pk=rank
+     */
+    void updateSupportedCarrierSlaRanks(long shopId, String pksAndRanks);
+
 }

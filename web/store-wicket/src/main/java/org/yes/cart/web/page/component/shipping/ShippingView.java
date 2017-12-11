@@ -111,10 +111,7 @@ public class ShippingView extends BaseComponent {
 
         final Map<String, Object> contentParams = new HashMap<>();
         final List<Carrier> carriers = shippingServiceFacade.findCarriers(cart, this.supplier);
-        final List<CarrierSla> carrierSlas = new ArrayList<CarrierSla>();
-        for (Carrier carrier : carriers) {
-            carrierSlas.addAll(carrier.getCarrierSla());
-        }
+        final List<CarrierSla> carrierSlas = shippingServiceFacade.getSortedCarrierSla(cart, carriers);
 
         // Restore carrier by sla from shopping cart into current model.
         final Pair<Carrier, CarrierSla> selection =
@@ -237,8 +234,14 @@ public class ShippingView extends BaseComponent {
                 new ListView<CarrierSla>("shippingList", carrierSlas) {
                     protected void populateItem(final ListItem<CarrierSla> shippingItem) {
                         shippingItem.add(new Radio<CarrierSla>("shippingLabel", new Model<CarrierSla>(shippingItem.getModelObject())));
-                        shippingItem.add(new Label("shippingName", shippingItem.getModelObject().getCarrier().getName() +
-                                ", " + shippingItem.getModelObject().getName()));
+
+                        final String shippingName =
+                                getI18NSupport().getFailoverModel(
+                                        shippingItem.getModelObject().getDisplayName(),
+                                        shippingItem.getModelObject().getName()
+                                ).getValue(getLocale().getLanguage());
+
+                        shippingItem.add(new Label("shippingName", shippingName));
 
                         final boolean infoVisible = shippingItem.getModelObject().equals(carrierSla);
                         final boolean showDateSelect = infoVisible && carrierSla.isNamedDay();
@@ -412,13 +415,6 @@ public class ShippingView extends BaseComponent {
 
         }
 
-    }
-
-    private List<CarrierSla> getCarrierSlas() {
-        if (this.carrier == null) {
-            return Collections.EMPTY_LIST;
-        }
-        return new ArrayList<CarrierSla>(carrier.getCarrierSla());
     }
 
     /**

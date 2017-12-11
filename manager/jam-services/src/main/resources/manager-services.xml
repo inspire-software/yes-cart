@@ -64,6 +64,8 @@
                 <value>COUNTRY_BILL</value>
                 <value>SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL</value>
                 <value>SUPPORTED_LANGUAGES</value>
+                <value>SHOP_CARRIER_SLA_DISABLED</value>
+                <value>SHOP_CARRIER_SLA_RANKS</value>
             </list>
         </property>
     </bean>
@@ -187,10 +189,11 @@
     </bean>
 
     <bean id="voCarrierService" class="org.yes.cart.service.vo.impl.VoShippingServiceImpl">
-        <constructor-arg index="0" ref="dtoCarrierService"/>
-        <constructor-arg index="1" ref="dtoCarrierSlaService"/>
-        <constructor-arg index="2" ref="uiFederationFacade"/>
-        <constructor-arg index="3" ref="voAssemblySupport"/>
+        <constructor-arg index="0" ref="dtoShopService"/>
+        <constructor-arg index="1" ref="dtoCarrierService"/>
+        <constructor-arg index="2" ref="dtoCarrierSlaService"/>
+        <constructor-arg index="3" ref="uiFederationFacade"/>
+        <constructor-arg index="4" ref="voAssemblySupport"/>
     </bean>
 
     <bean id="voPaymentGatewayService" class="org.yes.cart.service.vo.impl.VoPaymentGatewayServiceImpl">

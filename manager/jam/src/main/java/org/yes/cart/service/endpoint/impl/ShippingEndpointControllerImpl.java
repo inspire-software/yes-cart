@@ -48,7 +48,7 @@ public class ShippingEndpointControllerImpl implements ShippingEndpointControlle
 
     @Override
     public @ResponseBody List<VoShopCarrierAndSla> getShopCarriers(@PathVariable("id") final long shopId) throws Exception {
-        return voShippingService.getShopCarriersAnsSla(shopId);
+        return voShippingService.getShopCarriersAndSla(shopId);
     }
 
     @Override
@@ -72,8 +72,8 @@ public class ShippingEndpointControllerImpl implements ShippingEndpointControlle
     }
 
     @Override
-    public @ResponseBody List<VoShopCarrier> updateShopCarriers(@RequestBody final List<VoShopCarrier> vo) throws Exception {
-        return voShippingService.updateShopCarriers(vo);
+    public @ResponseBody List<VoShopCarrierAndSla> updateShopCarriers(@RequestBody final List<VoShopCarrierAndSla> vo) throws Exception {
+        return voShippingService.updateShopCarriersAndSla(vo);
     }
 
     @Override

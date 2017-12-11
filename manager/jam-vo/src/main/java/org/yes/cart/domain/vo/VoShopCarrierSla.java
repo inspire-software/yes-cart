@@ -17,24 +17,30 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * User: denispavlov
- * Date: 08/12/2017
- * Time: 08:32
+ * Date: 11/12/2017
+ * Time: 11:01
  */
 @Dto
-public class VoShopCarrierAndSla extends VoShopCarrier {
+public class VoShopCarrierSla extends VoCarrierSlaInfo {
 
-    private List<VoShopCarrierSla> carrierSlas = new ArrayList<VoShopCarrierSla>();
+    private boolean disabled;
+    private int rank;
 
-    public List<VoShopCarrierSla> getCarrierSlas() {
-        return carrierSlas;
+    public boolean isDisabled() {
+        return disabled;
     }
 
-    public void setCarrierSlas(final List<VoShopCarrierSla> carrierSlas) {
-        this.carrierSlas = carrierSlas;
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(final int rank) {
+        this.rank = rank;
     }
 }

@@ -66,6 +66,16 @@ public interface ShippingServiceFacade {
     List<Carrier> findCarriers(ShoppingCart shoppingCart, String supplier);
 
     /**
+     * Get shop specific sorted list of carrier SLA.
+     *
+     * @param shoppingCart current cart
+     * @param carriersChoices choices given to this cart (e.g. from #findCarriers method)
+     *
+     * @return sorted list of carriers
+     */
+    List<CarrierSla> getSortedCarrierSla(ShoppingCart shoppingCart, List<Carrier> carriersChoices);
+
+    /**
      * Get SLA from list of carrier choices.
      *
      * @param shoppingCart current cart

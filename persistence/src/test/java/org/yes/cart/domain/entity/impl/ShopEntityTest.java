@@ -316,6 +316,34 @@ public class ShopEntityTest {
     }
 
     @Test
+    public void testGetCsvValuesTrimmedAsSetLong() throws Exception {
+
+        final ShopEntity shopEntity = new ShopEntity();
+
+        final AttrValueShop av = context.mock(AttrValueShop.class, "av");
+
+        shopEntity.setAttributes(Collections.singletonList(av));
+
+        context.checking(new Expectations() {{
+            allowing(av).getAttributeCode(); will(returnValue("attr"));
+            allowing(av).getVal();will(returnValue(" 10 ,    11 \t,\t12,\n\n,\n\n,\t,13\n, 14,15a\n"));
+        }});
+
+        final Set<Long> csv = shopEntity.getCsvValuesTrimmedAsSetLong("attr");
+
+        assertNotNull(csv);
+        assertEquals(6, csv.size());
+        assertTrue(csv.contains(10L));
+        assertTrue(csv.contains(11L));
+        assertTrue(csv.contains(12L));
+        assertTrue(csv.contains(13L));
+        assertTrue(csv.contains(14L));
+        assertTrue(csv.contains(0L));
+
+
+    }
+
+    @Test
     public void testGetCsvValuesTrimmedAsListRaw() throws Exception {
 
         final ShopEntity shopEntity = new ShopEntity();
@@ -332,4 +360,33 @@ public class ShopEntityTest {
         assertEquals("def", csv.get(5));
 
     }
+
+
+    @Test
+    public void testGetSupportedCarrierSlaRanksAsMap() throws Exception {
+
+        final ShopEntity shopEntity = new ShopEntity();
+
+        final AttrValueShop av = context.mock(AttrValueShop.class, "av");
+
+        shopEntity.setAttributes(Collections.singletonList(av));
+
+        context.checking(new Expectations() {{
+            allowing(av).getAttributeCode(); will(returnValue(AttributeNamesKeys.Shop.SHOP_CARRIER_SLA_RANKS));
+            allowing(av).getVal();will(returnValue("10=1\n11=2\n12=3\n\n13=4"));
+        }});
+
+        final Map<Long, Integer> map = shopEntity.getSupportedCarrierSlaRanksAsMap();
+
+        assertNotNull(map);
+        assertEquals(4, map.size());
+        assertEquals(map.get(10L), Integer.valueOf(1));
+        assertEquals(map.get(11L), Integer.valueOf(2));
+        assertEquals(map.get(12L), Integer.valueOf(3));
+        assertEquals(map.get(13L), Integer.valueOf(4));
+
+    }
+
+
+
 }

@@ -406,6 +406,16 @@ public interface AttributeNamesKeys {
         String SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL = "SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL";
 
         /**
+         * Comma separated list of disabled carrier SLA (PKs).
+         */
+        String SHOP_CARRIER_SLA_DISABLED = "SHOP_CARRIER_SLA_DISABLED";
+
+        /**
+         * Properties config of carrier SLA ranks (PK=rank).
+         */
+        String SHOP_CARRIER_SLA_RANKS = "SHOP_CARRIER_SLA_RANKS";
+
+        /**
          * Regular expression for allowed IPs.
          */
         String SHOP_PAYMENT_GATEWAYS_ALLOWED_IPS_REGEX = "SHOP_PAYMENT_GATEWAYS_ALLOWED_IPS_REGEX";

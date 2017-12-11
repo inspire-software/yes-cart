@@ -119,8 +119,9 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
     @Override
     public List<Carrier> findCarriers(final ShoppingCart shoppingCart, final String supplier) {
         final List<Carrier> cached = carrierService.getCarriersByShopId(shoppingCart.getShoppingContext().getCustomerShopId());
+        final Shop shop = shopService.getById(shoppingCart.getShoppingContext().getCustomerShopId());
         final List<Carrier> all = deepCopyCarriers(cached);
-        filterCarriersForShoppingCart(all, shoppingCart, supplier);
+        filterCarriersForShoppingCart(all, shoppingCart, supplier, shop.getDisabledCarrierSlaAsSet());
         return all;
     }
 
@@ -136,11 +137,10 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
         return carriers;
     }
 
-    /*
-        // CPOINT: shipping logic in most cases it is very business specific and should be put into this method
-        // CPOINT: recommended approach is to create Carrier filter strategy bean and delegate filtering to it
-     */
-    private void filterCarriersForShoppingCart(final List<Carrier> all, final ShoppingCart shoppingCart, final String supplier) {
+    private void filterCarriersForShoppingCart(final List<Carrier> all,
+                                               final ShoppingCart shoppingCart,
+                                               final String supplier,
+                                               final Set<Long> disabled) {
 
         final Iterator<Carrier> carrierIt = all.iterator();
         while (carrierIt.hasNext()) {
@@ -148,6 +148,12 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
             final Iterator<CarrierSla> slaIt = carrier.getCarrierSla().iterator();
             while (slaIt.hasNext()) {
                 final CarrierSla carrierSla = slaIt.next();
+
+                // Disabled at shop level
+                if (disabled.contains(carrierSla.getCarrierslaId())) {
+                    slaIt.remove();
+                    continue;
+                }
 
                 // Check if this SLA is available for given supplier (empty supplier could be for ALWAYS+Digital, so need to allow all SLA for those TODO: revise for YC-668)
                 if (StringUtils.isNotBlank(supplier) && !carrierSla.getSupportedFulfilmentCentresAsList().contains(supplier)) {
@@ -190,6 +196,41 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public List<CarrierSla> getSortedCarrierSla(final ShoppingCart shoppingCart, final List<Carrier> carriersChoices) {
+
+        final Shop shop = shopService.getById(shoppingCart.getShoppingContext().getCustomerShopId());
+        final Map<Long, Integer> ranks = shop.getSupportedCarrierSlaRanksAsMap();
+        final String locale = shoppingCart.getCurrentLocale();
+
+        final List<CarrierSla> carrierSlas = new ArrayList<CarrierSla>();
+        for (Carrier carrier : carriersChoices) {
+            carrierSlas.addAll(carrier.getCarrierSla());
+        }
+
+        Collections.sort(carrierSlas, new Comparator<CarrierSla>() {
+            @Override
+            public int compare(final CarrierSla o1, final CarrierSla o2) {
+
+                final Integer o1rank = ranks.get(o1.getCarrierslaId());
+                final Integer o2rank = ranks.get(o2.getCarrierslaId());
+
+                final int byRank = Integer.compare(o1rank != null ? o1rank : 0, o2rank != null ? o2rank : 0);
+                if (byRank == 0) {
+
+                    final String o1name = new FailoverStringI18NModel(o1.getDisplayName(), o1.getName()).getValue(locale);
+                    final String o2name = new FailoverStringI18NModel(o2.getDisplayName(), o2.getName()).getValue(locale);
+
+                    return o1name.compareToIgnoreCase(o2name);
+
+                }
+                return byRank;
+            }
+        });
+
+        return carrierSlas;
+    }
 
     /** {@inheritDoc} */
     @Override

@@ -34,6 +34,7 @@ public class CartCarrierRO implements Serializable {
     private String supplier;
     private String supplierName;
     private List<CarrierRO> carriers;
+    private List<CarrierSlaRO> sortedSla;
 
     public String getSupplier() {
         return supplier;
@@ -63,5 +64,15 @@ public class CartCarrierRO implements Serializable {
 
     public void setCarriers(final List<CarrierRO> carriers) {
         this.carriers = carriers;
+    }
+
+    @XmlElementWrapper(name = "sorted-sla")
+    @XmlElement(name = "sla")
+    public List<CarrierSlaRO> getSortedSla() {
+        return sortedSla;
+    }
+
+    public void setSortedSla(final List<CarrierSlaRO> sortedSla) {
+        this.sortedSla = sortedSla;
     }
 }

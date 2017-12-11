@@ -65,7 +65,7 @@ public interface ShippingEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
     @RequestMapping(value = "/carrier/shop", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoShopCarrier> updateShopCarriers(@RequestBody List<VoShopCarrier> vo)  throws Exception;
+    List<VoShopCarrierAndSla> updateShopCarriers(@RequestBody List<VoShopCarrierAndSla> vo)  throws Exception;
 
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/carrier/{id}", method = RequestMethod.DELETE)

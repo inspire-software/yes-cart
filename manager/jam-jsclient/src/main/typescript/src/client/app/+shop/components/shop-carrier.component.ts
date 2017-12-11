@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
-import { ShopVO, ShopCarrierVO, CarrierInfoVO } from './../../shared/model/index';
+import { ShopVO, ShopCarrierVO, CarrierInfoVO, ShopCarrierSlaVO, Pair } from './../../shared/model/index';
 import { ShippingService, Util } from './../../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { UiUtil } from './../../shared/ui/index';
@@ -36,17 +36,26 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
 
   private shopCarriersVO:Array<ShopCarrierAndSlaVO>;
   private availableCarriers:Array<ShopCarrierAndSlaVO>;
-  private selectedCarriers:Array<ShopCarrierAndSlaVO>;
+  private selectedCarriers:Array<Pair<ShopCarrierAndSlaVO, ShopCarrierSlaVO>>;
 
   private changed:boolean = false;
 
   private newCarrier:CarrierInfoVO;
   @ViewChild('editNewCarrierName')
   private editNewCarrierName:ModalComponent;
+
+  private editCarrierSla:ShopCarrierSlaVO;
+  @ViewChild('editCarrierSlaRank')
+  private editCarrierSlaRank:ModalComponent;
+
   private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private newCarrierForm:any;
   private newCarrierFormSub:any; // tslint:disable-line:no-unused-variable
   private validForSave:boolean = false;
+  private initialisingEdit:boolean = false; // tslint:disable-line:no-unused-variable
+  private editCarrierSlaForm:any;
+  private editCarrierSlaFormSub:any; // tslint:disable-line:no-unused-variable
+  private validForEdit:boolean = false;
 
   private loading:boolean = false;
 
@@ -55,10 +64,16 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopCarrierComponent constructor');
 
     this.newCarrier = this.newCarrierInstance();
+    this.editCarrierSla = this.newCarrierSlaInstance();
 
     this.newCarrierForm = fb.group({
       'name': ['', YcValidators.requiredNonBlankTrimmed],
     });
+
+    this.editCarrierSlaForm = fb.group({
+      'rank': ['', YcValidators.requiredPositiveWholeNumber],
+    });
+
   }
 
   @Input()
@@ -84,15 +99,21 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
   ngOnInit() {
     LogUtil.debug('ShopCarrierComponent ngOnInit shop', this.shop);
     this.formBind();
+    this.formBindEdit();
   }
 
   ngOnDestroy() {
     LogUtil.debug('ShopCarrierComponent ngOnDestroy');
     this.formUnbind();
+    this.formUnbindEdit();
   }
 
   newCarrierInstance():CarrierInfoVO {
     return { carrierId: 0, name: '', description: null, displayNames: [], displayDescriptions: [] };
+  }
+
+  newCarrierSlaInstance():ShopCarrierSlaVO {
+    return { carrierslaId: 0, carrierId: 0, code: '', name: '', maxDays: 0, minDays: 0, guaranteed: false, namedDay: false, slaType: 'F', externalRef: '', disabled: false, rank: 0 };
   }
 
   formBind():void {
@@ -113,9 +134,26 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
     this.changed = true;
   }
 
+
+  formBindEdit():void {
+    UiUtil.formBind(this, 'editCarrierSlaForm', 'editCarrierSlaFormSub', 'formChangeEdit', 'initialisingEdit', false);
+  }
+
+
+  formUnbindEdit():void {
+    UiUtil.formUnbind(this, 'editCarrierSlaFormSub');
+  }
+
+
+  formChangeEdit():void {
+    LogUtil.debug('ProductCarrierSlaMinComponent formChangeEdit', this.editCarrierSlaForm.valid, this.editCarrierSla);
+    this.validForEdit = this.editCarrierSlaForm.valid;
+  }
+
+
   /**
-   * Fast create new category.
-   * @param parent parent of new catecory
+   * Fast create new carrier.
+   * @param parent parent of new carrier
    */
   createNew() {
     LogUtil.debug('ShopCarrierComponent createNew');
@@ -195,25 +233,86 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
     this.changed = true;
   }
 
+  onSupportedCarrierSlaRankClick(event:any) {
+    LogUtil.debug('ShopCarrierComponent onSupportedCarrierSlaRankClick', event);
+
+    this.validForEdit = false;
+    UiUtil.formInitialise(this, 'initialisingEdit', 'editCarrierSlaForm', 'editCarrierSla', Util.clone(event));
+    this.editCarrierSlaRank.show();
+  }
+
+
+  /**
+   * Handle result of new category modal dialog.
+   * @param modalresult
+   */
+  editCarrierSlaRankModalResult(modalresult:ModalResult) {
+    LogUtil.debug('ShopCarrierComponent editCarrierSlaRankModalResult modal result', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+
+      let _carrier = this.shopCarriersVO.find( carrier => {
+        return carrier.carrierId == this.editCarrierSla.carrierId;
+      });
+
+      if (_carrier != null) {
+
+        let _sla = _carrier.carrierSlas.find(sla => {
+          return sla.carrierslaId == this.editCarrierSla.carrierslaId;
+        });
+
+        if (_sla != null) {
+          _sla.rank = this.editCarrierSla.rank;
+          this.remapCarriers();
+          this.changed = true;
+        }
+      }
+
+    }
+  }
+
+
+
+  onSupportedCarrierSlaDisableClick(event:any) {
+    LogUtil.debug('ShopCarrierComponent onSupportedCarrierSlaDisableClick', event);
+    event.disabled = !event.disabled;
+    this.remapCarriers();
+    this.changed = true;
+  }
+
   private remapCarriers() {
 
     var availableCarriers:Array<ShopCarrierAndSlaVO> = [];
-    var selectedCarriers:Array<ShopCarrierAndSlaVO> = [];
+    var selectedCarriers:Array<Pair<ShopCarrierAndSlaVO, ShopCarrierSlaVO>> = [];
 
     this.shopCarriersVO.forEach(carrier => {
       if (carrier.carrierShop.disabled) {
         availableCarriers.push(carrier);
       } else {
-        selectedCarriers.push(carrier);
+        if (carrier.carrierSlas != null && carrier.carrierSlas.length > 0) {
+          carrier.carrierSlas.forEach(sla => {
+            selectedCarriers.push({ first: carrier, second: sla });
+          })
+        } else {
+          selectedCarriers.push({ first: carrier, second: null });
+        }
       }
     });
 
-    var _sort = function(a:ShopCarrierVO, b:ShopCarrierVO):number {
+    availableCarriers.sort((a, b) => {
       return (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1;
-    };
+    });
+    selectedCarriers.sort((a, b) => {
+      let aRank = a.second != null ? a.second.rank : 0;
+      let bRank = b.second != null ? b.second.rank : 0;
 
-    availableCarriers.sort(_sort);
-    selectedCarriers.sort(_sort);
+      if (aRank == bRank) {
+        let aName = a.second != null ? a.second.name : a.first.name;
+        let bName = b.second != null ? b.second.name : a.first.name;
+        return (aName.toLowerCase() < bName.toLowerCase()) ? -1 : 1;
+      }
+
+      return aRank < bRank ? -1 : 1;
+    });
 
     this.selectedCarriers = selectedCarriers;
     this.availableCarriers = availableCarriers;

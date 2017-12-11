@@ -184,6 +184,32 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc} */
+    public String getDisabledCarrierSla(final long shopId) {
+        return service.findById(shopId).getDisabledCarrierSla();
+    }
+
+    /** {@inheritDoc} */
+    public void updateDisabledCarrierSla(final long shopId, final String disabledPks) {
+        ((ShopService) service).updateAttributeValue(
+                shopId,
+                AttributeNamesKeys.Shop.SHOP_CARRIER_SLA_DISABLED,
+                disabledPks);
+    }
+
+    /** {@inheritDoc} */
+    public String getSupportedCarrierSlaRanks(final long shopId) {
+        return service.findById(shopId).getSupportedCarrierSlaRanks();
+    }
+
+    /** {@inheritDoc} */
+    public void updateSupportedCarrierSlaRanks(final long shopId, final String pksAndRanks) {
+        ((ShopService) service).updateAttributeValue(
+                shopId,
+                AttributeNamesKeys.Shop.SHOP_CARRIER_SLA_RANKS,
+                pksAndRanks);
+    }
+
+    /** {@inheritDoc} */
     public Class<ShopDTO> getDtoIFace() {
         return ShopDTO.class;
     }

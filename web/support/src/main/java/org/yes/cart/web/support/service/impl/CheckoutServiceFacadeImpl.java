@@ -238,9 +238,9 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                         final int priority1 = sorting.get(pgd1.getFirst().getLabel());
                         final int priority2 = sorting.get(pgd2.getFirst().getLabel());
                         if (priority1 == priority2) {
-                            return pgd1.getSecond().compareTo(pgd2.getSecond()); // if no priority sort naturally by name
+                            return pgd1.getSecond().compareToIgnoreCase(pgd2.getSecond()); // if no priority sort naturally by name
                         }
-                        return priority1 - priority2; // if prioritised then sort by priority
+                        return Integer.compare(priority1, priority2); // if prioritised then sort by priority
                     }
                 }
         );

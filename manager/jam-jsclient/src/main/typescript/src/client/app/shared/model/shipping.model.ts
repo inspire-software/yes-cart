@@ -68,6 +68,13 @@ export interface CarrierSlaInfoVO {
 
 }
 
+export interface ShopCarrierSlaVO extends CarrierSlaInfoVO {
+
+  disabled : boolean;
+  rank : number;
+
+}
+
 export interface CarrierSlaVO extends CarrierSlaInfoVO {
 
   description : string;
@@ -92,7 +99,7 @@ export interface CarrierSlaVO extends CarrierSlaInfoVO {
 
 export interface ShopCarrierAndSlaVO extends ShopCarrierVO {
 
-  carrierSlas : CarrierSlaInfoVO[];
+  carrierSlas : ShopCarrierSlaVO[];
 
 }
 

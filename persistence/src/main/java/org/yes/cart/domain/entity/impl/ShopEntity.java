@@ -18,9 +18,11 @@ package org.yes.cart.domain.entity.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
 
+import java.io.StringReader;
 import java.util.*;
 
 /**
@@ -92,6 +94,9 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Boolean sfRequireCustomerLogin = null;
 
     private List<String> productStoredAttributesAsList;
+
+    private Set<Long> carrierSlaDisabledAsSet;
+    private Map<Long, Integer> carrierSlaRanksAsMap;
 
     public ShopEntity() {
     }
@@ -474,6 +479,41 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return productStoredAttributesAsList;
     }
 
+    public String getDisabledCarrierSla() {
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CARRIER_SLA_DISABLED);
+    }
+
+    public Set<Long> getDisabledCarrierSlaAsSet() {
+        if (carrierSlaDisabledAsSet == null) {
+            carrierSlaDisabledAsSet = getCsvValuesTrimmedAsSetLong(AttributeNamesKeys.Shop.SHOP_CARRIER_SLA_DISABLED);
+        }
+        return carrierSlaDisabledAsSet;
+    }
+
+    public String getSupportedCarrierSlaRanks() {
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CARRIER_SLA_RANKS);
+    }
+
+    public Map<Long, Integer> getSupportedCarrierSlaRanksAsMap() {
+        if (carrierSlaRanksAsMap == null) {
+            final Map<Long, Integer> map = new HashMap<Long, Integer>();
+            final String conf = getSupportedCarrierSlaRanks();
+            if (StringUtils.isNotBlank(conf)) {
+                try {
+                    final Properties props = new Properties();
+                    props.load(new StringReader(conf));
+                    for (final String key : props.stringPropertyNames()) {
+                        map.put(NumberUtils.toLong(key), NumberUtils.toInt(props.getProperty(key)));
+                    }
+                } catch (Exception exp) {
+                    // do nothing
+                }
+            }
+            carrierSlaRanksAsMap = Collections.unmodifiableMap(map);
+        }
+        return carrierSlaRanksAsMap;
+    }
+
     public Collection<AttrValueShop> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueShop> result = new ArrayList<AttrValueShop>();
         if (attributeCode != null) {
@@ -750,6 +790,18 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
             return protocol + shopUrl.getUrl();
         }
         return "";
+    }
+
+    protected Set<Long> getCsvValuesTrimmedAsSetLong(final String attributeKey) {
+        final List<String> csv = getCsvValuesTrimmedAsListRaw(getAttributeValueByCode(attributeKey));
+        if (CollectionUtils.isNotEmpty(csv)) {
+            final Set<Long> set = new HashSet<Long>();
+            for (final String item : csv) {
+                set.add(NumberUtils.toLong(item));
+            }
+            return Collections.unmodifiableSet(set);
+        }
+        return Collections.emptySet();
     }
 
     protected Set<String> getCsvValuesTrimmedAsSet(final String attributeKey) {

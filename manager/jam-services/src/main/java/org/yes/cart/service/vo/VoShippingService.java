@@ -49,7 +49,7 @@ public interface VoShippingService {
      * @return all carriers for shop
      * @throws Exception
      */
-    List<VoShopCarrierAndSla> getShopCarriersAnsSla(long shopId) throws Exception;
+    List<VoShopCarrierAndSla> getShopCarriersAndSla(long shopId) throws Exception;
 
 
     /**
@@ -106,6 +106,15 @@ public interface VoShippingService {
      * @throws Exception
      */
     List<VoShopCarrier> updateShopCarriers(List<VoShopCarrier> vo)  throws Exception;
+
+
+    /**
+     * Create new vo
+     * @param vo carrier
+     * @return persistent version
+     * @throws Exception
+     */
+    List<VoShopCarrierAndSla> updateShopCarriersAndSla(List<VoShopCarrierAndSla> vo)  throws Exception;
 
 
     /**

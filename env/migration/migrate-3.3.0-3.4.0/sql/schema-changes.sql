@@ -204,3 +204,13 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  5020,  'SHOP_DEF_NAV_CAT', 'SHOP_DEFAULT_NAVIGATION_CATEGORY',  0,  NULL,  'Search: default shop navigation category (GUID)',
     'GUID of category which contains default navigation settings',  1000, 1001, 0, 0, 0, 0);
 
+--
+-- YC-796 Allow shipping methods sorting by priority
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  4050,  'SHOP_CARRIER_SLA_DISABLED', 'SHOP_CARRIER_SLA_DISABLED',  0,  NULL,  'Disabled shop carrier SLA',  'Disabled shop carrier SLA (CSV of PKs)',  1004, 1001, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  4051,  'SHOP_CARRIER_SLA_RANKS', 'SHOP_CARRIER_SLA_RANKS',  0,  NULL,  'Properties config of carrier SLA ranks',  'Properties config of carrier SLA ranks (PK=rank)',  1012, 1001, 0, 0, 0, 0);
+

@@ -18,6 +18,7 @@ package org.yes.cart.domain.entity;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -493,7 +494,6 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      */
     List<String> getSupportedBillingCountriesAsList();
 
-
     /**
      * List of supported language codes.
      *
@@ -588,6 +588,37 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      * @return list of attribute codes.
      */
     List<String> getProductStoredAttributesAsList();
+
+
+    /**
+     * Get CSV of PKs for disabled carrier SLA for given shop.
+     *
+     * @return CSV of carrier SLA PKs
+     */
+    String getDisabledCarrierSla();
+
+    /**
+     * Get CSV of PKs for disabled carrier SLA for given shop.
+     *
+     * @return carrier SLA PKs
+     */
+    Set<Long> getDisabledCarrierSlaAsSet();
+
+    /**
+     * Get properties of PKs and ranks for carrier SLA for given shop.
+     *
+     * @return Properties of pk=rank
+     */
+    String getSupportedCarrierSlaRanks();
+
+    /**
+     * Get properties of PKs and ranks for carrier SLA for given shop.
+     *
+     * @return map of pk=rank
+     */
+    Map<Long, Integer> getSupportedCarrierSlaRanksAsMap();
+
+
 
 }
 

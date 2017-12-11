@@ -869,8 +869,10 @@ public class CartController {
             cartCarrier.setSupplierName(supplierNames.get(supplier));
 
             final List<Carrier> carriers = shippingServiceFacade.findCarriers(cart, supplier);
+            final List<CarrierSla> slas = shippingServiceFacade.getSortedCarrierSla(cart, carriers);
 
             cartCarrier.setCarriers(mappingMixin.map(carriers, CarrierRO.class, Carrier.class));
+            cartCarrier.setSortedSla(mappingMixin.map(slas, CarrierSlaRO.class, CarrierSla.class));
             ros.add(cartCarrier);
         }
         return ros;

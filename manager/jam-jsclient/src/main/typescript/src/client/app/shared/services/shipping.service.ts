@@ -105,7 +105,7 @@ export class ShippingService {
    * @param carriers carriers
    * @returns {Observable<R>}
    */
-  saveShopCarriers(carriers:Array<ShopCarrierVO>) {
+  saveShopCarriers(carriers:Array<ShopCarrierAndSlaVO>) {
 
     let body = JSON.stringify(carriers);
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });

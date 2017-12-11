@@ -30,13 +30,16 @@
       <div class="panel panel-default">
         <div class="panel-heading">{{ 'ASSIGNED' | translate }}</div>
         <ul class="list-group">
-          <li *ngFor="let supported of selectedCarriers" class="list-group-item">
+          <li *ngFor="let supported of selectedCarriers" class="list-group-item {{supported.second != null && supported.second.disabled ? 'disabled' : ''}}">
             <h5>
-              {{supported.name}}
-              <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedCarrierClick(supported)><i class="fa fa-unlink"></i></button>
+              {{supported.first.name}} {{supported.second != null ? ' / ' + supported.second.name : ''}}
+              <button class="pull-right btn btn-danger btn-circle btn-sm" title="{{supported.first.name}}" (click)=onSupportedCarrierClick(supported.first)><i class="fa fa-unlink"></i></button>
+              <button *ngIf="supported.second != null" class="pull-right btn btn-info btn-circle btn-sm" style="margin-right: 3px" title="{{ 'AV_RANK' | translate }}" (click)=onSupportedCarrierSlaRankClick(supported.second)>{{supported.second.rank}}</button>
+              <button *ngIf="supported.second != null" class="pull-right btn {{ supported.second.disabled ? 'btn-success' : 'btn-danger' }} btn-circle btn-sm" style="margin-right: 3px" title="{{ supported.second.name }}" (click)=onSupportedCarrierSlaDisableClick(supported.second)><i class="fa fa-power-off"></i></button>
             </h5>
-            <p *ngFor="let carrierSla of supported.carrierSlas">
-              <small>{{carrierSla.code}} {{carrierSla.name}} ({{ ('CARRIERSLA_SLATYPE_' + carrierSla.slaType) | translate }} <i class="fa {{ carrierSla.guaranteed ? 'fa-calendar-check-o' : 'fa-calendar' }}"></i><ng-template [ngIf]="carrierSla.namedDay">+<i class="fa fa-user"></i></ng-template> {{ carrierSla.minDays > 0 ? carrierSla.minDays : '0' }}{{ carrierSla.maxDays > 0 ? ' - ' + carrierSla.maxDays : '' }})</small><br/>
+            <p *ngIf="supported.second != null">
+              <small>{{supported.second.code}}</small><br/>
+              <small>{{ ('CARRIERSLA_SLATYPE_' + supported.second.slaType) | translate }} <i class="fa {{ supported.second.guaranteed ? 'fa-calendar-check-o' : 'fa-calendar' }}"></i><ng-template [ngIf]="supported.second.namedDay">+<i class="fa fa-user"></i></ng-template> {{ supported.second.minDays > 0 ? supported.second.minDays : '0' }}{{ supported.second.maxDays > 0 ? ' - ' + supported.second.maxDays : '' }}</small>
             </p>
           </li>
         </ul>
@@ -80,5 +83,27 @@
       </fieldset>
     </form>
   </yc-modal>
+
+  <yc-modal #editCarrierSlaRank
+            title="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+            [valid]="validForEdit"
+            (closed)="editCarrierSlaRankModalResult($event)">
+    <form role="form" [formGroup]="editCarrierSlaForm">
+      <fieldset>
+        <div class="row">
+          <div class="col-lg-3">{{ 'AV_RANK' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="rank" name="rank" type="text" [(ngModel)]="editCarrierSla.rank">
+            <div [hidden]="editCarrierSlaForm.controls['rank'].valid || editCarrierSlaForm.controls['rank'].pristine" class="alert alert-danger">
+              {{ 'POS_INT_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </yc-modal>
+
 
 </ng-template>

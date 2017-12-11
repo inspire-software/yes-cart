@@ -18,6 +18,8 @@ package org.yes.cart.service.vo.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CarrierDTO;
 import org.yes.cart.domain.dto.CarrierSlaDTO;
@@ -26,14 +28,13 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.dto.DtoCarrierService;
 import org.yes.cart.service.dto.DtoCarrierSlaService;
+import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoShippingService;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.io.StringReader;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -42,16 +43,19 @@ import java.util.Map;
  */
 public class VoShippingServiceImpl implements VoShippingService {
 
+    private final DtoShopService dtoShopService;
     private final DtoCarrierService dtoCarrierService;
     private final DtoCarrierSlaService dtoCarrierSlaService;
 
     private final FederationFacade federationFacade;
     private final VoAssemblySupport voAssemblySupport;
 
-    public VoShippingServiceImpl(final DtoCarrierService dtoCarrierService,
+    public VoShippingServiceImpl(final DtoShopService dtoShopService,
+                                 final DtoCarrierService dtoCarrierService,
                                  final DtoCarrierSlaService dtoCarrierSlaService,
                                  final FederationFacade federationFacade,
                                  final VoAssemblySupport voAssemblySupport) {
+        this.dtoShopService = dtoShopService;
         this.dtoCarrierService = dtoCarrierService;
         this.dtoCarrierSlaService = dtoCarrierSlaService;
         this.federationFacade = federationFacade;
@@ -107,16 +111,19 @@ public class VoShippingServiceImpl implements VoShippingService {
     }
 
     @Override
-    public List<VoShopCarrierAndSla> getShopCarriersAnsSla(final long shopId) throws Exception {
+    public List<VoShopCarrierAndSla> getShopCarriersAndSla(final long shopId) throws Exception {
 
         if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
             final Map<CarrierDTO, Boolean> all = dtoCarrierService.findAllByShopId(shopId);
 
+            final Set<Long> disabled = getDisabledCarrierSlaConfig(shopId);
+            final Map<Long, Integer> ranks = getCarrierSlaRanksConfig(shopId);
+
             final List<VoShopCarrierAndSla> vos = new ArrayList<>(all.size());
             final VoAssemblySupport.VoAssembler<VoShopCarrierAndSla, CarrierDTO> asmC =
                     voAssemblySupport.with(VoShopCarrierAndSla.class, CarrierDTO.class);
-            final VoAssemblySupport.VoAssembler<VoCarrierSlaInfo, CarrierSlaDTO> asmS =
-                    voAssemblySupport.with(VoCarrierSlaInfo.class, CarrierSlaDTO.class);
+            final VoAssemblySupport.VoAssembler<VoShopCarrierSla, CarrierSlaDTO> asmS =
+                    voAssemblySupport.with(VoShopCarrierSla.class, CarrierSlaDTO.class);
             for (final Map.Entry<CarrierDTO, Boolean> dto : all.entrySet()) {
                 final VoShopCarrierAndSla vo = asmC.assembleVo(new VoShopCarrierAndSla(), dto.getKey());
 
@@ -127,7 +134,10 @@ public class VoShippingServiceImpl implements VoShippingService {
                 vo.setCarrierShop(link);
 
                 for (final CarrierSlaDTO sla : dtoCarrierSlaService.findByCarrier(dto.getKey().getCarrierId())) {
-                    final VoCarrierSlaInfo slaVo = asmS.assembleVo(new VoCarrierSlaInfo(), sla);
+                    final VoShopCarrierSla slaVo = asmS.assembleVo(new VoShopCarrierSla(), sla);
+                    slaVo.setDisabled(disabled.contains(slaVo.getCarrierslaId()));
+                    final Integer rank = ranks.get(slaVo.getCarrierslaId());
+                    slaVo.setRank(rank != null ? rank : 0);
                     vo.getCarrierSlas().add(slaVo);
                 }
 
@@ -138,6 +148,37 @@ public class VoShippingServiceImpl implements VoShippingService {
         } else {
             throw new AccessDeniedException("Access is denied");
         }
+    }
+
+    private Map<Long, Integer> getCarrierSlaRanksConfig(final long shopId) {
+        final String pkAndRanks = dtoShopService.getSupportedCarrierSlaRanks(shopId);
+        final Map<Long, Integer> pks = new HashMap<Long, Integer>();
+        if (StringUtils.isNotBlank(pkAndRanks)) {
+            try {
+                final Properties props = new Properties();
+                props.load(new StringReader(pkAndRanks));
+                for (final String key : props.stringPropertyNames()) {
+                    pks.put(NumberUtils.toLong(key), NumberUtils.toInt(props.getProperty(key)));
+                }
+            } catch (Exception exp) {
+                // do nothing
+            }
+        }
+        return pks;
+    }
+
+    private Set<Long> getDisabledCarrierSlaConfig(final long shopId) {
+        final String disabled = dtoShopService.getDisabledCarrierSla(shopId);
+        final Set<Long> pks = new HashSet<Long>();
+        if (StringUtils.isNotBlank(disabled)) {
+            for (final String pk : StringUtils.split(disabled, ',')) {
+                final long id = NumberUtils.toLong(pk.trim());
+                if (id > 0) {
+                    pks.add(id);
+                }
+            }
+        }
+        return pks;
     }
 
     @Override
@@ -277,6 +318,53 @@ public class VoShippingServiceImpl implements VoShippingService {
                     } else {
                         dtoCarrierService.assignToShop(link.getCarrierId(), link.getShopId(), false);
                     }
+                } // else skip updates for inaccessible shops
+            }
+
+            return vo;
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    @Override
+    public List<VoShopCarrierAndSla> updateShopCarriersAndSla(final List<VoShopCarrierAndSla> vo) throws Exception {
+        if (vo != null) {
+
+            for (final VoShopCarrierAndSla shopCarrier : vo) {
+                final VoCarrierShopLink link = shopCarrier.getCarrierShop();
+                if (link != null && federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
+                    if (link.isDisabled()) {
+                        dtoCarrierService.unassignFromShop(link.getCarrierId(), link.getShopId(), true);
+                    } else {
+                        dtoCarrierService.assignToShop(link.getCarrierId(), link.getShopId(), false);
+                    }
+
+                    final List<VoShopCarrierSla> slas = shopCarrier.getCarrierSlas();
+                    if (CollectionUtils.isNotEmpty(slas)) {
+
+                        final Set<Long> disabled = getDisabledCarrierSlaConfig(link.getShopId());
+                        final Map<Long, Integer> ranks = getCarrierSlaRanksConfig(link.getShopId());
+
+                        for (final VoShopCarrierSla sla : slas) {
+                            if (sla.isDisabled()) {
+                                disabled.add(sla.getCarrierslaId());
+                            } else {
+                                disabled.remove(sla.getCarrierslaId());
+                            }
+                            ranks.put(sla.getCarrierslaId(), sla.getRank());
+                        }
+
+                        dtoShopService.updateDisabledCarrierSla(link.getShopId(), StringUtils.join(disabled, ','));
+                        final StringBuilder props = new StringBuilder();
+                        for (final Map.Entry<Long, Integer> entry : ranks.entrySet()) {
+                            props.append(entry.getKey()).append('=').append(entry.getValue()).append('\n');
+                        }
+                        dtoShopService.updateSupportedCarrierSlaRanks(link.getShopId(), props.toString());
+
+                    }
+
                 } // else skip updates for inaccessible shops
             }
 
