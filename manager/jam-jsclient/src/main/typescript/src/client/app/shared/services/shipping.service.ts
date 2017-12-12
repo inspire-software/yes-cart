@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { CarrierInfoVO, CarrierVO, ShopCarrierVO, CarrierSlaVO, ShopCarrierAndSlaVO } from '../model/index';
+import { CarrierInfoVO, CarrierVO, CarrierSlaVO, ShopCarrierAndSlaVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';

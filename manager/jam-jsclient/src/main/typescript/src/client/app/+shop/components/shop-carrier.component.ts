@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
-import { ShopVO, ShopCarrierVO, CarrierInfoVO, ShopCarrierSlaVO, Pair } from './../../shared/model/index';
+import { ShopVO, CarrierInfoVO, ShopCarrierSlaVO, Pair } from './../../shared/model/index';
 import { ShippingService, Util } from './../../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { UiUtil } from './../../shared/ui/index';
@@ -291,7 +291,7 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
         if (carrier.carrierSlas != null && carrier.carrierSlas.length > 0) {
           carrier.carrierSlas.forEach(sla => {
             selectedCarriers.push({ first: carrier, second: sla });
-          })
+          });
         } else {
           selectedCarriers.push({ first: carrier, second: null });
         }
