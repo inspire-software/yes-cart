@@ -21,8 +21,10 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+import org.yes.cart.payment.CallbackAware;
 import org.yes.cart.payment.PaymentGatewayPayPalExpressCheckout;
 import org.yes.cart.payment.dto.*;
+import org.yes.cart.payment.dto.impl.BasicCallbackInfoImpl;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.shoppingcart.Total;
@@ -42,7 +44,8 @@ import java.util.UUID;
  * Date: 19/11/2015
  * Time: 18:13
  */
-public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPaymentGatewayImpl implements PaymentGatewayPayPalExpressCheckout {
+public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPaymentGatewayImpl
+        implements PaymentGatewayPayPalExpressCheckout, CallbackAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(PayPalExpressCheckoutPaymentGatewayImpl.class);
 
@@ -179,8 +182,12 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
     /**
      * {@inheritDoc}
      */
-    public String restoreOrderGuid(final Map privateCallBackParameters) {
-        return HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID));
+    public Callback convertToCallback(final Map privateCallBackParameters) {
+        return new BasicCallbackInfoImpl(
+                HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID)),
+                CallbackOperation.PAYMENT,
+                null, privateCallBackParameters
+        );
     }
 
 
@@ -399,7 +406,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
 
             final String redirectUrl;
 
-            if (CallbackResult.OK == getExternalCallbackResult(result)) {
+            if (CallbackAware.CallbackResult.OK == getExternalCallbackResult(result)) {
                 /*not encoded answer will be like this
                 TOKEN=EC%2d8DX631540T256421Y&TIMESTAMP=2011%2d12%2d21T20%3a12%3a37Z&CORRELATIONID=2d2aa98bcd550&ACK=Success&VERSION=2%2e3&BUILD=2271164
                  Redirect url  to paypal for perform login and payment */
@@ -440,11 +447,11 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
      *
      * @return true in case of success
      */
-    public CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
         if (isAckSuccess(callbackResult)) {
-            return CallbackResult.OK;
+            return CallbackAware.CallbackResult.OK;
         }
-        return  CallbackResult.FAILED;
+        return  CallbackAware.CallbackResult.FAILED;
     }
 
     /**
@@ -469,7 +476,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
         payment.setTransactionReferenceId(params.get("PAYMENTINFO_0_TRANSACTIONID"));
         payment.setTransactionAuthorizationCode(params.get("PAYERID"));
 
-        final CallbackResult res = getExternalCallbackResult(parametersMap);
+        final CallbackAware.CallbackResult res = getExternalCallbackResult(parametersMap);
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
 

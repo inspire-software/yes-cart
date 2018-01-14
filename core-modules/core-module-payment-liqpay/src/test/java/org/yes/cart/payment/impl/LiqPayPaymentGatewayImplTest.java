@@ -18,6 +18,7 @@ package org.yes.cart.payment.impl;
 
 import com.liqpay.LiqPay;
 import org.junit.Test;
+import org.yes.cart.payment.CallbackAware;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
@@ -175,14 +176,22 @@ public class LiqPayPaymentGatewayImplTest {
 
         }};
 
+        // Always should fail with invalid signature
         assertEquals(Payment.PAYMENT_STATUS_FAILED, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
-        assertNull(gatewayImpl.restoreOrderGuid(callBackresult));
+        final CallbackAware.Callback badCallback = gatewayImpl.convertToCallback(callBackresult);
+        assertNull(badCallback.getOrderGuid());
+        assertEquals(CallbackAware.CallbackOperation.INVALID, badCallback.getOperation());
+        assertNull(badCallback.getAmount());
 
+        // Check with valid signature
         callBackresult.put("signature", validSignature);
 
-
         assertEquals(expectedStatus, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
-        assertEquals(order_id, gatewayImpl.restoreOrderGuid(callBackresult));
+        final CallbackAware.Callback goodCallback = gatewayImpl.convertToCallback(callBackresult);
+        assertEquals(order_id, goodCallback.getOrderGuid());
+        // Only PAYMENT operation callback is supported as refund is a synchronous REST call with immediate result
+        assertEquals(CallbackAware.CallbackOperation.PAYMENT, goodCallback.getOperation());
+        assertEquals(new BigDecimal("10.00"), goodCallback.getAmount());
     }
 
 

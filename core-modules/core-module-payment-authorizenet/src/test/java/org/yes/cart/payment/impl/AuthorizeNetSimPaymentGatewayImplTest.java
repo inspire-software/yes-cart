@@ -17,9 +17,8 @@
 package org.yes.cart.payment.impl;
 
 import net.authorize.sim.Fingerprint;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.CallbackAware;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentAddress;
 import org.yes.cart.payment.dto.PaymentLine;
@@ -213,18 +212,46 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
     @Test
     public void testIsSuccess() {
 
+        // default behaviour is payment
+        testIsSuccessWithStatus("1", Payment.PAYMENT_STATUS_OK, null, CallbackAware.CallbackOperation.PAYMENT);
+        testIsSuccessWithStatus("2", Payment.PAYMENT_STATUS_FAILED, null, CallbackAware.CallbackOperation.PAYMENT);
+        testIsSuccessWithStatus("3", Payment.PAYMENT_STATUS_FAILED, null, CallbackAware.CallbackOperation.PAYMENT);
+        testIsSuccessWithStatus("4", Payment.PAYMENT_STATUS_PROCESSING, null, CallbackAware.CallbackOperation.PAYMENT);
+        testIsSuccessWithStatus("zxcvzxcvzxcv", Payment.PAYMENT_STATUS_FAILED, null, CallbackAware.CallbackOperation.PAYMENT);
 
-        testIsSuccessWithStatus("1", Payment.PAYMENT_STATUS_OK);
-        testIsSuccessWithStatus("2", Payment.PAYMENT_STATUS_FAILED);
-        testIsSuccessWithStatus("3", Payment.PAYMENT_STATUS_FAILED);
-        testIsSuccessWithStatus("4", Payment.PAYMENT_STATUS_PROCESSING);
-        testIsSuccessWithStatus("zxcvzxcvzxcv", Payment.PAYMENT_STATUS_FAILED);
+        testIsSuccessWithStatus("1", Payment.PAYMENT_STATUS_OK, "any-op", CallbackAware.CallbackOperation.PAYMENT);
+        testIsSuccessWithStatus("2", Payment.PAYMENT_STATUS_FAILED, "any-op", CallbackAware.CallbackOperation.PAYMENT);
+        testIsSuccessWithStatus("3", Payment.PAYMENT_STATUS_FAILED, "any-op", CallbackAware.CallbackOperation.PAYMENT);
+        testIsSuccessWithStatus("4", Payment.PAYMENT_STATUS_PROCESSING, "any-op", CallbackAware.CallbackOperation.PAYMENT);
+        testIsSuccessWithStatus("zxcvzxcvzxcv", Payment.PAYMENT_STATUS_FAILED, "any-op", CallbackAware.CallbackOperation.PAYMENT);
 
+        // credit & void are refund behaviour
+        testIsSuccessWithStatus("1", Payment.PAYMENT_STATUS_OK, "credit", CallbackAware.CallbackOperation.REFUND);
+        testIsSuccessWithStatus("2", Payment.PAYMENT_STATUS_FAILED, "credit", CallbackAware.CallbackOperation.REFUND);
+        testIsSuccessWithStatus("3", Payment.PAYMENT_STATUS_FAILED, "credit", CallbackAware.CallbackOperation.REFUND);
+        testIsSuccessWithStatus("4", Payment.PAYMENT_STATUS_PROCESSING, "credit", CallbackAware.CallbackOperation.REFUND);
+        testIsSuccessWithStatus("zxcvzxcvzxcv", Payment.PAYMENT_STATUS_FAILED, "credit", CallbackAware.CallbackOperation.REFUND);
+
+        testIsSuccessWithStatus("1", Payment.PAYMENT_STATUS_OK, "void", CallbackAware.CallbackOperation.REFUND);
+        testIsSuccessWithStatus("2", Payment.PAYMENT_STATUS_FAILED, "void", CallbackAware.CallbackOperation.REFUND);
+        testIsSuccessWithStatus("3", Payment.PAYMENT_STATUS_FAILED, "void", CallbackAware.CallbackOperation.REFUND);
+        testIsSuccessWithStatus("4", Payment.PAYMENT_STATUS_PROCESSING, "void", CallbackAware.CallbackOperation.REFUND);
+        testIsSuccessWithStatus("zxcvzxcvzxcv", Payment.PAYMENT_STATUS_FAILED, "void", CallbackAware.CallbackOperation.REFUND);
+
+        // info behaviour
+        testIsSuccessWithStatus("1", Payment.PAYMENT_STATUS_OK, "prior_auth_capture", CallbackAware.CallbackOperation.INFO);
+        testIsSuccessWithStatus("2", Payment.PAYMENT_STATUS_FAILED, "prior_auth_capture", CallbackAware.CallbackOperation.INFO);
+        testIsSuccessWithStatus("3", Payment.PAYMENT_STATUS_FAILED, "prior_auth_capture", CallbackAware.CallbackOperation.INFO);
+        testIsSuccessWithStatus("4", Payment.PAYMENT_STATUS_PROCESSING, "prior_auth_capture", CallbackAware.CallbackOperation.INFO);
+        testIsSuccessWithStatus("zxcvzxcvzxcv", Payment.PAYMENT_STATUS_FAILED, "prior_auth_capture", CallbackAware.CallbackOperation.INFO);
 
     }
 
 
-    private void testIsSuccessWithStatus(final String status, final String expectedStatus) {
+    private void testIsSuccessWithStatus(final String status,
+                                         final String expectedStatus,
+                                         final String xType,
+                                         final CallbackAware.CallbackOperation expectedOp) {
 
 
 
@@ -247,14 +274,21 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
 
             put("x_amount", "15.00");
             put("x_trans_id", "32100123");
+            if (xType != null) {
+                put("x_type", xType);
+            }
             put("x_response_code", status);
             put("x_MD5_Hash", "TESTINVALID");
             put("orderGuid", "12");
 
         }};
 
+        // Test failure with invalid signature
         assertEquals(Payment.PAYMENT_STATUS_FAILED, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
-        assertNull(gatewayImpl.restoreOrderGuid(callBackresult));
+        final CallbackAware.Callback badCallback = gatewayImpl.convertToCallback(callBackresult);
+        assertEquals(CallbackAware.CallbackOperation.INVALID, badCallback.getOperation());
+        assertNull(badCallback.getOrderGuid());
+        assertNull(badCallback.getAmount());
 
         final AuthorizeNetSimPaymentGatewayImpl gatewayImpl2 = new AuthorizeNetSimPaymentGatewayImpl() {
             @Override
@@ -263,8 +297,12 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
             }
         };
 
+        // Test behaviour with valid signature
         assertEquals(expectedStatus, gatewayImpl2.getExternalCallbackResult(callBackresult).getStatus());
-        assertEquals("12", gatewayImpl2.restoreOrderGuid(callBackresult));
+        final CallbackAware.Callback goodCallback = gatewayImpl2.convertToCallback(callBackresult);
+        assertEquals("12", goodCallback.getOrderGuid());
+        assertEquals(new BigDecimal("15.00"), goodCallback.getAmount());
+
     }
 
 
@@ -306,8 +344,11 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
         }};
 
 
-        assertEquals(PaymentGateway.CallbackResult.OK, gatewayImpl.getExternalCallbackResult(callBackresult));
-        assertEquals("151013162426-26", gatewayImpl.restoreOrderGuid(callBackresult));
+        assertEquals(CallbackAware.CallbackResult.OK, gatewayImpl.getExternalCallbackResult(callBackresult));
+        final CallbackAware.Callback goodCallback = gatewayImpl.convertToCallback(callBackresult);
+        assertEquals(CallbackAware.CallbackOperation.PAYMENT, goodCallback.getOperation());
+        assertEquals("151013162426-26", goodCallback.getOrderGuid());
+        assertEquals(new BigDecimal("1035.10"), goodCallback.getAmount());
     }
 
 

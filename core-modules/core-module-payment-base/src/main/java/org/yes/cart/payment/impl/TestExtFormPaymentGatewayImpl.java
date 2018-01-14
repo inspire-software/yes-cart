@@ -18,15 +18,20 @@ package org.yes.cart.payment.impl;
 
 
 import org.apache.commons.lang.SerializationUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yes.cart.payment.CallbackAware;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentMiscParam;
+import org.yes.cart.payment.dto.impl.BasicCallbackInfoImpl;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.util.HttpParamsUtils;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -36,11 +41,16 @@ import java.util.UUID;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl implements PaymentGatewayExternalForm {
+public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
+        implements PaymentGatewayExternalForm, CallbackAware {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TestExtFormPaymentGatewayImpl.class);
 
     public static String ORDER_GUID_PARAM_KEY = "ext-order-guid";
     public static String AUTH_RESPONSE_CODE_PARAM_KEY = "ext-auth-response-code";
+    public static String AUTH_RESPONSE_AMOUNT_PARAM_KEY = "ext-auth-response-amount";
     public static String REFUND_RESPONSE_CODE_PARAM_KEY = "ext-refund-response-code";
+    public static String REFUND_RESPONSE_AMOUNT_PARAM_KEY = "ext-refund-response-amount";
 
     private static final PaymentGatewayFeature PAYMENT_GATEWAY_FEATURE = new PaymentGatewayFeatureImpl(
             false, false, false, true,
@@ -94,29 +104,52 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
     /**
      * {@inheritDoc}
      */
-    public String restoreOrderGuid(final Map privateCallBackParameters) {
-        return HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID_PARAM_KEY));
+    public Callback convertToCallback(final Map privateCallBackParameters) {
+        CallbackOperation op = CallbackOperation.PAYMENT;
+        String responseCode = HttpParamsUtils.getSingleValue(privateCallBackParameters.get(AUTH_RESPONSE_CODE_PARAM_KEY));
+        String amountKey = AUTH_RESPONSE_AMOUNT_PARAM_KEY;
+        if (responseCode == null) {
+            responseCode = HttpParamsUtils.getSingleValue(privateCallBackParameters.get(REFUND_RESPONSE_CODE_PARAM_KEY));
+            if (responseCode != null) {
+                op = CallbackOperation.REFUND;
+                amountKey = REFUND_RESPONSE_AMOUNT_PARAM_KEY;
+            }
+        }
+
+        BigDecimal callbackAmount = null;
+        try {
+            callbackAmount = new BigDecimal(HttpParamsUtils.getSingleValue(privateCallBackParameters.get(amountKey)));
+        } catch (Exception exp) {
+            LOG.warn("Callback for did not have a valid amount {}", privateCallBackParameters.get(amountKey));
+        }
+
+        return new BasicCallbackInfoImpl(
+                HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID_PARAM_KEY)),
+                op,
+                callbackAmount,
+                privateCallBackParameters
+        );
     }
 
     /**
      * {@inheritDoc}
      */
-    public CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
 
         String responseCode = callbackResult.get(AUTH_RESPONSE_CODE_PARAM_KEY);
         if (responseCode == null) {
             responseCode = callbackResult.get(REFUND_RESPONSE_CODE_PARAM_KEY);
         }
         if ("1".equals(responseCode)) {
-            return CallbackResult.OK;
+            return CallbackAware.CallbackResult.OK;
         } else if ("2".equals(responseCode)) {
-            return CallbackResult.UNSETTLED;
+            return CallbackAware.CallbackResult.UNSETTLED;
         } else if ("3".equals(responseCode)) {
-            return CallbackResult.PROCESSING;
+            return CallbackAware.CallbackResult.PROCESSING;
         } else if ("4".equals(responseCode)) {
-            return CallbackResult.MANUAL_REQUIRED;
+            return CallbackAware.CallbackResult.MANUAL_REQUIRED;
         } else {
-            return CallbackResult.FAILED;
+            return CallbackAware.CallbackResult.FAILED;
         }
 
     }
@@ -131,7 +164,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
 
         final Map<String, String> params = HttpParamsUtils.createSingleValueMap(privateCallBackParameters);
-        final CallbackResult res = getExternalCallbackResult(params);
+        final CallbackAware.CallbackResult res = getExternalCallbackResult(params);
 
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
@@ -217,7 +250,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
         final String responseCode = gatewayConfig.containsKey(REFUND_RESPONSE_CODE_PARAM_KEY) ?
                 gatewayConfig.get(REFUND_RESPONSE_CODE_PARAM_KEY).getValue() : Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED;
 
-        final CallbackResult res = getExternalCallbackResult(new HashMap<String, String>() {{
+        final CallbackAware.CallbackResult res = getExternalCallbackResult(new HashMap<String, String>() {{
             put(REFUND_RESPONSE_CODE_PARAM_KEY, responseCode);
         }});
 

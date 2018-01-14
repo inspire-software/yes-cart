@@ -19,6 +19,8 @@ package org.yes.cart.payment.impl;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.payment.PaymentGateway;
@@ -43,6 +45,8 @@ import static org.junit.Assume.assumeTrue;
  */
 public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCase {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AuthorizeNetAimPaymentGatewayImplTest.class);
+
     private PaymentProcessorSurrogate paymentProcessor;
     private PaymentGatewayInternalForm authorizeNetAimPaymentGateway;
     private CustomerOrderPaymentService customerOrderPaymentService;
@@ -64,13 +68,14 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
         boolean testConfigured = StringUtils.isNotBlank(user) && StringUtils.isNotBlank(txkey) && StringUtils.isNotBlank(md5);
 
         if (enabled && !testConfigured) {
-            System.out.println("To run AuthorizeNetAim test please enter configuration for your test account " +
-                    "(testPgAuthorizeNetAimUser, testPgAuthorizeNetAimTxKey and testPgAuthorizeNetAimMD5)");
+
+            LOG.error("To run AuthorizeNetAim test please enter all necessary configurations");
+
             enabled = false;
         }
 
         if (enabled) {
-            System.out.println("Running AuthorizeNetAim using: " + user);
+            LOG.info("\n\n*** Running AuthorizeNetAim using: {} ****\n\n", user);
         }
 
         return enabled;
@@ -82,8 +87,25 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
 
     @Before
     public void setUp() throws Exception {
-        assumeTrue(isTestAllowed());
-        if (isTestAllowed()) {
+
+        final boolean allowed = isTestAllowed();
+
+        if (!allowed) {
+            LOG.warn("\n\n" +
+                    "***\n" +
+                    "AuthorizeNetAim integration test is DISABLED.\n" +
+                    "You can enable test in /env/maven/${env}/config-module-authorizenet-[on/off].properties\n" +
+                    "Set:\n" +
+                    "testPgAuthorizeNetAim=true\n" +
+                    "testPgAuthorizeNetAimUser=XXXXX\n" +
+                    "testPgAuthorizeNetAimTxKey=XXXXX\n" +
+                    "testPgAuthorizeNetAimMD5=XXXXX\n\n" +
+                    "***\n\n\n");
+        }
+
+        assumeTrue(allowed);
+
+        if (allowed) {
             customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
             authorizeNetAimPaymentGateway = (PaymentGatewayInternalForm) ctx().getBean("authorizeNetAimPaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, authorizeNetAimPaymentGateway);

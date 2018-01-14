@@ -231,35 +231,4 @@ public interface PaymentGateway extends Serializable {
      */
     String getParameterValue(String valueLabel);
 
-    enum CallbackResult {
-
-        OK(Payment.PAYMENT_STATUS_OK, true),
-        UNSETTLED(Payment.PAYMENT_STATUS_OK, false),
-        PROCESSING(Payment.PAYMENT_STATUS_PROCESSING, false),
-        FAILED(Payment.PAYMENT_STATUS_FAILED, false),
-        MANUAL_REQUIRED(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED, false);
-
-        private String status;
-        private boolean settled;
-
-        private CallbackResult(final String status, final boolean settled) {
-            this.status = status;
-            this.settled = settled;
-        }
-
-        /**
-         * @return payment result (see {@link Payment})
-         */
-        public String getStatus() {
-            return status;
-        }
-
-        /**
-         * @return AUTH_CAPTURE and CAPTURE operations only (denotes if funds were captured)
-         */
-        public boolean isSettled() {
-            return settled;
-        }
-    }
-
 }

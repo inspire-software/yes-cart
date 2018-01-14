@@ -21,10 +21,12 @@ import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.payment.CallbackAware;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentLine;
+import org.yes.cart.payment.dto.impl.BasicCallbackInfoImpl;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.service.payment.PaymentLocaleTranslator;
@@ -44,7 +46,8 @@ import java.util.UUID;
  * Date: 19/11/2015
  * Time: 18:13
  */
-public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImpl implements PaymentGatewayExternalForm {
+public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImpl
+        implements PaymentGatewayExternalForm, CallbackAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(PayPalButtonPaymentGatewayImpl.class);
 
@@ -95,7 +98,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
         return null;
     }
 
-    private IPNMessage createIPNMessage(final Map<String, String[]> requestParams) {
+    protected IPNMessage createIPNMessage(final Map<String, String[]> requestParams) {
 
         final Map<String, String> configurationMap = new HashMap<String, String>();
         setParameterIfNotNull(configurationMap, "acct1.UserName", PPB_USER);
@@ -111,26 +114,50 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     /**
      * {@inheritDoc}
      */
-    public String restoreOrderGuid(final Map privateCallBackParameters) {
+    public Callback convertToCallback(final Map privateCallBackParameters) {
 
         final IPNMessage ipn = createIPNMessage(privateCallBackParameters);
         if (ipn.validate()) {
             LOG.debug("Signature is valid");
             final String invoice = ipn.getIpnValue("invoice");
-            if (StringUtils.isBlank(invoice)) {
-                return ipn.getIpnValue("custom");
+            final String paymentStatus = ipn.getIpnValue("payment_status");
+            final boolean refund = "Refunded".equalsIgnoreCase(paymentStatus);
+            BigDecimal callbackAmount = null;
+            try {
+                callbackAmount = new BigDecimal(ipn.getIpnValue("mc_gross"));
+                if (refund && callbackAmount.compareTo(BigDecimal.ZERO) < 0) {
+                    callbackAmount = callbackAmount.negate(); // if amount is negative turn it to positive
+                }
+            } catch (Exception exp) {
+                LOG.error("Callback for {} did not have a valid amount {}", invoice, ipn.getIpnValue("mc_gross"));
             }
-            return invoice;
+
+            if (StringUtils.isBlank(invoice)) {
+                return new BasicCallbackInfoImpl(
+                        ipn.getIpnValue("custom"),
+                        refund ? CallbackOperation.REFUND : CallbackOperation.PAYMENT,
+                        callbackAmount, privateCallBackParameters
+                );
+            }
+            return new BasicCallbackInfoImpl(
+                    invoice,
+                    refund ? CallbackOperation.REFUND : CallbackOperation.PAYMENT,
+                    callbackAmount, privateCallBackParameters
+            );
         } else {
             LOG.debug("Signature is not valid");
         }
-        return null;
+        return new BasicCallbackInfoImpl(
+                null,
+                CallbackOperation.INVALID,
+                null, privateCallBackParameters
+        );
     }
 
     /**
      * {@inheritDoc}
      */
-    public CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
 
         final Map<String, String[]> request = HttpParamsUtils.createArrayValueMap(callbackResult);
 
@@ -141,13 +168,13 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
 
             final String paymentStatus = ipn.getIpnValue("payment_status");
 
-            final boolean settled = "Completed".equals(paymentStatus);
+            final boolean settled = "Completed".equalsIgnoreCase(paymentStatus);
 
-            return settled ? CallbackResult.OK : CallbackResult.UNSETTLED;
+            return settled ? CallbackAware.CallbackResult.OK : CallbackAware.CallbackResult.UNSETTLED;
         } else {
             LOG.debug("Signature is not valid");
         }
-        return CallbackResult.FAILED;
+        return CallbackAware.CallbackResult.FAILED;
 
     }
 
@@ -336,7 +363,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
         }
         payment.setCardHolderName(name.length() > 0 ? name.toString() : null);
 
-        final CallbackResult res = getExternalCallbackResult(params);
+        final CallbackAware.CallbackResult res = getExternalCallbackResult(params);
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
 

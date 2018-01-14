@@ -23,8 +23,10 @@ import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.payment.CallbackAware;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.*;
+import org.yes.cart.payment.dto.impl.BasicCallbackInfoImpl;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.util.HttpParamsUtils;
@@ -40,7 +42,8 @@ import java.util.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPaymentGatewayImpl implements PaymentGatewayExternalForm {
+public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPaymentGatewayImpl
+        implements PaymentGatewayExternalForm, CallbackAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthorizeNetSimPaymentGatewayImpl.class);
 
@@ -254,21 +257,49 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
-    public String restoreOrderGuid(final Map privateCallBackParameters) {
+    public Callback convertToCallback(final Map privateCallBackParameters) {
 
         if (isValid(privateCallBackParameters)) {
             LOG.debug("Signature is valid");
-            return HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID));
+
+            final String xType = HttpParamsUtils.getSingleValue(privateCallBackParameters.get("x_type"));
+            CallbackOperation op = CallbackOperation.PAYMENT;
+            if ("CREDIT".equalsIgnoreCase(xType) || "VOID".equalsIgnoreCase(xType)) {
+                op = CallbackOperation.REFUND;
+            } else if ("PRIOR_AUTH_CAPTURE".equalsIgnoreCase(xType)) {
+                op = CallbackOperation.INFO;
+            }
+
+            BigDecimal callbackAmount = null;
+            try {
+                callbackAmount = new BigDecimal(HttpParamsUtils.getSingleValue(privateCallBackParameters.get("x_amount")));
+            } catch (Exception exp) {
+                LOG.error("Callback for {} did not have a valid amount {}",
+                        privateCallBackParameters.get("orderGuid"), privateCallBackParameters.get("x_amount"));
+            }
+
+
+            return new BasicCallbackInfoImpl(
+                    HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID)),
+                    op,
+                    callbackAmount,
+                    privateCallBackParameters
+            );
         } else {
             LOG.debug("Signature is not valid");
         }
-        return null;
+        return new BasicCallbackInfoImpl(
+                null,
+                CallbackOperation.INVALID,
+                null,
+                privateCallBackParameters
+        );
     }
 
     /**
      * {@inheritDoc}
      */
-    public CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
 
         /*
            See http://developer.authorize.net/guides/SIM/wwhelp/wwhimpl/js/html/wwhelp.htm#href=SIM_Trans_response.09.2.html
@@ -286,11 +317,11 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
             LOG.debug("Signature is not valid");
         }
         if ("1".equals(responseCode)) {
-            return CallbackResult.OK;
+            return CallbackAware.CallbackResult.OK;
         } else if ("4".equals(responseCode)) {
-            return CallbackResult.PROCESSING;
+            return CallbackAware.CallbackResult.PROCESSING;
         } else {
-            return CallbackResult.FAILED;
+            return CallbackAware.CallbackResult.FAILED;
         }
     }
 
@@ -507,7 +538,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         payment.setTransactionReferenceId(params.get("x_trans_id"));
         payment.setTransactionAuthorizationCode(params.get("x_auth_code"));
 
-        final CallbackResult res = getExternalCallbackResult(params);
+        final CallbackAware.CallbackResult res = getExternalCallbackResult(params);
 
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());

@@ -20,6 +20,8 @@ import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.payment.PaymentGateway;
@@ -42,6 +44,8 @@ import static org.junit.Assume.assumeTrue;
  * Time: 14:12:54
  */
 public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PayPalProPaymentGatewayImplTest.class);
 
     private PaymentProcessorSurrogate paymentProcessor;
     private PayPalProPaymentGatewayImpl payPalProPaymentGateway;
@@ -70,13 +74,14 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
                 && StringUtils.isNotBlank(card) && StringUtils.isNotBlank(expMM) && StringUtils.isNotBlank(expYYYY);
 
         if (enabled && !testConfigured) {
-            System.out.println("To run PayPal Pro test please enter configuration for your test account " +
-                    "(testPgPayProUser, testPgPayProPass, testPgPayProSignature, testPgPayProCard, testPgPayProCardMM and testPgPayProCardYYYY, )");
+
+            LOG.error("To run PayPal Pro test please enter all necessary configurations");
+
             enabled = false;
         }
 
         if (enabled) {
-            System.out.println("Running PayPal Pro using: " + user);
+            LOG.info("\n\n*** Running PayPal Pro using: {} ****\n\n", user);
         }
 
         return enabled;
@@ -89,8 +94,28 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        assumeTrue(isTestAllowed());
-        if (isTestAllowed()) {
+
+        final boolean allowed = isTestAllowed();
+
+        if (!allowed) {
+            LOG.warn("\n\n" +
+                    "***\n" +
+                    "PayPal Pro integration test is DISABLED.\n" +
+                    "You can enable test in /env/maven/${env}/config-module-paypal-[on/off].properties\n" +
+                    "Set:\n" +
+                    "testPgPayPro=true\n" +
+                    "testPgPayProUser=XXXXX\n" +
+                    "testPgPayProPass=XXXXX\n" +
+                    "testPgPayProSignature=XXXXX\n" +
+                    "testPgPayProCard=XXXXX\n" +
+                    "testPgPayProCardMM=XXXXX\n" +
+                    "testPgPayProCardYYYY=XXXXX\n\n" +
+                    "***\n\n\n");
+        }
+
+        assumeTrue(allowed);
+
+        if (allowed) {
             customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
             payPalProPaymentGateway = (PayPalProPaymentGatewayImpl) ctx().getBean("payPalProPaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, payPalProPaymentGateway);

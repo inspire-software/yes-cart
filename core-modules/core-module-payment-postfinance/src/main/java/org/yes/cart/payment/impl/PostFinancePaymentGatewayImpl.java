@@ -20,11 +20,13 @@ import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.payment.CallbackAware;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentAddress;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentLine;
+import org.yes.cart.payment.dto.impl.BasicCallbackInfoImpl;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.service.payment.PaymentLocaleTranslator;
@@ -45,7 +47,7 @@ import java.util.UUID;
  * Time: 14:47
  */
 public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGatewayImpl
-        implements PaymentGatewayExternalForm {
+        implements PaymentGatewayExternalForm, CallbackAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(PostFinancePaymentGatewayImpl.class);
 
@@ -118,7 +120,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
-    public String restoreOrderGuid(final Map privateCallBackParameters) {
+    public Callback convertToCallback(final Map privateCallBackParameters) {
 
         if (privateCallBackParameters != null) {
 
@@ -128,14 +130,32 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
             final String verify = sha1sign(sorted, getParameterValue(PF_SHA_OUT));
             if (verify.equals(signature)) {
                 LOG.debug("Signature is valid");
-                return sorted.get("ORDERID");
+
+                BigDecimal callbackAmount = null;
+                try {
+                    callbackAmount = new BigDecimal(sorted.get("AMOUNT"));
+                } catch (Exception exp) {
+                    LOG.error("Callback for {} did not have a valid amount {}", sorted.get("ORDERID"), sorted.get("AMOUNT"));
+                }
+
+                return new BasicCallbackInfoImpl(
+                        sorted.get("ORDERID"),
+                        CallbackOperation.PAYMENT,
+                        callbackAmount,
+                        privateCallBackParameters
+                );
             } else {
                 LOG.warn("Signature is not valid");
             }
 
         }
 
-        return null;
+        return new BasicCallbackInfoImpl(
+                null,
+                CallbackOperation.INVALID,
+                null,
+                privateCallBackParameters
+        );
 
     }
 
@@ -151,7 +171,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
-    public CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
 
         String statusRes = null;
 
@@ -183,11 +203,11 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
 
         if (success) {
             if ("51".equalsIgnoreCase(statusRes) || "91".equalsIgnoreCase(statusRes)) {
-                return CallbackResult.UNSETTLED;
+                return CallbackAware.CallbackResult.UNSETTLED;
             }
-            return CallbackResult.OK;
+            return CallbackAware.CallbackResult.OK;
         }
-        return CallbackResult.FAILED;
+        return CallbackAware.CallbackResult.FAILED;
 
     }
 
@@ -565,7 +585,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
             payment.setCardExpireYear(sorted.get("ED").substring(2, 4));
         }
 
-        final CallbackResult res = getExternalCallbackResult(raw);
+        final CallbackAware.CallbackResult res = getExternalCallbackResult(raw);
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
         final StringBuilder msg = new StringBuilder();

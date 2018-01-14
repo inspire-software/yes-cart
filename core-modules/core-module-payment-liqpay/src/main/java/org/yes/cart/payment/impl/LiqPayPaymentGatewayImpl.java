@@ -20,11 +20,13 @@ import com.liqpay.LiqPay;
 import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.payment.CallbackAware;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.PaymentMiscParam;
+import org.yes.cart.payment.dto.impl.BasicCallbackInfoImpl;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.util.HttpParamsUtils;
@@ -45,7 +47,7 @@ import java.util.UUID;
  * Time: 12:53 PM
  */
 public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
-        implements PaymentGatewayExternalForm {
+        implements PaymentGatewayExternalForm, CallbackAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(LiqPayPaymentGatewayImpl.class);
 
@@ -97,7 +99,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
-    public String restoreOrderGuid(final Map privateCallBackParameters) {
+    public Callback convertToCallback(final Map privateCallBackParameters) {
 
         if (privateCallBackParameters != null) {
 
@@ -130,22 +132,40 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
                     sender_phone);
 
             if (signature.equals(validSignature)) {
+
+                BigDecimal callbackAmount = null;
+                try {
+                    callbackAmount = new BigDecimal(amount);
+                } catch (Exception exp) {
+                    LOG.error("Callback for {} did not have a valid amount {}", order_id, amount);
+                }
+
                 LOG.debug("Signature is valid");
-                return order_id;
+                return new BasicCallbackInfoImpl(
+                        order_id,
+                        CallbackOperation.PAYMENT,
+                        callbackAmount,
+                        privateCallBackParameters
+                );
             } else {
                 LOG.debug("Signature is not valid");
             }
 
         }
 
-        return null;
+        return new BasicCallbackInfoImpl(
+                null,
+                CallbackOperation.INVALID,
+                null,
+                privateCallBackParameters
+        );
 
     }
 
     /**
      * {@inheritDoc}
      */
-    public CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
 
         String statusRes = null;
 
@@ -186,6 +206,19 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
 
         }
 
+        /*
+            success      - успешный платеж
+            failure      - неуспешный платеж
+            wait_secure  - платеж на проверке
+            wait_accept  - Деньги с клиента списаны, но магазин еще не прошел проверку
+            wait_lc      - Аккредитив. Деньги с клиента списаны, ожидается подтверждение доставки товара
+            processing   - Платеж обрабатывается
+            sandbox      - тестовый платеж
+            subscribed   - Подписка успешно оформлена
+            unsubscribed - Подписка успешно деактивирована
+            reversed     - Возврат клиенту после списания
+            cash_wait    - Ожидание оплаты счета
+         */
 
         final boolean success = statusRes != null &&
                 ("success".equalsIgnoreCase(statusRes)
@@ -199,11 +232,11 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
 
         if (success) {
             if ("wait_secure".equalsIgnoreCase(statusRes)) {
-                return CallbackResult.UNSETTLED;
+                return CallbackAware.CallbackResult.UNSETTLED;
             }
-            return CallbackResult.OK;
+            return CallbackAware.CallbackResult.OK;
         }
-        return CallbackResult.FAILED;
+        return CallbackAware.CallbackResult.FAILED;
 
     }
 
@@ -362,7 +395,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
         payment.setTransactionReferenceId(singleParamMap.get("transaction_id"));
         payment.setTransactionAuthorizationCode(singleParamMap.get("order_id")); // this is order guid - we need it for refunds
 
-        final CallbackResult res = getExternalCallbackResult(singleParamMap);
+        final CallbackAware.CallbackResult res = getExternalCallbackResult(singleParamMap);
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
 

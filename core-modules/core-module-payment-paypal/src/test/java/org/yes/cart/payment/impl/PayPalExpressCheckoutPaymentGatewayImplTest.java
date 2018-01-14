@@ -19,7 +19,9 @@ package org.yes.cart.payment.impl;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.yes.cart.payment.PaymentGateway;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yes.cart.payment.CallbackAware;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
@@ -43,6 +45,8 @@ import static org.junit.Assume.assumeTrue;
  */
 public class PayPalExpressCheckoutPaymentGatewayImplTest extends PaymentModuleDBTestCase {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PayPalExpressCheckoutPaymentGatewayImplTest.class);
+
     private PayPalExpressCheckoutPaymentGatewayImpl paymentGateway;
 
     private Boolean enabled;
@@ -61,13 +65,14 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends PaymentModuleDB
         boolean testConfigured = StringUtils.isNotBlank(user) && StringUtils.isNotBlank(pass) && StringUtils.isNotBlank(sign);
 
         if (enabled && !testConfigured) {
-            System.out.println("To run PayPal Express test please enter configuration for your test account " +
-                    "(testPgPayPalExpressUser, testPgPayPalExpressPass and testPgPayPalExpressSignature)");
+
+            LOG.error("To run PayPal Express test please enter all necessary configurations");
+
             enabled = false;
         }
 
         if (enabled) {
-            System.out.println("Running PayPal Express using: " + user);
+            LOG.info("\n\n*** Running PayPal Express using: {} ****\n\n", user);
         }
 
         return enabled;
@@ -80,8 +85,25 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends PaymentModuleDB
 
     @Before
     public void setUp() throws Exception {
-        assumeTrue(isTestAllowed());
-        if (isTestAllowed()) {
+
+        final boolean allowed = isTestAllowed();
+
+        if (!allowed) {
+            LOG.warn("\n\n" +
+                    "***\n" +
+                    "PayPal Express integration test is DISABLED.\n" +
+                    "You can enable test in /env/maven/${env}/config-module-paypal-[on/off].properties\n" +
+                    "Set:\n" +
+                    "testPgPayPalExpress=true\n" +
+                    "testPgPayPalExpressUser=XXXXX\n" +
+                    "testPgPayPalExpressPass=XXXXX\n" +
+                    "testPgPayPalExpressSignature=XXXXX\n\n" +
+                    "***\n\n\n");
+        }
+
+        assumeTrue(allowed);
+
+        if (allowed) {
             paymentGateway = (PayPalExpressCheckoutPaymentGatewayImpl) ctx().getBean("payPalExpressPaymentGateway");
 
             final Map<String, PaymentGatewayParameter> params = new HashMap<String, PaymentGatewayParameter>();
@@ -139,7 +161,7 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends PaymentModuleDB
             assertTrue(nvpCallResult.isEmpty());
 
             assertEquals("Express checkout call must be authorised before DoExpressCheckoutPayment",
-                    PaymentGateway.CallbackResult.FAILED, paymentGateway.getExternalCallbackResult(nvpCallResult));
+                    CallbackAware.CallbackResult.FAILED, paymentGateway.getExternalCallbackResult(nvpCallResult));
 
 
         } finally {

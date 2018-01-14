@@ -45,21 +45,4 @@ public interface PaymentGatewayExternalForm extends PaymentGateway {
      */
     String getSubmitButton(String locale);
 
-    /**
-     * Restore order number by given parameters
-     *
-     * @param privateCallBackParameters request parameters
-     * @return restore order number
-     */
-    String restoreOrderGuid(Map privateCallBackParameters);
-
-    /**
-     * Check the result for success attributes.
-     *
-     * @param callbackResult  call result
-     * @return  true in case of success
-     */
-    CallbackResult getExternalCallbackResult(Map<String, String> callbackResult);
-
-
 }

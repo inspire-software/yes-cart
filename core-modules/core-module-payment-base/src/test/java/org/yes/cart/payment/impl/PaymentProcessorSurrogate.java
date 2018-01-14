@@ -31,6 +31,7 @@ import org.yes.cart.service.payment.impl.PaymentProcessorImpl;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -119,166 +120,27 @@ public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
      */
     public String shipmentComplete(final CustomerOrder order, final String orderShipmentNumber, final BigDecimal addToPayment) {
 
-        if (getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize()) {
-
-            final boolean isMultiplePaymentsSupports = getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment();
-
-            final List<CustomerOrderPayment> paymentsToCapture =
-                    determineOpenAuthorisations(order.getOrdernum(), isMultiplePaymentsSupports ? orderShipmentNumber : order.getOrdernum());
-
-            LOG.debug("Attempting to capture funds for Order num {} Shipment num {}", order.getOrdernum(), orderShipmentNumber);
-
-            if (paymentsToCapture.size() > 1) {
-                LOG.warn( //must be only one record
-                        MessageFormat.format(
-                                "Payment gateway {0} with features {1}. Found {2} records to capture, but expected 1 only. Order num {3} Shipment num {4}",
-                                getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), paymentsToCapture.size(), order.getOrdernum(), orderShipmentNumber
-                        )
-                );
-            } else if (paymentsToCapture.isEmpty()) {
-                LOG.debug( //this could be a single payment PG and it was already captured
-                        MessageFormat.format(
-                                "Payment gateway {0} with features {1}. Found 0 records to capture, possibly already captured all payments. Order num {2} Shipment num {3}",
-                                getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), order.getOrdernum(), orderShipmentNumber
-                        )
-                );
-
-            }
-
-            final boolean forceManualProcessing = false; // Boolean.TRUE.equals(params.get("forceManualProcessing"));
-            final String forceManualProcessingMessage = null; // (String) params.get("forceManualProcessingMessage");
-            boolean wasError = false;
-            String paymentResult = null;
-
-            // We always attempt to Capture funds at this stage.
-            // Funds are captured either:
-            // 1. for delivery for authorise per shipment PG; or
-            // 2. captured as soon as first delivery is shipped (thereafter there will be no AUTHs to CAPTURE,
-            // so all subsequent deliveries will not have any paymentsToCapture)
-
-            for (CustomerOrderPayment paymentToCapture : paymentsToCapture) {
-                Payment payment = new PaymentImpl();
-                BeanUtils.copyProperties(paymentToCapture, payment); //from persisted to PG object
-                payment.setTransactionOperation(PaymentGateway.CAPTURE);
-                payment.setPaymentAmount(payment.getPaymentAmount().add(addToPayment).setScale(2, BigDecimal.ROUND_HALF_UP));
+        return shipmentComplete(order, orderShipmentNumber, new HashMap() {{
+            put("forceManualProcessing", false);
+            put("forceManualProcessingMessage", null);
+            put("forceAddToEveryPaymentAmount", addToPayment);
+        }});
 
 
-                try {
-                    if (forceManualProcessing) {
-                        payment.setTransactionReferenceId(UUID.randomUUID().toString());
-                        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-                        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
-                        payment.setPaymentProcessorBatchSettlement(true);
-                        payment.setTransactionGatewayLabel("forceManualProcessing");
-                        payment.setTransactionOperationResultCode("forceManualProcessing");
-                        payment.setTransactionOperationResultMessage(forceManualProcessingMessage);
-                    } else {
-                        payment = getPaymentGateway().capture(payment); //pass "original" to perform fund capture.
-                    }
-                    paymentResult = payment.getPaymentProcessorResult();
-                } catch (Throwable th) {
-                    paymentResult = Payment.PAYMENT_STATUS_FAILED;
-                    payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
-                    payment.setPaymentProcessorBatchSettlement(false);
-                    payment.setTransactionOperationResultMessage(th.getMessage());
-                    LOG.error("Cannot capture " + payment, th);
-
-                } finally {
-                    final CustomerOrderPayment captureOrderPayment = new CustomerOrderPaymentEntity();
-                    //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
-                    BeanUtils.copyProperties(payment, captureOrderPayment); //from PG object to persisted
-                    captureOrderPayment.setPaymentProcessorResult(paymentResult);
-                    captureOrderPayment.setShopCode(paymentToCapture.getShopCode());
-                    customerOrderPaymentService.create(captureOrderPayment);
-                }
-                if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
-                    wasError = true;
-                }
-            }
-
-            return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
-        }
-        return Payment.PAYMENT_STATUS_OK;
     }
 
 
     /**
      * {@inheritDoc}
      */
-    public String cancelOrder(final CustomerOrder order, boolean useRefund) {
+    public String cancelOrder(final CustomerOrder order, final boolean useRefund) {
 
-        if (!CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus()) &&
-                !CustomerOrder.ORDER_STATUS_RETURNED.equals(order.getOrderStatus())) {
+        return cancelOrder(order, new HashMap() {{
+            put("forceManualProcessing", false);
+            put("forceManualProcessingMessage", null);
+            put("forceAutoProcessingOperation", useRefund ? PaymentGateway.REFUND : PaymentGateway.VOID_CAPTURE);
+        }});
 
-            reverseAuthorizations(order.getOrdernum());
-
-            final boolean forceManualProcessing = false; // Boolean.TRUE.equals(params.get("forceManualProcessing"));
-            final String forceManualProcessingMessage = null; // (String) params.get("forceManualProcessingMessage");
-            boolean wasError = false;
-
-            final List<CustomerOrderPayment> paymentsToRollBack = determineOpenCaptures(order.getOrdernum(), null);
-
-            /*
-               We do NOT need to check for features (isSupportRefund(), isSupportVoid()). PG must create payments with
-               Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED for audit purposes and manual flow support.
-            */
-
-            for (CustomerOrderPayment customerOrderPayment : paymentsToRollBack) {
-                Payment payment = null;
-                String paymentResult = null;
-                try {
-                    payment = new PaymentImpl();
-                    BeanUtils.copyProperties(customerOrderPayment, payment); //from persisted to PG object
-                    if (forceManualProcessing) {
-                        payment.setTransactionOperation(PaymentGateway.REFUND);
-                        payment.setTransactionReferenceId(UUID.randomUUID().toString());
-                        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-                        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
-                        payment.setPaymentProcessorBatchSettlement(false);
-                        payment.setTransactionGatewayLabel("forceManualProcessing");
-                        payment.setTransactionOperationResultCode("forceManualProcessing");
-                        payment.setTransactionOperationResultMessage(forceManualProcessingMessage);
-                    } else {
-                        if (useRefund /* customerOrderPayment.isPaymentProcessorBatchSettlement()*/) {
-                            // refund
-                            payment.setTransactionOperation(PaymentGateway.REFUND);
-                            payment = getPaymentGateway().refund(payment);
-                        } else {
-                            //void
-                            payment.setTransactionOperation(PaymentGateway.VOID_CAPTURE);
-                            payment = getPaymentGateway().voidCapture(payment);
-                        }
-                    }
-                    paymentResult = payment.getPaymentProcessorResult();
-                } catch (Throwable th) {
-                    LOG.error(
-                            MessageFormat.format(
-                                    "Can not perform roll back operation on payment record {0} payment {1}",
-                                    customerOrderPayment.getCustomerOrderPaymentId(),
-                                    payment
-                            ), th
-                    );
-                    paymentResult = Payment.PAYMENT_STATUS_FAILED;
-                    wasError = true;
-                } finally {
-                    final CustomerOrderPayment captureReversedOrderPayment = new CustomerOrderPaymentEntity();
-                    //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
-                    BeanUtils.copyProperties(payment, captureReversedOrderPayment); //from PG object to persisted
-                    captureReversedOrderPayment.setPaymentProcessorResult(paymentResult);
-                    captureReversedOrderPayment.setShopCode(customerOrderPayment.getShopCode());
-                    customerOrderPaymentService.create(captureReversedOrderPayment);
-                }
-                if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
-                    wasError = true;
-                }
-
-
-            }
-
-            return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
-        }
-        LOG.warn("Cannot refund canceled order  {}", order.getOrdernum());
-        return Payment.PAYMENT_STATUS_FAILED;
     }
 
 

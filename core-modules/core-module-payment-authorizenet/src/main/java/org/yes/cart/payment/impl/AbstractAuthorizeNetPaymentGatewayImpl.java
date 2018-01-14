@@ -31,7 +31,8 @@ import java.util.List;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractAuthorizeNetBasePaymentGatewayImpl implements PaymentGateway {
+public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractAuthorizeNetBasePaymentGatewayImpl
+        implements PaymentGateway {
 
 
     /**

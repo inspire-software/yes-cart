@@ -20,6 +20,8 @@ import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.payment.PaymentGateway;
@@ -44,6 +46,8 @@ import static org.junit.Assume.assumeTrue;
  */
 public class CyberSourcePaymentGatewayImplTest extends PaymentModuleDBTestCase {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CyberSourcePaymentGatewayImplTest.class);
+
     private PaymentProcessorSurrogate paymentProcessor;
     private PaymentGatewayInternalForm cyberSourcePaymentGateway;
     private CustomerOrderPaymentService customerOrderPaymentService;
@@ -63,13 +67,14 @@ public class CyberSourcePaymentGatewayImplTest extends PaymentModuleDBTestCase {
         boolean testConfigured = StringUtils.isNotBlank(organisation) && StringUtils.isNotBlank(absPathToP12);
 
         if (enabled && !testConfigured) {
-            System.out.println("To run CyberSource test please enter configuration for your test account " +
-                    "(testPgCyberSourceOrg, testPgCyberSourceKeys)");
+
+            LOG.error("To run CyberSource test please enter all necessary configurations");
+
             enabled = false;
         }
 
         if (enabled) {
-            System.out.println("Running CyberSource using: " + organisation);
+            LOG.info("\n\n*** Running CyberSource using: {} ****\n\n", organisation);
         }
 
         return enabled;
@@ -82,8 +87,24 @@ public class CyberSourcePaymentGatewayImplTest extends PaymentModuleDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        assumeTrue(isTestAllowed());
-        if (isTestAllowed()) {
+
+        final boolean allowed = isTestAllowed();
+
+        if (!allowed) {
+            LOG.warn("\n\n" +
+                    "***\n" +
+                    "AuthorizeNetAim integration test is DISABLED.\n" +
+                    "You can enable test in /env/maven/${env}/config-module-cybersource-[on/off].properties\n" +
+                    "Set:\n" +
+                    "testPgCyberSource=true\n" +
+                    "testPgCyberSourceOrg=XXXXX\n" +
+                    "testPgCyberSourceKeys=/path/to/key/file\n\n" +
+                    "***\n\n\n");
+        }
+
+        assumeTrue(allowed);
+
+        if (allowed) {
             customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
             cyberSourcePaymentGateway = (PaymentGatewayInternalForm) ctx().getBean("cyberSourcePaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, cyberSourcePaymentGateway);

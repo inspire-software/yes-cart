@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
@@ -222,7 +223,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         }
         throw new RuntimeException(
                 MessageFormat.format(
-                        "Payment gateway {0}  must supports 'authorize' or 'authorize-capture' operations",
+                        "Payment gateway {0}  must support either 'authorize' or 'authorize-capture' operations",
                         getPaymentGateway().getLabel()
                 )
         );
@@ -256,12 +257,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     payment.setTransactionOperationResultMessage(th.getMessage());
 
                 } finally {
-                    final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
-                    //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
-                    BeanUtils.copyProperties(payment, authReversedOrderPayment); //from PG object to persisted
-                    authReversedOrderPayment.setPaymentProcessorResult(paymentResult);
-                    authReversedOrderPayment.setShopCode(customerOrderPayment.getShopCode());
-                    customerOrderPaymentService.create(authReversedOrderPayment);
+                    savePaymentTransaction(customerOrderPayment, payment, paymentResult);
                 }
             }
         }
@@ -274,10 +270,10 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         if (getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize()) {
 
-            final boolean isMultiplePaymentsSupports = getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment();
+            final boolean isMultiplePayment = getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment();
 
             final List<CustomerOrderPayment> paymentsToCapture =
-                    determineOpenAuthorisations(order.getOrdernum(), isMultiplePaymentsSupports ? orderShipmentNumber : order.getOrdernum());
+                    determineOpenAuthorisations(order.getOrdernum(), isMultiplePayment ? orderShipmentNumber : order.getOrdernum());
 
             LOG.info("Attempting to capture funds for Order num {} Shipment num {}", order.getOrdernum(), orderShipmentNumber);
 
@@ -300,6 +296,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
             final boolean forceManualProcessing = Boolean.TRUE.equals(params.get("forceManualProcessing"));
             final String forceManualProcessingMessage = (String) params.get("forceManualProcessingMessage");
+            final BigDecimal forceAddToEveryPaymentAmount = (BigDecimal) params.get("forceAddToEveryPaymentAmount");
             boolean wasError = false;
             String paymentResult = null;
 
@@ -313,6 +310,9 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 Payment payment = new PaymentImpl();
                 BeanUtils.copyProperties(paymentToCapture, payment); //from persisted to PG object
                 payment.setTransactionOperation(PaymentGateway.CAPTURE);
+                if (forceAddToEveryPaymentAmount != null) {
+                    payment.setPaymentAmount(payment.getPaymentAmount().add(forceAddToEveryPaymentAmount).setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
 
 
                 try {
@@ -336,12 +336,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     LOG.error(Markers.alert(), "CAPTURE transaction [" + payment.getTransactionReferenceId() + "] failed, cause: " + th.getMessage());
                     LOG.error("CAPTURE transaction [" + payment + "] failed, cause: " + payment, th);
                 } finally {
-                    final CustomerOrderPayment captureOrderPayment = new CustomerOrderPaymentEntity();
-                    //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
-                    BeanUtils.copyProperties(payment, captureOrderPayment); //from PG object to persisted
-                    captureOrderPayment.setPaymentProcessorResult(paymentResult);
-                    captureOrderPayment.setShopCode(paymentToCapture.getShopCode());
-                    customerOrderPaymentService.create(captureOrderPayment);
+                    savePaymentTransaction(paymentToCapture, payment, paymentResult);
                 }
                 if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
                     wasError = true;
@@ -366,7 +361,10 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
             final boolean forceManualProcessing = Boolean.TRUE.equals(params.get("forceManualProcessing"));
             final String forceManualProcessingMessage = (String) params.get("forceManualProcessingMessage");
+            final String forceAutoProcessingOperation = (String) params.get("forceAutoProcessingOperation");
             boolean wasError = false;
+
+            BigDecimal orderRemainderAmount = customerOrderPaymentService.getOrderAmount(order.getOrdernum());
 
             final List<CustomerOrderPayment> paymentsToRollBack = determineOpenCaptures(order.getOrdernum(), null);
 
@@ -381,22 +379,78 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 try {
                     payment = new PaymentImpl();
                     BeanUtils.copyProperties(customerOrderPayment, payment); //from persisted to PG object
+                    payment.setPaymentProcessorBatchSettlement(false); // refund is always not a settlement
                     if (forceManualProcessing) {
-                        payment.setTransactionOperation(PaymentGateway.REFUND);
+                        if (forceAutoProcessingOperation != null) {
+                            if (PaymentGateway.REFUND.equals(forceAutoProcessingOperation)) {
+                                payment.setTransactionOperation(PaymentGateway.REFUND);
+                                if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(payment.getPaymentAmount(), orderRemainderAmount)) {
+                                    // possible partial refunds taken place
+                                    payment.setPaymentAmount(orderRemainderAmount);
+                                    orderRemainderAmount = BigDecimal.ZERO;
+                                } else {
+                                    orderRemainderAmount = orderRemainderAmount.subtract(payment.getPaymentAmount());
+                                }
+                            } else {
+                                payment.setTransactionOperation(PaymentGateway.VOID_CAPTURE);
+                            }
+                        } else if (customerOrderPayment.isPaymentProcessorBatchSettlement()) {
+                            payment.setTransactionOperation(PaymentGateway.REFUND);
+                            if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(payment.getPaymentAmount(), orderRemainderAmount)) {
+                                // possible partial refunds taken place
+                                payment.setPaymentAmount(orderRemainderAmount);
+                                orderRemainderAmount = BigDecimal.ZERO;
+                            } else {
+                                orderRemainderAmount = orderRemainderAmount.subtract(payment.getPaymentAmount());
+                            }
+                        } else {
+                            payment.setTransactionOperation(PaymentGateway.VOID_CAPTURE);
+                        }
                         payment.setTransactionReferenceId(UUID.randomUUID().toString());
                         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
                         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
-                        payment.setPaymentProcessorBatchSettlement(false);
                         payment.setTransactionGatewayLabel("forceManualProcessing");
                         payment.setTransactionOperationResultCode("forceManualProcessing");
                         payment.setTransactionOperationResultMessage(forceManualProcessingMessage);
                     } else {
-                        if (customerOrderPayment.isPaymentProcessorBatchSettlement()) {
+                        if (forceAutoProcessingOperation != null) {
+
+                            LOG.warn("Forcing auto refund/void operation {} on order {}", forceAutoProcessingOperation, order.getOrdernum());
+
+                            if (PaymentGateway.REFUND.equals(forceAutoProcessingOperation)) {
+
+                                // force refund
+                                payment.setTransactionOperation(PaymentGateway.REFUND);
+                                if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(payment.getPaymentAmount(), orderRemainderAmount)) {
+                                    // possible partial refunds taken place
+                                    payment.setPaymentAmount(orderRemainderAmount);
+                                    orderRemainderAmount = BigDecimal.ZERO;
+                                } else {
+                                    orderRemainderAmount = orderRemainderAmount.subtract(payment.getPaymentAmount());
+                                }
+                                payment = getPaymentGateway().refund(payment);
+
+                            } else {
+
+                                // force void
+                                payment.setTransactionOperation(PaymentGateway.VOID_CAPTURE);
+                                payment = getPaymentGateway().voidCapture(payment);
+
+                            }
+
+                        } else if (customerOrderPayment.isPaymentProcessorBatchSettlement()) {
                             // refund
                             payment.setTransactionOperation(PaymentGateway.REFUND);
+                            if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(payment.getPaymentAmount(), orderRemainderAmount)) {
+                                // possible partial refunds taken place
+                                payment.setPaymentAmount(orderRemainderAmount);
+                                orderRemainderAmount = BigDecimal.ZERO;
+                            } else {
+                                orderRemainderAmount = orderRemainderAmount.subtract(payment.getPaymentAmount());
+                            }
                             payment = getPaymentGateway().refund(payment);
                         } else {
-                            //void
+                            // void
                             payment.setTransactionOperation(PaymentGateway.VOID_CAPTURE);
                             payment = getPaymentGateway().voidCapture(payment);
                         }
@@ -413,12 +467,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     paymentResult = Payment.PAYMENT_STATUS_FAILED;
                     wasError = true;
                 } finally {
-                    final CustomerOrderPayment captureReversedOrderPayment = new CustomerOrderPaymentEntity();
-                    //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
-                    BeanUtils.copyProperties(payment, captureReversedOrderPayment); //from PG object to persisted
-                    captureReversedOrderPayment.setPaymentProcessorResult(paymentResult);
-                    captureReversedOrderPayment.setShopCode(customerOrderPayment.getShopCode());
-                    customerOrderPaymentService.create(captureReversedOrderPayment);
+                    savePaymentTransaction(customerOrderPayment, payment, paymentResult);
                 }
                 if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
                     wasError = true;
@@ -429,10 +478,113 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
             return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
         }
-        LOG.warn("Cannot refund canceled order  {}",
-                order.getOrdernum()
-        );
+        LOG.warn("Cannot refund canceled order  {}", order.getOrdernum());
         return Payment.PAYMENT_STATUS_FAILED;
+    }
+
+
+    /**
+     * Perform local refund operation, i.e. find payment transactions notification refers to
+     * and mark them as refunded externally.
+     *
+     * @param order order to cancel.
+     * @param params for payment gateway to create template from.
+     *
+     * @return status of operation.
+     */
+    public String refundNotification(final CustomerOrder order, final Map params) {
+
+        final Object amountObj = params.get("refundNotificationAmount");
+        BigDecimal refundAmount = BigDecimal.ZERO;
+        if (amountObj instanceof BigDecimal && MoneyUtils.isFirstBiggerThanSecond((BigDecimal) amountObj, BigDecimal.ZERO)) {
+
+            refundAmount = ((BigDecimal) amountObj).setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP);
+
+        }
+
+        if (MoneyUtils.isFirstEqualToSecond(refundAmount, BigDecimal.ZERO)) {
+            LOG.warn("No refunds can be processed for {} for order {} because refund amount is invalid", refundAmount, order.getOrdernum());
+            return Payment.PAYMENT_STATUS_FAILED;
+        }
+
+        boolean wasError = false;
+
+        final List<CustomerOrderPayment> paymentsToRollBack = determineOpenCaptures(order.getOrdernum(), null);
+
+        final List<CustomerOrderPayment> paymentsInThisRefund = new ArrayList<CustomerOrderPayment>(paymentsToRollBack);
+
+        for (CustomerOrderPayment customerOrderPayment : paymentsToRollBack) {
+            if (MoneyUtils.isFirstEqualToSecond(refundAmount, customerOrderPayment.getPaymentAmount())) {
+                // This is exact amount, so we only need this payment
+                paymentsInThisRefund.clear();
+                paymentsInThisRefund.add(customerOrderPayment);
+            }
+        }
+
+        if (CollectionUtils.isEmpty(paymentsInThisRefund)) {
+            LOG.warn("No refunds can be processed for {} for order {} because there are no open captures", refundAmount, order.getOrdernum());
+            return Payment.PAYMENT_STATUS_FAILED;
+        }
+
+        BigDecimal rem = refundAmount;
+
+        for (CustomerOrderPayment customerOrderPayment : paymentsInThisRefund) {
+            Payment payment = null;
+            String paymentResult = null;
+            try {
+                payment = new PaymentImpl();
+                BeanUtils.copyProperties(customerOrderPayment, payment); //from persisted to PG object
+                payment.setPaymentProcessorBatchSettlement(false);
+                if (customerOrderPayment.isPaymentProcessorBatchSettlement()) {
+                    payment.setTransactionOperation(PaymentGateway.REFUND);
+                } else {
+                    payment.setTransactionOperation(PaymentGateway.VOID_CAPTURE);
+                }
+                payment.setTransactionOperationResultMessage("Refund notification received for " + refundAmount.toPlainString());
+                if (MoneyUtils.isFirstBiggerThanSecond(customerOrderPayment.getPaymentAmount(), rem)) {
+                    // partial refund
+                    payment.setPaymentAmount(rem);
+                    rem = BigDecimal.ZERO;
+                } else {
+                    // full refund for this transaction
+                    rem = rem.subtract(customerOrderPayment.getPaymentAmount());
+                }
+                paymentResult = Payment.PAYMENT_STATUS_OK; // result is OK since this is notification of refund
+            } catch (Throwable th) {
+                LOG.error(
+                        MessageFormat.format(
+                                "Can not perform roll back operation on payment record {0} payment {1}",
+                                customerOrderPayment.getCustomerOrderPaymentId(),
+                                payment
+                        ), th
+                );
+                paymentResult = Payment.PAYMENT_STATUS_FAILED;
+                wasError = true;
+            } finally {
+                savePaymentTransaction(customerOrderPayment, payment, paymentResult);
+            }
+            if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
+                wasError = true;
+            }
+
+            if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ZERO, rem)) {
+                break; // end the loop, we exhausted refund
+            }
+
+        }
+
+        return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
+    }
+
+    private void savePaymentTransaction(final CustomerOrderPayment original,
+                                        final Payment newTransaction,
+                                        final String paymentResult) {
+        final CustomerOrderPayment orderPayment = new CustomerOrderPaymentEntity();
+        //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
+        BeanUtils.copyProperties(newTransaction, orderPayment); //from PG object to persisted
+        orderPayment.setPaymentProcessorResult(paymentResult);
+        orderPayment.setShopCode(original.getShopCode());
+        customerOrderPaymentService.create(orderPayment);
     }
 
 

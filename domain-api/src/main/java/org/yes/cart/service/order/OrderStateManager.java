@@ -57,6 +57,7 @@ public interface OrderStateManager {
     String EVT_CANCEL_NEW_WITH_REFUND       = "evt.new.order.cancel.refund";   // cancel event with refund for not yet reserved.
     String EVT_CANCEL_WITH_REFUND           = "evt.order.cancel.refund";       // cancel event with refund and credit quantity.
     String EVT_REFUND_PROCESSED             = "evt.refund.processed";          // REFUND payment response with update on processed payment (in case refund was in processing at the time of cancellation).
+    String EVT_REFUND_EXTERNAL              = "evt.refund.external";           // REFUND payment response with update on processed payment (in case refund was done outside of YC).
     String EVT_PROCESS_TIME_WAIT            = "evt.process.date.wait";         // wait till date
     String EVT_PROCESS_INVENTORY_WAIT       = "evt.process.inventory.wait";    // wait till available quantity state
     String EVT_PROCESS_ALLOCATION_WAIT      = "evt.process.allocation.wait";   // wait till allocation job

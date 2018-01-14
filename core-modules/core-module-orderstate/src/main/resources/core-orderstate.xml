@@ -83,6 +83,15 @@
         </property>
     </bean>
 
+    <bean id="externalRefundOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.ExternalRefundOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="paymentProcessorFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+
     <!--Perform separate processing of order deliveries-->
     <bean id="paymentOkOrderEventHandler"
           class="org.yes.cart.service.order.impl.handler.PaymentOkOrderEventHandlerImpl"/>
@@ -321,6 +330,7 @@
                 <entry key="evt.order.cancel.refund"       value-ref="cancelOrderWithRefundOrderEventHandler"/>
                 <entry key="evt.new.order.cancel.refund"   value-ref="cancelNewOrderWithRefundOrderEventHandler"/>
                 <entry key="evt.refund.processed"          value-ref="refundProcessedOrderEventHandler"/>
+                <entry key="evt.refund.external"           value-ref="externalRefundOrderEventHandler"/>
                 <entry key="evt.delivery.update"           value-ref="deliveryUpdateOrderEventHandler"/>
             </map>
         </constructor-arg>

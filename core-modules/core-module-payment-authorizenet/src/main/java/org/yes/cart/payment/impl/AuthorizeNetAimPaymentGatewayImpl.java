@@ -33,7 +33,8 @@ import org.yes.cart.util.log.Markers;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPaymentGatewayImpl implements PaymentGatewayInternalForm {
+public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPaymentGatewayImpl
+        implements PaymentGatewayInternalForm {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthorizeNetAimPaymentGatewayImpl.class);
 

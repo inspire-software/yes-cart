@@ -1,6 +1,7 @@
 package org.yes.cart.payment.impl;
 
 import org.junit.Test;
+import org.yes.cart.payment.CallbackAware;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentAddress;
 import org.yes.cart.payment.dto.PaymentLine;
@@ -205,7 +206,10 @@ public class PostFinancePaymentGatewayImplTest {
         }};
 
         assertEquals(Payment.PAYMENT_STATUS_FAILED, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
-        assertNull(gatewayImpl.restoreOrderGuid(callBackresult));
+        final CallbackAware.Callback badCallback = gatewayImpl.convertToCallback(callBackresult);
+        assertEquals(CallbackAware.CallbackOperation.INVALID, badCallback.getOperation());
+        assertNull(badCallback.getOrderGuid());
+        assertNull(badCallback.getAmount());
 
         final Map<String, String> sorted = new TreeMap<String, String>();
         gatewayImpl.copyHttpParamsAndRemoveSignature(callBackresult, sorted);
@@ -214,7 +218,10 @@ public class PostFinancePaymentGatewayImplTest {
 
 
         assertEquals(expectedStatus, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
-        assertEquals("12", gatewayImpl.restoreOrderGuid(callBackresult));
+        final CallbackAware.Callback goodCallback = gatewayImpl.convertToCallback(callBackresult);
+        assertEquals(CallbackAware.CallbackOperation.PAYMENT, goodCallback.getOperation());
+        assertEquals("12", goodCallback.getOrderGuid());
+        assertEquals(new BigDecimal("15"), goodCallback.getAmount());
     }
 
 

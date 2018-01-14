@@ -42,7 +42,8 @@ import java.util.UUID;
  * Date: 24/11/2015
  * Time: 08:29
  */
-public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGatewayImpl implements PaymentGatewayInternalForm {
+public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGatewayImpl
+        implements PaymentGatewayInternalForm {
 
     private static final Logger LOG = LoggerFactory.getLogger(PayPalProPaymentGatewayImpl.class);
 
