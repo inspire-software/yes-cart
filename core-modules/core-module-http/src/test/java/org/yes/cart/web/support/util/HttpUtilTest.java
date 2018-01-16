@@ -53,7 +53,7 @@ public class HttpUtilTest {
     @Test
     public void testGetParameters() throws Exception {
 
-        String request = "/yes-shop/category/abc/sku/xyz?a=a1&a=a2&b=b1";
+        String request = "/category/abc/sku/xyz?a=a1&a=a2&b=b1";
 
         Map<String, List<String>> parameters;
         Iterator<Map.Entry<String, List<String>>> parametersIt;
@@ -133,7 +133,7 @@ public class HttpUtilTest {
     @Test
     public void testGetParametersWithDuplicatesPreserve() throws Exception {
 
-        String request = "/yes-shop/category/abc/sku/xyz/category/abc/sku/xyz?a=a1&a=a2&b=b1&a=a1&a=a2&b=b1";
+        String request = "/category/abc/sku/xyz/category/abc/sku/xyz?a=a1&a=a2&b=b1&a=a1&a=a2&b=b1";
 
         Map<String, List<String>> parameters;
         Iterator<Map.Entry<String, List<String>>> parametersIt;
@@ -226,7 +226,7 @@ public class HttpUtilTest {
     @Test
     public void testGetParametersWithDuplicatesRemove() throws Exception {
 
-        String request = "/yes-shop/category/abc/sku/xyz/category/abc/sku/xyz?a=a1&a=a2&b=b1&a=a1&a=a2&b=b1";
+        String request = "/category/abc/sku/xyz/category/abc/sku/xyz?a=a1&a=a2&b=b1&a=a1&a=a2&b=b1";
 
         Map<String, List<String>> parameters;
         Iterator<Map.Entry<String, List<String>>> parametersIt;
@@ -307,7 +307,7 @@ public class HttpUtilTest {
     @Test
     public void testGetParameters2() throws Exception {
 
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/yes-shop/category/abc/sku/xyz");
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/category/abc/sku/xyz");
         request.setQueryString("a=a1&a=a2&b=b1");
 
         Map<String, List<String>> parameters;
@@ -388,7 +388,7 @@ public class HttpUtilTest {
     @Test
     public void testGetParameters2WithDuplicatesPreserve() throws Exception {
 
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/yes-shop/category/abc/sku/xyz/category/abc/sku/xyz");
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/category/abc/sku/xyz/category/abc/sku/xyz");
         request.setQueryString("a=a1&a=a2&b=b1&a=a1&a=a2&b=b1");
 
         Map<String, List<String>> parameters;
@@ -481,7 +481,7 @@ public class HttpUtilTest {
     @Test
     public void testGetParameters2WithDuplicatesRemove() throws Exception {
 
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/yes-shop/category/abc/sku/xyz/category/abc/sku/xyz");
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/category/abc/sku/xyz/category/abc/sku/xyz");
         request.setQueryString("a=a1&a=a2&b=b1&a=a1&a=a2&b=b1");
 
         Map<String, List<String>> parameters;
@@ -562,7 +562,7 @@ public class HttpUtilTest {
     @Test
     public void testAllParameters() throws Exception {
 
-        MockHttpServletRequest request = new MockHttpServletRequest("POST", "/yes-shop/category/abc/sku/xyz");
+        MockHttpServletRequest request = new MockHttpServletRequest("POST", "/category/abc/sku/xyz");
         request.setQueryString("a=a1");
         request.addParameter("a", "a2");
         request.addParameter("b", "b1");
@@ -645,7 +645,7 @@ public class HttpUtilTest {
     @Test
     public void testAllParametersWithDuplicatesPreserve() throws Exception {
 
-        MockHttpServletRequest request = new MockHttpServletRequest("POST", "/yes-shop/category/abc/sku/xyz/category/abc/sku/xyz");
+        MockHttpServletRequest request = new MockHttpServletRequest("POST", "/category/abc/sku/xyz/category/abc/sku/xyz");
         request.setQueryString("a=a1&a=a1");
         request.addParameter("a", "a2");
         request.addParameter("a", "a2");
@@ -742,7 +742,7 @@ public class HttpUtilTest {
     @Test
     public void testAllParametersWithDuplicatesRemove() throws Exception {
 
-        MockHttpServletRequest request = new MockHttpServletRequest("POST", "/yes-shop/category/abc/sku/xyz/category/abc/sku/xyz");
+        MockHttpServletRequest request = new MockHttpServletRequest("POST", "/category/abc/sku/xyz/category/abc/sku/xyz");
         request.setQueryString("a=a1&a=a1");
         request.addParameter("a", "a2");
         request.addParameter("a", "a2");

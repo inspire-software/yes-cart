@@ -31,4 +31,4 @@ out.print(e.getMessage());
 %>
 
 You can view detailed information in order history
-"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"
+"<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"

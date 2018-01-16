@@ -22,7 +22,7 @@
         <node-type>SFW</node-type>
         <node-config>DEFAULT</node-config>
         <lucene-index-disabled>false</lucene-index-disabled>
-        <channel>http://localhost:8080/yes-shop/services/backdoor</channel>
+        <channel>http://localhost:8080/services/backdoor</channel>
     </node>
     <node>
         <cluster-id>TESTCLUSTER</cluster-id>

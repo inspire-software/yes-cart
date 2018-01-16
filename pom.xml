@@ -58,7 +58,7 @@
             Webapps config META-INF context.xml path are specified in config-cluster.properties
             These are finalNames defaults. Must be here as finalNames does not support filters files.
          -->
-        <webapp.yes.war.name>yes-shop</webapp.yes.war.name>
+        <webapp.yes.war.name>ROOT</webapp.yes.war.name>
         <webapp.api.war.name>yes-api</webapp.api.war.name>
         <webapp.admin.war.name>yes-manager</webapp.admin.war.name>
 

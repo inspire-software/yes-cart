@@ -52,7 +52,7 @@ public class NodeConfigurationXStreamProviderTest {
         assertEquals("SFW", yes0.getNodeType());
         assertEquals("DEFAULT", yes0.getNodeConfig());
         assertFalse(yes0.isFtIndexDisabled());
-        assertEquals("http://localhost:8080/yes-shop/services/backdoor", yes0.getChannel());
+        assertEquals("http://localhost:8080/services/backdoor", yes0.getChannel());
 
         final Node yes1 = cluster.get(1);
         assertEquals("TESTCLUSTER.YES1", yes1.getId());

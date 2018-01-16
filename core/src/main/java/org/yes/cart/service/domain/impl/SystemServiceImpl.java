@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.core.io.Resource;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
@@ -34,9 +35,11 @@ import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -56,6 +59,10 @@ public class SystemServiceImpl implements SystemService {
     private final RuntimeAttributeService runtimeAttributeService;
 
     private final Cache PREF_CACHE;
+
+    private String imagevaultDefaultRoot = null;
+    private String filevaultDefaultRoot = null;
+    private String sysfilevaultDefaultRoot = null;
 
     /**
      * Construct system services, which is determinate shop set.
@@ -240,7 +247,11 @@ public class SystemServiceImpl implements SystemService {
 
         final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_IMAGE_VAULT);
         if (StringUtils.isBlank(attrValue)) {
-            return "context://../imagevault/";
+            if (StringUtils.isBlank(this.imagevaultDefaultRoot)) {
+                throw new RuntimeException(AttributeNamesKeys.System.SYSTEM_IMAGE_VAULT
+                        + " is not specified. Please specify absolute path. E.g.: file://path/to/imagevault/");
+            }
+            return this.imagevaultDefaultRoot;
         }
 
         return addTailFileSeparator(attrValue);
@@ -253,7 +264,11 @@ public class SystemServiceImpl implements SystemService {
 
         final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_FILE_VAULT);
         if (StringUtils.isBlank(attrValue)) {
-            return "context://../filevault/";
+            if (StringUtils.isBlank(this.filevaultDefaultRoot)) {
+                throw new RuntimeException(AttributeNamesKeys.System.SYSTEM_FILE_VAULT
+                        + " is not specified. Please specify absolute path. E.g.: file://path/to/filevault/");
+            }
+            return this.filevaultDefaultRoot;
         }
 
         return addTailFileSeparator(attrValue);
@@ -266,7 +281,11 @@ public class SystemServiceImpl implements SystemService {
 
         final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_SYSFILE_VAULT);
         if (StringUtils.isBlank(attrValue)) {
-            return "context://../sysfilevault/";
+            if (StringUtils.isBlank(this.sysfilevaultDefaultRoot)) {
+                throw new RuntimeException(AttributeNamesKeys.System.SYSTEM_SYSFILE_VAULT
+                        + " is not specified. Please specify absolute path. E.g.: file://path/to/sysfilevault/");
+            }
+            return this.sysfilevaultDefaultRoot;
         }
 
         return addTailFileSeparator(attrValue);
@@ -336,6 +355,19 @@ public class SystemServiceImpl implements SystemService {
         // Strping AOP
         return null;
     }
+
+
+    public void setConfig(final Resource config) throws IOException {
+
+        final Properties properties = new Properties();
+        properties.load(config.getInputStream());
+
+        this.imagevaultDefaultRoot = properties.getProperty("imagevault.default", null);
+        this.filevaultDefaultRoot = properties.getProperty("filevault.default", null);
+        this.sysfilevaultDefaultRoot = properties.getProperty("sysfilevault.default", null);
+
+    }
+
 
 
 }

@@ -185,19 +185,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
 
         if (StringUtils.isBlank(desc)) {
 
-            if (StringUtils.isBlank(getDescription())) {
-                //failover to product description
-                final String pDesc = getProduct().getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
-                if (StringUtils.isBlank(pDesc)) {
-                    return getProduct().getDescription();
-                }
-                return pDesc;
-
-            } else {
-
-                return getDescription();
-
-            }
+            return getDescription();
 
         }
         return desc;

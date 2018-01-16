@@ -326,7 +326,7 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11018,  'SYSTEM_PREVIEW_URI_CSS', 'SYSTEM_PREVIEW_URI_CSS',  1,  NULL,  'Admin\\CMS preview CSS URI',
-  'This URI points to preview CSS. For example on SFW: "yes-shop/wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css"', 1000,  1000, 0, 0, 0, 0);
+  'This URI points to preview CSS. For example on SFW: "wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css"', 1000,  1000, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11029,  'SYSTEM_PANEL_HELP_DOCS', 'SYSTEM_PANEL_HELP_DOCS',  1,  NULL,  'Admin\\Help doc link',
@@ -378,20 +378,17 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11099,  'SYSTEM_IMAGE_VAULT', 'SYSTEM_IMAGE_VAULT',  1,  NULL,  'System\\Image Root directory for image repository',
   'Root directory for image repository.
-Default: context://../imagevault
-Recommended: file:///home/yc/server/share/imagevault', 1001,  1000, 0, 0, 0, 0);
+Recommended: file:///home/yc/server/share/imagevault/', 1001,  1000, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11120,  'SYSTEM_FILE_VAULT', 'SYSTEM_FILE_VAULT',  1,  NULL,  'System\\File Root directory for image repository',
   'Root directory for file repository.
-Default: context://../filevault
-Recommended: file:///home/yc/server/share/filevault', 1001,  1000, 0, 0, 0, 0);
+Recommended: file:///home/yc/server/share/filevault/', 1001,  1000, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11121,  'SYSTEM_SYSFILE_VAULT', 'SYSTEM_SYSFILE_VAULT',  1,  NULL,  'System\\System File Root directory for image repository',
   'Root directory for secure file repository (no storefont access)
-Default: context://../sysfilevault
-Recommended: file:///home/yc/server/share/sysfilevault', 1001,  1000, 0, 0, 0, 0);
+Recommended: file:///home/yc/server/share/sysfilevault/', 1001,  1000, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11100,  'SEARCH_ITEMS_PER_PAGE', 'SEARCH_ITEMS_PER_PAGE',  1,  NULL,  'SF\\Behaviour Search items per page ',
@@ -865,11 +862,11 @@ INSERT INTO TPRODUCTTYPEATTR (PRODTYPEATTR_ID, GUID, CODE, PRODUCTTYPE_ID, RANK,
 
 INSERT INTO TSYSTEM (SYSTEM_ID, GUID, CODE, NAME, DESCRIPTION)  VALUES (100, 'YC', 'SYSTEM','Yes e-commerce platform', 'System table');
 
-INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1000,'http://localhost:8080/yes-shop','SYSTEM_DEFAULT_SHOP',100, 'YC_SYSTEM_DEFAULT_SHOP');
+INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1000,'http://localhost:8080/','SYSTEM_DEFAULT_SHOP',100, 'YC_SYSTEM_DEFAULT_SHOP');
 INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1002,'10,20,40','SEARCH_ITEMS_PER_PAGE',100, 'YC_SEARCH_ITEMS_PER_PAGE');
-INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1003,'context://../imagevault','SYSTEM_IMAGE_VAULT',100, 'YC_SYSTEM_IMAGE_VAULT');
-INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1024,'context://../filevault','SYSTEM_FILE_VAULT',100, 'YC_SYSTEM_FILE_VAULT');
-INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1025,'context://../sysfilevault','SYSTEM_SYSFILE_VAULT',100, 'YC_SYSTEM_SYSFILE_VAULT');
+-- INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1003,'context://../imagevault','SYSTEM_IMAGE_VAULT',100, 'YC_SYSTEM_IMAGE_VAULT');
+-- INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1024,'context://../filevault','SYSTEM_FILE_VAULT',100, 'YC_SYSTEM_FILE_VAULT');
+-- INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1025,'context://../sysfilevault','SYSTEM_SYSFILE_VAULT',100, 'YC_SYSTEM_SYSFILE_VAULT');
 INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1012,'testPaymentGatewayLabel,courierPaymentGatewayLabel,inStorePaymentGatewayLabel,prePaymentGatewayLabel','SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL',100, 'YC_SYSTEM_ACTIVE_PAYMENT_GATEWAYS');
 INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1014,'60','SYSTEM_ETAG_CACHE_IMAGES_TIME',100, 'YC_SYSTEM_ETAG_CACHE_IMAGES_TIME');
 INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1015,'10000','IMPORT_JOB_LOG_SIZE',100, 'YC_IMPORT_JOB_LOG_SIZE');
@@ -953,21 +950,21 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
    <p>
       Your order has been successfully created. You will receive confirmation by e-mail.
    </p>
-   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+   <a href="/" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
    <% if (binding.hasVariable(''order'') && order.customer != null) { %>
-      <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+      <a href="/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
    <% } %>
 <% } else {
    if (missingStock !=null) { %>
       <p>
          Item ${product} with code ${sku} has just gone out of stock. Please try to buy similar product
       </p>
-      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
    <% } else if (exception !=null) { %>
       <p>
          An error occurred while trying to create your order. Please try again.
       </p>
-      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
    <% } %>
 <% } %>
 
@@ -979,21 +976,21 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
    <p>
       Ваш заказ был успешно оформлен. Вы получите уведомление на электронный адрес.
    </p>
-   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+   <a href="/" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
    <% if (binding.hasVariable(''order'') && order.customer != null) { %>
-       <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+       <a href="/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
    <% } %>
 <% } else {
    if (missingStock !=null) { %>
       <p>
          Недостаточное количество ${product} (код ${sku}) на складе. Попробуйте купить похожий продукт. Приносим свои извинения
       </p>
-      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
    <% } else if (exception !=null) { %>
       <p>
          Произошла ошибка при создании Вашего заказа. Попробуйте еще раз.
       </p>
-      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
    <% } %>
 <% } %>
 
@@ -1005,21 +1002,21 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
    <p>
       Ваше замовлення було успішно оформлено. Ви отримаєте повідомлення на електронну адресу.
    </p>
-   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+   <a href="/" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
    <% if (binding.hasVariable(''order'') && order.customer != null) { %>
-      <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+      <a href="/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
    <% } %>
 <% } else {
    if (missingStock !=null) { %>
       <p>
          Недостатня кількість ${product} (код ${sku}) на складі. Спробуйте купити схожий товар. Приносимо вибачення
       </p>
-      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
    <% } else if (exception !=null) { %>
       <p>
          Сталася помилка при створені Вашого замовлення. Спробуйте ще раз.
       </p>
-      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
    <% } %>
 <% } %>
 
@@ -1031,21 +1028,21 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
    <p>
       Ihre Bestellung wurde erfolgreich erstellt. Sie erhalten eine Bestätigung per E-Mail.
    </p>
-   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter mit Einkaufen</a>
+   <a href="/" class="btn btn-primary2" rel="bookmark">Weiter mit Einkaufen</a>
    <% if (binding.hasVariable(''order'') && order.customer != null) { %>
-     <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung überprüfen</a>
+     <a href="/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung überprüfen</a>
    <% } %>
 <% } else {
    if (missingStock !=null) { %>
       <p>
          Leider ist der Artikel in der gewünschten Anzahl ${product} mit Artikel Nummer ${sku} nicht an Lager. Versuchen Sie ein vergleichbares Produkt zu kaufen.
       </p>
-      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
    <% } else if (exception !=null) { %>
       <p>
          Beim Erstellen Ihrer Bestellung ist ein Fehler aufgetreten. Bitte versuchen Sie es nochmals.
       </p>
-      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
    <% } %>
 <% } %>
 
@@ -1058,16 +1055,16 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
 if (_status.equals("ok")) { %>
 	<p>Order successfully placed</p>
-	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
-  	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+  	<a href="/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
   <% } %>
 <% } else if (_status.equals("cancel")) { %>
 	<p>Order was cancelled. This maybe due to payment failure or insufficient stock</p>
-	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
 <% } else { %>
 	<p>Errors in payment</p>
-	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Homepage</a>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Back to Homepage</a>
 <% } %>
 
 ',10520,'12520_CAV');
@@ -1077,16 +1074,16 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
 if (_status.equals("ok")) { %>
 	<p>Заказ успешно оформлен</p>
-	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+	<a href="/" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
-  	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+  	<a href="/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
   <% } %>
 <% } else if (_status.equals("cancel")) { %>
 	<p>Заказ отменен. Возможная причина - это ошибка при оплате, либо недостаточное кол-во товара на складе</p>
-	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+	<a href="/" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
 <% } else { %>
 	<p>Ошибки при оплате</p>
-	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
 <% } %>
 
 ',10520,'12521_CAV');
@@ -1096,16 +1093,16 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
 if (_status.equals("ok")) { %>
 	<p>Замовлення успішно оформлене</p>
-	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+	<a href="/" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
-	  <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+	  <a href="/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
 	<% } %>
 <% } else if (_status.equals("cancel")) { %>
 	<p>Замовлення скасовано. Можлива причина - це помилка при оплаті, або недостатня кількість товару на складі</p>
-	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+	<a href="/" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
 <% } else { %>
 	<p>Помилка при оплаті</p>
-	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
 <% } %>
 
 ',10520,'12522_CAV');
@@ -1115,16 +1112,16 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
 if (_status.equals("ok")) { %>
 	<p>Bestellung erfolgreich getätigt</p>
-	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
-   	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung verfolgen</a>
+   	<a href="/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung verfolgen</a>
   <% } %>
 <% } else if (_status.equals("cancel")) { %>
 	<p>Die Bestellung wurde annuliert oder die Artikel ist nicht mehr an Lager. Das kann der Grund für den Abbruch der Zahlung sein</p>
-	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
 <% } else { %>
 	<p>Fehler bei der Zahlung</p>
-	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
 <% } %>
 
 ',10520,'12523_CAV');

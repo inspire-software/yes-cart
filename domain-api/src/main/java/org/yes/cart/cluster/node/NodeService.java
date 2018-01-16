@@ -40,7 +40,7 @@ public interface NodeService {
     String BUILD_NO = "BUILD_NO";
     /** Cluster ID context parameter */
     String CLUSTER_ID = "CLUSTER_ID";
-    /** Lucene index disabled (use to suppress indexing jobs if yes-shop and yes-api on the same Servlet container) */
+    /** Lucene index disabled (used for Admin as it does not use FT index) */
     String LUCENE_INDEX_DISABLED = "LUCENE_INDEX_DISABLED";
 
     /** WS Channel URI context parameter */

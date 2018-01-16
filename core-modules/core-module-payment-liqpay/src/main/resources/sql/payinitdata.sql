@@ -31,13 +31,13 @@ VALUES (13151, 'liqPayPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (13152, 'liqPayPaymentGateway',
 'LP_RESULT_URL',
-'http://@domain@/yes-shop/paymentresult?hint=ok'
+'http://@domain@/paymentresult?hint=ok'
 , 'Page URL to show payment result', 'Page URL to show payment result');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (13153, 'liqPayPaymentGateway',
 'LP_SERVER_URL',
-'http://@domain@/yes-shop/liqpaycallback'
+'http://@domain@/liqpaycallback'
 , 'Call back URL with payment result.', 'Call back URL with payment result. ');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -88,13 +88,13 @@ VALUES (13251, 'liqPayNoRefundPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (13252, 'liqPayNoRefundPaymentGateway',
 'LP_RESULT_URL',
-'http://@domain@/yes-shop/paymentresult?hint=ok'
+'http://@domain@/paymentresult?hint=ok'
 , 'Page URL to show payment result', 'Page URL to show payment result');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (13253, 'liqPayNoRefundPaymentGateway',
 'LP_SERVER_URL',
-'http://@domain@/yes-shop/liqpaynrcallback'
+'http://@domain@/liqpaynrcallback'
 , 'Call back URL with payment result.', 'Call back URL with payment result. ');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)

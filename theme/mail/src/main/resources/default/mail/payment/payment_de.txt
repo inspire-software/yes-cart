@@ -4,4 +4,4 @@ Ihre Zahlung für die Bestellung $root.ordernum haben wir erhalten. Besten Dank!
 ${include('common-order-details')}
 
 Detailierte Informationen zu Ihren Bestellungen finden Sie hier
-"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"
+"<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"

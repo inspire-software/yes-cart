@@ -57,8 +57,8 @@
     <bean id="runtimeConstants" class="org.yes.cart.utils.impl.RuntimeConstantsImpl">
         <constructor-arg>
             <map>
-                <entry key="webapp.yes.context.path" value="/yes-shop"/>
-                <entry key="webapp.api.context.path" value="/ys-api"/>
+                <entry key="webapp.yes.context.path" value="/"/>
+                <entry key="webapp.api.context.path" value="/yes-api"/>
                 <entry key="webapp.admin.context.path" value="/yes-manager"/>
             </map>
         </constructor-arg>

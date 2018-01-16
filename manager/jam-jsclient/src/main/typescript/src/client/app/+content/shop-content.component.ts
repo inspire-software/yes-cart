@@ -31,7 +31,7 @@ import { LogUtil } from './../shared/log/index';
 
 export class ShopContentComponent implements OnInit, OnDestroy {
 
-  private static DEFAULT_PREVIEW_URL:string = 'http://localhost:8080/yes-shop/';
+  private static DEFAULT_PREVIEW_URL:string = 'http://localhost:8080/';
   private static DEFAULT_PREVIEW_CSS:string = 'wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css';
 
   private static CONTENTS:string = 'contents';

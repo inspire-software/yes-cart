@@ -109,10 +109,10 @@
         PG_LABEL="payPalExpressPaymentGateway" P_LABEL="SIGNATURE" P_VALUE="!!!SetValue:testPgPayPalExpressSignature!!!"  P_NAME="Signature"  P_DESCRIPTION="Signature"/>
 
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "223"
-        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="RETURNURL" P_VALUE="https://demo.yes-cart.org/yes-shop"  P_NAME="ret"  P_DESCRIPTION="ret"/>
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="RETURNURL" P_VALUE="https://demo.yes-cart.org"  P_NAME="ret"  P_DESCRIPTION="ret"/>
 
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "224"
-        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="CANCELURL" P_VALUE="https://demo.yes-cart.org/yes-shop"  P_NAME="can"  P_DESCRIPTION="can"/>
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="CANCELURL" P_VALUE="https://demo.yes-cart.org"  P_NAME="can"  P_DESCRIPTION="can"/>
 
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "225"
         PG_LABEL="payPalExpressPaymentGateway" P_LABEL="PP_EC_API_URL" P_VALUE="https://api-3t.sandbox.paypal.com/nvp"  P_NAME="url"  P_DESCRIPTION="url"/>
@@ -121,7 +121,7 @@
         PG_LABEL="payPalExpressPaymentGateway" P_LABEL="PP_EC_PAYPAL_URL" P_VALUE="https://www.sandbox.paypal.com/cgi-bin/webscr"  P_NAME="url"  P_DESCRIPTION="url"/>
 
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "227"
-        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="CALLBACK" P_VALUE="https://demo.yes-cart.org/yes-shop"  P_NAME="call"  P_DESCRIPTION="call"/>
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="CALLBACK" P_VALUE="https://demo.yes-cart.org"  P_NAME="call"  P_DESCRIPTION="call"/>
 
 
 </dataset>

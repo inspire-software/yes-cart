@@ -129,6 +129,7 @@
                 <constructor-arg type="org.yes.cart.service.domain.RuntimeAttributeService" ref="runtimeAttributeService"/>
                 <constructor-arg type="org.springframework.cache.CacheManager" ref="cacheManager"/>
                 <lookup-method name="getSelf" bean="systemService"/>
+                <property name="config" value="classpath:yc-config.properties"/>
             </bean>
         </property>
     </bean>

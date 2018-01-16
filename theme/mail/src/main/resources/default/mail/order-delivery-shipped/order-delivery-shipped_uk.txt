@@ -5,4 +5,4 @@
 ${include('common-order-delivery-details')}
 
 Детальну інформацію Ви можете переглянути в історії замовлень
-"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"
+"<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"

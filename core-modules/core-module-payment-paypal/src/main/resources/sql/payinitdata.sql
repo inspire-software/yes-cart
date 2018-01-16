@@ -416,13 +416,13 @@ VALUES (14352, 'payPalExpressPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (14353, 'payPalExpressPaymentGateway',
 'RETURNURL',
-'https://@domain@/yes-shop/paymentresult?hint=ok'
+'https://@domain@/paymentresult?hint=ok'
 , 'Return url', 'Return url');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (14354, 'payPalExpressPaymentGateway',
 'CANCELURL',
-'https://@domain@/yes-shop/paymentresult?hint=cancel'
+'https://@domain@/paymentresult?hint=cancel'
 , 'Cancel url', 'Cancel url');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -455,7 +455,7 @@ VALUES (14358, 'payPalExpressPaymentGateway', 'priority', '100', 'Gateway priori
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (14359, 'payPalExpressPaymentGateway',
 'CALLBACK',
-'https://@domain@/yes-shop/paymentpaypalexpress'
+'https://@domain@/paymentpaypalexpress'
 , 'Callback url', 'Callback url');
 
 
@@ -499,19 +499,19 @@ VALUES (14552, 'payPalButtonPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (14553, 'payPalButtonPaymentGateway',
 'PPB_RETURNURL',
-'http://@domain@/yes-shop/paymentresult?hint=ok'
+'http://@domain@/paymentresult?hint=ok'
 , 'Return URL', 'The URL to which PayPal redirects buyers'' browser after they complete their payments. ');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (14554, 'payPalButtonPaymentGateway',
 'CANCELURL',
-'http://@domain@/yes-shop/paymentresult?hint=cancel'
+'http://@domain@/paymentresult?hint=cancel'
 , 'Cancel URL', 'A URL to which PayPal redirects the buyers'' browsers if they cancel checkout before completing their payments');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (14555, 'payPalButtonPaymentGateway',
 'PPB_NOTIFYURL',
-'http://@domain@/yes-shop/paymentpaypalbutton'
+'http://@domain@/paymentpaypalbutton'
 , 'Api callback URL', 'The URL to which PayPal posts information about the payment, in the form of Instant Payment Notification messages');
 
 

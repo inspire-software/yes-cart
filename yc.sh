@@ -303,38 +303,7 @@ start_aws() {
     mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; DELETE FROM TSYSTEMATTRVALUE WHERE CODE='JOB_LOCAL_FILE_IMPORT_PAUSE'; INSERT INTO TSYSTEMATTRVALUE SET val = 'false', code = 'JOB_LOCAL_FILE_IMPORT_PAUSE', SYSTEM_ID=100, GUID='JLFP100'; " yes
     mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; DELETE FROM TSYSTEMATTRVALUE WHERE CODE='JOB_SEND_MAIL_PAUSE'; INSERT INTO TSYSTEMATTRVALUE SET val = 'false', code = 'JOB_SEND_MAIL_PAUSE', SYSTEM_ID=100, GUID='JSPM100'; " yes
 
-    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; UPDATE TSYSTEMATTRVALUE SET val = 'http://$ycdemohost:8080/yes-shop' WHERE code = 'SYSTEM_DEFAULT_SHOP' AND SYSTEM_ID=100; " yes
-
-
-
-    mkdir -p /var/lib/tomcat7/webapps/ROOT/WEB-INF
-tee /var/lib/tomcat7/webapps/ROOT/index.html <<-'EOF'
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="refresh" content="0; url=/yes-shop/">
-</head>
-<body>
-    <a href="/yes-shop/">Shop</a>
-</body>
-</html>
-EOF
-tee /var/lib/tomcat7/webapps/ROOT/WEB-INF/web.xml <<-'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
-                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-  version="3.1"  metadata-complete="true">
-
-  <display-name>Yes-cart</display-name>
-  <description>
-     Yes-cart
-  </description>
-
-</web-app>
-EOF
-    
+    mysql -uyes -hyesmysqlhost -ppwdMy34SqL -e "USE yes; UPDATE TSYSTEMATTRVALUE SET val = 'http://$ycdemohost:8080/' WHERE code = 'SYSTEM_DEFAULT_SHOP' AND SYSTEM_ID=100; " yes
 
     cp env/maven/aws/tomcat/keystore.jks /etc/tomcat7/keystore.jks
     cp env/maven/aws/tomcat/server.xml  /etc/tomcat7/server.xml
@@ -346,7 +315,7 @@ EOF
 
     cp /home/ec2-user/yes-cart/manager/jam/target/yes-manager.war /usr/share/tomcat7/webapps/
     cp /home/ec2-user/yes-cart/web/api/target/yes-api.war /usr/share/tomcat7/webapps/
-    cp /home/ec2-user/yes-cart/web/store-wicket/target/yes-shop.war /usr/share/tomcat7/webapps/
+    cp /home/ec2-user/yes-cart/web/store-wicket/target/ROOT.war /usr/share/tomcat7/webapps/
 
     mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/config
     mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/archived
@@ -382,7 +351,7 @@ EOF
 
     echo " Yes-Cart is available on "
     echo " http://$ycdemohost:8080/yes-manager/ "
-    echo " http://$ycdemohost:8080/yes-shop/ "
+    echo " http://$ycdemohost:8080/ "
 
     exit
 

@@ -28,16 +28,6 @@
     </node>
     <node>
         <cluster-id>${cluster.config.cluster_id}</cluster-id>
-        <node-id>${cluster.config.yes2.node_id}</node-id>
-        <node-type>SFW</node-type>
-        <node-config>${cluster.config.yes2.node_config}</node-config>
-        <version>${project.version}</version>
-        <build-number>${buildNumber}</build-number>
-        <lucene-index-disabled>${cluster.config.yes2.lucene_index_disabled}</lucene-index-disabled>
-        <channel>${cluster.config.yes2.ws.channel_uri}</channel>
-    </node>
-    <node>
-        <cluster-id>${cluster.config.cluster_id}</cluster-id>
         <node-id>${cluster.config.api.node_id}</node-id>
         <node-type>API</node-type>
         <node-config>${cluster.config.api.node_config}</node-config>
@@ -45,16 +35,6 @@
         <build-number>${buildNumber}</build-number>
         <lucene-index-disabled>${cluster.config.api.lucene_index_disabled}</lucene-index-disabled>
         <channel>${cluster.config.api.ws.channel_uri}</channel>
-    </node>
-    <node>
-        <cluster-id>${cluster.config.cluster_id}</cluster-id>
-        <node-id>${cluster.config.api2.node_id}</node-id>
-        <node-type>API</node-type>
-        <node-config>${cluster.config.api2.node_config}</node-config>
-        <version>${project.version}</version>
-        <build-number>${buildNumber}</build-number>
-        <lucene-index-disabled>${cluster.config.api2.lucene_index_disabled}</lucene-index-disabled>
-        <channel>${cluster.config.api2.ws.channel_uri}</channel>
     </node>
     <node>
         <cluster-id>${cluster.config.cluster_id}</cluster-id>

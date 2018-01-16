@@ -347,7 +347,7 @@
                                         <goal>copy-resources</goal>
                                     </goals>
                                     <configuration>
-                                        <outputDirectory>${basedir}/target/yes-shop</outputDirectory>
+                                        <outputDirectory>${basedir}/target/${webapp.yes.war.name}</outputDirectory>
                                         <resources>
                                             <resource>
                                                 <directory>${basedir}/../../theme/mail/src/main/resources</directory>

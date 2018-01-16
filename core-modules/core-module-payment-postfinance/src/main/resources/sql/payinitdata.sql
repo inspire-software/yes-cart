@@ -20,29 +20,29 @@ VALUES (15150, 'postFinancePaymentGateway', 'PF_POST_URL', 'https://e-payment.po
 'In the production (PROD) environment, the URL for the action will be https://e- payment.postfinance.ch/ncol/prod/orderstandard.asp.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15151, 'postFinancePaymentGateway', 'PF_RESULT_URL_HOME', 'http://@domain@/yes-shop/', '(Absolute) URL of your home page',
+VALUES (15151, 'postFinancePaymentGateway', 'PF_RESULT_URL_HOME', 'http://@domain@/', '(Absolute) URL of your home page',
 '(Absolute) URL of your home page. When the transaction has been processed, your customer is requested to return to this URL via a button.
 When you send the value "NONE", the button leading back to the merchants site will be hidden.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15152, 'postFinancePaymentGateway', 'PF_RESULT_URL_CATALOG', 'http://@domain@/yes-shop/', '(Absolute) URL of your catalogue',
+VALUES (15152, 'postFinancePaymentGateway', 'PF_RESULT_URL_CATALOG', 'http://@domain@/', '(Absolute) URL of your catalogue',
 '(Absolute) URL of your catalogue. When the transaction has been processed, your customer is requested to return to this URL via a button.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15153, 'postFinancePaymentGateway', 'PF_RESULT_URL_ACCEPT', 'http://@domain@/yes-shop/paymentresult?hint=ok', 'URL for accepted payment',
+VALUES (15153, 'postFinancePaymentGateway', 'PF_RESULT_URL_ACCEPT', 'http://@domain@/paymentresult?hint=ok', 'URL for accepted payment',
 'URL of the web page to display to the customer when the payment has been authorised (status 5), stored (status 4), accepted (status 9) or is waiting to be accepted (pending status 41, 51 or 91).');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15154, 'postFinancePaymentGateway', 'PF_RESULT_URL_DECLINE', 'http://@domain@/yes-shop/paymentresult?hint=declined', 'URL for declined payment',
+VALUES (15154, 'postFinancePaymentGateway', 'PF_RESULT_URL_DECLINE', 'http://@domain@/paymentresult?hint=declined', 'URL for declined payment',
 'URL of the web page to show the customer when the acquirer declines the authorisation (status 2 or 93) more than the maximum permissible number of times.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15155, 'postFinancePaymentGateway', 'PF_RESULT_URL_EXCEPTION', 'http://@domain@/yes-shop/paymentresult?hint=exception', 'URL for error during payment',
+VALUES (15155, 'postFinancePaymentGateway', 'PF_RESULT_URL_EXCEPTION', 'http://@domain@/paymentresult?hint=exception', 'URL for error during payment',
 'URL of the web page to display to the customer when the payment result is uncertain (status 52 or 92).
 If this field is empty, the customer will see the ACCEPTURL instead.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15156, 'postFinancePaymentGateway', 'PF_RESULT_URL_CANCEL', 'http://@domain@/yes-shop/paymentresult?hint=cancel', 'URL for cancelled payment',
+VALUES (15156, 'postFinancePaymentGateway', 'PF_RESULT_URL_CANCEL', 'http://@domain@/paymentresult?hint=cancel', 'URL for cancelled payment',
 'URL of the web page to display to the customer when he cancels the payment (status 1).
 If this field is empty, the customer will see the DECLINEURL instead.');
 
@@ -165,29 +165,29 @@ VALUES (15250, 'postFinanceManualPaymentGateway', 'PF_POST_URL', 'https://e-paym
 'In the production (PROD) environment, the URL for the action will be https://e- payment.postfinance.ch/ncol/prod/orderstandard.asp.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15251, 'postFinanceManualPaymentGateway', 'PF_RESULT_URL_HOME', 'http://@domain@/yes-shop/', '(Absolute) URL of your home page',
+VALUES (15251, 'postFinanceManualPaymentGateway', 'PF_RESULT_URL_HOME', 'http://@domain@/', '(Absolute) URL of your home page',
 '(Absolute) URL of your home page. When the transaction has been processed, your customer is requested to return to this URL via a button.
 When you send the value "NONE", the button leading back to the merchants site will be hidden.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15252, 'postFinanceManualPaymentGateway', 'PF_RESULT_URL_CATALOG', 'http://@domain@/yes-shop/', '(Absolute) URL of your catalogue',
+VALUES (15252, 'postFinanceManualPaymentGateway', 'PF_RESULT_URL_CATALOG', 'http://@domain@/', '(Absolute) URL of your catalogue',
 '(Absolute) URL of your catalogue. When the transaction has been processed, your customer is requested to return to this URL via a button.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15253, 'postFinanceManualPaymentGateway', 'PF_RESULT_URL_ACCEPT', 'http://@domain@/yes-shop/paymentresult?hint=ok', 'URL for accepted payment',
+VALUES (15253, 'postFinanceManualPaymentGateway', 'PF_RESULT_URL_ACCEPT', 'http://@domain@/paymentresult?hint=ok', 'URL for accepted payment',
 'URL of the web page to display to the customer when the payment has been authorised (status 5), stored (status 4), accepted (status 9) or is waiting to be accepted (pending status 41, 51 or 91).');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15254, 'postFinanceManualPaymentGateway', 'PF_RESULT_URL_DECLINE', 'http://@domain@/yes-shop/paymentresult?hint=declined', 'URL for declined payment',
+VALUES (15254, 'postFinanceManualPaymentGateway', 'PF_RESULT_URL_DECLINE', 'http://@domain@/paymentresult?hint=declined', 'URL for declined payment',
 'URL of the web page to show the customer when the acquirer declines the authorisation (status 2 or 93) more than the maximum permissible number of times.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15255, 'postFinanceManualPaymentGateway', 'PF_RESULT_URL_EXCEPTION', 'http://@domain@/yes-shop/paymentresult?hint=exception', 'URL for error during payment',
+VALUES (15255, 'postFinanceManualPaymentGateway', 'PF_RESULT_URL_EXCEPTION', 'http://@domain@/paymentresult?hint=exception', 'URL for error during payment',
 'URL of the web page to display to the customer when the payment result is uncertain (status 52 or 92).
 If this field is empty, the customer will see the ACCEPTURL instead.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15256, 'postFinanceManualPaymentGateway', 'PF_RESULT_URL_CANCEL', 'http://@domain@/yes-shop/paymentresult?hint=cancel', 'URL for cancelled payment',
+VALUES (15256, 'postFinanceManualPaymentGateway', 'PF_RESULT_URL_CANCEL', 'http://@domain@/paymentresult?hint=cancel', 'URL for cancelled payment',
 'URL of the web page to display to the customer when he cancels the payment (status 1).
 If this field is empty, the customer will see the DECLINEURL instead.');
 

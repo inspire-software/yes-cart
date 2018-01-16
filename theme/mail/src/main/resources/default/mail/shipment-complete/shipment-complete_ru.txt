@@ -2,4 +2,4 @@
 Доставка номер $param1 по заказу $root.ordernum завершена.
 
 Подробную информацию Вы можете посмотреть в истории заказов
-"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"
+"<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"

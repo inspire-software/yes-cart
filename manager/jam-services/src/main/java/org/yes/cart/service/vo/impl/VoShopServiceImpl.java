@@ -770,7 +770,7 @@ public class VoShopServiceImpl implements VoShopService {
 
         String previewURICss = systemService.getPreviewShopURICss();
         if (previewURICss == null) {
-            previewURICss = "yes-shop/wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css";
+            previewURICss = "wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css";
             LOG.warn("Preview shop URI CSS is not configured, using '{}'", previewURICss);
         }
         voShopUrl.setPreviewCss(voShopUrl.getPreviewUrl() + previewURICss);

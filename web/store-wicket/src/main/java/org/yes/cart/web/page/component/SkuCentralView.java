@@ -247,6 +247,7 @@ public class SkuCentralView extends AbstractCentralView {
                 product = productServiceFacade.getProductById(prodPK);
                 final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(product, browsingShopId);
                 sku = getDefault(product, pam, browsingShopId);
+                sku = productServiceFacade.getSkuById(sku.getSkuId());
             } catch (Exception exp) {
                 throw new RestartResponseException(Application.get().getHomePage());
             }
@@ -278,11 +279,20 @@ public class SkuCentralView extends AbstractCentralView {
 
         final ObjectDecorator decorator = getDecorator();
 
+        String desc = decorator.getDescription(selectedLocale);
+        if (!isProduct && StringUtils.isBlank(desc)) {
+            desc = product.getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + selectedLocale);
+            if (StringUtils.isBlank(desc)) {
+                desc = product.getDescription();
+            }
+        }
+
+
         add(getPriceView());
         add(new SkuListView(SKU_LIST_VIEW, product.getSku(), sku, isProduct));
         add(new Label(SKU_CODE_LABEL, getDisplaySkuCode(shop, sku)));
         add(new Label(PRODUCT_NAME_LABEL, decorator.getName(selectedLocale)));
-        add(new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale)).setEscapeModelStrings(false));
+        add(new Label(PRODUCT_DESCRIPTION_LABEL, desc).setEscapeModelStrings(false));
         add(new AddAnyButton(SOCIAL_ADD_TO_ANY_BUTTON, product));
 
         final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(sku, browsingStoreId);

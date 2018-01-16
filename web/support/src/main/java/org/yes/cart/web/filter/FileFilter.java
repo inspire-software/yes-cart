@@ -73,9 +73,18 @@ public class FileFilter extends AbstractFilter implements Filter {
     public void handleRequestInternal(final HttpServletRequest httpServletRequest,
                                       final HttpServletResponse httpServletResponse) throws ServletException, IOException {
 
-        final String requestPath = HttpUtil.decodeUtf8UriParam(httpServletRequest.getRequestURI());           // RequestURI  -> /yes-shop/imagevault/product/image.png
-        final String contextPath = httpServletRequest.getContextPath();                                       // ContextPath -> /yes-shop
-        final String servletPath = requestPath.substring(contextPath.length());                               // ServletPath ->          /imagevault/product/image.png
+        /*
+            RequestURI  -> /yes-shop/filevault/product/image.png
+            ContextPath -> /yes-shop
+            ServletPath ->          /filevault/product/image.png
+
+            RequestURI  -> /filevault/product/image.png
+            ContextPath ->
+            ServletPath -> /filevault/product/image.png
+         */
+        final String requestPath = HttpUtil.decodeUtf8UriParam(httpServletRequest.getRequestURI());
+        final String contextPath = httpServletRequest.getContextPath();
+        final String servletPath = requestPath.substring(contextPath.length());
 
         final MediaFileNameStrategy mediaFileNameStrategy = fileService.getFileNameStrategy(servletPath);
 

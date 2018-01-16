@@ -133,9 +133,19 @@ public class ImageFilter extends AbstractFilter implements Filter {
             }
         } else {
 
-            final String requestPath = HttpUtil.decodeUtf8UriParam(httpServletRequest.getRequestURI());           // RequestURI  -> /yes-shop/imagevault/product/image.png
-            final String contextPath = httpServletRequest.getContextPath();                                       // ContextPath -> /yes-shop
-            final String servletPath = requestPath.substring(contextPath.length());                               // ServletPath ->          /imagevault/product/image.png
+            /*
+                RequestURI  -> /yes-shop/imgvault/product/file.pdf
+                ContextPath -> /yes-shop
+                ServletPath ->          /imgvault/product/file.pdf
+
+                RequestURI  -> /imgvault/product/file.pdf
+                ContextPath ->
+                ServletPath -> /imgvault/product/file.pdf
+             */
+
+            final String requestPath = HttpUtil.decodeUtf8UriParam(httpServletRequest.getRequestURI());
+            final String contextPath = httpServletRequest.getContextPath();
+            final String servletPath = requestPath.substring(contextPath.length());
 
             httpServletResponse.setDateHeader(LAST_MODIFIED, (new Date()).getTime());
 

@@ -4,4 +4,4 @@
 ${include('common-order-details')}
 
 Подробную информацию Вы можете посмотреть в истории заказов
-"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"
+"<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"

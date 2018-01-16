@@ -349,9 +349,9 @@ public class ContentController {
      *
      *                     &lt;p&gt;Links:
      *                     &lt;ul&gt;
-     *                     &lt;li&gt;&lt;a href="http://testdevshop.yes-cart.org/yes-shop/content/license"&gt;License page (content link)&lt;/a&gt;&lt;/li&gt;
-     *                     &lt;li&gt;&lt;a href="http://testdevshop.yes-cart.org/yes-shop/category/netbooks"&gt;Notebooks (category link)&lt;/a&gt;&lt;/li&gt;
-     *                     &lt;li&gt;&lt;a href="http://testdevshop.yes-cart.org/yes-shop/"&gt;Home (plain link)&lt;/a&gt;&lt;/li&gt;
+     *                     &lt;li&gt;&lt;a href="http://testdevshop.yes-cart.org/content/license"&gt;License page (content link)&lt;/a&gt;&lt;/li&gt;
+     *                     &lt;li&gt;&lt;a href="http://testdevshop.yes-cart.org/category/netbooks"&gt;Notebooks (category link)&lt;/a&gt;&lt;/li&gt;
+     *                     &lt;li&gt;&lt;a href="http://testdevshop.yes-cart.org/"&gt;Home (plain link)&lt;/a&gt;&lt;/li&gt;
      *                     &lt;/ul&gt;
      *                     &lt;/p&gt;
      *
