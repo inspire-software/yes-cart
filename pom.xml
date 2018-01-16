@@ -734,40 +734,6 @@
         </profile>
 
         <!--
-            BUILD PROCESS OPTIMISATION
-
-            Includes profiles to skip some steps of full build to save some time
-
-            skipInstaller - installer module is not built
-        -->
-
-        <profile>
-            <activation><activeByDefault>false</activeByDefault></activation>
-            <id>buildInstaller</id>
-            <properties>
-                <env>installer</env>
-                <env.db>derby</env.db>
-                <env.ssl>off</env.ssl>
-                <payment.liqpay.module>off</payment.liqpay.module>
-                <payment.cybersource.module>off</payment.cybersource.module>
-                <payment.authorizenet.module>off</payment.authorizenet.module>
-                <payment.paypal.module>off</payment.paypal.module>
-                <payment.postfinance.module>off</payment.postfinance.module>
-            </properties>
-            <modules>
-                <module>payment-api</module>
-                <module>domain-api</module>
-                <module>persistence</module>
-                <module>core-modules</module>
-                <module>core</module>
-                <module>theme</module>
-                <module>web</module>
-                <module>manager</module>
-                <module>installer</module>
-            </modules>
-        </profile>
-
-        <!--
             DEMO STORE
         -->
 

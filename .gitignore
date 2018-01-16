@@ -176,8 +176,6 @@ web/web.iml
 
 web/target/**
 
-installer/target/**
-
 yes-cart.iml
 
 yes-cart.ipr

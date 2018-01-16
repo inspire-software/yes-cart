@@ -244,17 +244,6 @@
         </profile>
 
         <profile>
-            <id>buildInstaller</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.apache.derby</groupId>
-                    <artifactId>derbyclient</artifactId>
-                    <version>10.8.1.2</version>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
             <activation><activeByDefault>true</activeByDefault></activation>
             <id>paymentAll</id>
             <dependencies>
