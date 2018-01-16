@@ -19,7 +19,7 @@
     <node>
         <cluster-id>${cluster.config.cluster_id}</cluster-id>
         <node-id>${cluster.config.yes.node_id}</node-id>
-        <node-type>SFG</node-type>
+        <node-type>SFW</node-type>
         <node-config>${cluster.config.yes.node_config}</node-config>
         <version>${project.version}</version>
         <build-number>${buildNumber}</build-number>
