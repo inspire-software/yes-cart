@@ -23,6 +23,9 @@
               <label>{{ 'NAME' | translate }}</label>
               <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text" [(ngModel)]="country.name">
               <div [hidden]="countryForm.controls['name'].valid || countryForm.controls['name'].pristine" class="alert alert-danger">
+                <div [hidden]="!countryForm.controls['name'].hasError('maxlength')">
+                  {{ 'MAXLENGTH_REQUIRED' | translate:{value: 64} }}
+                </div>
                 {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
               </div>
             </div>

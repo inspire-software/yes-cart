@@ -34,6 +34,9 @@
                   <label>{{ 'CUSTOMER_SALUTATION' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'CUSTOMER_SALUTATION' | translate }}" formControlName="salutation" name="salutation" type="text" [(ngModel)]="customer.salutation">
                   <div [hidden]="customerForm.controls['salutation'].valid || customerForm.controls['salutation'].pristine" class="alert alert-danger">
+                    <div [hidden]="!customerForm.controls['salutation'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 128} }}
+                    </div>
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
@@ -41,6 +44,9 @@
                   <label>{{ 'CUSTOMER_FIRSTNAME' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'CUSTOMER_FIRSTNAME' | translate }}" formControlName="firstname" name="firstname" type="text" [(ngModel)]="customer.firstname">
                   <div [hidden]="customerForm.controls['firstname'].valid || customerForm.controls['firstname'].pristine" class="alert alert-danger">
+                    <div [hidden]="!customerForm.controls['firstname'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 128} }}
+                    </div>
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
@@ -48,6 +54,9 @@
                   <label>{{ 'CUSTOMER_MIDDLENAME' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'CUSTOMER_MIDDLENAME' | translate }}" formControlName="middlename" name="middlename" type="text" [(ngModel)]="customer.middlename">
                   <div [hidden]="customerForm.controls['middlename'].valid || customerForm.controls['middlename'].pristine" class="alert alert-danger">
+                    <div [hidden]="!customerForm.controls['middlename'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 128} }}
+                    </div>
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
@@ -55,6 +64,9 @@
                   <label>{{ 'CUSTOMER_LASTNAME' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'CUSTOMER_LASTNAME' | translate }}" formControlName="lastname" name="lastname" type="text" [(ngModel)]="customer.lastname">
                   <div [hidden]="customerForm.controls['lastname'].valid || customerForm.controls['lastname'].pristine" class="alert alert-danger">
+                    <div [hidden]="!customerForm.controls['lastname'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 128} }}
+                    </div>
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
@@ -62,6 +74,9 @@
                   <label>{{ 'CUSTOMER_TYPE' | translate }} <a class="js-click" (click)="onTypeHelpClick()"><i class="fa fa-question-circle"></i></a></label>
                   <input class="form-control" placeholder="{{ 'CUSTOMER_TYPE' | translate }}" formControlName="customerType" name="customerType" type="text" [(ngModel)]="customer.customerType">
                   <div [hidden]="customerForm.controls['customerType'].valid || customerForm.controls['customerType'].pristine" class="alert alert-danger">
+                    <div [hidden]="!customerForm.controls['customerType'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
                     {{ 'ALPHANUM_REQUIRED' | translate }}
                   </div>
                 </div>
@@ -69,6 +84,9 @@
                   <label>{{ 'CUSTOMER_POLICY' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'CUSTOMER_POLICY' | translate }}" formControlName="pricingPolicy" name="pricingPolicy" type="text" [(ngModel)]="customer.pricingPolicy">
                   <div [hidden]="customerForm.controls['pricingPolicy'].valid || customerForm.controls['pricingPolicy'].pristine" class="alert alert-danger">
+                    <div [hidden]="!customerForm.controls['pricingPolicy'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
                     {{ 'ALPHANUM_REQUIRED' | translate }}
                   </div>
                 </div>
@@ -76,6 +94,9 @@
                   <label>{{ 'CUSTOMER_TAG' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'CUSTOMER_TAG' | translate }}" formControlName="tag" name="tag" type="text" [(ngModel)]="customer.tag">
                   <div [hidden]="customerForm.controls['tag'].valid || customerForm.controls['tag'].pristine" class="alert alert-danger">
+                    <div [hidden]="!customerForm.controls['tag'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
                     {{ 'TAGS_REQUIRED' | translate }}
                   </div>
                 </div>

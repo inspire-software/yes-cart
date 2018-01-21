@@ -18,6 +18,9 @@
                     <div [hidden]="!attributeForm.controls['code'].hasError('DUPLICATE')">
                       {{ 'UNIQUE_REQUIRED' | translate }}
                     </div>
+                    <div [hidden]="!attributeForm.controls['code'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
                     {{ 'SEOURI_REQUIRED' | translate }}
                   </div>
                 </div>

@@ -82,13 +82,13 @@ export class CustomerComponent implements OnInit, OnDestroy {
     this.customerForm = fb.group({
       'code': [''],
       'email': ['', YcValidators.requiredValidEmail],
-      'salutation': ['', YcValidators.nonBlankTrimmed],
-      'firstname': ['', YcValidators.requiredNonBlankTrimmed],
-      'lastname': ['', YcValidators.requiredNonBlankTrimmed],
-      'middlename': ['', YcValidators.nonBlankTrimmed],
-      'tag': ['', YcValidators.nonBlankTrimmed],
-      'customerType': ['', YcValidators.validCode],
-      'pricingPolicy': ['', YcValidators.validCode],
+      'salutation': ['', YcValidators.nonBlankTrimmed128],
+      'firstname': ['', YcValidators.requiredNonBlankTrimmed128],
+      'lastname': ['', YcValidators.requiredNonBlankTrimmed128],
+      'middlename': ['', YcValidators.nonBlankTrimmed128],
+      'tag': ['', YcValidators.nonBlankTrimmed255],
+      'customerType': ['', YcValidators.validCode255],
+      'pricingPolicy': ['', YcValidators.validCode255],
     });
 
     let that = this;

@@ -36,14 +36,20 @@
                   <label>{{ 'CUSTOMER_FIRSTNAME' | translate }}</label>
                   <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_FIRSTNAME' | translate }}" formControlName="firstName" name="firstName" type="text" [(ngModel)]="manager.firstName">
                   <div [hidden]="managerForm.controls['firstName'].valid || managerForm.controls['firstName'].pristine" class="alert alert-danger">
-                    {{ 'SIMPLE_REQUIRED' | translate }}
+                    <div [hidden]="!managerForm.controls['firstName'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 128} }}
+                    </div>
+                    {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'CUSTOMER_LASTNAME' | translate }}</label>
                   <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_LASTNAME' | translate }}" formControlName="lastName" name="lastName" type="text" [(ngModel)]="manager.lastName">
                   <div [hidden]="managerForm.controls['lastName'].valid || managerForm.controls['lastName'].pristine" class="alert alert-danger">
-                    {{ 'SIMPLE_REQUIRED' | translate }}
+                    <div [hidden]="!managerForm.controls['lastName'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 128} }}
+                    </div>
+                    {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
               </fieldset>

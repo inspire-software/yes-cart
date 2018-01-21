@@ -45,7 +45,7 @@ export class CountryComponent implements OnInit, OnDestroy {
     this.countryForm = fb.group({
       'countryCode': ['', YcValidators.requiredValidCountryCode],
       'isoCode': ['', YcValidators.requiredValidCountryIsoCode],
-      'name': ['', YcValidators.requiredNonBlankTrimmed],
+      'name': ['', YcValidators.requiredNonBlankTrimmed64],
       'displayName': ['', YcValidators.nonBlankTrimmed],
     });
 

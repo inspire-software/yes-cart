@@ -15,6 +15,7 @@
   "URI_REQUIRED": "Gültige URI wird benötigt (A-Z, a-z, 0-9, _ oder -)",
   "REMOTE_CHECK": "Die Daten werden auf Duplikate überprüft...",
   "UNIQUE_REQUIRED": "Dieser Wert ist schon vorhanden. Bitte wählen Sie nochmals einen andern Wert.",
+  "MAXLENGTH_REQUIRED": "Maximale Länge für diesen Wert ist {{value}}",
   "TAGS_REQUIRED": "Tags müssen durch einen Leerschlag separiert werden und müssen ein Wort umfassend sein. z.B. 'eintag nocheiner eindritter123'",
   "EMAIL_REQUIRED": "Es wird eine gültige E-Mail Adresse benötigt",
   "PHONE_REQUIRED": "Korrektes Format für die Telefonnummer ist erforderlich (z.b. +44 077 777-777, (0) 77-777-777, 777-777)",

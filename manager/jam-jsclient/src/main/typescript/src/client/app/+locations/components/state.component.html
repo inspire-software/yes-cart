@@ -16,6 +16,9 @@
               <label>{{ 'LOCATION_STATE_CODE' | translate }}</label>
               <input autofocus class="form-control" placeholder="{{ 'LOCATION_STATE_CODE' | translate }}" formControlName="stateCode" name="stateCode" type="text" [(ngModel)]="state.stateCode">
               <div [hidden]="stateForm.controls['stateCode'].valid || stateForm.controls['stateCode'].pristine" class="alert alert-danger">
+                <div [hidden]="!stateForm.controls['stateCode'].hasError('maxlength')">
+                  {{ 'MAXLENGTH_REQUIRED' | translate:{value: 64} }}
+                </div>
                 {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
               </div>
             </div>
@@ -23,6 +26,9 @@
               <label>{{ 'NAME' | translate }}</label>
               <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text"  [(ngModel)]="state.name">
               <div [hidden]="stateForm.controls['name'].valid || stateForm.controls['name'].pristine" class="alert alert-danger">
+                <div [hidden]="!stateForm.controls['name'].hasError('maxlength')">
+                  {{ 'MAXLENGTH_REQUIRED' | translate:{value: 64} }}
+                </div>
                 {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
               </div>
             </div>

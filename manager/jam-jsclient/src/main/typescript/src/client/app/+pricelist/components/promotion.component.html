@@ -23,6 +23,9 @@
                     <div [hidden]="!promotionForm.controls['code'].hasError('DUPLICATE')">
                       {{ 'UNIQUE_REQUIRED' | translate }}
                     </div>
+                    <div [hidden]="!promotionForm.controls['code'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
                     {{ 'ALPHANUM_REQUIRED' | translate }}
                   </div>
                 </div>

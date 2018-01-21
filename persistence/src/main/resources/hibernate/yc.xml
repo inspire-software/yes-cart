@@ -515,7 +515,7 @@
         <property name="countryCode" type="string" length="2">
             <column name="COUNTRY_CODE" length="2" not-null="true"/>
         </property>
-        <property name="stateCode" type="string" length="16">
+        <property name="stateCode" type="string" length="64">
             <column name="STATE_CODE" length="64" not-null="true"/>
         </property>
         <property name="name" type="string" length="64" not-null="true">

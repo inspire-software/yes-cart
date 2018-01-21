@@ -38,6 +38,9 @@
                     <div [hidden]="!categoryForm.controls['guid'].hasError('DUPLICATE')">
                       {{ 'UNIQUE_REQUIRED' | translate }}
                     </div>
+                    <div [hidden]="!categoryForm.controls['guid'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 36} }}
+                    </div>
                     {{ 'ALPHANUM_REQUIRED' | translate }}
                   </div>
                 </div>
@@ -154,6 +157,9 @@
                     </div>
                     <div [hidden]="!categoryForm.controls['uri'].hasError('DUPLICATE')">
                       {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    <div [hidden]="!categoryForm.controls['uri'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
                     </div>
                     {{ 'SEOURI_REQUIRED' | translate }}
                   </div>

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
 import { ManagerVO, ManagerShopLinkVO, ManagerRoleLinkVO, ShopVO, RoleVO, Pair, ValidationRequestVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
@@ -71,8 +71,8 @@ export class ManagerComponent implements OnInit, OnDestroy {
 
     this.managerForm = fb.group({
       'email': ['', validInput],
-      'firstName': ['', Validators.required],
-      'lastName': ['', Validators.required],
+      'firstName': ['', YcValidators.requiredNonBlankTrimmed128],
+      'lastName': ['', YcValidators.requiredNonBlankTrimmed128],
       'managerShops': [''],
       'managerRoles': [''],
     });

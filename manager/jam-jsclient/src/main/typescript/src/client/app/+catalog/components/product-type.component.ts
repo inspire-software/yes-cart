@@ -69,7 +69,7 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.validCode(control);
+      let basic = YcValidators.validCode36(control);
       if (basic == null) {
         var req:ValidationRequestVO = { subject: 'producttype', subjectId: that._productType.producttypeId, field: 'guid', value: code };
         return YcValidators.validRemoteCheck(control, req);
@@ -82,8 +82,8 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
       'guid': ['', validCode],
       'name': [''],
       'description': [''],
-      'uitemplate': ['', YcValidators.noWhitespace],
-      'uisearchtemplate': ['', YcValidators.noWhitespace],
+      'uitemplate': ['', YcValidators.noWhitespace255],
+      'uisearchtemplate': ['', YcValidators.noWhitespace255],
       'service': [''],
       'ensemble': [''],
       'shippable': [''],

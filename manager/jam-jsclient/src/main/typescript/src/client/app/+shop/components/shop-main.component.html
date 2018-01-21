@@ -28,6 +28,9 @@
                 <div [hidden]="!shopMainForm.controls['code'].hasError('DUPLICATE')">
                   {{ 'UNIQUE_REQUIRED' | translate }}
                 </div>
+                <div [hidden]="!shopMainForm.controls['code'].hasError('maxlength')">
+                  {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                </div>
                 {{ 'ALPHANUM_REQUIRED' | translate }}
               </div>
             </div>
@@ -35,6 +38,9 @@
               <label>{{ 'NAME' | translate }}</label>
               <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text"  [(ngModel)]="shop.name">
               <div [hidden]="shopMainForm.controls['name'].valid || shopMainForm.controls['name'].pristine" class="alert alert-danger">
+                <div [hidden]="!shopMainForm.controls['name'].hasError('maxlength')">
+                  {{ 'MAXLENGTH_REQUIRED' | translate:{value: 64} }}
+                </div>
                 {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
               </div>
             </div>
