@@ -67,10 +67,10 @@ public class PricingPolicyProviderImpl implements PricingPolicyProvider, Configu
     public void register(final String shopCode, final PricingPolicyProvider provider) {
 
         if (provider != null) {
-            LOG.info("Custom shop settings for {} Registering pricing provider {}", shopCode, provider.getClass());
+            LOG.info("Custom shop settings for {} registering pricing provider {}", shopCode, provider.getClass());
             customPricingPolicyProviders.put(shopCode, provider);
         } else {
-            LOG.info("Custom shop settings for {} Registering pricing provider DEFAULT", shopCode);
+            LOG.info("Custom shop settings for {} registering pricing provider DEFAULT", shopCode);
             customPricingPolicyProviders.remove(shopCode);
         }
 

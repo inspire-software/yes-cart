@@ -73,10 +73,10 @@ public class PriceResolverImpl implements PriceResolver, ConfigurationRegistry<L
     public void register(final Long shopCode, final PriceResolver provider) {
 
         if (provider != null) {
-            LOG.info("Custom shop settings for {} Registering pricing resolver {}", shopCode, provider.getClass());
+            LOG.info("Custom shop settings for {} registering pricing resolver {}", shopCode, provider.getClass());
             customPriceResolvers.put(shopCode, provider);
         } else {
-            LOG.info("Custom shop settings for {} Registering pricing resolver DEFAULT", shopCode);
+            LOG.info("Custom shop settings for {} registering pricing resolver DEFAULT", shopCode);
             customPriceResolvers.remove(shopCode);
         }
     }

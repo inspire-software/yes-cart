@@ -64,10 +64,10 @@ public class TaxProviderImpl implements TaxProvider, ConfigurationRegistry<Strin
     public void register(final String shopCode, final TaxProvider provider) {
 
         if (provider != null) {
-            LOG.info("Custom shop settings for {} Registering tax provider {}", shopCode, provider.getClass());
+            LOG.info("Custom shop settings for {} registering tax provider {}", shopCode, provider.getClass());
             customTaxProviders.put(shopCode, provider);
         } else {
-            LOG.info("Custom shop settings for {} Registering tax provider DEFAULT", shopCode);
+            LOG.info("Custom shop settings for {} registering tax provider DEFAULT", shopCode);
             customTaxProviders.remove(shopCode);
         }
 

@@ -98,10 +98,10 @@ public class InventoryResolverImpl implements InventoryResolver, ConfigurationRe
     public void register(final String warehouseCode, final InventoryResolver provider) {
 
         if (provider != null) {
-            LOG.info("Custom shop settings for {} Registering inventory resolver {}", warehouseCode, provider.getClass());
+            LOG.info("Custom shop settings for {} registering inventory resolver {}", warehouseCode, provider.getClass());
             customInventoryResolvers.put(warehouseCode, provider);
         } else {
-            LOG.info("Custom shop settings for {} Registering inventory resolver DEFAULT", warehouseCode);
+            LOG.info("Custom shop settings for {} registering inventory resolver DEFAULT", warehouseCode);
             customInventoryResolvers.remove(warehouseCode);
         }
     }

@@ -86,10 +86,10 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
     public void register(final Long shopCode, final ProductAvailabilityStrategy strategy) {
 
         if (strategy != null) {
-            LOG.info("Custom shop settings for {} Registering availability strategy {}", shopCode, strategy.getClass());
+            LOG.info("Custom shop settings for {} registering availability strategy {}", shopCode, strategy.getClass());
             customAvailabilityStrategies.put(shopCode, strategy);
         } else {
-            LOG.info("Custom shop settings for {} Registering availability strategy DEFAULT", shopCode);
+            LOG.info("Custom shop settings for {} registering availability strategy DEFAULT", shopCode);
             customAvailabilityStrategies.remove(shopCode);
         }
 

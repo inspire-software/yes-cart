@@ -74,10 +74,10 @@ public class DefaultCartContentsValidator extends AbstractCartContentsValidatorI
     public void register(final String shopCode, final CartContentsValidator validator) {
 
         if (validator != null) {
-            LOG.info("Custom shop settings for {} Registering cart validator {}", shopCode, validator.getClass());
+            LOG.info("Custom shop settings for {} registering cart validator {}", shopCode, validator.getClass());
             customValidators.put(shopCode, validator);
         } else {
-            LOG.info("Custom shop settings for {} Registering cart validator DEFAULT", shopCode);
+            LOG.info("Custom shop settings for {} registering cart validator DEFAULT", shopCode);
             customValidators.remove(shopCode);
         }
 
