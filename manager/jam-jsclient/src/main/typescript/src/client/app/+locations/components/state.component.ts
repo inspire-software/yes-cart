@@ -44,8 +44,8 @@ export class StateComponent implements OnInit, OnDestroy {
 
     this.stateForm = fb.group({
       'countryCode': ['', YcValidators.requiredValidCountryCode],
-      'stateCode': ['', YcValidators.requiredNonBlankTrimmed],
-      'name': ['', YcValidators.requiredNonBlankTrimmed],
+      'stateCode': ['', YcValidators.requiredNonBlankTrimmed64],
+      'name': ['', YcValidators.requiredNonBlankTrimmed64],
       'displayName': ['', YcValidators.requiredNonBlankTrimmed],
     });
 

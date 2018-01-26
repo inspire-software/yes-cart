@@ -78,7 +78,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.validSeoUri(control);
+      let basic = YcValidators.validSeoUri255(control);
       if (basic == null) {
         var req:ValidationRequestVO = { subject: 'category', subjectId: that._category.categoryId, field: 'uri', value: uri };
         return YcValidators.validRemoteCheck(control, req);
@@ -93,7 +93,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.validCode(control);
+      let basic = YcValidators.validCode36(control);
       if (basic == null) {
         var req:ValidationRequestVO = { subject: 'category', subjectId: that._category.categoryId, field: 'guid', value: code };
         return YcValidators.validRemoteCheck(control, req);

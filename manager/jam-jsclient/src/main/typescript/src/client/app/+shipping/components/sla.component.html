@@ -18,6 +18,9 @@
                     <div [hidden]="!slaForm.controls['code'].hasError('DUPLICATE')">
                       {{ 'UNIQUE_REQUIRED' | translate }}
                     </div>
+                    <div [hidden]="!slaForm.controls['code'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 36} }}
+                    </div>
                     {{ 'ALPHANUM_REQUIRED' | translate }}
                   </div>
                 </div>

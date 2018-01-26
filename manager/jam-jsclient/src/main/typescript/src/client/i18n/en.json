@@ -15,6 +15,7 @@
   "URI_REQUIRED": "Valid URI is required (A-Z, a-z, 0-9, _ or -)",
   "REMOTE_CHECK": "Performing duplicate data check...",
   "UNIQUE_REQUIRED": "This value has already been used. Please choose another.",
+  "MAXLENGTH_REQUIRED": "Maximum length for this value is {{value}}",
   "TAGS_REQUIRED": "Tags must be separated by space and should be one word. E.g. 'onetag another third123'",
   "EMAIL_REQUIRED": "Valid email address is required",
   "PHONE_REQUIRED": "Valid phone is required (e.g. +44 077 777-777, (0)77-777-777, 777-777)",

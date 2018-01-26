@@ -82,7 +82,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.validSeoUri(control);
+      let basic = YcValidators.validSeoUri255(control);
       if (basic == null) {
         var req:ValidationRequestVO = { subject: 'product', subjectId: that._product.productId, field: 'uri', value: uri };
         return YcValidators.validRemoteCheck(control, req);
@@ -97,7 +97,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.validCode(control);
+      let basic = YcValidators.validCode36(control);
       if (basic == null) {
         var req:ValidationRequestVO = { subject: 'product', subjectId: that._product.productId, field: 'guid', value: code };
         return YcValidators.validRemoteCheck(control, req);
@@ -107,7 +107,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
     let validCode = function(control:any):any {
 
-      let basic = YcValidators.requiredValidCode(control);
+      let basic = YcValidators.requiredValidCode255(control);
       if (basic == null) {
 
         let code = control.value;
@@ -124,11 +124,11 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.productForm = fb.group({
       'guid': ['', validGuid],
       'code': ['', validCode],
-      'manufacturerCode': ['', YcValidators.noWhitespace],
-      'manufacturerPartCode': ['', YcValidators.noWhitespace],
-      'supplierCode': ['', YcValidators.noWhitespace],
-      'supplierCatalogCode': ['', YcValidators.noWhitespace],
-      'pimCode': ['', YcValidators.noWhitespace],
+      'manufacturerCode': ['', YcValidators.noWhitespace255],
+      'manufacturerPartCode': ['', YcValidators.noWhitespace255],
+      'supplierCode': ['', YcValidators.noWhitespace255],
+      'supplierCatalogCode': ['', YcValidators.noWhitespace255],
+      'pimCode': ['', YcValidators.noWhitespace255],
       'pimDisabled': [''],
       'pimOutdated': [''],
       'pimUpdated': [''],

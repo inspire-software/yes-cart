@@ -56,7 +56,7 @@ export class BrandComponent implements OnInit, OnDestroy {
     LogUtil.debug('BrandComponent constructed');
 
     this.brandForm = fb.group({
-      'name': ['', YcValidators.requiredNonBlankTrimmed],
+      'name': ['', YcValidators.requiredNonBlankTrimmed255],
       'description': [''],
     });
 

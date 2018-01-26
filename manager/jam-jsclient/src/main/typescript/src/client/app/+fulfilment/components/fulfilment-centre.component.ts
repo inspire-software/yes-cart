@@ -59,7 +59,7 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
           return null;
         }
 
-        basic = YcValidators.validCode(control);
+        basic = YcValidators.validCode255(control);
         if (basic == null) {
           var req:ValidationRequestVO = {
             subject: 'warehouse',

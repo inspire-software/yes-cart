@@ -28,11 +28,31 @@ export class YcValidators {
 
   static validCode = Validators.pattern('[A-Za-z0-9\\-_]+');
 
+  static validCode36 = Validators.compose([YcValidators.validCode, Validators.maxLength(36)]);
+
+  static validCode255 = Validators.compose([YcValidators.validCode, Validators.maxLength(255)]);
+
   static requiredValidCode = Validators.compose([Validators.required, YcValidators.validCode]);
+
+  static requiredValidCode255 = Validators.compose([Validators.required, Validators.maxLength(255), YcValidators.validCode]);
 
   static validSeoUri = Validators.pattern('[A-Za-z0-9.\\-_]+');
 
+  static validSeoUri255 = Validators.compose([YcValidators.validSeoUri, Validators.maxLength(255)]);
+
   static noWhitespace = Validators.pattern('\\S+');
+
+  static noWhitespace255 = Validators.compose([YcValidators.noWhitespace, Validators.maxLength(255)]);
+
+  static nonBlankTrimmed128 = Validators.compose([Validators.maxLength(128), YcValidators.nonBlankTrimmed]);
+
+  static nonBlankTrimmed255 = Validators.compose([Validators.maxLength(255), YcValidators.nonBlankTrimmed]);
+
+  static requiredNonBlankTrimmed64 = Validators.compose([Validators.maxLength(64), YcValidators.requiredNonBlankTrimmed]);
+
+  static requiredNonBlankTrimmed128 = Validators.compose([Validators.maxLength(128), YcValidators.requiredNonBlankTrimmed]);
+
+  static requiredNonBlankTrimmed255 = Validators.compose([Validators.maxLength(255), YcValidators.requiredNonBlankTrimmed]);
 
   static validLanguageCode = Validators.pattern('[a-z]{2}');
 

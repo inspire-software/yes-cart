@@ -66,17 +66,18 @@ export class ShopMainComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.requiredValidCode(control);
+      let basic = YcValidators.requiredValidCode255(control);
       if (basic == null) {
         var req:ValidationRequestVO = { subject: 'shop', subjectId: that.shop.shopId, field: 'code', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
+      LogUtil.debug('Basic error', basic);
       return basic;
     };
 
     this.shopMainForm = fb.group({
         'code': ['', validCode],
-        'name': ['', YcValidators.requiredNonBlankTrimmed],
+        'name': ['', YcValidators.requiredNonBlankTrimmed64],
         'description': [''],
         'fspointer': [''],
     });

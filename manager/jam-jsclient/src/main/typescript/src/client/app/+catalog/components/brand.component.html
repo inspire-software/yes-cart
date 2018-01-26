@@ -13,6 +13,9 @@
                   <label>{{ 'NAME' | translate }}</label>
                   <input autofocus class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text" [(ngModel)]="brand.name">
                   <div [hidden]="brandForm.controls['name'].valid || brandForm.controls['name'].pristine" class="alert alert-danger">
+                    <div [hidden]="!brandForm.controls['name'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>

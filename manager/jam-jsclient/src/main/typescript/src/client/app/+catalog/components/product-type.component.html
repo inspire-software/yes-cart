@@ -19,6 +19,9 @@
                     <div [hidden]="!productTypeForm.controls['guid'].hasError('DUPLICATE')">
                       {{ 'UNIQUE_REQUIRED' | translate }}
                     </div>
+                    <div [hidden]="!productTypeForm.controls['guid'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 36} }}
+                    </div>
                     {{ 'ALPHANUM_REQUIRED' | translate }}
                   </div>
                 </div>
@@ -59,6 +62,9 @@
                   <label>{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}" formControlName="uitemplate" name="uitemplate" type="text" [(ngModel)]="productType.uitemplate">
                   <div [hidden]="productTypeForm.controls['uitemplate'].valid || productTypeForm.controls['uitemplate'].pristine" class="alert alert-danger">
+                    <div [hidden]="!productTypeForm.controls['uitemplate'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
                     {{ 'NO_WHITESPACE_REQUIRED' | translate }}
                   </div>
                 </div>
@@ -66,6 +72,9 @@
                   <label>{{ 'PRODUCT_TYPE_UISEARCHTEMPLATE' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}" formControlName="uisearchtemplate" name="uisearchtemplate" type="text" [(ngModel)]="productType.uisearchtemplate">
                   <div [hidden]="productTypeForm.controls['uisearchtemplate'].valid || productTypeForm.controls['uisearchtemplate'].pristine" class="alert alert-danger">
+                    <div [hidden]="!productTypeForm.controls['uitemplate'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
                     {{ 'NO_WHITESPACE_REQUIRED' | translate }}
                   </div>
                 </div>
