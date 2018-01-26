@@ -107,7 +107,7 @@
         <groovy-all.version>2.4.3</groovy-all.version>
 
         <!-- Storefront global versions -->
-        <wicket.version>1.5.11</wicket.version>
+        <wicket.version>7.9.0</wicket.version>
         <jetty.version>6.1.4</jetty.version>
 
         <!-- Storefront API global versions -->

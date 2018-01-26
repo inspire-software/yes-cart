@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.misc.navigation.price;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -25,7 +26,7 @@ import java.util.Set;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface PriceTierTree {
+public interface PriceTierTree extends Serializable {
 
     /**
      * Get configured currencies.

@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -148,7 +148,7 @@ public class OrderPage extends AbstractWebPage {
      * @return page title
      */
     public IModel<String> getPageTitle() {
-        return new Model<String>(getLocalizer().getString("ordersSummary",this));
+        return new StringResourceModel("ordersSummary",this);
     }
 
 

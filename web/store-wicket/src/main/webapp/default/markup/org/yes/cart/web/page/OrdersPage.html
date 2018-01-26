@@ -15,7 +15,7 @@
   -->
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<html  xmlns:wicket="http://wicket.apache.org">
 
 <wicket:head>
     <title wicket:id="pageTitle">[page title]</title>
@@ -88,8 +88,8 @@
                         </label>
                         <div class="col-xs-12 col-sm-6">
                             <select type="text" id="view" name="view" class="form-control">
-                                <option value="week" selected="selected"><wicket:message key="viewOrdersForWeek">[last week]</wicket:message></option>
-                                <option value="month"><wicket:message key="viewOrdersForMonth">[last month]</wicket:message></option>
+                                <option value="week"><wicket:message key="viewOrdersForWeek">[last week]</wicket:message></option>
+                                <option value="month" selected="selected"><wicket:message key="viewOrdersForMonth">[last month]</wicket:message></option>
                                 <option value="year"><wicket:message key="viewOrdersForYear">[last year]</wicket:message></option>
                                 <option value="all"><wicket:message key="viewOrdersForAll">[all orders]</wicket:message></option>
                             </select>

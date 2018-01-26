@@ -28,7 +28,7 @@ import java.util.List;
  * Date: 7/13/11
  * Time: 9:51 AM
  */
-public class SortableCategoryDataProvider extends SortableDataProvider<CategoryDecorator> {
+public class SortableCategoryDataProvider extends SortableDataProvider<CategoryDecorator, String> {
 
 
     private final List<CategoryDecorator> categories;
@@ -45,14 +45,14 @@ public class SortableCategoryDataProvider extends SortableDataProvider<CategoryD
     /**
      * {@inheritDoc}
      */
-    public Iterator<? extends CategoryDecorator> iterator(final int i, final int i1) {
+    public Iterator<? extends CategoryDecorator> iterator(final long i, final long i1) {
         return categories.iterator();
     }
 
     /**
      * {@inheritDoc}
      */
-    public int size() {
+    public long size() {
         return categories.size();
     }
 

@@ -18,7 +18,7 @@ package org.yes.cart.web.page;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -67,7 +67,7 @@ public class AjaxWlPage extends AbstractWebPage {
      * @return page title
      */
     public IModel<String> getPageTitle() {
-        return new Model<String>(getLocalizer().getString("wishlist",this));
+        return new StringResourceModel("wishlist",this);
     }
 
 

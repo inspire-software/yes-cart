@@ -153,10 +153,16 @@ public class ProductsCentralView extends AbstractCentralView {
 
             }
 
+
+
         };
 
         productDataView.setColumns(columns);
-        productDataView.setRows(selectedItemPerPage / columns);
+        productDataView.setRows(
+                selectedItemPerPage % columns == 0 ?
+                        selectedItemPerPage / columns :
+                        (selectedItemPerPage / columns) + 1);
+        productDataView.setItemsPerPage(selectedItemPerPage);
         productDataView.setCurrentPage(currentPageIdx);
 
         add(new ProductSorter(SORTER, pageSortingValues).setVisible(hasResults));

@@ -20,6 +20,7 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.value.ValueMap;
@@ -122,7 +123,7 @@ public class ShoppingCartPage extends AbstractWebPage {
      * @return page title
      */
     public IModel<String> getPageTitle() {
-        return new Model<String>(getLocalizer().getString("shoppingCart", this));
+        return new StringResourceModel("shoppingCart", this);
     }
 
 

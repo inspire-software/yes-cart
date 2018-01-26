@@ -94,39 +94,43 @@ public class SubCategoriesCentralView extends AbstractCentralView {
 
         final List<CategoryDecorator> categories = decorate(categoryServiceFacade.getCurrentCategoryMenu(categoryId, browsingShopId, lang));
 
-        final SortableDataProvider<CategoryDecorator> dataProvider = new SortableCategoryDataProvider(categories);
+        final SortableDataProvider<CategoryDecorator, String> dataProvider = new SortableCategoryDataProvider(categories);
 
         final Pair<String, String> imageSize = categoryServiceFacade.getCategoryListImageSizeConfig(categoryId, configShopId);
-        final int subCatsQty = categoryServiceFacade.getCategoryListColumnOptionsConfig(categoryId, configShopId);
+        final int columns = categoryServiceFacade.getCategoryListColumnOptionsConfig(categoryId, configShopId);
 
-        add(
-                new GridView<CategoryDecorator>(CATEGORY_LIST, dataProvider) {
+        final GridView<CategoryDecorator> categoryView = new GridView<CategoryDecorator>(CATEGORY_LIST, dataProvider) {
 
-                    /** {@inheritDoc} */
-                    protected void populateItem(Item<CategoryDecorator> categoryItem) {
+            /** {@inheritDoc} */
+            protected void populateItem(Item<CategoryDecorator> categoryItem) {
 
-                        categoryItem.add(
+                categoryItem.add(
 
-                                new CategoryView(CATEGORY_VIEW, imageSize)
+                        new CategoryView(CATEGORY_VIEW, imageSize)
 
-                        );
+                );
 
-                    }
+            }
 
-                    protected void populateEmptyItem(Item<CategoryDecorator> categoryItem) {
+            protected void populateEmptyItem(Item<CategoryDecorator> categoryItem) {
 
-                        categoryItem.add(
+                categoryItem.add(
 
-                                new Label(CATEGORY_VIEW, StringUtils.EMPTY).setVisible(false)
+                        new Label(CATEGORY_VIEW, StringUtils.EMPTY).setVisible(false)
 
-                        );
+                );
 
-                    }
+            }
 
-                }
-                        .setColumns(subCatsQty)
-                        .setRows(1 + categories.size() / subCatsQty)
-        );
+        };
+
+        categoryView.setColumns(columns);
+        categoryView.setRows(categories.size() % columns == 0 ?
+                                categories.size() / columns :
+                                (categories.size() / columns) + 1);
+        categoryView.setItemsPerPage(categories.size());
+
+        add(categoryView);
 
         super.onBeforeRender();
     }

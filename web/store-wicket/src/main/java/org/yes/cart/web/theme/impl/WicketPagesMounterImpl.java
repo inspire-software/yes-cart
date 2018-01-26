@@ -16,11 +16,11 @@
 
 package org.yes.cart.web.theme.impl;
 
+import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.component.IRequestablePage;
-import org.apache.wicket.request.mapper.MountedMapper;
 import org.apache.wicket.request.mapper.parameter.IPageParametersEncoder;
-import org.apache.wicket.util.ClassProvider;
+import org.apache.wicket.util.reference.ClassReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.web.theme.WicketPagesMounter;
@@ -43,9 +43,9 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
     private final Map<String, Map<String, Class<IRequestablePage>>> pageMapping;
     private final List<String> encoderEnabledUrls;
 
-    private ClassProvider<IRequestablePage> loginPage;
-    private ClassProvider<IRequestablePage> homePage;
-    private Map<String, ClassProvider<IRequestablePage>> pageByUri = new HashMap<String, ClassProvider<IRequestablePage>>();
+    private ClassReference<IRequestablePage> loginPage;
+    private ClassReference<IRequestablePage> homePage;
+    private Map<String, ClassReference<IRequestablePage>> pageByUri = new HashMap<String, ClassReference<IRequestablePage>>();
 
     public WicketPagesMounterImpl(final IPageParametersEncoder encoder,
                                   final Map<String, Map<String, Class<IRequestablePage>>> pageMapping,
@@ -63,10 +63,10 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
         for (Map.Entry<String, Map<String, Class<IRequestablePage>>> pageMappingEntry : pageMapping.entrySet()) {
             final String url = pageMappingEntry.getKey();
             final Map<String, Class<IRequestablePage>> pages = pageMappingEntry.getValue();
-            final ClassProvider classProvider;
+            final ClassReference classProvider;
             if (pages.size() == 1) {
                 // there is only default mapping for this url
-                classProvider = ClassProvider.of(pages.entrySet().iterator().next().getValue());
+                classProvider = ClassReference.of(pages.entrySet().iterator().next().getValue());
                 if (LOG.isInfoEnabled()) {
                     LOG.info("Mounting url '{}' to page '{}'", url, classProvider.get().getCanonicalName());
                 }
@@ -101,17 +101,17 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
     }
 
     /** {@inheritDoc} */
-    public ClassProvider<IRequestablePage> getHomePageProvider() {
+    public ClassReference<IRequestablePage> getHomePageProvider() {
         return homePage;
     }
 
     /** {@inheritDoc} */
-    public ClassProvider<IRequestablePage> getLoginPageProvider() {
+    public ClassReference<IRequestablePage> getLoginPageProvider() {
         return loginPage;
     }
 
     /** {@inheritDoc} */
-    public ClassProvider<IRequestablePage> getPageProviderByUri(final String uri) {
+    public ClassReference<IRequestablePage> getPageProviderByUri(final String uri) {
         return pageByUri.get(uri);
     }
 }

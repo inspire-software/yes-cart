@@ -30,7 +30,7 @@ import java.util.Iterator;
  */
 
 
-public class SortableProductDataProvider extends SortableDataProvider<ProductSearchResultDTO> {
+public class SortableProductDataProvider extends SortableDataProvider<ProductSearchResultDTO, String> {
 
     private ProductSearchResultPageDTO products;
 
@@ -44,12 +44,12 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductSea
         this.products = products;
     }
 
-    public Iterator<? extends ProductSearchResultDTO> iterator(int first, int count) {
+    public Iterator<? extends ProductSearchResultDTO> iterator(final long first, final long count) {
         return products.getResults().iterator();
     }
 
 
-    public int size() {
+    public long size() {
         return products.getTotalHits();
     }
 

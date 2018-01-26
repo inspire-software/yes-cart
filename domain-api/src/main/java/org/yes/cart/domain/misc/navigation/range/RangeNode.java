@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.misc.navigation.range;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ import java.util.List;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface RangeNode {
+public interface RangeNode extends Serializable {
 
     /**
      * @return from range

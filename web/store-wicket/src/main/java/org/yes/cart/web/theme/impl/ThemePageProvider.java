@@ -17,8 +17,8 @@
 package org.yes.cart.web.theme.impl;
 
 import org.apache.wicket.request.component.IRequestablePage;
-import org.apache.wicket.util.ClassProvider;
 import org.apache.wicket.util.IProvider;
+import org.apache.wicket.util.reference.ClassReference;
 import org.springframework.util.Assert;
 import org.yes.cart.web.application.ApplicationDirector;
 
@@ -31,18 +31,18 @@ import java.util.Map;
  * Date: 13-03-21
  * Time: 10:28 AM
  */
-public class ThemePageProvider extends ClassProvider<IRequestablePage> {
+public class ThemePageProvider extends ClassReference<IRequestablePage> {
 
     private final Map<String, IProvider<Class<IRequestablePage>>> pages = new HashMap<String, IProvider<Class<IRequestablePage>>>();
 
     public ThemePageProvider(final Map<String, Class<IRequestablePage>> pages) {
-        super(null);
+        super(IRequestablePage.class);
 
         Assert.notEmpty(pages, "Must have pages mapping");
         Assert.isTrue(pages.containsKey("default"), "Must have mapping for default theme");
 
         for (final Map.Entry<String, Class<IRequestablePage>> entry : pages.entrySet()) {
-            this.pages.put(entry.getKey(), ClassProvider.of(entry.getValue()));
+            this.pages.put(entry.getKey(), ClassReference.of(entry.getValue()));
         }
     }
 

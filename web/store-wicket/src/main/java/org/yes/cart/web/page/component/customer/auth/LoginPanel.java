@@ -245,9 +245,8 @@ public class LoginPanel extends BaseComponent {
                             if (signIn(getEmail(), getPassword())) {
                                 ((AbstractWebPage) getPage()).executeHttpPostedCommands();
                                 ((AbstractWebPage) getPage()).persistCartIfNecessary();
-                                if (!continueToOriginalDestination()) {
-                                    setResponsePage(successfulPage, parameters);
-                                }
+                                continueToOriginalDestination();
+                                setResponsePage(successfulPage, parameters);
                             } else {
                                 if (getCurrentCart().getLogonState() == ShoppingCart.INACTIVE_FOR_SHOP) {
                                     setRestorePassword(null);

@@ -57,6 +57,7 @@ public class URLPagingNavigator   extends PagingNavigator {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected PagingNavigation newNavigation(final String id,
                                              final IPageable pageable,
                                              final IPagingLabelProvider labelProvider) {
@@ -66,11 +67,17 @@ public class URLPagingNavigator   extends PagingNavigator {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected AbstractLink newPagingNavigationIncrementLink(final String id, final IPageable pageable, final int increment) {
 
         final LinksSupport links = ((AbstractWebPage) getPage()).getWicketSupportFacade().links();
         final PageParameters map = links.getFilteredCurrentParameters(pageParameters);
-        map.set(WebParametersKeys.PAGE, pageable.getCurrentPage() + increment);
+
+        final long total = pageable.getPageCount();
+        final long current = pageable.getCurrentPage();
+        final long tryPage = current + increment;
+
+        map.set(WebParametersKeys.PAGE, tryPage < 0 ? 0 : tryPage >= total ? total - 1 : tryPage);
 
         return (AbstractLink) links.newLink(id, map).add(new AttributeModifier("class", "nav-page-control"));
 
@@ -81,12 +88,13 @@ public class URLPagingNavigator   extends PagingNavigator {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected AbstractLink newPagingNavigationLink(final String id, final IPageable pageable, int pageNumber) {
 
         final LinksSupport links = ((AbstractWebPage) getPage()).getWicketSupportFacade().links();
         final PageParameters params = links.getFilteredCurrentParameters(pageParameters);
 
-        final int pNum;
+        final long pNum;
 
         if ("last".equals(id)) {
             pNum = getPageable().getPageCount() - 1;
@@ -111,24 +119,24 @@ public class URLPagingNavigator   extends PagingNavigator {
             pagingNavigation = newNavigation("navigation", getPageable(), labelProvider);
             add(pagingNavigation);
 
-            int previousPage = getPageable().getCurrentPage() - 1;
+            long previousPage = getPageable().getCurrentPage() - 1;
             if (previousPage < 0) {
                 previousPage = 0;
             }
 
-            int nextPage = getPageable().getCurrentPage() + 1;
+            long nextPage = getPageable().getCurrentPage() + 1;
             if (nextPage > getPageable().getPageCount() - 1) {
                 nextPage = getPageable().getPageCount() - 1;
             }
 
-            int lastPage = getPageable().getPageCount() - 1;
+            long lastPage = getPageable().getPageCount() - 1;
 
 
             // Add additional page links
             add(newPagingNavigationLink("first", getPageable(), 0));//.add(new TitleAppender("PagingNavigator.first")));
-            add(newPagingNavigationLink("prev", getPageable(), previousPage));//.add(new TitleAppender("PagingNavigator.first")));
-            add(newPagingNavigationLink("next", getPageable(), nextPage));//.add(new TitleAppender("PagingNavigator.first")));
-            add(newPagingNavigationLink("last", getPageable(), lastPage));//.add(new TitleAppender("PagingNavigator.last")));
+            add(newPagingNavigationLink("prev", getPageable(), (int) previousPage));//.add(new TitleAppender("PagingNavigator.first")));
+            add(newPagingNavigationLink("next", getPageable(), (int) nextPage));//.add(new TitleAppender("PagingNavigator.first")));
+            add(newPagingNavigationLink("last", getPageable(), (int) lastPage));//.add(new TitleAppender("PagingNavigator.last")));
         }
         super.onBeforeRender();
     }

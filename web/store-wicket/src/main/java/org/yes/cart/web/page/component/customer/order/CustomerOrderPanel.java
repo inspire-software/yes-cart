@@ -33,7 +33,6 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDet;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.impl.CustomerOrderComparator;
@@ -71,9 +70,6 @@ public class CustomerOrderPanel extends BaseComponent {
 
     @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
     private CustomerOrderService customerOrderService;
-
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
-    private CustomerService customerService;
 
     @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
@@ -177,7 +173,7 @@ public class CustomerOrderPanel extends BaseComponent {
     }
 
     private final static Set<String> SUPPORTED_VIEWS = new HashSet<String>(Arrays.asList("week", "month", "year", "all"));
-    private final static String DEFAULT_VIEW = "week";
+    private final static String DEFAULT_VIEW = "month";
 
     private Date determineDate(final PageParameters pageParameters) {
         String viewTime = pageParameters.get("view").toString();

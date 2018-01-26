@@ -81,6 +81,6 @@ public class LogoutPanel  extends BaseComponent {
     /** {@inheritDoc} */
     public boolean isVisible() {
         return ShoppingCart.LOGGED_IN == getCurrentCart().getLogonState()
-                && AuthenticatedWebSession.get().isSignedIn();
+                || AuthenticatedWebSession.get().isSignedIn();
     }
 }

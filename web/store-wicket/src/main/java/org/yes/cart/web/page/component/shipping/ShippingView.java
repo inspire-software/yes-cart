@@ -20,9 +20,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxEventBehavior;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -35,6 +32,7 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.constants.AttributeNamesKeys;
@@ -45,7 +43,6 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -152,7 +149,7 @@ public class ShippingView extends BaseComponent {
                 new PropertyModel<CarrierSla>(this, "carrierSla")) {
 
             /** {@inheritDoc} */
-            protected void onSelectionChanged(final Object descriptor) {
+            protected void onSelectionChanged(final CarrierSla descriptor) {
                 super.onSelectionChanged(carrierSla);
 
 
@@ -398,7 +395,7 @@ public class ShippingView extends BaseComponent {
         } else {
             final ProductPriceModel model = shippingServiceFacade.getCartShippingSupplierTotal(cart, this.supplier);
 
-            form.addOrReplace(new Label(PRICE_LABEL, getLocalizer().getString(PRICE_LABEL, this)));
+            form.addOrReplace(new Label(PRICE_LABEL, new StringResourceModel(PRICE_LABEL, this)));
             form.addOrReplace(
                     new PriceView(
                             PRICE_VIEW,

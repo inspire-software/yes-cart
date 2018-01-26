@@ -115,7 +115,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
      * @param id        component id
      * @param cartItems cart items
      */
-    public ShoppingCartItemsList(final String id, final List<? extends CartItem> cartItems) {
+    public ShoppingCartItemsList(final String id, final List<CartItem> cartItems) {
         super(id, cartItems);
     }
 

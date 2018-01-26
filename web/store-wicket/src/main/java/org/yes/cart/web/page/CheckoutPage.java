@@ -31,6 +31,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -463,7 +464,7 @@ public class CheckoutPage extends AbstractWebPage {
                 new PropertyModel<String>(orderInfo, "paymentGatewayLabel")) {
 
             /** {@inheritDoc} */
-            protected void onSelectionChanged(final Object descriptor) {
+            protected void onSelectionChanged(final String descriptor) {
 
                 final ShoppingCart cart = getCurrentCart();
                 final Shop shop = getCurrentShop();
@@ -530,7 +531,7 @@ public class CheckoutPage extends AbstractWebPage {
                         .add(multiDelivery)
                         .add(
                                 new Label(PAYMENT_FRAGMENT_MD_LABEL,
-                                        getLocalizer().getString(PAYMENT_FRAGMENT_MD_LABEL, this)
+                                        new StringResourceModel(PAYMENT_FRAGMENT_MD_LABEL, this)
 
                                 ).setVisible(showMultipleDelivery)
 

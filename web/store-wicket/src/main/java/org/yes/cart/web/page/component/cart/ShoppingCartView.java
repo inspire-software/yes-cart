@@ -109,28 +109,6 @@ public class ShoppingCartView extends BaseComponent {
 
         final CartValidityModel validation = checkoutServiceFacade.validateCart(cart);
 
-        if (validation.getMessages() != null) {
-            for (final CartValidityModelMessage message : validation.getMessages()) {
-                try {
-                    if (CartValidityModelMessage.MessageType.ERROR == message.getMessageType()) {
-                        error(getLocalizer().getString(message.getMessageKey(), this,
-                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
-                    } else if (CartValidityModelMessage.MessageType.INFO == message.getMessageType()) {
-                        info(getLocalizer().getString(message.getMessageKey(), this,
-                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
-                    } else if (CartValidityModelMessage.MessageType.SUCCESS == message.getMessageType()) {
-                        success(getLocalizer().getString(message.getMessageKey(), this,
-                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
-                    } else {
-                        warn(getLocalizer().getString(message.getMessageKey(), this,
-                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
-                    }
-                } catch (MissingResourceException exp) {
-                    warn(message.getMessageKey());
-                }
-            }
-        }
-
         final ProductPriceModel model = productServiceFacade.getCartItemsTotal(cart);
         final Total total = cart.getTotal();
 
@@ -221,6 +199,37 @@ public class ShoppingCartView extends BaseComponent {
 
     }
 
+    private void displayCartValidationMessages() {
+
+        final ShoppingCart cart = getCurrentCart();
+
+        final CartValidityModel validation = checkoutServiceFacade.validateCart(cart);
+
+        if (validation.getMessages() != null) {
+            for (final CartValidityModelMessage message : validation.getMessages()) {
+                try {
+                    if (CartValidityModelMessage.MessageType.ERROR == message.getMessageType()) {
+                        error(getLocalizer().getString(message.getMessageKey(), this,
+                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
+                    } else if (CartValidityModelMessage.MessageType.INFO == message.getMessageType()) {
+                        info(getLocalizer().getString(message.getMessageKey(), this,
+                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
+                    } else if (CartValidityModelMessage.MessageType.SUCCESS == message.getMessageType()) {
+                        success(getLocalizer().getString(message.getMessageKey(), this,
+                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
+                    } else {
+                        warn(getLocalizer().getString(message.getMessageKey(), this,
+                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
+                    }
+                } catch (MissingResourceException exp) {
+                    warn(message.getMessageKey());
+                }
+            }
+        }
+
+
+    }
+
     @Override
     protected void onBeforeRender() {
 
@@ -247,6 +256,8 @@ public class ShoppingCartView extends BaseComponent {
         final boolean allowMessages = shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG);
         String messageInclude = getContentInclude(shopId, "shopping_cart_message_include", lang, dynaCtx);
         form.get(ORDERMSG_INCLUDE).replaceWith(new Label(ORDERMSG_INCLUDE, messageInclude).setEscapeModelStrings(false).setVisible(allowMessages));
+
+        displayCartValidationMessages();
 
         super.onBeforeRender();
     }

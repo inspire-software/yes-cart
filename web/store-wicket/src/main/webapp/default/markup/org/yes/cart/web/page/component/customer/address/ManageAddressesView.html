@@ -14,12 +14,12 @@
   ~    limitations under the License.
   -->
 
-<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<html  xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:panel>
     <form wicket:id="selectAddressForm">
 
-        <div wicket:id="addressRadioGroup" >
+        <wicket:container wicket:id="addressRadioGroup">
             <div class="col-xs-12">
                 <h2 id="addresses" wicket:id="addressTitle">[type dependend message]</h2>
                 <a wicket:id="createLink" class="btn btn-primary" rel="nofollow">
@@ -42,7 +42,7 @@
                     </a>
 				</div>
             </div>
-        </div>
+        </wicket:container>
 
     </form>
 

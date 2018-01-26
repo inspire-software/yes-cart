@@ -47,7 +47,7 @@ public class URLPagingNavigation extends PagingNavigation {
     /**
      * {@inheritDoc}
      */
-    protected AbstractLink newPagingNavigationLink(final String id, final IPageable pageable, final int pageIndex) {
+    protected AbstractLink newPagingNavigationLink(final String id, final IPageable pageable, final long pageIndex) {
 
         final LinksSupport links = ((AbstractWebPage) getPage()).getWicketSupportFacade().links();
         final PaginationSupport pagination = ((AbstractWebPage) getPage()).getWicketSupportFacade().pagination();
@@ -56,7 +56,7 @@ public class URLPagingNavigation extends PagingNavigation {
         pageParameters.set(WebParametersKeys.PAGE, pageIndex);
 
         final Link rez = links.newLink(id, pageParameters);
-        if (pagination.markSelectedPageLink(rez, getPage().getPageParameters(), pageIndex)) {
+        if (pagination.markSelectedPageLink(rez, getPage().getPageParameters(), (int) pageIndex)) {
             rez.setModel(new Model(Boolean.TRUE));
         }
 
@@ -67,7 +67,7 @@ public class URLPagingNavigation extends PagingNavigation {
     protected void populateItem(final LoopItem loopItem) {
         super.populateItem(loopItem);
 
-        Link pageLink = (Link) loopItem.get(0);
+        Link pageLink = (Link) loopItem.iterator().next();
         IModel model = pageLink.getModel();
 
         if (model instanceof Model && model.getObject() instanceof Boolean) {

@@ -18,6 +18,7 @@ package org.yes.cart.web.page.component.price;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
@@ -188,19 +189,25 @@ public class PriceView extends BaseComponent {
 
         final String taxNote = this.showTaxNet ? "taxNoteNet" : "taxNoteGross";
 
-        addOrReplace(
-                new Label(TAX_LABEL,
-                        WicketUtil.createStringResourceModel(this, taxNote, tax))
-                        .setVisible(this.showTax)
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_TAX))
-        );
+        final WebMarkupContainer taxWrapper = new WebMarkupContainer("taxWrapper");
+        taxWrapper.add(new Label(TAX_LABEL,
+                WicketUtil.createStringResourceModel(this, taxNote, tax))
+                .setVisible(this.showTax)
+                .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_TAX)));
+        taxWrapper.setVisible(this.showTax);
 
-        addOrReplace(
-                new Label(LIST_PRICE_LABEL, listPrice)
-                        .setVisible(showSave)
-                        .add(new AttributeModifier(HTML_CLASS, "list-price"))
-        );
+        addOrReplace(taxWrapper);
 
+        final WebMarkupContainer listPriceWrapper = new WebMarkupContainer("listPriceWrapper");
+        listPriceWrapper.add(new Label(LIST_PRICE_LABEL, listPrice)
+                .setVisible(showSave)
+                .add(new AttributeModifier(HTML_CLASS, "list-price")));
+        listPriceWrapper.setVisible(showSave);
+
+        addOrReplace(listPriceWrapper);
+
+        final WebMarkupContainer saveWrapper = new WebMarkupContainer("saveWrapper");
+        saveWrapper.setVisible(showSave);
 
         final Label discount = new Label(SAVE_LABEL,
                 WicketUtil.createStringResourceModel(this, "savePercent",
@@ -236,13 +243,19 @@ public class PriceView extends BaseComponent {
             discount.add(new AttributeModifier("title", WicketUtil.createStringResourceModel(this, "savePercentTitle")));
         }
 
-        addOrReplace(discount);
+        saveWrapper.add(discount);
 
-        addOrReplace(
-                new Label(PROMO_LABEL, promos)
-                        .setVisible(StringUtils.isNotBlank(promos))
-                        .add(new AttributeModifier(HTML_CLASS, "sale-price-save sale-price-save-details"))
-        );
+        addOrReplace(saveWrapper);
+
+        final WebMarkupContainer promoWrapper = new WebMarkupContainer("promoWrapper");
+
+        final boolean hasPromo = StringUtils.isNotBlank(promos);
+        promoWrapper.add(new Label(PROMO_LABEL, promos)
+                .setVisible(hasPromo)
+                .add(new AttributeModifier(HTML_CLASS, "sale-price-save sale-price-save-details")));
+        promoWrapper.setVisible(hasPromo);
+
+        addOrReplace(promoWrapper);
 
         super.onBeforeRender();
 

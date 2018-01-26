@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.application;
 
+import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
@@ -97,12 +98,13 @@ public class StorefrontWebSession extends AuthenticatedWebSession {
 
     /** {@inheritDoc} */
     @Override
-    public void setLocale(final Locale locale) {
+    public Session setLocale(final Locale locale) {
         final List<String> supported = languageService.getSupportedLanguages(ShopCodeContext.getShopCode());
         if (supported.contains(locale.getLanguage())) {
             super.setLocale(locale);
         } else {
             super.setLocale(new Locale(supported.get(0)));
         }
+        return this;
     }
 }

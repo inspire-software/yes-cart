@@ -16,8 +16,6 @@
 
 package org.yes.cart.web.service.wicketsupport.impl;
 
-import org.apache.commons.lang.math.NumberUtils;
-import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.IPageParametersEncoder;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -124,10 +122,10 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
     /**
      * {@inheritDoc}
      */
-    public PageParameters decodePageParameters(final Request request) {
+    public PageParameters decodePageParameters(final Url url) {
         final PageParameters parameters = new PageParameters();
         String name = null;
-        for (String segment : request.getUrl().getSegments()) {
+        for (String segment : url.getSegments()) {
             if (name == null) {
                 name = segment;
             } else {

@@ -120,7 +120,7 @@ public class RegisterPanel extends BaseComponent {
             /**
              * {@inheritDoc}
              */
-            protected void onSelectionChanged(final Object descriptor) {
+            protected void onSelectionChanged(final String descriptor) {
                 // Change the form
                 RegisterPanel.this.get(REGISTER_FORM).replaceWith(new RegisterForm(REGISTER_FORM, customerType, target.getFirst(), target.getSecond()));
             }

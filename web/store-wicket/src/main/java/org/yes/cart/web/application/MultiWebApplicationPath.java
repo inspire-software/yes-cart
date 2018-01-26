@@ -16,9 +16,8 @@
 
 package org.yes.cart.web.application;
 
-import org.apache.wicket.util.file.IResourcePath;
+import org.apache.wicket.core.util.resource.UrlResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
-import org.apache.wicket.util.resource.UrlResourceStream;
 import org.apache.wicket.util.string.StringList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +32,7 @@ import java.util.List;
  * Date: 7/10/11
  * Time: 9:13 AM
  */
-public class MultiWebApplicationPath   implements IResourcePath {
+public class MultiWebApplicationPath {
 
     private static final Logger LOG = LoggerFactory.getLogger(MultiWebApplicationPath.class);
 

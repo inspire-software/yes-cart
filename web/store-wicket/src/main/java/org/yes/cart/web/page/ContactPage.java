@@ -23,7 +23,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
@@ -96,7 +96,7 @@ public class ContactPage  extends AbstractWebPage {
      * @return page title
      */
     public IModel<String> getPageTitle() {
-        return new Model<String>(getLocalizer().getString("contact",this));
+        return new StringResourceModel("contact",this);
     }
 
 

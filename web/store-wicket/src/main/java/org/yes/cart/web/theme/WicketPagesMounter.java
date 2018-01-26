@@ -18,7 +18,7 @@ package org.yes.cart.web.theme;
 
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.component.IRequestablePage;
-import org.apache.wicket.util.ClassProvider;
+import org.apache.wicket.util.reference.ClassReference;
 
 /**
  * User: denispavlov
@@ -37,12 +37,12 @@ public interface WicketPagesMounter {
     /**
      * @return page provider that returns theme specific home page.
      */
-    ClassProvider<IRequestablePage> getHomePageProvider();
+    ClassReference<IRequestablePage> getHomePageProvider();
 
     /**
      * @return page provider that returns theme specific login page.
      */
-    ClassProvider<IRequestablePage> getLoginPageProvider();
+    ClassReference<IRequestablePage> getLoginPageProvider();
 
     /**
      * Get page class by URI
@@ -51,6 +51,6 @@ public interface WicketPagesMounter {
      *
      * @return page provider that returns theme specific login page.
      */
-    ClassProvider<IRequestablePage> getPageProviderByUri(String uri);
+    ClassReference<IRequestablePage> getPageProviderByUri(String uri);
 
 }

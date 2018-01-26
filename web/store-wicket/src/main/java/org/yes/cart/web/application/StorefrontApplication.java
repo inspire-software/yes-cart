@@ -22,6 +22,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.core.util.resource.locator.ResourceStreamLocator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.protocol.https.HttpsMapper;
@@ -30,10 +31,9 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.apache.wicket.util.ClassProvider;
 import org.apache.wicket.util.file.IResourceFinder;
+import org.apache.wicket.util.reference.ClassReference;
 import org.apache.wicket.util.resource.IResourceStream;
-import org.apache.wicket.util.resource.locator.ResourceStreamLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -70,8 +70,8 @@ public class StorefrontApplication extends AuthenticatedWebApplication
 
     private SpringComponentInjector springComponentInjector;
 
-    private ClassProvider loginPageProvider;
-    private ClassProvider homePageProvider;
+    private ClassReference loginPageProvider;
+    private ClassReference homePageProvider;
 
     /**
      * Lazy getter of spring injector.
@@ -104,8 +104,10 @@ public class StorefrontApplication extends AuthenticatedWebApplication
         super.init();
 
         // dynamic shop markup support via specific resource finder
-        getResourceSettings().setResourceFinder(this);
-        getResourceSettings().setResourceStreamLocator(new ResourceStreamLocator(this));
+        getResourceSettings().getResourceFinders().add(this);
+        getResourceSettings().setResourceStreamLocator(
+                new ResourceStreamLocator(getResourceSettings().getResourceFinders())
+        );
 
         setRequestCycleProvider(this);
 
@@ -196,9 +198,8 @@ public class StorefrontApplication extends AuthenticatedWebApplication
         getMarkupSettings().setCompressWhitespace(true);
         getMarkupSettings().setStripWicketTags(true); // true remove wicket:tags in development mode
         getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
-        getMarkupSettings().setDefaultBeforeDisabledLink("<a>");
-        getMarkupSettings().setDefaultAfterDisabledLink("</a>");
-        //getMarkupSettings().setAutomaticLinking(false);
+//        getMarkupSettings().setDefaultBeforeDisabledLink("<a>");
+//        getMarkupSettings().setDefaultAfterDisabledLink("</a>");
     }
 
     /**

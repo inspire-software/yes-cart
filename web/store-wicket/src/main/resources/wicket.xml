@@ -119,7 +119,7 @@
                 </entry>
                 <entry key="/address">
                     <map>
-                        <entry key="default" value="org.yes.cart.web.page.component.customer.address.CreateEditAddressPage"/>
+                        <entry key="default" value="org.yes.cart.web.page.CreateEditAddressPage"/>
                     </map>
                 </entry>
                 <entry key="/checkout">
@@ -134,12 +134,12 @@
                 </entry>
                 <entry key="/paymentresult">
                     <map>
-                        <entry key="default" value="org.yes.cart.web.page.payment.callback.ResultPage"/>
+                        <entry key="default" value="org.yes.cart.web.page.ResultPage"/>
                     </map>
                 </entry>
                 <entry key="/anetsimresult">
                     <map>
-                        <entry key="default" value="org.yes.cart.web.page.payment.callback.AuthorizeNetSimPaymentOkPage"/>
+                        <entry key="default" value="org.yes.cart.web.page.AuthorizeNetSimPaymentOkPage"/>
                     </map>
                 </entry>
             </map>

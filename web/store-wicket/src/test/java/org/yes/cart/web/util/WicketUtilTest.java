@@ -55,7 +55,10 @@ public class WicketUtilTest {
             allowing(commandConfig).isInternalCommandKey("cmd2"); will(returnValue(false));
         }});
 
-        PageParameters parametersToFilter = new PageParameters("cmd1=val1,asd=dsa,cmd2=ppp");
+        PageParameters parametersToFilter = new PageParameters()
+            .add("cmd1", "val1")
+            .add("asd", "dsa")
+            .add("cmd2", "ppp");
         assertEquals(3, parametersToFilter.getNamedKeys().size());
         Map<String, String> filtered = new WicketUtil(commandConfig).pageParametesAsMap(parametersToFilter);
         assertNotNull(filtered);
@@ -77,7 +80,10 @@ public class WicketUtilTest {
         }});
 
         assertNotNull(new WicketUtil(commandConfig).getFilteredRequestParameters(null));
-        PageParameters parametersToFilter = new PageParameters("cmd1=val1,asd=dsa,cmd2=ppp");
+        PageParameters parametersToFilter = new PageParameters()
+            .add("cmd1", "val1")
+            .add("asd", "dsa")
+            .add("cmd2", "ppp");
         assertEquals(3, parametersToFilter.getNamedKeys().size());
         PageParameters filtered = new WicketUtil(commandConfig).getFilteredRequestParameters(parametersToFilter);
         assertNotNull(filtered);
@@ -98,7 +104,10 @@ public class WicketUtilTest {
         }});
 
         assertNotNull(new WicketUtil(commandConfig).getFilteredRequestParameters(null));
-        PageParameters parametersToFilter = new PageParameters("cmd1=val1,asd=dsa,toRemove=ppp");
+        PageParameters parametersToFilter = new PageParameters()
+            .add("cmd1", "val1")
+            .add("asd", "dsa")
+            .add("toRemove", "ppp");
         assertEquals(3, parametersToFilter.getNamedKeys().size());
         assertEquals(2, new WicketUtil(commandConfig).getFilteredRequestParameters(parametersToFilter).getNamedKeys().size());
         PageParameters filtered = new WicketUtil(commandConfig).getFilteredRequestParameters(parametersToFilter, Arrays.asList("toRemove"));
@@ -120,7 +129,11 @@ public class WicketUtilTest {
         }});
 
         assertNotNull(new WicketUtil(commandConfig).getFilteredRequestParameters(null));
-        PageParameters parametersToFilter = new PageParameters("cmd1=val1,asd=dsa,toRemove=ppp,toRemove=zzz");
+        PageParameters parametersToFilter = new PageParameters()
+            .add("cmd1", "val1")
+            .add("asd", "dsa")
+            .add("toRemove", "ppp")
+            .add("toRemove", "zzz");
         assertEquals(3, parametersToFilter.getNamedKeys().size());
         assertEquals(2, new WicketUtil(commandConfig).getFilteredRequestParameters(parametersToFilter).getNamedKeys().size());
         PageParameters filtered = new WicketUtil(commandConfig).getFilteredRequestParameters(parametersToFilter, "toRemove", null);
@@ -157,7 +170,11 @@ public class WicketUtilTest {
         }});
 
         assertNotNull(new WicketUtil(commandConfig).getFilteredRequestParameters(null));
-        PageParameters parametersToFilter = new PageParameters("cmd1=val1,asd=dsa,retained1=ppp,retained2=zzz");
+        PageParameters parametersToFilter = new PageParameters()
+            .add("cmd1", "val1")
+            .add("asd", "dsa")
+            .add("retained1", "ppp")
+            .add("retained2", "zzz");
         assertEquals(4, parametersToFilter.getNamedKeys().size());
         assertEquals(3, new WicketUtil(commandConfig).getFilteredRequestParameters(parametersToFilter).getNamedKeys().size());
         PageParameters filtered = new WicketUtil(commandConfig).getRetainedRequestParameters(parametersToFilter, new HashSet<String>(Arrays.asList("retained1", "retained2")));
@@ -169,7 +186,10 @@ public class WicketUtilTest {
 
     @Test
     public void testGetFilteredRequestParametersForSearch() {
-        PageParameters parametersToFilter = new PageParameters("query=val1,query=val2,query=val3");
+        PageParameters parametersToFilter = new PageParameters()
+            .add("query", "val1")
+            .add("query", "val2")
+            .add("query", "val3");
         assertEquals(1, parametersToFilter.getNamedKeys().size());
         assertEquals(3, parametersToFilter.getValues("query").size());
         parametersToFilter.remove("query", "val2");

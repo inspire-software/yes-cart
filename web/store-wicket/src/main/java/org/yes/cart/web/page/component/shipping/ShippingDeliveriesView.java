@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.constants.Constants;
@@ -205,7 +206,7 @@ public class ShippingDeliveriesView extends BaseComponent {
                                         }
 
                                 )
-                                .add(new Label("deliveryBucketCarrier", getLocalizer().getString("deliveryBucketCarrier", this, new Model<Serializable>(new ValueMap(
+                                .add(new Label("deliveryBucketCarrier", new StringResourceModel("deliveryBucketCarrier", this, new Model<Serializable>(new ValueMap(
                                         Collections.singletonMap("supplier", supplierName)
                                 )))))
                                 .add(
@@ -243,7 +244,7 @@ public class ShippingDeliveriesView extends BaseComponent {
                 .add(multiDelivery)
                 .add(
                         new Label("multipleDeliveryLabel",
-                                getLocalizer().getString("multipleDeliveryLabel", this)
+                                new StringResourceModel("multipleDeliveryLabel", this)
 
                         )
                 )

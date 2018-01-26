@@ -164,8 +164,6 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
                 links.newProductLink(PRODUCT_LINK_IMAGE, prod.getId(), getPage().getPageParameters())
                         .add(
                                 new ContextImage(PRODUCT_IMAGE, getDefaultImage(prod, width, height, selectedLocale))
-                                        .add(new AttributeModifier(HTML_WIDTH, width))
-                                        .add(new AttributeModifier(HTML_HEIGHT, height))
                                         .add(new AttributeModifier(HTML_TITLE, prodName))
                                         .add(new AttributeModifier(HTML_ALT, prodName))
                         )

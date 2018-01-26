@@ -37,6 +37,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.page.CreateEditAddressPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -106,8 +107,8 @@ public class ManageAddressesView extends BaseComponent {
                                 new Model<Address>(addressBookFacade.getDefaultAddress(customerModel.getObject(), getCurrentCustomerShop(), addressType))) {
 
                             @Override
-                            protected void onSelectionChanged(final Object o) {
-                                final Address address = (Address) o;
+                            protected void onSelectionChanged(final Address o) {
+                                final Address address = o;
                                 super.onSelectionChanged(address);
                                 addressBookFacade.useAsDefault(address, getCurrentCustomerShop());
                                 final String key = Address.ADDR_TYPE_BILLING.equals(addressType) ?

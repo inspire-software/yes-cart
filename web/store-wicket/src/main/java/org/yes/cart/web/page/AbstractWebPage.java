@@ -164,23 +164,26 @@ public class AbstractWebPage extends WebPage {
         addOrReplace(relCanonical);
         relCanonical.setVisible(relCanonicalModel != null);
 
-        if (!isPageStateless() && Application.get().getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT) {
-            determineStatefulComponent();
-        }
+        determineStatefulComponentOnDev();
 
     }
 
-    private void determineStatefulComponent() {
-        final List<String> statefulComponentIds = new ArrayList<String>();
-        this.visitChildren(Component.class, new IVisitor<Component, Object>() {
-            @Override
-            public void component(final Component object, final IVisit<Object> objectIVisit) {
-                if (!object.isStateless()) {
-                    statefulComponentIds.add(object.getMarkupId());
+    private void determineStatefulComponentOnDev() {
+
+        if (Application.get().getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT && !isPageStateless()) {
+
+            final List<String> statefulComponentIds = new ArrayList<String>();
+            this.visitChildren(Component.class, new IVisitor<Component, Object>() {
+                @Override
+                public void component(final Component object, final IVisit<Object> objectIVisit) {
+                    if (!object.isStateless()) {
+                        statefulComponentIds.add(object.getId());
+                    }
                 }
-            }
-        });
-        LOG.warn("Page {} is stateful because of the following components: {}", getClass().getCanonicalName(), statefulComponentIds);
+            });
+            LOG.warn("[DEV] Page {} is stateful because of the following components: {}", getClass().getCanonicalName(), statefulComponentIds);
+
+        }
     }
 
 

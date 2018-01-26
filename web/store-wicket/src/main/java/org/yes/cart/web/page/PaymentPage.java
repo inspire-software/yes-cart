@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -291,6 +291,6 @@ public class PaymentPage extends AbstractWebPage {
 
     @Override
     public IModel<String> getPageTitle() {
-        return new Model<String>(getLocalizer().getString("orderPayment", this));
+        return new StringResourceModel("orderPayment", this);
     }
 }
