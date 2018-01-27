@@ -27,6 +27,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -95,7 +96,7 @@ public class WebReportGeneratorImpl extends AbstractThemeAwareFopReportGenerator
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Report XML ==================================\n\n" + new String(bytesOut.toByteArray(), Charset.forName("UTF-8")));
+            LOG.debug("Report XML ==================================\n\n" + new String(bytesOut.toByteArray(), StandardCharsets.UTF_8));
         }
 
         return new StreamSource(new ByteArrayInputStream(bytesOut.toByteArray()));

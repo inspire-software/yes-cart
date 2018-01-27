@@ -70,7 +70,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
     public void run() {
 
         try {
-            LOG.info("CustomerRegistrationMessageListener#onMessage response :" + objectMessage);
+            LOG.info("CustomerRegistrationMessageListener#onMessage response : {}", objectMessage);
 
             if (objectMessage.getMailTemplatePathChain() != null) {
                 processMessage(objectMessage);

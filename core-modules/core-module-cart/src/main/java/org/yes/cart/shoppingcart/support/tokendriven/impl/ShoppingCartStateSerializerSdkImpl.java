@@ -22,7 +22,6 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerializer;
 
 import java.io.*;
-import java.text.MessageFormat;
 
 /**
  * User: denispavlov
@@ -46,8 +45,7 @@ public class ShoppingCartStateSerializerSdkImpl implements ShoppingCartStateSeri
             return shoppingCart;
 
         } catch (Exception exception) {
-            final String errMsg = "Unable to convert bytes assembled from tuple into object";
-            LOG.error(errMsg, exception);
+            LOG.error("Unable to convert bytes assembled from tuple into object: " + exception.getMessage(), exception);
             return null;
         } finally {
             try {
@@ -56,7 +54,7 @@ public class ShoppingCartStateSerializerSdkImpl implements ShoppingCartStateSeri
                 }
                 byteArrayInputStream.close();
             } catch (IOException ioe) { // leave this one silent as we have the object.
-                LOG.error("Unable to close object stream", ioe);
+                LOG.error("Unable to close object stream: " + ioe.getMessage(), ioe);
             }
 
         }
@@ -80,7 +78,7 @@ public class ShoppingCartStateSerializerSdkImpl implements ShoppingCartStateSeri
 
         } catch (Throwable ioe) {
             LOG.error(
-                    MessageFormat.format("Unable to serialize object {0}", shoppingCart),
+                    "Unable to serialize object: " + shoppingCart,
                     ioe
             );
         } finally {
@@ -90,7 +88,7 @@ public class ShoppingCartStateSerializerSdkImpl implements ShoppingCartStateSeri
                 }
                 byteArrayOutputStream.close();
             } catch (IOException e) {
-                LOG.error("Can not close stream", e);
+                LOG.error("Can not close stream: " + e.getMessage(), e);
             }
         }
         return null;

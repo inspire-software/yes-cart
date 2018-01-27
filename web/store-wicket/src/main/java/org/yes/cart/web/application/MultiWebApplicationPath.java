@@ -84,19 +84,13 @@ public class MultiWebApplicationPath {
                 try {
                     final URL url = servletContext.getResource(path + pathname);
                     if (url != null) {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("Retrieving web resource: {}{}", path, pathname);
-                        }
+                        LOG.debug("Retrieving web resource: {}{}", path, pathname);
 
                         return new UrlResourceStream(url);
                     }
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Lookup resource: {}{}", path, pathname);
-                    }
+                    LOG.debug("Lookup resource: {}{}", path, pathname);
                 } catch (Exception ex) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("File couldn't be found: {}{}", path, pathname);
-                    }
+                    LOG.debug("File couldn't be found: {}{}", path, pathname);
                 }
             }
             if (pathname.endsWith(RESOURCE_EXTENSION)) {
@@ -106,19 +100,13 @@ public class MultiWebApplicationPath {
                     try {
                         final URL url = servletContext.getResource(path + resourceName);
                         if (url != null) {
-                            if (LOG.isDebugEnabled()) {
-                                LOG.debug("Retrieving web resource: {}{}", path, resourceName);
-                            }
+                            LOG.debug("Retrieving web resource: {}{}", path, resourceName);
 
                             return new UrlResourceStream(url);
                         }
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("Lookup resource: {}{}", path, resourceName);
-                        }
+                        LOG.debug("Lookup resource: {}{}", path, resourceName);
                     } catch (Exception ex) {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("File couldn't be found: {}{}", path, resourceName);
-                        }
+                        LOG.debug("File couldn't be found: {}{}", path, resourceName);
                     }
                 }
             }

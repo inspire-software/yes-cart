@@ -29,7 +29,7 @@ import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.service.dto.DtoPromotionCouponService;
 import org.yes.cart.utils.HQLUtils;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -148,7 +148,7 @@ public class DtoPromotionCouponServiceImpl
                     .append(coupon.getUsageCount()).append('\n');
 
         }
-        return csv.toString().getBytes(Charset.forName("UTF-8"));
+        return csv.toString().getBytes(StandardCharsets.UTF_8);
 
     }
 

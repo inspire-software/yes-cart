@@ -29,7 +29,6 @@ import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
-import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -95,10 +94,9 @@ public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImp
 
                         final String eventId = deliveryGroupEvent.getValue();
 
-                        if (LOG.isInfoEnabled()) {
-                            LOG.info(MessageFormat.format("Delivery {0} for order {1} event {2}",
-                                    delivery.getDeliveryNum(), order.getOrdernum(), eventId));
-                        }
+                        LOG.info("Delivery {} for order {} event {}",
+                                delivery.getDeliveryNum(), order.getOrdernum(), eventId);
+
                         final OrderEvent deliveryEvent = new OrderEventImpl(orderEvent, eventId, order, delivery);
                         getOrderStateManager().fireTransition(deliveryEvent);
 

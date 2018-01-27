@@ -119,9 +119,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 payment = getPaymentGateway().authorizeCapture(payment);
                 paymentResult = payment.getPaymentProcessorResult();
             } catch (Throwable th) {
-                LOG.error(
-                        "Error", th
-                );
+                LOG.error(th.getMessage(), th);
                 th.printStackTrace();
                 paymentResult = Payment.PAYMENT_STATUS_FAILED;
                 payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
@@ -279,17 +277,13 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
             if (paymentsToCapture.size() > 1) {
                 LOG.warn( //must be only one record
-                        MessageFormat.format(
-                                "Payment gateway {0} with features {1}. Found {2} records to capture, but expected 1 only. Order num {3} Shipment num {4}",
-                                getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), paymentsToCapture.size(), order.getOrdernum(), orderShipmentNumber
-                        )
+                        "Payment gateway {} with features {}. Found {} records to capture, but expected 1 only. Order num {} Shipment num {}",
+                        getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), paymentsToCapture.size(), order.getOrdernum(), orderShipmentNumber
                 );
             } else if (paymentsToCapture.isEmpty()) {
                 LOG.debug( //this could be a single payment PG and it was already captured
-                        MessageFormat.format(
-                                "Payment gateway {0} with features {1}. Found 0 records to capture, possibly already captured all payments. Order num {2} Shipment num {3}",
-                                getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), order.getOrdernum(), orderShipmentNumber
-                        )
+                        "Payment gateway {} with features {}. Found 0 records to capture, possibly already captured all payments. Order num {} Shipment num {}",
+                        getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), order.getOrdernum(), orderShipmentNumber
                 );
 
             }

@@ -42,7 +42,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletContextAware, DisposableBean {
 
-    protected Logger LOG;
+    protected Logger log;
 
     private final Map<String, String> configuration = new HashMap<String, String>();
     private Node node = new NodeImpl(true, "-", null, "DEFAULT", "YCCLUSTER", "N/A", "", true);
@@ -166,7 +166,7 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
                 listeners.put(subject, subjectListeners);
             }
             subjectListeners.add(listener);
-            LOG.debug("Registering listener for topic {}", subject);
+            log.debug("Registering listener for topic {}", subject);
         }
     }
 
@@ -273,9 +273,9 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
         this.node = node;
         this.cluster.add(node);
 
-        LOG = LoggerFactory.getLogger(node.getClusterId() + "." + node.getNodeId());
+        log = LoggerFactory.getLogger(node.getClusterId() + "." + node.getNodeId());
 
-        if (LOG.isInfoEnabled()) {
+        if (log.isInfoEnabled()) {
 
             final StringBuilder stats = new StringBuilder();
 
@@ -286,7 +286,7 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
                 stats.append('\n').append(entry.getKey()).append(": ").append(entry.getValue());
             }
 
-            LOG.info(stats.toString());
+            log.info(stats.toString());
         }
 
     }
@@ -314,7 +314,7 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
      */
     public void destroy() throws Exception {
 
-        LOG.info("Closing WS channel for node {}", node.getId());
+        log.info("Closing WS channel for node {}", node.getId());
 
     }
 

@@ -28,7 +28,6 @@ import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
 import java.io.*;
 import java.security.InvalidKeyException;
-import java.text.MessageFormat;
 
 /**
  * Default implementation of cookie tuplizer.
@@ -107,7 +106,7 @@ public abstract class AbstractCryptedTuplizerImpl {
                 objectOutputStream.close();
             } catch (Throwable ioe) {
                 LOG.error(
-                        MessageFormat.format("Unable to serialize object {0}", serializable),
+                        "Unable to serialize object: " + serializable,
                         ioe
                 );
                 throw new CartTuplizationException(ioe);

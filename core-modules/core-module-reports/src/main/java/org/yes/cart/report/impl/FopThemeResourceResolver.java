@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -75,7 +75,7 @@ public class FopThemeResourceResolver implements TempResourceResolver, ResourceR
             final String content = contentService.getContentBody(curi, language);
             if (StringUtils.isNotBlank(content)) {
                 LOG.debug("Using shop specific report template file {}", curi);
-                return new Resource(new ByteArrayInputStream(content.getBytes(Charset.forName("UTF-8"))));
+                return new Resource(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
             }
 
         }

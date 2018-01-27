@@ -38,15 +38,13 @@ public abstract class AbstractOrderEventHandlerImpl implements OrderEventHandler
     protected abstract String getTransitionTarget(final OrderEvent orderEvent);
 
     protected void handleInternal(final OrderEvent orderEvent) {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Order {} transition from {} to {} state",
-                    new Object[]{
-                            orderEvent.getCustomerOrder().getOrdernum(),
-                            orderEvent.getCustomerOrder().getOrderStatus(),
-                            getTransitionTarget(orderEvent)
-                    }
-            );
-        }
+
+        LOG.info("Order {} transition from {} to {} state",
+                orderEvent.getCustomerOrder().getOrdernum(),
+                orderEvent.getCustomerOrder().getOrderStatus(),
+                getTransitionTarget(orderEvent)
+        );
+
         orderEvent.getCustomerOrder().setOrderStatus(getTransitionTarget(orderEvent));
     }
 

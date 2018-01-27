@@ -177,7 +177,7 @@ public class CacheDirectorImpl implements CacheDirector {
 
                     } else {
 
-                        LOG.warn("The [" + cacheStrategy.getSecond() + "] cache eviction strategy not supported");
+                        LOG.warn("The [{}] cache eviction strategy not supported", cacheStrategy.getSecond());
 
                     }
 

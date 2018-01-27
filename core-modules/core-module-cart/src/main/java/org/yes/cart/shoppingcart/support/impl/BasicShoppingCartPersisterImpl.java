@@ -24,7 +24,6 @@ import org.yes.cart.shoppingcart.support.CartTuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizer;
 import org.yes.cart.shoppingcart.support.ShoppingCartPersister;
 
-import java.text.MessageFormat;
 import java.util.Map;
 
 /**
@@ -63,7 +62,7 @@ public class BasicShoppingCartPersisterImpl implements ShoppingCartPersister<Map
             try {
                 tuplizer.tuplize(httpServletRequest, httpServletResponse, shoppingCart);
             } catch (CartTuplizationException e) {
-                LOG.error(MessageFormat.format("Unable to create cookies from {0} cart", shoppingCart), e);
+                LOG.error("Unable to create cookies from cart: " + shoppingCart, e);
             }
 
         } catch (Exception e) {

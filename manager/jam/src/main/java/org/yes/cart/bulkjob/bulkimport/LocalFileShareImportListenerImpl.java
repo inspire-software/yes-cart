@@ -29,6 +29,7 @@ import org.yes.cart.bulkcommon.service.ImportDirectorService;
 import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.async.AsyncContextFactory;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.utils.RunAsUserAuthentication;
@@ -39,7 +40,6 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.util.log.Markers;
-import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -278,7 +278,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
                     final String groupName = groupData.get("group");
 
-                    LOG.info("Importing '{}' for shop {} using group {}", new Object[] { toImport.getAbsolutePath(), shop.getCode(), groupName });
+                    LOG.info("Importing '{}' for shop {} using group {}", toImport.getAbsolutePath(), shop.getCode(), groupName);
 
                     final String destination = moveFileToImportDirectory(toImport, targetDirectory);
 
@@ -302,7 +302,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                             final long msImport = (finishImport - startImport);
                             final long secImport = msImport > 0 ? msImport / 1000 : 0;
 
-                            LOG.info("Importing '{}' for shop {} using group {} ... completed [{}] in {}s", new Object[] { toImport.getAbsolutePath(), shop.getCode(), groupName, importStatus.getCompletion(), secImport });
+                            LOG.info("Importing '{}' for shop {} using group {} ... completed [{}] in {}s", toImport.getAbsolutePath(), shop.getCode(), groupName, importStatus.getCompletion(), secImport);
 
                             final AsyncContext cacheCtx = createCtx(AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
                             clusterService.evictAllCache(cacheCtx);
@@ -314,7 +314,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
                                     final long startIndex = getTimeNow();
 
-                                    LOG.info("Re-indexed products for shop {} using group {} ... starting", new Object[] { shop.getCode(), groupName });
+                                    LOG.info("Re-indexed products for shop {} using group {} ... starting", shop.getCode(), groupName);
 
                                     final AsyncContext reindexCtx = createCtx(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS);
                                     Thread.sleep(INDEX_GET_READY_TIMEOUT); // let cache invalidation run before index
@@ -328,7 +328,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                                             final long msIndex = (finishIndex - startIndex);
                                             final long secIndex = msIndex > 0 ? msIndex / 1000 : 0;
 
-                                            LOG.info("Re-indexed products for shop {} using group {} ... completed [{}] in {}s", new Object[] { shop.getCode(), groupName, reindexStatus.getCompletion(), secIndex });
+                                            LOG.info("Re-indexed products for shop {} using group {} ... completed [{}] in {}s", shop.getCode(), groupName, reindexStatus.getCompletion(), secIndex);
 
                                             clusterService.evictAllCache(cacheCtx);
                                             Thread.sleep(WARMUP_GET_READY_TIMEOUT);
@@ -344,7 +344,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
 
                         } else {
-                            LOG.warn("Invalid credentials for '{}' for shop {} using group {}", new Object[]{user, shop.getCode(), groupName});
+                            LOG.warn("Invalid credentials for '{}' for shop {} using group {}", user, shop.getCode(), groupName);
                         }
 
                     } finally {

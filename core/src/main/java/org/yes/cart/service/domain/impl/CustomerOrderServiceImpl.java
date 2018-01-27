@@ -31,7 +31,6 @@ import org.yes.cart.shoppingcart.CartContentsValidator;
 import org.yes.cart.shoppingcart.CartValidityModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
-import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -260,13 +259,8 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
                 // This can only happen if they did not click come back to site from the external payment site
                 // Meanwhile the callback happened and updated the order
 
-                LOG.warn(
-                        MessageFormat.format(
-                                "Order {0} with {1} cart guid has {2} order status instead of 1 - ORDER_STATUS_NONE",
-                                customerOrderToDelete.getCustomerorderId(),
-                                shoppingCart.getGuid(),
-                                customerOrderToDelete.getOrderStatus()
-                        )
+                LOG.warn("Order {} with {} cart guid has {} order status instead of 1 - ORDER_STATUS_NONE",
+                    customerOrderToDelete.getCustomerorderId(), shoppingCart.getGuid(), customerOrderToDelete.getOrderStatus()
                 );
 
                 // detach order as it is being processed (rehash the GUID and reset cartGuid)

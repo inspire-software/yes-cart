@@ -110,9 +110,7 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
         final String callbackDump = HttpUtil.dumpRequest(httpServletRequest);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(callbackDump);
-        }
+        LOG.debug("Callback:\n{}", callbackDump);
 
         try {
 
@@ -126,7 +124,7 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
         } catch (OrderException e) {
 
             LOG.error("Transition failed during payment call back for authorizeNetSimPaymentGatewayLabel payment gateway" , e);
-            LOG.error(HttpUtil.dumpRequest(httpServletRequest));
+            LOG.error("Callback:\n{}", callbackDump);
 
         }
 

@@ -25,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.bulkimport.image.ImageImportDomainObjectStrategy;
 import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.service.async.AsyncContextFactory;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
 import org.yes.cart.service.async.model.AsyncContext;
@@ -36,7 +37,6 @@ import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.media.MediaFileNameStrategy;
 import org.yes.cart.stream.io.FileSystemIOProvider;
-import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -143,7 +143,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
                                 JobStatus reindexStatus = reindexService.getIndexJobStatus(reindexCtx, indexToken);
                                 if (reindexStatus.getState() == JobStatus.State.FINISHED) {
 
-                                    LOG.info("Re-indexed products ... completed [{}]", new Object[]{ reindexStatus.getCompletion()});
+                                    LOG.info("Re-indexed products ... completed [{}]", reindexStatus.getCompletion());
 
                                     clusterService.evictAllCache(cacheCtx);
                                     Thread.sleep(WARMUP_GET_READY_TIMEOUT);

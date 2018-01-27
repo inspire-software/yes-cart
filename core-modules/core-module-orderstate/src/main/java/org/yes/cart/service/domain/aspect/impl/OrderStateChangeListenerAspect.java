@@ -163,10 +163,10 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
             return rez;
         } catch (final OrderItemAllocationException th) {
 
-            LOG.warn("Can't allocation quantity for product " + th.getProductSkuCode() );
+            LOG.warn("Can't allocation quantity for product {}", th.getProductSkuCode());
 
             if (StringUtils.isBlank(adminEmail)) {
-                LOG.error(Markers.alert(), "Can't get admin email address for shop " + emailShop.getCode() );
+                LOG.error(Markers.alert(), "Can't get admin email address for shop {}", emailShop.getCode());
             } else {
 
                 final ProductSku sku = productSkuService.getProductSkuBySkuCode(th.getProductSkuCode());

@@ -544,7 +544,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
                     } else {
 
-                        LOG.info("Copy default label {}/{} with value {}", new Object[] { shopCode, shopLabel, defParam.getValue() });
+                        LOG.info("Copy default label {}/{} with value {}", shopCode, shopLabel, defParam.getValue());
 
                     }
 
@@ -555,7 +555,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
         }
 
-        LOG.warn("PG{} on {} is {}", new Object[] { pgLabel, shopCode, disabled ? "DISABLED" : "ENABLED" });
+        LOG.warn("PG{} on {} is {}", pgLabel, shopCode, disabled ? "DISABLED" : "ENABLED");
 
     }
 

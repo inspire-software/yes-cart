@@ -97,7 +97,7 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
             final OrderDeliveryStatusUpdate update = (OrderDeliveryStatusUpdate) orderEvent.getParams().get("update");
 
             LOG.info("Received delivery update for order {}, status {}:\n{}",
-                    new Object[] { customerOrder.getOrdernum(), customerOrder.getOrderStatus(), update });
+                    customerOrder.getOrdernum(), customerOrder.getOrderStatus(), update);
 
             if (update != null) {
 
@@ -328,7 +328,7 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
                 }
 
                 LOG.info("Finished delivery update for order {}, status {}:\n{}",
-                        new Object[]{customerOrder.getOrdernum(), customerOrder.getOrderStatus(), update});
+                        customerOrder.getOrdernum(), customerOrder.getOrderStatus(), update);
 
                 return true; // Return true to indicate that we want to save changes.
             }

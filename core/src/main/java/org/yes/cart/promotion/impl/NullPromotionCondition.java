@@ -56,7 +56,7 @@ public class NullPromotionCondition implements PromotionCondition {
 
     /** {@inheritDoc} */
     public boolean isEligible(final Map<String, Object> context) {
-        LOG.warn("Null condition invoked for promo: " + promotionCode);
+        LOG.warn("Null condition invoked for promo: {}", promotionCode);
         return false;
     }
 }

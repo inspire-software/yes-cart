@@ -72,7 +72,7 @@ public class BasicAuthInInterceptor extends AbstractSoapInterceptor implements S
                         auth.getUserName(),
                         auth.getPassword()
                 );
-                LOG.debug("Receiving WS request from user {}", "");
+                LOG.debug("Receiving WS request from user {}", auth.getUserName());
                 authentication = authenticationManager.authenticate(authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 

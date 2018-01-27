@@ -37,6 +37,7 @@ import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.entity.DataGroup;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.service.async.AsyncContextFactory;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.SingletonJobRunner;
 import org.yes.cart.service.async.impl.JobStatusListenerImpl;
@@ -50,11 +51,9 @@ import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.utils.impl.ZipUtils;
-import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -310,10 +309,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                     }
                     importFile.delete();
                 } catch (IOException e) {
-                    LOG.error(
-                            MessageFormat.format("Cant move file {0} to folder {1}", importFileName, dir.getAbsolutePath()),
-                            e
-                    );
+                    LOG.error("Can not move file " + importFileName + " to directory " + dir.getAbsolutePath(), e);
                 }
             }
 

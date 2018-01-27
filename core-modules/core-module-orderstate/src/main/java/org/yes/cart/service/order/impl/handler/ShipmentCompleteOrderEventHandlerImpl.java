@@ -76,9 +76,7 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
 
                 if (Payment.PAYMENT_STATUS_OK.equals(result)) {
                     // payment was ok so continue
-                    if (LOG.isInfoEnabled()) {
-                        LOG.info("Funds captured for delivery {}", thisDelivery.getDeliveryNum());
-                    }
+                    LOG.info("Funds captured for delivery {}", thisDelivery.getDeliveryNum());
 
                     processDeliveryStates(orderEvent);
                     return true;
@@ -106,9 +104,8 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
             }
         }
         orderEvent.getCustomerOrder().setOrderStatus(CustomerOrder.ORDER_STATUS_COMPLETED);
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Order {} completed ", orderEvent.getCustomerOrder().getOrdernum());
-        }
+
+        LOG.info("Order {} completed ", orderEvent.getCustomerOrder().getOrdernum());
     }
 
 

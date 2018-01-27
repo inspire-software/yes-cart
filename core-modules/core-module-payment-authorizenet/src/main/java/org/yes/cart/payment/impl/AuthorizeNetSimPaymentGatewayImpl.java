@@ -33,6 +33,7 @@ import org.yes.cart.util.HttpParamsUtils;
 
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -245,7 +246,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         sign.append("EUR");
 
         try {
-            final Charset charset = Charset.forName("UTF-8");
+            final Charset charset = StandardCharsets.UTF_8;
             final MessageDigest digest = MessageDigest.getInstance("MD5");
             return new String(Hex.encodeHex(digest.digest(sign.toString().getBytes(charset)))).toUpperCase();
         } catch (NoSuchAlgorithmException e) {

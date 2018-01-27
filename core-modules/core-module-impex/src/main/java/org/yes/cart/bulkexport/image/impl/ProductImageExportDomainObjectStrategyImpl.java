@@ -30,7 +30,6 @@ import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
 
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -74,11 +73,7 @@ public class ProductImageExportDomainObjectStrategyImpl extends AbstractImageExp
             }
         } catch (AccessDeniedException ade) {
 
-            String message = MessageFormat.format(
-                    "Access denied during export image for product : {0}",
-                    next.getProductId()
-            );
-            LOG.debug(message, ade);  // debug only, no error
+            LOG.debug("Access denied during export image for product : " + next.getProductId(), ade);  // debug only, no error
             return null;
 
         }

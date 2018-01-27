@@ -69,7 +69,7 @@ public class PromotionContextFactoryImpl implements PromotionContextFactory {
                 } else {
                     LOG.warn(
                             "No action mapping for promotion: {}, type: {}, action {}",
-                            new Object[]{promotion.getCode(), promotion.getPromoType(), promotion.getPromoAction()});
+                            promotion.getCode(), promotion.getPromoType(), promotion.getPromoAction());
                 }
             } else {
                 LOG.warn(

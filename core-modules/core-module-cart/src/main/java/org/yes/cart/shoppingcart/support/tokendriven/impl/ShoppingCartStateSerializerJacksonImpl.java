@@ -27,7 +27,6 @@ import org.yes.cart.shoppingcart.impl.*;
 import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerializer;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 
 /**
  * User: denispavlov
@@ -61,8 +60,7 @@ public class ShoppingCartStateSerializerJacksonImpl implements ShoppingCartState
         try {
             return mapper.readValue(bytes, ShoppingCartImpl.class);
         } catch (IOException exception) {
-            final String errMsg = "Unable to convert bytes assembled from tuple into object";
-            LOG.error(errMsg, exception);
+            LOG.error("Unable to convert bytes assembled from tuple into object: " + exception.getMessage(), exception);
             return null;
         }
 
@@ -76,7 +74,7 @@ public class ShoppingCartStateSerializerJacksonImpl implements ShoppingCartState
             return mapper.writeValueAsBytes(shoppingCart);
         } catch (IOException ioe) {
             LOG.error(
-                    MessageFormat.format("Unable to serialize object {0}", shoppingCart),
+                    "Unable to serialize object: " + shoppingCart,
                     ioe
             );
         }

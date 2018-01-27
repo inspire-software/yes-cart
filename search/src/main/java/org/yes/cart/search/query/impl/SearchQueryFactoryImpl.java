@@ -377,9 +377,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
 
         }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Constructed nav queries: \nprod: {}\nsku:  {}", prod, sku);
-        }
+        LOG.debug("Constructed nav queries: \nprod: {}\nsku:  {}", prod, sku);
 
         return new LuceneNavigationContextImpl(shopId, customerShopId, customerLanguage, categories, includeSubCategories, navigationParameters, prod, sku);
     }

@@ -96,7 +96,7 @@ public class BulkMailProcessorImpl implements Runnable {
                         LOG.info("Sent mail to {} with subject {}", mail.getRecipients(), mail.getSubject());
                         mailService.delete(mail);
                     } catch (Exception exp) {
-                        LOG.error(Markers.alert(), "Unable to send mail " + mail.getMailId() + " for shop " + shopCode, exp);
+                        LOG.error(Markers.alert(), "Unable to send mail " + mail.getMailId() + "/" + mail.getSubject() + " for shop " + shopCode, exp);
                         lastFailedEmailId = mail.getMailId();
                         exceptionsThresholdsByShop.put(shopCode, exceptionsThreshold - 1);
 

@@ -27,6 +27,7 @@ import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
@@ -164,11 +165,11 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
 
         }
         try {
-            final Charset charset = Charset.forName("UTF-8");
+            final Charset charset = StandardCharsets.UTF_8;
             final MessageDigest digest = MessageDigest.getInstance("SHA-1");
             return new String(Hex.encodeHex(digest.digest(all.toString().getBytes(charset)))).toUpperCase();
         } catch (NoSuchAlgorithmException e) {
-            LOG.error("SHA-1 not available", e);
+            LOG.error("SHA-1 not available: " + e.getMessage(), e);
             return "SHA-1 not available";
         }
 

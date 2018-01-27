@@ -122,7 +122,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
             count = productSkus.size();
             runBatch = count < full;
 
-            LOG.info("Inventory changed for {} since {}", new Object[]{productSkus.size(), lastRun});
+            LOG.info("Inventory changed for {} since {}", productSkus.size(), lastRun);
 
             if (runBatch) {
                 int fromIndex = 0;

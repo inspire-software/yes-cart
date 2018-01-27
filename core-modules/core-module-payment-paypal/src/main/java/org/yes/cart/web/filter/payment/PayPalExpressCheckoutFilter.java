@@ -94,9 +94,7 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
 
         if (isCallerIpAllowed(servletRequest)) {
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(callbackDump);
-            }
+            LOG.debug("Callback:\n{}", callbackDump);
 
             final Map parameters = servletRequest.getParameterMap();
             final Map<String, String> singleMap = HttpParamsUtils.createSingleValueMap(parameters);
@@ -171,7 +169,7 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
                     } catch (OrderException e) {
 
                         LOG.error("Transition failed during payment call back for " + getPaymentGatewayLabel() + " payment gateway", e);
-                        LOG.error(callbackDump);
+                        LOG.error("Callback:\n{}", callbackDump);
 
                         // Send 500, so that PG know that there was an issue and may resend the update
                         ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -181,7 +179,7 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
                 } else {
 
                     LOG.error("Transition failed during payment call back for " + getPaymentGatewayLabel() + " payment gateway: orderGuid verification failed");
-                    LOG.error(callbackDump);
+                    LOG.error("Callback:\n{}", callbackDump);
 
                     // Send 500, so that PG know that there was an issue and may resend the update
                     ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -195,7 +193,7 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
 
             if (LOG.isWarnEnabled()) {
                 LOG.warn(Markers.alert(), "Received payment gateway callback from unauthorised IP {}", ipResolver.resolve((HttpServletRequest) servletRequest));
-                LOG.warn(callbackDump);
+                LOG.warn("Callback:\n{}", callbackDump);
             }
             // Send forbidden to notify PG that this is a security issue and not error of any kind
             ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_FORBIDDEN);

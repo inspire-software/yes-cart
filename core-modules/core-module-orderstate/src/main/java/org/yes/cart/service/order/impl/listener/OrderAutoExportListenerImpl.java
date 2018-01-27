@@ -57,10 +57,8 @@ public class OrderAutoExportListenerImpl implements OrderStateAfterTransitionLis
 
                 if (isValidDeliveryState(delivery)) {
 
-                    if (LOG.isInfoEnabled()) {
-                        LOG.info("OrderEvent {} is eligible for auto export {}/{}",
-                                new Object[]{orderEvent, orderEligibilityType, deliveryEligibilityType});
-                    }
+                    LOG.info("OrderEvent {} is eligible for auto export {}/{}",
+                            orderEvent, orderEligibilityType, deliveryEligibilityType);
 
                     order.setEligibleForExport(orderEligibilityType);
                     delivery.setEligibleForExport(deliveryEligibilityType);

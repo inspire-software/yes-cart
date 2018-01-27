@@ -177,11 +177,9 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
                     // synchronous response, so processing those callbacks is unnecessary (in fact it may lead to capturing
                     // payments more than once)
 
-                    if (LOG.isWarnEnabled()) {
-                        LOG.warn("Cannot handle payment callback {} for order in state {}. " +
-                                 "This is probably follow up capture callback that was already accounted for. Callback: {}",
-                                new Object[] { order.getOrderStatus(), pgCallback, callback.getPaymentGatewayCallbackId() });
-                    }
+                    LOG.warn("Cannot handle payment callback {} for order in state {}. " +
+                             "This is probably follow up capture callback that was already accounted for. Callback: {}",
+                            order.getOrderStatus(), pgCallback, callback.getPaymentGatewayCallbackId());
 
                 } else if (pgCallback.getOperation() == CallbackAware.CallbackOperation.REFUND) {
 
@@ -196,20 +194,16 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
                         handlePrematureRefund(params, order);
                         finaliseCallback(callback, "Processed refund callback: " + pgCallback.getOrderGuid());
                     } else {
-                        if (LOG.isWarnEnabled()) {
-                            LOG.warn("Cannot handle zero-refund callback {} for order in state {}. Callback: {}",
-                                    new Object[] { order.getOrderStatus(), pgCallback, callback.getPaymentGatewayCallbackId() });
-                        }
+                        LOG.warn("Cannot handle zero-refund callback {} for order in state {}. Callback: {}",
+                                order.getOrderStatus(), pgCallback, callback.getPaymentGatewayCallbackId());
                     }
 
                 } else {
 
                     // This is probably some notification from payment gateway that can be ignored.
 
-                    if (LOG.isWarnEnabled()) {
-                        LOG.warn("Cannot handle info callback {} for order in state {}. Callback: {}",
-                                new Object[] { order.getOrderStatus(), pgCallback, callback.getPaymentGatewayCallbackId() });
-                    }
+                    LOG.warn("Cannot handle info callback {} for order in state {}. Callback: {}",
+                            order.getOrderStatus(), pgCallback, callback.getPaymentGatewayCallbackId());
 
                 }
 
@@ -223,9 +217,8 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
         callback.setProcessed(true);
         paymentGatewayCallbackService.update(callback);
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Callback {} processed. {}", callback.getPaymentGatewayCallbackId(), msg);
-        }
+
+        LOG.info("Callback {} processed. {}", callback.getPaymentGatewayCallbackId(), msg);
 
     }
 
@@ -372,10 +365,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
             return null;
         }
         final CallbackAware.Callback pgCallback = ((CallbackAware) paymentGateway).convertToCallback(privateCallBackParameters);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Resolved callback {} from http request with {} payment gateway.",
-                    pgCallback, paymentGatewayLabel);
-        }
+        LOG.debug("Resolved callback {} from http request with {} payment gateway.", pgCallback, paymentGatewayLabel);
         return pgCallback;
     }
 

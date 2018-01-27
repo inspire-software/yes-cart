@@ -44,7 +44,7 @@ public class WebsupportWsNodeServiceImpl extends AbstractWsNodeServiceImpl imple
      */
     public void broadcast(final Message message) {
 
-        LOG.debug("Sending message locally: {}", message);
+        log.debug("Sending message locally: {}", message);
 
         final List<MessageListener> subjectListeners = listeners.get(message.getSubject());
         if (CollectionUtils.isNotEmpty(subjectListeners)) {
@@ -75,7 +75,7 @@ public class WebsupportWsNodeServiceImpl extends AbstractWsNodeServiceImpl imple
             }
 
         } else {
-            LOG.warn("No listeners for message: {}", message);
+            log.warn("No listeners for message: {}", message);
         }
 
     }

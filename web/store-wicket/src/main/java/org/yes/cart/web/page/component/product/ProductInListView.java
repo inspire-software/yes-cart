@@ -203,7 +203,7 @@ public class ProductInListView extends BaseComponent {
 
         if (LOG.isDebugEnabled()) {
 
-            LOG.debug("Default image is [" + product.getDefaultImage() + "]  result is [" + result + "]");
+            LOG.debug("Default image is [{}]  result is [{}]", product.getDefaultImage(), result);
 
         }
 

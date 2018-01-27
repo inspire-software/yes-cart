@@ -109,11 +109,10 @@ public class DynaFormPanel extends BaseComponent {
                 final Map<String, String> values = new HashMap<String, String>();
                 for (Pair<? extends AttrValueWithAttribute, Boolean> av : attrValueCollection) {
                     LOG.debug("Attribute with code [{}] has value [{}], readonly [{}]",
-                            new Object[] {
                                     av.getFirst().getAttribute().getCode(),
                                     av.getFirst().getVal(),
                                     av.getSecond()
-                            });
+                            );
                     if (av.getSecond() != null && !av.getSecond()) {
                         if ("salutation".equals(av.getFirst().getAttribute().getCode())) {
                             customer.setSalutation(av.getFirst().getVal());

@@ -67,9 +67,7 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
             if (pages.size() == 1) {
                 // there is only default mapping for this url
                 classProvider = ClassReference.of(pages.entrySet().iterator().next().getValue());
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("Mounting url '{}' to page '{}'", url, classProvider.get().getCanonicalName());
-                }
+                LOG.info("Mounting url '{}' to page '{}'", url, classProvider.get().getCanonicalName());
             } else {
                 // more than one mapping - need a theme dependent class provider
                 classProvider = new ThemePageProvider(pages);
@@ -87,14 +85,10 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
             }
             if (loginUrl.equals(url)) {
                 loginPage = classProvider;
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("This is a login url");
-                }
+                LOG.info("Login url [{}], class {}", loginUrl, loginPage);
             } else if ("/".equals(url)) {
                 homePage = classProvider;
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("This is a home url");
-                }
+                LOG.info("Home url [/], class {}", homePage);
             }
             pageByUri.put(url, classProvider);
         }

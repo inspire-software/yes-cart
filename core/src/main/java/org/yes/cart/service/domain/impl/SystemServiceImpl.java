@@ -162,9 +162,7 @@ public class SystemServiceImpl implements SystemService {
 
         if (attrVal == null) {
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("updating system preference {} with {} (previous value was absent)", key, value);
-            }
+            LOG.debug("updating system preference {} with {} (previous value was absent)", key, value);
 
             final System system = getSystem();
 
@@ -187,9 +185,7 @@ public class SystemServiceImpl implements SystemService {
             }
         } else {
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("updating system preference {} with {} (previous value was {})", new Object[]{key, value, attrVal.getVal()});
-            }
+            LOG.debug("updating system preference {} with {} (previous value was {})", key, value, attrVal.getVal());
 
             attrVal.setVal(value);
         }

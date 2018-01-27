@@ -88,7 +88,7 @@ public class ResultPage extends AbstractWebPage {
         final PageParameters params = getPageParameters();
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug(HttpUtil.dumpRequest((HttpServletRequest) getRequest().getContainerRequest()));
+            LOG.debug("Callback:\n{}", HttpUtil.dumpRequest((HttpServletRequest) getRequest().getContainerRequest()));
         }
 
         // Status gives preliminary result from return URL, which can be sent as "status" or "hint"

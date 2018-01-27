@@ -57,7 +57,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
     public void broadcast(final Message message) {
 
         if (reloadClusterTopics.contains(message.getSubject())) {
-            LOG.info("Reloading cluster information before {}", message.getSubject());
+            log.info("Reloading cluster information before {}", message.getSubject());
             reloadClusterConfiguration();
         }
 
@@ -65,7 +65,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
         final AsyncContext context = wsMessage.getAsyncContext();
 
         if (AsyncContext.NO_BROADCAST.equals(context.getAttribute(AsyncContext.NO_BROADCAST))) {
-            LOG.debug("Broadcasting switched off for context of message {}", message.getSubject());
+            log.debug("Broadcasting switched off for context of message {}", message.getSubject());
             return;
         }
 
@@ -111,15 +111,15 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
                     blacklist(yesNode.getId());
 
-                    if (LOG.isErrorEnabled()) {
-                        LOG.error(Markers.alert(), "Node message failure [" + message + "] to  url ["
+                    if (log.isErrorEnabled()) {
+                        log.error(Markers.alert(), "Node message failure [" + message + "] to  url ["
                                 + yesNode.getId() + "] . Blacklisting this node");
                     }
 
                 } else {
 
-                    if (LOG.isErrorEnabled()) {
-                        LOG.error(Markers.alert(), "Node message failure [" + message + "] to  url ["
+                    if (log.isErrorEnabled()) {
+                        log.error(Markers.alert(), "Node message failure [" + message + "] to  url ["
                                 + yesNode.getId() + "] . Exception occurred during ws call",
                                 wse);
                     }
@@ -128,8 +128,8 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
             } catch (Exception e) {
 
-                if (LOG.isErrorEnabled()) {
-                    LOG.error(Markers.alert(), "Node message failure [" + message + "] to  url ["
+                if (log.isErrorEnabled()) {
+                    log.error(Markers.alert(), "Node message failure [" + message + "] to  url ["
                             + yesNode.getId() + "] . Exception occurred during ws call",
                             e);
                 }

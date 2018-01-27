@@ -178,9 +178,8 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      * {@inheritDoc}
      */
     public Payment authorize(final Payment payment) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Authorize " + payment);
-        }
+
+        LOG.debug("Authorize: {}", payment);
 
         final HashMap<String, String> request = new HashMap<String, String>();
         request.put("ccAuthService_run", "true");
@@ -308,9 +307,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      */
     public Payment reverseAuthorization(final Payment payment) {
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Reverse authorization " + payment);
-        }
+        LOG.debug("Reverse authorization: {}", payment);
 
         final HashMap<String, String> request = new HashMap<String, String>();
 
@@ -334,9 +331,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      */
     public Payment capture(final Payment payment) {
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Capture " + payment);
-        }
+        LOG.debug("Capture: {}", payment);
 
         final HashMap<String, String> request = new HashMap<String, String>();
         request.put("ccCaptureService_run", "true");
@@ -366,9 +361,8 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      * {@inheritDoc}
      */
     public Payment voidCapture(final Payment payment) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Void capture " + payment);
-        }
+
+        LOG.debug("Void capture: {}", payment);
 
         final HashMap<String, String> request = new HashMap<String, String>();
 
@@ -390,9 +384,8 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      * {@inheritDoc}
      */
     public Payment refund(final Payment payment) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Credit on prev auth " + payment);
-        }
+
+        LOG.debug("Credit on prev auth: {}", payment);
 
         final HashMap<String, String> request = new HashMap<String, String>();
 
@@ -428,11 +421,15 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
         payment.setTransactionOperation(operation);
 
         try {
-            LOG.info(HttpParamsUtils.stringify("Cybersource request:", request));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(HttpParamsUtils.stringify("Cybersource request:", request));
+            }
 
             final Map<String, String> reply = Client.runTransaction(request, getProperties());
 
-            LOG.info(HttpParamsUtils.stringify("Cybersource response:", reply));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(HttpParamsUtils.stringify("Cybersource response:", reply));
+            }
 
             /*
                 See http://apps.cybersource.com/library/documentation/sbc/SB_API_SP_UG/html/api.htm#API_8156_59537

@@ -490,7 +490,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
             return rez;
 
         } else {
-            LOG.warn("Customer order not found. Order number is " + orderNum);
+            LOG.warn("Customer order not found. Order number is {}", orderNum);
         }
         return Collections.emptyList();
 
@@ -530,7 +530,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
             return rez;
         } else {
-            LOG.warn("Customer order not found. Order num is " + orderNum);
+            LOG.warn("Customer order not found. Order num is {}", orderNum);
         }
         return Collections.emptyList();
 

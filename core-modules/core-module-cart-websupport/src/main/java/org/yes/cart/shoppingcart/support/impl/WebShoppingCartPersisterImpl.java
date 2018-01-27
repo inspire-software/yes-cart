@@ -26,7 +26,6 @@ import org.yes.cart.shoppingcart.support.ShoppingCartPersister;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.MessageFormat;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -64,7 +63,7 @@ public class WebShoppingCartPersisterImpl implements ShoppingCartPersister<HttpS
             try {
                 tuplizer.tuplize(httpServletRequest, httpServletResponse, shoppingCart);
             } catch (CartTuplizationException e) {
-                LOG.error(MessageFormat.format("Unable to create cookies from {0} cart", shoppingCart), e);
+                LOG.error("Unable to create cookies from cart: " + shoppingCart, e);
             }
 
         } catch (Exception e) {

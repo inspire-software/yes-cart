@@ -440,13 +440,13 @@ public class MailComposerImpl implements MailComposer {
             final String content = templateSupport.processTemplate(template, locale, enhancedModel);
 
             if (!include) {
-                LOG.debug("Processed template for locale {}, template: {}, ext: {}\n{}", new Object[]{locale, fileName, ext, content});
+                LOG.debug("Processed template for locale {}, template: {}, ext: {}\n{}", locale, fileName, ext, content);
             }
 
             return content;
 
         } catch (IOException e) {
-            LOG.warn("No template found for locale {}, template: {}, ext: {}", new Object[] { locale, fileName, ext });
+            LOG.warn("No template found for locale {}, template: {}, ext: {}", locale, fileName, ext);
             return null;
         }
 

@@ -57,12 +57,12 @@ public class YcCronJob extends QuartzJobBean implements Job {
             job.run();
 
             final long sec = getExecutionTimeInSeconds(start);
-            LOG.info("Finished job {} on {} in {}s, next run {}", new Object[]{ jobName, nodeId, sec, context.getNextFireTime() });
+            LOG.info("Finished job {} on {} in {}s, next run {}", jobName, nodeId, sec, context.getNextFireTime());
 
         } catch (Throwable thw) {
 
             final long sec = getExecutionTimeInSeconds(start);
-            LOG.error("Terminated job {} on {} in {}s, next run {}", new Object[] { jobName, nodeId, sec, context.getNextFireTime() });
+            LOG.error("Terminated job {} on {} in {}s, next run {}", jobName, nodeId, sec, context.getNextFireTime());
             LOG.error(Markers.alert(), "Job " + jobName + " finished in error, cause: " + thw.getMessage(), thw);
 
         }

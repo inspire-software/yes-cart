@@ -91,18 +91,14 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
                         case CATEGORY:
                             //check is this category allowed to open in this shop
                             if (!isCategoryVisibleInShop(categoryId)) {
-                                if (LOG.isWarnEnabled()) {
-                                    LOG.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
-                                }
+                                LOG.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
                                 clz = getDefaultPanel();
                             }
                             break;
                         case CONTENT:
                             //check is this content is allowed to open in this shop
                             if (!isContentVisibleInShop(categoryId)) {
-                                if (LOG.isWarnEnabled()) {
-                                    LOG.warn("Can not access content {} from shop {}", categoryId, ShopCodeContext.getShopId());
-                                }
+                                LOG.warn("Can not access content {} from shop {}", categoryId, ShopCodeContext.getShopId());
                                 clz = getDefaultPanel();
                             }
                             break;
@@ -110,9 +106,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
                         default:
                             //check is this category/content allowed to open in this shop
                             if (!isCategoryVisibleInShop(categoryId) && !isContentVisibleInShop(categoryId)) {
-                                if (LOG.isWarnEnabled()) {
-                                    LOG.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
-                                }
+                                LOG.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
                                 clz = getDefaultPanel();
                             }
                             break;

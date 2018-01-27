@@ -375,7 +375,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
 
         } catch (FileNotFoundException fnf) {
 
-            LOG.error("Unable to resize image " + original + " to " + resized + ", caused by: file not found");
+            LOG.error("Unable to resize image {} to {}, caused by: file not found", original, resized);
             return new byte[0];
 
         } catch (IOException ioe) {
