@@ -331,12 +331,6 @@ public class ShippingView extends BaseComponent {
 
         add(form);
 
-        if (carriers.isEmpty()) {
-            addNoShippingOptionFeedback();
-        } else {
-            addShippingOptionFeedback();
-        }
-
     }
 
     private void addNoShippingOptionFeedback() {
@@ -354,6 +348,21 @@ public class ShippingView extends BaseComponent {
                         Collections.singletonMap("supplier", supplierName)
                 )))
         );
+    }
+
+    @Override
+    protected void onBeforeRender() {
+
+        final ShoppingCart cart = getCurrentCart();
+        final List<Carrier> carriers = shippingServiceFacade.findCarriers(cart, this.supplier);
+
+        if (carriers.isEmpty()) {
+            addNoShippingOptionFeedback();
+        } else {
+            addShippingOptionFeedback();
+        }
+
+        super.onBeforeRender();
     }
 
     private void addShippingOptionFeedback() {
