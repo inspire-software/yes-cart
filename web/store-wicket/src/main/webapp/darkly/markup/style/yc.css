@@ -255,17 +255,14 @@ fieldset[disabled] .btn-primary2.active {
 /*===================================================================================*/
 
 .featured-panel {
-    padding: 15px 0 40px 0;
+    padding: 15px 0;
     border-bottom: 1px solid #303030;
 }
 
-.featured-panel ul {
-    list-style: none;
-    margin-bottom: 0;
-}
-
-.featured-panel ul > li {
-    display: inline-block;
+.featured-panel .owl-carousel .item {
+    width: 80px;
+    text-align: center;
+    margin: auto;
 }
 
 /*===================================================================================*/
