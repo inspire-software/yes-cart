@@ -18,13 +18,15 @@ package org.yes.cart.search.dao.entity;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.dto.StoredAttributesDTO;
 import org.yes.cart.domain.dto.impl.ProductSkuSearchResultDTOImpl;
-import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.dto.impl.StoredAttributesDTOImpl;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -33,8 +35,8 @@ import org.yes.cart.search.dao.support.NavigatableAttributesSupport;
 import org.yes.cart.search.query.impl.SearchUtil;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.TimeContext;
+import org.yes.cart.util.log.Markers;
 
-import java.lang.System;
 import java.util.*;
 
 import static org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils.*;
@@ -46,6 +48,8 @@ import static org.yes.cart.search.query.ProductSearchQueryBuilder.*;
  * Time: 14:22
  */
 public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<ProductSku, Long> {
+
+    private static final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
 
     private NavigatableAttributesSupport attributesSupport;
 
@@ -59,66 +63,77 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
 
         if (isProductInCategoryAndAvailableNow(entity, now)) {
 
-            final Document document = new Document();
+            try {
 
-            final ProductSkuSearchResultDTO result = createBaseResultObject(entity);
+                final Document document = new Document();
 
-            addPkField(document, ProductSku.class, String.valueOf(entity.getSkuId()));
+                final ProductSkuSearchResultDTO result = createBaseResultObject(entity);
 
-            addSimpleField(document, "skuId", String.valueOf(entity.getSkuId()));
-            addSimpleField(document, SKU_ID_FIELD, String.valueOf(entity.getSkuId()));
-            addSimpleField(document, PRODUCT_ID_FIELD, String.valueOf(entity.getProduct().getProductId()));
+                addPkField(document, ProductSku.class, String.valueOf(entity.getSkuId()));
 
-            addSimpleField(document, SKU_PRODUCT_CODE_FIELD, entity.getCode());
-            addSearchField(document, SKU_PRODUCT_CODE_FIELD_SEARCH, entity.getCode());
-            addSimpleField(document, SKU_PRODUCT_CODE_FIELD, entity.getBarCode());
-            addSearchField(document, SKU_PRODUCT_CODE_FIELD_SEARCH, entity.getBarCode());
-            addSortField(document, SKU_PRODUCT_CODE_SORT_FIELD, entity.getCode());
-            addStemFields(document, SKU_PRODUCT_CODE_STEM_FIELD, entity.getCode(), entity.getProduct().getCode());
+                addSimpleField(document, "skuId", String.valueOf(entity.getSkuId()));
+                addSimpleField(document, SKU_ID_FIELD, String.valueOf(entity.getSkuId()));
+                addSimpleField(document, PRODUCT_ID_FIELD, String.valueOf(entity.getProduct().getProductId()));
 
-            addSimpleField(document, SKU_PRODUCT_MANUFACTURER_CODE_FIELD, entity.getManufacturerCode());
-            addSearchField(document, SKU_PRODUCT_MANUFACTURER_CODE_FIELD_SEARCH, entity.getManufacturerCode());
-            addSortField(document, SKU_PRODUCT_MANUFACTURER_CODE_SORT_FIELD, entity.getManufacturerCode());
-            addStemFields(document, SKU_PRODUCT_MANUFACTURER_CODE_STEM_FIELD, entity.getManufacturerCode(), entity.getManufacturerPartCode(), entity.getSupplierCode());
+                addSimpleField(document, SKU_PRODUCT_CODE_FIELD, entity.getCode());
+                addSearchField(document, SKU_PRODUCT_CODE_FIELD_SEARCH, entity.getCode());
+                addSimpleField(document, SKU_PRODUCT_CODE_FIELD, entity.getBarCode());
+                addSearchField(document, SKU_PRODUCT_CODE_FIELD_SEARCH, entity.getBarCode());
+                addSortField(document, SKU_PRODUCT_CODE_SORT_FIELD, entity.getCode());
+                addStemFields(document, SKU_PRODUCT_CODE_STEM_FIELD, entity.getCode(), entity.getProduct().getCode());
 
-            addSearchField(document, PRODUCT_NAME_FIELD, entity.getName());
-            addSortField(document, PRODUCT_NAME_SORT_FIELD, entity.getName());
-            addStemFields(document, PRODUCT_NAME_STEM_FIELD, entity.getName(), entity.getSeo().getTitle(), entity.getSeo().getMetakeywords());
+                addSimpleField(document, SKU_PRODUCT_MANUFACTURER_CODE_FIELD, entity.getManufacturerCode());
+                addSearchField(document, SKU_PRODUCT_MANUFACTURER_CODE_FIELD_SEARCH, entity.getManufacturerCode());
+                addSortField(document, SKU_PRODUCT_MANUFACTURER_CODE_SORT_FIELD, entity.getManufacturerCode());
+                addStemFields(document, SKU_PRODUCT_MANUFACTURER_CODE_STEM_FIELD, entity.getManufacturerCode(), entity.getManufacturerPartCode(), entity.getSupplierCode());
 
-            final I18NModel displayName = new StringI18NModel(entity.getDisplayName());
-            addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, displayName);
-            addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(entity.getSeo().getDisplayTitle()));
-            addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(entity.getSeo().getDisplayMetakeywords()));
-            addSearchFields(document, PRODUCT_DISPLAYNAME_FIELD, displayName);
-            addSortFields(document, PRODUCT_DISPLAYNAME_SORT_FIELD, displayName);
+                addSearchField(document, PRODUCT_NAME_FIELD, entity.getName());
+                addSortField(document, PRODUCT_NAME_SORT_FIELD, entity.getName());
+                addStemFields(document, PRODUCT_NAME_STEM_FIELD, entity.getName(), entity.getSeo().getTitle(), entity.getSeo().getMetakeywords());
 
-            addNumericField(document, "rank", (long) entity.getRank(), false);
-            float boost = 1f;
-            // 50 is lowest rank, anything lower increases boost, higher decreases boost
-            if (entity.getRank() != 50) {
-                // 1pt == 0.01f boost
-                boost += 50f - ((float) entity.getRank()) / 100f;
-                if (boost < 0.25) {
-                    boost = 0.25f; // does not make any sense to have it lower
+                final I18NModel displayName = new StringI18NModel(entity.getDisplayName());
+                addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, displayName);
+                addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(entity.getSeo().getDisplayTitle()));
+                addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(entity.getSeo().getDisplayMetakeywords()));
+                addSearchFields(document, PRODUCT_DISPLAYNAME_FIELD, displayName);
+                addSortFields(document, PRODUCT_DISPLAYNAME_SORT_FIELD, displayName);
+
+                addNumericField(document, "rank", (long) entity.getRank(), false);
+                float boost = 1f;
+                // 50 is lowest rank, anything lower increases boost, higher decreases boost
+                if (entity.getRank() != 50) {
+                    // 1pt == 0.01f boost
+                    boost += 50f - ((float) entity.getRank()) / 100f;
+                    if (boost < 0.25) {
+                        boost = 0.25f; // does not make any sense to have it lower
+                    }
                 }
+                addStoredField(document, "rank_boost", boost);
+
+                // Created timestamp is used to determine ranges
+                addDateField(document, PRODUCT_CREATED_FIELD, entity.getCreatedTimestamp(), false);
+                addSortField(document, PRODUCT_CREATED_SORT_FIELD, entity.getCreatedTimestamp(), false);
+
+                // Add attributes
+                addAttributeFields(document, entity, result);
+
+                // save the whole search object instead of individual fields, fields are only for searching
+                // must be last step so that we have fully modified object serialised to index
+                addObjectDefaultField(document, result);
+
+                return new Pair<Long, Document[]>(entity.getSkuId(), new Document[]{document});
+
+            } catch (Exception exp) {
+                LOGFTQ.error(Markers.alert(),
+                        "Unable to adapt product {} to index document", entity.getCode());
+                LOGFTQ.error(
+                        "Unable to adapt product to index document, code: " + entity.getCode()
+                                + ", cause: " + exp.getMessage(), exp);
             }
-            addStoredField(document, "rank_boost", boost);
-
-            // Created timestamp is used to determine ranges
-            addDateField(document, PRODUCT_CREATED_FIELD, entity.getCreatedTimestamp(), false);
-            addSortField(document, PRODUCT_CREATED_SORT_FIELD, entity.getCreatedTimestamp(), false);
-
-            // Add attributes
-            addAttributeFields(document, entity, result);
-
-            // save the whole search object instead of individual fields, fields are only for searching
-            // must be last step so that we have fully modified object serialised to index
-            addObjectDefaultField(document, result);
-
-            return new Pair<Long, Document[]>(entity.getSkuId(), new Document[] { document });
 
         }
         return entity != null ? new Pair<Long, Document[]>(entity.getSkuId(), null) : null;
+
     }
 
     long now() {
