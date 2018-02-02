@@ -164,6 +164,7 @@
     <entry key="multibuy">Multi-buy</entry>
 
     <!-- ShoppingCartPaymentVerificationView -->
+    <entry key="gratis">FREE</entry>
     <entry key="productName">Product</entry>
     <entry key="amount">Amount</entry>
     <entry key="deliveryNum">Delivery number</entry>
@@ -171,7 +172,6 @@
     <entry key="deliverySubTotalTax">Tax</entry>
     <entry key="deliverySubTotalAmount">Sub total (inc. tax)</entry>
     <entry key="deliveryCost">Shipping cost</entry>
-    <entry key="deliveryCostGratis">FREE</entry>
     <entry key="deliveryCostTax">Tax</entry>
     <entry key="deliveryCostAmount">Shipping cost (inc. tax)</entry>
     <entry key="deliveryMethod">Method</entry>

@@ -164,6 +164,7 @@
     <entry key="multibuy">Оптові знижки</entry>
 
     <!-- ShoppingCartPaymentVerificationView -->
+    <entry key="gratis">безкоштовно</entry>
     <entry key="productName">Товар</entry>
     <entry key="amount">Всього</entry>
     <entry key="deliveryNum">Номер доставки</entry>
@@ -171,7 +172,6 @@
     <entry key="deliverySubTotalTax">ПДВ</entry>
     <entry key="deliverySubTotalAmount">Разом доставка (з ПДВ)</entry>
     <entry key="deliveryCost">Доставка</entry>
-    <entry key="deliveryCostGratis">безкоштовно</entry>
     <entry key="deliveryCostTax">ПДВ</entry>
     <entry key="deliveryCostAmount">Доставка (з ПДВ)</entry>
     <entry key="deliveryMethod">Спосіб</entry>

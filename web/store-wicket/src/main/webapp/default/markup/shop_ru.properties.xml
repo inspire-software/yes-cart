@@ -164,6 +164,7 @@
     <entry key="multibuy">Оптовые скидки</entry>
 
     <!-- ShoppingCartPaymentVerificationView -->
+    <entry key="gratis">бесплатно</entry>
     <entry key="productName">Товар</entry>
     <entry key="amount">Всего</entry>
     <entry key="deliveryNum">Номер доставки</entry>
@@ -171,7 +172,6 @@
     <entry key="deliverySubTotalTax">НДС</entry>
     <entry key="deliverySubTotalAmount">Итого по доставке (с НДС)</entry>
     <entry key="deliveryCost">Доставка</entry>
-    <entry key="deliveryCostGratis">бесплатно</entry>
     <entry key="deliveryCostTax">НДС</entry>
     <entry key="deliveryCostAmount">Доставка (с НДС)</entry>
     <entry key="deliveryMethod">Метод</entry>

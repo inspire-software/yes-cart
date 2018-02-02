@@ -164,6 +164,7 @@
     <entry key="multibuy">Demo: Mengenrabatt</entry>
 
     <!-- ShoppingCartPaymentVerificationView -->
+    <entry key="gratis">GRATIS</entry>
     <entry key="productName">Produkt</entry>
     <entry key="amount">Betrag</entry>
     <entry key="deliveryNum">Versandnummer</entry>
@@ -171,7 +172,6 @@
     <entry key="deliverySubTotalTax">MwSt.</entry>
     <entry key="deliverySubTotalAmount">Subtotal (inkl. MwSt.)</entry>
     <entry key="deliveryCost">Versandkosten</entry>
-    <entry key="deliveryCostGratis">GRATIS</entry>
     <entry key="deliveryCostTax">MwSt.</entry>
     <entry key="deliveryCostAmount">Versandkosten (inkl. MwSt.)</entry>
     <entry key="deliveryMethod">Versand</entry>
