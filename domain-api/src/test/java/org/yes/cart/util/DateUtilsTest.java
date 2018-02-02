@@ -143,13 +143,52 @@ public class DateUtilsTest {
 
     }
 
+    @Test
+    public void custom() throws Exception {
+
+        final Date date = DateUtils.dParse("10/10/17 10:30:00", "dd/MM/yy HH:mm:ss");
+        assertNotNull(date);
+        assertEquals("2017-10-10 10:30:00", DateUtils.formatSDT(date));
+        assertEquals("2017-10-10", DateUtils.formatSD(date));
+
+        final LocalDate localDate = DateUtils.ldParse("10/10/17 10:30:00", "dd/MM/yy HH:mm:ss");
+        assertNotNull(localDate);
+        assertEquals("2017-10-10 00:00:00", DateUtils.formatSDT(localDate));
+        assertEquals("2017-10-10", DateUtils.formatSD(localDate));
+
+        final LocalDateTime localDateTime = DateUtils.ldtParse("10/10/17 10:30:00", "dd/MM/yy HH:mm:ss");
+        assertNotNull(localDateTime);
+        assertEquals("2017-10-10 10:30:00", DateUtils.formatSDT(localDateTime));
+        assertEquals("2017-10-10", DateUtils.formatSD(localDateTime));
+
+        final ZonedDateTime zonedDateTime = DateUtils.zdtParse("10/10/17 10:30:00", "dd/MM/yy HH:mm:ss");
+        assertNotNull(zonedDateTime);
+        assertEquals("2017-10-10 10:30:00", DateUtils.formatSDT(zonedDateTime));
+        assertEquals("2017-10-10", DateUtils.formatSD(zonedDateTime));
+
+        assertNotNull(DateUtils.formatSDT());
+
+        final Instant testSQLDate = DateUtils.iParse("10/10/17 10:30:00", "dd/MM/yy HH:mm:ss");
+        final java.sql.Date sqlDate = new java.sql.Date(testSQLDate.toEpochMilli());
+        assertEquals("2017-10-10 00:00:00", DateUtils.formatSDT(sqlDate));
+        assertEquals("2017-10-10", DateUtils.formatSD(sqlDate));
+
+        final Instant testSQLTimestamp = DateUtils.iParse("10/10/17 10:30:00", "dd/MM/yy HH:mm:ss");
+        final Timestamp sqlTimestamp = new Timestamp(testSQLTimestamp.toEpochMilli());
+        assertEquals("2017-10-10 10:30:00", DateUtils.formatSDT(sqlTimestamp));
+        assertEquals("2017-10-10", DateUtils.formatSD(sqlTimestamp));
+
+
+    }
+
 
     @Test
     public void exportFileTimestamp() throws Exception {
 
-        final ZonedDateTime zonedDateTime = DateUtils.zdtParseSDT("2017-10-10 10:30:00");
-
-        assertEquals("20171010103000", DateUtils.exportFileTimestamp(zonedDateTime));
+        assertEquals("20171010103000", DateUtils.exportFileTimestamp(DateUtils.dParseSDT("2017-10-10 10:30:00")));
+        assertEquals("20171010103000", DateUtils.exportFileTimestamp(DateUtils.iParseSDT("2017-10-10 10:30:00")));
+        assertEquals("20171010103000", DateUtils.exportFileTimestamp(DateUtils.ldtParseSDT("2017-10-10 10:30:00")));
+        assertEquals("20171010103000", DateUtils.exportFileTimestamp(DateUtils.zdtParseSDT("2017-10-10 10:30:00")));
 
         assertNotNull(DateUtils.exportFileTimestamp());
 
@@ -157,11 +196,23 @@ public class DateUtilsTest {
 
 
     @Test
+    public void numberTimestamp() throws Exception {
+
+        assertEquals("20171010103000", DateUtils.numberTimestamp(DateUtils.dParseSDT("2017-10-10 10:30:00")));
+        assertEquals("20171010103000", DateUtils.numberTimestamp(DateUtils.iParseSDT("2017-10-10 10:30:00")));
+        assertEquals("20171010103000", DateUtils.numberTimestamp(DateUtils.ldtParseSDT("2017-10-10 10:30:00")));
+        assertEquals("20171010103000", DateUtils.numberTimestamp(DateUtils.zdtParseSDT("2017-10-10 10:30:00")));
+
+    }
+
+
+    @Test
     public void impexFileTimestamp() throws Exception {
 
-        final ZonedDateTime zonedDateTime = DateUtils.zdtParseSDT("2017-10-10 10:30:00");
-
-        assertEquals("2017-10-10_103000", DateUtils.impexFileTimestamp(zonedDateTime));
+        assertEquals("2017-10-10_103000", DateUtils.impexFileTimestamp(DateUtils.iParseSDT("2017-10-10 10:30:00")));
+        assertEquals("2017-10-10_103000", DateUtils.impexFileTimestamp(DateUtils.dParseSDT("2017-10-10 10:30:00")));
+        assertEquals("2017-10-10_103000", DateUtils.impexFileTimestamp(DateUtils.ldtParseSDT("2017-10-10 10:30:00")));
+        assertEquals("2017-10-10_103000", DateUtils.impexFileTimestamp(DateUtils.zdtParseSDT("2017-10-10 10:30:00")));
 
         assertNotNull(DateUtils.impexFileTimestamp());
 
@@ -183,9 +234,11 @@ public class DateUtilsTest {
     @Test
     public void formatCustomer() throws Exception {
 
-        final Date date = DateUtils.dParseSDT("2017-10-10 10:30:00");
-
-        assertEquals("10 October 2017", DateUtils.formatCustomer(date, Locale.UK));
+        assertEquals("10 October 2017", DateUtils.formatCustomer(DateUtils.iParseSDT("2017-10-10 10:30:00"), Locale.UK));
+        assertEquals("10 October 2017", DateUtils.formatCustomer(DateUtils.dParseSDT("2017-10-10 10:30:00"), Locale.UK));
+        assertEquals("10 October 2017", DateUtils.formatCustomer(DateUtils.ldParseSDT("2017-10-10 10:30:00"), Locale.UK));
+        assertEquals("10 October 2017", DateUtils.formatCustomer(DateUtils.ldtParseSDT("2017-10-10 10:30:00"), Locale.UK));
+        assertEquals("10 October 2017", DateUtils.formatCustomer(DateUtils.zdtParseSDT("2017-10-10 10:30:00"), Locale.UK));
 
     }
 

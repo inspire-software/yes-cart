@@ -47,8 +47,11 @@ public final class DateUtils {
     private static final DateTimeFormatter STANDARD_DATE =
             DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    private static final DateTimeFormatter EXPORT_FILE_TIMESTAMP =
+    private static final DateTimeFormatter NUMBER_TIMESTAMP =
             DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+    private static final DateTimeFormatter EXPORT_FILE_TIMESTAMP =
+            NUMBER_TIMESTAMP;
 
     private static final DateTimeFormatter IMPEX_FILE_TIMESTAMP =
             DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
@@ -59,7 +62,16 @@ public final class DateUtils {
     private static final DateTimeFormatter YEAR =
             DateTimeFormatter.ofPattern("yyyy");
 
-    private static final Map<Locale, DateTimeFormatter> CUSTOMER_DATE = new ConcurrentHashMap<>();
+    private static final Map<String, DateTimeFormatter> CUSTOM = new ConcurrentHashMap<>();
+    static {
+        CUSTOM.put("yyyy-MM-dd HH:mm:ss", STANDARD_DATETIME);
+        CUSTOM.put("yyyy-MM-dd", STANDARD_DATE);
+        CUSTOM.put("yyyyMMddHHmmss", NUMBER_TIMESTAMP);
+        CUSTOM.put("_yyyy-MM-dd_HHmmss_SSS", AUTO_IMPORT_TIMESTAMP);
+        CUSTOM.put("dd/MM/yyyy", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    private static final Map<Locale, Map<String, DateTimeFormatter>> CUSTOM_LOCAL = new ConcurrentHashMap<>();
 
     private static final ZoneId ZONE = ZoneId.systemDefault();
 
@@ -84,16 +96,95 @@ public final class DateUtils {
      * @return timestamp
      */
     public static String exportFileTimestamp() {
-        return exportFileTimestamp(ZonedDateTime.now(ZONE));
+        return exportFileTimestamp(ZonedDateTime.now(zone()));
     }
 
     /**
      * Return timestamp for "now" in  yyyyMMddHHmmss format
      *
+     * @param date date time
+     *
+     * @return timestamp
+     */
+    public static String exportFileTimestamp(final Date date) {
+        return format(date, EXPORT_FILE_TIMESTAMP);
+    }
+
+    /**
+     * Return timestamp for "now" in  yyyyMMddHHmmss format
+     *
+     * @param instant date time
+     *
+     * @return timestamp
+     */
+    public static String exportFileTimestamp(final Instant instant) {
+        return format(instant, EXPORT_FILE_TIMESTAMP);
+    }
+
+    /**
+     * Return timestamp for "now" in  yyyyMMddHHmmss format
+     *
+     * @param localDateTime local date time
+     *
+     * @return timestamp
+     */
+    public static String exportFileTimestamp(final LocalDateTime localDateTime) {
+        return format(localDateTime, EXPORT_FILE_TIMESTAMP);
+    }
+
+    /**
+     * Return timestamp for "now" in  yyyyMMddHHmmss format
+     *
+     * @param zonedDateTime zoned date time
+     *
      * @return timestamp
      */
     public static String exportFileTimestamp(final ZonedDateTime zonedDateTime) {
-        return zonedDateTime.format(EXPORT_FILE_TIMESTAMP);
+        return format(zonedDateTime, EXPORT_FILE_TIMESTAMP);
+    }
+
+    /**
+     * Return timestamp for "now" in  yyyyMMddHHmmss format
+     *
+     * @param dateTime date time
+     *
+     * @return timestamp
+     */
+    public static String numberTimestamp(final Date dateTime) {
+        return format(dateTime, NUMBER_TIMESTAMP);
+    }
+
+    /**
+     * Return timestamp for "now" in  yyyyMMddHHmmss format
+     *
+     * @param instant date time
+     *
+     * @return timestamp
+     */
+    public static String numberTimestamp(final Instant instant) {
+        return format(instant, NUMBER_TIMESTAMP);
+    }
+
+    /**
+     * Return timestamp for "now" in  yyyyMMddHHmmss format
+     *
+     * @param localDateTime date time
+     *
+     * @return timestamp
+     */
+    public static String numberTimestamp(final LocalDateTime localDateTime) {
+        return format(localDateTime, NUMBER_TIMESTAMP);
+    }
+
+    /**
+     * Return timestamp for "now" in  yyyyMMddHHmmss format
+     *
+     * @param zonedDateTime date time
+     *
+     * @return timestamp
+     */
+    public static String numberTimestamp(final ZonedDateTime zonedDateTime) {
+        return format(zonedDateTime, NUMBER_TIMESTAMP);
     }
 
     /**
@@ -102,16 +193,51 @@ public final class DateUtils {
      * @return timestamp
      */
     public static String impexFileTimestamp() {
-        return impexFileTimestamp(ZonedDateTime.now(ZONE));
+        return impexFileTimestamp(ZonedDateTime.now(zone()));
     }
 
     /**
      * Return timestamp for "now" in  yyyy-MM-dd_HHmmss format
      *
+     * @param date date time
+     *
+     * @return timestamp
+     */
+    public static String impexFileTimestamp(final Date date) {
+        return format(date, IMPEX_FILE_TIMESTAMP);
+    }
+
+    /**
+     * Return timestamp for "now" in  yyyy-MM-dd_HHmmss format
+     *
+     * @param instant date time
+     *
+     * @return timestamp
+     */
+    public static String impexFileTimestamp(final Instant instant) {
+        return format(instant, IMPEX_FILE_TIMESTAMP);
+    }
+
+    /**
+     * Return timestamp for "now" in  yyyy-MM-dd_HHmmss format
+     *
+     * @param localDateTime date time
+     *
+     * @return timestamp
+     */
+    public static String impexFileTimestamp(final LocalDateTime localDateTime) {
+        return format(localDateTime, IMPEX_FILE_TIMESTAMP);
+    }
+
+    /**
+     * Return timestamp for "now" in  yyyy-MM-dd_HHmmss format
+     *
+     * @param zonedDateTime date time
+     *
      * @return timestamp
      */
     public static String impexFileTimestamp(final ZonedDateTime zonedDateTime) {
-        return zonedDateTime.format(IMPEX_FILE_TIMESTAMP);
+        return format(zonedDateTime, IMPEX_FILE_TIMESTAMP);
     }
 
     /**
@@ -120,7 +246,7 @@ public final class DateUtils {
      * @return timestamp
      */
     public static String autoImportTimestamp() {
-        return autoImportTimestamp(ZonedDateTime.now(ZONE));
+        return autoImportTimestamp(ZonedDateTime.now(zone()));
     }
 
     /**
@@ -146,12 +272,12 @@ public final class DateUtils {
     /**
      * Convert to old Date
      *
-     * @param zonedDateTime date time
+     * @param localDate date
      *
      * @return date
      */
-    public static Date from(final ZonedDateTime zonedDateTime) {
-        return zonedDateTime != null ? Date.from(zonedDateTime.toInstant()) : null;
+    public static Date from(final LocalDate localDate) {
+        return localDate != null ? Date.from(localDate.atStartOfDay(zone()).toInstant()) : null;
     }
 
     /**
@@ -162,18 +288,18 @@ public final class DateUtils {
      * @return date
      */
     public static Date from(final LocalDateTime localDateTime) {
-        return localDateTime != null ? Date.from(localDateTime.atZone(ZONE).toInstant()) : null;
+        return localDateTime != null ? Date.from(localDateTime.atZone(zone()).toInstant()) : null;
     }
 
     /**
      * Convert to old Date
      *
-     * @param localDate date
+     * @param zonedDateTime date time
      *
      * @return date
      */
-    public static Date from(final LocalDate localDate) {
-        return localDate != null ? Date.from(localDate.atStartOfDay(ZONE).toInstant()) : null;
+    public static Date from(final ZonedDateTime zonedDateTime) {
+        return zonedDateTime != null ? Date.from(zonedDateTime.toInstant()) : null;
     }
 
     /**
@@ -184,7 +310,7 @@ public final class DateUtils {
      * @return millis
      */
     public static long millis(final LocalDate localDate) {
-        return localDate != null ? localDate.atStartOfDay(ZONE).toInstant().toEpochMilli() : 0L;
+        return localDate != null ? localDate.atStartOfDay(zone()).toInstant().toEpochMilli() : 0L;
     }
 
     /**
@@ -195,7 +321,7 @@ public final class DateUtils {
      * @return millis
      */
     public static long millis(final LocalDateTime localDateTime) {
-        return localDateTime != null ? localDateTime.atZone(ZONE).toInstant().toEpochMilli() : 0L;
+        return localDateTime != null ? localDateTime.atZone(zone()).toInstant().toEpochMilli() : 0L;
     }
 
     /**
@@ -209,6 +335,41 @@ public final class DateUtils {
         return zonedDateTime != null ? zonedDateTime.toInstant().toEpochMilli() : 0L;
     }
 
+    private static DateTimeFormatter lazyLoad(final String pattern) {
+        DateTimeFormatter dtf = CUSTOM.get(pattern);
+        if (dtf == null) {
+            LOG.info("Add new custom date time formatter using pattern {}", pattern);
+            dtf = DateTimeFormatter.ofPattern(pattern);
+        }
+        return dtf;
+    }
+
+    private static DateTimeFormatter lazyLoad(final String pattern, final Locale locale) {
+        Map<String, DateTimeFormatter> dtfLocal = CUSTOM_LOCAL.get(locale);
+        if (dtfLocal == null) {
+            dtfLocal = new ConcurrentHashMap<>();
+            CUSTOM_LOCAL.put(locale, dtfLocal);
+        }
+        DateTimeFormatter dtf = dtfLocal.get(pattern);
+        if (dtf == null) {
+            LOG.info("Add new custom date time formatter using pattern {} for {}", pattern, locale);
+            dtf = DateTimeFormatter.ofPattern(pattern);
+        }
+        return dtf;
+    }
+
+    /**
+     * Parse date or date time using pattern
+     *
+     * @param datetime date or datetime
+     * @param pattern pattern
+     *
+     * @return date object
+     */
+    public static Date dParse(final String datetime, final String pattern) {
+        return dParse(datetime, lazyLoad(pattern));
+    }
+
     private static Date dParse(final String datetime, final DateTimeFormatter formatter) {
 
         if (StringUtils.isNotBlank(datetime)) {
@@ -216,9 +377,9 @@ public final class DateUtils {
 
                 TemporalAccessor temporalAccessor = formatter.parseBest(datetime, LocalDateTime::from, LocalDate::from);
                 if (temporalAccessor instanceof LocalDateTime) {
-                    return Date.from(((LocalDateTime) temporalAccessor).atZone(ZONE).toInstant());
+                    return Date.from(((LocalDateTime) temporalAccessor).atZone(zone()).toInstant());
                 }
-                return Date.from(((LocalDate) temporalAccessor).atStartOfDay(ZONE).toInstant());
+                return Date.from(((LocalDate) temporalAccessor).atStartOfDay(zone()).toInstant());
             } catch (Exception exp) {
                 LOG.error("Unable to parse date {} using formatter {}", datetime, formatter);
                 LOG.error(exp.getMessage(), exp);
@@ -227,6 +388,20 @@ public final class DateUtils {
         return null;
 
     }
+
+
+    /**
+     * Parse date or date time using pattern
+     *
+     * @param datetime date or datetime
+     * @param pattern pattern
+     *
+     * @return date object
+     */
+    public static Instant iParse(final String datetime, final String pattern) {
+        return iParse(datetime, lazyLoad(pattern));
+    }
+
 
     private static Instant iParse(final String datetime, final DateTimeFormatter formatter) {
 
@@ -240,9 +415,9 @@ public final class DateUtils {
                 try {
                     TemporalAccessor temporalAccessor = formatter.parseBest(datetime, LocalDateTime::from, LocalDate::from);
                     if (temporalAccessor instanceof LocalDateTime) {
-                        return ((LocalDateTime) temporalAccessor).atZone(ZONE).toInstant();
+                        return ((LocalDateTime) temporalAccessor).atZone(zone()).toInstant();
                     }
-                    return ((LocalDate) temporalAccessor).atStartOfDay(ZONE).toInstant();
+                    return ((LocalDate) temporalAccessor).atStartOfDay(zone()).toInstant();
                 } catch (Exception exp) {
                     LOG.error("Unable to parse date {} using formatter {}", datetime, formatter);
                     LOG.error(exp.getMessage(), exp);
@@ -252,6 +427,20 @@ public final class DateUtils {
         return null;
 
     }
+
+
+    /**
+     * Parse date or date time using pattern
+     *
+     * @param datetime date or datetime
+     * @param pattern pattern
+     *
+     * @return date object
+     */
+    public static LocalDate ldParse(final String datetime, final String pattern) {
+        return ldParse(datetime, lazyLoad(pattern));
+    }
+
 
     private static LocalDate ldParse(final String datetime, final DateTimeFormatter formatter) {
 
@@ -270,6 +459,19 @@ public final class DateUtils {
         }
         return null;
 
+    }
+
+
+    /**
+     * Parse date or date time using pattern
+     *
+     * @param datetime date or datetime
+     * @param pattern pattern
+     *
+     * @return date object
+     */
+    public static LocalDateTime ldtParse(final String datetime, final String pattern) {
+        return ldtParse(datetime, lazyLoad(pattern));
     }
 
 
@@ -293,6 +495,19 @@ public final class DateUtils {
     }
 
 
+    /**
+     * Parse date or date time using pattern
+     *
+     * @param datetime date or datetime
+     * @param pattern pattern
+     *
+     * @return date object
+     */
+    public static ZonedDateTime zdtParse(final String datetime, final String pattern) {
+        return zdtParse(datetime, lazyLoad(pattern));
+    }
+
+
     private static ZonedDateTime zdtParse(final String datetime, final DateTimeFormatter formatter) {
 
         if (StringUtils.isNotBlank(datetime)) {
@@ -300,9 +515,9 @@ public final class DateUtils {
 
                 TemporalAccessor temporalAccessor = formatter.parseBest(datetime, LocalDateTime::from, LocalDate::from);
                 if (temporalAccessor instanceof LocalDateTime) {
-                    return ((LocalDateTime) temporalAccessor).atZone(ZONE);
+                    return ((LocalDateTime) temporalAccessor).atZone(zone());
                 }
-                return ((LocalDate) temporalAccessor).atStartOfDay(ZONE);
+                return ((LocalDate) temporalAccessor).atStartOfDay(zone());
             } catch (Exception exp) {
                 LOG.error("Unable to parse date {} using formatter {}", datetime, formatter);
                 LOG.error(exp.getMessage(), exp);
@@ -395,7 +610,35 @@ public final class DateUtils {
                 if (datetime instanceof java.sql.Date) { // java.sql.Date.toInstant() is not supported operation
                     return format(((java.sql.Date) datetime).toLocalDate(), formatter);
                 }
-                return ZonedDateTime.ofInstant(datetime.toInstant(), ZONE).format(formatter);
+                return ZonedDateTime.ofInstant(datetime.toInstant(), zone()).format(formatter);
+            } catch (Exception exp) {
+                LOG.error("Unable to format date {} using formatter {}", datetime, formatter);
+                LOG.error(exp.getMessage(), exp);
+            }
+        }
+        return null;
+
+    }
+
+    private static String format(final Instant instant, final DateTimeFormatter formatter) {
+
+        if (instant != null) {
+            try {
+                return ZonedDateTime.ofInstant(instant, zone()).format(formatter);
+            } catch (Exception exp) {
+                LOG.error("Unable to format date {} using formatter {}", instant, formatter);
+                LOG.error(exp.getMessage(), exp);
+            }
+        }
+        return null;
+
+    }
+
+    private static String format(final LocalDate datetime, final DateTimeFormatter formatter) {
+
+        if (datetime != null) {
+            try {
+                return datetime.atStartOfDay(zone()).format(formatter);
             } catch (Exception exp) {
                 LOG.error("Unable to format date {} using formatter {}", datetime, formatter);
                 LOG.error(exp.getMessage(), exp);
@@ -409,21 +652,7 @@ public final class DateUtils {
 
         if (datetime != null) {
             try {
-                return datetime.atZone(ZONE).format(formatter);
-            } catch (Exception exp) {
-                LOG.error("Unable to format date {} using formatter {}", datetime, formatter);
-                LOG.error(exp.getMessage(), exp);
-            }
-        }
-        return null;
-
-    }
-
-    private static String format(final LocalDate datetime, final DateTimeFormatter formatter) {
-
-        if (datetime != null) {
-            try {
-                return datetime.atStartOfDay(ZONE).format(formatter);
+                return datetime.atZone(zone()).format(formatter);
             } catch (Exception exp) {
                 LOG.error("Unable to format date {} using formatter {}", datetime, formatter);
                 LOG.error(exp.getMessage(), exp);
@@ -457,7 +686,7 @@ public final class DateUtils {
      */
     public static String formatSDT() {
 
-        return format(ZonedDateTime.now(ZONE), STANDARD_DATETIME);
+        return format(ZonedDateTime.now(zone()), STANDARD_DATETIME);
 
     }
 
@@ -474,7 +703,7 @@ public final class DateUtils {
 
         return instant.toEpochMilli()
                 + INSTANT_COMMENT
-                + ZonedDateTime.ofInstant(instant, ZONE);
+                + ZonedDateTime.ofInstant(instant, zone());
 
     }
 
@@ -601,7 +830,7 @@ public final class DateUtils {
      */
     public static String formatYear() {
 
-        return format(ZonedDateTime.now(ZONE), YEAR);
+        return format(ZonedDateTime.now(zone()), YEAR);
 
     }
 
@@ -611,18 +840,74 @@ public final class DateUtils {
      * Format date in locale specific way in the following formats:
      * dd MMMMM yyyy
      *
+     * @param instant date time
+     * @param locale locale
+     *
+     * @return year now
+     */
+    public static String formatCustomer(final Instant instant, final Locale locale) {
+
+        return format(instant, lazyLoad("dd MMMM yyyy", locale));
+
+    }
+
+    /**
+     * Format date in locale specific way in the following formats:
+     * dd MMMMM yyyy
+     *
+     * @param date date time
+     * @param locale locale
+     *
      * @return year now
      */
     public static String formatCustomer(final Date date, final Locale locale) {
 
-        DateTimeFormatter dtf = CUSTOMER_DATE.get(locale);
-        if (dtf == null) {
-            dtf = DateTimeFormatter.ofPattern("dd MMMM yyyy");
-            CUSTOMER_DATE.put(locale, dtf);
-        }
+        return format(date, lazyLoad("dd MMMM yyyy", locale));
 
-        return format(date, dtf);
+    }
 
+    /**
+     * Format date in locale specific way in the following formats:
+     * dd MMMMM yyyy
+     *
+     * @param date date time
+     * @param locale locale
+     *
+     * @return year now
+     */
+    public static String formatCustomer(final LocalDate date, final Locale locale) {
+
+        return format(date, lazyLoad("dd MMMM yyyy", locale));
+
+    }
+
+    /**
+     * Format date in locale specific way in the following formats:
+     * dd MMMMM yyyy
+     *
+     * @param date date time
+     * @param locale locale
+     *
+     * @return year now
+     */
+    public static String formatCustomer(final LocalDateTime date, final Locale locale) {
+
+        return format(date, lazyLoad("dd MMMM yyyy", locale));
+
+    }
+
+    /**
+     * Format date in locale specific way in the following formats:
+     * dd MMMMM yyyy
+     *
+     * @param date date time
+     * @param locale locale
+     *
+     * @return year now
+     */
+    public static String formatCustomer(final ZonedDateTime date, final Locale locale) {
+
+        return format(date, lazyLoad("dd MMMM yyyy", locale));
 
     }
 
