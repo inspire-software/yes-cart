@@ -673,7 +673,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
                 // time search
                 entities = service.getGenericDao().findRangeByCriteria(
-                        " where ((?1 is null or e.orderTimestamp >= ?1) and (?2 is null or e.orderTimestamp >= ?2)) and (?3 = 0 or e.orderStatus in (?4)) order by e.orderTimestamp desc, e.ordernum desc",
+                        " where ((?1 is null or e.orderTimestamp >= ?1) and (?2 is null or e.orderTimestamp <= ?2)) and (?3 = 0 or e.orderStatus in (?4)) order by e.orderTimestamp desc, e.ordernum desc",
                         page * pageSize, pageSize,
                         from, to,
                         HQLUtils.criteriaInTest(statuses),
