@@ -20,11 +20,9 @@ import com.inspiresoftware.lib.dto.geda.adapter.ValueConverter;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.util.DateUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -43,30 +41,21 @@ public class CSVToListDatesPairsConverter implements ValueConverter {
     public Object convertToDto(final Object object, final BeanFactory beanFactory) {
         final List<MutablePair<String, String>> list = new ArrayList<MutablePair<String, String>>();
         if (object instanceof String) {
-            final SimpleDateFormat format = new SimpleDateFormat(Constants.DEFAULT_IMPORT_DATE_FORMAT);
             final String[] dateRanges = StringUtils.split((String) object, ',');
             for (final String dates : dateRanges) {
-                try {
-                    if (dates.indexOf(':') == -1) {
-                        list.add(
-                                MutablePair.of(
-                                        format.parse(dates),
-                                        null
-                                )
-                        );
-                    } else {
-                        final String[] dateRange = StringUtils.split(dates, ':');
-                        list.add(
-                                MutablePair.of(
-                                    format.parse(dateRange[0]),
-                                    format.parse(dateRange[1])
-                                )
-                        );
+                if (dates.indexOf(':') == -1) {
+                    final Date date = DateUtils.dParseSDT(dates);
+                    if (date != null) {
+                        list.add(MutablePair.of(date, null));
                     }
-                } catch (ParseException pe) {
-                    LOG.error(pe.getMessage() + ": " + object, pe);
+                } else {
+                    final String[] dateRange = StringUtils.split(dates, ':');
+                    final Date from = DateUtils.dParseSDT(dateRange[0]);
+                    final Date to = DateUtils.dParseSDT(dateRange[1]);
+                    if (from != null && to != null) {
+                        list.add(MutablePair.of(from, to));
+                    }
                 }
-
             }
         }
         return list;
@@ -76,18 +65,17 @@ public class CSVToListDatesPairsConverter implements ValueConverter {
     public Object convertToEntity(final Object object, final Object oldEntity, final BeanFactory beanFactory) {
         if (object instanceof Collection) {
             final List<MutablePair<Date, Date>> dates =  (List<MutablePair<Date, Date>>) object;
-            final SimpleDateFormat format = new SimpleDateFormat(Constants.DEFAULT_IMPORT_DATE_FORMAT);
             final StringBuilder out = new StringBuilder();
             for (final MutablePair<Date, Date> range : dates) {
                 if (out.length() > 0) {
                     out.append(',');
                 }
                 if (range.getFirst() != null) {
-                    out.append(format.format(range.getFirst()));
+                    out.append(DateUtils.formatSD(range.getFirst()));
                 }
                 if (range.getSecond() != null) {
                     out.append(':');
-                    out.append(format.format(range.getSecond()));
+                    out.append(DateUtils.formatSD(range.getSecond()));
                 }
             }
             if (out.length() > 0) {

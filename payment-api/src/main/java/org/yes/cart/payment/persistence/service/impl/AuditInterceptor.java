@@ -129,7 +129,7 @@ public class AuditInterceptor extends EmptyInterceptor {
                 auditable.setCreatedTimestamp(date);
             }
 
-            if (StringUtils.isBlank(((Auditable) entity).getGuid())) {
+            if (StringUtils.isBlank(auditable.getGuid())) {
                 final String guid = UUID.randomUUID().toString();
                 setValue(currentState, propertyNames, "guid", guid);
                 auditable.setGuid(guid);

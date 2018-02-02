@@ -24,10 +24,14 @@ import org.slf4j.MDC;
  * Hold current shop code context.
  *
  */
-public class ShopCodeContext {
+public final class ShopCodeContext {
 
-    private static final ThreadLocal<String> shopCode = new ThreadLocal<String>();
-    private static final ThreadLocal<Long> shopId = new ThreadLocal<Long>();
+    private static final ThreadLocal<String> SHOP_CODE = new ThreadLocal<String>();
+    private static final ThreadLocal<Long> SHOP_ID = new ThreadLocal<Long>();
+
+    private ShopCodeContext() {
+        // no instance
+    }
 
     /**
      * Get current shop code.
@@ -35,7 +39,7 @@ public class ShopCodeContext {
      * @return current shop code.
      */
     public static String getShopCode() {
-        final String code = shopCode.get();
+        final String code = SHOP_CODE.get();
         if (code == null) {
             return "DEFAULT";
         }
@@ -48,7 +52,7 @@ public class ShopCodeContext {
      * @param currentShopCode shop code to set.
      */
     public static void setShopCode(final String currentShopCode) {
-        shopCode.set(currentShopCode);
+        SHOP_CODE.set(currentShopCode);
         MDC.put("shopCode", getShopCode());
     }
 
@@ -58,7 +62,7 @@ public class ShopCodeContext {
      * @return current shop id
      */
     public static Long getShopId() {
-        final Long code = shopId.get();
+        final Long code = SHOP_ID.get();
         if (code == null) {
             return 0L;
         }
@@ -71,7 +75,7 @@ public class ShopCodeContext {
      * @param currentShopId shop Id to set.
      */
     public static void setShopId(final long currentShopId) {
-        shopId.set(currentShopId);
+        SHOP_ID.set(currentShopId);
     }
 
 
@@ -79,8 +83,8 @@ public class ShopCodeContext {
      * Clear thread locals at the end of the request
      */
     public static void clear() {
-        shopId.set(0L);
-        shopCode.set("DEFAULT");
+        SHOP_ID.set(0L);
+        SHOP_CODE.set("DEFAULT");
         MDC.put("shopCode", getShopCode());
     }
 

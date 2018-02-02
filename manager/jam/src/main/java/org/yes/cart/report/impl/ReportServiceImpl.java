@@ -26,9 +26,12 @@ import org.yes.cart.domain.vo.VoReportRequest;
 import org.yes.cart.domain.vo.VoReportRequestParameter;
 import org.yes.cart.remote.service.FileManager;
 import org.yes.cart.report.*;
+import org.yes.cart.util.DateUtils;
 
-import java.io.*;
-import java.text.SimpleDateFormat;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 
 /**
@@ -156,8 +159,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public String generateReport(final VoReportRequest reportRequest) throws Exception {
 
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
-        final String timestamp = format.format(new Date());
+        final String timestamp = DateUtils.impexFileTimestamp();
         final File target = new File(this.fileManager.home() + File.separator + "reports" + File.separator + reportRequest.getReportId() + "_" + timestamp + ".pdf");
 
         if (!target.getParentFile().exists()) {

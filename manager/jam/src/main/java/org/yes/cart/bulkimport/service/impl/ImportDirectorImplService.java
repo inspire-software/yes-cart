@@ -50,11 +50,11 @@ import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.utils.impl.ZipUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -294,9 +294,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
      */
     protected void moveImportFilesToArchive(final Set<String> importedFiles) {
         if (!importedFiles.isEmpty()) {
-            final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
             final String fullPathToArchiveFolder = pathToArchiveDirectory;
-            File dir = new File(fullPathToArchiveFolder + File.separator + dateFormat.format(new Date()) + File.separator);
+            File dir = new File(fullPathToArchiveFolder + File.separator + DateUtils.impexFileTimestamp() + File.separator);
             dir.mkdirs();
 
             String tempRoot = null;

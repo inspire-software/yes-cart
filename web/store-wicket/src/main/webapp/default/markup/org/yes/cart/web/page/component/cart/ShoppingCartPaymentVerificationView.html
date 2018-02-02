@@ -24,7 +24,6 @@
                 <wicket:message key="deliveryNum">[ Delivery ]</wicket:message>
                 <span wicket:id="deliveryCode">[delivery Code]</span>
             </label>
-            <p><strong wicket:id="deliveryTime">Estimated between X and Y</strong> <span wicket:id="deliveryRemarks">Some notes about delivery</span></p>
             <div class="row no-margin cart-items-header hidden-xs">
                 <div class="col-xs-12 col-sm-6">
                     <span><wicket:message key="productName">[Product name]</wicket:message></span>
@@ -79,18 +78,6 @@
                 <div class="text-right clearfix">
                     <wicket:container wicket:id="deliverySubTotal">[sub total]</wicket:container>
                 </div>
-                <div class="pull-left">
-                    <label><wicket:message key="deliverySubTotalTax">[Delivery sub total tax ]</wicket:message></label>
-                </div>
-                <div class="text-right clearfix">
-                    <wicket:container wicket:id="deliverySubTotalTax">[sub total tax ]</wicket:container>
-                </div>
-                <div class="pull-left">
-                    <label><wicket:message key="deliverySubTotalAmount">[Delivery sub total amount]</wicket:message></label>
-                </div>
-                <div class="text-right clearfix">
-                    <wicket:container wicket:id="deliverySubTotalAmount">[sub total amount ]</wicket:container>
-                </div>
             </div>
 
             <div class="delivery-block">
@@ -100,23 +87,17 @@
                 <div class="text-right clearfix">
                     <wicket:container wicket:id="deliveryMethod">[delivery method]</wicket:container>
                 </div>
+                <div class="clearfix">
+                    <wicket:container wicket:id="deliveryTime">Estimated between X and Y</wicket:container> <span wicket:id="deliveryRemarks">Some notes about delivery</span>
+                </div>
                 <div class="pull-left">
                     <label><wicket:message key="deliveryCost">[Delivery sub total amount]</wicket:message></label>
                 </div>
                 <div class="text-right clearfix">
+                    <wicket:container wicket:id="deliveryCostGratis">
+                        <wicket:message key="deliveryCostGratis">[Delivery sub total amount]</wicket:message>
+                    </wicket:container>
                     <wicket:container wicket:id="deliveryCost">[delivery cost]</wicket:container>
-                </div>
-                <div class="pull-left">
-                    <label><wicket:message key="deliveryCostTax">[Delivery sub total amount]</wicket:message></label>
-                </div>
-                <div class="text-right clearfix">
-                    <wicket:container wicket:id="deliveryCostTax">[delivery tax]</wicket:container>
-                </div>
-                <div class="pull-left">
-                    <label><wicket:message key="deliveryCostAmount">[Delivery sub total amount]</wicket:message></label>
-                </div>
-                <div class="text-right clearfix">
-                    <wicket:container wicket:id="deliveryCostAmount">[delivery amount]</wicket:container>
                 </div>
                 <wicket:enclosure child="deliveryAddress">
                     <div class="pull-left">
@@ -137,12 +118,6 @@
             </div>
             <div class="text-right">
                 <wicket:container wicket:id="grandTotal">[grand  total]</wicket:container>
-            </div>
-            <div class="pull-left">
-                <label><wicket:message key="grandTotalTax">[Delivery sub total amount]</wicket:message></label>
-            </div>
-            <div class="text-right">
-                <wicket:container wicket:id="grandTotalTax">[grand total tax ]</wicket:container>
             </div>
             <div class="pull-left">
                 <label><wicket:message key="grandTotalAmount">[Delivery sub total amount]</wicket:message></label>

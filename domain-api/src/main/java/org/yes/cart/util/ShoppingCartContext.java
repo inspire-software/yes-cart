@@ -24,9 +24,13 @@ import org.yes.cart.shoppingcart.ShoppingCart;
  * Hold current shopping cart context.
  *
  */
-public class ShoppingCartContext {
+public final class ShoppingCartContext {
 
-    private static final ThreadLocal<ShoppingCart> shoppingCartThreadLocal = new ThreadLocal<ShoppingCart>();
+    private static final ThreadLocal<ShoppingCart> SHOPPING_CART_THREAD_LOCAL = new ThreadLocal<ShoppingCart>();
+
+    private ShoppingCartContext() {
+        // no instance
+    }
 
     /**
      * Get shopping cart from local thread storage.
@@ -34,7 +38,7 @@ public class ShoppingCartContext {
      * @return {@link ShoppingCart}
      */
     public static ShoppingCart getShoppingCart() {
-        return shoppingCartThreadLocal.get();
+        return SHOPPING_CART_THREAD_LOCAL.get();
     }
 
     /**
@@ -43,7 +47,7 @@ public class ShoppingCartContext {
      * @param shoppingCart current cart.
      */
     public static void setShoppingCart(final ShoppingCart shoppingCart) {
-        shoppingCartThreadLocal.set(shoppingCart);
+        SHOPPING_CART_THREAD_LOCAL.set(shoppingCart);
     }
 
 
@@ -51,7 +55,7 @@ public class ShoppingCartContext {
      * Clear thread locals at the end of the request
      */
     public static void clear() {
-        shoppingCartThreadLocal.set(null);
+        SHOPPING_CART_THREAD_LOCAL.set(null);
     }
 
 

@@ -38,11 +38,11 @@ import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.stream.xml.XStreamProvider;
+import org.yes.cart.util.DateUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -966,7 +966,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals("Робот ASIMO", model.getValue("ru"));
             assertEquals(1, rs.getInt(8));
             assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
-            assertEquals("2015-06-12", new SimpleDateFormat("yyyy-MM-dd").format(rs.getDate(10)));
+            assertEquals("2015-06-12", DateUtils.formatSD(rs.getDate(10)));
             rs.close();
 
 
@@ -1018,7 +1018,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals("Робот ASIMO", model.getValue("ru"));
             assertEquals(1, rs.getInt(8));
             assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
-            assertEquals("2015-06-12", new SimpleDateFormat("yyyy-MM-dd").format(rs.getDate(10)));
+            assertEquals("2015-06-12", DateUtils.formatSD(rs.getDate(10)));
             version = rs.getLong(11);
             rs.close();
 
@@ -1052,7 +1052,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals("Другой Робот ASIMO", model.getValue("ru"));
             assertEquals(1, rs.getInt(8));
             assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
-            assertEquals("2015-06-12", new SimpleDateFormat("yyyy-MM-dd").format(rs.getDate(10)));
+            assertEquals("2015-06-12", DateUtils.formatSD(rs.getDate(10)));
             assertTrue(version < rs.getLong(11)); // version is updated
             rs.close();
 

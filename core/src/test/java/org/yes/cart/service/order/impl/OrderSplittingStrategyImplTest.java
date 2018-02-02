@@ -27,9 +27,9 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
+import org.yes.cart.util.DateUtils;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -823,7 +823,7 @@ public class OrderSplittingStrategyImplTest {
 
         final Date availableFrom = null;
         final Date availableTo = null;
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, true, /* Digital */
@@ -837,9 +837,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityAlwaysDigitalProductAvailable() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, true, /* Digital */
@@ -853,9 +853,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityAlwaysDigitalProductNotAvailableAfter() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2017-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, true, /* Digital */
@@ -870,9 +870,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityAlwaysDigitalProductNotAvailableBefore() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, true, /* Digital */
@@ -889,7 +889,7 @@ public class OrderSplittingStrategyImplTest {
 
         final Date availableFrom = null;
         final Date availableTo = null;
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, false,
@@ -903,9 +903,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityAlwaysProductAvailable() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, false,
@@ -920,9 +920,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityAlwaysProductNotAvailableAfter() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2017-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, false,
@@ -936,9 +936,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityAlwaysProductNotAvailableBefore() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, false,
@@ -953,9 +953,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityPreorderProduct() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
@@ -972,7 +972,7 @@ public class OrderSplittingStrategyImplTest {
 
         final Date availableFrom = null;
         final Date availableTo = null;
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
@@ -988,7 +988,7 @@ public class OrderSplittingStrategyImplTest {
 
         final Date availableFrom = null;
         final Date availableTo = null;
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
@@ -1003,9 +1003,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityPreorderProductNotAvailableAfter() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2017-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
@@ -1020,9 +1020,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityPreorderProductNotAvailableBefore() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
@@ -1039,9 +1039,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityBackorderProduct() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
@@ -1057,7 +1057,7 @@ public class OrderSplittingStrategyImplTest {
 
         final Date availableFrom = null;
         final Date availableTo = null;
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
@@ -1073,7 +1073,7 @@ public class OrderSplittingStrategyImplTest {
 
         final Date availableFrom = null;
         final Date availableTo = null;
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
@@ -1087,9 +1087,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityBackorderProductNotAvailableAfter() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2017-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
@@ -1104,9 +1104,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityBackorderProductNotAvailableBefore() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
@@ -1121,9 +1121,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityStandardProduct() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
@@ -1140,7 +1140,7 @@ public class OrderSplittingStrategyImplTest {
 
         final Date availableFrom = null;
         final Date availableTo = null;
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
@@ -1156,7 +1156,7 @@ public class OrderSplittingStrategyImplTest {
 
         final Date availableFrom = null;
         final Date availableTo = null;
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
@@ -1170,9 +1170,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityStandardProductNotAvailableAfter() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2017-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
@@ -1186,9 +1186,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityStandardProductNotAvailableBefore() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
@@ -1203,9 +1203,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityShowroomProduct() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_SHOWROOM, false,
@@ -1222,7 +1222,7 @@ public class OrderSplittingStrategyImplTest {
 
         final Date availableFrom = null;
         final Date availableTo = null;
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-18");
+        final Date now = DateUtils.dParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_SHOWROOM, false,
@@ -1238,9 +1238,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityShowroomProductNotAvailableAfter() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2017-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_SHOWROOM, false,
@@ -1254,9 +1254,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityShowroomProductNotAvailableBefore() throws Exception {
 
-        final Date availableFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
-        final Date availableTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-01");
-        final Date now = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-18");
+        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
+        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
+        final Date now = DateUtils.dParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_SHOWROOM, false,

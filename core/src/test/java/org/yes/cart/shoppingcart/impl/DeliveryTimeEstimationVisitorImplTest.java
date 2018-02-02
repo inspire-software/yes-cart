@@ -28,8 +28,8 @@ import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.MutableOrderInfo;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.util.DateUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -43,8 +43,6 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
     private final Mockery context = new JUnit4Mockery();
 
-    private final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-
 
     @Test
     public void testSkipInventoryLeadTimeNoFf() throws Exception {
@@ -54,7 +52,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         context.checking(new Expectations() {{
             allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
@@ -64,7 +62,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
 
-        assertEquals("2017-02-07", df.format(calendar.getTime()));
+        assertEquals("2017-02-07", DateUtils.formatSD(calendar.getTime()));
 
         this.context.assertIsSatisfied();
 
@@ -78,7 +76,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         context.checking(new Expectations() {{
             allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
@@ -90,7 +88,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
 
-        assertEquals("2017-02-07", df.format(calendar.getTime()));
+        assertEquals("2017-02-07", DateUtils.formatSD(calendar.getTime()));
 
         this.context.assertIsSatisfied();
 
@@ -104,7 +102,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         context.checking(new Expectations() {{
             allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
@@ -116,7 +114,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
 
-        assertEquals("2017-02-09", df.format(calendar.getTime()));
+        assertEquals("2017-02-09", DateUtils.formatSD(calendar.getTime()));
 
         this.context.assertIsSatisfied();
 
@@ -130,7 +128,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         context.checking(new Expectations() {{
             allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
@@ -142,7 +140,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
 
-        assertEquals("2017-02-09", df.format(calendar.getTime()));
+        assertEquals("2017-02-09", DateUtils.formatSD(calendar.getTime()));
 
         this.context.assertIsSatisfied();
 
@@ -156,7 +154,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         context.checking(new Expectations() {{
             allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.MIX_DELIVERY_GROUP));
@@ -168,7 +166,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
 
-        assertEquals("2017-02-09", df.format(calendar.getTime()));
+        assertEquals("2017-02-09", DateUtils.formatSD(calendar.getTime()));
 
         this.context.assertIsSatisfied();
 
@@ -180,7 +178,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         context.checking(new Expectations() {{
             allowing(sla).getExcludeWeekDaysAsList(); will(returnValue(Collections.emptyList()));
@@ -188,7 +186,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
 
-        assertEquals("2017-02-07", df.format(calendar.getTime()));
+        assertEquals("2017-02-07", DateUtils.formatSD(calendar.getTime()));
 
         this.context.assertIsSatisfied();
 
@@ -205,37 +203,37 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(sla).getExcludeWeekDaysAsList(); will(returnValue(Arrays.asList(1,7)));
         }});
 
-        calendar.setTime(df.parse("2017-02-06"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-06"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
-        assertEquals("2017-02-06", df.format(calendar.getTime()));
+        assertEquals("2017-02-06", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
-        assertEquals("2017-02-07", df.format(calendar.getTime()));
+        assertEquals("2017-02-07", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-08"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-08"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
-        assertEquals("2017-02-08", df.format(calendar.getTime()));
+        assertEquals("2017-02-08", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-09"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-09"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
-        assertEquals("2017-02-09", df.format(calendar.getTime()));
+        assertEquals("2017-02-09", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-10"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-10"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
-        assertEquals("2017-02-10", df.format(calendar.getTime()));
+        assertEquals("2017-02-10", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-11"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-11"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
-        assertEquals("2017-02-13", df.format(calendar.getTime()));
+        assertEquals("2017-02-13", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-12"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-12"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
-        assertEquals("2017-02-13", df.format(calendar.getTime()));
+        assertEquals("2017-02-13", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-13"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-13"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
-        assertEquals("2017-02-13", df.format(calendar.getTime()));
+        assertEquals("2017-02-13", DateUtils.formatSD(calendar.getTime()));
 
         this.context.assertIsSatisfied();
 
@@ -268,12 +266,12 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         assertNotNull(dates);
         assertEquals(3, dates.size());
-        date = df.parse("2017-01-08");
+        date = DateUtils.dParseSDT("2017-01-08");
         assertEquals(date, dates.get(date));
-        date = df.parse("2017-01-10");
-        date2 = df.parse("2017-01-15");
+        date = DateUtils.dParseSDT("2017-01-10");
+        date2 = DateUtils.dParseSDT("2017-01-15");
         assertEquals(date2, dates.get(date));
-        date = df.parse("2017-01-17");
+        date = DateUtils.dParseSDT("2017-01-17");
         assertEquals(date, dates.get(date));
 
     }
@@ -286,7 +284,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         context.checking(new Expectations() {{
             allowing(sla).getExcludeWeekDays();
@@ -295,7 +293,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, Collections.<Date, Date>emptyMap());
 
-        assertEquals("2017-02-07", df.format(calendar.getTime()));
+        assertEquals("2017-02-07", DateUtils.formatSD(calendar.getTime()));
 
         this.context.assertIsSatisfied();
 
@@ -313,53 +311,53 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final Map<Date, Date> dates = new DeliveryTimeEstimationVisitorImpl(null, null).getCarrierSlaExcludedDates(sla);
 
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-07", df.format(calendar.getTime()));
+        assertEquals("2017-02-07", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-08"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-08"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-09", df.format(calendar.getTime()));
+        assertEquals("2017-02-09", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-09"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-09"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-09", df.format(calendar.getTime()));
+        assertEquals("2017-02-09", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-10"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-10"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-16", df.format(calendar.getTime()));
+        assertEquals("2017-02-16", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-11"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-11"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-16", df.format(calendar.getTime()));
+        assertEquals("2017-02-16", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-12"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-12"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-16", df.format(calendar.getTime()));
+        assertEquals("2017-02-16", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-13"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-13"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-16", df.format(calendar.getTime()));
+        assertEquals("2017-02-16", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-14"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-14"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-16", df.format(calendar.getTime()));
+        assertEquals("2017-02-16", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-15"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-15"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-16", df.format(calendar.getTime()));
+        assertEquals("2017-02-16", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-16"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-16"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-16", df.format(calendar.getTime()));
+        assertEquals("2017-02-16", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-17"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-17"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-18", df.format(calendar.getTime()));
+        assertEquals("2017-02-18", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-18"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-18"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-18", df.format(calendar.getTime()));
+        assertEquals("2017-02-18", DateUtils.formatSD(calendar.getTime()));
 
     }
 
@@ -376,53 +374,53 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final Map<Date, Date> dates = new DeliveryTimeEstimationVisitorImpl(null, null).getCarrierSlaExcludedDates(sla);
 
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-07", df.format(calendar.getTime()));
+        assertEquals("2017-02-07", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-08"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-08"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-20", df.format(calendar.getTime()));
+        assertEquals("2017-02-20", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-09"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-09"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-09", df.format(calendar.getTime())); // Must skip weekdays first!
+        assertEquals("2017-02-09", DateUtils.formatSD(calendar.getTime())); // Must skip weekdays first!
 
-        calendar.setTime(df.parse("2017-02-10"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-10"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-20", df.format(calendar.getTime()));
+        assertEquals("2017-02-20", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-11"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-11"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-20", df.format(calendar.getTime()));
+        assertEquals("2017-02-20", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-12"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-12"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-20", df.format(calendar.getTime()));
+        assertEquals("2017-02-20", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-13"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-13"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-20", df.format(calendar.getTime()));
+        assertEquals("2017-02-20", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-14"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-14"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-20", df.format(calendar.getTime()));
+        assertEquals("2017-02-20", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-15"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-15"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-20", df.format(calendar.getTime()));
+        assertEquals("2017-02-20", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-16"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-16"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-16", df.format(calendar.getTime()));  // Must skip weekdays first!
+        assertEquals("2017-02-16", DateUtils.formatSD(calendar.getTime()));  // Must skip weekdays first!
 
-        calendar.setTime(df.parse("2017-02-17"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-17"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-20", df.format(calendar.getTime()));
+        assertEquals("2017-02-20", DateUtils.formatSD(calendar.getTime()));
 
-        calendar.setTime(df.parse("2017-02-18"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-18"));
         new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, calendar, dates);
-        assertEquals("2017-02-18", df.format(calendar.getTime()));  // Must skip weekdays first!
+        assertEquals("2017-02-18", DateUtils.formatSD(calendar.getTime()));  // Must skip weekdays first!
 
     }
 
@@ -448,7 +446,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
@@ -468,8 +466,8 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(det).getSupplierCode(); will(returnValue("CED"));
             // expectations:
             oneOf(delivery).setDeliveryGuaranteed(null);
-            oneOf(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-20"))));
-            oneOf(delivery).setDeliveryEstimatedMax(with(equal(df.parse("2017-02-24"))));
+            oneOf(delivery).setDeliveryEstimatedMin(with(equal(DateUtils.dParseSDT("2017-02-20"))));
+            oneOf(delivery).setDeliveryEstimatedMax(with(equal(DateUtils.dParseSDT("2017-02-24"))));
 
         }});
 
@@ -501,7 +499,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
@@ -513,7 +511,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         context.checking(new Expectations() {{
             allowing(delivery).getCustomerOrder(); will(returnValue(order));
             allowing(delivery).getCarrierSla(); will(returnValue(sla));
-            allowing(delivery).getRequestedDeliveryDate(); will(returnValue(df.parse("2017-02-20")));
+            allowing(delivery).getRequestedDeliveryDate(); will(returnValue(DateUtils.dParseSDT("2017-02-20")));
             allowing(order).getShop(); will(returnValue(shop));
             allowing(shop).getShopId(); will(returnValue(123L));
             allowing(warehouseService).getByShopIdMapped(123L, false); will(returnValue(Collections.singletonMap("ABC", warehouse)));
@@ -553,7 +551,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
@@ -565,7 +563,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         context.checking(new Expectations() {{
             allowing(delivery).getCustomerOrder(); will(returnValue(order));
             allowing(delivery).getCarrierSla(); will(returnValue(sla));
-            allowing(delivery).getRequestedDeliveryDate(); will(returnValue(df.parse("2017-02-12")));
+            allowing(delivery).getRequestedDeliveryDate(); will(returnValue(DateUtils.dParseSDT("2017-02-12")));
             allowing(order).getShop(); will(returnValue(shop));
             allowing(shop).getShopId(); will(returnValue(123L));
             allowing(warehouseService).getByShopIdMapped(123L, false); will(returnValue(Collections.singletonMap("ABC", warehouse)));
@@ -573,7 +571,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("CED"));
             // expectations: NONE, requested date is valid
-            oneOf(delivery).setDeliveryGuaranteed(with(equal(df.parse("2017-02-20"))));
+            oneOf(delivery).setDeliveryGuaranteed(with(equal(DateUtils.dParseSDT("2017-02-20"))));
             oneOf(delivery).setDeliveryEstimatedMin(null);
             oneOf(delivery).setDeliveryEstimatedMax(null);
 
@@ -607,7 +605,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
@@ -619,7 +617,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         context.checking(new Expectations() {{
             allowing(delivery).getCustomerOrder(); will(returnValue(order));
             allowing(delivery).getCarrierSla(); will(returnValue(sla));
-            allowing(delivery).getRequestedDeliveryDate(); will(returnValue(df.parse("2017-02-12")));
+            allowing(delivery).getRequestedDeliveryDate(); will(returnValue(DateUtils.dParseSDT("2017-02-12")));
             allowing(order).getShop(); will(returnValue(shop));
             allowing(shop).getShopId(); will(returnValue(123L));
             allowing(warehouseService).getByShopIdMapped(123L, false); will(returnValue(Collections.singletonMap("ABC", warehouse)));
@@ -628,7 +626,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(det).getSupplierCode(); will(returnValue("CED"));
             // expectations: NONE, requested date is valid
             oneOf(delivery).setDeliveryGuaranteed(null);
-            oneOf(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-20"))));
+            oneOf(delivery).setDeliveryEstimatedMin(with(equal(DateUtils.dParseSDT("2017-02-20"))));
             oneOf(delivery).setDeliveryEstimatedMax(null);
 
         }});
@@ -659,7 +657,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(5);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
@@ -680,8 +678,8 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(det).getSupplierCode(); will(returnValue("ABC"));
             // expectations:
             oneOf(delivery).setDeliveryGuaranteed(null);
-            oneOf(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-20"))));
-            oneOf(delivery).setDeliveryEstimatedMax(with(equal(df.parse("2017-02-24"))));
+            oneOf(delivery).setDeliveryEstimatedMin(with(equal(DateUtils.dParseSDT("2017-02-20"))));
+            oneOf(delivery).setDeliveryEstimatedMax(with(equal(DateUtils.dParseSDT("2017-02-24"))));
 
         }});
 
@@ -711,7 +709,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(5);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
@@ -730,7 +728,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("CED"));
             // expectations:
-            oneOf(delivery).setDeliveryGuaranteed(with(equal(df.parse("2017-02-18"))));
+            oneOf(delivery).setDeliveryGuaranteed(with(equal(DateUtils.dParseSDT("2017-02-18"))));
             oneOf(delivery).setDeliveryEstimatedMin(null);
             oneOf(delivery).setDeliveryEstimatedMax(null);
 
@@ -762,7 +760,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(5);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
@@ -782,7 +780,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
             allowing(det).getSupplierCode(); will(returnValue("ABC"));
             // expectations:
-            oneOf(delivery).setDeliveryGuaranteed(with(equal(df.parse("2017-02-18"))));
+            oneOf(delivery).setDeliveryGuaranteed(with(equal(DateUtils.dParseSDT("2017-02-18"))));
             oneOf(delivery).setDeliveryEstimatedMin(null);
             oneOf(delivery).setDeliveryEstimatedMax(null);
 
@@ -813,7 +811,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(5);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
@@ -833,7 +831,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(det).getSupplierCode(); will(returnValue("CED"));
             // expectations:
             oneOf(delivery).setDeliveryGuaranteed(null);
-            oneOf(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-18"))));
+            oneOf(delivery).setDeliveryEstimatedMin(with(equal(DateUtils.dParseSDT("2017-02-18"))));
             oneOf(delivery).setDeliveryEstimatedMax(null);
 
         }});
@@ -863,7 +861,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(5);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
             @Override
@@ -884,7 +882,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(det).getSupplierCode(); will(returnValue("ABC"));
             // expectations:
             oneOf(delivery).setDeliveryGuaranteed(null);
-            oneOf(delivery).setDeliveryEstimatedMin(with(equal(df.parse("2017-02-18"))));
+            oneOf(delivery).setDeliveryEstimatedMin(with(equal(DateUtils.dParseSDT("2017-02-18"))));
             oneOf(delivery).setDeliveryEstimatedMax(null);
 
 
@@ -906,7 +904,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -936,7 +934,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CarrierSlaEntity sla = new CarrierSlaEntity();
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -975,7 +973,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CarrierSlaEntity sla = new CarrierSlaEntity();
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -1020,7 +1018,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -1070,7 +1068,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -1121,7 +1119,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -1174,7 +1172,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -1227,7 +1225,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -1279,7 +1277,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -1332,7 +1330,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -1385,7 +1383,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -1440,7 +1438,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -1497,7 +1495,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -1554,7 +1552,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(15);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -1613,7 +1611,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setMaxDays(60);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse("2017-02-07"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-07"));
 
         final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
             @Override
@@ -1653,7 +1651,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
     }
 
     private String time(String date) throws Exception {
-        return String.valueOf(df.parse(date).getTime());
+        return String.valueOf(DateUtils.dParseSDT(date).getTime());
     }
 
     private String time(String ... dates) throws Exception {

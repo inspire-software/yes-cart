@@ -166,7 +166,7 @@ public final class MoneyUtils {
         } else if (first == null) {
             return false;
         }
-        return first.setScale(scale).compareTo(second.setScale(scale)) == 0;
+        return first.setScale(scale, RoundingMode.HALF_UP).compareTo(second.setScale(scale, RoundingMode.HALF_UP)) == 0;
 
     }
 

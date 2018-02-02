@@ -30,9 +30,9 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.order.impl.handler.AbstractEventHandlerImplTest;
+import org.yes.cart.util.DateUtils;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -52,8 +52,6 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
     private CustomerOrderService orderService;
     private CustomerOrderPaymentService paymentService;
 
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
     @Before
     public void setUp()  {
         super.setUp();
@@ -65,7 +63,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
     }
 
     Date date(final String date) throws Exception{
-        return format.parse(date);
+        return DateUtils.dParseSDT(date);
     }
 
     @Test

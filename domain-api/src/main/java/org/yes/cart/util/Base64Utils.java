@@ -16,9 +16,8 @@
 
 package org.yes.cart.util;
 
-import org.apache.commons.codec.binary.Base64;
-
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 /**
  * Wrapper for Base64. Since we support JDK7, have to use commons.
@@ -28,7 +27,12 @@ import java.nio.charset.StandardCharsets;
  * Date: 11/05/2016
  * Time: 08:38
  */
-public class Base64Utils {
+public final class Base64Utils {
+
+
+    private Base64Utils() {
+        // no instance
+    }
 
     /**
      * Encode string to base64 string
@@ -39,7 +43,7 @@ public class Base64Utils {
      */
     public static String encode(String input) {
 
-        return Base64.encodeBase64String(input.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(input.getBytes(StandardCharsets.UTF_8));
 
     }
 
@@ -52,7 +56,7 @@ public class Base64Utils {
      */
     public static String decode(String encoded) {
 
-        return new String(Base64.decodeBase64(encoded));
+        return new String(Base64.getDecoder().decode(encoded));
 
     }
 

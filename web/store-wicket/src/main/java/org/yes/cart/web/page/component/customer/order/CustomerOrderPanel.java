@@ -26,25 +26,22 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDet;
-import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.impl.CustomerOrderComparator;
 import org.yes.cart.web.page.OrderPage;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
-import org.yes.cart.web.support.service.CurrencySymbolService;
+import org.yes.cart.web.support.service.CheckoutServiceFacade;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -71,8 +68,8 @@ public class CustomerOrderPanel extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
     private CustomerOrderService customerOrderService;
 
-    @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
-    private CurrencySymbolService currencySymbolService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CHECKOUT_SERVICE_FACADE)
+    private CheckoutServiceFacade checkoutServiceFacade;
 
     /**
      * Construct panel.
@@ -108,10 +105,6 @@ public class CustomerOrderPanel extends BaseComponent {
     @Override
     protected void onBeforeRender() {
         final Customer customer = (Customer) getDefaultModel().getObject();
-        final SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT, getLocale());
-
-        final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols(Locale.US);
-        final DecimalFormat decimalFormat = new DecimalFormat(Constants.MONEY_FORMAT, formatSymbols);
 
         final Date date = determineDate(getPage().getPageParameters());
         final List<CustomerOrder> orders = getValidCustomerOrderInChronologicalOrder(customer, date);
@@ -131,19 +124,16 @@ public class CustomerOrderPanel extends BaseComponent {
                                         protected void populateItem(final ListItem<CustomerOrder> customerOrderListItem) {
 
                                             final CustomerOrder order = customerOrderListItem.getModelObject();
-                                            final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(order.getCurrency());
-                                            final BigDecimal amount = order.getOrderTotal();
+                                            final ProductPriceModel amount = checkoutServiceFacade.getOrderTotalSub(order, getCurrentCart());
 
                                             customerOrderListItem
                                                     .add(determineOrderPageLink(order, CustomerOrderPanel.ORDER_VIEW_LINK))
                                                     .add(new Label(ORDER_NUM, order.getOrdernum()))
-                                                    .add(new Label(ORDER_DATE, dateFormat.format(order.getOrderTimestamp())))
+                                                    .add(new Label(ORDER_DATE, DateUtils.formatCustomer(order.getOrderTimestamp(), getLocale())))
                                                     .add(new Label(ORDER_STATE, getLocalizer().getString(order.getOrderStatus(), this)))
                                                     .add(new Label(ORDER_ITEMS, getItemsList(order)).setEscapeModelStrings(false))
-                                                    .add(new Label(ORDER_AMOUNT,
-                                                            symbol.getSecond() ?
-                                                                    decimalFormat.format(amount) + " " + symbol.getFirst() :
-                                                                    symbol.getFirst() + " " + decimalFormat.format(amount)
+                                                    .add(new PriceView(ORDER_AMOUNT,
+                                                            amount, null, true, false, amount.isTaxInfoEnabled(), amount.isTaxInfoShowAmount()
                                                     ));
 
                                         }

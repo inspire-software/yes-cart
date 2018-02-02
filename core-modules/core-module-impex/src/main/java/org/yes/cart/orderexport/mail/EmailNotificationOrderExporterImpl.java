@@ -37,10 +37,10 @@ import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.theme.ThemeService;
+import org.yes.cart.util.DateUtils;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -69,13 +69,6 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
     private String exporterId = "EmailNotificationOrderExporterImpl";
 
     private int priority = 100;
-
-    private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        }
-    };
 
     public EmailNotificationOrderExporterImpl(final TaskExecutor taskExecutor,
                                               final ThemeService themeService,
@@ -187,7 +180,7 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
 
         final Set<Long> exported = new HashSet<Long>();
         final Map<String, String> audit = new HashMap<String, String>();
-        final String timestamp = formatter.get().format(new Date());
+        final String timestamp = DateUtils.formatSDT();
 
         for (final Map.Entry<String, List<CustomerOrderDelivery>> entry : deliveriesBySupplierCode.entrySet()) {
 

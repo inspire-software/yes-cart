@@ -18,9 +18,9 @@ package org.yes.cart.service.dto.impl;
 
 import org.junit.Test;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.util.DateUtils;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -89,53 +89,52 @@ public class ComplexSearchUtilsTest {
         assertNull(ComplexSearchUtils.checkDateRangeSearch("1982-SEP<"));
         assertNull(ComplexSearchUtils.checkDateRangeSearch("<1982-SEP"));
 
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Pair<Date, Date> search;
 
         search = ComplexSearchUtils.checkDateRangeSearch("1982<");
         assertNotNull(search);
-        assertEquals("1982-01-01 00:00:00.000", format.format(search.getFirst()));
+        assertEquals("1982-01-01 00:00:00", DateUtils.formatSDT(search.getFirst()));
         assertNull(search.getSecond());
 
         search = ComplexSearchUtils.checkDateRangeSearch("1982-09<");
         assertNotNull(search);
-        assertEquals("1982-09-01 00:00:00.000", format.format(search.getFirst()));
+        assertEquals("1982-09-01 00:00:00", DateUtils.formatSDT(search.getFirst()));
         assertNull(search.getSecond());
 
         search = ComplexSearchUtils.checkDateRangeSearch("1982-09-28<");
         assertNotNull(search);
-        assertEquals("1982-09-28 00:00:00.000", format.format(search.getFirst()));
+        assertEquals("1982-09-28 00:00:00", DateUtils.formatSDT(search.getFirst()));
         assertNull(search.getSecond());
 
         search = ComplexSearchUtils.checkDateRangeSearch("1982-09-31<");
         assertNotNull(search);
-        assertEquals("1982-10-01 00:00:00.000", format.format(search.getFirst())); // calendar feature!
+        assertEquals("1982-10-01 00:00:00", DateUtils.formatSDT(search.getFirst())); // calendar feature!
         assertNull(search.getSecond());
 
         search = ComplexSearchUtils.checkDateRangeSearch("<1982");
         assertNotNull(search);
         assertNull(search.getFirst());
-        assertEquals("1982-01-01 00:00:00.000", format.format(search.getSecond()));
+        assertEquals("1982-01-01 00:00:00", DateUtils.formatSDT(search.getSecond()));
 
         search = ComplexSearchUtils.checkDateRangeSearch("<1982-09");
         assertNotNull(search);
         assertNull(search.getFirst());
-        assertEquals("1982-09-01 00:00:00.000", format.format(search.getSecond()));
+        assertEquals("1982-09-01 00:00:00", DateUtils.formatSDT(search.getSecond()));
 
         search = ComplexSearchUtils.checkDateRangeSearch("<1982-09-28");
         assertNotNull(search);
         assertNull(search.getFirst());
-        assertEquals("1982-09-28 00:00:00.000", format.format(search.getSecond()));
+        assertEquals("1982-09-28 00:00:00", DateUtils.formatSDT(search.getSecond()));
 
         search = ComplexSearchUtils.checkDateRangeSearch("<1982-09-31");
         assertNotNull(search);
         assertNull(search.getFirst());
-        assertEquals("1982-10-01 00:00:00.000", format.format(search.getSecond())); // calendar feature!
+        assertEquals("1982-10-01 00:00:00", DateUtils.formatSDT(search.getSecond())); // calendar feature!
 
         search = ComplexSearchUtils.checkDateRangeSearch("1982-09<2017-03-12");
         assertNotNull(search);
-        assertEquals("1982-09-01 00:00:00.000", format.format(search.getFirst()));
-        assertEquals("2017-03-12 00:00:00.000", format.format(search.getSecond()));
+        assertEquals("1982-09-01 00:00:00", DateUtils.formatSDT(search.getFirst()));
+        assertEquals("2017-03-12 00:00:00", DateUtils.formatSDT(search.getSecond()));
 
     }
 }

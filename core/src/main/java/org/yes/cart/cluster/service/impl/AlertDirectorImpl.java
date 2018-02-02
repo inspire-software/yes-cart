@@ -18,12 +18,13 @@ package org.yes.cart.cluster.service.impl;
 import net.sf.ehcache.Element;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.cluster.service.AlertDirector;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.util.DateUtils;
 
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -35,13 +36,6 @@ import java.util.Map;
 public class AlertDirectorImpl implements AlertDirector {
 
     private CacheManager cacheManager;
-
-    private static final ThreadLocal<SimpleDateFormat> formater = new ThreadLocal<SimpleDateFormat>() {
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        }
-    };
 
     /** {@inheritDoc} */
     @Override
@@ -67,10 +61,13 @@ public class AlertDirectorImpl implements AlertDirector {
         final List<Pair<String, String>> all = new ArrayList<Pair<String, String>>(100);
         for (final Map.Entry<Object, Element> elem : elems.entrySet()) {
             if (elem.getValue() != null && !elem.getValue().isExpired()) {
-                final Date last = new Date(elem.getValue().getLatestOfCreationAndUpdateTime());
+                final LocalDateTime last = LocalDateTime.ofInstant(
+                        Instant.ofEpochMilli(elem.getValue().getLatestOfCreationAndUpdateTime()),
+                        DateUtils.zone()
+                );
                 final Pair<String, String> elemOriginal = (Pair<String, String>) elem.getValue().getObjectValue();
                 final Pair<String, String> elemWithLastTime = new Pair<String, String>(
-                        formater.get().format(last) + ": " + elemOriginal.getFirst(),
+                        DateUtils.formatSDT(last) + ": " + elemOriginal.getFirst(),
                         elemOriginal.getSecond()
                 );
                 all.add(elemWithLastTime);

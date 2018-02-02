@@ -16,11 +16,9 @@
 
 package org.yes.cart.domain.entity.impl;
 
-import org.jmock.Expectations;
 import org.junit.Test;
-import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.util.DateUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
@@ -32,8 +30,6 @@ import static org.junit.Assert.*;
  * Time: 08:18
  */
 public class CarrierSlaEntityTest {
-
-    private final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     @Test
     public void testGetCarrierSlaExcludedDatesNone() throws Exception {
@@ -62,12 +58,12 @@ public class CarrierSlaEntityTest {
 
         assertNotNull(dates);
         assertEquals(3, dates.size());
-        date = df.parse("2017-01-08");
+        date = DateUtils.dParseSDT("2017-01-08");
         assertEquals(date, dates.get(date));
-        date = df.parse("2017-01-10");
-        date2 = df.parse("2017-01-15");
+        date = DateUtils.dParseSDT("2017-01-10");
+        date2 = DateUtils.dParseSDT("2017-01-15");
         assertEquals(date2, dates.get(date));
-        date = df.parse("2017-01-17");
+        date = DateUtils.dParseSDT("2017-01-17");
         assertEquals(date, dates.get(date));
 
     }

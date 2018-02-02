@@ -20,7 +20,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
@@ -32,12 +31,12 @@ import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.PriceResolver;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -181,11 +180,11 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setB2bApprovedBy(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_BY));
         final String approvedDate = shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_DATE);
         if (approvedDate != null) {
-            try {
-                customerOrder.setB2bApprovedDate(new SimpleDateFormat(Constants.DEFAULT_IMPORT_DATE_TIME_FORMAT).parse(approvedDate));
-            } catch (Exception exp) {
-                throw new OrderAssemblyException("Order b2bApprovedDate has invalid format: " + approvedDate + ", has to be " + Constants.DEFAULT_IMPORT_DATE_TIME_FORMAT);
+            final Date approve = DateUtils.dParseSDT(approvedDate);
+            if (approve == null) {
+                throw new OrderAssemblyException("Order b2bApprovedDate has invalid format: " + approvedDate + ", has to be \"yyyy-MM-dd HH:mm:ss\"");
             }
+            customerOrder.setB2bApprovedDate(approve);
         }
 
     }

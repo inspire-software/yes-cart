@@ -33,9 +33,9 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -97,52 +97,7 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
         assertTrue(quantity.getFirst().compareTo(quantity.getSecond()) <= 0);
 
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
-                new ProductInventoryChangedProcessorImpl(skuWarehouseService, productService, null, null, null, null) {
-                    @Override
-                    protected String getNodeId() {
-                        return "TEST";
-                    }
-
-                    @Override
-                    protected Boolean isLuceneIndexDisabled() {
-                        return false;
-                    }
-
-                    @Override
-                    protected int getBatchSize() {
-                        return 100;
-                    }
-
-                    @Override
-                    protected long getDeltaCheckDelay() {
-                        return 100;
-                    }
-
-                    @Override
-                    protected int getDeltaCheckSize() {
-                        return 100;
-                    }
-
-                    @Override
-                    protected int getChangeMaxSize() {
-                        return 1000;
-                    }
-
-                    @Override
-                    public ProductInventoryChangedProcessorInternal getSelf() {
-                        return this;
-                    }
-
-                    @Override
-                    protected void flushCaches() {
-
-                    }
-                }.doRun(new Date()); // this should reindex product and it will be removed as there is no inventory
-            }
-        });
+        getTx().execute(runInTransactionNow(productService, skuWarehouseService));
 
         final CacheManager mgr = ctx().getBean("cacheManager", CacheManager.class);
 
@@ -175,7 +130,21 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
 
 
 
-        getTx().execute(new TransactionCallbackWithoutResult() {
+        getTx().execute(runInTransactionNow(productService, skuWarehouseService));
+
+        mgr.getCache("productService-productSearchResultDTOByQuery").clear();
+        mgr.getCache("productSkuService-productSkuSearchResultDTOByQuery").clear();
+
+        rez = productService.getProductSearchResultDTOByQuery(context, 0, 1, null, false).getResults();
+        assertNotNull(rez);
+        assertEquals(1, rez.size());
+
+
+
+    }
+
+    TransactionCallbackWithoutResult runInTransactionNow(final ProductService productService, final SkuWarehouseService skuWarehouseService) {
+        return new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
                 new ProductInventoryChangedProcessorImpl(skuWarehouseService, productService, null, null, null, null) {
@@ -218,21 +187,10 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
                     protected void flushCaches() {
 
                     }
-                }.doRun(new Date()); // this should reindex product and it will be removed as there is no inventory
+                }.doRun(Instant.now()); // this should reindex product and it will be removed as there is no inventory
             }
-        });
-
-        mgr.getCache("productService-productSearchResultDTOByQuery").clear();
-        mgr.getCache("productSkuService-productSkuSearchResultDTOByQuery").clear();
-
-        rez = productService.getProductSearchResultDTOByQuery(context, 0, 1, null, false).getResults();
-        assertNotNull(rez);
-        assertEquals(1, rez.size());
-
-
-
+        };
     }
-
 
 
 }

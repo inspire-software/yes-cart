@@ -22,15 +22,14 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.federation.FederationFacade;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.util.ExceptionUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,8 +73,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                     fileToExport = fileToExport.replace(ROOT_PLACEHOLDER, csvExportRoot);
                 }
                 if (fileToExport.contains(TIMESTAMP_PLACEHOLDER)) {
-                    final SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-                    fileToExport = fileToExport.replace(TIMESTAMP_PLACEHOLDER, format.format(new Date()));
+                    fileToExport = fileToExport.replace(TIMESTAMP_PLACEHOLDER, DateUtils.exportFileTimestamp());
                     if (new File(fileToExport).exists()) {
                         // Only do this for timestamped files, otherwise we assume that files are re-writable
                         final String msgErr = MessageFormat.format(

@@ -18,18 +18,20 @@ package org.yes.cart.web.page.component.cart;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
@@ -73,11 +75,11 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
     private static final String BILLING_ADDRESS = "billingAddress";
 
     public static final String DELIVERY_COST = "deliveryCost";
+    public static final String DELIVERY_COST_GRATIS = "deliveryCostGratis";
     private static final String DELIVERY_COST_TAX = "deliveryCostTax";
     private static final String DELIVERY_COST_AMOUNT = "deliveryCostAmount";
 
     private static final String DELIVERY_GRAND_TOTAL = "grandTotal";
-    private static final String DELIVERY_GRAND_TAX = "grandTotalTax";
     private static final String DELIVERY_GRAND_AMOUNT = "grandTotalAmount";
 
     private static final String ITEM_LIST = "itemList";
@@ -115,7 +117,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
         final ShoppingCart cart = getCurrentCart();
         final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(orderGuid);
-        final Total grandTotal = checkoutServiceFacade.getOrderTotal(customerOrder);
+        final ProductPriceModel subTotalPrice = checkoutServiceFacade.getOrderTotalSub(customerOrder, cart);
         final ProductPriceModel grandTotalPrice = checkoutServiceFacade.getOrderTotalAmount(customerOrder, cart);
 
         final String selectedLocale = getLocale().getLanguage();
@@ -149,7 +151,9 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                         final List<CustomerOrderDeliveryDet> deliveryDet = new ArrayList<CustomerOrderDeliveryDet>(delivery.getDetail());
 
-                        final Total total = checkoutServiceFacade.getOrderDeliveryTotal(customerOrder, delivery);
+                        final ProductPriceModel deliveryTotal = checkoutServiceFacade.getOrderDeliveryTotalSub(customerOrder, delivery, getCurrentCart());
+                        final ProductPriceModel deliveryShipping = checkoutServiceFacade.getOrderDeliveryTotalShipping(customerOrder, delivery, getCurrentCart());
+                        final boolean freeShipping = MoneyUtils.isFirstEqualToSecond(deliveryShipping.getRegularPrice(), BigDecimal.ZERO);
 
                         final IModel<String> deliveryTime;
                         final boolean showDeliveryTime;
@@ -221,10 +225,6 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                 final String lang = getLocale().getLanguage();
                                                 final String defaultImageRelativePath = productSkuDecorator.getDefaultImage(width, height, lang);
 
-                                                final BigDecimal itemTotal = det.getPrice()
-                                                        .multiply(det.getQty())
-                                                        .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-
                                                 final LinksSupport links = getWicketSupportFacade().links();
 
                                                 final IModel<String> deliveryTime;
@@ -281,13 +281,13 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                                 new Label(DELIVERY_REMARKS_ITEM, det.getDeliveryRemarks()).setVisible(StringUtils.isNotBlank(det.getDeliveryRemarks()))
                                                         )
                                                         .add(
-                                                                new Label(ITEM_PRICE, det.getPrice().toString())
+                                                                getPriceView(det)
                                                         )
                                                         .add(
-                                                                new Label(ITEM_QTY, det.getQty().toString())
+                                                                new Label(ITEM_QTY, det.getQty().stripTrailingZeros().toPlainString())
                                                         )
                                                         .add(
-                                                                new Label(ITEM_TOTAL, itemTotal.toString())
+                                                                getTotalView(det)
                                                         )
                                                         .add(
                                                                 new ContextImage(DEFAULT_IMAGE, defaultImageRelativePath)
@@ -302,22 +302,23 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                                 )
                                 .add(
-                                        new Label(DELIVERY_SUB_TOTAL, total.getSubTotal().toString())
+                                        new PriceView(
+                                                DELIVERY_SUB_TOTAL,
+                                                deliveryTotal,
+                                                null,
+                                                false, false,
+                                                deliveryTotal.isTaxInfoEnabled(), deliveryTotal.isTaxInfoShowAmount())
                                 )
                                 .add(
-                                        new Label(DELIVERY_SUB_TOTAL_TAX, total.getSubTotalTax().toString())
+                                        new WebMarkupContainer(DELIVERY_COST_GRATIS).setVisible(freeShipping)
                                 )
                                 .add(
-                                        new Label(DELIVERY_SUB_TOTAL_AMOUNT, total.getSubTotalAmount().toString())
-                                )
-                                .add(
-                                        new Label(DELIVERY_COST, total.getDeliveryCost().toString())
-                                )
-                                .add(
-                                        new Label(DELIVERY_COST_TAX, total.getDeliveryTax().toString())
-                                )
-                                .add(
-                                        new Label(DELIVERY_COST_AMOUNT, total.getDeliveryCostAmount().toString())
+                                        new PriceView(
+                                                DELIVERY_COST,
+                                                deliveryShipping,
+                                                null,
+                                                false, false,
+                                                deliveryShipping.isTaxInfoEnabled(), deliveryShipping.isTaxInfoShowAmount())
                                 )
                                 .add(
                                         new Label(DELIVERY_METHOD, slaName)
@@ -331,21 +332,53 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                 }
         );
 
-        add(new Label(DELIVERY_GRAND_TOTAL, grandTotal.getTotalAmount().toString()));
-        add(new Label(BILLING_ADDRESS, makeHtml(billingAddress)).setEscapeModelStrings(false));
-        add(new Label(DELIVERY_GRAND_TAX, grandTotal.getTotalTax().toString()));
+        add(
+                new PriceView(
+                        DELIVERY_GRAND_TOTAL,
+                        subTotalPrice,
+                        null,
+                        false, false,
+                        subTotalPrice.isTaxInfoEnabled(), subTotalPrice.isTaxInfoShowAmount())
+        );
         add(
             new PriceView(
-                    DELIVERY_GRAND_AMOUNT,
-                    grandTotalPrice,
-                    StringUtils.join(allPromos, ','),
-                    true, true,
-                    false, false)
-            );
+                        DELIVERY_GRAND_AMOUNT,
+                        grandTotalPrice,
+                        StringUtils.join(allPromos, ','),
+                        true, true,
+                        false, false)
+        );
+        add(new Label(BILLING_ADDRESS, makeHtml(billingAddress)).setEscapeModelStrings(false));
 
     }
 
     private String makeHtml(final String address) {
         return address.trim().replace("\r\n", "<br/>").replace("\r", "<br/>").replace("\n", "<br/>");
     }
+
+
+    private PriceView getPriceView(final CartItem cartItem) {
+
+        final ShoppingCart cart = ((AbstractWebPage) getPage()).getCurrentCart();
+
+        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
+
+        final PriceView priceView = new PriceView(ITEM_PRICE, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
+
+        return priceView;
+    }
+
+
+    private PriceView getTotalView(final CartItem cartItem) {
+
+        final ShoppingCart cart = ((AbstractWebPage) getPage()).getCurrentCart();
+
+        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, true);
+
+        final PriceView priceView = new PriceView(ITEM_TOTAL, model, null, false, false, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
+
+        return priceView;
+
+    }
+
 }

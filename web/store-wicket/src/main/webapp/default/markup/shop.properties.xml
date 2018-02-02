@@ -171,6 +171,7 @@
     <entry key="deliverySubTotalTax">Tax</entry>
     <entry key="deliverySubTotalAmount">Sub total (inc. tax)</entry>
     <entry key="deliveryCost">Shipping cost</entry>
+    <entry key="deliveryCostGratis">FREE</entry>
     <entry key="deliveryCostTax">Tax</entry>
     <entry key="deliveryCostAmount">Shipping cost (inc. tax)</entry>
     <entry key="deliveryMethod">Method</entry>

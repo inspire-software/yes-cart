@@ -29,9 +29,9 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.value.ValueMap;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.CartItem;
@@ -40,6 +40,7 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
@@ -49,7 +50,6 @@ import org.yes.cart.web.support.service.ProductServiceFacade;
 import org.yes.cart.web.support.service.ShippingServiceFacade;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -162,10 +162,6 @@ public class ShippingDeliveriesView extends BaseComponent {
                                                 final String lang = getLocale().getLanguage();
                                                 final String defaultImageRelativePath = productSkuDecorator.getDefaultImage(width, height, lang);
 
-                                                final BigDecimal itemTotal = det.getPrice()
-                                                        .multiply(det.getQty())
-                                                        .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-
                                                 final LinksSupport links = getWicketSupportFacade().links();
 
                                                 customerOrderDeliveryDetListItem
@@ -180,10 +176,10 @@ public class ShippingDeliveriesView extends BaseComponent {
                                                                 new Label(ITEM_CODE, det.getProductSkuCode())
                                                         )
                                                         .add(
-                                                                new Label(ITEM_PRICE, det.getPrice().toString())
+                                                                getPriceView(det)
                                                         )
                                                         .add(
-                                                                new Label(ITEM_TOTAL, itemTotal.toString())
+                                                                getTotalView(det)
                                                         )
                                                         .add(
                                                                 new ContextImage(DEFAULT_IMAGE, defaultImageRelativePath)
@@ -193,7 +189,7 @@ public class ShippingDeliveriesView extends BaseComponent {
                                                                         )
                                                         );
 
-                                                final Label qty = new Label(ITEM_QTY, det.getQty().toString());
+                                                final Label qty = new Label(ITEM_QTY, det.getQty().stripTrailingZeros().toPlainString());
                                                 if (CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP.equals(det.getDeliveryGroup()) ||
                                                         CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP.equals(det.getDeliveryGroup())) {
                                                     qty.add(new AttributeModifier("class", "label label-warning"));
@@ -250,6 +246,32 @@ public class ShippingDeliveriesView extends BaseComponent {
                 )
         );
     }
+
+
+    private PriceView getPriceView(final CartItem cartItem) {
+
+        final ShoppingCart cart = ((AbstractWebPage) getPage()).getCurrentCart();
+
+        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
+
+        final PriceView priceView = new PriceView(ITEM_PRICE, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
+
+        return priceView;
+    }
+
+
+    private PriceView getTotalView(final CartItem cartItem) {
+
+        final ShoppingCart cart = ((AbstractWebPage) getPage()).getCurrentCart();
+
+        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, true);
+
+        final PriceView priceView = new PriceView(ITEM_TOTAL, model, null, false, false, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
+
+        return priceView;
+
+    }
+
 
     @Override
     protected void onBeforeRender() {

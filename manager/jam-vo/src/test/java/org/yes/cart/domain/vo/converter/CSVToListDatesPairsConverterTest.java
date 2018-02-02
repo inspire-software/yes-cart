@@ -17,10 +17,9 @@
 package org.yes.cart.domain.vo.converter;
 
 import org.junit.Test;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.util.DateUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +35,6 @@ public class CSVToListDatesPairsConverterTest {
     @Test
     public void testConvert() throws Exception {
 
-        final SimpleDateFormat format = new SimpleDateFormat(Constants.DEFAULT_IMPORT_DATE_FORMAT);
         List<MutablePair<Date, Date>> csv;
 
         csv = (List<MutablePair<Date, Date>>) new CSVToListDatesPairsConverter().convertToDto(null, null);
@@ -50,15 +48,15 @@ public class CSVToListDatesPairsConverterTest {
         MutablePair<Date, Date> range;
         range = csv.get(0);
         assertNotNull(range);
-        assertEquals(format.parse("2017-01-01"), range.getFirst());
+        assertEquals(DateUtils.dParseSDT("2017-01-01"), range.getFirst());
         assertNull(range.getSecond());
         range = csv.get(1);
         assertNotNull(range);
-        assertEquals(format.parse("2017-01-15"), range.getFirst());
-        assertEquals(format.parse("2017-01-17"), range.getSecond());
+        assertEquals(DateUtils.dParseSDT("2017-01-15"), range.getFirst());
+        assertEquals(DateUtils.dParseSDT("2017-01-17"), range.getSecond());
         range = csv.get(2);
         assertNotNull(range);
-        assertEquals(format.parse("2017-01-25"), range.getFirst());
+        assertEquals(DateUtils.dParseSDT("2017-01-25"), range.getFirst());
         assertNull(range.getSecond());
 
         assertEquals("2017-01-01,2017-01-15:2017-01-17,2017-01-25", new CSVToListDatesPairsConverter().convertToEntity(csv, null, null));

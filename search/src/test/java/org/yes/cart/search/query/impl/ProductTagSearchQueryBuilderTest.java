@@ -23,8 +23,8 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.search.ShopSearchSupportService;
 import org.yes.cart.search.dto.NavigationContext;
+import org.yes.cart.util.DateUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -112,8 +112,7 @@ public class ProductTagSearchQueryBuilderTest {
 
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
 
-        final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        final Date earliest = formatter.parse("20141118000000");
+        final Date earliest = DateUtils.dParseSDT("2014-11-18 00:00:00");
 
         final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
@@ -138,8 +137,7 @@ public class ProductTagSearchQueryBuilderTest {
 
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
 
-        final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        final Date earliest = formatter.parse("20141118000000");
+        final Date earliest = DateUtils.dParseSDT("2014-11-18 00:00:00");
 
         final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
@@ -166,9 +164,8 @@ public class ProductTagSearchQueryBuilderTest {
 
         final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
-        final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        final Date earliest123 = formatter.parse("20141118000000");
-        final Date earliest234 = formatter.parse("20141218000000");
+        final Date earliest123 = DateUtils.dParseSDT("2014-11-18 00:00:00");
+        final Date earliest234 = DateUtils.dParseSDT("2014-12-18 00:00:00");
 
         context.checking(new Expectations() {{
             oneOf(shopSearchSupportService).getCategoryNewArrivalDate(123L, 10L); will(returnValue(earliest123));

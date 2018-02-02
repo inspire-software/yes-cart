@@ -19,7 +19,6 @@ package org.yes.cart.service.order.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerService;
@@ -27,8 +26,8 @@ import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.service.order.OrderDisassembler;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
+import org.yes.cart.util.DateUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -125,7 +124,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
         mutableOrderInfo.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_BY, customerOrder.getB2bApprovedBy());
         if (customerOrder.getB2bApprovedBy() != null) {
             mutableOrderInfo.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_DATE,
-                    new SimpleDateFormat(Constants.DEFAULT_IMPORT_DATE_TIME_FORMAT).format(customerOrder.getB2bApprovedBy()));
+                    DateUtils.formatSDT(customerOrder.getB2bApprovedDate()));
         }
 
         mutableOrderInfo.setOrderMessage(customerOrder.getOrderMessage());

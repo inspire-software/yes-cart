@@ -27,7 +27,9 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.util.DateUtils;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -75,9 +77,10 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
 
     /** {@inheritDoc} */
     @Override
-    protected boolean doRun(final Date lastRun) {
+    protected boolean doRun(final Instant lastRun) {
 
         final String nodeId = getNodeId();
+        final Date lastRunDate = DateUtils.from(lastRun);
 
         if (isLuceneIndexDisabled()) {
             LOG.info("Reindexing products inventory updates on {} ... disabled", nodeId);
@@ -93,7 +96,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
 
         LOG.info("Check changed orders products to be reindexed on {}, batch {}", nodeId, batchSize);
 
-        List<String> productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
+        List<String> productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRunDate);
 
         if (productSkus != null && !productSkus.isEmpty()) {
 
@@ -108,7 +111,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
                     Thread.sleep(getDeltaCheckDelay());
                 } catch (InterruptedException e) {
                 }
-                productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
+                productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRunDate);
                 int delta = productSkus.size() - count;
                 int maxDelta = getDeltaCheckSize();
                 if (delta > maxDelta) {

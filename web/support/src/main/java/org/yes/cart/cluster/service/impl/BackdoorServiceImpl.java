@@ -37,13 +37,13 @@ import org.yes.cart.search.dao.IndexBuilder;
 import org.yes.cart.search.query.impl.AsIsAnalyzer;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.utils.impl.ObjectUtil;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -142,13 +142,12 @@ public class BackdoorServiceImpl implements BackdoorService {
         if (!isLuceneIndexDisabled()) {
 
             try {
-                final Date now = new Date();
+                final Instant now = Instant.now();
                 final String inventoryChangeLastKey = "JOB_PRODINVUP_LR_" + nodeService.getCurrentNodeId();
-                final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 final String lastRun = systemService.getAttributeValue(inventoryChangeLastKey);
-                if (StringUtils.isBlank(lastRun) || format.parse(lastRun).before(now)) {
+                if (StringUtils.isBlank(lastRun) || DateUtils.iParseSDT(lastRun).isBefore(now)) {
                     // Ensure that product inventory changes have last date which corresponds to indexing start time
-                    systemService.updateAttributeValue(inventoryChangeLastKey, format.format(now));
+                    systemService.updateAttributeValue(inventoryChangeLastKey, DateUtils.formatSDT(now));
                 }
             } catch (Exception exp) {
                 LOG.error("Unable to update JOB_PRODINVUP_LR_X: " + exp.getMessage(), exp);

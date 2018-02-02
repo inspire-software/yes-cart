@@ -29,10 +29,7 @@ import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductAssociation;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.*;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.yes.cart.util.DateUtils;
 
 import static org.junit.Assert.*;
 
@@ -47,11 +44,9 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
     @Test
     public void testRun() throws Exception {
 
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        final Date _1999_01_01 = format.parse("1999-01-01");
-        final Date now = new Date();
+        final long _1999_01_01 = DateUtils.iParseSDT("1999-01-01").toEpochMilli();
 
-        final int days = (int) Math.ceil(((double) (now.getTime() - _1999_01_01.getTime())) / ((double) (1000*60*60*24)));
+        final int days = (int) Math.ceil(((double) (System.currentTimeMillis() - _1999_01_01)) / ((double) (1000*60*60*24)));
 
         final ProductService productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         final ProductSkuService productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
@@ -166,8 +161,6 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
         GenericDAO<AttrValueProduct, Long> productAvDao = (GenericDAO<AttrValueProduct, Long>) ctx().getBean("attrValueEntityProductDao");
         GenericDAO<AttrValueProductSku, Long> productSkuAvDao = (GenericDAO<AttrValueProductSku, Long>) ctx().getBean("attrValueEntityProductSkuDao");
 
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
         for (final Pair<String, String> pair : namesAndAvailabilities) {
 
             EntityFactory entityFactory = productService.getGenericDao().getEntityFactory();
@@ -177,11 +170,7 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
             product.setDescription("description");
             product.setProducttype(productTypeService.findById(1L));
             product.setAvailability(Product.AVAILABILITY_ALWAYS);
-            try {
-                product.setAvailableto(format.parse(pair.getSecond()));
-            } catch (ParseException pe) {
-                throw new IllegalArgumentException(pe);
-            }
+            product.setAvailableto(DateUtils.dParseSDT(pair.getSecond()));
             product.setBrand(brandService.findById(101L));
             product = productService.create(product);
             assertTrue(product.getProductId() > 0);

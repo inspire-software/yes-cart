@@ -18,6 +18,8 @@ package org.yes.cart.bulkcommon.model;
 
 import org.yes.cart.bulkexport.model.ExportTuple;
 
+import java.time.format.DateTimeFormatter;
+
 /**
  * Single import/export column description.
  * <p/>
@@ -72,7 +74,7 @@ public interface ImpExColumn {
      */
     String DECIMAL = "DECIMAL";
     /**
-     * Date value. For date format see {@link org.yes.cart.constants.Constants#DEFAULT_IMPORT_DATE_TIME_FORMAT}
+     * Date value. Format: "yyyy-MM-dd HH:mm:ss" {@link org.yes.cart.util.DateUtils#dParseSDT(String)}
      */
     String DATETIME = "DATETIME";
 

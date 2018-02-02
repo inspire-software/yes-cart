@@ -22,8 +22,8 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.util.DateUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
@@ -43,25 +43,23 @@ public class DefaultOrderNumberGeneratorImplTest {
     @Test
     public void testDatePart() throws Exception {
 
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        final Date lastCheck = format.parse("2017-01-01 00:00:00");
+        final Date lastCheck = DateUtils.dParseSDT("2017-01-01 00:00:00");
 
         final DefaultOrderNumberGeneratorImpl defaultOrderNumberGenerator = new DefaultOrderNumberGeneratorImpl();
         defaultOrderNumberGenerator.setLastCheck(lastCheck);
 
         Calendar calendar = Calendar.getInstance();
 
-        calendar.setTime(format.parse("2017-02-05 14:04:34"));
+        calendar.setTime(DateUtils.dParseSDT("2017-02-05 14:04:34"));
         assertEquals("170205140434", defaultOrderNumberGenerator.datePart(calendar));
 
-        calendar.setTime(format.parse("2017-01-31 04:43:00"));
+        calendar.setTime(DateUtils.dParseSDT("2017-01-31 04:43:00"));
         assertEquals("170131044300", defaultOrderNumberGenerator.datePart(calendar));
 
-        calendar.setTime(format.parse("2017-12-31 23:59:59"));
+        calendar.setTime(DateUtils.dParseSDT("2017-12-31 23:59:59"));
         assertEquals("171231235959", defaultOrderNumberGenerator.datePart(calendar));
 
-        calendar.setTime(format.parse("2017-01-01 00:00:00"));
+        calendar.setTime(DateUtils.dParseSDT("2017-01-01 00:00:00"));
         assertEquals("170101000000", defaultOrderNumberGenerator.datePart(calendar));
 
     }
@@ -71,15 +69,14 @@ public class DefaultOrderNumberGeneratorImplTest {
 
         final GenericDAO<CustomerOrder, Long> customerOrderDao = this.mockery.mock(GenericDAO.class, "customerOrderDao");
 
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         final Calendar now = Calendar.getInstance();
-        now.setTime(format.parse("2017-12-25 11:11:11"));
+        now.setTime(DateUtils.dParseSDT("2017-12-25 11:11:11"));
         final Calendar dec01 = Calendar.getInstance();
-        dec01.setTime(format.parse("2017-12-01 00:00:00"));
+        dec01.setTime(DateUtils.dParseSDT("2017-12-01 00:00:00"));
         final Calendar jan01 = Calendar.getInstance();
-        jan01.setTime(format.parse("2018-01-01 00:00:00"));
+        jan01.setTime(DateUtils.dParseSDT("2018-01-01 00:00:00"));
         final Calendar feb01 = Calendar.getInstance();
-        feb01.setTime(format.parse("2018-02-01 00:00:00"));
+        feb01.setTime(DateUtils.dParseSDT("2018-02-01 00:00:00"));
 
         DefaultOrderNumberGeneratorImpl defaultOrderNumberGenerator = new DefaultOrderNumberGeneratorImpl(customerOrderDao) {
             @Override
@@ -134,10 +131,9 @@ public class DefaultOrderNumberGeneratorImplTest {
     public void testGetNextOrderNumberMultithread() throws Exception {
 
 
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        final Date lastCheck = format.parse("2017-01-01 00:00:00");
+        final Date lastCheck = DateUtils.dParseSDT("2017-01-01 00:00:00");
         final Calendar now = Calendar.getInstance();
-        now.setTime(format.parse("2017-01-01 11:11:11"));
+        now.setTime(DateUtils.dParseSDT("2017-01-01 11:11:11"));
 
         //Multithread.
         int THREADGROUPSIZE = 100;

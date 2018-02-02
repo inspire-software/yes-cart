@@ -10,11 +10,14 @@ import org.yes.cart.bulkcommon.service.ExportDirectorService;
 import org.yes.cart.bulkcommon.service.ImportDirectorService;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.remote.service.FileManager;
+import org.yes.cart.util.DateUtils;
 
 import java.io.*;
 import java.nio.file.AccessDeniedException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -126,8 +129,7 @@ public class FSFileManagerImpl implements FileManager {
 
         final String importRoot = importDirectorService.getImportDirectory();
 
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
-        final String timestamp = format.format(new Date());
+        final String timestamp = DateUtils.impexFileTimestamp();
         final SecurityContext sc = SecurityContextHolder.getContext();
 
         final File dir;

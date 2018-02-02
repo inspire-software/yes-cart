@@ -72,7 +72,7 @@
 
                 <div class="input-group input-sm">
                     Powered by <a href="http://yes-cart.org" target="_blank">YC - pure <sup>e</sup>Commerce</a><br/>
-                    &copy; YesCart.org 2009 - <%= new java.text.SimpleDateFormat("yyyy").format(new java.util.Date()) %>
+                    &copy; YesCart.org 2009 - <%= org.yes.cart.util.DateUtils.formatYear() %>
                 </div>
             </form>
         </div>

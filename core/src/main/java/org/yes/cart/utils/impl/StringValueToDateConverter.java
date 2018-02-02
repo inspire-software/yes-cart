@@ -17,10 +17,8 @@
 package org.yes.cart.utils.impl;
 
 import org.springframework.core.convert.converter.Converter;
-import org.yes.cart.constants.Constants;
+import org.yes.cart.util.DateUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -30,26 +28,9 @@ import java.util.Date;
  */
 public class StringValueToDateConverter implements Converter<String, Date> {
 
-    private static final ThreadLocal<SimpleDateFormat> format = new ThreadLocal<SimpleDateFormat>();
-
     /** {@inheritDoc} */
     public Date convert(final String str) {
-        if (str != null) {
-            try {
-                return getDateFormat().parse(str);
-            } catch (ParseException e) {
-                return null;
-            }            
-        }
-        return null;
+        return DateUtils.dParseSDT(str);
     }
 
-    private SimpleDateFormat getDateFormat() {
-        SimpleDateFormat dateFormat = format.get();
-        if (dateFormat == null) {
-            dateFormat = new SimpleDateFormat(Constants.DEFAULT_IMPORT_DATE_TIME_FORMAT);
-            format.set(dateFormat);
-        }
-        return dateFormat;
-    }
 }

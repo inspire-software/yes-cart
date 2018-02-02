@@ -171,6 +171,7 @@
     <entry key="deliverySubTotalTax">MwSt.</entry>
     <entry key="deliverySubTotalAmount">Subtotal (inkl. MwSt.)</entry>
     <entry key="deliveryCost">Versandkosten</entry>
+    <entry key="deliveryCostGratis">GRATIS</entry>
     <entry key="deliveryCostTax">MwSt.</entry>
     <entry key="deliveryCostAmount">Versandkosten (inkl. MwSt.)</entry>
     <entry key="deliveryMethod">Versand</entry>

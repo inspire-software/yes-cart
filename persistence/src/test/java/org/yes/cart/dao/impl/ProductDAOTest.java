@@ -31,11 +31,12 @@ import org.yes.cart.domain.entity.impl.*;
 import org.yes.cart.search.query.SearchQueryBuilder;
 import org.yes.cart.search.query.impl.ProductShopInStockSearchQueryBuilder;
 import org.yes.cart.search.query.impl.ProductSkuCodeSearchQueryBuilder;
+import org.yes.cart.util.DateUtils;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -304,12 +305,8 @@ public class ProductDAOTest extends AbstractTestDAO {
                 product.setCode("SONY_PRODUCT_CODE");
                 product.setName("product sony name");
                 product.setDescription("Description ");
-                try {
-                    // Preorders are only preorders if available to date is in future, otherwise standard
-                    product.setAvailablefrom(new SimpleDateFormat("yyyy-MM-dd").parse("2099-01-01"));
-                } catch (ParseException pe) {
-                    fail(pe.getMessage());
-                }
+                // Preorders are only preorders if available to date is in future, otherwise standard
+                product.setAvailablefrom(DateUtils.dParseSDT("2099-01-01"));
 
                 ProductType productType = productTypeDao.findById(1L);
                 assertNotNull(productType);

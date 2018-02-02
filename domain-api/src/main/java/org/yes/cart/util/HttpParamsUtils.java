@@ -26,6 +26,7 @@ import java.util.*;
 public class HttpParamsUtils {
 
     private HttpParamsUtils() {
+        // no instance
     }
 
     /**

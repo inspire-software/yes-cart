@@ -22,8 +22,8 @@ import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.service.domain.PromotionService;
+import org.yes.cart.util.DateUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -187,7 +187,7 @@ public class PromotionCouponServiceImplTest extends BaseCoreDBTestCase {
         couponPromotion.setCouponTriggered(true);
         couponPromotion.setCanBeCombined(false);
         couponPromotion.setEnabled(true);
-        couponPromotion.setEnabledTo(new SimpleDateFormat("yyyy-MM-dd").parse("1999-01-01"));
+        couponPromotion.setEnabledTo(DateUtils.dParseSDT("1999-01-01"));
         couponPromotion.setCurrency("EUR");
         couponPromotion.setShopCode("SHOP10");
         couponPromotion.setName("TESTCOUPON4");
@@ -228,7 +228,7 @@ public class PromotionCouponServiceImplTest extends BaseCoreDBTestCase {
         couponPromotion.setCouponTriggered(true);
         couponPromotion.setCanBeCombined(false);
         couponPromotion.setEnabled(true);
-        couponPromotion.setEnabledFrom(new SimpleDateFormat("yyyy-MM-dd").parse("2099-01-01"));
+        couponPromotion.setEnabledFrom(DateUtils.dParseSDT("2099-01-01"));
         couponPromotion.setCurrency("EUR");
         couponPromotion.setShopCode("SHOP10");
         couponPromotion.setName("TESTCOUPON5");

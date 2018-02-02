@@ -171,6 +171,7 @@
     <entry key="deliverySubTotalTax">ПДВ</entry>
     <entry key="deliverySubTotalAmount">Разом доставка (з ПДВ)</entry>
     <entry key="deliveryCost">Доставка</entry>
+    <entry key="deliveryCostGratis">безкоштовно</entry>
     <entry key="deliveryCostTax">ПДВ</entry>
     <entry key="deliveryCostAmount">Доставка (з ПДВ)</entry>
     <entry key="deliveryMethod">Спосіб</entry>

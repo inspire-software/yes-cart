@@ -25,9 +25,9 @@ import org.yes.cart.orderexport.ExportProcessorException;
 import org.yes.cart.orderexport.OrderAutoExportProcessor;
 import org.yes.cart.orderexport.OrderExporter;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.util.log.Markers;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -42,13 +42,6 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
     private final CustomerOrderService customerOrderService;
 
     private final Set<OrderExporter> orderExporters = new HashSet<OrderExporter>();
-
-    private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        }
-    };
 
     public OrderAutoExportProcessorImpl(final CustomerOrderService customerOrderService) {
         this.customerOrderService = customerOrderService;
@@ -200,7 +193,7 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
         customerOrder.setLastExportStatus(error);
         // Key is Exporter+Suffix because we want to overwrite this with last error by this exporter (in case this error
         // is persistent, so that we do not flood the audit table)
-        customerOrder.putValue(exporter + ": ERROR", formatter.get().format(new Date()) + ": " + error, "AUDITEXPORT");
+        customerOrder.putValue(exporter + ": ERROR", DateUtils.formatSDT() + ": " + error, "AUDITEXPORT");
         customerOrderService.update(customerOrder);
 
     }

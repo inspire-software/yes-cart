@@ -21,12 +21,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Carrier;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.util.log.Markers;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -163,23 +161,28 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         final Map<Date, Date> dates = new HashMap<Date, Date>();
         if (StringUtils.isNotBlank(getExcludeDates())) {
 
-            final SimpleDateFormat df = new SimpleDateFormat(Constants.DEFAULT_IMPORT_DATE_FORMAT);
             final String[] all = StringUtils.split(getExcludeDates(), ',');
             for (final String range : all) {
-                try {
-                    final int rangePos = range.indexOf(':');
-                    if (rangePos == -1) {
-                        final Date date = df.parse(range);
+                final int rangePos = range.indexOf(':');
+                if (rangePos == -1) {
+                    final Date date = DateUtils.dParseSDT(range);
+                    if (date != null) {
                         dates.put(date, date);
                     } else {
-                        final Date date = df.parse(range.substring(0, rangePos));
-                        final Date date2 = df.parse(range.substring(rangePos + 1));
-                        dates.put(date, date2);
+                        LOG.error(Markers.alert(),
+                                "Error reading excluded date during delivery time estimation: {}, sla: {}/{}",
+                                range, getGuid(), getName());
                     }
-                } catch (ParseException pe) {
-                    LOG.error(Markers.alert(),
-                            "Error reading excluded dates during delivery time estimation: " + pe.getMessage() +
-                                    ", sla: " + getGuid() + "/" + getName(), pe);
+                } else {
+                    final Date date = DateUtils.dParseSDT(range.substring(0, rangePos));
+                    final Date date2 = DateUtils.dParseSDT(range.substring(rangePos + 1));
+                    if (date != null && date2 != null) {
+                        dates.put(date, date2);
+                    } else {
+                        LOG.error(Markers.alert(),
+                                "Error reading excluded date range during delivery time estimation: {}, sla: {}/{}",
+                                range, getGuid(), getName());
+                    }
                 }
             }
 

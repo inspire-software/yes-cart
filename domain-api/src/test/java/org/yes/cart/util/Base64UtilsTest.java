@@ -31,10 +31,11 @@ public class Base64UtilsTest {
     public void testEncodeDecode() throws Exception {
 
         final String original = "Java 8 now supports BASE64 Encoding and Decoding. Why are we even writing this? Ah, Java 7";
+        final String base64 = "SmF2YSA4IG5vdyBzdXBwb3J0cyBCQVNFNjQgRW5jb2RpbmcgYW5kIERlY29kaW5nLiBXaHkgYXJlIHdlIGV2ZW4gd3JpdGluZyB0aGlzPyBBaCwgSmF2YSA3";
 
         final String encoded = Base64Utils.encode(original);
 
-        assertNotNull(encoded);
+        assertEquals(base64, encoded);
         assertFalse(encoded.equals(original));
 
         final String decoded = Base64Utils.decode(encoded);

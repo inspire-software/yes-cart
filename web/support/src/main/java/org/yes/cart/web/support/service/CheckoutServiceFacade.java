@@ -75,6 +75,16 @@ public interface CheckoutServiceFacade {
     Total getOrderTotal(CustomerOrder customerOrder);
 
     /**
+     * Represent order sub total information as price model.
+     *
+     * @param customerOrder customer order
+     * @param cart current cart to extract tax view settings
+     *
+     * @return model
+     */
+    ProductPriceModel getOrderTotalSub(CustomerOrder customerOrder, ShoppingCart cart);
+
+    /**
      * Represent order total information as price model.
      *
      * @param customerOrder customer order
@@ -93,6 +103,28 @@ public interface CheckoutServiceFacade {
      * @return total for this delivery
      */
     Total getOrderDeliveryTotal(CustomerOrder customerOrder, CustomerOrderDelivery delivery);
+
+    /**
+     * Calculate order total using appropriate calculation strategy.
+     *
+     * @param customerOrder order
+     * @param delivery delivery to calculate total for
+     * @param cart current cart to extract tax view settings
+     *
+     * @return total for this delivery
+     */
+    ProductPriceModel getOrderDeliveryTotalSub(CustomerOrder customerOrder, CustomerOrderDelivery delivery, ShoppingCart cart);
+
+    /**
+     * Calculate order total using appropriate calculation strategy.
+     *
+     * @param customerOrder order
+     * @param delivery delivery to calculate total for
+     * @param cart current cart to extract tax view settings
+     *
+     * @return total for this delivery
+     */
+    ProductPriceModel getOrderDeliveryTotalShipping(CustomerOrder customerOrder, CustomerOrderDelivery delivery, ShoppingCart cart);
 
     /**
      * Find all payment records for this order.

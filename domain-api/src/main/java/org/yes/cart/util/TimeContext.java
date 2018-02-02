@@ -24,7 +24,7 @@ import java.util.Date;
  * Date: 17/10/2017
  * Time: 18:31
  */
-public class TimeContext {
+public final class TimeContext {
 
     private static final ThreadLocal<Date> NOW = new ThreadLocal<Date>();
 
@@ -35,7 +35,9 @@ public class TimeContext {
         }
     };
 
-
+    private TimeContext() {
+        // no instance
+    }
 
     /**
      * Time frame set for this thread local.

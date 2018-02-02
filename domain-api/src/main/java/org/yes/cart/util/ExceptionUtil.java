@@ -24,8 +24,11 @@ import java.io.StringWriter;
  * Date: 2/12/12
  * Time: 11:30 AM
  */
-public class ExceptionUtil {
+public final class ExceptionUtil {
 
+    private ExceptionUtil() {
+        // no instance
+    }
 
     /**
      * Convert stack trace of an exception to string.

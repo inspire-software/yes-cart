@@ -16,14 +16,11 @@
 
 package org.yes.cart.bulkjob.cron;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.util.DateUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * Processor that depends on the time it was last executed.
@@ -37,23 +34,11 @@ import java.util.Date;
  */
 public abstract class AbstractLastRunDependentProcessorImpl implements Runnable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractLastRunDependentProcessorImpl.class);
-
-    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-
     private final SystemService systemService;
     private final RuntimeAttributeService runtimeAttributeService;
 
     private boolean lastRunInitialised = false;
-    private Date lastRun;
-
-    private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat(DATE_FORMAT);
-        }
-    };
-
+    private Instant lastRun;
 
     public AbstractLastRunDependentProcessorImpl(final SystemService systemService,
                                                  final RuntimeAttributeService runtimeAttributeService) {
@@ -65,28 +50,20 @@ public abstract class AbstractLastRunDependentProcessorImpl implements Runnable 
     @Override
     public final void run() {
 
-        final Date now = new Date();
-
-        final SimpleDateFormat dateFormat = formatter.get();
+        final Instant now = Instant.now();
 
         final String lastRunPreferenceAttributeName = getLastRunPreferenceAttributeName();
 
         if (!lastRunInitialised) {
             final String pref = systemService.createOrGetAttributeValue(lastRunPreferenceAttributeName, "Date");
-            if (pref != null) {
-                try {
-                    lastRun = dateFormat.parse(pref);
-                } catch (ParseException e) {
-                    LOG.error("Unable to parse last job run date {} using format {}", pref, DATE_FORMAT);
-                }
-            }
+            lastRun = DateUtils.iParseSDT(pref);
             lastRunInitialised = true;
         }
 
         if (doRun(lastRun)) {
 
             lastRun = now;
-            systemService.updateAttributeValue(lastRunPreferenceAttributeName, dateFormat.format(now));
+            systemService.updateAttributeValue(lastRunPreferenceAttributeName, DateUtils.formatSDT(now));
 
         }
 
@@ -110,7 +87,7 @@ public abstract class AbstractLastRunDependentProcessorImpl implements Runnable 
      *
      * @return true if run was done
      */
-    protected abstract boolean doRun(final Date lastRun);
+    protected abstract boolean doRun(final Instant lastRun);
 
 
 }

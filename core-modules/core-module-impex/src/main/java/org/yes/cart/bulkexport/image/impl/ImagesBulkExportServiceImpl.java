@@ -28,11 +28,10 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.federation.FederationFacade;
+import org.yes.cart.util.DateUtils;
 
 import java.io.File;
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * User: denispavlov
@@ -76,8 +75,7 @@ public class ImagesBulkExportServiceImpl extends AbstractExportService implement
                 fileToExport = imageExportOverrideFile;
             } else {
                 if (fileToExport.contains(TIMESTAMP_PLACEHOLDER)) {
-                    final SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-                    fileToExport = fileToExport.replace(TIMESTAMP_PLACEHOLDER, format.format(new Date()));
+                    fileToExport = fileToExport.replace(TIMESTAMP_PLACEHOLDER, DateUtils.exportFileTimestamp());
                     if (new File(fileToExport).exists()) {
                         final String msgErr = MessageFormat.format(
                                 "export file already exists: {0}",

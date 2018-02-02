@@ -30,45 +30,13 @@ import java.util.List;
 public interface Constants {
 
     /**
-     * This is the import date format for csv import.
-     * Example: 2014-01-24 16:54:00
-     * We used short form format to prevent localisation issues in csv. All parts of date time imports are numbers.
+     * Default money scale
      */
-    String DEFAULT_IMPORT_DATE_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss";
-    String DEFAULT_IMPORT_DATE_FORMAT = "yyyy-MM-dd";
-
-    String DEFAULT_DATE_FORMAT = "dd MMMMM yyyy";
-
-    /**
-     * According to HTTP/1.1 (RFC2068) spec date time must be in  RFC850 format.
-     * <p/>
-     * <p/>
-     * HTTP application historically accepted three formats to represent date/time:
-     * <p/>
-     * Sun, 06 Nov 1994 08:49:37 GMT  ; RFC 822, enhanced in RFC 1123
-     * Sunday, 06-Nov-94 08:49:37 GMT ; RFC 850, rewritten as RFC 1036
-     * Sun Nov  6 08:49:37 1994       ; format asctime() ANSI C
-     * <p/>
-     * The first format is chosen as Internet standard and represents fixed
-     * length string as stated in RFC 1123 (modified RFC 822)
-     */
-    String RFC850_DATE_TIME_FORMAT = "EEE, dd MMM yyyy HH:mm:ss z";
-
-    /**
-     * Money in minor money units. For example
-     * 12 dollars and 34 cent will be 1234 cents.
-     */
-    String MONEY_FORMAT_TOINDEX = "00000000";
-    String MONEY_FORMAT = "#####0.00";
     int MONEY_SCALE = 2;
 
     /**
-     * Inventory in minor units. For example
-     * 12.345 meter of fabric would be 12345.
-     * 1 item would be 1000
+     * Default inventory scale
      */
-    String INVENTORY_FORMAT_TOINDEX = "00000000";
-    String INVENTORY_FORMAT = "#####0.000";
     int INVENTORY_SCALE = 3;
 
     /**
@@ -76,11 +44,6 @@ public interface Constants {
      */
     int DEFAULT_SCALE = 2;
 
-
-    /**
-     * For price filtered navigation expected only whole digits.
-     */
-    String MONEY_FORMAT_PRICE_NAVIGATION = "########";
 
     /**
      * No image file name.

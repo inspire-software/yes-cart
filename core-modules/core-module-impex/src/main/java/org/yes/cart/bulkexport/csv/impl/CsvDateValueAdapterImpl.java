@@ -21,8 +21,11 @@ import org.yes.cart.bulkcommon.model.ExtensibleValueAdapter;
 import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.util.DateUtils;
 
-import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -33,12 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CsvDateValueAdapterImpl implements ValueAdapter {
 
-    private static final ThreadLocal<Map<String, SimpleDateFormat>> formatter = new ThreadLocal<Map<String, SimpleDateFormat>>() {
-        @Override
-        protected Map<String, SimpleDateFormat> initialValue() {
-            return new ConcurrentHashMap<String, SimpleDateFormat>();
-        }
-    };
+    private static final Map<String, DateTimeFormatter> FORMATTERS = new ConcurrentHashMap<String, DateTimeFormatter>();
 
     /**
      * {@inheritDoc}
@@ -50,12 +48,13 @@ public class CsvDateValueAdapterImpl implements ValueAdapter {
 
         if (rawValue != null && StringUtils.isNotBlank(pattern)) {
 
-            SimpleDateFormat sdf = formatter.get().get(pattern);
-            if (sdf == null) {
-                sdf = new SimpleDateFormat(pattern);
-                formatter.get().put(pattern, sdf);
+            DateTimeFormatter dtf = FORMATTERS.get(pattern);
+            if (dtf == null) {
+                dtf = DateTimeFormatter.ofPattern(pattern);
+                FORMATTERS.put(pattern, dtf);
             }
-            return sdf.format(rawValue);
+
+            return dtf.format(ZonedDateTime.ofInstant(((Date) rawValue).toInstant(), DateUtils.zone()));
         }
 
         return rawValue;

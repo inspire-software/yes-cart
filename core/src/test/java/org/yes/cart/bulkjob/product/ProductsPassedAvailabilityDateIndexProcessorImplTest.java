@@ -27,9 +27,13 @@ import org.yes.cart.search.SearchQueryFactory;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.util.DateUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -60,12 +64,9 @@ public class ProductsPassedAvailabilityDateIndexProcessorImplTest extends BaseCo
         assertNotNull(rez);
         assertEquals(1, rez.size());
 
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        final ZonedDateTime minus24h = ZonedDateTime.now().minusHours(24);
 
-        final Calendar minus24h = Calendar.getInstance();
-        minus24h.add(Calendar.HOUR_OF_DAY, -24);
-
-        final String availableTo = format.format(minus24h.getTime());
+        final String availableTo = DateUtils.formatSDT(minus24h);
 
         getTx().execute(new TransactionCallbackWithoutResult() {
             @Override

@@ -38,13 +38,13 @@ import org.yes.cart.service.cluster.ReindexService;
 import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.util.log.Markers;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -247,8 +247,6 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                     return;
                 }
 
-                final SimpleDateFormat format = new SimpleDateFormat("_yyyy-MM-dd_HHmmss_SSS");
-
                 final int total = readyForImport.length;
                 int count = 1;
                 for (final File toImport : prioritiseProcessedFiles(readyForImport)) {
@@ -256,7 +254,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                     LOG.info("Processing file {} of {}", count, total);
                     count++;
 
-                    final String timestamp = format.format(new Date());
+                    final String timestamp = DateUtils.autoImportTimestamp();
 
                     final File targetDirectory = new File(importDirPath + File.separator + PRINCIPAL + timestamp);
                     targetDirectory.mkdirs();

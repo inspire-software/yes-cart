@@ -29,7 +29,11 @@ import java.util.Map;
  * <p/>
  * Util class for domain objects.
  */
-public class DomainApiUtils {
+public final class DomainApiUtils {
+
+    private DomainApiUtils() {
+        // no instance
+    }
 
     /**
      * Get the value of attribute from attribute value map.
@@ -122,9 +126,5 @@ public class DomainApiUtils {
 
         return true;
 
-    }
-
-    private DomainApiUtils() {
-        
     }
 }

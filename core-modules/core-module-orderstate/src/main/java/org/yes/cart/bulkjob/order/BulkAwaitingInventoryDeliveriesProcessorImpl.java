@@ -28,8 +28,10 @@ import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.util.log.Markers;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -77,7 +79,9 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
     /** {@inheritDoc} */
     @Override
-    protected boolean doRun(final Date lastRun) {
+    protected boolean doRun(final Instant lastRun) {
+
+        final Date lastRunDate = DateUtils.from(lastRun);
 
         LOG.info("Check orders awaiting allocation start date");
 
@@ -96,10 +100,10 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
         LOG.info("Transitioned {} deliveries awaiting preorder start date", dateWaiting);
 
-        LOG.info("Check orders awaiting inventory");
+        LOG.info("Check orders awaiting inventory since {}", lastRunDate);
 
         final int inventoryWaiting;
-        final List<String> skuChanged = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
+        final List<String> skuChanged = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRunDate);
         if (skuChanged.isEmpty()) {
             inventoryWaiting = 0;
         } else {

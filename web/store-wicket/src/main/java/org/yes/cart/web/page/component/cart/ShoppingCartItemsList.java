@@ -207,7 +207,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         cartItemListItem.add(
                 quantity.setVisible(available && notGift)
         )
-        .add(new Label(QUANTITY_TEXT_RO, pqm.getCartQty().toPlainString()).setVisible(!notGift))
+        .add(new Label(QUANTITY_TEXT_RO, pqm.getCartQty().stripTrailingZeros().toPlainString()).setVisible(!notGift))
         .add(
                 createAddSeveralSkuButton(skuCode, quantity).setVisible(available && notGift)
         );
