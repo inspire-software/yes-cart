@@ -354,6 +354,7 @@ public final class DateUtils {
         if (dtf == null) {
             LOG.info("Add new custom date time formatter using pattern {} for {}", pattern, locale);
             dtf = DateTimeFormatter.ofPattern(pattern);
+            dtfLocal.put(pattern, dtf);
         }
         return dtf;
     }
