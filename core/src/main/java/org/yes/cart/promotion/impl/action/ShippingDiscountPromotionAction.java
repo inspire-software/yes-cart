@@ -60,7 +60,7 @@ public class ShippingDiscountPromotionAction extends AbstractShippingPromotionAc
             final DeliveryBucket bucket = shipping.getDeliveryBucket();
 
             // calculate discount relative to sale price
-            final BigDecimal saleDiscount = shipping.getSalePrice().multiply(discount);
+            final BigDecimal saleDiscount = nullSafeItemPriceForCalculation(shipping).multiply(discount);
             final BigDecimal promoPrice;
             if (MoneyUtils.isFirstBiggerThanSecond(shipping.getPrice(), saleDiscount)) {
                 // we may have compound discounts so need to use final price

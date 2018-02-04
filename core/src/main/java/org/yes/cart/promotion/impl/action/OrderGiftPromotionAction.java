@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.promotion.PromotionAction;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -63,37 +64,46 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
         this.orderSplittingStrategy = orderSplittingStrategy;
     }
 
-
     /** {@inheritDoc} */
     public BigDecimal testDiscountValue(final Map<String, Object> context) {
+        final ItemPromotionActionContext ctx = getPromotionActionContext(context);
         final Total itemTotal = getItemTotal(context);
-        return getAmountValue(context).divide(itemTotal.getPriceSubTotal(), RoundingMode.HALF_UP);
+        final BigDecimal giftQty = BigDecimal.ONE.multiply(ctx.getMultiplier(itemTotal.getPriceSubTotal())).setScale(0, RoundingMode.HALF_UP).setScale(2);
+        if (MoneyUtils.isPositive(giftQty)) {
+            final BigDecimal giftValue = getAmountValue(context);
+            if (MoneyUtils.isPositive(giftValue) && MoneyUtils.isPositive(itemTotal.getPriceSubTotal())) {
+                return giftValue.divide(itemTotal.getPriceSubTotal(), RoundingMode.HALF_UP);
+            }
+            return BigDecimal.ONE; // Assume 100% as we have no price to compare
+        }
+        return BigDecimal.ZERO; // no gift
     }
 
     private BigDecimal getAmountValue(final Map<String, Object> context) {
 
-        final Total itemTotal = getItemTotal(context);
         final ItemPromotionActionContext ctx = getPromotionActionContext(context);
+        final Total itemTotal = getItemTotal(context);
         final ShoppingCart cart = getShoppingCart(context);
 
-        final SkuPrice giftValue = getGiftPrices(ctx.getSubject(), cart);
-        if (giftValue == null) {
-            return BigDecimal.ZERO;
-        }
-        final BigDecimal minimal = MoneyUtils.minPositive(giftValue.getSalePriceForCalculation(), giftValue.getRegularPrice());
-        if (minimal == null) {
-            return BigDecimal.ZERO;
-        }
         final BigDecimal multiplier = ctx.getMultiplier(itemTotal.getPriceSubTotal());
-        if (multiplier.compareTo(BigDecimal.ZERO) > 0) {
-            if (multiplier.compareTo(BigDecimal.ONE) == 0) {
-                return minimal;
+        if (MoneyUtils.isPositive(multiplier)) {
+
+            final SkuPrice giftValue = getGiftPrices(ctx.getSubject(), cart);
+            if (giftValue == null) {
+                return BigDecimal.ZERO;
             }
-            return minimal.divide(multiplier, 2, RoundingMode.HALF_UP);
+
+            final BigDecimal minimal = MoneyUtils.minPositive(giftValue.getSalePriceForCalculation());
+            if (MoneyUtils.isPositive(minimal)) {
+                if (MoneyUtils.isFirstEqualToSecond(multiplier, BigDecimal.ONE)) {
+                    return minimal;
+                }
+                return minimal.divide(multiplier, 2, RoundingMode.HALF_UP);
+            }
+
         }
         return BigDecimal.ZERO;
     }
-
 
     private SkuPrice getGiftPrices(final String sku, final ShoppingCart cart) {
         try {
@@ -114,7 +124,6 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
         }
         return null;
     }
-
 
     private String getSkuName(final String code, final String lang) {
 
@@ -140,14 +149,17 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
 
         final SkuPrice giftValue = getGiftPrices(ctx.getSubject(), cart);
         if (giftValue != null) {
-
             // add gift and set its price, we assume gift are in whole units
             final BigDecimal giftQty = BigDecimal.ONE.multiply(ctx.getMultiplier(itemTotal.getPriceSubTotal())).setScale(0, RoundingMode.HALF_UP).setScale(2);
             cart.addGiftToCart(ctx.getSubject(), getSkuName(ctx.getSubject(), cart.getCurrentLocale()), giftQty, getPromotionCode(context));
-            final BigDecimal minimal = MoneyUtils.minPositive(giftValue.getSalePriceForCalculation(), giftValue.getRegularPrice());
-            cart.setGiftPrice(ctx.getSubject(), minimal, giftValue.getRegularPrice());
 
-            addListValue(context, giftValue.getRegularPrice().multiply(giftQty).setScale(2, RoundingMode.HALF_UP));
+            final Pair<BigDecimal, BigDecimal> listAndSale = giftValue.getSalePriceForCalculation();
+            final BigDecimal list = listAndSale.getFirst();
+            final BigDecimal sale = listAndSale.getSecond();
+
+            cart.setGiftPrice(ctx.getSubject(), sale != null ? sale : list, list);
+
+            addListValue(context, MoneyUtils.notNull(list).multiply(giftQty).setScale(2, RoundingMode.HALF_UP));
 
             for (final CartItem item : cart.getCartItemList()) {
                 if (item.isGift() && ctx.getSubject().equals(item.getProductSkuCode())) {
@@ -155,7 +167,6 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
                     cart.setGiftDeliveryBucket(ctx.getSubject(), bucket);
                 }
             }
-
         }
     }
 

@@ -98,7 +98,7 @@ public class PriceListDeliveryCostCalculationStrategy implements DeliveryCostCal
 
                     if (price != null && price.getSkuPriceId() > 0L) {
 
-                        final BigDecimal salePrice = MoneyUtils.minPositive(price.getRegularPrice(), price.getSalePriceForCalculation());
+                        final BigDecimal salePrice = MoneyUtils.minPositive(price.getSalePriceForCalculation());
                         final BigDecimal deliveryCost = salePrice.multiply(qty).multiply(new BigDecimal(supplierBuckets.size())).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
 
                         for (final DeliveryBucket bucket : supplierBuckets) {

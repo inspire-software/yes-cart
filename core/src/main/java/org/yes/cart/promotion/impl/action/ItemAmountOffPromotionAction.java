@@ -43,15 +43,16 @@ public class ItemAmountOffPromotionAction extends AbstractItemPromotionAction im
     }
 
     private BigDecimal getDiscountValue(final String ctx, final BigDecimal salePrice) {
-        try {
-            final BigDecimal amountOff = getAmountValue(ctx);
-            if (amountOff.compareTo(BigDecimal.ZERO) > 0) {
-                return amountOff.divide(salePrice, RoundingMode.HALF_UP);
+        if (MoneyUtils.isPositive(salePrice))
+            try {
+                final BigDecimal amountOff = getAmountValue(ctx);
+                if (amountOff.compareTo(BigDecimal.ZERO) > 0) {
+                    return amountOff.divide(salePrice, RoundingMode.HALF_UP);
+                }
+            } catch (Exception exp) {
+                LOG.error(
+                        "Unable top parse amountOff for promotion action context: {}", ctx);
             }
-        } catch (Exception exp) {
-            LOG.error(
-                    "Unable top parse amountOff for promotion action context: {}", ctx);
-        }
         return MoneyUtils.ZERO;
     }
 

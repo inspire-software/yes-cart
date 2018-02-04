@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.misc.Pair;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -111,9 +113,36 @@ public interface SkuPrice extends Auditable, Taggable {
     /**
      * Get sale price for calculation.
      *
+     * This method aims to standardise access to the prices realm, in terms of following
+     * rules:
+     *
+     * 1. If product does not have a price as in price is <code>null</code> it is not purchasable.
+     * 2. Zero price is used for things like gift and free of change items
+     * 3. Sale price by nature cannot be higher than regular price (at least on frontend)
+     *
+     * This method will return correct regular and sale price provided settings of this
+     * object.
+     *
+     * Examples:
+     *
+     * Non purchasable product:
+     * R: null, S: null results in [null, null]
+     *
+     * Standard use case only "Regular" price is provided
+     * R: 100, S: null results in [100, null]
+     *
+     * Typical sale use case "Regular" is higher than "Sale"
+     * R: 100, S: 80 results in [100, 80]
+     *
+     * Gift product:
+     * R: 100, S: 0 results in [100, 0]
+     *
+     * Overpriced:
+     * R: 100, S: 120 results in [120, null]
+     *
      * @return sale price for calculation.
      */
-    BigDecimal getSalePriceForCalculation();
+    Pair<BigDecimal, BigDecimal> getSalePriceForCalculation();
 
     /**
      * Set sale price.

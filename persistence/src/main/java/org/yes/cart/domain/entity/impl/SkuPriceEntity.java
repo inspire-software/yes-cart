@@ -17,7 +17,8 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -99,37 +100,15 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     /** {@inheritDoc} */
-    public BigDecimal getSalePriceForCalculation() {  //TODO: V2 time machine
-        if (salefrom == null) {
-            if (saleto == null) {
-                return this.salePrice;
-            } else {
-                if (now() < saleto.getTime()) {
-                    return this.salePrice;  //sale not yet end
-                } else {
-                    return null; //the sale is end;
-                }
-            }
-        } else {
-            if (saleto == null) {
-                if (now() > salefrom.getTime()) {
-                    return this.salePrice; //endless sale
-                } else {
-                    return null; // sale not yet started
-                }
-            } else {
-                final long now = now();
-                if (now > salefrom.getTime() && now < saleto.getTime()) {
-                    return this.salePrice; //sale in time range
-                } else {
-                    return null;
-                }
-            }
+    public Pair<BigDecimal, BigDecimal> getSalePriceForCalculation() {
+        if (salePrice == null) {
+            // No sale price is set only regular should be used
+            return new Pair<>(regularPrice, null);
+        } else if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(salePrice, regularPrice)) {
+            // Overpriced (or sale is the same as regular)
+            return new Pair<>(salePrice, null);
         }
-    }
-
-    private long now() {
-        return TimeContext.getMillis();
+        return new Pair<>(regularPrice, salePrice);
     }
 
     public void setSalePrice(BigDecimal salePrice) {

@@ -17,12 +17,11 @@ package org.yes.cart.domain.entity.impl;
 
 import org.junit.Test;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -31,40 +30,116 @@ import static org.junit.Assert.assertNull;
  */
 public class SkuPriceEntityTest {
 
+
     @Test
-    public void testGetSalePriceForCalculation() throws Exception {
+    public void testGetSalePriceForCalculationDefaultNotSellable() throws Exception {
 
-        SkuPrice skuPrice = new SkuPriceEntity();
-        assertNull(skuPrice.getSalePriceForCalculation());
+        final SkuPrice skuPrice = new SkuPriceEntity();
+        final Pair<BigDecimal, BigDecimal> listAndSale = skuPrice.getSalePriceForCalculation();
+        assertNotNull(listAndSale);
 
-        skuPrice.setSalePrice(BigDecimal.TEN);
-        assertEquals(BigDecimal.TEN, skuPrice.getSalePriceForCalculation());   //simple sale without end and start
+        assertNull(listAndSale.getFirst());
+        assertNull(listAndSale.getSecond());
+    }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2020, 10, 10);
-        skuPrice.setSalefrom(calendar.getTime());
-        assertNull(skuPrice.getSalePriceForCalculation()); //sale starts in future
+    @Test
+    public void testGetSalePriceForCalculationSaleOnlyRevertsToRegular() throws Exception {
 
-        calendar.set(2020, 12, 12);
-        skuPrice.setSaleto(calendar.getTime());
-        assertNull(skuPrice.getSalePriceForCalculation()); // sale start and end in future
+        final SkuPrice skuPrice = new SkuPriceEntity();
+        skuPrice.setSalePrice(new BigDecimal("80.00"));
+        final Pair<BigDecimal, BigDecimal> listAndSale = skuPrice.getSalePriceForCalculation();
+        assertNotNull(listAndSale);
 
-        calendar.set(2010, 12, 12);
-        skuPrice.setSalefrom(calendar.getTime());
-        assertEquals(BigDecimal.TEN, skuPrice.getSalePriceForCalculation()); // sale in range
+        assertNotNull(listAndSale.getFirst());
+        assertEquals("80.00", listAndSale.getFirst().toPlainString());
+        assertNull(listAndSale.getSecond());
+    }
 
-        calendar.set(2010, 12, 12);
-        skuPrice.setSaleto(calendar.getTime());
-        assertNull(skuPrice.getSalePriceForCalculation()); // sale start and end in past
+    @Test
+    public void testGetSalePriceForCalculationListOnly() throws Exception {
 
-        skuPrice.setSalefrom(null);
-        calendar.set(2010, 12, 12);
-        skuPrice.setSaleto(calendar.getTime());
-        assertNull(skuPrice.getSalePriceForCalculation());  // end in past
+        final SkuPrice skuPrice = new SkuPriceEntity();
+        skuPrice.setRegularPrice(new BigDecimal("100.00"));
+        final Pair<BigDecimal, BigDecimal> listAndSale = skuPrice.getSalePriceForCalculation();
+        assertNotNull(listAndSale);
 
-        calendar.set(2020, 12, 12);
-        skuPrice.setSaleto(calendar.getTime());
-        assertEquals(BigDecimal.TEN, skuPrice.getSalePriceForCalculation()); // not yet end
+        assertNotNull(listAndSale.getFirst());
+        assertEquals("100.00", listAndSale.getFirst().toPlainString());
+        assertNull(listAndSale.getSecond());
+    }
+
+    @Test
+    public void testGetSalePriceForCalculationWithSale() throws Exception {
+
+        final SkuPrice skuPrice = new SkuPriceEntity();
+        skuPrice.setRegularPrice(new BigDecimal("100.00"));
+        skuPrice.setSalePrice(new BigDecimal("80.00"));
+        final Pair<BigDecimal, BigDecimal> listAndSale = skuPrice.getSalePriceForCalculation();
+        assertNotNull(listAndSale);
+
+        assertNotNull(listAndSale.getFirst());
+        assertEquals("100.00", listAndSale.getFirst().toPlainString());
+        assertNotNull(listAndSale.getSecond());
+        assertEquals("80.00", listAndSale.getSecond().toPlainString());
+    }
+
+    @Test
+    public void testGetSalePriceForCalculationGift() throws Exception {
+
+        final SkuPrice skuPrice = new SkuPriceEntity();
+        skuPrice.setRegularPrice(new BigDecimal("0.00"));
+        final Pair<BigDecimal, BigDecimal> listAndSale = skuPrice.getSalePriceForCalculation();
+        assertNotNull(listAndSale);
+
+        assertNotNull(listAndSale.getFirst());
+        assertEquals("0.00", listAndSale.getFirst().toPlainString());
+        assertNull(listAndSale.getSecond());
+    }
+
+    @Test
+    public void testGetSalePriceForCalculationSaleGift() throws Exception {
+
+        final SkuPrice skuPrice = new SkuPriceEntity();
+        skuPrice.setRegularPrice(new BigDecimal("100.00"));
+        skuPrice.setSalePrice(new BigDecimal("0.00"));
+        final Pair<BigDecimal, BigDecimal> listAndSale = skuPrice.getSalePriceForCalculation();
+        assertNotNull(listAndSale);
+
+        assertNotNull(listAndSale.getFirst());
+        assertEquals("100.00", listAndSale.getFirst().toPlainString());
+        assertNotNull(listAndSale.getSecond());
+        assertEquals("0.00", listAndSale.getSecond().toPlainString());
+    }
+
+    @Test
+    public void testGetSalePriceForCalculationSaleGiftNoRegular() throws Exception {
+
+        final SkuPrice skuPrice = new SkuPriceEntity();
+        skuPrice.setSalePrice(new BigDecimal("0.00"));
+        final Pair<BigDecimal, BigDecimal> listAndSale = skuPrice.getSalePriceForCalculation();
+        assertNotNull(listAndSale);
+
+        assertNotNull(listAndSale.getFirst());
+        assertEquals("0.00", listAndSale.getFirst().toPlainString());
+        assertNull(listAndSale.getSecond());
 
     }
+
+
+    @Test
+    public void testGetSalePriceForCalculationOverpriced() throws Exception {
+
+        final SkuPrice skuPrice = new SkuPriceEntity();
+        skuPrice.setRegularPrice(new BigDecimal("100.00"));
+        skuPrice.setSalePrice(new BigDecimal("120.00"));
+        final Pair<BigDecimal, BigDecimal> listAndSale = skuPrice.getSalePriceForCalculation();
+        assertNotNull(listAndSale);
+
+        assertNotNull(listAndSale.getFirst());
+        assertEquals("120.00", listAndSale.getFirst().toPlainString());
+        assertNull(listAndSale.getSecond());
+
+    }
+
+
 }

@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 
@@ -71,11 +72,10 @@ public class CsvProductPriceValueAdapterImpl implements ValueAdapter {
                 price = priceService.getMinimalPrice(null, (String) rawValue, shop.getShopId(), fallbackId, currency, BigDecimal.ONE, false, null);
             }
             if (price != null && price.getSkuPriceId() > 0L) {
-                final BigDecimal sale = price.getSalePriceForCalculation();
-                if (sale != null) {
-                    return sale.toPlainString();
+                final BigDecimal lowest = MoneyUtils.secondOrFirst(price.getSalePriceForCalculation());
+                if (lowest != null) {
+                    return lowest.toPlainString();
                 }
-                return price.getRegularPrice().toPlainString();
             }
         } else {
             LOG.warn("Unable to determine price since export descriptor does not specify valid shop code");

@@ -17,6 +17,7 @@
 package org.yes.cart.util;
 
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.Total;
 
 import java.math.BigDecimal;
@@ -41,41 +42,65 @@ public final class MoneyUtils {
 
     /**
      * Get max value from given values.
-     * @param first    first given
+     *
+     * @param first    first value
      * @param second   second value
+     *
      * @return max value.
      */
     public static BigDecimal max(final BigDecimal first, final BigDecimal second) {
-        if (isFirstBiggerThanSecond(
-                notNull(first),
-                notNull(second))) {
+        if (isFirstBiggerThanSecond(notNull(first), notNull(second))) {
             return notNull(first);
         }
         return notNull(second);
     }
 
     /**
+     * Get value.
+     *
+     * @param firstAndSecond    first and second
+     *
+     * @return second if not null, first if second is null.
+     */
+    public static BigDecimal secondOrFirst(final Pair<BigDecimal, BigDecimal> firstAndSecond) {
+        return firstAndSecond.getSecond() == null ? firstAndSecond.getFirst() : firstAndSecond.getSecond();
+    }
+
+    /**
      * Get minimal, but greater than 0 value from given values.
+     *
+     * @param firstAndSecond pair value
+     *
+     * @return min value.
+     */
+    public static BigDecimal minPositive(final Pair<BigDecimal, BigDecimal> firstAndSecond) {
+        return minPositive(firstAndSecond.getSecond(), firstAndSecond.getFirst());
+    }
+
+    /**
+     * Get minimal, but greater than 0 value from given values.
+     *
      * @param first    first given
      * @param second   second value
-     * @return max value.
+     *
+     * @return min value.
      */
     public static BigDecimal minPositive(final BigDecimal first, final BigDecimal second) {
-        if ( first == null || notNull(first).equals(BigDecimal.ZERO) ) {
+        if ( first == null || first.compareTo(BigDecimal.ZERO) == 0) {
             return notNull(second);
-        } else if ( second == null || notNull(second).equals(BigDecimal.ZERO) ) {
+        } else if ( second == null || second.compareTo(BigDecimal.ZERO) == 0) {
             return notNull(first);
-        } else  if (isFirstBiggerThanSecond(
-                notNull(first),
-                notNull(second))) {
+        } else  if (isFirstBiggerThanSecond(notNull(first), notNull(second))) {
             return notNull(second);
         }
         return notNull(first);
     }
 
     /**
+     * Non null.
      *
      * @param value value to check
+     *
      * @return value if it not null, otherwise BigDecimal.ZERO
      */
     public static BigDecimal notNull(final BigDecimal value) {
@@ -83,8 +108,11 @@ public final class MoneyUtils {
     }
 
     /**
+     * Return #ifNull value if null.
+     *
      * @param value  value to check
      * @param ifNull value to return if value to check is null
+     *
      * @return value or ifNull if value is null. if ifNull is null returns BigDecimal.ZERO.
      */
     public static BigDecimal notNull(final BigDecimal value, final BigDecimal ifNull) {
@@ -98,75 +126,73 @@ public final class MoneyUtils {
     }
 
     /**
+     * Check if positive.
+     *
+     * @param value  value
+     *
+     * @return true if value is greater than zero (null safe)
+     */
+    public static boolean isPositive(final BigDecimal value) {
+
+        return value != null && value.compareTo(BigDecimal.ZERO) > 0;
+
+    }
+
+    /**
+     * Check if first is bigger than second.
+     *
      * @param first  value
      * @param second value
+     *
      * @return true if first is greater than second (null safe)
      */
     public static boolean isFirstBiggerThanSecond(final BigDecimal first, final BigDecimal second) {
 
-        if (first == null && second == null) {
-            return false;
-        } else if (second == null) {
-            return true;
-        } else if (first == null) {
-            return false;
-        }
-        return first.compareTo(second) > 0;
+        return first != null && (second == null || first.compareTo(second) > 0);
 
     }
 
     /**
+     * Check if first bigger or equal than second.
+     *
      * @param first  value
      * @param second value
+     *
      * @return true if first is greater than or equal to second (null safe)
      */
     public static boolean isFirstBiggerThanOrEqualToSecond(final BigDecimal first, final BigDecimal second) {
 
-        if (first == null && second == null) {
-            return false;
-        } else if (second == null) {
-            return true;
-        } else if (first == null) {
-            return false;
-        }
-        return first.compareTo(second) >= 0;
+        return first != null && (second == null || first.compareTo(second) >= 0);
 
     }
 
     /**
+     * Check if first equal to second.
+     *
      * @param first  value
      * @param second value
+     *
      * @return true if first is equal to second (null safe)
      */
     public static boolean isFirstEqualToSecond(final BigDecimal first, final BigDecimal second) {
 
-        if (first == null && second == null) {
-            return false;
-        } else if (second == null) {
-            return false;
-        } else if (first == null) {
-            return false;
-        }
-        return first.compareTo(second) == 0;
+        return first != null && second != null && first.compareTo(second) == 0;
 
     }
 
     /**
+     * Check if first equal to second at scale.
+     *
      * @param first  value
      * @param second value
      * @param scale  scale
+     *
      * @return true if first is equal to second (null safe)
      */
     public static boolean isFirstEqualToSecond(final BigDecimal first, final BigDecimal second, final int scale) {
 
-        if (first == null && second == null) {
-            return false;
-        } else if (second == null) {
-            return false;
-        } else if (first == null) {
-            return false;
-        }
-        return first.setScale(scale, RoundingMode.HALF_UP).compareTo(second.setScale(scale, RoundingMode.HALF_UP)) == 0;
+        return first != null && second != null &&
+                first.setScale(scale, RoundingMode.HALF_UP).compareTo(second.setScale(scale, RoundingMode.HALF_UP)) == 0;
 
     }
 
@@ -177,6 +203,7 @@ public final class MoneyUtils {
      *
      * @param original original price
      * @param discounted discounted price
+     *
      * @return discount in percent
      */
     public static BigDecimal getDiscountDisplayValue(final BigDecimal original, final BigDecimal discounted) {

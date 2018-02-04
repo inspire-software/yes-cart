@@ -389,7 +389,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
             if (item.isPromoApplied()) {
                 // reinstate sale price
                 removed = true;
-                item.setPrice(item.getSalePrice());
+                item.setPrice(item.getSalePrice() != null ? item.getSalePrice() : item.getListPrice());
                 item.setAppliedPromo(null);
                 item.setPromoApplied(false);
             }
@@ -406,7 +406,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
             if (item.isFixedPrice()) {
                 // reinstate sale price
                 removed = true;
-                item.setPrice(item.getSalePrice());
+                item.setPrice(item.getSalePrice() != null ? item.getSalePrice() : item.getListPrice());
                 item.setAppliedPromo(null);
                 item.setFixedPrice(false);
             }
@@ -450,7 +450,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
                     cartItem.setListPrice(cartItem.getPrice());
                 }
             } else {
-                cartItem.setPrice(salePrice);
+                cartItem.setPrice(salePrice != null ? salePrice : listPrice);
                 cartItem.setSalePrice(salePrice);
                 cartItem.setListPrice(listPrice);
                 // clear promotion as we effectively changed the base price for promo calculations
@@ -467,7 +467,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
         final int shipIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
         if (shipIndex != -1) {
             final CartItemImpl shipItem = getShipping().get(shipIndex);
-            shipItem.setPrice(salePrice);
+            shipItem.setPrice(salePrice != null ? salePrice : listPrice);
             shipItem.setSalePrice(salePrice);
             shipItem.setListPrice(listPrice);
             // clear promotion as we effectively changed the base price for promo calculations

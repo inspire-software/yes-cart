@@ -31,8 +31,8 @@ public class SkuPriceQuantityComparatorImpl implements Comparator<SkuPrice> {
     public int compare(final SkuPrice skuPrice1, final SkuPrice skuPrice2) {
         final int byTier = skuPrice1.getQuantity().compareTo(skuPrice2.getQuantity());
         if (byTier == 0) {
-            final BigDecimal minPrice1 = MoneyUtils.minPositive(skuPrice1.getRegularPrice(), skuPrice1.getSalePrice());
-            final BigDecimal minPrice2 = MoneyUtils.minPositive(skuPrice2.getRegularPrice(), skuPrice2.getSalePrice());
+            final BigDecimal minPrice1 = MoneyUtils.minPositive(skuPrice1.getSalePriceForCalculation());
+            final BigDecimal minPrice2 = MoneyUtils.minPositive(skuPrice2.getSalePriceForCalculation());
             return minPrice1.compareTo(minPrice2);
         }
         return byTier;

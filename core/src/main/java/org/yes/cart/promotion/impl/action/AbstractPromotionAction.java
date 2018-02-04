@@ -20,8 +20,11 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.promotion.PromotionAction;
 import org.yes.cart.promotion.PromotionCondition;
+import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.util.MoneyUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -100,6 +103,22 @@ public abstract class AbstractPromotionAction implements PromotionAction {
      */
     protected List<String> getCustomerTags(final Map<String, Object> context) {
         return (List<String>) context.get(PromotionCondition.VAR_CUSTOMER_TAGS);
+    }
+
+    /**
+     * Get null safe price for calculation.
+     *
+     * @param item item
+     *
+     * @return sale price if not null, else list price,
+     */
+    protected BigDecimal nullSafeItemPriceForCalculation(final CartItem item) {
+        if (item.getSalePrice() != null) {
+            return item.getSalePrice();
+        } else if (item.getListPrice() != null) {
+            return item.getListPrice();
+        }
+        return MoneyUtils.ZERO;
     }
 
 }

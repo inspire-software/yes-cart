@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.promotion.PromotionAction;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -68,8 +69,18 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
 
     /** {@inheritDoc} */
     public BigDecimal testDiscountValue(final Map<String, Object> context) {
+        final ItemPromotionActionContext ctx = getPromotionActionContext(context);
         final CartItem cartItem = getShoppingCartItem(context);
-        return getAmountValue(context).divide(cartItem.getSalePrice(), RoundingMode.HALF_UP);
+        final BigDecimal giftQty = BigDecimal.ONE.multiply(ctx.getMultiplier(cartItem.getQty())).setScale(0, RoundingMode.HALF_UP).setScale(2);
+        if (MoneyUtils.isPositive(giftQty)) {
+            final BigDecimal giftValue = getAmountValue(context);
+            final BigDecimal itemValue = nullSafeItemPriceForCalculation(cartItem);
+            if (MoneyUtils.isPositive(giftValue) && MoneyUtils.isPositive(itemValue)) {
+                return giftValue.divide(itemValue, RoundingMode.HALF_UP);
+            }
+            return BigDecimal.ONE; // Assume 100% as we have no price to compare
+        }
+        return BigDecimal.ZERO; // no gift
     }
 
     private BigDecimal getAmountValue(final Map<String, Object> context) {
@@ -78,20 +89,22 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
         final CartItem cartItem = getShoppingCartItem(context);
         final ShoppingCart cart = getShoppingCart(context);
 
-        final SkuPrice giftValue = getGiftPrices(ctx.getSubject(), cart);
-        if (giftValue == null) {
-            return BigDecimal.ZERO;
-        }
-        final BigDecimal minimal = MoneyUtils.minPositive(giftValue.getSalePriceForCalculation(), giftValue.getRegularPrice());
-        if (minimal == null) {
-            return BigDecimal.ZERO;
-        }
         final BigDecimal multiplier = ctx.getMultiplier(cartItem.getQty());
-        if (multiplier.compareTo(BigDecimal.ZERO) > 0) {
-            if (multiplier.compareTo(BigDecimal.ONE) == 0) {
-                return minimal;
+        if (MoneyUtils.isPositive(multiplier)) {
+
+            final SkuPrice giftValue = getGiftPrices(ctx.getSubject(), cart);
+            if (giftValue == null) {
+                return BigDecimal.ZERO;
             }
-            return minimal.divide(multiplier, 2, RoundingMode.HALF_UP);
+
+            final BigDecimal minimal = MoneyUtils.minPositive(giftValue.getSalePriceForCalculation());
+            if (MoneyUtils.isPositive(minimal)) {
+                if (MoneyUtils.isFirstEqualToSecond(multiplier, BigDecimal.ONE)) {
+                    return minimal;
+                }
+                return minimal.divide(multiplier, 2, RoundingMode.HALF_UP);
+            }
+
         }
         return BigDecimal.ZERO;
     }
@@ -143,8 +156,12 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
             // add gift and set its price, we assume gift are in whole units
             final BigDecimal giftQty = BigDecimal.ONE.multiply(ctx.getMultiplier(cartItem.getQty())).setScale(0, RoundingMode.HALF_UP).setScale(2);
             cart.addGiftToCart(ctx.getSubject(), getSkuName(ctx.getSubject(), cart.getCurrentLocale()), giftQty, getPromotionCode(context));
-            final BigDecimal minimal = MoneyUtils.minPositive(giftValue.getSalePriceForCalculation(), giftValue.getRegularPrice());
-            cart.setGiftPrice(ctx.getSubject(), minimal, giftValue.getRegularPrice());
+
+            final Pair<BigDecimal, BigDecimal> listAndSale = giftValue.getSalePriceForCalculation();
+            final BigDecimal list = listAndSale.getFirst();
+            final BigDecimal sale = listAndSale.getSecond();
+
+            cart.setGiftPrice(ctx.getSubject(), sale != null ? sale : list, list);
             // update current cart item with promotion details but do not alter its price as we
             // can have cumulative promotions
             cart.setProductSkuPromotion(cartItem.getProductSkuCode(), cartItem.getPrice(), getPromotionCode(context));

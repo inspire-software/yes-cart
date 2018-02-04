@@ -22,6 +22,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
@@ -115,8 +116,7 @@ public class PriceListDeliveryCostCalculationStrategyTest {
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
             oneOf(cost).getSkuPriceId(); will(returnValue(345L));
-            oneOf(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            oneOf(cost).getSalePriceForCalculation(); will(returnValue(null));
+            oneOf(cost).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), null)));
             oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
             oneOf(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("10.00"), new BigDecimal("10.00"));
         }});
@@ -178,8 +178,7 @@ public class PriceListDeliveryCostCalculationStrategyTest {
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
             oneOf(cost).getSkuPriceId(); will(returnValue(345L));
-            oneOf(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            oneOf(cost).getSalePriceForCalculation(); will(returnValue(new BigDecimal("8.00")));
+            oneOf(cost).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), new BigDecimal("8.00"))));
             oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
             oneOf(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("8.00"), new BigDecimal("8.00"));
         }});
@@ -313,8 +312,7 @@ public class PriceListDeliveryCostCalculationStrategyTest {
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
             oneOf(cost).getSkuPriceId(); will(returnValue(345L));
-            oneOf(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            oneOf(cost).getSalePriceForCalculation(); will(returnValue(null));
+            oneOf(cost).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), null)));
             oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
             oneOf(cart).addShippingToCart(bucket2, "CSL001", "CSL001", new BigDecimal("1.00"));
             oneOf(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("10.00"), new BigDecimal("10.00"));
@@ -385,8 +383,7 @@ public class PriceListDeliveryCostCalculationStrategyTest {
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
             oneOf(cost).getSkuPriceId(); will(returnValue(345L));
-            oneOf(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            oneOf(cost).getSalePriceForCalculation(); will(returnValue(new BigDecimal("8.00")));
+            oneOf(cost).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), new BigDecimal("8.00"))));
             oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
             oneOf(cart).addShippingToCart(bucket2, "CSL001", "CSL001", new BigDecimal("1.00"));
             oneOf(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("8.00"), new BigDecimal("8.00"));

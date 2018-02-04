@@ -26,9 +26,9 @@ import org.yes.cart.domain.misc.SkuPriceQuantityComparatorImpl;
 import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.search.PriceNavigation;
-import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.search.dto.impl.FilteredNavigationRecordImpl;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
@@ -105,7 +105,7 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
         Pair<String, SkuPrice> rez = null;
         for (Pair<String, SkuPrice> skuPrice : skuPrices) {
             if ((selectedSku == null || skuPrice.getFirst().equals(selectedSku))) {
-                final BigDecimal minPrice = MoneyUtils.minPositive(skuPrice.getSecond().getRegularPrice(), skuPrice.getSecond().getSalePrice());
+                final BigDecimal minPrice = MoneyUtils.minPositive(skuPrice.getSecond().getSalePriceForCalculation());
                 if (
                         // Starting point of search
                         overallMinimalRegularPrice == null
@@ -441,10 +441,10 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
 
 
     private void ensureNonZeroPrices(final SkuPrice entity) {
-        if (entity.getSalePrice() != null && MoneyUtils.isFirstEqualToSecond(entity.getSalePrice(), BigDecimal.ZERO)) {
+        if (!MoneyUtils.isPositive(entity.getSalePrice())) {
             entity.setSalePrice(null);
         }
-        if (entity.getMinimalPrice() != null && MoneyUtils.isFirstEqualToSecond(entity.getMinimalPrice(), BigDecimal.ZERO)) {
+        if (!MoneyUtils.isPositive(entity.getMinimalPrice())) {
             entity.setMinimalPrice(null);
         }
     }

@@ -125,8 +125,8 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
                             if (isValidPrice(priceByWeight) && isValidPrice(priceByVolume)) {
                                 // Assign price only if we have both valid prices
 
-                                final BigDecimal salePriceByWeight = MoneyUtils.minPositive(priceByWeight.getRegularPrice(), priceByWeight.getSalePriceForCalculation());
-                                final BigDecimal salePriceByVolume = MoneyUtils.minPositive(priceByVolume.getRegularPrice(), priceByVolume.getSalePriceForCalculation());
+                                final BigDecimal salePriceByWeight = MoneyUtils.minPositive(priceByWeight.getSalePriceForCalculation());
+                                final BigDecimal salePriceByVolume = MoneyUtils.minPositive(priceByVolume.getSalePriceForCalculation());
 
                                 if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(salePriceByVolume, salePriceByWeight)) {
                                     // Volume has higher cost
@@ -148,7 +148,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
 
                         if (isValidPrice(price)) {
 
-                            final BigDecimal salePrice = MoneyUtils.minPositive(price.getRegularPrice(), price.getSalePriceForCalculation());
+                            final BigDecimal salePrice = MoneyUtils.minPositive(price.getSalePriceForCalculation());
 
                             cart.addShippingToCart(bucketAndItems.getKey(), carrierSlaGUID, carrierSlaName, qty);
                             cart.setShippingPrice(carrierSlaGUID, bucketAndItems.getKey(), salePrice, salePrice);

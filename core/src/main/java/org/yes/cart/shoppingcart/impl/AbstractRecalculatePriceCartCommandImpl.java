@@ -21,11 +21,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
-import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 
@@ -174,11 +174,10 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
                 false,
                 policy.getID());
 
-        if (shoppingCart.setProductSkuPrice(
-                skuCode,
-                MoneyUtils.minPositive(skuPrice.getSalePriceForCalculation(), skuPrice.getRegularPrice()),
-                skuPrice.getRegularPrice()
-        )) {
+        final Pair<BigDecimal, BigDecimal> listAndSale = skuPrice.getSalePriceForCalculation();
+        final BigDecimal list = listAndSale.getFirst();
+        final BigDecimal sale = listAndSale.getSecond();
+        if (shoppingCart.setProductSkuPrice(skuCode, sale != null ? sale : list, list)) {
             final String key = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID + skuCode;
             if (StringUtils.isNotBlank(skuPrice.getRef())) {
                 shoppingCart.getOrderInfo().putDetail(key, skuPrice.getRef());

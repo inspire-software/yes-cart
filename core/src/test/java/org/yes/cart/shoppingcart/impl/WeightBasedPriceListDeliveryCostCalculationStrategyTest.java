@@ -24,6 +24,7 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.order.DeliveryBucket;
@@ -141,13 +142,11 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.80")); will(returnValue(costM3));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
             allowing(costKg).getSkuPriceId(); will(returnValue(345L));
-            allowing(costKg).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            allowing(costKg).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(costKg).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), null)));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
             allowing(costKgMax).getQuantity(); will(returnValue(new BigDecimal("10.00")));
             allowing(costM3).getSkuPriceId(); will(returnValue(445L));
-            allowing(costM3).getRegularPrice(); will(returnValue(new BigDecimal("9.00"))); // Note we choose Kg because it is more expensive
-            allowing(costM3).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(costM3).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("9.00"), null))); // Note we choose Kg because it is more expensive
             allowing(costM3Max).getSkuPriceId(); will(returnValue(446L));
             allowing(costM3Max).getQuantity(); will(returnValue(new BigDecimal("10.00")));
             oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
@@ -510,8 +509,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KG", pricingPolicy, new BigDecimal("0.750")); will(returnValue(costKg));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
             allowing(costKg).getSkuPriceId(); will(returnValue(345L));
-            allowing(costKg).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            allowing(costKg).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(costKg).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), null)));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
             allowing(costKgMax).getQuantity(); will(returnValue(new BigDecimal("10.00")));
             oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
@@ -720,8 +718,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.80")); will(returnValue(costM3));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
             allowing(costM3).getSkuPriceId(); will(returnValue(445L));
-            allowing(costM3).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            allowing(costM3).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(costM3).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), null)));
             allowing(costM3Max).getSkuPriceId(); will(returnValue(446L));
             allowing(costM3Max).getQuantity(); will(returnValue(new BigDecimal("10.00")));
             oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
@@ -935,13 +932,11 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.80")); will(returnValue(costM3));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
             allowing(costKg).getSkuPriceId(); will(returnValue(345L));
-            allowing(costKg).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            allowing(costKg).getSalePriceForCalculation(); will(returnValue(new BigDecimal("7.00")));
+            allowing(costKg).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), new BigDecimal("7.00"))));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
             allowing(costKgMax).getQuantity(); will(returnValue(new BigDecimal("10.00")));
             allowing(costM3).getSkuPriceId(); will(returnValue(445L));
-            allowing(costM3).getRegularPrice(); will(returnValue(new BigDecimal("8.00"))); // Note we choose M3 because it is more expensive
-            allowing(costM3).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(costM3).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("8.00"), null))); // Note we choose M3 because it is more expensive
             allowing(costM3Max).getSkuPriceId(); will(returnValue(446L));
             allowing(costM3Max).getQuantity(); will(returnValue(new BigDecimal("10.00")));
             oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
@@ -1034,8 +1029,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
             allowing(costKgMax).getQuantity(); will(returnValue(new BigDecimal("10.00")));
             allowing(costM3).getSkuPriceId(); will(returnValue(445L));
-            allowing(costM3).getRegularPrice(); will(returnValue(new BigDecimal("9.00")));
-            allowing(costM3).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(costM3).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("9.00"), null)));
             allowing(costM3Max).getSkuPriceId(); will(returnValue(446L));
             allowing(costM3Max).getQuantity(); will(returnValue(new BigDecimal("10.00")));
         }});
@@ -1104,8 +1098,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.80")); will(returnValue(costM3));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
             allowing(costKg).getSkuPriceId(); will(returnValue(345L));
-            allowing(costKg).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            allowing(costKg).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(costKg).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), null)));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
             allowing(costKgMax).getQuantity(); will(returnValue(new BigDecimal("10.00")));
             allowing(costM3).getSkuPriceId(); will(returnValue(0L));
@@ -1188,13 +1181,11 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.50")); will(returnValue(costM3));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
             allowing(costKg).getSkuPriceId(); will(returnValue(345L));
-            allowing(costKg).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            allowing(costKg).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(costKg).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), null)));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
             allowing(costKgMax).getQuantity(); will(returnValue(new BigDecimal("10.00")));
             allowing(costM3).getSkuPriceId(); will(returnValue(445L));
-            allowing(costM3).getRegularPrice(); will(returnValue(new BigDecimal("9.00"))); // Note we choose Kg because it is more expensive
-            allowing(costM3).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(costM3).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("9.00"), null))); // Note we choose Kg because it is more expensive
             allowing(costM3Max).getSkuPriceId(); will(returnValue(446L));
             allowing(costM3Max).getQuantity(); will(returnValue(new BigDecimal("10.00")));
             oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
@@ -1296,13 +1287,11 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.50")); will(returnValue(costM3));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
             allowing(costKg).getSkuPriceId(); will(returnValue(345L));
-            allowing(costKg).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
-            allowing(costKg).getSalePriceForCalculation(); will(returnValue(new BigDecimal("7.00")));
+            allowing(costKg).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), new BigDecimal("7.00"))));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
             allowing(costKgMax).getQuantity(); will(returnValue(new BigDecimal("10.00")));
             allowing(costM3).getSkuPriceId(); will(returnValue(445L));
-            allowing(costM3).getRegularPrice(); will(returnValue(new BigDecimal("8.00"))); // Note we choose M3 because it is more expensive
-            allowing(costM3).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(costM3).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("8.00"), null))); // Note we choose M3 because it is more expensive
             allowing(costM3Max).getSkuPriceId(); will(returnValue(446L));
             allowing(costM3Max).getQuantity(); will(returnValue(new BigDecimal("10.00")));
             oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
@@ -1405,8 +1394,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
             allowing(costKgMax).getQuantity(); will(returnValue(new BigDecimal("10.00")));
             allowing(costM3).getSkuPriceId(); will(returnValue(445L));
-            allowing(costM3).getRegularPrice(); will(returnValue(new BigDecimal("9.00")));
-            allowing(costM3).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(costM3).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("9.00"), null)));
             allowing(costM3Max).getSkuPriceId(); will(returnValue(446L));
             allowing(costM3Max).getQuantity(); will(returnValue(new BigDecimal("10.00")));
         }});

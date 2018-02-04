@@ -58,7 +58,7 @@ public class ItemDiscountPromotionAction extends AbstractItemPromotionAction imp
             final CartItem cartItem = getShoppingCartItem(context);
 
             // calculate discount relative to sale price
-            final BigDecimal saleDiscount = cartItem.getSalePrice().multiply(discount);
+            final BigDecimal saleDiscount = nullSafeItemPriceForCalculation(cartItem).multiply(discount);
             final BigDecimal promoPrice;
             if (MoneyUtils.isFirstBiggerThanSecond(cartItem.getPrice(), saleDiscount)) {
                 // we may have compound discounts so need to use final price

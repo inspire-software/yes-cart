@@ -17,6 +17,7 @@
 package org.yes.cart.util;
 
 import org.junit.Test;
+import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
 
@@ -30,148 +31,193 @@ import static org.junit.Assert.*;
 public class MoneyUtilsTest {
 
     @Test
-    public void testMaxWithNulls() {
-        assertEquals("Must return zero if bot arguments are null", BigDecimal.ZERO, MoneyUtils.max(null, null));
-    }
-
-    @Test
-    public void testMaxWithFirstNull() {
-        assertEquals("Must return zero if bot arguments are null", BigDecimal.ONE, MoneyUtils.max(null, BigDecimal.ONE));
-    }
-
-    @Test
-    public void testMaxWithSecondNull() {
-        assertEquals("Must return zero if bot arguments are null", BigDecimal.TEN, MoneyUtils.max(BigDecimal.TEN, null));
-    }
-
-    @Test
     public void testMax() {
-        assertEquals("Must return zero if bot arguments are null", BigDecimal.TEN, MoneyUtils.max(BigDecimal.TEN, BigDecimal.ONE));
+
+        assertEquals(BigDecimal.ZERO, MoneyUtils.max(null, null));
+
+        assertEquals(BigDecimal.ONE, MoneyUtils.max(null, BigDecimal.ONE));
+
+        assertEquals(BigDecimal.TEN, MoneyUtils.max(BigDecimal.TEN, null));
+
+        assertEquals(BigDecimal.TEN, MoneyUtils.max(BigDecimal.TEN, BigDecimal.ONE));
+
+        assertEquals(BigDecimal.TEN, MoneyUtils.max(BigDecimal.ONE, BigDecimal.TEN));
+
     }
 
     @Test
-    public void testNotNullIsNullSafe() {
-        assertEquals("Must return zero if bot arguments are null", BigDecimal.ZERO, MoneyUtils.notNull(null, null));
+    public void testSecondOrFirst() throws Exception {
+
+        assertNull(MoneyUtils.secondOrFirst(new Pair<>(null, null)));
+
+        assertEquals(BigDecimal.TEN, MoneyUtils.secondOrFirst(new Pair<>(BigDecimal.TEN, null)));
+
+        assertEquals(BigDecimal.ONE, MoneyUtils.secondOrFirst(new Pair<>(BigDecimal.TEN, BigDecimal.ONE)));
+
+        assertEquals(BigDecimal.TEN, MoneyUtils.secondOrFirst(new Pair<>(BigDecimal.ONE, BigDecimal.TEN)));
+
+        assertEquals(BigDecimal.ONE, MoneyUtils.secondOrFirst(new Pair<>(null, BigDecimal.ONE)));
+
     }
 
     @Test
-    public void testNotNullWithNull() {
-        assertEquals("Must return ifNull (10) for null value", BigDecimal.TEN, MoneyUtils.notNull(null, BigDecimal.TEN));
+    public void testNotNull() {
+
+        assertEquals(BigDecimal.ZERO, MoneyUtils.notNull(null));
+
+        assertEquals(BigDecimal.ZERO, MoneyUtils.notNull(null, null));
+
+        assertEquals(BigDecimal.TEN, MoneyUtils.notNull(null, BigDecimal.TEN));
+
+        assertEquals(new BigDecimal(3), MoneyUtils.notNull(new BigDecimal(3)));
+        
+        assertEquals(new BigDecimal(3), MoneyUtils.notNull(new BigDecimal(3), BigDecimal.TEN));
+
     }
 
     @Test
-    public void testNotNullWithThree() {
-        assertEquals("Must return value (3) for non-null value", new BigDecimal(3), MoneyUtils.notNull(new BigDecimal(3), BigDecimal.TEN));
+    public void testIsPositive() {
+
+        assertFalse(MoneyUtils.isPositive(null));
+
+        assertFalse(MoneyUtils.isPositive(BigDecimal.ZERO));
+
+        assertFalse(MoneyUtils.isPositive(new BigDecimal("-1")));
+
+        assertTrue(MoneyUtils.isPositive(BigDecimal.ONE));
+
     }
 
     @Test
-    public void testIsFirstNullBiggerThanSecondNulls() {
-        assertFalse("Two nulls must give a false", MoneyUtils.isFirstBiggerThanSecond(null, null));
+    public void testIsFirstBiggerThanSecond() {
+
+        assertFalse(MoneyUtils.isFirstBiggerThanSecond(null, null));
+
+        assertFalse(MoneyUtils.isFirstBiggerThanSecond(null, BigDecimal.ZERO));
+
+        assertTrue(MoneyUtils.isFirstBiggerThanSecond(BigDecimal.ZERO, null));
+
+        assertFalse(MoneyUtils.isFirstBiggerThanSecond(null, BigDecimal.ONE));
+
+        assertFalse(MoneyUtils.isFirstBiggerThanSecond(BigDecimal.ZERO, BigDecimal.ONE));
+
+        assertFalse(MoneyUtils.isFirstBiggerThanSecond(BigDecimal.ONE, BigDecimal.ONE));
+
+        assertTrue(MoneyUtils.isFirstBiggerThanSecond(BigDecimal.TEN, BigDecimal.ONE));
+
+        assertTrue(MoneyUtils.isFirstBiggerThanSecond(BigDecimal.TEN, null));
+
+        assertFalse(MoneyUtils.isFirstBiggerThanSecond(BigDecimal.TEN, new BigDecimal(10.00)));
     }
 
     @Test
-    public void testIsFirstNullBiggerThanSecondZero() {
-        assertFalse("Null is not bigger than zero", MoneyUtils.isFirstBiggerThanSecond(null, BigDecimal.ZERO));
+    public void testIsFirstBiggerThanOrEqualToSecond() {
+
+        assertFalse(MoneyUtils.isFirstBiggerThanOrEqualToSecond(null, null));
+
+        assertFalse(MoneyUtils.isFirstBiggerThanOrEqualToSecond(null, BigDecimal.ZERO));
+
+        assertTrue(MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ZERO, null));
+
+        assertFalse(MoneyUtils.isFirstBiggerThanOrEqualToSecond(null, BigDecimal.ONE));
+
+        assertFalse(MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ZERO, BigDecimal.ONE));
+
+        assertTrue(MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ONE, BigDecimal.ONE));
+
+        assertTrue(MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.TEN, BigDecimal.ONE));
+
+        assertTrue(MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.TEN, null));
+
+        assertTrue(MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.TEN, new BigDecimal(10.00)));
+
+        assertTrue(MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.TEN, BigDecimal.ZERO));
+
     }
 
     @Test
-    public void testIsFirstZeroBiggerThanSecondNull() {
-        assertTrue("Zero is bigger than null", MoneyUtils.isFirstBiggerThanSecond(BigDecimal.ZERO, null));
+    public void testIsFirstEqualToSecond() {
+
+        assertFalse(MoneyUtils.isFirstEqualToSecond(null, null));
+
+        assertFalse(MoneyUtils.isFirstEqualToSecond(null, BigDecimal.ZERO));
+
+        assertFalse(MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, null));
+
+        assertFalse(MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, BigDecimal.TEN));
+
+        assertFalse(MoneyUtils.isFirstEqualToSecond(BigDecimal.TEN, BigDecimal.ZERO));
+
+        assertTrue(MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, BigDecimal.ZERO));
+
+        assertTrue(MoneyUtils.isFirstEqualToSecond(BigDecimal.TEN, new BigDecimal("10.0000")));
     }
 
     @Test
-    public void testIsFirstZeroBiggerThanSecondTen() {
-        assertFalse("zero is not bigger than ten", MoneyUtils.isFirstBiggerThanSecond(BigDecimal.ZERO, BigDecimal.TEN));
+    public void testIsFirstEqualToSecondScaled() {
+
+        assertFalse(MoneyUtils.isFirstEqualToSecond(null, null, 2));
+
+        assertFalse(MoneyUtils.isFirstEqualToSecond(null, BigDecimal.ZERO, 2));
+
+        assertFalse(MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, null, 2));
+
+        assertFalse(MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, BigDecimal.TEN, 2));
+
+        assertFalse(MoneyUtils.isFirstEqualToSecond(BigDecimal.TEN, BigDecimal.ZERO, 2));
+
+        assertTrue(MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, BigDecimal.ZERO, 2));
+
+        assertTrue(MoneyUtils.isFirstEqualToSecond(BigDecimal.TEN, new BigDecimal("10.0000"), 2));
+
+        assertFalse(MoneyUtils.isFirstEqualToSecond(new BigDecimal("10.333"), new BigDecimal("10.336"), 3));
+
+        assertFalse(MoneyUtils.isFirstEqualToSecond(new BigDecimal("10.333"), new BigDecimal("10.336"), 2));
+
+        assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("10.333"), new BigDecimal("10.336"), 1));
+
+        assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("10.333"), new BigDecimal("10.336"), 0));
+
+        assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("1.1"), new BigDecimal("0.99"), 0));
     }
 
     @Test
-    public void testIsFirstTenBiggerThanSecondZero() {
-        assertTrue("ten is bigger than zero", MoneyUtils.isFirstBiggerThanSecond(BigDecimal.TEN, BigDecimal.ZERO));
-    }
+    public void testMinimalPositive() {
 
-    @Test
-    public void testIsFirstTenBiggerThanSecondTen() {
-        assertFalse("ten is not bigger than ten", MoneyUtils.isFirstBiggerThanSecond(BigDecimal.TEN, new BigDecimal(10.00)));
-    }
+        assertEquals(BigDecimal.ZERO, MoneyUtils.minPositive(null, null));
 
-    @Test
-    public void testIsFirstNullBiggerThanOrEqualToSecondNulls() {
-        assertFalse("Two nulls must give a false", MoneyUtils.isFirstBiggerThanOrEqualToSecond(null, null));
-    }
+        assertEquals(BigDecimal.ZERO, MoneyUtils.minPositive(BigDecimal.ZERO, BigDecimal.ZERO));
 
-    @Test
-    public void testIsFirstNullBiggerThanOrEqualToSecondZero() {
-        assertFalse("Null is not bigger than or equal to zero", MoneyUtils.isFirstBiggerThanOrEqualToSecond(null, BigDecimal.ZERO));
-    }
+        assertEquals(BigDecimal.ONE, MoneyUtils.minPositive(BigDecimal.ONE, null));
 
-    @Test
-    public void testIsFirstZeroBiggerThanOrEqualToSecondNull() {
-        assertTrue("Zero is bigger than or equal to null", MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ZERO, null));
-    }
+        assertEquals(BigDecimal.ONE, MoneyUtils.minPositive(BigDecimal.ONE, BigDecimal.ZERO));
 
-    @Test
-    public void testIsFirstZeroBiggerThanOrEqualToSecondTen() {
-        assertFalse("zero is not bigger than or equal to ten", MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ZERO, BigDecimal.TEN));
-    }
+        assertEquals(BigDecimal.ONE, MoneyUtils.minPositive(null, BigDecimal.ONE));
 
-    @Test
-    public void testIsFirstTenBiggerThanOrEqualToSecondZero() {
-        assertTrue("ten is bigger than or equal to zero", MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.TEN, BigDecimal.ZERO));
-    }
+        assertEquals(BigDecimal.ONE, MoneyUtils.minPositive(BigDecimal.ZERO, BigDecimal.ONE));
 
-    @Test
-    public void testIsFirstTenBiggerThanOrEqualToSecondTen() {
-        assertTrue("ten is bigger than or equal to ten", MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.TEN, BigDecimal.ZERO));
-    }
+        assertEquals(BigDecimal.ONE, MoneyUtils.minPositive(BigDecimal.TEN, BigDecimal.ONE));
 
-    @Test
-    public void testIsFirstNullEqualToSecondNulls() {
-        assertFalse("Two nulls must give a false", MoneyUtils.isFirstEqualToSecond(null, null));
-    }
+        assertEquals(BigDecimal.ONE, MoneyUtils.minPositive(BigDecimal.ONE, BigDecimal.TEN));
 
-    @Test
-    public void testIsFirstNullEqualToSecondZero() {
-        assertFalse("Null is not equal to zero", MoneyUtils.isFirstEqualToSecond(null, BigDecimal.ZERO));
-    }
 
-    @Test
-    public void testIsFirstZeroEqualToSecondNull() {
-        assertFalse("Zero is not equal to null", MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, null));
-    }
+        assertEquals(BigDecimal.ZERO, MoneyUtils.minPositive(new Pair<>(null, null)));
 
-    @Test
-    public void testIsFirstZeroEqualToSecondTen() {
-        assertFalse("zero is not equal to ten", MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, BigDecimal.TEN));
-    }
+        assertEquals(BigDecimal.ZERO, MoneyUtils.minPositive(new Pair<>(BigDecimal.ZERO, BigDecimal.ZERO)));
 
-    @Test
-    public void testIsFirstTenEqualToSecondZero() {
-        assertFalse("ten is not equal to zero", MoneyUtils.isFirstEqualToSecond(BigDecimal.TEN, BigDecimal.ZERO));
-    }
+        assertEquals(BigDecimal.ONE, MoneyUtils.minPositive(new Pair<>(BigDecimal.ONE, null)));
 
-    @Test
-    public void testIsFirstTenEqualToSecondTen() {
-        assertTrue("ten is equal to ten", MoneyUtils.isFirstEqualToSecond(BigDecimal.TEN, new BigDecimal("10.0000")));
-    }
+        assertEquals(BigDecimal.ONE, MoneyUtils.minPositive(new Pair<>(BigDecimal.ONE, BigDecimal.ZERO)));
 
-    @Test
-    public void testMinimalPositiveIsFirstTenMoreThanSecondOne() {
-        assertTrue("ten is equal to ten", MoneyUtils.minPositive(BigDecimal.TEN, BigDecimal.ONE).equals(BigDecimal.ONE));
-    }
+        assertEquals(BigDecimal.ONE, MoneyUtils.minPositive(new Pair<>(null, BigDecimal.ONE)));
 
-    @Test
-    public void testMinimalPositiveIsFirstOneLessThanSecondTen() {
-        assertTrue("ten is equal to ten", MoneyUtils.minPositive(BigDecimal.ONE, BigDecimal.TEN).equals(BigDecimal.ONE));
-    }
+        assertEquals(BigDecimal.ONE, MoneyUtils.minPositive(new Pair<>(BigDecimal.ZERO, BigDecimal.ONE)));
 
-    @Test
-    public void testMinimalPositiveIsFirstMinimalFromTenAndNull() {
-        assertTrue("ten is equal to ten", MoneyUtils.minPositive(BigDecimal.TEN, null).equals(BigDecimal.TEN));
-    }
+        assertEquals(BigDecimal.ONE, MoneyUtils.minPositive(new Pair<>(BigDecimal.TEN, BigDecimal.ONE)));
 
-    @Test
-    public void testMinimalPositiveIsSecondMinimalFromTenAndNull() {
-        assertTrue("ten is equal to ten", MoneyUtils.minPositive(null, BigDecimal.TEN).equals(BigDecimal.TEN));
+        assertEquals(BigDecimal.ONE, MoneyUtils.minPositive(new Pair<>(BigDecimal.ONE, BigDecimal.TEN)));
+
+
     }
 
     @Test
@@ -209,6 +255,7 @@ public class MoneyUtilsTest {
     @Test
     public void testGetNetAmount() throws Exception {
 
+        assertEquals("0.00", MoneyUtils.getNetAmount(null, new BigDecimal("0.00"), true).toPlainString());
         assertEquals("100.00", MoneyUtils.getNetAmount(new BigDecimal("100.00"), new BigDecimal("0.00"), true).toPlainString());
         assertEquals("100.00", MoneyUtils.getNetAmount(new BigDecimal("100.00"), new BigDecimal("0.00"), false).toPlainString());
         assertEquals("83.33", MoneyUtils.getNetAmount(new BigDecimal("100.00"), new BigDecimal("20.00"), true).toPlainString());
@@ -219,6 +266,7 @@ public class MoneyUtilsTest {
     @Test
     public void testGetGrossAmount() throws Exception {
 
+        assertEquals("0.00", MoneyUtils.getGrossAmount(null, new BigDecimal("0.00"), true).toPlainString());
         assertEquals("100.00", MoneyUtils.getGrossAmount(new BigDecimal("100.00"), new BigDecimal("0.00"), true).toPlainString());
         assertEquals("100.00", MoneyUtils.getGrossAmount(new BigDecimal("100.00"), new BigDecimal("0.00"), false).toPlainString());
         assertEquals("100.00", MoneyUtils.getGrossAmount(new BigDecimal("100.00"), new BigDecimal("20.00"), true).toPlainString());

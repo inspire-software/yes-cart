@@ -38,7 +38,6 @@ import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.utils.HQLUtils;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -325,10 +324,10 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
     }
 
     private void ensureNonZeroPrices(final SkuPrice entity) {
-        if (entity.getSalePrice() != null && MoneyUtils.isFirstEqualToSecond(entity.getSalePrice(), BigDecimal.ZERO)) {
+        if (!MoneyUtils.isPositive(entity.getSalePrice())) {
             entity.setSalePrice(null);
         }
-        if (entity.getMinimalPrice() != null && MoneyUtils.isFirstEqualToSecond(entity.getMinimalPrice(), BigDecimal.ZERO)) {
+        if (!MoneyUtils.isPositive(entity.getMinimalPrice())) {
             entity.setMinimalPrice(null);
         }
     }

@@ -556,10 +556,8 @@ public class OrderAssemblerImpl implements OrderAssembler {
             final String policyID = "COST" + (StringUtils.isBlank(item.getSupplierCode()) ? "" : "_" + item.getSupplierCode());
 
             final SkuPrice price = priceResolver.getMinimalPrice(null, item.getProductSkuCode(), customerShopId, fallbackShopId, currency, item.getQty(), false, policyID);
-            if (price != null) {
-                final BigDecimal sale = price.getSalePriceForCalculation();
-                final BigDecimal list = price.getRegularPrice();
-                final BigDecimal cost = sale != null && MoneyUtils.isFirstBiggerThanSecond(list, sale) ? sale : list;
+            if (price != null && price.getSkuPriceId() > 0L) {
+                final BigDecimal cost = MoneyUtils.secondOrFirst(price.getSalePriceForCalculation());
                 customerOrderDet.putValue("ItemCostPrice", cost.toPlainString(), "SUPPLIER");
             }
 

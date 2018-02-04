@@ -101,261 +101,343 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         SkuPrice skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "EUR", BigDecimal.ONE, false, null);
         assertNotNull(skuPrice);
         assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("140.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "EUR", BigDecimal.ONE, true, null);
         assertNotNull(skuPrice);
         assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("140.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "EUR", BigDecimal.ONE, false, "");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("140.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "EUR", BigDecimal.ONE, true, "");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("140.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "EUR", BigDecimal.ONE, false, null);
         assertNotNull(skuPrice);
         assertEquals("SOBOT-PINK", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("140.11"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("140.11")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("140.11"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "EUR", BigDecimal.ONE, true, null);
         assertNotNull(skuPrice);
         assertEquals("SOBOT-PINK", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("140.11"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("140.11")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("140.11"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "EUR", BigDecimal.ONE, false, "");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-PINK", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("140.11"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("140.11")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("140.11"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "EUR", BigDecimal.ONE, true, "");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-PINK", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("140.11"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("140.11")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("140.11"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "EUR", new BigDecimal("2"), false, null);
         assertNotNull(skuPrice);
         assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("130.11")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "EUR", new BigDecimal("2"), true, null);
         assertNotNull(skuPrice);
         assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("130.11")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "EUR", new BigDecimal("2"), true, "");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("130.11")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "EUR", new BigDecimal("2"), false, "");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("130.11")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "EUR", new BigDecimal("2"), true, null);
         assertNotNull(skuPrice);
         assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("140.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "EUR", new BigDecimal("2"), false, null);
         assertNotNull(skuPrice);
         assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("140.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "EUR", new BigDecimal("2"), false, "");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("140.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "EUR", new BigDecimal("2"), true, "");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("140.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("140.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, "SOBOT-LIGHT", shop.getShopId(), null, "EUR", new BigDecimal("2"), false, null);
         assertNotNull(skuPrice);
         assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("130.11")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, "SOBOT-LIGHT", shop.getShopId(), null, "EUR", new BigDecimal("2"), true, null);
         assertNotNull(skuPrice);
         assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("130.11")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, "SOBOT-LIGHT", shop.getShopId(), null, "EUR", new BigDecimal("2"), false, "");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("130.11")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, "SOBOT-LIGHT", shop.getShopId(), null, "EUR", new BigDecimal("2"), true, "");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("130.11")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("130.11"), skuPrice.getSalePriceForCalculation().getSecond());
 
         // Test special prices policy
 
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "EUR", BigDecimal.ONE, false, "P1");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("120.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("120.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("120.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "EUR", BigDecimal.ONE, true, "P1");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("120.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("120.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("120.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "EUR", BigDecimal.ONE, false, "P1");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("120.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("120.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("120.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "EUR", BigDecimal.ONE, true, "P1");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("120.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("120.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("120.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "EUR", new BigDecimal("2"), false, "P1");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("115.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("115.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("115.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "EUR", new BigDecimal("2"), true, "P1");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("115.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("115.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("115.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         // Make sure that default lower prices still win over the special
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "EUR", new BigDecimal("3"), false, "P1");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("100.11"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("100.11")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("100.11"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "EUR", new BigDecimal("3"), true, "P1");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("100.11"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("100.11")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("100.11"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "EUR", new BigDecimal("2"), false, "P1");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("120.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("120.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("120.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "EUR", new BigDecimal("2"), true, "P1");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("120.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("120.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("120.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, "SOBOT-LIGHT", shop.getShopId(), null, "EUR", new BigDecimal("2"), false, "P1");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("115.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("115.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("115.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, "SOBOT-LIGHT", shop.getShopId(), null, "EUR", new BigDecimal("2"), true, "P1");
         assertNotNull(skuPrice);
         assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("150.85"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("115.22"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("115.22")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("150.85"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("115.22"), skuPrice.getSalePriceForCalculation().getSecond());
 
 
         //Test that we can not getByKey the minimal price through price tiers for multisku product for not configured currency
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "BYR", BigDecimal.ONE, false, null);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
-        assertNull(skuPrice.getSalePriceForCalculation());
+        assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertNull(skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "BYR", BigDecimal.ONE, true, null);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
-        assertNull(skuPrice.getSalePriceForCalculation());
+        assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertNull(skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "UAH", BigDecimal.ONE, false, null);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
-        assertNull(skuPrice.getSalePriceForCalculation());
+        assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertNull(skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), null, "UAH", BigDecimal.ONE, true, null);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
-        assertNull(skuPrice.getSalePriceForCalculation());
+        assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertNull(skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "UAH", BigDecimal.ONE, false, null);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
-        assertNull(skuPrice.getSalePriceForCalculation());
+        assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertNull(skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), null, "UAH", BigDecimal.ONE, true, null);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
-        assertNull(skuPrice.getSalePriceForCalculation());
+        assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertNull(skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
     }
 
@@ -417,58 +499,74 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         SkuPrice skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 10L, null, "EUR", new BigDecimal("0.250"), false, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("6.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("6.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("6.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 10L, null, "EUR", new BigDecimal("0.250"), true, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("6.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("6.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("6.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 10L, null, "EUR", new BigDecimal("1.250"), false, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("6.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("6.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("6.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 10L, null, "EUR", new BigDecimal("1.250"), true, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("12.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("12.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("12.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 10L, null, "EUR", new BigDecimal("1.250"), false, "P1");
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("6.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("6.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("6.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 10L, null, "EUR", new BigDecimal("1.250"), true, "P1");
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("12.50"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("10.50"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("12.50")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("10.50")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("12.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("10.50"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 10L, null, "EUR", new BigDecimal("10.250"), false, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("6.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("6.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("6.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 10L, null, "EUR", new BigDecimal("10.250"), true, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("30.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("30.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("30.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
     }
 
@@ -479,114 +577,147 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         SkuPrice skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, 10L, "EUR", new BigDecimal("0.250"), false, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("5.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("5.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("5.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, null, "EUR", new BigDecimal("0.250"), false, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("5.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("5.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("5.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, 10L, "EUR", new BigDecimal("0.250"), true, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("5.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("5.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("5.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, null, "EUR", new BigDecimal("0.250"), true, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("5.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("5.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("5.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, 10L, "EUR", new BigDecimal("1.250"), false, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("5.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("5.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("5.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, null, "EUR", new BigDecimal("1.250"), false, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("5.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("5.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("5.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, 10L, "EUR", new BigDecimal("1.250"), true, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("12.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("12.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("12.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
+
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, null, "EUR", new BigDecimal("1.250"), true, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("5.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("5.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("5.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, 10L, "EUR", new BigDecimal("1.250"), false, "P1");
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("5.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("5.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("5.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, null, "EUR", new BigDecimal("1.250"), false, "P1");
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("5.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("5.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("5.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, 10L, "EUR", new BigDecimal("1.250"), true, "P1");
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("12.50"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("9.50"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("12.50")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("9.50")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("12.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("9.50"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, null, "EUR", new BigDecimal("1.250"), true, "P1");
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
+        assertEquals(new BigDecimal("12.50"), skuPrice.getRegularPrice());
+        assertEquals(new BigDecimal("9.50"), skuPrice.getSalePrice());
         assertNotNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("12.50")).equals(skuPrice.getRegularPrice()));
-        assertTrue((new BigDecimal("9.50")).equals(skuPrice.getSalePrice()));
+        assertEquals(new BigDecimal("12.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertEquals(new BigDecimal("9.50"), skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, 10L, "EUR", new BigDecimal("10.250"), false, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("5.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("5.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("5.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, null, "EUR", new BigDecimal("10.250"), false, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("5.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("5.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("5.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, 10L, "EUR", new BigDecimal("10.250"), true, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("30.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("30.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("30.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
         skuPrice = priceService.getMinimalPrice(null, "WV_CARRIERSLA_KG", 1011L, null, "EUR", new BigDecimal("10.250"), true, null);
         assertNotNull(skuPrice);
         assertEquals("WV_CARRIERSLA_KG", skuPrice.getSkuCode());
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("5.50")).equals(skuPrice.getRegularPrice()));
+        assertEquals(new BigDecimal("5.50"), skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertEquals(new BigDecimal("5.50"), skuPrice.getSalePriceForCalculation().getFirst());
+        assertNull(skuPrice.getSalePriceForCalculation().getSecond());
 
     }
 

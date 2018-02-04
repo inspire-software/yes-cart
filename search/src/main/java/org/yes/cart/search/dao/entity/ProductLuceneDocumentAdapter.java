@@ -426,8 +426,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                     } else {
                         final int compare = oldLowestQuantity.getQuantity().compareTo(skuPrice.getQuantity());
                         if (compare > 0 || (compare == 0 && MoneyUtils.isFirstBiggerThanSecond(
-                                MoneyUtils.minPositive(oldLowestQuantity.getRegularPrice(), oldLowestQuantity.getSalePrice()),
-                                MoneyUtils.minPositive(skuPrice.getRegularPrice(), skuPrice.getSalePrice())
+                                MoneyUtils.minPositive(oldLowestQuantity.getSalePriceForCalculation()),
+                                MoneyUtils.minPositive(skuPrice.getSalePriceForCalculation())
                         ))) {
                             // if this sku price has lower quantity then this is probably better starting price
                             // if the quantity is the same lower price is more appealing to show
@@ -442,7 +442,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 for (final Map.Entry<Long, Map<String, SkuPrice>> shop : lowestQuantityPrice.entrySet()) {
                     for (final Map.Entry<String, SkuPrice> currency : shop.getValue().entrySet()) {
 
-                        final BigDecimal price = MoneyUtils.minPositive(currency.getValue().getRegularPrice(), currency.getValue().getSalePrice());
+                        final BigDecimal price = MoneyUtils.minPositive(currency.getValue().getSalePriceForCalculation());
                         // Pad 2 decimal places 99.99 => 9999
                         final long longPrice = SearchUtil.priceToLong(price);
                         final String facetName = SearchUtil.priceFacetName(shop.getKey(), currency.getKey());

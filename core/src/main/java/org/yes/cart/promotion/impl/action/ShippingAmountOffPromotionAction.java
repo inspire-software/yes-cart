@@ -40,17 +40,22 @@ public class ShippingAmountOffPromotionAction extends AbstractShippingPromotionA
     /** {@inheritDoc} */
     public BigDecimal testDiscountValue(final Map<String, Object> context) {
         final CartItem shipping = getShipping(context);
-        return getDiscountValue(getRawPromotionActionContext(context), shipping.getSalePrice());
+        return getDiscountValue(
+                getRawPromotionActionContext(context),
+                nullSafeItemPriceForCalculation(shipping)
+        );
     }
 
     private BigDecimal getDiscountValue(final String ctx, final BigDecimal salePrice) {
-        try {
-            final BigDecimal amountOff = getAmountValue(ctx);
-            if (amountOff.compareTo(BigDecimal.ZERO) > 0) {
-                return amountOff.divide(salePrice, RoundingMode.HALF_UP);
+        if (MoneyUtils.isPositive(salePrice)) {
+            try {
+                final BigDecimal amountOff = getAmountValue(ctx);
+                if (amountOff.compareTo(BigDecimal.ZERO) > 0) {
+                    return amountOff.divide(salePrice, RoundingMode.HALF_UP);
+                }
+            } catch (Exception exp) {
+                LOG.error("Unable to parse amountOff for promotion action context: {}", ctx);
             }
-        } catch (Exception exp) {
-            LOG.error("Unable to parse amountOff for promotion action context: {}", ctx);
         }
         return MoneyUtils.ZERO;
     }
