@@ -88,15 +88,12 @@
                     <wicket:container wicket:id="deliveryMethod">[delivery method]</wicket:container>
                 </div>
                 <div class="clearfix">
-                    <wicket:container wicket:id="deliveryTime">Estimated between X and Y</wicket:container> <span wicket:id="deliveryRemarks">Some notes about delivery</span>
+                    <small><wicket:container wicket:id="deliveryTime">Estimated between X and Y</wicket:container> <span wicket:id="deliveryRemarks">Some notes about delivery</span></small>
                 </div>
                 <div class="pull-left">
                     <label><wicket:message key="deliveryCost">[Delivery sub total amount]</wicket:message></label>
                 </div>
                 <div class="text-right clearfix">
-                    <wicket:container wicket:id="deliveryCostGratis">
-                        <wicket:message key="gratis">[Delivery sub total amount]</wicket:message>
-                    </wicket:container>
                     <wicket:container wicket:id="deliveryCost">[delivery cost]</wicket:container>
                 </div>
                 <wicket:enclosure child="deliveryAddress">

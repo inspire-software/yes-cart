@@ -230,7 +230,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                 firstTaxCode,
                 taxRate,
                 priceTaxExclusive,
-                grandTotal.getTotalTax()
+                grandTotal.getSubTotalTax()
         );
 
     }
@@ -270,13 +270,15 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
         final boolean showTaxAmount = showTax && cart.getShoppingContext().isTaxInfoShowAmount();
 
         return new ProductPriceModelImpl(DELIVERY_SHIPPING_REF, customerOrder.getCurrency(), BigDecimal.ONE,
+                showTaxNet ?
+                        MoneyUtils.getNetAmount(grandTotal.getDeliveryListCost(), taxRate, priceTaxExclusive) :
+                        MoneyUtils.getGrossAmount(grandTotal.getDeliveryListCost(), taxRate, priceTaxExclusive),
                 showTaxNet ? grandTotal.getDeliveryCostAmount().subtract(grandTotal.getDeliveryTax()) : grandTotal.getDeliveryCostAmount(),
-                null,
                 showTax, showTaxNet, showTaxAmount,
                 firstTaxCode,
                 taxRate,
                 priceTaxExclusive,
-                grandTotal.getTotalTax()
+                grandTotal.getDeliveryTax()
         );
 
     }

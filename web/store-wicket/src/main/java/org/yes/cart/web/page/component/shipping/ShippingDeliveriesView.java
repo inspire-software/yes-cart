@@ -254,7 +254,7 @@ public class ShippingDeliveriesView extends BaseComponent {
 
         final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
 
-        final PriceView priceView = new PriceView(ITEM_PRICE, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
+        final PriceView priceView = new PriceView(ITEM_PRICE, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount(), cartItem.isGift());
 
         return priceView;
     }

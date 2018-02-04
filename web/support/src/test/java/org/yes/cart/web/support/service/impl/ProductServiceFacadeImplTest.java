@@ -22,6 +22,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.domain.ShopService;
@@ -494,8 +495,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
-            allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
-            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
@@ -558,8 +558,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
-            allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
-            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new BigDecimal("80.00")));
+            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
@@ -626,8 +625,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
-            allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
-            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
@@ -700,8 +698,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
-            allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
-            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
@@ -777,8 +774,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
-            allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
-            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
@@ -853,8 +849,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
-            allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
-            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
@@ -930,8 +925,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
-            allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
-            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new BigDecimal("80.00")));
+            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
@@ -1004,8 +998,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
-            allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
-            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new BigDecimal("80.00")));
+            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
@@ -1081,8 +1074,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
-            allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
-            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new BigDecimal("80.00")));
+            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
@@ -1157,8 +1149,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
-            allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
-            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new BigDecimal("80.00")));
+            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));

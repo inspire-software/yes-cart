@@ -28,9 +28,9 @@ import org.yes.cart.domain.entity.impl.ProductPriceModelImpl;
 import org.yes.cart.domain.entity.impl.ProductPromotionModelImpl;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.search.SearchQueryFactory;
 import org.yes.cart.search.dto.NavigationContext;
+import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
@@ -491,7 +491,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         if (isPriceValid(priceNow)) {
             if (ApplicationDirector.getShoppingCart().getCurrencyCode().equals(addedPriceCurr)) {
                 final BigDecimal addedPrice = item.getRegularPriceWhenAdded();
-                final BigDecimal saleNow = MoneyUtils.minPositive(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
+                final BigDecimal saleNow = MoneyUtils.secondOrFirst(priceNow.getSalePriceForCalculation());
                 if (MoneyUtils.isFirstEqualToSecond(addedPrice, saleNow)) {
                     // no change
                     if (MoneyUtils.isFirstBiggerThanSecond(priceNow.getRegularPrice(), addedPrice)) {
@@ -526,12 +526,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 }
             } else {
                 // no comparative price - different currency
-                price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
+                price = priceNow.getSalePriceForCalculation();
                 priceInfo = new CustomerWishList.PriceChange(CustomerWishList.PriceChangeType.DIFFCURRENCY, null);
             }
         } else {
             // Item is not priced now so it cannot be bought
-            price = new Pair<BigDecimal, BigDecimal>(BigDecimal.ZERO, null);
+            price = new Pair<BigDecimal, BigDecimal>(null, null);
             priceInfo = new CustomerWishList.PriceChange(CustomerWishList.PriceChangeType.OFFLINE, null);
         }
 
@@ -556,12 +556,14 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
             if (resolved != null) {
 
+                final Pair<BigDecimal, BigDecimal> listAndSale = resolved.getSalePriceForCalculation();
+
                 return getSkuPrice(
                         cart,
                         resolved.getSkuCode(),
                         resolved.getQuantity(),
-                        resolved.getRegularPrice(),
-                        resolved.getSalePriceForCalculation()
+                        listAndSale.getFirst(),
+                        listAndSale.getSecond()
                 );
 
             }
@@ -782,12 +784,14 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 final List<ProductPriceModel> models = new ArrayList<ProductPriceModel>(prices.size());
                 for (final SkuPrice price : prices) {
 
+                    final Pair<BigDecimal, BigDecimal> listAndSale = price.getSalePriceForCalculation();
+
                     models.add(getSkuPrice(
                             cart,
                             price.getSkuCode(),
                             price.getQuantity(),
-                            price.getRegularPrice(),
-                            price.getSalePriceForCalculation()
+                            listAndSale.getFirst(),
+                            listAndSale.getSecond()
                     ));
 
                 }

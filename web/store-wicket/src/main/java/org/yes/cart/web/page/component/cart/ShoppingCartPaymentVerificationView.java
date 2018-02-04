@@ -316,9 +316,9 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                         new PriceView(
                                                 DELIVERY_COST,
                                                 deliveryShipping,
-                                                null,
-                                                false, false,
-                                                deliveryShipping.isTaxInfoEnabled(), deliveryShipping.isTaxInfoShowAmount())
+                                                delivery.getAppliedPromo(),
+                                                false, true,
+                                                deliveryShipping.isTaxInfoEnabled(), deliveryShipping.isTaxInfoShowAmount(), true)
                                 )
                                 .add(
                                         new Label(DELIVERY_METHOD, slaName)
@@ -363,7 +363,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
         final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
 
-        final PriceView priceView = new PriceView(ITEM_PRICE, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
+        final PriceView priceView = new PriceView(ITEM_PRICE, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount(), cartItem.isGift());
 
         return priceView;
     }

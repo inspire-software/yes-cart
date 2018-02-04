@@ -237,7 +237,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
         final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
 
-        final PriceView priceView = new PriceView(PRICE_VIEW, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
+        final PriceView priceView = new PriceView(PRICE_VIEW, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount(), cartItem.isGift());
 
         priceView.setVisible(available);
 

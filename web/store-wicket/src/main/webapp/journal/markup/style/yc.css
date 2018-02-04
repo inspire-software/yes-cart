@@ -1269,6 +1269,8 @@ fieldset[disabled] .btn-primary2.active {
 
 .order-grand-total .sale-price-save-details,
 .shipping-form .sale-price-save-details,
+.order-items-holder .cart-item .sale-price-save-details,
+.order-items-sidebar .sale-price-save-details,
 .shopping-cart-details .cart-item .sale-price-save-details,
 .shopping-cart-sidebar .sale-price-save-details {
     visibility: hidden;

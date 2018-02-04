@@ -74,6 +74,7 @@ public class PriceView extends BaseComponent {
     private final boolean showTax;
     private final boolean showTaxNet;
     private final boolean showTaxAmount;
+    private final boolean showGratis;
 
     private static final Pair<BigDecimal, BigDecimal> NULL = new Pair<BigDecimal, BigDecimal>(null, null);
     private static final String[] EMPTY_FORMATED_PRICE = new String[] { StringUtils.EMPTY, StringUtils.EMPTY };
@@ -102,6 +103,29 @@ public class PriceView extends BaseComponent {
                      final boolean showTax,
                      final boolean showTaxAmount
     ) {
+        this(id, productPriceModel, appliedPromos, showCurrencySymbol, showSavings, showTax, showTaxAmount, false);
+    }
+
+    /**
+     * Create price view.
+     * @param id component id.
+     * @param productPriceModel price model.
+     * @param appliedPromos applied promotions
+     * @param showCurrencySymbol currency symbol.
+     * @param showSavings show user friendly percentage savings
+     * @param showTax show tax information
+     * @param showTaxAmount show amount of tax (rather than percent)
+     * @param showGratis show gratis prices
+     */
+    public PriceView(final String id,
+                     final ProductPriceModel productPriceModel,
+                     final String appliedPromos,
+                     final boolean showCurrencySymbol,
+                     final boolean showSavings,
+                     final boolean showTax,
+                     final boolean showTaxAmount,
+                     final boolean showGratis
+    ) {
         super(id);
         this.productPriceModel = productPriceModel;
         this.showCurrencySymbol = showCurrencySymbol;
@@ -110,7 +134,7 @@ public class PriceView extends BaseComponent {
         this.showTax = showTax && productPriceModel != null && productPriceModel.getPriceTax() != null;
         this.showTaxNet = this.showTax && productPriceModel.isTaxInfoUseNet();
         this.showTaxAmount = showTaxAmount;
-
+        this.showGratis = showGratis;
     }
 
 
@@ -150,7 +174,11 @@ public class PriceView extends BaseComponent {
                 listPrice = productPriceModel.getRegularPrice().setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP).toPlainString();
             }
         }
-        final String[] formatted = getFormattedPrice(priceToFormat);
+        final boolean nonZero = MoneyUtils.isPositive(priceToFormat);
+        final String[] formatted = nonZero ?
+                getFormattedPrice(priceToFormat) :
+                new String[] { getString("gratis"), null };
+        final boolean shopFractionalPart = StringUtils.isNotBlank(formatted[1]);
 
         addOrReplace(
                 new Label(WHOLE_LABEL, formatted[0])
@@ -158,23 +186,29 @@ public class PriceView extends BaseComponent {
         addOrReplace(
                 new Label(DOT_LABEL, ".")
                         .setVisible(StringUtils.isNotBlank(formatted[0]) || StringUtils.isNotBlank(formatted[1]))
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DOT)));
+                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DOT))
+                .setVisible(shopFractionalPart)
+        );
         addOrReplace(
                 new Label(DECIMAL_LABEL, formatted[1])
                         .setVisible(StringUtils.isNotBlank(formatted[0]) || StringUtils.isNotBlank(formatted[1]))
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DECIMAL)));
+                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DECIMAL))
+                .setVisible(shopFractionalPart)
+        );
 
         final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(productPriceModel.getCurrency());
 
+        final boolean showMainCurrencySymbol = showCurrencySymbol && (nonZero || !showGratis);
+
         addOrReplace(
                 new Label(CURRENCY_LABEL, symbol.getFirst())
-                        .setVisible(showCurrencySymbol && !symbol.getSecond())
+                        .setVisible(showMainCurrencySymbol && !symbol.getSecond())
                         .setEscapeModelStrings(false)
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_CURRENCY)));
 
         addOrReplace(
                 new Label(CURRENCY2_LABEL, symbol.getFirst())
-                        .setVisible(showCurrencySymbol && symbol.getSecond())
+                        .setVisible(showMainCurrencySymbol && symbol.getSecond())
                         .setEscapeModelStrings(false)
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_CURRENCY)));
 
@@ -259,19 +293,13 @@ public class PriceView extends BaseComponent {
 
         super.onBeforeRender();
 
+        setVisible(
+                !this.showGratis &&
+                        MoneyUtils.isPositive(productPriceModel.getRegularPrice())
+                || this.showGratis &&
+                        MoneyUtils.isFirstBiggerThanOrEqualToSecond(productPriceModel.getRegularPrice(), BigDecimal.ZERO)
+        );
+
     }
 
-    /** {@inheritDoc}*/
-    public boolean isVisible() {
-        return super.isVisible()
-                &&
-                productPriceModel != null
-                &&
-                productPriceModel.getRegularPrice() != null
-                &&
-                !MoneyUtils.isFirstEqualToSecond(
-                        Total.ZERO,
-                        productPriceModel.getRegularPrice().setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP),
-                        2);
-    }
 }
