@@ -32,7 +32,7 @@ export class AppComponent implements OnDestroy {
               @Inject(ValidationService)     _validationService:ValidationService,
               @Inject(ManagementService)     _managementService:ManagementService,
               @Inject(ShopService)           _shopService:ShopService,
-              translate: TranslateService) {
+              @Inject(TranslateService)      translate: TranslateService) {
     LogUtil.debug('Environment config', Config);
 
     ErrorEventBus.init(_errorEventBus);
@@ -42,34 +42,44 @@ export class AppComponent implements OnDestroy {
     UserEventBus.init(_userEventBus);
     YcValidators.init(_validationService);
 
-    var userLang = navigator.language.split('-')[0]; // use navigator lang if available
-    userLang = (new RegExp(Config.SUPPORTED_LANGS, 'gi')).test(userLang) ? userLang : Config.DEFAULT_LANG;
-    LogUtil.debug('AppComponent language', userLang);
-    translate.setDefaultLang(userLang);
+    let cookieLang = CookieUtil.readCookie('YCJAM_UI_LANG', '-');
+    let lang = Config.DEFAULT_LANG;
+    if (cookieLang != '-' && (new RegExp(Config.SUPPORTED_LANGS, 'gi')).test(cookieLang)) {
+      LogUtil.debug('AppComponent language found supported lang cookie', cookieLang);
+      lang = cookieLang;
+    } else {
+      let userLang = navigator.language.split('-')[0]; // use navigator lang if available
+      if ((new RegExp(Config.SUPPORTED_LANGS, 'gi')).test(userLang)) {
+        LogUtil.debug('AppComponent language found supported navigator lang', userLang);
+        lang = userLang;
+      }
+    }
+    LogUtil.debug('AppComponent language', lang);
+    translate.setDefaultLang(lang);
 
     this.langSub = I18nEventBus.getI18nEventBus().i18nUpdated$.subscribe(lang => {
-      if (translate.currentLang != lang) {
+      LogUtil.debug('AppComponent language change', lang);
+      if (lang != null) {
         translate.use(lang);
       }
     });
 
-    let lang = CookieUtil.readCookie('YCJAM_UI_LANG', userLang);
     translate.use(lang);
     I18nEventBus.getI18nEventBus().emit(lang);
 
     this.loadUiPreferences();
 
-    var _sub:any = _managementService.getMyUI().subscribe( myui => {
+    let _sub:any = _managementService.getMyUI().subscribe( myui => {
       LogUtil.debug('Loading ui', myui);
       _sub.unsubscribe();
 
-      var _sub2:any = _managementService.getMyself().subscribe( myself => {
+      let _sub2:any = _managementService.getMyself().subscribe( myself => {
         LogUtil.debug('Loading user', myself);
         UserEventBus.getUserEventBus().emit(myself);
         _sub2.unsubscribe();
       });
 
-      var _sub3:any = _shopService.getAllShops().subscribe( allshops => {
+      let _sub3:any = _shopService.getAllShops().subscribe( allshops => {
         LogUtil.debug('Loading user shops', allshops);
         ShopEventBus.getShopEventBus().emitAll(allshops);
         _sub3.unsubscribe();

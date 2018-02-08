@@ -37,7 +37,7 @@ export class I18nEventBus {
 
   constructor() {
     LogUtil.debug('I18nEventBus constructed');
-    this._i18nSource = new BehaviorSubject<any>('en');
+    this._i18nSource = new BehaviorSubject<any>(null);
     this.i18nUpdated$ = this._i18nSource.asObservable();
   }
 
