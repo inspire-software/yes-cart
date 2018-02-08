@@ -23,7 +23,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.PriceModel;
-import org.yes.cart.domain.entity.ProductPromotionModel;
+import org.yes.cart.domain.entity.PromotionModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.MoneyUtils;
@@ -253,10 +253,10 @@ public class PriceView extends BaseComponent {
 
         if (showSave && StringUtils.isNotBlank(promos)) {
 
-            final Map<String, ProductPromotionModel> promoModels = productServiceFacade.getPromotionModel(promos);
+            final Map<String, PromotionModel> promoModels = productServiceFacade.getPromotionModel(promos);
 
             final StringBuilder details = new StringBuilder();
-            for (final ProductPromotionModel model : promoModels.values()) {
+            for (final PromotionModel model : promoModels.values()) {
 
                 final String name = model.getName().getValue(lang);
                 final String desc = model.getDescription().getValue(lang);

@@ -4116,7 +4116,7 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, promotionService, null, null, null);
 
-        final Map<String, ProductPromotionModel> model = facade.getPromotionModel(null);
+        final Map<String, PromotionModel> model = facade.getPromotionModel(null);
 
         assertNotNull(model);
 
@@ -4135,7 +4135,7 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, promotionService, null, null, null);
 
-        final Map<String, ProductPromotionModel> model = facade.getPromotionModel("CODE1");
+        final Map<String, PromotionModel> model = facade.getPromotionModel("CODE1");
 
         assertNotNull(model);
 
@@ -4169,13 +4169,13 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, promotionService, null, null, null);
 
-        final Map<String, ProductPromotionModel> model = facade.getPromotionModel("CODE1");
+        final Map<String, PromotionModel> model = facade.getPromotionModel("CODE1");
 
         assertNotNull(model);
 
         assertFalse(model.isEmpty());
 
-        final ProductPromotionModel code1model = model.get("CODE1");
+        final PromotionModel code1model = model.get("CODE1");
 
         assertEquals("CODE1", code1model.getCode());
         assertNull(code1model.getCouponCode());
@@ -4215,13 +4215,13 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, promotionService, null, null, null);
 
-        final Map<String, ProductPromotionModel> model = facade.getPromotionModel("CODE1:COUPON1");
+        final Map<String, PromotionModel> model = facade.getPromotionModel("CODE1:COUPON1");
 
         assertNotNull(model);
 
         assertFalse(model.isEmpty());
 
-        final ProductPromotionModel code1model = model.get("CODE1:COUPON1");
+        final PromotionModel code1model = model.get("CODE1:COUPON1");
 
         assertEquals("CODE1", code1model.getCode());
         assertEquals("COUPON1", code1model.getCouponCode());
@@ -4318,13 +4318,13 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, promotionService, null, null, null);
 
-        final Map<String, ProductPromotionModel> model = facade.getPromotionModel("CODE2:COUPON2,CODE1,CODE0");
+        final Map<String, PromotionModel> model = facade.getPromotionModel("CODE2:COUPON2,CODE1,CODE0");
 
         assertNotNull(model);
 
         assertFalse(model.isEmpty());
 
-        final ProductPromotionModel code0model = model.get("CODE0");
+        final PromotionModel code0model = model.get("CODE0");
 
         assertEquals("CODE0", code0model.getCode());
         assertNull(code0model.getCouponCode());
@@ -4336,7 +4336,7 @@ public class ProductServiceFacadeImplTest {
         assertSame(start, code0model.getActiveFrom());
         assertSame(end, code0model.getActiveTo());
 
-        final ProductPromotionModel code1model = model.get("CODE1");
+        final PromotionModel code1model = model.get("CODE1");
 
         assertEquals("CODE1", code1model.getCode());
         assertNull(code1model.getCouponCode());
@@ -4348,7 +4348,7 @@ public class ProductServiceFacadeImplTest {
         assertSame(start, code1model.getActiveFrom());
         assertSame(end, code1model.getActiveTo());
 
-        final ProductPromotionModel code2model = model.get("CODE2:COUPON2");
+        final PromotionModel code2model = model.get("CODE2:COUPON2");
 
         assertEquals("CODE2", code2model.getCode());
         assertEquals("COUPON2", code2model.getCouponCode());

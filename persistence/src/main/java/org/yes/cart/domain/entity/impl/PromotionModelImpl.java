@@ -15,7 +15,7 @@
  */
 package org.yes.cart.domain.entity.impl;
 
-import org.yes.cart.domain.entity.ProductPromotionModel;
+import org.yes.cart.domain.entity.PromotionModel;
 import org.yes.cart.domain.i18n.I18NModel;
 
 import java.util.Date;
@@ -25,7 +25,7 @@ import java.util.Date;
  * Date: 06/10/2015
  * Time: 14:35
  */
-public class ProductPromotionModelImpl implements ProductPromotionModel {
+public class PromotionModelImpl implements PromotionModel {
 
     private final String code;
     private final String couponCode;
@@ -37,15 +37,15 @@ public class ProductPromotionModelImpl implements ProductPromotionModel {
     private final Date activeFrom;
     private final Date activeTo;
 
-    public ProductPromotionModelImpl(final String code,
-                                     final String couponCode,
-                                     final String type,
-                                     final String action,
-                                     final String context,
-                                     final I18NModel name,
-                                     final I18NModel description,
-                                     final Date activeFrom,
-                                     final Date activeTo) {
+    public PromotionModelImpl(final String code,
+                              final String couponCode,
+                              final String type,
+                              final String action,
+                              final String context,
+                              final I18NModel name,
+                              final I18NModel description,
+                              final Date activeFrom,
+                              final Date activeTo) {
         this.code = code;
         this.couponCode = couponCode;
         this.type = type;

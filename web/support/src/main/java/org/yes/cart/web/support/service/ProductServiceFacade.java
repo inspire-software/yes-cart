@@ -403,7 +403,7 @@ public interface ProductServiceFacade {
      *
      * @return map code to model in order specified by applied promo
      */
-    Map<String, ProductPromotionModel> getPromotionModel(String appliedPromo);
+    Map<String, PromotionModel> getPromotionModel(String appliedPromo);
 
     /**
      * Brand are lazily initialised. This method allows to retrieve brand by name and cache it for later use.

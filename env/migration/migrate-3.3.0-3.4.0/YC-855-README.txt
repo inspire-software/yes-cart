@@ -20,3 +20,5 @@ Affected areas:
 - ProductPriceModel is now renamed to PriceModel to better reflect the API
 
 - ProductQuantityModel is now renamed to QuantityModel to better reflect the API
+
+- ProductPromotionModel is now renamed to PromotionModel to better reflect the API

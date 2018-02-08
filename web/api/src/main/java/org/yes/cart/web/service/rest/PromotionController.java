@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.yes.cart.domain.entity.ProductPromotionModel;
+import org.yes.cart.domain.entity.PromotionModel;
 import org.yes.cart.domain.ro.PromotionListRO;
 import org.yes.cart.domain.ro.PromotionRO;
 import org.yes.cart.web.service.rest.impl.CartMixin;
@@ -176,13 +176,13 @@ public class PromotionController {
 
     private List<PromotionRO> viewPromotionsInternal(final String promotions) {
 
-        final Map<String, ProductPromotionModel> promoData = productServiceFacade.getPromotionModel(promotions);
+        final Map<String, PromotionModel> promoData = productServiceFacade.getPromotionModel(promotions);
 
         final List<PromotionRO> all = new ArrayList<PromotionRO>();
 
-        for (final Map.Entry<String, ProductPromotionModel> promo : promoData.entrySet()) {
+        for (final Map.Entry<String, PromotionModel> promo : promoData.entrySet()) {
 
-            final PromotionRO promoRO = mappingMixin.map(promo.getValue(), PromotionRO.class, ProductPromotionModel.class);
+            final PromotionRO promoRO = mappingMixin.map(promo.getValue(), PromotionRO.class, PromotionModel.class);
             promoRO.setOriginalCode(promo.getKey());
             all.add(promoRO);
 

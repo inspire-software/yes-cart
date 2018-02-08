@@ -10,7 +10,7 @@ import java.util.Date;
  * Date: 06/10/2015
  * Time: 11:11
  */
-public interface ProductPromotionModel extends Serializable {
+public interface PromotionModel extends Serializable {
 
     /**
      * @return promo code

@@ -25,7 +25,7 @@ import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.PriceModelImpl;
-import org.yes.cart.domain.entity.impl.ProductPromotionModelImpl;
+import org.yes.cart.domain.entity.impl.PromotionModelImpl;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.SearchQueryFactory;
@@ -961,14 +961,14 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
-    public Map<String, ProductPromotionModel> getPromotionModel(final String appliedPromo) {
+    public Map<String, PromotionModel> getPromotionModel(final String appliedPromo) {
 
         if (StringUtils.isBlank(appliedPromo)) {
             return Collections.emptyMap();
         }
 
         final String[] promoCodes = StringUtils.split(appliedPromo, ',');
-        final Map<String, ProductPromotionModel> result = new LinkedHashMap<String, ProductPromotionModel>(promoCodes.length * 2);
+        final Map<String, PromotionModel> result = new LinkedHashMap<String, PromotionModel>(promoCodes.length * 2);
 
         for (final String code : promoCodes) {
 
@@ -982,7 +982,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
                 final Promotion data = promotions.get(0);
 
-                result.put(code, new ProductPromotionModelImpl(
+                result.put(code, new PromotionModelImpl(
                         code,
                         null,
                         data.getPromoType(),
@@ -1006,7 +1006,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
                 final Promotion data = promotions.get(0);
 
-                result.put(code, new ProductPromotionModelImpl(
+                result.put(code, new PromotionModelImpl(
                         realCode,
                         coupon,
                         data.getPromoType(),
