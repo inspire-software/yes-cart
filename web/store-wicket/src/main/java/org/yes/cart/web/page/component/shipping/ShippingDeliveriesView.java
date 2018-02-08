@@ -31,7 +31,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.PriceModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.CartItem;
@@ -252,7 +252,7 @@ public class ShippingDeliveriesView extends BaseComponent {
 
         final ShoppingCart cart = ((AbstractWebPage) getPage()).getCurrentCart();
 
-        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
+        final PriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
 
         final PriceView priceView = new PriceView(ITEM_PRICE, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount(), cartItem.isGift());
 
@@ -264,7 +264,7 @@ public class ShippingDeliveriesView extends BaseComponent {
 
         final ShoppingCart cart = ((AbstractWebPage) getPage()).getCurrentCart();
 
-        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, true);
+        final PriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, true);
 
         final PriceView priceView = new PriceView(ITEM_TOTAL, model, null, false, false, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
 

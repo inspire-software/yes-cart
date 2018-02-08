@@ -18,7 +18,7 @@ package org.yes.cart.shoppingcart;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductQuantityModel;
+import org.yes.cart.domain.entity.QuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 
 import java.math.BigDecimal;
@@ -46,7 +46,7 @@ public interface ProductQuantityStrategy {
      *
      * @return quantity model
      */
-    ProductQuantityModel getQuantityModel(BigDecimal cartQty, Product product);
+    QuantityModel getQuantityModel(BigDecimal cartQty, Product product);
 
     /**
      * Quantity model.
@@ -56,7 +56,7 @@ public interface ProductQuantityStrategy {
      *
      * @return quantity model
      */
-    ProductQuantityModel getQuantityModel(BigDecimal cartQty, ProductSearchResultDTO product);
+    QuantityModel getQuantityModel(BigDecimal cartQty, ProductSearchResultDTO product);
 
     /**
      * Quantity model.
@@ -66,7 +66,7 @@ public interface ProductQuantityStrategy {
      *
      * @return quantity model
      */
-    ProductQuantityModel getQuantityModel(BigDecimal cartQty, ProductSku productSku);
+    QuantityModel getQuantityModel(BigDecimal cartQty, ProductSku productSku);
 
     /**
      * Quantity model.
@@ -78,6 +78,6 @@ public interface ProductQuantityStrategy {
      *
      * @return quantity model
      */
-    ProductQuantityModel getQuantityModel(BigDecimal cartQty, BigDecimal min, BigDecimal max, BigDecimal step);
+    QuantityModel getQuantityModel(BigDecimal cartQty, BigDecimal min, BigDecimal max, BigDecimal step);
 
 }

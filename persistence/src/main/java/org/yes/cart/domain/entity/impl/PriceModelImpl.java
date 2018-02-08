@@ -1,6 +1,6 @@
 package org.yes.cart.domain.entity.impl;
 
-import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.PriceModel;
 
 import java.math.BigDecimal;
 
@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  * Date: 01/10/2015
  * Time: 23:36
  */
-public class ProductPriceModelImpl implements ProductPriceModel {
+public class PriceModelImpl implements PriceModel {
 
     private final String ref;
 
@@ -31,26 +31,26 @@ public class ProductPriceModelImpl implements ProductPriceModel {
     /**
      * Basic setting for no tax information enabled.
      */
-    public ProductPriceModelImpl(final String ref,
-                                 final String currency,
-                                 final BigDecimal quantity,
-                                 final BigDecimal regularPrice,
-                                 final BigDecimal salePrice) {
+    public PriceModelImpl(final String ref,
+                          final String currency,
+                          final BigDecimal quantity,
+                          final BigDecimal regularPrice,
+                          final BigDecimal salePrice) {
         this(ref, currency, quantity, regularPrice, salePrice, false, false, false, null, null, false, null);
     }
 
-    public ProductPriceModelImpl(final String ref,
-                                 final String currency,
-                                 final BigDecimal quantity,
-                                 final BigDecimal regularPrice,
-                                 final BigDecimal salePrice,
-                                 final boolean taxInfoEnabled,
-                                 final boolean taxInfoUseNet,
-                                 final boolean taxInfoShowAmount,
-                                 final String priceTaxCode,
-                                 final BigDecimal priceTaxRate,
-                                 final boolean priceTaxExclusive,
-                                 final BigDecimal priceTax) {
+    public PriceModelImpl(final String ref,
+                          final String currency,
+                          final BigDecimal quantity,
+                          final BigDecimal regularPrice,
+                          final BigDecimal salePrice,
+                          final boolean taxInfoEnabled,
+                          final boolean taxInfoUseNet,
+                          final boolean taxInfoShowAmount,
+                          final String priceTaxCode,
+                          final BigDecimal priceTaxRate,
+                          final boolean priceTaxExclusive,
+                          final BigDecimal priceTax) {
         this.ref = ref;
         this.currency = currency;
         this.quantity = quantity;

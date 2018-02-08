@@ -23,7 +23,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductQuantityModel;
+import org.yes.cart.domain.entity.QuantityModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -58,7 +58,7 @@ public class QuantityPickerPanel extends BaseComponent {
         final ShoppingCart cart = getCurrentCart();
         final Product product = productServiceFacade.getProductById(productId);
         final BigDecimal cartQty = cart.getProductSkuQuantity(sku);
-        final ProductQuantityModel pqm = productServiceFacade.getProductQuantity(cartQty, product);
+        final QuantityModel pqm = productServiceFacade.getProductQuantity(cartQty, product);
 
         final String message;
         if (!pqm.canOrderMore()) {

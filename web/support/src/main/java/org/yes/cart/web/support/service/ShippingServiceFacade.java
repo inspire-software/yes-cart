@@ -18,7 +18,7 @@ package org.yes.cart.web.support.service;
 
 import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.domain.entity.CarrierSla;
-import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.PriceModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
@@ -105,7 +105,7 @@ public interface ShippingServiceFacade {
      *
      * @return price (or blank object)
      */
-    ProductPriceModel getCartShippingTotal(ShoppingCart cart);
+    PriceModel getCartShippingTotal(ShoppingCart cart);
 
     /**
      * Get cart total price model (or blank object) with respect to current shop tax display settings.
@@ -116,7 +116,7 @@ public interface ShippingServiceFacade {
      *
      * @return price (or blank object)
      */
-    ProductPriceModel getCartShippingSupplierTotal(ShoppingCart cart, String supplier);
+    PriceModel getCartShippingSupplierTotal(ShoppingCart cart, String supplier);
 
     /**
      * Get cart items suppliers.

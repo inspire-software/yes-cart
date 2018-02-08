@@ -18,7 +18,7 @@ package org.yes.cart.web.support.service;
 
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.PriceModel;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
@@ -82,7 +82,7 @@ public interface CheckoutServiceFacade {
      *
      * @return model
      */
-    ProductPriceModel getOrderTotalSub(CustomerOrder customerOrder, ShoppingCart cart);
+    PriceModel getOrderTotalSub(CustomerOrder customerOrder, ShoppingCart cart);
 
     /**
      * Represent order total information as price model.
@@ -92,7 +92,7 @@ public interface CheckoutServiceFacade {
      *
      * @return model
      */
-    ProductPriceModel getOrderTotalAmount(CustomerOrder customerOrder, ShoppingCart cart);
+    PriceModel getOrderTotalAmount(CustomerOrder customerOrder, ShoppingCart cart);
 
     /**
      * Calculate order total using appropriate calculation strategy.
@@ -113,7 +113,7 @@ public interface CheckoutServiceFacade {
      *
      * @return total for this delivery
      */
-    ProductPriceModel getOrderDeliveryTotalSub(CustomerOrder customerOrder, CustomerOrderDelivery delivery, ShoppingCart cart);
+    PriceModel getOrderDeliveryTotalSub(CustomerOrder customerOrder, CustomerOrderDelivery delivery, ShoppingCart cart);
 
     /**
      * Calculate order total using appropriate calculation strategy.
@@ -124,7 +124,7 @@ public interface CheckoutServiceFacade {
      *
      * @return total for this delivery
      */
-    ProductPriceModel getOrderDeliveryTotalShipping(CustomerOrder customerOrder, CustomerOrderDelivery delivery, ShoppingCart cart);
+    PriceModel getOrderDeliveryTotalShipping(CustomerOrder customerOrder, CustomerOrderDelivery delivery, ShoppingCart cart);
 
     /**
      * Find all payment records for this order.

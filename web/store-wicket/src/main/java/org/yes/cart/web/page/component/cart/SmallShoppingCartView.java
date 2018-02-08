@@ -20,7 +20,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.PriceModel;
 import org.yes.cart.service.misc.PluralFormService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.MoneyUtils;
@@ -74,7 +74,7 @@ public class SmallShoppingCartView extends BaseComponent {
 
         final ShoppingCart cart = getCurrentCart();
 
-        final ProductPriceModel model = productServiceFacade.getCartItemsTotal(cart);
+        final PriceModel model = productServiceFacade.getCartItemsTotal(cart);
 
         final int itemsInCart = cart.getCartItemsCount();
         final String linkTarget = getLinkTarget(itemsInCart > 0 && MoneyUtils.isPositive(cart.getTotal().getTotalAmount()));

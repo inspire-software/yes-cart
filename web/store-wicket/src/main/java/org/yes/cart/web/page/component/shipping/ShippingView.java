@@ -402,7 +402,7 @@ public class ShippingView extends BaseComponent {
             form.addOrReplace(new Label(PRICE_LABEL));
             form.addOrReplace(new Label(PRICE_VIEW));
         } else {
-            final ProductPriceModel model = shippingServiceFacade.getCartShippingSupplierTotal(cart, this.supplier);
+            final PriceModel model = shippingServiceFacade.getCartShippingSupplierTotal(cart, this.supplier);
 
             form.addOrReplace(new Label(PRICE_LABEL, new StringResourceModel(PRICE_LABEL, this)));
             form.addOrReplace(

@@ -386,7 +386,7 @@ public class SkuCentralView extends AbstractCentralView {
                         new ProductAssociationsView(PRODUCTS_VIEW, productsBuy)
                 ).setVisible(buyVisible));
 
-        final Collection<ProductPriceModel> prices = getSkuPrices();
+        final Collection<PriceModel> prices = getSkuPrices();
         final boolean multibuy = CollectionUtils.isNotEmpty(prices) && prices.size() > 1;
         add(new Fragment(VOLUME_DISCOUNT_HEAD_CONTAINER, VOLUME_DISCOUNT_HEAD, this).setVisible(multibuy));
         add(new PriceTierView(VOLUME_DISCOUNT_BODY_CONTAINER, prices));
@@ -421,7 +421,7 @@ public class SkuCentralView extends AbstractCentralView {
      *
      * @return collection of sku prices.
      */
-    private List<ProductPriceModel> getSkuPrices() {
+    private List<PriceModel> getSkuPrices() {
         /* We always preselect a SKU */
         return productServiceFacade.getSkuPrices(
                 getCurrentCart(),
@@ -450,7 +450,7 @@ public class SkuCentralView extends AbstractCentralView {
 
     private PriceView getPriceView() {
 
-        final ProductPriceModel model = productServiceFacade.getSkuPrice(
+        final PriceModel model = productServiceFacade.getSkuPrice(
                 getCurrentCart(),
                 null,
                 sku.getCode(), /* We always preselect a SKU */

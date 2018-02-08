@@ -29,7 +29,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.PriceModel;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
@@ -110,7 +110,7 @@ public class ShoppingCartView extends BaseComponent {
 
         final CartValidityModel validation = checkoutServiceFacade.validateCart(cart);
 
-        final ProductPriceModel model = productServiceFacade.getCartItemsTotal(cart);
+        final PriceModel model = productServiceFacade.getCartItemsTotal(cart);
         final Total total = cart.getTotal();
 
         final Form cartForm = new StatelessForm(CART_FORM);

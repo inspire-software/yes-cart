@@ -24,7 +24,7 @@ import java.math.BigDecimal;
  * Date: 25/10/2014
  * Time: 11:42
  */
-public interface ProductQuantityModel extends Serializable {
+public interface QuantityModel extends Serializable {
 
     /**
      * Returns true if we can order less one step of this item

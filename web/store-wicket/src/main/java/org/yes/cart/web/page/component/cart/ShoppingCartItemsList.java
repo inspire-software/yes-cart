@@ -138,7 +138,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
         final ProductSku sku = productServiceFacade.getProductSkuBySkuCode(skuCode);
         final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(sku, browsingShopId);
-        final ProductQuantityModel pqm = productServiceFacade.getProductQuantity(cartItem.getQty(), sku);
+        final QuantityModel pqm = productServiceFacade.getProductQuantity(cartItem.getQty(), sku);
 
         final ProductSkuDecorator productSkuDecorator = decoratorFacade.decorate(sku, wicketUtil.getHttpServletRequest().getContextPath(), true);
 
@@ -236,7 +236,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
         final ShoppingCart cart = ((AbstractWebPage) getPage()).getCurrentCart();
 
-        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
+        final PriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
 
         final PriceView priceView = new PriceView(PRICE_VIEW, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount(), cartItem.isGift());
 
@@ -250,7 +250,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
         final ShoppingCart cart = ((AbstractWebPage) getPage()).getCurrentCart();
 
-        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, true);
+        final PriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, true);
 
         final PriceView priceView = new PriceView(LINE_TOTAL_VIEW, model, null, false, false, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
 

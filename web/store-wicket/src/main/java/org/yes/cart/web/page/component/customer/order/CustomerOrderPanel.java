@@ -30,7 +30,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDet;
-import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.PriceModel;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.DateUtils;
@@ -124,7 +124,7 @@ public class CustomerOrderPanel extends BaseComponent {
                                         protected void populateItem(final ListItem<CustomerOrder> customerOrderListItem) {
 
                                             final CustomerOrder order = customerOrderListItem.getModelObject();
-                                            final ProductPriceModel amount = checkoutServiceFacade.getOrderTotalSub(order, getCurrentCart());
+                                            final PriceModel amount = checkoutServiceFacade.getOrderTotalSub(order, getCurrentCart());
 
                                             customerOrderListItem
                                                     .add(determineOrderPageLink(order, CustomerOrderPanel.ORDER_VIEW_LINK))

@@ -16,7 +16,7 @@
 
 package org.yes.cart.domain.entity.impl;
 
-import org.yes.cart.domain.entity.ProductQuantityModel;
+import org.yes.cart.domain.entity.QuantityModel;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -27,7 +27,7 @@ import java.math.RoundingMode;
  * Date: 25/10/2014
  * Time: 11:55
  */
-public class ProductQuantityModelImpl implements ProductQuantityModel {
+public class QuantityModelImpl implements QuantityModel {
 
     private static final BigDecimal MAX = new BigDecimal(Integer.MAX_VALUE);
 
@@ -43,10 +43,10 @@ public class ProductQuantityModelImpl implements ProductQuantityModel {
     private final BigDecimal step;
     private final BigDecimal cartQty;
 
-    public ProductQuantityModelImpl(final BigDecimal min,
-                                    final BigDecimal max,
-                                    final BigDecimal step,
-                                    final BigDecimal cartQty) {
+    public QuantityModelImpl(final BigDecimal min,
+                             final BigDecimal max,
+                             final BigDecimal step,
+                             final BigDecimal cartQty) {
 
         this.hasStep = MoneyUtils.isPositive(step);
         this.step = (this.hasStep ? step : BigDecimal.ONE).stripTrailingZeros(); // Stepping ultimately defines the scale for quantity

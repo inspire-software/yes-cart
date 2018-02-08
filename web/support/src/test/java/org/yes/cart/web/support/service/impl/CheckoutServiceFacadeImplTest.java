@@ -6,7 +6,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.PriceModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingContext;
 import org.yes.cart.shoppingcart.Total;
@@ -75,7 +75,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(order).getCurrency(); will(returnValue("EUR"));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalSub(order, cart);
+        final PriceModel model = facade.getOrderTotalSub(order, cart);
 
         assertNotNull(model);
 
@@ -129,7 +129,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(noTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalSub(order, cart);
+        final PriceModel model = facade.getOrderTotalSub(order, cart);
 
         assertNotNull(model);
 
@@ -182,7 +182,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(noTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalSub(order, cart);
+        final PriceModel model = facade.getOrderTotalSub(order, cart);
 
         assertNotNull(model);
 
@@ -237,7 +237,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(netPercentTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalSub(order, cart);
+        final PriceModel model = facade.getOrderTotalSub(order, cart);
 
         assertNotNull(model);
 
@@ -291,7 +291,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(grossPercentTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalSub(order, cart);
+        final PriceModel model = facade.getOrderTotalSub(order, cart);
 
         assertNotNull(model);
 
@@ -344,7 +344,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(netPercentTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalSub(order, cart);
+        final PriceModel model = facade.getOrderTotalSub(order, cart);
 
         assertNotNull(model);
 
@@ -397,7 +397,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(grossPercentTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalSub(order, cart);
+        final PriceModel model = facade.getOrderTotalSub(order, cart);
 
         assertNotNull(model);
 
@@ -452,7 +452,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(order).getCurrency(); will(returnValue("EUR"));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalAmount(order, cart);
+        final PriceModel model = facade.getOrderTotalAmount(order, cart);
 
         assertNotNull(model);
 
@@ -504,7 +504,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(order).getCurrency(); will(returnValue("EUR"));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalAmount(order, cart);
+        final PriceModel model = facade.getOrderTotalAmount(order, cart);
 
         assertNotNull(model);
 
@@ -559,7 +559,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(noTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalAmount(order, cart);
+        final PriceModel model = facade.getOrderTotalAmount(order, cart);
 
         assertNotNull(model);
 
@@ -614,7 +614,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(noTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalAmount(order, cart);
+        final PriceModel model = facade.getOrderTotalAmount(order, cart);
 
         assertNotNull(model);
 
@@ -667,7 +667,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(noTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalAmount(order, cart);
+        final PriceModel model = facade.getOrderTotalAmount(order, cart);
 
         assertNotNull(model);
 
@@ -722,7 +722,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(noTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalAmount(order, cart);
+        final PriceModel model = facade.getOrderTotalAmount(order, cart);
 
         assertNotNull(model);
 
@@ -776,7 +776,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(netPercentTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalAmount(order, cart);
+        final PriceModel model = facade.getOrderTotalAmount(order, cart);
 
         assertNotNull(model);
 
@@ -831,7 +831,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(netPercentTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalAmount(order, cart);
+        final PriceModel model = facade.getOrderTotalAmount(order, cart);
 
         assertNotNull(model);
 
@@ -885,7 +885,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(grossPercentTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalAmount(order, cart);
+        final PriceModel model = facade.getOrderTotalAmount(order, cart);
 
         assertNotNull(model);
 
@@ -940,7 +940,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(grossPercentTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalAmount(order, cart);
+        final PriceModel model = facade.getOrderTotalAmount(order, cart);
 
         assertNotNull(model);
 
@@ -994,7 +994,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(netPercentTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalAmount(order, cart);
+        final PriceModel model = facade.getOrderTotalAmount(order, cart);
 
         assertNotNull(model);
 
@@ -1049,7 +1049,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(netPercentTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalAmount(order, cart);
+        final PriceModel model = facade.getOrderTotalAmount(order, cart);
 
         assertNotNull(model);
 
@@ -1103,7 +1103,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(grossPercentTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalAmount(order, cart);
+        final PriceModel model = facade.getOrderTotalAmount(order, cart);
 
         assertNotNull(model);
 
@@ -1158,7 +1158,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(grossPercentTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderTotalAmount(order, cart);
+        final PriceModel model = facade.getOrderTotalAmount(order, cart);
 
         assertNotNull(model);
 
@@ -1208,7 +1208,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(order).getCurrency(); will(returnValue("EUR"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalSub(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalSub(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1259,7 +1259,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(noTaxInfo()));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalSub(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalSub(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1310,7 +1310,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalSub(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalSub(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1363,7 +1363,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalSub(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalSub(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1415,7 +1415,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalSub(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalSub(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1466,7 +1466,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalSub(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalSub(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1517,7 +1517,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalSub(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalSub(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1570,7 +1570,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(order).getCurrency(); will(returnValue("EUR"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1621,7 +1621,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(order).getCurrency(); will(returnValue("EUR"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1675,7 +1675,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1730,7 +1730,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1782,7 +1782,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1836,7 +1836,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1889,7 +1889,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1943,7 +1943,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -1996,7 +1996,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -2050,7 +2050,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -2104,7 +2104,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -2158,7 +2158,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -2211,7 +2211,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
 
         assertNotNull(model);
 
@@ -2265,7 +2265,7 @@ public class CheckoutServiceFacadeImplTest {
             allowing(delivery).getTaxCode(); will(returnValue("TAX"));
         }});
 
-        final ProductPriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
+        final PriceModel model = facade.getOrderDeliveryTotalShipping(order, delivery, cart);
 
         assertNotNull(model);
 

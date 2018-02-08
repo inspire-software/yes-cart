@@ -22,7 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.domain.entity.impl.ProductPriceModelImpl;
+import org.yes.cart.domain.entity.impl.PriceModelImpl;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CarrierService;
@@ -269,7 +269,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
     /**
      * {@inheritDoc}
      */
-    public ProductPriceModel getCartShippingTotal(final ShoppingCart cart) {
+    public PriceModel getCartShippingTotal(final ShoppingCart cart) {
 
         final String currency = cart.getCurrencyCode();
 
@@ -322,7 +322,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                     final MoneyUtils.Money listMoney = MoneyUtils.getMoney(list, taxRate, !exclusiveTax);
                     final BigDecimal listAdjusted = showTaxNet ? listMoney.getNet() : listMoney.getGross();
 
-                    return new ProductPriceModelImpl(
+                    return new PriceModelImpl(
                             CART_SHIPPING_TOTAL_REF,
                             currency,
                             deliveriesCount,
@@ -336,7 +336,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
                 }
                 // no discounts
-                return new ProductPriceModelImpl(
+                return new PriceModelImpl(
                         CART_SHIPPING_TOTAL_REF,
                         currency,
                         deliveriesCount,
@@ -356,7 +356,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
         if (MoneyUtils.isFirstBiggerThanSecond(list, sale)) {
             // if we have discounts
-            return new ProductPriceModelImpl(
+            return new PriceModelImpl(
                     CART_SHIPPING_TOTAL_REF,
                     currency,
                     deliveriesCount,
@@ -365,7 +365,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
         }
         // no discounts
-        return new ProductPriceModelImpl(
+        return new PriceModelImpl(
                 CART_SHIPPING_TOTAL_REF,
                 currency,
                 deliveriesCount,
@@ -379,7 +379,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
     /**
      * {@inheritDoc}
      */
-    public ProductPriceModel getCartShippingSupplierTotal(final ShoppingCart cart, final String supplier) {
+    public PriceModel getCartShippingSupplierTotal(final ShoppingCart cart, final String supplier) {
 
         final String currency = cart.getCurrencyCode();
 
@@ -443,7 +443,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                     final MoneyUtils.Money listMoney = MoneyUtils.getMoney(list, taxRate, !exclusiveTax);
                     final BigDecimal listAdjusted = showTaxNet ? listMoney.getNet() : listMoney.getGross();
 
-                    return new ProductPriceModelImpl(
+                    return new PriceModelImpl(
                             CART_SHIPPING_TOTAL_REF,
                             currency,
                             deliveriesCount,
@@ -457,7 +457,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
                 }
                 // no discounts
-                return new ProductPriceModelImpl(
+                return new PriceModelImpl(
                         CART_SHIPPING_TOTAL_REF,
                         currency,
                         deliveriesCount,
@@ -477,7 +477,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
         if (MoneyUtils.isFirstBiggerThanSecond(list, sale)) {
             // if we have discounts
-            return new ProductPriceModelImpl(
+            return new PriceModelImpl(
                     CART_SHIPPING_TOTAL_REF,
                     currency,
                     deliveriesCount,
@@ -486,7 +486,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
         }
         // no discounts
-        return new ProductPriceModelImpl(
+        return new PriceModelImpl(
                 CART_SHIPPING_TOTAL_REF,
                 currency,
                 deliveriesCount,

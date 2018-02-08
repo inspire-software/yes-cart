@@ -29,7 +29,7 @@ import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
-import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.PriceModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.MoneyUtils;
@@ -237,8 +237,8 @@ public class WishListView extends AbstractProductSearchResultList {
 
         final ShoppingCart cart = getCurrentCart();
 
-        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndDelta = productServiceFacade.getSkuPrice(cart, itemData);
-        final ProductPriceModel model = modelAndDelta.getFirst();
+        final Pair<PriceModel, CustomerWishList.PriceChange> modelAndDelta = productServiceFacade.getSkuPrice(cart, itemData);
+        final PriceModel model = modelAndDelta.getFirst();
         final CustomerWishList.PriceChange change = modelAndDelta.getSecond();
 
         String priceInfo = "";

@@ -23,7 +23,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.PriceModel;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -268,7 +268,7 @@ public interface ProductServiceFacade {
      *
      * @return quantity model
      */
-    ProductQuantityModel getProductQuantity(BigDecimal cartQty, Product product);
+    QuantityModel getProductQuantity(BigDecimal cartQty, Product product);
 
     /**
      * Quantity model.
@@ -278,7 +278,7 @@ public interface ProductServiceFacade {
      *
      * @return quantity model
      */
-    ProductQuantityModel getProductQuantity(BigDecimal cartQty, ProductSku product);
+    QuantityModel getProductQuantity(BigDecimal cartQty, ProductSku product);
 
     /**
      * Quantity model.
@@ -288,7 +288,7 @@ public interface ProductServiceFacade {
      *
      * @return quantity model
      */
-    ProductQuantityModel getProductQuantity(BigDecimal cartQty, ProductSearchResultDTO product);
+    QuantityModel getProductQuantity(BigDecimal cartQty, ProductSearchResultDTO product);
 
 
     /**
@@ -301,7 +301,7 @@ public interface ProductServiceFacade {
      *
      * @return quantity model
      */
-    ProductQuantityModel getProductQuantity(BigDecimal cartQty, BigDecimal min, BigDecimal max, BigDecimal step);
+    QuantityModel getProductQuantity(BigDecimal cartQty, BigDecimal min, BigDecimal max, BigDecimal step);
 
     /**
      * Get price model (or blank object) with respect to current shop tax display settings.
@@ -313,7 +313,7 @@ public interface ProductServiceFacade {
      *
      * @return price (or blank object)
      */
-    Pair<ProductPriceModel, CustomerWishList.PriceChange> getSkuPrice(ShoppingCart cart, CustomerWishList item);
+    Pair<PriceModel, CustomerWishList.PriceChange> getSkuPrice(ShoppingCart cart, CustomerWishList item);
 
 
     /**
@@ -328,7 +328,7 @@ public interface ProductServiceFacade {
      *
      * @return active product/SKU price (or blank object)
      */
-    ProductPriceModel getSkuPrice(ShoppingCart cart, Long productId, String skuCode, BigDecimal quantity);
+    PriceModel getSkuPrice(ShoppingCart cart, Long productId, String skuCode, BigDecimal quantity);
 
     /**
      * Get price model (or blank object) with respect to current shop tax display settings.
@@ -343,7 +343,7 @@ public interface ProductServiceFacade {
      *
      * @return price (or blank object)
      */
-    ProductPriceModel getSkuPrice(ShoppingCart cart, String ref, BigDecimal quantity, BigDecimal listPrice, BigDecimal salePrice);
+    PriceModel getSkuPrice(ShoppingCart cart, String ref, BigDecimal quantity, BigDecimal listPrice, BigDecimal salePrice);
 
     /**
      * Get price model (or blank object) with respect to current shop tax display settings.
@@ -356,7 +356,7 @@ public interface ProductServiceFacade {
      *
      * @return price (or blank object)
      */
-    ProductPriceModel getSkuPrice(ShoppingCart cart, CartItem item, boolean total);
+    PriceModel getSkuPrice(ShoppingCart cart, CartItem item, boolean total);
 
     /**
      * Get price model (or blank object) with respect to current shop tax display settings. (used by YCE)
@@ -373,7 +373,7 @@ public interface ProductServiceFacade {
      *
      * @return price (or blank object)
      */
-    ProductPriceModel getSkuPrice(String currency, boolean showTax, boolean showTaxNet, boolean showTaxAmount, CartItem item, boolean total, final boolean hide);
+    PriceModel getSkuPrice(String currency, boolean showTax, boolean showTaxNet, boolean showTaxAmount, CartItem item, boolean total, final boolean hide);
 
     /**
      * Get prices for all SKU quantity tiers sorted by tier.
@@ -384,7 +384,7 @@ public interface ProductServiceFacade {
      *
      * @return active product/SKU prices (or blank object)
      */
-    List<ProductPriceModel> getSkuPrices(ShoppingCart cart, Long productId, String skuCode);
+    List<PriceModel> getSkuPrices(ShoppingCart cart, Long productId, String skuCode);
 
 
     /**
@@ -396,7 +396,7 @@ public interface ProductServiceFacade {
      *
      * @return price (or blank object)
      */
-    ProductPriceModel getCartItemsTotal(ShoppingCart cart);
+    PriceModel getCartItemsTotal(ShoppingCart cart);
 
     /**
      * Generate promotion model map from given applied promotion codes.

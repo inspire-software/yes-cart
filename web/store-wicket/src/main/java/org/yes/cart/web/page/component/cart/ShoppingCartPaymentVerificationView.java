@@ -29,7 +29,6 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -117,8 +116,8 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
         final ShoppingCart cart = getCurrentCart();
         final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(orderGuid);
-        final ProductPriceModel subTotalPrice = checkoutServiceFacade.getOrderTotalSub(customerOrder, cart);
-        final ProductPriceModel grandTotalPrice = checkoutServiceFacade.getOrderTotalAmount(customerOrder, cart);
+        final PriceModel subTotalPrice = checkoutServiceFacade.getOrderTotalSub(customerOrder, cart);
+        final PriceModel grandTotalPrice = checkoutServiceFacade.getOrderTotalAmount(customerOrder, cart);
 
         final String selectedLocale = getLocale().getLanguage();
         final Set<String> allPromos = checkoutServiceFacade.getOrderPromoCodes(customerOrder);
@@ -151,8 +150,8 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                         final List<CustomerOrderDeliveryDet> deliveryDet = new ArrayList<CustomerOrderDeliveryDet>(delivery.getDetail());
 
-                        final ProductPriceModel deliveryTotal = checkoutServiceFacade.getOrderDeliveryTotalSub(customerOrder, delivery, getCurrentCart());
-                        final ProductPriceModel deliveryShipping = checkoutServiceFacade.getOrderDeliveryTotalShipping(customerOrder, delivery, getCurrentCart());
+                        final PriceModel deliveryTotal = checkoutServiceFacade.getOrderDeliveryTotalSub(customerOrder, delivery, getCurrentCart());
+                        final PriceModel deliveryShipping = checkoutServiceFacade.getOrderDeliveryTotalShipping(customerOrder, delivery, getCurrentCart());
                         final boolean freeShipping = MoneyUtils.isFirstEqualToSecond(deliveryShipping.getRegularPrice(), BigDecimal.ZERO);
 
                         final IModel<String> deliveryTime;
@@ -361,7 +360,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
         final ShoppingCart cart = ((AbstractWebPage) getPage()).getCurrentCart();
 
-        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
+        final PriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
 
         final PriceView priceView = new PriceView(ITEM_PRICE, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount(), cartItem.isGift());
 
@@ -373,7 +372,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
         final ShoppingCart cart = ((AbstractWebPage) getPage()).getCurrentCart();
 
-        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, true);
+        final PriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, true);
 
         final PriceView priceView = new PriceView(ITEM_TOTAL, model, null, false, false, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
 

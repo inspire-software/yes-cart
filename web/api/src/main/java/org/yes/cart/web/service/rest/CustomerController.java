@@ -1174,14 +1174,14 @@ public class CustomerController {
                         final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
                         wl.setProductAvailabilityModel(amRo);
 
-                        final ProductPriceModel price = productServiceFacade.getSkuPrice(
+                        final PriceModel price = productServiceFacade.getSkuPrice(
                                 cart,
                                 null,
                                 skuPam.getFirstAvailableSkuCode(),
                                 BigDecimal.ONE
                         );
 
-                        final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, ProductPriceModel.class);
+                        final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, PriceModel.class);
                         priceRo.setSymbol(symbol.getFirst());
                         priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
 
@@ -1651,14 +1651,14 @@ public class CustomerController {
             final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
             rv.setProductAvailabilityModel(amRo);
 
-            final ProductPriceModel price = productServiceFacade.getSkuPrice(
+            final PriceModel price = productServiceFacade.getSkuPrice(
                     cart,
                     null,
                     skuPam.getFirstAvailableSkuCode(),
                     BigDecimal.ONE
             );
 
-            final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, ProductPriceModel.class);
+            final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, PriceModel.class);
             priceRo.setSymbol(symbol.getFirst());
             priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
 

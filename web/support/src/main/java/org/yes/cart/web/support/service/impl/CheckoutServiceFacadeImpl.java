@@ -22,7 +22,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.domain.entity.impl.ProductPriceModelImpl;
+import org.yes.cart.domain.entity.impl.PriceModelImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
@@ -116,7 +116,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
     /** {@inheritDoc} */
     @Override
-    public ProductPriceModel getOrderTotalSub(final CustomerOrder customerOrder, final ShoppingCart cart) {
+    public PriceModel getOrderTotalSub(final CustomerOrder customerOrder, final ShoppingCart cart) {
 
         final Total grandTotal = getOrderTotal(customerOrder);
 
@@ -137,7 +137,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
             final boolean priceTaxExclusive = MoneyUtils.isFirstBiggerThanSecond(grandTotal.getTotalAmount(), grandTotal.getTotal());
 
             // no discounts on sub total
-            return new ProductPriceModelImpl(
+            return new PriceModelImpl(
                     ORDER_SUB_TOTAL_REF,
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
@@ -153,7 +153,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
         }
 
         // no discounts on sub total
-        return new ProductPriceModelImpl(
+        return new PriceModelImpl(
                 ORDER_SUB_TOTAL_REF,
                 customerOrder.getCurrency(),
                 BigDecimal.ONE,
@@ -167,7 +167,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
     /** {@inheritDoc} */
     @Override
-    public ProductPriceModel getOrderTotalAmount(final CustomerOrder customerOrder, final ShoppingCart cart) {
+    public PriceModel getOrderTotalAmount(final CustomerOrder customerOrder, final ShoppingCart cart) {
 
         final Total grandTotal = getOrderTotal(customerOrder);
 
@@ -185,7 +185,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
             final BigDecimal taxPercent = grandTotal.getTotalTax().divide(netAmount, Constants.TAX_SCALE, BigDecimal.ROUND_FLOOR);
             final BigDecimal taxRate = taxPercent.multiply(MoneyUtils.HUNDRED).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
 
-            return new ProductPriceModelImpl(
+            return new PriceModelImpl(
                     ORDER_TOTAL_REF,
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
@@ -203,7 +203,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
         if (hasDiscounts) {
 
-            return new ProductPriceModelImpl(
+            return new PriceModelImpl(
                     ORDER_TOTAL_REF,
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
@@ -213,7 +213,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
         }
 
-        return new ProductPriceModelImpl(
+        return new PriceModelImpl(
                 ORDER_TOTAL_REF,
                 customerOrder.getCurrency(),
                 BigDecimal.ONE,
@@ -232,7 +232,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     static final String DELIVERY_TOTAL_REF = "yc-delivery-sub-total";
 
     @Override
-    public ProductPriceModel getOrderDeliveryTotalSub(final CustomerOrder customerOrder, final CustomerOrderDelivery delivery, final ShoppingCart cart) {
+    public PriceModel getOrderDeliveryTotalSub(final CustomerOrder customerOrder, final CustomerOrderDelivery delivery, final ShoppingCart cart) {
 
         final Total grandTotal = getOrderDeliveryTotal(customerOrder, delivery);
 
@@ -253,7 +253,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
             final boolean priceTaxExclusive = MoneyUtils.isFirstBiggerThanSecond(grandTotal.getSubTotalAmount(), grandTotal.getSubTotal());
 
             // no discounts on sub total
-            return new ProductPriceModelImpl(
+            return new PriceModelImpl(
                     DELIVERY_TOTAL_REF,
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
@@ -269,7 +269,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
         }
 
         // no discounts on sub total
-        return new ProductPriceModelImpl(
+        return new PriceModelImpl(
                 DELIVERY_TOTAL_REF,
                 customerOrder.getCurrency(),
                 BigDecimal.ONE,
@@ -282,7 +282,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     static final String DELIVERY_SHIPPING_REF = "yc-delivery-shipping";
 
     @Override
-    public ProductPriceModel getOrderDeliveryTotalShipping(final CustomerOrder customerOrder, final CustomerOrderDelivery delivery, final ShoppingCart cart) {
+    public PriceModel getOrderDeliveryTotalShipping(final CustomerOrder customerOrder, final CustomerOrderDelivery delivery, final ShoppingCart cart) {
 
         final Total grandTotal = getOrderDeliveryTotal(customerOrder, delivery);
 
@@ -305,7 +305,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
             if (hasDiscount) {
 
-                return new ProductPriceModelImpl(DELIVERY_SHIPPING_REF, customerOrder.getCurrency(), BigDecimal.ONE,
+                return new PriceModelImpl(DELIVERY_SHIPPING_REF, customerOrder.getCurrency(), BigDecimal.ONE,
                         showTaxNet ?
                                 MoneyUtils.getNetAmount(grandTotal.getDeliveryListCost(), taxRate, !priceTaxExclusive) :
                                 MoneyUtils.getGrossAmount(grandTotal.getDeliveryListCost(), taxRate, !priceTaxExclusive),
@@ -322,7 +322,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
             }
 
 
-            return new ProductPriceModelImpl(DELIVERY_SHIPPING_REF, customerOrder.getCurrency(), BigDecimal.ONE,
+            return new PriceModelImpl(DELIVERY_SHIPPING_REF, customerOrder.getCurrency(), BigDecimal.ONE,
                     showTaxNet ?
                             grandTotal.getDeliveryCostAmount().subtract(grandTotal.getDeliveryTax()) :
                             grandTotal.getDeliveryCostAmount(),
@@ -338,7 +338,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
         if (hasDiscount) {
 
-            return new ProductPriceModelImpl(
+            return new PriceModelImpl(
                     DELIVERY_SHIPPING_REF,
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
@@ -348,7 +348,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
         }
 
-        return new ProductPriceModelImpl(
+        return new PriceModelImpl(
                 DELIVERY_SHIPPING_REF,
                 customerOrder.getCurrency(),
                 BigDecimal.ONE,

@@ -325,15 +325,15 @@ public class CartController {
             final CartItem item = items.get(i);
             final CartItemRO itemRO = cartRO.getCartItems().get(i);
 
-            final ProductPriceModel modelUnit = productServiceFacade.getSkuPrice(cart, item, false);
-            final ProductPriceModel modelTotal = productServiceFacade.getSkuPrice(cart, item, true);
+            final PriceModel modelUnit = productServiceFacade.getSkuPrice(cart, item, false);
+            final PriceModel modelTotal = productServiceFacade.getSkuPrice(cart, item, true);
 
-            final SkuPriceRO unitPricingRo = mappingMixin.map(modelUnit, SkuPriceRO.class, ProductPriceModel.class);
+            final SkuPriceRO unitPricingRo = mappingMixin.map(modelUnit, SkuPriceRO.class, PriceModel.class);
             unitPricingRo.setSymbol(cartCurrencySymbol);
             unitPricingRo.setSymbolPosition(cartCurrencySymbolPosition);
             itemRO.setUnitPricing(unitPricingRo);
 
-            final SkuPriceRO totalPricingRo = mappingMixin.map(modelTotal, SkuPriceRO.class, ProductPriceModel.class);
+            final SkuPriceRO totalPricingRo = mappingMixin.map(modelTotal, SkuPriceRO.class, PriceModel.class);
             totalPricingRo.setSymbol(cartCurrencySymbol);
             totalPricingRo.setSymbolPosition(cartCurrencySymbolPosition);
             itemRO.setTotalPricing(totalPricingRo);
@@ -345,30 +345,30 @@ public class CartController {
             final CartItem item = shipping.get(i);
             final CartItemRO itemRO = cartRO.getShipping().get(i);
 
-            final ProductPriceModel modelUnit = productServiceFacade.getSkuPrice(cart, item, false);
-            final ProductPriceModel modelTotal = productServiceFacade.getSkuPrice(cart, item, true);
+            final PriceModel modelUnit = productServiceFacade.getSkuPrice(cart, item, false);
+            final PriceModel modelTotal = productServiceFacade.getSkuPrice(cart, item, true);
 
-            final SkuPriceRO unitPricingRo = mappingMixin.map(modelUnit, SkuPriceRO.class, ProductPriceModel.class);
+            final SkuPriceRO unitPricingRo = mappingMixin.map(modelUnit, SkuPriceRO.class, PriceModel.class);
             unitPricingRo.setSymbol(cartCurrencySymbol);
             unitPricingRo.setSymbolPosition(cartCurrencySymbolPosition);
             itemRO.setUnitPricing(unitPricingRo);
 
-            final SkuPriceRO totalPricingRo = mappingMixin.map(modelTotal, SkuPriceRO.class, ProductPriceModel.class);
+            final SkuPriceRO totalPricingRo = mappingMixin.map(modelTotal, SkuPriceRO.class, PriceModel.class);
             totalPricingRo.setSymbol(cartCurrencySymbol);
             totalPricingRo.setSymbolPosition(cartCurrencySymbolPosition);
             itemRO.setTotalPricing(totalPricingRo);
         }
 
         // Items pricing
-        final ProductPriceModel itemsPricing = productServiceFacade.getCartItemsTotal(cart);
-        final SkuPriceRO itemsPricingRo = mappingMixin.map(itemsPricing, SkuPriceRO.class, ProductPriceModel.class);
+        final PriceModel itemsPricing = productServiceFacade.getCartItemsTotal(cart);
+        final SkuPriceRO itemsPricingRo = mappingMixin.map(itemsPricing, SkuPriceRO.class, PriceModel.class);
         itemsPricingRo.setSymbol(cartCurrencySymbol);
         itemsPricingRo.setSymbolPosition(cartCurrencySymbolPosition);
         cartRO.getTotal().setItemPricing(itemsPricingRo);
 
         // Delivery pricing
-        final ProductPriceModel deliveryPricing = shippingServiceFacade.getCartShippingTotal(cart);
-        final SkuPriceRO deliveryPricingRo = mappingMixin.map(deliveryPricing, SkuPriceRO.class, ProductPriceModel.class);
+        final PriceModel deliveryPricing = shippingServiceFacade.getCartShippingTotal(cart);
+        final SkuPriceRO deliveryPricingRo = mappingMixin.map(deliveryPricing, SkuPriceRO.class, PriceModel.class);
         deliveryPricingRo.setSymbol(cartCurrencySymbol);
         deliveryPricingRo.setSymbolPosition(cartCurrencySymbolPosition);
         cartRO.getTotal().setDeliveryPricing(deliveryPricingRo);

@@ -20,7 +20,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.PriceModel;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.CartItem;
@@ -70,7 +70,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -124,7 +124,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -179,7 +179,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -233,7 +233,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -286,7 +286,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -356,7 +356,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -424,7 +424,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -492,7 +492,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -555,7 +555,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -619,7 +619,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -682,7 +682,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -752,7 +752,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -820,7 +820,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -888,7 +888,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -953,7 +953,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1018,7 +1018,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1080,7 +1080,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1150,7 +1150,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1218,7 +1218,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1286,7 +1286,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1349,7 +1349,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1413,7 +1413,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1475,7 +1475,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1545,7 +1545,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1613,7 +1613,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1682,7 +1682,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1746,7 +1746,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1810,7 +1810,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1873,7 +1873,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+        final PriceModel model = facade.getCartShippingTotal(cart);
 
         assertNotNull(model);
 
@@ -1925,7 +1925,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -1979,7 +1979,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -2035,7 +2035,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -2090,7 +2090,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -2144,7 +2144,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -2224,7 +2224,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -2302,7 +2302,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -2380,7 +2380,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -2446,7 +2446,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -2513,7 +2513,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -2579,7 +2579,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -2659,7 +2659,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -2737,7 +2737,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -2815,7 +2815,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -2883,7 +2883,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -2951,7 +2951,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -3016,7 +3016,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -3096,7 +3096,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -3174,7 +3174,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -3252,7 +3252,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -3318,7 +3318,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -3385,7 +3385,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -3450,7 +3450,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -3530,7 +3530,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -3608,7 +3608,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -3687,7 +3687,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -3754,7 +3754,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -3821,7 +3821,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 
@@ -3887,7 +3887,7 @@ public class ShippingServiceFacadeImplTest {
         final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
-        final ProductPriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
+        final PriceModel model = facade.getCartShippingSupplierTotal(cart, "SUP1");
 
         assertNotNull(model);
 

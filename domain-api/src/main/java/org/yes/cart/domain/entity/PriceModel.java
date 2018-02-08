@@ -8,7 +8,7 @@ import java.math.BigDecimal;
  * Date: 01/10/2015
  * Time: 18:41
  */
-public interface ProductPriceModel extends Serializable {
+public interface PriceModel extends Serializable {
 
     /**
      * Get price reference.

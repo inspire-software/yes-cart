@@ -6,7 +6,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.value.ValueMap;
-import org.yes.cart.domain.entity.ProductQuantityModel;
+import org.yes.cart.domain.entity.QuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -54,7 +54,7 @@ public class AjaxAtbPage extends AbstractWebPage {
         final ProductSku productSku = productServiceFacade.getProductSkuBySkuCode(sku);
         final ShoppingCart cart = getCurrentCart();
         final BigDecimal cartQty = cart.getProductSkuQuantity(sku);
-        final ProductQuantityModel pqm = productServiceFacade.getProductQuantity(cartQty, productSku.getProduct());
+        final QuantityModel pqm = productServiceFacade.getProductQuantity(cartQty, productSku.getProduct());
 
         final String message;
         if (!pqm.canOrderMore()) {

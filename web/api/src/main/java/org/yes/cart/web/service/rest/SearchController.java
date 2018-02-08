@@ -31,7 +31,7 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
-import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.PriceModel;
 import org.yes.cart.domain.entity.ProductTypeAttr;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.*;
@@ -721,14 +721,14 @@ public class SearchController {
                 final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
                 ro.setProductAvailabilityModel(amRo);
 
-                final ProductPriceModel price = productServiceFacade.getSkuPrice(
+                final PriceModel price = productServiceFacade.getSkuPrice(
                         cart,
                         null,
                         skuPam.getFirstAvailableSkuCode(),
                         BigDecimal.ONE
                 );
 
-                final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, ProductPriceModel.class);
+                final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, PriceModel.class);
                 priceRo.setSymbol(symbol.getFirst());
                 priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
 

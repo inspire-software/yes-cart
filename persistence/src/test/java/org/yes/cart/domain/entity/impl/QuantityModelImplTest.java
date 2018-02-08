@@ -17,7 +17,7 @@
 package org.yes.cart.domain.entity.impl;
 
 import org.junit.Test;
-import org.yes.cart.domain.entity.ProductQuantityModel;
+import org.yes.cart.domain.entity.QuantityModel;
 
 import java.math.BigDecimal;
 
@@ -30,12 +30,12 @@ import static org.junit.Assert.assertTrue;
  * Date: 25/10/2014
  * Time: 12:18
  */
-public class ProductQuantityModelImplTest {
+public class QuantityModelImplTest {
 
     @Test
     public void testDefaultCartEmpty() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(null, null, null, null);
+        final QuantityModel pqm = new QuantityModelImpl(null, null, null, null);
 
         assertFalse(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());
@@ -79,7 +79,7 @@ public class ProductQuantityModelImplTest {
     @Test
     public void testDefaultCartEmptyWithMin() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(new BigDecimal("3"), null, null, null);
+        final QuantityModel pqm = new QuantityModelImpl(new BigDecimal("3"), null, null, null);
 
         assertFalse(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());
@@ -123,7 +123,7 @@ public class ProductQuantityModelImplTest {
     @Test
     public void testDefaultCartEmptyWithMinMax() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(new BigDecimal("3"), new BigDecimal("10"), null, null);
+        final QuantityModel pqm = new QuantityModelImpl(new BigDecimal("3"), new BigDecimal("10"), null, null);
 
         assertFalse(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());
@@ -167,7 +167,7 @@ public class ProductQuantityModelImplTest {
     @Test
     public void testDefaultCartEmptyWithMinMaxStepInt() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(new BigDecimal("3"), new BigDecimal("11"), new BigDecimal("2"), null);
+        final QuantityModel pqm = new QuantityModelImpl(new BigDecimal("3"), new BigDecimal("11"), new BigDecimal("2"), null);
 
         assertFalse(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());
@@ -211,7 +211,7 @@ public class ProductQuantityModelImplTest {
     @Test
     public void testDefaultCartEmptyWithMinMaxStepDecimal() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(new BigDecimal("3"), new BigDecimal("11"), new BigDecimal("0.2"), null);
+        final QuantityModel pqm = new QuantityModelImpl(new BigDecimal("3"), new BigDecimal("11"), new BigDecimal("0.2"), null);
 
         assertFalse(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());
@@ -256,7 +256,7 @@ public class ProductQuantityModelImplTest {
     @Test
     public void testDefaultCartWith1Item() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(null, null, null, new BigDecimal("1.00"));
+        final QuantityModel pqm = new QuantityModelImpl(null, null, null, new BigDecimal("1.00"));
 
         assertFalse(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());
@@ -300,7 +300,7 @@ public class ProductQuantityModelImplTest {
     @Test
     public void testDefaultCartWith1ItemWithMin() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(new BigDecimal("3"), null, null, new BigDecimal("1.00"));
+        final QuantityModel pqm = new QuantityModelImpl(new BigDecimal("3"), null, null, new BigDecimal("1.00"));
 
         assertFalse(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());
@@ -344,7 +344,7 @@ public class ProductQuantityModelImplTest {
     @Test
     public void testDefaultCartWith1ItemWithMinMax() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(new BigDecimal("3"), new BigDecimal("10"), null, new BigDecimal("1.00"));
+        final QuantityModel pqm = new QuantityModelImpl(new BigDecimal("3"), new BigDecimal("10"), null, new BigDecimal("1.00"));
 
         assertFalse(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());
@@ -388,7 +388,7 @@ public class ProductQuantityModelImplTest {
     @Test
     public void testDefaultCartWith1ItemWithMinMaxStepInt() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(new BigDecimal("3"), new BigDecimal("11"), new BigDecimal("2"), new BigDecimal("1.00"));
+        final QuantityModel pqm = new QuantityModelImpl(new BigDecimal("3"), new BigDecimal("11"), new BigDecimal("2"), new BigDecimal("1.00"));
 
         assertFalse(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());
@@ -432,7 +432,7 @@ public class ProductQuantityModelImplTest {
     @Test
     public void testDefaultCartWith1ItemWithMinMaxStepDecimal() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(new BigDecimal("3"), new BigDecimal("11"), new BigDecimal("0.2"), new BigDecimal("1.00"));
+        final QuantityModel pqm = new QuantityModelImpl(new BigDecimal("3"), new BigDecimal("11"), new BigDecimal("0.2"), new BigDecimal("1.00"));
 
         assertFalse(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());
@@ -476,7 +476,7 @@ public class ProductQuantityModelImplTest {
     @Test
     public void testDefaultCartWith3Items() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(null, null, null, new BigDecimal("3.00"));
+        final QuantityModel pqm = new QuantityModelImpl(null, null, null, new BigDecimal("3.00"));
 
         assertTrue(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());
@@ -520,7 +520,7 @@ public class ProductQuantityModelImplTest {
     @Test
     public void testDefaultCartWith3ItemsWithMin() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(new BigDecimal("2"), null, null, new BigDecimal("3.00"));
+        final QuantityModel pqm = new QuantityModelImpl(new BigDecimal("2"), null, null, new BigDecimal("3.00"));
 
         assertTrue(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());
@@ -564,7 +564,7 @@ public class ProductQuantityModelImplTest {
     @Test
     public void testDefaultCartWith3ItemsWithMinMax() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(new BigDecimal("2"), new BigDecimal("10"), null, new BigDecimal("3.00"));
+        final QuantityModel pqm = new QuantityModelImpl(new BigDecimal("2"), new BigDecimal("10"), null, new BigDecimal("3.00"));
 
         assertTrue(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());
@@ -608,7 +608,7 @@ public class ProductQuantityModelImplTest {
     @Test
     public void testDefaultCartWith3ItemsWithMinMaxStepInt() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(new BigDecimal("2"), new BigDecimal("10"), new BigDecimal("2"), new BigDecimal("3.00"));
+        final QuantityModel pqm = new QuantityModelImpl(new BigDecimal("2"), new BigDecimal("10"), new BigDecimal("2"), new BigDecimal("3.00"));
 
         assertTrue(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());
@@ -652,7 +652,7 @@ public class ProductQuantityModelImplTest {
     @Test
     public void testDefaultCartWith3ItemsWithMinMaxStepDecimal() throws Exception {
 
-        final ProductQuantityModel pqm = new ProductQuantityModelImpl(new BigDecimal("2"), new BigDecimal("10"), new BigDecimal("0.2"), new BigDecimal("3.00"));
+        final QuantityModel pqm = new QuantityModelImpl(new BigDecimal("2"), new BigDecimal("10"), new BigDecimal("0.2"), new BigDecimal("3.00"));
 
         assertTrue(pqm.canOrderLess());
         assertTrue(pqm.canOrderMore());

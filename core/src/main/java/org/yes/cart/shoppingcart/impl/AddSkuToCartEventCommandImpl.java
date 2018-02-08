@@ -18,7 +18,7 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.domain.entity.ProductQuantityModel;
+import org.yes.cart.domain.entity.QuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.ProductService;
@@ -79,7 +79,7 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
             try {
                 final BigDecimal qty = new BigDecimal((String) strQty);
                 if (productSku != null) {
-                    final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+                    final QuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
                     return pqm.getValidAddQty(qty);
                 }
                 if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(qty, BigDecimal.ZERO)) {
@@ -92,7 +92,7 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
             }
         }
         if (productSku != null) {
-            final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+            final QuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
             return pqm.getValidAddQty(null);
         }
         return BigDecimal.ONE;

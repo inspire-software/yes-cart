@@ -18,9 +18,9 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductQuantityModel;
+import org.yes.cart.domain.entity.QuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.impl.ProductQuantityModelImpl;
+import org.yes.cart.domain.entity.impl.QuantityModelImpl;
 import org.yes.cart.shoppingcart.ProductQuantityStrategy;
 
 import java.math.BigDecimal;
@@ -33,8 +33,8 @@ import java.math.BigDecimal;
 public class ProductQuantityStrategyDefaultImpl implements ProductQuantityStrategy {
 
     /** {@inheritDoc} */
-    public ProductQuantityModel getQuantityModel(final BigDecimal cartQty, final Product product) {
-        return new ProductQuantityModelImpl(
+    public QuantityModel getQuantityModel(final BigDecimal cartQty, final Product product) {
+        return new QuantityModelImpl(
                 product.getMinOrderQuantity(),
                 product.getMaxOrderQuantity(),
                 product.getStepOrderQuantity(),
@@ -42,8 +42,8 @@ public class ProductQuantityStrategyDefaultImpl implements ProductQuantityStrate
     }
 
     /** {@inheritDoc} */
-    public ProductQuantityModel getQuantityModel(final BigDecimal cartQty, final ProductSearchResultDTO product) {
-        return new ProductQuantityModelImpl(
+    public QuantityModel getQuantityModel(final BigDecimal cartQty, final ProductSearchResultDTO product) {
+        return new QuantityModelImpl(
                 product.getMinOrderQuantity(),
                 product.getMaxOrderQuantity(),
                 product.getStepOrderQuantity(),
@@ -51,16 +51,16 @@ public class ProductQuantityStrategyDefaultImpl implements ProductQuantityStrate
     }
 
     /** {@inheritDoc} */
-    public ProductQuantityModel getQuantityModel(final BigDecimal cartQty, final ProductSku productSku) {
+    public QuantityModel getQuantityModel(final BigDecimal cartQty, final ProductSku productSku) {
         return getQuantityModel(cartQty, productSku.getProduct());
     }
 
     /** {@inheritDoc} */
-    public ProductQuantityModel getQuantityModel(final BigDecimal cartQty,
-                                                 final BigDecimal min,
-                                                 final BigDecimal max,
-                                                 final BigDecimal step) {
-        return new ProductQuantityModelImpl(
+    public QuantityModel getQuantityModel(final BigDecimal cartQty,
+                                          final BigDecimal min,
+                                          final BigDecimal max,
+                                          final BigDecimal step) {
+        return new QuantityModelImpl(
                 min,
                 max,
                 step,

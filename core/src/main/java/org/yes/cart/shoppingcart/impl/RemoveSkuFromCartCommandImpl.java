@@ -18,7 +18,7 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.domain.entity.ProductQuantityModel;
+import org.yes.cart.domain.entity.QuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -73,7 +73,7 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
     private BigDecimal getQuantityValue(final ProductSku productSku, final BigDecimal quantityInCart) {
 
         if (productSku != null) {
-            final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+            final QuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
             return pqm.getValidRemoveQty(null);
         }
 

@@ -68,7 +68,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -123,7 +123,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -182,7 +182,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -242,7 +242,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -305,7 +305,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -370,7 +370,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -435,7 +435,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -499,7 +499,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -562,7 +562,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -637,7 +637,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -710,7 +710,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -786,7 +786,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -861,7 +861,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -937,7 +937,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -1010,7 +1010,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -1086,7 +1086,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -1161,7 +1161,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
 
         assertNotNull(model);
 
@@ -1197,7 +1197,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel modelPrice = facade.getSkuPrice("EUR", true, true, true, item, false, true);
+        final PriceModel modelPrice = facade.getSkuPrice("EUR", true, true, true, item, false, true);
 
         assertNotNull(modelPrice);
 
@@ -1219,7 +1219,7 @@ public class ProductServiceFacadeImplTest {
         assertNull(modelPrice.getPriceTax());
 
 
-        final ProductPriceModel modelTotal = facade.getSkuPrice("EUR", true, true, true, item, true, true);
+        final PriceModel modelTotal = facade.getSkuPrice("EUR", true, true, true, item, true, true);
 
         assertNotNull(modelTotal);
 
@@ -1267,7 +1267,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
+        final PriceModel modelPrice = facade.getSkuPrice(cart, item, false);
 
         assertNotNull(modelPrice);
 
@@ -1289,7 +1289,7 @@ public class ProductServiceFacadeImplTest {
         assertNull(modelPrice.getPriceTax());
 
 
-        final ProductPriceModel modelTotal = facade.getSkuPrice(cart, item, true);
+        final PriceModel modelTotal = facade.getSkuPrice(cart, item, true);
 
         assertNotNull(modelTotal);
 
@@ -1343,7 +1343,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
+        final PriceModel modelPrice = facade.getSkuPrice(cart, item, false);
 
         assertNotNull(modelPrice);
 
@@ -1365,7 +1365,7 @@ public class ProductServiceFacadeImplTest {
         assertNull(modelPrice.getPriceTax());
 
 
-        final ProductPriceModel modelTotal = facade.getSkuPrice(cart, item, true);
+        final PriceModel modelTotal = facade.getSkuPrice(cart, item, true);
 
         assertNotNull(modelTotal);
 
@@ -1421,7 +1421,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
+        final PriceModel modelPrice = facade.getSkuPrice(cart, item, false);
 
         assertNotNull(modelPrice);
 
@@ -1442,7 +1442,7 @@ public class ProductServiceFacadeImplTest {
         assertFalse(modelPrice.isPriceTaxExclusive());
         assertNull(modelPrice.getPriceTax());
 
-        final ProductPriceModel modelTotal = facade.getSkuPrice(cart, item, true);
+        final PriceModel modelTotal = facade.getSkuPrice(cart, item, true);
 
         assertNotNull(modelTotal);
 
@@ -1497,7 +1497,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
+        final PriceModel modelPrice = facade.getSkuPrice(cart, item, false);
 
         assertNotNull(modelPrice);
 
@@ -1518,7 +1518,7 @@ public class ProductServiceFacadeImplTest {
         assertFalse(modelPrice.isPriceTaxExclusive());
         assertNull(modelPrice.getPriceTax());
 
-        final ProductPriceModel modelTotal = facade.getSkuPrice(cart, item, true);
+        final PriceModel modelTotal = facade.getSkuPrice(cart, item, true);
 
         assertNotNull(modelTotal);
 
@@ -1574,7 +1574,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
+        final PriceModel modelPrice = facade.getSkuPrice(cart, item, false);
 
         assertNotNull(modelPrice);
 
@@ -1595,7 +1595,7 @@ public class ProductServiceFacadeImplTest {
         assertFalse(modelPrice.isPriceTaxExclusive());
         assertNull(modelPrice.getPriceTax());
 
-        final ProductPriceModel modelTotal = facade.getSkuPrice(cart, item, true);
+        final PriceModel modelTotal = facade.getSkuPrice(cart, item, true);
 
         assertNotNull(modelTotal);
 
@@ -1657,7 +1657,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
+        final PriceModel modelPrice = facade.getSkuPrice(cart, item, false);
 
         assertNotNull(modelPrice);
 
@@ -1678,7 +1678,7 @@ public class ProductServiceFacadeImplTest {
         assertFalse(modelPrice.isPriceTaxExclusive());
         assertEquals("13.33", modelPrice.getPriceTax().toPlainString());
 
-        final ProductPriceModel modelTotal = facade.getSkuPrice(cart, item, true);
+        final PriceModel modelTotal = facade.getSkuPrice(cart, item, true);
 
         assertNotNull(modelTotal);
 
@@ -1739,7 +1739,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
+        final PriceModel modelPrice = facade.getSkuPrice(cart, item, false);
 
         assertNotNull(modelPrice);
 
@@ -1760,7 +1760,7 @@ public class ProductServiceFacadeImplTest {
         assertFalse(modelPrice.isPriceTaxExclusive());
         assertEquals("13.33", modelPrice.getPriceTax().toPlainString());
 
-        final ProductPriceModel modelTotal = facade.getSkuPrice(cart, item, true);
+        final PriceModel modelTotal = facade.getSkuPrice(cart, item, true);
 
         assertNotNull(modelTotal);
 
@@ -1822,7 +1822,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
+        final PriceModel modelPrice = facade.getSkuPrice(cart, item, false);
 
         assertNotNull(modelPrice);
 
@@ -1843,7 +1843,7 @@ public class ProductServiceFacadeImplTest {
         assertTrue(modelPrice.isPriceTaxExclusive());
         assertEquals("20.00", modelPrice.getPriceTax().toPlainString());
 
-        final ProductPriceModel modelTotal = facade.getSkuPrice(cart, item, true);
+        final PriceModel modelTotal = facade.getSkuPrice(cart, item, true);
 
         assertNotNull(modelTotal);
 
@@ -1904,7 +1904,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
+        final PriceModel modelPrice = facade.getSkuPrice(cart, item, false);
 
         assertNotNull(modelPrice);
 
@@ -1925,7 +1925,7 @@ public class ProductServiceFacadeImplTest {
         assertTrue(modelPrice.isPriceTaxExclusive());
         assertEquals("20.00", modelPrice.getPriceTax().toPlainString());
 
-        final ProductPriceModel modelTotal = facade.getSkuPrice(cart, item, true);
+        final PriceModel modelTotal = facade.getSkuPrice(cart, item, true);
 
         assertNotNull(modelTotal);
 
@@ -1987,7 +1987,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
+        final PriceModel modelPrice = facade.getSkuPrice(cart, item, false);
 
         assertNotNull(modelPrice);
 
@@ -2008,7 +2008,7 @@ public class ProductServiceFacadeImplTest {
         assertFalse(modelPrice.isPriceTaxExclusive());
         assertEquals("16.67", modelPrice.getPriceTax().toPlainString());
 
-        final ProductPriceModel modelTotal = facade.getSkuPrice(cart, item, true);
+        final PriceModel modelTotal = facade.getSkuPrice(cart, item, true);
 
         assertNotNull(modelTotal);
 
@@ -2070,7 +2070,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
+        final PriceModel modelPrice = facade.getSkuPrice(cart, item, false);
 
         assertNotNull(modelPrice);
 
@@ -2091,7 +2091,7 @@ public class ProductServiceFacadeImplTest {
         assertFalse(modelPrice.isPriceTaxExclusive());
         assertEquals("16.67", modelPrice.getPriceTax().toPlainString());
 
-        final ProductPriceModel modelTotal = facade.getSkuPrice(cart, item, true);
+        final PriceModel modelTotal = facade.getSkuPrice(cart, item, true);
 
         assertNotNull(modelTotal);
 
@@ -2134,7 +2134,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null);
 
 
-        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+        final Pair<PriceModel, CustomerWishList.PriceChange> modelAndChange =
                 facade.getSkuPrice(cart, wishList);
 
         final CustomerWishList.PriceChange change = modelAndChange.getSecond();
@@ -2145,7 +2145,7 @@ public class ProductServiceFacadeImplTest {
 
         assertNull(change.getDelta());
 
-        final ProductPriceModel model = modelAndChange.getFirst();
+        final PriceModel model = modelAndChange.getFirst();
 
         assertNotNull(model);
 
@@ -2181,7 +2181,7 @@ public class ProductServiceFacadeImplTest {
         final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
-        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+        final PriceModel model = context.mock(PriceModel.class, "model");
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
@@ -2204,7 +2204,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertNull(listPrice);
@@ -2214,7 +2214,7 @@ public class ProductServiceFacadeImplTest {
         };
 
 
-        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+        final Pair<PriceModel, CustomerWishList.PriceChange> modelAndChange =
                 facade.getSkuPrice(cart, wishList);
 
         final CustomerWishList.PriceChange change = modelAndChange.getSecond();
@@ -2241,7 +2241,7 @@ public class ProductServiceFacadeImplTest {
         final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
-        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+        final PriceModel model = context.mock(PriceModel.class, "model");
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
@@ -2265,7 +2265,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("9.99", listPrice.toPlainString());
@@ -2275,7 +2275,7 @@ public class ProductServiceFacadeImplTest {
         };
 
 
-        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+        final Pair<PriceModel, CustomerWishList.PriceChange> modelAndChange =
                 facade.getSkuPrice(cart, wishList);
 
         final CustomerWishList.PriceChange change = modelAndChange.getSecond();
@@ -2302,7 +2302,7 @@ public class ProductServiceFacadeImplTest {
         final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
-        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+        final PriceModel model = context.mock(PriceModel.class, "model");
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
@@ -2327,7 +2327,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("9.99", listPrice.toPlainString());
@@ -2337,7 +2337,7 @@ public class ProductServiceFacadeImplTest {
         };
 
 
-        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+        final Pair<PriceModel, CustomerWishList.PriceChange> modelAndChange =
                 facade.getSkuPrice(cart, wishList);
 
         final CustomerWishList.PriceChange change = modelAndChange.getSecond();
@@ -2364,7 +2364,7 @@ public class ProductServiceFacadeImplTest {
         final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
-        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+        final PriceModel model = context.mock(PriceModel.class, "model");
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
@@ -2389,7 +2389,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("12.99", listPrice.toPlainString());
@@ -2399,7 +2399,7 @@ public class ProductServiceFacadeImplTest {
         };
 
 
-        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+        final Pair<PriceModel, CustomerWishList.PriceChange> modelAndChange =
                 facade.getSkuPrice(cart, wishList);
 
         final CustomerWishList.PriceChange change = modelAndChange.getSecond();
@@ -2426,7 +2426,7 @@ public class ProductServiceFacadeImplTest {
         final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
-        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+        final PriceModel model = context.mock(PriceModel.class, "model");
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
@@ -2451,7 +2451,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("9.99", listPrice.toPlainString());
@@ -2461,7 +2461,7 @@ public class ProductServiceFacadeImplTest {
         };
 
 
-        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+        final Pair<PriceModel, CustomerWishList.PriceChange> modelAndChange =
                 facade.getSkuPrice(cart, wishList);
 
         final CustomerWishList.PriceChange change = modelAndChange.getSecond();
@@ -2488,7 +2488,7 @@ public class ProductServiceFacadeImplTest {
         final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
-        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+        final PriceModel model = context.mock(PriceModel.class, "model");
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
@@ -2513,7 +2513,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("9.99", listPrice.toPlainString());
@@ -2523,7 +2523,7 @@ public class ProductServiceFacadeImplTest {
         };
 
 
-        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+        final Pair<PriceModel, CustomerWishList.PriceChange> modelAndChange =
                 facade.getSkuPrice(cart, wishList);
 
         final CustomerWishList.PriceChange change = modelAndChange.getSecond();
@@ -2551,7 +2551,7 @@ public class ProductServiceFacadeImplTest {
         final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
-        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+        final PriceModel model = context.mock(PriceModel.class, "model");
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
@@ -2576,7 +2576,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("12.99", listPrice.toPlainString());
@@ -2586,7 +2586,7 @@ public class ProductServiceFacadeImplTest {
         };
 
 
-        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+        final Pair<PriceModel, CustomerWishList.PriceChange> modelAndChange =
                 facade.getSkuPrice(cart, wishList);
 
         final CustomerWishList.PriceChange change = modelAndChange.getSecond();
@@ -2614,7 +2614,7 @@ public class ProductServiceFacadeImplTest {
         final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
-        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+        final PriceModel model = context.mock(PriceModel.class, "model");
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
@@ -2639,7 +2639,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("14.99", listPrice.toPlainString());
@@ -2649,7 +2649,7 @@ public class ProductServiceFacadeImplTest {
         };
 
 
-        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+        final Pair<PriceModel, CustomerWishList.PriceChange> modelAndChange =
                 facade.getSkuPrice(cart, wishList);
 
         final CustomerWishList.PriceChange change = modelAndChange.getSecond();
@@ -2678,7 +2678,7 @@ public class ProductServiceFacadeImplTest {
         final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
-        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+        final PriceModel model = context.mock(PriceModel.class, "model");
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
@@ -2703,7 +2703,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("12.99", listPrice.toPlainString());
@@ -2713,7 +2713,7 @@ public class ProductServiceFacadeImplTest {
         };
 
 
-        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+        final Pair<PriceModel, CustomerWishList.PriceChange> modelAndChange =
                 facade.getSkuPrice(cart, wishList);
 
         final CustomerWishList.PriceChange change = modelAndChange.getSecond();
@@ -2741,7 +2741,7 @@ public class ProductServiceFacadeImplTest {
         final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
-        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+        final PriceModel model = context.mock(PriceModel.class, "model");
 
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
@@ -2766,7 +2766,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("14.99", listPrice.toPlainString());
@@ -2776,7 +2776,7 @@ public class ProductServiceFacadeImplTest {
         };
 
 
-        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+        final Pair<PriceModel, CustomerWishList.PriceChange> modelAndChange =
                 facade.getSkuPrice(cart, wishList);
 
         final CustomerWishList.PriceChange change = modelAndChange.getSecond();
@@ -2813,7 +2813,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -2864,7 +2864,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -2918,7 +2918,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -2970,7 +2970,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3021,7 +3021,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3090,7 +3090,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3159,7 +3159,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3222,7 +3222,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3285,7 +3285,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3354,7 +3354,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3423,7 +3423,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3486,7 +3486,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3549,7 +3549,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3619,7 +3619,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3689,7 +3689,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3752,7 +3752,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3815,7 +3815,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3886,7 +3886,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -3955,7 +3955,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -4019,7 +4019,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
@@ -4082,7 +4082,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
-        final ProductPriceModel model = facade.getCartItemsTotal(cart);
+        final PriceModel model = facade.getCartItemsTotal(cart);
 
         assertNotNull(model);
 
