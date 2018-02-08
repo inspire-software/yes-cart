@@ -146,7 +146,7 @@ public class PriceView extends BaseComponent {
     String[] getFormattedPrice(BigDecimal price) {
         final String[] formatted;
         if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(price, BigDecimal.ZERO)) { // show zeros!
-            final String priceString = price.setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP).toPlainString();
+            final String priceString = price.setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP).toPlainString();
             formatted = StringUtils.split(priceString, '.');
         } else { // if price was null
             formatted = EMPTY_FORMATED_PRICE;
@@ -171,11 +171,11 @@ public class PriceView extends BaseComponent {
             if (showSave) {
                 final BigDecimal save = MoneyUtils.getDiscountDisplayValue(productPriceModel.getRegularPrice(), productPriceModel.getSalePrice());
                 savePercent = save.toString();
-                listPrice = productPriceModel.getRegularPrice().setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP).toPlainString();
+                listPrice = productPriceModel.getRegularPrice().setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP).toPlainString();
             }
         }
         final boolean nonZero = MoneyUtils.isPositive(priceToFormat);
-        final String[] formatted = nonZero ?
+        final String[] formatted = nonZero || !this.showGratis ?
                 getFormattedPrice(priceToFormat) :
                 new String[] { getString("gratis"), null };
         final boolean shopFractionalPart = StringUtils.isNotBlank(formatted[1]);
@@ -226,9 +226,9 @@ public class PriceView extends BaseComponent {
         final WebMarkupContainer taxWrapper = new WebMarkupContainer("taxWrapper");
         taxWrapper.add(new Label(TAX_LABEL,
                 WicketUtil.createStringResourceModel(this, taxNote, tax))
-                .setVisible(this.showTax)
+                .setVisible(this.showTax && nonZero)
                 .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_TAX)));
-        taxWrapper.setVisible(this.showTax);
+        taxWrapper.setVisible(this.showTax && nonZero);
 
         addOrReplace(taxWrapper);
 

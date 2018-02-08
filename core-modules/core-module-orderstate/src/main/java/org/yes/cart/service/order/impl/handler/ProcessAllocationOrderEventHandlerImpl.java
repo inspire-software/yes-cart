@@ -140,7 +140,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
                     final BigDecimal rem = inventoryResolver.debit(selected, skuCode, toAllocate);
 
-                    if (MoneyUtils.isFirstBiggerThanSecond(rem, BigDecimal.ZERO)) {
+                    if (MoneyUtils.isPositive(rem)) {
                         /**
                          * For allocation we always must have stock items with inventory supported availability
                          */

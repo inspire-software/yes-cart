@@ -218,25 +218,25 @@ public class TotalImpl implements Total {
                 listTotalAmount,
                 totalAmount);
 
-        sum.listSubTotal = sum.listSubTotal.add(summand.getListSubTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        sum.saleSubTotal = sum.saleSubTotal.add(summand.getSaleSubTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        sum.nonSaleSubTotal = sum.nonSaleSubTotal.add(summand.getNonSaleSubTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        sum.priceSubTotal = sum.priceSubTotal.add(summand.getPriceSubTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.listSubTotal = sum.listSubTotal.add(summand.getListSubTotal()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.saleSubTotal = sum.saleSubTotal.add(summand.getSaleSubTotal()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.nonSaleSubTotal = sum.nonSaleSubTotal.add(summand.getNonSaleSubTotal()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.priceSubTotal = sum.priceSubTotal.add(summand.getPriceSubTotal()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
         sum.orderPromoApplied = sum.orderPromoApplied || summand.isOrderPromoApplied();
         sum.appliedOrderPromo = mergePromo(sum.appliedOrderPromo, summand.getAppliedOrderPromo());
-        sum.subTotal = sum.subTotal.add(summand.getSubTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        sum.subTotalTax = sum.subTotalTax.add(summand.getSubTotalTax()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        sum.subTotalAmount = sum.subTotalAmount.add(summand.getSubTotalAmount()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        sum.deliveryListCost = sum.deliveryListCost.add(summand.getDeliveryListCost()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        sum.deliveryCost = sum.deliveryCost.add(summand.getDeliveryCost()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.subTotal = sum.subTotal.add(summand.getSubTotal()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.subTotalTax = sum.subTotalTax.add(summand.getSubTotalTax()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.subTotalAmount = sum.subTotalAmount.add(summand.getSubTotalAmount()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.deliveryListCost = sum.deliveryListCost.add(summand.getDeliveryListCost()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.deliveryCost = sum.deliveryCost.add(summand.getDeliveryCost()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
         sum.deliveryPromoApplied = sum.deliveryPromoApplied || summand.isDeliveryPromoApplied();
         sum.appliedDeliveryPromo = mergePromo(sum.appliedDeliveryPromo, summand.getAppliedDeliveryPromo());
-        sum.deliveryTax = sum.deliveryTax.add(summand.getDeliveryTax()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        sum.deliveryCostAmount = sum.deliveryCostAmount.add(summand.getDeliveryCostAmount()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        sum.total = sum.total.add(summand.getTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        sum.totalTax = sum.totalTax.add(summand.getTotalTax()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        sum.listTotalAmount = sum.listTotalAmount.add(summand.getListTotalAmount()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        sum.totalAmount = sum.totalAmount.add(summand.getTotalAmount()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.deliveryTax = sum.deliveryTax.add(summand.getDeliveryTax()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.deliveryCostAmount = sum.deliveryCostAmount.add(summand.getDeliveryCostAmount()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.total = sum.total.add(summand.getTotal()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.totalTax = sum.totalTax.add(summand.getTotalTax()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.listTotalAmount = sum.listTotalAmount.add(summand.getListTotalAmount()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.totalAmount = sum.totalAmount.add(summand.getTotalAmount()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
         return sum;
     }
 

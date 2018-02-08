@@ -38,6 +38,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -285,7 +286,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
                 //TODOv2 add flag for product is quantity with float point enabled for this product or not
                 //ATM this is CPOINT
                 if (NumberUtils.isNumber(qty) /*&& NumberUtils.toInt(qty) >= 1*/) {
-                    qtyField.setConvertedInput(new BigDecimal(qty).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+                    qtyField.setConvertedInput(new BigDecimal(qty).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP));
                     setResponsePage(
                             getPage().getPageClass(),
                             new PageParameters()
@@ -295,7 +296,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
 
                 } else {
-                    qtyField.setConvertedInput(BigDecimal.ONE.setScale(Constants.DEFAULT_SCALE));
+                    qtyField.setConvertedInput(MoneyUtils.ONE);
                     error(getLocalizer().getString("nonZeroDigits", this, "Need positive integer value"));
                 }
             }

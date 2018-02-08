@@ -21,6 +21,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -97,16 +98,16 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     private String code;
 
 
-    private BigDecimal amount = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+    private BigDecimal amount = MoneyUtils.ZERO;
 
     @DtoField(value = "orderTotal", readOnly = true)
-    private BigDecimal orderTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+    private BigDecimal orderTotal = MoneyUtils.ZERO;
     @DtoField(value = "orderTotalTax", readOnly = true)
-    private BigDecimal orderTotalTax = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+    private BigDecimal orderTotalTax = MoneyUtils.ZERO;
     @DtoField(value = "orderGrossTotal", readOnly = true)
-    private BigDecimal orderGrossTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+    private BigDecimal orderGrossTotal = MoneyUtils.ZERO;
     @DtoField(value = "orderNetTotal", readOnly = true)
-    private BigDecimal orderNetTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+    private BigDecimal orderNetTotal = MoneyUtils.ZERO;
 
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;

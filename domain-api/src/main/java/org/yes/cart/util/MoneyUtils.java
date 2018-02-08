@@ -32,9 +32,9 @@ import java.math.RoundingMode;
  */
 public final class MoneyUtils {
 
-    public static final BigDecimal ZERO = new BigDecimal("0.00").setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-    public static final BigDecimal ONE = new BigDecimal("1.00").setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-    public static final BigDecimal HUNDRED = new BigDecimal("100.00").setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    public static final BigDecimal ZERO = new BigDecimal("0.00").setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+    public static final BigDecimal ONE = new BigDecimal("1.00").setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+    public static final BigDecimal HUNDRED = new BigDecimal("100.00").setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
 
     private MoneyUtils() {
         // prevent instantiation
@@ -261,12 +261,10 @@ public final class MoneyUtils {
         if (taxIncluded) {
             // vat = item * vatRate / (vat + 100). Round CEILING to make sure we are not underpaying tax
             return money.multiply(taxRate)
-                    .divide(taxRate.add(HUNDRED), Constants.DEFAULT_SCALE)
-                    .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_CEILING);
+                    .divide(taxRate.add(HUNDRED), Constants.MONEY_SCALE, BigDecimal.ROUND_CEILING);
         }
         // tax = item * taxRate / 100. Round CEILING to make sure we are not underpaying tax
-        return money.multiply(taxRate).divide(HUNDRED, Constants.DEFAULT_SCALE)
-                .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_CEILING);
+        return money.multiply(taxRate).divide(HUNDRED, Constants.MONEY_SCALE, BigDecimal.ROUND_CEILING);
     }
 
 

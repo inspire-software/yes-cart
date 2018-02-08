@@ -18,11 +18,11 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -50,7 +50,7 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
         commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getTotal().getSubTotal());
+        assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
         Map<String, String> params = new HashMap<String, String>();
         params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
 
@@ -86,7 +86,7 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
         commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getTotal().getSubTotal());
+        assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
         Map<String, String> params = new HashMap<String, String>();
         params.put(ShoppingCartCommand.CMD_ADDTOCART, "NOPROD-SKU");
 

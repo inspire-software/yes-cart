@@ -23,6 +23,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.service.misc.PluralFormService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -75,8 +76,8 @@ public class SmallShoppingCartView extends BaseComponent {
 
         final ProductPriceModel model = productServiceFacade.getCartItemsTotal(cart);
 
-        final Integer itemsInCart = cart.getCartItemsCount();
-        final String linkTarget = getLinkTarget();
+        final int itemsInCart = cart.getCartItemsCount();
+        final String linkTarget = getLinkTarget(itemsInCart > 0 && MoneyUtils.isPositive(cart.getTotal().getTotalAmount()));
         final boolean showPrices = !cart.getShoppingContext().isHidePrices();
 
         add(
@@ -118,9 +119,9 @@ public class SmallShoppingCartView extends BaseComponent {
         super.onBeforeRender();
     }
 
-    private String getLinkTarget() {
+    private String getLinkTarget(final boolean allowCheckout) {
 
-        if (getPage() instanceof ShoppingCartPage) {
+        if (allowCheckout && (getPage() instanceof ShoppingCartPage)) {
             return getWicketUtil().getHttpServletRequest().getContextPath() + "/checkout";
         }
         return getWicketUtil().getHttpServletRequest().getContextPath() + "/cart";

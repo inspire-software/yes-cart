@@ -71,7 +71,7 @@ public class ShippingAmountOffPromotionAction extends AbstractShippingPromotionA
     /** {@inheritDoc} */
     public void perform(final Map<String, Object> context) {
         final BigDecimal amountOff = getAmountValue(getRawPromotionActionContext(context));
-        if (MoneyUtils.isFirstBiggerThanSecond(amountOff, BigDecimal.ZERO)) {
+        if (MoneyUtils.isPositive(amountOff)) {
             final MutableShoppingCart cart = getShoppingCart(context);
             final CartItem shipping = getShipping(context);
             final DeliveryBucket bucket = shipping.getDeliveryBucket();

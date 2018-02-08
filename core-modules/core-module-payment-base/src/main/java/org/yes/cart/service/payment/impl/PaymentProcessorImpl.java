@@ -490,7 +490,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         final Object amountObj = params.get("refundNotificationAmount");
         BigDecimal refundAmount = BigDecimal.ZERO;
-        if (amountObj instanceof BigDecimal && MoneyUtils.isFirstBiggerThanSecond((BigDecimal) amountObj, BigDecimal.ZERO)) {
+        if (amountObj instanceof BigDecimal && MoneyUtils.isPositive((BigDecimal) amountObj)) {
 
             refundAmount = ((BigDecimal) amountObj).setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP);
 
@@ -725,15 +725,15 @@ public class PaymentProcessorImpl implements PaymentProcessor {
             for (PaymentLine paymentLine : payment.getOrderItems()) {
                 if (paymentLine.isShipment()) {
                     // shipping price already includes shipping level promotions
-                    final BigDecimal shipping = paymentLine.getUnitPrice().setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-                    final BigDecimal shippingTax = paymentLine.getTaxAmount().setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+                    final BigDecimal shipping = paymentLine.getUnitPrice().setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+                    final BigDecimal shippingTax = paymentLine.getTaxAmount().setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
                     itemsAndShipping = itemsAndShipping.add(shipping);
                     itemsAndShippingTax = itemsAndShippingTax.add(shippingTax);
                     shippingOnly = shippingOnly.add(shipping);
                     shippingOnlyTax = shippingOnlyTax.add(shippingTax);
                 } else {
                     // unit price already includes item level promotions
-                    final BigDecimal item = paymentLine.getQuantity().multiply(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+                    final BigDecimal item = paymentLine.getQuantity().multiply(paymentLine.getUnitPrice()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
                     final BigDecimal itemTax = paymentLine.getTaxAmount();
                     itemsAndShipping = itemsAndShipping.add(item);
                     itemsAndShippingTax = itemsAndShippingTax.add(itemTax);
@@ -750,15 +750,15 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 // promotions against sale price
                 BigDecimal orderTotalList = BigDecimal.ZERO;
                 for (final CustomerOrderDet detail : order.getOrderDetail()) {
-                    orderTotalList = orderTotalList.add(detail.getQty().multiply(detail.getGrossPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+                    orderTotalList = orderTotalList.add(detail.getQty().multiply(detail.getGrossPrice()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP));
                 }
 
                 final BigDecimal orderTotal = order.getGrossPrice();
                 // take the list price (sub total of items using list price)
                 final BigDecimal discount = orderTotalList.subtract(orderTotal).divide(orderTotalList, 10, RoundingMode.HALF_UP);
                 // scale delivery items without shipping total in accordance with order level discount percentage
-                itemsAndShipping = itemsOnly.multiply(BigDecimal.ONE.subtract(discount)).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-                itemsAndShippingTax = itemsOnlyTax.multiply(BigDecimal.ONE.subtract(discount)).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+                itemsAndShipping = itemsOnly.multiply(BigDecimal.ONE.subtract(discount)).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+                itemsAndShippingTax = itemsOnlyTax.multiply(BigDecimal.ONE.subtract(discount)).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
                 // add unscaled shipping
                 itemsAndShipping = itemsAndShipping.add(shippingOnly);
                 itemsAndShippingTax = itemsAndShippingTax.add(shippingOnlyTax);

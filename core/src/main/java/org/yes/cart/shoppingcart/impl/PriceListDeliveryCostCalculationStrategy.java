@@ -38,9 +38,9 @@ import java.util.Set;
  */
 public class PriceListDeliveryCostCalculationStrategy implements DeliveryCostCalculationStrategy {
 
-    private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    private static final BigDecimal ZERO = MoneyUtils.ZERO;
 
-    private static final BigDecimal QTY = new BigDecimal(1).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    private static final BigDecimal QTY = MoneyUtils.ONE;
 
     private final CarrierSlaService carrierSlaService;
     private final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver;
@@ -99,7 +99,7 @@ public class PriceListDeliveryCostCalculationStrategy implements DeliveryCostCal
                     if (price != null && price.getSkuPriceId() > 0L) {
 
                         final BigDecimal salePrice = MoneyUtils.minPositive(price.getSalePriceForCalculation());
-                        final BigDecimal deliveryCost = salePrice.multiply(qty).multiply(new BigDecimal(supplierBuckets.size())).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
+                        final BigDecimal deliveryCost = salePrice.multiply(qty).multiply(new BigDecimal(supplierBuckets.size())).setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP);
 
                         for (final DeliveryBucket bucket : supplierBuckets) {
                             // Add shipping line for every bucket by this supplier (e.g. if we have multi delivery)

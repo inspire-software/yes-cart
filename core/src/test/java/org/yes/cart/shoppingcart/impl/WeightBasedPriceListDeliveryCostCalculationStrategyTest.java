@@ -43,6 +43,8 @@ import static org.junit.Assert.*;
 public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
 
 
+    private static final BigDecimal MAX = new BigDecimal(Integer.MAX_VALUE).setScale(2);
+
     private final Mockery context = new JUnit4Mockery();
 
 
@@ -138,9 +140,9 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KG", pricingPolicy, new BigDecimal("0.750")); will(returnValue(costKg));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.80")); will(returnValue(costM3));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             allowing(costKg).getSkuPriceId(); will(returnValue(345L));
             allowing(costKg).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), null)));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
@@ -229,9 +231,9 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.80")); will(returnValue(costM3));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
             allowing(costKgMax).getQuantity(); will(returnValue(new BigDecimal("0.50")));
             allowing(costM3Max).getSkuPriceId(); will(returnValue(446L));
@@ -299,8 +301,8 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KG", pricingPolicy, new BigDecimal("0.750")); will(returnValue(costKg));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             allowing(costKg).getSkuPriceId(); will(returnValue(345L));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
             allowing(costKgMax).getQuantity(); will(returnValue(new BigDecimal("10.00")));
@@ -369,9 +371,9 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.80")); will(returnValue(costM3));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(0L));
             allowing(costM3Max).getSkuPriceId(); will(returnValue(446L));
             allowing(costM3Max).getQuantity(); will(returnValue(new BigDecimal("10.00")));
@@ -438,8 +440,8 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KG", pricingPolicy, new BigDecimal("0.750")); will(returnValue(costKg));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             allowing(costKg).getSkuPriceId(); will(returnValue(345L));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
             allowing(costKgMax).getQuantity(); will(returnValue(new BigDecimal("10.00")));
@@ -507,7 +509,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KG", pricingPolicy, new BigDecimal("0.750")); will(returnValue(costKg));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
             allowing(costKg).getSkuPriceId(); will(returnValue(345L));
             allowing(costKg).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), null)));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
@@ -591,7 +593,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
             allowing(costKgMax).getQuantity(); will(returnValue(new BigDecimal("0.50")));
         }});
@@ -653,7 +655,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(0L));
         }});
 
@@ -716,7 +718,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.80")); will(returnValue(costM3));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             allowing(costM3).getSkuPriceId(); will(returnValue(445L));
             allowing(costM3).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), null)));
             allowing(costM3Max).getSkuPriceId(); will(returnValue(446L));
@@ -800,7 +802,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             allowing(costM3Max).getSkuPriceId(); will(returnValue(446L));
             allowing(costM3Max).getQuantity(); will(returnValue(new BigDecimal("1.00")));
         }});
@@ -861,7 +863,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Arrays.asList(item1, item2))));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             allowing(costM3Max).getSkuPriceId(); will(returnValue(0L));
         }});
 
@@ -928,9 +930,9 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KG", pricingPolicy, new BigDecimal("0.750")); will(returnValue(costKg));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.80")); will(returnValue(costM3));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             allowing(costKg).getSkuPriceId(); will(returnValue(345L));
             allowing(costKg).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), new BigDecimal("7.00"))));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
@@ -1022,9 +1024,9 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KG", pricingPolicy, new BigDecimal("0.750")); will(returnValue(costKg));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.80")); will(returnValue(costM3));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             allowing(costKg).getSkuPriceId(); will(returnValue(0L));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
             allowing(costKgMax).getQuantity(); will(returnValue(new BigDecimal("10.00")));
@@ -1094,9 +1096,9 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KG", pricingPolicy, new BigDecimal("0.750")); will(returnValue(costKg));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.80")); will(returnValue(costM3));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             allowing(costKg).getSkuPriceId(); will(returnValue(345L));
             allowing(costKg).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), null)));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
@@ -1173,13 +1175,13 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(bucket2).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KG", pricingPolicy, new BigDecimal("0.250")); will(returnValue(costKg));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("0.3")); will(returnValue(costM3));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KG", pricingPolicy, new BigDecimal("0.500")); will(returnValue(costKg));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.50")); will(returnValue(costM3));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             allowing(costKg).getSkuPriceId(); will(returnValue(345L));
             allowing(costKg).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), null)));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
@@ -1279,13 +1281,13 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(bucket2).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KG", pricingPolicy, new BigDecimal("0.250")); will(returnValue(costKg));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("0.3")); will(returnValue(costM3));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KG", pricingPolicy, new BigDecimal("0.500")); will(returnValue(costKg));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.50")); will(returnValue(costM3));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             allowing(costKg).getSkuPriceId(); will(returnValue(345L));
             allowing(costKg).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("10.00"), new BigDecimal("7.00"))));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
@@ -1387,9 +1389,9 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(bucket2).getSupplier(); will(returnValue("Backorder"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KG", pricingPolicy, new BigDecimal("0.750")); will(returnValue(costKg));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costKgMax));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_KGMAX", pricingPolicy, MAX); will(returnValue(costKgMax));
             oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3", pricingPolicy, new BigDecimal("1.80")); will(returnValue(costM3));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, new BigDecimal(Integer.MAX_VALUE)); will(returnValue(costM3Max));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001_M3MAX", pricingPolicy, MAX); will(returnValue(costM3Max));
             allowing(costKg).getSkuPriceId(); will(returnValue(0L));
             allowing(costKgMax).getSkuPriceId(); will(returnValue(346L));
             allowing(costKgMax).getQuantity(); will(returnValue(new BigDecimal("10.00")));

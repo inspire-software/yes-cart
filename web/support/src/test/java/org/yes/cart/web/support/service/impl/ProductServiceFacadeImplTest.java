@@ -23,7 +23,6 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.ShoppingCartCalculator;
@@ -298,8 +297,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
-            allowing(skuPrice).getRegularPrice(); will(returnValue(null));
-            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(null, null)));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
@@ -362,8 +360,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
-            allowing(skuPrice).getRegularPrice(); will(returnValue(null));
-            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(null, null)));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
@@ -428,8 +425,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
-            allowing(skuPrice).getRegularPrice(); will(returnValue(null));
-            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
+            allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(null, null)));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
@@ -1191,6 +1187,64 @@ public class ProductServiceFacadeImplTest {
     }
 
 
+    @Test
+    public void testGetSkuPriceCartItemsHidePriceBare() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final CartItem item = context.mock(CartItem.class, "item");
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
+
+
+        final ProductPriceModel modelPrice = facade.getSkuPrice("EUR", true, true, true, item, false, true);
+
+        assertNotNull(modelPrice);
+
+        assertNull(modelPrice.getRef());
+
+        assertEquals("EUR", modelPrice.getCurrency());
+        assertNull(modelPrice.getQuantity());
+
+        assertNull(modelPrice.getRegularPrice());
+        assertNull(modelPrice.getSalePrice());
+
+        assertFalse(modelPrice.isTaxInfoEnabled());
+        assertFalse(modelPrice.isTaxInfoUseNet());
+        assertFalse(modelPrice.isTaxInfoShowAmount());
+
+        assertNull(modelPrice.getPriceTaxCode());
+        assertNull(modelPrice.getPriceTaxRate());
+        assertFalse(modelPrice.isPriceTaxExclusive());
+        assertNull(modelPrice.getPriceTax());
+
+
+        final ProductPriceModel modelTotal = facade.getSkuPrice("EUR", true, true, true, item, true, true);
+
+        assertNotNull(modelTotal);
+
+        assertNull(modelTotal.getRef());
+
+        assertEquals("EUR", modelTotal.getCurrency());
+        assertNull(modelTotal.getQuantity());
+
+        assertNull(modelTotal.getRegularPrice());
+        assertNull(modelTotal.getSalePrice());
+
+        assertFalse(modelTotal.isTaxInfoEnabled());
+        assertFalse(modelTotal.isTaxInfoUseNet());
+        assertFalse(modelTotal.isTaxInfoShowAmount());
+
+        assertNull(modelTotal.getPriceTaxCode());
+        assertNull(modelTotal.getPriceTaxRate());
+        assertFalse(modelTotal.isPriceTaxExclusive());
+        assertNull(modelTotal.getPriceTax());
+
+        context.assertIsSatisfied();
+
+    }
+
+
 
     @Test
     public void testGetSkuPriceCartItemsHidePrice() throws Exception {
@@ -1550,8 +1604,8 @@ public class ProductServiceFacadeImplTest {
         assertEquals("EUR", modelTotal.getCurrency());
         assertEquals("10", modelTotal.getQuantity().toPlainString());
 
-        assertEquals("800.00", modelTotal.getRegularPrice().toPlainString());
-        assertNull(modelTotal.getSalePrice());
+        assertEquals("1000.00", modelTotal.getRegularPrice().toPlainString());
+        assertEquals("800.00", modelTotal.getSalePrice().toPlainString());
 
         assertFalse(modelTotal.isTaxInfoEnabled());
         assertFalse(modelTotal.isTaxInfoUseNet());
@@ -1567,6 +1621,169 @@ public class ProductServiceFacadeImplTest {
     }
 
 
+    @Test
+    public void testGetSkuPriceCartItemsPriceListAndSaleTaxInfoNet() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+
+        final Shop shop = context.mock(Shop.class, "shop");
+
+        final CartItem item = context.mock(CartItem.class, "item");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
+            allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).getQty(); will(returnValue(BigDecimal.TEN));
+            allowing(item).getListPrice(); will(returnValue(new BigDecimal("100.00")));
+            allowing(item).getSalePrice(); will(returnValue(new BigDecimal("80.00")));
+            allowing(item).getNetPrice(); will(returnValue(new BigDecimal("66.67")));
+            allowing(item).getGrossPrice(); will(returnValue(new BigDecimal("80.00")));
+            allowing(item).getPrice(); will(returnValue(new BigDecimal("80.00")));
+            allowing(item).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(item).isTaxExclusiveOfPrice(); will(returnValue(false));
+            allowing(item).getTaxCode(); will(returnValue("VAT20"));
+            allowing(shopService).getById(234L); will(returnValue(shop));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(false));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
+
+
+        final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
+
+        assertNotNull(modelPrice);
+
+        assertEquals("ABC", modelPrice.getRef());
+
+        assertEquals("EUR", modelPrice.getCurrency());
+        assertEquals("10", modelPrice.getQuantity().toPlainString());
+
+        assertEquals("83.33", modelPrice.getRegularPrice().toPlainString());
+        assertEquals("66.67", modelPrice.getSalePrice().toPlainString());
+
+        assertTrue(modelPrice.isTaxInfoEnabled());
+        assertTrue(modelPrice.isTaxInfoUseNet());
+        assertFalse(modelPrice.isTaxInfoShowAmount());
+
+        assertEquals("VAT20", modelPrice.getPriceTaxCode());
+        assertEquals("20.00", modelPrice.getPriceTaxRate().toPlainString());
+        assertFalse(modelPrice.isPriceTaxExclusive());
+        assertEquals("13.33", modelPrice.getPriceTax().toPlainString());
+
+        final ProductPriceModel modelTotal = facade.getSkuPrice(cart, item, true);
+
+        assertNotNull(modelTotal);
+
+        assertEquals("ABC", modelTotal.getRef());
+
+        assertEquals("EUR", modelTotal.getCurrency());
+        assertEquals("10", modelTotal.getQuantity().toPlainString());
+
+        assertEquals("833.30", modelTotal.getRegularPrice().toPlainString());
+        assertEquals("666.70", modelTotal.getSalePrice().toPlainString());
+
+        assertTrue(modelTotal.isTaxInfoEnabled());
+        assertTrue(modelTotal.isTaxInfoUseNet());
+        assertFalse(modelTotal.isTaxInfoShowAmount());
+
+        assertEquals("VAT20", modelTotal.getPriceTaxCode());
+        assertEquals("20.00", modelTotal.getPriceTaxRate().toPlainString());
+        assertFalse(modelTotal.isPriceTaxExclusive());
+        assertEquals("133.30", modelTotal.getPriceTax().toPlainString());
+
+        context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testGetSkuPriceCartItemsPriceListAndSaleTaxInfoGross() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+
+        final Shop shop = context.mock(Shop.class, "shop");
+
+        final CartItem item = context.mock(CartItem.class, "item");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
+            allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).getQty(); will(returnValue(BigDecimal.TEN));
+            allowing(item).getListPrice(); will(returnValue(new BigDecimal("100.00")));
+            allowing(item).getSalePrice(); will(returnValue(new BigDecimal("80.00")));
+            allowing(item).getNetPrice(); will(returnValue(new BigDecimal("66.67")));
+            allowing(item).getGrossPrice(); will(returnValue(new BigDecimal("80.00")));
+            allowing(item).getPrice(); will(returnValue(new BigDecimal("80.00")));
+            allowing(item).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(item).isTaxExclusiveOfPrice(); will(returnValue(false));
+            allowing(item).getTaxCode(); will(returnValue("VAT20"));
+            allowing(shopService).getById(234L); will(returnValue(shop));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(false));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
+
+
+        final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
+
+        assertNotNull(modelPrice);
+
+        assertEquals("ABC", modelPrice.getRef());
+
+        assertEquals("EUR", modelPrice.getCurrency());
+        assertEquals("10", modelPrice.getQuantity().toPlainString());
+
+        assertEquals("100.00", modelPrice.getRegularPrice().toPlainString());
+        assertEquals("80.00", modelPrice.getSalePrice().toPlainString());
+
+        assertTrue(modelPrice.isTaxInfoEnabled());
+        assertFalse(modelPrice.isTaxInfoUseNet());
+        assertFalse(modelPrice.isTaxInfoShowAmount());
+
+        assertEquals("VAT20", modelPrice.getPriceTaxCode());
+        assertEquals("20.00", modelPrice.getPriceTaxRate().toPlainString());
+        assertFalse(modelPrice.isPriceTaxExclusive());
+        assertEquals("13.33", modelPrice.getPriceTax().toPlainString());
+
+        final ProductPriceModel modelTotal = facade.getSkuPrice(cart, item, true);
+
+        assertNotNull(modelTotal);
+
+        assertEquals("ABC", modelTotal.getRef());
+
+        assertEquals("EUR", modelTotal.getCurrency());
+        assertEquals("10", modelTotal.getQuantity().toPlainString());
+
+        assertEquals("1000.00", modelTotal.getRegularPrice().toPlainString());
+        assertEquals("800.00", modelTotal.getSalePrice().toPlainString());
+
+        assertTrue(modelTotal.isTaxInfoEnabled());
+        assertFalse(modelTotal.isTaxInfoUseNet());
+        assertFalse(modelTotal.isTaxInfoShowAmount());
+
+        assertEquals("VAT20", modelTotal.getPriceTaxCode());
+        assertEquals("20.00", modelTotal.getPriceTaxRate().toPlainString());
+        assertFalse(modelTotal.isPriceTaxExclusive());
+        assertEquals("133.30", modelTotal.getPriceTax().toPlainString());
+
+        context.assertIsSatisfied();
+
+    }
 
     @Test
     public void testGetSkuPriceCartItemsPriceListOnlyWithTaxExclInfoGross() throws Exception {
@@ -1899,6 +2116,681 @@ public class ProductServiceFacadeImplTest {
 
     }
 
+
+    @Test
+    public void testgetSkuPriceWishListHidePrices() throws Exception {
+
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+        final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(true));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null);
+
+
+        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+                facade.getSkuPrice(cart, wishList);
+
+        final CustomerWishList.PriceChange change = modelAndChange.getSecond();
+
+        assertNotNull(change);
+
+        assertEquals(CustomerWishList.PriceChangeType.NOCHANGE, change.getType());
+
+        assertNull(change.getDelta());
+
+        final ProductPriceModel model = modelAndChange.getFirst();
+
+        assertNotNull(model);
+
+        assertNull(model.getRef());
+
+        assertEquals("EUR", model.getCurrency());
+        assertNull(model.getQuantity());
+
+        assertNull(model.getRegularPrice());
+        assertNull(model.getSalePrice());
+
+        assertFalse(model.isTaxInfoEnabled());
+        assertFalse(model.isTaxInfoUseNet());
+        assertFalse(model.isTaxInfoShowAmount());
+
+        assertNull(model.getPriceTaxCode());
+        assertNull(model.getPriceTaxRate());
+        assertFalse(model.isPriceTaxExclusive());
+        assertNull(model.getPriceTax());
+
+
+
+    }
+
+    @Test
+    public void testgetSkuPriceWishListNoPrice() throws Exception {
+
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+
+        final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
+        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
+
+        final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
+        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(wishList).getSkus(); will(returnValue(productSku));
+            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
+            allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
+            allowing(priceNow).getRegularPrice(); will(returnValue(null));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
+            @Override
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+                assertNull(productId);
+                assertEquals("ABC", sku);
+                assertEquals(BigDecimal.TEN, qty);
+                return priceNow;
+            }
+
+            @Override
+            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+                assertEquals("ABC", ref);
+                assertEquals(BigDecimal.ONE, quantity);
+                assertNull(listPrice);
+                assertNull(salePrice);
+                return model;
+            }
+        };
+
+
+        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+                facade.getSkuPrice(cart, wishList);
+
+        final CustomerWishList.PriceChange change = modelAndChange.getSecond();
+
+        assertNotNull(change);
+
+        assertEquals(CustomerWishList.PriceChangeType.OFFLINE, change.getType());
+
+        assertNull(change.getDelta());
+
+
+        assertSame(model, modelAndChange.getFirst());
+
+    }
+
+    @Test
+    public void testgetSkuPriceWishListDifferentCurrency() throws Exception {
+
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+
+        final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
+        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
+
+        final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
+        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(wishList).getSkus(); will(returnValue(productSku));
+            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
+            allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("USD"));
+            allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("9.99")));
+            allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("9.99"), null)));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
+            @Override
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+                assertNull(productId);
+                assertEquals("ABC", sku);
+                assertEquals(BigDecimal.TEN, qty);
+                return priceNow;
+            }
+
+            @Override
+            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+                assertEquals("ABC", ref);
+                assertEquals(BigDecimal.ONE, quantity);
+                assertEquals("9.99", listPrice.toPlainString());
+                assertNull(salePrice);
+                return model;
+            }
+        };
+
+
+        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+                facade.getSkuPrice(cart, wishList);
+
+        final CustomerWishList.PriceChange change = modelAndChange.getSecond();
+
+        assertNotNull(change);
+
+        assertEquals(CustomerWishList.PriceChangeType.DIFFCURRENCY, change.getType());
+
+        assertNull(change.getDelta());
+
+
+        assertSame(model, modelAndChange.getFirst());
+
+    }
+
+    @Test
+    public void testgetSkuPriceWishListSamePriceAsBefore() throws Exception {
+
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+
+        final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
+        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
+
+        final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
+        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(wishList).getSkus(); will(returnValue(productSku));
+            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
+            allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("9.99")));
+            allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
+            allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("9.99")));
+            allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("9.99"), null)));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
+            @Override
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+                assertNull(productId);
+                assertEquals("ABC", sku);
+                assertEquals(BigDecimal.TEN, qty);
+                return priceNow;
+            }
+
+            @Override
+            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+                assertEquals("ABC", ref);
+                assertEquals(BigDecimal.ONE, quantity);
+                assertEquals("9.99", listPrice.toPlainString());
+                assertNull(salePrice);
+                return model;
+            }
+        };
+
+
+        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+                facade.getSkuPrice(cart, wishList);
+
+        final CustomerWishList.PriceChange change = modelAndChange.getSecond();
+
+        assertNotNull(change);
+
+        assertEquals(CustomerWishList.PriceChangeType.NOCHANGE, change.getType());
+
+        assertNull(change.getDelta());
+
+
+        assertSame(model, modelAndChange.getFirst());
+
+    }
+
+    @Test
+    public void testgetSkuPriceWishListSamePriceAsBeforeSale() throws Exception {
+
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+
+        final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
+        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
+
+        final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
+        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(wishList).getSkus(); will(returnValue(productSku));
+            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
+            allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("9.99")));
+            allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
+            allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("12.99")));
+            allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("12.99"), new BigDecimal("9.99"))));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
+            @Override
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+                assertNull(productId);
+                assertEquals("ABC", sku);
+                assertEquals(BigDecimal.TEN, qty);
+                return priceNow;
+            }
+
+            @Override
+            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+                assertEquals("ABC", ref);
+                assertEquals(BigDecimal.ONE, quantity);
+                assertEquals("12.99", listPrice.toPlainString());
+                assertEquals("9.99", salePrice.toPlainString());
+                return model;
+            }
+        };
+
+
+        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+                facade.getSkuPrice(cart, wishList);
+
+        final CustomerWishList.PriceChange change = modelAndChange.getSecond();
+
+        assertNotNull(change);
+
+        assertEquals(CustomerWishList.PriceChangeType.ONSALE, change.getType());
+
+        assertEquals("23", change.getDelta().toPlainString()); // 23%
+
+
+        assertSame(model, modelAndChange.getFirst());
+
+    }
+
+    @Test
+    public void testgetSkuPriceWishListPriceIsMoreThanList() throws Exception {
+
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+
+        final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
+        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
+
+        final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
+        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(wishList).getSkus(); will(returnValue(productSku));
+            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
+            allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("9.99")));
+            allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
+            allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("8.99")));
+            allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("8.99"), null)));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
+            @Override
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+                assertNull(productId);
+                assertEquals("ABC", sku);
+                assertEquals(BigDecimal.TEN, qty);
+                return priceNow;
+            }
+
+            @Override
+            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+                assertEquals("ABC", ref);
+                assertEquals(BigDecimal.ONE, quantity);
+                assertEquals("9.99", listPrice.toPlainString());
+                assertEquals("8.99", salePrice.toPlainString());
+                return model;
+            }
+        };
+
+
+        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+                facade.getSkuPrice(cart, wishList);
+
+        final CustomerWishList.PriceChange change = modelAndChange.getSecond();
+
+        assertNotNull(change);
+
+        assertEquals(CustomerWishList.PriceChangeType.DECREASED, change.getType());
+
+        assertEquals("10", change.getDelta().toPlainString()); // 10%
+
+
+        assertSame(model, modelAndChange.getFirst());
+
+    }
+
+    @Test
+    public void testgetSkuPriceWishListPriceIsMoreThanSale() throws Exception {
+
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+
+        final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
+        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
+
+        final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
+        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(wishList).getSkus(); will(returnValue(productSku));
+            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
+            allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("9.99")));
+            allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
+            allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("12.99")));
+            allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("12.99"), new BigDecimal("8.99"))));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
+            @Override
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+                assertNull(productId);
+                assertEquals("ABC", sku);
+                assertEquals(BigDecimal.TEN, qty);
+                return priceNow;
+            }
+
+            @Override
+            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+                assertEquals("ABC", ref);
+                assertEquals(BigDecimal.ONE, quantity);
+                assertEquals("9.99", listPrice.toPlainString());
+                assertEquals("8.99", salePrice.toPlainString());
+                return model;
+            }
+        };
+
+
+        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+                facade.getSkuPrice(cart, wishList);
+
+        final CustomerWishList.PriceChange change = modelAndChange.getSecond();
+
+        assertNotNull(change);
+
+        assertEquals(CustomerWishList.PriceChangeType.DECREASED, change.getType());
+
+        assertEquals("10", change.getDelta().toPlainString()); // 10%
+
+
+        assertSame(model, modelAndChange.getFirst());
+
+    }
+
+
+    @Test
+    public void testgetSkuPriceWishListPriceIsLessThanList() throws Exception {
+
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+
+        final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
+        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
+
+        final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
+        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(wishList).getSkus(); will(returnValue(productSku));
+            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
+            allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("9.99")));
+            allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
+            allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("12.99")));
+            allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("12.99"), null)));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
+            @Override
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+                assertNull(productId);
+                assertEquals("ABC", sku);
+                assertEquals(BigDecimal.TEN, qty);
+                return priceNow;
+            }
+
+            @Override
+            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+                assertEquals("ABC", ref);
+                assertEquals(BigDecimal.ONE, quantity);
+                assertEquals("12.99", listPrice.toPlainString());
+                assertNull(salePrice);
+                return model;
+            }
+        };
+
+
+        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+                facade.getSkuPrice(cart, wishList);
+
+        final CustomerWishList.PriceChange change = modelAndChange.getSecond();
+
+        assertNotNull(change);
+
+        assertEquals(CustomerWishList.PriceChangeType.INCRSEASED, change.getType());
+
+        assertEquals("30", change.getDelta().toPlainString()); // 30%
+
+
+        assertSame(model, modelAndChange.getFirst());
+
+    }
+
+
+    @Test
+    public void testgetSkuPriceWishListPriceIsLessThanSale() throws Exception {
+
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+
+        final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
+        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
+
+        final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
+        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(wishList).getSkus(); will(returnValue(productSku));
+            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
+            allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("9.99")));
+            allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
+            allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("14.99")));
+            allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("14.99"), new BigDecimal("12.99"))));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
+            @Override
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+                assertNull(productId);
+                assertEquals("ABC", sku);
+                assertEquals(BigDecimal.TEN, qty);
+                return priceNow;
+            }
+
+            @Override
+            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+                assertEquals("ABC", ref);
+                assertEquals(BigDecimal.ONE, quantity);
+                assertEquals("14.99", listPrice.toPlainString());
+                assertEquals("12.99", salePrice.toPlainString());
+                return model;
+            }
+        };
+
+
+        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+                facade.getSkuPrice(cart, wishList);
+
+        final CustomerWishList.PriceChange change = modelAndChange.getSecond();
+
+        assertNotNull(change);
+
+        assertEquals(CustomerWishList.PriceChangeType.INCRSEASED, change.getType());
+
+        assertEquals("30", change.getDelta().toPlainString()); // 30%
+
+
+        assertSame(model, modelAndChange.getFirst());
+
+    }
+
+
+
+    @Test
+    public void testgetSkuPriceWishListPriceAddedZero() throws Exception {
+
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+
+        final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
+        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
+
+        final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
+        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(wishList).getSkus(); will(returnValue(productSku));
+            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
+            allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("0.00")));
+            allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
+            allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("12.99")));
+            allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("12.99"), null)));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
+            @Override
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+                assertNull(productId);
+                assertEquals("ABC", sku);
+                assertEquals(BigDecimal.TEN, qty);
+                return priceNow;
+            }
+
+            @Override
+            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+                assertEquals("ABC", ref);
+                assertEquals(BigDecimal.ONE, quantity);
+                assertEquals("12.99", listPrice.toPlainString());
+                assertNull(salePrice);
+                return model;
+            }
+        };
+
+
+        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+                facade.getSkuPrice(cart, wishList);
+
+        final CustomerWishList.PriceChange change = modelAndChange.getSecond();
+
+        assertNotNull(change);
+
+        assertEquals(CustomerWishList.PriceChangeType.NOCHANGE, change.getType());
+
+        assertNull(change.getDelta());
+
+
+        assertSame(model, modelAndChange.getFirst());
+
+    }
+
+
+    @Test
+    public void testgetSkuPriceWishListPriceAddedZeroSale() throws Exception {
+
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+
+        final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
+        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
+
+        final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
+        final ProductPriceModel model = context.mock(ProductPriceModel.class, "model");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).isHidePrices(); will(returnValue(false));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(wishList).getSkus(); will(returnValue(productSku));
+            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
+            allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("0.00")));
+            allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
+            allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("14.99")));
+            allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("14.99"), new BigDecimal("12.99"))));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
+            @Override
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+                assertNull(productId);
+                assertEquals("ABC", sku);
+                assertEquals(BigDecimal.TEN, qty);
+                return priceNow;
+            }
+
+            @Override
+            public ProductPriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final BigDecimal listPrice, final BigDecimal salePrice) {
+                assertEquals("ABC", ref);
+                assertEquals(BigDecimal.ONE, quantity);
+                assertEquals("14.99", listPrice.toPlainString());
+                assertEquals("12.99", salePrice.toPlainString());
+                return model;
+            }
+        };
+
+
+        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndChange =
+                facade.getSkuPrice(cart, wishList);
+
+        final CustomerWishList.PriceChange change = modelAndChange.getSecond();
+
+        assertNotNull(change);
+
+        assertEquals(CustomerWishList.PriceChangeType.NOCHANGE, change.getType());
+
+        assertNull(change.getDelta());
+
+
+        assertSame(model, modelAndChange.getFirst());
+
+    }
 
 
     @Test

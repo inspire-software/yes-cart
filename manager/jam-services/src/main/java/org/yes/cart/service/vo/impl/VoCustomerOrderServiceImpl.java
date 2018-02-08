@@ -153,12 +153,12 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
 
 
     private String determinePaymentStatus(final VoCustomerOrderInfo vo) {
-        if (MoneyUtils.isFirstBiggerThanSecond(vo.getOrderTotal(), BigDecimal.ZERO)) {
+        if (MoneyUtils.isPositive(vo.getOrderTotal())) {
             if (MoneyUtils.isFirstBiggerThanSecond(vo.getOrderPaymentBalance(), vo.getOrderTotal())) {
                 // more payments than order total
                 return "pt.refund.pending";
             } else if (MoneyUtils.isFirstBiggerThanSecond(vo.getOrderTotal(), vo.getOrderPaymentBalance())) {
-                if (MoneyUtils.isFirstBiggerThanSecond(vo.getOrderPaymentBalance(), BigDecimal.ZERO)) {
+                if (MoneyUtils.isPositive(vo.getOrderPaymentBalance())) {
                     // less payments than order total
                     return "pt.partial";
                 }
@@ -181,7 +181,7 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
             }
             // exact payment
             return "pt.full";
-        } else if (MoneyUtils.isFirstBiggerThanSecond(vo.getOrderPaymentBalance(), BigDecimal.ZERO)) {
+        } else if (MoneyUtils.isPositive(vo.getOrderPaymentBalance())) {
             // payments on zero order
             return "pt.refund.pending";
         }

@@ -23,6 +23,7 @@ import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class RemoveSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
         }});
 
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getTotal().getTotal());
+        assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getTotal());
         Map<String, String> params = new HashMap<String, String>();
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST3");
         params.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "3");

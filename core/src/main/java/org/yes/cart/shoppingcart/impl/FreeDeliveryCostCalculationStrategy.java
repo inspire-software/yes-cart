@@ -16,13 +16,13 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -36,9 +36,9 @@ import java.util.Set;
  */
 public class FreeDeliveryCostCalculationStrategy implements DeliveryCostCalculationStrategy {
 
-    private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    private static final BigDecimal ZERO = MoneyUtils.ZERO;
 
-    private static final BigDecimal QTY = new BigDecimal(1).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    private static final BigDecimal QTY = MoneyUtils.ONE;
 
     private final CarrierSlaService carrierSlaService;
     private final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver;

@@ -285,7 +285,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
             final BigDecimal costInclTax = cart.getTotal().getDeliveryCostAmount();
 
-            if (MoneyUtils.isFirstBiggerThanSecond(costInclTax, Total.ZERO)) {
+            if (MoneyUtils.isPositive(costInclTax)) {
 
                 final BigDecimal totalTax = cart.getTotal().getDeliveryTax();
                 final BigDecimal net = costInclTax.subtract(totalTax);
@@ -303,9 +303,11 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                 }
 
                 final BigDecimal taxRate;
-                if (MoneyUtils.isFirstBiggerThanSecond(totalTax, Total.ZERO) && rates.size() > 1) {
+                if (MoneyUtils.isPositive(totalTax) && rates.size() > 1) {
                     // mixed rates in cart we use average with round up so that tax is not reduced by rounding
-                    taxRate = totalTax.multiply(MoneyUtils.HUNDRED).divide(net, Constants.DEFAULT_SCALE, BigDecimal.ROUND_UP);
+                    taxRate = totalTax.multiply(MoneyUtils.HUNDRED)
+                                .divide(net, 1, BigDecimal.ROUND_HALF_UP)
+                                    .setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
                 } else {
                     // single rate for all items, use it to prevent rounding errors
                     taxRate = rates.iterator().next();
@@ -394,14 +396,14 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
         for (final CartItem shipping : cart.getShippingList()) {
             if (supplier.equals(shipping.getSupplierCode())) {
                 deliveriesCount = deliveriesCount.add(BigDecimal.ONE);
-                list = list.add(shipping.getListPrice().multiply(shipping.getQty()).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP));
-                sale = sale.add(shipping.getPrice().multiply(shipping.getQty()).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP));
-                taxAmount = taxAmount.add(shipping.getGrossPrice().subtract(shipping.getNetPrice()).multiply(shipping.getQty()).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP));
+                list = list.add(shipping.getListPrice().multiply(shipping.getQty()).setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP));
+                sale = sale.add(shipping.getPrice().multiply(shipping.getQty()).setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP));
+                taxAmount = taxAmount.add(shipping.getGrossPrice().subtract(shipping.getNetPrice()).multiply(shipping.getQty()).setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP));
                 if (StringUtils.isNotBlank(shipping.getTaxCode())) {
                     taxes.add(shipping.getTaxCode());
                 }
-                net = net.add(shipping.getNetPrice().multiply(shipping.getQty()).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP));
-                gross = gross.add(shipping.getGrossPrice().multiply(shipping.getQty()).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP));
+                net = net.add(shipping.getNetPrice().multiply(shipping.getQty()).setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP));
+                gross = gross.add(shipping.getGrossPrice().multiply(shipping.getQty()).setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP));
                 rates.add(shipping.getTaxRate());
             }
         }
@@ -415,16 +417,18 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
             final BigDecimal costInclTax = gross;
 
-            if (MoneyUtils.isFirstBiggerThanSecond(costInclTax, Total.ZERO)) {
+            if (MoneyUtils.isPositive(costInclTax)) {
 
                 final BigDecimal totalTax = taxAmount;
 
                 final BigDecimal totalAdjusted = showTaxNet ? net : gross;
 
                 final BigDecimal taxRate;
-                if (MoneyUtils.isFirstBiggerThanSecond(totalTax, Total.ZERO) && rates.size() > 1) {
+                if (MoneyUtils.isPositive(totalTax) && rates.size() > 1) {
                     // mixed rates in cart we use average with round up so that tax is not reduced by rounding
-                    taxRate = totalTax.multiply(MoneyUtils.HUNDRED).divide(net, Constants.DEFAULT_SCALE, BigDecimal.ROUND_UP);
+                    taxRate = totalTax.multiply(MoneyUtils.HUNDRED)
+                                .divide(net, 1, BigDecimal.ROUND_HALF_UP)
+                                    .setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
                 } else {
                     // single rate for all items, use it to prevent rounding errors
                     taxRate = rates.iterator().next();

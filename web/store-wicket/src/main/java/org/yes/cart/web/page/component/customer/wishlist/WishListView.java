@@ -43,7 +43,6 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -265,7 +264,7 @@ public class WishListView extends AbstractProductSearchResultList {
 
         final PriceView priceView = new PriceView("priceView", model, priceInfo, true, false, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
 
-        final boolean isPriceNowAvailable = model.getRegularPrice() != null && MoneyUtils.isFirstBiggerThanSecond(model.getRegularPrice(), BigDecimal.ZERO);
+        final boolean isPriceNowAvailable = MoneyUtils.isPositive(model.getRegularPrice());
         priceView.setVisible(isPriceNowAvailable);
         return priceView;
     }

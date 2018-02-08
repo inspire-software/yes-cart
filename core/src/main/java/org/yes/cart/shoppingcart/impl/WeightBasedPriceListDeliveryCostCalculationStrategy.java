@@ -47,11 +47,11 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
 
     private static final Logger LOG = LoggerFactory.getLogger(WeightBasedPriceListDeliveryCostCalculationStrategy.class);
 
-    private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    private static final BigDecimal ZERO = MoneyUtils.ZERO;
 
-    private static final BigDecimal QTY = new BigDecimal(1).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    private static final BigDecimal QTY = MoneyUtils.ONE;
 
-    private static final BigDecimal MAX = new BigDecimal(Integer.MAX_VALUE);
+    private static final BigDecimal MAX = new BigDecimal(Integer.MAX_VALUE).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
 
     private final CarrierSlaService carrierSlaService;
     private final ProductService productService;
@@ -111,8 +111,8 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
 
                         final Pair<BigDecimal, BigDecimal> weightAndVolume = determineProductWeightAndVolume(bucketAndItems.getValue());
 
-                        final boolean useWeight = MoneyUtils.isFirstBiggerThanSecond(weightAndVolume.getFirst(), BigDecimal.ZERO);
-                        final boolean useVolume = MoneyUtils.isFirstBiggerThanSecond(weightAndVolume.getSecond(), BigDecimal.ZERO);
+                        final boolean useWeight = MoneyUtils.isPositive(weightAndVolume.getFirst());
+                        final boolean useVolume = MoneyUtils.isPositive(weightAndVolume.getSecond());
 
                         final SkuPrice priceByWeightMax = useWeight ? getSkuPrice(cart, carrierSlaGUID + "_KGMAX", policy, MAX) : null;
                         final SkuPrice priceByWeight = useWeight && isValidPrice(priceByWeightMax) && MoneyUtils.isFirstBiggerThanOrEqualToSecond(priceByWeightMax.getQuantity(), weightAndVolume.getFirst()) ? getSkuPrice(cart, carrierSlaGUID + "_KG", policy, weightAndVolume.getFirst()) : null;
@@ -152,7 +152,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
 
                             cart.addShippingToCart(bucketAndItems.getKey(), carrierSlaGUID, carrierSlaName, qty);
                             cart.setShippingPrice(carrierSlaGUID, bucketAndItems.getKey(), salePrice, salePrice);
-                            final BigDecimal deliveryCost = salePrice.multiply(qty).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
+                            final BigDecimal deliveryCost = salePrice.multiply(qty).setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP);
 
                             final Total bucketTotal = new TotalImpl(
                                     Total.ZERO,

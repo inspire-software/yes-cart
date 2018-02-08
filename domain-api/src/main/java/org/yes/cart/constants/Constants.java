@@ -35,6 +35,11 @@ public interface Constants {
     int MONEY_SCALE = 2;
 
     /**
+     * Tax scale is to half percent
+     */
+    int TAX_SCALE = 3;
+
+    /**
      * Default inventory scale
      */
     int INVENTORY_SCALE = 3;
@@ -42,7 +47,7 @@ public interface Constants {
     /**
      * Default decimal scale
      */
-    int DEFAULT_SCALE = 2;
+    int DEFAULT_SCALE = MONEY_SCALE;
 
 
     /**

@@ -51,7 +51,7 @@ public class OrderDiscountPromotionAction extends AbstractOrderPromotionAction i
     /** {@inheritDoc} */
     public void perform(final Map<String, Object> context) {
         final BigDecimal discount = getDiscountValue(getRawPromotionActionContext(context));
-        if (MoneyUtils.isFirstBiggerThanSecond(discount, BigDecimal.ZERO)) {
+        if (MoneyUtils.isPositive(discount)) {
 
             final Total cartItemTotal = getItemTotal(context);
 

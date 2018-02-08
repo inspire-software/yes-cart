@@ -65,7 +65,7 @@ public class OrderAmountOffPromotionAction extends AbstractOrderPromotionAction 
     /** {@inheritDoc} */
     public void perform(final Map<String, Object> context) {
         final BigDecimal amountOff = getAmountValue(getRawPromotionActionContext(context));
-        if (MoneyUtils.isFirstBiggerThanSecond(amountOff, BigDecimal.ZERO)) {
+        if (MoneyUtils.isPositive(amountOff)) {
 
             subtractPromotionValue(context, amountOff);
 

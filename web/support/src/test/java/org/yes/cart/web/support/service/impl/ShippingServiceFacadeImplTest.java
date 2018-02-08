@@ -3113,7 +3113,7 @@ public class ShippingServiceFacadeImplTest {
         assertTrue(model.isTaxInfoShowAmount());
 
         assertEquals("NET,NET-2", model.getPriceTaxCode());
-        assertEquals("17.89", model.getPriceTaxRate().toPlainString());
+        assertEquals("17.90", model.getPriceTaxRate().toPlainString());
         assertFalse(model.isPriceTaxExclusive());
         assertEquals("12.14", model.getPriceTax().toPlainString());
 
@@ -3191,7 +3191,7 @@ public class ShippingServiceFacadeImplTest {
         assertTrue(model.isTaxInfoShowAmount());
 
         assertEquals("NET,NET-2", model.getPriceTaxCode());
-        assertEquals("17.89", model.getPriceTaxRate().toPlainString());
+        assertEquals("17.90", model.getPriceTaxRate().toPlainString());
         assertFalse(model.isPriceTaxExclusive());
         assertEquals("12.14", model.getPriceTax().toPlainString());
 
@@ -3547,7 +3547,7 @@ public class ShippingServiceFacadeImplTest {
         assertTrue(model.isTaxInfoShowAmount());
 
         assertEquals("NET,NET-2", model.getPriceTaxCode());
-        assertEquals("17.89", model.getPriceTaxRate().toPlainString());
+        assertEquals("17.90", model.getPriceTaxRate().toPlainString());
         assertFalse(model.isPriceTaxExclusive());
         assertEquals("12.14", model.getPriceTax().toPlainString());
 
@@ -3696,7 +3696,7 @@ public class ShippingServiceFacadeImplTest {
         assertEquals("EUR", model.getCurrency());
         assertEquals("3", model.getQuantity().toPlainString());
 
-        assertEquals("84.82", model.getRegularPrice().toPlainString());
+        assertEquals("84.81", model.getRegularPrice().toPlainString());
         assertEquals("67.86", model.getSalePrice().toPlainString());
 
         assertTrue(model.isTaxInfoEnabled());
@@ -3704,7 +3704,7 @@ public class ShippingServiceFacadeImplTest {
         assertTrue(model.isTaxInfoShowAmount());
 
         assertEquals("NET,NET-2", model.getPriceTaxCode());
-        assertEquals("17.89", model.getPriceTaxRate().toPlainString());
+        assertEquals("17.90", model.getPriceTaxRate().toPlainString());
         assertFalse(model.isPriceTaxExclusive());
         assertEquals("12.14", model.getPriceTax().toPlainString());
 

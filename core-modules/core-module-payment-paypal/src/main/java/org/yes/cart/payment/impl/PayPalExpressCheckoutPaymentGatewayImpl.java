@@ -206,7 +206,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
         Assert.notNull(token, "The pay pal tonek must  be not null");
         Assert.notNull(payment, "Payment must be provided");
         Assert.notNull(payment.getPaymentAmount(), "Amount must be provided");
-        Assert.isTrue(MoneyUtils.isFirstBiggerThanSecond(payment.getPaymentAmount(), BigDecimal.ZERO), "Amount must be positive");
+        Assert.isTrue(MoneyUtils.isPositive(payment.getPaymentAmount()), "Amount must be positive");
         Assert.notNull(payment.getOrderCurrency(), "Currency code must be provided");
 
         try {
@@ -294,7 +294,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
                 final BigDecimal restoredNetAmount = itemNetPricePerAdjustedQty.multiply(qty).setScale(Total.ZERO.scale(), BigDecimal.ROUND_HALF_UP);
 
                 itemsNetTotal = itemsNetTotal.add(restoredNetAmount);
-//                final BigDecimal taxUnit = MoneyUtils.isFirstBiggerThanSecond(item.getTaxAmount(), Total.ZERO) ? item.getTaxAmount().divide(qty, Total.ZERO.scale(), BigDecimal.ROUND_HALF_UP) : Total.ZERO;
+//                final BigDecimal taxUnit = MoneyUtils.isPositive(item.getTaxAmount()) ? item.getTaxAmount().divide(qty, Total.ZERO.scale(), BigDecimal.ROUND_HALF_UP) : Total.ZERO;
 
                 npvs.addRaw(PP_EC_L_PAYMENTREQUEST_0_AMT + i, itemNetPricePerAdjustedQty.toPlainString());
 
@@ -383,7 +383,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
 
         Assert.notNull(payment, "Payment must be provided");
         Assert.notNull(payment.getPaymentAmount(), "Amount must be provided");
-        Assert.isTrue(MoneyUtils.isFirstBiggerThanSecond(payment.getPaymentAmount(), BigDecimal.ZERO), "Amount must be positive");
+        Assert.isTrue(MoneyUtils.isPositive(payment.getPaymentAmount()), "Amount must be positive");
         Assert.notNull(payment.getOrderCurrency(), "Currency code must be provided");
 
 

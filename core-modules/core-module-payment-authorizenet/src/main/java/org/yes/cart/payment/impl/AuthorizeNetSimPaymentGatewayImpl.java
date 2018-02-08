@@ -381,7 +381,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         // TODO: tax exempt and duty
         //
 // x_tax seems to be relating to shipping only
-//        if (MoneyUtils.isFirstBiggerThanSecond(payment.getTaxAmount(), Total.ZERO)) {
+//        if (MoneyUtils.isPositive(payment.getTaxAmount())) {
 //            // <INPUT TYPE="HIDDEN" name="x_tax" VALUE="Tax1<|>state tax<|>0.0625">
 //            setValueIfNotNull(stringBuilder, "x_tax",
 //                    "Tax<|>tax amount<|>" +  payment.getTaxAmount().toPlainString());

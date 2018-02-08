@@ -23,6 +23,7 @@ import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class RemoveAllSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
         }});
 
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getTotal().getSubTotal());
+        assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
         Map<String, String> params = new HashMap<String, String>();
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST2");
         params.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "10");
@@ -60,7 +61,7 @@ public class RemoveAllSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
         params = new HashMap<String, String>();
         params.put(RemoveAllSkuFromCartCommandImpl.CMD_REMOVEALLSKU, "CC_TEST2");
         commands.execute(shoppingCart, (Map) params);
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getTotal().getSubTotal());
+        assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
         assertTrue(shoppingCart.getCartItemList().isEmpty());
     }
 }

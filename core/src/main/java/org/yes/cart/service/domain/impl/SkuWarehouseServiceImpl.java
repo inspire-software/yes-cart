@@ -41,7 +41,7 @@ import java.util.*;
  */
 public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse> implements SkuWarehouseService {
 
-    private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
+    private static final BigDecimal ZERO = MoneyUtils.ZERO;
 
     private ProductService productService;
 

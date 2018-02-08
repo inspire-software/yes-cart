@@ -708,7 +708,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 final Map<String, BigDecimal> qty = result.getQtyOnWarehouse(shop);
                 boolean hasStock = false;
                 for (final BigDecimal singleSku : qty.values()) {
-                    if (MoneyUtils.isFirstBiggerThanSecond(singleSku, BigDecimal.ZERO)) {
+                    if (MoneyUtils.isPositive(singleSku)) {
                         hasStock = true;
                         break;
                     }
@@ -755,7 +755,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                         final BigDecimal ats = stock.getAvailableToSell();
                         // if standard with zero stock then not available
                         if ((sku.getProduct().getAvailability() != Product.AVAILABILITY_STANDARD && !preorderInSale)
-                                || MoneyUtils.isFirstBiggerThanSecond(ats, BigDecimal.ZERO)) {
+                                || MoneyUtils.isPositive(ats)) {
                             final long ff = stock.getWarehouse().getWarehouseId();
                             final Set<Long> shs = shopsByFulfilment.get(ff);
                             if (shs != null) {
@@ -775,7 +775,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                                     }
                                     final Set<Long> withFcAvailableIn = availableIn.get(withFc);
 
-                                    final BigDecimal atsAdd = MoneyUtils.isFirstBiggerThanSecond(ats, BigDecimal.ZERO) ? ats : BigDecimal.ZERO;
+                                    final BigDecimal atsAdd = MoneyUtils.isPositive(ats) ? ats : BigDecimal.ZERO;
 
                                     for (final Long sh : shs) {
 

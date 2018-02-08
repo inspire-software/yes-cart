@@ -53,7 +53,7 @@ public class ItemDiscountPromotionAction extends AbstractItemPromotionAction imp
     /** {@inheritDoc} */
     public void perform(final Map<String, Object> context) {
         final BigDecimal discount = getDiscountValue(getRawPromotionActionContext(context));
-        if (MoneyUtils.isFirstBiggerThanSecond(discount, BigDecimal.ZERO)) {
+        if (MoneyUtils.isPositive(discount)) {
             final MutableShoppingCart cart = getShoppingCart(context);
             final CartItem cartItem = getShoppingCartItem(context);
 

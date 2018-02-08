@@ -32,6 +32,7 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.shoppingcart.*;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -132,7 +133,7 @@ public class ShoppingCartView extends BaseComponent {
         final boolean disabledCheckout = validation.isCheckoutBlocked();
 
         // TOTALS
-        final boolean cartIsNotEmpty = cart.getCartItemsCount() > 0;
+        final boolean cartIsNotEmpty = cart.getCartItemsCount() > 0 && MoneyUtils.isPositive(total.getTotalAmount());
         cartForm.addOrReplace(new Label(SUBTOTAL_INCLUDE, "").setVisible(cartIsNotEmpty));
 
         cartForm.addOrReplace(new BookmarkablePageLink<CheckoutPage>(CHECKOUT_LINK, CheckoutPage.class).setVisible(cartIsNotEmpty && !disabledCheckout));

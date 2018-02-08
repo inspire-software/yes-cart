@@ -18,11 +18,11 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -48,7 +48,7 @@ public class ChangeCurrencyEventCommandImplTest extends BaseCoreDBTestCase {
                 (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETSHOP, "10"));
         commands.execute(shoppingCart,
                 (Map) Collections.singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getTotal().getSubTotal());
+        assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
         for (int i = 0; i < 3; i++) {
             commands.execute(shoppingCart,
                     (Map) Collections.singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));

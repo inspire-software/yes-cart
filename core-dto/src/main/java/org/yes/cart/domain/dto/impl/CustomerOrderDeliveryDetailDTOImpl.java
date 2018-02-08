@@ -160,10 +160,10 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     private void calculateLineTotal() {
 
         if (qty != null && netPrice != null && grossPrice != null) {
-            lineTotal = qty.multiply(grossPrice).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
-            lineTotalGross = qty.multiply(grossPrice).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
-            lineTotalNet = qty.multiply(netPrice).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
-            lineTax = qty.multiply(grossPrice.subtract(netPrice)).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
+            lineTotal = qty.multiply(grossPrice).setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP);
+            lineTotalGross = qty.multiply(grossPrice).setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP);
+            lineTotalNet = qty.multiply(netPrice).setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP);
+            lineTax = lineTotalGross.subtract(lineTotalNet);
         }
 
     }

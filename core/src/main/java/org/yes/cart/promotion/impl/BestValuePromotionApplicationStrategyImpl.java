@@ -92,7 +92,7 @@ public class BestValuePromotionApplicationStrategyImpl implements PromotionAppli
                         if (eligible) {
 
                             final BigDecimal pdisc = promo.getAction().testDiscountValue(context);
-                            if (MoneyUtils.isFirstBiggerThanSecond(pdisc, BigDecimal.ZERO)) {
+                            if (MoneyUtils.isPositive(pdisc)) {
                                 // only if we get some discount from test this promo qualifies to be applicable
                                 applicable.add(promo);
                                 // cumulative discount value is total value in percent relative to sale price

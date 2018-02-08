@@ -166,10 +166,8 @@ public class CartItemImpl implements CartItem {
      */
     public BigDecimal addQuantity(final BigDecimal quantity) {
 
-        final BigDecimal notNullQty = MoneyUtils.notNull(quantity, BigDecimal.ZERO);
-
-        if (MoneyUtils.isFirstBiggerThanSecond(notNullQty, BigDecimal.ZERO)) {
-            this.quantity = this.quantity.add(notNullQty);
+        if (MoneyUtils.isPositive(quantity)) {
+            this.quantity = this.quantity.add(quantity);
         }
         return getQty();
     }
@@ -185,13 +183,11 @@ public class CartItemImpl implements CartItem {
      */
     public BigDecimal removeQuantity(final BigDecimal quantity) throws CartItemRequiresDeletion {
 
-        final BigDecimal notNullQty = MoneyUtils.notNull(quantity, BigDecimal.ZERO);
-
-        if (MoneyUtils.isFirstBiggerThanSecond(notNullQty, BigDecimal.ZERO)) {
-            if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(notNullQty, this.quantity)) {
+        if (MoneyUtils.isPositive(quantity)) {
+            if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(quantity, this.quantity)) {
                 throw new CartItemRequiresDeletion();
             } else {
-                this.quantity = this.quantity.subtract(notNullQty);
+                this.quantity = this.quantity.subtract(quantity);
             }
         }
         return getQty();

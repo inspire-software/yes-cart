@@ -39,7 +39,6 @@ import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.MoneyUtils;
 
-import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -188,7 +187,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
                     // paypal website would generate a callback for capture but the order may well still be in processing
                     // or even complete state)
 
-                    if (MoneyUtils.isFirstBiggerThanSecond(pgCallback.getAmount(), BigDecimal.ZERO)) {
+                    if (MoneyUtils.isPositive(pgCallback.getAmount())) {
                         final Map params = new LinkedHashMap(parameters);
                         params.put("refundNotificationAmount", pgCallback.getAmount());
                         handlePrematureRefund(params, order);

@@ -98,13 +98,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
         return amountCalculationStrategy.calculate(customerOrder);
     }
 
-    static final String ORDER_SUB_TOTAL_REF = "yc-order-sub-total";
-
-    /** {@inheritDoc} */
-    @Override
-    public ProductPriceModel getOrderTotalSub(final CustomerOrder customerOrder, final ShoppingCart cart) {
-
-        final Total grandTotal = getOrderTotal(customerOrder);
+    String determineTaxCode(final CustomerOrder customerOrder) {
 
         // TODO: fix this later (YC-760)
         String firstTaxCode = "";
@@ -114,33 +108,57 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                 break;
             }
         }
+        return firstTaxCode;
 
-        BigDecimal taxRate = BigDecimal.ZERO;
-        boolean hasTax = false;
-        boolean priceTaxExclusive = false;
-        if (MoneyUtils.isFirstBiggerThanSecond(grandTotal.getTotalTax(), BigDecimal.ZERO)) {
+    }
 
-            final BigDecimal netAmount = grandTotal.getTotalAmount().subtract(grandTotal.getTotalTax());
-            final BigDecimal taxPercent = grandTotal.getTotalTax().divide(netAmount, Constants.DEFAULT_SCALE, BigDecimal.ROUND_FLOOR);
-            taxRate = taxPercent.movePointRight(2);
+    static final String ORDER_SUB_TOTAL_REF = "yc-order-sub-total";
 
-            hasTax = true;
-            priceTaxExclusive = grandTotal.getTotalAmount().compareTo(grandTotal.getTotal()) > 0;
+    /** {@inheritDoc} */
+    @Override
+    public ProductPriceModel getOrderTotalSub(final CustomerOrder customerOrder, final ShoppingCart cart) {
 
-        }
+        final Total grandTotal = getOrderTotal(customerOrder);
+
+        final boolean hasTax = MoneyUtils.isPositive(grandTotal.getTotalTax());
 
         final boolean showTax = hasTax && cart.getShoppingContext().isTaxInfoEnabled();
         final boolean showTaxNet = showTax && cart.getShoppingContext().isTaxInfoUseNet();
         final boolean showTaxAmount = showTax && cart.getShoppingContext().isTaxInfoShowAmount();
 
-        return new ProductPriceModelImpl(ORDER_SUB_TOTAL_REF, customerOrder.getCurrency(), BigDecimal.ONE,
-                showTaxNet ? grandTotal.getTotalAmount().subtract(grandTotal.getTotalTax()) : grandTotal.getTotalAmount(),
-                null,
-                showTax, showTaxNet, showTaxAmount,
-                firstTaxCode,
-                taxRate,
-                priceTaxExclusive,
-                grandTotal.getTotalTax()
+        if (showTax) {
+
+            final String firstTaxCode = determineTaxCode(customerOrder);
+
+            final BigDecimal netAmount = grandTotal.getTotalAmount().subtract(grandTotal.getTotalTax());
+            final BigDecimal taxPercent = grandTotal.getTotalTax().divide(netAmount, Constants.TAX_SCALE, BigDecimal.ROUND_FLOOR);
+            final BigDecimal taxRate = taxPercent.multiply(MoneyUtils.HUNDRED).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+
+            final boolean priceTaxExclusive = MoneyUtils.isFirstBiggerThanSecond(grandTotal.getTotalAmount(), grandTotal.getTotal());
+
+            // no discounts on sub total
+            return new ProductPriceModelImpl(
+                    ORDER_SUB_TOTAL_REF,
+                    customerOrder.getCurrency(),
+                    BigDecimal.ONE,
+                    showTaxNet ? grandTotal.getTotalAmount().subtract(grandTotal.getTotalTax()) : grandTotal.getTotalAmount(),
+                    null,
+                    showTax, showTaxNet, showTaxAmount,
+                    firstTaxCode,
+                    taxRate,
+                    priceTaxExclusive,
+                    grandTotal.getTotalTax()
+            );
+
+        }
+
+        // no discounts on sub total
+        return new ProductPriceModelImpl(
+                ORDER_SUB_TOTAL_REF,
+                customerOrder.getCurrency(),
+                BigDecimal.ONE,
+                grandTotal.getTotal(),
+                null
         );
 
     }
@@ -153,32 +171,54 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
         final Total grandTotal = getOrderTotal(customerOrder);
 
-        // TODO: fix this later (YC-760)
-        String firstTaxCode = "";
-        for (final CartItem item : customerOrder.getOrderDetail()) {
-            if (StringUtils.isNotBlank(item.getTaxCode())) {
-                firstTaxCode = item.getTaxCode();
-                break;
-            }
-        }
+        final boolean hasTax = MoneyUtils.isPositive(grandTotal.getTotalTax());
+        final boolean showTax = hasTax; // Total amount always must show tax if it has it
+        final boolean showTaxAmount = showTax && cart.getShoppingContext().isTaxInfoShowAmount();
 
-        BigDecimal taxRate = BigDecimal.ZERO;
-        if (MoneyUtils.isFirstBiggerThanSecond(grandTotal.getTotalTax(), BigDecimal.ZERO)) {
+        final boolean hasDiscounts = MoneyUtils.isFirstBiggerThanSecond(grandTotal.getListTotalAmount(), grandTotal.getTotalAmount());
+
+        if (showTax) {
+
+            final String firstTaxCode = determineTaxCode(customerOrder);
 
             final BigDecimal netAmount = grandTotal.getTotalAmount().subtract(grandTotal.getTotalTax());
-            final BigDecimal taxPercent = grandTotal.getTotalTax().divide(netAmount, Constants.DEFAULT_SCALE, BigDecimal.ROUND_FLOOR);
-            taxRate = taxPercent.movePointRight(2);
+            final BigDecimal taxPercent = grandTotal.getTotalTax().divide(netAmount, Constants.TAX_SCALE, BigDecimal.ROUND_FLOOR);
+            final BigDecimal taxRate = taxPercent.multiply(MoneyUtils.HUNDRED).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+
+            return new ProductPriceModelImpl(
+                    ORDER_TOTAL_REF,
+                    customerOrder.getCurrency(),
+                    BigDecimal.ONE,
+                    hasDiscounts ? grandTotal.getListTotalAmount() : grandTotal.getTotalAmount(),
+                    hasDiscounts ? grandTotal.getTotalAmount() : null,
+                    showTax, false, showTaxAmount,
+                    firstTaxCode,
+                    taxRate,
+                    false, // TotalAmount always includes taxes
+                    grandTotal.getTotalTax()
+            );
+
 
         }
 
-        return new ProductPriceModelImpl(ORDER_TOTAL_REF, customerOrder.getCurrency(), BigDecimal.ONE,
-                grandTotal.getListTotalAmount(),
+        if (hasDiscounts) {
+
+            return new ProductPriceModelImpl(
+                    ORDER_TOTAL_REF,
+                    customerOrder.getCurrency(),
+                    BigDecimal.ONE,
+                    grandTotal.getListTotalAmount(),
+                    grandTotal.getTotalAmount()
+            );
+
+        }
+
+        return new ProductPriceModelImpl(
+                ORDER_TOTAL_REF,
+                customerOrder.getCurrency(),
+                BigDecimal.ONE,
                 grandTotal.getTotalAmount(),
-                false, false, false,
-                firstTaxCode,
-                taxRate,
-                false, // TotalAmount includes taxes
-                grandTotal.getTotalTax()
+                null
         );
 
     }
@@ -196,41 +236,45 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
         final Total grandTotal = getOrderDeliveryTotal(customerOrder, delivery);
 
-        // TODO: fix this later (YC-760)
-        String firstTaxCode = "";
-        for (final CartItem item : delivery.getDetail()) {
-            if (StringUtils.isNotBlank(item.getTaxCode())) {
-                firstTaxCode = item.getTaxCode();
-                break;
-            }
-        }
-
-        BigDecimal taxRate = BigDecimal.ZERO;
-        boolean hasTax = false;
-        boolean priceTaxExclusive = false;
-        if (MoneyUtils.isFirstBiggerThanSecond(grandTotal.getSubTotalTax(), BigDecimal.ZERO)) {
-
-            final BigDecimal netAmount = grandTotal.getSubTotalAmount().subtract(grandTotal.getSubTotalTax());
-            final BigDecimal taxPercent = grandTotal.getSubTotalTax().divide(netAmount, Constants.DEFAULT_SCALE, BigDecimal.ROUND_FLOOR);
-            taxRate = taxPercent.movePointRight(2);
-
-            hasTax = true;
-            priceTaxExclusive = grandTotal.getSubTotalAmount().compareTo(grandTotal.getSubTotal()) > 0;
-
-        }
+        final boolean hasTax = MoneyUtils.isPositive(grandTotal.getSubTotalTax());
 
         final boolean showTax = hasTax && cart.getShoppingContext().isTaxInfoEnabled();
         final boolean showTaxNet = showTax && cart.getShoppingContext().isTaxInfoUseNet();
         final boolean showTaxAmount = showTax && cart.getShoppingContext().isTaxInfoShowAmount();
 
-        return new ProductPriceModelImpl(DELIVERY_TOTAL_REF, customerOrder.getCurrency(), BigDecimal.ONE,
-                showTaxNet ? grandTotal.getSubTotalAmount().subtract(grandTotal.getSubTotalTax()) : grandTotal.getSubTotalAmount(),
-                null,
-                showTax, showTaxNet, showTaxAmount,
-                firstTaxCode,
-                taxRate,
-                priceTaxExclusive,
-                grandTotal.getSubTotalTax()
+        if (showTax) {
+
+            final String firstTaxCode = delivery.getTaxCode();
+
+            final BigDecimal netAmount = grandTotal.getSubTotalAmount().subtract(grandTotal.getSubTotalTax());
+            final BigDecimal taxPercent = grandTotal.getSubTotalTax().divide(netAmount, Constants.TAX_SCALE, BigDecimal.ROUND_FLOOR);
+            final BigDecimal taxRate = taxPercent.multiply(MoneyUtils.HUNDRED).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+
+            final boolean priceTaxExclusive = MoneyUtils.isFirstBiggerThanSecond(grandTotal.getSubTotalAmount(), grandTotal.getSubTotal());
+
+            // no discounts on sub total
+            return new ProductPriceModelImpl(
+                    DELIVERY_TOTAL_REF,
+                    customerOrder.getCurrency(),
+                    BigDecimal.ONE,
+                    showTaxNet ? grandTotal.getSubTotalAmount().subtract(grandTotal.getSubTotalTax()) : grandTotal.getSubTotalAmount(),
+                    null,
+                    showTax, showTaxNet, showTaxAmount,
+                    firstTaxCode,
+                    taxRate,
+                    priceTaxExclusive,
+                    grandTotal.getSubTotalTax()
+            );
+
+        }
+
+        // no discounts on sub total
+        return new ProductPriceModelImpl(
+                DELIVERY_TOTAL_REF,
+                customerOrder.getCurrency(),
+                BigDecimal.ONE,
+                grandTotal.getSubTotal(),
+                null
         );
 
     }
@@ -242,43 +286,74 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
         final Total grandTotal = getOrderDeliveryTotal(customerOrder, delivery);
 
-        // TODO: fix this later (YC-760)
-        String firstTaxCode = "";
-        for (final CartItem item : delivery.getDetail()) {
-            if (StringUtils.isNotBlank(item.getTaxCode())) {
-                firstTaxCode = item.getTaxCode();
-                break;
-            }
-        }
-
-        BigDecimal taxRate = BigDecimal.ZERO;
-        boolean hasTax = false;
-        boolean priceTaxExclusive = false;
-        if (MoneyUtils.isFirstBiggerThanSecond(grandTotal.getDeliveryTax(), BigDecimal.ZERO)) {
-
-            final BigDecimal netAmount = grandTotal.getDeliveryCostAmount().subtract(grandTotal.getDeliveryTax());
-            final BigDecimal taxPercent = grandTotal.getDeliveryTax().divide(netAmount, Constants.DEFAULT_SCALE, BigDecimal.ROUND_FLOOR);
-            taxRate = taxPercent.movePointRight(2);
-
-            hasTax = true;
-            priceTaxExclusive = grandTotal.getDeliveryCostAmount().compareTo(grandTotal.getDeliveryCost()) > 0;
-
-        }
-
+        boolean hasTax = MoneyUtils.isPositive(grandTotal.getDeliveryTax());
         final boolean showTax = hasTax && cart.getShoppingContext().isTaxInfoEnabled();
         final boolean showTaxNet = showTax && cart.getShoppingContext().isTaxInfoUseNet();
         final boolean showTaxAmount = showTax && cart.getShoppingContext().isTaxInfoShowAmount();
 
-        return new ProductPriceModelImpl(DELIVERY_SHIPPING_REF, customerOrder.getCurrency(), BigDecimal.ONE,
-                showTaxNet ?
-                        MoneyUtils.getNetAmount(grandTotal.getDeliveryListCost(), taxRate, priceTaxExclusive) :
-                        MoneyUtils.getGrossAmount(grandTotal.getDeliveryListCost(), taxRate, priceTaxExclusive),
-                showTaxNet ? grandTotal.getDeliveryCostAmount().subtract(grandTotal.getDeliveryTax()) : grandTotal.getDeliveryCostAmount(),
-                showTax, showTaxNet, showTaxAmount,
-                firstTaxCode,
-                taxRate,
-                priceTaxExclusive,
-                grandTotal.getDeliveryTax()
+        final boolean hasDiscount = MoneyUtils.isFirstBiggerThanSecond(grandTotal.getDeliveryListCost(), grandTotal.getDeliveryCost());
+
+        if (showTax) {
+
+            final String firstTaxCode = delivery.getTaxCode();
+
+            final BigDecimal netAmount = grandTotal.getDeliveryCostAmount().subtract(grandTotal.getDeliveryTax());
+            final BigDecimal taxPercent = grandTotal.getDeliveryTax().divide(netAmount, Constants.TAX_SCALE, BigDecimal.ROUND_FLOOR);
+            final BigDecimal taxRate = taxPercent.multiply(MoneyUtils.HUNDRED).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+
+            final boolean priceTaxExclusive = MoneyUtils.isFirstBiggerThanSecond(grandTotal.getDeliveryCostAmount(), grandTotal.getDeliveryCost());
+
+            if (hasDiscount) {
+
+                return new ProductPriceModelImpl(DELIVERY_SHIPPING_REF, customerOrder.getCurrency(), BigDecimal.ONE,
+                        showTaxNet ?
+                                MoneyUtils.getNetAmount(grandTotal.getDeliveryListCost(), taxRate, !priceTaxExclusive) :
+                                MoneyUtils.getGrossAmount(grandTotal.getDeliveryListCost(), taxRate, !priceTaxExclusive),
+                        showTaxNet ?
+                                grandTotal.getDeliveryCostAmount().subtract(grandTotal.getDeliveryTax()) :
+                                grandTotal.getDeliveryCostAmount(),
+                        showTax, showTaxNet, showTaxAmount,
+                        firstTaxCode,
+                        taxRate,
+                        priceTaxExclusive,
+                        grandTotal.getDeliveryTax()
+                );
+
+            }
+
+
+            return new ProductPriceModelImpl(DELIVERY_SHIPPING_REF, customerOrder.getCurrency(), BigDecimal.ONE,
+                    showTaxNet ?
+                            grandTotal.getDeliveryCostAmount().subtract(grandTotal.getDeliveryTax()) :
+                            grandTotal.getDeliveryCostAmount(),
+                    null,
+                    showTax, showTaxNet, showTaxAmount,
+                    firstTaxCode,
+                    taxRate,
+                    priceTaxExclusive,
+                    grandTotal.getDeliveryTax()
+            );
+
+        }
+
+        if (hasDiscount) {
+
+            return new ProductPriceModelImpl(
+                    DELIVERY_SHIPPING_REF,
+                    customerOrder.getCurrency(),
+                    BigDecimal.ONE,
+                    grandTotal.getDeliveryListCost(),
+                    grandTotal.getDeliveryCost()
+            );
+
+        }
+
+        return new ProductPriceModelImpl(
+                DELIVERY_SHIPPING_REF,
+                customerOrder.getCurrency(),
+                BigDecimal.ONE,
+                grandTotal.getDeliveryCost(),
+                null
         );
 
     }

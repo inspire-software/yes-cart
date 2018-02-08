@@ -151,7 +151,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
 
         final Total tmp = promoCtx.applyOrderPromo(customer, cart, itemTotal);
 
-        final BigDecimal orderLevelDiscountRatio = MoneyUtils.isFirstBiggerThanSecond(itemTotal.getSubTotal(), BigDecimal.ZERO) ? tmp.getSubTotal().divide(itemTotal.getSubTotal(), 16, RoundingMode.HALF_UP) : Total.ZERO;
+        final BigDecimal orderLevelDiscountRatio = MoneyUtils.isPositive(itemTotal.getSubTotal()) ? tmp.getSubTotal().divide(itemTotal.getSubTotal(), 16, RoundingMode.HALF_UP) : Total.ZERO;
 
         final BigDecimal subTotal = tmp.getSubTotal();
         final BigDecimal subTotalTax = multiply(itemTotal.getSubTotalTax(), orderLevelDiscountRatio);
@@ -502,7 +502,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
      */
     BigDecimal calculateDelivery(final CustomerOrderDelivery orderDelivery) {
         if (orderDelivery != null && orderDelivery.getPrice() != null) {
-            return orderDelivery.getPrice().setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+            return orderDelivery.getPrice().setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
         }
         return Total.ZERO;
     }
@@ -532,7 +532,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
      * @return amount with correct scale
      */
     BigDecimal multiply(final BigDecimal price, final BigDecimal qty) {
-        return price.multiply(qty).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        return price.multiply(qty).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
     }
 
 

@@ -34,7 +34,6 @@ import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
@@ -489,16 +488,17 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         final Pair<BigDecimal, BigDecimal> price;
         final CustomerWishList.PriceChange priceInfo;
         if (isPriceValid(priceNow)) {
-            if (ApplicationDirector.getShoppingCart().getCurrencyCode().equals(addedPriceCurr)) {
+            if (cart.getCurrencyCode().equals(addedPriceCurr)) {
                 final BigDecimal addedPrice = item.getRegularPriceWhenAdded();
-                final BigDecimal saleNow = MoneyUtils.secondOrFirst(priceNow.getSalePriceForCalculation());
+                final Pair<BigDecimal, BigDecimal> listAndSale = priceNow.getSalePriceForCalculation();
+                final BigDecimal saleNow = MoneyUtils.secondOrFirst(listAndSale);
                 if (MoneyUtils.isFirstEqualToSecond(addedPrice, saleNow)) {
                     // no change
-                    if (MoneyUtils.isFirstBiggerThanSecond(priceNow.getRegularPrice(), addedPrice)) {
-                        price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), addedPrice);
+                    if (MoneyUtils.isFirstBiggerThanSecond(listAndSale.getFirst(), addedPrice)) {
+                        price = new Pair<BigDecimal, BigDecimal>(listAndSale.getFirst(), addedPrice);
                         priceInfo = new CustomerWishList.PriceChange(
                                 CustomerWishList.PriceChangeType.ONSALE,
-                                MoneyUtils.getDiscountDisplayValue(priceNow.getRegularPrice(), addedPrice)
+                                MoneyUtils.getDiscountDisplayValue(listAndSale.getFirst(), addedPrice)
                         );
                     } else {
                         // not on sale
@@ -512,16 +512,16 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                             CustomerWishList.PriceChangeType.DECREASED,
                             MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow)
                     );
-                } else if (MoneyUtils.isFirstBiggerThanSecond(addedPrice, BigDecimal.ZERO)) {
+                } else if (MoneyUtils.isPositive(addedPrice)) {
                     // price gone up
-                    price = new Pair<BigDecimal, BigDecimal>(saleNow, null);
+                    price = listAndSale;
                     priceInfo = new CustomerWishList.PriceChange(
                             CustomerWishList.PriceChangeType.INCRSEASED,
                             MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).negate()
                     );
                 } else {
-                    // was not on sale
-                    price = new Pair<BigDecimal, BigDecimal>(addedPrice, null);
+                    // invalid config - old price is zero or negative
+                    price = listAndSale;
                     priceInfo = new CustomerWishList.PriceChange(CustomerWishList.PriceChangeType.NOCHANGE, null);
                 }
             } else {
@@ -604,11 +604,11 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 if (showTaxNet) {
                     saleAdjusted = saleModel.getNetPrice();
                     // recalculate list price so that discounts are correct
-                    listAdjusted = list != null ? MoneyUtils.getMoney(list, saleModel.getTaxRate(), !saleModel.isTaxExclusive()).getNet() : null;
+                    listAdjusted = list != null ? MoneyUtils.getNetAmount(list, saleModel.getTaxRate(), !saleModel.isTaxExclusive()) : null;
                 } else {
                     saleAdjusted = saleModel.getGrossPrice();
                     // recalculate list price so that discounts are correct
-                    listAdjusted = list != null ? MoneyUtils.getMoney(list, saleModel.getTaxRate(), !saleModel.isTaxExclusive()).getGross() : null;
+                    listAdjusted = list != null ? MoneyUtils.getGrossAmount(list, saleModel.getTaxRate(), !saleModel.isTaxExclusive()) : null;
                 }
 
                 return new ProductPriceModelImpl(
@@ -688,23 +688,53 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
             return getNullProductPriceModel(currency);
         }
 
-        // For total we use only list price since we already show discount in unit prices
-        final BigDecimal sale = total ? null : item.getSalePrice();
-        final BigDecimal list = total ? (item.getPrice() != null ? item.getPrice().multiply(item.getQty()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP) : null) : item.getListPrice();
-
         if (showTax) {
-            if (sale != null) {
+            if (item.getSalePrice() != null && MoneyUtils.isFirstBiggerThanSecond(item.getListPrice(), item.getPrice())) {
+
+                if (total) {
+
+                    // if sale price exists use it as primary target as this one will be shown
+                    final BigDecimal saleAdjusted, listAdjusted;
+
+                    if (showTaxNet) {
+                        saleAdjusted = item.getNetPrice().multiply(item.getQty()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+                        // recalculate list price so that discounts are correct
+                        listAdjusted = item.getListPrice() != null ?
+                                MoneyUtils.getMoney(item.getListPrice(), item.getTaxRate(), !item.isTaxExclusiveOfPrice()).getNet().multiply(item.getQty()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP) : null;
+                    } else {
+                        saleAdjusted = item.getGrossPrice().multiply(item.getQty()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
+                        // recalculate list price so that discounts are correct
+                        listAdjusted = item.getListPrice() != null ?
+                                MoneyUtils.getMoney(item.getListPrice(), item.getTaxRate(), !item.isTaxExclusiveOfPrice()).getGross().multiply(item.getQty()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP) : null;
+                    }
+
+                    return new ProductPriceModelImpl(
+                            item.getProductSkuCode(),
+                            currency,
+                            item.getQty(),
+                            listAdjusted, saleAdjusted,
+                            showTax, showTaxNet, showTaxAmount,
+                            item.getTaxCode(),
+                            item.getTaxRate(),
+                            item.isTaxExclusiveOfPrice(),
+                            item.getGrossPrice().subtract(item.getNetPrice()).multiply(item.getQty()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP)
+                    );
+
+                }
+
+                final BigDecimal list = item.getListPrice();
+
                 // if sale price exists use it as primary target as this one will be shown
                 final BigDecimal saleAdjusted, listAdjusted;
 
                 if (showTaxNet) {
                     saleAdjusted = item.getNetPrice();
                     // recalculate list price so that discounts are correct
-                    listAdjusted = list != null ? MoneyUtils.getMoney(list, item.getTaxRate(), !item.isTaxExclusiveOfPrice()).getNet() : null;
+                    listAdjusted = list != null ? MoneyUtils.getNetAmount(list, item.getTaxRate(), !item.isTaxExclusiveOfPrice()) : null;
                 } else {
                     saleAdjusted = item.getGrossPrice();
                     // recalculate list price so that discounts are correct
-                    listAdjusted = list != null ? MoneyUtils.getMoney(list, item.getTaxRate(), !item.isTaxExclusiveOfPrice()).getGross() : null;
+                    listAdjusted = list != null ? MoneyUtils.getGrossAmount(list, item.getTaxRate(), !item.isTaxExclusiveOfPrice()) : null;
                 }
 
                 return new ProductPriceModelImpl(
@@ -719,7 +749,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                         item.getGrossPrice().subtract(item.getNetPrice())
                 );
 
-            } else if (list != null) {
+            } else if (item.getListPrice() != null) {
 
                 if (total) {
 
@@ -730,12 +760,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                             item.getProductSkuCode(),
                             currency,
                             item.getQty(),
-                            listAdjusted.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP), null,
+                            listAdjusted.setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP), null,
                             showTax, showTaxNet, showTaxAmount,
                             item.getTaxCode(),
                             item.getTaxRate(),
                             item.isTaxExclusiveOfPrice(),
-                            item.getGrossPrice().subtract(item.getNetPrice()).multiply(item.getQty()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP)
+                            item.getGrossPrice().subtract(item.getNetPrice()).multiply(item.getQty()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP)
                     );
 
                 }
@@ -757,6 +787,19 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
             }
         }
+
+        final BigDecimal sale = total ?
+                (item.getPrice() != null && !MoneyUtils.isFirstEqualToSecond(item.getPrice(), item.getListPrice()) ?
+                        item.getPrice().multiply(item.getQty()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP) :
+                        null) :
+                (item.getPrice() != null && !MoneyUtils.isFirstEqualToSecond(item.getPrice(), item.getListPrice()) ?
+                        item.getPrice() :
+                        null);
+        final BigDecimal list = total ?
+                (item.getListPrice() != null ?
+                        item.getListPrice().multiply(item.getQty()).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP) :
+                        null) :
+                item.getListPrice();
 
         // standard "as is" prices
         return new ProductPriceModelImpl(
@@ -826,7 +869,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
             final BigDecimal totalInclTax = cart.getTotal().getSubTotalAmount();
 
-            if (MoneyUtils.isFirstBiggerThanSecond(totalInclTax, Total.ZERO)) {
+            if (MoneyUtils.isPositive(totalInclTax)) {
                 final BigDecimal totalTax = cart.getTotal().getSubTotalTax();
                 final BigDecimal net = totalInclTax.subtract(totalTax);
                 final BigDecimal gross = totalInclTax;
@@ -843,9 +886,11 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 }
 
                 final BigDecimal taxRate;
-                if (MoneyUtils.isFirstBiggerThanSecond(totalTax, Total.ZERO) && rates.size() > 1) {
+                if (MoneyUtils.isPositive(totalTax) && rates.size() > 1) {
                     // mixed rates in cart we use average with round up so that tax is not reduced by rounding
-                    taxRate = totalTax.multiply(MoneyUtils.HUNDRED).divide(net, Constants.DEFAULT_SCALE, BigDecimal.ROUND_UP);
+                    taxRate = totalTax.multiply(MoneyUtils.HUNDRED)
+                            .divide(net, 1, BigDecimal.ROUND_HALF_UP)
+                                .setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
                 } else {
                     // single rate for all items, use it to prevent rounding errors
                     taxRate = rates.iterator().next();
@@ -891,7 +936,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         // standard "as is" prices
 
-        if (MoneyUtils.isFirstBiggerThanSecond(sale, Total.ZERO)
+        if (MoneyUtils.isPositive(sale)
                 && MoneyUtils.isFirstBiggerThanSecond(list, sale)) {
             // if we have discounts
             return new ProductPriceModelImpl(

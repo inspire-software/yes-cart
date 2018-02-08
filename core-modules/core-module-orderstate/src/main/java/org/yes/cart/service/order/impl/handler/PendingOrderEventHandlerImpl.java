@@ -185,7 +185,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
 
                     final BigDecimal rem = inventoryResolver.reservation(selected, skuCode, toReserve, backorder || preorder);
 
-                    if (MoneyUtils.isFirstBiggerThanSecond(rem, BigDecimal.ZERO)) {
+                    if (MoneyUtils.isPositive(rem)) {
                         /**
                          * For reservation we always must have stock items with inventory supported availability
                          */

@@ -37,7 +37,7 @@ public interface Total extends Serializable {
     /**
      * Zero with correct scale
      */
-    BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP);
 
     /**
      * Get subtotal of all items list price.

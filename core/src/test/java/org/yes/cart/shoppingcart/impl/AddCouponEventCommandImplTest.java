@@ -26,6 +26,7 @@ import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -55,7 +56,7 @@ public class AddCouponEventCommandImplTest extends BaseCoreDBTestCase {
         commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getTotal().getSubTotal());
+        assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
 
         final String couponCodeValid = "CMDTEST-ADD001";
         createCoupon(couponCodeValid, shoppingCart.getShoppingContext().getShopCode(), shoppingCart.getCurrencyCode());

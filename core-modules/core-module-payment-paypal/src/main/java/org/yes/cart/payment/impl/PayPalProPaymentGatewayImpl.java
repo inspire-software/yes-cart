@@ -209,7 +209,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
                 final BigDecimal restoredNetAmount = itemNetPricePerAdjustedQty.multiply(qty).setScale(Total.ZERO.scale(), BigDecimal.ROUND_HALF_UP);
 
                 itemsNetTotal = itemsNetTotal.add(restoredNetAmount);
-//                final BigDecimal taxUnit = MoneyUtils.isFirstBiggerThanSecond(item.getTaxAmount(), Total.ZERO) ? item.getTaxAmount().divide(qty, Total.ZERO.scale(), BigDecimal.ROUND_HALF_UP) : Total.ZERO;
+//                final BigDecimal taxUnit = MoneyUtils.isPositive(item.getTaxAmount()) ? item.getTaxAmount().divide(qty, Total.ZERO.scale(), BigDecimal.ROUND_HALF_UP) : Total.ZERO;
 
                 npvs.addRaw("L_AMT" + i, itemNetPricePerAdjustedQty.toPlainString());
 

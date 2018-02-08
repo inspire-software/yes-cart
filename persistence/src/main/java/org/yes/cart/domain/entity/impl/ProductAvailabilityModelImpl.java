@@ -60,7 +60,7 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
             skuCodes = new TreeSet<String>(inventoryQty.keySet());
             if (!perpetual) {
                 for (final BigDecimal qty : inventoryQty.values()) {
-                    if (MoneyUtils.isFirstBiggerThanSecond(qty, BigDecimal.ZERO)) {
+                    if (MoneyUtils.isPositive(qty)) {
                         inStock = true;
                         break;
                     }
@@ -111,12 +111,12 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
 
     public String determineFirstAvailableSkuCode(final String defaultSku, final SortedSet<String> skuCodes) {
         final BigDecimal defValue = getAvailableToSellQuantity(defaultSku);
-        if (MoneyUtils.isFirstBiggerThanSecond(defValue, BigDecimal.ZERO)) {
+        if (MoneyUtils.isPositive(defValue)) {
             return defaultSku;
         }
         for (final String skuCode : skuCodes) {
             final BigDecimal value = getAvailableToSellQuantity(skuCode);
-            if (MoneyUtils.isFirstBiggerThanSecond(value, BigDecimal.ZERO)) {
+            if (MoneyUtils.isPositive(value)) {
                 return skuCode;
             }
         }

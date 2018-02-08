@@ -308,7 +308,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
             final BigDecimal ppQty = item.getQuantity().setScale(0, BigDecimal.ROUND_CEILING);
             form.append(getHiddenFieldValue("quantity_" + i, ppQty.toPlainString()));
 
-            final BigDecimal taxUnit = MoneyUtils.isFirstBiggerThanSecond(item.getTaxAmount(), Total.ZERO) ?
+            final BigDecimal taxUnit = MoneyUtils.isPositive(item.getTaxAmount()) ?
                             item.getTaxAmount().divide(item.getQuantity(), Total.ZERO.scale(), RoundingMode.HALF_UP)
                                 : Total.ZERO;
             final BigDecimal itemAmount = item.getUnitPrice().subtract(taxUnit);

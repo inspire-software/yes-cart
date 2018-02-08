@@ -23,6 +23,7 @@ import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class SetSkuQuantityToCartEventCommandImplTest extends BaseCoreDBTestCase
             put(ShoppingCartCommand.CMD_SETSHOP, "10");
         }});
 
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getTotal().getSubTotal());
+        assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
         Map<String, String> params = new HashMap<String, String>();
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST4");
         params.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1");

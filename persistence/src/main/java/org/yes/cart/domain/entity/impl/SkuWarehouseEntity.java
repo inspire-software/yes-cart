@@ -139,7 +139,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     public boolean isAvailableToSell() {
-        return MoneyUtils.isFirstBiggerThanSecond(getQuantity(), BigDecimal.ZERO)
+        return MoneyUtils.isPositive(getQuantity())
                 && MoneyUtils.isFirstBiggerThanSecond(getQuantity(), getReserved());
     }
 

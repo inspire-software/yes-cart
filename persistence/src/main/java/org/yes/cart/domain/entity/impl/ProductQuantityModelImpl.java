@@ -48,10 +48,10 @@ public class ProductQuantityModelImpl implements ProductQuantityModel {
                                     final BigDecimal step,
                                     final BigDecimal cartQty) {
 
-        this.hasStep = MoneyUtils.isFirstBiggerThanSecond(step, BigDecimal.ZERO);
+        this.hasStep = MoneyUtils.isPositive(step);
         this.step = (this.hasStep ? step : BigDecimal.ONE).stripTrailingZeros(); // Stepping ultimately defines the scale for quantity
 
-        this.hasMin = MoneyUtils.isFirstBiggerThanSecond(min, BigDecimal.ZERO);
+        this.hasMin = MoneyUtils.isPositive(min);
         this.min = (this.hasMin ? min : BigDecimal.ONE).setScale(this.step.scale(), RoundingMode.HALF_UP);
 
         this.hasMax = max != null && MoneyUtils.isFirstBiggerThanSecond(MAX, max);

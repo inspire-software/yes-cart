@@ -380,7 +380,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
 
 
         int i = 1;
-        boolean hasOrderDiscount = MoneyUtils.isFirstBiggerThanSecond(orderDiscountRemainder, Total.ZERO);
+        boolean hasOrderDiscount = MoneyUtils.isPositive(orderDiscountRemainder);
         for (final PaymentLine item : payment.getOrderItems()) {
 
             final BigDecimal itemGrossAmount = item.getUnitPrice().multiply(item.getQuantity()).setScale(Total.ZERO.scale(), RoundingMode.HALF_UP);
@@ -388,8 +388,8 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
             params.put("ITEMNAME" + i, item.getSkuName().length() > ITEMNAME ? item.getSkuName().substring(0, ITEMNAME - 1) + "~" : item.getSkuName());
             params.put("ITEMQUANT" + i, item.getQuantity().toPlainString());
             if (hasOrderDiscount
-                    && MoneyUtils.isFirstBiggerThanSecond(orderDiscountRemainder, Total.ZERO)
-                    && MoneyUtils.isFirstBiggerThanSecond(itemGrossAmount, Total.ZERO)) {
+                    && MoneyUtils.isPositive(orderDiscountRemainder)
+                    && MoneyUtils.isPositive(itemGrossAmount)) {
                 BigDecimal discount;
                 if (i == it) {
                     // last item

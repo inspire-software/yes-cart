@@ -138,7 +138,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
                         if (voidReservation) {
                             // this delivery was not completed, so can just void reservation
                             final BigDecimal rem = inventoryResolver.voidReservation(selected, skuCode, toCredit);
-                            if (MoneyUtils.isFirstBiggerThanSecond(rem, BigDecimal.ZERO)) {
+                            if (MoneyUtils.isPositive(rem)) {
                                 LOG.warn(
                                         "Could not void all reservation {}:{}",
                                         delivery.getDeliveryNum(), det.getProductSkuCode()
@@ -147,7 +147,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
                         } else if (voidCredit) {
                             // this delivery is completed, so need to credit qty
                             final BigDecimal rem = inventoryResolver.credit(selected, skuCode, toCredit);
-                            if (MoneyUtils.isFirstBiggerThanSecond(rem, BigDecimal.ZERO)) {
+                            if (MoneyUtils.isPositive(rem)) {
                                 LOG.warn(
                                         "Could not credit all reservation {}:{}",
                                         delivery.getDeliveryNum(), det.getProductSkuCode()

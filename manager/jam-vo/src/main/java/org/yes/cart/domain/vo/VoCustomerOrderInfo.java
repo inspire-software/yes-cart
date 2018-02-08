@@ -20,6 +20,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -98,16 +99,16 @@ public class VoCustomerOrderInfo {
     private String code;
 
     @DtoField(value = "amount", readOnly = true)
-    private BigDecimal orderPaymentBalance = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+    private BigDecimal orderPaymentBalance = MoneyUtils.ZERO;
 
     @DtoField(value = "orderTotal", readOnly = true)
-    private BigDecimal orderTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+    private BigDecimal orderTotal = MoneyUtils.ZERO;
     @DtoField(value = "orderTotalTax", readOnly = true)
-    private BigDecimal orderTotalTax = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+    private BigDecimal orderTotalTax = MoneyUtils.ZERO;
     @DtoField(value = "orderGrossTotal", readOnly = true)
-    private BigDecimal orderGrossTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+    private BigDecimal orderGrossTotal = MoneyUtils.ZERO;
     @DtoField(value = "orderNetTotal", readOnly = true)
-    private BigDecimal orderNetTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+    private BigDecimal orderNetTotal = MoneyUtils.ZERO;
 
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
