@@ -2,16 +2,10 @@ package org.yes.cart.util;
 
 import org.junit.Test;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.Locale;
+import java.time.*;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
@@ -49,34 +43,37 @@ public class DateUtilsTest {
     @Test
     public void convert() throws Exception {
 
-        final LocalDate localDate = LocalDate.now();
-        final Date dateFromLD = DateUtils.from(localDate);
-        assertEquals(dateFromLD.getTime(), DateUtils.millis(localDate));
+        Instant instant;
+
+        instant = DateUtils.iParseSDT("2017-10-10 00:00:00");
+        final LocalDate localDate = DateUtils.ldParseSDT("2017-10-10");
+        assertEquals(instant.toEpochMilli(), DateUtils.millis(localDate));
         assertEquals(0L, DateUtils.millis((LocalDate) null));
+        assertEquals(localDate, DateUtils.ldFrom(instant.toEpochMilli()));
 
-        final LocalDateTime localDateTime = LocalDateTime.now();
-        final Date dateFromLDT = DateUtils.from(localDateTime);
-        assertEquals(dateFromLDT.getTime(), DateUtils.millis(localDateTime));
+        instant = DateUtils.iParseSDT("2017-10-10 11:55:23");
+        final LocalDateTime localDateTime = DateUtils.ldtParseSDT("2017-10-10 11:55:23");
+        assertEquals(instant.toEpochMilli(), DateUtils.millis(localDateTime));
         assertEquals(0L, DateUtils.millis((LocalDateTime) null));
+        assertEquals(localDateTime, DateUtils.ldtFrom(instant.toEpochMilli()));
 
-        final ZonedDateTime zonedDateTime = ZonedDateTime.now();
-        final Date dateFromZDT = DateUtils.from(zonedDateTime);
-        assertEquals(dateFromZDT.getTime(), DateUtils.millis(zonedDateTime));
+        instant = DateUtils.iParseSDT("2017-10-10 11:55:23");
+        final ZonedDateTime zonedDateTime = DateUtils.zdtParseSDT("2017-10-10 11:55:23");
+        assertEquals(instant.toEpochMilli(), DateUtils.millis(zonedDateTime));
         assertEquals(0L, DateUtils.millis((ZonedDateTime) null));
+        assertEquals(zonedDateTime, DateUtils.zdtFrom(instant.toEpochMilli()));
 
-        final Instant instant = Instant.now();
-        final Date dateFromI = DateUtils.from(instant);
-        assertEquals(dateFromI.getTime(), instant.toEpochMilli());
+        instant = DateUtils.iParseSDT("2017-10-10 11:55:23");
+        assertEquals(instant, DateUtils.iFrom(instant.toEpochMilli()));
+        assertEquals(instant, DateUtils.iFrom(DateUtils.ldtParseSDT("2017-10-10 11:55:23")));
+        assertEquals(instant, DateUtils.iFrom(DateUtils.zdtParseSDT("2017-10-10 11:55:23")));
+        instant = DateUtils.iParseSDT("2017-10-10");
+        assertEquals(instant, DateUtils.iFrom(DateUtils.ldParseSDT("2017-10-10")));
 
     }
 
     @Test
     public void standardDate() throws Exception {
-
-        final Date date = DateUtils.dParseSDT("2017-10-10");
-        assertNotNull(date);
-        assertEquals("2017-10-10 00:00:00", DateUtils.formatSDT(date));
-        assertEquals("2017-10-10", DateUtils.formatSD(date));
 
         final LocalDate localDate = DateUtils.ldParseSDT("2017-10-10");
         assertNotNull(localDate);
@@ -93,36 +90,29 @@ public class DateUtilsTest {
         assertEquals("2017-10-10 00:00:00", DateUtils.formatSDT(zonedDateTime));
         assertEquals("2017-10-10", DateUtils.formatSD(zonedDateTime));
 
-        final Instant testSQLDate = DateUtils.iParseSDT("2017-10-10");
-        final java.sql.Date sqlDate = new java.sql.Date(testSQLDate.toEpochMilli());
-        assertEquals("2017-10-10 00:00:00", DateUtils.formatSDT(sqlDate));
-        assertEquals("2017-10-10", DateUtils.formatSD(sqlDate));
-
-        final Instant testSQLTimestamp = DateUtils.iParseSDT("2017-10-10");
-        final Timestamp sqlTimestamp = new Timestamp(testSQLTimestamp.toEpochMilli());
-        assertEquals("2017-10-10 00:00:00", DateUtils.formatSDT(sqlTimestamp));
-        assertEquals("2017-10-10", DateUtils.formatSD(sqlTimestamp));
-
     }
 
     @Test
     public void standardDateTime() throws Exception {
 
-        final Date date = DateUtils.dParseSDT("2017-10-10 10:30:00");
-        assertNotNull(date);
-        assertEquals("2017-10-10 10:30:00", DateUtils.formatSDT(date));
-        assertEquals("2017-10-10", DateUtils.formatSD(date));
+        assertNull(DateUtils.formatSDT((Instant) null));
+        final Instant instant = DateUtils.iParseSDT("2017-10-10 10:30:00");
+        assertNotNull(instant);
+        assertTrue(DateUtils.formatSDT(instant).contains("2017-10-10T10:30"));
 
+        assertNull(DateUtils.formatSDT((LocalDate) null));
         final LocalDate localDate = DateUtils.ldParseSDT("2017-10-10 10:30:00");
         assertNotNull(localDate);
         assertEquals("2017-10-10 00:00:00", DateUtils.formatSDT(localDate));
         assertEquals("2017-10-10", DateUtils.formatSD(localDate));
 
+        assertNull(DateUtils.formatSDT((LocalDateTime) null));
         final LocalDateTime localDateTime = DateUtils.ldtParseSDT("2017-10-10 10:30:00");
         assertNotNull(localDateTime);
         assertEquals("2017-10-10 10:30:00", DateUtils.formatSDT(localDateTime));
         assertEquals("2017-10-10", DateUtils.formatSD(localDateTime));
 
+        assertNull(DateUtils.formatSDT((ZonedDateTime) null));
         final ZonedDateTime zonedDateTime = DateUtils.zdtParseSDT("2017-10-10 10:30:00");
         assertNotNull(zonedDateTime);
         assertEquals("2017-10-10 10:30:00", DateUtils.formatSDT(zonedDateTime));
@@ -130,26 +120,10 @@ public class DateUtilsTest {
 
         assertNotNull(DateUtils.formatSDT());
 
-        final Instant testSQLDate = DateUtils.iParseSDT("2017-10-10 10:30:00");
-        final java.sql.Date sqlDate = new java.sql.Date(testSQLDate.toEpochMilli());
-        assertEquals("2017-10-10 00:00:00", DateUtils.formatSDT(sqlDate));
-        assertEquals("2017-10-10", DateUtils.formatSD(sqlDate));
-
-        final Instant testSQLTimestamp = DateUtils.iParseSDT("2017-10-10 10:30:00");
-        final Timestamp sqlTimestamp = new Timestamp(testSQLTimestamp.toEpochMilli());
-        assertEquals("2017-10-10 10:30:00", DateUtils.formatSDT(sqlTimestamp));
-        assertEquals("2017-10-10", DateUtils.formatSD(sqlTimestamp));
-
-
     }
 
     @Test
     public void custom() throws Exception {
-
-        final Date date = DateUtils.dParse("10/10/17 10:30:00", "dd/MM/yy HH:mm:ss");
-        assertNotNull(date);
-        assertEquals("2017-10-10 10:30:00", DateUtils.formatSDT(date));
-        assertEquals("2017-10-10", DateUtils.formatSD(date));
 
         final LocalDate localDate = DateUtils.ldParse("10/10/17 10:30:00", "dd/MM/yy HH:mm:ss");
         assertNotNull(localDate);
@@ -168,24 +142,12 @@ public class DateUtilsTest {
 
         assertNotNull(DateUtils.formatSDT());
 
-        final Instant testSQLDate = DateUtils.iParse("10/10/17 10:30:00", "dd/MM/yy HH:mm:ss");
-        final java.sql.Date sqlDate = new java.sql.Date(testSQLDate.toEpochMilli());
-        assertEquals("2017-10-10 00:00:00", DateUtils.formatSDT(sqlDate));
-        assertEquals("2017-10-10", DateUtils.formatSD(sqlDate));
-
-        final Instant testSQLTimestamp = DateUtils.iParse("10/10/17 10:30:00", "dd/MM/yy HH:mm:ss");
-        final Timestamp sqlTimestamp = new Timestamp(testSQLTimestamp.toEpochMilli());
-        assertEquals("2017-10-10 10:30:00", DateUtils.formatSDT(sqlTimestamp));
-        assertEquals("2017-10-10", DateUtils.formatSD(sqlTimestamp));
-
-
     }
 
 
     @Test
     public void exportFileTimestamp() throws Exception {
 
-        assertEquals("20171010103000", DateUtils.exportFileTimestamp(DateUtils.dParseSDT("2017-10-10 10:30:00")));
         assertEquals("20171010103000", DateUtils.exportFileTimestamp(DateUtils.iParseSDT("2017-10-10 10:30:00")));
         assertEquals("20171010103000", DateUtils.exportFileTimestamp(DateUtils.ldtParseSDT("2017-10-10 10:30:00")));
         assertEquals("20171010103000", DateUtils.exportFileTimestamp(DateUtils.zdtParseSDT("2017-10-10 10:30:00")));
@@ -198,7 +160,6 @@ public class DateUtilsTest {
     @Test
     public void numberTimestamp() throws Exception {
 
-        assertEquals("20171010103000", DateUtils.numberTimestamp(DateUtils.dParseSDT("2017-10-10 10:30:00")));
         assertEquals("20171010103000", DateUtils.numberTimestamp(DateUtils.iParseSDT("2017-10-10 10:30:00")));
         assertEquals("20171010103000", DateUtils.numberTimestamp(DateUtils.ldtParseSDT("2017-10-10 10:30:00")));
         assertEquals("20171010103000", DateUtils.numberTimestamp(DateUtils.zdtParseSDT("2017-10-10 10:30:00")));
@@ -210,7 +171,6 @@ public class DateUtilsTest {
     public void impexFileTimestamp() throws Exception {
 
         assertEquals("2017-10-10_103000", DateUtils.impexFileTimestamp(DateUtils.iParseSDT("2017-10-10 10:30:00")));
-        assertEquals("2017-10-10_103000", DateUtils.impexFileTimestamp(DateUtils.dParseSDT("2017-10-10 10:30:00")));
         assertEquals("2017-10-10_103000", DateUtils.impexFileTimestamp(DateUtils.ldtParseSDT("2017-10-10 10:30:00")));
         assertEquals("2017-10-10_103000", DateUtils.impexFileTimestamp(DateUtils.zdtParseSDT("2017-10-10 10:30:00")));
 
@@ -235,7 +195,6 @@ public class DateUtilsTest {
     public void formatCustomer() throws Exception {
 
         assertEquals("10 October 2017", DateUtils.formatCustomer(DateUtils.iParseSDT("2017-10-10 10:30:00"), Locale.UK));
-        assertEquals("10 October 2017", DateUtils.formatCustomer(DateUtils.dParseSDT("2017-10-10 10:30:00"), Locale.UK));
         assertEquals("10 October 2017", DateUtils.formatCustomer(DateUtils.ldParseSDT("2017-10-10 10:30:00"), Locale.UK));
         assertEquals("10 October 2017", DateUtils.formatCustomer(DateUtils.ldtParseSDT("2017-10-10 10:30:00"), Locale.UK));
         assertEquals("10 October 2017", DateUtils.formatCustomer(DateUtils.zdtParseSDT("2017-10-10 10:30:00"), Locale.UK));
@@ -250,5 +209,170 @@ public class DateUtilsTest {
 
         assertEquals(String.valueOf(now.atZone(DateUtils.zone()).getYear()), DateUtils.formatYear());
 
+    }
+
+    @Test
+    public void atStartOfYear() throws Exception {
+
+        assertNull(DateUtils.zdtAtStartOfYear(null));
+        assertEquals("2017-01-01 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfYear(DateUtils.zdtParseSDT("2017-10-10 10:30:00"))));
+        assertEquals("2017-01-01 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfYear(DateUtils.zdtParseSDT("2017-10-31 23:59:59"))));
+        assertEquals("2017-01-01 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfYear(DateUtils.zdtParseSDT("2017-10-01 00:00:00"))));
+
+        assertNull(DateUtils.ldtAtStartOfYear(null));
+        assertEquals("2017-01-01 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfYear(DateUtils.ldtParseSDT("2017-10-10 10:30:00"))));
+        assertEquals("2017-01-01 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfYear(DateUtils.ldtParseSDT("2017-10-31 23:59:59"))));
+        assertEquals("2017-01-01 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfYear(DateUtils.ldtParseSDT("2017-10-01 00:00:00"))));
+
+    }
+
+    @Test
+    public void atStartOfMonth() throws Exception {
+
+        assertNull(DateUtils.zdtAtStartOfMonth(null));
+        assertEquals("2017-10-01 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfMonth(DateUtils.zdtParseSDT("2017-10-10 10:30:00"))));
+        assertEquals("2017-10-01 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfMonth(DateUtils.zdtParseSDT("2017-10-31 23:59:59"))));
+        assertEquals("2017-10-01 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfMonth(DateUtils.zdtParseSDT("2017-10-01 00:00:00"))));
+
+        assertNull(DateUtils.ldtAtStartOfMonth(null));
+        assertEquals("2017-10-01 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfMonth(DateUtils.ldtParseSDT("2017-10-10 10:30:00"))));
+        assertEquals("2017-10-01 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfMonth(DateUtils.ldtParseSDT("2017-10-31 23:59:59"))));
+        assertEquals("2017-10-01 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfMonth(DateUtils.ldtParseSDT("2017-10-01 00:00:00"))));
+
+    }
+
+
+    @Test
+    public void atStartOfWeek() throws Exception {
+
+        assertNull(DateUtils.zdtAtStartOfWeek(null));
+        assertEquals("2017-09-25 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfWeek(DateUtils.zdtParseSDT("2017-10-01 10:30:00"))));
+        assertEquals("2017-10-02 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfWeek(DateUtils.zdtParseSDT("2017-10-02 23:59:59"))));
+        assertEquals("2017-10-02 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfWeek(DateUtils.zdtParseSDT("2017-10-03 00:00:00"))));
+        assertEquals("2017-10-02 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfWeek(DateUtils.zdtParseSDT("2017-10-04 10:30:00"))));
+        assertEquals("2017-10-02 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfWeek(DateUtils.zdtParseSDT("2017-10-05 23:59:59"))));
+        assertEquals("2017-10-02 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfWeek(DateUtils.zdtParseSDT("2017-10-06 00:00:00"))));
+        assertEquals("2017-10-02 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfWeek(DateUtils.zdtParseSDT("2017-10-07 10:30:00"))));
+        assertEquals("2017-10-02 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfWeek(DateUtils.zdtParseSDT("2017-10-08 23:59:59"))));
+        assertEquals("2017-10-09 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfWeek(DateUtils.zdtParseSDT("2017-10-09 00:00:00"))));
+
+        assertNull(DateUtils.ldtAtStartOfWeek(null));
+        assertEquals("2017-09-25 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfWeek(DateUtils.ldtParseSDT("2017-10-01 10:30:00"))));
+        assertEquals("2017-10-02 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfWeek(DateUtils.ldtParseSDT("2017-10-02 23:59:59"))));
+        assertEquals("2017-10-02 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfWeek(DateUtils.ldtParseSDT("2017-10-03 00:00:00"))));
+        assertEquals("2017-10-02 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfWeek(DateUtils.ldtParseSDT("2017-10-04 10:30:00"))));
+        assertEquals("2017-10-02 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfWeek(DateUtils.ldtParseSDT("2017-10-05 23:59:59"))));
+        assertEquals("2017-10-02 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfWeek(DateUtils.ldtParseSDT("2017-10-06 00:00:00"))));
+        assertEquals("2017-10-02 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfWeek(DateUtils.ldtParseSDT("2017-10-07 10:30:00"))));
+        assertEquals("2017-10-02 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfWeek(DateUtils.ldtParseSDT("2017-10-08 23:59:59"))));
+        assertEquals("2017-10-09 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfWeek(DateUtils.ldtParseSDT("2017-10-09 00:00:00"))));
+
+
+    }
+
+
+    @Test
+    public void atStartOfDay() throws Exception {
+
+        assertNull(DateUtils.zdtAtStartOfDay(null));
+        assertEquals("2017-10-10 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfDay(DateUtils.zdtParseSDT("2017-10-10 10:30:00"))));
+        assertEquals("2017-10-31 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfDay(DateUtils.zdtParseSDT("2017-10-31 23:59:59"))));
+        assertEquals("2017-10-01 00:00:00",
+                DateUtils.formatSDT(DateUtils.zdtAtStartOfDay(DateUtils.zdtParseSDT("2017-10-01 00:00:00"))));
+
+        assertNull(DateUtils.ldtAtStartOfDay(null));
+        assertEquals("2017-10-10 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfDay(DateUtils.ldtParseSDT("2017-10-10 10:30:00"))));
+        assertEquals("2017-10-31 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfDay(DateUtils.ldtParseSDT("2017-10-31 23:59:59"))));
+        assertEquals("2017-10-01 00:00:00",
+                DateUtils.formatSDT(DateUtils.ldtAtStartOfDay(DateUtils.ldtParseSDT("2017-10-01 00:00:00"))));
+
+    }
+
+
+    @Test
+    public void fromCalendarDaysOfWeekToISO() throws Exception {
+
+        assertNotNull(DateUtils.fromCalendarDaysOfWeekToISO(null));
+        assertTrue(DateUtils.fromCalendarDaysOfWeekToISO(null).isEmpty());
+
+        assertNotNull(DateUtils.fromCalendarDaysOfWeekToISO(Collections.emptyList()));
+        assertTrue(DateUtils.fromCalendarDaysOfWeekToISO(Collections.emptyList()).isEmpty());
+
+        List<DayOfWeek> dow;
+        dow = DateUtils.fromCalendarDaysOfWeekToISO(Collections.singletonList(Calendar.MONDAY));
+        assertNotNull(dow);
+        assertEquals(1, dow.size());
+        assertTrue(dow.contains(DayOfWeek.MONDAY));
+
+        dow = DateUtils.fromCalendarDaysOfWeekToISO(Collections.singletonList(Calendar.TUESDAY));
+        assertNotNull(dow);
+        assertEquals(1, dow.size());
+        assertTrue(dow.contains(DayOfWeek.TUESDAY));
+
+        dow = DateUtils.fromCalendarDaysOfWeekToISO(Collections.singletonList(Calendar.WEDNESDAY));
+        assertNotNull(dow);
+        assertEquals(1, dow.size());
+        assertTrue(dow.contains(DayOfWeek.WEDNESDAY));
+
+        dow = DateUtils.fromCalendarDaysOfWeekToISO(Collections.singletonList(Calendar.THURSDAY));
+        assertNotNull(dow);
+        assertEquals(1, dow.size());
+        assertTrue(dow.contains(DayOfWeek.THURSDAY));
+
+        dow = DateUtils.fromCalendarDaysOfWeekToISO(Collections.singletonList(Calendar.FRIDAY));
+        assertNotNull(dow);
+        assertEquals(1, dow.size());
+        assertTrue(dow.contains(DayOfWeek.FRIDAY));
+
+        dow = DateUtils.fromCalendarDaysOfWeekToISO(Collections.singletonList(Calendar.SATURDAY));
+        assertNotNull(dow);
+        assertEquals(1, dow.size());
+        assertTrue(dow.contains(DayOfWeek.SATURDAY));
+
+        dow = DateUtils.fromCalendarDaysOfWeekToISO(Collections.singletonList(Calendar.SUNDAY));
+        assertNotNull(dow);
+        assertEquals(1, dow.size());
+        assertTrue(dow.contains(DayOfWeek.SUNDAY));
+
+        dow = DateUtils.fromCalendarDaysOfWeekToISO(Arrays.asList(Calendar.MONDAY,Calendar.WEDNESDAY, Calendar.SUNDAY));
+        assertNotNull(dow);
+        assertEquals(3, dow.size());
+        assertTrue(dow.contains(DayOfWeek.MONDAY));
+        assertTrue(dow.contains(DayOfWeek.WEDNESDAY));
+        assertTrue(dow.contains(DayOfWeek.SUNDAY));
     }
 }

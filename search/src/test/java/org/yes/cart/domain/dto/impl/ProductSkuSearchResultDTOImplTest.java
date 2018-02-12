@@ -19,11 +19,6 @@ package org.yes.cart.domain.dto.impl;
 import org.junit.Test;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 

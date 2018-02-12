@@ -21,8 +21,8 @@ import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -164,6 +164,6 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
      *
      * @return list of PKs
      */
-    List<String> findProductSkuForWhichInventoryChangedAfter(Date lastUpdate);
+    List<String> findProductSkuForWhichInventoryChangedAfter(Instant lastUpdate);
 
 }

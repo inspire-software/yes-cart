@@ -30,11 +30,12 @@ import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -148,9 +149,12 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                 customerOrderDelivery.setTaxExclusiveOfPrice(shipping.isTaxExclusiveOfPrice());
 
                 final String requestedDateKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + customerOrderDelivery.getCarrierSla().getCarrierslaId() + entry.getKey().getSupplier();
-                final long requestedDate = NumberUtils.toLong(shoppingCart.getOrderInfo().getDetailByKey(requestedDateKey), 0);
-                if (requestedDate > now()) {
-                    customerOrderDelivery.setRequestedDeliveryDate(new Date(requestedDate));
+                final LocalDateTime requestedDate =
+                        DateUtils.ldtFrom(
+                                NumberUtils.toLong(shoppingCart.getOrderInfo().getDetailByKey(requestedDateKey), 0)
+                        );
+                if (requestedDate.isAfter(now())) {
+                    customerOrderDelivery.setRequestedDeliveryDate(requestedDate);
                 }
 
 
@@ -166,8 +170,8 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
     }
 
-    long now() {
-        return TimeContext.getMillis();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /**

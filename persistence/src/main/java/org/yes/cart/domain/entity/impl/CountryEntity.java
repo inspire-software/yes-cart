@@ -17,11 +17,11 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
- * Date: 27 0ct 2012
+ * Instant: 27 0ct 2012
  * Time: 9:10 AM
  */
 public class CountryEntity implements org.yes.cart.domain.entity.Country, java.io.Serializable {
@@ -33,8 +33,8 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
     private String isoCode;
     private String name;
     private String displayName;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -77,19 +77,19 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
         this.displayName = displayName;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

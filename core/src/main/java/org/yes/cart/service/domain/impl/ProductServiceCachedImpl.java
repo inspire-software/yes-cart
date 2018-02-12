@@ -31,8 +31,8 @@ import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.ProductService;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -253,7 +253,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
-    public List<Long> findProductIdsByUnavailableBefore(final Date before) {
+    public List<Long> findProductIdsByUnavailableBefore(final LocalDateTime before) {
         return productService.findProductIdsByUnavailableBefore(before);
     }
 

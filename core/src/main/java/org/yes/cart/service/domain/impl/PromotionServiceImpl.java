@@ -22,7 +22,7 @@ import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -39,14 +39,14 @@ public class PromotionServiceImpl extends BaseGenericServiceImpl<Promotion> impl
     /** {@inheritDoc} */
     public List<Promotion> getPromotionsByShopCode(final String shopCode, final String currency, final boolean active) {
         if (active) {
-            final Date now = now();
+            final LocalDateTime now = now();
             return getGenericDao().findByNamedQuery("PROMOTION.BY.SHOPCODE.CURRENCY.ACTIVE", shopCode, currency, active, now, now);
         }
         return getGenericDao().findByNamedQuery("PROMOTION.BY.SHOPCODE.CURRENCY", shopCode, currency);
     }
 
-    Date now() {
-        return TimeContext.getTime();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /** {@inheritDoc} */

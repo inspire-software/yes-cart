@@ -23,7 +23,7 @@ import org.yes.cart.domain.misc.Result;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -167,8 +167,8 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
             String lastName,
             String email,
             String orderStatus,
-            Date fromDate,
-            Date toDate,
+            LocalDateTime fromDate,
+            LocalDateTime toDate,
             String orderNum
     ) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 

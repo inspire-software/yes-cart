@@ -19,9 +19,9 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.ManagerShop;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -43,9 +43,9 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     private String password;
     private String authToken;
     private boolean enabled;
-    private Date authTokenExpiry;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant authTokenExpiry;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -111,11 +111,11 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
         this.authToken = authToken;
     }
 
-    public Date getAuthTokenExpiry() {
+    public Instant getAuthTokenExpiry() {
         return authTokenExpiry;
     }
 
-    public void setAuthTokenExpiry(final Date authTokenExpiry) {
+    public void setAuthTokenExpiry(final Instant authTokenExpiry) {
         this.authTokenExpiry = authTokenExpiry;
     }
 
@@ -127,19 +127,19 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
         this.enabled = enabled;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

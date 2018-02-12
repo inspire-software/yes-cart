@@ -33,18 +33,18 @@ import java.util.List;
 
 public class ApplicationDirector {
 
-    private static final ThreadLocal<String> domainThreadLocal = new ThreadLocal<String>();
-    private static final ThreadLocal<Shop> shopThreadLocal = new ThreadLocal<Shop>();
-    private static final ThreadLocal<Shop> customerShopThreadLocal = new ThreadLocal<Shop>();
-    private static final ThreadLocal<List<String>> currentThemeChainThreadLocal = new ThreadLocal<List<String>>();
-    private static final ThreadLocal<String> shopperIPAddressThreadLocal = new ThreadLocal<String>();
+    private static final ThreadLocal<String> DOMAIN_THREAD_LOCAL = new ThreadLocal<String>();
+    private static final ThreadLocal<Shop> SHOP_THREAD_LOCAL = new ThreadLocal<Shop>();
+    private static final ThreadLocal<Shop> CUSTOMER_SHOP_THREAD_LOCAL = new ThreadLocal<Shop>();
+    private static final ThreadLocal<List<String>> CURRENT_THEME_CHAIN_THREAD_LOCAL = new ThreadLocal<List<String>>();
+    private static final ThreadLocal<String> SHOPPER_IP_ADDRESS_THREAD_LOCAL = new ThreadLocal<String>();
 
     /**
      * Get shopper ip address.
      * @return shopper ip address
      */
     public static String getShopperIPAddress() {
-        return shopperIPAddressThreadLocal.get();
+        return SHOPPER_IP_ADDRESS_THREAD_LOCAL.get();
     }
 
     /**
@@ -52,7 +52,7 @@ public class ApplicationDirector {
      * @param shopperIPAddress shopper ip address
      */
     public static void setShopperIPAddress(final String shopperIPAddress) {
-        shopperIPAddressThreadLocal.set(shopperIPAddress);
+        SHOPPER_IP_ADDRESS_THREAD_LOCAL.set(shopperIPAddress);
     }
 
 
@@ -62,7 +62,7 @@ public class ApplicationDirector {
      * @return {@link Shop} instance
      */
     public static Shop getCurrentShop() {
-        return shopThreadLocal.get();
+        return SHOP_THREAD_LOCAL.get();
     }
 
 
@@ -72,7 +72,7 @@ public class ApplicationDirector {
      * @param currentShop current shop.
      */
     public static void setCurrentShop(final Shop currentShop) {
-        shopThreadLocal.set(currentShop);
+        SHOP_THREAD_LOCAL.set(currentShop);
     }
 
     /**
@@ -82,7 +82,7 @@ public class ApplicationDirector {
      */
     public static Shop getCurrentCustomerShop() {
 
-        return customerShopThreadLocal.get();
+        return CUSTOMER_SHOP_THREAD_LOCAL.get();
 
     }
 
@@ -92,7 +92,7 @@ public class ApplicationDirector {
      * @param currentShop current shop.
      */
     public static void setCurrentCustomerShop(final Shop currentShop) {
-        customerShopThreadLocal.set(currentShop);
+        CUSTOMER_SHOP_THREAD_LOCAL.set(currentShop);
     }
 
     /**
@@ -100,7 +100,7 @@ public class ApplicationDirector {
      */
     public static List<String> getCurrentThemeChain() {
 
-        return currentThemeChainThreadLocal.get();
+        return CURRENT_THEME_CHAIN_THREAD_LOCAL.get();
 
     }
 
@@ -111,7 +111,7 @@ public class ApplicationDirector {
      */
     public static void setCurrentThemeChain(final List<String> themeChain) {
 
-        currentThemeChainThreadLocal.set(themeChain);
+        CURRENT_THEME_CHAIN_THREAD_LOCAL.set(themeChain);
 
     }
 
@@ -122,7 +122,7 @@ public class ApplicationDirector {
      * @return {@link Shop} URL domain for this request
      */
     public static String getCurrentDomain() {
-        return domainThreadLocal.get();
+        return DOMAIN_THREAD_LOCAL.get();
     }
 
     /**
@@ -131,7 +131,7 @@ public class ApplicationDirector {
      * @param currentDomain current request domain.
      */
     public static void setCurrentDomain(final String currentDomain) {
-        domainThreadLocal.set(currentDomain);
+        DOMAIN_THREAD_LOCAL.set(currentDomain);
     }
 
 
@@ -157,12 +157,24 @@ public class ApplicationDirector {
      * Clear thread locals at the end of the request
      */
     public static void clear() {
-        domainThreadLocal.set(null);
-        shopThreadLocal.set(null);
-        customerShopThreadLocal.set(null);
-        shopperIPAddressThreadLocal.set(null);
-        currentThemeChainThreadLocal.set(null);
+        DOMAIN_THREAD_LOCAL.set(null);
+        SHOP_THREAD_LOCAL.set(null);
+        CUSTOMER_SHOP_THREAD_LOCAL.set(null);
+        SHOPPER_IP_ADDRESS_THREAD_LOCAL.set(null);
+        CURRENT_THEME_CHAIN_THREAD_LOCAL.set(null);
         ShoppingCartContext.clear();
+    }
+
+    /**
+     * Explicitly remove thread locals to prevent memory leaks.
+     */
+    public static  void destroy() {
+        DOMAIN_THREAD_LOCAL.remove();
+        SHOP_THREAD_LOCAL.remove();
+        CUSTOMER_SHOP_THREAD_LOCAL.remove();
+        SHOPPER_IP_ADDRESS_THREAD_LOCAL.remove();
+        CURRENT_THEME_CHAIN_THREAD_LOCAL.remove();
+        ShoppingCartContext.destroy();
     }
 
 

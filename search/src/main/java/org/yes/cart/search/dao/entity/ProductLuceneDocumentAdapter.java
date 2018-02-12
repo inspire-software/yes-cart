@@ -41,6 +41,7 @@ import org.yes.cart.util.TimeContext;
 import org.yes.cart.util.log.Markers;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils.*;
@@ -73,7 +74,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
     @Override
     public Pair<Long, Document[]> toDocument(final Product entity) {
 
-        final long now = now();
+        final LocalDateTime now = now();
 
         if (isProductInCategoryHasSkuAndAvailableNow(entity, now)) {
 
@@ -176,7 +177,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                     addSimpleField(document, PRODUCT_FEATURED_FIELD, entity.getFeatured() != null && entity.getFeatured() ? "true" : "false");
                     addStoredField(document, "featured_boost", entity.getFeatured() != null && entity.getFeatured() ? 1.25f : 1.0f);
                     // Created timestamp is used to determine ranges
-                    addDateField(document, PRODUCT_CREATED_FIELD, entity.getCreatedTimestamp(), false);
+                    addInstantField(document, PRODUCT_CREATED_FIELD, entity.getCreatedTimestamp(), false);
                     addSortField(document, PRODUCT_CREATED_SORT_FIELD, entity.getCreatedTimestamp(), false);
 
                     // Inventory flag
@@ -386,7 +387,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      * @param available   shop PK's
      * @param now         time now to filter out inactive price records
      */
-    protected void addPriceFields(final Document document, final Product entity, final ProductSearchResultDTO result, final Set<Long> available, final long now) {
+    protected void addPriceFields(final Document document, final Product entity, final ProductSearchResultDTO result, final Set<Long> available, final LocalDateTime now) {
 
         final boolean isShowRoom = entity.getAvailability() == Product.AVAILABILITY_SHOWROOM;
 
@@ -514,7 +515,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
         }
     }
 
-    private void addCategoryFields(final Document document, final Product entity, final Set<Long> available, final long now) {
+    private void addCategoryFields(final Document document, final Product entity, final Set<Long> available, final LocalDateTime now) {
 
         final Set<Long> availableCategories = new HashSet<Long>();
 
@@ -599,7 +600,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      *
      * @return true if this category is available, false otherwise
      */
-    protected boolean isCategoryAvailable(final Long currentId, final long now) {
+    protected boolean isCategoryAvailable(final Long currentId, final LocalDateTime now) {
 
         if (currentId != null) {
 
@@ -684,7 +685,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      * @param available  shop PKs where this result is available
      * @param now        time now (used for pre-ordered items)
      */
-    protected void addInventoryFields(final Document document, final ProductSearchResultDTO result, final Set<Long> available, final long now) {
+    protected void addInventoryFields(final Document document, final ProductSearchResultDTO result, final Set<Long> available, final LocalDateTime now) {
 
         for (final Long shop : available) {
             if (LOGFTQ.isTraceEnabled()) {
@@ -731,7 +732,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      * @param resultsByFc hit results by supplier code
      * @param availableIn shop PK for which given product is available (determined by supplier link to shop)
      */
-    protected void populateResultsByFc(final Product entity, final long now, final Map<String, ProductSearchResultDTO> resultsByFc, final Map<ProductSearchResultDTO, Set<Long>> availableIn) {
+    protected void populateResultsByFc(final Product entity, final LocalDateTime now, final Map<String, ProductSearchResultDTO> resultsByFc, final Map<ProductSearchResultDTO, Set<Long>> availableIn) {
 
         final ProductSearchResultDTO base = createBaseResultObject(entity);
 
@@ -834,8 +835,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
     }
 
-    long now() {
-        return TimeContext.getMillis();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /**
@@ -903,7 +904,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      *
      * @return true if entity need to be in lucene index.
      */
-    public boolean isProductInCategoryHasSkuAndAvailableNow(final Product entity, final long now) {
+    public boolean isProductInCategoryHasSkuAndAvailableNow(final Product entity, final LocalDateTime now) {
         if (entity != null) {
             if (entity.getProductCategory().isEmpty()) {
                 return false; // if it is not assigned to category, no way to determine the shop

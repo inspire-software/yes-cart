@@ -19,7 +19,7 @@ package org.yes.cart.domain.dto;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Lightweight price object.
@@ -106,28 +106,28 @@ public interface PriceListDTO extends Identifiable {
      *
      * @return sale from date.
      */
-    Date getSalefrom();
+    LocalDateTime getSalefrom();
 
     /**
      * Get sale from date.
      *
      * @param salefrom sale from date.
      */
-    void setSalefrom(Date salefrom);
+    void setSalefrom(LocalDateTime salefrom);
 
     /**
      * Get sale to date.
      *
      * @return sale to date.
      */
-    Date getSaleto();
+    LocalDateTime getSaleto();
 
     /**
      * Set sale to date
      *
      * @param saleto sale to date
      */
-    void setSaleto(Date saleto);
+    void setSaleto(LocalDateTime saleto);
 
     /**
      * Primary key.

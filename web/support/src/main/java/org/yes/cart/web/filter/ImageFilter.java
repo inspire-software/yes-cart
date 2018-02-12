@@ -22,6 +22,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.media.MediaFileNameStrategy;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.web.support.util.HttpUtil;
 
 import javax.activation.MimetypesFileTypeMap;
@@ -32,8 +33,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 /**
  * ImageServlet responsible for get product or brand images
@@ -118,13 +118,12 @@ public class ImageFilter extends AbstractFilter implements Filter {
 
         httpServletResponse.setHeader(ETAG, currentToken);
 
-        final Date modifiedDate = new Date(httpServletRequest.getDateHeader(IF_MODIFIED_SINCE));
-        final Calendar calendar = Calendar.getInstance();
-        final Date now = calendar.getTime();
-
-        calendar.setTime(modifiedDate);
-        calendar.add(Calendar.MINUTE, getEtagExpiration());
-        if (currentToken.equals(previousToken) && (now.getTime() < calendar.getTime().getTime())) {
+        if (currentToken.equals(previousToken) &&
+                ZonedDateTime.now(
+                        DateUtils.zone()
+                ).isBefore(
+                        DateUtils.zdtFrom(httpServletRequest.getDateHeader(IF_MODIFIED_SINCE)).plusMinutes(getEtagExpiration())
+                )) {
             httpServletResponse.sendError(HttpServletResponse.SC_NOT_MODIFIED);
             // use the same date we sent when we created the ETag the first time through
             httpServletResponse.setHeader(LAST_MODIFIED, httpServletRequest.getHeader(IF_MODIFIED_SINCE));
@@ -147,7 +146,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
             final String contextPath = httpServletRequest.getContextPath();
             final String servletPath = requestPath.substring(contextPath.length());
 
-            httpServletResponse.setDateHeader(LAST_MODIFIED, (new Date()).getTime());
+            httpServletResponse.setDateHeader(LAST_MODIFIED, System.currentTimeMillis());
 
             final String width = httpServletRequest.getParameter(Constants.WIDTH);
             final String height = httpServletRequest.getParameter(Constants.HEIGHT);

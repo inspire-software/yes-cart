@@ -21,9 +21,10 @@ import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopTopSeller;
 import org.yes.cart.service.domain.ShopTopSellerService;
+import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,12 +59,11 @@ public class ShopTopSellerServiceImpl extends BaseGenericServiceImpl<ShopTopSell
     //Use stored procedures in case if it will reduce performance on big data set
     //Bad ORM fashion
     public void updateTopSellers(final int calculationPeriodInDays) {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, -1 * calculationPeriodInDays);
+        final LocalDateTime calendar = now().plusDays(-calculationPeriodInDays);
         List<Shop> shops = shopDao.findAll();
         for(Shop shop : shops) {
             getGenericDao().executeUpdate("TOP.SELLER.SHOP.CLEAN", shop);
-            List<Object[]> list = getGenericDao().findQueryObjectsByNamedQuery("TOP.SELLER.SHOP.CALCULATE", shop, calendar.getTime());
+            List<Object[]> list = getGenericDao().findQueryObjectsByNamedQuery("TOP.SELLER.SHOP.CALCULATE", shop, calendar);
             final Map<Long, BigDecimal> topSellersCount = new HashMap<Long, BigDecimal>();
             final Map<Long, Product> topSellersProducts = new HashMap<Long, Product>();
             for(Object [] tuple : list) {
@@ -91,5 +91,9 @@ public class ShopTopSellerServiceImpl extends BaseGenericServiceImpl<ShopTopSell
             }
         }
 
+    }
+
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 }

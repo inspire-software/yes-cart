@@ -21,7 +21,7 @@ import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 public class ShoppingCartStateServiceImpl extends BaseGenericServiceImpl<ShoppingCartState> implements ShoppingCartStateService {
@@ -62,14 +62,14 @@ public class ShoppingCartStateServiceImpl extends BaseGenericServiceImpl<Shoppin
     /**
      * {@inheritDoc}
      */
-    public ResultsIterator<ShoppingCartState> findByModificationPrior(final Date lastModification) {
+    public ResultsIterator<ShoppingCartState> findByModificationPrior(final Instant lastModification) {
         return shoppingCartStateDao.findByNamedQueryIterator("SHOPPINGCARTSTATE.BY.LASTMODIFIED", lastModification);
     }
 
     /**
      * {@inheritDoc}
      */
-    public ResultsIterator<ShoppingCartState> findByModificationPrior(final Date lastModification,
+    public ResultsIterator<ShoppingCartState> findByModificationPrior(final Instant lastModification,
                                                                       final boolean emptyAnonymous) {
         if (!emptyAnonymous) {
             return shoppingCartStateDao.findByNamedQueryIterator("SHOPPINGCARTSTATE.BY.LASTMODIFIED", lastModification);

@@ -21,9 +21,10 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -53,16 +54,16 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     private String deliveryStatus;
 
     private String deliveryRemarks;
-    private Date deliveryEstimatedMin;
-    private Date deliveryEstimatedMax;
-    private Date deliveryGuaranteed;
-    private Date deliveryConfirmed;
+    private LocalDateTime deliveryEstimatedMin;
+    private LocalDateTime deliveryEstimatedMax;
+    private LocalDateTime deliveryGuaranteed;
+    private LocalDateTime deliveryConfirmed;
 
-    private Date requestedDeliveryDate;
+    private LocalDateTime requestedDeliveryDate;
 
     private String eligibleForExport;
     private boolean blockExport;
-    private Date lastExportDate;
+    private Instant lastExportDate;
     private String lastExportStatus;
     private String lastExportDeliveryStatus;
 
@@ -70,8 +71,8 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     private CarrierSla carrierSla;
     private CustomerOrder customerOrder;
     private String deliveryGroup;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -185,43 +186,43 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
         this.deliveryRemarks = deliveryRemarks;
     }
 
-    public Date getDeliveryEstimatedMin() {
+    public LocalDateTime getDeliveryEstimatedMin() {
         return deliveryEstimatedMin;
     }
 
-    public void setDeliveryEstimatedMin(final Date deliveryEstimatedMin) {
+    public void setDeliveryEstimatedMin(final LocalDateTime deliveryEstimatedMin) {
         this.deliveryEstimatedMin = deliveryEstimatedMin;
     }
 
-    public Date getDeliveryEstimatedMax() {
+    public LocalDateTime getDeliveryEstimatedMax() {
         return deliveryEstimatedMax;
     }
 
-    public void setDeliveryEstimatedMax(final Date deliveryEstimatedMax) {
+    public void setDeliveryEstimatedMax(final LocalDateTime deliveryEstimatedMax) {
         this.deliveryEstimatedMax = deliveryEstimatedMax;
     }
 
-    public Date getDeliveryGuaranteed() {
+    public LocalDateTime getDeliveryGuaranteed() {
         return deliveryGuaranteed;
     }
 
-    public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
+    public void setDeliveryGuaranteed(final LocalDateTime deliveryGuaranteed) {
         this.deliveryGuaranteed = deliveryGuaranteed;
     }
 
-    public Date getDeliveryConfirmed() {
+    public LocalDateTime getDeliveryConfirmed() {
         return deliveryConfirmed;
     }
 
-    public void setDeliveryConfirmed(final Date deliveryConfirmed) {
+    public void setDeliveryConfirmed(final LocalDateTime deliveryConfirmed) {
         this.deliveryConfirmed = deliveryConfirmed;
     }
 
-    public Date getRequestedDeliveryDate() {
+    public LocalDateTime getRequestedDeliveryDate() {
         return requestedDeliveryDate;
     }
 
-    public void setRequestedDeliveryDate(final Date requestedDeliveryDate) {
+    public void setRequestedDeliveryDate(final LocalDateTime requestedDeliveryDate) {
         this.requestedDeliveryDate = requestedDeliveryDate;
     }
 
@@ -241,11 +242,11 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
         this.blockExport = blockExport;
     }
 
-    public Date getLastExportDate() {
+    public Instant getLastExportDate() {
         return lastExportDate;
     }
 
-    public void setLastExportDate(final Date lastExportDate) {
+    public void setLastExportDate(final Instant lastExportDate) {
         this.lastExportDate = lastExportDate;
     }
 
@@ -297,19 +298,19 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
         this.deliveryGroup = deliveryGroup;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

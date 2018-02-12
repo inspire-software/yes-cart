@@ -18,7 +18,6 @@ package org.yes.cart.service.order.impl.handler.delivery;
 
 import org.yes.cart.domain.misc.Pair;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 

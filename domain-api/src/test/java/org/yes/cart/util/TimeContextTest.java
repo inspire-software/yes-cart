@@ -18,7 +18,7 @@ package org.yes.cart.util;
 
 import org.junit.Test;
 
-import java.util.Date;
+import java.time.Instant;
 
 import static org.junit.Assert.*;
 
@@ -28,35 +28,42 @@ import static org.junit.Assert.*;
  * Time: 17:53
  */
 public class TimeContextTest {
+
+    @Test
+    public void defaults() throws Exception {
+
+        assertTrue(TimeContext.getMillis() > 0L);
+        assertNotNull(TimeContext.getZone());
+        assertNotNull(TimeContext.getLocalDateTime());
+
+    }
+
     @Test
     public void getTime() throws Exception {
 
         assertNotNull(TimeContext.getTime());
 
-        final Date now = new Date();
+        final Instant now = Instant.now();
         TimeContext.setTime(now);
 
         assertEquals("The time should be equal", now, TimeContext.getTime());
-        assertNotSame("The time must not be same BUT CLONE", now, TimeContext.getTime());
-        assertNotSame("The time must not be same BUT CLONE", TimeContext.getTime(), TimeContext.getTime());
-        assertEquals("The time should be equal", now, TimeContext.getTime());
+        assertSame("The time must be the same since Instant is immutable", now, TimeContext.getTime());
+        assertSame("The time must be the same since Instant is immutable", TimeContext.getTime(), TimeContext.getTime());
 
         TimeContext.clear();
         
     }
 
     @Test
-    public void getCalendar() throws Exception {
+    public void getLocalDateTime() throws Exception {
 
-        assertNotNull(TimeContext.getCalendar());
+        assertNotNull(TimeContext.getLocalDateTime());
 
-        final Date now = new Date();
+        final Instant now = Instant.now();
         TimeContext.setTime(now);
 
-        assertEquals("The calendar should be equal", now, TimeContext.getCalendar().getTime());
-        assertNotSame("The calendar must not be same BUT CLONE", now, TimeContext.getCalendar().getTime());
-        assertNotSame("The calendar must not be same BUT CLONE", TimeContext.getCalendar(), TimeContext.getCalendar());
-        assertEquals("The calendar should be equal", now, TimeContext.getCalendar().getTime());
+        assertEquals("The calendar should be equal", now, TimeContext.getLocalDateTime().atZone(TimeContext.getZone()).toInstant());
+        assertNotSame("The time must be the same since LocalDateTime is immutable", TimeContext.getLocalDateTime(), TimeContext.getLocalDateTime());
 
         TimeContext.clear();
 
@@ -65,12 +72,13 @@ public class TimeContextTest {
     @Test
     public void setNow() throws Exception {
 
-        TimeContext.setTime(new Date(0L));
-        assertEquals(0L, TimeContext.getTime().getTime());
+        TimeContext.setTime(Instant.ofEpochMilli(0L));
+        assertEquals(0L, TimeContext.getTime().toEpochMilli());
+        assertEquals(0L, TimeContext.getMillis());
 
-        final Date now = new Date();
+        final Instant now = Instant.now();
         TimeContext.setNow();
-        assertTrue(!now.after(TimeContext.getTime()));
+        assertTrue(!now.isAfter(TimeContext.getTime()));
 
         TimeContext.clear();
 
@@ -79,12 +87,12 @@ public class TimeContextTest {
     @Test
     public void clear() throws Exception {
 
-        assertNotNull(TimeContext.getCalendar());
+        assertNotNull(TimeContext.getLocalDateTime());
 
-        final Date now = new Date();
+        final Instant now = Instant.now();
         TimeContext.setTime(now);
 
-        assertEquals("The time should be equal", now, TimeContext.getCalendar().getTime());
+        assertEquals("The time should be equal", now, TimeContext.getLocalDateTime().atZone(TimeContext.getZone()).toInstant());
 
         try {
             Thread.sleep(10L);
@@ -92,7 +100,7 @@ public class TimeContextTest {
 
         TimeContext.clear();
 
-        assertTrue(now.before(TimeContext.getTime()));
+        assertTrue(now.isBefore(TimeContext.getTime()));
 
         TimeContext.clear();
 

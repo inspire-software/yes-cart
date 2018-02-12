@@ -16,7 +16,7 @@
 
 package org.yes.cart.domain.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 /**
@@ -55,15 +55,15 @@ public interface ShopAdvPlaceRule extends Auditable, Rankable, Nameable {
 
     /**
      */
-    Date getAvailablefrom();
+    LocalDateTime getAvailablefrom();
 
-    void setAvailablefrom(Date availablefrom);
+    void setAvailablefrom(LocalDateTime availablefrom);
 
     /**
      */
-    Date getAvailableto();
+    LocalDateTime getAvailableto();
 
-    void setAvailableto(Date availableto);
+    void setAvailableto(LocalDateTime availableto);
 
     /**
      */

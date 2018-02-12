@@ -30,9 +30,9 @@ import org.yes.cart.service.dto.DtoPromotionCouponService;
 import org.yes.cart.utils.HQLUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -102,7 +102,7 @@ public class DtoPromotionCouponServiceImpl
     }
 
     @Override
-    public List<PromotionCouponDTO> findBy(final long promotionId, final Date createdAfter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public List<PromotionCouponDTO> findBy(final long promotionId, final Instant createdAfter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<PromotionCouponDTO> dtos = new ArrayList<PromotionCouponDTO>();
 
         if (promotionId > 0L) {

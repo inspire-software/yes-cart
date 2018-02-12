@@ -3,7 +3,7 @@ package org.yes.cart.domain.entity;
 import org.yes.cart.domain.i18n.I18NModel;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -50,11 +50,11 @@ public interface PromotionModel extends Serializable {
     /**
      * @return active from date
      */
-    Date getActiveFrom();
+    LocalDateTime getActiveFrom();
 
     /**
      * @return active to date
      */
-    Date getActiveTo();
+    LocalDateTime getActiveTo();
 
 }

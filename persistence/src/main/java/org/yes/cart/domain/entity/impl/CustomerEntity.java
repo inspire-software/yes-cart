@@ -18,6 +18,7 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.*;
 
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -39,7 +40,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     private String middlename;
     private String password;
     private String authToken;
-    private Date authTokenExpiry;
+    private Instant authTokenExpiry;
     private String tag;
     private String publicKey;
     private String customerType;
@@ -50,8 +51,8 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     private Collection<AttrValueCustomer> attributes = new ArrayList<AttrValueCustomer>(0);
     private Collection<Address> address = new ArrayList<Address>(0);
     private Collection<CustomerShop> shops = new ArrayList<CustomerShop>(0);
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -140,11 +141,11 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.authToken = authToken;
     }
 
-    public Date getAuthTokenExpiry() {
+    public Instant getAuthTokenExpiry() {
         return authTokenExpiry;
     }
 
-    public void setAuthTokenExpiry(final Date authTokenExpiry) {
+    public void setAuthTokenExpiry(final Instant authTokenExpiry) {
         this.authTokenExpiry = authTokenExpiry;
     }
 
@@ -220,19 +221,19 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.shops = shops;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

@@ -23,18 +23,36 @@ public class CsvDateValueAdapterImplTest {
     @Test
     public void fromRaw() throws Exception {
 
-        final ImpExColumn column = this.mockery.mock(ImpExColumn.class);
-        final ImpExTuple tuple = this.mockery.mock(ImpExTuple.class);
+        final ImpExColumn ldColumn = this.mockery.mock(ImpExColumn.class, "ldColumn");
+        final ImpExColumn ldtColumn = this.mockery.mock(ImpExColumn.class, "ldtColumn");
+        final ImpExColumn zdtColumn = this.mockery.mock(ImpExColumn.class, "zdtColumn");
+        final ImpExColumn iColumn = this.mockery.mock(ImpExColumn.class, "iColumn");
+        final ImpExTuple tuple = this.mockery.mock(ImpExTuple.class, "tuple");
 
         final CsvDateValueAdapterImpl adapter = new CsvDateValueAdapterImpl();
 
         this.mockery.checking(new Expectations() {{
-            oneOf(column).getContext(); will(returnValue("yyyy-MM-dd HH:mm:ss"));
+            oneOf(ldColumn).getContext(); will(returnValue("yyyy-MM-dd"));
+            oneOf(ldtColumn).getContext(); will(returnValue("yyyy-MM-dd HH:mm:ss"));
+            oneOf(zdtColumn).getContext(); will(returnValue("yyyy-MM-dd HH:mm:ss"));
+            oneOf(iColumn).getContext(); will(returnValue("yyyy-MM-dd HH:mm:ss"));
         }});
 
         assertEquals(
-                "2017-06-06 00:00:00",
-                adapter.fromRaw(DateUtils.dParseSDT("2017-06-06"), "DATE", column, tuple)
+                "2017-06-06",
+                adapter.fromRaw(DateUtils.ldParseSDT("2017-06-06"), "DATE", ldColumn, tuple)
+        );
+        assertEquals(
+                "2017-06-06 15:30:17",
+                adapter.fromRaw(DateUtils.ldtParseSDT("2017-06-06 15:30:17"), "DATETIME", ldtColumn, tuple)
+        );
+        assertEquals(
+                "2017-06-06 15:30:17",
+                adapter.fromRaw(DateUtils.zdtParseSDT("2017-06-06 15:30:17"), "ZONEDTIME", zdtColumn, tuple)
+        );
+        assertEquals(
+                "2017-06-06 15:30:17",
+                adapter.fromRaw(DateUtils.zdtParseSDT("2017-06-06 15:30:17"), "INSTANT", iColumn, tuple)
         );
 
         this.mockery.assertIsSatisfied();

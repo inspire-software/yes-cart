@@ -29,7 +29,7 @@ import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -105,16 +105,16 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
                 qty);
     }
 
-    private boolean isAvailableNow(final int availability, final Date from, final Date to) {
-        final Date now = now();
+    private boolean isAvailableNow(final int availability, final LocalDateTime from, final LocalDateTime to) {
+        final LocalDateTime now = now();
         if (availability == Product.AVAILABILITY_PREORDER) {
             return DomainApiUtils.isObjectAvailableNow(true, null, to, now);
         }
         return DomainApiUtils.isObjectAvailableNow(true, from, to, now);
     }
 
-    private Date now() {
-        return TimeContext.getTime();
+    private LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
 }

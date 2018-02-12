@@ -19,7 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.ShoppingCartState;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -63,7 +63,7 @@ public interface ShoppingCartStateService extends GenericService<ShoppingCartSta
      *
      * @return all saved states that were not modified since given date
      */
-    ResultsIterator<ShoppingCartState> findByModificationPrior(Date lastModification);
+    ResultsIterator<ShoppingCartState> findByModificationPrior(Instant lastModification);
 
     /**
      * Get all states that were modified before given date.
@@ -73,6 +73,6 @@ public interface ShoppingCartStateService extends GenericService<ShoppingCartSta
      *
      * @return all saved states that were not modified since given date
      */
-    ResultsIterator<ShoppingCartState> findByModificationPrior(Date lastModification, boolean emptyAnonymous);
+    ResultsIterator<ShoppingCartState> findByModificationPrior(Instant lastModification, boolean emptyAnonymous);
 
 }

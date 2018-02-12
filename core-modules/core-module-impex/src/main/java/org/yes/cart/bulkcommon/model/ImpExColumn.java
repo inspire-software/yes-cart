@@ -74,9 +74,21 @@ public interface ImpExColumn {
      */
     String DECIMAL = "DECIMAL";
     /**
-     * Date value. Format: "yyyy-MM-dd HH:mm:ss" {@link org.yes.cart.util.DateUtils#dParseSDT(String)}
+     * Date value. Format: "yyyy-MM-dd" {@link org.yes.cart.util.DateUtils#ldParseSDT(String)}
+     */
+    String DATE = "DATE";
+    /**
+     * Date value. Format: "yyyy-MM-dd HH:mm:ss" {@link org.yes.cart.util.DateUtils#ldtParseSDT(String)}
      */
     String DATETIME = "DATETIME";
+    /**
+     * Date value. Format: "yyyy-MM-dd HH:mm:ss" {@link org.yes.cart.util.DateUtils#zdtParseSDT(String)}
+     */
+    String ZONEDTIME = "ZONEDTIME";
+    /**
+     * Date value. Format: "yyyy-MM-dd HH:mm:ss" {@link org.yes.cart.util.DateUtils#iParseSDT(String)}
+     */
+    String INSTANT = "INSTANT";
 
 
 

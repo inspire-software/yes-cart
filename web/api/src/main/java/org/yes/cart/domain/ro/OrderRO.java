@@ -21,14 +21,16 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.matcher.impl.NoopMatcher;
 import org.yes.cart.domain.entity.CustomerOrderDet;
+import org.yes.cart.domain.ro.xml.impl.LocalDateTimeAdapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -76,7 +78,7 @@ public class OrderRO implements Serializable {
     private boolean multipleShipmentOption;
 
     @DtoField(value = "orderTimestamp", readOnly = true)
-    private Date orderTimestamp;
+    private LocalDateTime orderTimestamp;
 
     @DtoField(value = "orderIp", readOnly = true)
     private String orderIp;
@@ -131,12 +133,12 @@ public class OrderRO implements Serializable {
     @DtoField(value = "b2bApprovedBy", readOnly = true)
     private String b2bApprovedBy;
     @DtoField(value = "b2bApprovedDate", readOnly = true)
-    private Date b2bApprovedDate;
+    private LocalDateTime b2bApprovedDate;
     @DtoField(value = "b2bRemarks", readOnly = true)
     private String b2bRemarks;
 
     @DtoField(value = "requestedDeliveryDate", readOnly = true)
-    private Date requestedDeliveryDate;
+    private LocalDateTime requestedDeliveryDate;
 
     @XmlAttribute(name = "customer-order-id")
     public long getCustomerorderId() {
@@ -246,12 +248,13 @@ public class OrderRO implements Serializable {
         this.multipleShipmentOption = multipleShipmentOption;
     }
 
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     @XmlAttribute(name = "order-timestamp")
-    public Date getOrderTimestamp() {
+    public LocalDateTime getOrderTimestamp() {
         return orderTimestamp;
     }
 
-    public void setOrderTimestamp(final Date orderTimestamp) {
+    public void setOrderTimestamp(final LocalDateTime orderTimestamp) {
         this.orderTimestamp = orderTimestamp;
     }
 
@@ -376,12 +379,13 @@ public class OrderRO implements Serializable {
         this.b2bApprovedBy = b2bApprovedBy;
     }
 
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     @XmlElement(name = "b2b-approved-date")
-    public Date getB2bApprovedDate() {
+    public LocalDateTime getB2bApprovedDate() {
         return b2bApprovedDate;
     }
 
-    public void setB2bApprovedDate(final Date b2bApprovedDate) {
+    public void setB2bApprovedDate(final LocalDateTime b2bApprovedDate) {
         this.b2bApprovedDate = b2bApprovedDate;
     }
 
@@ -394,12 +398,13 @@ public class OrderRO implements Serializable {
         this.b2bRemarks = b2bRemarks;
     }
 
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     @XmlElement(name = "requested-delivery-date")
-    public Date getRequestedDeliveryDate() {
+    public LocalDateTime getRequestedDeliveryDate() {
         return requestedDeliveryDate;
     }
 
-    public void setRequestedDeliveryDate(final Date requestedDeliveryDate) {
+    public void setRequestedDeliveryDate(final LocalDateTime requestedDeliveryDate) {
         this.requestedDeliveryDate = requestedDeliveryDate;
     }
 

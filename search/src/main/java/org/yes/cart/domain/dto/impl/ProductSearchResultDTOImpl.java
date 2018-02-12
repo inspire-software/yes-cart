@@ -24,7 +24,8 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -51,8 +52,8 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private int typeMask;
     private String tag;
     private String brand;
-    private Date availablefrom;
-    private Date availableto;
+    private LocalDateTime availablefrom;
+    private LocalDateTime availableto;
     private int availability;
     private Map<Long, Map<String, BigDecimal>> qtyOnWarehouse;
     private String defaultImage;
@@ -70,8 +71,8 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     private StoredAttributesDTO attributes;
 
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
 
 
     /** {@inheritDoc} */
@@ -104,22 +105,22 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     }
 
     /** {@inheritDoc} */
-    public Date getAvailableto() {
+    public LocalDateTime getAvailableto() {
         return availableto;
     }
 
     /** {@inheritDoc} */
-    public void setAvailableto(final Date availableto) {
+    public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
 
     /** {@inheritDoc} */
-    public Date getAvailablefrom() {
+    public LocalDateTime getAvailablefrom() {
         return availablefrom;
     }
 
     /** {@inheritDoc} */
-    public void setAvailablefrom(final Date availablefrom) {
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
@@ -447,22 +448,22 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     }
 
     /** {@inheritDoc} */
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
     /** {@inheritDoc} */
-    public void setCreatedTimestamp(final Date createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
     /** {@inheritDoc} */
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
     /** {@inheritDoc} */
-    public void setUpdatedTimestamp(final Date updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

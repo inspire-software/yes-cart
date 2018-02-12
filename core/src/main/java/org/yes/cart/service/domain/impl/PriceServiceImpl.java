@@ -35,6 +35,7 @@ import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -202,7 +203,7 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
 
         final List<Pair<String, SkuPrice>> allPrices = new LinkedList<Pair<String, SkuPrice>>();
 
-        final Date now = now();
+        final LocalDateTime now = now();
         for (Pair<String, SkuPrice> skuPrice : skuPrices) {
 
             if (DomainApiUtils.isObjectAvailableNow(true, skuPrice.getSecond().getSalefrom(), skuPrice.getSecond().getSaleto(), now)) {
@@ -214,8 +215,8 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
         return allPrices;
     }
 
-    Date now() {
-        return TimeContext.getTime();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /**

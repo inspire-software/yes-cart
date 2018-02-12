@@ -20,7 +20,9 @@ import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -36,8 +38,8 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     private String cardHolderName;
     private String cardExpireYear;
     private String cardExpireMonth;
-    private Date cardStartDate;
-    private Date orderDate;
+    private LocalDate cardStartDate;
+    private LocalDateTime orderDate;
     private BigDecimal paymentAmount;
     private BigDecimal taxAmount;
     private String orderCurrency;
@@ -53,8 +55,8 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     private String transactionOperationResultMessage;
     private String paymentProcessorResult;
     private boolean paymentProcessorBatchSettlement;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -136,28 +138,28 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    public Date getCardStartDate() {
+    public LocalDate getCardStartDate() {
         return this.cardStartDate;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setCardStartDate(final Date cardStartDate) {
+    public void setCardStartDate(final LocalDate cardStartDate) {
         this.cardStartDate = cardStartDate;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Date getOrderDate() {
+    public LocalDateTime getOrderDate() {
         return this.orderDate;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setOrderDate(final Date orderDate) {
+    public void setOrderDate(final LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -359,28 +361,28 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setCreatedTimestamp(final Date createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setUpdatedTimestamp(final Date updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

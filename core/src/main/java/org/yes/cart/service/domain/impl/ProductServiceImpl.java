@@ -46,6 +46,7 @@ import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
 import java.lang.System;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -132,8 +133,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return productDao.findByNamedQuery("PRODUCTS.BY.CATEGORYID", categoryId, now());
     }
 
-    Date now() {
-        return TimeContext.getTime();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /**
@@ -496,10 +497,9 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     public Pair<Integer, Integer> getProductQtyAll() {
 
         final int total = getGenericDao().findCountByCriteria(null);
-        final Date now = now();
         final int active = getGenericDao().findCountByCriteria(
                 " where (e.availablefrom is null or e.availability = ?1 or e.availablefrom <= ?2) and (e.availableto is null or e.availableto >= ?2)",
-                Product.AVAILABILITY_PREORDER, now
+                Product.AVAILABILITY_PREORDER, now()
         );
 
         return new Pair<>(total, active);
@@ -606,7 +606,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public List<Long> findProductIdsByUnavailableBefore(final Date before) {
+    public List<Long> findProductIdsByUnavailableBefore(final LocalDateTime before) {
         return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.AVAILABLETO", before);
     }
 

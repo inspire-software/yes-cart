@@ -18,7 +18,7 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.PromotionModel;
 import org.yes.cart.domain.i18n.I18NModel;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -34,8 +34,8 @@ public class PromotionModelImpl implements PromotionModel {
     private final String context;
     private final I18NModel name;
     private final I18NModel description;
-    private final Date activeFrom;
-    private final Date activeTo;
+    private final LocalDateTime activeFrom;
+    private final LocalDateTime activeTo;
 
     public PromotionModelImpl(final String code,
                               final String couponCode,
@@ -44,8 +44,8 @@ public class PromotionModelImpl implements PromotionModel {
                               final String context,
                               final I18NModel name,
                               final I18NModel description,
-                              final Date activeFrom,
-                              final Date activeTo) {
+                              final LocalDateTime activeFrom,
+                              final LocalDateTime activeTo) {
         this.code = code;
         this.couponCode = couponCode;
         this.type = type;
@@ -109,14 +109,14 @@ public class PromotionModelImpl implements PromotionModel {
     /**
      * {@inheritDoc}
      */
-    public Date getActiveFrom() {
+    public LocalDateTime getActiveFrom() {
         return activeFrom;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Date getActiveTo() {
+    public LocalDateTime getActiveTo() {
         return activeTo;
     }
 

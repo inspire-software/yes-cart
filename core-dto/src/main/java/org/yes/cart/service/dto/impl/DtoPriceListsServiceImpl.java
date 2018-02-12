@@ -38,6 +38,7 @@ import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.utils.HQLUtils;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -119,7 +120,7 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
             if (StringUtils.isNotBlank(filter)) {
 
                 final Pair<String, String> tagSearch = ComplexSearchUtils.checkSpecialSearch(filter, TAG_OR_POLICY);
-                final Pair<Date, Date> dateSearch = tagSearch == null ? ComplexSearchUtils.checkDateRangeSearch(filter) : null;
+                final Pair<LocalDateTime, LocalDateTime> dateSearch = tagSearch == null ? ComplexSearchUtils.checkDateRangeSearch(filter) : null;
 
                 if (tagSearch != null) {
 
@@ -137,8 +138,8 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
 
                 } else if (dateSearch != null) {
 
-                    final Date from = dateSearch.getFirst();
-                    final Date to = dateSearch.getSecond();
+                    final LocalDateTime from = dateSearch.getFirst();
+                    final LocalDateTime to = dateSearch.getSecond();
 
                     // time search
                     entities = skuPriceDAO.findRangeByCriteria(

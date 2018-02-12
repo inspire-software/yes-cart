@@ -21,7 +21,7 @@ import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.domain.entity.CarrierShop;
 import org.yes.cart.domain.entity.Shop;
 
-import java.util.Date;
+import java.time.Instant;
 
 public class CarrierShopEntity implements CarrierShop, java.io.Serializable {
 
@@ -31,8 +31,8 @@ public class CarrierShopEntity implements CarrierShop, java.io.Serializable {
     private Carrier carrier;
     private Shop shop;
     private boolean disabled;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -65,19 +65,19 @@ public class CarrierShopEntity implements CarrierShop, java.io.Serializable {
         this.disabled = disabled;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

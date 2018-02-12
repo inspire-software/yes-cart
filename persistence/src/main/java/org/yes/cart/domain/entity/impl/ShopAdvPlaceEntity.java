@@ -20,7 +20,7 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopAdvPlaceRule;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,8 +38,8 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
     private String description;
     private Shop shop;
     private Set<ShopAdvPlaceRule> shopAdvPlaceRules = new HashSet<ShopAdvPlaceRule>(0);
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -81,19 +81,19 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
         this.shopAdvPlaceRules = shopAdvPlaceRules;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

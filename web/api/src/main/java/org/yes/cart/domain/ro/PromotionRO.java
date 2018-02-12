@@ -2,13 +2,13 @@ package org.yes.cart.domain.ro;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
+import org.yes.cart.domain.ro.xml.impl.LocalDateTimeAdapter;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -36,9 +36,9 @@ public class PromotionRO {
     @DtoField(value = "description.allValues", readOnly = true)
     private Map<String, String> description;
     @DtoField(readOnly = true)
-    private Date activeFrom;
+    private LocalDateTime activeFrom;
     @DtoField(readOnly = true)
-    private Date activeTo;
+    private LocalDateTime activeTo;
 
     @XmlElement(name = "original-code")
     public String getOriginalCode() {
@@ -111,21 +111,23 @@ public class PromotionRO {
         this.description = description;
     }
 
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     @XmlElement(name = "active-from")
-    public Date getActiveFrom() {
+    public LocalDateTime getActiveFrom() {
         return activeFrom;
     }
 
-    public void setActiveFrom(final Date activeFrom) {
+    public void setActiveFrom(final LocalDateTime activeFrom) {
         this.activeFrom = activeFrom;
     }
 
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     @XmlElement(name = "active-to")
-    public Date getActiveTo() {
+    public LocalDateTime getActiveTo() {
         return activeTo;
     }
 
-    public void setActiveTo(final Date activeTo) {
+    public void setActiveTo(final LocalDateTime activeTo) {
         this.activeTo = activeTo;
     }
 }

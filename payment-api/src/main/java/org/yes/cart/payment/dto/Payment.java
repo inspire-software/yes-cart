@@ -18,7 +18,8 @@ package org.yes.cart.payment.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -209,28 +210,28 @@ public interface Payment extends Serializable {
      *
      * @return card start date.
      */
-    Date getCardStartDate();
+    LocalDate getCardStartDate();
 
     /**
      * Set  card start date.
      *
      * @param cardStartDate card start date.
      */
-    void setCardStartDate(final Date cardStartDate);
+    void setCardStartDate(final LocalDate cardStartDate);
 
     /**
      * Get order date.
      *
      * @return order date.
      */
-    Date getOrderDate();
+    LocalDateTime getOrderDate();
 
     /**
      * Set  order date.
      *
      * @param orderDate order date.
      */
-    void setOrderDate(final Date orderDate);
+    void setOrderDate(final LocalDateTime orderDate);
 
 
     /**

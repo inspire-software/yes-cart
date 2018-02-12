@@ -23,6 +23,8 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -46,10 +48,10 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     private String pimCode;
     private boolean pimDisabled;
     private boolean pimOutdated;
-    private Date pimUpdated;
+    private Instant pimUpdated;
 
-    private Date availablefrom;
-    private Date availableto;
+    private LocalDateTime availablefrom;
+    private LocalDateTime availableto;
     private String name;
     private String displayName;
     private String description;
@@ -67,8 +69,8 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     private BigDecimal minOrderQuantity;
     private BigDecimal maxOrderQuantity;
     private BigDecimal stepOrderQuantity;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -142,29 +144,29 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.pimOutdated = pimOutdated;
     }
 
-    public Date getPimUpdated() {
+    public Instant getPimUpdated() {
         return pimUpdated;
     }
 
-    public void setPimUpdated(final Date pimUpdated) {
+    public void setPimUpdated(final Instant pimUpdated) {
         this.pimUpdated = pimUpdated;
     }
 
-    public Date getAvailablefrom() {
+    public LocalDateTime getAvailablefrom() {
         return this.availablefrom;
     }
 
-    public void setAvailablefrom(Date availablefrom) {
+    public void setAvailablefrom(LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
     /** {@inheritDoc} */
-    public Date getAvailableto() {
+    public LocalDateTime getAvailableto() {
         return this.availableto;
     }
 
     /** {@inheritDoc} */
-    public void setAvailableto(Date availableto) {
+    public void setAvailableto(LocalDateTime availableto) {
         this.availableto = availableto;
     }
 
@@ -319,19 +321,19 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.seoInternal = seo;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

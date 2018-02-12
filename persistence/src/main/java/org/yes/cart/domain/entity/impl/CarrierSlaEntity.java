@@ -25,6 +25,8 @@ import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.util.DateUtils;
 import org.yes.cart.util.log.Markers;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -62,8 +64,8 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     private boolean deliveryAddressNotRequired;
     private String externalRef;
     private Carrier carrier;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -156,16 +158,16 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.excludeDates = excludeDates;
     }
 
-    public Map<Date, Date> getExcludeDatesAsMap() {
+    public Map<LocalDate, LocalDate> getExcludeDatesAsMap() {
 
-        final Map<Date, Date> dates = new HashMap<Date, Date>();
+        final Map<LocalDate, LocalDate> dates = new HashMap<LocalDate, LocalDate>();
         if (StringUtils.isNotBlank(getExcludeDates())) {
 
             final String[] all = StringUtils.split(getExcludeDates(), ',');
             for (final String range : all) {
                 final int rangePos = range.indexOf(':');
                 if (rangePos == -1) {
-                    final Date date = DateUtils.dParseSDT(range);
+                    final LocalDate date = DateUtils.ldParseSDT(range);
                     if (date != null) {
                         dates.put(date, date);
                     } else {
@@ -174,10 +176,10 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
                                 range, getGuid(), getName());
                     }
                 } else {
-                    final Date date = DateUtils.dParseSDT(range.substring(0, rangePos));
-                    final Date date2 = DateUtils.dParseSDT(range.substring(rangePos + 1));
-                    if (date != null && date2 != null) {
-                        dates.put(date, date2);
+                    final LocalDate from = DateUtils.ldParseSDT(range.substring(0, rangePos));
+                    final LocalDate to = DateUtils.ldParseSDT(range.substring(rangePos + 1));
+                    if (from != null && to != null) {
+                        dates.put(from, to);
                     } else {
                         LOG.error(Markers.alert(),
                                 "Error reading excluded date range during delivery time estimation: {}, sla: {}/{}",
@@ -329,19 +331,19 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.carrier = carrier;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

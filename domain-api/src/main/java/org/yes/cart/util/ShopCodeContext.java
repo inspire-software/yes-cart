@@ -88,5 +88,13 @@ public final class ShopCodeContext {
         MDC.put("shopCode", getShopCode());
     }
 
+    /**
+     * Explicitly remove thread locals to prevent memory leaks.
+     */
+    public static  void destroy() {
+        SHOP_ID.remove();
+        SHOP_CODE.remove();
+    }
+
 
 }

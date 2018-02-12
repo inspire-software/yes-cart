@@ -30,8 +30,8 @@ import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.util.TimeContext;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * Perform transition from time  wait to inventory wait state.
@@ -56,15 +56,15 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
      */
     public boolean handle(final OrderEvent orderEvent)  throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
-            final Date now = now();
+            final LocalDateTime now = now();
 
             final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderEvent.getCustomerOrderDelivery().getDetail();
 
             for (CustomerOrderDeliveryDet det : deliveryDetails) {
 
                 final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
-                final Date availableFrom = product.getAvailablefrom();
-                if ((availableFrom != null) && (availableFrom.getTime() > now.getTime())) {
+                final LocalDateTime availableFrom = product.getAvailablefrom();
+                if ((availableFrom != null) && (availableFrom.isAfter(now))) {
                     return false; // no transition, because need to wait
                 }
             }
@@ -83,8 +83,8 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
         this.applicationContext = applicationContext;
     }
 
-    Date now() {
-        return TimeContext.getTime();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     private synchronized OrderStateManager getOrderStateManager() {

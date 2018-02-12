@@ -19,7 +19,7 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.Mailtemplategroup;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -36,8 +36,8 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
     private String name;
     private String description;
     private Mailtemplategroup mailTemplateGroup;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -86,19 +86,19 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
         this.mailTemplateGroup = mailTemplateGroup;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

@@ -20,9 +20,9 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.ProdTypeAttributeViewGroup;
 import org.yes.cart.domain.entity.ProductTypeAttr;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -46,8 +46,8 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     private boolean shippable = true; // New types are shippable by default
     private boolean digital;
     private boolean downloadable;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -153,19 +153,19 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.downloadable = downloadable;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

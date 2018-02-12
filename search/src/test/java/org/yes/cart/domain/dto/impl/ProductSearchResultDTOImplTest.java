@@ -20,13 +20,12 @@ import org.junit.Test;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * User: Denis
@@ -55,10 +54,10 @@ public class ProductSearchResultDTOImplTest {
         first.setDownloadable(true);
         first.setTag("tag");
         first.setBrand("brand");
-        first.setAvailablefrom(new Date());
-        first.setAvailableto(new Date());
-        first.setCreatedTimestamp(new Date());
-        first.setUpdatedTimestamp(new Date());
+        first.setAvailablefrom(LocalDateTime.now());
+        first.setAvailableto(LocalDateTime.now());
+        first.setCreatedTimestamp(Instant.now());
+        first.setUpdatedTimestamp(Instant.now());
         first.setAvailability(1);
         first.setQtyOnWarehouse(new HashMap<Long, Map<String, BigDecimal>>() {{
             put(10L, new HashMap<String, BigDecimal>());

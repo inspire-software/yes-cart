@@ -26,8 +26,8 @@ import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.dto.DtoPromotionCouponService;
 import org.yes.cart.service.dto.DtoPromotionService;
+import org.yes.cart.util.DateUtils;
 
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -101,7 +101,7 @@ public class DtoPromotionCouponServiceImplTezt extends BaseCoreDBTestCase {
         assertNotNull(find);
         assertEquals(1, find.size());
         // created 60 sec ago
-        find = dtoPromotionCouponService.findBy(promotionDTO.getPromotionId(), new Date(System.currentTimeMillis() - 60000L));
+        find = dtoPromotionCouponService.findBy(promotionDTO.getPromotionId(), DateUtils.iFrom(System.currentTimeMillis() - 60000L));
         assertNotNull(find);
         assertEquals(10, find.size());
 
@@ -188,8 +188,8 @@ public class DtoPromotionCouponServiceImplTezt extends BaseCoreDBTestCase {
         promotionDTO.setPromoActionContext("10");
         promotionDTO.setCanBeCombined(true);
         promotionDTO.setEnabled(true);
-        promotionDTO.setEnabledFrom(new Date());
-        promotionDTO.setEnabledTo(new Date(System.currentTimeMillis() + 864000000l)); // +10days
+        promotionDTO.setEnabledFrom(DateUtils.ldtFrom(System.currentTimeMillis() - 1000L));
+        promotionDTO.setEnabledTo(DateUtils.ldtFrom(System.currentTimeMillis() + 864000000L)); // +10days
 
         promotionDTO.setTag("tag1");
         promotionDTO.setName("Test name");

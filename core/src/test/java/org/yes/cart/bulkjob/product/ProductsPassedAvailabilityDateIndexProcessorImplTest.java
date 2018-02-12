@@ -29,10 +29,10 @@ import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.DateUtils;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -52,7 +52,7 @@ public class ProductsPassedAvailabilityDateIndexProcessorImplTest extends BaseCo
 
         Product product = productService.findById(9998L);
         assertNotNull(product.getAvailableto());
-        assertTrue(product.getAvailableto().after(new Date()));
+        assertTrue(product.getAvailableto().isAfter(LocalDateTime.now()));
 
         productService.reindexProduct(product.getId());
 
@@ -79,7 +79,7 @@ public class ProductsPassedAvailabilityDateIndexProcessorImplTest extends BaseCo
         product = productService.findById(9998L);
 
         assertNotNull(product.getAvailableto());
-        assertTrue(product.getAvailableto().before(new Date()));
+        assertTrue(product.getAvailableto().isBefore(LocalDateTime.now()));
 
 
         final ProductsPassedAvailabilityDateIndexProcessorImpl processor = new ProductsPassedAvailabilityDateIndexProcessorImpl(productService, null, null, null) {

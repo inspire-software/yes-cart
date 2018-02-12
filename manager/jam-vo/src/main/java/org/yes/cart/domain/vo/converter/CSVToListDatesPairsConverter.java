@@ -23,9 +23,9 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.util.DateUtils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,14 +44,14 @@ public class CSVToListDatesPairsConverter implements ValueConverter {
             final String[] dateRanges = StringUtils.split((String) object, ',');
             for (final String dates : dateRanges) {
                 if (dates.indexOf(':') == -1) {
-                    final Date date = DateUtils.dParseSDT(dates);
+                    final LocalDate date = DateUtils.ldParseSDT(dates);
                     if (date != null) {
                         list.add(MutablePair.of(date, null));
                     }
                 } else {
                     final String[] dateRange = StringUtils.split(dates, ':');
-                    final Date from = DateUtils.dParseSDT(dateRange[0]);
-                    final Date to = DateUtils.dParseSDT(dateRange[1]);
+                    final LocalDate from = DateUtils.ldParseSDT(dateRange[0]);
+                    final LocalDate to = DateUtils.ldParseSDT(dateRange[1]);
                     if (from != null && to != null) {
                         list.add(MutablePair.of(from, to));
                     }
@@ -64,9 +64,9 @@ public class CSVToListDatesPairsConverter implements ValueConverter {
     @Override
     public Object convertToEntity(final Object object, final Object oldEntity, final BeanFactory beanFactory) {
         if (object instanceof Collection) {
-            final List<MutablePair<Date, Date>> dates =  (List<MutablePair<Date, Date>>) object;
+            final List<MutablePair<LocalDate, LocalDate>> dates =  (List<MutablePair<LocalDate, LocalDate>>) object;
             final StringBuilder out = new StringBuilder();
-            for (final MutablePair<Date, Date> range : dates) {
+            for (final MutablePair<LocalDate, LocalDate> range : dates) {
                 if (out.length() > 0) {
                     out.append(',');
                 }

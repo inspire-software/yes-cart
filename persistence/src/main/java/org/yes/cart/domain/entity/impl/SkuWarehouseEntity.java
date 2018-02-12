@@ -20,7 +20,7 @@ import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -36,8 +36,8 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     private String skuCode;
     private BigDecimal quantity;
     private BigDecimal reserved;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -78,19 +78,19 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
         this.reserved = reserved;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

@@ -19,11 +19,11 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.System;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
- * Date: 27 0ct 2012
+ * Instant: 27 0ct 2012
  * Time: 9:10 AM
  */
 public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrValueSystem, java.io.Serializable {
@@ -36,8 +36,8 @@ public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrVal
     private String indexedVal;
     private String displayVal;
     private String attributeCode;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -85,19 +85,19 @@ public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrVal
         this.attributeCode = attributeCode;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

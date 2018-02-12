@@ -45,6 +45,7 @@ import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -182,7 +183,7 @@ public class DtoProductServiceImpl
 
         if (StringUtils.isNotBlank(filter)) {
 
-            final Pair<Date, Date> dateSearch = ComplexSearchUtils.checkDateRangeSearch(filter);
+            final Pair<LocalDateTime, LocalDateTime> dateSearch = ComplexSearchUtils.checkDateRangeSearch(filter);
 
             if (dateSearch != null) {
 

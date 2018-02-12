@@ -41,6 +41,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.support.ShoppingCartPersister;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -435,7 +436,7 @@ public class AbstractWebPage extends WebPage {
      * @return page created
      */
     public IModel<String> getCreated() {
-        return new Model<String>(new Date().toString());
+        return new Model<String>(DateUtils.formatSDT());
     }
 
     protected String getKeywords(final Seo seo, final String language) {

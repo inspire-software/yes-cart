@@ -21,7 +21,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.misc.MutablePair;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -50,13 +51,13 @@ public class VoCustomerOrderLine {
     @DtoField(value = "deliveryRemarks", readOnly = true)
     private String deliveryRemarks;
     @DtoField(value = "deliveryEstimatedMin", readOnly = true)
-    private Date deliveryEstimatedMin;
+    private LocalDateTime deliveryEstimatedMin;
     @DtoField(value = "deliveryEstimatedMax", readOnly = true)
-    private Date deliveryEstimatedMax;
+    private LocalDateTime deliveryEstimatedMax;
     @DtoField(value = "deliveryGuaranteed", readOnly = true)
-    private Date deliveryGuaranteed;
+    private LocalDateTime deliveryGuaranteed;
     @DtoField(value = "deliveryConfirmed", readOnly = true)
-    private Date deliveryConfirmed;
+    private LocalDateTime deliveryConfirmed;
     @DtoField(value = "deliveredQuantity", readOnly = true)
     private BigDecimal deliveredQuantity;
     @DtoField(value = "deliveryRejected", readOnly = true)
@@ -70,7 +71,7 @@ public class VoCustomerOrderLine {
     @DtoField(value = "supplierInvoiceNo", readOnly = true)
     private String supplierInvoiceNo;
     @DtoField(value = "supplierInvoiceDate", readOnly = true)
-    private Date supplierInvoiceDate;
+    private LocalDate supplierInvoiceDate;
 
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
@@ -166,35 +167,35 @@ public class VoCustomerOrderLine {
         this.deliveryRemarks = deliveryRemarks;
     }
 
-    public Date getDeliveryEstimatedMin() {
+    public LocalDateTime getDeliveryEstimatedMin() {
         return deliveryEstimatedMin;
     }
 
-    public void setDeliveryEstimatedMin(final Date deliveryEstimatedMin) {
+    public void setDeliveryEstimatedMin(final LocalDateTime deliveryEstimatedMin) {
         this.deliveryEstimatedMin = deliveryEstimatedMin;
     }
 
-    public Date getDeliveryEstimatedMax() {
+    public LocalDateTime getDeliveryEstimatedMax() {
         return deliveryEstimatedMax;
     }
 
-    public void setDeliveryEstimatedMax(final Date deliveryEstimatedMax) {
+    public void setDeliveryEstimatedMax(final LocalDateTime deliveryEstimatedMax) {
         this.deliveryEstimatedMax = deliveryEstimatedMax;
     }
 
-    public Date getDeliveryGuaranteed() {
+    public LocalDateTime getDeliveryGuaranteed() {
         return deliveryGuaranteed;
     }
 
-    public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
+    public void setDeliveryGuaranteed(final LocalDateTime deliveryGuaranteed) {
         this.deliveryGuaranteed = deliveryGuaranteed;
     }
 
-    public Date getDeliveryConfirmed() {
+    public LocalDateTime getDeliveryConfirmed() {
         return deliveryConfirmed;
     }
 
-    public void setDeliveryConfirmed(final Date deliveryConfirmed) {
+    public void setDeliveryConfirmed(final LocalDateTime deliveryConfirmed) {
         this.deliveryConfirmed = deliveryConfirmed;
     }
 
@@ -238,11 +239,11 @@ public class VoCustomerOrderLine {
         this.supplierInvoiceNo = supplierInvoiceNo;
     }
 
-    public Date getSupplierInvoiceDate() {
+    public LocalDate getSupplierInvoiceDate() {
         return supplierInvoiceDate;
     }
 
-    public void setSupplierInvoiceDate(final Date supplierInvoiceDate) {
+    public void setSupplierInvoiceDate(final LocalDate supplierInvoiceDate) {
         this.supplierInvoiceDate = supplierInvoiceDate;
     }
 

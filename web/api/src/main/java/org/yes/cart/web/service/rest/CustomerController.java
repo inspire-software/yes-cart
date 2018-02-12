@@ -34,6 +34,7 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.DateUtils;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.impl.CustomerOrderComparator;
 import org.yes.cart.web.service.rest.impl.AddressSupportMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
@@ -43,7 +44,7 @@ import org.yes.cart.web.support.service.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -2253,11 +2254,11 @@ public class CustomerController {
                                                               final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfNotLoggedIn();
-        Date since = null;
+        LocalDateTime since = null;
         if (StringUtils.isNotBlank(date)) {
-            since = DateUtils.dParseSDT(date);
+            since = DateUtils.ldtParseSDT(date);
             if (since == null) {
-                since = DateUtils.from(LocalDate.now().minusDays(30));
+                since = TimeContext.getLocalDateTime().minusDays(30);
                 LOG.warn("Invalid date {} using {}", date, since);
             }
         }

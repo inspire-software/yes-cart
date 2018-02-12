@@ -30,6 +30,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.TimeContext;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -193,15 +194,15 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
      */
     Pair<String, String> getDeliveryGroup(final CartItem item, final Map<String, Warehouse> warehouses) {
 
-        final Date now = now();
+        final LocalDateTime now = now();
 
         final String sku = item.getProductSkuCode();
         final String name = item.getProductName();
 
         final ProductSku productSku = productService.getProductSkuByCode(sku);
         final int availability;
-        final Date availableFrom;
-        final Date availableTo;
+        final LocalDateTime availableFrom;
+        final LocalDateTime availableTo;
         final boolean digital;
         if (productSku != null) {
             final Product product = productSku.getProduct();
@@ -358,8 +359,8 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
     }
 
-    Date now() {
-        return TimeContext.getTime();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
 }

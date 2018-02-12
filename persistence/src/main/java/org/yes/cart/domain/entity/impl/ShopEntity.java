@@ -23,6 +23,7 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
 
 import java.io.StringReader;
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -46,8 +47,8 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Collection<AttrValueShop> attributes = new ArrayList<AttrValueShop>(0);
     private SeoEntity seoInternal;
     private Collection<ShopCategory> shopCategory = new ArrayList<ShopCategory>(0);
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -243,19 +244,19 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.shopCategory = shopCategory;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

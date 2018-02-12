@@ -19,7 +19,7 @@ package org.yes.cart.payment.persistence.entity.impl;
 
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 
-import java.util.Date;
+import java.time.Instant;
 
 
 /**
@@ -35,8 +35,8 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
     private String name;
     private String value;
     protected String pgLabel;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -138,19 +138,19 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
         this.pgLabel = pgLabel;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(final Date createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(final Date updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

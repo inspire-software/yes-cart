@@ -20,7 +20,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.yes.cart.domain.misc.MutablePair;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -69,10 +69,10 @@ public class VoCategory {
     private String uitemplate;
 
     @DtoField(value = "availablefrom")
-    private Date availablefrom;
+    private LocalDateTime availablefrom;
 
     @DtoField(value = "availableto")
-    private Date availableto;
+    private LocalDateTime availableto;
 
     @DtoField(value = "uri")
     private String uri;
@@ -219,19 +219,19 @@ public class VoCategory {
         this.uitemplate = uitemplate;
     }
 
-    public Date getAvailablefrom() {
+    public LocalDateTime getAvailablefrom() {
         return availablefrom;
     }
 
-    public void setAvailablefrom(Date availablefrom) {
+    public void setAvailablefrom(LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
-    public Date getAvailableto() {
+    public LocalDateTime getAvailableto() {
         return availableto;
     }
 
-    public void setAvailableto(Date availableto) {
+    public void setAvailableto(LocalDateTime availableto) {
         this.availableto = availableto;
     }
 

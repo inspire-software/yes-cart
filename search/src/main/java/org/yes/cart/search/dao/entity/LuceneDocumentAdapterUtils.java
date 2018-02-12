@@ -17,8 +17,11 @@
 package org.yes.cart.search.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.*;
@@ -33,9 +36,13 @@ import org.yes.cart.domain.dto.impl.StoredAttributesDTOImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.search.query.impl.SearchUtil;
+import org.yes.cart.util.DateUtils;
 
+import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -61,9 +68,17 @@ public class LuceneDocumentAdapterUtils {
 
         MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        SimpleModule module = new SimpleModule("search", new Version(3, 4, 0, null, "org.yes", "search"));
+        final SimpleModule module = new SimpleModule("search", new Version(3, 4, 0, null, "org.yes", "search"));
         module.addAbstractTypeMapping(StoredAttributesDTO.class, StoredAttributesDTOImpl.class);
         module.addAbstractTypeMapping(I18NModel.class, StringI18NModel.class);
+
+        // java.time.* support
+        module.addSerializer(Instant.class, new JSInstantSerializer());
+        module.addSerializer(LocalDate.class, new JSLocalDateSerializer());
+        module.addSerializer(LocalDateTime.class, new JSLocalDateTimeSerializer());
+        module.addDeserializer(Instant.class, new JSInstantDeserializer());
+        module.addDeserializer(LocalDate.class, new JSLocalDateDeserializer());
+        module.addDeserializer(LocalDateTime.class, new JSLocalDateTimeDeserializer());
 
         MAPPER.registerModule(module);
 
@@ -348,12 +363,12 @@ public class LuceneDocumentAdapterUtils {
      * @param value        value
      * @param negativeNull true if null values are to be filled with {@link Long#MIN_VALUE}, false if to be filled with {@link Long#MAX_VALUE}
      */
-    public static void addDateField(final Document document,
-                                    final String name,
-                                    final Date value,
-                                    final boolean negativeNull) {
+    public static void addInstantField(final Document document,
+                                       final String name,
+                                       final Instant value,
+                                       final boolean negativeNull) {
 
-        final long datetime = value != null ? value.getTime() : (negativeNull ? Long.MIN_VALUE : Long.MAX_VALUE);
+        final long datetime = value != null ? value.toEpochMilli() : (negativeNull ? Long.MIN_VALUE : Long.MAX_VALUE);
         /*
             LongPoint allows ranges as well LongPoint.newRangeQuery()
          */
@@ -443,10 +458,10 @@ public class LuceneDocumentAdapterUtils {
      */
     public static void addSortField(final Document document,
                                     final String name,
-                                    final Date value,
+                                    final Instant value,
                                     final boolean negativeNull) {
 
-        final long datetime = value != null ? value.getTime() : (negativeNull ? Long.MIN_VALUE : Long.MAX_VALUE);
+        final long datetime = value != null ? value.toEpochMilli() : (negativeNull ? Long.MIN_VALUE : Long.MAX_VALUE);
         document.add(new SortedDocValuesField(name, new BytesRef(String.valueOf(datetime))));
 
     }
@@ -628,6 +643,48 @@ public class LuceneDocumentAdapterUtils {
                 Numeric field allows facet ranges.
              */
             document.add(new NumericDocValuesField(name, value));
+        }
+    }
+
+    private static class JSInstantSerializer extends JsonSerializer<Instant> {
+        @Override
+        public void serialize(final Instant value, final JsonGenerator gen, final SerializerProvider serializers) throws IOException {
+            gen.writeNumber(value.toEpochMilli());
+        }
+    }
+
+    private static class JSLocalDateSerializer extends JsonSerializer<LocalDate> {
+        @Override
+        public void serialize(final LocalDate value, final JsonGenerator gen, final SerializerProvider serializers) throws IOException {
+            gen.writeNumber(DateUtils.millis(value));
+        }
+    }
+
+    private static class JSLocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
+        @Override
+        public void serialize(final LocalDateTime value, final JsonGenerator gen, final SerializerProvider serializers) throws IOException {
+            gen.writeNumber(DateUtils.millis(value));
+        }
+    }
+
+    private static class JSInstantDeserializer extends JsonDeserializer<Instant> {
+        @Override
+        public Instant deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            return DateUtils.iFrom(p.getLongValue());
+        }
+    }
+
+    private static class JSLocalDateDeserializer extends JsonDeserializer<LocalDate> {
+        @Override
+        public LocalDate deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            return DateUtils.ldFrom(p.getLongValue());
+        }
+    }
+
+    private static class JSLocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
+        @Override
+        public LocalDateTime deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            return DateUtils.ldtFrom(p.getLongValue());
         }
     }
 

@@ -4,11 +4,11 @@ import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Attribute;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * User: denispavlov
- * Date: 21/07/2017
+ * Instant: 21/07/2017
  * Time: 10:33
  */
 public class AttrValueWithAttributeAdapter implements AttrValueWithAttribute {
@@ -85,22 +85,22 @@ public class AttrValueWithAttributeAdapter implements AttrValueWithAttribute {
     }
 
     @Override
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return value.getCreatedTimestamp();
     }
 
     @Override
-    public void setCreatedTimestamp(final Date createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         value.setCreatedTimestamp(createdTimestamp);
     }
 
     @Override
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return value.getUpdatedTimestamp();
     }
 
     @Override
-    public void setUpdatedTimestamp(final Date updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         value.setUpdatedTimestamp(updatedTimestamp);
     }
 

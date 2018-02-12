@@ -19,7 +19,7 @@ package org.yes.cart.domain.entity.impl;
 import org.junit.Test;
 import org.yes.cart.util.DateUtils;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -36,7 +36,7 @@ public class CarrierSlaEntityTest {
 
         final CarrierSlaEntity sla = new CarrierSlaEntity();
 
-        final Map<Date, Date> dates = sla.getExcludeDatesAsMap();
+        final Map<LocalDate, LocalDate> dates = sla.getExcludeDatesAsMap();
 
         assertNotNull(dates);
         assertTrue(dates.isEmpty());
@@ -51,19 +51,19 @@ public class CarrierSlaEntityTest {
 
         sla.setExcludeDates("2017-01-08,2017-01-10:2017-01-15,2017-01-17");
 
-        Date date, date2;
+        LocalDate date, date2;
 
-        final Map<Date, Date> dates = sla.getExcludeDatesAsMap();
+        final Map<LocalDate, LocalDate> dates = sla.getExcludeDatesAsMap();
 
 
         assertNotNull(dates);
         assertEquals(3, dates.size());
-        date = DateUtils.dParseSDT("2017-01-08");
+        date = DateUtils.ldParseSDT("2017-01-08");
         assertEquals(date, dates.get(date));
-        date = DateUtils.dParseSDT("2017-01-10");
-        date2 = DateUtils.dParseSDT("2017-01-15");
+        date = DateUtils.ldParseSDT("2017-01-10");
+        date2 = DateUtils.ldParseSDT("2017-01-15");
         assertEquals(date2, dates.get(date));
-        date = DateUtils.dParseSDT("2017-01-17");
+        date = DateUtils.ldParseSDT("2017-01-17");
         assertEquals(date, dates.get(date));
 
     }

@@ -214,3 +214,11 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  4051,  'SHOP_CARRIER_SLA_RANKS', 'SHOP_CARRIER_SLA_RANKS',  0,  NULL,  'Properties config of carrier SLA ranks',  'Properties config of carrier SLA ranks (PK=rank)',  1012, 1001, 0, 0, 0, 0);
 
+--
+--  YC-853 Use JDK8 java.time.* instead of Date and SimpleDateFormat
+--
+
+update TETYPE set JAVATYPE = 'java.time.LocalDateTime', BUSINESSTYPE = 'DateTime', GUID = 'DateTime' where JAVATYPE = 'java.util.Date';
+INSERT INTO TETYPE (ETYPE_ID, JAVATYPE, BUSINESSTYPE, GUID) VALUES (1015, 'java.time.LocalDate', 'Date', 'Date');
+INSERT INTO TETYPE (ETYPE_ID, JAVATYPE, BUSINESSTYPE, GUID) VALUES (1016, 'java.time.Instant', 'Timestamp', 'Timestamp');
+

@@ -32,6 +32,8 @@ import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -321,7 +323,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     }
 
     /** {@inheritDoc} */
-    public List<String> findProductSkuForWhichInventoryChangedAfter(final Date lastUpdate) {
+    public List<String> findProductSkuForWhichInventoryChangedAfter(final Instant lastUpdate) {
         return (List) getGenericDao().findQueryObjectByNamedQuery("SKUCODE.FOR.SKUWAREHOUSE.CHANGED.SINCE", lastUpdate);
     }
 
@@ -341,8 +343,8 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         return false;
     }
 
-    Date now() {
-        return TimeContext.getTime();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /** IoC.*/

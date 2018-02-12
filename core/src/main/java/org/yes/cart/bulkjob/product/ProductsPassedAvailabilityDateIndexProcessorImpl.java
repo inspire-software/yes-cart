@@ -24,9 +24,9 @@ import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.util.TimeContext;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -119,8 +119,10 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
      */
     @Override
     public List<Long> findDiscontinuedProductsIds() {
+        final LocalDateTime now = now();
         return (List) productService.getGenericDao()
-                .findQueryObjectByNamedQuery("DISCONTINUED.PRODUCTS.AFTER.DATE.CHANGED.AFTER", now(0), now(numberOfDays));
+                .findQueryObjectByNamedQuery("DISCONTINUED.PRODUCTS.AFTER.DATE.CHANGED.AFTER",
+                        now, now.plusDays(-numberOfDays));
     }
 
 
@@ -146,12 +148,8 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
         return nodeService.getCurrentNode().isFtIndexDisabled();
     }
 
-    protected Date now(int minusDays) {
-        final Calendar now = Calendar.getInstance();
-        if (minusDays != 0) {
-            now.add(Calendar.DAY_OF_YEAR, -minusDays);
-        }
-        return now.getTime();
+    protected LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /**

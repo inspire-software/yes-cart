@@ -21,7 +21,8 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -40,10 +41,10 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     private BigDecimal regularPrice;
     private BigDecimal salePrice;
     private BigDecimal minimalPrice;
-    private Date salefrom;
-    private Date saleto;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private LocalDateTime salefrom;
+    private LocalDateTime saleto;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -123,35 +124,35 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.minimalPrice = minimalPrice;
     }
 
-    public Date getSalefrom() {
+    public LocalDateTime getSalefrom() {
         return this.salefrom;
     }
 
-    public void setSalefrom(Date salefrom) {
+    public void setSalefrom(LocalDateTime salefrom) {
         this.salefrom = salefrom;
     }
 
-    public Date getSaleto() {
+    public LocalDateTime getSaleto() {
         return this.saleto;
     }
 
-    public void setSaleto(Date saleto) {
+    public void setSaleto(LocalDateTime saleto) {
         this.saleto = saleto;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

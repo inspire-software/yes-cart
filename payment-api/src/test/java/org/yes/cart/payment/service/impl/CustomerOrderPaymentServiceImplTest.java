@@ -24,7 +24,8 @@ import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -165,9 +166,9 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
         payment.setCardHolderName("Bender Rodrigues");
         payment.setCardIssueNumber("123");
         payment.setCardNumber("41111111115678");
-        payment.setCardStartDate(new Date());
+        payment.setCardStartDate(LocalDate.now());
         payment.setOrderCurrency("EUR");
-        payment.setOrderDate(new Date());
+        payment.setOrderDate(LocalDateTime.now());
         payment.setPaymentAmount(amount);
         payment.setTaxAmount(amount.divide(new BigDecimal("1.2"), 10, BigDecimal.ROUND_UP).multiply(new BigDecimal("1.2")).setScale(2, BigDecimal.ROUND_UP));
         payment.setOrderNumber(orderNum);

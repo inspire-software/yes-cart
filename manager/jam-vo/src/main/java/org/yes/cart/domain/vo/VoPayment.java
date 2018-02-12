@@ -20,7 +20,9 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -41,9 +43,9 @@ public class VoPayment {
     @DtoField(readOnly = true)
     private String cardExpireMonth;
     @DtoField(readOnly = true)
-    private Date cardStartDate;
+    private LocalDate cardStartDate;
     @DtoField(readOnly = true)
-    private Date orderDate;
+    private LocalDateTime orderDate;
     @DtoField(readOnly = true)
     private BigDecimal paymentAmount;
     @DtoField(readOnly = true)
@@ -75,9 +77,9 @@ public class VoPayment {
     @DtoField(readOnly = true)
     private boolean paymentProcessorBatchSettlement;
     @DtoField(readOnly = true)
-    private Date createdTimestamp;
+    private Instant createdTimestamp;
     @DtoField(readOnly = true)
-    private Date updatedTimestamp;
+    private Instant updatedTimestamp;
     @DtoField(readOnly = true)
     private String shopperIpAddress;
 
@@ -121,19 +123,19 @@ public class VoPayment {
         this.cardExpireMonth = cardExpireMonth;
     }
 
-    public Date getCardStartDate() {
+    public LocalDate getCardStartDate() {
         return cardStartDate;
     }
 
-    public void setCardStartDate(final Date cardStartDate) {
+    public void setCardStartDate(final LocalDate cardStartDate) {
         this.cardStartDate = cardStartDate;
     }
 
-    public Date getOrderDate() {
+    public LocalDateTime getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(final Date orderDate) {
+    public void setOrderDate(final LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -257,19 +259,19 @@ public class VoPayment {
         this.paymentProcessorBatchSettlement = paymentProcessorBatchSettlement;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
-    public void setCreatedTimestamp(final Date createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(final Date updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

@@ -20,10 +20,7 @@ package org.yes.cart.domain.dto;
 import org.yes.cart.domain.entity.Guidable;
 import org.yes.cart.domain.entity.Identifiable;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -94,28 +91,28 @@ public interface CategoryRelationDTO extends Identifiable, Guidable {
      *
      * @return available from date.
      */
-    Date getAvailablefrom();
+    LocalDateTime getAvailablefrom();
 
     /**
      * Set available from date.
      *
      * @param availablefrom available from date.
      */
-    void setAvailablefrom(Date availablefrom);
+    void setAvailablefrom(LocalDateTime availablefrom);
 
     /**
      * Get available to date.  Null value means no end date.
      *
      * @return available to date.
      */
-    Date getAvailableto();
+    LocalDateTime getAvailableto();
 
     /**
      * Set available to date.
      *
      * @param availableto available to date.
      */
-    void setAvailableto(Date availableto);
+    void setAvailableto(LocalDateTime availableto);
 
     /**
      * Get category name.

@@ -26,7 +26,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.SystemService;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * Bulk processor to remove guest checkout accounts.
@@ -57,8 +57,7 @@ public class BulkExpiredGuestsProcessorImpl implements Runnable {
     @Override
     public void run() {
 
-        final Date lastModification =
-                new Date(System.currentTimeMillis() - determineExpiryInMs());
+        final Instant lastModification = Instant.now().plusMillis(-determineExpiryInMs());
 
         LOG.info("Look up all Guest accounts created before {}", lastModification);
 

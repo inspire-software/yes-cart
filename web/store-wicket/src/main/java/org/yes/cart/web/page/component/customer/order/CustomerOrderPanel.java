@@ -42,6 +42,7 @@ import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -106,7 +107,7 @@ public class CustomerOrderPanel extends BaseComponent {
     protected void onBeforeRender() {
         final Customer customer = (Customer) getDefaultModel().getObject();
 
-        final Date date = determineDate(getPage().getPageParameters());
+        final LocalDateTime date = determineDate(getPage().getPageParameters());
         final List<CustomerOrder> orders = getValidCustomerOrderInChronologicalOrder(customer, date);
 
         if (orders.isEmpty()) {
@@ -165,7 +166,7 @@ public class CustomerOrderPanel extends BaseComponent {
     private final static Set<String> SUPPORTED_VIEWS = new HashSet<String>(Arrays.asList("week", "month", "year", "all"));
     private final static String DEFAULT_VIEW = "month";
 
-    private Date determineDate(final PageParameters pageParameters) {
+    private LocalDateTime determineDate(final PageParameters pageParameters) {
         String viewTime = pageParameters.get("view").toString();
         if (viewTime == null || !SUPPORTED_VIEWS.contains(viewTime)) {
             viewTime = DEFAULT_VIEW;
@@ -175,40 +176,27 @@ public class CustomerOrderPanel extends BaseComponent {
             return null;
         }
 
-        final Calendar calendar = now();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
+        final LocalDateTime calendar = now();
 
-        if ("month".equals(viewTime)) {
+        if ("week".equals(viewTime)) {
 
-            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            return DateUtils.ldtAtStartOfWeek(calendar);
 
         } else if ("year".equals(viewTime)) {
 
-            calendar.set(Calendar.DAY_OF_MONTH, 1);
-            calendar.set(Calendar.MONTH, 0);
-
-        } else {
-
-            calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
-
-            final Calendar now = now();
-            if (now.before(calendar)) {
-                calendar.add(Calendar.DATE, -7);
-            }
+            return DateUtils.ldtAtStartOfYear(calendar);
 
         }
 
-        return calendar.getTime();
+        return DateUtils.ldtAtStartOfMonth(calendar);
+
     }
 
-    private Calendar now() {
-        return TimeContext.getCalendar();
+    private LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
-    private List<CustomerOrder> getValidCustomerOrderInChronologicalOrder(final Customer customer, final Date date) {
+    private List<CustomerOrder> getValidCustomerOrderInChronologicalOrder(final Customer customer, final LocalDateTime date) {
 
         final ShoppingCart cart = getCurrentCart();
 

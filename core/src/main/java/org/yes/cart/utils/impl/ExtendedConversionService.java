@@ -31,7 +31,10 @@ public class ExtendedConversionService extends GenericConversionService {
         super();
         DefaultConversionService.addDefaultConverters(this);
         addConverter(new StringValueToPairListConverter());
-        addConverter(new StringValueToDateConverter());
+        addConverter(new StringValueToInstantConverter());
+        addConverter(new StringValueToLocalDateConverter());
+        addConverter(new StringValueToLocalDateTimeConverter());
+        addConverter(new StringValueToZonedDateTimeConverter());
     }
     
 }

@@ -17,7 +17,8 @@
 package org.yes.cart.payment.persistence.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Represent payment per order. Each order has at least one payment. In case of several shipments order has several payments.
@@ -91,28 +92,28 @@ public interface CustomerOrderPayment extends Auditable {
      *
      * @return card start date.
      */
-    Date getCardStartDate();
+    LocalDate getCardStartDate();
 
     /**
      * Set card start date.
      *
      * @param cardStartDate card start date.
      */
-    void setCardStartDate(Date cardStartDate);
+    void setCardStartDate(LocalDate cardStartDate);
 
     /**
      * Get order date.
      *
      * @return order date.
      */
-    Date getOrderDate();
+    LocalDateTime getOrderDate();
 
     /**
      * Set order date.
      *
      * @param orderDate order date.
      */
-    void setOrderDate(Date orderDate);
+    void setOrderDate(LocalDateTime orderDate);
 
     /**
      * Get payment amount, including delivery price.

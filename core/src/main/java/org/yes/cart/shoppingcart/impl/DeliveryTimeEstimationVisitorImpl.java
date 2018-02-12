@@ -31,8 +31,11 @@ import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.DeliveryTimeEstimationVisitor;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.util.TimeContext;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -141,7 +144,7 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
         final String excludedWeekdaysKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + "WExcl" + suffix;
 
         // Get existing selection, so that we can check it against valid dates later
-        long requestedDate = NumberUtils.toLong(shoppingCart.getOrderInfo().getDetailByKey(requestedDateKey));
+        LocalDate requestedDate = DateUtils.ldFrom(NumberUtils.toLong(shoppingCart.getOrderInfo().getDetailByKey(requestedDateKey)));
 
         // Ensure we clean up any old data
         shoppingCart.getOrderInfo().putDetail(requestedDateKey, null);
@@ -154,81 +157,74 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
             return; // Only named date should have this calculation, as all others are automatic min/max
         }
 
-        Calendar minDeliveryTime = now();
-
-        minDeliveryTime.set(Calendar.HOUR_OF_DAY, 0);
-        minDeliveryTime.set(Calendar.MINUTE, 0);
-        minDeliveryTime.set(Calendar.SECOND, 0);
-        minDeliveryTime.set(Calendar.MILLISECOND, 0);
+        LocalDate minDeliveryTime = now();
 
         if (ff != null && ff.getDefaultBackorderStockLeadTime() > 0) {
             for (final CartItem item : shoppingCart.getCartItemList()) {
                 final String dgroup = item.getDeliveryBucket().getGroup();
                 if (!CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(dgroup) &&
                         !CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(dgroup)) {
-                    minDeliveryTime.add(Calendar.DAY_OF_YEAR, ff.getDefaultBackorderStockLeadTime());
+                    minDeliveryTime = minDeliveryTime.plusDays(ff.getDefaultBackorderStockLeadTime());
                 }
             }
         }
 
-        final Map<Date, Date> slaExcludedDates = getCarrierSlaExcludedDates(sla);
+        final Map<LocalDate, LocalDate> slaExcludedDates = getCarrierSlaExcludedDates(sla);
 
         final int minDays = sla.getMinDays() != null ? sla.getMinDays() : 0;
         final int maxDays = sla.getMaxDays() != null ? sla.getMaxDays() : MAX_NAMED_DAY_IF_NOT_SET;
 
         if (minDays > 0) {
-            minDeliveryTime.add(Calendar.DAY_OF_YEAR, minDays);
+            minDeliveryTime = minDeliveryTime.plusDays(minDays);
         }
 
-        Calendar maxDeliveryTime = Calendar.getInstance();
         // Set hard lower limit, before skipping exclusions
-        maxDeliveryTime.setTime(minDeliveryTime.getTime());
+        LocalDate maxDeliveryTime = minDeliveryTime;
 
-        skipWeekdayExclusions(sla, minDeliveryTime);
-        skipDatesExclusions(sla, minDeliveryTime, slaExcludedDates);
+        minDeliveryTime = skipWeekdayExclusions(sla, minDeliveryTime);
+        minDeliveryTime = skipDatesExclusions(sla, minDeliveryTime, slaExcludedDates);
 
-        Date min = minDeliveryTime.getTime();
+        LocalDate min = minDeliveryTime;
 
         // Ensure we are not below lower limit before we check exclusions
-        if (requestedDate < min.getTime()) {
-            requestedDate = min.getTime();
+        if (requestedDate.isBefore(minDeliveryTime)) {
+            requestedDate = minDeliveryTime;
         }
 
         if (maxDays > minDays) {
-            maxDeliveryTime.add(Calendar.DAY_OF_YEAR, maxDays - minDays);
+            maxDeliveryTime = maxDeliveryTime.plusDays(maxDays - minDays);
         } else {
-            maxDeliveryTime.add(Calendar.DAY_OF_YEAR, 1); // Misconfiguration - just show one day
+            maxDeliveryTime = maxDeliveryTime.plusDays(1); // Misconfiguration - just show one day
         }
         // We want a hard limit on max, so we do not skip beyond maxDays
         // skipWeekdayExclusions(sla, maxDeliveryTime);
 
-        Date max = maxDeliveryTime.getTime();
+        LocalDate max = maxDeliveryTime;
 
-        final Map<Date, Date> exclusions = sla.getExcludeDatesAsMap();
+        final Map<LocalDate, LocalDate> exclusions = sla.getExcludeDatesAsMap();
         if (!exclusions.isEmpty() || !sla.getExcludeWeekDaysAsList().isEmpty()) {
 
             final StringBuilder exclusionsInMinMax = new StringBuilder();
 
-            minDeliveryTime.setTime(min);
-            Date lastValidDate = min;
+            LocalDate nextDay = min;
+            LocalDate lastValidDate = min;
 
-            while (minDeliveryTime.getTime().before(max)) {
+            while (nextDay.isBefore(max)) {
 
-                minDeliveryTime.add(Calendar.DAY_OF_YEAR, 1);
+                nextDay = nextDay.plusDays(1);
 
-                Date date = minDeliveryTime.getTime();
+                LocalDate expectedNextDay = nextDay;
 
-                skipWeekdayExclusions(sla, minDeliveryTime);
-                skipDatesExclusions(sla, minDeliveryTime, exclusions);
+                nextDay = skipWeekdayExclusions(sla, nextDay);
+                nextDay = skipDatesExclusions(sla, nextDay, exclusions);
 
-                if (date.getTime() != minDeliveryTime.getTime().getTime()) {
+                if (!expectedNextDay.isEqual(nextDay)) {
                     // we skipped
-                    final Calendar excluded = Calendar.getInstance();
-                    excluded.setTime(date);
+                    LocalDate excluded = expectedNextDay;
 
                     // Ensure requested date is not in exclusion range and if it is set the first day after the exclusion
-                    if (date.getTime() <= requestedDate && requestedDate < minDeliveryTime.getTime().getTime()) {
-                        requestedDate = minDeliveryTime.getTime().getTime();
+                    if (!requestedDate.isBefore(expectedNextDay) && requestedDate.isBefore(nextDay)) {
+                        requestedDate = nextDay;
                     }
 
                     do {
@@ -236,13 +232,13 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
                         if (exclusionsInMinMax.length() > 0) {
                             exclusionsInMinMax.append(',');
                         }
-                        exclusionsInMinMax.append(excluded.getTime().getTime());
-                        excluded.add(Calendar.DAY_OF_YEAR, 1);
+                        exclusionsInMinMax.append(DateUtils.millis(excluded));
+                        excluded = excluded.plusDays(1);
 
-                    } while (excluded.getTime().before(minDeliveryTime.getTime()));
+                    } while (excluded.isBefore(nextDay));
                 } else {
                     // This date is not excluded
-                    lastValidDate = date;
+                    lastValidDate = expectedNextDay;
                 }
 
             }
@@ -258,24 +254,24 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
             }
 
             // Tailing exclusions
-            if (lastValidDate.before(max)) {
+            if (lastValidDate.isBefore(max)) {
                 max = lastValidDate;
             }
-            if (requestedDate > lastValidDate.getTime()) {
-                requestedDate = lastValidDate.getTime();
+            if (requestedDate.isAfter(lastValidDate)) {
+                requestedDate = lastValidDate;
             }
 
         }
 
         // Ensure we are not above upper limit after we checked exclusions
-        if (requestedDate > max.getTime()) {
-            requestedDate = max.getTime();
+        if (requestedDate.isAfter(max)) {
+            requestedDate = max;
         }
 
         // Save possible min - max range and preselect requested date, since this is named delivery
-        shoppingCart.getOrderInfo().putDetail(requestedDateKey, String.valueOf(requestedDate));
-        shoppingCart.getOrderInfo().putDetail(minKey, String.valueOf(min.getTime()));
-        shoppingCart.getOrderInfo().putDetail(maxKey, String.valueOf(max.getTime()));
+        shoppingCart.getOrderInfo().putDetail(requestedDateKey, String.valueOf(DateUtils.millis(requestedDate)));
+        shoppingCart.getOrderInfo().putDetail(minKey, String.valueOf(DateUtils.millis(min)));
+        shoppingCart.getOrderInfo().putDetail(maxKey, String.valueOf(DateUtils.millis(max)));
 
     }
 
@@ -292,88 +288,77 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
 
             final CarrierSla sla = customerOrderDelivery.getCarrierSla();
 
-            Calendar minDeliveryTime = now();
-
-            minDeliveryTime.set(Calendar.HOUR_OF_DAY, 0);
-            minDeliveryTime.set(Calendar.MINUTE, 0);
-            minDeliveryTime.set(Calendar.SECOND, 0);
-            minDeliveryTime.set(Calendar.MILLISECOND, 0);
+            LocalDate minDeliveryTime = now();
 
             // Honour warehouse lead inventory
-            skipInventoryLeadTime(customerOrderDelivery, warehouseByCode, minDeliveryTime);
+            minDeliveryTime = skipInventoryLeadTime(customerOrderDelivery, warehouseByCode, minDeliveryTime);
 
             boolean namedDay = sla.isNamedDay();
 
-            final Map<Date, Date> slaExcludedDates = getCarrierSlaExcludedDates(sla);
+            final Map<LocalDate, LocalDate> slaExcludedDates = getCarrierSlaExcludedDates(sla);
 
             final int minDays = sla.getMinDays() != null ? sla.getMinDays() : 0;
             final int maxDays = sla.getMaxDays() != null ? sla.getMaxDays() : (namedDay ? MAX_NAMED_DAY_IF_NOT_SET : 0);
 
             // Ensure delivery lead time
             if (minDays > 0) {
-                minDeliveryTime.add(Calendar.DAY_OF_YEAR, minDays);
+                minDeliveryTime = minDeliveryTime.plusDays(minDays);
             }
 
             // Process exclusions to ensure that we do not set excluded day (For named day this should not make any changes
             // since we already checked it, this is just to ensure we do not have manual tampering with data)
-            skipWeekdayExclusions(sla, minDeliveryTime);
-            skipDatesExclusions(sla, minDeliveryTime, slaExcludedDates);
+            minDeliveryTime = skipWeekdayExclusions(sla, minDeliveryTime);
+            minDeliveryTime = skipDatesExclusions(sla, minDeliveryTime, slaExcludedDates);
 
             // For named days ensure that requested date is valid
             if (namedDay) {
                 // It must set and not before the lower limit
-                if (customerOrderDelivery.getRequestedDeliveryDate() != null && !customerOrderDelivery.getRequestedDeliveryDate().before(minDeliveryTime.getTime())) {
+                if (customerOrderDelivery.getRequestedDeliveryDate() != null && !customerOrderDelivery.getRequestedDeliveryDate().isBefore(minDeliveryTime.atStartOfDay())) {
 
-                    final Calendar checkRequested = Calendar.getInstance();
-                    checkRequested.setTime(customerOrderDelivery.getRequestedDeliveryDate());
-                    checkRequested.set(Calendar.HOUR_OF_DAY, 0);
-                    checkRequested.set(Calendar.MINUTE, 0);
-                    checkRequested.set(Calendar.SECOND, 0);
-                    checkRequested.set(Calendar.MILLISECOND, 0);
+                    LocalDate checkRequested = customerOrderDelivery.getRequestedDeliveryDate().toLocalDate();
 
                     // Attempt to skip exclusion to see if the date changes
-                    skipWeekdayExclusions(sla, checkRequested);
-                    skipDatesExclusions(sla, checkRequested, slaExcludedDates);
+                    checkRequested = skipWeekdayExclusions(sla, checkRequested);
+                    checkRequested = skipDatesExclusions(sla, checkRequested, slaExcludedDates);
 
-                    if (customerOrderDelivery.getRequestedDeliveryDate().getTime() == checkRequested.getTime().getTime()) {
+                    if (customerOrderDelivery.getRequestedDeliveryDate().isEqual(checkRequested.atStartOfDay())) {
                         // We have not changed the date so it is valid, for named date we do not estimate
                         return;
                     }
 
                     // else the requested date is invalid, so we use the next available after the exclusions
-                    minDeliveryTime.setTime(checkRequested.getTime());
+                    minDeliveryTime = checkRequested;
 
                 }
 
                 // else requested date is less than minimal
             }
 
-            Date guaranteed = null;
-            Date min = null;
-            Date max = null;
+            LocalDate guaranteed = null;
+            LocalDate min = null;
+            LocalDate max = null;
 
             // Named day assumes that it is guaranteed
             if (sla.isGuaranteed() || namedDay) {
                 if (CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(customerOrderDelivery.getDeliveryGroup())) {
                     // guarantee is only for in stock items
-                    guaranteed = minDeliveryTime.getTime();
+                    guaranteed = minDeliveryTime;
                 } else {
-                    min = minDeliveryTime.getTime();
+                    min = minDeliveryTime;
                 }
 
             } else {
-                min = minDeliveryTime.getTime();
+                min = minDeliveryTime;
                 if (maxDays > minDays) {
-                    minDeliveryTime.add(Calendar.DAY_OF_YEAR, maxDays - minDays);
-                    skipWeekdayExclusions(sla, minDeliveryTime);
+                    minDeliveryTime = skipWeekdayExclusions(sla, minDeliveryTime.plusDays(maxDays - minDays));
                 }
-                max = minDeliveryTime.getTime();
+                max = minDeliveryTime;
             }
 
             // Need to reset all in case we have dirty fields
-            customerOrderDelivery.setDeliveryGuaranteed(guaranteed);
-            customerOrderDelivery.setDeliveryEstimatedMin(min);
-            customerOrderDelivery.setDeliveryEstimatedMax(max);
+            customerOrderDelivery.setDeliveryGuaranteed(guaranteed != null ? guaranteed.atStartOfDay() : null);
+            customerOrderDelivery.setDeliveryEstimatedMin(min != null ? min.atStartOfDay() : null);
+            customerOrderDelivery.setDeliveryEstimatedMax(max != null ? max.atStartOfDay() : null);
 
         }
 
@@ -386,91 +371,93 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
      * @param warehouseByCode       fulfilment centers
      * @param minDeliveryTime       start date (i.e. now)
      */
-    protected void skipInventoryLeadTime(final CustomerOrderDelivery customerOrderDelivery, final Map<String, Warehouse> warehouseByCode, final Calendar minDeliveryTime) {
+    protected LocalDate skipInventoryLeadTime(final CustomerOrderDelivery customerOrderDelivery, final Map<String, Warehouse> warehouseByCode, final LocalDate minDeliveryTime) {
 
+        LocalDate min = minDeliveryTime;
         if (CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(customerOrderDelivery.getDeliveryGroup())) {
 
             final Warehouse ff = warehouseByCode.get(customerOrderDelivery.getDetail().iterator().next().getSupplierCode());
             if (ff != null && ff.getDefaultStandardStockLeadTime() > 0) {
-                minDeliveryTime.add(Calendar.DAY_OF_YEAR, ff.getDefaultStandardStockLeadTime());
+                min = min.plusDays(ff.getDefaultStandardStockLeadTime());
             }
 
         } else {
             // Pre, Back and Mixed (very simplistic) TODO: account for product specific lead times and pre-order release dates
             final Warehouse ff = warehouseByCode.get(customerOrderDelivery.getDetail().iterator().next().getSupplierCode());
             if (ff != null && ff.getDefaultBackorderStockLeadTime() > 0) {
-                minDeliveryTime.add(Calendar.DAY_OF_YEAR, ff.getDefaultBackorderStockLeadTime());
+                min = min.plusDays(ff.getDefaultBackorderStockLeadTime());
             }
 
         }
+        return min;
     }
 
-    protected Calendar now() {
-        return TimeContext.getCalendar();
+    protected LocalDate now() {
+        return TimeContext.getLocalDate();
     }
 
-    protected Map<Date, Date> getCarrierSlaExcludedDates(final CarrierSla sla) {
+    protected Map<LocalDate, LocalDate> getCarrierSlaExcludedDates(final CarrierSla sla) {
 
         return sla.getExcludeDatesAsMap();
 
     }
 
-    protected void skipWeekdayExclusions(final CarrierSla sla, final Calendar date) {
+    protected LocalDate skipWeekdayExclusions(final CarrierSla sla, final LocalDate date) {
 
+        LocalDate thisDate = date;
         final List<Integer> skip = sla.getExcludeWeekDaysAsList();
         if (!skip.isEmpty()) {
-            final List<Integer> excluded = new ArrayList<Integer>(skip);
+            final List<DayOfWeek> excluded = new ArrayList<>(DateUtils.fromCalendarDaysOfWeekToISO(skip));
             while (!excluded.isEmpty()) {
-                final int dayOfWeek = date.get(Calendar.DAY_OF_WEEK);
-                final Iterator<Integer> itExluded = excluded.iterator();
+                final DayOfWeek dayOfWeek = thisDate.getDayOfWeek();
+                final Iterator<DayOfWeek> itExcluded = excluded.iterator();
                 boolean removed = false;
-                while (itExluded.hasNext()) {
-                    if (Integer.valueOf(dayOfWeek).equals(itExluded.next())) {
-                        date.add(Calendar.DAY_OF_YEAR, 1); // This date is excluded
-                        itExluded.remove();
+                while (itExcluded.hasNext()) {
+                    if (dayOfWeek == itExcluded.next()) {
+                        thisDate = thisDate.plusDays(1);  // This date is excluded
+                        itExcluded.remove();
                         removed = true;
                     }
                 }
                 if (!removed) {
-                    return;
+                    return thisDate;
                 }
             }
         }
+        return thisDate;
 
     }
 
 
-    protected void skipDatesExclusions(final CarrierSla sla, final Calendar date, final Map<Date, Date> exclusions) {
+    protected LocalDate skipDatesExclusions(final CarrierSla sla, final LocalDate startDate, final Map<LocalDate, LocalDate> exclusions) {
 
+        LocalDate thisDate = startDate;
         if (!exclusions.isEmpty()) {
 
-            final TreeSet<Date> startDates = new TreeSet<Date>(exclusions.keySet());
+            final TreeSet<LocalDate> startDates = new TreeSet<LocalDate>(exclusions.keySet());
 
             while (true) {
-                final Date thisDate = date.getTime();
-                final Date beforeOfEqual = startDates.floor(thisDate);
-                if (beforeOfEqual == null) {
-                    return; // no exclusions before
-                } else if (beforeOfEqual.before(thisDate)) {
-                    final Date rangeEnd = exclusions.get(beforeOfEqual);
+                final LocalDate beforeOrEqual = startDates.floor(thisDate);
+                if (beforeOrEqual == null) {
+                    return thisDate; // no exclusions before
+                } else if (beforeOrEqual.isBefore(thisDate)) {
+                    final LocalDate rangeEnd = exclusions.get(beforeOrEqual);
                     // Two cases here:
                     // 1) Single date - same as beforeOfEqual
                     // 2) Range - need to make sure it is before this date
-                    if (thisDate.after(rangeEnd)) {
-                        return; // This date is after the min in exclusions
+                    if (thisDate.isAfter(rangeEnd)) {
+                        return thisDate; // This date is after the min in exclusions
                     } else {
-                        thisDate.setTime(rangeEnd.getTime());
-                        date.add(Calendar.DAY_OF_YEAR, 1);
-                        skipWeekdayExclusions(sla, date);
+                        thisDate = skipWeekdayExclusions(sla, rangeEnd.plusDays(1L));
                     }
                 } else {
                     // equal, so need to move next day and check weekdays
-                    date.add(Calendar.DAY_OF_YEAR, 1);
-                    skipWeekdayExclusions(sla, date);
+                    thisDate = skipWeekdayExclusions(sla, thisDate.plusDays(1L));
                 }
             }
 
         }
+        return thisDate;
 
     }
 

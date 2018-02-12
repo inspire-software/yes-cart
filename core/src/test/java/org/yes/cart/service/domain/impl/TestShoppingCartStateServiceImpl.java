@@ -26,7 +26,7 @@ import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -85,8 +85,8 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         scs.setState("State".getBytes());
         shoppingCartStateService.create(scs);
 
-        final Date tenSecondsAfterCreation = new Date(System.currentTimeMillis() + 10000L);
-        final Date tenSecondsBeforeCreation = new Date(tenSecondsAfterCreation.getTime() - 20000L);
+        final Instant tenSecondsAfterCreation = Instant.now().plusSeconds(10L);
+        final Instant tenSecondsBeforeCreation = tenSecondsAfterCreation.plusSeconds(-20L);
 
         getTxReadOnly().execute(new TransactionCallback<Object>() {
             @Override
@@ -125,8 +125,8 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         scs.setState("State".getBytes());
         shoppingCartStateService.create(scs);
 
-        final Date tenSecondsAfterCreation = new Date(System.currentTimeMillis() + 10000L);
-        final Date tenSecondsBeforeCreation = new Date(tenSecondsAfterCreation.getTime() - 20000L);
+        final Instant tenSecondsAfterCreation = Instant.now().plusSeconds(10L);
+        final Instant tenSecondsBeforeCreation = tenSecondsAfterCreation.plusSeconds(-20L);
 
         getTxReadOnly().execute(new TransactionCallback<Object>() {
             @Override
@@ -162,8 +162,8 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         scs.setState("State".getBytes());
         shoppingCartStateService.create(scs);
 
-        final Date tenSecondsAfterCreation = new Date(System.currentTimeMillis() + 10000L);
-        final Date tenSecondsBeforeCreation = new Date(tenSecondsAfterCreation.getTime() - 20000L);
+        final Instant tenSecondsAfterCreation = Instant.now().plusSeconds(10L);
+        final Instant tenSecondsBeforeCreation = tenSecondsAfterCreation.plusSeconds(-20L);
 
         getTxReadOnly().execute(new TransactionCallback<Object>() {
             @Override

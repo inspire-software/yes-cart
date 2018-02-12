@@ -18,13 +18,13 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,7 +69,7 @@ public class VoCustomerOrderInfo {
     private boolean multipleShipmentOption;
 
     @DtoField(value = "orderTimestamp", readOnly = true)
-    private Date orderTimestamp;
+    private LocalDateTime orderTimestamp;
 
     @DtoField(value = "orderIp", readOnly = true)
     private String orderIp;
@@ -128,7 +128,7 @@ public class VoCustomerOrderInfo {
     @DtoField(value = "blockExport", readOnly = true)
     private boolean blockExport;
     @DtoField(value = "lastExportDate", readOnly = true)
-    private Date lastExportDate;
+    private Instant lastExportDate;
     @DtoField(value = "lastExportStatus", readOnly = true)
     private String lastExportStatus;
     @DtoField(value = "lastExportOrderStatus", readOnly = true)
@@ -145,12 +145,12 @@ public class VoCustomerOrderInfo {
     @DtoField(value = "b2bApprovedBy", readOnly = true)
     private String b2bApprovedBy;
     @DtoField(value = "b2bApprovedDate", readOnly = true)
-    private Date b2bApprovedDate;
+    private LocalDateTime b2bApprovedDate;
     @DtoField(value = "b2bRemarks", readOnly = true)
     private String b2bRemarks;
 
     @DtoField(value = "requestedDeliveryDate", readOnly = true)
-    private Date requestedDeliveryDate;
+    private LocalDateTime requestedDeliveryDate;
 
     @DtoField(value = "allValues", converter = "PairMapToPairList", readOnly = true)
     private List<MutablePair<String, MutablePair<String, String>>> allValues;
@@ -259,11 +259,11 @@ public class VoCustomerOrderInfo {
         this.multipleShipmentOption = multipleShipmentOption;
     }
 
-    public Date getOrderTimestamp() {
+    public LocalDateTime getOrderTimestamp() {
         return orderTimestamp;
     }
 
-    public void setOrderTimestamp(final Date orderTimestamp) {
+    public void setOrderTimestamp(final LocalDateTime orderTimestamp) {
         this.orderTimestamp = orderTimestamp;
     }
 
@@ -443,11 +443,11 @@ public class VoCustomerOrderInfo {
         this.blockExport = blockExport;
     }
 
-    public Date getLastExportDate() {
+    public Instant getLastExportDate() {
         return lastExportDate;
     }
 
-    public void setLastExportDate(final Date lastExportDate) {
+    public void setLastExportDate(final Instant lastExportDate) {
         this.lastExportDate = lastExportDate;
     }
 
@@ -507,11 +507,11 @@ public class VoCustomerOrderInfo {
         this.b2bApprovedBy = b2bApprovedBy;
     }
 
-    public Date getB2bApprovedDate() {
+    public LocalDateTime getB2bApprovedDate() {
         return b2bApprovedDate;
     }
 
-    public void setB2bApprovedDate(final Date b2bApprovedDate) {
+    public void setB2bApprovedDate(final LocalDateTime b2bApprovedDate) {
         this.b2bApprovedDate = b2bApprovedDate;
     }
 
@@ -523,11 +523,11 @@ public class VoCustomerOrderInfo {
         this.b2bRemarks = b2bRemarks;
     }
 
-    public Date getRequestedDeliveryDate() {
+    public LocalDateTime getRequestedDeliveryDate() {
         return requestedDeliveryDate;
     }
 
-    public void setRequestedDeliveryDate(final Date requestedDeliveryDate) {
+    public void setRequestedDeliveryDate(final LocalDateTime requestedDeliveryDate) {
         this.requestedDeliveryDate = requestedDeliveryDate;
     }
 

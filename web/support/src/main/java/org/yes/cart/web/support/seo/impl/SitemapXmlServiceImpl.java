@@ -28,7 +28,9 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.RuntimeConstants;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -36,7 +38,11 @@ import org.yes.cart.web.support.seo.SitemapXmlService;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -81,7 +87,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
             writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             writer.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\">\n");
             writer.write("<!-- YecCart sitemap generator. ");
-            writer.write(new Date().toString());
+            writer.write(DateUtils.formatSDT());
             writer.write(" -->\n");
 
             final Shop shop = shopService.getShopByCode(shopCode);
@@ -138,7 +144,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
             return;
         }
 
-        final Date now = new Date();
+        final LocalDateTime now = TimeContext.getLocalDateTime();
         final String urlBase = getShopBaseUrl(shop);
 
         appendHomeLoc(writer, urlBase, languages);
@@ -163,7 +169,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     }
 
 
-    private Set<Long> appendCategories(final OutputStreamWriter writer, final Shop shop, final String urlBase, final List<String> languages, final Date now) throws IOException {
+    private Set<Long> appendCategories(final OutputStreamWriter writer, final Shop shop, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
 
         final Set<Long> accessible = new HashSet<Long>();
 
@@ -183,7 +189,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     }
 
 
-    private void appendCategory(final OutputStreamWriter writer, final Category category, final Set<Long> accessible, final String urlBase, final List<String> languages, final Date now) throws IOException {
+    private void appendCategory(final OutputStreamWriter writer, final Category category, final Set<Long> accessible, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
 
         if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)) {
 
@@ -206,7 +212,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     }
 
 
-    private void appendContent(final OutputStreamWriter writer, final Shop shop, final String urlBase, final List<String> languages, final Date now) throws IOException {
+    private void appendContent(final OutputStreamWriter writer, final Shop shop, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
 
         writer.write("<!-- Content -->\n");
 
@@ -222,7 +228,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     }
 
 
-    private void appendContent(final OutputStreamWriter writer, final Category content, final boolean childInclude, final String urlBase, final List<String> languages, final Date now) throws IOException {
+    private void appendContent(final OutputStreamWriter writer, final Category content, final boolean childInclude, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
 
         if (DomainApiUtils.isObjectAvailableNow(true, content.getAvailablefrom(), content.getAvailableto(), now)) {
 
@@ -251,7 +257,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     }
 
 
-    private void appendProducts(final OutputStreamWriter writer, final Shop shop, final Set<Long> accessible, final String urlBase, final List<String> languages, final Date now) throws IOException {
+    private void appendProducts(final OutputStreamWriter writer, final Shop shop, final Set<Long> accessible, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
 
         writer.write("<!-- Products -->\n");
 

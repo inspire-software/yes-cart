@@ -16,7 +16,7 @@
 
 package org.yes.cart.domain.entity;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * Represent any registered person in system: customer, admid, call center , etc.
@@ -131,14 +131,14 @@ public interface RegisteredPerson {
      *
      * @return auth token expiry (for resetting passwords)
      */
-    Date getAuthTokenExpiry();
+    Instant getAuthTokenExpiry();
 
     /**
      * Authorisation token expiry.
      *
      * @param authTokenExpiry auth token expiry (for resetting passwords)
      */
-    void setAuthTokenExpiry(Date authTokenExpiry);
+    void setAuthTokenExpiry(Instant authTokenExpiry);
 
 
 

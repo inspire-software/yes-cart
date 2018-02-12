@@ -57,7 +57,19 @@
             <bean class="org.yes.cart.bulkcommon.service.support.impl.ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl"/>
         </entry>
         <entry key="{NOW}">
-            <bean class="org.yes.cart.bulkcommon.service.support.impl.NowLookUpQueryParameterStrategyValueProviderImpl"/>
+            <bean class="org.yes.cart.bulkcommon.service.support.impl.NowLookUpQueryParameterStrategyValueProviderImpl">
+                <property name="javaType" value="java.time.LocalDateTime"/>
+            </bean>
+        </entry>
+        <entry key="{DATE}">
+            <bean class="org.yes.cart.bulkcommon.service.support.impl.NowLookUpQueryParameterStrategyValueProviderImpl">
+                <property name="javaType" value="java.time.LocalDate"/>
+            </bean>
+        </entry>
+        <entry key="{INSTANT}">
+            <bean class="org.yes.cart.bulkcommon.service.support.impl.NowLookUpQueryParameterStrategyValueProviderImpl">
+                <property name="javaType" value="java.time.Instant"/>
+            </bean>
         </entry>
     </util:map>
 

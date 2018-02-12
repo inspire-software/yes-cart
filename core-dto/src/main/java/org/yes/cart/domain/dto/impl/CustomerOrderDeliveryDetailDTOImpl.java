@@ -16,9 +16,6 @@
 package org.yes.cart.domain.dto.impl;
 
 
-
-
-
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.constants.Constants;
@@ -27,7 +24,8 @@ import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -62,13 +60,13 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     @DtoField(readOnly = true)
     private String deliveryRemarks;
     @DtoField(readOnly = true)
-    private Date deliveryEstimatedMin;
+    private LocalDateTime deliveryEstimatedMin;
     @DtoField(readOnly = true)
-    private Date deliveryEstimatedMax;
+    private LocalDateTime deliveryEstimatedMax;
     @DtoField(readOnly = true)
-    private Date deliveryGuaranteed;
+    private LocalDateTime deliveryGuaranteed;
     @DtoField(readOnly = true)
-    private Date deliveryConfirmed;
+    private LocalDateTime deliveryConfirmed;
     @DtoField(readOnly = true)
     private BigDecimal deliveredQuantity;
     @DtoField(readOnly = true)
@@ -82,7 +80,7 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     @DtoField(readOnly = true)
     private String supplierInvoiceNo;
     @DtoField(readOnly = true)
-    private Date supplierInvoiceDate;
+    private LocalDate supplierInvoiceDate;
 
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
@@ -221,35 +219,35 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
         this.deliveryRemarks = deliveryRemarks;
     }
 
-    public Date getDeliveryEstimatedMin() {
+    public LocalDateTime getDeliveryEstimatedMin() {
         return deliveryEstimatedMin;
     }
 
-    public void setDeliveryEstimatedMin(final Date deliveryEstimatedMin) {
+    public void setDeliveryEstimatedMin(final LocalDateTime deliveryEstimatedMin) {
         this.deliveryEstimatedMin = deliveryEstimatedMin;
     }
 
-    public Date getDeliveryEstimatedMax() {
+    public LocalDateTime getDeliveryEstimatedMax() {
         return deliveryEstimatedMax;
     }
 
-    public void setDeliveryEstimatedMax(final Date deliveryEstimatedMax) {
+    public void setDeliveryEstimatedMax(final LocalDateTime deliveryEstimatedMax) {
         this.deliveryEstimatedMax = deliveryEstimatedMax;
     }
 
-    public Date getDeliveryGuaranteed() {
+    public LocalDateTime getDeliveryGuaranteed() {
         return deliveryGuaranteed;
     }
 
-    public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
+    public void setDeliveryGuaranteed(final LocalDateTime deliveryGuaranteed) {
         this.deliveryGuaranteed = deliveryGuaranteed;
     }
 
-    public Date getDeliveryConfirmed() {
+    public LocalDateTime getDeliveryConfirmed() {
         return deliveryConfirmed;
     }
 
-    public void setDeliveryConfirmed(final Date deliveryConfirmed) {
+    public void setDeliveryConfirmed(final LocalDateTime deliveryConfirmed) {
         this.deliveryConfirmed = deliveryConfirmed;
     }
 
@@ -293,11 +291,11 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
         this.supplierInvoiceNo = supplierInvoiceNo;
     }
 
-    public Date getSupplierInvoiceDate() {
+    public LocalDate getSupplierInvoiceDate() {
         return supplierInvoiceDate;
     }
 
-    public void setSupplierInvoiceDate(final Date supplierInvoiceDate) {
+    public void setSupplierInvoiceDate(final LocalDate supplierInvoiceDate) {
         this.supplierInvoiceDate = supplierInvoiceDate;
     }
 

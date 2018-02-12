@@ -30,8 +30,9 @@ import org.yes.cart.domain.entity.Product;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.*;
+import org.yes.cart.util.TimeContext;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -102,7 +103,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         dto = dtoService.create(dto);
         assertTrue(dto.getProductId() > 0);
         long pk = dto.getProductId();
-        Date availableFrom = new Date();
+        LocalDateTime availableFrom = TimeContext.getLocalDateTime();
         dto.setAvailablefrom(availableFrom);
         dto.setAvailableto(availableFrom);
         dto.setName("new-name");

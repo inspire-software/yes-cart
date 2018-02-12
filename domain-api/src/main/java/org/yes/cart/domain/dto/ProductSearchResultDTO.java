@@ -20,7 +20,8 @@ import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -183,14 +184,14 @@ public interface ProductSearchResultDTO extends Identifiable {
      *
      * @return start of product availability.
      */
-    Date getAvailablefrom();
+    LocalDateTime getAvailablefrom();
 
     /**
      * Set start of product availability.
      *
      * @param availablefrom start of product availability.
      */
-    void setAvailablefrom(Date availablefrom);
+    void setAvailablefrom(LocalDateTime availablefrom);
 
     /**
      * Get end of product availability.
@@ -198,14 +199,14 @@ public interface ProductSearchResultDTO extends Identifiable {
      *
      * @return end of product availability.
      */
-    Date getAvailableto();
+    LocalDateTime getAvailableto();
 
     /**
      * Set end of product availability.
      *
      * @param availableto end of product availability.
      */
-    void setAvailableto(Date availableto);
+    void setAvailableto(LocalDateTime availableto);
 
     /**
      * Set product availability. See ProductEntity fields for more details.
@@ -467,22 +468,22 @@ public interface ProductSearchResultDTO extends Identifiable {
     /**
      * @return created timestamp.
      */
-    Date getCreatedTimestamp();
+    Instant getCreatedTimestamp();
 
     /**
      * @param createdTimestamp set created timestamp.
      */
-    void setCreatedTimestamp(Date createdTimestamp);
+    void setCreatedTimestamp(Instant createdTimestamp);
 
     /**
      * @return updated timestamp.
      */
-    Date getUpdatedTimestamp();
+    Instant getUpdatedTimestamp();
 
     /**
      * @param updatedTimestamp set updated timestamp.
      */
-    void setUpdatedTimestamp(Date updatedTimestamp);
+    void setUpdatedTimestamp(Instant updatedTimestamp);
 
     /**
      * Creates copy of this object

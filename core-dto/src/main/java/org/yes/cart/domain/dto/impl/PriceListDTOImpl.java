@@ -22,7 +22,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.yes.cart.domain.dto.PriceListDTO;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Default implementation.
@@ -49,10 +49,10 @@ public class PriceListDTOImpl implements PriceListDTO {
     private BigDecimal salePrice;
 
     @DtoField(value = "salefrom")
-    private Date salefrom;
+    private LocalDateTime salefrom;
 
     @DtoField(value = "saleto")
-    private Date saleto;
+    private LocalDateTime saleto;
 
     @DtoField(value = "quantity")
     private BigDecimal quantity;
@@ -165,22 +165,22 @@ public class PriceListDTOImpl implements PriceListDTO {
     }
 
     /** {@inheritDoc}*/
-    public Date getSalefrom() {
+    public LocalDateTime getSalefrom() {
         return salefrom;
     }
 
     /** {@inheritDoc}*/
-    public void setSalefrom(final Date salefrom) {
+    public void setSalefrom(final LocalDateTime salefrom) {
         this.salefrom = salefrom;
     }
 
     /** {@inheritDoc}*/
-    public Date getSaleto() {
+    public LocalDateTime getSaleto() {
         return saleto;
     }
 
     /** {@inheritDoc}*/
-    public void setSaleto(final Date saleto) {
+    public void setSaleto(final LocalDateTime saleto) {
         this.saleto = saleto;
     }
 

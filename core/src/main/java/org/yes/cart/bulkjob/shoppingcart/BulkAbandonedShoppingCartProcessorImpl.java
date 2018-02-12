@@ -28,7 +28,7 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 import org.yes.cart.service.domain.SystemService;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * Processor that allows to clean up abandoned shopping cart, so that we do not accumulate
@@ -62,8 +62,7 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
     @Override
     public void run() {
 
-        final Date lastModification =
-                new Date(System.currentTimeMillis() - determineExpiryInMs());
+        final Instant lastModification = Instant.now().plusMillis(-determineExpiryInMs());
 
         LOG.info("Look up all ShoppingCartStates not modified since {}", lastModification);
 

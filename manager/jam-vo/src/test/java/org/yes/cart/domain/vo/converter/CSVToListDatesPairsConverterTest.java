@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.util.DateUtils;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -35,28 +35,28 @@ public class CSVToListDatesPairsConverterTest {
     @Test
     public void testConvert() throws Exception {
 
-        List<MutablePair<Date, Date>> csv;
+        List<MutablePair<LocalDate, LocalDate>> csv;
 
-        csv = (List<MutablePair<Date, Date>>) new CSVToListDatesPairsConverter().convertToDto(null, null);
+        csv = (List<MutablePair<LocalDate, LocalDate>>) new CSVToListDatesPairsConverter().convertToDto(null, null);
         assertNotNull(csv);
         assertTrue(csv.isEmpty());
         assertNull(new CSVToListConverter().convertToEntity(csv, null, null));
 
-        csv = (List<MutablePair<Date, Date>>) new CSVToListDatesPairsConverter().convertToDto("2017-01-01,2017-01-15:2017-01-17,,2017-01-25", null);
+        csv = (List<MutablePair<LocalDate, LocalDate>>) new CSVToListDatesPairsConverter().convertToDto("2017-01-01,2017-01-15:2017-01-17,,2017-01-25", null);
         assertNotNull(csv);
         assertEquals(3, csv.size());
-        MutablePair<Date, Date> range;
+        MutablePair<LocalDate, LocalDate> range;
         range = csv.get(0);
         assertNotNull(range);
-        assertEquals(DateUtils.dParseSDT("2017-01-01"), range.getFirst());
+        assertEquals(DateUtils.ldParseSDT("2017-01-01"), range.getFirst());
         assertNull(range.getSecond());
         range = csv.get(1);
         assertNotNull(range);
-        assertEquals(DateUtils.dParseSDT("2017-01-15"), range.getFirst());
-        assertEquals(DateUtils.dParseSDT("2017-01-17"), range.getSecond());
+        assertEquals(DateUtils.ldParseSDT("2017-01-15"), range.getFirst());
+        assertEquals(DateUtils.ldParseSDT("2017-01-17"), range.getSecond());
         range = csv.get(2);
         assertNotNull(range);
-        assertEquals(DateUtils.dParseSDT("2017-01-25"), range.getFirst());
+        assertEquals(DateUtils.ldParseSDT("2017-01-25"), range.getFirst());
         assertNull(range.getSecond());
 
         assertEquals("2017-01-01,2017-01-15:2017-01-17,2017-01-25", new CSVToListDatesPairsConverter().convertToEntity(csv, null, null));

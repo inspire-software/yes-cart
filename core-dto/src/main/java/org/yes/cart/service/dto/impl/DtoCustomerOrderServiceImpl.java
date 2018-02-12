@@ -52,6 +52,7 @@ import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.utils.HQLUtils;
 
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -546,8 +547,8 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
             final String lastName,
             final String email,
             final String orderStatus,
-            final Date fromDate,
-            final Date toDate,
+            final LocalDateTime fromDate,
+            final LocalDateTime toDate,
             final String orderNum
     ) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<CustomerOrder> orders = ((CustomerOrderService) service).findCustomerOrdersByCriteria(
@@ -596,7 +597,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         if (StringUtils.isNotBlank(filter)) {
 
             final Pair<String, String> orderNumberOrCustomerOrAddressOrSku = ComplexSearchUtils.checkSpecialSearch(filter, ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU);
-            final Pair<Date, Date> dateSearch = orderNumberOrCustomerOrAddressOrSku == null ? ComplexSearchUtils.checkDateRangeSearch(filter) : null;
+            final Pair<LocalDateTime, LocalDateTime> dateSearch = orderNumberOrCustomerOrAddressOrSku == null ? ComplexSearchUtils.checkDateRangeSearch(filter) : null;
 
             if (orderNumberOrCustomerOrAddressOrSku != null) {
 
@@ -668,8 +669,8 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
             } else if (dateSearch != null) {
 
-                final Date from = dateSearch.getFirst();
-                final Date to = dateSearch.getSecond();
+                final LocalDateTime from = dateSearch.getFirst();
+                final LocalDateTime to = dateSearch.getSecond();
 
                 // time search
                 entities = service.getGenericDao().findRangeByCriteria(

@@ -21,7 +21,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.DateUtils;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static org.junit.Assert.*;
 
@@ -89,7 +89,7 @@ public class ComplexSearchUtilsTest {
         assertNull(ComplexSearchUtils.checkDateRangeSearch("1982-SEP<"));
         assertNull(ComplexSearchUtils.checkDateRangeSearch("<1982-SEP"));
 
-        Pair<Date, Date> search;
+        Pair<LocalDateTime, LocalDateTime> search;
 
         search = ComplexSearchUtils.checkDateRangeSearch("1982<");
         assertNotNull(search);
@@ -108,7 +108,7 @@ public class ComplexSearchUtilsTest {
 
         search = ComplexSearchUtils.checkDateRangeSearch("1982-09-31<");
         assertNotNull(search);
-        assertEquals("1982-10-01 00:00:00", DateUtils.formatSDT(search.getFirst())); // calendar feature!
+        assertEquals("1982-09-30 00:00:00", DateUtils.formatSDT(search.getFirst())); // Sep only has 30 days
         assertNull(search.getSecond());
 
         search = ComplexSearchUtils.checkDateRangeSearch("<1982");
@@ -129,7 +129,7 @@ public class ComplexSearchUtilsTest {
         search = ComplexSearchUtils.checkDateRangeSearch("<1982-09-31");
         assertNotNull(search);
         assertNull(search.getFirst());
-        assertEquals("1982-10-01 00:00:00", DateUtils.formatSDT(search.getSecond())); // calendar feature!
+        assertEquals("1982-09-30 00:00:00", DateUtils.formatSDT(search.getSecond())); // Sep only has 30 days
 
         search = ComplexSearchUtils.checkDateRangeSearch("1982-09<2017-03-12");
         assertNotNull(search);

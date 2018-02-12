@@ -33,6 +33,7 @@ import org.yes.cart.util.TimeContext;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -252,9 +253,9 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
      * {@inheritDoc}
      */
     @Cacheable(value = "categoryService-categoryNewArrivalDate")
-    public Date getCategoryNewArrivalDate(final long categoryId, final long shopId) {
+    public int getCategoryNewArrivalOffsetDays(final long categoryId, final long shopId) {
 
-        return shopSearchSupportService.getCategoryNewArrivalDate(categoryId, shopId);
+        return shopSearchSupportService.getCategoryNewArrivalOffsetDays(categoryId, shopId);
 
     }
 
@@ -456,8 +457,8 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
                 Constants.CATEGORY_FILTERNAV_LIMIT);
     }
 
-    Date now() {
-        return TimeContext.getTime();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
 }

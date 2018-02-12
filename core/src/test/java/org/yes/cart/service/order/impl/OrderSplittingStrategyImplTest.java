@@ -30,6 +30,7 @@ import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.DateUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -753,9 +754,9 @@ public class OrderSplittingStrategyImplTest {
 
     private void testGetDeliveryGroup(final int availability,
                                       final boolean digital,
-                                      final Date availableFrom,
-                                      final Date availableTo,
-                                      final Date now,
+                                      final LocalDateTime availableFrom,
+                                      final LocalDateTime availableTo,
+                                      final LocalDateTime now,
                                       final BigDecimal stock,
                                       final BigDecimal required,
                                       final String expectedGroup) throws Exception {
@@ -767,7 +768,7 @@ public class OrderSplittingStrategyImplTest {
 
         final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver) {
             @Override
-            Date now() {
+            LocalDateTime now() {
                 return now;
             }
         };
@@ -821,9 +822,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityAlwaysDigitalProduct() throws Exception {
 
-        final Date availableFrom = null;
-        final Date availableTo = null;
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = null;
+        final LocalDateTime availableTo = null;
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, true, /* Digital */
@@ -837,9 +838,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityAlwaysDigitalProductAvailable() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, true, /* Digital */
@@ -853,9 +854,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityAlwaysDigitalProductNotAvailableAfter() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2017-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, true, /* Digital */
@@ -870,9 +871,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityAlwaysDigitalProductNotAvailableBefore() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2015-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, true, /* Digital */
@@ -887,9 +888,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityAlwaysProduct() throws Exception {
 
-        final Date availableFrom = null;
-        final Date availableTo = null;
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = null;
+        final LocalDateTime availableTo = null;
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, false,
@@ -903,9 +904,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityAlwaysProductAvailable() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, false,
@@ -920,9 +921,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityAlwaysProductNotAvailableAfter() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2017-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, false,
@@ -936,9 +937,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityAlwaysProductNotAvailableBefore() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2015-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, false,
@@ -953,9 +954,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityPreorderProduct() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
@@ -970,9 +971,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityPreorderProductAvailable() throws Exception {
 
-        final Date availableFrom = null;
-        final Date availableTo = null;
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = null;
+        final LocalDateTime availableTo = null;
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
@@ -986,9 +987,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityPreorderProductAvailableNotEnough() throws Exception {
 
-        final Date availableFrom = null;
-        final Date availableTo = null;
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = null;
+        final LocalDateTime availableTo = null;
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
@@ -1003,9 +1004,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityPreorderProductNotAvailableAfter() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2017-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
@@ -1020,9 +1021,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityPreorderProductNotAvailableBefore() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2015-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
@@ -1039,9 +1040,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityBackorderProduct() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
@@ -1055,9 +1056,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityBackorderProductAvailable() throws Exception {
 
-        final Date availableFrom = null;
-        final Date availableTo = null;
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = null;
+        final LocalDateTime availableTo = null;
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
@@ -1071,9 +1072,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityBackorderProductAvailableNotEnough() throws Exception {
 
-        final Date availableFrom = null;
-        final Date availableTo = null;
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = null;
+        final LocalDateTime availableTo = null;
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
@@ -1087,9 +1088,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityBackorderProductNotAvailableAfter() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2017-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
@@ -1104,9 +1105,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityBackorderProductNotAvailableBefore() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2015-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
@@ -1121,9 +1122,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityStandardProduct() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
@@ -1138,9 +1139,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityStandardProductAvailable() throws Exception {
 
-        final Date availableFrom = null;
-        final Date availableTo = null;
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = null;
+        final LocalDateTime availableTo = null;
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
@@ -1154,9 +1155,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityStandardProductAvailableNotEnough() throws Exception {
 
-        final Date availableFrom = null;
-        final Date availableTo = null;
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = null;
+        final LocalDateTime availableTo = null;
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
@@ -1170,9 +1171,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityStandardProductNotAvailableAfter() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2017-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
@@ -1186,9 +1187,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityStandardProductNotAvailableBefore() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2015-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
@@ -1203,9 +1204,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityShowroomProduct() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_SHOWROOM, false,
@@ -1220,9 +1221,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityShowroomProductAvailable() throws Exception {
 
-        final Date availableFrom = null;
-        final Date availableTo = null;
-        final Date now = DateUtils.dParseSDT("2016-02-18");
+        final LocalDateTime availableFrom = null;
+        final LocalDateTime availableTo = null;
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_SHOWROOM, false,
@@ -1238,9 +1239,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityShowroomProductNotAvailableAfter() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2017-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_SHOWROOM, false,
@@ -1254,9 +1255,9 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetDeliveryGroupAvailabilityShowroomProductNotAvailableBefore() throws Exception {
 
-        final Date availableFrom = DateUtils.dParseSDT("2016-01-01");
-        final Date availableTo = DateUtils.dParseSDT("2016-03-01");
-        final Date now = DateUtils.dParseSDT("2015-02-18");
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_SHOWROOM, false,

@@ -23,7 +23,10 @@ import org.yes.cart.domain.vo.VoManagerShop;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
+import org.yes.cart.util.DateUtils;
+import org.yes.cart.util.TimeContext;
 
+import java.time.ZonedDateTime;
 import java.util.*;
 
 /**
@@ -68,40 +71,20 @@ public class VoDashboardWidgetPluginCustomersInShops implements VoDashboardWidge
             }
         }
 
-        final Calendar today = Calendar.getInstance();
-        today.set(Calendar.HOUR_OF_DAY, 0);
-        today.set(Calendar.MINUTE, 0);
-        today.set(Calendar.SECOND, 0);
-        today.set(Calendar.MILLISECOND, 0);
-
-        final int date = today.get(Calendar.DATE);
-        final int month = today.get(Calendar.MONTH);
-        final int year = today.get(Calendar.YEAR);
+        final ZonedDateTime today = TimeContext.getZonedDateTime();
 
         final String criteria = " join e.shops cshop where cshop.shop.shopId in (?1) and e.createdTimestamp >= ?2";
 
         final int ordersToday = this.customerService.findCountByCriteria(
-                criteria, shops, today.getTime()
+                criteria, shops, DateUtils.zdtAtStartOfDay(today).toInstant()
         );
-
-        if (today.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-            today.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            if (date < today.get(Calendar.DATE)) {
-                // monday moved us forward, so need to subtract one week
-                today.add(Calendar.DAY_OF_YEAR, -7);
-            }
-        }
 
         final int ordersWeek = this.customerService.findCountByCriteria(
-                criteria, shops, today.getTime()
+                criteria, shops, DateUtils.zdtAtStartOfWeek(today).toInstant()
         );
 
-        today.set(Calendar.DATE, 1);
-        today.set(Calendar.MONTH, month);
-        today.set(Calendar.YEAR, year);
-
         final int ordersMonth = this.customerService.findCountByCriteria(
-                criteria, shops, today.getTime()
+                criteria, shops, DateUtils.zdtAtStartOfMonth(today).toInstant()
         );
 
 

@@ -32,6 +32,7 @@ import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.TimeContext;
 import org.yes.cart.util.log.Markers;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -220,7 +221,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
 
         final List<ShopCategory> top = (List) shopDao.findQueryObjectByNamedQuery("ALL.TOPCATEGORIES.BY.SHOPID", shopId);
         final Set<Category> cats = new HashSet<Category>();
-        final Date now = now();
+        final LocalDateTime now = now();
         for (final ShopCategory shopCategory : top) {
             final Category category = categoryService.getById(shopCategory.getCategory().getCategoryId());
             if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)) {
@@ -231,8 +232,8 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
 
     }
 
-    Date now() {
-        return TimeContext.getTime();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /**

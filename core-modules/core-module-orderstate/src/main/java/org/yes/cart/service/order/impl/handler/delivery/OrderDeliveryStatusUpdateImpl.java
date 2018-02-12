@@ -18,8 +18,6 @@ package org.yes.cart.service.order.impl.handler.delivery;
 
 import org.yes.cart.domain.misc.Pair;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

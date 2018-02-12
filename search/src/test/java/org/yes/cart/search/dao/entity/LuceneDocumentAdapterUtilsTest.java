@@ -22,7 +22,7 @@ import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
 import org.yes.cart.domain.dto.impl.StoredAttributesDTOImpl;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +41,7 @@ public class LuceneDocumentAdapterUtilsTest {
         dto.setAttributes(new StoredAttributesDTOImpl());
         dto.setCode("CODE");
         dto.setAvailability(1);
-        dto.setAvailablefrom(new Date());
+        dto.setAvailablefrom(LocalDateTime.now());
         dto.setShippable(true);
         dto.setEnsemble(true);
         dto.setMaxOrderQuantity(BigDecimal.ONE);

@@ -20,8 +20,8 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayCallback;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -44,8 +44,8 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     private Map<String, String[]> parameterMap;
     private String requestDump;
 
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -178,28 +178,28 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setCreatedTimestamp(final Date createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setUpdatedTimestamp(final Date updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

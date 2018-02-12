@@ -33,8 +33,8 @@ import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -144,7 +144,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
             final Map<String, Warehouse> warehouseByCode = warehouseService.getByShopIdMapped(
                     orderDelivery.getCustomerOrder().getShop().getShopId(), false);
 
-            final Date now = now();
+            final LocalDateTime now = now();
 
             for (CustomerOrderDeliveryDet det : deliveryDetails) {
 
@@ -168,8 +168,8 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                     final BigDecimal toReserve = det.getQty();
 
                     final int availability;
-                    final Date availableFrom;
-                    final Date availableTo;
+                    final LocalDateTime availableFrom;
+                    final LocalDateTime availableTo;
                     if (product != null) {
                         availability = product.getAvailability();
                         availableFrom = product.getAvailablefrom();
@@ -204,8 +204,8 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
 
     }
 
-    Date now() {
-        return TimeContext.getTime();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /**

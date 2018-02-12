@@ -20,11 +20,15 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueBrand;
 
-import java.util.*;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
- * Date: 27 0ct 2012
+ * Instant: 27 0ct 2012
  * Time: 9:10 AM
  */
 public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Serializable {
@@ -35,8 +39,8 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
     private String name;
     private String description;
     private Collection<AttrValueBrand> attributes = new ArrayList<AttrValueBrand>(0);
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -70,19 +74,19 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
         this.attributes = attributes;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

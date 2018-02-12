@@ -18,9 +18,6 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
-import java.util.Date;
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 13-10-22

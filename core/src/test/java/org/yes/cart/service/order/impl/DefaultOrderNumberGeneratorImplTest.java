@@ -24,7 +24,11 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.util.DateUtils;
 
-import java.util.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
@@ -43,24 +47,18 @@ public class DefaultOrderNumberGeneratorImplTest {
     @Test
     public void testDatePart() throws Exception {
 
-        final Date lastCheck = DateUtils.dParseSDT("2017-01-01 00:00:00");
+        final LocalDateTime lastCheck = DateUtils.ldtParseSDT("2017-01-01 00:00:00");
 
         final DefaultOrderNumberGeneratorImpl defaultOrderNumberGenerator = new DefaultOrderNumberGeneratorImpl();
         defaultOrderNumberGenerator.setLastCheck(lastCheck);
 
-        Calendar calendar = Calendar.getInstance();
+        assertEquals("170205140434", defaultOrderNumberGenerator.datePart(DateUtils.ldtParseSDT("2017-02-05 14:04:34")));
 
-        calendar.setTime(DateUtils.dParseSDT("2017-02-05 14:04:34"));
-        assertEquals("170205140434", defaultOrderNumberGenerator.datePart(calendar));
+        assertEquals("170131044300", defaultOrderNumberGenerator.datePart(DateUtils.ldtParseSDT("2017-01-31 04:43:00")));
 
-        calendar.setTime(DateUtils.dParseSDT("2017-01-31 04:43:00"));
-        assertEquals("170131044300", defaultOrderNumberGenerator.datePart(calendar));
+        assertEquals("171231235959", defaultOrderNumberGenerator.datePart(DateUtils.ldtParseSDT("2017-12-31 23:59:59")));
 
-        calendar.setTime(DateUtils.dParseSDT("2017-12-31 23:59:59"));
-        assertEquals("171231235959", defaultOrderNumberGenerator.datePart(calendar));
-
-        calendar.setTime(DateUtils.dParseSDT("2017-01-01 00:00:00"));
-        assertEquals("170101000000", defaultOrderNumberGenerator.datePart(calendar));
+        assertEquals("170101000000", defaultOrderNumberGenerator.datePart(DateUtils.ldtParseSDT("2017-01-01 00:00:00")));
 
     }
 
@@ -69,44 +67,41 @@ public class DefaultOrderNumberGeneratorImplTest {
 
         final GenericDAO<CustomerOrder, Long> customerOrderDao = this.mockery.mock(GenericDAO.class, "customerOrderDao");
 
-        final Calendar now = Calendar.getInstance();
-        now.setTime(DateUtils.dParseSDT("2017-12-25 11:11:11"));
-        final Calendar dec01 = Calendar.getInstance();
-        dec01.setTime(DateUtils.dParseSDT("2017-12-01 00:00:00"));
-        final Calendar jan01 = Calendar.getInstance();
-        jan01.setTime(DateUtils.dParseSDT("2018-01-01 00:00:00"));
-        final Calendar feb01 = Calendar.getInstance();
-        feb01.setTime(DateUtils.dParseSDT("2018-02-01 00:00:00"));
+        final LocalDateTime[] now = new LocalDateTime[] { DateUtils.ldtParseSDT("2017-12-25 11:11:11") };
+
+        final LocalDateTime dec01 = DateUtils.ldtParseSDT("2017-12-01 00:00:00");
+        final LocalDateTime jan01 = DateUtils.ldtParseSDT("2018-01-01 00:00:00");
+        final LocalDateTime feb01 = DateUtils.ldtParseSDT("2018-02-01 00:00:00");
 
         DefaultOrderNumberGeneratorImpl defaultOrderNumberGenerator = new DefaultOrderNumberGeneratorImpl(customerOrderDao) {
             @Override
-            Calendar now() {
-                return (Calendar) now.clone();
+            LocalDateTime now() {
+                return now[0];
             }
         };
 
         this.mockery.checking(new Expectations() {{
             oneOf(customerOrderDao).findCountByCriteria(
                     " where e.orderTimestamp >= ?1 and e.orderStatus <> ?2",
-                    dec01.getTime(), CustomerOrder.ORDER_STATUS_NONE
+                    dec01, CustomerOrder.ORDER_STATUS_NONE
             ); will(returnValue(0));
             oneOf(customerOrderDao).findCountByCriteria(
                     " where e.orderTimestamp >= ?1 and e.orderStatus <> ?2",
-                    jan01.getTime(), CustomerOrder.ORDER_STATUS_NONE
+                    jan01, CustomerOrder.ORDER_STATUS_NONE
             ); will(returnValue(0));
             oneOf(customerOrderDao).findCountByCriteria(
                     " where e.orderTimestamp >= ?1 and e.orderStatus <> ?2",
-                    feb01.getTime(), CustomerOrder.ORDER_STATUS_NONE
+                    feb01, CustomerOrder.ORDER_STATUS_NONE
             ); will(returnValue(0));
         }});
 
         int prevMonth = 11;
         int prev = 0;
-        int countMth = 1;
+        int countMth = 0;
 
         for (int day = 1; day < 40; day++) {
 
-            final int month = now.get(Calendar.MONTH);
+            final int month = now[0].getMonthValue();
             if (month != prevMonth)  {
                 prevMonth = month;
                 prev = 0;
@@ -118,7 +113,7 @@ public class DefaultOrderNumberGeneratorImplTest {
                 String expected = "-" + (i + prev);
                 assertEquals(expected, orderNum.substring(orderNum.indexOf("-")));
             }
-            now.add(Calendar.DAY_OF_YEAR, 1);
+            now[0] = now[0].plusDays(1);
             prev += 10000;
         }
 
@@ -131,16 +126,14 @@ public class DefaultOrderNumberGeneratorImplTest {
     public void testGetNextOrderNumberMultithread() throws Exception {
 
 
-        final Date lastCheck = DateUtils.dParseSDT("2017-01-01 00:00:00");
-        final Calendar now = Calendar.getInstance();
-        now.setTime(DateUtils.dParseSDT("2017-01-01 11:11:11"));
+        final LocalDateTime lastCheck = DateUtils.ldtParseSDT("2017-01-01 00:00:00");
 
         //Multithread.
         int THREADGROUPSIZE = 100;
         DefaultOrderNumberGeneratorImpl defaultOrderNumberGenerator = new DefaultOrderNumberGeneratorImpl() {
             @Override
-            Calendar now() {
-                return now;
+            LocalDateTime now() {
+                return DateUtils.ldtParseSDT("2017-01-01 11:11:11");
             }
         };
         defaultOrderNumberGenerator.setLastCheck(lastCheck);

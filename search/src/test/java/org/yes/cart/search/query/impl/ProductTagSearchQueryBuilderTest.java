@@ -25,9 +25,10 @@ import org.yes.cart.search.ShopSearchSupportService;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.util.DateUtils;
 
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -112,21 +113,27 @@ public class ProductTagSearchQueryBuilderTest {
 
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
 
-        final Date earliest = DateUtils.dParseSDT("2014-11-18 00:00:00");
+        final ZonedDateTime now = DateUtils.zdtParseSDT("2014-11-23 01:50:33");
+        final Instant expected = DateUtils.iParseSDT("2014-11-18 00:00:00"); // 5days before
 
         final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
         context.checking(new Expectations() {{
-            oneOf(shopSearchSupportService).getCategoryNewArrivalDate(0L, 10L); will(returnValue(earliest));
+            oneOf(shopSearchSupportService).getCategoryNewArrivalOffsetDays(0L, 10L); will(returnValue(5));
             oneOf(navigationContext).getCategories(); will(returnValue(null));
             oneOf(navigationContext).getShopId(); will(returnValue(10L));
         }});
 
 
-        final List<Query> query = new ProductTagSearchQueryBuilder(shopSearchSupportService).createQueryChain(navigationContext, "tag", "newarrival");
+        final List<Query> query = new ProductTagSearchQueryBuilder(shopSearchSupportService) {
+            @Override
+            ZonedDateTime now() {
+                return now;
+            }
+        }.createQueryChain(navigationContext, "tag", "newarrival");
         assertNotNull(query);
         assertEquals(1, query.size());
-        assertEquals("(tag:newarrival)^20.0 createdTimestamp:[" + earliest.getTime() + " TO 9223372036854775807]", query.get(0).toString());
+        assertEquals("(tag:newarrival)^20.0 createdTimestamp:[" + expected.toEpochMilli() + " TO 9223372036854775807]", query.get(0).toString());
 
         this.context.assertIsSatisfied();
 
@@ -137,21 +144,27 @@ public class ProductTagSearchQueryBuilderTest {
 
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
 
-        final Date earliest = DateUtils.dParseSDT("2014-11-18 00:00:00");
+        final ZonedDateTime now = DateUtils.zdtParseSDT("2014-11-23 01:50:33");
+        final Instant expected = DateUtils.iParseSDT("2014-11-18 00:00:00"); // 5days before
 
         final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
         context.checking(new Expectations() {{
-            oneOf(shopSearchSupportService).getCategoryNewArrivalDate(123L, 10L); will(returnValue(earliest));
+            oneOf(shopSearchSupportService).getCategoryNewArrivalOffsetDays(123L, 10L); will(returnValue(5));
             atLeast(2).of(navigationContext).getCategories(); will(returnValue(Collections.singletonList(123L)));
             oneOf(navigationContext).getShopId(); will(returnValue(10L));
         }});
 
 
-        final List<Query> query = new ProductTagSearchQueryBuilder(shopSearchSupportService).createQueryChain(navigationContext, "tag", "newarrival");
+        final List<Query> query = new ProductTagSearchQueryBuilder(shopSearchSupportService) {
+            @Override
+            ZonedDateTime now() {
+                return now;
+            }
+        }.createQueryChain(navigationContext, "tag", "newarrival");
         assertNotNull(query);
         assertEquals(1, query.size());
-        assertEquals("(tag:newarrival)^20.0 createdTimestamp:[" + earliest.getTime() + " TO 9223372036854775807]", query.get(0).toString());
+        assertEquals("(tag:newarrival)^20.0 createdTimestamp:[" + expected.toEpochMilli() + " TO 9223372036854775807]", query.get(0).toString());
 
         this.context.assertIsSatisfied();
 
@@ -164,21 +177,26 @@ public class ProductTagSearchQueryBuilderTest {
 
         final NavigationContext<Query> navigationContext = this.context.mock(NavigationContext.class, "navigationContext");
 
-        final Date earliest123 = DateUtils.dParseSDT("2014-11-18 00:00:00");
-        final Date earliest234 = DateUtils.dParseSDT("2014-12-18 00:00:00");
+        final ZonedDateTime now = DateUtils.zdtParseSDT("2014-11-23 01:50:33");
+        final Instant expected = DateUtils.iParseSDT("2014-11-18 00:00:00"); // 5days before
 
         context.checking(new Expectations() {{
-            oneOf(shopSearchSupportService).getCategoryNewArrivalDate(123L, 10L); will(returnValue(earliest123));
-            oneOf(shopSearchSupportService).getCategoryNewArrivalDate(234L, 10L); will(returnValue(earliest234));
+            oneOf(shopSearchSupportService).getCategoryNewArrivalOffsetDays(123L, 10L); will(returnValue(5));
+            oneOf(shopSearchSupportService).getCategoryNewArrivalOffsetDays(234L, 10L); will(returnValue(3));
             atLeast(2).of(navigationContext).getCategories(); will(returnValue(Arrays.asList(123L, 234L)));
             atLeast(2).of(navigationContext).getShopId(); will(returnValue(10L));
         }});
 
 
-        final List<Query> query = new ProductTagSearchQueryBuilder(shopSearchSupportService).createQueryChain(navigationContext, "tag", "newarrival");
+        final List<Query> query = new ProductTagSearchQueryBuilder(shopSearchSupportService) {
+            @Override
+            ZonedDateTime now() {
+                return now;
+            }
+        }.createQueryChain(navigationContext, "tag", "newarrival");
         assertNotNull(query);
         assertEquals(1, query.size());
-        assertEquals("(tag:newarrival)^20.0 createdTimestamp:[" + earliest123.getTime() + " TO 9223372036854775807]", query.get(0).toString());
+        assertEquals("(tag:newarrival)^20.0 createdTimestamp:[" + expected.toEpochMilli() + " TO 9223372036854775807]", query.get(0).toString());
 
         this.context.assertIsSatisfied();
 

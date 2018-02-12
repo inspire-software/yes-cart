@@ -170,7 +170,7 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
             product.setDescription("description");
             product.setProducttype(productTypeService.findById(1L));
             product.setAvailability(Product.AVAILABILITY_ALWAYS);
-            product.setAvailableto(DateUtils.dParseSDT(pair.getSecond()));
+            product.setAvailableto(DateUtils.ldtParseSDT(pair.getSecond()));
             product.setBrand(brandService.findById(101L));
             product = productService.create(product);
             assertTrue(product.getProductId() > 0);

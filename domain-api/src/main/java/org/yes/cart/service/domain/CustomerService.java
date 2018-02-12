@@ -21,7 +21,7 @@ import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -181,6 +181,6 @@ public interface CustomerService extends GenericService<Customer> {
      *
      * @return guest accounts
      */
-    ResultsIterator<Customer> findGuestsBefore(Date date);
+    ResultsIterator<Customer> findGuestsBefore(Instant date);
 
 }

@@ -27,6 +27,8 @@ import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.domain.entity.ProductSku;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -70,16 +72,16 @@ public class ProductDTOImpl implements ProductDTO {
     private boolean pimOutdated;
 
     @DtoField(value = "pimUpdated", readOnly = true)
-    private Date pimUpdated;
+    private Instant pimUpdated;
 
     @DtoField(value = "tag")
     private String tag;
 
     @DtoField(value = "availablefrom")
-    private Date availablefrom;
+    private LocalDateTime availablefrom;
 
     @DtoField(value = "availableto")
-    private Date availableto;
+    private LocalDateTime availableto;
 
     @DtoField(value = "availability")
     private int availability;
@@ -324,42 +326,42 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
-    public Date getPimUpdated() {
+    public Instant getPimUpdated() {
         return pimUpdated;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setPimUpdated(final Date pimUpdated) {
+    public void setPimUpdated(final Instant pimUpdated) {
         this.pimUpdated = pimUpdated;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Date getAvailablefrom() {
+    public LocalDateTime getAvailablefrom() {
         return availablefrom;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setAvailablefrom(final Date availablefrom) {
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Date getAvailableto() {
+    public LocalDateTime getAvailableto() {
         return availableto;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setAvailableto(final Date availableto) {
+    public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
 

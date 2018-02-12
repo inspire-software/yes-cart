@@ -18,7 +18,7 @@ package org.yes.cart.domain.dto.impl;
 
 import org.yes.cart.domain.dto.CategoryRelationDTO;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -42,9 +42,9 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
 
     private String displayName;
 
-    private Date availablefrom;
+    private LocalDateTime availablefrom;
 
-    private Date availableto;
+    private LocalDateTime availableto;
 
     public CategoryRelationDTOImpl() {
     }
@@ -56,8 +56,8 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
                                    final int rank,
                                    final String name,
                                    final String displayName,
-                                   final Date availablefrom,
-                                   final Date availableto) {
+                                   final LocalDateTime availablefrom,
+                                   final LocalDateTime availableto) {
         this.categoryId = categoryId;
         this.parentId = parentId;
         this.linkToId = linkToId;
@@ -135,28 +135,28 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
-    public Date getAvailablefrom() {
+    public LocalDateTime getAvailablefrom() {
         return availablefrom;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setAvailablefrom(final Date availablefrom) {
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Date getAvailableto() {
+    public LocalDateTime getAvailableto() {
         return availableto;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setAvailableto(final Date availableto) {
+    public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
 

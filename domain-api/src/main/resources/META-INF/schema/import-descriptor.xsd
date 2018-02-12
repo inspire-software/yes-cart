@@ -54,7 +54,12 @@
                 1. {masterObjectId} PK of the master object
                 2. {masterObject} master instance (for use with HSQL)
                 3. {GUID} auto generated guid (for use with native SQL inserts)
-
+                4. {contextShop} Shop instance by code
+                5. {contextShopId} Shop instance by ID
+                6. {contextShopCode} Descriptor's shop code from context
+                7. {NOW} Now in java.time.LocalDateTime
+                8. {DATE} Now in java.time.LocalDate
+                9. {INSTANT} Now in java.time.Instant
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
@@ -167,7 +172,7 @@
                 <xs:annotation>
                     <xs:documentation>
                         This field must correspond to org.yes.cart.bulkcommon.model.ImpExColumn constants.
-                        I.e. STRING, BOOLEAN, LONG, INT, DECIMAL, DATETIME
+                        I.e. STRING, BOOLEAN, LONG, INT, DECIMAL, DATE, DATETIME, ZONEDTIME, INSTANT
                         This field is not restricted to allow more flexibility in custom implementations
                     </xs:documentation>
                 </xs:annotation>

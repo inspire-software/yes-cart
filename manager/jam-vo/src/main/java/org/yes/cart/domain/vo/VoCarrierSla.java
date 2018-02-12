@@ -20,7 +20,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.misc.MutablePair;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -38,7 +38,7 @@ public class VoCarrierSla extends VoCarrierSlaInfo {
     private List<String> excludeWeekDays;
 
     @DtoField(value = "excludeDates", converter = "CSVToListDatesPairs")
-    private List<MutablePair<Date, Date>> excludeDates;
+    private List<MutablePair<LocalDate, LocalDate>> excludeDates;
 
     @DtoField(value = "excludeCustomerTypes")
     private String excludeCustomerTypes;
@@ -83,11 +83,11 @@ public class VoCarrierSla extends VoCarrierSlaInfo {
         this.excludeWeekDays = excludeWeekDays;
     }
 
-    public List<MutablePair<Date, Date>> getExcludeDates() {
+    public List<MutablePair<LocalDate, LocalDate>> getExcludeDates() {
         return excludeDates;
     }
 
-    public void setExcludeDates(final List<MutablePair<Date, Date>> excludeDates) {
+    public void setExcludeDates(final List<MutablePair<LocalDate, LocalDate>> excludeDates) {
         this.excludeDates = excludeDates;
     }
 

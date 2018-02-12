@@ -32,17 +32,18 @@ import org.yes.cart.domain.entity.impl.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.VoInventory;
 import org.yes.cart.domain.vo.VoPayment;
-import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
+import org.yes.cart.util.DateUtils;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Writer;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  *
@@ -54,8 +55,8 @@ import java.util.GregorianCalendar;
  * Time: 11:55 AM
  */
 public class ReportObjectStreamFactory {
-    
-    
+
+
     private static final String ROOT_NODE = "yes-report";
 
     private static final XStream X_STREAM = getXStream();
@@ -118,16 +119,17 @@ public class ReportObjectStreamFactory {
             public void marshal(final Object source, final HierarchicalStreamWriter writer, final MarshallingContext context) {
                 if (source == null) {
                     writer.setValue("");
+                } else if (source instanceof LocalDate) {
+                    writer.setValue(((LocalDate) source).atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME));
+                } else if (source instanceof LocalDateTime) {
+                    writer.setValue(((LocalDateTime) source).format(DateTimeFormatter.ISO_DATE_TIME));
+                } else if (source instanceof ZonedDateTime) {
+                    writer.setValue(((ZonedDateTime) source).format(DateTimeFormatter.ISO_DATE_TIME));
+                } else if (source instanceof Instant) {
+                    writer.setValue(ZonedDateTime.ofInstant((Instant) source, DateUtils.zone()).format(DateTimeFormatter.ISO_DATE_TIME));
                 } else {
-                    GregorianCalendar calendar = new GregorianCalendar();
-                    calendar.setTime((Date) source);
-                    try {
-                        writer.setValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar).toXMLFormat());
-                    } catch (DatatypeConfigurationException e) {
-                        writer.setValue("");
-                    }
+                    writer.setValue(source.toString());
                 }
-
             }
 
             @Override
@@ -137,7 +139,7 @@ public class ReportObjectStreamFactory {
 
             @Override
             public boolean canConvert(final Class type) {
-                return Date.class.isAssignableFrom(type);
+                return LocalDate.class == type || LocalDateTime.class == type || ZonedDateTime.class == type || Instant.class == type;
             }
         });
 

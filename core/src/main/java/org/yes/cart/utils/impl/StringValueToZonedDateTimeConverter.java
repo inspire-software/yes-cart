@@ -19,18 +19,16 @@ package org.yes.cart.utils.impl;
 import org.springframework.core.convert.converter.Converter;
 import org.yes.cart.util.DateUtils;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * User: dpavlov
  */
-public class StringValueToDateConverter implements Converter<String, Date> {
+public class StringValueToZonedDateTimeConverter implements Converter<String, ZonedDateTime> {
 
     /** {@inheritDoc} */
-    public Date convert(final String str) {
-        return DateUtils.dParseSDT(str);
+    public ZonedDateTime convert(final String str) {
+        return DateUtils.zdtParseSDT(str);
     }
 
 }

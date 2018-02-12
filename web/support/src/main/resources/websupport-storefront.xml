@@ -22,6 +22,8 @@
 
     <!-- ################################### filter delegates begin ################################### -->
 
+    <bean id="runtimeContextFilter" class="org.yes.cart.web.filter.RuntimeContextFilter"/>
+
     <bean id="shopResolverFilter" class="org.yes.cart.web.filter.ShopResolverFilter">
         <constructor-arg index="0" ref="shopService"/>
         <constructor-arg index="1" ref="systemService"/>

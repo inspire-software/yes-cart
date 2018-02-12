@@ -187,7 +187,7 @@ public class PromotionCouponServiceImplTest extends BaseCoreDBTestCase {
         couponPromotion.setCouponTriggered(true);
         couponPromotion.setCanBeCombined(false);
         couponPromotion.setEnabled(true);
-        couponPromotion.setEnabledTo(DateUtils.dParseSDT("1999-01-01"));
+        couponPromotion.setEnabledTo(DateUtils.ldtParseSDT("1999-01-01"));
         couponPromotion.setCurrency("EUR");
         couponPromotion.setShopCode("SHOP10");
         couponPromotion.setName("TESTCOUPON4");
@@ -228,7 +228,7 @@ public class PromotionCouponServiceImplTest extends BaseCoreDBTestCase {
         couponPromotion.setCouponTriggered(true);
         couponPromotion.setCanBeCombined(false);
         couponPromotion.setEnabled(true);
-        couponPromotion.setEnabledFrom(DateUtils.dParseSDT("2099-01-01"));
+        couponPromotion.setEnabledFrom(DateUtils.ldtParseSDT("2099-01-01"));
         couponPromotion.setCurrency("EUR");
         couponPromotion.setShopCode("SHOP10");
         couponPromotion.setName("TESTCOUPON5");

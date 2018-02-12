@@ -101,7 +101,6 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
         ApplicationDirector.setCurrentThemeChain(themeService.getThemeChainByShopId(shop.getShopId(), serverDomainName));
         ShopCodeContext.setShopCode(shop.getCode());
         ShopCodeContext.setShopId(shop.getShopId());
-        TimeContext.setNow(); // TODO: Time Machine
 
         return getModifiedRequest(servletRequest, ApplicationDirector.getCurrentThemeChain());
 
@@ -146,12 +145,18 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
 
         ApplicationDirector.clear();
         ShopCodeContext.clear();
-        TimeContext.clear();
 
     }
 
     /** {@inheritDoc} */
     public void setServletContext(final ServletContext servletContext) {
         this.servletContext = servletContext;
+    }
+
+    @Override
+    public void destroy() {
+        ApplicationDirector.destroy();
+        ShopCodeContext.destroy();
+        super.destroy();
     }
 }

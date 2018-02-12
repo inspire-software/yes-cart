@@ -33,11 +33,10 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingContext;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.shoppingcart.support.tokendriven.CartUpdateProcessor;
-import org.yes.cart.shoppingcart.support.tokendriven.impl.ResilientCartRepositoryImpl;
 
 import java.io.*;
+import java.time.Instant;
 import java.util.Arrays;
-import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -87,14 +86,14 @@ public class ResilientCartRepositoryImplTest {
         final ShoppingContext cachedCartCtx = context.mock(ShoppingContext.class, "cachedCartCtx");
         final Shop shop = context.mock(Shop.class, "shop");
 
-        final Date modified = new Date();
+        final long modified = System.currentTimeMillis();
 
         context.checking(new Expectations() {{
             oneOf(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));
             oneOf(cartCache).get("IN-CACHE"); will(returnValue(wrapper));
             oneOf(wrapper).get(); will(returnValue(cachedCart));
             allowing(cachedCart).getLogonState(); will(returnValue(ShoppingCart.LOGGED_IN));
-            allowing(cachedCart).getModifiedTimestamp(); will(returnValue(modified.getTime() - 118000L));
+            allowing(cachedCart).getModifiedTimestamp(); will(returnValue(modified - 118000L));
             allowing(cachedCart).getShoppingContext(); will(returnValue(cachedCartCtx));
             allowing(cachedCartCtx).getShopId(); will(returnValue(111L));
             oneOf(shopService).getById(111L); will(returnValue(shop));
@@ -150,14 +149,14 @@ public class ResilientCartRepositoryImplTest {
         final ShoppingContext cachedCartCtx = context.mock(ShoppingContext.class, "cachedCartCtx");
         final Shop shop = context.mock(Shop.class, "shop");
 
-        final Date modified = new Date();
+        final long modified = System.currentTimeMillis();
 
         context.checking(new Expectations() {{
             oneOf(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));
             oneOf(cartCache).get("IN-CACHE"); will(returnValue(wrapper));
             oneOf(wrapper).get(); will(returnValue(cachedCart));
             allowing(cachedCart).getLogonState(); will(returnValue(ShoppingCart.LOGGED_IN));
-            allowing(cachedCart).getModifiedTimestamp(); will(returnValue(modified.getTime() - 58000L));
+            allowing(cachedCart).getModifiedTimestamp(); will(returnValue(modified - 58000L));
             allowing(cachedCart).getShoppingContext(); will(returnValue(cachedCartCtx));
             allowing(cachedCartCtx).getShopId(); will(returnValue(111L));
             oneOf(shopService).getById(111L); will(returnValue(shop));
@@ -214,14 +213,14 @@ public class ResilientCartRepositoryImplTest {
         final ShoppingContext cachedCartCtx = context.mock(ShoppingContext.class, "cachedCartCtx");
         final Shop shop = context.mock(Shop.class, "shop");
 
-        final Date modified = new Date();
+        final long modified = System.currentTimeMillis();
 
         context.checking(new Expectations() {{
             oneOf(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));
             oneOf(cartCache).get("IN-CACHE"); will(returnValue(wrapper));
             oneOf(wrapper).get(); will(returnValue(cachedCart));
             allowing(cachedCart).getLogonState(); will(returnValue(ShoppingCart.LOGGED_IN));
-            allowing(cachedCart).getModifiedTimestamp(); will(returnValue(modified.getTime() - 121000L));
+            allowing(cachedCart).getModifiedTimestamp(); will(returnValue(modified - 121000L));
             allowing(cachedCart).getShoppingContext(); will(returnValue(cachedCartCtx));
             allowing(cachedCartCtx).getShopId(); will(returnValue(111L));
             oneOf(shopService).getById(111L); will(returnValue(shop));
@@ -276,11 +275,11 @@ public class ResilientCartRepositoryImplTest {
         final Cache cartCache = context.mock(Cache.class, "cartCache");
         final Cache.ValueWrapper wrapper = context.mock(Cache.ValueWrapper.class, "wrapper");
 
-        final Date modified = new Date();
+        final long modified = System.currentTimeMillis();
         final ShoppingCartImpl cachedCart = new ShoppingCartImpl() {
             @Override
             public long getModifiedTimestamp() {
-                return modified.getTime() - 121000L;
+                return modified - 121000L;
             }
 
             @Override
@@ -327,11 +326,11 @@ public class ResilientCartRepositoryImplTest {
         final Cache cartCache = context.mock(Cache.class, "cartCache");
         final Cache.ValueWrapper wrapper = context.mock(Cache.ValueWrapper.class, "wrapper");
 
-        final Date modified = new Date();
+        final long modified = System.currentTimeMillis();
         final ShoppingCartImpl cachedCart = new ShoppingCartImpl() {
             @Override
             public long getModifiedTimestamp() {
-                return modified.getTime() - 121000L;
+                return modified - 121000L;
             }
 
             @Override
@@ -377,14 +376,14 @@ public class ResilientCartRepositoryImplTest {
         final ShoppingContext cachedCartCtx = context.mock(ShoppingContext.class, "cachedCartCtx");
         final Shop shop = context.mock(Shop.class, "shop");
 
-        final Date modified = new Date();
+        final long modified = System.currentTimeMillis();
 
         context.checking(new Expectations() {{
             oneOf(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));
             oneOf(cartCache).get("IN-CACHE"); will(returnValue(wrapper));
             oneOf(wrapper).get(); will(returnValue(cachedCart));
             allowing(cachedCart).getLogonState(); will(returnValue(ShoppingCart.LOGGED_IN));
-            allowing(cachedCart).getModifiedTimestamp(); will(returnValue(modified.getTime() - 61000L));
+            allowing(cachedCart).getModifiedTimestamp(); will(returnValue(modified - 61000L));
             allowing(cachedCart).getShoppingContext(); will(returnValue(cachedCartCtx));
             allowing(cachedCartCtx).getShopId(); will(returnValue(111L));
             oneOf(shopService).getById(111L); will(returnValue(shop));
@@ -475,7 +474,7 @@ public class ResilientCartRepositoryImplTest {
         final byte[] bytes = serializeCart(cart);
         final ShoppingCart restored = deserializeCart(bytes);
 
-        final Date stillActive = new Date(System.currentTimeMillis() - 118000L);
+        final Instant stillActive = Instant.ofEpochMilli(System.currentTimeMillis() - 118000L);
 
         context.checking(new Expectations() {{
             oneOf(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));
@@ -522,7 +521,7 @@ public class ResilientCartRepositoryImplTest {
         final byte[] bytes = serializeCart(cart);
         final ShoppingCart restored = deserializeCart(bytes);
 
-        final Date stillActive = new Date(System.currentTimeMillis() - 118000L);
+        final Instant stillActive = Instant.ofEpochMilli(System.currentTimeMillis() - 118000L);
 
         context.checking(new Expectations() {{
             oneOf(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));
@@ -567,7 +566,7 @@ public class ResilientCartRepositoryImplTest {
         final byte[] bytes = serializeCart(cart);
         final ShoppingCart restored = deserializeCart(bytes);
 
-        final Date stillActive = new Date(System.currentTimeMillis() - 58000L);
+        final Instant stillActive = Instant.ofEpochMilli(System.currentTimeMillis() - 58000L);
 
         context.checking(new Expectations() {{
             oneOf(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));
@@ -613,7 +612,7 @@ public class ResilientCartRepositoryImplTest {
         final byte[] bytes = serializeCart(cart);
         final ShoppingCart restored = deserializeCart(bytes);
 
-        final Date stillActive = new Date(System.currentTimeMillis() - 58000L);
+        final Instant stillActive = Instant.ofEpochMilli(System.currentTimeMillis() - 58000L);
 
         context.checking(new Expectations() {{
             oneOf(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));
@@ -658,7 +657,7 @@ public class ResilientCartRepositoryImplTest {
         final byte[] bytes = serializeCart(cart);
         final ShoppingCart restored = deserializeCart(bytes);
 
-        final Date stillActive = new Date(System.currentTimeMillis() - 121000L);
+        final Instant stillActive = Instant.ofEpochMilli(System.currentTimeMillis() - 121000L);
 
         context.checking(new Expectations() {{
             oneOf(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));
@@ -711,7 +710,7 @@ public class ResilientCartRepositoryImplTest {
         final byte[] bytes = serializeCart(cart);
         final ShoppingCart restored = deserializeCart(bytes);
 
-        final Date stillActive = new Date(System.currentTimeMillis() - 121000L);
+        final Instant stillActive = Instant.ofEpochMilli(System.currentTimeMillis() - 121000L);
 
         context.checking(new Expectations() {{
             oneOf(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));
@@ -762,7 +761,7 @@ public class ResilientCartRepositoryImplTest {
         final byte[] bytes = serializeCart(cart);
         final ShoppingCart restored = deserializeCart(bytes);
 
-        final Date stillActive = new Date(System.currentTimeMillis() - 61000L);
+        final Instant stillActive = Instant.ofEpochMilli(System.currentTimeMillis() - 61000L);
 
         context.checking(new Expectations() {{
             oneOf(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));
@@ -816,7 +815,7 @@ public class ResilientCartRepositoryImplTest {
         final byte[] bytes = serializeCart(cart);
         final ShoppingCart restored = deserializeCart(bytes);
 
-        final Date stillActive = new Date(System.currentTimeMillis() - 61000L);
+        final Instant stillActive = Instant.ofEpochMilli(System.currentTimeMillis() - 61000L);
 
         context.checking(new Expectations() {{
             oneOf(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));

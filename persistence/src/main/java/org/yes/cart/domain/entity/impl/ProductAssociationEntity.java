@@ -20,7 +20,7 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.Association;
 import org.yes.cart.domain.entity.Product;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -36,8 +36,8 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
     private Association association;
     private Product product;
     private String associatedSku;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -78,19 +78,19 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
         this.associatedSku = associatedSku;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

@@ -33,8 +33,10 @@ import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -485,14 +487,14 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
      * @param availableFrom available from date
      */
     protected void changeAvailabilityDatesAndAssert(final String skuCode,
-                                                    final Date availableFrom,
+                                                    final LocalDateTime availableFrom,
                                                     final boolean expectedAvailable) {
 
         final Product product = productService.getProductBySkuCode(skuCode);
         assertNotNull("No product exists: " + skuCode, product);
         product.setAvailablefrom(availableFrom);
         productService.update(product);
-        assertEquals(expectedAvailable, DomainApiUtils.isObjectAvailableNow(true, product.getAvailablefrom(), product.getAvailableto(), new Date()));
+        assertEquals(expectedAvailable, DomainApiUtils.isObjectAvailableNow(true, product.getAvailablefrom(), product.getAvailableto(), TimeContext.getLocalDateTime()));
     }
 
     // Common asserts below this line ---------------------------------------------------------

@@ -37,6 +37,7 @@ import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.TimeContext;
 import org.yes.cart.util.log.Markers;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils.*;
@@ -59,7 +60,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
     @Override
     public Pair<Long, Document[]> toDocument(final ProductSku entity) {
 
-        final long now = now();
+        final LocalDateTime now = now();
 
         if (isProductInCategoryAndAvailableNow(entity, now)) {
 
@@ -111,7 +112,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                 addStoredField(document, "rank_boost", boost);
 
                 // Created timestamp is used to determine ranges
-                addDateField(document, PRODUCT_CREATED_FIELD, entity.getCreatedTimestamp(), false);
+                addInstantField(document, PRODUCT_CREATED_FIELD, entity.getCreatedTimestamp(), false);
                 addSortField(document, PRODUCT_CREATED_SORT_FIELD, entity.getCreatedTimestamp(), false);
 
                 // Add attributes
@@ -136,8 +137,8 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
 
     }
 
-    long now() {
-        return TimeContext.getMillis();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
 
@@ -318,7 +319,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
      *
      * @return true if entity need to be in lucene index.
      */
-    public boolean isProductInCategoryAndAvailableNow(final ProductSku entity, final long now) {
+    public boolean isProductInCategoryAndAvailableNow(final ProductSku entity, final LocalDateTime now) {
         if (entity != null && entity.getProduct() != null) {
             if (entity.getProduct().getProductCategory().isEmpty()) {
                 return false; // if it is not assigned to category, no way to determine the shop

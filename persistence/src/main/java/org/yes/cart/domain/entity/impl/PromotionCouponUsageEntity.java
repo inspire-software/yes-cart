@@ -20,7 +20,7 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.domain.entity.PromotionCouponUsage;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * User: denispavlov
@@ -36,8 +36,8 @@ public class PromotionCouponUsageEntity implements PromotionCouponUsage, java.io
     private String customerEmail;
     private CustomerOrder customerOrder;
 
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
 
@@ -85,19 +85,19 @@ public class PromotionCouponUsageEntity implements PromotionCouponUsage, java.io
         this.customerOrder = customerOrder;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
-    public void setCreatedTimestamp(final Date createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(final Date updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

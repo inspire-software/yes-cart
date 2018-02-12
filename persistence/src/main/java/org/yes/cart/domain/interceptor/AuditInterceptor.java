@@ -31,7 +31,11 @@ import org.yes.cart.domain.entity.Guidable;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.io.Serializable;
-import java.util.*;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -86,7 +90,7 @@ public class AuditInterceptor extends EmptyInterceptor {
         if (entity instanceof Auditable) {
             final Auditable auditable = ((Auditable) entity);
 
-            final Date date = new Date();
+            final Instant date = Instant.now();
             final String userName = getUserName();
 
             setValue(state, propertyNames, "createdBy", userName);
@@ -139,7 +143,7 @@ public class AuditInterceptor extends EmptyInterceptor {
         if (entity instanceof Auditable) {
             final Auditable auditable = (Auditable) entity;
 
-            final Date date = new Date();
+            final Instant date = Instant.now();
             final String userName = getUserName();
 
 

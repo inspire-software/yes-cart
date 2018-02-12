@@ -21,7 +21,12 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -60,7 +65,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     private String eligibleForExport;
     private boolean blockExport;
-    private Date lastExportDate;
+    private Instant lastExportDate;
     private String lastExportStatus;
     private String lastExportOrderStatus;
 
@@ -69,10 +74,10 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     private String b2bChargeId;
     private boolean b2bRequireApprove;
     private String b2bApprovedBy;
-    private Date b2bApprovedDate;
+    private LocalDateTime b2bApprovedDate;
     private String b2bRemarks;
 
-    private Date requestedDeliveryDate;
+    private LocalDateTime requestedDeliveryDate;
 
     private Customer customer;
     private Shop shop;
@@ -84,10 +89,10 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     private Address billingAddressDetails;
     private Address shippingAddressDetails;
     private boolean multipleShipmentOption;
-    private Date orderTimestamp;
+    private LocalDateTime orderTimestamp;
     private String orderIp;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -210,11 +215,11 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.blockExport = blockExport;
     }
 
-    public Date getLastExportDate() {
+    public Instant getLastExportDate() {
         return lastExportDate;
     }
 
-    public void setLastExportDate(final Date lastExportDate) {
+    public void setLastExportDate(final Instant lastExportDate) {
         this.lastExportDate = lastExportDate;
     }
 
@@ -274,11 +279,11 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.b2bApprovedBy = b2bApprovedBy;
     }
 
-    public Date getB2bApprovedDate() {
+    public LocalDateTime getB2bApprovedDate() {
         return b2bApprovedDate;
     }
 
-    public void setB2bApprovedDate(final Date b2bApprovedDate) {
+    public void setB2bApprovedDate(final LocalDateTime b2bApprovedDate) {
         this.b2bApprovedDate = b2bApprovedDate;
     }
 
@@ -290,11 +295,11 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.b2bRemarks = b2bRemarks;
     }
 
-    public Date getRequestedDeliveryDate() {
+    public LocalDateTime getRequestedDeliveryDate() {
         return requestedDeliveryDate;
     }
 
-    public void setRequestedDeliveryDate(final Date requestedDeliveryDate) {
+    public void setRequestedDeliveryDate(final LocalDateTime requestedDeliveryDate) {
         this.requestedDeliveryDate = requestedDeliveryDate;
     }
 
@@ -378,11 +383,11 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.multipleShipmentOption = multipleShipmentOption;
     }
 
-    public Date getOrderTimestamp() {
+    public LocalDateTime getOrderTimestamp() {
         return this.orderTimestamp;
     }
 
-    public void setOrderTimestamp(Date orderTimestamp) {
+    public void setOrderTimestamp(LocalDateTime orderTimestamp) {
         this.orderTimestamp = orderTimestamp;
     }
 
@@ -501,19 +506,19 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.storedAttributes = new CustomerOrderDetAttributesImpl(allValues);
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

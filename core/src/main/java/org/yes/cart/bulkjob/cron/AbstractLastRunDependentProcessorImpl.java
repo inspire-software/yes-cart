@@ -55,7 +55,7 @@ public abstract class AbstractLastRunDependentProcessorImpl implements Runnable 
         final String lastRunPreferenceAttributeName = getLastRunPreferenceAttributeName();
 
         if (!lastRunInitialised) {
-            final String pref = systemService.createOrGetAttributeValue(lastRunPreferenceAttributeName, "Date");
+            final String pref = systemService.createOrGetAttributeValue(lastRunPreferenceAttributeName, "String");
             lastRun = DateUtils.iParseSDT(pref);
             lastRunInitialised = true;
         }

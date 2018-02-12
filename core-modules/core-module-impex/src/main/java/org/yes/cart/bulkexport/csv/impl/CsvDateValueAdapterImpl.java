@@ -21,11 +21,9 @@ import org.yes.cart.bulkcommon.model.ExtensibleValueAdapter;
 import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
-import org.yes.cart.util.DateUtils;
 
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.time.temporal.TemporalAccessor;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -54,7 +52,7 @@ public class CsvDateValueAdapterImpl implements ValueAdapter {
                 FORMATTERS.put(pattern, dtf);
             }
 
-            return dtf.format(ZonedDateTime.ofInstant(((Date) rawValue).toInstant(), DateUtils.zone()));
+            return dtf.format((TemporalAccessor) rawValue);
         }
 
         return rawValue;

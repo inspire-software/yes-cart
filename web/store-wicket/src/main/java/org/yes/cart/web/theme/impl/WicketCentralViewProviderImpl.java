@@ -33,7 +33,7 @@ import org.yes.cart.web.theme.WicketCentralViewProvider;
 
 import java.lang.reflect.Constructor;
 import java.text.MessageFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 
@@ -166,7 +166,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
             final Set<Long> catIds = shopService.getShopCategoriesIds(ApplicationDirector.getShoppingCart().getShoppingContext().getCustomerShopId());
             if (catIds.contains(categoryId)) {
                 Category category = categoryService.getById(categoryId);
-                final Date now = now();
+                final LocalDateTime now = now();
 
                 while (category != null
                         && DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)
@@ -185,8 +185,8 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
         return false;
     }
 
-    private Date now() {
-        return TimeContext.getTime();
+    private LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /**
@@ -209,7 +209,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
             final Set<Long> catIds = shopService.getShopContentIds(ApplicationDirector.getShoppingCart().getShoppingContext().getShopId());
             if (catIds.contains(contentId)) {
                 Category content = categoryService.getById(contentId);
-                final Date now = now();
+                final LocalDateTime now = now();
 
                 if (DomainApiUtils.isObjectAvailableNow(true, content.getAvailablefrom(), content.getAvailableto(), now)) {
 

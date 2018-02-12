@@ -26,7 +26,12 @@ import org.yes.cart.domain.vo.matcher.VoProductCategoryMatcher;
 import org.yes.cart.domain.vo.matcher.VoProductSkuMatcher;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -65,16 +70,16 @@ public class VoProduct {
     private boolean pimOutdated;
 
     @DtoField(value = "pimUpdated")
-    private Date pimUpdated;
+    private Instant pimUpdated;
 
     @DtoField(value = "tag")
     private String tag;
 
     @DtoField(value = "availablefrom")
-    private Date availablefrom;
+    private LocalDateTime availablefrom;
 
     @DtoField(value = "availableto")
-    private Date availableto;
+    private LocalDateTime availableto;
 
     @DtoField(value = "availability")
     private int availability;
@@ -239,11 +244,11 @@ public class VoProduct {
         this.pimOutdated = pimOutdated;
     }
 
-    public Date getPimUpdated() {
+    public Instant getPimUpdated() {
         return pimUpdated;
     }
 
-    public void setPimUpdated(final Date pimUpdated) {
+    public void setPimUpdated(final Instant pimUpdated) {
         this.pimUpdated = pimUpdated;
     }
 
@@ -255,19 +260,19 @@ public class VoProduct {
         this.tag = tag;
     }
 
-    public Date getAvailablefrom() {
+    public LocalDateTime getAvailablefrom() {
         return availablefrom;
     }
 
-    public void setAvailablefrom(final Date availablefrom) {
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
-    public Date getAvailableto() {
+    public LocalDateTime getAvailableto() {
         return availableto;
     }
 
-    public void setAvailableto(final Date availableto) {
+    public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
 

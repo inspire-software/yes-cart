@@ -32,8 +32,8 @@ import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.util.log.Markers;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -131,10 +131,10 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
 
                 for (final CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
 
-                    Date estimatedMin = null;
-                    Date estimatedMax = null;
-                    Date guaranteed = null;
-                    Date confirmed = null;
+                    LocalDateTime estimatedMin = null;
+                    LocalDateTime estimatedMax = null;
+                    LocalDateTime guaranteed = null;
+                    LocalDateTime confirmed = null;
                     boolean notGuaranteed = false;
 
                     boolean atLeastOneItemIsNotUpdated = false;
@@ -337,14 +337,14 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
         }
     }
 
-    Date chooseLatestDate(final Date current, final Date newCandidate) {
+    LocalDateTime chooseLatestDate(final LocalDateTime current, final LocalDateTime newCandidate) {
         if (current == null) {
             return newCandidate;
         }
         if (newCandidate == null) {
             return current;
         }
-        if (newCandidate.after(current)) {
+        if (newCandidate.isAfter(current)) {
             return newCandidate;
         }
         return current;

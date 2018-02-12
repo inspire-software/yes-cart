@@ -23,6 +23,8 @@ import org.yes.cart.domain.entity.xml.CategoryPriceNavigationXStreamProvider;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.stream.xml.XStreamProvider;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -43,16 +45,16 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     private String displayName;
     private String description;
     private String uitemplate;
-    private Date availablefrom;
-    private Date availableto;
+    private LocalDateTime availablefrom;
+    private LocalDateTime availableto;
     private Collection<AttrValueCategory> attributes = new ArrayList<AttrValueCategory>(0);
     private SeoEntity seoInternal;
     private Set<ProductCategory> productCategory = new HashSet<ProductCategory>(0);
     private Boolean navigationByAttributes;
     private Boolean navigationByPrice;
     private String navigationByPriceTiers;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -126,19 +128,19 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.uitemplate = uitemplate;
     }
 
-    public Date getAvailablefrom() {
+    public LocalDateTime getAvailablefrom() {
         return this.availablefrom;
     }
 
-    public void setAvailablefrom(Date availablefrom) {
+    public void setAvailablefrom(LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
-    public Date getAvailableto() {
+    public LocalDateTime getAvailableto() {
         return this.availableto;
     }
 
-    public void setAvailableto(Date availableto) {
+    public void setAvailableto(LocalDateTime availableto) {
         this.availableto = availableto;
     }
 
@@ -190,19 +192,19 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.navigationByPriceTiers = navigationByPriceTiers;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

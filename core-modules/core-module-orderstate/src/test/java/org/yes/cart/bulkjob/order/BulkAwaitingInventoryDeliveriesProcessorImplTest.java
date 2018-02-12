@@ -26,7 +26,7 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -63,15 +63,14 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
     @Test
     public void testProcessAwaitingOrders() throws Exception {
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND, 5);
+        LocalDateTime calendar = LocalDateTime.now().plusSeconds(5);
 
         Product product = productService.getProductById(15350L);
-        product.setAvailablefrom(calendar.getTime());
+        product.setAvailablefrom(calendar);
         productService.update(product);
 
         product = productService.getProductById(15360L);
-        product.setAvailablefrom(calendar.getTime());
+        product.setAvailablefrom(calendar);
         productService.update(product);
 
         final Customer customer = createCustomer();

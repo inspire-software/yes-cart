@@ -58,5 +58,11 @@ public final class ShoppingCartContext {
         SHOPPING_CART_THREAD_LOCAL.set(null);
     }
 
+    /**
+     * Explicitly remove thread locals to prevent memory leaks.
+     */
+    public static  void destroy() {
+        SHOPPING_CART_THREAD_LOCAL.remove();
+    }
 
 }

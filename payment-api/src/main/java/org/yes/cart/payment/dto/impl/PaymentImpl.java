@@ -22,8 +22,9 @@ import org.yes.cart.payment.dto.PaymentAddress;
 import org.yes.cart.payment.dto.PaymentLine;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,10 +42,10 @@ public class PaymentImpl implements Payment {
     private String cardExpireMonth;
     private String cardIssueNumber;
     private String cardCvv2Code;
-    private Date cardStartDate;
+    private LocalDate cardStartDate;
 
     // when order was created
-    private Date orderDate;
+    private LocalDateTime orderDate;
     private BigDecimal paymentAmount;
     private BigDecimal taxAmount;
     private String orderCurrency;
@@ -274,28 +275,28 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
-    public Date getCardStartDate() {
+    public LocalDate getCardStartDate() {
         return cardStartDate;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setCardStartDate(final Date cardStartDate) {
+    public void setCardStartDate(final LocalDate cardStartDate) {
         this.cardStartDate = cardStartDate;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Date getOrderDate() {
+    public LocalDateTime getOrderDate() {
         return orderDate;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setOrderDate(final Date orderDate) {
+    public void setOrderDate(final LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 

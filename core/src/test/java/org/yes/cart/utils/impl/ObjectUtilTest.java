@@ -24,7 +24,11 @@ import org.junit.Test;
 import org.yes.cart.domain.entity.Auditable;
 import org.yes.cart.domain.misc.Pair;
 
-import java.util.*;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -146,8 +150,8 @@ public class ObjectUtilTest {
 
             private long addressId = 123L;
             private long version = 3;
-            private Date createdTimestamp = null;
-            private Date updatedTimestamp = null;
+            private Instant createdTimestamp = null;
+            private Instant updatedTimestamp = null;
             private String createdBy = "admin1";
             private String updatedBy = "admin2";
             private String guid = "GUID-123";
@@ -160,11 +164,11 @@ public class ObjectUtilTest {
                 return version;
             }
 
-            public Date getCreatedTimestamp() {
+            public Instant getCreatedTimestamp() {
                 return createdTimestamp;
             }
 
-            public Date getUpdatedTimestamp() {
+            public Instant getUpdatedTimestamp() {
                 return updatedTimestamp;
             }
 
@@ -180,11 +184,11 @@ public class ObjectUtilTest {
                 return guid;
             }
 
-            public void setCreatedTimestamp(final Date createdTimestamp) {
+            public void setCreatedTimestamp(final Instant createdTimestamp) {
                 this.createdTimestamp = createdTimestamp;
             }
 
-            public void setUpdatedTimestamp(final Date updatedTimestamp) {
+            public void setUpdatedTimestamp(final Instant updatedTimestamp) {
                 this.updatedTimestamp = updatedTimestamp;
             }
 

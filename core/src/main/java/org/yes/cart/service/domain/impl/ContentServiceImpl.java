@@ -31,6 +31,8 @@ import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -116,13 +118,14 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     }
 
     private Category createContentRootForShop(final String shopcode) {
+        final LocalDateTime now = now();
         final Category root = categoryDao.getEntityFactory().getByIface(Category.class);
         root.setGuid(shopcode);
         root.setName(shopcode);
         root.setParentId(0L);
         root.setUitemplate("content");
-        root.setAvailablefrom(new Date(0L));
-        root.setAvailableto(new Date(7226600400000L));
+        root.setAvailablefrom(now.truncatedTo(ChronoUnit.DAYS));
+        root.setAvailableto(now.plusYears(100).truncatedTo(ChronoUnit.DAYS));
         root.setNavigationByPrice(false);
         root.setNavigationByPriceTiers("");
         root.setNavigationByAttributes(false);
@@ -163,8 +166,8 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         return "";
     }
 
-    Date now() {
-        return TimeContext.getTime();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /**
@@ -290,7 +293,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         ));
         if (withAvailability) {
 
-            final Date now = now();
+            final LocalDateTime now = now();
             final Iterator<Category> it = cats.iterator();
             while (it.hasNext()) {
 

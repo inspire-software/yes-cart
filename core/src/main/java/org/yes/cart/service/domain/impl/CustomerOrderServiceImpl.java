@@ -31,6 +31,7 @@ import org.yes.cart.shoppingcart.CartContentsValidator;
 import org.yes.cart.shoppingcart.CartValidityModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -162,8 +163,8 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             final String lastName,
             final String email,
             final String orderStatus,
-            final Date fromDate,
-            final Date toDate,
+            final LocalDateTime fromDate,
+            final LocalDateTime toDate,
             final String orderNum
             ) {
         return getGenericDao().findByNamedQuery("ORDERS.BY.CRITERIA",
@@ -190,7 +191,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
-    public List<CustomerOrder> findCustomerOrders(final long customerId, final Date since) {
+    public List<CustomerOrder> findCustomerOrders(final long customerId, final LocalDateTime since) {
         return findCustomerOrders(customerDao.findById(customerId), since);
     }
 
@@ -198,7 +199,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
-    public List<CustomerOrder> findCustomerOrders(final Customer customer, final Date since) {
+    public List<CustomerOrder> findCustomerOrders(final Customer customer, final LocalDateTime since) {
         if (since == null) {
             return getGenericDao().findByCriteria(
                     " where e.customer = ?1", customer

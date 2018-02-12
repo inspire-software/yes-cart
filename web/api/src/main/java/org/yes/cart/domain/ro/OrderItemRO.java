@@ -18,12 +18,14 @@ package org.yes.cart.domain.ro;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.ro.xml.impl.LocalDateTimeAdapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -42,11 +44,11 @@ public class OrderItemRO extends CartItemRO implements Serializable {
     @DtoField(readOnly = true)
     private String deliveryRemarks;
     @DtoField(readOnly = true)
-    private Date deliveryEstimatedMin;
+    private LocalDateTime deliveryEstimatedMin;
     @DtoField(readOnly = true)
-    private Date deliveryEstimatedMax;
+    private LocalDateTime deliveryEstimatedMax;
     @DtoField(readOnly = true)
-    private Date deliveryGuaranteed;
+    private LocalDateTime deliveryGuaranteed;
     @DtoField(readOnly = true)
     private String b2bRemarks;
 
@@ -69,30 +71,33 @@ public class OrderItemRO extends CartItemRO implements Serializable {
         this.deliveryRemarks = deliveryRemarks;
     }
 
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     @XmlAttribute(name = "item-delivery-estimated-min")
-    public Date getDeliveryEstimatedMin() {
+    public LocalDateTime getDeliveryEstimatedMin() {
         return deliveryEstimatedMin;
     }
 
-    public void setDeliveryEstimatedMin(final Date deliveryEstimatedMin) {
+    public void setDeliveryEstimatedMin(final LocalDateTime deliveryEstimatedMin) {
         this.deliveryEstimatedMin = deliveryEstimatedMin;
     }
 
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     @XmlAttribute(name = "item-delivery-estimated-max")
-    public Date getDeliveryEstimatedMax() {
+    public LocalDateTime getDeliveryEstimatedMax() {
         return deliveryEstimatedMax;
     }
 
-    public void setDeliveryEstimatedMax(final Date deliveryEstimatedMax) {
+    public void setDeliveryEstimatedMax(final LocalDateTime deliveryEstimatedMax) {
         this.deliveryEstimatedMax = deliveryEstimatedMax;
     }
 
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     @XmlAttribute(name = "item-delivery-guaranteed")
-    public Date getDeliveryGuaranteed() {
+    public LocalDateTime getDeliveryGuaranteed() {
         return deliveryGuaranteed;
     }
 
-    public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
+    public void setDeliveryGuaranteed(final LocalDateTime deliveryGuaranteed) {
         this.deliveryGuaranteed = deliveryGuaranteed;
     }
 

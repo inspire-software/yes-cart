@@ -966,7 +966,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals("Робот ASIMO", model.getValue("ru"));
             assertEquals(1, rs.getInt(8));
             assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
-            assertEquals("2015-06-12", DateUtils.formatSD(rs.getDate(10)));
+            assertEquals("2015-06-12", DateUtils.formatSD(rs.getDate(10).toLocalDate()));
             rs.close();
 
 
@@ -1018,7 +1018,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals("Робот ASIMO", model.getValue("ru"));
             assertEquals(1, rs.getInt(8));
             assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
-            assertEquals("2015-06-12", DateUtils.formatSD(rs.getDate(10)));
+            assertEquals("2015-06-12", DateUtils.formatSD(rs.getDate(10).toLocalDate()));
             version = rs.getLong(11);
             rs.close();
 
@@ -1052,7 +1052,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals("Другой Робот ASIMO", model.getValue("ru"));
             assertEquals(1, rs.getInt(8));
             assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
-            assertEquals("2015-06-12", DateUtils.formatSD(rs.getDate(10)));
+            assertEquals("2015-06-12", DateUtils.formatSD(rs.getDate(10).toLocalDate()));
             assertTrue(version < rs.getLong(11)); // version is updated
             rs.close();
 

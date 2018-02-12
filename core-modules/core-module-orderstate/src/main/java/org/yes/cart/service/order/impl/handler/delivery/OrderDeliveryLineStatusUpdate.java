@@ -19,7 +19,8 @@ package org.yes.cart.service.order.impl.handler.delivery;
 import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -55,28 +56,28 @@ public interface OrderDeliveryLineStatusUpdate {
      *
      * @return estimated
      */
-    Date getDeliveryEstimatedMin();
+    LocalDateTime getDeliveryEstimatedMin();
 
     /**
      * Estimated delivery time max
      *
      * @return estimated
      */
-    Date getDeliveryEstimatedMax();
+    LocalDateTime getDeliveryEstimatedMax();
 
     /**
      * Guaranteed delivery time
      *
      * @return guaranteed
      */
-    Date getDeliveryGuaranteed();
+    LocalDateTime getDeliveryGuaranteed();
 
     /**
      * Actual delivery time.
      *
      * @return guaranteed date
      */
-    Date getDeliveryConfirmed();
+    LocalDateTime getDeliveryConfirmed();
 
     /**
      * Get ordered quantity.
@@ -111,7 +112,7 @@ public interface OrderDeliveryLineStatusUpdate {
      *
      * @return supplier invoice date
      */
-    Date getSupplierInvoiceDate();
+    LocalDate getSupplierInvoiceDate();
 
     /**
      * Additional data per line.

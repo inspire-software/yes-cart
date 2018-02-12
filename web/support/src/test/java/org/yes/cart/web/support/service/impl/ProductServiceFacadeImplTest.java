@@ -27,12 +27,13 @@ import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.ShoppingCartCalculator;
 import org.yes.cart.shoppingcart.*;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -4150,8 +4151,8 @@ public class ProductServiceFacadeImplTest {
 
         final Promotion code1 = context.mock(Promotion.class, "code1");
 
-        final Date start = new Date();
-        final Date end = new Date();
+        final LocalDateTime start = TimeContext.getLocalDateTime();
+        final LocalDateTime end = TimeContext.getLocalDateTime();
 
         context.checking(new Expectations() {{
             allowing(promotionService).findByParameters("CODE1", null, null, null, null, null, Boolean.TRUE); will(returnValue(Arrays.asList(code1)));
@@ -4196,8 +4197,8 @@ public class ProductServiceFacadeImplTest {
 
         final Promotion code1 = context.mock(Promotion.class, "code1");
 
-        final Date start = new Date();
-        final Date end = new Date();
+        final LocalDateTime start = TimeContext.getLocalDateTime();
+        final LocalDateTime end = TimeContext.getLocalDateTime();
 
         context.checking(new Expectations() {{
             allowing(promotionService).findByParameters("CODE1", null, null, null, null, null, Boolean.TRUE); will(returnValue(Arrays.asList(code1)));
@@ -4244,8 +4245,8 @@ public class ProductServiceFacadeImplTest {
         final Promotion code1 = context.mock(Promotion.class, "code1");
         final Promotion code2 = context.mock(Promotion.class, "code2");
 
-        final Date start = new Date();
-        final Date end = new Date();
+        final LocalDateTime start = TimeContext.getLocalDateTime();
+        final LocalDateTime end = TimeContext.getLocalDateTime();
 
         context.checking(new Expectations() {{
             allowing(promotionService).findByParameters("CODE0", null, null, null, null, null, Boolean.TRUE);

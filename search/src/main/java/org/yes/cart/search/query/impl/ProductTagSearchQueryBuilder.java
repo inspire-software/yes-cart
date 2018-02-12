@@ -23,9 +23,13 @@ import org.springframework.util.CollectionUtils;
 import org.yes.cart.search.ShopSearchSupportService;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.util.TimeContext;
 
-import java.util.*;
+import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -93,13 +97,13 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
 
         if (TAG_NEWARRIVAL.equals(tag)) {
 
-            final Long fromDate = getDateOnly(earliestNewArrivalDate(navigationContext));
+            final ZonedDateTime fromDate = earliestNewArrivalDate(navigationContext);
 
             final BooleanQuery.Builder aggregateQuery = new BooleanQuery.Builder();
 
             // newarrival tag is top priority 20 points
             aggregateQuery.add(createTermQuery(PRODUCT_TAG_FIELD, TAG_NEWARRIVAL, 20f), BooleanClause.Occur.SHOULD);
-            aggregateQuery.add(createRangeQuery(PRODUCT_CREATED_FIELD, fromDate, null), BooleanClause.Occur.SHOULD);
+            aggregateQuery.add(createRangeQuery(PRODUCT_CREATED_FIELD, fromDate.toInstant().toEpochMilli(), null), BooleanClause.Occur.SHOULD);
 
             return aggregateQuery.build();
 
@@ -115,38 +119,24 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
     }
 
 
-    protected Long getDateOnly(final Date value) {
-        final Calendar calendar = TimeContext.getCalendar();
-        calendar.setTime(value);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
+    private ZonedDateTime earliestNewArrivalDate(final NavigationContext<Query> navigationContext) {
 
-        return calendar.getTimeInMillis();
-    }
-
-
-    private Date earliestNewArrivalDate(final NavigationContext<Query> navigationContext) {
-
-        Date beforeDays = now();
+        int daysOffset = 1;
         if (CollectionUtils.isEmpty(navigationContext.getCategories())) {
 
-            beforeDays = shopSearchSupportService.getCategoryNewArrivalDate(0L, navigationContext.getShopId());
+            daysOffset = shopSearchSupportService.getCategoryNewArrivalOffsetDays(0L, navigationContext.getShopId());
 
         } else {
             for (final Long categoryId : navigationContext.getCategories()) {
-                Date catBeforeDays = shopSearchSupportService.getCategoryNewArrivalDate(categoryId, navigationContext.getShopId());
-                if (catBeforeDays.before(beforeDays)) {
-                    beforeDays = catBeforeDays; // get the earliest
-                }
+                // get the earliest
+                daysOffset = Math.max(daysOffset, shopSearchSupportService.getCategoryNewArrivalOffsetDays(categoryId, navigationContext.getShopId()));
             }
         }
-        return beforeDays;
+        return DateUtils.zdtAtStartOfDay(now().plusDays(-daysOffset));
     }
 
-    private Date now() {
-        return TimeContext.getTime();
+    ZonedDateTime now() {
+        return TimeContext.getZonedDateTime();
     }
 
 

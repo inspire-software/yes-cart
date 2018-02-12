@@ -210,6 +210,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     } else {
       switch (typ) {
         case 'Integer':
+        case 'Timestamp':
           this.validForSave = /^[\-]?[0-9]+$/.test(val);
           break;
         case 'Float':
@@ -221,8 +222,11 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
         case 'Email':
           this.validForSave = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/.test(val);
           break;
-        case 'Date':
+        case 'DateTime':
           this.validForSave = /^[0-9]{4}\-([0][1-9]|[1][0-2])\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?$/.test(val);
+          break;
+        case 'Date':
+          this.validForSave = /^[0-9]{4}\-([0][1-9]|[1][0-2])\-([0][1-9]|[1-2][0-9]|[3][0-1])?$/.test(val);
           break;
         case 'Any':
           this.validForSave = true;
@@ -419,6 +423,8 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
         case 'Float':
         case 'Integer':
         case 'Date':
+        case 'DateTime':
+        case 'Timestamp':
           this.miniTextEditor = true;
           break;
         case 'Locked':

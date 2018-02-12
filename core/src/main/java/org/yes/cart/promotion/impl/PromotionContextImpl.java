@@ -26,6 +26,7 @@ import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.shoppingcart.impl.TotalImpl;
 import org.yes.cart.util.TimeContext;
 
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -37,7 +38,7 @@ public class PromotionContextImpl implements PromotionContext {
 
     private final String shopCode;
     private final PromotionApplicationStrategy strategy;
-    private final Date timestamp = TimeContext.getTime();
+    private final Instant timestamp = TimeContext.getTime();
 
     private final Map<String, List<List<PromoTriplet>>> promotionBuckets = new HashMap<String, List<List<PromoTriplet>>>();
     private final Map<String, PromoTriplet> promotionByCode = new HashMap<String, PromoTriplet>();
@@ -83,7 +84,7 @@ public class PromotionContextImpl implements PromotionContext {
     }
 
     /** {@inheritDoc} */
-    public Date getTimestamp() {
+    public Instant getTimestamp() {
         return timestamp;
     }
 

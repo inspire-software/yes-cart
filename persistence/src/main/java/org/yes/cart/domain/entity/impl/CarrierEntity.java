@@ -20,13 +20,13 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.CarrierShop;
 import org.yes.cart.domain.entity.CarrierSla;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
- * Date: 27 0ct 2012
+ * Instant: 27 0ct 2012
  * Time: 9:10 AM
  */
 public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.io.Serializable {
@@ -44,8 +44,8 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     private boolean local;
     private Collection<CarrierSla> carrierSla = new ArrayList<CarrierSla>(0);
     private Collection<CarrierShop> shops = new ArrayList<CarrierShop>(0);
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -135,19 +135,19 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
         this.shops = shops;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

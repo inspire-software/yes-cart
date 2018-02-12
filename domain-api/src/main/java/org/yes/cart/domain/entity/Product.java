@@ -17,8 +17,9 @@
 package org.yes.cart.domain.entity;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Set;
 
 
@@ -191,14 +192,14 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      *
      * @return last update timestamp
      */
-    Date getPimUpdated();
+    Instant getPimUpdated();
 
     /**
      * PIM last update timestamp
      *
      * @param pimUpdated last update timestamp
      */
-    void setPimUpdated(Date pimUpdated);
+    void setPimUpdated(Instant pimUpdated);
 
 
 
@@ -208,14 +209,14 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      *
      * @return start of product availability.
      */
-    Date getAvailablefrom();
+    LocalDateTime getAvailablefrom();
 
     /**
      * Set start of product availability.
      *
      * @param availablefrom start of product availability.
      */
-    void setAvailablefrom(Date availablefrom);
+    void setAvailablefrom(LocalDateTime availablefrom);
 
     /**
      * Get end of product availability.
@@ -223,14 +224,14 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      *
      * @return end of product availability.
      */
-    Date getAvailableto();
+    LocalDateTime getAvailableto();
 
     /**
      * Set end of product availability.
      *
      * @param availableto end of product availability.
      */
-    void setAvailableto(Date availableto);
+    void setAvailableto(LocalDateTime availableto);
 
     /**
      * Get product availability

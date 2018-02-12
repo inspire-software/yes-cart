@@ -20,7 +20,7 @@ import org.yes.cart.domain.dto.PromotionCouponDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -70,7 +70,7 @@ public interface DtoPromotionCouponService extends GenericDTOService<PromotionCo
      * @param createdAfter created after
      * @return coupons
      */
-    List<PromotionCouponDTO> findBy(long promotionId, Date createdAfter)
+    List<PromotionCouponDTO> findBy(long promotionId, Instant createdAfter)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 

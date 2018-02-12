@@ -24,6 +24,7 @@ import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
 import org.yes.cart.domain.entity.AttrValueCategory;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -72,10 +73,10 @@ public class CategoryDTOImpl implements CategoryDTO {
     private String uitemplate;
 
     @DtoField(value = "availablefrom")
-    private Date availablefrom;
+    private LocalDateTime availablefrom;
 
     @DtoField(value = "availableto")
-    private Date availableto;
+    private LocalDateTime availableto;
 
     @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
     private String uri;
@@ -325,28 +326,28 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
-    public Date getAvailablefrom() {
+    public LocalDateTime getAvailablefrom() {
         return availablefrom;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setAvailablefrom(final Date availablefrom) {
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Date getAvailableto() {
+    public LocalDateTime getAvailableto() {
         return availableto;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setAvailableto(final Date availableto) {
+    public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
 

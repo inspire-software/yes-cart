@@ -29,7 +29,8 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.TimeContext;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -96,7 +97,7 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
      * {@inheritDoc}
      */
     @Cacheable(value = "categoryService-categoryNewArrivalDate")
-    public Date getCategoryNewArrivalDate(final long categoryId, final long shopId) {
+    public int getCategoryNewArrivalOffsetDays(final long categoryId, final long shopId) {
 
         final Shop shop = shopService.getById(shopId);
         final String value = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_NEW_ARRIVAL_DAYS_OFFSET);
@@ -121,22 +122,12 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
             }
         }
 
-        final Calendar date = calendar();
-        date.add(Calendar.DAY_OF_YEAR, -beforeDays);
-        date.set(Calendar.HOUR, 0);
-        date.set(Calendar.MINUTE, 0);
-        date.set(Calendar.SECOND, 0);
-        date.set(Calendar.MILLISECOND, 0);
-        return date.getTime();
+        return beforeDays;
     }
 
 
-    Date now() {
-        return TimeContext.getTime();
-    }
-
-    Calendar calendar() {
-        return TimeContext.getCalendar();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
 

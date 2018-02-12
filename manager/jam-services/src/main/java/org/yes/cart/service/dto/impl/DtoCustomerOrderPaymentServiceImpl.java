@@ -6,10 +6,12 @@ import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 import org.yes.cart.payment.service.DtoCustomerOrderPaymentService;
 import org.yes.cart.payment.service.impl.PaymentModuleGenericServiceImpl;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.utils.HQLUtils;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,7 +43,7 @@ public class DtoCustomerOrderPaymentServiceImpl extends PaymentModuleGenericServ
 
             final Pair<String, String> orderNumberOrCustomerOrDetails =
                     ComplexSearchUtils.checkSpecialSearch(filter, ORDER_OR_CUSTOMER_OR_DETAILS);
-            final Pair<Date, Date> dateSearch = orderNumberOrCustomerOrDetails == null ?
+            final Pair<LocalDateTime, LocalDateTime> dateSearch = orderNumberOrCustomerOrDetails == null ?
                     ComplexSearchUtils.checkDateRangeSearch(filter) : null;
 
             if (orderNumberOrCustomerOrDetails != null) {
@@ -89,8 +91,8 @@ public class DtoCustomerOrderPaymentServiceImpl extends PaymentModuleGenericServ
 
             } else if (dateSearch != null) {
 
-                final Date from = dateSearch.getFirst();
-                final Date to = dateSearch.getSecond();
+                final Instant from = DateUtils.iFrom(dateSearch.getFirst());
+                final Instant to = DateUtils.iFrom(dateSearch.getSecond());
 
                 // time search
                 return getGenericDao().findRangeByCriteria(

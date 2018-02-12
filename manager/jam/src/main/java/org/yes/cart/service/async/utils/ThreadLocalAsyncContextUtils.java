@@ -32,7 +32,7 @@ import org.yes.cart.service.async.model.JobContext;
  */
 public final class ThreadLocalAsyncContextUtils {
 
-    private static final ThreadLocal<AsyncContext> ctx = new ThreadLocal<AsyncContext>();
+    private static final ThreadLocal<AsyncContext> CTX = new ThreadLocal<AsyncContext>();
 
     /**
      * Initialise security context from async context.
@@ -50,7 +50,7 @@ public final class ThreadLocalAsyncContextUtils {
         if (forceSetSecurity) {
             SecurityContextHolder.setContext(security);
         }
-        ctx.set(context);
+        CTX.set(context);
     }
 
     /**
@@ -63,14 +63,22 @@ public final class ThreadLocalAsyncContextUtils {
         if (forceSetSecurity) {
             SecurityContextHolder.clearContext();
         }
-        ctx.set(null);
+        CTX.remove();
     }
+
+    /**
+     * Explicitly remove thread locals to prevent memory leaks.
+     */
+    public static  void destroy() {
+        clear();
+    }
+
 
     /**
      * @return context for this thread
      */
     public static AsyncContext getContext() {
-        return ctx.get();
+        return CTX.get();
     }
 
 

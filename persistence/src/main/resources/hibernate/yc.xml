@@ -38,7 +38,7 @@
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
         <property name="password" length="255" type="java.lang.String" column="PASSWORD" not-null="true"/>
         <property name="authToken" length="255" type="java.lang.String" column="AUTHTOKEN" not-null="false"/>
-        <property name="authTokenExpiry" type="timestamp" column="AUTHTOKENEXPIRY" not-null="false"/>
+        <property name="authTokenExpiry" type="java.time.Instant" column="AUTHTOKENEXPIRY" not-null="false"/>
 
         <property name="enabled" length="1" type="boolean" not-null="true">
             <column name="ENABLED" length="1" not-null="true">
@@ -51,8 +51,8 @@
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ManagerShopEntity"/>
         </bag>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="MANAGER_GUID" not-null="true"/>
@@ -72,8 +72,8 @@
         <property name="code" length="255" type="java.lang.String" column="CODE" unique-key="ROLE_CODE" not-null="true"/>
         <property name="description" length="255" type="java.lang.String" column="DESCRIPTION"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36"  unique-key="ROLE_GUID" not-null="true"/>
@@ -93,8 +93,8 @@
         <property name="email" length="255" type="java.lang.String" column="EMAIL"  not-null="true"/>
         <property name="code" length="255" type="java.lang.String" column="CODE"  not-null="true"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36"  unique-key="MANAGER_ROLE_GUID" not-null="true"/>
@@ -119,8 +119,8 @@
 
 
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="MANAGERSHOP_GUID" not-null="true"/>
@@ -158,8 +158,8 @@
             </column>
         </property>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36"  unique-key="ETYPE_GUID" not-null="true"/>
@@ -185,8 +185,8 @@
             <column name="DESCRIPTION" length="4000"/>
         </property>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36"  unique-key="ATTRIBUTE_GROUP_GUID" not-null="true"/>
@@ -283,8 +283,8 @@
             </column>
         </property>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36"  unique-key="ATTRIBUTE_GUID" not-null="true"/>
@@ -308,8 +308,8 @@
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="customer" class="org.yes.cart.domain.entity.impl.CustomerEntity"  not-null="true" column="CUSTOMER_ID" foreign-key="FK_AV_CUSTOMER_CUSTOMERID"/>
         <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_CUSTOMER_CODE"/>
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="AV_CUSTOMER_GUID" not-null="true"/>
@@ -331,8 +331,8 @@
         <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity"  not-null="true" column="SHOP_ID" foreign-key="FK_AV_SHOP_SHOPID"/>
         <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_SHOP_CODE"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="AVSHOP_GUID" not-null="true"/>
@@ -355,8 +355,8 @@
         <many-to-one name="system" class="org.yes.cart.domain.entity.impl.SystemEntity"  not-null="true" column="SYSTEM_ID" foreign-key="FK_AV_SYSTEM_SYSTEMID"/>
         <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_SYSTEM_CODE"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36"  unique-key="AVSYS_GUID" not-null="true"/>
@@ -382,8 +382,8 @@
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
         <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_BRAND_CODE"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="AVBRAND_GUID" not-null="true"/>
@@ -406,8 +406,8 @@
         <many-to-one name="product" class="org.yes.cart.domain.entity.impl.ProductEntity" lazy="proxy" not-null="true" column="PRODUCT_ID" foreign-key="FK_AV_PRODUCT_PRODUCTID"/>
         <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_PRODUCT_CODE"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="AVPROD_GUID" not-null="true"/>
@@ -430,8 +430,8 @@
         <many-to-one name="productSku" class="org.yes.cart.domain.entity.impl.ProductSkuEntity"  not-null="true" column="SKU_ID" foreign-key="FK_AV_SKU_SKUID"/>
         <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_SKU_CODE"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="AVSKU_GUID" not-null="true"/>
@@ -454,8 +454,8 @@
         <many-to-one name="category" class="org.yes.cart.domain.entity.impl.CategoryEntity"  not-null="true" column="CATEGORY_ID" foreign-key="FK_AV_CATEGORY_CATEGORYID"/>
         <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_CATEGORY_CODE"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="AVCATEGORY_GUID" not-null="true"/>
@@ -492,8 +492,8 @@
             <column name="DISPLAYNAME" length="255" not-null="false"/>
         </property>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="COUNTRY_GUID" not-null="true"/>
@@ -525,8 +525,8 @@
             <column name="DISPLAYNAME" length="255" not-null="false"/>
         </property>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="STATE_GUID" not-null="true"/>
@@ -580,8 +580,8 @@
 
         <many-to-one name="customer" class="org.yes.cart.domain.entity.impl.CustomerEntity"  not-null="false" column="CUSTOMER_ID"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="ADDRESS_GUID" not-null="true"/>
@@ -607,8 +607,8 @@
             <column name="DESCRIPTION" length="4000"/>
         </property>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="MAILTEMPLATEGROUP_GUID" not-null="true"/>
@@ -640,8 +640,8 @@
                      foreign-key="FK_M_TEMPLATEGROUP">
             <column name="MAILTEMPLATEGROUP_ID" not-null="true"/>
         </many-to-one>
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="MAILTEMPLATE_GUID" not-null="true"/>
@@ -678,8 +678,8 @@
             <one-to-many class="org.yes.cart.domain.entity.impl.MailPartEntity"/>
         </set>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="MAIL_GUID" not-null="true"/>
@@ -706,8 +706,8 @@
             <column name="PART_DATA" sql-type="blob"/>
         </property>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="MAILTEMPLATEGROUP_GUID" not-null="true"/>
@@ -740,8 +740,8 @@
         </map>
 
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SYSTEM_GUID" not-null="true"/>
@@ -802,8 +802,8 @@
             </column>
         </property>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="PRODTYPEATTR_GUID" not-null="true"/>
@@ -881,8 +881,8 @@
             </column>
         </property>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="PRODTYPE_GUID" not-null="true"/>
@@ -921,8 +921,8 @@
             <column name="DISPLAYNAME"/>
         </property>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="PRODTYPEATTRGROUP_GUID" not-null="true"/>
@@ -965,8 +965,8 @@
                 </comment>
             </column>
         </property>
-        <property name="availablefrom" column="AVAILABLEFROM" type="timestamp"/>
-        <property name="availableto" column="AVAILABLETO" type="timestamp"/>
+        <property name="availablefrom" column="AVAILABLEFROM" type="java.time.LocalDateTime"/>
+        <property name="availableto" column="AVAILABLETO" type="java.time.LocalDateTime"/>
 
 
         <bag name="attributes" inverse="true" lazy="false" cascade="all">
@@ -1007,8 +1007,8 @@
             </column>
         </property>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="CATEGORY_GUID" not-null="true"/>
@@ -1035,8 +1035,8 @@
         </bag>
 
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="BRAND_GUID" not-null="true"/>
@@ -1066,10 +1066,10 @@
         <property name="pimCode" column="PIM_CODE" type="string" length="255" index="PRODUCT_PCODE" not-null="false"/>
         <property name="pimDisabled" column="PIM_DISABLED" type="boolean" index="PRODUCT_PDISABLED" not-null="true"/>
         <property name="pimOutdated" column="PIM_OUTDATED" type="boolean" index="PRODUCT_POUTDATED" not-null="true"/>
-        <property name="pimUpdated" column="PIM_UPDATED" type="timestamp" not-null="false"/>
+        <property name="pimUpdated" column="PIM_UPDATED" type="java.time.Instant" not-null="false"/>
 
-        <property name="availablefrom" column="AVAILABLEFROM" type="timestamp" not-null="false"/>
-        <property name="availableto" column="AVAILABLETO" type="timestamp" not-null="false"/>
+        <property name="availablefrom" column="AVAILABLEFROM" type="java.time.LocalDateTime" not-null="false"/>
+        <property name="availableto" column="AVAILABLETO" type="java.time.LocalDateTime" not-null="false"/>
 
         <property name="name" type="string" length="255" not-null="true">
             <column name="NAME" length="255" not-null="true"/>
@@ -1158,8 +1158,8 @@
         <property name="maxOrderQuantity" column="MAX_ORDER_QUANTITY"  type="java.math.BigDecimal"/>
         <property name="stepOrderQuantity" column="STEP_ORDER_QUANTITY"  type="java.math.BigDecimal"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="PRODUCT_GUID" not-null="true"/>
@@ -1183,8 +1183,8 @@
             <column name="SKU_ID" not-null="true"/>
         </many-to-one>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="ENSEMBLE_GUID" not-null="true"/>
@@ -1248,8 +1248,8 @@
             <property name="displayMetadescription" type="string" column="DISPLAY_METADESCRIPTION" length="4000" not-null="false"/>
         </component>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SKU_GUID" not-null="true"/>
@@ -1295,8 +1295,8 @@
                 <comment>Minimal price used in name-your-price pricing strategy. Must be less that regular</comment>
             </column>
         </property>
-        <property name="salefrom" column="SALE_FROM" type="timestamp" not-null="false"/>
-        <property name="saleto" column="SALE_TO" type="timestamp" not-null="false"/>
+        <property name="salefrom" column="SALE_FROM" type="java.time.LocalDateTime" not-null="false"/>
+        <property name="saleto" column="SALE_TO" type="java.time.LocalDateTime" not-null="false"/>
         <property name="tag" type="string" length="45" not-null="false">
             <column name="TAG">
                 <comment>
@@ -1307,8 +1307,8 @@
         <property name="pricingPolicy" length="255" type="java.lang.String" column="PRICINGPOLICY" index="SKUPRICE_PRICINGPOLICY" not-null="false"/>
         <property name="ref" length="255" type="java.lang.String" column="REF" index="SKUPRICE_REF" not-null="false"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique="false" index="SKUPRICE_GUID" not-null="true"/>
@@ -1337,8 +1337,8 @@
             </column>
         </property>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="PRODUCTCAT_GUID" not-null="true"/>
@@ -1360,8 +1360,8 @@
         <property name="name" column="NAME" type="string" length="255" not-null="true"/>
         <property name="description" column="DESCRIPTION" type="string" length="4000"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="ASSOCIATION_GUID" not-null="true"/>
@@ -1395,8 +1395,8 @@
         </many-to-one>
         <property name="associatedSku" column="ASSOCIATED_SKU_CODE" type="string" length="255" index="ASSOCIATED_SKUCODE" not-null="true"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="PRODUCTASSOC_GUID" not-null="true"/>
@@ -1433,8 +1433,8 @@
         <property name="defaultBackorderStockLeadTime" type="java.lang.Integer" column="DEFAULT_BO_LEAD_TIME" not-null="false"/>
         <property name="multipleShippingSupported" type="boolean" column="MULTI_SHIP_SUPPORTED" not-null="true"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="WAREHOUSE_GUID" not-null="true"/>
@@ -1518,8 +1518,8 @@
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ShopCategoryEntity"/>
         </bag>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOP_GUID" not-null="true"/>
@@ -1546,8 +1546,8 @@
         </many-to-one>
         <property name="counter" column="COUNTER" type="java.math.BigDecimal"  not-null="false"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPTOPSELLER_GUID" not-null="true"/>
@@ -1582,8 +1582,8 @@
 
         <property name="disabled" column="DISABLED" type="boolean" not-null="true" index="I_SWE_SHOP_DISABLED"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPWAREHOUSE_GUID" not-null="true"/>
@@ -1619,8 +1619,8 @@
         </property>
 
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SKUWAREHOUSE_GUID" not-null="true"/>
@@ -1651,8 +1651,8 @@
             <column name="CATEGORY_ID" not-null="true"/>
         </many-to-one>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPCATEGORY_GUID" not-null="true"/>
@@ -1676,8 +1676,8 @@
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPURL_GUID" not-null="true"/>
@@ -1699,8 +1699,8 @@
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPURL_GUID" not-null="true"/>
@@ -1727,8 +1727,8 @@
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ShopAdvPlaceRuleEntity"/>
         </set>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPADVPLACE_GUID" not-null="true"/>
@@ -1748,14 +1748,14 @@
         <property name="rank" type="int" not-null="false"/>
         <property name="name" column="NAME" type="string" length="255" not-null="true"/>
         <property name="description" column="DESCRIPTION" type="string" length="4000"/>
-        <property name="availablefrom" column="AVAILABLEFROM" type="timestamp"/>
-        <property name="availableto" column="AVAILABLETO" type="timestamp"/>
+        <property name="availablefrom" column="AVAILABLEFROM" type="java.time.LocalDateTime"/>
+        <property name="availableto" column="AVAILABLETO" type="java.time.LocalDateTime"/>
         <property name="rule" column="RULE" type="string" length="4000"/>
         <many-to-one name="shopAdvPlace" class="org.yes.cart.domain.entity.impl.ShopAdvPlaceEntity" foreign-key="FK_ADVR_ADVPLACE">
             <column name="SHOPADVPLACE_ID" not-null="true"/>
         </many-to-one>
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPADVRULES_GUID" not-null="true"/>
@@ -1784,7 +1784,7 @@
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
         <property name="password" length="255" type="java.lang.String" column="PASSWORD" not-null="true"/>
         <property name="authToken" length="255" type="java.lang.String" column="AUTHTOKEN" not-null="false"/>
-        <property name="authTokenExpiry" type="timestamp" column="AUTHTOKENEXPIRY" not-null="false"/>
+        <property name="authTokenExpiry" type="java.time.Instant" column="AUTHTOKENEXPIRY" not-null="false"/>
         <property name="publicKey" length="255" type="java.lang.String" column="PUBLICKEY" not-null="false"/>
         <property name="customerType" length="255" type="java.lang.String" column="CUSTOMERTYPE" not-null="false"/>
         <property name="pricingPolicy" length="255" type="java.lang.String" column="PRICINGPOLICY" not-null="false"/>
@@ -1829,8 +1829,8 @@
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.CustomerShopEntity"/>
         </bag>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="CUSTOMER_GUID" not-null="true"/>
@@ -1859,8 +1859,8 @@
 
         <property name="disabled" column="DISABLED" type="boolean" not-null="true" index="I_CS_SHOP_DISABLED"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="CUSTOMERSHOP_GUID" not-null="true"/>
@@ -1922,8 +1922,8 @@
             </column>
         </property>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="CUSTOMERWISHLIST_GUID" not-null="true"/>
@@ -1989,7 +1989,7 @@
 
         <property name="eligibleForExport" column="ELIGIBLE_FOR_EXPORT" type="string" length="20" index="CUSTOMERORDER_ELIGEXP"/>
         <property name="blockExport" column="EXPORT_BLOCK" type="boolean" length="1" not-null="true"/>
-        <property name="lastExportDate" column="EXPORT_LAST_DATE" type="timestamp"/>
+        <property name="lastExportDate" column="EXPORT_LAST_DATE" type="java.time.Instant"/>
         <property name="lastExportStatus" column="EXPORT_LAST_STATUS" type="string" length="4000"/>
         <property name="lastExportOrderStatus" column="EXPORT_LAST_ORDERSTATUS" type="string" length="64"/>
 
@@ -1998,7 +1998,7 @@
         <property name="b2bChargeId" column="B2B_CHARGEID" type="string" length="255"/>
         <property name="b2bRequireApprove" column="B2B_APPROVE_REQUIRE" type="boolean" length="1" not-null="true"/>
         <property name="b2bApprovedBy" column="B2B_APPROVEDBY" type="string" length="64"/>
-        <property name="b2bApprovedDate" column="B2B_APPROVED_DATE" type="timestamp"/>
+        <property name="b2bApprovedDate" column="B2B_APPROVED_DATE" type="java.time.LocalDateTime"/>
 
         <many-to-one name="customer" class="org.yes.cart.domain.entity.impl.CustomerEntity" foreign-key="FK_ORDER_CUSTOMER" lazy="false">
             <column name="CUSTOMER_ID" not-null="false"/>
@@ -2054,12 +2054,12 @@
             </column>
         </property>
 
-        <property name="requestedDeliveryDate" column="REQUESTED_DELIVERY_DATE" type="timestamp"/>
-        <property name="orderTimestamp" column="ORDER_TIMESTAMP" type="timestamp" not-null="true"/>
+        <property name="requestedDeliveryDate" column="REQUESTED_DELIVERY_DATE" type="java.time.LocalDateTime"/>
+        <property name="orderTimestamp" column="ORDER_TIMESTAMP" type="java.time.LocalDateTime" not-null="true"/>
         <property name="orderIp" column="ORDER_IP" type="string" length="45"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="CUSTOMERORDER_GUID" not-null="true"/>
@@ -2099,9 +2099,9 @@
         <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255"/>
 
         <property name="deliveryRemarks" column="DELIVERY_REMARKS" type="string" length="255"/>
-        <property name="deliveryEstimatedMin" column="DELIVERY_EST_MIN" type="timestamp"/>
-        <property name="deliveryEstimatedMax" column="DELIVERY_EST_MAX" type="timestamp"/>
-        <property name="deliveryGuaranteed" column="DELIVERY_GUARANTEED" type="timestamp"/>
+        <property name="deliveryEstimatedMin" column="DELIVERY_EST_MIN" type="java.time.LocalDateTime"/>
+        <property name="deliveryEstimatedMax" column="DELIVERY_EST_MAX" type="java.time.LocalDateTime"/>
+        <property name="deliveryGuaranteed" column="DELIVERY_GUARANTEED" type="java.time.LocalDateTime"/>
 
         <property name="b2bRemarks" column="B2B_REMARKS" type="string" length="255"/>
 
@@ -2111,8 +2111,8 @@
             <column name="CUSTOMERORDER_ID" not-null="true"/>
         </many-to-one>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="CUSTOMERORDERDET_GUID" not-null="true"/>
@@ -2157,14 +2157,14 @@
         <property name="taxCode" column="TAX_CODE" type="string" length="255" not-null="true"/>
 
         <property name="deliveryRemarks" column="DELIVERY_REMARKS" type="string" length="255"/>
-        <property name="deliveryEstimatedMin" column="DELIVERY_EST_MIN" type="timestamp"/>
-        <property name="deliveryEstimatedMax" column="DELIVERY_EST_MAX" type="timestamp"/>
-        <property name="deliveryGuaranteed" column="DELIVERY_GUARANTEED" type="timestamp"/>
-        <property name="deliveryConfirmed" column="DELIVERY_CONFIRMED" type="timestamp"/>
+        <property name="deliveryEstimatedMin" column="DELIVERY_EST_MIN" type="java.time.LocalDateTime"/>
+        <property name="deliveryEstimatedMax" column="DELIVERY_EST_MAX" type="java.time.LocalDateTime"/>
+        <property name="deliveryGuaranteed" column="DELIVERY_GUARANTEED" type="java.time.LocalDateTime"/>
+        <property name="deliveryConfirmed" column="DELIVERY_CONFIRMED" type="java.time.LocalDateTime"/>
 
         <property name="eligibleForExport" column="ELIGIBLE_FOR_EXPORT" type="string" length="20" index="CUSTOMERORDERDELIVERY_ELIGEXP"/>
         <property name="blockExport" column="EXPORT_BLOCK" type="boolean" length="1" not-null="true"/>
-        <property name="lastExportDate" column="EXPORT_LAST_DATE" type="timestamp"/>
+        <property name="lastExportDate" column="EXPORT_LAST_DATE" type="java.time.Instant"/>
         <property name="lastExportStatus" column="EXPORT_LAST_STATUS" type="string" length="4000"/>
         <property name="lastExportDeliveryStatus" column="EXPORT_LAST_DELIVERYSTATUS" type="string" length="64"/>
 
@@ -2183,10 +2183,10 @@
             <column name="DELIVERY_GROUP" length="16" not-null="true"/>
         </property>
 
-        <property name="requestedDeliveryDate" column="REQUESTED_DELIVERY_DATE" type="timestamp"/>
+        <property name="requestedDeliveryDate" column="REQUESTED_DELIVERY_DATE" type="java.time.LocalDateTime"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="CUSTOMERORDERDEL_GUID" not-null="true"/>
@@ -2230,24 +2230,24 @@
         <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255"/>
 
         <property name="deliveryRemarks" column="DELIVERY_REMARKS" type="string" length="255"/>
-        <property name="deliveryEstimatedMin" column="DELIVERY_EST_MIN" type="timestamp"/>
-        <property name="deliveryEstimatedMax" column="DELIVERY_EST_MAX" type="timestamp"/>
-        <property name="deliveryGuaranteed" column="DELIVERY_GUARANTEED" type="timestamp"/>
-        <property name="deliveryConfirmed" column="DELIVERY_CONFIRMED" type="timestamp"/>
+        <property name="deliveryEstimatedMin" column="DELIVERY_EST_MIN" type="java.time.LocalDateTime"/>
+        <property name="deliveryEstimatedMax" column="DELIVERY_EST_MAX" type="java.time.LocalDateTime"/>
+        <property name="deliveryGuaranteed" column="DELIVERY_GUARANTEED" type="java.time.LocalDateTime"/>
+        <property name="deliveryConfirmed" column="DELIVERY_CONFIRMED" type="java.time.LocalDateTime"/>
         <property name="deliveredQuantity" column="DELIVERED_QUANTITY" type="java.math.BigDecimal"/>
 
         <property name="b2bRemarks" column="B2B_REMARKS" type="string" length="255"/>
 
         <property name="supplierInvoiceNo" column="SUPPLIER_INVOICE_NO" type="string" length="255"/>
-        <property name="supplierInvoiceDate" column="SUPPLIER_INVOICE_DATE" type="timestamp"/>
+        <property name="supplierInvoiceDate" column="SUPPLIER_INVOICE_DATE" type="java.time.LocalDate"/>
 
         <property name="storedAttributesInternal" column="STORED_ATTRIBUTES" type="string"/>
 
         <many-to-one name="delivery" class="org.yes.cart.domain.entity.impl.CustomerOrderDeliveryEntity" foreign-key="FK_CODD_DL">
             <column name="CUSTOMERORDERDELIVERY_ID" not-null="true"/>
         </many-to-one>
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="CUSTOMERORDERDELDET_GUID" not-null="true"/>
@@ -2289,8 +2289,8 @@
         </bag>
 
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="CARRIER_GUID" not-null="true"/>
@@ -2334,8 +2334,8 @@
             <column name="CARRIER_ID" not-null="true"/>
         </many-to-one>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="CARRIERSLA_GUID" not-null="true"/>
@@ -2362,8 +2362,8 @@
 
         <property name="disabled" column="DISABLED" type="boolean" not-null="true" index="I_CRS_SHOP_DISABLED"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="CARRIERSHOP_GUID" not-null="true"/>
@@ -2390,8 +2390,8 @@
         <property name="displayAlt" column="DISPLAY_ALT"  not-null="false" type="string" length="4000"/>
         <property name="displayTitle" column="DISPLAY_TITLE"  not-null="false" type="string" length="4000"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SEOIMAGE_GUID" not-null="true"/>
@@ -2436,11 +2436,11 @@
         <property name="canBeCombined" column="CAN_BE_COMBINED" type="boolean" length="1" not-null="true"/>
         <property name="enabled" column="ENABLED" type="boolean" length="1" not-null="true" index="PROMO_ENABLED"/>
 
-        <property name="enabledFrom" column="ENABLED_FROM" type="timestamp" not-null="false" index="PROMO_ENABLED_FROM"/>
-        <property name="enabledTo" column="ENABLED_TO" type="timestamp" not-null="false" index="PROMO_ENABLED_TO"/>
+        <property name="enabledFrom" column="ENABLED_FROM" type="java.time.LocalDateTime" not-null="false" index="PROMO_ENABLED_FROM"/>
+        <property name="enabledTo" column="ENABLED_TO" type="java.time.LocalDateTime" not-null="false" index="PROMO_ENABLED_TO"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="PROMO_GUID" not-null="true"/>
@@ -2466,8 +2466,8 @@
         <property name="usageLimitPerCustomer" column="USAGE_LIMIT_PER_CUSTOMER" type="int" not-null="true"/>
         <property name="usageCount" column="USAGE_COUNT" type="int" not-null="true"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
 
@@ -2492,8 +2492,8 @@
             <column name="CUSTOMERORDER_ID" not-null="true"/>
         </many-to-one>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
 
@@ -2515,8 +2515,8 @@
         <property name="state" column="CART_STATE" type="byte[]" length="16384" not-null="true"/>
         <property name="ordernum" column="ORDERNUM" type="string" length="16" not-null="false"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
 
@@ -2540,8 +2540,8 @@
         <property name="description" column="DESCRIPTION" type="string" length="100"/>
 
         <property name="guid" column="GUID" type="string" length="255" unique-key="TTAX_GUID" not-null="true"/>
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
     </class>
@@ -2564,8 +2564,8 @@
         <property name="countryCode" type="string" length="2" column="COUNTRY_CODE" index="TAX_COUNTRY_CODE"/>
 
         <property name="guid" column="GUID" type="string" length="255" unique-key="TTAXCONFIG_GUID" not-null="true"/>
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
     </class>
@@ -2588,8 +2588,8 @@
         <property name="descriptors" column="DESCRIPTORS" type="string" length="4000"/>
 
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
     </class>
@@ -2608,8 +2608,8 @@
         <property name="value" column="VALUE" type="string" length="4000" not-null="true"/>
 
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
     </class>

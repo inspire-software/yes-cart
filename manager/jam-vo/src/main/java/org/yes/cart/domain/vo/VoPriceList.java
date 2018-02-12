@@ -20,7 +20,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -41,10 +41,10 @@ public class VoPriceList {
     private BigDecimal salePrice;
 
     @DtoField(value = "salefrom")
-    private Date salefrom;
+    private LocalDateTime salefrom;
 
     @DtoField(value = "saleto")
-    private Date saleto;
+    private LocalDateTime saleto;
 
     @DtoField(value = "quantity")
     private BigDecimal quantity;
@@ -102,19 +102,19 @@ public class VoPriceList {
         this.salePrice = salePrice;
     }
 
-    public Date getSalefrom() {
+    public LocalDateTime getSalefrom() {
         return salefrom;
     }
 
-    public void setSalefrom(final Date salefrom) {
+    public void setSalefrom(final LocalDateTime salefrom) {
         this.salefrom = salefrom;
     }
 
-    public Date getSaleto() {
+    public LocalDateTime getSaleto() {
         return saleto;
     }
 
-    public void setSaleto(final Date saleto) {
+    public void setSaleto(final LocalDateTime saleto) {
         this.saleto = saleto;
     }
 

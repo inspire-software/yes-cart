@@ -25,6 +25,7 @@ import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -106,8 +107,8 @@ public class CustomerOrderPaymentServiceImpl
      * {@inheritDoc}
      */
     public List<CustomerOrderPayment> findBy(final String orderNumber,
-                                             final Date fromDate,
-                                             final Date tillDate,
+                                             final LocalDateTime fromDate,
+                                             final LocalDateTime tillDate,
                                              final String lastCardDigits,
                                              final String cardHolderName,
                                              final String paymentGateway) {

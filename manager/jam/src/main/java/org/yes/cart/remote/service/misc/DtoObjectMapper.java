@@ -15,10 +15,18 @@
  */
 package org.yes.cart.remote.service.misc;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.yes.cart.util.DateUtils;
+
+import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Customized object mapper to support creation of particular dto classes from json.
@@ -28,9 +36,64 @@ public class DtoObjectMapper extends ObjectMapper {
 
     public DtoObjectMapper() {
         super();
+
         configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        SimpleModule module = new SimpleModule("dto", new Version( 3, 4, 0, null, "org.yes", "jam"));
+        configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+
+        final SimpleModule module = new SimpleModule("dto", new Version( 3, 4, 0, null, "org.yes", "jam"));
         //module.addAbstractTypeMapping(ShopDTO.class, ShopDTOImpl.class);
+
+        // java.time.* support
+        module.addSerializer(Instant.class, new JSInstantSerializer());
+        module.addSerializer(LocalDate.class, new JSLocalDateSerializer());
+        module.addSerializer(LocalDateTime.class, new JSLocalDateTimeSerializer());
+        module.addDeserializer(Instant.class, new JSInstantDeserializer());
+        module.addDeserializer(LocalDate.class, new JSLocalDateDeserializer());
+        module.addDeserializer(LocalDateTime.class, new JSLocalDateTimeDeserializer());
+
         this.registerModule(module);
+
+    }
+
+    private class JSInstantSerializer extends JsonSerializer<Instant> {
+        @Override
+        public void serialize(final Instant value, final JsonGenerator gen, final SerializerProvider serializers) throws IOException {
+            gen.writeNumber(value.toEpochMilli());
+        }
+    }
+
+    private class JSLocalDateSerializer extends JsonSerializer<LocalDate> {
+        @Override
+        public void serialize(final LocalDate value, final JsonGenerator gen, final SerializerProvider serializers) throws IOException {
+            gen.writeNumber(DateUtils.millis(value));
+        }
+    }
+
+    private class JSLocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
+        @Override
+        public void serialize(final LocalDateTime value, final JsonGenerator gen, final SerializerProvider serializers) throws IOException {
+            gen.writeNumber(DateUtils.millis(value));
+        }
+    }
+
+    private class JSInstantDeserializer extends JsonDeserializer<Instant> {
+        @Override
+        public Instant deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            return DateUtils.iFrom(p.getLongValue());
+        }
+    }
+
+    private class JSLocalDateDeserializer extends JsonDeserializer<LocalDate> {
+        @Override
+        public LocalDate deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            return DateUtils.ldFrom(p.getLongValue());
+        }
+    }
+
+    private class JSLocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
+        @Override
+        public LocalDateTime deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            return DateUtils.ldtFrom(p.getLongValue());
+        }
     }
 }

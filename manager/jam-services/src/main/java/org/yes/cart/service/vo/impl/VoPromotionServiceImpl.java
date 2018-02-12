@@ -27,9 +27,10 @@ import org.yes.cart.service.dto.DtoPromotionService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoPromotionService;
+import org.yes.cart.util.TimeContext;
 
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -158,7 +159,7 @@ public class VoPromotionServiceImpl implements VoPromotionService {
 
         getPromotionById(vo.getPromotionId()); // check access
 
-        final Date now = new Date();
+        final Instant now = TimeContext.getTime();
 
         dtoPromotionCouponService.create(
                 voAssemblySupport.assembleDto(PromotionCouponDTO.class, VoPromotionCoupon.class, dtoPromotionCouponService.getNew(), vo)

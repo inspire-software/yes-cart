@@ -26,8 +26,8 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.SkuWarehouseService;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -160,7 +160,7 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     }
 
     /** {@inheritDoc} */
-    public List<String> findProductSkuForWhichInventoryChangedAfter(final Date lastUpdate) {
+    public List<String> findProductSkuForWhichInventoryChangedAfter(final Instant lastUpdate) {
         return skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastUpdate);
     }
 

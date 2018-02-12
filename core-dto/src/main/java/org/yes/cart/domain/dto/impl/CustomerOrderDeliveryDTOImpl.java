@@ -24,9 +24,10 @@ import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  *
@@ -88,13 +89,13 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     @DtoField(value = "deliveryRemarks", readOnly = true)
     private String deliveryRemarks;
     @DtoField(value = "deliveryEstimatedMin", readOnly = true)
-    private Date deliveryEstimatedMin;
+    private LocalDateTime deliveryEstimatedMin;
     @DtoField(value = "deliveryEstimatedMax", readOnly = true)
-    private Date deliveryEstimatedMax;
+    private LocalDateTime deliveryEstimatedMax;
     @DtoField(value = "deliveryGuaranteed", readOnly = true)
-    private Date deliveryGuaranteed;
+    private LocalDateTime deliveryGuaranteed;
     @DtoField(value = "deliveryConfirmed", readOnly = true)
-    private Date deliveryConfirmed;
+    private LocalDateTime deliveryConfirmed;
 
 
     @DtoField(value = "price", readOnly = true)
@@ -133,14 +134,14 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     @DtoField(value = "blockExport", readOnly = true)
     private boolean blockExport;
     @DtoField(value = "lastExportDate", readOnly = true)
-    private Date lastExportDate;
+    private Instant lastExportDate;
     @DtoField(value = "lastExportStatus", readOnly = true)
     private String lastExportStatus;
     @DtoField(value = "lastExportDeliveryStatus", readOnly = true)
     private String lastExportDeliveryStatus;
 
     @DtoField(value = "requestedDeliveryDate", readOnly = true)
-    private Date requestedDeliveryDate;
+    private LocalDateTime requestedDeliveryDate;
 
     /** {@inheritDoc} */
     public String getShippingAddress() {
@@ -343,12 +344,12 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     }
 
     /** {@inheritDoc} */
-    public Date getLastExportDate() {
+    public Instant getLastExportDate() {
         return lastExportDate;
     }
 
     /** {@inheritDoc} */
-    public void setLastExportDate(final Date lastExportDate) {
+    public void setLastExportDate(final Instant lastExportDate) {
         this.lastExportDate = lastExportDate;
     }
 
@@ -423,52 +424,52 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     }
 
     /** {@inheritDoc} */
-    public Date getDeliveryEstimatedMin() {
+    public LocalDateTime getDeliveryEstimatedMin() {
         return deliveryEstimatedMin;
     }
 
     /** {@inheritDoc} */
-    public void setDeliveryEstimatedMin(final Date deliveryEstimatedMin) {
+    public void setDeliveryEstimatedMin(final LocalDateTime deliveryEstimatedMin) {
         this.deliveryEstimatedMin = deliveryEstimatedMin;
     }
 
     /** {@inheritDoc} */
-    public Date getDeliveryEstimatedMax() {
+    public LocalDateTime getDeliveryEstimatedMax() {
         return deliveryEstimatedMax;
     }
 
     /** {@inheritDoc} */
-    public void setDeliveryEstimatedMax(final Date deliveryEstimatedMax) {
+    public void setDeliveryEstimatedMax(final LocalDateTime deliveryEstimatedMax) {
         this.deliveryEstimatedMax = deliveryEstimatedMax;
     }
 
     /** {@inheritDoc} */
-    public Date getDeliveryGuaranteed() {
+    public LocalDateTime getDeliveryGuaranteed() {
         return deliveryGuaranteed;
     }
 
     /** {@inheritDoc} */
-    public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
+    public void setDeliveryGuaranteed(final LocalDateTime deliveryGuaranteed) {
         this.deliveryGuaranteed = deliveryGuaranteed;
     }
 
     /** {@inheritDoc} */
-    public Date getDeliveryConfirmed() {
+    public LocalDateTime getDeliveryConfirmed() {
         return deliveryConfirmed;
     }
 
     /** {@inheritDoc} */
-    public void setDeliveryConfirmed(final Date deliveryConfirmed) {
+    public void setDeliveryConfirmed(final LocalDateTime deliveryConfirmed) {
         this.deliveryConfirmed = deliveryConfirmed;
     }
 
     /** {@inheritDoc} */
-    public Date getRequestedDeliveryDate() {
+    public LocalDateTime getRequestedDeliveryDate() {
         return requestedDeliveryDate;
     }
 
     /** {@inheritDoc} */
-    public void setRequestedDeliveryDate(final Date requestedDeliveryDate) {
+    public void setRequestedDeliveryDate(final LocalDateTime requestedDeliveryDate) {
         this.requestedDeliveryDate = requestedDeliveryDate;
     }
 

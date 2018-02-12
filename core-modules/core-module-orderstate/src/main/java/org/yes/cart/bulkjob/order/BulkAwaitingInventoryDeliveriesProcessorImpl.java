@@ -33,7 +33,6 @@ import org.yes.cart.util.log.Markers;
 
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -81,8 +80,6 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
     @Override
     protected boolean doRun(final Instant lastRun) {
 
-        final Date lastRunDate = DateUtils.from(lastRun);
-
         LOG.info("Check orders awaiting allocation start date");
 
         final int allocWaiting = processAwaitingOrders(null,
@@ -100,10 +97,10 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
         LOG.info("Transitioned {} deliveries awaiting preorder start date", dateWaiting);
 
-        LOG.info("Check orders awaiting inventory since {}", lastRunDate);
+        LOG.info("Check orders awaiting inventory since {}", DateUtils.formatSDT(lastRun));
 
         final int inventoryWaiting;
-        final List<String> skuChanged = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRunDate);
+        final List<String> skuChanged = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
         if (skuChanged.isEmpty()) {
             inventoryWaiting = 0;
         } else {

@@ -39,9 +39,12 @@ import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCustomerService;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -308,7 +311,7 @@ public class DtoCustomerServiceImpl
         if (StringUtils.isNotBlank(filter)) {
 
             final Pair<String, String> refOrCustomerOrAddressOrPolicy = ComplexSearchUtils.checkSpecialSearch(filter, REF_OR_CUSTOMER_OR_ADDRESS);
-            final Pair<Date, Date> dateSearch = refOrCustomerOrAddressOrPolicy == null ? ComplexSearchUtils.checkDateRangeSearch(filter) : null;
+            final Pair<LocalDateTime, LocalDateTime> dateSearch = refOrCustomerOrAddressOrPolicy == null ? ComplexSearchUtils.checkDateRangeSearch(filter) : null;
 
             if (refOrCustomerOrAddressOrPolicy != null) {
 
@@ -366,8 +369,8 @@ public class DtoCustomerServiceImpl
 
             } else if (dateSearch != null) {
 
-                final Date from = dateSearch.getFirst();
-                final Date to = dateSearch.getSecond();
+                final Instant from = DateUtils.iFrom(dateSearch.getFirst());
+                final Instant to = DateUtils.iFrom(dateSearch.getSecond());
 
                 // time search
                 entities = service.getGenericDao().findRangeByCriteria(

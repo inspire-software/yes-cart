@@ -27,7 +27,6 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 
-import java.util.Date;
 import java.util.HashMap;
 
 public class DynoContentCentralView extends AbstractCentralView {

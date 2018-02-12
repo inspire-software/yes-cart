@@ -24,7 +24,10 @@ import org.yes.cart.domain.vo.VoManagerShop;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
+import org.yes.cart.util.DateUtils;
+import org.yes.cart.util.TimeContext;
 
+import java.time.ZonedDateTime;
 import java.util.*;
 
 /**
@@ -69,40 +72,20 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
             }
         }
 
-        final Calendar today = Calendar.getInstance();
-        today.set(Calendar.HOUR_OF_DAY, 0);
-        today.set(Calendar.MINUTE, 0);
-        today.set(Calendar.SECOND, 0);
-        today.set(Calendar.MILLISECOND, 0);
-
-        final int date = today.get(Calendar.DATE);
-        final int month = today.get(Calendar.MONTH);
-        final int year = today.get(Calendar.YEAR);
+        final ZonedDateTime today = TimeContext.getZonedDateTime();
 
         final String criteria = " where e.shop.shopId in (?1) and e.createdTimestamp >= ?2 and e.orderStatus <> ?3";
 
         final int ordersToday = this.customerOrderService.findCountByCriteria(
-                criteria, shops, today.getTime(), CustomerOrder.ORDER_STATUS_NONE
+                criteria, shops, DateUtils.zdtAtStartOfDay(today).toInstant(), CustomerOrder.ORDER_STATUS_NONE
         );
-
-        if (today.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-            today.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            if (date < today.get(Calendar.DATE)) {
-                // monday moved us forward, so need to subtract one week
-                today.add(Calendar.DAY_OF_YEAR, -7);
-            }
-        }
 
         final int ordersWeek = this.customerOrderService.findCountByCriteria(
-                criteria, shops, today.getTime(), CustomerOrder.ORDER_STATUS_NONE
+                criteria, shops, DateUtils.zdtAtStartOfWeek(today).toInstant(), CustomerOrder.ORDER_STATUS_NONE
         );
 
-        today.set(Calendar.DATE, 1);
-        today.set(Calendar.MONTH, month);
-        today.set(Calendar.YEAR, year);
-
         final int ordersMonth = this.customerOrderService.findCountByCriteria(
-                criteria, shops, today.getTime(), CustomerOrder.ORDER_STATUS_NONE
+                criteria, shops, DateUtils.zdtAtStartOfMonth(today).toInstant(), CustomerOrder.ORDER_STATUS_NONE
         );
 
         final String waiting = " where e.shop.shopId in (?1) and e.orderStatus in (?2)";

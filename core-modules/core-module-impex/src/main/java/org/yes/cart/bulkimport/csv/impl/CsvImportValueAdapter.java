@@ -24,7 +24,10 @@ import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkcommon.model.impl.AbstractExtensibleValueAdapter;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +46,10 @@ public class CsvImportValueAdapter extends AbstractExtensibleValueAdapter implem
         put(ImpExColumn.INT,       Integer.class);
         put(ImpExColumn.LONG,      Long.class);
         put(ImpExColumn.DECIMAL,   BigDecimal.class);
-        put(ImpExColumn.DATETIME,  Date.class);
+        put(ImpExColumn.DATE,      LocalDate.class);
+        put(ImpExColumn.DATETIME,  LocalDateTime.class);
+        put(ImpExColumn.ZONEDTIME, ZonedDateTime.class);
+        put(ImpExColumn.INSTANT,   Instant.class);
     }};
 
     public CsvImportValueAdapter(final GenericConversionService extendedConversionService) {
@@ -55,7 +61,7 @@ public class CsvImportValueAdapter extends AbstractExtensibleValueAdapter implem
             return rawValue;
         }
 
-        final ValueAdapter specific = getTypeSpecific(impExColumn.getDataType());
+        final ValueAdapter specific = getTypeSpecific(requiredType);
         if (specific != null) {
             return specific.fromRaw(rawValue, requiredType, impExColumn, tuple);
         }

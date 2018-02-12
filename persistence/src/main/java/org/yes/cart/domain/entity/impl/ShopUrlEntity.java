@@ -18,7 +18,7 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.Shop;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -34,8 +34,8 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
     private String themeChain;
     private boolean primary;
     private Shop shop;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -50,7 +50,7 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
         this.guid = guid;
     }
 
-    public ShopUrlEntity(String url, Shop shop, Date createdTimestamp, Date updatedTimestamp, String createdBy, String updatedBy, String guid) {
+    public ShopUrlEntity(String url, Shop shop, Instant createdTimestamp, Instant updatedTimestamp, String createdBy, String updatedBy, String guid) {
         this.url = url;
         this.shop = shop;
         this.createdTimestamp = createdTimestamp;
@@ -92,19 +92,19 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
         this.shop = shop;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

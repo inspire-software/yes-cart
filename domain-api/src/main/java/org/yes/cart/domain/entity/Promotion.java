@@ -16,7 +16,7 @@
 
 package org.yes.cart.domain.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -207,22 +207,22 @@ public interface Promotion extends Auditable, Codable, Taggable, Rankable, Namea
     /**
      * @return promotion start time
      */
-    Date getEnabledFrom();
+    LocalDateTime getEnabledFrom();
 
     /**
      * @param enabledFrom promotion start time
      */
-    void setEnabledFrom(Date enabledFrom);
+    void setEnabledFrom(LocalDateTime enabledFrom);
 
     /**
      * @return promotion finish time
      */
-    Date getEnabledTo();
+    LocalDateTime getEnabledTo();
 
     /**
      * @param enabledTo promotion finish time
      */
-    void setEnabledTo(Date enabledTo);
+    void setEnabledTo(LocalDateTime enabledTo);
 
 
     /**

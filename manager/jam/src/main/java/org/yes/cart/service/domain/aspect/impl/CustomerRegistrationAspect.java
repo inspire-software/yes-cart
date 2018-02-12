@@ -43,6 +43,8 @@ import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.util.TimeContext;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -121,7 +123,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
         final String generatedPassword;
         final String generatedPasswordHash;
         final String generatedToken;
-        final Date generatedTokenExpiry;
+        final Instant generatedTokenExpiry;
         if (generatePassword) {
 
             if (StringUtils.isNotBlank(registeredPerson.getPassword())) {
@@ -142,7 +144,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
                 if (!isCallcenterToken(shop, token)) {
                     if (!token.equals(registeredPerson.getAuthToken())
                             || registeredPerson.getAuthTokenExpiry() == null
-                            || now().after(registeredPerson.getAuthTokenExpiry())) {
+                            || now().isAfter(registeredPerson.getAuthTokenExpiry())) {
                         throw new BadCredentialsException(Constants.PASSWORD_RESET_AUTH_TOKEN_INVALID);
                     }
                 }
@@ -222,7 +224,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
                                                           final String generatedPassword,
                                                           final String generatedPasswordHash,
                                                           final String generatedToken,
-                                                          final Date generatedTokenExpiry,
+                                                          final Instant generatedTokenExpiry,
                                                           final String template) throws Throwable {
 
 
@@ -278,21 +280,19 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
         return null;
     }
 
-    private Date determineExpiryTime(final Shop shop) {
+    private Instant determineExpiryTime(final Shop shop) {
 
         int secondsTimeout = Constants.DEFAULT_CUSTOMER_TOKEN_EXPIRY_SECONDS;
         final String attrVal = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS);
         if (attrVal != null) {
             secondsTimeout = NumberUtils.toInt(attrVal, secondsTimeout);
         }
-        final Calendar calendar = now();
-        calendar.add(Calendar.SECOND, secondsTimeout);
-        return calendar.getTime();
+        return now().plus(secondsTimeout, ChronoUnit.HOURS);
 
     }
 
-    Calendar now() {
-        return TimeContext.getCalendar();
+    Instant now() {
+        return TimeContext.getTime();
     }
 
     private boolean isCallcenterToken(final Shop shop, final String token) {

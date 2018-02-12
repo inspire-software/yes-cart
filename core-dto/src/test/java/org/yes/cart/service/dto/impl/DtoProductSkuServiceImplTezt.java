@@ -28,9 +28,10 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.service.dto.DtoProductSkuService;
+import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -220,7 +221,7 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         assertTrue((new BigDecimal("1.22")).equals(skuPriceDTO.getSalePrice()));
         assertTrue((new BigDecimal("1.21")).equals(skuPriceDTO.getMinimalPrice()));
 
-        Date date = new Date();
+        LocalDateTime date = TimeContext.getLocalDateTime();
         skuPriceDTO.setRegularPrice(new BigDecimal("2.34"));
         skuPriceDTO.setSalePrice(new BigDecimal("2.33"));
         skuPriceDTO.setMinimalPrice(new BigDecimal("2.32"));
@@ -280,7 +281,7 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         assertNull(skuPriceDTO.getSalePrice());
         assertNull(skuPriceDTO.getMinimalPrice());
 
-        Date date = new Date();
+        LocalDateTime date = TimeContext.getLocalDateTime();
         skuPriceDTO.setRegularPrice(new BigDecimal("2.34"));
         skuPriceDTO.setSalePrice(new BigDecimal("2.33"));
         skuPriceDTO.setMinimalPrice(new BigDecimal("2.32"));

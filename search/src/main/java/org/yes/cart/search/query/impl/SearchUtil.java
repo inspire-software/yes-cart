@@ -39,6 +39,11 @@ import java.util.*;
  */
 public class SearchUtil {
 
+    private static Map<String, Analysis> LANGUAGE_SPECIFIC = new HashMap<String, Analysis>();
+    static {
+        initAnalysis();
+    }
+
     /**
      * Tokenize search phraze and clean from empty strings.
      *
@@ -111,46 +116,6 @@ public class SearchUtil {
     public static List<String> analyseForSearch(final String lang, final String phraze) {
         final Analysis analysis = LANGUAGE_SPECIFIC.getOrDefault(lang, LANGUAGE_SPECIFIC.get("default"));
         return analysis.analyse(phraze);
-    }
-
-    private static Map<String, Analysis> LANGUAGE_SPECIFIC = new HashMap<String, Analysis>();
-    static {
-        LANGUAGE_SPECIFIC.put("ru", new Analysis() {
-            @Override
-            protected Analyzer initialValue() {
-                return new RussianAnalyzer();
-            }
-        });
-        LANGUAGE_SPECIFIC.put("uk", new Analysis() {
-            @Override
-            protected Analyzer initialValue() {
-                return new RussianAnalyzer();
-            }
-        });
-        LANGUAGE_SPECIFIC.put("de", new Analysis() {
-            @Override
-            protected Analyzer initialValue() {
-                return new GermanAnalyzer();
-            }
-        });
-        LANGUAGE_SPECIFIC.put("fr", new Analysis() {
-            @Override
-            protected Analyzer initialValue() {
-                return new FrenchAnalyzer();
-            }
-        });
-        LANGUAGE_SPECIFIC.put("it", new Analysis() {
-            @Override
-            protected Analyzer initialValue() {
-                return new ItalianAnalyzer();
-            }
-        });
-        LANGUAGE_SPECIFIC.put("default", new Analysis() {
-            @Override
-            protected Analyzer initialValue() {
-                return new StandardAnalyzer();
-            }
-        });
     }
 
     private static class Analysis extends ThreadLocal<Analyzer> {
@@ -233,5 +198,54 @@ public class SearchUtil {
         }
         return "0";
     }
+
+    private static void initAnalysis() {
+        LANGUAGE_SPECIFIC.put("ru", new Analysis() {
+            @Override
+            protected Analyzer initialValue() {
+                return new RussianAnalyzer();
+            }
+        });
+        LANGUAGE_SPECIFIC.put("uk", new Analysis() {
+            @Override
+            protected Analyzer initialValue() {
+                return new RussianAnalyzer();
+            }
+        });
+        LANGUAGE_SPECIFIC.put("de", new Analysis() {
+            @Override
+            protected Analyzer initialValue() {
+                return new GermanAnalyzer();
+            }
+        });
+        LANGUAGE_SPECIFIC.put("fr", new Analysis() {
+            @Override
+            protected Analyzer initialValue() {
+                return new FrenchAnalyzer();
+            }
+        });
+        LANGUAGE_SPECIFIC.put("it", new Analysis() {
+            @Override
+            protected Analyzer initialValue() {
+                return new ItalianAnalyzer();
+            }
+        });
+        LANGUAGE_SPECIFIC.put("default", new Analysis() {
+            @Override
+            protected Analyzer initialValue() {
+                return new StandardAnalyzer();
+            }
+        });
+    }
+
+    /**
+     * Explicitly remove thread locals to prevent memory leaks.
+     */
+    public static  void destroy() {
+        for (final Map.Entry<String, Analysis> entry : LANGUAGE_SPECIFIC.entrySet()) {
+            entry.getValue().remove(); // remove
+        }
+    }
+
 
 }

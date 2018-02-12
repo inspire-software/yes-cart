@@ -32,6 +32,7 @@ import org.yes.cart.search.dao.IndexBuilder;
 import org.yes.cart.search.dao.LuceneDocumentAdapter;
 import org.yes.cart.search.dao.LuceneIndexProvider;
 import org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils;
+import org.yes.cart.search.query.impl.SearchUtil;
 import org.yes.cart.util.TimeContext;
 
 import java.io.IOException;
@@ -338,15 +339,16 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
                     LOGFTQ.error("Error during indexing", exp);
                 } finally {
                     asyncRunningState.set(COMPLETED);
-                    TimeContext.clear();
                     if (async) {
                         try {
                             endTx(tx);
                         } catch (Exception exp) { }
+                        SearchUtil.destroy(); // ensure analysers are unloaded
                     }
                     if (log.isInfoEnabled()) {
                         log.info("Full reindex for {} class ... COMPLETED", indexProvider.getName());
                     }
+                    TimeContext.destroy();
                 }
             }
         };

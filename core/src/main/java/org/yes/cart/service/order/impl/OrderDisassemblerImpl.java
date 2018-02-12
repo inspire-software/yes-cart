@@ -28,6 +28,7 @@ import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.util.DateUtils;
 
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -366,22 +367,22 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
             }
 
             @Override
-            public Date getCreatedTimestamp() {
+            public Instant getCreatedTimestamp() {
                 return null;
             }
 
             @Override
-            public void setCreatedTimestamp(final Date createdTimestamp) {
+            public void setCreatedTimestamp(final Instant createdTimestamp) {
 
             }
 
             @Override
-            public Date getUpdatedTimestamp() {
+            public Instant getUpdatedTimestamp() {
                 return null;
             }
 
             @Override
-            public void setUpdatedTimestamp(final Date updatedTimestamp) {
+            public void setUpdatedTimestamp(final Instant updatedTimestamp) {
 
             }
 
@@ -516,12 +517,12 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
             }
 
             @Override
-            public Date getAuthTokenExpiry() {
+            public Instant getAuthTokenExpiry() {
                 return null;
             }
 
             @Override
-            public void setAuthTokenExpiry(final Date authTokenExpiry) {
+            public void setAuthTokenExpiry(final Instant authTokenExpiry) {
 
             }
 

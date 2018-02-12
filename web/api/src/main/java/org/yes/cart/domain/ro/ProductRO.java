@@ -22,6 +22,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.matcher.impl.NoopMatcher;
 import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
+import org.yes.cart.domain.ro.xml.impl.LocalDateTimeAdapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -30,7 +31,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -56,10 +61,10 @@ public class ProductRO implements Serializable {
     private String tag;
 
     @DtoField(value = "availablefrom", readOnly = true)
-    private Date availablefrom;
+    private LocalDateTime availablefrom;
 
     @DtoField(value = "availableto", readOnly = true)
-    private Date availableto;
+    private LocalDateTime availableto;
 
     @DtoField(value = "availability", readOnly = true)
     private int availability;
@@ -189,19 +194,21 @@ public class ProductRO implements Serializable {
         this.tag = tag;
     }
 
-    public Date getAvailablefrom() {
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    public LocalDateTime getAvailablefrom() {
         return availablefrom;
     }
 
-    public void setAvailablefrom(final Date availablefrom) {
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
-    public Date getAvailableto() {
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    public LocalDateTime getAvailableto() {
         return availableto;
     }
 
-    public void setAvailableto(final Date availableto) {
+    public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
 

@@ -22,9 +22,9 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.*;
 import org.yes.cart.payment.service.impl.BasePaymentModuleDBTestCase;
 import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -111,7 +111,7 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
 
     protected CustomerOrder createCustomerOrder(String orderNum) {
         CustomerOrder customerOrder = new CustomerOrderEntity();
-        customerOrder.setOrderTimestamp(new Date());
+        customerOrder.setOrderTimestamp(TimeContext.getLocalDateTime());
         customerOrder.setCurrency("USD");
         customerOrder.setOrdernum(orderNum);
         customerOrder.setCartGuid(UUID.randomUUID().toString());

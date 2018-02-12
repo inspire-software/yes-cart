@@ -30,6 +30,18 @@
 
     <mvc:annotation-driven />
 
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg index="0" name="defaultCharset" value="UTF-8"/>
+            </bean>
+            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="roObjectMapper" />
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
     <mvc:interceptors>
         <bean id="webContentInterceptor"
               class="org.springframework.web.servlet.mvc.WebContentInterceptor">
@@ -40,45 +52,6 @@
         </bean>
     </mvc:interceptors>
 
-    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-
-        <property name="order" value="1" />
-
-        <property name="contentNegotiationManager">
-            <bean class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-                <property name="ignoreAcceptHeader" value="false"/>
-                <property name="mediaTypes">
-                    <map>
-                        <entry key="json" value="application/json" />
-                        <entry key="xml" value="application/xml" />
-                    </map>
-                </property>
-                <property name="defaultContentType" value="application/json" />
-            </bean>
-        </property>
-
-        <property name="defaultViews">
-            <list>
-                <!-- JSON View -->
-                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
-                    <property name="modelKey" value="model"/>
-                </bean>
-
-                <!-- JAXB XML View -->
-                <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
-                    <constructor-arg>
-                        <bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-                            <property name="packagesToScan">
-                                <array>
-                                    <value>org.yes.cart.domain.ro</value>
-                                </array>
-                            </property>
-                        </bean>
-                    </constructor-arg>
-                </bean>
-            </list>
-        </property>
-
-    </bean>
+    <bean id="roObjectMapper" class="org.yes.cart.web.service.rest.impl.RoObjectMapper"/>
 
 </beans>

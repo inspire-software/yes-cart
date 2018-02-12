@@ -21,7 +21,12 @@ import org.yes.cart.domain.entity.Guidable;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Product DTO.
@@ -171,14 +176,14 @@ public interface ProductDTO extends Identifiable, Guidable {
      *
      * @return last update timestamp
      */
-    Date getPimUpdated();
+    Instant getPimUpdated();
 
     /**
      * PIM last update timestamp
      *
      * @param pimUpdated last update timestamp
      */
-    void setPimUpdated(Date pimUpdated);
+    void setPimUpdated(Instant pimUpdated);
 
 
     /**
@@ -260,14 +265,14 @@ public interface ProductDTO extends Identifiable, Guidable {
      *
      * @return start of product availability.
      */
-    Date getAvailablefrom();
+    LocalDateTime getAvailablefrom();
 
     /**
      * Set start of product availability.
      *
      * @param availablefrom start of product availability.
      */
-    void setAvailablefrom(Date availablefrom);
+    void setAvailablefrom(LocalDateTime availablefrom);
 
     /**
      * Get end of product availability.
@@ -275,14 +280,14 @@ public interface ProductDTO extends Identifiable, Guidable {
      *
      * @return end of product availability.
      */
-    Date getAvailableto();
+    LocalDateTime getAvailableto();
 
     /**
      * Set end of product availability.
      *
      * @param availableto end of product availability.
      */
-    void setAvailableto(Date availableto);
+    void setAvailableto(LocalDateTime availableto);
 
     /**
      * Get product availability

@@ -27,6 +27,7 @@ import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -160,7 +161,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         ));
         if (withAvailability) {
 
-            final Date now = now();
+            final LocalDateTime now = now();
             final Iterator<Category> it = cats.iterator();
             while (it.hasNext()) {
 
@@ -179,8 +180,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
 
     }
 
-    Date now() {
-        return TimeContext.getTime();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
 

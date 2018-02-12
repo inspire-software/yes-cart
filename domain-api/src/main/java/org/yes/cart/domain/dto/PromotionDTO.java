@@ -18,7 +18,7 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -225,22 +225,22 @@ public interface PromotionDTO extends Identifiable {
     /**
      * @return promotion start time
      */
-    Date getEnabledFrom();
+    LocalDateTime getEnabledFrom();
 
     /**
      * @param enabledFrom promotion start time
      */
-    void setEnabledFrom(Date enabledFrom);
+    void setEnabledFrom(LocalDateTime enabledFrom);
 
     /**
      * @return promotion finish time
      */
-    Date getEnabledTo();
+    LocalDateTime getEnabledTo();
 
     /**
      * @param enabledTo promotion finish time
      */
-    void setEnabledTo(Date enabledTo);
+    void setEnabledTo(LocalDateTime enabledTo);
 
 
     /**

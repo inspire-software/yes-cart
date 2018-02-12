@@ -18,8 +18,9 @@ package org.yes.cart.util;
 
 import org.yes.cart.domain.entity.AttrValue;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -77,19 +78,19 @@ public final class DomainApiUtils {
      * @return true if object is available given provided settings
      */
     public static boolean isObjectAvailableNow(final boolean enabled,
-                                               final Date availableFrom,
-                                               final Date availableTo,
-                                               final Date now) {
+                                               final LocalDateTime availableFrom,
+                                               final LocalDateTime availableTo,
+                                               final LocalDateTime now) {
 
         if (!enabled) {
             return false;
         }
 
-        if (availableFrom != null && now.before(availableFrom)) {
+        if (availableFrom != null && now.isBefore(availableFrom)) {
             return false;
         }
 
-        if (availableTo != null && now.after(availableTo)) {
+        if (availableTo != null && now.isAfter(availableTo)) {
             return false;
         }
 
@@ -97,34 +98,4 @@ public final class DomainApiUtils {
 
     }
 
-    /**
-     * Check availability of an object.
-     *
-     * @param enabled flag for on/off switch
-     * @param availableFrom availability start (or null)
-     * @param availableTo availability finish (or null)
-     * @param now time now
-     *
-     * @return true if object is available given provided settings
-     */
-    public static boolean isObjectAvailableNow(final boolean enabled,
-                                               final Date availableFrom,
-                                               final Date availableTo,
-                                               final long now) {
-
-        if (!enabled) {
-            return false;
-        }
-
-        if (availableFrom != null && now < availableFrom.getTime()) {
-            return false;
-        }
-
-        if (availableTo != null && now > availableTo.getTime()) {
-            return false;
-        }
-
-        return true;
-
-    }
 }

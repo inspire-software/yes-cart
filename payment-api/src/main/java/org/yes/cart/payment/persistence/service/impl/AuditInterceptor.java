@@ -28,6 +28,7 @@ import org.springframework.security.core.userdetails.User;
 import org.yes.cart.payment.persistence.entity.Auditable;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.*;
 
 
@@ -69,7 +70,7 @@ public class AuditInterceptor extends EmptyInterceptor {
         if (entity instanceof Auditable) {
             final Auditable auditable = ((Auditable) entity);
 
-            final Date date = new Date();
+            final Instant date = Instant.now();
             final String userName = getUserName();
 
             if (StringUtils.isBlank(auditable.getGuid())) {
@@ -118,7 +119,7 @@ public class AuditInterceptor extends EmptyInterceptor {
         if (entity instanceof Auditable) {
             final Auditable auditable = (Auditable) entity;
 
-            final Date date = new Date();
+            final Instant date = Instant.now();
             final String userName = getUserName();
 
 

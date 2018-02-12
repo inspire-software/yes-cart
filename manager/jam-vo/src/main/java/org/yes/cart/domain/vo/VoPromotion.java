@@ -20,7 +20,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.misc.MutablePair;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -75,9 +75,9 @@ public class VoPromotion {
     @DtoField(value = "enabled")
     private boolean enabled;
     @DtoField(value = "enabledFrom")
-    private Date enabledFrom;
+    private LocalDateTime enabledFrom;
     @DtoField(value = "enabledTo")
-    private Date enabledTo;
+    private LocalDateTime enabledTo;
 
     public long getPromotionId() {
         return promotionId;
@@ -215,19 +215,19 @@ public class VoPromotion {
         this.enabled = enabled;
     }
 
-    public Date getEnabledFrom() {
+    public LocalDateTime getEnabledFrom() {
         return enabledFrom;
     }
 
-    public void setEnabledFrom(final Date enabledFrom) {
+    public void setEnabledFrom(final LocalDateTime enabledFrom) {
         this.enabledFrom = enabledFrom;
     }
 
-    public Date getEnabledTo() {
+    public LocalDateTime getEnabledTo() {
         return enabledTo;
     }
 
-    public void setEnabledTo(final Date enabledTo) {
+    public void setEnabledTo(final LocalDateTime enabledTo) {
         this.enabledTo = enabledTo;
     }
 }

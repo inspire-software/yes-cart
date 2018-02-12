@@ -16,9 +16,7 @@
 
 package org.yes.cart.domain.entity;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -236,7 +234,7 @@ public interface CarrierSla extends Auditable {
      *
      * @return map of date exclusions
      */
-    Map<Date, Date> getExcludeDatesAsMap();
+    Map<LocalDate, LocalDate> getExcludeDatesAsMap();
 
     /**
      * Flag to denote that this is a guaranteed delivery for {@link #getMinDays()}. (e.g. next day delivery)

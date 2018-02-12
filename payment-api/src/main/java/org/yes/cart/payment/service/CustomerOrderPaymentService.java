@@ -20,7 +20,7 @@ package org.yes.cart.payment.service;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -75,8 +75,8 @@ public interface CustomerOrderPaymentService extends PaymentModuleGenericService
      */
     List<CustomerOrderPayment> findBy(
             String orderNumber,
-            Date fromDate,
-            Date tillDate,
+            LocalDateTime fromDate,
+            LocalDateTime tillDate,
             String lastCardDigits,
             String cardHolderName,
             String paymentGateway

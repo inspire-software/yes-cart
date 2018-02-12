@@ -19,8 +19,9 @@ package org.yes.cart.domain.entity;
 import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 
 
@@ -415,14 +416,14 @@ public interface CustomerOrder extends Auditable {
      *
      * @return timestamp
      */
-    Date getLastExportDate();
+    Instant getLastExportDate();
 
     /**
      * Timestamp of last attempted export.
      *
      * @param lastExportDate timestamp
      */
-    void setLastExportDate(Date lastExportDate);
+    void setLastExportDate(Instant lastExportDate);
 
     /**
      * Last export status. Could be any update from third party system (e.g. validation error).
@@ -530,14 +531,14 @@ public interface CustomerOrder extends Auditable {
      *
      * @return date/time
      */
-    Date getB2bApprovedDate();
+    LocalDateTime getB2bApprovedDate();
 
     /**
      * Date of approval.
      *
      * @param b2bApprovedDate date/time
      */
-    void setB2bApprovedDate(Date b2bApprovedDate);
+    void setB2bApprovedDate(LocalDateTime b2bApprovedDate);
 
 
     /**
@@ -559,14 +560,14 @@ public interface CustomerOrder extends Auditable {
      *
      * @return requested delivery date
      */
-    Date getRequestedDeliveryDate();
+    LocalDateTime getRequestedDeliveryDate();
 
     /**
      * Requested delivery date by customer
      *
      * @param requestedDeliveryDate requested delivery date
      */
-    void setRequestedDeliveryDate(Date requestedDeliveryDate);
+    void setRequestedDeliveryDate(LocalDateTime requestedDeliveryDate);
 
     /**
      * Get Customer.
@@ -664,14 +665,14 @@ public interface CustomerOrder extends Auditable {
      *
      * @return order creation timestamp.
      */
-    Date getOrderTimestamp();
+    LocalDateTime getOrderTimestamp();
 
     /**
      * Set order creation timestamp.
      *
      * @param orderTimestamp order creation timestamp.
      */
-    void setOrderTimestamp(Date orderTimestamp);
+    void setOrderTimestamp(LocalDateTime orderTimestamp);
 
     /**
      * IP address of the request that created this order.

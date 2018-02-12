@@ -31,7 +31,7 @@ import org.yes.cart.service.vo.VoShopCategoryService;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.TimeContext;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -89,8 +89,8 @@ public class VoShopCategoryServiceImpl implements VoShopCategoryService {
         }
     }
 
-    Date now() {
-        return TimeContext.getTime();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /** {@inheritDoc} */

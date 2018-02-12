@@ -34,9 +34,9 @@
 
         <property name="cardExpireYear" column="CARD_EXPIRY_YEAR" length="4"  type="java.lang.String"/>
         <property name="cardExpireMonth" column="CARD_EXPIRY_MONTH" length="2"  type="java.lang.String"/>
-        <property name="cardStartDate" column="CARD_START_DATE" type="timestamp"/>
+        <property name="cardStartDate" column="CARD_START_DATE" type="java.time.LocalDate"/>
 
-        <property name="orderDate" column="ORDER_DATE" type="timestamp" not-null="true"/>
+        <property name="orderDate" column="ORDER_DATE" type="java.time.LocalDateTime" not-null="true"/>
         <property name="shopCode" column="SHOP_CODE" type="java.lang.String" not-null="true" length="255"/>
         <property name="orderNumber" column="ORDER_NUMBER" type="java.lang.String" index="CUSTOMERORDERPAYMENT_ONUM" not-null="true" length="128"/>
         <property name="orderShipment" column="ORDER_SHIPMENT_NUMBER" type="java.lang.String" not-null="true" length="128"/>
@@ -56,8 +56,8 @@
         <property name="paymentProcessorBatchSettlement" column="PP_BATCH_SETTLEMENT" type="boolean" not-null="true"/>
         <property name="shopperIpAddress" column="IPADDRESS" type="java.lang.String" length="64" not-null="false"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" index="CUSTOMERORDERPAYMENT_GUID"/>
@@ -77,8 +77,8 @@
         <property name="label" length="64" type="java.lang.String" column="P_LABEL"/>
         <property name="pgLabel" length="64" type="java.lang.String" index="PAYMENTGATEWAYPARAMETER_PGL" column="PG_LABEL"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36"  index="PAYMENTGATEWAYPARAMETER_GUID"/>
@@ -97,8 +97,8 @@
         <property name="requestDump" length="12000" type="java.lang.String" column="REQUEST_DUMP"/>
         <property name="processed" type="boolean" column="PROCESSED" index="PAYMENTGATEWAYCALLBACK_PROCESSED"/>
 
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36"  index="PAYMENTGATEWAYCALLBACK_GUID"/>

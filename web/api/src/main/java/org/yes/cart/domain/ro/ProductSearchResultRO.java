@@ -22,6 +22,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.dto.matcher.impl.NoopMatcher;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
+import org.yes.cart.domain.ro.xml.impl.InstantAdapter;
+import org.yes.cart.domain.ro.xml.impl.LocalDateTimeAdapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -30,8 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -83,9 +86,9 @@ public class ProductSearchResultRO implements Serializable {
     @DtoField(readOnly = true)
     private String brand;
     @DtoField(readOnly = true)
-    private Date availablefrom;
+    private LocalDateTime availablefrom;
     @DtoField(readOnly = true)
-    private Date availableto;
+    private LocalDateTime availableto;
     @DtoField(readOnly = true)
     private int availability;
     private ProductAvailabilityModelRO productAvailabilityModel;
@@ -116,9 +119,9 @@ public class ProductSearchResultRO implements Serializable {
     private List<ProductSearchResultAttributeRO> attributes;
 
     @DtoField(readOnly = true)
-    private Date createdTimestamp;
+    private Instant createdTimestamp;
     @DtoField(readOnly = true)
-    private Date updatedTimestamp;
+    private Instant updatedTimestamp;
 
 
     @XmlElement(name = "default-image")
@@ -143,19 +146,21 @@ public class ProductSearchResultRO implements Serializable {
         this.productAvailabilityModel = productAvailabilityModel;
     }
 
-    public Date getAvailableto() {
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    public LocalDateTime getAvailableto() {
         return availableto;
     }
 
-    public void setAvailableto(final Date availableto) {
+    public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
 
-    public Date getAvailablefrom() {
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    public LocalDateTime getAvailablefrom() {
         return availablefrom;
     }
 
-    public void setAvailablefrom(final Date availablefrom) {
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
@@ -395,21 +400,23 @@ public class ProductSearchResultRO implements Serializable {
         this.attributes = attributes;
     }
 
+    @XmlJavaTypeAdapter(InstantAdapter.class)
     @XmlElement(name = "created-timestamp")
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
-    public void setCreatedTimestamp(final Date createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @XmlJavaTypeAdapter(InstantAdapter.class)
     @XmlElement(name = "updated-timestamp")
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(final Date updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 }

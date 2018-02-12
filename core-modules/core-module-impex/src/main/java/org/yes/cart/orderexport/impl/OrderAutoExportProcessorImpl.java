@@ -26,6 +26,7 @@ import org.yes.cart.orderexport.OrderAutoExportProcessor;
 import org.yes.cart.orderexport.OrderExporter;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.util.DateUtils;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.util.log.Markers;
 
 import java.util.*;
@@ -132,7 +133,7 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
                     // Set next eligibility if we have one
                     delivery.setEligibleForExport(nextDeliveryEligibility.get(delivery.getCustomerOrderDeliveryId()));
                     if (exported.contains(delivery.getCustomerOrderDeliveryId())) {
-                        delivery.setLastExportDate(new Date());
+                        delivery.setLastExportDate(TimeContext.getTime());
                         delivery.setLastExportDeliveryStatus(delivery.getDeliveryStatus());
                         delivery.setLastExportStatus(null); // No status - OK
                         LOG.info("Delivery {} exported", delivery.getDeliveryNum());
@@ -151,7 +152,7 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
             // Set next eligibility if we have one
             customerOrder.setEligibleForExport(nextOrderEligibility);
             if (!exported.isEmpty()) {
-                customerOrder.setLastExportDate(new Date());
+                customerOrder.setLastExportDate(TimeContext.getTime());
                 customerOrder.setLastExportOrderStatus(customerOrder.getOrderStatus());
                 customerOrder.setLastExportStatus(null); // No status - OK
                 LOG.info("Order {} exported", customerOrder.getOrdernum());
@@ -189,7 +190,7 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
 
         final CustomerOrder customerOrder = customerOrderService.findById(customerOrderId);
         customerOrder.setLastExportOrderStatus(customerOrder.getOrderStatus());
-        customerOrder.setLastExportDate(new Date());
+        customerOrder.setLastExportDate(TimeContext.getTime());
         customerOrder.setLastExportStatus(error);
         // Key is Exporter+Suffix because we want to overwrite this with last error by this exporter (in case this error
         // is persistent, so that we do not flood the audit table)

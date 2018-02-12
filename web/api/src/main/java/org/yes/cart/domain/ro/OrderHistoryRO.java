@@ -16,11 +16,14 @@
 
 package org.yes.cart.domain.ro;
 
+import org.yes.cart.domain.ro.xml.impl.LocalDateTimeAdapter;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -33,7 +36,7 @@ public class OrderHistoryRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
-    private Date since;
+    private LocalDateTime since;
     private List<OrderRO> orders;
 
     public OrderHistoryRO() {
@@ -44,12 +47,13 @@ public class OrderHistoryRO implements Serializable {
         this.orders = orders;
     }
 
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     @XmlAttribute(name = "since")
-    public Date getSince() {
+    public LocalDateTime getSince() {
         return since;
     }
 
-    public void setSince(final Date since) {
+    public void setSince(final LocalDateTime since) {
         this.since = since;
     }
 

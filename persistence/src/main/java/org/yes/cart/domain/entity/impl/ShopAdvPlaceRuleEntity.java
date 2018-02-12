@@ -20,7 +20,8 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.ShopAdvPlace;
 
-import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -35,12 +36,12 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
     private int rank;
     private String name;
     private String description;
-    private Date availablefrom;
-    private Date availableto;
+    private LocalDateTime availablefrom;
+    private LocalDateTime availableto;
     private String rule;
     private ShopAdvPlace shopAdvPlace;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -74,19 +75,19 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
         this.description = description;
     }
 
-    public Date getAvailablefrom() {
+    public LocalDateTime getAvailablefrom() {
         return this.availablefrom;
     }
 
-    public void setAvailablefrom(Date availablefrom) {
+    public void setAvailablefrom(LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
-    public Date getAvailableto() {
+    public LocalDateTime getAvailableto() {
         return this.availableto;
     }
 
-    public void setAvailableto(Date availableto) {
+    public void setAvailableto(LocalDateTime availableto) {
         this.availableto = availableto;
     }
 
@@ -106,19 +107,19 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
         this.shopAdvPlace = shopAdvPlace;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

@@ -51,7 +51,7 @@
     <TETYPE VERSION="0" ETYPE_ID="1006" GUID="Integer"  JAVATYPE="java.lang.Integer" BUSINESSTYPE="Integer"/>
     <TETYPE VERSION="0" ETYPE_ID="1007" GUID="Phone"    JAVATYPE="java.lang.String" BUSINESSTYPE="Phone"/>
     <TETYPE VERSION="0" ETYPE_ID="1008" GUID="Boolean"  JAVATYPE="java.lang.Boolean" BUSINESSTYPE="Boolean"/>
-    <TETYPE VERSION="0" ETYPE_ID="1009" GUID="Date"  JAVATYPE="java.util.Date" BUSINESSTYPE="Date"/>
+    <TETYPE VERSION="0" ETYPE_ID="1009" GUID="Date"  JAVATYPE="java.time.LocalDateTime" BUSINESSTYPE="Date"/>
     <TETYPE VERSION="0" ETYPE_ID="1010" GUID="EMail"   JAVATYPE="java.lang.String" BUSINESSTYPE="Email"/>
     <TETYPE VERSION="0" ETYPE_ID="1011" GUID="HTML"   JAVATYPE="java.lang.String" BUSINESSTYPE="HTML"/>
 

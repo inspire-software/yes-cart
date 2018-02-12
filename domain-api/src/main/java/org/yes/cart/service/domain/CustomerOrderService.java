@@ -24,8 +24,8 @@ import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.shoppingcart.CartValidityModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +44,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * @param since    given date optional
      * @return list of all orders
      */
-    List<CustomerOrder> findCustomerOrders(Customer customer, Date since);
+    List<CustomerOrder> findCustomerOrders(Customer customer, LocalDateTime since);
 
     /**
      * Get all orders , than belong to give customer.
@@ -53,7 +53,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * @param since      given date optional
      * @return list of all orders
      */
-    List<CustomerOrder> findCustomerOrders(long customerId, Date since);
+    List<CustomerOrder> findCustomerOrders(long customerId, LocalDateTime since);
 
     /**
      * Find customer's order by given criteria.
@@ -75,8 +75,8 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
             String lastName,
             String email,
             String orderStatus,
-            Date fromDate,
-            Date toDate,
+            LocalDateTime fromDate,
+            LocalDateTime toDate,
             String orderNum
     );
 

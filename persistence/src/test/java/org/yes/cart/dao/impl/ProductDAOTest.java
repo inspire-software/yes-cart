@@ -306,7 +306,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 product.setName("product sony name");
                 product.setDescription("Description ");
                 // Preorders are only preorders if available to date is in future, otherwise standard
-                product.setAvailablefrom(DateUtils.dParseSDT("2099-01-01"));
+                product.setAvailablefrom(DateUtils.ldtParseSDT("2099-01-01"));
 
                 ProductType productType = productTypeDao.findById(1L);
                 assertNotNull(productType);

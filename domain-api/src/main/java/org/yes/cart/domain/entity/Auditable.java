@@ -16,7 +16,7 @@
 
 package org.yes.cart.domain.entity;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * Auditable holds auditing fields, that is also used to "getByKey" database changes slice
@@ -37,22 +37,22 @@ public interface Auditable extends Identifiable, Guidable, Versionable {
     /**
      * @return created timestamp.
      */
-    Date getCreatedTimestamp();
+    Instant getCreatedTimestamp();
 
     /**
      * @param createdTimestamp set created timestamp.
      */
-    void setCreatedTimestamp(Date createdTimestamp);
+    void setCreatedTimestamp(Instant createdTimestamp);
 
     /**
      * @return updated timestamp.
      */
-    Date getUpdatedTimestamp();
+    Instant getUpdatedTimestamp();
 
     /**
      * @param updatedTimestamp set updated timestamp.
      */
-    void setUpdatedTimestamp(Date updatedTimestamp);
+    void setUpdatedTimestamp(Instant updatedTimestamp);
 
     /**
      * @return created by user identificator.

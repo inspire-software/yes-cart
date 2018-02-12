@@ -156,9 +156,9 @@ public class ResilientCartRepositoryImpl implements CartRepository {
     private boolean determineIfLoginInvalidationRequired(final ShoppingCartState state, final long shopId) {
 
         if (state.getUpdatedTimestamp() != null) {
-            return determineIfLoginInvalidationRequired(state.getUpdatedTimestamp().getTime(), shopId);
+            return determineIfLoginInvalidationRequired(state.getUpdatedTimestamp().toEpochMilli(), shopId);
         }
-        return determineIfLoginInvalidationRequired(state.getCreatedTimestamp().getTime(), shopId);
+        return determineIfLoginInvalidationRequired(state.getCreatedTimestamp().toEpochMilli(), shopId);
 
     }
 

@@ -20,8 +20,9 @@ import org.yes.cart.bulkcommon.model.ImpExDescriptor;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkcommon.service.support.LookUpQueryParameterStrategyValueProvider;
+import org.yes.cart.util.TimeContext;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -29,6 +30,12 @@ import java.util.Date;
  * Time: 12:22
  */
 public class NowLookUpQueryParameterStrategyValueProviderImpl implements LookUpQueryParameterStrategyValueProvider {
+
+    private enum Type {
+        LDT, LD, I
+    }
+
+    private Type javaType = Type.LDT;
 
     /**
      * {@inheritDoc}
@@ -40,6 +47,23 @@ public class NowLookUpQueryParameterStrategyValueProviderImpl implements LookUpQ
                                       final ValueAdapter adapter,
                                       final String queryTemplate) {
 
-        return new Date();
+        if (javaType == Type.LDT) {
+            return TimeContext.getLocalDateTime();
+        } else if (javaType == Type.LD) {
+            return TimeContext.getLocalDate();
+        }
+        return TimeContext.getTime();
+    }
+
+    public void setJavaType(final String javaType) {
+        if ("java.time.LocalDateTime".equals(javaType)) {
+            this.javaType = Type.LDT;
+        } else if ("java.time.LocalDate".equals(javaType)) {
+            this.javaType = Type.LD;
+        } else if ("java.time.Instant".equals(javaType)) {
+            this.javaType = Type.I;
+        } else {
+            throw new IllegalArgumentException("Unsupported time class " + javaType);
+        }
     }
 }

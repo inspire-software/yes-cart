@@ -27,9 +27,9 @@ import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
+import org.yes.cart.util.DateUtils;
 
 import java.util.Collections;
-import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -109,7 +109,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
 
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
 
-        changeAvailabilityDatesAndAssert("CC_TEST6", new Date(0L), true);
+        changeAvailabilityDatesAndAssert("CC_TEST6", DateUtils.ldtFrom(0L), true);
 
         CustomerOrderDelivery delivery = null;
         for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
@@ -162,7 +162,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
 
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
 
-        changeAvailabilityDatesAndAssert("CC_TEST6", new Date(0L), true);
+        changeAvailabilityDatesAndAssert("CC_TEST6", DateUtils.ldtFrom(0L), true);
 
         CustomerOrderDelivery delivery = null;
         for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
@@ -214,7 +214,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
 
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
 
-        changeAvailabilityDatesAndAssert("CC_TEST6", new Date(0L), true);
+        changeAvailabilityDatesAndAssert("CC_TEST6", DateUtils.ldtFrom(0L), true);
 
         CustomerOrderDelivery delivery = null;
         for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
@@ -265,7 +265,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
 
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
 
-        changeAvailabilityDatesAndAssert("CC_TEST6", new Date(0L), true);
+        changeAvailabilityDatesAndAssert("CC_TEST6", DateUtils.ldtFrom(0L), true);
 
         CustomerOrderDelivery delivery = null;
         for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
@@ -373,7 +373,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
 
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
 
-        changeAvailabilityDatesAndAssert("CC_TEST6", new Date(0L), true);
+        changeAvailabilityDatesAndAssert("CC_TEST6", DateUtils.ldtFrom(0L), true);
 
         CustomerOrderDelivery delivery = null;
         for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
@@ -439,7 +439,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
 
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
 
-        changeAvailabilityDatesAndAssert("CC_TEST6", new Date(0L), true);
+        changeAvailabilityDatesAndAssert("CC_TEST6", DateUtils.ldtFrom(0L), true);
 
         CustomerOrderDelivery delivery = null;
         for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
@@ -505,7 +505,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
 
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
 
-        changeAvailabilityDatesAndAssert("CC_TEST6", new Date(0L), true);
+        changeAvailabilityDatesAndAssert("CC_TEST6", DateUtils.ldtFrom(0L), true);
 
         CustomerOrderDelivery delivery = null;
         for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
@@ -570,7 +570,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
 
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
 
-        changeAvailabilityDatesAndAssert("CC_TEST6", new Date(0L), true);
+        changeAvailabilityDatesAndAssert("CC_TEST6", DateUtils.ldtFrom(0L), true);
 
         CustomerOrderDelivery delivery = null;
         for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {

@@ -17,7 +17,7 @@
 package org.yes.cart.payment.persistence.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -34,22 +34,22 @@ public interface Auditable extends Serializable {
     /**
      * @return created timestamp.
      */
-    Date getCreatedTimestamp();
+    Instant getCreatedTimestamp();
 
     /**
      * @param createdTimestamp set created timestamp.
      */
-    void setCreatedTimestamp(Date createdTimestamp);
+    void setCreatedTimestamp(Instant createdTimestamp);
 
     /**
      * @return updated timestamp.
      */
-    Date getUpdatedTimestamp();
+    Instant getUpdatedTimestamp();
 
     /**
      * @param updatedTimestamp set updated timestamp.
      */
-    void setUpdatedTimestamp(Date updatedTimestamp);
+    void setUpdatedTimestamp(Instant updatedTimestamp);
 
     /**
      * @return created by user identificator.

@@ -23,7 +23,7 @@ import org.yes.cart.domain.entity.xml.ProductTypeRangeListXStreamProvider;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.stream.xml.XStreamProvider;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -43,8 +43,8 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     private String navigationTemplate;
     private String navigationType;
     private String rangeNavigation;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -149,19 +149,19 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         this.rangeNavigation = rangeNavigation;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

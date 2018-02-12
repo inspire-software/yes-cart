@@ -16,8 +16,7 @@
 
 package org.yes.cart.util;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.*;
 
 /**
  * User: denispavlov
@@ -26,17 +25,21 @@ import java.util.Date;
  */
 public final class TimeContext {
 
-    private static final ThreadLocal<Date> NOW = new ThreadLocal<Date>();
-
-    private static final ThreadLocal<Calendar> CALENDAR = new ThreadLocal<Calendar>() {
-        @Override
-        protected Calendar initialValue() {
-            return Calendar.getInstance();
-        }
-    };
+    private static final ZoneId DEFAULT_ZONE = ZoneId.systemDefault();
+    private static final ThreadLocal<Instant> NOW = new ThreadLocal<Instant>();
+    private static final ThreadLocal<ZoneId> ZONE = ThreadLocal.withInitial(() -> DEFAULT_ZONE);
 
     private TimeContext() {
         // no instance
+    }
+
+    /**
+     * Get zone ID for current time context.
+     *
+     * @return current zone
+     */
+    public static ZoneId getZone() {
+        return ZONE.get();
     }
 
     /**
@@ -46,11 +49,11 @@ public final class TimeContext {
      * @return date now
      */
     public static long getMillis() {
-        final Date date = NOW.get();
-        if (date == null) {
+        final Instant instant = NOW.get();
+        if (instant == null) {
             return System.currentTimeMillis();
         }
-        return date.getTime();
+        return instant.toEpochMilli();
     }
 
 
@@ -60,49 +63,99 @@ public final class TimeContext {
      *
      * @return date now
      */
-    public static Date getTime() {
-        final Date date = NOW.get();
-        if (date == null) {
-            return new Date();
+    public static Instant getTime() {
+        final Instant instant = NOW.get();
+        if (instant == null) {
+            return Instant.now();
         }
-        return (Date) date.clone();
+        return instant;
     }
 
 
     /**
      * Time frame set for this thread local.
-     * If time frame is not set then new Date() is returned.
      *
-     * @return date now
+     * If time frame is not set then current system time is returned.
+     *
+     * @return date now in given zone
      */
-    public static Calendar getCalendar() {
-        final Calendar cal = CALENDAR.get();
-        cal.setTime(getTime());
-        return (Calendar) cal.clone();
+    public static LocalDate getLocalDate() {
+        return getLocalDateTime().toLocalDate();
+    }
+
+
+    /**
+     * Time frame set for this thread local.
+     *
+     * If time frame is not set then current system time is returned.
+     *
+     * @return date time now in given zone
+     */
+    public static LocalDateTime getLocalDateTime() {
+        return LocalDateTime.ofInstant(getTime(), getZone());
+    }
+
+
+    /**
+     * Time frame set for this thread local.
+     *
+     * If time frame is not set then current system time is returned.
+     *
+     * @return date time now in given zone
+     */
+    public static ZonedDateTime getZonedDateTime() {
+        return ZonedDateTime.ofInstant(getTime(), getZone());
     }
 
 
     /**
      * Time frame to use for this thread local.
      *
+     * Setting null results in {@link #getTime()} producing new instant on each invocation.
+     * Setting this to an Instant "freezes" time to this instant until {@link #clear()} is called.
+     *
      * @param time time
      */
-    public static void setTime(final Date time) {
+    public static void setTime(final Instant time) {
         NOW.set(time);
     }
 
     /**
-     * Set time frame to now (new Date())
+     * Set time frame to now (Instant.now())
      */
     public static void setNow() {
-        setTime(new Date());
+        setTime(Instant.now());
     }
+
+    /**
+     * Set zone ID.
+     *
+     * Zone ID to use for localized date/datetime conversions.
+     * Settinf this value to null results in resetting zone id to {@link #DEFAULT_ZONE}
+     *
+     * @param zoneId zone ID
+     */
+    public static void setZone(final ZoneId zoneId) {
+        ZONE.set(zoneId != null ? zoneId : DEFAULT_ZONE);
+    }
+
+
 
     /**
      * Remove thread local setting
      */
     public static void clear() {
         setTime(null);
+        setZone(null);
     }
+
+    /**
+     * Explicitly remove thread locals to prevent memory leaks.
+     */
+    public static  void destroy() {
+        NOW.remove();
+        ZONE.remove();
+    }
+
 
 }

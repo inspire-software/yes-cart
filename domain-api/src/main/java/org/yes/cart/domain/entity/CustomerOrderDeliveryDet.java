@@ -20,7 +20,8 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.CartItem;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 
@@ -123,42 +124,42 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return estimated date
      */
-    Date getDeliveryEstimatedMin();
+    LocalDateTime getDeliveryEstimatedMin();
 
     /**
      * Earliest date the delivery is estimated for.
      *
      * @param deliveryEstimatedMin estimated date
      */
-    void setDeliveryEstimatedMin(Date deliveryEstimatedMin);
+    void setDeliveryEstimatedMin(LocalDateTime deliveryEstimatedMin);
 
     /**
      * Latest date the delivery is estimated for.
      *
      * @return estimated date
      */
-    Date getDeliveryEstimatedMax();
+    LocalDateTime getDeliveryEstimatedMax();
 
     /**
      * Latest date the delivery is estimated for.
      *
      * @param deliveryEstimatedMax estimated date
      */
-    void setDeliveryEstimatedMax(Date deliveryEstimatedMax);
+    void setDeliveryEstimatedMax(LocalDateTime deliveryEstimatedMax);
 
     /**
      * Guaranteed delivery date.
      *
      * @return guaranteed date
      */
-    Date getDeliveryGuaranteed();
+    LocalDateTime getDeliveryGuaranteed();
 
     /**
      * Guaranteed delivery date.
      *
      * @param deliveryGuaranteed guaranteed date
      */
-    void setDeliveryGuaranteed(Date deliveryGuaranteed);
+    void setDeliveryGuaranteed(LocalDateTime deliveryGuaranteed);
 
     /**
      * Confirmed delivery date. This date should be populated from the third party integrations and denoted
@@ -167,14 +168,14 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return guaranteed date
      */
-    Date getDeliveryConfirmed();
+    LocalDateTime getDeliveryConfirmed();
 
     /**
      * Actual confirmed delivery date.
      *
      * @param delivered confirmed delivery date
      */
-    void setDeliveryConfirmed(Date delivered);
+    void setDeliveryConfirmed(LocalDateTime delivered);
 
     /**
      * Actual delivered quantity. Zero indicates that item has been rejected. Must remain null if no
@@ -240,14 +241,14 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return invoice date
      */
-    Date getSupplierInvoiceDate();
+    LocalDate getSupplierInvoiceDate();
 
     /**
      * Set invoice date.
      *
      * @param supplierInvoiceDate invoice date
      */
-    void setSupplierInvoiceDate(Date supplierInvoiceDate);
+    void setSupplierInvoiceDate(LocalDate supplierInvoiceDate);
 
     /**
      * Get order delivery.

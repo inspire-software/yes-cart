@@ -20,7 +20,7 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -35,8 +35,8 @@ public class ShopCategoryEntity implements org.yes.cart.domain.entity.ShopCatego
     private int rank;
     private Shop shop;
     private Category category;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -70,19 +70,19 @@ public class ShopCategoryEntity implements org.yes.cart.domain.entity.ShopCatego
         this.category = category;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

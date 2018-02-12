@@ -30,7 +30,6 @@ import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.DateUtils;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -80,7 +79,6 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
     protected boolean doRun(final Instant lastRun) {
 
         final String nodeId = getNodeId();
-        final Date lastRunDate = DateUtils.from(lastRun);
 
         if (isLuceneIndexDisabled()) {
             LOG.info("Reindexing products inventory updates on {} ... disabled", nodeId);
@@ -96,7 +94,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
 
         LOG.info("Check changed orders products to be reindexed on {}, batch {}", nodeId, batchSize);
 
-        List<String> productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRunDate);
+        List<String> productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
 
         if (productSkus != null && !productSkus.isEmpty()) {
 
@@ -111,12 +109,12 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
                     Thread.sleep(getDeltaCheckDelay());
                 } catch (InterruptedException e) {
                 }
-                productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRunDate);
+                productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
                 int delta = productSkus.size() - count;
                 int maxDelta = getDeltaCheckSize();
                 if (delta > maxDelta) {
                     LOG.info("Detected bulking operation ... {} inventory records changed in past {} seconds (max: {}). Postponing check until next run.",
-                            new Object[]{delta, getDeltaCheckDelay() / 1000, maxDelta});
+                            delta, getDeltaCheckDelay() / 1000, maxDelta);
                     return false;
                 }
             }
@@ -125,7 +123,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
             count = productSkus.size();
             runBatch = count < full;
 
-            LOG.info("Inventory changed for {} since {}", productSkus.size(), lastRun);
+            LOG.info("Inventory changed for {} since {}", productSkus.size(), DateUtils.formatSDT(lastRun));
 
             if (runBatch) {
                 int fromIndex = 0;

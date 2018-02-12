@@ -21,7 +21,7 @@ import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * Context object that holds runtime information necessary for the
@@ -41,7 +41,7 @@ public interface PromotionContext extends Serializable {
     /**
      * @return timestamp for creation of this context
      */
-    Date getTimestamp();
+    Instant getTimestamp();
 
     /**
      * Apply item level promotions on cart.

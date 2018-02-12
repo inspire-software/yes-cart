@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.yes.cart.service.domain.ShopTopSellerService;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -42,9 +42,9 @@ public class TopSellerCounterJobBeanImpl extends QuartzJobBean {
      * {@inheritDoc}
      */
     protected void executeInternal(final JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        LOG.info("TopSellerCounterJobBeanImpl start at {}", new Date());
+        LOG.info("TopSellerCounterJobBeanImpl start at {}", LocalDateTime.now());
         shopTopSellerService.updateTopSellers (calculationPeriodInDays);
-        LOG.info("TopSellerCounterJobBeanImpl   end at {}", new Date());
+        LOG.info("TopSellerCounterJobBeanImpl   end at {}", LocalDateTime.now());
     }
 
     /**

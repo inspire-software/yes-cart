@@ -18,7 +18,7 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.Shop;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * Shop alias.
@@ -30,8 +30,8 @@ public class ShopAliasEntity implements org.yes.cart.domain.entity.ShopAlias, ja
 
     private String alias;
     private Shop shop;
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -46,7 +46,7 @@ public class ShopAliasEntity implements org.yes.cart.domain.entity.ShopAlias, ja
         this.guid = guid;
     }
 
-    public ShopAliasEntity(String alias, Shop shop, Date createdTimestamp, Date updatedTimestamp, String createdBy, String updatedBy, String guid) {
+    public ShopAliasEntity(String alias, Shop shop, Instant createdTimestamp, Instant updatedTimestamp, String createdBy, String updatedBy, String guid) {
         this.alias = alias;
         this.shop = shop;
         this.createdTimestamp = createdTimestamp;
@@ -72,19 +72,19 @@ public class ShopAliasEntity implements org.yes.cart.domain.entity.ShopAlias, ja
         this.shop = shop;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

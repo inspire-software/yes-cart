@@ -37,8 +37,8 @@ import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -138,7 +138,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setLocale(shoppingCart.getCurrentLocale());
         customerOrder.setCurrency(shoppingCart.getCurrencyCode());
         customerOrder.setOrderStatus(CustomerOrder.ORDER_STATUS_NONE);
-        customerOrder.setOrderTimestamp(nowOrder());
+        customerOrder.setOrderTimestamp(now());
         customerOrder.setGuid(shoppingCart.getGuid());
         customerOrder.setCartGuid(shoppingCart.getGuid());
         customerOrder.setOrderIp(shoppingCart.getShoppingContext().getResolvedIp());
@@ -180,7 +180,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setB2bApprovedBy(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_BY));
         final String approvedDate = shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_DATE);
         if (approvedDate != null) {
-            final Date approve = DateUtils.dParseSDT(approvedDate);
+            final LocalDateTime approve = DateUtils.ldtParseSDT(approvedDate);
             if (approve == null) {
                 throw new OrderAssemblyException("Order b2bApprovedDate has invalid format: " + approvedDate + ", has to be \"yyyy-MM-dd HH:mm:ss\"");
             }
@@ -322,9 +322,13 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setOrderMessage(shoppingCart.getOrderMessage());
         customerOrder.setB2bRemarks(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_REMARKS_ID));
 
-        final long requestedDate = NumberUtils.toLong(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID), 0);
-        if (requestedDate > now()) {
-            customerOrder.setRequestedDeliveryDate(new Date(requestedDate));
+        final LocalDateTime requestedDate =
+                DateUtils.ldtFrom(
+                        NumberUtils.toLong(shoppingCart.getOrderInfo().getDetailByKey(
+                                AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID), 0)
+                );
+        if (requestedDate.isAfter(now())) {
+            customerOrder.setRequestedDeliveryDate(requestedDate);
         }
 
 
@@ -354,12 +358,8 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
     }
 
-    long now() {
-        return TimeContext.getMillis();
-    }
-
-    Date nowOrder() {
-        return TimeContext.getTime();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /**
@@ -491,7 +491,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
         final ProductSku sku = productSkuService.getProductSkuBySkuCode(item.getProductSkuCode());
         if (sku != null) {
 
-            final long now = now();
+            final LocalDateTime now = now();
             final int availability = sku.getProduct().getAvailability();
             final boolean isAvailableNow = availability != Product.AVAILABILITY_SHOWROOM && DomainApiUtils.isObjectAvailableNow(true, sku.getProduct().getAvailablefrom(), sku.getProduct().getAvailableto(), now);
             final boolean isAvailableLater = availability == Product.AVAILABILITY_PREORDER && DomainApiUtils.isObjectAvailableNow(true, null, sku.getProduct().getAvailableto(), now);

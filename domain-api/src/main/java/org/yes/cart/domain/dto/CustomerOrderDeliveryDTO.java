@@ -18,8 +18,9 @@ package org.yes.cart.domain.dto;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  *
@@ -235,42 +236,42 @@ public interface CustomerOrderDeliveryDTO   extends Identifiable {
      *
      * @return estimated date
      */
-    Date getDeliveryEstimatedMin();
+    LocalDateTime getDeliveryEstimatedMin();
 
     /**
      * Earliest date the delivery is estimated for.
      *
      * @param deliveryEstimatedMin estimated date
      */
-    void setDeliveryEstimatedMin(Date deliveryEstimatedMin);
+    void setDeliveryEstimatedMin(LocalDateTime deliveryEstimatedMin);
 
     /**
      * Latest date the delivery is estimated for.
      *
      * @return estimated date
      */
-    Date getDeliveryEstimatedMax();
+    LocalDateTime getDeliveryEstimatedMax();
 
     /**
      * Latest date the delivery is estimated for.
      *
      * @param deliveryEstimatedMax estimated date
      */
-    void setDeliveryEstimatedMax(Date deliveryEstimatedMax);
+    void setDeliveryEstimatedMax(LocalDateTime deliveryEstimatedMax);
 
     /**
      * Guaranteed delivery date.
      *
      * @return guaranteed date
      */
-    Date getDeliveryGuaranteed();
+    LocalDateTime getDeliveryGuaranteed();
 
     /**
      * Guaranteed delivery date.
      *
      * @param deliveryGuaranteed guaranteed date
      */
-    void setDeliveryGuaranteed(Date deliveryGuaranteed);
+    void setDeliveryGuaranteed(LocalDateTime deliveryGuaranteed);
 
 
     /**
@@ -280,14 +281,14 @@ public interface CustomerOrderDeliveryDTO   extends Identifiable {
      *
      * @return guaranteed date
      */
-    Date getDeliveryConfirmed();
+    LocalDateTime getDeliveryConfirmed();
 
     /**
      * Actual confirmed delivery date.
      *
      * @param delivered confirmed delivery date
      */
-    void setDeliveryConfirmed(Date delivered);
+    void setDeliveryConfirmed(LocalDateTime delivered);
 
     /**
      * Flag for export management control.
@@ -322,14 +323,14 @@ public interface CustomerOrderDeliveryDTO   extends Identifiable {
      *
      * @return timestamp
      */
-    Date getLastExportDate();
+    Instant getLastExportDate();
 
     /**
      * Timestamp of last attempted export.
      *
      * @param lastExportDate timestamp
      */
-    void setLastExportDate(Date lastExportDate);
+    void setLastExportDate(Instant lastExportDate);
 
     /**
      * Last export status. Could be any update from third party system (e.g. validation error).
@@ -407,14 +408,14 @@ public interface CustomerOrderDeliveryDTO   extends Identifiable {
      *
      * @return requested delivery date
      */
-    Date getRequestedDeliveryDate();
+    LocalDateTime getRequestedDeliveryDate();
 
     /**
      * Requested delivery date by customer
      *
      * @param requestedDeliveryDate requested delivery date
      */
-    void setRequestedDeliveryDate(Date requestedDeliveryDate);
+    void setRequestedDeliveryDate(LocalDateTime requestedDeliveryDate);
 
 
     /**

@@ -18,7 +18,8 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.Promotion;
 
-import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -52,11 +53,11 @@ public class PromotionEntity implements Promotion, java.io.Serializable {
     private boolean couponTriggered;
     private boolean canBeCombined;
     private boolean enabled;
-    private Date enabledFrom;
-    private Date enabledTo;
+    private LocalDateTime enabledFrom;
+    private LocalDateTime enabledTo;
 
-    private Date createdTimestamp;
-    private Date updatedTimestamp;
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
@@ -201,35 +202,35 @@ public class PromotionEntity implements Promotion, java.io.Serializable {
         this.enabled = enabled;
     }
 
-    public Date getEnabledFrom() {
+    public LocalDateTime getEnabledFrom() {
         return enabledFrom;
     }
 
-    public void setEnabledFrom(final Date enabledFrom) {
+    public void setEnabledFrom(final LocalDateTime enabledFrom) {
         this.enabledFrom = enabledFrom;
     }
 
-    public Date getEnabledTo() {
+    public LocalDateTime getEnabledTo() {
         return enabledTo;
     }
 
-    public void setEnabledTo(final Date enabledTo) {
+    public void setEnabledTo(final LocalDateTime enabledTo) {
         this.enabledTo = enabledTo;
     }
 
-    public Date getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
-    public void setCreatedTimestamp(final Date createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public Date getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(final Date updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 

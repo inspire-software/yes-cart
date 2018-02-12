@@ -18,13 +18,13 @@ package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -68,7 +68,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     private boolean multipleShipmentOption;
 
     @DtoField(value = "orderTimestamp", readOnly = true)
-    private Date orderTimestamp;
+    private LocalDateTime orderTimestamp;
 
     @DtoField(value = "orderIp", readOnly = true)
     private String orderIp;
@@ -127,7 +127,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     @DtoField(value = "blockExport", readOnly = true)
     private boolean blockExport;
     @DtoField(value = "lastExportDate", readOnly = true)
-    private Date lastExportDate;
+    private Instant lastExportDate;
     @DtoField(value = "lastExportStatus", readOnly = true)
     private String lastExportStatus;
     @DtoField(value = "lastExportOrderStatus", readOnly = true)
@@ -144,12 +144,12 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     @DtoField(value = "b2bApprovedBy", readOnly = true)
     private String b2bApprovedBy;
     @DtoField(value = "b2bApprovedDate", readOnly = true)
-    private Date b2bApprovedDate;
+    private LocalDateTime b2bApprovedDate;
     @DtoField(value = "b2bRemarks", readOnly = true)
     private String b2bRemarks;
 
     @DtoField(value = "requestedDeliveryDate", readOnly = true)
-    private Date requestedDeliveryDate;
+    private LocalDateTime requestedDeliveryDate;
 
     @DtoField(value = "allValues", readOnly = true)
     private Map<String, Pair<String, String>> allValues;
@@ -459,14 +459,14 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
-    public Date getOrderTimestamp() {
+    public LocalDateTime getOrderTimestamp() {
         return orderTimestamp;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setOrderTimestamp(final Date orderTimestamp) {
+    public void setOrderTimestamp(final LocalDateTime orderTimestamp) {
         this.orderTimestamp = orderTimestamp;
     }
 
@@ -585,14 +585,14 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
-    public Date getLastExportDate() {
+    public Instant getLastExportDate() {
         return lastExportDate;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setLastExportDate(final Date lastExportDate) {
+    public void setLastExportDate(final Instant lastExportDate) {
         this.lastExportDate = lastExportDate;
     }
 
@@ -697,14 +697,14 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
-    public Date getB2bApprovedDate() {
+    public LocalDateTime getB2bApprovedDate() {
         return b2bApprovedDate;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setB2bApprovedDate(final Date b2bApprovedDate) {
+    public void setB2bApprovedDate(final LocalDateTime b2bApprovedDate) {
         this.b2bApprovedDate = b2bApprovedDate;
     }
 
@@ -725,14 +725,14 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
-    public Date getRequestedDeliveryDate() {
+    public LocalDateTime getRequestedDeliveryDate() {
         return requestedDeliveryDate;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setRequestedDeliveryDate(final Date requestedDeliveryDate) {
+    public void setRequestedDeliveryDate(final LocalDateTime requestedDeliveryDate) {
         this.requestedDeliveryDate = requestedDeliveryDate;
     }
 

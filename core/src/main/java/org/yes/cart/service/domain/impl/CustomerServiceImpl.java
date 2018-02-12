@@ -32,6 +32,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.impl.AttributeRankComparator;
 
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -357,7 +358,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    public ResultsIterator<Customer> findGuestsBefore(final Date date) {
+    public ResultsIterator<Customer> findGuestsBefore(final Instant date) {
         return getGenericDao().findByNamedQueryIterator("GUESTS.BEFORE.CREATED", Boolean.TRUE, date);
     }
 }

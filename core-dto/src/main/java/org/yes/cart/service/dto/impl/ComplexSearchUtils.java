@@ -17,13 +17,12 @@
 package org.yes.cart.service.dto.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.util.DateUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * User: denispavlov
@@ -97,12 +96,12 @@ class ComplexSearchUtils {
      *
      * @return from-to pair
      */
-    public static Pair<Date, Date> checkDateRangeSearch(String filter) {
+    public static Pair<LocalDateTime, LocalDateTime> checkDateRangeSearch(String filter) {
         if (filter.length() > 4 && filter.contains("<")) {
 
             final String[] fromAndTo = org.apache.commons.lang.StringUtils.splitPreserveAllTokens(filter, '<');
-            final Date from = fromAndTo.length > 0 ? stringToDate(fromAndTo[0]) : null;
-            final Date to = fromAndTo.length > 1 ? stringToDate(fromAndTo[1]) : null;
+            final LocalDateTime from = fromAndTo.length > 0 ? stringToDate(fromAndTo[0]) : null;
+            final LocalDateTime to = fromAndTo.length > 1 ? stringToDate(fromAndTo[1]) : null;
 
             if (from != null || to != null) {
                 return new Pair<>(from, to);
@@ -113,41 +112,23 @@ class ComplexSearchUtils {
     }
 
 
-    private static Date stringToDate(String string) {
+    private static LocalDateTime stringToDate(String string) {
         if (StringUtils.isNotBlank(string)) {
             try {
-                final String[] dateParts = org.apache.commons.lang.StringUtils.split(string, '-');
-                final Calendar cal = Calendar.getInstance();
-                if (dateParts.length > 0) {
-                    int year = NumberUtils.toInt(dateParts[0]);
-                    if (year < 1900 || year > 2199) {
-                        return null;
-                    }
-                    cal.set(Calendar.YEAR, year);
+                switch (string.length()) {
+                    case 4:
+                        return DateUtils.ldtParse(string + "-01-01", "yyyy-MM-dd");
+                    case 7:
+                        return DateUtils.ldtParse(string + "-01", "yyyy-MM-dd");
+                    case 10:
+                        return DateUtils.ldtParse(string, "yyyy-MM-dd");
+                    case 13:
+                        return DateUtils.ldtParse(string, "yyyy-MM-dd HH");
+                    case 16:
+                        return DateUtils.ldtParse(string, "yyyy-MM-dd HH:mm");
+                    case 19:
+                        return DateUtils.ldtParse(string, "yyyy-MM-dd HH:mm:ss");
                 }
-                if (dateParts.length > 1) {
-                    int mth = NumberUtils.toInt(dateParts[1], -1) - 1;
-                    if (mth < 0 || mth > 11) {
-                        return null;
-                    }
-                    cal.set(Calendar.MONTH, mth);
-                } else {
-                    cal.set(Calendar.MONTH, 0);
-                }
-                if (dateParts.length > 2) {
-                    int dt = NumberUtils.toInt(dateParts[2], -1);
-                    if (dt < 0 || dt > 31) {
-                        return null;
-                    }
-                    cal.set(Calendar.DATE, dt);
-                } else {
-                    cal.set(Calendar.DATE, 1);
-                }
-                cal.set(Calendar.HOUR_OF_DAY, 0);
-                cal.set(Calendar.MINUTE, 0);
-                cal.set(Calendar.SECOND, 0);
-                cal.set(Calendar.MILLISECOND, 0);
-                return cal.getTime();
             } catch (Exception exp) {
                 // do nothing
                 return null;

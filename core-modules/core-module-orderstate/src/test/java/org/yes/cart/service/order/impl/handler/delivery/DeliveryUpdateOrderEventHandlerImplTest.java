@@ -33,6 +33,7 @@ import org.yes.cart.service.order.impl.handler.AbstractEventHandlerImplTest;
 import org.yes.cart.util.DateUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -62,8 +63,8 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         paymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
     }
 
-    Date date(final String date) throws Exception{
-        return DateUtils.dParseSDT(date);
+    LocalDateTime date(final String date) throws Exception{
+        return DateUtils.ldtParseSDT(date);
     }
 
     @Test
@@ -404,10 +405,10 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
                 "WAREHOUSE_1",
                 Arrays.<OrderDeliveryLineStatusUpdate>asList(
                         new OrderDeliveryLineStatusUpdateImpl(
-                                null, "CC_TEST1", "delivered 1", null, null, null, date("2017-02-21"), null, new BigDecimal(2), false, "INV-001",  date("2017-02-22")
+                                null, "CC_TEST1", "delivered 1", null, null, null, date("2017-02-21"), null, new BigDecimal(2), false, "INV-001",  date("2017-02-22").toLocalDate()
                         ),
                         new OrderDeliveryLineStatusUpdateImpl(
-                                null, "CC_TEST2", "delivered 2", null, null, null, date("2017-02-21"), null, new BigDecimal(1), false, "INV-001",  date("2017-02-22")
+                                null, "CC_TEST2", "delivered 2", null, null, null, date("2017-02-21"), null, new BigDecimal(1), false, "INV-001",  date("2017-02-22").toLocalDate()
                         )
                 )
         );
@@ -454,7 +455,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertFalse(test31.isDeliveryRejected());
         assertFalse(test31.isDeliveryDifferent());
         assertEquals("INV-001", test31.getSupplierInvoiceNo());
-        assertEquals(date("2017-02-22"), test31.getSupplierInvoiceDate());
+        assertEquals(date("2017-02-22").toLocalDate(), test31.getSupplierInvoiceDate());
 
         final CustomerOrderDeliveryDet test32 = detailsBySKU3.get("CC_TEST2");
         assertNotNull(test32);
@@ -466,7 +467,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertFalse(test32.isDeliveryRejected());
         assertFalse(test32.isDeliveryDifferent());
         assertEquals("INV-001", test32.getSupplierInvoiceNo());
-        assertEquals(date("2017-02-22"), test32.getSupplierInvoiceDate());
+        assertEquals(date("2017-02-22").toLocalDate(), test32.getSupplierInvoiceDate());
 
         // single payment AUTH because CAPTURE should be confirmed by CC manager
         assertSinglePaymentEntry(customerOrder.getOrdernum(), "689.74", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
@@ -648,10 +649,10 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
                 "WAREHOUSE_1",
                 Arrays.<OrderDeliveryLineStatusUpdate>asList(
                         new OrderDeliveryLineStatusUpdateImpl(
-                                null, "CC_TEST1", "delivered 1", null, null, null, date("2017-02-21"), null, new BigDecimal(2), false, "INV-001",  date("2017-02-22")
+                                null, "CC_TEST1", "delivered 1", null, null, null, date("2017-02-21"), null, new BigDecimal(2), false, "INV-001",  date("2017-02-22").toLocalDate()
                         ),
                         new OrderDeliveryLineStatusUpdateImpl(
-                                null, "CC_TEST2", "delivered 2", null, null, null, date("2017-02-21"), null, new BigDecimal(1), false, "INV-001",  date("2017-02-22")
+                                null, "CC_TEST2", "delivered 2", null, null, null, date("2017-02-21"), null, new BigDecimal(1), false, "INV-001",  date("2017-02-22").toLocalDate()
                         )
                 )
         );
@@ -698,7 +699,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertFalse(test31.isDeliveryRejected());
         assertFalse(test31.isDeliveryDifferent());
         assertEquals("INV-001", test31.getSupplierInvoiceNo());
-        assertEquals(date("2017-02-22"), test31.getSupplierInvoiceDate());
+        assertEquals(date("2017-02-22").toLocalDate(), test31.getSupplierInvoiceDate());
 
         final CustomerOrderDeliveryDet test32 = detailsBySKU3.get("CC_TEST2");
         assertNotNull(test32);
@@ -710,7 +711,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertFalse(test32.isDeliveryRejected());
         assertFalse(test32.isDeliveryDifferent());
         assertEquals("INV-001", test32.getSupplierInvoiceNo());
-        assertEquals(date("2017-02-22"), test32.getSupplierInvoiceDate());
+        assertEquals(date("2017-02-22").toLocalDate(), test32.getSupplierInvoiceDate());
 
         // Prepaid
         assertSinglePaymentEntry(customerOrder.getOrdernum(), "689.74", PaymentGateway.AUTH_CAPTURE, Payment.PAYMENT_STATUS_OK, true);
@@ -883,10 +884,10 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
                 "WAREHOUSE_1",
                 Arrays.<OrderDeliveryLineStatusUpdate>asList(
                         new OrderDeliveryLineStatusUpdateImpl(
-                                null, "CC_TEST1", "delivered 1", null, null, null, date("2017-02-21"), null, new BigDecimal(2), false, "INV-001",  date("2017-02-22")
+                                null, "CC_TEST1", "delivered 1", null, null, null, date("2017-02-21"), null, new BigDecimal(2), false, "INV-001",  date("2017-02-22").toLocalDate()
                         ),
                         new OrderDeliveryLineStatusUpdateImpl(
-                                null, "CC_TEST2", "delivered 2", null, null, null, date("2017-02-21"), null, new BigDecimal(1), false, "INV-001",  date("2017-02-22")
+                                null, "CC_TEST2", "delivered 2", null, null, null, date("2017-02-21"), null, new BigDecimal(1), false, "INV-001",  date("2017-02-22").toLocalDate()
                         )
                 )
         );
@@ -933,7 +934,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertFalse(test31.isDeliveryRejected());
         assertFalse(test31.isDeliveryDifferent());
         assertEquals("INV-001", test31.getSupplierInvoiceNo());
-        assertEquals(date("2017-02-22"), test31.getSupplierInvoiceDate());
+        assertEquals(date("2017-02-22").toLocalDate(), test31.getSupplierInvoiceDate());
 
         final CustomerOrderDeliveryDet test32 = detailsBySKU3.get("CC_TEST2");
         assertNotNull(test32);
@@ -945,7 +946,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertFalse(test32.isDeliveryRejected());
         assertFalse(test32.isDeliveryDifferent());
         assertEquals("INV-001", test32.getSupplierInvoiceNo());
-        assertEquals(date("2017-02-22"), test32.getSupplierInvoiceDate());
+        assertEquals(date("2017-02-22").toLocalDate(), test32.getSupplierInvoiceDate());
 
         // Shipment confirmation triggers CAPTURE
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
@@ -993,7 +994,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
                 "WAREHOUSE_1",
                 Arrays.<OrderDeliveryLineStatusUpdate>asList(
                         new OrderDeliveryLineStatusUpdateImpl(
-                                null, "CC_TEST1", "delivered", date("2017-02-17"), date("2017-02-20"), null, date("2017-02-21"), null, new BigDecimal(2), false, "INV-001",  date("2017-02-22")
+                                null, "CC_TEST1", "delivered", date("2017-02-17"), date("2017-02-20"), null, date("2017-02-21"), null, new BigDecimal(2), false, "INV-001",  date("2017-02-22").toLocalDate()
                         )
                 )
         );
@@ -1055,7 +1056,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
                 "WAREHOUSE_1",
                 Arrays.<OrderDeliveryLineStatusUpdate>asList(
                         new OrderDeliveryLineStatusUpdateImpl(
-                                null, "CC_TEST2", "rejected", null, null, null, null, null, null, true, "INV-001",  date("2017-02-22")
+                                null, "CC_TEST2", "rejected", null, null, null, null, null, null, true, "INV-001",  date("2017-02-22").toLocalDate()
                         )
                 )
         );

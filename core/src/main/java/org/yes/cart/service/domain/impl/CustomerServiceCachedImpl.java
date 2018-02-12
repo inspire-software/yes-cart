@@ -26,7 +26,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -194,7 +194,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
-    public ResultsIterator<Customer> findGuestsBefore(final Date date) {
+    public ResultsIterator<Customer> findGuestsBefore(final Instant date) {
         return customerService.findGuestsBefore(date);
     }
 

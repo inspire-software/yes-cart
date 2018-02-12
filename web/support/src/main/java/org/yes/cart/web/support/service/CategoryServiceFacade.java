@@ -19,7 +19,6 @@ package org.yes.cart.web.support.service;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -141,7 +140,7 @@ public interface CategoryServiceFacade {
      *
      * @return max number of days
      */
-    Date getCategoryNewArrivalDate(long categoryId, long shopId);
+    int getCategoryNewArrivalOffsetDays(long categoryId, long shopId);
 
 
     /**

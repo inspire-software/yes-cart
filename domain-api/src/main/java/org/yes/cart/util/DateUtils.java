@@ -23,10 +23,10 @@ import org.slf4j.LoggerFactory;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
+import java.time.temporal.TemporalAdjusters;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -102,17 +102,6 @@ public final class DateUtils {
     /**
      * Return timestamp for "now" in  yyyyMMddHHmmss format
      *
-     * @param date date time
-     *
-     * @return timestamp
-     */
-    public static String exportFileTimestamp(final Date date) {
-        return format(date, EXPORT_FILE_TIMESTAMP);
-    }
-
-    /**
-     * Return timestamp for "now" in  yyyyMMddHHmmss format
-     *
      * @param instant date time
      *
      * @return timestamp
@@ -141,17 +130,6 @@ public final class DateUtils {
      */
     public static String exportFileTimestamp(final ZonedDateTime zonedDateTime) {
         return format(zonedDateTime, EXPORT_FILE_TIMESTAMP);
-    }
-
-    /**
-     * Return timestamp for "now" in  yyyyMMddHHmmss format
-     *
-     * @param dateTime date time
-     *
-     * @return timestamp
-     */
-    public static String numberTimestamp(final Date dateTime) {
-        return format(dateTime, NUMBER_TIMESTAMP);
     }
 
     /**
@@ -194,17 +172,6 @@ public final class DateUtils {
      */
     public static String impexFileTimestamp() {
         return impexFileTimestamp(ZonedDateTime.now(zone()));
-    }
-
-    /**
-     * Return timestamp for "now" in  yyyy-MM-dd_HHmmss format
-     *
-     * @param date date time
-     *
-     * @return timestamp
-     */
-    public static String impexFileTimestamp(final Date date) {
-        return format(date, IMPEX_FILE_TIMESTAMP);
     }
 
     /**
@@ -258,49 +225,84 @@ public final class DateUtils {
         return zonedDateTime.format(AUTO_IMPORT_TIMESTAMP);
     }
 
+
     /**
-     * Convert to old Date
+     * Get local date.
      *
-     * @param instant date time
+     * @param millis millis
      *
      * @return date
      */
-    public static Date from(final Instant instant) {
-        return instant != null ? Date.from(instant) : null;
+    public static LocalDate ldFrom(final long millis) {
+        return ldtFrom(millis).toLocalDate();
     }
 
     /**
-     * Convert to old Date
+     * Get local date time.
+     *
+     * @param millis millis
+     *
+     * @return date time
+     */
+    public static LocalDateTime ldtFrom(final long millis) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), zone());
+    }
+
+    /**
+     * Get zoned date time.
+     *
+     * @param millis millis
+     *
+     * @return date time
+     */
+    public static ZonedDateTime zdtFrom(final long millis) {
+        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(millis), zone());
+    }
+
+    /**
+     * Get instant.
+     *
+     * @param millis millis
+     *
+     * @return instant
+     */
+    public static Instant iFrom(final long millis) {
+        return Instant.ofEpochMilli(millis);
+    }
+
+    /**
+     * Get instant.
      *
      * @param localDate date
      *
-     * @return date
+     * @return instant
      */
-    public static Date from(final LocalDate localDate) {
-        return localDate != null ? Date.from(localDate.atStartOfDay(zone()).toInstant()) : null;
+    public static Instant iFrom(final LocalDate localDate) {
+        return localDate != null ? localDate.atStartOfDay(DateUtils.zone()).toInstant() : null;
     }
 
     /**
-     * Convert to old Date
+     * Get instant.
      *
      * @param localDateTime date time
      *
-     * @return date
+     * @return instant
      */
-    public static Date from(final LocalDateTime localDateTime) {
-        return localDateTime != null ? Date.from(localDateTime.atZone(zone()).toInstant()) : null;
+    public static Instant iFrom(final LocalDateTime localDateTime) {
+        return localDateTime != null ? localDateTime.atZone(DateUtils.zone()).toInstant() : null;
     }
 
     /**
-     * Convert to old Date
+     * Get instant.
      *
      * @param zonedDateTime date time
      *
-     * @return date
+     * @return instant
      */
-    public static Date from(final ZonedDateTime zonedDateTime) {
-        return zonedDateTime != null ? Date.from(zonedDateTime.toInstant()) : null;
+    public static Instant iFrom(final ZonedDateTime zonedDateTime) {
+        return zonedDateTime != null ? zonedDateTime.toInstant() : null;
     }
+
 
     /**
      * Get millis.
@@ -358,38 +360,6 @@ public final class DateUtils {
         }
         return dtf;
     }
-
-    /**
-     * Parse date or date time using pattern
-     *
-     * @param datetime date or datetime
-     * @param pattern pattern
-     *
-     * @return date object
-     */
-    public static Date dParse(final String datetime, final String pattern) {
-        return dParse(datetime, lazyLoad(pattern));
-    }
-
-    private static Date dParse(final String datetime, final DateTimeFormatter formatter) {
-
-        if (StringUtils.isNotBlank(datetime)) {
-            try {
-
-                TemporalAccessor temporalAccessor = formatter.parseBest(datetime, LocalDateTime::from, LocalDate::from);
-                if (temporalAccessor instanceof LocalDateTime) {
-                    return Date.from(((LocalDateTime) temporalAccessor).atZone(zone()).toInstant());
-                }
-                return Date.from(((LocalDate) temporalAccessor).atStartOfDay(zone()).toInstant());
-            } catch (Exception exp) {
-                LOG.error("Unable to parse date {} using formatter {}", datetime, formatter);
-                LOG.error(exp.getMessage(), exp);
-            }
-        }
-        return null;
-
-    }
-
 
     /**
      * Parse date or date time using pattern
@@ -528,22 +498,6 @@ public final class DateUtils {
 
     }
 
-
-    /**
-     * Parse date or date time in the following formats:
-     * yyyy-MM-dd
-     * yyyy-MM-dd HH:mm:ss
-     *
-     * @param datetime date or datetime
-     *
-     * @return date object
-     */
-    public static Date dParseSDT(final String datetime) {
-
-        return dParse(datetime, STANDARD_DATETIME_PARSE);
-
-    }
-
     /**
      * Parse date or date time in the following formats:
      * yyyy-MM-dd
@@ -601,23 +555,6 @@ public final class DateUtils {
     public static ZonedDateTime zdtParseSDT(final String datetime) {
 
         return zdtParse(datetime, STANDARD_DATETIME_PARSE);
-
-    }
-
-    private static String format(final Date datetime, final DateTimeFormatter formatter) {
-
-        if (datetime != null) {
-            try {
-                if (datetime instanceof java.sql.Date) { // java.sql.Date.toInstant() is not supported operation
-                    return format(((java.sql.Date) datetime).toLocalDate(), formatter);
-                }
-                return ZonedDateTime.ofInstant(datetime.toInstant(), zone()).format(formatter);
-            } catch (Exception exp) {
-                LOG.error("Unable to format date {} using formatter {}", datetime, formatter);
-                LOG.error(exp.getMessage(), exp);
-            }
-        }
-        return null;
 
     }
 
@@ -702,24 +639,9 @@ public final class DateUtils {
      */
     public static String formatSDT(final Instant instant) {
 
-        return instant.toEpochMilli()
+        return instant != null ? instant.toEpochMilli()
                 + INSTANT_COMMENT
-                + ZonedDateTime.ofInstant(instant, zone());
-
-    }
-
-
-    /**
-     * Format date or date time in the following formats:
-     * yyyy-MM-dd HH:mm:ss
-     *
-     * @param datetime date or datetime
-     *
-     * @return date
-     */
-    public static String formatSDT(final Date datetime) {
-
-        return format(datetime, STANDARD_DATETIME);
+                + ZonedDateTime.ofInstant(instant, zone()) : null;
 
     }
 
@@ -762,20 +684,6 @@ public final class DateUtils {
     public static String formatSDT(final ZonedDateTime datetime) {
 
         return format(datetime, STANDARD_DATETIME);
-
-    }
-
-    /**
-     * Format date or date time in the following formats:
-     * yyyy-MM-dd
-     *
-     * @param date date
-     *
-     * @return date
-     */
-    public static String formatSD(final Date date) {
-
-        return format(date, STANDARD_DATE);
 
     }
 
@@ -861,21 +769,6 @@ public final class DateUtils {
      *
      * @return year now
      */
-    public static String formatCustomer(final Date date, final Locale locale) {
-
-        return format(date, lazyLoad("dd MMMM yyyy", locale));
-
-    }
-
-    /**
-     * Format date in locale specific way in the following formats:
-     * dd MMMMM yyyy
-     *
-     * @param date date time
-     * @param locale locale
-     *
-     * @return year now
-     */
     public static String formatCustomer(final LocalDate date, final Locale locale) {
 
         return format(date, lazyLoad("dd MMMM yyyy", locale));
@@ -912,6 +805,140 @@ public final class DateUtils {
 
     }
 
+
+    /**
+     * Determine start of the year for this local date time (the start is on the 1st at 00:00:00).
+     *
+     * @param date date time
+     *
+     * @return start of the year
+     */
+    public static LocalDateTime ldtAtStartOfYear(final LocalDateTime date) {
+        return date != null ? date.with(TemporalAdjusters.firstDayOfYear()).truncatedTo(ChronoUnit.DAYS) : null;
+    }
+
+    /**
+     * Determine start of the year for this zoned date time (the start is on the 1st at 00:00:00).
+     *
+     * @param date date time
+     *
+     * @return start of the year
+     */
+    public static ZonedDateTime zdtAtStartOfYear(final ZonedDateTime date) {
+        return date != null ? date.with(TemporalAdjusters.firstDayOfYear()).truncatedTo(ChronoUnit.DAYS) : null;
+    }
+
+
+    /**
+     * Determine start of the month for this local date time (the start is on the 1st at 00:00:00).
+     *
+     * @param date date time
+     *
+     * @return start of the month
+     */
+    public static LocalDateTime ldtAtStartOfMonth(final LocalDateTime date) {
+        return date != null ? date.with(TemporalAdjusters.firstDayOfMonth()).truncatedTo(ChronoUnit.DAYS) : null;
+    }
+
+    /**
+     * Determine start of the month for this zoned date time (the start is on the 1st at 00:00:00).
+     *
+     * @param date date time
+     *
+     * @return start of the month
+     */
+    public static ZonedDateTime zdtAtStartOfMonth(final ZonedDateTime date) {
+        return date != null ? date.with(TemporalAdjusters.firstDayOfMonth()).truncatedTo(ChronoUnit.DAYS) : null;
+    }
+
+    /**
+     * Determine start of the week for this local date time (the start is on Monday at 00:00:00).
+     *
+     * @param date date time
+     *
+     * @return start of the week
+     */
+    public static LocalDateTime ldtAtStartOfWeek(final LocalDateTime date) {
+        return date != null ? date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS) : null;
+    }
+
+    /**
+     * Determine start of the week for this zoned date time (the start is on Monday at 00:00:00).
+     *
+     * @param date date time
+     *
+     * @return start of the week
+     */
+    public static ZonedDateTime zdtAtStartOfWeek(final ZonedDateTime date) {
+        return date != null ? date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).truncatedTo(ChronoUnit.DAYS) : null;
+    }
+
+    /**
+     * Determine start of day for this zoned date time (the start is at 00:00:00).
+     *
+     * @param date date time
+     *
+     * @return start of the day
+     */
+    public static LocalDateTime ldtAtStartOfDay(final LocalDateTime date) {
+        return date != null ? date.truncatedTo(ChronoUnit.DAYS) : null;
+    }
+
+    /**
+     * Determine start of day for this zoned date time (the start is at 00:00:00).
+     *
+     * @param date date time
+     *
+     * @return start of the day
+     */
+    public static ZonedDateTime zdtAtStartOfDay(final ZonedDateTime date) {
+        return date != null ? date.truncatedTo(ChronoUnit.DAYS) : null;
+    }
+
+
+
+    /**
+     * Convert list of days of week numbers from {@link Calendar#DAY_OF_WEEK}  (staring with SUNDAY = 1 to SATURDAY = 7)
+     * format to {@link DayOfWeek} (starting from MONDAY = 1 to SUNDAY = 7)
+     * dd MMMMM yyyy
+     *
+     * @param calendarDaysOfWeek {@link Calendar#DAY_OF_WEEK} days of week
+     *
+     * @return {@link DayOfWeek} days of week
+     */
+    public static List<DayOfWeek> fromCalendarDaysOfWeekToISO(final List<Integer> calendarDaysOfWeek) {
+
+        if (calendarDaysOfWeek != null) {
+            final List<DayOfWeek> iso = new ArrayList<>(calendarDaysOfWeek.size());
+            for (final Integer dow : calendarDaysOfWeek) {
+                switch (dow) {
+                    case Calendar.MONDAY:
+                        iso.add(DayOfWeek.MONDAY);
+                        break;
+                    case Calendar.TUESDAY:
+                        iso.add(DayOfWeek.TUESDAY);
+                        break;
+                    case Calendar.WEDNESDAY:
+                        iso.add(DayOfWeek.WEDNESDAY);
+                        break;
+                    case Calendar.THURSDAY:
+                        iso.add(DayOfWeek.THURSDAY);
+                        break;
+                    case Calendar.FRIDAY:
+                        iso.add(DayOfWeek.FRIDAY);
+                        break;
+                    case Calendar.SATURDAY:
+                        iso.add(DayOfWeek.SATURDAY);
+                        break;
+                    case Calendar.SUNDAY:
+                        iso.add(DayOfWeek.SUNDAY);
+                        break;
+                }
+            }
+            return iso;
+        }
+        return new ArrayList<>(0);
+    }
 
 
 }

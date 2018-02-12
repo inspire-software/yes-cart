@@ -19,10 +19,10 @@ package org.yes.cart.service.order.impl;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.order.OrderNumberGenerator;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.util.TimeContext;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -39,7 +39,7 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
 
     private final GenericDAO<CustomerOrder, Long> customerOrderDao;
     private AtomicInteger orderSequence = new AtomicInteger();
-    private Date lastCheck;
+    private LocalDateTime lastCheck;
 
     /**
      * Construct order number generator service.
@@ -60,12 +60,12 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
         lastCheck = null;
     }
 
-    void setLastCheck(final Date lastCheck) {
+    void setLastCheck(final LocalDateTime lastCheck) {
         this.lastCheck = lastCheck;
     }
 
-    Calendar now() {
-        return TimeContext.getCalendar();
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /**
@@ -75,21 +75,21 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
      */
     public synchronized String getNextOrderNumber() {
 
-        final Calendar now = now();
+        final LocalDateTime now = now();
         final String datePart = datePart(now);
         final String sequencePart = getOrderSequence(now);
         return datePart + '-' + sequencePart;
 
     }
 
-    String datePart(final Calendar calendar) {
+    String datePart(final LocalDateTime dateTime) {
 
-        final long year = calendar.get(Calendar.YEAR);
-        final long mth = calendar.get(Calendar.MONTH) + 1;
-        final long day = calendar.get(Calendar.DAY_OF_MONTH);
-        final long hour = calendar.get(Calendar.HOUR_OF_DAY);
-        final long min = calendar.get(Calendar.MINUTE);
-        final long sec = calendar.get(Calendar.SECOND);
+        final long year = dateTime.getYear();
+        final long mth = dateTime.getMonthValue();
+        final long day = dateTime.getDayOfMonth();
+        final long hour = dateTime.getHour();
+        final long min = dateTime.getMinute();
+        final long sec = dateTime.getSecond();
 
         final long time = (year % 100) * 10000000000l + mth * 100000000l + day * 1000000l + hour * 10000l + min * 100 + sec;
 
@@ -97,25 +97,21 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
 
     }
 
-    private String getOrderSequence(final Calendar calendar) {
+    private String getOrderSequence(final LocalDateTime dateTime) {
 
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
+        final LocalDateTime startOfThisMonth = DateUtils.ldtAtStartOfMonth(dateTime);
 
-        if (lastCheck == null || lastCheck.before(calendar.getTime())) {
+        if (lastCheck == null || lastCheck.isBefore(startOfThisMonth)) {
             synchronized (DefaultOrderNumberGeneratorImpl.class) {
-                if (lastCheck == null || lastCheck.before(calendar.getTime())) {
+                if (lastCheck == null || lastCheck.isBefore(startOfThisMonth)) {
                     // Restart count for current month
                     orderSequence.set(
                             customerOrderDao.findCountByCriteria(
                                     " where e.orderTimestamp >= ?1 and e.orderStatus <> ?2",
-                                    calendar.getTime(), CustomerOrder.ORDER_STATUS_NONE
+                                    startOfThisMonth, CustomerOrder.ORDER_STATUS_NONE
                             )
                     );
-                    lastCheck = calendar.getTime();
+                    lastCheck = startOfThisMonth;
                 }
             }
         }
