@@ -614,6 +614,64 @@ public final class DateUtils {
 
     }
 
+    /**
+     * Format instant in given format
+     *
+     * @param instant instant
+     * @param pattern pattern
+     *
+     * @return formatted
+     */
+    public static String format(final Instant instant, final String pattern) {
+
+        return format(instant, lazyLoad(pattern));
+
+    }
+
+
+    /**
+     * Format date in given format
+     *
+     * @param date date
+     * @param pattern pattern
+     *
+     * @return formatted
+     */
+    public static String format(final LocalDate date, final String pattern) {
+
+        return format(date, lazyLoad(pattern));
+
+    }
+
+
+    /**
+     * Format datetime in given format
+     *
+     * @param datetime datetime
+     * @param pattern pattern
+     *
+     * @return formatted
+     */
+    public static String format(final LocalDateTime datetime, final String pattern) {
+
+        return format(datetime, lazyLoad(pattern));
+
+    }
+
+
+    /**
+     * Format datetime in given format
+     *
+     * @param datetime datetime
+     * @param pattern pattern
+     *
+     * @return formatted
+     */
+    public static String format(final ZonedDateTime datetime, final String pattern) {
+
+        return format(datetime, lazyLoad(pattern));
+
+    }
 
 
     /**

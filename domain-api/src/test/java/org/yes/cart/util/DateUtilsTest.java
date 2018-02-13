@@ -129,16 +129,21 @@ public class DateUtilsTest {
         assertNotNull(localDate);
         assertEquals("2017-10-10 00:00:00", DateUtils.formatSDT(localDate));
         assertEquals("2017-10-10", DateUtils.formatSD(localDate));
+        assertEquals("10/10/17 00:00:00", DateUtils.format(localDate, "dd/MM/yy HH:mm:ss"));
 
         final LocalDateTime localDateTime = DateUtils.ldtParse("10/10/17 10:30:00", "dd/MM/yy HH:mm:ss");
         assertNotNull(localDateTime);
         assertEquals("2017-10-10 10:30:00", DateUtils.formatSDT(localDateTime));
         assertEquals("2017-10-10", DateUtils.formatSD(localDateTime));
+        assertEquals("10/10/17 10:30", DateUtils.format(localDateTime, "dd/MM/yy HH:mm"));
 
         final ZonedDateTime zonedDateTime = DateUtils.zdtParse("10/10/17 10:30:00", "dd/MM/yy HH:mm:ss");
         assertNotNull(zonedDateTime);
         assertEquals("2017-10-10 10:30:00", DateUtils.formatSDT(zonedDateTime));
         assertEquals("2017-10-10", DateUtils.formatSD(zonedDateTime));
+        assertEquals("10/10/17 10:30:00", DateUtils.format(zonedDateTime, "dd/MM/yy HH:mm:ss"));
+
+        assertEquals("10/10/17 10:30:00", DateUtils.format(zonedDateTime.toInstant(), "dd/MM/yy HH:mm:ss"));
 
         assertNotNull(DateUtils.formatSDT());
 
