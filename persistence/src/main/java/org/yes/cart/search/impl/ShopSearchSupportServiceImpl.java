@@ -80,7 +80,12 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
                 }
 
                 if (lookInSubCats == null) {
-                    lookInSubCats = shopService.getById(shopId).isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
+                    final String searchInSub = shopService.getById(shopId).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
+                    if (StringUtils.isBlank(searchInSub)) {
+                        lookInSubCats = true; // default is to search in sub cats, so we use tru if not set
+                    } else {
+                        lookInSubCats = Boolean.valueOf(searchInSub);
+                    }
                 }
 
                 final List<Long> catIds = categoryService.getCategoryIdAndLinkId(categoryId);
