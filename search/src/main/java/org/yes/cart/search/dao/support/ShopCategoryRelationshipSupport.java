@@ -89,4 +89,13 @@ public interface ShopCategoryRelationshipSupport {
      */
     Set<Long> getCategoryParentsIds(long categoryId);
 
+    /**
+     * Get all category links.
+     *
+     * @param categoryId given category PK
+     *
+     * @return immediate links
+     */
+    Set<Long> getCategoryLinkedIds(long categoryId);
+
 }

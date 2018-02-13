@@ -85,6 +85,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
                 populateResultsByFc(entity, now, resultsByFc, availableIn);
 
+                final List<SkuPrice> allPrices = determineAllActivePrices(entity);
+
                 final Document[] documents = new Document[resultsByFc.size()];
                 int count = 0;
 
@@ -184,7 +186,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                     addInventoryFields(document, result, available, now);
 
                     // Add prices
-                    addPriceFields(document, entity, result, available, now);
+                    addPriceFields(document, entity, allPrices, result, available, now);
 
                     // Add categories
                     addCategoryFields(document, entity, available, now);
@@ -383,22 +385,20 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      * Determine lowest price and set it as facet field.
      * @param document    index document
      * @param entity      product
+     * @param allPrices   all prices for all SKU in all shops
      * @param result      search result
      * @param available   shop PK's
      * @param now         time now to filter out inactive price records
      */
-    protected void addPriceFields(final Document document, final Product entity, final ProductSearchResultDTO result, final Set<Long> available, final LocalDateTime now) {
+    protected void addPriceFields(final Document document, final Product entity, final List<SkuPrice> allPrices, final ProductSearchResultDTO result, final Set<Long> available, final LocalDateTime now) {
 
         final boolean isShowRoom = entity.getAvailability() == Product.AVAILABILITY_SHOWROOM;
-
-        final List<SkuPrice> allPrices = determineAllActivePrices(entity);
 
         Set<Long> availableIn = null;
         if (!allPrices.isEmpty()) {
 
             final Map<Long, Map<String, SkuPrice>> lowestQuantityPrice = new HashMap<Long, Map<String, SkuPrice>>();
-            for (Object obj : (Collection) allPrices) {
-                SkuPrice skuPrice = (SkuPrice) obj;
+            for (final SkuPrice skuPrice : allPrices) {
 
                 if (!available.contains(skuPrice.getShop().getShopId())) {
                     continue; // This product is not in stock in this shop

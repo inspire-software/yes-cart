@@ -90,8 +90,16 @@ public class ShopCategoryRelationshipSupportCachedImpl implements ShopCategoryRe
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-categoryParentsIds"/*, key ="shop.getShopId()"*/)
+    @Cacheable(value = "categoryService-categoryParentsIds")
     public Set<Long> getCategoryParentsIds(final long categoryId) {
         return support.getCategoryParentsIds(categoryId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "categoryService-categoryLinkedIds")
+    public Set<Long> getCategoryLinkedIds(long categoryId) {
+        return support.getCategoryLinkedIds(categoryId);
     }
 }

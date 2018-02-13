@@ -77,15 +77,22 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
         final CategoryRelationDTO category = proxy().getCategoryRelationById(categoryId);
         final Set<Long> parents = new HashSet<Long>();
         if (category != null && !category.isRoot()) {
-            parents.addAll((List) categoryDao.findQueryObjectByNamedQuery("LINKED.CATEGORY.IDS.BY.ID", category.getCategoryId()));
+            parents.addAll(proxy().getCategoryLinkedIds(category.getCategoryId()));
             final CategoryRelationDTO parent = proxy().getCategoryRelationById(category.getParentId());
             if (parent != null && !parent.isRoot()) {
                 parents.add(category.getParentId());
-                parents.addAll((List) categoryDao.findQueryObjectByNamedQuery("LINKED.CATEGORY.IDS.BY.ID", category.getParentId()));
+                parents.addAll(proxy().getCategoryLinkedIds(category.getParentId()));
             }
 
         }
         return Collections.unmodifiableSet(parents);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Set<Long> getCategoryLinkedIds(long categoryId) {
+        return Collections.unmodifiableSet(new HashSet(categoryDao.findQueryObjectByNamedQuery("LINKED.CATEGORY.IDS.BY.ID", categoryId)));
     }
 
     /**
