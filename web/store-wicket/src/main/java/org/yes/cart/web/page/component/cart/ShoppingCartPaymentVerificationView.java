@@ -29,6 +29,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.util.DateUtils;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -42,7 +43,6 @@ import org.yes.cart.web.support.service.ProductServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.util.*;
 
 /**
@@ -157,34 +157,29 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                         final IModel<String> deliveryTime;
                         final boolean showDeliveryTime;
                         if (delivery.getDeliveryConfirmed() != null) {
-                            final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
                             deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryConfirmed",
-                                    Collections.<String, Object>singletonMap("date", df.format(delivery.getDeliveryConfirmed())));
+                                    Collections.<String, Object>singletonMap("date", DateUtils.formatCustomer(delivery.getDeliveryConfirmed(), getLocale())));
                             showDeliveryTime = true;
                         } else if (delivery.getDeliveryGuaranteed() != null) {
-                            final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
                             deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryGuaranteed",
-                                    Collections.<String, Object>singletonMap("date", df.format(delivery.getDeliveryGuaranteed())));
+                                    Collections.<String, Object>singletonMap("date", DateUtils.formatCustomer(delivery.getDeliveryGuaranteed(), getLocale())));
                             showDeliveryTime = true;
                         } else if (delivery.getDeliveryEstimatedMin() != null) {
                             if (delivery.getDeliveryEstimatedMax() != null) {
-                                final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
                                 deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryEstimatedXY",
                                         new HashMap<String, Object>(4) {{
-                                            put("from", df.format(delivery.getDeliveryEstimatedMin()));
-                                            put("to", df.format(delivery.getDeliveryEstimatedMax()));
+                                            put("from", DateUtils.formatCustomer(delivery.getDeliveryEstimatedMin(), getLocale()));
+                                            put("to", DateUtils.formatCustomer(delivery.getDeliveryEstimatedMax(), getLocale()));
                                         }});
                                 showDeliveryTime = true;
                             } else {
-                                final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
                                 deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryEstimatedX",
-                                        Collections.<String, Object>singletonMap("from", df.format(delivery.getDeliveryEstimatedMin())));
+                                        Collections.<String, Object>singletonMap("from", DateUtils.formatCustomer(delivery.getDeliveryEstimatedMin(), getLocale())));
                                 showDeliveryTime = true;
                             }
                         } else if (delivery.getRequestedDeliveryDate() != null) {
-                            final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
                             deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryRequested",
-                                    Collections.<String, Object>singletonMap("date", df.format(delivery.getRequestedDeliveryDate())));
+                                    Collections.<String, Object>singletonMap("date", DateUtils.formatCustomer(delivery.getRequestedDeliveryDate(), getLocale())));
                             showDeliveryTime = true;
                         } else {
                             deliveryTime = null;
@@ -229,28 +224,24 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                 final IModel<String> deliveryTime;
                                                 final boolean showDeliveryTime;
                                                 if (det.getDeliveryConfirmed() != null) {
-                                                    final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
                                                     deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryConfirmed",
-                                                            Collections.<String, Object>singletonMap("date", df.format(det.getDeliveryConfirmed())));
+                                                            Collections.<String, Object>singletonMap("date", DateUtils.formatCustomer(det.getDeliveryConfirmed(), getLocale())));
                                                     showDeliveryTime = true;
                                                 } else if (det.getDeliveryGuaranteed() != null) {
-                                                    final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
                                                     deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryGuaranteed",
-                                                            Collections.<String, Object>singletonMap("date", df.format(det.getDeliveryGuaranteed())));
+                                                            Collections.<String, Object>singletonMap("date", DateUtils.formatCustomer(det.getDeliveryGuaranteed(), getLocale())));
                                                     showDeliveryTime = true;
                                                 } else if (det.getDeliveryEstimatedMin() != null) {
                                                     if (det.getDeliveryEstimatedMax() != null) {
-                                                        final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
                                                         deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryEstimatedXY",
                                                                 new HashMap<String, Object>(4) {{
-                                                                    put("from", df.format(det.getDeliveryEstimatedMin()));
-                                                                    put("to", df.format(det.getDeliveryEstimatedMax()));
+                                                                    put("from", DateUtils.formatCustomer(det.getDeliveryEstimatedMin(), getLocale()));
+                                                                    put("to", DateUtils.formatCustomer(det.getDeliveryEstimatedMax(), getLocale()));
                                                                 }});
                                                         showDeliveryTime = true;
                                                     } else {
-                                                        final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
                                                         deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryEstimatedX",
-                                                                Collections.<String, Object>singletonMap("from", df.format(det.getDeliveryEstimatedMin())));
+                                                                Collections.<String, Object>singletonMap("from", DateUtils.formatCustomer(det.getDeliveryEstimatedMin(), getLocale())));
                                                         showDeliveryTime = true;
                                                     }
                                                 } else {
