@@ -653,7 +653,7 @@ public class CategoryController {
         return centralViewResolver.resolveMainPanelRendererLabel(params);
     }
 
-    private List<BreadcrumbRO> generateBreadcrumbs(final long categoryId, final long shopId) {
+    private List<BreadcrumbRO> generateBreadcrumbs(final long categoryId, final long browsingShopId) {
 
         final List<BreadcrumbRO> crumbs = new ArrayList<BreadcrumbRO>();
 
@@ -661,7 +661,7 @@ public class CategoryController {
 
         while(true) {
 
-            Category cat = categoryServiceFacade.getCategory(current, shopId);
+            Category cat = categoryServiceFacade.getCategory(current, browsingShopId);
 
             if (cat == null || CentralViewLabel.INCLUDE.equals(cat.getUitemplate())) {
                 break;
@@ -670,7 +670,7 @@ public class CategoryController {
             final BreadcrumbRO crumb = mappingMixin.map(cat, BreadcrumbRO.class, Category.class);
             crumbs.add(crumb);
 
-            Long parentId = categoryServiceFacade.getCategoryParentId(cat.getCategoryId(), shopId);
+            Long parentId = categoryServiceFacade.getCategoryParentId(cat.getCategoryId(), browsingShopId);
             if (parentId == null) {
                 break;
             }

@@ -75,11 +75,11 @@ public class ImageView extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-        final long configShopId = getCurrentShopId();
+        final long browsingShopId = getCurrentCustomerShopId();
         long categoryId = getWicketUtil().getCategoryId(getPage().getPageParameters());
 
-        final Pair<String, String> imageSize = categoryServiceFacade.getProductListImageSizeConfig(categoryId, configShopId);
-        final Pair<String, String> thumbSize = categoryServiceFacade.getThumbnailSizeConfig(categoryId, configShopId);
+        final Pair<String, String> imageSize = categoryServiceFacade.getProductListImageSizeConfig(categoryId, browsingShopId);
+        final Pair<String, String> thumbSize = categoryServiceFacade.getThumbnailSizeConfig(categoryId, browsingShopId);
 
         final String width = imageSize.getFirst();
         final String height = imageSize.getSecond();

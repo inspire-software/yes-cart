@@ -58,8 +58,8 @@ public class AttributeProductFilter extends AbstractProductFilter {
 
             filteredNavigationByAttribute = getCategory().getNavigationByAttributes() == null ? false : getCategory().getNavigationByAttributes();
 
-            final long configShopId = getCurrentShopId();
-            final Long productType = categoryServiceFacade.getCategoryProductTypeId(categoryId, configShopId);
+            final long browsingShopId = getCurrentCustomerShopId();
+            final Long productType = categoryServiceFacade.getCategoryProductTypeId(categoryId, browsingShopId);
 
             if (filteredNavigationByAttribute && productType != null) {
 

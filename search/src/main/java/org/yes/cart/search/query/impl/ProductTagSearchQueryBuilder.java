@@ -124,12 +124,12 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
         int daysOffset = 1;
         if (CollectionUtils.isEmpty(navigationContext.getCategories())) {
 
-            daysOffset = shopSearchSupportService.getCategoryNewArrivalOffsetDays(0L, navigationContext.getShopId());
+            daysOffset = shopSearchSupportService.getCategoryNewArrivalOffsetDays(0L, navigationContext.getCustomerShopId());
 
         } else {
             for (final Long categoryId : navigationContext.getCategories()) {
                 // get the earliest
-                daysOffset = Math.max(daysOffset, shopSearchSupportService.getCategoryNewArrivalOffsetDays(categoryId, navigationContext.getShopId()));
+                daysOffset = Math.max(daysOffset, shopSearchSupportService.getCategoryNewArrivalOffsetDays(categoryId, navigationContext.getCustomerShopId()));
             }
         }
         return DateUtils.zdtAtStartOfDay(now().plusDays(-daysOffset));

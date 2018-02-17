@@ -131,9 +131,9 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
         final String deliveryAddress = customerOrder.getShippingAddress();
         final String billingAddress = customerOrder.getBillingAddress();
 
-        final long configShopId = cart.getShoppingContext().getShopId();
+        final long browsingShopId = cart.getShoppingContext().getCustomerShopId();
 
-        final Pair<String, String> imageSize = categoryServiceFacade.getThumbnailSizeConfig(0L, configShopId);
+        final Pair<String, String> imageSize = categoryServiceFacade.getThumbnailSizeConfig(0L, browsingShopId);
 
         add(
                 new ListView<CustomerOrderDelivery>(DELIVERY_LIST, new ArrayList<CustomerOrderDelivery>(customerOrder.getDelivery()))

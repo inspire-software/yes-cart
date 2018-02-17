@@ -531,13 +531,13 @@ public class SearchController {
 
 
     private void populateFilteredNavigation(final long categoryId,
-                                            final long shopId,
+                                            final long browsingShopId,
                                             final String locale,
                                             final String currencyCode,
                                             final NavigationContext context,
                                             final SearchResultRO result) {
 
-        final Category category = categoryServiceFacade.getCategory(categoryId, shopId);
+        final Category category = categoryServiceFacade.getCategory(categoryId, browsingShopId);
 
         if (category != null) {
 
@@ -554,7 +554,7 @@ public class SearchController {
             }
 
             final boolean byAttr = category.getNavigationByAttributes() == null ? false : category.getNavigationByAttributes();
-            final Long productType = categoryServiceFacade.getCategoryProductTypeId(category.getCategoryId(), shopId);
+            final Long productType = categoryServiceFacade.getCategoryProductTypeId(category.getCategoryId(), browsingShopId);
 
             if (byAttr && productType != null) {
 
@@ -567,7 +567,7 @@ public class SearchController {
 
         } else {
 
-            final Category defaultCategory = categoryServiceFacade.getDefaultNavigationCategory(shopId);
+            final Category defaultCategory = categoryServiceFacade.getDefaultNavigationCategory(browsingShopId);
 
             if (defaultCategory != null) {
 
@@ -743,12 +743,12 @@ public class SearchController {
     }
 
     private void configureResultViewOptions(final long categoryId,
-                                            final long shopId,
+                                            final long browsingShopId,
                                             final String locale,
                                             final String currency,
                                             final SearchResultRO result) {
 
-        final List<String> itemsPerPageValues = categoryServiceFacade.getItemsPerPageOptionsConfig(categoryId, shopId);
+        final List<String> itemsPerPageValues = categoryServiceFacade.getItemsPerPageOptionsConfig(categoryId, browsingShopId);
         final int selectedItemPerPage;
         if (itemsPerPageValues.contains(String.valueOf(result.getSearch().getPageSize()))) {
             selectedItemPerPage = result.getSearch().getPageSize();
@@ -756,19 +756,19 @@ public class SearchController {
             selectedItemPerPage = NumberUtils.toInt(itemsPerPageValues.get(0), 10);
         }
 
-        final List<String> pageSortingValues = categoryServiceFacade.getPageSortingOptionsConfig(categoryId, shopId);
+        final List<String> pageSortingValues = categoryServiceFacade.getPageSortingOptionsConfig(categoryId, browsingShopId);
         final Map<String, String> sortPageValues = new LinkedHashMap<String, String>();
         for (final String pageSortingValue : pageSortingValues) {
             final ProductSortingUtils.SupportedSorting sorting = ProductSortingUtils.getConfiguration(pageSortingValue);
             if (sorting != null) {
                 sortPageValues.put(
-                        sorting.resolveLabelKey(shopId, locale, currency),
-                        sorting.resolveSortField(shopId, locale, currency)
+                        sorting.resolveLabelKey(browsingShopId, locale, currency),
+                        sorting.resolveSortField(browsingShopId, locale, currency)
                 );
             }
         }
 
-        final Pair<String, String> widthHeight = categoryServiceFacade.getProductListImageSizeConfig(categoryId, shopId);
+        final Pair<String, String> widthHeight = categoryServiceFacade.getProductListImageSizeConfig(categoryId, browsingShopId);
 
         result.setPageAvailableSize(itemsPerPageValues);
         result.setPageAvailableSort(sortPageValues);

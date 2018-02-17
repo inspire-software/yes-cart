@@ -88,7 +88,6 @@ public class SubCategoriesCentralView extends AbstractCentralView {
         add(new TopCategories("topCategories"));
 
         final long categoryId = getCategoryId();
-        final long configShopId = getCurrentShopId();
         final long browsingShopId = getCurrentCustomerShopId();
         final String lang = getLocale().getLanguage();
 
@@ -96,8 +95,8 @@ public class SubCategoriesCentralView extends AbstractCentralView {
 
         final SortableDataProvider<CategoryDecorator, String> dataProvider = new SortableCategoryDataProvider(categories);
 
-        final Pair<String, String> imageSize = categoryServiceFacade.getCategoryListImageSizeConfig(categoryId, configShopId);
-        final int columns = categoryServiceFacade.getCategoryListColumnOptionsConfig(categoryId, configShopId);
+        final Pair<String, String> imageSize = categoryServiceFacade.getCategoryListImageSizeConfig(categoryId, browsingShopId);
+        final int columns = categoryServiceFacade.getCategoryListColumnOptionsConfig(categoryId, browsingShopId);
 
         final GridView<CategoryDecorator> categoryView = new GridView<CategoryDecorator>(CATEGORY_LIST, dataProvider) {
 

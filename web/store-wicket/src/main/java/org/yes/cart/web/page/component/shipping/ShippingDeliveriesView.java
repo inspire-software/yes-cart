@@ -120,8 +120,7 @@ public class ShippingDeliveriesView extends BaseComponent {
 
         this.multipleDelivery = shoppingCart.getOrderInfo().isMultipleDelivery();
 
-        final long configShopId = getCurrentShopId();
-        final Pair<String, String> imageSize = categoryServiceFacade.getThumbnailSizeConfig(0L, configShopId);
+        final Pair<String, String> imageSize = categoryServiceFacade.getThumbnailSizeConfig(0L, getCurrentCustomerShopId());
         final Map<String, String> supplierNames = shippingServiceFacade.getCartItemsSuppliers(shoppingCart);
 
         add(

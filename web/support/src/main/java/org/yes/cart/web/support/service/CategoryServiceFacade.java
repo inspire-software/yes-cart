@@ -31,30 +31,31 @@ public interface CategoryServiceFacade {
     /**
      * Get the category parent ID for given shop.
      *
-     * @param shopId shop id
      * @param categoryId given category PK
+     * @param customerShopId shop id
+     *
      * @return parent ID (or symlink parent)
      */
-    Long getCategoryParentId(long categoryId, long shopId);
+    Long getCategoryParentId(long categoryId, long customerShopId);
 
     /**
      * Get category if it belongs to given shop.
      *
      * @param categoryId category id
-     * @param shopId     shop id
+     * @param customerShopId shop id
      *
      * @return category or null
      */
-    Category getCategory(long categoryId, long shopId);
+    Category getCategory(long categoryId, long customerShopId);
 
     /**
      * Get the default category for navigation configuration for shop.
      *
-     * @param shopId PK of shop
+     * @param customerShopId PK of shop
      *
      * @return category with default navigation.
      */
-    Category getDefaultNavigationCategory(long shopId);
+    Category getDefaultNavigationCategory(long customerShopId);
 
     /**
      * Get category id applicable for given current category. Depending on whether category permits
@@ -63,125 +64,125 @@ public interface CategoryServiceFacade {
      * categoryId is always returned as part of list
      *
      * @param categoryId current category PK
-     * @param shopId     current shop
+     * @param customerShopId     current shop
      *
      * @return list of searchable categories with flag to indicate if subcategories to be included
      */
-    Pair<List<Long>, Boolean> getSearchCategoriesIds(long categoryId, long shopId);
+    Pair<List<Long>, Boolean> getSearchCategoriesIds(long categoryId, long customerShopId);
 
     /**
      * Get current category menu, or top categories if category is not specified or does
      * not belong to this shop.
      *
      * @param currentCategoryId current category (optional)
-     * @param shopId            current shop
+     * @param customerShopId    current shop
      * @param locale            locale
      *
      * @return list of sub categories (or top shop categories)
      */
-    List<Category> getCurrentCategoryMenu(long currentCategoryId, long shopId, String locale);
+    List<Category> getCurrentCategoryMenu(long currentCategoryId, long customerShopId, String locale);
 
     /**
      * Get thumbnail size configuration.
      *
      * @param categoryId category PK
-     * @param shopId     current shop
+     * @param customerShopId current shop
      *
      * @return first width, second height
      */
-    Pair<String, String> getThumbnailSizeConfig(long categoryId, long shopId);
+    Pair<String, String> getThumbnailSizeConfig(long categoryId, long customerShopId);
 
     /**
      * Get category viewing image size configuration.
      *
      * @param categoryId category PK
-     * @param shopId     current shop
+     * @param customerShopId current shop
      *
      * @return first width, second height
      */
-    Pair<String, String> getProductListImageSizeConfig(long categoryId, long shopId);
+    Pair<String, String> getProductListImageSizeConfig(long categoryId, long customerShopId);
 
     /**
      * Get category viewing image size configuration.
      *
      * @param categoryId category PK
-     * @param shopId     current shop
+     * @param customerShopId current shop
      *
      * @return first width, second height
      */
-    Pair<String, String> getCategoryListImageSizeConfig(long categoryId, long shopId);
+    Pair<String, String> getCategoryListImageSizeConfig(long categoryId, long customerShopId);
 
     /**
      * Get featured products size configuration.
      *
      * @param categoryId category PK
-     * @param shopId     current shop
+     * @param customerShopId current shop
      *
      * @return max number of products
      */
-    int getFeaturedListSizeConfig(long categoryId, long shopId);
+    int getFeaturedListSizeConfig(long categoryId, long customerShopId);
 
     /**
      * Get newarrival products size configuration.
      *
      * @param categoryId category PK
-     * @param shopId     current shop
+     * @param customerShopId current shop
      *
      * @return max number of products
      */
-    int getNewArrivalListSizeConfig(long categoryId, long shopId);
+    int getNewArrivalListSizeConfig(long categoryId, long customerShopId);
 
 
     /**
      * Number of days that counts towards newarrival products
      *
      * @param categoryId current category
-     * @param shopId current shop
+     * @param customerShopId current shop
      *
      * @return max number of days
      */
-    int getCategoryNewArrivalOffsetDays(long categoryId, long shopId);
+    int getCategoryNewArrivalOffsetDays(long categoryId, long customerShopId);
 
 
     /**
      * Get pagination options configuration.
      *
      * @param categoryId category PK
-     * @param shopId     current shop
+     * @param customerShopId current shop
      *
      * @return pagination options
      */
-    List<String> getItemsPerPageOptionsConfig(long categoryId, long shopId);
+    List<String> getItemsPerPageOptionsConfig(long categoryId, long customerShopId);
 
     /**
      * Get sorting options configuration.
      *
      * @param categoryId category PK
-     * @param shopId     current shop
+     * @param customerShopId current shop
      *
      * @return sorting options
      */
-    List<String> getPageSortingOptionsConfig(long categoryId, long shopId);
+    List<String> getPageSortingOptionsConfig(long categoryId, long customerShopId);
 
     /**
      * Get number of columns options configuration.
      *
      * @param categoryId category PK
-     * @param shopId     current shop
+     * @param customerShopId current shop
      *
      * @return product columns options
      */
-    int getProductListColumnOptionsConfig(long categoryId, long shopId);
+    int getProductListColumnOptionsConfig(long categoryId, long customerShopId);
 
     /**
      * Get number of columns options configuration.
      *
      * @param categoryId category PK
-     * @param shopId     current shop
+     * @param customerShopId current shop
      *
      * @return category columns options
      */
-    int getCategoryListColumnOptionsConfig(long categoryId, long shopId);
+    int getCategoryListColumnOptionsConfig(long categoryId, long customerShopId);
 
 
     /**
@@ -189,22 +190,22 @@ public interface CategoryServiceFacade {
      * looks up parent category product type, until one is found
      *
      * @param categoryId category id
-     * @param shopId     current shop
+     * @param customerShopId current shop
      *
      * @return product type for this category
      */
-    Long getCategoryProductTypeId(long categoryId, long shopId);
+    Long getCategoryProductTypeId(long categoryId, long customerShopId);
 
 
     /**
      * Get number of values to display in a filter nav block.
      *
      * @param categoryId category PK
-     * @param shopId     current shop
+     * @param customerShopId current shop
      *
      * @return filter nav options limit
      */
-    int getCategoryFilterLimitConfig(long categoryId, long shopId);
+    int getCategoryFilterLimitConfig(long categoryId, long customerShopId);
 
 
 }

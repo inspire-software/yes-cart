@@ -23,7 +23,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -92,19 +91,19 @@ public abstract class AbstractProductFilter extends BaseComponent {
         final long configShopId = getCurrentShopId();
         final long browsingShopId = getCurrentCustomerShopId();
         this.categories = categoryServiceFacade.getSearchCategoriesIds(categoryId, browsingShopId).getFirst();
-        this.recordLimit = getCategoryFilterLimitConfig(categoryId, configShopId);
+        this.recordLimit = getCategoryFilterLimitConfig(categoryId, browsingShopId);
     }
 
     /**
      * Determine size of the filter nav records. Allows to overwrite the default setting.
      *
      * @param categoryId category
-     * @param shopId shop
+     * @param browsingShopId shop
      *
      * @return max records to render
      */
-    protected int getCategoryFilterLimitConfig(final long categoryId, final long shopId) {
-        return categoryServiceFacade.getCategoryFilterLimitConfig(categoryId, shopId);
+    protected int getCategoryFilterLimitConfig(final long categoryId, final long browsingShopId) {
+        return categoryServiceFacade.getCategoryFilterLimitConfig(categoryId, browsingShopId);
     }
 
     /**

@@ -54,9 +54,9 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
      * {@inheritDoc}
      */
     @Cacheable(value = "categoryService-searchCategoriesIds")
-    public Pair<List<Long>, Boolean> getSearchCategoriesIds(final long categoryId, final long shopId) {
+    public Pair<List<Long>, Boolean> getSearchCategoriesIds(final long categoryId, final long customerShopId) {
 
-        if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
+        if (categoryId > 0L && shopService.getShopCategoriesIds(customerShopId).contains(categoryId)) {
 
             Boolean lookInSubCats = null;
 
@@ -67,7 +67,7 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
                 while (category != null) {
                     final String searchInSub = category.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_INCLUDE_SUBCATEGORIES_IN_SEARCH);
                     if (StringUtils.isBlank(searchInSub)) {
-                        final Long parentId = shopService.getShopCategoryParentId(shopId, category.getCategoryId());
+                        final Long parentId = shopService.getShopCategoryParentId(customerShopId, category.getCategoryId());
                         if (parentId != null) {
                             category = categoryService.getById(parentId);
                         } else {
@@ -80,7 +80,7 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
                 }
 
                 if (lookInSubCats == null) {
-                    final String searchInSub = shopService.getById(shopId).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
+                    final String searchInSub = shopService.getById(customerShopId).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
                     if (StringUtils.isBlank(searchInSub)) {
                         lookInSubCats = true; // default is to search in sub cats, so we use tru if not set
                     } else {
@@ -102,9 +102,9 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
      * {@inheritDoc}
      */
     @Cacheable(value = "categoryService-categoryNewArrivalDate")
-    public int getCategoryNewArrivalOffsetDays(final long categoryId, final long shopId) {
+    public int getCategoryNewArrivalOffsetDays(final long categoryId, final long customerShopId) {
 
-        final Shop shop = shopService.getById(shopId);
+        final Shop shop = shopService.getById(customerShopId);
         final String value = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_NEW_ARRIVAL_DAYS_OFFSET);
         int beforeDays = NumberUtils.toInt(value, 15);
 
@@ -112,7 +112,7 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
         while (category != null) {
             String catValue = category.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_NEW_ARRIVAL_DAYS_OFFSET);
             if (StringUtils.isBlank(catValue)) {
-                final Long parentId = shopService.getShopCategoryParentId(shopId, category.getCategoryId());
+                final Long parentId = shopService.getShopCategoryParentId(customerShopId, category.getCategoryId());
                 if (parentId != null) {
                     category = categoryService.getById(parentId);
                 } else {

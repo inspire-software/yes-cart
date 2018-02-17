@@ -94,7 +94,7 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
                 final String lang = cart.getCurrentLocale();
 
                 // If we have template just use it without any checks (saves us 1 FT query for each request)
-                final String template = shopService.getShopCategoryTemplate(shopId, categoryId);
+                final String template = shopService.getShopCategoryTemplate(browsingShopId, categoryId);
                 if (StringUtils.isNotBlank(template)) {
                     if (CentralViewLabel.PRODUCTS_LIST.equals(template)) {
                         return DEFAULT_PL;
@@ -104,7 +104,7 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
                     return new Pair<String, String>(template, CentralViewLabel.CATEGORY);
                 }
 
-                final Pair<List<Long>, Boolean> catIds = determineSearchCategories(categoryId, shopId);
+                final Pair<List<Long>, Boolean> catIds = determineSearchCategories(categoryId, browsingShopId);
 
 
                 if (CollectionUtils.isEmpty(catIds.getFirst())) {
@@ -116,7 +116,7 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
 
                 if (productService.getProductQty(hasProducts) > 0) {
 
-                    final String searchTemplate = shopService.getShopCategorySearchTemplate(shopId, categoryId);
+                    final String searchTemplate = shopService.getShopCategorySearchTemplate(browsingShopId, categoryId);
                     if (StringUtils.isNotBlank(searchTemplate)) {
                         return new Pair<String, String>(searchTemplate, CentralViewLabel.PRODUCTS_LIST);
                     }
@@ -133,9 +133,9 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
         return null;
     }
 
-    private Pair<List<Long>, Boolean> determineSearchCategories(final long categoryId, final long shopId) {
+    private Pair<List<Long>, Boolean> determineSearchCategories(final long categoryId, final long browsingShopId) {
 
-        return shopSearchSupportService.getSearchCategoriesIds(categoryId, shopId);
+        return shopSearchSupportService.getSearchCategoriesIds(categoryId, browsingShopId);
 
     }
 }

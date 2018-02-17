@@ -34,21 +34,21 @@ public interface ShopSearchSupportService {
      * categoryId is always returned as part of list
      *
      * @param categoryId current category PK
-     * @param shopId     current shop
+     * @param customerShopId current shop
      *
      * @return list of searchable categories,
      */
-    Pair<List<Long>, Boolean> getSearchCategoriesIds(long categoryId, long shopId);
+    Pair<List<Long>, Boolean> getSearchCategoriesIds(long categoryId, long customerShopId);
 
     /**
      * Number of days that counts towards newarrival products
      *
      * @param categoryId current category
-     * @param shopId current shop
+     * @param customerShopId current shop
      *
      * @return max number of days
      */
-    int getCategoryNewArrivalOffsetDays(long categoryId, long shopId);
+    int getCategoryNewArrivalOffsetDays(long categoryId, long customerShopId);
 
 
 }

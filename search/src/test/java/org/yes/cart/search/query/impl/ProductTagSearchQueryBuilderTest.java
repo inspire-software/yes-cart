@@ -121,7 +121,7 @@ public class ProductTagSearchQueryBuilderTest {
         context.checking(new Expectations() {{
             oneOf(shopSearchSupportService).getCategoryNewArrivalOffsetDays(0L, 10L); will(returnValue(5));
             oneOf(navigationContext).getCategories(); will(returnValue(null));
-            oneOf(navigationContext).getShopId(); will(returnValue(10L));
+            oneOf(navigationContext).getCustomerShopId(); will(returnValue(10L));
         }});
 
 
@@ -152,7 +152,7 @@ public class ProductTagSearchQueryBuilderTest {
         context.checking(new Expectations() {{
             oneOf(shopSearchSupportService).getCategoryNewArrivalOffsetDays(123L, 10L); will(returnValue(5));
             atLeast(2).of(navigationContext).getCategories(); will(returnValue(Collections.singletonList(123L)));
-            oneOf(navigationContext).getShopId(); will(returnValue(10L));
+            oneOf(navigationContext).getCustomerShopId(); will(returnValue(10L));
         }});
 
 
@@ -184,7 +184,7 @@ public class ProductTagSearchQueryBuilderTest {
             oneOf(shopSearchSupportService).getCategoryNewArrivalOffsetDays(123L, 10L); will(returnValue(5));
             oneOf(shopSearchSupportService).getCategoryNewArrivalOffsetDays(234L, 10L); will(returnValue(3));
             atLeast(2).of(navigationContext).getCategories(); will(returnValue(Arrays.asList(123L, 234L)));
-            atLeast(2).of(navigationContext).getShopId(); will(returnValue(10L));
+            atLeast(2).of(navigationContext).getCustomerShopId(); will(returnValue(10L));
         }});
 
 

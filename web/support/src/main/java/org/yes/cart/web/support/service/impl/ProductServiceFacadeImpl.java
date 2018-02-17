@@ -182,7 +182,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
             categories = Collections.singletonList(categoryId);
         }
 
-        final int limit = categoryServiceFacade.getFeaturedListSizeConfig(categoryId, shopId);
+        final int limit = categoryServiceFacade.getFeaturedListSizeConfig(categoryId, customerShopId);
 
         final NavigationContext featured = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, categories,
                 false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD,
@@ -200,7 +200,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                                        final long shopId,
                                                        final long customerShopId) {
 
-        final int limit = categoryServiceFacade.getNewArrivalListSizeConfig(categoryId, shopId);
+        final int limit = categoryServiceFacade.getNewArrivalListSizeConfig(categoryId, customerShopId);
 
         final List<Long> newArrivalCats;
         if (categoryId > 0L) {
@@ -232,7 +232,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
             categories = Collections.singletonList(categoryId);
         }
 
-        final int limit = categoryServiceFacade.getFeaturedListSizeConfig(categoryId, shopId);
+        final int limit = categoryServiceFacade.getFeaturedListSizeConfig(categoryId, customerShopId);
 
         final NavigationContext tagged = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, categories,
                 false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
@@ -252,7 +252,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         if (CollectionUtils.isNotEmpty(productIds)) {
 
             List<String> productIdsForCategory = productIds;
-            int limit = categoryServiceFacade.getNewArrivalListSizeConfig(categoryId, shopId);
+            int limit = categoryServiceFacade.getNewArrivalListSizeConfig(categoryId, customerShopId);
             if (limit > productIds.size() || categoryId < 0L) {
                 limit = productIds.size();
             } else {

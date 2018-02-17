@@ -96,7 +96,7 @@ public class ProductsCentralView extends AbstractCentralView {
     protected void onBeforeRender() {
 
 
-        final long configShopId = getCurrentShopId();
+        final long browsingShopId = getCurrentCustomerShopId();
         final long categoryId = getCategoryId();
         final NavigationContext context = getNavigationContext();
 
@@ -104,10 +104,10 @@ public class ProductsCentralView extends AbstractCentralView {
         add(new AttributeProductFilter("attributeFilter", categoryId, context));
         add(new PriceProductFilter("priceFilter", categoryId, context));
 
-        final List<String> itemsPerPageValues = categoryServiceFacade.getItemsPerPageOptionsConfig(categoryId, configShopId);
-        final List<String> pageSortingValues = categoryServiceFacade.getPageSortingOptionsConfig(categoryId, configShopId);
-        final Pair<String, String> widthHeight = categoryServiceFacade.getProductListImageSizeConfig(categoryId, configShopId);
-        final int columns = categoryServiceFacade.getProductListColumnOptionsConfig(categoryId, configShopId);
+        final List<String> itemsPerPageValues = categoryServiceFacade.getItemsPerPageOptionsConfig(categoryId, browsingShopId);
+        final List<String> pageSortingValues = categoryServiceFacade.getPageSortingOptionsConfig(categoryId, browsingShopId);
+        final Pair<String, String> widthHeight = categoryServiceFacade.getProductListImageSizeConfig(categoryId, browsingShopId);
+        final int columns = categoryServiceFacade.getProductListColumnOptionsConfig(categoryId, browsingShopId);
 
         final PageParameters pageParameters = getPage().getPageParameters();
         final PaginationSupport pagination = getWicketSupportFacade().pagination();

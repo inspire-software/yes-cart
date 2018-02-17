@@ -133,7 +133,6 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         final PageParameters params = new PageParameters();
         params.add(WebParametersKeys.PAGE_TYPE, "cart");
 
-        final long configShopId = ((AbstractWebPage) getPage()).getCurrentShopId();
         final long browsingShopId = ((AbstractWebPage) getPage()).getCurrentCustomerShopId();
 
         final ProductSku sku = productServiceFacade.getProductSkuBySkuCode(skuCode);
@@ -214,7 +213,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         );
 
 
-        final Pair<String, String> size = categoryServiceFacade.getThumbnailSizeConfig(0L, configShopId);
+        final Pair<String, String> size = categoryServiceFacade.getThumbnailSizeConfig(0L, browsingShopId);
 
         final String width = size.getFirst();
         final String height = size.getSecond();

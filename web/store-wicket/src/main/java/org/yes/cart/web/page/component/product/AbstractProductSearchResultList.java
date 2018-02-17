@@ -110,8 +110,7 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
         final String selectedLocale = getLocale().getLanguage();
 
         final long categoryId = getWicketUtil().getCategoryId(getPage().getPageParameters());
-        final long configShopId = getCurrentShopId();
-        final Pair<String, String> thumbWidthHeight = categoryServiceFacade.getThumbnailSizeConfig(categoryId, configShopId);
+        final Pair<String, String> thumbWidthHeight = categoryServiceFacade.getThumbnailSizeConfig(categoryId, getCurrentCustomerShopId());
 
         addOrReplace(
                 new ListView<ProductSearchResultDTO>(PRODUCT_LIST, getProductListToShow())

@@ -17,7 +17,6 @@
 package org.yes.cart.web.page.component.product;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.List;
 
@@ -61,15 +60,6 @@ public class RecentlyViewedProducts extends AbstractProductSearchResultList {
 
         }
         return products;
-    }
-
-    /**
-     * Get quantity limit.
-     *
-     * @return quantity limit
-     */
-    public int getProductsLimit(final long categoryId) {
-        return categoryServiceFacade.getNewArrivalListSizeConfig(categoryId, ShopCodeContext.getShopId());
     }
 
 }

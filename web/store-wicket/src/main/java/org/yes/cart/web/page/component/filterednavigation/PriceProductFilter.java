@@ -61,7 +61,7 @@ public class PriceProductFilter extends AbstractProductFilter {
     }
 
     @Override
-    protected int getCategoryFilterLimitConfig(final long categoryId, final long shopId) {
+    protected int getCategoryFilterLimitConfig(final long categoryId, final long browsingShopId) {
         return Integer.MAX_VALUE; // Prices are in ranges, all should be visible
     }
 
