@@ -80,9 +80,20 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
                 }
 
                 if (lookInSubCats == null) {
-                    final String searchInSub = shopService.getById(customerShopId).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
+                    final Shop shop = shopService.getById(customerShopId);
+                    final String searchInSub = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
                     if (StringUtils.isBlank(searchInSub)) {
-                        lookInSubCats = true; // default is to search in sub cats, so we use tru if not set
+                        if (shop.getMaster() != null) {
+                            final Shop master = shopService.getById(shop.getMaster().getShopId());
+                            final String searchInSubMaster = master.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
+                            if (StringUtils.isBlank(searchInSubMaster)) {
+                                lookInSubCats = true; // default is to search in sub cats, so we use true if not set
+                            } else {
+                                lookInSubCats = Boolean.valueOf(searchInSubMaster);
+                            }
+                        } else {
+                            lookInSubCats = true; // default is to search in sub cats, so we use true if not set
+                        }
                     } else {
                         lookInSubCats = Boolean.valueOf(searchInSub);
                     }
@@ -105,7 +116,11 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
     public int getCategoryNewArrivalOffsetDays(final long categoryId, final long customerShopId) {
 
         final Shop shop = shopService.getById(customerShopId);
-        final String value = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_NEW_ARRIVAL_DAYS_OFFSET);
+        String value = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_NEW_ARRIVAL_DAYS_OFFSET);
+        if (StringUtils.isBlank(value) && shop.getMaster() != null) {
+            final Shop master = shopService.getById(shop.getMaster().getShopId());
+            value = master.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_NEW_ARRIVAL_DAYS_OFFSET);
+        }
         int beforeDays = NumberUtils.toInt(value, 15);
 
         Category category = categoryService.getById(categoryId);
