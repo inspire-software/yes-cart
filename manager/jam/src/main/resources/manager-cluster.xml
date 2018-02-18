@@ -75,7 +75,7 @@
         <property name="cacheManager" ref="cacheManager"/>
     </bean>
 
-    <bean id="alertTurboFilter" class="org.yes.cart.util.log.AlertTurboFilter"/>
+    <bean id="alertTurboFilter" class="org.yes.cart.utils.log.AlertTurboFilter"/>
 
     <bean id="webAppManagerAsyncContextFactory" class="org.yes.cart.service.async.WebAppManagerAsyncContextFactory">
         <constructor-arg index="0" ref="managerService"/>

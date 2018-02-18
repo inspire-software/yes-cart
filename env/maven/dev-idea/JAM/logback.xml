@@ -20,7 +20,7 @@
 
     <jmxConfigurator />
 
-    <turboFilter class="org.yes.cart.util.log.AlertTurboFilter"/>
+    <turboFilter class="org.yes.cart.utils.log.AlertTurboFilter"/>
 
     <appender name="DEFAULT" class="ch.qos.logback.classic.sift.SiftingAppender">
         <discriminator class="org.yes.cart.util.log.ShopCodeAndLevelLogDiscriminator"/>

@@ -1,8 +1,8 @@
 REF: YC-853 Use JDK8 java.time.* instead of Date and SimpleDateFormat
 
-java.util.Date and java.text.*Fotmatter class suffer from various issues from simply being mutable to bluntly not
+java.util.Date and java.text.*Formatter class suffer from various issues from simply being mutable to bluntly not
 being thread-safe. As such this API is considered harmful. Since JDK8 has now matured and provides a comprehensive
-alternative in java.time.* YC will utilise this capability to maximum by erradicating all references to java.util.Date
+alternative in java.time.* YC will utilise this capability to maximum by eradicating all references to java.util.Date
 and formatters.
 
 All date/time related functionality will be encapsulated in org.yes.cart.util.DateUtils class which is to provide full

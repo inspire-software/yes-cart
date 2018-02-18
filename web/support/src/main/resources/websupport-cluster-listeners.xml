@@ -97,6 +97,6 @@
         <property name="nodeService" ref="nodeService"/>
     </bean>
 
-    <bean id="alertTurboFilter" class="org.yes.cart.util.log.AlertTurboFilter"/>
+    <bean id="alertTurboFilter" class="org.yes.cart.utils.log.AlertTurboFilter"/>
 
 </beans>

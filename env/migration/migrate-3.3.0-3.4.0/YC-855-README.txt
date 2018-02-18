@@ -10,7 +10,7 @@ in all areas of price and total calculation.
 
 Affected areas:
 
-- MoneyUtils was updated with new API isPrositive() (as a replacement for isFirstBiggerThanSecond(x, 0))
+- MoneyUtils was updated with new API isPositive() (as a replacement for isFirstBiggerThanSecond(x, 0))
 
 - Facades in websupport were fully reworked and covered with unit tests. Note that this does not gurantee that
   there are no rounding errors (especially with corner case when pricelists have GROSS prices but customer wishes
