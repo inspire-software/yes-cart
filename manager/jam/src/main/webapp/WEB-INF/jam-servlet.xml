@@ -57,7 +57,7 @@
             </bean>
             <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-                <property name="objectMapper" ref="dtoObjectMapper" />
+                <property name="objectMapper" ref="voObjectMapper" />
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
@@ -79,7 +79,7 @@
 
     <mvc:resources mapping="/favicon.ico" location="/resources/favicon.ico" />
 
-    <bean id="dtoObjectMapper" class="org.yes.cart.remote.service.misc.DtoObjectMapper"/>
+    <bean id="voObjectMapper" class="org.yes.cart.remote.service.misc.VoObjectMapper"/>
 
     <bean id="messageSource"
           class="org.springframework.context.support.ResourceBundleMessageSource">
