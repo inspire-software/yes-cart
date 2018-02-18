@@ -27,6 +27,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.cluster.service.AlertDirector;
+import org.yes.cart.util.log.Markers;
 
 /**
  * User: denispavlov
@@ -43,7 +44,7 @@ public class AlertTurboFilter extends TurboFilter implements ApplicationContextA
             return FilterReply.NEUTRAL;
         }
 
-        if(marker != null && marker.contains("alert") && ALERTS != null) {
+        if ((Markers.alert() == marker) && (ALERTS != null)) {
             if (params == null || params.length == 0) {
                 ALERTS.publish(
                         new Pair<String, String>(
