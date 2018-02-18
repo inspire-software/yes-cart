@@ -36,6 +36,7 @@
         <div class="bg-info text-padding block-margin-spacer">
           <p>{{ 'SEARCH_HELP_CACHE_TOP' | translate }} <span><button type="button" (click)="onTopSelected()" class="btn btn-default btn-circle"><i class="fa fa-sort-numeric-desc"></i></button></span></p>
           <p>{{ 'SEARCH_HELP_CACHE_SIZE' | translate }} <span><button type="button" (click)="onSizeSelected()" class="btn btn-default btn-circle"><i class="fa fa-calculator"></i></button></span></p>
+          <p>{{ 'SEARCH_HELP_CACHE_HOT' | translate }} <span><button type="button" (click)="onHotSelected()" class="btn btn-default btn-circle"><i class="fa fa-free-code-camp"></i></button></span></p>
         </div>
       </div>
 
@@ -45,6 +46,7 @@
           <tr>
             <th>{{ 'CACHE_NODE' | translate }}</th>
             <th>{{ 'CACHE_NAME' | translate }}</th>
+            <th>{{ 'CACHE_SPEC' | translate }}</th>
             <th>{{ 'CACHE_SIZE' | translate }}</th>
             <th>{{ 'CACHE_HITS' | translate }}</th>
             <th>{{ 'CACHE_SIZE_MEM' | translate }}</th>
@@ -56,10 +58,11 @@
             <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
               <td title="{{ 'CACHE_NODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)" title="{{row.nodeUri ? row.nodeUri : row.nodeId}}">{{row.nodeId}} <i class="fa fa-info-circle"></i></a></td>
               <td title="{{ 'CACHE_NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.cacheName}}</a></td>
-              <td title="{{ 'CACHE_SIZE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.cacheSize}}</a></td>
+              <td title="{{ 'CACHE_SPEC' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.memoryStoreEvictionPolicy}} {{row.eternal ? ('CACHE_ETERNAL' | translate) : getTTL(row) }}</a></td>
+              <td title="{{ 'CACHE_SIZE' | translate }}" class="{{ row.cacheSize < row.inMemorySizeMax ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.cacheSize}}/{{row.inMemorySizeMax}}</a></td>
               <td title="{{ 'CACHE_HITS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{getHitsAndMissed(row)}}</a></td>
               <td title="{{ 'CACHE_SIZE_MEM' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{getMemSize(row)}}</a></td>
-              <td title="{{ 'CACHE_SIZE_DISK' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{getDiskSize(row)}}</a></td>
+              <td title="{{ 'CACHE_SIZE_DISK' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{getDiskSize(row)}}  <i class="fa {{row.overflowToDisk ? 'fa-check-circle' : 'fa-times-circle'}}"></i></a></td>
             </ng-template>
           </tr>
           </tbody>

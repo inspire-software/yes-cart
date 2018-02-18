@@ -15,6 +15,7 @@
  */
 package org.yes.cart.cluster.service.impl;
 
+import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.statistics.LiveCacheStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +61,7 @@ public class CacheDirectorImpl implements CacheDirector {
         for (String cacheName : cacheNames) {
             final Cache cache = cacheManager.getCache(cacheName);
             final net.sf.ehcache.Cache nativeCache = (net.sf.ehcache.Cache) cache.getNativeCache();
+            final CacheConfiguration cacheConfiguration = nativeCache.getCacheConfiguration();
             final LiveCacheStatistics stats = nativeCache.getLiveCacheStatistics();
             final boolean statsEnabled = stats != null && stats.isStatisticsEnabled();
             if (statsEnabled) {
@@ -68,6 +70,12 @@ public class CacheDirectorImpl implements CacheDirector {
                                 nativeCache.getName(),
                                 nativeCache.getSize(),
                                 nativeCache.getMemoryStoreSize(),
+                                cacheConfiguration.getMaxEntriesLocalHeap(),
+                                cacheConfiguration.isOverflowToDisk(),
+                                cacheConfiguration.isEternal(),
+                                (int) cacheConfiguration.getTimeToLiveSeconds(),
+                                (int) cacheConfiguration.getTimeToIdleSeconds(),
+                                cacheConfiguration.getMemoryStoreEvictionPolicy().toString(),
                                 nativeCache.getDiskStoreSize(),
                                 stats.getCacheHitCount(),
                                 stats.getCacheMissCount(),
@@ -81,6 +89,12 @@ public class CacheDirectorImpl implements CacheDirector {
                                 nativeCache.getName(),
                                 nativeCache.getSize(),
                                 nativeCache.getMemoryStoreSize(),
+                                cacheConfiguration.getMaxEntriesLocalHeap(),
+                                cacheConfiguration.isOverflowToDisk(),
+                                cacheConfiguration.isEternal(),
+                                (int) cacheConfiguration.getTimeToLiveSeconds(),
+                                (int) cacheConfiguration.getTimeToIdleSeconds(),
+                                cacheConfiguration.getMemoryStoreEvictionPolicy().toString(),
                                 nativeCache.getDiskStoreSize()
                         )
                 );

@@ -35,6 +35,18 @@ public class CacheInfoDTOImpl implements Serializable {
 
     private long inMemorySize;
 
+    private long inMemorySizeMax;
+
+    private int timeToLiveSeconds;
+
+    private int timeToIdleSeconds;
+
+    private boolean eternal;
+
+    private String memoryStoreEvictionPolicy;
+
+    private boolean overflowToDisk;
+
     private int  diskStoreSize;
 
     private long  calculateInMemorySize;
@@ -115,6 +127,54 @@ public class CacheInfoDTOImpl implements Serializable {
         this.inMemorySize = inMemorySize;
     }
 
+    public long getInMemorySizeMax() {
+        return inMemorySizeMax;
+    }
+
+    public void setInMemorySizeMax(final long inMemorySizeMax) {
+        this.inMemorySizeMax = inMemorySizeMax;
+    }
+
+    public int getTimeToLiveSeconds() {
+        return timeToLiveSeconds;
+    }
+
+    public void setTimeToLiveSeconds(final int timeToLiveSeconds) {
+        this.timeToLiveSeconds = timeToLiveSeconds;
+    }
+
+    public int getTimeToIdleSeconds() {
+        return timeToIdleSeconds;
+    }
+
+    public void setTimeToIdleSeconds(final int timeToIdleSeconds) {
+        this.timeToIdleSeconds = timeToIdleSeconds;
+    }
+
+    public boolean isEternal() {
+        return eternal;
+    }
+
+    public void setEternal(final boolean eternal) {
+        this.eternal = eternal;
+    }
+
+    public String getMemoryStoreEvictionPolicy() {
+        return memoryStoreEvictionPolicy;
+    }
+
+    public void setMemoryStoreEvictionPolicy(final String memoryStoreEvictionPolicy) {
+        this.memoryStoreEvictionPolicy = memoryStoreEvictionPolicy;
+    }
+
+    public boolean isOverflowToDisk() {
+        return overflowToDisk;
+    }
+
+    public void setOverflowToDisk(final boolean overflowToDisk) {
+        this.overflowToDisk = overflowToDisk;
+    }
+
     public long getHits() {
         return hits;
     }
@@ -142,6 +202,12 @@ public class CacheInfoDTOImpl implements Serializable {
     public CacheInfoDTOImpl(final String cacheName,
                             final int cacheSize,
                             final long inMemorySize,
+                            final long inMemorySizeMax,
+                            final boolean overflowToDisk,
+                            final boolean eternal,
+                            final int timeToLiveSeconds,
+                            final int timeToIdleSeconds,
+                            final String memoryStoreEvictionPolicy,
                             final int diskStoreSize,
                             final long hits,
                             final long misses,
@@ -150,6 +216,12 @@ public class CacheInfoDTOImpl implements Serializable {
         this.cacheName = cacheName;
         this.cacheSize = cacheSize;
         this.inMemorySize = inMemorySize;
+        this.inMemorySizeMax = inMemorySizeMax;
+        this.overflowToDisk = overflowToDisk;
+        this.eternal = eternal;
+        this.timeToLiveSeconds = timeToLiveSeconds;
+        this.timeToIdleSeconds = timeToIdleSeconds;
+        this.memoryStoreEvictionPolicy = memoryStoreEvictionPolicy;
         this.diskStoreSize = diskStoreSize;
         this.calculateInMemorySize = calculateInMemorySize;
         this.calculateOnDiskSize = calculateOnDiskSize;
@@ -161,10 +233,22 @@ public class CacheInfoDTOImpl implements Serializable {
     public CacheInfoDTOImpl(final String cacheName,
                             final int cacheSize,
                             final long inMemorySize,
+                            final long inMemorySizeMax,
+                            final boolean overflowToDisk,
+                            final boolean eternal,
+                            final int timeToLiveSeconds,
+                            final int timeToIdleSeconds,
+                            final String memoryStoreEvictionPolicy,
                             final int diskStoreSize) {
         this.cacheName = cacheName;
         this.cacheSize = cacheSize;
         this.inMemorySize = inMemorySize;
+        this.inMemorySizeMax = inMemorySizeMax;
+        this.overflowToDisk = overflowToDisk;
+        this.eternal = eternal;
+        this.timeToLiveSeconds = timeToLiveSeconds;
+        this.timeToIdleSeconds = timeToIdleSeconds;
+        this.memoryStoreEvictionPolicy = memoryStoreEvictionPolicy;
         this.diskStoreSize = diskStoreSize;
         this.calculateInMemorySize = -1;
         this.calculateOnDiskSize = -1;

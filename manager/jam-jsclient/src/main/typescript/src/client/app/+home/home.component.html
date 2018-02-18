@@ -143,14 +143,14 @@
 
         <div class="row">
           <div class="col-lg-3 col-md-6" *ngIf="widgets.CacheOverview">
-            <div class="panel panel-green">
+            <div class="panel  {{ widgets.CacheOverview.data.hasHotCaches ? 'panel-red' : 'panel-green'}}">
               <div class="panel-heading">
                 <div class="row">
                   <div class="col-xs-3">
                     <i class="fa fa-gears fa-5x"></i>
                   </div>
                   <div class="col-xs-9 text-right">
-                    <div *ngFor="let node of widgets.CacheOverview.data">{{ node.first }} {{ node.second }}</div>
+                    <div *ngFor="let node of widgets.CacheOverview.data.caches">{{ node.first }} {{ node.second }}</div>
                   </div>
                 </div>
               </div>

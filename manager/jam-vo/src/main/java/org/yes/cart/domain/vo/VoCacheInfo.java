@@ -36,6 +36,24 @@ public class VoCacheInfo {
     private long inMemorySize;
 
     @DtoField(readOnly = true)
+    private long inMemorySizeMax;
+
+    @DtoField(readOnly = true)
+    private int timeToLiveSeconds;
+
+    @DtoField(readOnly = true)
+    private int timeToIdleSeconds;
+
+    @DtoField(readOnly = true)
+    private boolean eternal;
+
+    @DtoField(readOnly = true)
+    private String memoryStoreEvictionPolicy;
+
+    @DtoField(readOnly = true)
+    private boolean overflowToDisk;
+
+    @DtoField(readOnly = true)
     private int  diskStoreSize;
 
     @DtoField(readOnly = true)
@@ -121,6 +139,54 @@ public class VoCacheInfo {
 
     public void setInMemorySize(long inMemorySize) {
         this.inMemorySize = inMemorySize;
+    }
+
+    public long getInMemorySizeMax() {
+        return inMemorySizeMax;
+    }
+
+    public void setInMemorySizeMax(final long inMemorySizeMax) {
+        this.inMemorySizeMax = inMemorySizeMax;
+    }
+
+    public int getTimeToLiveSeconds() {
+        return timeToLiveSeconds;
+    }
+
+    public void setTimeToLiveSeconds(final int timeToLiveSeconds) {
+        this.timeToLiveSeconds = timeToLiveSeconds;
+    }
+
+    public int getTimeToIdleSeconds() {
+        return timeToIdleSeconds;
+    }
+
+    public void setTimeToIdleSeconds(final int timeToIdleSeconds) {
+        this.timeToIdleSeconds = timeToIdleSeconds;
+    }
+
+    public boolean isEternal() {
+        return eternal;
+    }
+
+    public void setEternal(final boolean eternal) {
+        this.eternal = eternal;
+    }
+
+    public String getMemoryStoreEvictionPolicy() {
+        return memoryStoreEvictionPolicy;
+    }
+
+    public void setMemoryStoreEvictionPolicy(final String memoryStoreEvictionPolicy) {
+        this.memoryStoreEvictionPolicy = memoryStoreEvictionPolicy;
+    }
+
+    public boolean isOverflowToDisk() {
+        return overflowToDisk;
+    }
+
+    public void setOverflowToDisk(final boolean overflowToDisk) {
+        this.overflowToDisk = overflowToDisk;
     }
 
     public long getHits() {

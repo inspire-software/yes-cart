@@ -371,6 +371,8 @@
 
   "CACHE_NODE": "Node",
   "CACHE_NAME": "Cache",
+  "CACHE_SPEC": "Configuration",
+  "CACHE_ETERNAL": "eternal",
   "CACHE_SIZE": "Size",
   "CACHE_HITS": "Hit / Miss",
   "CACHE_SIZE_MEM": "Mem size",
@@ -784,6 +786,7 @@
 
   "SEARCH_HELP_CACHE_TOP": "To display top X used caches. Format: '^X'",
   "SEARCH_HELP_CACHE_SIZE": "To display caches with X or more elements. Format: '#X'",
+  "SEARCH_HELP_CACHE_HOT": "To display overloaded caches. Format: '!X'",
 
   "SEARCH_HELP_CALENDAR": "To search by date use the < character with dates after (on left) or before (on right). E.g: 'before 2000': <2000, 'after sep 2000 before 2017': 2000-09<2017"
 

@@ -34,6 +34,12 @@ export interface CacheInfoVO {
   cacheSize : number;
 
   inMemorySize : number;
+  inMemorySizeMax : number;
+  timeToLiveSeconds : number;
+  timeToIdleSeconds : number;
+  eternal : boolean;
+  overflowToDisk : boolean;
+  memoryStoreEvictionPolicy : string;
   diskStoreSize : number;
   calculateInMemorySize : number;
   calculateOnDiskSize : number;

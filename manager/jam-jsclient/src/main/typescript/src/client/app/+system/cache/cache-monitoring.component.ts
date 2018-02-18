@@ -203,7 +203,51 @@ export class CacheMonitoringComponent implements OnInit {
   }
 
   protected getDiskSize(row:CacheInfoVO):string {
-    return row.diskStoreSize + (row.stats ? this.getHumanReadableSize(row.calculateOnDiskSize) : '');
+    if (row.diskStoreSize > 0 || row.overflowToDisk) {
+      return row.diskStoreSize + (row.stats ? this.getHumanReadableSize(row.calculateOnDiskSize) : '');
+    }
+    return '';
+  }
+
+  protected getTTL(row:CacheInfoVO):string {
+    var _out:string = '';
+    if (row.timeToLiveSeconds > 0) {
+      _out += this.getHumanReadableSeconds(row.timeToLiveSeconds) + ' ttl ';
+    }
+    if (row.timeToIdleSeconds > 0) {
+      _out += this.getHumanReadableSeconds(row.timeToIdleSeconds) + ' tti ';
+    }
+    return _out;
+  }
+
+  protected getHumanReadableSeconds(seconds:number):string {
+    if (seconds >= 0) {
+
+      var _sec:number = 1000;
+      var _min:number = 60 * _sec;
+      var _hour:number = 60 * _min;
+
+      var _ms:number = seconds * 1000;
+      var _out:string = '';
+      if (_ms >= _hour) {
+        _out += Math.floor(_ms / _hour) + 'h ';
+      }
+      if (_ms % _hour >= _min) {
+        _out += Math.floor(_ms % _hour / _min) + 'm ';
+      }
+
+      if (_ms % _min >= _sec) {
+        _out += Math.floor(_ms % _min / _sec) + 's ';
+      }
+
+      if (_ms % _sec > 0) {
+        _out += (Math.floor(_ms % _sec * 100) / 100) + 'ms';
+      }
+
+      return _out;
+
+    }
+    return '-';
   }
 
   protected onSearchHelpToggle() {
@@ -218,6 +262,12 @@ export class CacheMonitoringComponent implements OnInit {
 
   protected onSizeSelected() {
     this.cacheFilter = '#100';
+    this.searchHelpShow = false;
+    this.filterCaches();
+  }
+
+  protected onHotSelected() {
+    this.cacheFilter = '!10';
     this.searchHelpShow = false;
     this.filterCaches();
   }
@@ -264,6 +314,15 @@ export class CacheMonitoringComponent implements OnInit {
         }
 
         this.filteredCaches = this.caches.sort((n1,n2) => n2.cacheSize - n1.cacheSize).slice(0, _top);
+
+      } else if (_filter.indexOf('!') == 0) {
+
+        let _hot = parseInt(_filter.substr(1));
+        if (isNaN(_hot)) {
+          _hot = 5;
+        }
+
+        this.filteredCaches = this.caches.sort((n1,n2) => (n2.cacheSize / n2.inMemorySizeMax) - (n1.cacheSize / n1.inMemorySizeMax)).slice(0, _hot);
 
       } else {
         this.filteredCaches = this.caches.filter(cache =>

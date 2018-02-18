@@ -62,6 +62,7 @@ public class VoDashboardWidgetPluginCacheMonitoring implements VoDashboardWidget
         final VoDashboardWidget widget = new VoDashboardWidget();
         widget.setWidgetId("CacheOverview");
 
+        boolean hasHotCaches = false;
         final List<MutablePair<String, Integer>> data = new ArrayList<>();
         try {
             final Map<String, Object> param = new HashMap<String, Object>();
@@ -72,8 +73,11 @@ public class VoDashboardWidgetPluginCacheMonitoring implements VoDashboardWidget
                 int counter = 0;
 
                 for (final CacheInfoDTOImpl cache : caches.get(node)) {
-                    if (cache.getCacheSize() > 0) {
+                    // if we have max size setting and we are more than 75%, report as hot cache
+                    if (cache.getInMemorySizeMax() > 0 &&
+                            cache.getCacheSize() > (cache.getInMemorySizeMax() - cache.getInMemorySizeMax() / 4)) {
                         counter++;
+                        hasHotCaches = true;
                     }
                 }
 
@@ -85,7 +89,11 @@ public class VoDashboardWidgetPluginCacheMonitoring implements VoDashboardWidget
             // ignore
 
         }
-        widget.setData(data);
+
+        final Map<String, Object> wData = new HashMap<>();
+        wData.put("hasHotCaches", hasHotCaches);
+        wData.put("caches", data);
+        widget.setData(wData);
 
         return widget;
     }
