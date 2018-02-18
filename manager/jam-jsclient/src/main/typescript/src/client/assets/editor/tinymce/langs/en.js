@@ -175,5 +175,11 @@ tinymce.addI18n('en_GB',{
 "Tools": "Tools",
 "View": "View",
 "Table": "Table",
-"Format": "Format"
+"Format": "Format",
+"Shortcuts": "Shortcuts",
+"Instructions": "Instructions",
+"This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.": "This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.",
+"All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.": "All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.",
+"You can use then Templates button to add typical elements to your page.": "You can use then Templates button to add typical elements to your page.",
+"This editor automatically injects shop theme's additional CSS. If it does not, make sure that SYSTEM_PREVIEW_URL_TEMPLATE and SYSTEM_PREVIEW_URI_CSS system preferences are correctly set.": "This editor automatically injects shop theme's additional CSS. If it does not, make sure that SYSTEM_PREVIEW_URL_TEMPLATE and SYSTEM_PREVIEW_URI_CSS system preferences are correctly set."
 });

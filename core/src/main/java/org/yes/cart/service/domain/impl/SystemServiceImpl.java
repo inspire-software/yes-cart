@@ -64,6 +64,9 @@ public class SystemServiceImpl implements SystemService {
     private String filevaultDefaultRoot = null;
     private String sysfilevaultDefaultRoot = null;
 
+    private String previewShopURLTemplate = null;
+    private String previewShopURICss = null;
+
     /**
      * Construct system services, which is determinate shop set.
      *
@@ -211,14 +214,34 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public String getPreviewShopURLTemplate() {
-        return proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_PREVIEW_URL_TEMPLATE);
+        final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_PREVIEW_URL_TEMPLATE);
+        if (StringUtils.isBlank(attrValue)) {
+            if (StringUtils.isBlank(this.previewShopURLTemplate)) {
+                LOG.warn("Preview shop URL template {} is not configured, using  'http://{primaryShopURL}:8080/'",
+                        AttributeNamesKeys.System.SYSTEM_PREVIEW_URL_TEMPLATE);
+                return "http://{primaryShopURL}:8080/";
+            }
+            return this.previewShopURLTemplate;
+        }
+
+        return addTailFileSeparator(attrValue);
     }
 
     /**
      * {@inheritDoc}
      */
     public String getPreviewShopURICss() {
-        return proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_PREVIEW_URI_CSS);
+        final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_PREVIEW_URI_CSS);
+        if (StringUtils.isBlank(attrValue)) {
+            if (StringUtils.isBlank(this.previewShopURICss)) {
+                LOG.warn("Preview shop URI CSS {} is not configured, using 'wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css'",
+                        AttributeNamesKeys.System.SYSTEM_PREVIEW_URI_CSS);
+                return "wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css";
+            }
+            return this.previewShopURICss;
+        }
+
+        return attrValue;
     }
 
     /**
@@ -361,6 +384,9 @@ public class SystemServiceImpl implements SystemService {
         this.imagevaultDefaultRoot = properties.getProperty("imagevault.default", null);
         this.filevaultDefaultRoot = properties.getProperty("filevault.default", null);
         this.sysfilevaultDefaultRoot = properties.getProperty("sysfilevault.default", null);
+
+        this.previewShopURLTemplate = properties.getProperty("admin.cms.preview.shop-url-template.default", null);
+        this.previewShopURICss = properties.getProperty("admin.cms.preview.shop-uri-css.default", null);
 
     }
 

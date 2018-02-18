@@ -731,11 +731,7 @@ public class VoShopServiceImpl implements VoShopService {
         voShopUrl.setUrls(voAssemblySupport.assembleVos(VoShopUrlDetail.class, ShopUrlDTO.class, shopUrlDTO));
         voShopUrl.setShopId(shopId);
 
-        String previewURLTemplate = systemService.getPreviewShopURLTemplate();
-        if (previewURLTemplate == null) {
-            previewURLTemplate = "http://{primaryShopURL}:8080/";
-            LOG.warn("Preview shop URL template is not configured, using '{}'", previewURLTemplate);
-        }
+        final String previewURLTemplate = systemService.getPreviewShopURLTemplate();
 
         String primary = null;
         if (voShopUrl.getUrls() == null || voShopUrl.getUrls().isEmpty()) {
@@ -750,11 +746,8 @@ public class VoShopServiceImpl implements VoShopService {
 
         voShopUrl.setPreviewUrl(previewURLTemplate.replace("{primaryShopURL}", primary));
 
-        String previewURICss = systemService.getPreviewShopURICss();
-        if (previewURICss == null) {
-            previewURICss = "wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css";
-            LOG.warn("Preview shop URI CSS is not configured, using '{}'", previewURICss);
-        }
+        final String previewURICss = systemService.getPreviewShopURICss();
+
         voShopUrl.setPreviewCss(voShopUrl.getPreviewUrl() + previewURICss);
 
 

@@ -215,5 +215,11 @@ tinymce.addI18n('de',{
 "Tools": "Werkzeuge",
 "View": "Ansicht",
 "Table": "Tabelle",
-"Format": "Format"
+"Format": "Format",
+"Shortcuts": "Abk\u00FCrzungen",
+"Instructions": "Anleitung",
+"This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.": "Dieser WYSIWYG-Editor erm\u00F6glicht es Ihnen, das Ergebnis Ihrer Bearbeitung in allen Modi zu visualisieren: Desktop, Mobile und Tablets.",
+"All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.": "Alles, was Sie tun m\u00FCssen, ist die Gr\u00F6\u00DFe dieses Fensters zu \u00E4ndern, um Responsive Design bei der Arbeit zu sehen. Die Schaltfl\u00E4che Bl\u00f6cke anzeigen erstellt einen gestrichelten Rahmen, damit Sie die Elemente auf der Seite besser sehen k\u00F6nnen. Jede Ansicht hat ihre eigene Rahmenfarbe: Desktop ist GR\u00DCN, Mobil ist ROT und Tablet ist BLAU.",
+"You can use then Templates button to add typical elements to your page.": "Sie k\u00F6nnen dann die Schaltfl\u00E4che Vorlage einf\u00fcgen verwenden, um Ihrer Seite typische Elemente hinzuzuf\u00FCgen.",
+"This editor automatically injects shop theme's additional CSS. If it does not, make sure that SYSTEM_PREVIEW_URL_TEMPLATE and SYSTEM_PREVIEW_URI_CSS system preferences are correctly set.": "Dieser Editor f\u00FCgt automatisch das zus\u00E4tzliche CSS des Gesch\u00E4ftsthemas hinzu. Ist dies nicht der Fall, stellen Sie sicher, dass die Systemeinstellungen SYSTEM_PREVIEW_URL_TEMPLATE und SYSTEM_PREVIEW_URI_CSS richtig eingestellt sind."
 });

@@ -53,7 +53,7 @@
 
     <context-param>
         <param-name>wicket.configuration</param-name>
-        <param-value>${wicket.configuration}</param-value>
+        <param-value>${webapp.configuration}</param-value>
     </context-param>
 
     <listener>
@@ -180,7 +180,7 @@
         </init-param>
         <init-param>
             <param-name>configuration</param-name>
-            <param-value>${wicket.configuration}</param-value>
+            <param-value>${webapp.configuration}</param-value>
         </init-param>
         <init-param>
             <param-name>ignorePaths</param-name>

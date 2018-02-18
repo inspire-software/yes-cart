@@ -222,3 +222,15 @@ update TETYPE set JAVATYPE = 'java.time.LocalDateTime', BUSINESSTYPE = 'DateTime
 INSERT INTO TETYPE (ETYPE_ID, JAVATYPE, BUSINESSTYPE, GUID) VALUES (1015, 'java.time.LocalDate', 'Date', 'Date');
 INSERT INTO TETYPE (ETYPE_ID, JAVATYPE, BUSINESSTYPE, GUID) VALUES (1016, 'java.time.Instant', 'Timestamp', 'Timestamp');
 
+--
+--  YC-863 Improve CMS editor
+--
+
+update TATTRIBUTE  set DESCRIPTION = 'This URI points to preview CSS. For example:
+SFW: "wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css"
+SFG: "resources/style/yc-preview.css"' where GUID = 'SYSTEM_PREVIEW_URI_CSS';
+
+update TATTRIBUTE set DESCRIPTION = 'This template is used to adjust URLs in content (<img src=""/> and <a href=""/>). For example:
+DEV: http://{primaryShopURL}:8080/ where {primaryShopURL} is a placeholder for shop primary domain
+PROD: http://{primaryShopURL}/ where {primaryShopURL} is a placeholder for shop primary domain'  where GUID = 'SYSTEM_PREVIEW_URL_TEMPLATE';
+

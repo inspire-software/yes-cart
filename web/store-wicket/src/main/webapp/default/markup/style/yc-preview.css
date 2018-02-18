@@ -1,32 +1,5 @@
-/* Default theme css */
+/* Default theme bundle css, used by JAM's CMS editor */
 @import "bootstrap.min.css";
 @import "bootstrap-theme.css";
 @import "fonts.css";
 @import "yc.css";
-
-/*
-   Additional helper classes to see boundaries
-   Green: desktop
-   Red:   mobile
-   Blue:  tablet
- */
-div, p, span, a, ul, li {
-  border: 1px #008800 dashed;
-}
-
-@media (max-width:768px) {
-
-  div, p, span, a, ul, li {
-    border: 1px #d34646 dashed;
-  }
-
-}
-
-@media (min-width:769px) and (max-width:1200px) {
-
-  div, p, span, a, ul, li {
-    border: 1px #0064cc dashed;
-  }
-
-}
-
