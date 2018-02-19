@@ -15,3 +15,11 @@ Actions for PROD:
 - remove visualisation code from yc-preview.css in custom themes (if you have it, see yc-preview.css in default for reference)
 
 - update "config-cluster.properties" file and change property "wicket.configuration" to "webapp.configuration"
+
+NB: customisations of visual editor
+
+- visualblocks has updated CSS in order to mark borders accoring to device view port
+- help has been updated with specific instructions on how to work with CMS editor
+- template was customised to add new 'preview' config property. This preview content is what is shown in small preview pop up,
+  it is a necessary evil in order to display desktop config in a small window (which is the most reasonable view users
+  would expect in a preview).

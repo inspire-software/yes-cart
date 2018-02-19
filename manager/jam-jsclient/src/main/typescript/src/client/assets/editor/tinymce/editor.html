@@ -62,29 +62,62 @@
         height: 500,
         theme: 'modern',
         plugins: [
-          'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+          'advlist autolink lists link image charmap hr anchor pagebreak',
           'searchreplace wordcount visualblocks visualchars code fullscreen',
-          'insertdatetime media nonbreaking save table contextmenu directionality',
-          'emoticons template paste textcolor colorpicker textpattern imagetools'
+          'insertdatetime media nonbreaking save table directionality',
+          'template paste textcolor colorpicker textpattern imagetools help'
         ],
         toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media',
-        toolbar2: 'save | forecolor backcolor | visualblocks template ',
+        toolbar2: 'save | forecolor backcolor | visualblocks visualchars template | help',
         image_advtab: true,
         templates: [
-          { title: '1 x column', content: '<div class="row"><div class="col-xs-12">1 x Mobile, 1 x Desktop</div></div>' },
-          { title: '2 x columns', content: '<div class="row"><div class="col-xs-12 col-md-6">1 x Mobile, 1/2 x Desktop</div><div class="col-xs-12 col-md-6">1 x Mobile, 1/2 x Desktop</div></div>' },
-          { title: '2 x columns (wide left)', content: '<div class="row"><div class="col-xs-12 col-md-8">1 x Mobile, 2/3 x Desktop</div><div class="col-xs-12 col-md-4">1 x Mobile, 1/3 x Desktop</div></div>' },
-          { title: '2 x columns (wide right)', content: '<div class="row"><div class="col-xs-12 col-md-4">1 x Mobile, 1/3 x Desktop</div><div class="col-xs-12 col-md-8">1 x Mobile, 2/3 x Desktop</div></div>' },
-          { title: '3 x columns', content: '<div class="row"><div class="col-xs-12 col-md-4">1 x Mobile, 1/3 x Desktop</div><div class="col-xs-12 col-md-4">1 x Mobile, 1/3 x Desktop</div><div class="col-xs-12 col-md-4">1 x Mobile, 1/3 x Desktop</div></div>' },
-          { title: '4 x columns', content: '<div class="row"><div class="col-xs-6 col-md-3">1/2 x Mobile, 1/4 x Desktop</div><div class="col-xs-6 col-md-3">1/2 x Mobile, 1/4 x Desktop</div><div class="col-xs-6 col-md-3">1/2 x Mobile, 1/4 x Desktop</div><div class="col-xs-6 col-md-3">1/2 x Mobile, 1/4 x Desktop</div></div>' },
-          { title: '2 x columns (very wide left)', content: '<div class="row"><div class="col-xs-12 col-md-9">1 x Mobile, 3/4 x Desktop</div><div class="col-xs-12 col-md-3">1 x Mobile, 1/4 x Desktop</div></div>' },
-          { title: '2 x columns (very wide right)', content: '<div class="row"><div class="col-xs-12 col-md-3">1 x Mobile, 1/4 x Desktop</div><div class="col-xs-12 col-md-9">1 x Mobile, 3/4 x Desktop</div></div>' },
-        ],
+          {
+            title: '1 x column',
+            content: '<div class="row"><div class="col-xs-12"><br/>1 x Mobile, 1 x Desktop<br/><br/></div></div>',
+            preview: '<div class="row"><div class="col-xs-12"><br/>1 x Mobile, 1 x Desktop<br/><br/></div></div>'
+          },
+          {
+            title: '2 x columns',
+            content: '<div class="row"><div class="col-xs-12 col-md-6"><br/>1 x Mobile, 1/2 x Desktop<br/><br/></div><div class="col-xs-12 col-md-6"><br/>1 x Mobile, 1/2 x Desktop<br/><br/></div></div>',
+            preview: '<div class="row"><div class="col-xs-6"><br/>1 x Mobile, 1/2 x Desktop<br/><br/></div><div class="col-xs-6"><br/>1 x Mobile, 1/2 x Desktop<br/><br/></div></div>'
+          },
+          {
+            title: '2 x columns (wide left)',
+            content: '<div class="row"><div class="col-xs-12 col-md-8"><br/>1 x Mobile, 2/3 x Desktop<br/><br/></div><div class="col-xs-12 col-md-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div></div>',
+            preview: '<div class="row"><div class="col-xs-8"><br/>1 x Mobile, 2/3 x Desktop<br/><br/></div><div class="col-xs-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div></div>'
+          },
+          {
+            title: '2 x columns (wide right)',
+            content: '<div class="row"><div class="col-xs-12 col-md-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div><div class="col-xs-12 col-md-8"><br/>1 x Mobile, 2/3 x Desktop<br/><br/></div></div>',
+            preview: '<div class="row"><div class="col-xs-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div><div class="col-xs-8"><br/>1 x Mobile, 2/3 x Desktop<br/><br/></div></div>'
+          },
+          {
+            title: '3 x columns',
+            content: '<div class="row"><div class="col-xs-12 col-md-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div><div class="col-xs-12 col-md-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div><div class="col-xs-12 col-md-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div></div>',
+            preview: '<div class="row"><div class="col-xs-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div><div class="col-xs-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div><div class="col-xs-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div></div>'
+          },
+          {
+            title: '4 x columns',
+            content: '<div class="row"><div class="col-xs-6 col-md-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-6 col-md-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-6 col-md-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-6 col-md-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div></div>',
+            preview: '<div class="row"><div class="col-xs-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div></div>'
+          },
+          {
+            title: '2 x columns (very wide left)',
+            content: '<div class="row"><div class="col-xs-12 col-md-9"><br/>1 x Mobile, 3/4 x Desktop<br/><br/></div><div class="col-xs-12 col-md-3"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div></div>',
+            preview: '<div class="row"><div class="col-xs-9"><br/>1 x Mobile, 3/4 x Desktop<br/><br/></div><div class="col-xs-3"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div></div>'
+          },
+          {
+            title: '2 x columns (very wide right)',
+            content: '<div class="row"><div class="col-xs-12 col-md-3"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-12 col-md-9"><br/>1 x Mobile, 3/4 x Desktop<br/><br/></div></div>',
+            preview: '<div class="row"><div class="col-xs-3"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-9"><br/>1 x Mobile, 3/4 x Desktop<br/><br/></div></div>'
+          }        ],
         content_css: [
           _css
         ],
         force_p_newlines: false,
-        forced_root_block: 'template',
+        force_br_newlines: true,
+        forced_root_block: '',
+        paste_as_text: true,
         setup: function(editor) {
           // on full start we need timeout for the browser to settle with layout
           // then we enter full screen mode and enable visual blocks by default
