@@ -257,10 +257,11 @@ tinymce.addI18n('nl',{
 "Tools": "Gereedschap",
 "Powered by {0}": "",
 "Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help": "Rich Text Area. Druk ALT-F9 voor het menu. Druk ALT-F10 voor de toolbar. Druk ALT-0 voor help.",
-"Shortcuts": "Shortcuts",
-"Instructions": "Instructions",
-"This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.": "This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.",
-"All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.": "All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.",
-"You can use then Templates button to add typical elements to your page.": "You can use then Templates button to add typical elements to your page.",
-"This editor automatically injects shop theme's additional CSS. If it does not, make sure that SYSTEM_PREVIEW_URL_TEMPLATE and SYSTEM_PREVIEW_URI_CSS system preferences are correctly set.": "This editor automatically injects shop theme's additional CSS. If it does not, make sure that SYSTEM_PREVIEW_URL_TEMPLATE and SYSTEM_PREVIEW_URI_CSS system preferences are correctly set."
+"Shortcuts": "Kortere weg",
+"Add new block": "Voeg een nieuw blok toe",
+"Instructions": "Voorschrift",
+"This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.": "Met deze WYSIWYG-editor kunt u de resultaten van uw bewerking in alle modi visualiseren: desktop, mobiel en tablets.",
+"All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.": "Het enige dat u hoeft te doen, is het formaat van dit venster aanpassen om responsief ontwerp op het werk te zien. Met de visualisatieknop maakt u een onderbroken rand om de elementen op de pagina beter te kunnen zien. Elke weergave krijgt een eigen randkleur: Bureaublad is GROEN, Mobiel is ROOD en Tablet is BLAUW.",
+"You can use then Templates button to add typical elements to your page.": "U kunt de knop Sjablonen dan gebruiken om typische elementen aan uw pagina toe te voegen.",
+"This editor automatically injects shop theme's additional CSS. If it does not, make sure that SYSTEM_PREVIEW_URL_TEMPLATE and SYSTEM_PREVIEW_URI_CSS system preferences are correctly set.": "Deze editor injecteert automatisch extra CSS voor winkelthema's. Als dit niet het geval is, controleert u of de systeemvoorkeuren SYSTEM_PREVIEW_URL_TEMPLATE en SYSTEM_PREVIEW_URI_CSS correct zijn ingesteld."
 });

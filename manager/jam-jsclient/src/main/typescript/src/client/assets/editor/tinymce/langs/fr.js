@@ -1,4 +1,4 @@
-tinymce.addI18n('fr_FR',{
+tinymce.addI18n('fr',{
 "Redo": "R\u00e9tablir",
 "Undo": "Annuler",
 "Cut": "Couper",
@@ -257,10 +257,11 @@ tinymce.addI18n('fr_FR',{
 "Tools": "Outils",
 "Powered by {0}": "",
 "Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help": "Zone Texte Riche. Appuyer sur ALT-F9 pour le menu. Appuyer sur ALT-F10 pour la barre d'outils. Appuyer sur ALT-0 pour de l'aide.",
-"Shortcuts": "Shortcuts",
+"Shortcuts": "Raccourcis",
+"Add new block": "Ajouter un nouveau bloc",
 "Instructions": "Instructions",
-"This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.": "This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.",
-"All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.": "All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.",
-"You can use then Templates button to add typical elements to your page.": "You can use then Templates button to add typical elements to your page.",
-"This editor automatically injects shop theme's additional CSS. If it does not, make sure that SYSTEM_PREVIEW_URL_TEMPLATE and SYSTEM_PREVIEW_URI_CSS system preferences are correctly set.": "This editor automatically injects shop theme's additional CSS. If it does not, make sure that SYSTEM_PREVIEW_URL_TEMPLATE and SYSTEM_PREVIEW_URI_CSS system preferences are correctly set."
+"This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.": "Cet \u00E9diteur WYSIWYG vous permettra de visualiser les r\u00E9sultats de votre montage dans tous les modes: desktop, mobile et tablettes.",
+"All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.": "Tout ce que vous devez faire est de redimensionner cette fen\u00EAtre pour voir la conception adaptative au travail. Le bouton de visualisation cr\u00E9era une bordure en pointill\u00E9s pour mieux voir les \u00E9l\u00E9ments sur la page. Chaque vue aura sa propre couleur de bordure: le bureau est vert, le mobile est rouge et la tablette est bleue.",
+"You can use then Templates button to add typical elements to your page.": "Vous pouvez utiliser le bouton Mod\u00E8les pour ajouter des \u00E9l\u00E9ments typiques \u00E0 votre page.",
+"This editor automatically injects shop theme's additional CSS. If it does not, make sure that SYSTEM_PREVIEW_URL_TEMPLATE and SYSTEM_PREVIEW_URI_CSS system preferences are correctly set.": "Cet \u00E9diteur injecte automatiquement les CSS suppl\u00E9mentaires du th\u00E8me de la boutique. Si ce n\\'est pas le cas, assurez-vous que les pr\u00E9f\u00E9rences syst\u00E8me SYSTEM_PREVIEW_URL_TEMPLATE et SYSTEM_PREVIEW_URI_CSS sont correctement d\u00E9finies."
 });

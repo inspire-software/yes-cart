@@ -257,10 +257,11 @@ tinymce.addI18n('it',{
 "Tools": "Strumenti",
 "Powered by {0}": "",
 "Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help": "Rich Text Area. Premi ALT-F9 per il men\u00f9. Premi ALT-F10 per la barra degli strumenti. Premi ALT-0 per l'aiuto.",
-"Shortcuts": "Shortcuts",
-"Instructions": "Instructions",
-"This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.": "This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.",
-"All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.": "All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.",
-"You can use then Templates button to add typical elements to your page.": "You can use then Templates button to add typical elements to your page.",
-"This editor automatically injects shop theme's additional CSS. If it does not, make sure that SYSTEM_PREVIEW_URL_TEMPLATE and SYSTEM_PREVIEW_URI_CSS system preferences are correctly set.": "This editor automatically injects shop theme's additional CSS. If it does not, make sure that SYSTEM_PREVIEW_URL_TEMPLATE and SYSTEM_PREVIEW_URI_CSS system preferences are correctly set."
+"Shortcuts": "Scorciatoia",
+"Add new block": "Aggiungi un nuovo blocco",
+"Instructions": "Istruzioni",
+"This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.": "Questo editor WYSIWYG ti permetter\u00E0 di visualizzare i risultati della tua modifica in tutte le modalit\u00E0: desktop, mobile e tablet.",
+"All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.": "Tutto quello che devi fare è ridimensionare questa finestra per vedere il responsive design al lavoro. Il pulsante di visualizzazione creerà un bordo tratteggiato per consentirti di vedere meglio gli elementi sulla pagina. Ogni vista avrà il proprio colore del bordo: il desktop è VERDE, il mobile è ROSSO e il tablet è BLU.",
+"You can use then Templates button to add typical elements to your page.": "Puoi usare il pulsante Modelli per aggiungere elementi tipici alla tua pagina.",
+"This editor automatically injects shop theme's additional CSS. If it does not, make sure that SYSTEM_PREVIEW_URL_TEMPLATE and SYSTEM_PREVIEW_URI_CSS system preferences are correctly set.": "Questo editor inserisce automaticamente il CSS aggiuntivo del tema del negozio. In caso contrario, assicurati che le preferenze di sistema SYSTEM_PREVIEW_URL_TEMPLATE e SYSTEM_PREVIEW_URI_CSS siano impostate correttamente."
 });

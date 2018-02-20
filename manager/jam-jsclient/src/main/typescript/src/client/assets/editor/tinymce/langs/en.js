@@ -229,6 +229,7 @@ tinymce.addI18n('en_GB',{
 "Table": "Table",
 "Format": "Format",
 "Shortcuts": "Shortcuts",
+"Add new block": "Add new block",
 "Instructions": "Instructions",
 "This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.": "This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.",
 "All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.": "All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.",

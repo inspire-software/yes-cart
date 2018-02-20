@@ -258,7 +258,7 @@ tinymce.addI18n('de',{
 "Powered by {0}": "",
 "Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help": "Rich-Text- Area. Dr\u00fccken Sie ALT-F9 f\u00fcr das Men\u00fc. Dr\u00fccken Sie ALT-F10 f\u00fcr Symbolleiste. Dr\u00fccken Sie ALT-0 f\u00fcr Hilfe",
 "Shortcuts": "Abk\u00FCrzungen",
-"Instructions": "Anleitung",
+"Add new block": "F\u00FCge einen neuen Block hinzu",
 "This WYSIWIG editor will allow you to visualise outcome of you editing in all modes: desktop, mobile and tablets.": "Dieser WYSIWYG-Editor erm\u00F6glicht es Ihnen, das Ergebnis Ihrer Bearbeitung in allen Modi zu visualisieren: Desktop, Mobile und Tablets.",
 "All you need to do is resize this window to see responsive design at work. The visualization button will create a dashed border for you to better see the elements on the page. Each view will have its own border color: Desktop is GREEN, Mobile is RED and Tablet is BLUE.": "Alles, was Sie tun m\u00FCssen, ist die Gr\u00F6\u00DFe dieses Fensters zu \u00E4ndern, um Responsive Design bei der Arbeit zu sehen. Die Schaltfl\u00E4che Bl\u00f6cke anzeigen erstellt einen gestrichelten Rahmen, damit Sie die Elemente auf der Seite besser sehen k\u00F6nnen. Jede Ansicht hat ihre eigene Rahmenfarbe: Desktop ist GR\u00DCN, Mobil ist ROT und Tablet ist BLAU.",
 "You can use then Templates button to add typical elements to your page.": "Sie k\u00F6nnen dann die Schaltfl\u00E4che Vorlage einf\u00fcgen verwenden, um Ihrer Seite typische Elemente hinzuzuf\u00FCgen.",

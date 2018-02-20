@@ -72,44 +72,251 @@
         image_advtab: true,
         templates: [
           {
+            title: 'Landing Page',
+            content: '\
+<div class="row">\
+<div class="col-xs-12"></div>\
+</div>\
+<div class="row">\
+<div class="col-xs-6 col-md-3"></div>\
+<div class="col-xs-6 col-md-3"></div>\
+<div class="col-xs-6 col-md-3"></div>\
+<div class="col-xs-6 col-md-3"></div>\
+</div>\
+<div class="row">\
+<div class="col-xs-12 col-md-6"></div>\
+<div class="col-xs-12 col-md-6"></div>\
+</div>\
+<div class="row">\
+<div class="col-xs-12 col-md-3"></div>\
+<div class="col-xs-12 col-md-9"></div>\
+</div>\
+<div class="row">\
+<div class="col-xs-12 col-md-9"></div>\
+<div class="col-xs-12 col-md-3"></div>\
+</div>\
+<div class="row">\
+<div class="col-xs-12 col-md-4"></div>\
+<div class="col-xs-12 col-md-4"></div>\
+<div class="col-xs-12 col-md-4"></div>\
+</div>\
+<div class="row">\
+<div class="col-xs-12 col-md-4"></div>\
+<div class="col-xs-12 col-md-8"></div>\
+</div>\
+<div class="row">\
+<div class="col-xs-12 col-md-8"></div>\
+<div class="col-xs-12 col-md-4"></div>\
+</div>\
+<div></div>',
+            preview: '\
+<div class="row">\
+<div class="col-xs-12" style="border:1px dashed #F00;"><br/>1 x Mobile, 1 x Desktop<br/><br/></div>\
+</div>\
+<div class="row">\
+<div class="col-xs-3" style="border:1px dashed #F00;"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div>\
+<div class="col-xs-3" style="border:1px dashed #F00;"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div>\
+<div class="col-xs-3" style="border:1px dashed #F00;"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div>\
+<div class="col-xs-3" style="border:1px dashed #F00;"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div>\
+</div>\
+<div class="row">\
+<div class="col-xs-6" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/2 x Desktop<br/><br/></div>\
+<div class="col-xs-6" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/2 x Desktop<br/><br/></div>\
+</div>\
+<div class="row">\
+<div class="col-xs-3" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div>\
+<div class="col-xs-9" style="border:1px dashed #F00;"><br/>1 x Mobile, 3/4 x Desktop<br/><br/><br/></div>\
+</div>\
+<div class="row">\
+<div class="col-xs-9" style="border:1px dashed #F00;"><br/>1 x Mobile, 3/4 x Desktop<br/><br/><br/></div>\
+<div class="col-xs-3" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div>\
+</div>\
+<div class="row">\
+<div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div>\
+<div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div>\
+<div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div>\
+</div>\
+<div class="row">\
+<div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div>\
+<div class="col-xs-8" style="border:1px dashed #F00;"><br/>1 x Mobile, 2/3 x Desktop<br/><br/></div>\
+</div>\
+<div class="row">\
+<div class="col-xs-8" style="border:1px dashed #F00;"><br/>1 x Mobile, 2/3 x Desktop<br/><br/></div>\
+<div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div>\
+</div>\
+<div></div>'
+          },
+          {
+            title: 'Content Page',
+            content: '\
+<div class="row">\
+<div class="col-xs-12"></div>\
+</div>\
+<div class="row">\
+  <div class="col-xs-12 col-md-3">\
+  </div>\
+  <div class="col-xs-12 col-md-9">\
+  <div class="row">\
+  <div class="col-xs-12 col-md-4"></div>\
+  <div class="col-xs-12 col-md-4"></div>\
+  <div class="col-xs-12 col-md-4"></div>\
+  </div>\
+  <div class="row">\
+  <div class="col-xs-12 col-md-4"></div>\
+  <div class="col-xs-12 col-md-8"></div>\
+  </div>\
+  <div class="row">\
+  <div class="col-xs-12"></div>\
+  </div>\
+  <div class="row">\
+  <div class="col-xs-12 col-md-8"></div>\
+  <div class="col-xs-12 col-md-4"></div>\
+  </div>\
+  </div>\
+</div>\
+<div></div>',
+            preview: '\
+<div class="row">\
+<div class="col-xs-12" style="border:1px dashed #F00;"><br/>1 x Mobile, 1 x Desktop<br/><br/></div>\
+</div>\
+<div class="row">\
+  <div class="col-xs-3" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/4 x Desktop<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></div>\
+  <div class="col-xs-9">\
+  <div class="row">\
+  <div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div>\
+  <div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div>\
+  <div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div>\
+  </div>\
+  <div class="row">\
+  <div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div>\
+  <div class="col-xs-8" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/2 x Desktop<br/><br/><br/></div>\
+  </div>\
+  <div class="row">\
+  <div class="col-xs-12" style="border:1px dashed #F00;"><br/>1 x Mobile, 3/4 x Desktop<br/><br/></div>\
+  </div>\
+  <div class="row">\
+  <div class="col-xs-8" style="border:1px dashed #F00;"><br/>1 x Mobile, 3/4 x Desktop<br/><br/><br/></div>\
+  <div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div>\
+  </div>\
+  </div>\
+</div>\
+<div></div>'
+          },
+          {
             title: '1 x column',
-            content: '<div class="row"><div class="col-xs-12"><br/>1 x Mobile, 1 x Desktop<br/><br/></div></div>',
-            preview: '<div class="row"><div class="col-xs-12"><br/>1 x Mobile, 1 x Desktop<br/><br/></div></div>'
+            content: '\
+<div class="row">\
+<div class="col-xs-12"></div>\
+</div>\
+<div></div>',
+            preview: '\
+<div class="row">\
+<div class="col-xs-12" style="border:1px dashed #F00;"><br/>1 x Mobile, 1 x Desktop<br/><br/></div>\
+</div>'
           },
           {
             title: '2 x columns',
-            content: '<div class="row"><div class="col-xs-12 col-md-6"><br/>1 x Mobile, 1/2 x Desktop<br/><br/></div><div class="col-xs-12 col-md-6"><br/>1 x Mobile, 1/2 x Desktop<br/><br/></div></div>',
-            preview: '<div class="row"><div class="col-xs-6"><br/>1 x Mobile, 1/2 x Desktop<br/><br/></div><div class="col-xs-6"><br/>1 x Mobile, 1/2 x Desktop<br/><br/></div></div>'
+            content: '\
+<div class="row">\
+<div class="col-xs-12 col-md-6"></div>\
+<div class="col-xs-12 col-md-6"></div>\
+</div>\
+<div></div>',
+            preview: '\
+<div class="row">\
+<div class="col-xs-6" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/2 x Desktop<br/><br/></div>\
+<div class="col-xs-6" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/2 x Desktop<br/><br/></div>\
+</div>'
           },
           {
             title: '2 x columns (wide left)',
-            content: '<div class="row"><div class="col-xs-12 col-md-8"><br/>1 x Mobile, 2/3 x Desktop<br/><br/></div><div class="col-xs-12 col-md-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div></div>',
-            preview: '<div class="row"><div class="col-xs-8"><br/>1 x Mobile, 2/3 x Desktop<br/><br/></div><div class="col-xs-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div></div>'
+            content: '\
+<div class="row">\
+<div class="col-xs-12 col-md-8"></div>\
+<div class="col-xs-12 col-md-4"></div>\
+</div>\
+<div></div>',
+            preview: '\
+<div class="row">\
+<div class="col-xs-8" style="border:1px dashed #F00;"><br/>1 x Mobile, 2/3 x Desktop<br/><br/></div>\
+<div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div>\
+</div>'
           },
           {
             title: '2 x columns (wide right)',
-            content: '<div class="row"><div class="col-xs-12 col-md-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div><div class="col-xs-12 col-md-8"><br/>1 x Mobile, 2/3 x Desktop<br/><br/></div></div>',
-            preview: '<div class="row"><div class="col-xs-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div><div class="col-xs-8"><br/>1 x Mobile, 2/3 x Desktop<br/><br/></div></div>'
+            content: '\
+<div class="row">\
+<div class="col-xs-12 col-md-4"></div>\
+<div class="col-xs-12 col-md-8"></div>\
+</div>\
+<div></div>',
+            preview: '\
+<div class="row">\
+<div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div>\
+<div class="col-xs-8" style="border:1px dashed #F00;"><br/>1 x Mobile, 2/3 x Desktop<br/><br/></div>\
+</div>'
           },
           {
             title: '3 x columns',
-            content: '<div class="row"><div class="col-xs-12 col-md-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div><div class="col-xs-12 col-md-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div><div class="col-xs-12 col-md-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div></div>',
-            preview: '<div class="row"><div class="col-xs-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div><div class="col-xs-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div><div class="col-xs-4"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div></div>'
+            content: '\
+<div class="row">\
+<div class="col-xs-12 col-md-4"></div>\
+<div class="col-xs-12 col-md-4"></div>\
+<div class="col-xs-12 col-md-4"></div>\
+</div>\
+<div></div>',
+            preview: '\
+<div class="row">\
+<div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div>\
+<div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div>\
+<div class="col-xs-4" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/3 x Desktop<br/><br/></div>\
+</div>'
           },
           {
             title: '4 x columns',
-            content: '<div class="row"><div class="col-xs-6 col-md-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-6 col-md-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-6 col-md-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-6 col-md-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div></div>',
-            preview: '<div class="row"><div class="col-xs-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-3"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div></div>'
+            content: '\
+<div class="row">\
+<div class="col-xs-6 col-md-3"></div>\
+<div class="col-xs-6 col-md-3"></div>\
+<div class="col-xs-6 col-md-3"></div>\
+<div class="col-xs-6 col-md-3"></div>\
+</div>\
+<div></div>',
+            preview: '\
+<div class="row">\
+<div class="col-xs-3" style="border:1px dashed #F00;"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div>\
+<div class="col-xs-3" style="border:1px dashed #F00;"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div>\
+<div class="col-xs-3" style="border:1px dashed #F00;"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div>\
+<div class="col-xs-3" style="border:1px dashed #F00;"><br/>1/2 x Mobile, 1/4 x Desktop<br/><br/></div>\
+</div>'
           },
           {
             title: '2 x columns (very wide left)',
-            content: '<div class="row"><div class="col-xs-12 col-md-9"><br/>1 x Mobile, 3/4 x Desktop<br/><br/></div><div class="col-xs-12 col-md-3"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div></div>',
-            preview: '<div class="row"><div class="col-xs-9"><br/>1 x Mobile, 3/4 x Desktop<br/><br/></div><div class="col-xs-3"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div></div>'
+            content: '\
+<div class="row">\
+<div class="col-xs-12 col-md-9"></div>\
+<div class="col-xs-12 col-md-3"></div>\
+</div>\
+<div></div>',
+            preview: '\
+<div class="row">\
+<div class="col-xs-9" style="border:1px dashed #F00;"><br/>1 x Mobile, 3/4 x Desktop<br/><br/></div>\
+<div class="col-xs-3" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div>\
+</div>'
           },
           {
             title: '2 x columns (very wide right)',
-            content: '<div class="row"><div class="col-xs-12 col-md-3"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-12 col-md-9"><br/>1 x Mobile, 3/4 x Desktop<br/><br/></div></div>',
-            preview: '<div class="row"><div class="col-xs-3"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div><div class="col-xs-9"><br/>1 x Mobile, 3/4 x Desktop<br/><br/></div></div>'
+            content: '\
+<div class="row">\
+<div class="col-xs-12 col-md-3"></div>\
+<div class="col-xs-12 col-md-9"></div>\
+</div>\
+<div></div>',
+            preview: '\
+<div class="row">\
+<div class="col-xs-3" style="border:1px dashed #F00;"><br/>1 x Mobile, 1/4 x Desktop<br/><br/></div>\
+<div class="col-xs-9" style="border:1px dashed #F00;"><br/>1 x Mobile, 3/4 x Desktop<br/><br/></div>\
+</div>'
           }        ],
         content_css: [
           _css
