@@ -20,9 +20,7 @@ import org.apache.lucene.search.Query;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.search.dto.NavigationContext;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -118,8 +116,33 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
     /**
      * {@inheritDoc}
      */
-    public Map<String, List<String>> getFilterParameters() {
-        return Collections.unmodifiableMap(navigationParameters);
+    @Override
+    public Set<String> getFilterParametersNames() {
+        return Collections.unmodifiableSet(navigationParameters.keySet());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> getFilterParameterValues(final String parameterName) {
+        final List<String> values = navigationParameters.get(parameterName);
+        if (values == null) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(values);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, List<String>> getMutableCopyFilterParameters() {
+        final Map<String, List<String>> copy = new LinkedHashMap<>();
+        for (final Map.Entry<String, List<String>> entry : navigationParameters.entrySet()) {
+            copy.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+        }
+        return copy;
     }
 
     /**

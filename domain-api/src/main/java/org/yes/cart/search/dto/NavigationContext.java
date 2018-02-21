@@ -19,6 +19,7 @@ package org.yes.cart.search.dto;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Navigation context that holds all necessary information to locate products
@@ -87,7 +88,23 @@ public interface NavigationContext<T> extends Serializable {
      *
      * @return get filter parameters
      */
-    Map<String, List<String>> getFilterParameters();
+    Set<String> getFilterParametersNames();
+
+    /**
+     * Get filter parameters.
+     *
+     * @param parameterName name of the parameter
+     *
+     * @return get filter parameters
+     */
+    List<String> getFilterParameterValues(String parameterName);
+
+    /**
+     * Get copy of filter parameters to be used by other classes.
+     *
+     * @return get filter parameters
+     */
+    Map<String, List<String>> getMutableCopyFilterParameters();
 
     /**
      * Get product navigation query.

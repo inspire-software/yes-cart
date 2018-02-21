@@ -155,7 +155,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
 
         final BooleanQuery.Builder snowball = new BooleanQuery.Builder();
 
-        final Map<String, List<String>> navigationParameters = new HashMap<String, List<String>>(navigationContext.getFilterParameters());
+        final Map<String, List<String>> navigationParameters = navigationContext.getMutableCopyFilterParameters();
 
         if (value != null) {
 
@@ -201,7 +201,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
 
         final BooleanQuery.Builder snowball = new BooleanQuery.Builder();
 
-        final Map<String, List<String>> navigationParameters = new HashMap<String, List<String>>(navigationContext.getFilterParameters());
+        final Map<String, List<String>> navigationParameters = navigationContext.getMutableCopyFilterParameters();
 
         if (!CollectionUtils.isEmpty(products)) {
 
