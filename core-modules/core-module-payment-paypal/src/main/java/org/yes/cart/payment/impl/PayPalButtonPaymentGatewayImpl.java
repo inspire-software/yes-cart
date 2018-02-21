@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.CallbackAware;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
@@ -178,6 +179,67 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
 
     }
 
+
+    @Override
+    public void preProcess(final Payment payment, final Callback callback, final String processorOperation) {
+
+        if (PaymentGateway.REFUND_NOTIFY.equals(processorOperation) && callback != null) {
+
+            final Map<String, String> params = HttpParamsUtils.createSingleValueMap(callback.getParameters());
+
+            if (params.get("txn_id") != null) {
+                payment.setTransactionReferenceId(params.get("txn_id"));
+            }
+            if (params.get("ipn_track_id") != null) {
+                payment.setTransactionAuthorizationCode(params.get("ipn_track_id"));
+            }
+
+            if (params.get("payment_status") != null || params.get("payer_id") != null) {
+                payment.setTransactionOperationResultMessage(
+                        params.get("payment_status")
+                                + " "
+                                + params.get("payer_id")
+                );
+            }
+
+        }
+
+
+    }
+
+    @Override
+    public void postProcess(final Payment payment, final Callback callback, final String processorOperation) {
+
+        if ((PaymentGateway.REFUND.equals(processorOperation) || PaymentGateway.VOID_CAPTURE.equals(processorOperation)) && callback != null) {
+
+            final Map<String, String> params = HttpParamsUtils.createSingleValueMap(callback.getParameters());
+
+            if (params.get("txn_id") != null) {
+                payment.setTransactionReferenceId(params.get("txn_id"));
+            }
+            if (params.get("ipn_track_id") != null) {
+                payment.setTransactionAuthorizationCode(params.get("ipn_track_id"));
+            }
+
+            if (params.get("payment_status") != null || params.get("payer_id") != null) {
+                payment.setTransactionOperationResultMessage(
+                        params.get("payment_status")
+                                + " "
+                                + params.get("payer_id")
+                );
+            }
+            if (payment.getTransactionOperationResultMessage() != null) {
+                payment.setTransactionOperationResultMessage(
+                        payment.getTransactionOperationResultMessage() + ". Amount: " + callback.getAmount().toPlainString());
+            } else {
+                payment.setTransactionOperationResultMessage("Amount: " + callback.getAmount().toPlainString());
+            }
+
+            payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+
+        }
+
+    }
 
     private void setParameterIfNotNull(final Map<String, String> params, final String key, final String valueKey) {
         final String value = getParameterValue(valueKey);

@@ -28,10 +28,12 @@ import org.yes.cart.service.payment.PaymentProcessorFactory;
 
 /**
  * Handle pending refunds for cancelled and returned orders.
+ *
+ * This handles the case when order was cancelled in admin but failed to process the refund (e.g. not supported,
+ * or a failure). In such case this handled is suppose to automatically confirm the refund when external notification
+ * is received.
  * <p/>
  * User: Denis Pavlov
- * Date: 27-Apr-2015
- * Time: 14:12:54
  */
 public class RefundProcessedOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl implements OrderEventHandler {
 

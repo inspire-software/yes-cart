@@ -26,6 +26,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.payment.CallbackAware;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentAddress;
@@ -351,6 +352,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         if (!CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus()) &&
                 !CustomerOrder.ORDER_STATUS_RETURNED.equals(order.getOrderStatus())) {
 
+            final CallbackAware.Callback callback = (CallbackAware.Callback) params.get(CallbackAware.CALLBACK_PARAM);
+
             reverseAuthorizations(order.getOrdernum());
 
             final boolean forceManualProcessing = Boolean.TRUE.equals(params.get("forceManualProcessing"));
@@ -422,13 +425,17 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                                 } else {
                                     orderRemainderAmount = orderRemainderAmount.subtract(payment.getPaymentAmount());
                                 }
+                                preProcessCallbackAware(payment, callback, PaymentGateway.REFUND);
                                 payment = getPaymentGateway().refund(payment);
+                                postProcessCallbackAware(payment, callback, PaymentGateway.REFUND);
 
                             } else {
 
                                 // force void
                                 payment.setTransactionOperation(PaymentGateway.VOID_CAPTURE);
+                                preProcessCallbackAware(payment, callback, PaymentGateway.VOID_CAPTURE);
                                 payment = getPaymentGateway().voidCapture(payment);
+                                postProcessCallbackAware(payment, callback, PaymentGateway.VOID_CAPTURE);
 
                             }
 
@@ -442,11 +449,15 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                             } else {
                                 orderRemainderAmount = orderRemainderAmount.subtract(payment.getPaymentAmount());
                             }
+                            preProcessCallbackAware(payment, callback, PaymentGateway.REFUND);
                             payment = getPaymentGateway().refund(payment);
+                            postProcessCallbackAware(payment, callback, PaymentGateway.REFUND);
                         } else {
                             // void
                             payment.setTransactionOperation(PaymentGateway.VOID_CAPTURE);
+                            preProcessCallbackAware(payment, callback, PaymentGateway.VOID_CAPTURE);
                             payment = getPaymentGateway().voidCapture(payment);
+                            postProcessCallbackAware(payment, callback, PaymentGateway.VOID_CAPTURE);
                         }
                     }
                     paymentResult = payment.getPaymentProcessorResult();
@@ -488,7 +499,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      */
     public String refundNotification(final CustomerOrder order, final Map params) {
 
-        final Object amountObj = params.get("refundNotificationAmount");
+        final CallbackAware.Callback callback = (CallbackAware.Callback) params.get(CallbackAware.CALLBACK_PARAM);
+        final Object amountObj = callback != null ? callback.getAmount() : params.get("refundNotificationAmount");
         BigDecimal refundAmount = BigDecimal.ZERO;
         if (amountObj instanceof BigDecimal && MoneyUtils.isPositive((BigDecimal) amountObj)) {
 
@@ -528,6 +540,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
             try {
                 payment = new PaymentImpl();
                 BeanUtils.copyProperties(customerOrderPayment, payment); //from persisted to PG object
+                preProcessCallbackAware(payment, callback, PaymentGateway.REFUND_NOTIFY);
                 payment.setPaymentProcessorBatchSettlement(false);
                 if (customerOrderPayment.isPaymentProcessorBatchSettlement()) {
                     payment.setTransactionOperation(PaymentGateway.REFUND);
@@ -543,7 +556,9 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     // full refund for this transaction
                     rem = rem.subtract(customerOrderPayment.getPaymentAmount());
                 }
-                paymentResult = Payment.PAYMENT_STATUS_OK; // result is OK since this is notification of refund
+                payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);  // result is OK since this is notification of refund
+                postProcessCallbackAware(payment, callback, PaymentGateway.REFUND_NOTIFY);
+                paymentResult = payment.getPaymentProcessorResult();
             } catch (Throwable th) {
                 LOG.error(
                         MessageFormat.format(
@@ -844,6 +859,18 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         templatePayment.setTransactionGatewayLabel(transactionGatewayLabel);
 
         return templatePayment;
+    }
+
+    private void preProcessCallbackAware(final Payment payment, final CallbackAware.Callback callback, final String operation) {
+        if (getPaymentGateway() instanceof CallbackAware) {
+            ((CallbackAware) getPaymentGateway()).preProcess(payment, callback, operation);
+        }
+    }
+
+    private void postProcessCallbackAware(final Payment payment, final CallbackAware.Callback callback, final String operation) {
+        if (getPaymentGateway() instanceof CallbackAware) {
+            ((CallbackAware) getPaymentGateway()).postProcess(payment, callback, operation);
+        }
     }
 
 

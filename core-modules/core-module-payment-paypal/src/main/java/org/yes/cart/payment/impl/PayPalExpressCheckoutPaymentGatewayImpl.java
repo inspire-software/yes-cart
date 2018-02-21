@@ -190,6 +190,21 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void preProcess(final Payment payment, final Callback callback, final String processorOperation) {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void postProcess(final Payment payment, final Callback callback, final String processorOperation) {
+
+    }
 
     /**
      * Get the express checkout details via GetExpressCheckoutDetails method of

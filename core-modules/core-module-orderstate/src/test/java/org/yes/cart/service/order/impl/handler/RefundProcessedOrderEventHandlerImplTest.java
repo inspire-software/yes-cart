@@ -21,8 +21,10 @@ import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.payment.CallbackAware;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.payment.dto.impl.BasicCallbackInfoImpl;
 import org.yes.cart.payment.impl.TestExtFormPaymentGatewayImpl;
 import org.yes.cart.payment.impl.TestPaymentGatewayImpl;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
@@ -32,6 +34,7 @@ import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -306,7 +309,7 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
 
 
     @Test
-    public void testHandleStandardReserveFailedPaymentOkRefundNotSupportedExternal() throws Exception {
+    public void testHandleStandardReserveFailedPaymentOkRefundNotSupportedExternalForce() throws Exception {
 
         configureTestExtPG("4");
 
@@ -355,9 +358,131 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
     }
 
 
+    @Test
+    public void testHandleStandardReserveFailedPaymentOkRefundNotSupportedExternalCallback() throws Exception {
+
+        configureTestExtPG("4");
+
+        String label = assertPgFeatures("testExtFormPaymentGateway", true, true, false, false);
+
+        CustomerOrder customerOrder = createTestOrderFailedReserve(TestOrderType.STANDARD, label, false);
+
+        assertTrue(cancelNewOrderHandler.handle(
+                new OrderEventImpl("", //evt.new.order.cancel.refund
+                        customerOrder,
+                        null,
+                        new HashMap() {{
+                            put(TestExtFormPaymentGatewayImpl.AUTH_RESPONSE_CODE_PARAM_KEY, "1");
+                        }})));
+
+
+        // attempt refund manual
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.refund.processed
+                        customerOrder,
+                        null,
+                        new HashMap() {{
+                            put(CallbackAware.CALLBACK_PARAM,
+                                    new BasicCallbackInfoImpl(
+                                            customerOrder.getOrdernum(),
+                                            CallbackAware.CallbackOperation.REFUND,
+                                            new BigDecimal("689.74"),
+                                            Collections.singletonMap(TestExtFormPaymentGatewayImpl.REFUND_RESPONSE_CODE_PARAM_KEY, "1")
+                                    )
+                            );
+                        }})));
+
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "0.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_WAIT);
+
+        // payment OK, but refund is not supported
+        assertMultiPaymentEntry(customerOrder.getOrdernum(),
+                Arrays.asList("689.74",                     "689.74",                                           "689.74"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE,  PaymentGateway.REFUND,                              PaymentGateway.REFUND),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED,  Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.TRUE,                 Boolean.FALSE,                                      Boolean.FALSE)
+        );
+        assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_CANCELLED, customerOrder.getOrderStatus());
+
+    }
+
+
 
     @Test
     public void testHandleFullMixedReserveFailedPaymentOkRefundProcessingExternal() throws Exception {
+
+        configureTestExtPG("3");
+
+        String label = assertPgFeatures("testExtFormPaymentGateway", true, true, false, false);
+
+        CustomerOrder customerOrder = createTestOrderFailedReserve(TestOrderType.FULL, label, false);
+
+        assertTrue(cancelNewOrderHandler.handle(
+                new OrderEventImpl("", //evt.new.order.cancel.refund
+                        customerOrder,
+                        null,
+                        new HashMap() {{
+                            put(TestExtFormPaymentGatewayImpl.AUTH_RESPONSE_CODE_PARAM_KEY, "1");
+                        }})));
+
+
+        configureTestExtPG("1");
+
+        // refund
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.refund.processed
+                        customerOrder,
+                        null,
+                        new HashMap() {{
+                            put(CallbackAware.CALLBACK_PARAM,
+                                    new BasicCallbackInfoImpl(
+                                            customerOrder.getOrdernum(),
+                                            CallbackAware.CallbackOperation.REFUND,
+                                            new BigDecimal("1479.20"),
+                                            Collections.singletonMap(TestExtFormPaymentGatewayImpl.REFUND_RESPONSE_CODE_PARAM_KEY, "1")
+                                    )
+                            );
+                        }})));
+
+
+        // check reserved quantity
+        // standard
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "0.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00");
+        // preorder
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "0.00");
+        // backorder
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00");
+        // electronic
+        assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
+
+        assertTrue(customerOrder.getDelivery().size() == 4);
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_WAIT);
+
+        // payment OK, but refund is not supported
+        assertMultiPaymentEntry(customerOrder.getOrdernum(),
+                Arrays.asList("1479.20",                    "1479.20",                          "1479.20"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE,  PaymentGateway.REFUND,              PaymentGateway.REFUND),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_PROCESSING,  Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.TRUE,                 Boolean.FALSE,                      Boolean.FALSE)
+        );
+        assertEquals("1479.20", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_CANCELLED, customerOrder.getOrderStatus());
+
+    }
+
+
+    @Test
+    public void testHandleFullMixedReserveFailedPaymentOkRefundProcessingExternalCallback() throws Exception {
 
         configureTestExtPG("3");
 
@@ -411,7 +536,6 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
         assertEquals(CustomerOrder.ORDER_STATUS_CANCELLED, customerOrder.getOrderStatus());
 
     }
-
 
 
     @Test

@@ -39,6 +39,8 @@ public interface PaymentGateway extends Serializable {
     String VOID_CAPTURE = "VOID_CAPTURE";   //void capture fund  operation
     String REFUND = "REFUND"; //return money back to client
 
+    String REFUND_NOTIFY = "REFUND_NOTIFY"; //refund notification (just a marker)
+
     /**
      * Locale specific name for given payment gateway.
      *

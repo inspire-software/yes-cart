@@ -12,6 +12,8 @@ import java.util.Map;
  */
 public interface CallbackAware {
 
+    String CALLBACK_PARAM = "__CALLBACK__";
+
     /**
      * Restore order number by given parameters
      *
@@ -27,6 +29,37 @@ public interface CallbackAware {
      * @return  true in case of success
      */
     CallbackResult getExternalCallbackResult(Map<String, String> callbackResult);
+
+    /**
+     * Pre process payment operation. This is a hook to inject additional data using
+     * callback object before the operation has been performed.
+     *
+     * Example use case:
+     * if PG does not support refunds but does support callbacks and receives a refund
+     * notification it is possible to pre-setup values in Payment object so that we do
+     * not end up with {@link Payment#PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED}
+     *
+     * @param payment payment object
+     * @param callback callback received
+     * @param processorOperation currently attempted operation
+     */
+    void preProcess(Payment payment, Callback callback, String processorOperation);
+
+
+    /**
+     * Post process payment operation. This is a hook to inject additional data using
+     * callback object after the operation has been performed.
+     *
+     * Example use case:
+     * if PG does not support refunds but does support callbacks and receives a refund
+     * notification it is possible to post-setup values in Payment object so that we do
+     * not end up with {@link Payment#PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED}
+     *
+     * @param payment payment object
+     * @param callback callback received
+     * @param processorOperation currently attempted operation
+     */
+    void postProcess(Payment payment, Callback callback, String processorOperation);
 
     /**
      * Basic callback object

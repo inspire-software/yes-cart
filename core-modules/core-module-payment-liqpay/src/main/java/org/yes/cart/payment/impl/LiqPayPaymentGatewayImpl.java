@@ -240,6 +240,21 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void preProcess(final Payment payment, final Callback callback, final String processorOperation) {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void postProcess(final Payment payment, final Callback callback, final String processorOperation) {
+
+    }
 
     private LiqPay getLiqPayAPI() {
         return new LiqPay(getParameterValue(LP_MERCHANT_ID), getParameterValue(LP_MERCHANT_KEY), getParameterValue(LP_POST_URL));

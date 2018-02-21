@@ -31,7 +31,10 @@ import org.yes.cart.util.log.Markers;
 
 /**
  * External refund event is triggered by callback from payment gateway, whcih could happen
- * if refund is made outside of YC (ay from PG user panel)
+ * if refund is made outside of YC (e.g. from PG user panel).
+ *
+ * The idea is to keep track of these refunds, so that when cancellation of the order is triggered we do not
+ * over-refund.
  * <p/>
  * <p/>
  * User: Denis Pavlov

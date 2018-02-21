@@ -167,6 +167,21 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
         return sorted.remove("SHASIGN");
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void preProcess(final Payment payment, final Callback callback, final String processorOperation) {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void postProcess(final Payment payment, final Callback callback, final String processorOperation) {
+
+    }
 
     /**
      * {@inheritDoc}

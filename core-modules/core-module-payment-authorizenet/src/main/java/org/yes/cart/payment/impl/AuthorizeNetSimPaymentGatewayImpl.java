@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.CallbackAware;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.*;
 import org.yes.cart.payment.dto.impl.BasicCallbackInfoImpl;
@@ -214,6 +215,76 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
         payment.setPaymentProcessorBatchSettlement(false);
         return payment;
+    }
+
+    @Override
+    public void preProcess(final Payment payment, final Callback callback, final String processorOperation) {
+
+        if (PaymentGateway.REFUND_NOTIFY.equals(processorOperation) && callback != null) {
+
+            final Map<String, String> params = HttpParamsUtils.createSingleValueMap(callback.getParameters());
+
+            if (params.get("x_trans_id") != null) {
+                payment.setTransactionReferenceId(params.get("x_trans_id"));
+            }
+            if (params.get("x_auth_code") != null) {
+                payment.setTransactionAuthorizationCode(params.get("x_auth_code"));
+            }
+            if (params.get("x_response_code") != null) {
+                payment.setTransactionOperationResultCode(params.get("x_response_code"));
+            }
+            if (params.get("x_response_reason_code") != null || params.get("x_response_reason_text") != null) {
+                payment.setTransactionOperationResultMessage(
+                        params.get("x_response_reason_code")
+                                + " "
+                                + params.get("x_response_reason_text")
+                );
+            }
+            if (params.get("x_account_number") != null) {
+                payment.setCardNumber(params.get("x_account_number"));
+            }
+
+        }
+
+    }
+
+    @Override
+    public void postProcess(final Payment payment, final Callback callback, final String processorOperation) {
+
+        if ((PaymentGateway.REFUND.equals(processorOperation) || PaymentGateway.VOID_CAPTURE.equals(processorOperation)) && callback != null) {
+
+            final Map<String, String> params = HttpParamsUtils.createSingleValueMap(callback.getParameters());
+
+            if (params.get("x_trans_id") != null) {
+                payment.setTransactionReferenceId(params.get("x_trans_id"));
+            }
+            if (params.get("x_auth_code") != null) {
+                payment.setTransactionAuthorizationCode(params.get("x_auth_code"));
+            }
+            if (params.get("x_response_code") != null) {
+                payment.setTransactionOperationResultCode(params.get("x_response_code"));
+            }
+            if (params.get("x_response_reason_code") != null || params.get("x_response_reason_text") != null) {
+                payment.setTransactionOperationResultMessage(
+                        params.get("x_response_reason_code")
+                                + " "
+                                + params.get("x_response_reason_text")
+                );
+            }
+            if (payment.getTransactionOperationResultMessage() != null) {
+                payment.setTransactionOperationResultMessage(
+                        payment.getTransactionOperationResultMessage() + ". Amount: " + callback.getAmount().toPlainString());
+            } else {
+                payment.setTransactionOperationResultMessage("Amount: " + callback.getAmount().toPlainString());
+            }
+            if (params.get("x_account_number") != null) {
+                payment.setCardNumber(params.get("x_account_number"));
+            }
+
+            payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+
+        }
+
     }
 
     protected boolean isValid(final Map privateCallBackParameters) {
@@ -525,9 +596,9 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * Process public call back request from payment gateway.
      *
-     *
-     * @param operation
+     * @param operation operation
      * @param privateCallBackParameters get/post parameters
+     *
      * @return true in case in payment was ok, false in case if payment failed
      */
     public Payment createPaymentPrototype(final String operation, final Map privateCallBackParameters) {

@@ -21,6 +21,7 @@ import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.CallbackAware;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
@@ -247,18 +248,40 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
 
-        final String responseCode = gatewayConfig.containsKey(REFUND_RESPONSE_CODE_PARAM_KEY) ?
-                gatewayConfig.get(REFUND_RESPONSE_CODE_PARAM_KEY).getValue() : Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED;
-
-        final CallbackAware.CallbackResult res = getExternalCallbackResult(new HashMap<String, String>() {{
-            put(REFUND_RESPONSE_CODE_PARAM_KEY, responseCode);
-        }});
-
         payment.setTransactionGatewayLabel(getLabel());
-        payment.setTransactionOperationResultCode(responseCode);
-        payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
+    @Override
+    public void preProcess(final Payment payment, final Callback callback, final String processorOperation) {
+
+    }
+
+    @Override
+    public void postProcess(final Payment payment, final Callback callback, final String processorOperation) {
+
+        if (PaymentGateway.REFUND.equals(processorOperation)) {
+
+            final String responseCode;
+            final CallbackAware.CallbackResult res;
+
+            if (callback != null) {
+                responseCode = HttpParamsUtils.getSingleValue(callback.getParameters().get(REFUND_RESPONSE_CODE_PARAM_KEY));
+                res = getExternalCallbackResult(HttpParamsUtils.createSingleValueMap(callback.getParameters()));
+            } else {
+                responseCode = gatewayConfig.containsKey(REFUND_RESPONSE_CODE_PARAM_KEY) ?
+                        gatewayConfig.get(REFUND_RESPONSE_CODE_PARAM_KEY).getValue() : Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED;
+
+                res = getExternalCallbackResult(new HashMap<String, String>() {{
+                    put(REFUND_RESPONSE_CODE_PARAM_KEY, responseCode);
+                }});
+            }
+
+            payment.setTransactionOperationResultCode(responseCode);
+            payment.setPaymentProcessorResult(res.getStatus());
+
+        }
+        
+    }
 }

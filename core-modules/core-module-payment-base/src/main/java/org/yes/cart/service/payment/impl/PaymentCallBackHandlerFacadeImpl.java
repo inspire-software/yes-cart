@@ -159,7 +159,9 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
                     CustomerOrder.ORDER_STATUS_RETURNED_WAITING_PAYMENT.endsWith(order.getOrderStatus())) {
 
                 if (pgCallback.getOperation() == CallbackAware.CallbackOperation.REFUND) {
-                    handleWaitingRefundToRefunded(parameters, order);
+                    final Map params = new LinkedHashMap(parameters);
+                    params.put(CallbackAware.CALLBACK_PARAM, pgCallback);
+                    handleWaitingRefundToRefunded(params, order);
                     finaliseCallback(callback, "Waiting payment to pending: " + pgCallback.getOrderGuid());
                 } else {
                     LOG.warn("Non-refund callback invoked on waiting-refund order {}. Callback: {}", pgCallback, callback.getPaymentGatewayCallbackId());
@@ -189,7 +191,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
                     if (MoneyUtils.isPositive(pgCallback.getAmount())) {
                         final Map params = new LinkedHashMap(parameters);
-                        params.put("refundNotificationAmount", pgCallback.getAmount());
+                        params.put(CallbackAware.CALLBACK_PARAM, pgCallback);
                         handlePrematureRefund(params, order);
                         finaliseCallback(callback, "Processed refund callback: " + pgCallback.getOrderGuid());
                     } else {
