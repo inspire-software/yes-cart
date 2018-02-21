@@ -41,6 +41,11 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<Pair<ContentVO, Array<Pair<AttrValueContentVO, boolean>>>>> = new EventEmitter<FormValidationEvent<Pair<ContentVO, Array<Pair<AttrValueContentVO, boolean>>>>>();
 
+  private visibleContentBodies: Array<ContentBodyVO> = [];
+  private visibleLanguages: Array<string> = [];
+
+  private _shopSupportedLanguages: Array<string> = [];
+
   private _content:ContentWithBodyVO;
   private _attributes:AttrValueContentVO[] = [];
   private attributeFilter:string;
@@ -170,10 +175,21 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   @Input()
+  set shopSupportedLanguages(value: Array<string>) {
+    this._shopSupportedLanguages = value;
+    this.visibleLanguages = this._shopSupportedLanguages != null ? this._shopSupportedLanguages.slice() : [];
+  }
+
+  get shopSupportedLanguages(): Array<string> {
+    return this._shopSupportedLanguages;
+  }
+
+  @Input()
   set content(content:ContentWithBodyVO) {
 
     UiUtil.formInitialise(this, 'initialising', 'contentForm', '_content', content);
     this._changes = [];
+    this.visibleContentBodies = this.content != null ? this.getVisibleContentBodies(this.content.contentBodies) : [];
 
   }
 
@@ -336,6 +352,34 @@ export class ContentComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected getVisibleContentBodies(bodies:Array<ContentBodyVO>):Array<ContentBodyVO> {
+    let _filtered:Array<ContentBodyVO> = [];
+    if (bodies != null && this.shopSupportedLanguages != null) {
+      bodies.forEach(body => {
+        if (this.isBodyVisible(body)) {
+          _filtered.push(body);
+        }
+      });
+    }
+    return _filtered;
+  }
+
+  protected isBodyVisible(body:ContentBodyVO):boolean {
+    return this.visibleLanguages.includes(body.lang);
+  }
+
+  protected onBodyEnable(body:ContentBodyVO) {
+    if (this.content != null) {
+      LogUtil.debug('ContentComponent onBodyEnable ', body);
+      let idx = this.visibleLanguages.indexOf(body.lang);
+      if (idx != -1) {
+        this.visibleLanguages.splice(idx, 1);
+      } else {
+        this.visibleLanguages.push(body.lang);
+      }
+      this.visibleContentBodies = this.getVisibleContentBodies(this.content.contentBodies);
+    }
+  }
 
   protected getCMSPreview(body:ContentBodyVO) {
 

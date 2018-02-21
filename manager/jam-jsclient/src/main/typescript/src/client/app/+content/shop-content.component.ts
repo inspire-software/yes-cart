@@ -18,7 +18,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ShopService, ContentService, ShopEventBus } from './../shared/services/index';
 import { ContentMinSelectComponent } from './../shared/content/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { ShopVO, ShopUrlVO, ContentWithBodyVO, ContentVO, AttrValueContentVO, Pair } from './../shared/model/index';
+import { ShopVO, ShopUrlVO, ShopLanguagesVO, ContentWithBodyVO, ContentVO, AttrValueContentVO, Pair } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
@@ -45,6 +45,8 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   private shopUrl:ShopUrlVO = null;
   private shopPreviewUrl = ShopContentComponent.DEFAULT_PREVIEW_URL;
   private shopPreviewCss = ShopContentComponent.DEFAULT_PREVIEW_CSS;
+  private shopLanguages:ShopLanguagesVO = null;
+  private shopSupportedLanguages: Array<string> = [];
 
   private shopIdSub:any;
   private shopSub:any;
@@ -375,10 +377,18 @@ export class ShopContentComponent implements OnInit, OnDestroy {
 
       this._shopService.getShopUrls(this.shop.shopId).subscribe(shopUrl => {
 
-        LogUtil.debug('ShopContentComponent urls', this.shopUrl);
+        LogUtil.debug('ShopContentComponent urls', shopUrl);
         this.shopUrl = shopUrl;
         this.shopPreviewUrl = shopUrl.previewUrl;
         this.shopPreviewCss = shopUrl.previewCss;
+
+      });
+
+      this._shopService.getShopLanguages(this.shop.shopId).subscribe( langs => {
+
+        LogUtil.debug('ShopContentComponent langs', this.shopUrl);
+        this.shopLanguages = langs;
+        this.shopSupportedLanguages = langs.supported;
 
       });
 

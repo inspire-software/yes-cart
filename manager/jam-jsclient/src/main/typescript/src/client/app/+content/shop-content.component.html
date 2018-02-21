@@ -67,7 +67,7 @@
 
   <div [hidden]="viewMode !== 'content'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-content [content]="contentEdit" [attributes]="contentEditAttributes" [shop]="shop"
-                [shopPreviewUrl]="shopPreviewUrl" [shopPreviewCss]="shopPreviewCss"
+                [shopPreviewUrl]="shopPreviewUrl" [shopPreviewCss]="shopPreviewCss" [shopSupportedLanguages]="shopSupportedLanguages"
                 (dataChanged)="onContentChanged($event)"></yc-content>
   </div>
 
