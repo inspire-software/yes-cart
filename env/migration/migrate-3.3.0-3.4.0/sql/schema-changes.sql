@@ -234,3 +234,107 @@ update TATTRIBUTE set DESCRIPTION = 'This template is used to adjust URLs in con
 DEV: http://{primaryShopURL}:8080/ where {primaryShopURL} is a placeholder for shop primary domain
 PROD: http://{primaryShopURL}/ where {primaryShopURL} is a placeholder for shop primary domain'  where GUID = 'SYSTEM_PREVIEW_URL_TEMPLATE';
 
+--
+-- YC-872 Secure string attribute type
+--
+
+INSERT INTO TETYPE (ETYPE_ID, JAVATYPE, BUSINESSTYPE, GUID) VALUES (1017, 'java.lang.String', 'SecureString', 'SecureString');
+
+alter table TATTRIBUTE add column SECURE_ATTRIBUTE bit not null default 0;
+-- alter table TATTRIBUTE add column SECURE_ATTRIBUTE smallint not null default 0;
+
+update TATTRIBUTE set ETYPE_ID = 1017 where GUID in (
+  'SHOP_CUSTOMER_PASSWORD_RESET_CC',
+  'SHOP_MAIL_SERVER_PASSWORD'
+);
+update TATTRIBUTE set SECURE_ATTRIBUTE = 1 where GUID in (
+  'SHOP_CUSTOMER_PASSWORD_RESET_CC',
+  'SHOP_MAIL_SERVER_CUSTOM_ENABLE',
+  'SHOP_MAIL_SERVER_HOST',
+  'SHOP_MAIL_SERVER_PORT',
+  'SHOP_MAIL_SERVER_USERNAME',
+  'SHOP_MAIL_SERVER_PASSWORD',
+  'SHOP_MAIL_SERVER_STARTTLS_ENABLE',
+  'SHOP_MAIL_SERVER_SMTPAUTH_ENABLE',
+  'SHOP_SYSFILE0'
+);
+
+alter table TPAYMENTGATEWAYPARAMETER add column BUSINESSTYPE varchar(255);
+alter table TPAYMENTGATEWAYPARAMETER add column SECURE_ATTRIBUTE bit not null default 0;
+-- alter table TPAYMENTGATEWAYPARAMETER add column SECURE_ATTRIBUTE smallint not null default 0;
+
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'authorizeNetAimPaymentGateway' and P_LABEL like '%API_LOGIN_ID';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'authorizeNetAimPaymentGateway' and P_LABEL like '%TRANSACTION_KEY';
+
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'authorizeNetAimPaymentGateway' and P_LABEL like '%API_LOGIN_ID';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'authorizeNetAimPaymentGateway' and P_LABEL like '%TRANSACTION_KEY';
+
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'authorizeNetSimPaymentGateway' and P_LABEL like '%API_LOGIN_ID';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'authorizeNetSimPaymentGateway' and P_LABEL like '%TRANSACTION_KEY';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'authorizeNetSimPaymentGateway' and P_LABEL like '%MD5_HASH_KEY';
+
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'authorizeNetSimPaymentGateway' and P_LABEL like '%API_LOGIN_ID';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'authorizeNetSimPaymentGateway' and P_LABEL like '%TRANSACTION_KEY';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'authorizeNetSimPaymentGateway' and P_LABEL like '%MD5_HASH_KEY';
+
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'cyberSourcePaymentGateway' and P_LABEL like '%merchantID';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'cyberSourcePaymentGateway' and P_LABEL like '%proxyPassword';
+
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'cyberSourcePaymentGateway' and P_LABEL like '%merchantID';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'cyberSourcePaymentGateway' and P_LABEL like '%proxyHost';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'cyberSourcePaymentGateway' and P_LABEL like '%proxyPort';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'cyberSourcePaymentGateway' and P_LABEL like '%proxyUser';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'cyberSourcePaymentGateway' and P_LABEL like '%proxyPassword';
+
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'liqPayPaymentGateway' and P_LABEL like '%LP_MERCHANT_ID';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'liqPayPaymentGateway' and P_LABEL like '%LP_MERCHANT_KEY';
+
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'liqPayPaymentGateway' and P_LABEL like '%LP_MERCHANT_ID';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'liqPayPaymentGateway' and P_LABEL like '%LP_MERCHANT_KEY';
+
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'liqPayNoRefundPaymentGateway' and P_LABEL like '%LP_MERCHANT_ID';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'liqPayNoRefundPaymentGateway' and P_LABEL like '%LP_MERCHANT_KEY';
+
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'liqPayNoRefundPaymentGateway' and P_LABEL like '%LP_MERCHANT_ID';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'liqPayNoRefundPaymentGateway' and P_LABEL like '%LP_MERCHANT_KEY';
+
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'payPalProPaymentGateway' and P_LABEL like '%API_USER_NAME';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'payPalProPaymentGateway' and P_LABEL like '%API_USER_PASSWORD';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'payPalProPaymentGateway' and P_LABEL like '%SIGNATURE';
+
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'payPalProPaymentGateway' and P_LABEL like '%API_USER_NAME';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'payPalProPaymentGateway' and P_LABEL like '%API_USER_PASSWORD';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'payPalProPaymentGateway' and P_LABEL like '%SIGNATURE';
+
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'payPalExpressPaymentGateway' and P_LABEL like '%API_USER_NAME';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'payPalExpressPaymentGateway' and P_LABEL like '%API_USER_PASSWORD';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'payPalExpressPaymentGateway' and P_LABEL like '%SIGNATURE';
+
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'payPalExpressPaymentGateway' and P_LABEL like '%API_USER_NAME';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'payPalExpressPaymentGateway' and P_LABEL like '%API_USER_PASSWORD';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'payPalExpressPaymentGateway' and P_LABEL like '%SIGNATURE';
+
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'payPalButtonPaymentGateway' and P_LABEL like '%PPB_USER';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'payPalButtonPaymentGateway' and P_LABEL like '%PPB_PASSWORD';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'payPalButtonPaymentGateway' and P_LABEL like '%PPB_SIGNATURE';
+
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'payPalButtonPaymentGateway' and P_LABEL like '%PPB_USER';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'payPalButtonPaymentGateway' and P_LABEL like '%PPB_PASSWORD';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'payPalButtonPaymentGateway' and P_LABEL like '%PPB_SIGNATURE';
+
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'postFinancePaymentGateway' and P_LABEL like '%PF_PSPID';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'postFinancePaymentGateway' and P_LABEL like '%PF_SHA_IN';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'postFinancePaymentGateway' and P_LABEL like '%PF_SHA_OUT';
+
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'postFinancePaymentGateway' and P_LABEL like '%PF_PSPID';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'postFinancePaymentGateway' and P_LABEL like '%PF_SHA_IN';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'postFinancePaymentGateway' and P_LABEL like '%PF_SHA_OUT';
+
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'postFinanceManualPaymentGateway' and P_LABEL like '%PF_PSPID';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'postFinanceManualPaymentGateway' and P_LABEL like '%PF_SHA_IN';
+update TPAYMENTGATEWAYPARAMETER set BUSINESSTYPE = 'SecureString' where PG_LABEL = 'postFinanceManualPaymentGateway' and P_LABEL like '%PF_SHA_OUT';
+
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'postFinanceManualPaymentGateway' and P_LABEL like '%PF_PSPID';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'postFinanceManualPaymentGateway' and P_LABEL like '%PF_SHA_IN';
+update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'postFinanceManualPaymentGateway' and P_LABEL like '%PF_SHA_OUT';
+

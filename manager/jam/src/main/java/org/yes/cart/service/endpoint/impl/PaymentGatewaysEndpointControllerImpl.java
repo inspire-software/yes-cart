@@ -61,22 +61,42 @@ public class PaymentGatewaysEndpointControllerImpl implements PaymentGatewaysEnd
 
     @Override
     public @ResponseBody List<VoPaymentGateway> getPaymentGatewaysWithParameters(@PathVariable("lang") final String lang) throws Exception {
-        return voPaymentGatewayService.getPaymentGatewaysWithParameters(lang);
+        return voPaymentGatewayService.getPaymentGatewaysWithParameters(lang, false);
+    }
+
+    @Override
+    public @ResponseBody List<VoPaymentGateway> getPaymentGatewaysWithParametersSecure(@PathVariable("lang") final String lang) throws Exception {
+        return voPaymentGatewayService.getPaymentGatewaysWithParameters(lang, true);
     }
 
     @Override
     public @ResponseBody List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(@PathVariable("lang") final String lang, @PathVariable("code") final String shopCode) throws Exception {
-        return voPaymentGatewayService.getPaymentGatewaysWithParametersForShop(lang, shopCode);
+        return voPaymentGatewayService.getPaymentGatewaysWithParametersForShop(lang, shopCode, false);
+    }
+
+    @Override
+    public @ResponseBody List<VoPaymentGateway> getPaymentGatewaysWithParametersForShopSecure(@PathVariable("lang") final String lang, @PathVariable("code") final String shopCode) throws Exception {
+        return voPaymentGatewayService.getPaymentGatewaysWithParametersForShop(lang, shopCode, true);
     }
 
     @Override
     public @ResponseBody List<VoPaymentGatewayParameter> update(@PathVariable("label") final String pgLabel, @RequestBody final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
-        return voPaymentGatewayService.update(pgLabel, vo);
+        return voPaymentGatewayService.update(pgLabel, vo, false);
+    }
+
+    @Override
+    public @ResponseBody List<VoPaymentGatewayParameter> updateSecure(@PathVariable("label") final String pgLabel, @RequestBody final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
+        return voPaymentGatewayService.update(pgLabel, vo, true);
     }
 
     @Override
     public @ResponseBody List<VoPaymentGatewayParameter> update(@PathVariable("code") final String shopCode, @PathVariable("label") final String pgLabel, @RequestBody final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
-        return voPaymentGatewayService.update(shopCode, pgLabel, vo);
+        return voPaymentGatewayService.update(shopCode, pgLabel, vo, false);
+    }
+
+    @Override
+    public @ResponseBody List<VoPaymentGatewayParameter> updateSecure(@PathVariable("code") final String shopCode, @PathVariable("label") final String pgLabel, @RequestBody final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
+        return voPaymentGatewayService.update(shopCode, pgLabel, vo, true);
     }
 
     @Override

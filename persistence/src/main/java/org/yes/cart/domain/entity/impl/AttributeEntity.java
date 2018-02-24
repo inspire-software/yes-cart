@@ -35,6 +35,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
 
     private String code;
     private boolean mandatory;
+    private boolean secure;
     private boolean allowduplicate;
     private boolean allowfailover;
     private boolean store;
@@ -67,6 +68,14 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
 
     public void setMandatory(boolean mandatory) {
         this.mandatory = mandatory;
+    }
+
+    public boolean isSecure() {
+        return secure;
+    }
+
+    public void setSecure(final boolean secure) {
+        this.secure = secure;
     }
 
     public boolean isAllowduplicate() {

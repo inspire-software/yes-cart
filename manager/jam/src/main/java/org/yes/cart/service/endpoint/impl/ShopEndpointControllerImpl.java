@@ -182,11 +182,21 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
 
     public  @ResponseBody
     List<VoAttrValueShop> getShopAttributes(@PathVariable("shopId") final long shopId) throws Exception {
-        return voShopService.getShopAttributes(shopId);
+        return voShopService.getShopAttributes(shopId, false);
+    }
+
+    public  @ResponseBody
+    List<VoAttrValueShop> getShopAttributesSecure(@PathVariable("shopId") final long shopId) throws Exception {
+        return voShopService.getShopAttributes(shopId, true);
     }
 
     public  @ResponseBody
     List<VoAttrValueShop> update(@RequestBody final List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception {
-        return voShopService.update(vo);
+        return voShopService.update(vo, false);
+    }
+
+    public  @ResponseBody
+    List<VoAttrValueShop> updateSecure(@RequestBody final List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception {
+        return voShopService.update(vo, true);
     }
 }

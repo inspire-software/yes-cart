@@ -19,53 +19,53 @@
 
 <!-- ################################################## Cybersource ################################################################# -->
     <TPAYMENTGATEWAYPARAMETER
-        PAYMENTGATEWAYPARAMETER_ID = "100"
+        PAYMENTGATEWAYPARAMETER_ID = "100" SECURE_ATTRIBUTE="0"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="merchantID" P_VALUE="!!!SetValue:testPgCyberSourceOrg!!!"
         P_NAME="Merchand Id"  P_DESCRIPTION="Test merchant id"/>
 
     <TPAYMENTGATEWAYPARAMETER
-        PAYMENTGATEWAYPARAMETER_ID = "101"
+        PAYMENTGATEWAYPARAMETER_ID = "101" SECURE_ATTRIBUTE="0"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="keysDirectory" P_VALUE="!!!SetValue:testPgCyberSourceKeys!!!"
         P_NAME="Keys directory"  P_DESCRIPTION="Directory with keys"/>
 
     <TPAYMENTGATEWAYPARAMETER
-        PAYMENTGATEWAYPARAMETER_ID = "102"
+        PAYMENTGATEWAYPARAMETER_ID = "102" SECURE_ATTRIBUTE="0"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="targetAPIVersion" P_VALUE="1.28"
         P_NAME="API version"  P_DESCRIPTION="Cyber source API Version"/>
 
     <TPAYMENTGATEWAYPARAMETER
-        PAYMENTGATEWAYPARAMETER_ID = "103"
+        PAYMENTGATEWAYPARAMETER_ID = "103" SECURE_ATTRIBUTE="0"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="sendToProduction" P_VALUE="false"
         P_NAME="Send to production"  P_DESCRIPTION="false for test"/>
 
     <TPAYMENTGATEWAYPARAMETER
-        PAYMENTGATEWAYPARAMETER_ID = "104"
+        PAYMENTGATEWAYPARAMETER_ID = "104" SECURE_ATTRIBUTE="0"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="useHttpClient" P_VALUE="true"
         P_NAME="Use apache http client for communication"  P_DESCRIPTION="Use apache http client for communication. false for test"/>
 
     <TPAYMENTGATEWAYPARAMETER
-        PAYMENTGATEWAYPARAMETER_ID = "105"
+        PAYMENTGATEWAYPARAMETER_ID = "105" SECURE_ATTRIBUTE="0"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="enableLog" P_VALUE="false"
         P_NAME="Enable log"  P_DESCRIPTION="Enable log. true for test"/>
 
     <TPAYMENTGATEWAYPARAMETER
-        PAYMENTGATEWAYPARAMETER_ID = "106"
+        PAYMENTGATEWAYPARAMETER_ID = "106" SECURE_ATTRIBUTE="0"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="logDirectory" P_VALUE="target"
         P_NAME="Log directory"  P_DESCRIPTION="Log directory."/>
 
     <TPAYMENTGATEWAYPARAMETER
-        PAYMENTGATEWAYPARAMETER_ID = "107"
+        PAYMENTGATEWAYPARAMETER_ID = "107" SECURE_ATTRIBUTE="0"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="logMaximumSize" P_VALUE="10"
         P_NAME="Max size of log file"  P_DESCRIPTION="Value in MB"/>
 
 
-    <!--TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "109"
+    <!--TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "109" SECURE_ATTRIBUTE="0"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="proxyHost" P_VALUE="127.0.0.1"  P_NAME="Proxy host"  P_DESCRIPTION="Proxy host"/>
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "110"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "110" SECURE_ATTRIBUTE="0"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="proxyPort" P_VALUE="3128"  P_NAME="Proxy port"  P_DESCRIPTION="Proxy port"/>
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "111"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "111" SECURE_ATTRIBUTE="0"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="proxyUser" P_VALUE="userName"  P_NAME="Proxy user"  P_DESCRIPTION="Proxy user"/>
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "112"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "112" SECURE_ATTRIBUTE="0"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="proxyPassword" P_VALUE="password"  P_NAME="Proxy pasword"  P_DESCRIPTION="Proxy password"/-->
 
     <TPAYMENTGATEWAYPARAMETER
@@ -132,7 +132,7 @@
 	&lt;td&gt;Card security code&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;groovyqtytext&quot; name=&quot;ccSecCode&quot;/&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/table&gt;"
-        P_NAME="Part of html form"  P_DESCRIPTION="Part of html form, that display when user select this gateway to pay"/>
+        P_NAME="Part of html form"  P_DESCRIPTION="Part of html form, that display when user select this gateway to pay" SECURE_ATTRIBUTE="0"/>
 
 
 </dataset>

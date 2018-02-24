@@ -82,6 +82,37 @@ public interface PaymentGatewayParameter extends Serializable, Descriptor, Audit
      */
     void setPgLabel(String pgLabel);
 
+
+    /**
+     * Secure flag.
+     *
+     * @return true if value has sensitive data and needs special access.
+     */
+    boolean isSecure();
+
+    /**
+     * Set secure flag.
+     *
+     * @param secure flag value
+     */
+    void setSecure(boolean secure);
+
+
+    /**
+     * High level business type
+     *
+     * @return business type
+     */
+    String getBusinesstype();
+
+    /**
+     * Set business type.
+     *
+     * @param businesstype business type.
+     */
+    void setBusinesstype(String businesstype);
+
+
     /**
      * GUID is an auto generated identified that can help in entity synchronisation
      * and global identification.

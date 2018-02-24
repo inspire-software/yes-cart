@@ -35,6 +35,9 @@ public class VoAttribute {
     @DtoField(value = "code")
     private String code;
 
+    @DtoField(value = "secure")
+    private boolean secure;
+
     @DtoField(value = "mandatory")
     private boolean mandatory;
 
@@ -142,6 +145,14 @@ public class VoAttribute {
 
     public void setCode(final String code) {
         this.code = code;
+    }
+
+    public boolean isSecure() {
+        return secure;
+    }
+
+    public void setSecure(final boolean secure) {
+        this.secure = secure;
     }
 
     public boolean isMandatory() {

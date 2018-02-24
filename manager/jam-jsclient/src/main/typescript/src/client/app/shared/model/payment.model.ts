@@ -50,6 +50,8 @@ export interface PaymentGatewayParameterVO {
   name : string;
   value : string;
   pgLabel : string;
+  businesstype : string;
+  secure : boolean;
 
 }
 

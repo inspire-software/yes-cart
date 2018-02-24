@@ -15,6 +15,7 @@
  */
 package org.yes.cart.service.endpoint.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,8 @@ import org.yes.cart.service.vo.VoAddressBookService;
 import org.yes.cart.service.vo.VoCustomerService;
 import org.yes.cart.service.vo.VoShopService;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -59,6 +62,24 @@ public class CustomerEndpointControllerImpl implements CustomerEndpointControlle
     @Override
     public @ResponseBody
     List<MutablePair<String, String>> getCustomerTypes(@PathVariable("lang") final String lang) throws Exception {
+        return voShopService.getAvailableShopsCustomerTypes(lang);
+    }
+
+    @Override
+    public List<MutablePair<String, String>> getCustomerTypes(final long customerId, final String lang) throws Exception {
+
+        if (customerId > 0L) {
+            final VoCustomer voCustomer = voCustomerService.getById(customerId);
+            final List<VoCustomerShopLink> shops = voCustomer.getCustomerShops();
+            if (CollectionUtils.isNotEmpty(shops)) {
+                final List<Long> shopIds = new ArrayList<>();
+                for (final VoCustomerShopLink link : shops) {
+                    shopIds.add(link.getShopId());
+                }
+                return voShopService.getAvailableShopsCustomerTypes(shopIds, lang);
+            }
+            return Collections.emptyList();
+        }
         return voShopService.getAvailableShopsCustomerTypes(lang);
     }
 

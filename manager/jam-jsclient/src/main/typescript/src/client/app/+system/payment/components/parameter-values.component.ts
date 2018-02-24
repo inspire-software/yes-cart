@@ -145,7 +145,7 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
   }
 
   newParamInstance():PaymentGatewayParameterVO {
-    return { paymentGatewayParameterId: 0, description: '', label:'', name: '', value: '', pgLabel:null};
+    return { paymentGatewayParameterId: 0, description: '', label:'', name: '', value: '', pgLabel:null, businesstype:null, secure: false };
   }
 
   protected onSelectRow(row:PaymentGatewayParameterVO) {
@@ -297,6 +297,9 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
 
   protected getDisplayValue(row:PaymentGatewayParameterVO):string {
     if (row.value != null) {
+      if (row.businesstype === 'SecureString') {
+        return row.value ? '*****' : '&nbsp;';
+      }
       var _str:string = '' + row.value;
       if (_str  === 'true') {
         return '<i class="fa fa-check-circle"></i>';
@@ -336,7 +339,7 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
 
   private filterAttributes() {
     let _filter = this._attributeFilter ? this._attributeFilter.toLowerCase() : null;
-    if (_filter) {
+    if (_filter != null && this._objectAttributes != null) {
       if (_filter === '###') {
         this.filteredObjectAttributes = this._objectAttributes.filter(val =>
           val.value != null && val.value != '' && val.paymentGatewayParameterId > 0
@@ -385,7 +388,7 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
 
       let _update = <Array<Pair<PaymentGatewayParameterVO, boolean>>>[];
       this._objectAttributes.forEach(attr => {
-        if (attr.paymentGatewayParameterId !== 0 || (attr.value !== null && /\S+.*\S+/.test(attr.value))) {
+        if ((attr.paymentGatewayParameterId !== 0 && this.isEditedAttribute(attr)) || (attr.paymentGatewayParameterId === 0 && attr.value !== null && /\S+.*\S+/.test(attr.value))) {
           _update.push(new Pair(attr, this.isRemovedAttribute(attr)));
         }
       });

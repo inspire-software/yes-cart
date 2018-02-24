@@ -73,6 +73,20 @@ public interface AttributeDTO extends Identifiable {
     void setCode(String code);
 
     /**
+     * Secure flag.
+     *
+     * @return true if value has sensitive data and needs special access.
+     */
+    boolean isSecure();
+
+    /**
+     * Set secure flag.
+     *
+     * @param secure flag value
+     */
+    void setSecure(boolean secure);
+
+    /**
      * Mandatory flag.
      *
      * @return true if value must be set for this attribute.

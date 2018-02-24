@@ -47,6 +47,9 @@ export class ShopAttributesComponent implements OnInit {
 
   private loading:boolean = false;
 
+  private includeSecure:boolean = false;
+  private changeIncludeSecure:boolean = false;
+
   /**
    * Construct shop attribute panel
    *
@@ -78,13 +81,18 @@ export class ShopAttributesComponent implements OnInit {
   get shop():ShopVO  {
     return this._shop;
   }
-  /** {@inheritDoc} */
+
   public ngOnInit() {
     LogUtil.debug('ShopAttributeComponent ngOnInit shop', this.shop);
   }
 
+  protected onIncludeSecure() {
+    this.changeIncludeSecure = !this.includeSecure;
+    this.getShopAttributes();
+  }
+
   protected onRowDeleteSelected() {
-    if (this.selectedRow != null) {
+    if (this.selectedRow != null && !this.selectedRow.attribute.mandatory) {
       this.attributeValuesComponent.onRowDeleteSelected();
     }
   }
@@ -118,7 +126,7 @@ export class ShopAttributesComponent implements OnInit {
       LogUtil.debug('ShopAttributeComponent Save handler update', this.update);
 
       this.loading = true;
-      var _sub:any = this._shopService.saveShopAttributes(this.update).subscribe(
+      var _sub:any = this._shopService.saveShopAttributes(this.update, this.includeSecure).subscribe(
           rez => {
             LogUtil.debug('ShopAttributeComponent attributes', rez);
             this.shopAttributes = rez;
@@ -140,6 +148,7 @@ export class ShopAttributesComponent implements OnInit {
 
   protected onRefreshHandler() {
     LogUtil.debug('ShopAttributeComponent refresh handler', this.shop);
+    this.changeIncludeSecure = this.includeSecure;
     this.getShopAttributes();
   }
 
@@ -181,7 +190,7 @@ export class ShopAttributesComponent implements OnInit {
     if (this.shop.shopId > 0) {
 
       this.loading = true;
-      var _sub:any = this._shopService.getShopAttributes(this.shop.shopId).subscribe(shopAttributes => {
+      var _sub:any = this._shopService.getShopAttributes(this.shop.shopId, this.changeIncludeSecure).subscribe(shopAttributes => {
 
         LogUtil.debug('ShopAttributeComponent attributes', shopAttributes);
         this.shopAttributes = shopAttributes;
@@ -190,6 +199,7 @@ export class ShopAttributesComponent implements OnInit {
         this.selectedRow = null;
         _sub.unsubscribe();
         this.loading = false;
+        this.includeSecure = this.changeIncludeSecure; // change only if we get successful result
 
       });
     } else {

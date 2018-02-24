@@ -78,7 +78,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
                 )
                 {
                     @Override
-                    protected boolean skipAttributesInView(final String code) {
+                    protected boolean skipAttributesInView(final String code, final boolean includeSecure) {
                         return skipAttributesInView.contains(code) || code.startsWith(skipContentAttributesInView);
                     }
 
@@ -88,7 +88,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
                     }
 
                     @Override
-                    protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId) throws Exception {
+                    protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId, final boolean includeSecure) throws Exception {
                         boolean accessible = federationFacade.isManageable(objectId, CategoryDTO.class);
                         if (!accessible) {
                             return new Pair<>(false, null);
@@ -287,7 +287,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
      */
     public List<VoAttrValueCategory> getCategoryAttributes(final long categoryId) throws Exception {
 
-        return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(categoryId);
+        return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(categoryId, true);
 
     }
 
@@ -296,7 +296,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
      */
     public List<VoAttrValueCategory> update(final List<MutablePair<VoAttrValueCategory, Boolean>> vo) throws Exception {
 
-        final long categoryId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo);
+        final long categoryId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);
 
         return getCategoryAttributes(categoryId);
     }

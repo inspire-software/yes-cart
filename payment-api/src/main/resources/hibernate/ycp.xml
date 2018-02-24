@@ -72,6 +72,8 @@
 
         <property name="name" length="64" type="java.lang.String" column="P_NAME"/>
         <property name="value" length="4000" type="java.lang.String" column="P_VALUE"/>
+        <property name="secure" length="1" type="boolean" column="SECURE_ATTRIBUTE" not-null="true"/>
+        <property name="businesstype" type="string" column="BUSINESSTYPE"/>
 
         <property name="description" length="255" type="java.lang.String" column="P_DESCRIPTION"/>
         <property name="label" length="64" type="java.lang.String" column="P_LABEL"/>

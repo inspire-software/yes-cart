@@ -43,10 +43,11 @@ export class SystemService {
 
   /**
    * Get attributes for given system.
+   * @param includeSecure
    * @returns {Observable<R>}
    */
-  getSystemPreferences() {
-    return this.http.get(this._serviceBaseUrl + '/preferences')
+  getSystemPreferences(includeSecure:boolean) {
+    return this.http.get(this._serviceBaseUrl + (includeSecure ? '/preferences/secure' : '/preferences'))
       .map(res => <AttrValueSystemVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -54,13 +55,14 @@ export class SystemService {
   /**
    * Update supported attributes.
    * @param attrs
+   * @param includeSecure
    * @returns {Observable<R>}
    */
-  saveSystemAttributes(attrs:Array<Pair<AttrValueSystemVO, boolean>>) {
+  saveSystemAttributes(attrs:Array<Pair<AttrValueSystemVO, boolean>>, includeSecure:boolean) {
     let body = JSON.stringify(attrs);
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._serviceBaseUrl + '/preferences', body, options)
+    return this.http.post(this._serviceBaseUrl + (includeSecure ? '/preferences/secure' : '/preferences'), body, options)
       .map(res => <AttrValueSystemVO[]> this.json(res))
       .catch(this.handleError);
   }

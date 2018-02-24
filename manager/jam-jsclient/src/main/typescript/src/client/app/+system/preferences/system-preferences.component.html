@@ -11,6 +11,10 @@
         <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
       </form>
 
+      <button type="button" (click)="onIncludeSecure()" class="btn {{ includeSecure ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl" title="{{ (includeSecure ? 'MODAL_BUTTON_SECURE_ATTR_OFF' : 'MODAL_BUTTON_SECURE_ATTR_ON') | translate }}">
+        <i class="fa {{ includeSecure ? 'fa-unlock' : 'fa-lock' }}"></i>
+      </button>
+
       <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
         <i class="fa fa-edit"></i>
       </button>

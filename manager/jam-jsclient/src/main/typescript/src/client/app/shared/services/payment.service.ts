@@ -80,11 +80,13 @@ export class PaymentService {
    * Get list of all payment gateways, which are accessible to manage or view,
    * @param lang language
    * @param shopCode shop code
+   * @param includeSecure
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getPaymentGatewaysWithParameters(lang:string, shopCode:string) {
+  getPaymentGatewaysWithParameters(lang:string, shopCode:string, includeSecure:boolean) {
 
-    let _path = shopCode != null ? '/gateways/configure/shop/' + shopCode + '/' : '/gateways/configure/all/';
+    let _secure = includeSecure ? 'secure/' : '';
+    let _path = shopCode != null ? ('/gateways/configure/' + _secure + 'shop/' + shopCode + '/') : ('/gateways/configure/' + _secure + 'all/');
 
     return this.http.get(this._serviceBaseUrl + _path + lang)
       .map(res => <PaymentGatewayVO[]> this.json(res))
@@ -113,15 +115,19 @@ export class PaymentService {
 
   /**
    * Update supported attributes.
+   * @param shopCode shop code
+   * @param pgLabel
    * @param attrs
+   * @param includeSecure
    * @returns {Observable<R>}
    */
-  savePaymentGatewayParameters(shopCode: string, pgLabel:string, attrs:Array<Pair<PaymentGatewayParameterVO, boolean>>) {
+  savePaymentGatewayParameters(shopCode: string, pgLabel:string, attrs:Array<Pair<PaymentGatewayParameterVO, boolean>>, includeSecure:boolean) {
     let body = JSON.stringify(attrs);
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
-    let _path = shopCode != null ? ('/gateways/configure/' + pgLabel + '/' + shopCode + '/') : ('/gateways/configure/'  + pgLabel + '/');
+    let _secure = includeSecure ? 'secure/' : '';
+    let _path = shopCode != null ? ('/gateways/configure/'  + _secure + pgLabel + '/' + shopCode + '/') : ('/gateways/configure/' + _secure + pgLabel + '/');
 
     return this.http.post(this._serviceBaseUrl + _path , body, options)
       .map(res => <PaymentGatewayParameterVO[]> this.json(res))

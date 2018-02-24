@@ -76,7 +76,7 @@ public class VoBrandServiceImpl implements VoBrandService {
                 )
         {
             @Override
-            protected boolean skipAttributesInView(final String code) {
+            protected boolean skipAttributesInView(final String code, final boolean includeSecure) {
                 return skipAttributesInView.contains(code);
             }
 
@@ -86,7 +86,7 @@ public class VoBrandServiceImpl implements VoBrandService {
             }
 
             @Override
-            protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId) throws Exception {
+            protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId, final boolean includeSecure) throws Exception {
                 boolean accessible = true; // federationFacade.isCurrentUserSystemAdmin(); allow brand attributes to be visible by roles
                 if (!accessible) {
                     return new Pair<>(false, null);
@@ -171,7 +171,7 @@ public class VoBrandServiceImpl implements VoBrandService {
      */
     public List<VoAttrValueBrand> getBrandAttributes(final long brandId) throws Exception {
 
-        return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(brandId);
+        return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(brandId, true);
 
     }
 
@@ -180,7 +180,7 @@ public class VoBrandServiceImpl implements VoBrandService {
      */
     public List<VoAttrValueBrand> update(final List<MutablePair<VoAttrValueBrand, Boolean>> vo) throws Exception {
 
-        final long brandId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo);
+        final long brandId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);
 
         return getBrandAttributes(brandId);
     }

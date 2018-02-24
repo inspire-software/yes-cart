@@ -76,7 +76,7 @@ public class VoContentServiceImpl implements VoContentService {
                 )
                 {
                     @Override
-                    protected boolean skipAttributesInView(final String code) {
+                    protected boolean skipAttributesInView(final String code, final boolean includeSecure) {
                         return skipAttributesInView.contains(code) || code.startsWith(skipContentAttributesInView);
                     }
 
@@ -86,7 +86,7 @@ public class VoContentServiceImpl implements VoContentService {
                     }
 
                     @Override
-                    protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId) throws Exception {
+                    protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId, final boolean includeSecure) throws Exception {
                         boolean accessible = federationFacade.isManageable(objectId, CategoryDTO.class);
                         if (!accessible) {
                             return new Pair<>(false, null);
@@ -271,7 +271,7 @@ public class VoContentServiceImpl implements VoContentService {
      */
     public List<VoAttrValueContent> getContentAttributes(final long contentId) throws Exception {
 
-        return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(contentId);
+        return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(contentId, true);
 
     }
 
@@ -280,7 +280,7 @@ public class VoContentServiceImpl implements VoContentService {
      */
     public List<VoAttrValueContent> update(final List<MutablePair<VoAttrValueContent, Boolean>> vo) throws Exception {
 
-        final long contentId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo);
+        final long contentId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);
 
         return getContentAttributes(contentId);
     }

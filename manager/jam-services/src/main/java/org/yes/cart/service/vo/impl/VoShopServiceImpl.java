@@ -133,7 +133,7 @@ public class VoShopServiceImpl implements VoShopService {
                 )
         {
             @Override
-            protected boolean skipAttributesInView(final String code) {
+            protected boolean skipAttributesInView(final String code, final boolean includeSecure) {
                 return skipAttributesInView.contains(code);
             }
 
@@ -143,7 +143,7 @@ public class VoShopServiceImpl implements VoShopService {
             }
 
             @Override
-            protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId) throws Exception {
+            protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId, final boolean includeSecure) throws Exception {
                 boolean accessible = federationFacade.isShopAccessibleByCurrentManager(objectId);
                 if (!accessible) {
                     return new Pair<>(false, null);
@@ -516,7 +516,7 @@ public class VoShopServiceImpl implements VoShopService {
     }
 
     protected Map<String, VoAttrValueShop> getStringVoAttrValueShopMap(final long shopId, final String code) throws Exception {
-        final List<VoAttrValueShop> attrs = voAttributesCRUDTemplate.getAttributes(shopId, code);
+        final List<VoAttrValueShop> attrs = voAttributesCRUDTemplate.getAttributes(shopId, code, false);
         final Map<String, VoAttrValueShop> attrsMap = new HashMap<String, VoAttrValueShop>(attrs.size() * 2);
         for (final VoAttrValueShop attr : attrs) {
             attrsMap.put(attr.getAttribute().getCode(), attr);
@@ -1010,9 +1010,9 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
-    public List<VoAttrValueShop> getShopAttributes(final long shopId) throws Exception {
+    public List<VoAttrValueShop> getShopAttributes(final long shopId, final boolean includeSecure) throws Exception {
 
-        return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(shopId);
+        return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(shopId, includeSecure);
 
     }
 
@@ -1020,13 +1020,30 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
-    public List<VoAttrValueShop> update(final List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception {
+    public List<VoAttrValueShop> update(final List<MutablePair<VoAttrValueShop, Boolean>> vo, final boolean includeSecure) throws Exception {
 
-        final long shopId = this.voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo);
+        final long shopId = this.voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, includeSecure);
 
-        return getShopAttributes(shopId);
+        return getShopAttributes(shopId, includeSecure);
 
     }
+
+
+    void collectKnownCustomerTypesInShop(final String locale, final List<MutablePair<String, String>> types, final Set<String> knownCustomerTypes, final long shopId) throws Exception {
+
+        final VoShopSummary summary = new VoShopSummary();
+        fillShopSummaryDetails(summary, shopId, locale);
+
+        for (final MutablePair<String, String> typeAndName : summary.getCustomerTypes()) {
+            if (!AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST.equals(typeAndName.getFirst())
+                    && !knownCustomerTypes.contains(typeAndName.getFirst())) {
+                knownCustomerTypes.add(typeAndName.getFirst());
+                types.add(typeAndName);
+            }
+        }
+
+    }
+
 
     /**
      * {@inheritDoc}
@@ -1036,30 +1053,28 @@ public class VoShopServiceImpl implements VoShopService {
         final List<MutablePair<String, String>> types = new ArrayList<MutablePair<String, String>>();
 
         final Set<String> knownCustomerTypes = new HashSet<String>();
-        for (final ShopDTO shopDTO : federationFacade.getAccessibleShopsByCurrentManager()) {
+        for (final Long shopId : federationFacade.getAccessibleShopIdsByCurrentManager()) {
 
-            final long configShopId = shopDTO.getMasterId() != null ? shopDTO.getMasterId() : shopDTO.getShopId();
-            final String configShopCode = shopDTO.getMasterId() != null ? shopDTO.getMasterCode() : shopDTO.getCode();
+            collectKnownCustomerTypesInShop(locale, types, knownCustomerTypes, shopId);
 
-            final Map<String, VoAttrValueShop> attrsMap = getStringVoAttrValueShopMap(configShopId, configShopCode);
+        }
 
-            final VoAttrValueShop registrationTypesCsv = attrsMap.get(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES);
-            if (registrationTypesCsv != null && StringUtils.isNotBlank(registrationTypesCsv.getVal())) {
+        return types;
 
-                final String[] registrationTypes = StringUtils.split(registrationTypesCsv.getVal(), ',');
-                final String[] registrationTypesNames = StringUtils.split(
-                        getDisplayName(registrationTypesCsv.getDisplayVals(), registrationTypesCsv.getVal(), locale), ',');
+    }
 
-                for (int i = 0; i < registrationTypes.length; i++) {
-                    final MutablePair<String, String> typeAndName = MutablePair.of(
-                            registrationTypes[i],
-                            registrationTypesNames.length > i ? registrationTypesNames[i] : registrationTypes[i]
-                    );
-                    if (!knownCustomerTypes.contains(typeAndName.getFirst())) {
-                        knownCustomerTypes.add(typeAndName.getFirst());
-                        types.add(typeAndName);
-                    }
-                }
+    @Override
+    public List<MutablePair<String, String>> getAvailableShopsCustomerTypes(final List<Long> shopIds, final String locale) throws Exception {
+
+        final List<MutablePair<String, String>> types = new ArrayList<MutablePair<String, String>>();
+
+        final Set<String> knownCustomerTypes = new HashSet<String>();
+
+        for (final Long shopId : shopIds) {
+
+            if (shopId != null && federationFacade.isShopAccessibleByCurrentManager(shopId)) {
+
+                collectKnownCustomerTypesInShop(locale, types, knownCustomerTypes, shopId);
 
             }
 
@@ -1068,8 +1083,6 @@ public class VoShopServiceImpl implements VoShopService {
         return types;
 
     }
-
-    
 
     /**
      * Spring IoC

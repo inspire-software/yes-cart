@@ -14,7 +14,7 @@
       <tbody>
       <tr *ngFor="let row of filteredAttributes; let i = index" class="{{row == selectedAttribute ? 'active' : ''}}">
         <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}} <i class="fa fa-lock" [hidden]="!row.secure"></i></a></td>
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
           <td title="{{ 'AV_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.etypeName}} <span [innerHTML]="getSearchFlags(row)"></span></a></td>
           <td title="{{ 'AV_REGEX' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.mandatory ? 'fa-check-circle' : 'fa-times-circle' }}"></i> {{row.regexp}}&nbsp;</a></td>

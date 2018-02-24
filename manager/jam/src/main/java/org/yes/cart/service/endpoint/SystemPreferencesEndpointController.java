@@ -41,11 +41,20 @@ public interface SystemPreferencesEndpointController {
     @ResponseBody
     List<VoAttrValueSystem> getSystemPreferences() throws Exception;
 
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/secure", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoAttrValueSystem> getSystemPreferencesSecure() throws Exception;
 
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoAttrValueSystem> update(@RequestBody List<MutablePair<VoAttrValueSystem, Boolean>> vo) throws Exception;
+
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/secure", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoAttrValueSystem> updateSecure(@RequestBody List<MutablePair<VoAttrValueSystem, Boolean>> vo) throws Exception;
 
 
 }

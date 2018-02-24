@@ -212,6 +212,11 @@
                 <comment>Attribute must have the default value if mandatory flag is true</comment>
             </column>
         </property>
+        <property name="secure" length="1" type="boolean" not-null="true">
+            <column name="SECURE_ATTRIBUTE" length="1" not-null="true">
+                <comment>Attribute contains secinsitive data if secure flag is true</comment>
+            </column>
+        </property>
         <property name="allowduplicate" length="1" type="boolean" not-null="true">
             <column name="ALLOWDUPLICATE" length="1" not-null="true" default="0">
                 <comment>Allow to duplicate attr values. Example color - red and black</comment>

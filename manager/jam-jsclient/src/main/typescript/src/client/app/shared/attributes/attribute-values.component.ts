@@ -371,6 +371,9 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
   protected getDisplayValue(row:AttrValueVO):string {
     if (row.val != null) {
+      if (row.attribute.etypeName === 'SecureString') {
+        return '*****';
+      }
       if (row.attribute.etypeName === 'Boolean') {
         if (('' + row.val)  === 'true') {
           return '<i class="fa fa-check-circle"></i>';
@@ -402,6 +405,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
       switch (av.attribute.etypeName) {
         case 'String':
+        case 'SecureString':
           this.localisableEditor = true;
           break;
         case 'Boolean':

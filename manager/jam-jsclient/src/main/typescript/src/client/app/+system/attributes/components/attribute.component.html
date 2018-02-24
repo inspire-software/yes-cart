@@ -34,6 +34,10 @@
                   </div>
                 </div>
                 <div class="form-group">
+                  <input formControlName="secure" name="secure" type="checkbox" [(ngModel)]="attribute.secure">
+                  <label>{{ 'AV_SECURE' | translate }}</label>
+                </div>
+                <div class="form-group">
                   <label>{{ 'DESCRIPTION' | translate }}</label>
                   <textarea class="form-control"  rows="6" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="attribute.description"></textarea>
                 </div>

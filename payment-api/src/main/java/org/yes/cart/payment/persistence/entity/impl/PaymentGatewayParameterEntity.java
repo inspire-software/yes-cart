@@ -34,6 +34,8 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
     private long paymentGatewayParameterId;
     private String name;
     private String value;
+    private String businesstype;
+    private boolean secure;
     protected String pgLabel;
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
@@ -68,6 +70,38 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
      */
     public void setValue(final String value) {
         this.value = value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getBusinesstype() {
+        return businesstype;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setBusinesstype(final String businesstype) {
+        this.businesstype = businesstype;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isSecure() {
+        return secure;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSecure(final boolean secure) {
+        this.secure = secure;
     }
 
     /**

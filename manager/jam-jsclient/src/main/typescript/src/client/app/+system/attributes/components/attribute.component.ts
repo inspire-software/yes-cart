@@ -77,6 +77,7 @@ export class AttributeComponent implements OnInit, OnDestroy {
       'rank': ['', YcValidators.requiredRank],
       'description': [''],
       'val': [''],
+      'secure': [''],
       'mandatory': [''],
       'allowduplicate': [''],
       'allowfailover': [''],

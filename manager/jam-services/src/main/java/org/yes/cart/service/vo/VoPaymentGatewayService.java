@@ -112,30 +112,33 @@ public interface VoPaymentGatewayService {
      * Get allowed payment gateways in all modules.
      *
      * @param lang ui lang
+     * @param includeSecure include secure attributes (false to filter out)
      *
      * @return list of label-name pairs .
      */
-    List<VoPaymentGateway> getPaymentGatewaysWithParameters(String lang) throws Exception;
+    List<VoPaymentGateway> getPaymentGatewaysWithParameters(String lang, boolean includeSecure) throws Exception;
 
     /**
      * Get allowed payment gateways in all modules.
      *
      * @param lang ui lang
      * @param shopCode shop code
+     * @param includeSecure include secure attributes (false to filter out)
      *
      * @return list of label-name pairs .
      */
-    List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(String lang, String shopCode) throws Exception;
+    List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(String lang, String shopCode, boolean includeSecure) throws Exception;
 
     /**
      * Update the PG attributes.
      *
      * @param pgLabel PG label
      * @param vo PG attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
+     * @param includeSecure include secure attributes (false to filter out)
      * @return PG attributes.
      * @throws Exception
      */
-    List<VoPaymentGatewayParameter> update(String pgLabel, List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception;
+    List<VoPaymentGatewayParameter> update(String pgLabel, List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo, boolean includeSecure) throws Exception;
 
     /**
      * Update the PG attributes.
@@ -143,10 +146,11 @@ public interface VoPaymentGatewayService {
      * @param shopCode shop code for which to update the PG parameters
      * @param pgLabel PG label
      * @param vo PG attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
+     * @param includeSecure include secure attributes (false to filter out)
      * @return PG attributes.
      * @throws Exception
      */
-    List<VoPaymentGatewayParameter> update(String shopCode, String pgLabel, List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception;
+    List<VoPaymentGatewayParameter> update(String shopCode, String pgLabel, List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo, boolean includeSecure) throws Exception;
 
 
     /**

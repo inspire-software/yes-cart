@@ -51,6 +51,7 @@ export interface AttributeVO {
 
   val : string;
 
+  secure : boolean;
   mandatory : boolean;
   allowduplicate : boolean;
   allowfailover : boolean;

@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -275,7 +276,8 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     }
 
     /** {@inheritDoc} */
-    public List<VoPaymentGateway> getPaymentGatewaysWithParameters(final String lang) throws Exception {
+    public List<VoPaymentGateway> getPaymentGatewaysWithParameters(final String lang,
+                                                                   final boolean includeSecure) throws Exception {
 
         if (federationFacade.isCurrentUserSystemAdmin()) {
 
@@ -283,7 +285,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
             final List<VoPaymentGateway> vos = new ArrayList<>(info.size());
             for (final VoPaymentGatewayInfo pgInfo : info) {
 
-                vos.add(getPaymentGatewayWithParameters(pgInfo, DEFAULT_SHOP_CODE));
+                vos.add(getPaymentGatewayWithParameters(pgInfo, DEFAULT_SHOP_CODE, includeSecure));
 
             }
 
@@ -297,7 +299,9 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
 
     /** {@inheritDoc} */
-    public List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(final String lang, final String shopCode) throws Exception {
+    public List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(final String lang,
+                                                                          final String shopCode,
+                                                                          final boolean includeSecure) throws Exception {
 
         if (federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
 
@@ -305,7 +309,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
             final List<VoPaymentGateway> vos = new ArrayList<>(info.size());
             for (final VoPaymentGatewayInfo pgInfo : info) {
 
-                vos.add(getPaymentGatewayWithParameters(pgInfo, shopCode));
+                vos.add(getPaymentGatewayWithParameters(pgInfo, shopCode, includeSecure));
 
             }
 
@@ -319,7 +323,9 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     }
 
 
-    private VoPaymentGateway getPaymentGatewayWithParameters(final VoPaymentGatewayInfo pgInfo, final String shopCode) {
+    private VoPaymentGateway getPaymentGatewayWithParameters(final VoPaymentGatewayInfo pgInfo,
+                                                             final String shopCode,
+                                                             final boolean includeSecure) {
         final PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway(pgInfo.getLabel(), shopCode);
 
         final VoPaymentGatewayFeature feature = voAssemblySupport.assembleVo(
@@ -329,7 +335,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
         final List<VoPaymentGatewayParameter> parameters = voAssemblySupport.assembleVos(
                 VoPaymentGatewayParameter.class, PaymentGatewayParameter.class,
-                new ArrayList<PaymentGatewayParameter>(getPaymentGatewayParameters(paymentGateway, shopCode))
+                new ArrayList<PaymentGatewayParameter>(getPaymentGatewayParameters(paymentGateway, shopCode, includeSecure))
         );
 
         int rank = 100; // default priority in modules
@@ -347,11 +353,21 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
         );
     }
 
-    private Collection<PaymentGatewayParameter> getPaymentGatewayParameters(final PaymentGateway paymentGateway, final String shopCode) {
+    private Collection<PaymentGatewayParameter> getPaymentGatewayParameters(final PaymentGateway paymentGateway,
+                                                                            final String shopCode,
+                                                                            final boolean includeSecure) {
 
         if (DEFAULT_SHOP_CODE.equals(shopCode)) {
 
-            return new ArrayList<PaymentGatewayParameter>(paymentGateway.getPaymentGatewayParameters());
+            final List<PaymentGatewayParameter> defParams = new ArrayList<PaymentGatewayParameter>(paymentGateway.getPaymentGatewayParameters());
+            final Iterator<PaymentGatewayParameter> defParamsIt = defParams.iterator();
+            while (defParamsIt.hasNext()) {
+                final PaymentGatewayParameter param = defParamsIt.next();
+                if (!includeSecure && param.isSecure()) {
+                    defParamsIt.remove();
+                }
+            }
+            return defParams;
 
         } else {
 
@@ -360,7 +376,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
             final String prefix = labelToShopLabel(shopCode, "");
             while (shopOnlyIt.hasNext()) {
                 final PaymentGatewayParameter param = shopOnlyIt.next();
-                if (!param.getLabel().startsWith(prefix)) {
+                if ((!includeSecure && param.isSecure()) || !param.getLabel().startsWith(prefix)) {
                     shopOnlyIt.remove();
                 }
             }
@@ -370,12 +386,17 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     }
 
     /** {@inheritDoc} */
-    public List<VoPaymentGatewayParameter> update(final String pgLabel, final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
-        return update(DEFAULT_SHOP_CODE, pgLabel, vo);
+    public List<VoPaymentGatewayParameter> update(final String pgLabel,
+                                                  final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo,
+                                                  final boolean includeSecure) throws Exception {
+        return update(DEFAULT_SHOP_CODE, pgLabel, vo, includeSecure);
     }
 
     /** {@inheritDoc} */
-    public List<VoPaymentGatewayParameter> update(final String shopCode, final String pgLabel, final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
+    public List<VoPaymentGatewayParameter> update(final String shopCode,
+                                                  final String pgLabel,
+                                                  final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo,
+                                                  final boolean includeSecure) throws Exception {
 
         final boolean systemSettings = DEFAULT_SHOP_CODE.equals(shopCode);
 
@@ -388,7 +409,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
         final VoAssemblySupport.VoAssembler<VoPaymentGatewayParameter, PaymentGatewayParameter> asm =
                 voAssemblySupport.with(VoPaymentGatewayParameter.class, PaymentGatewayParameter.class);
 
-        Map<Long, PaymentGatewayParameter> existing = mapAvById((List) getPaymentGatewayParameters(pg, shopCode));
+        Map<Long, PaymentGatewayParameter> existing = mapAvById((List) getPaymentGatewayParameters(pg, shopCode, includeSecure));
 
         for (final MutablePair<VoPaymentGatewayParameter, Boolean> item : vo) {
             if (item.getFirst().getPaymentGatewayParameterId() > 0L && !pg.getLabel().equals(item.getFirst().getPgLabel())) {
@@ -399,10 +420,14 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
                 // delete mode
                 final PaymentGatewayParameter param = existing.get(item.getFirst().getPaymentGatewayParameterId());
                 if (param != null) {
-                    LOG.info("Removing PG({}/{}) for {}, value was {}",
-                            new Object[]{shopCode, param.getPgLabel(), param.getLabel(), param.getValue()});
-                    param.setValue("");
-                    pg.updateParameter(param);
+                    if ((includeSecure || !param.isSecure())) {
+                        LOG.info("Removing PG({}/{}) for {}, value was {}",
+                                new Object[]{shopCode, param.getPgLabel(), param.getLabel(), param.getValue()});
+                        param.setValue("");
+                        pg.updateParameter(param);
+                    } else {
+                        throw new AccessDeniedException("Access is denied");
+                    }
                 } else {
                     LOG.warn("Update skipped for inexistent ID {}", item.getFirst().getPaymentGatewayParameterId());
                 }
@@ -410,10 +435,14 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
                 // update mode
                 final PaymentGatewayParameter param = existing.get(item.getFirst().getPaymentGatewayParameterId());
                 if (param != null) {
-                    LOG.info("Updating PG({}/{}) for {}, value was {}, now {}",
-                            new Object[]{shopCode, param.getPgLabel(), param.getLabel(), param.getValue(), item.getFirst().getValue()});
-                    param.setValue(item.getFirst().getValue());
-                    pg.updateParameter(param);
+                    if ((includeSecure || !param.isSecure())) {
+                        LOG.info("Updating PG({}/{}) for {}, value was {}, now {}",
+                                new Object[]{shopCode, param.getPgLabel(), param.getLabel(), param.getValue(), item.getFirst().getValue()});
+                        param.setValue(item.getFirst().getValue());
+                        pg.updateParameter(param);
+                    } else {
+                        throw new AccessDeniedException("Access is denied");
+                    }
                 } else {
                     LOG.warn("Update skipped for inexistent ID {}", item.getFirst().getPaymentGatewayParameterId());
                 }
@@ -426,13 +455,19 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
                     final String name = item.getFirst().getName();
                     final String label = item.getFirst().getLabel();
                     final String value = item.getFirst().getValue();
+                    final String businesstype = item.getFirst().getBusinesstype();
+                    final boolean secure = item.getFirst().isSecure();
 
-                    final boolean duplicate = createPaymentGatewayParameter(pg, all, name, label, name, value);
-                    if (duplicate) {
-                        LOG.warn("Update skipped because create mode detected duplicate label {}", label);
+                    if (includeSecure || !secure) {
+                        final boolean duplicate = createPaymentGatewayParameter(pg, all, name, label, name, value, StringUtils.isBlank(businesstype) ? null : businesstype, secure);
+                        if (duplicate) {
+                            LOG.warn("Update skipped because create mode detected duplicate label {}", label);
+                        } else {
+                            LOG.info("Creating PG({}/{}) for {}, value {}",
+                                    new Object[]{shopCode, pg.getLabel(), label, value});
+                        }
                     } else {
-                        LOG.info("Creating PG({}/{}) for {}, value {}",
-                                new Object[]{shopCode, pg.getLabel(), label, value});
+                        throw new AccessDeniedException("Access is denied");
                     }
 
                 } else {
@@ -448,7 +483,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
         if (pg != null) {
             return voAssemblySupport.assembleVos(
                     VoPaymentGatewayParameter.class, PaymentGatewayParameter.class,
-                    new ArrayList<PaymentGatewayParameter>(getPaymentGatewayParameters(pg, shopCode))
+                    new ArrayList<PaymentGatewayParameter>(getPaymentGatewayParameters(pg, shopCode, includeSecure))
             );
         }
 
@@ -461,7 +496,9 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
                                                   final String name,
                                                   final String label,
                                                   final String description,
-                                                  final String value) {
+                                                  final String value,
+                                                  final String businesstype,
+                                                  final boolean secure) {
 
         for (PaymentGatewayParameter param : all) {
             if (param.getLabel().equals(label)) {
@@ -476,6 +513,8 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
         parameter.setDescription(description);
         parameter.setValue(value);
         parameter.setGuid(UUID.randomUUID().toString());
+        parameter.setBusinesstype(businesstype);
+        parameter.setSecure(secure);
         pg.addParameter(parameter);
 
         return false;
@@ -528,15 +567,24 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
                 paymentModulesManager.allowPaymentGatewayForShop(pgLabel, shopCode);
                 final PaymentGateway pgDefault = paymentModulesManager.getPaymentGateway(pgLabel, DEFAULT_SHOP_CODE);
                 final PaymentGateway pgShop = paymentModulesManager.getPaymentGateway(pgLabel, shopCode);
-                getPaymentGatewayParameters(pgShop, shopCode);
+                getPaymentGatewayParameters(pgShop, shopCode, true);
 
-                final Collection<PaymentGatewayParameter> defParams = getPaymentGatewayParameters(pgDefault, DEFAULT_SHOP_CODE);
-                final Collection<PaymentGatewayParameter> shopParams = getPaymentGatewayParameters(pgShop, shopCode);
+                final Collection<PaymentGatewayParameter> defParams = getPaymentGatewayParameters(pgDefault, DEFAULT_SHOP_CODE, true);
+                final Collection<PaymentGatewayParameter> shopParams = getPaymentGatewayParameters(pgShop, shopCode, true);
 
                 for (final PaymentGatewayParameter defParam : defParams) {
 
                     final String shopLabel = labelToShopLabel(shopCode, defParam.getLabel());
-                    final boolean duplicate = createPaymentGatewayParameter(pgShop, shopParams, defParam.getName(), shopLabel, defParam.getDescription(), defParam.getValue());
+                    final boolean duplicate = createPaymentGatewayParameter(
+                            pgShop,
+                            shopParams,
+                            defParam.getName(),
+                            shopLabel,
+                            defParam.getDescription(),
+                            defParam.getValue(),
+                            defParam.getBusinesstype(),
+                            defParam.isSecure()
+                    );
 
                     if (duplicate) {
 

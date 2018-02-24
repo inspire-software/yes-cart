@@ -46,6 +46,9 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
 
   private loading:boolean = false;
 
+  private includeSecure:boolean = false;
+  private changeIncludeSecure:boolean = false;
+
   /**
    * Construct shop attribute panel
    *
@@ -67,6 +70,11 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
   ngOnChanges(changes:any) {
     LogUtil.debug('ShopAttributeComponent ngOnChanges', changes);
     this.onRefreshHandler();
+  }
+
+  protected onIncludeSecure() {
+    this.changeIncludeSecure = !this.includeSecure;
+    this.getSystemPreferences();
   }
 
   protected onRowDeleteSelected() {
@@ -104,7 +112,7 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
       LogUtil.debug('ShopAttributeComponent Save handler update', this.update);
 
       this.loading = true;
-      var _sub:any = this._systemService.saveSystemAttributes(this.update).subscribe(
+      var _sub:any = this._systemService.saveSystemAttributes(this.update, this.includeSecure).subscribe(
           rez => {
             LogUtil.debug('ShopAttributeComponent attributes', rez);
             this.systemAttributes = rez;
@@ -125,9 +133,9 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
 
   protected onRefreshHandler() {
     LogUtil.debug('ShopAttributeComponent refresh handler');
+    this.changeIncludeSecure = this.includeSecure;
     this.getSystemPreferences();
   }
-
 
   protected onClearFilter() {
 
@@ -164,15 +172,15 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
     LogUtil.debug('ShopAttributeComponent get attributes');
 
     this.loading = true;
-    var _sub:any = this._systemService.getSystemPreferences().subscribe(systemAttributes => {
+    var _sub:any = this._systemService.getSystemPreferences(this.changeIncludeSecure).subscribe(systemAttributes => {
 
       LogUtil.debug('ShopAttributeComponent attributes', systemAttributes);
       this.systemAttributes = systemAttributes;
       this.changed = false;
       this.selectedRow = null;
-      this.loading = false;
       _sub.unsubscribe();
-
+      this.loading = false;
+      this.includeSecure = this.changeIncludeSecure; // change only if we get successful result
     });
 
   }

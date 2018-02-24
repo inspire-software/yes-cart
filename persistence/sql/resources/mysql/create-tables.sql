@@ -56,6 +56,7 @@
         ATTRIBUTE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         CODE varchar(255) not null  unique,
+        SECURE_ATTRIBUTE bit default 0 not null comment 'Attribute contains secinsitive data if secure flag is true',
         MANDATORY bit not null comment 'Attribute must have the default value if mandatory flag is true',
         ALLOWDUPLICATE bit default 0 not null comment 'Allow to duplicate attr values. Example color - red and black',
         ALLOWFAILOVER bit default 0 not null comment 'Allow search attribute value in parent object',

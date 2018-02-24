@@ -20,25 +20,25 @@
 
 
 <!-- ################################################## Paypal Pro  ################################################################# -->
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "170"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "170" SECURE_ATTRIBUTE="0"
         PG_LABEL="payPalProPaymentGateway" P_LABEL="API_USER_NAME" P_VALUE="!!!SetValue:testPgPayProUser!!!"  P_NAME="Api user name "  P_DESCRIPTION="Api user name"/>
 
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "171"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "171" SECURE_ATTRIBUTE="0"
         PG_LABEL="payPalProPaymentGateway" P_LABEL="API_USER_PASSWORD" P_VALUE="!!!SetValue:testPgPayProPass!!!"  P_NAME="Api user password"  P_DESCRIPTION="Api user password"/>
 
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "172"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "172" SECURE_ATTRIBUTE="0"
         PG_LABEL="payPalProPaymentGateway" P_LABEL="SIGNATURE" P_VALUE="!!!SetValue:testPgPayProSignature!!!"  P_NAME="Signature"  P_DESCRIPTION="Signature"/>
 
 <!--
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "173"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "173"  SECURE_ATTRIBUTE="0"
         PG_LABEL="payPalProPaymentGateway" P_LABEL="KEY_PATH" P_VALUE="src/test/resources/ppkeys/some.p12"  P_NAME="Path to key"  P_DESCRIPTION="Path to key"/>
 
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "174"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "174" SECURE_ATTRIBUTE="0"
         PG_LABEL="payPalProPaymentGateway" P_LABEL="KEY_PASSWORD" P_VALUE="password"  P_NAME="Key password"  P_DESCRIPTION="Key password"/>
 
 -->
 
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "175"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "175" SECURE_ATTRIBUTE="0"
         PG_LABEL="payPalProPaymentGateway" P_LABEL="ENVIRONMENT" P_VALUE="sandbox"  P_NAME="Environment"  P_DESCRIPTION="Environment allowed 'live' or 'sandbox' "/>
 
     <TPAYMENTGATEWAYPARAMETER
@@ -91,36 +91,36 @@
 	&lt;td&gt;Card security code&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;groovyqtytext&quot; name=&quot;ccSecCode&quot;/&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/table&gt;"
-        P_NAME="Part of html form"  P_DESCRIPTION="Part of html form, that display when user select this gateway to pay"/>
+        P_NAME="Part of html form"  P_DESCRIPTION="Part of html form, that display when user select this gateway to pay" SECURE_ATTRIBUTE="0"/>
 
 
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "176"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "176" SECURE_ATTRIBUTE="0"
                                 PG_LABEL="payPalProPaymentGateway" P_LABEL="PP_EC_API_URL" P_VALUE="https://api-3t.sandbox.paypal.com/nvp"  P_NAME="url"  P_DESCRIPTION="url"/>
 
 
 <!-- ################################################## Paypal Express  ################################################################# -->
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "220"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "220" SECURE_ATTRIBUTE="0"
         PG_LABEL="payPalExpressPaymentGateway" P_LABEL="API_USER_NAME" P_VALUE="!!!SetValue:testPgPayPalExpressUser!!!"  P_NAME="Api user name "  P_DESCRIPTION="Api user name"/>
 
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "221"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "221" SECURE_ATTRIBUTE="0"
         PG_LABEL="payPalExpressPaymentGateway" P_LABEL="API_USER_PASSWORD" P_VALUE="!!!SetValue:testPgPayPalExpressPass!!!"  P_NAME="Api user password"  P_DESCRIPTION="Api user password"/>
 
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "222"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "222" SECURE_ATTRIBUTE="0"
         PG_LABEL="payPalExpressPaymentGateway" P_LABEL="SIGNATURE" P_VALUE="!!!SetValue:testPgPayPalExpressSignature!!!"  P_NAME="Signature"  P_DESCRIPTION="Signature"/>
 
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "223"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "223" SECURE_ATTRIBUTE="0"
         PG_LABEL="payPalExpressPaymentGateway" P_LABEL="RETURNURL" P_VALUE="https://demo.yes-cart.org"  P_NAME="ret"  P_DESCRIPTION="ret"/>
 
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "224"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "224" SECURE_ATTRIBUTE="0"
         PG_LABEL="payPalExpressPaymentGateway" P_LABEL="CANCELURL" P_VALUE="https://demo.yes-cart.org"  P_NAME="can"  P_DESCRIPTION="can"/>
 
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "225"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "225" SECURE_ATTRIBUTE="0"
         PG_LABEL="payPalExpressPaymentGateway" P_LABEL="PP_EC_API_URL" P_VALUE="https://api-3t.sandbox.paypal.com/nvp"  P_NAME="url"  P_DESCRIPTION="url"/>
 
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "226"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "226" SECURE_ATTRIBUTE="0"
         PG_LABEL="payPalExpressPaymentGateway" P_LABEL="PP_EC_PAYPAL_URL" P_VALUE="https://www.sandbox.paypal.com/cgi-bin/webscr"  P_NAME="url"  P_DESCRIPTION="url"/>
 
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "227"
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "227" SECURE_ATTRIBUTE="0"
         PG_LABEL="payPalExpressPaymentGateway" P_LABEL="CALLBACK" P_VALUE="https://demo.yes-cart.org"  P_NAME="call"  P_DESCRIPTION="call"/>
 
 

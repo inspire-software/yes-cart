@@ -39,6 +39,9 @@ public class AttributeDTOImpl implements AttributeDTO {
     @DtoField(value = "code")
     private String code;
 
+    @DtoField(value = "secure")
+    private boolean secure;
+
     @DtoField(value = "mandatory")
     private boolean mandatory;
 
@@ -161,6 +164,18 @@ public class AttributeDTOImpl implements AttributeDTO {
     /** {@inheritDoc} */
     public void setCode(final String code) {
         this.code = code;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isSecure() {
+        return secure;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setSecure(final boolean secure) {
+        this.secure = secure;
     }
 
     /** {@inheritDoc} */

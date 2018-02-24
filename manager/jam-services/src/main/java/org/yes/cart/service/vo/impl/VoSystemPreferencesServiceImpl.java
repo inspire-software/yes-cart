@@ -78,7 +78,7 @@ public class VoSystemPreferencesServiceImpl implements VoSystemPreferencesServic
                 )
         {
             @Override
-            protected boolean skipAttributesInView(final String code) {
+            protected boolean skipAttributesInView(final String code, final boolean includeSecure) {
                 return skipAttributesInView.contains(code);
             }
 
@@ -88,7 +88,7 @@ public class VoSystemPreferencesServiceImpl implements VoSystemPreferencesServic
             }
 
             @Override
-            protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId) throws Exception {
+            protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId, final boolean includeSecure) throws Exception {
                 boolean accessible = federationFacade.isCurrentUserSystemAdmin();
                 if (!accessible) {
                     return new Pair<>(false, null);
@@ -103,9 +103,9 @@ public class VoSystemPreferencesServiceImpl implements VoSystemPreferencesServic
     /**
      * {@inheritDoc}
      */
-    public List<VoAttrValueSystem> getSystemPreferences() throws Exception {
+    public List<VoAttrValueSystem> getSystemPreferences(final boolean includeSecure) throws Exception {
 
-        return this.voAttributesCRUDTemplate.verifyAccessAndGetAttributes(100L);
+        return this.voAttributesCRUDTemplate.verifyAccessAndGetAttributes(100L, includeSecure);
 
     }
 
@@ -113,11 +113,12 @@ public class VoSystemPreferencesServiceImpl implements VoSystemPreferencesServic
     /**
      * {@inheritDoc}
      */
-    public List<VoAttrValueSystem> update(final List<MutablePair<VoAttrValueSystem, Boolean>> vo) throws Exception {
+    public List<VoAttrValueSystem> update(final List<MutablePair<VoAttrValueSystem, Boolean>> vo,
+                                          final boolean includeSecure) throws Exception {
 
-        this.voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo);
+        this.voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, includeSecure);
 
-        return getSystemPreferences();
+        return getSystemPreferences(includeSecure);
 
     }
 

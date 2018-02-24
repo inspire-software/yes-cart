@@ -66,6 +66,9 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
 
   private loading:boolean = false;
 
+  private includeSecure:boolean = false;
+  private changeIncludeSecure:boolean = false;
+
   constructor(private _paymentService:PaymentService) {
     LogUtil.debug('PaymentGatewaysComponent constructed');
 
@@ -92,9 +95,8 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
     LogUtil.debug('PaymentGatewaysComponent ngOnDestroy');
   }
 
-
-  protected onRefreshHandler() {
-    LogUtil.debug('PaymentGatewaysComponent refresh handler');
+  protected onIncludeSecure() {
+    this.changeIncludeSecure = !this.includeSecure;
     this.getAllPgs();
   }
 
@@ -188,6 +190,12 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
   }
 
 
+  protected onRefreshHandler() {
+    LogUtil.debug('PaymentGatewaysComponent refresh handler');
+    this.changeIncludeSecure = this.includeSecure;
+    this.getAllPgs();
+  }
+
   protected onRowListSelected() {
     if (this.selectedGateway != null) {
       this.onRowList(this.selectedGateway);
@@ -201,7 +209,7 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
 
       LogUtil.debug('PaymentGatewaysComponent Save handler update', [this.shopCode, this.selectedGateway.label, this.update]);
 
-      var _sub:any = this._paymentService.savePaymentGatewayParameters(this.shopCode, this.selectedGateway.label, this.update).subscribe(rez => {
+      var _sub:any = this._paymentService.savePaymentGatewayParameters(this.shopCode, this.selectedGateway.label, this.update, this.includeSecure).subscribe(rez => {
           LogUtil.debug('PaymentGatewaysComponent attributes', rez);
           this.selectedGateway.parameters = rez;
           this.parameterValuesComponent.paymentGateway = this.selectedGateway;
@@ -211,9 +219,7 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
           _sub.unsubscribe();
         }
       );
-
     }
-
   }
 
   protected onDiscardEventHandler() {
@@ -266,15 +272,16 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
       let lang = I18nEventBus.getI18nEventBus().current();
 
       this.loading = true;
-      var _sub:any = this._paymentService.getPaymentGatewaysWithParameters(lang, this.shopCode).subscribe( allgateways => {
-        LogUtil.debug('PaymentGatewaysComponent getAllCountries', allgateways);
+      var _sub:any = this._paymentService.getPaymentGatewaysWithParameters(lang, this.shopCode, this.changeIncludeSecure).subscribe( allgateways => {
+        LogUtil.debug('PaymentGatewaysComponent getPaymentGatewaysWithParameters', allgateways);
+        this.viewMode = PaymentGatewaysComponent.PGS;
         this.gateways = allgateways;
         this.selectedGateway = null;
-        this.viewMode = PaymentGatewaysComponent.PGS;
         this.changed = false;
         this.validForSave = false;
-        this.loading = false;
         _sub.unsubscribe();
+        this.loading = false;
+        this.includeSecure = this.changeIncludeSecure; // change only if we get successful result
       });
 
     } else {

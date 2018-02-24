@@ -263,14 +263,16 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
   protected onTypeHelpClick() {
 
-    let lang = I18nEventBus.getI18nEventBus().current();
-    let _sub:any = this._customerService.getCustomerTypes(lang).subscribe((types:Pair<string, string>[]) => {
-      LogUtil.debug('CustomerComponent available types', types);
-      this.availableCustomerTypes = types;
-      _sub.unsubscribe();
+    if (this._customer != null) {
+      let lang = I18nEventBus.getI18nEventBus().current();
+      let _sub: any = this._customerService.getCustomerTypes(this._customer.customerId, lang).subscribe((types: Pair<string, string>[]) => {
+        LogUtil.debug('CustomerComponent available types', types);
+        this.availableCustomerTypes = types;
+        _sub.unsubscribe();
 
-      this.typeHelpModalDialog.show();
-    });
+        this.typeHelpModalDialog.show();
+      });
+    }
 
   }
 

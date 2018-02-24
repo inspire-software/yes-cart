@@ -59,6 +59,6 @@
         &lt;td&gt;Card security code&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;groovyqtytext&quot; name=&quot;ccSecCode&quot;/&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/table&gt;"
-        P_NAME="Part of html form"  P_DESCRIPTION="Part of html form, that display when user select this gateway to pay"/>
+        P_NAME="Part of html form"  P_DESCRIPTION="Part of html form, that display when user select this gateway to pay" SECURE_ATTRIBUTE="0"/>
 
 </dataset>

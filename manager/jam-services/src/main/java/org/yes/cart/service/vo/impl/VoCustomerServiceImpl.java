@@ -85,7 +85,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
                 )
         {
             @Override
-            protected boolean skipAttributesInView(final String code) {
+            protected boolean skipAttributesInView(final String code, final boolean includeSecure) {
                 return skipAttributesInView.contains(code);
             }
 
@@ -95,7 +95,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
             }
 
             @Override
-            protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId) throws Exception {
+            protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId, final boolean includeSecure) throws Exception {
 
                 boolean accessible = federationFacade.isManageable(objectId, CustomerDTO.class);
                 if (!accessible) {
@@ -300,7 +300,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
      */
     public List<VoAttrValueCustomer> getCustomerAttributes(final long customerId) throws Exception {
 
-        return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(customerId);
+        return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(customerId, true);
 
     }
 
@@ -309,7 +309,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
      */
     public List<VoAttrValueCustomer> update(final List<MutablePair<VoAttrValueCustomer, Boolean>> vo) throws Exception {
 
-        final long customerId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo);
+        final long customerId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);
 
         return getCustomerAttributes(customerId);
     }

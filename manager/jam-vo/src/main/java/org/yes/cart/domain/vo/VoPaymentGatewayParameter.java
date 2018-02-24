@@ -40,6 +40,10 @@ public class VoPaymentGatewayParameter {
     @DtoField()
     private String value;
     @DtoField(readOnly = true)
+    private String businesstype;
+    @DtoField(readOnly = true)
+    private boolean secure;
+    @DtoField(readOnly = true)
     private String pgLabel;
 
     public long getPaymentGatewayParameterId() {
@@ -80,6 +84,22 @@ public class VoPaymentGatewayParameter {
 
     public void setValue(final String value) {
         this.value = value;
+    }
+
+    public String getBusinesstype() {
+        return businesstype;
+    }
+
+    public void setBusinesstype(final String businesstype) {
+        this.businesstype = businesstype;
+    }
+
+    public boolean isSecure() {
+        return secure;
+    }
+
+    public void setSecure(final boolean secure) {
+        this.secure = secure;
     }
 
     public String getPgLabel() {

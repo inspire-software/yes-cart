@@ -215,21 +215,26 @@ public interface VoShopService {
 
     /**
      * Get supported attributes by given shop
+     *
      * @param shopId given shop id
+     * @param includeSecure include secure attributes (false to filter out)
+     *
      * @return attributes
      * @throws Exception
      */
-    List<VoAttrValueShop> getShopAttributes(long shopId) throws Exception;
+    List<VoAttrValueShop> getShopAttributes(long shopId, boolean includeSecure) throws Exception;
 
 
     /**
      * Update the shop attributes.
      *
      * @param vo shop attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
+     * @param includeSecure include secure attributes (false to filter out)
+     *
      * @return shop attributes.
      * @throws Exception
      */
-    List<VoAttrValueShop> update(List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception;
+    List<VoAttrValueShop> update(List<MutablePair<VoAttrValueShop, Boolean>> vo, boolean includeSecure) throws Exception;
 
 
     /**
@@ -239,5 +244,14 @@ public interface VoShopService {
      * @throws Exception
      */
     List<MutablePair<String, String>> getAvailableShopsCustomerTypes(String locale) throws Exception;
+
+    /**
+     * Get supported attributes by given shop
+     * @param shopIds shops to check
+     * @param locale locale
+     * @return customer types
+     * @throws Exception
+     */
+    List<MutablePair<String, String>> getAvailableShopsCustomerTypes(List<Long> shopIds, String locale) throws Exception;
 
 }

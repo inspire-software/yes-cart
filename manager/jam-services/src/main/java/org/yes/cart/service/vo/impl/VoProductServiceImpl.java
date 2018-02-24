@@ -91,7 +91,7 @@ public class VoProductServiceImpl implements VoProductService {
                 )
                 {
                     @Override
-                    protected boolean skipAttributesInView(final String code) {
+                    protected boolean skipAttributesInView(final String code, final boolean includeSecure) {
                         return false;
                     }
 
@@ -101,7 +101,7 @@ public class VoProductServiceImpl implements VoProductService {
                     }
 
                     @Override
-                    protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId) throws Exception {
+                    protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId, final boolean includeSecure) throws Exception {
                         boolean accessible = federationFacade.isManageable(objectId, ProductDTO.class);
                         if (!accessible) {
                             return new Pair<>(false, null);
@@ -126,7 +126,7 @@ public class VoProductServiceImpl implements VoProductService {
                 )
                 {
                     @Override
-                    protected boolean skipAttributesInView(final String code) {
+                    protected boolean skipAttributesInView(final String code, final boolean includeSecure) {
                         return false;
                     }
 
@@ -136,7 +136,7 @@ public class VoProductServiceImpl implements VoProductService {
                     }
 
                     @Override
-                    protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId) throws Exception {
+                    protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId, final boolean includeSecure) throws Exception {
                         final ProductSkuDTO sku = dtoProductSkuService.getById(objectId);
                         boolean accessible = sku != null && federationFacade.isManageable(sku.getProductId(), ProductDTO.class);
                         if (!accessible) {
@@ -327,13 +327,13 @@ public class VoProductServiceImpl implements VoProductService {
 
     /** {@inheritDoc} */
     public List<VoAttrValueProduct> getProductAttributes(final long productId) throws Exception {
-        return this.voProductAttributesCRUDTemplate.verifyAccessAndGetAttributes(productId);
+        return this.voProductAttributesCRUDTemplate.verifyAccessAndGetAttributes(productId, true);
     }
 
     /** {@inheritDoc} */
     public List<VoAttrValueProduct> updateProduct(final List<MutablePair<VoAttrValueProduct, Boolean>> vo) throws Exception {
 
-        final long productId = this.voProductAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo);
+        final long productId = this.voProductAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);
 
         return getProductAttributes(productId);
 
@@ -441,13 +441,13 @@ public class VoProductServiceImpl implements VoProductService {
 
     /** {@inheritDoc} */
     public List<VoAttrValueProductSku> getSkuAttributes(final long productId) throws Exception {
-        return this.voSkuAttributesCRUDTemplate.verifyAccessAndGetAttributes(productId);
+        return this.voSkuAttributesCRUDTemplate.verifyAccessAndGetAttributes(productId, true);
     }
 
     /** {@inheritDoc} */
     public List<VoAttrValueProductSku> updateSku(final List<MutablePair<VoAttrValueProductSku, Boolean>> vo) throws Exception {
 
-        final long skuId = this.voSkuAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo);
+        final long skuId = this.voSkuAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);
 
         return getSkuAttributes(skuId);
 

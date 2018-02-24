@@ -294,10 +294,11 @@ export class ShopService {
   /**
    * Get attributes for given shop id.
    * @param id
+   * @param includeSecure
    * @returns {Observable<R>}
    */
-  getShopAttributes(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/attributes/' + id)
+  getShopAttributes(id:number, includeSecure:boolean) {
+    return this.http.get(this._serviceBaseUrl + (includeSecure ? '/attributes/secure/' : '/attributes/') + id)
       .map(res => <AttrValueShopVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -362,13 +363,14 @@ export class ShopService {
   /**
    * Update supported attributes.
    * @param attrs
+   * @param includeSecure
    * @returns {Observable<R>}
    */
-  saveShopAttributes(attrs:Array<Pair<AttrValueShopVO, boolean>>) {
+  saveShopAttributes(attrs:Array<Pair<AttrValueShopVO, boolean>>, includeSecure:boolean) {
     let body = JSON.stringify(attrs);
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._serviceBaseUrl + '/attributes', body, options)
+    return this.http.post(this._serviceBaseUrl + (includeSecure ? '/attributes/secure' : '/attributes'), body, options)
       .map(res => <ShopLocationsVO[]> this.json(res))
       .catch(this.handleError);
   }

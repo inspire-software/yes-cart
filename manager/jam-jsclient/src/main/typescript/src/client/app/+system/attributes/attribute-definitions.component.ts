@@ -86,7 +86,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
       attributeId: 0, attributegroupId: groupId,
       code: '', name: '', description:null, displayNames: [],
       etypeId: etype.etypeId, etypeName:etype.businesstype,
-      val:null, mandatory:false, allowduplicate:false, allowfailover:false,
+      val:null, secure: false, mandatory:false, allowduplicate:false, allowfailover:false,
       regexp:null, validationFailedMessage:[],
       rank:500,
       choiceData:[],

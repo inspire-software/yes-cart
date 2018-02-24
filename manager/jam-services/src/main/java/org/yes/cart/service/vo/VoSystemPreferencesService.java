@@ -30,19 +30,24 @@ public interface VoSystemPreferencesService {
 
     /**
      * Get supported attributes by system
+     *
+     * @param includeSecure include secure attributes
+     *
      * @return attributes
      * @throws Exception
      */
-    List<VoAttrValueSystem> getSystemPreferences() throws Exception;
+    List<VoAttrValueSystem> getSystemPreferences(boolean includeSecure) throws Exception;
 
 
     /**
      * Update the system attributes.
      *
      * @param vo shop attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
+     * @param includeSecure include secure attributes
+     *
      * @return shop attributes.
      * @throws Exception
      */
-    List<VoAttrValueSystem> update(List<MutablePair<VoAttrValueSystem, Boolean>> vo) throws Exception;
+    List<VoAttrValueSystem> update(List<MutablePair<VoAttrValueSystem, Boolean>> vo, boolean includeSecure) throws Exception;
 
 }

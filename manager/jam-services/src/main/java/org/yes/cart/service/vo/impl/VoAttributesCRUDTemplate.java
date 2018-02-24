@@ -21,10 +21,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.AttrValueDTO;
+import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.entity.Etype;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.VoAttrValue;
+import org.yes.cart.domain.vo.VoAttribute;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.GenericAttrValueService;
 import org.yes.cart.service.vo.VoAssemblySupport;
@@ -75,19 +77,21 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
      * Template for retrieving object attributes.
      *
      * @param objectId master object id
+     * @param includeSecure include secure attributes
+     *
      * @return vo attributes
      *
      * @throws Exception
      */
-    public List<V> verifyAccessAndGetAttributes(final long objectId) throws Exception {
+    public List<V> verifyAccessAndGetAttributes(final long objectId, final boolean includeSecure) throws Exception {
 
-        final Pair<Boolean, String> pair = verifyAccessAndDetermineObjectCode(objectId);
+        final Pair<Boolean, String> pair = verifyAccessAndDetermineObjectCode(objectId, includeSecure);
         if (!pair.getFirst()) {
             throw new AccessDeniedException("Access is denied");
         }
 
         final String imageObjectCode = pair.getSecond();
-        return getAttributes(objectId, imageObjectCode);
+        return getAttributes(objectId, imageObjectCode, includeSecure);
 
     }
 
@@ -96,11 +100,13 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
      * Template for retrieving object attributes.
      *
      * @param objectId master object id
+     * @param includeSecure include secure attributes
+     *
      * @return vo attributes
      *
      * @throws Exception
      */
-    public List<V> getAttributes(final long objectId, final String imageObjectCode) throws Exception {
+    public List<V> getAttributes(final long objectId, final String imageObjectCode, final boolean includeSecure) throws Exception {
 
         final List<D> attributes = (List) this.genericAttrValueService.getEntityAttributes(objectId);
 
@@ -109,7 +115,9 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
         final Iterator<V> allIt = all.iterator();
         while (allIt.hasNext()) {
             final V next = allIt.next();
-            if (skipAttributesInView(next.getAttribute().getCode())) {
+            if (skipAttributesInView(next.getAttribute().getCode(), includeSecure)) {
+                allIt.remove();
+            } else if (skipSecure(next, next.getAttribute(), includeSecure)) {
                 allIt.remove();
             } else if (next.getAttrvalueId() > 0L && Etype.IMAGE_BUSINESS_TYPE.equals(next.getAttribute().getEtypeName())) {
                 if (StringUtils.isNotBlank(next.getVal())) {
@@ -128,19 +136,56 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
     /**
      * Extension hook to feed in entity specific hidden attributes
      *
+     * @param code attribute code
+     * @param includeSecure include secure attributes
+     *
      * @return set of attributes to skip
      */
-    protected abstract boolean skipAttributesInView(String code);
+    protected abstract boolean skipAttributesInView(String code, boolean includeSecure);
+
+    /**
+     * Extension hook to feed in entity specific secure attributes
+     *
+     * @param av av value
+     * @param attribute attribute
+     * @param includeSecure include secure attributes
+     *
+     * @return set of attributes to skip
+     */
+    protected boolean skipSecure(VoAttrValue av, VoAttribute attribute, boolean includeSecure) {
+        if (includeSecure) {
+            return false;
+        }
+        return attribute == null || attribute.isSecure();
+    }
+
+    /**
+     * Extension hook to feed in entity specific secure attributes
+     *
+     * @param av av value
+     * @param attribute attribute
+     * @param includeSecure include secure attributes
+     *
+     * @return set of attributes to skip
+     */
+    protected boolean skipSecure(AttrValueDTO av, AttributeDTO attribute, boolean includeSecure) {
+        if (includeSecure) {
+            return false;
+        }
+        return attribute == null || attribute.isSecure();
+    }
 
     /**
      * Update attribute values for a single master object.
      *
      * @param vo vo's of attributes belonging to the same object
+     * @param includeSecure include secure attributes
+     *
      * @return master object id
      *
      * @throws Exception
      */
-    public long verifyAccessAndUpdateAttributes(final List<MutablePair<V, Boolean>> vo) throws Exception {
+    public long verifyAccessAndUpdateAttributes(final List<MutablePair<V, Boolean>> vo, final boolean includeSecure) throws Exception {
 
         long objectId = 0L;
         String imageCode = null;
@@ -151,7 +196,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
         for (final MutablePair<V, Boolean> item : vo) {
             if (objectId == 0L) {
                 objectId = determineObjectId(item.getFirst());
-                final Pair<Boolean, String> pair = verifyAccessAndDetermineObjectCode(objectId);
+                final Pair<Boolean, String> pair = verifyAccessAndDetermineObjectCode(objectId, includeSecure);
                 if (!pair.getFirst()) {
                     throw new AccessDeniedException("Access is denied");
                 }
@@ -161,13 +206,18 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                 throw new AccessDeniedException("Access is denied");
             }
 
-            if (skipAttributesInView(item.getFirst().getAttribute().getCode())) {
+            if (skipAttributesInView(item.getFirst().getAttribute().getCode(), includeSecure)) {
                 LOG.warn("Attribute {} value cannot be updated using general AV update ... skipped", item.getFirst().getAttribute().getCode());
                 continue;
             }
 
             if (Boolean.valueOf(item.getSecond())) {
                 if (item.getFirst().getAttrvalueId() > 0L) {
+
+                    if (skipSecure(item.getFirst(), item.getFirst().getAttribute(), includeSecure)) {
+                        throw new AccessDeniedException("Access is denied");
+                    }
+
                     // delete mode
                     genericAttrValueService.deleteAttributeValue(item.getFirst().getAttrvalueId());
                 }
@@ -175,6 +225,11 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                 // update mode
                 final D dto = existing.get(item.getFirst().getAttrvalueId());
                 if (dto != null) {
+
+                    if (skipSecure(dto, dto.getAttributeDTO(), includeSecure)) {
+                        throw new AccessDeniedException("Access is denied");
+                    }
+
                     boolean shouldIndex = false;
                     if (Etype.IMAGE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
                         final String existingImage = voIOSupport.
@@ -230,6 +285,16 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                 // insert mode
                 final D dto = (D) genericAttrValueService.getNewAttribute(objectId);
                 dto.setAttributeDTO(dtoAttributeService.getById(item.getFirst().getAttribute().getAttributeId()));
+
+                if (dto.getAttributeDTO() == null) {
+                    LOG.warn("Unknown attribute {} value cannot be inserted using generic AV update ... skipped", item.getFirst().getAttribute().getCode());
+                    continue;
+                }
+
+                if (skipSecure(dto, dto.getAttributeDTO(), includeSecure)) {
+                    throw new AccessDeniedException("Access is denied");
+                }
+
                 boolean shouldIndex = false;
                 if (Etype.IMAGE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
                     String formattedFilename = item.getFirst().getVal();
@@ -302,9 +367,10 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
      * Verify access to object and provide object image code.
      *
      * @param objectId master object pk
+     * @param includeSecure include secure attributes
      *
      * @return first is accessible flag, second is image object code
      */
-    protected abstract Pair<Boolean, String> verifyAccessAndDetermineObjectCode(long objectId) throws Exception;
+    protected abstract Pair<Boolean, String> verifyAccessAndDetermineObjectCode(long objectId, boolean includeSecure) throws Exception;
 
 }

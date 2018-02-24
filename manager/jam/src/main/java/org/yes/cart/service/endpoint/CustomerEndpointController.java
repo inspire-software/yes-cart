@@ -45,6 +45,11 @@ public interface CustomerEndpointController {
     List<MutablePair<String, String>> getCustomerTypes(@PathVariable("lang") String lang) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER","ROLE_SMCALLCENTERCUSTOMER"})
+    @RequestMapping(value = "/types/{lang}/{customer}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<MutablePair<String, String>> getCustomerTypes(@PathVariable("customer") long customerId, @PathVariable("lang") String lang) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER","ROLE_SMCALLCENTERCUSTOMER"})
     @RequestMapping(value = "/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoCustomer getCustomerById(@PathVariable("id") long id) throws Exception;
