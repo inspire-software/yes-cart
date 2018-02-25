@@ -20,7 +20,9 @@ import org.yes.cart.service.domain.ContentServiceTemplateSupport;
 import org.yes.cart.service.domain.TemplateSupport;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * User: denispavlov
@@ -31,6 +33,7 @@ public class ContentServiceTemplateSupportGroovyImpl implements ContentServiceTe
 
     private final Map<String, FunctionProvider> functions = new HashMap<String, FunctionProvider>();
     private final Map<String, FunctionProvider> functionsCtx = new HashMap<String, FunctionProvider>();
+    private final Map<String, Locale> localeCache = new ConcurrentHashMap<String, Locale>();
 
     private final TemplateSupport templateSupport;
 
@@ -51,11 +54,21 @@ public class ContentServiceTemplateSupportGroovyImpl implements ContentServiceTe
         // Add context as variable to allow smuggling in object into template
         final Map<String, Object> fullContext = new HashMap<String, Object>(context);
         fullContext.put("locale", locale);
+        fullContext.put("localeObject", lazyLoad(locale));
         fullContext.putAll(functionsCtx);
         fullContext.put("context", fullContext);
 
         return this.templateSupport.get(templateWithFuncs.toString()).make(fullContext);
 
+    }
+
+    Locale lazyLoad(final String lang) {
+        Locale locale = this.localeCache.get(lang);
+        if (locale == null) {
+            locale = new Locale(lang);
+            this.localeCache.put(lang, locale);
+        }
+        return locale;
     }
 
     /**
