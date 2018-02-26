@@ -178,7 +178,7 @@ public class FSFileManagerImpl implements FileManager {
         final String exportRoot = this.exportDirectorService.getExportDirectory();
 
         final File fileToDownload;
-        if (fileName.startsWith("/")) {
+        if (fileName.startsWith("/") || fileName.startsWith(exportRoot)) {
 
             boolean allowed = false;
             for (final String path : this.allowedPaths) {
