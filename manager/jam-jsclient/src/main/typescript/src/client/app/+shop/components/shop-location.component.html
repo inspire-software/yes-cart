@@ -56,7 +56,7 @@
         <ul class="list-group">
           <li *ngFor="let supported of selectedShipping" class="list-group-item">
             <h5>
-              {{supported.first}} {{supported.second}}
+              <span class="label label-info">{{supported.first}}</span> {{supported.second}}
               <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onSupportedShippingClick(supported)><i class="fa fa-unlink"></i></button>
             </h5>
           </li>
@@ -69,7 +69,7 @@
         <ul class="list-group">
           <li *ngFor="let available of availableShipping" class="list-group-item">
             <h5>
-              {{available.first}} {{available.second}}
+              <span class="label label-info">{{available.first}}</span> {{available.second}}
               <button class="pull-right btn btn-default btn-circle btn-sm" (click)=onAvailableShippingClick(available)><i class="fa fa-link"></i></button>
             </h5>
           </li>
