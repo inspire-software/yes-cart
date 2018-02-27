@@ -913,6 +913,85 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
 
     }
 
+
+    @Test
+    public void testPriceFacetingPUR() throws InterruptedException {
+
+        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+
+                productDao.fullTextSearchReindex(false, 1000);
+
+                NavigationContext context;
+                Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> facets;
+                List<Pair<Pair<String, I18NModel>, Integer>> priceFacetResults;
+
+                // master
+                context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, Arrays.asList(212L), false, null);
+
+                // There should be the following products:
+                // 10.00 EUR - 5x all products
+                // 0.00 EUR  - 2x PUR products
+
+                final FilteredNavigationRecordRequest priceInCategories =
+                        new FilteredNavigationRecordRequestImpl(
+                                "priceFacet",
+                                "facet_price_10_EUR",
+                                new ArrayList<Pair<String, String>>() {{
+                                    add(new Pair<String, String>("00000000", "00001000"));
+                                    add(new Pair<String, String>("00001000", "00001500"));
+                                }}
+                        );
+
+                facets = productDao.fullTextSearchNavigation(context.getProductQuery(), Collections.singletonList(priceInCategories));
+                assertEquals("Failed [" + context.getProductQuery().toString() +"]", 1, facets.size());
+
+                priceFacetResults = facets.get("priceFacet");
+                assertNotNull(priceFacetResults);
+                assertEquals(2, priceFacetResults.size());
+                assertEquals("00000000-_-00001000", priceFacetResults.get(0).getFirst().getFirst());
+                assertEquals(Integer.valueOf(2), priceFacetResults.get(0).getSecond());
+                assertEquals("00001000-_-00001500", priceFacetResults.get(1).getFirst().getFirst());
+                assertEquals(Integer.valueOf(5), priceFacetResults.get(1).getSecond());
+
+                // sub
+                context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 1010L, null, Arrays.asList(212L), false, null);
+
+                // There should be the following products:
+                // 10.00 EUR - 5x all products
+                // 0.00 EUR  - 2x PUR products
+
+                final FilteredNavigationRecordRequest priceInCategoriesSub =
+                        new FilteredNavigationRecordRequestImpl(
+                                "priceFacet",
+                                "facet_price_1010_EUR",
+                                new ArrayList<Pair<String, String>>() {{
+                                    add(new Pair<String, String>("00000000", "00001000"));
+                                    add(new Pair<String, String>("00001000", "00001500"));
+                                }}
+                        );
+
+                facets = productDao.fullTextSearchNavigation(context.getProductQuery(), Collections.singletonList(priceInCategoriesSub));
+                assertEquals("Failed [" + context.getProductQuery().toString() +"]", 1, facets.size());
+
+                priceFacetResults = facets.get("priceFacet");
+                assertNotNull(priceFacetResults);
+                assertEquals(2, priceFacetResults.size());
+                assertEquals("00000000-_-00001000", priceFacetResults.get(0).getFirst().getFirst());
+                assertEquals(Integer.valueOf(2), priceFacetResults.get(0).getSecond());
+                assertEquals("00001000-_-00001500", priceFacetResults.get(1).getFirst().getFirst());
+                assertEquals(Integer.valueOf(5), priceFacetResults.get(1).getSecond());
+
+
+                status.setRollbackOnly();
+
+            }
+        });
+
+    }
+
+
+
     @Test
     public void testAttributeFaceting() throws InterruptedException {
 
@@ -1513,7 +1592,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(false, 1000);
 
                 List<Product> products = productDao.fullTextSearch(searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, Arrays.asList(212L), false, null).getProductQuery());
-                assertEquals("Only 5 product available in 212 category", 5, products.size());
+                assertEquals("Only 7 product available in 212 category", 7, products.size());
                 assertNull(getProductByCode(products, "PAT_PRODUCT_ON_STOCK_ONLY_1"));
                 assertNotNull(getProductByCode(products, "PAT_PRODUCT_ON_STOCK_ONLY_2"));
                 assertNull(getProductByCode(products, "PAT_PRODUCT_ON_STOCK_ONLY_3"));
@@ -1521,10 +1600,12 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertNotNull(getProductByCode(products, "PAT_PRODUCT_BACKORDER"));
                 assertNotNull(getProductByCode(products, "PAT_PRODUCT_ALWAYS"));
                 assertNotNull(getProductByCode(products, "PAT_PRODUCT_ALWAYS2"));
+                assertNotNull(getProductByCode(products, "PAT_PRODUCT_PUR"));
+                assertNotNull(getProductByCode(products, "PAT_PRODUCT_PUR2"));
 
                 // sub shops availability
                 products = productDao.fullTextSearch(searchQueryFactory.getFilteredNavigationQueryChain(10L, 1010L, null, Arrays.asList(212L), false, null).getProductQuery());
-                assertEquals("Only 5 product available in 212 category", 5, products.size());
+                assertEquals("Only 7 product available in 212 category", 7, products.size());
                 assertNull(getProductByCode(products, "PAT_PRODUCT_ON_STOCK_ONLY_1"));
                 assertNotNull(getProductByCode(products, "PAT_PRODUCT_ON_STOCK_ONLY_2"));
                 assertNull(getProductByCode(products, "PAT_PRODUCT_ON_STOCK_ONLY_3"));
@@ -1532,12 +1613,15 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertNotNull(getProductByCode(products, "PAT_PRODUCT_BACKORDER"));
                 assertNotNull(getProductByCode(products, "PAT_PRODUCT_ALWAYS"));
                 assertNotNull(getProductByCode(products, "PAT_PRODUCT_ALWAYS2"));
+                assertNotNull(getProductByCode(products, "PAT_PRODUCT_PUR"));
+                assertNotNull(getProductByCode(products, "PAT_PRODUCT_PUR2"));
 
                 status.setRollbackOnly();
 
             }
         });
     }
+
 
     private Product getProductByCode(final List<Product> products, final String skuCode) {
         for (Product prod : products) {

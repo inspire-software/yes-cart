@@ -19,6 +19,7 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.PriceListDTO;
@@ -127,14 +128,48 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                     // tag & policy search
                     final String tagOrPolicy = tagSearch.getSecond();
 
-                    entities = skuPriceDAO.findRangeByCriteria(
-                            " where e.shop.shopId = ?1 and e.currency = ?2 and (lower(e.tag) like ?3 or lower(e.pricingPolicy) = ?4 or lower(e.ref) = ?4) order by e.skuCode, e.quantity",
-                            page * pageSize, pageSize,
-                            shopId,
-                            currency,
-                            HQLUtils.criteriaIlikeAnywhere(tagOrPolicy),
-                            HQLUtils.criteriaIeq(tagOrPolicy)
-                    );
+                    final List<String> codes  = new ArrayList<>();
+                    if ("shipping".equalsIgnoreCase(tagOrPolicy)) {
+
+                        final List<CarrierSla> carrierSlas = carrierSlaDAO.findByCriteria(" inner join fetch e.carrier c join fetch c.shops s where s.shop.shopId = ?1", shopId);
+                        if (CollectionUtils.isNotEmpty(carrierSlas)) {
+                            for (final CarrierSla carrierSla : carrierSlas) {
+                                codes.add(carrierSla.getGuid());
+                                if (CarrierSla.WEIGHT_VOLUME.equals(carrierSla.getSlaType())) {
+                                    codes.add(carrierSla.getGuid().concat("_KG"));
+                                    codes.add(carrierSla.getGuid().concat("_KGMAX"));
+                                    codes.add(carrierSla.getGuid().concat("_M3"));
+                                    codes.add(carrierSla.getGuid().concat("_M3MAX"));
+                                }
+                            }
+                        }
+
+                    }
+
+                    if (!codes.isEmpty()) {
+
+                        entities = skuPriceDAO.findRangeByCriteria(
+                                " where e.shop.shopId = ?1 and e.currency = ?2 and (lower(e.tag) like ?3 or lower(e.pricingPolicy) = ?4 or lower(e.ref) = ?4 or e.skuCode in (?5)) order by e.skuCode, e.quantity",
+                                page * pageSize, pageSize,
+                                shopId,
+                                currency,
+                                HQLUtils.criteriaIlikeAnywhere(tagOrPolicy),
+                                HQLUtils.criteriaIeq(tagOrPolicy),
+                                codes
+                        );
+
+                    } else {
+
+                        entities = skuPriceDAO.findRangeByCriteria(
+                                " where e.shop.shopId = ?1 and e.currency = ?2 and (lower(e.tag) like ?3 or lower(e.pricingPolicy) = ?4 or lower(e.ref) = ?4) order by e.skuCode, e.quantity",
+                                page * pageSize, pageSize,
+                                shopId,
+                                currency,
+                                HQLUtils.criteriaIlikeAnywhere(tagOrPolicy),
+                                HQLUtils.criteriaIeq(tagOrPolicy)
+                        );
+
+                    }
 
                 } else if (dateSearch != null) {
 

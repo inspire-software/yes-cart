@@ -441,6 +441,8 @@
   "PRICELIST_FROM": "From",
   "PRICELIST_TO": "To",
   "PRICELIST_POLICY": "Policy",
+  "PRICELIST_PUR": "Price upon request",
+  "PRICELIST_PUR_TIP": "This price will not be shown to the customer, customer will need to contact shop for prices",
   "PRICELIST_TAG": "Tags",
   "PRICELIST_REF": "Reference",
   "PRICELIST_SHOP_CODE": "Shop code",
@@ -726,6 +728,7 @@
   "SEARCH_HELP_PRICELIST_DEFAULT": "Default prices search is partial by SKU code/name or product code/name",
   "SEARCH_HELP_PRICELIST_EXACT": "To search for exact SKU (code, PIM code, barcode or manufacturer code): Format: !SKU",
   "SEARCH_HELP_PRICELIST_TAG": "To search prices by tag or policy use #tag or #policy",
+  "SEARCH_HELP_PRICELIST_SHIPPING": "To search for shipping costs use special search tag '#shipping'",
 
   "SEARCH_HELP_INVENTORY_DEFAULT": "Default inventory search is partial by SKU code/name or product code/name",
   "SEARCH_HELP_INVENTORY_EXACT": "To search for exact SKU (code, PIM code, barcode or manufacturer code): Format: !SKU",

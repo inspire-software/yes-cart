@@ -141,6 +141,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                     ORDER_SUB_TOTAL_REF,
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
+                    false,
                     showTaxNet ? grandTotal.getTotalAmount().subtract(grandTotal.getTotalTax()) : grandTotal.getTotalAmount(),
                     null,
                     showTax, showTaxNet, showTaxAmount,
@@ -157,6 +158,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                 ORDER_SUB_TOTAL_REF,
                 customerOrder.getCurrency(),
                 BigDecimal.ONE,
+                false,
                 grandTotal.getTotal(),
                 null
         );
@@ -189,6 +191,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                     ORDER_TOTAL_REF,
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
+                    false,
                     hasDiscounts ? grandTotal.getListTotalAmount() : grandTotal.getTotalAmount(),
                     hasDiscounts ? grandTotal.getTotalAmount() : null,
                     showTax, false, showTaxAmount,
@@ -207,6 +210,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                     ORDER_TOTAL_REF,
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
+                    false,
                     grandTotal.getListTotalAmount(),
                     grandTotal.getTotalAmount()
             );
@@ -217,6 +221,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                 ORDER_TOTAL_REF,
                 customerOrder.getCurrency(),
                 BigDecimal.ONE,
+                false,
                 grandTotal.getTotalAmount(),
                 null
         );
@@ -257,6 +262,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                     DELIVERY_TOTAL_REF,
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
+                    false,
                     showTaxNet ? grandTotal.getSubTotalAmount().subtract(grandTotal.getSubTotalTax()) : grandTotal.getSubTotalAmount(),
                     null,
                     showTax, showTaxNet, showTaxAmount,
@@ -273,6 +279,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                 DELIVERY_TOTAL_REF,
                 customerOrder.getCurrency(),
                 BigDecimal.ONE,
+                false,
                 grandTotal.getSubTotal(),
                 null
         );
@@ -306,6 +313,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
             if (hasDiscount) {
 
                 return new PriceModelImpl(DELIVERY_SHIPPING_REF, customerOrder.getCurrency(), BigDecimal.ONE,
+                        false,
                         showTaxNet ?
                                 MoneyUtils.getNetAmount(grandTotal.getDeliveryListCost(), taxRate, !priceTaxExclusive) :
                                 MoneyUtils.getGrossAmount(grandTotal.getDeliveryListCost(), taxRate, !priceTaxExclusive),
@@ -323,6 +331,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
 
             return new PriceModelImpl(DELIVERY_SHIPPING_REF, customerOrder.getCurrency(), BigDecimal.ONE,
+                    false,
                     showTaxNet ?
                             grandTotal.getDeliveryCostAmount().subtract(grandTotal.getDeliveryTax()) :
                             grandTotal.getDeliveryCostAmount(),
@@ -342,6 +351,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                     DELIVERY_SHIPPING_REF,
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
+                    false,
                     grandTotal.getDeliveryListCost(),
                     grandTotal.getDeliveryCost()
             );
@@ -352,6 +362,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                 DELIVERY_SHIPPING_REF,
                 customerOrder.getCurrency(),
                 BigDecimal.ONE,
+                false,
                 grandTotal.getDeliveryCost(),
                 null
         );

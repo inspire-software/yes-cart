@@ -441,6 +441,8 @@
   "PRICELIST_FROM": "З",
   "PRICELIST_TO": "До",
   "PRICELIST_POLICY": "Політика",
+  "PRICELIST_PUR": "Ціна за запитом",
+  "PRICELIST_PUR_TIP": "Ця ціна не буде показана клієнту, клієнтові необхідно зв'язатися з магазином на предмет цін",
   "PRICELIST_TAG": "Теги",
   "PRICELIST_REF": "Мітка",
   "PRICELIST_SHOP_CODE": "Код магазину",
@@ -726,6 +728,7 @@
   "SEARCH_HELP_PRICELIST_DEFAULT": "Пошук цін за замовчуванням є частковим за SKU кодом / назвою або кодом / назвою продукту",
   "SEARCH_HELP_PRICELIST_EXACT": "Для точного пошуку за SKU (код, PIM код, штрих-код або код виробника). Формат:! SKU",
   "SEARCH_HELP_PRICELIST_TAG": "Для пошуку цін за тегом або політиці #тег або #політика",
+  "SEARCH_HELP_PRICELIST_SHIPPING": "Для пошуку цін на доставку використовуйте спеціальний пошук по тегу '#shipping'",
 
   "SEARCH_HELP_INVENTORY_DEFAULT": "Пошук складських залишків за замовчуванням є частковим за SKU кодом / назвою або кодом / назвою продукту",
   "SEARCH_HELP_INVENTORY_EXACT": "Для точного пошуку за SKU (код, PIM код, штрих-код або код виробника). Формат:! SKU",

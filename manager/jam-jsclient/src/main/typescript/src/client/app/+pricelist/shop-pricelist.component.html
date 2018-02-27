@@ -50,6 +50,7 @@
       <p>{{ 'SEARCH_HELP_PRICELIST_DEFAULT' | translate }}</p>
       <p>{{ 'SEARCH_HELP_PRICELIST_EXACT' | translate }} <span><button type="button" (click)="onSearchExact()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
       <p>{{ 'SEARCH_HELP_PRICELIST_TAG' | translate }} <span><button type="button" (click)="onSearchTag()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_PRICELIST_SHIPPING' | translate }} <span><button type="button" (click)="onSearchShipping()" class="btn btn-default btn-circle"><i class="fa fa-truck"></i></button></span></p>
       <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-default btn-circle"><i class="fa fa-calendar"></i></button></span></p>
     </div>
   </div>
@@ -157,6 +158,12 @@
               <div [hidden]="pricelistEditForm.controls['quantity'].valid || pricelistEditForm.controls['quantity'].pristine" class="alert alert-danger">
                 {{ 'POS_DECIMAL_REQUIRED' | translate }}
               </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-3">{{ 'PRICELIST_PUR' | translate }}</div>
+            <div class="col-lg-9">
+              <input formControlName="priceUponRequest" name="priceUponRequest" type="checkbox" [(ngModel)]="pricelistEdit.priceUponRequest">  <i class="fa fa-question-circle" title="{{ 'PRICELIST_PUR_TIP' | translate }}"></i>
             </div>
           </div>
           <div class="row">

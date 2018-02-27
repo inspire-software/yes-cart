@@ -162,9 +162,13 @@ public class PriceView extends BaseComponent {
         String listPrice = "";
         final String lang = getLocale().getLanguage();
 
+        final boolean priceUponRequest = priceModel.isPriceUponRequest();
+
         BigDecimal priceToFormat = priceModel.getRegularPrice();
         String cssModificator = "regular";
-        if (priceModel.getSalePrice() != null && MoneyUtils.isFirstBiggerThanSecond(priceModel.getRegularPrice(), priceModel.getSalePrice())) {
+        if (priceUponRequest) {
+            cssModificator = "upon-request";
+        } else if (priceModel.getSalePrice() != null && MoneyUtils.isFirstBiggerThanSecond(priceModel.getRegularPrice(), priceModel.getSalePrice())) {
             priceToFormat = priceModel.getSalePrice();
             cssModificator = "sale";
             showSave = this.showSavings;
@@ -175,30 +179,34 @@ public class PriceView extends BaseComponent {
             }
         }
         final boolean nonZero = MoneyUtils.isPositive(priceToFormat);
-        final String[] formatted = nonZero || !this.showGratis ?
-                getFormattedPrice(priceToFormat) :
-                new String[] { getString("gratis"), null };
-        final boolean shopFractionalPart = StringUtils.isNotBlank(formatted[1]);
+        final String[] formatted;
+        if (priceUponRequest) {
+            formatted = new String[] { getString("priceUponRequest"), null };
+        } else if (nonZero || !this.showGratis) {
+            formatted = getFormattedPrice(priceToFormat);
+        } else {
+            formatted = new String[] { getString("gratis"), null };
+        }
+
+        final boolean showFractionalPart = StringUtils.isNotBlank(formatted[1]);
 
         addOrReplace(
                 new Label(WHOLE_LABEL, formatted[0])
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_WHOLE)));
         addOrReplace(
                 new Label(DOT_LABEL, ".")
-                        .setVisible(StringUtils.isNotBlank(formatted[0]) || StringUtils.isNotBlank(formatted[1]))
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DOT))
-                .setVisible(shopFractionalPart)
+                        .setVisible(showFractionalPart)
         );
         addOrReplace(
                 new Label(DECIMAL_LABEL, formatted[1])
-                        .setVisible(StringUtils.isNotBlank(formatted[0]) || StringUtils.isNotBlank(formatted[1]))
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DECIMAL))
-                .setVisible(shopFractionalPart)
+                        .setVisible(showFractionalPart)
         );
 
         final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(priceModel.getCurrency());
 
-        final boolean showMainCurrencySymbol = showCurrencySymbol && (nonZero || !showGratis);
+        final boolean showMainCurrencySymbol = showCurrencySymbol && (nonZero || !showGratis) && !priceUponRequest;
 
         addOrReplace(
                 new Label(CURRENCY_LABEL, symbol.getFirst())
@@ -226,9 +234,9 @@ public class PriceView extends BaseComponent {
         final WebMarkupContainer taxWrapper = new WebMarkupContainer("taxWrapper");
         taxWrapper.add(new Label(TAX_LABEL,
                 WicketUtil.createStringResourceModel(this, taxNote, tax))
-                .setVisible(this.showTax && nonZero)
+                .setVisible(this.showTax && nonZero && !priceUponRequest)
                 .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_TAX)));
-        taxWrapper.setVisible(this.showTax && nonZero);
+        taxWrapper.setVisible(this.showTax && nonZero && !priceUponRequest);
 
         addOrReplace(taxWrapper);
 
@@ -294,7 +302,8 @@ public class PriceView extends BaseComponent {
         super.onBeforeRender();
 
         setVisible(
-                !this.showGratis &&
+                priceUponRequest
+                || !this.showGratis &&
                         MoneyUtils.isPositive(priceModel.getRegularPrice())
                 || this.showGratis &&
                         MoneyUtils.isFirstBiggerThanOrEqualToSecond(priceModel.getRegularPrice(), BigDecimal.ZERO)

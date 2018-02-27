@@ -19,6 +19,8 @@ public class PriceModelImpl implements PriceModel {
     private final BigDecimal regularPrice;
     private final BigDecimal salePrice;
 
+    private final boolean priceUponRequest;
+
     private final boolean taxInfoEnabled;
     private final boolean taxInfoUseNet;
     private final boolean taxInfoShowAmount;
@@ -34,14 +36,16 @@ public class PriceModelImpl implements PriceModel {
     public PriceModelImpl(final String ref,
                           final String currency,
                           final BigDecimal quantity,
+                          final boolean priceUponRequest,
                           final BigDecimal regularPrice,
                           final BigDecimal salePrice) {
-        this(ref, currency, quantity, regularPrice, salePrice, false, false, false, null, null, false, null);
+        this(ref, currency, quantity, priceUponRequest, regularPrice, salePrice, false, false, false, null, null, false, null);
     }
 
     public PriceModelImpl(final String ref,
                           final String currency,
                           final BigDecimal quantity,
+                          final boolean priceUponRequest,
                           final BigDecimal regularPrice,
                           final BigDecimal salePrice,
                           final boolean taxInfoEnabled,
@@ -54,6 +58,7 @@ public class PriceModelImpl implements PriceModel {
         this.ref = ref;
         this.currency = currency;
         this.quantity = quantity;
+        this.priceUponRequest = priceUponRequest;
         this.regularPrice = regularPrice;
         this.salePrice = salePrice;
         this.taxInfoEnabled = taxInfoEnabled;
@@ -93,6 +98,12 @@ public class PriceModelImpl implements PriceModel {
     @Override
     public BigDecimal getSalePrice() {
         return salePrice;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isPriceUponRequest() {
+        return priceUponRequest;
     }
 
     /** {@inheritDoc} */

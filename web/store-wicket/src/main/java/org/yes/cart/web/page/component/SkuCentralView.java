@@ -287,8 +287,14 @@ public class SkuCentralView extends AbstractCentralView {
             }
         }
 
+        final PriceModel model = productServiceFacade.getSkuPrice(
+                getCurrentCart(),
+                null,
+                sku.getCode(), /* We always preselect a SKU */
+                BigDecimal.ONE
+        );
 
-        add(getPriceView());
+        add(getPriceView(model));
         add(new SkuListView(SKU_LIST_VIEW, product.getSku(), sku, isProduct));
         add(new Label(SKU_CODE_LABEL, getDisplaySkuCode(shop, sku)));
         add(new Label(PRODUCT_NAME_LABEL, decorator.getName(selectedLocale)));
@@ -297,7 +303,7 @@ public class SkuCentralView extends AbstractCentralView {
 
         final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(sku, browsingStoreId);
 
-        final boolean qtyPickVisible = pam.isAvailable() && shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_ADD_ENABLE_QTY_PICKER);
+        final boolean qtyPickVisible = !model.isPriceUponRequest() && pam.isAvailable() && shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_ADD_ENABLE_QTY_PICKER);
 
         add(new QuantityPickerPanel(QTY_PICKER, product.getProductId(), sku.getCode()).setVisible(qtyPickVisible));
 
@@ -306,7 +312,7 @@ public class SkuCentralView extends AbstractCentralView {
                         .add(new Label(ADD_TO_CART_LINK_LABEL, pam.isInStock() || pam.isPerpetual() ?
                                 getLocalizer().getString("addToCart", this) :
                                 getLocalizer().getString("preorderCart", this)))
-                        .setVisible(pam.isAvailable())
+                        .setVisible(!model.isPriceUponRequest() && pam.isAvailable())
         );
 
         add(
@@ -448,14 +454,7 @@ public class SkuCentralView extends AbstractCentralView {
     }
 
 
-    private PriceView getPriceView() {
-
-        final PriceModel model = productServiceFacade.getSkuPrice(
-                getCurrentCart(),
-                null,
-                sku.getCode(), /* We always preselect a SKU */
-                BigDecimal.ONE
-        );
+    private PriceView getPriceView(final PriceModel model) {
 
         return new PriceView(PRICE_VIEW, model, null, true, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
     }

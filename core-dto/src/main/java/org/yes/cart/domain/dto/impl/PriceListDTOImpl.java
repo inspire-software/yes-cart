@@ -57,6 +57,9 @@ public class PriceListDTOImpl implements PriceListDTO {
     @DtoField(value = "quantity")
     private BigDecimal quantity;
 
+    @DtoField(value = "priceUponRequest")
+    private boolean priceUponRequest;
+
     @DtoField(value = "currency", readOnly = true)
     private String currency;
 
@@ -192,6 +195,18 @@ public class PriceListDTOImpl implements PriceListDTO {
     /** {@inheritDoc}*/
     public void setQuantity(final BigDecimal quantity) {
         this.quantity = quantity;
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public boolean isPriceUponRequest() {
+        return priceUponRequest;
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public void setPriceUponRequest(final boolean priceUponRequest) {
+        this.priceUponRequest = priceUponRequest;
     }
 
     /** {@inheritDoc}*/

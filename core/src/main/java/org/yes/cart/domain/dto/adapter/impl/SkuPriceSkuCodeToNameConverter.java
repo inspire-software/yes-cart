@@ -52,6 +52,10 @@ public class SkuPriceSkuCodeToNameConverter implements ValueConverter {
             return skuCode.substring(0, skuCode.length() - 3);
         } else if (skuCode.endsWith("_KGMAX")) {
             return skuCode.substring(0, skuCode.length() - 6);
+        } else if (skuCode.endsWith("_M3")) {
+            return skuCode.substring(0, skuCode.length() - 3);
+        } else if (skuCode.endsWith("_M3MAX")) {
+            return skuCode.substring(0, skuCode.length() - 6);
         }
         return skuCode;
     }

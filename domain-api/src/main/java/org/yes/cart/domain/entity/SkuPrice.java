@@ -89,6 +89,27 @@ public interface SkuPrice extends Auditable, Taggable {
      */
     void setQuantity(BigDecimal quantity);
 
+
+    /**
+     * Get price upon request flag. This flag indicates that the product has price in this shop but
+     * it is not publicly available and current customer needs to contact the shop directly for the price
+     * quote. When such price is resolved the product is not purchasable and effectively is behaving like
+     * SHOWROOM product. However the big difference is that it is controlled by price record, so if other
+     * customers (say using different pricing policy) has this price resolved they will be able to
+     * purchase the product.
+     *
+     * @return flag
+     */
+    boolean isPriceUponRequest();
+
+    /**
+     * Set price upon request flag.
+     *
+     * @param priceUponRequest set flag
+     */
+    void setPriceUponRequest(boolean priceUponRequest);
+
+
     /**
      * Get regular/list price.
      *

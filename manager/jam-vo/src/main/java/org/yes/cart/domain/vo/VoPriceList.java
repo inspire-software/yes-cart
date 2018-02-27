@@ -49,6 +49,9 @@ public class VoPriceList {
     @DtoField(value = "quantity")
     private BigDecimal quantity;
 
+    @DtoField(value = "priceUponRequest")
+    private boolean priceUponRequest;
+
     @DtoField(value = "currency")
     private String currency;
 
@@ -124,6 +127,14 @@ public class VoPriceList {
 
     public void setQuantity(final BigDecimal quantity) {
         this.quantity = quantity;
+    }
+
+    public boolean isPriceUponRequest() {
+        return priceUponRequest;
+    }
+
+    public void setPriceUponRequest(final boolean priceUponRequest) {
+        this.priceUponRequest = priceUponRequest;
     }
 
     public String getCurrency() {

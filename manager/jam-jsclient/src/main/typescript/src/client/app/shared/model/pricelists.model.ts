@@ -26,6 +26,7 @@ export interface PriceListVO {
 
   salefrom : Date;
   saleto : Date;
+  priceUponRequest : boolean;
 
   quantity : number;
   currency : string;

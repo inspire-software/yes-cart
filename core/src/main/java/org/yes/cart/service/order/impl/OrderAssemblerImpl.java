@@ -406,7 +406,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
                     || item.getTaxRate() == null
                     || item.getTaxCode() == null
                     || item.getProductSkuCode() == null) {
-                throw new OrderAssemblyException("Order line has no prices and/or taxes: " + item);
+                throw new SkuUnavailableException(item.getProductSkuCode(), item.getProductName(), false);
             }
 
             CustomerOrderDet customerOrderDet = entityFactory.getByIface(CustomerOrderDet.class);

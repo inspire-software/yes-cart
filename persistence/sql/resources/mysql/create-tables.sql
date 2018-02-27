@@ -955,6 +955,7 @@
         SHOP_ID bigint not null,
         CURRENCY varchar(3) not null,
         QTY decimal(19,2) not null comment 'Quantity of SKU. Price tier',
+        PRICE_UPON_REQUEST bit not null default 0,
         REGULAR_PRICE decimal(19,2) not null comment 'Regular price',
         SALE_PRICE decimal(19,2) comment 'Sale price. Must be less that regular',
         MINIMAL_PRICE decimal(19,2) comment 'Minimal price used in name-your-price pricing strategy. Must be less that regular',

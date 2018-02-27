@@ -188,7 +188,7 @@ public class WishListView extends AbstractProductSearchResultList {
 
         final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(product, ShopCodeContext.getShopId());
 
-        final PriceView priceView = getPriceView(product, itemData);
+        final Pair<PriceView, PriceModel> priceView = getPriceView(product, itemData);
 
         final String qty = itemData.getQuantity().stripTrailingZeros().toPlainString();
 
@@ -213,7 +213,7 @@ public class WishListView extends AbstractProductSearchResultList {
                                         new Model<Serializable>(new ValueMap(Collections.singletonMap("quantity", qty)))) :
                                 getLocalizer().getString("preorderCartWlBtn", this,
                                         new Model<Serializable>(new ValueMap(Collections.singletonMap("quantity", qty))))))
-                        .setVisible(pam.isAvailable())
+                        .setVisible(!priceView.getSecond().isPriceUponRequest() && MoneyUtils.isPositive(priceView.getSecond().getRegularPrice()) && pam.isAvailable())
         );
 
         listItem.add(
@@ -222,7 +222,7 @@ public class WishListView extends AbstractProductSearchResultList {
                                 .setVisible(ownerViewing)
         );
 
-        listItem.add(priceView);
+        listItem.add(priceView.getFirst());
 
 
         listItem.add(new AttributeModifier("data-tag", itemData.getTag()));
@@ -233,7 +233,7 @@ public class WishListView extends AbstractProductSearchResultList {
 
     }
 
-    private PriceView getPriceView(final ProductSearchResultDTO product, final CustomerWishList itemData) {
+    private Pair<PriceView, PriceModel> getPriceView(final ProductSearchResultDTO product, final CustomerWishList itemData) {
 
         final ShoppingCart cart = getCurrentCart();
 
@@ -264,9 +264,8 @@ public class WishListView extends AbstractProductSearchResultList {
 
         final PriceView priceView = new PriceView("priceView", model, priceInfo, true, false, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
 
-        final boolean isPriceNowAvailable = MoneyUtils.isPositive(model.getRegularPrice());
-        priceView.setVisible(isPriceNowAvailable);
-        return priceView;
+        priceView.setVisible(model.isPriceUponRequest() || MoneyUtils.isPositive(model.getRegularPrice()));
+        return new Pair<>(priceView, model);
     }
 
     /**

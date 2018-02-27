@@ -138,7 +138,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
                     false,
                     policy.getID());
 
-            if (skuPrice.getRegularPrice() != null) {
+            if (skuPrice.getRegularPrice() != null && !skuPrice.isPriceUponRequest()) {
 
                 return skuPrice;
 
@@ -175,8 +175,8 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
                 policy.getID());
 
         final Pair<BigDecimal, BigDecimal> listAndSale = skuPrice.getSalePriceForCalculation();
-        final BigDecimal list = listAndSale.getFirst();
-        final BigDecimal sale = listAndSale.getSecond();
+        final BigDecimal list = skuPrice.isPriceUponRequest() ? null : listAndSale.getFirst();
+        final BigDecimal sale = skuPrice.isPriceUponRequest() ? null : listAndSale.getSecond();
         if (shoppingCart.setProductSkuPrice(skuCode, sale != null ? sale : list, list)) {
             final String key = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID + skuCode;
             if (StringUtils.isNotBlank(skuPrice.getRef())) {

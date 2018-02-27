@@ -149,6 +149,10 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
         pl = dtoService.findBy(shop.getShopId(), "EUR", "#P1", 0, 10);
         assertFalse(pl.isEmpty());
 
+        // Shipping prices
+        pl = dtoService.findBy(shop.getShopId(), "EUR", "#shipping", 0, 10);
+        assertFalse(pl.isEmpty());
+
 
 
     }

@@ -441,6 +441,8 @@
   "PRICELIST_FROM": "Absender",
   "PRICELIST_TO": "Empfänger",
   "PRICELIST_POLICY": "Richtlinie",
+  "PRICELIST_PUR": "Preis auf Anfrage",
+  "PRICELIST_PUR_TIP": "Dieser Preis wird dem Kunden nicht angezeigt, der Kunde muss sich mit dem Shop in Verbindung setzen",
   "PRICELIST_TAG": "Tags",
   "PRICELIST_REF": "Referenz",
   "PRICELIST_SHOP_CODE": "Shop Code",
@@ -726,6 +728,7 @@
   "SEARCH_HELP_PRICELIST_DEFAULT": "Die Standart-Preis-Suche geht teilweise über SKU-Code/Name oder Produktcode/Name",
   "SEARCH_HELP_PRICELIST_EXACT": "Zur Suche nach exakter SKU (Code, PIM Code, Barcode oder Herstellercode): Format:!SKU",
   "SEARCH_HELP_PRICELIST_TAG": "Um die Preise nach Tag oder Richtlinie/Policy zu suchen, verwenden Sie #tag oder #policy. Um Preise nach Tag oder Policy zu durchsuchen, benutzen Sie #tag oder #policy",
+  "SEARCH_HELP_PRICELIST_SHIPPING": "Um nach Versandkosten zu suchen, verwenden Sie das spezielle Such-Tag '#shipping'",
 
   "SEARCH_HELP_INVENTORY_DEFAULT": "Die Standard-Inventarsuche nutzt partiell den SKU-Code/Name oder Produktcode/Name",
   "SEARCH_HELP_INVENTORY_EXACT": "Zur Suche nach exakter SKU (Code, PIM Code, Barcode oder Herstellercode): Format:!SKU",

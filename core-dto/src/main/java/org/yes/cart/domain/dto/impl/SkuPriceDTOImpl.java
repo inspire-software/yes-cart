@@ -64,6 +64,9 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
     @DtoField(value = "quantity")
     private BigDecimal quantity;
 
+    @DtoField(value = "priceUponRequest")
+    private boolean priceUponRequest;
+
     @DtoField(value = "currency")
     private String currency;
 
@@ -195,6 +198,18 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
     /** {@inheritDoc}*/
     public void setQuantity(final BigDecimal quantity) {
         this.quantity = quantity;
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public boolean isPriceUponRequest() {
+        return priceUponRequest;
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public void setPriceUponRequest(final boolean priceUponRequest) {
+        this.priceUponRequest = priceUponRequest;
     }
 
     /** {@inheritDoc}*/

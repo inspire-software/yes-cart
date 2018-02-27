@@ -443,7 +443,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 for (final Map.Entry<Long, Map<String, SkuPrice>> shop : lowestQuantityPrice.entrySet()) {
                     for (final Map.Entry<String, SkuPrice> currency : shop.getValue().entrySet()) {
 
-                        final BigDecimal price = MoneyUtils.minPositive(currency.getValue().getSalePriceForCalculation());
+                        final BigDecimal price = currency.getValue().isPriceUponRequest() ?
+                                BigDecimal.ZERO : MoneyUtils.minPositive(currency.getValue().getSalePriceForCalculation());
                         // Pad 2 decimal places 99.99 => 9999
                         final long longPrice = SearchUtil.priceToLong(price);
                         final String facetName = SearchUtil.priceFacetName(shop.getKey(), currency.getKey());

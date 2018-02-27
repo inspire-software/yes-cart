@@ -94,6 +94,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
       'shopCode': ['', Validators.required],
       'currency': ['', Validators.required],
       'pricingPolicy': ['', YcValidators.validCode],
+      'priceUponRequest': [''],
       'quantity': ['', YcValidators.requiredPositiveNumber],
       'regularPrice': ['', YcValidators.requiredPositiveNumber],
       'salePrice': ['', YcValidators.positiveNumber],
@@ -145,6 +146,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
       skuPriceId: 0,
       regularPrice: 0, minimalPrice: undefined, salePrice: undefined,
       salefrom: null, saleto:null,
+      priceUponRequest: false,
       quantity: 1,
       currency: this.selectedCurrency,
       skuCode: '', skuName: '',
@@ -270,6 +272,12 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
     this.searchHelpShow = false;
   }
 
+  protected onSearchShipping() {
+    this.pricelistFilter = '#shipping';
+    this.searchHelpShow = false;
+    this.getFilteredPricelist();
+  }
+
   protected onSearchDate() {
     this.pricelistFilter = UiUtil.exampleDateSearch();
     this.searchHelpShow = false;
@@ -358,6 +366,9 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
     if (event.valid && this.pricelistEdit != null && this.pricelistEdit.skuPriceId <= 0) {
       this.pricelistEdit.skuCode = event.source.code;
       this.pricelistEdit.skuName = event.source.name;
+      if (this.pricelistEdit.tag == null || this.pricelistEdit.tag == '') {
+        this.pricelistEdit.tag = 'shipping'; // suggest shipping tag so that it is easier to find shipping prices
+      }
     }
   }
 

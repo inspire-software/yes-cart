@@ -1280,6 +1280,8 @@
 
         <property name="currency" type="string" length="3" not-null="true" column="CURRENCY"/>
 
+        <property name="priceUponRequest" type="boolean" column="PRICE_UPON_REQUEST" not-null="true"/>
+
         <property name="quantity" type="java.math.BigDecimal" not-null="true">
             <column name="QTY" not-null="true">
                 <comment>Quantity of SKU. Price tier</comment>

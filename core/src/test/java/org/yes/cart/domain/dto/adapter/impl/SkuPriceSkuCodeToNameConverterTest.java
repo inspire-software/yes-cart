@@ -33,10 +33,14 @@ public class SkuPriceSkuCodeToNameConverterTest {
         assertEquals("ABC", new SkuPriceSkuCodeToNameConverter(null).slaCode("ABC"));
         assertEquals("ABC", new SkuPriceSkuCodeToNameConverter(null).slaCode("ABC_KG"));
         assertEquals("ABC", new SkuPriceSkuCodeToNameConverter(null).slaCode("ABC_KGMAX"));
+        assertEquals("ABC", new SkuPriceSkuCodeToNameConverter(null).slaCode("ABC_M3"));
+        assertEquals("ABC", new SkuPriceSkuCodeToNameConverter(null).slaCode("ABC_M3MAX"));
 
         assertEquals("CDE", new SkuPriceSkuCodeToNameConverter(null).slaCode("CDE"));
         assertEquals("CDE", new SkuPriceSkuCodeToNameConverter(null).slaCode("CDE_KG"));
         assertEquals("CDE", new SkuPriceSkuCodeToNameConverter(null).slaCode("CDE_KGMAX"));
+        assertEquals("CDE", new SkuPriceSkuCodeToNameConverter(null).slaCode("CDE_M3"));
+        assertEquals("CDE", new SkuPriceSkuCodeToNameConverter(null).slaCode("CDE_M3MAX"));
 
     }
 }

@@ -257,7 +257,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
                 false,
                 policy.getID());
 
-        final BigDecimal price = MoneyUtils.secondOrFirst(skuPrice.getSalePriceForCalculation());
+        final BigDecimal price = skuPrice.isPriceUponRequest() ? MoneyUtils.ZERO : MoneyUtils.secondOrFirst(skuPrice.getSalePriceForCalculation());
 
         final CustomerWishList customerWishList = customerWishListService.getGenericDao().getEntityFactory().getByIface(CustomerWishList.class);
         customerWishList.setCustomer(customer);

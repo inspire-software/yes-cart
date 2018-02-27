@@ -74,6 +74,20 @@ public interface SkuPriceDTO extends Identifiable {
     void setQuantity(BigDecimal quantity);
 
     /**
+     * Get price upon request flag.
+     *
+     * @return flag
+     */
+    boolean isPriceUponRequest();
+
+    /**
+     * Set price upon request flag.
+     *
+     * @param priceUponRequest set flag
+     */
+    void setPriceUponRequest(boolean priceUponRequest);
+
+    /**
      * Get regular/list price.
      *
      * @return regular price.

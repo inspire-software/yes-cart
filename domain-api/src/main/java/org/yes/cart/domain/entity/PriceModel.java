@@ -46,6 +46,13 @@ public interface PriceModel extends Serializable {
     BigDecimal getSalePrice();
 
     /**
+     * Get price upon request flag.
+     *
+     * @return flag
+     */
+    boolean isPriceUponRequest();
+
+    /**
      * Get flag to indicate if tax info is enabled.
      *
      * @return true if tax info is enabled

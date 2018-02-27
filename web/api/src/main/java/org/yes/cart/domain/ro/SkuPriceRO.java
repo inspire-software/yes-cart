@@ -44,6 +44,8 @@ public class SkuPriceRO implements Serializable {
     @DtoField(readOnly = true)
     private BigDecimal quantity;
     @DtoField(readOnly = true)
+    private boolean priceUponRequest;
+    @DtoField(readOnly = true)
     private BigDecimal regularPrice;
     @DtoField(readOnly = true)
     private BigDecimal salePrice;
@@ -95,6 +97,15 @@ public class SkuPriceRO implements Serializable {
 
     public void setQuantity(final BigDecimal quantity) {
         this.quantity = quantity;
+    }
+
+    @XmlAttribute(name = "price-upon-request")
+    public boolean isPriceUponRequest() {
+        return priceUponRequest;
+    }
+
+    public void setPriceUponRequest(final boolean priceUponRequest) {
+        this.priceUponRequest = priceUponRequest;
     }
 
     @XmlElement(name = "regular-price")

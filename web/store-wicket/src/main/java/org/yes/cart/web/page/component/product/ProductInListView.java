@@ -154,8 +154,10 @@ public class ProductInListView extends BaseComponent {
 
         final long browsingShopId = getCurrentCustomerShopId();
         final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(product, browsingShopId);
+        final ShoppingCart cart = getCurrentCart();
+        final PriceModel model = productServiceFacade.getSkuPrice(cart, null, skuPam.getDefaultSkuCode(), BigDecimal.ONE);
 
-        final boolean ableToAddDefault = skuPam.isAvailable() && skuPam.getDefaultSkuCode().equals(skuPam.getFirstAvailableSkuCode());
+        final boolean ableToAddDefault = !model.isPriceUponRequest() && skuPam.isAvailable() && skuPam.getDefaultSkuCode().equals(skuPam.getFirstAvailableSkuCode());
 
         add(links.newAddToCartLink(ADD_TO_CART_LINK, skuPam.getDefaultSkuCode(), null, getPage().getPageParameters())
                         .add(new Label(ADD_TO_CART_LINK_LABEL, skuPam.isInStock() || skuPam.isPerpetual() ?
@@ -169,16 +171,12 @@ public class ProductInListView extends BaseComponent {
                         .setVisible(!ableToAddDefault)
         );
 
-        add(getPriceView(skuPam));
+        add(getPriceView(model));
 
         super.onBeforeRender();
     }
 
-    private PriceView getPriceView(final ProductAvailabilityModel skuPam) {
-
-        final ShoppingCart cart = getCurrentCart();
-
-        final PriceModel model = productServiceFacade.getSkuPrice(cart, null, skuPam.getDefaultSkuCode(), BigDecimal.ONE);
+    private PriceView getPriceView(final PriceModel model) {
 
         return new PriceView(PRICE_VIEW, model, null, true, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
     }

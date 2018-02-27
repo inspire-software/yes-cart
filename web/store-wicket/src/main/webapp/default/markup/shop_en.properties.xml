@@ -165,6 +165,7 @@
 
     <!-- ShoppingCartPaymentVerificationView -->
     <entry key="gratis">FREE</entry>
+    <entry key="priceUponRequest">Call us for prices</entry>
     <entry key="productName">Product</entry>
     <entry key="amount">Amount</entry>
     <entry key="deliveryNum">Delivery number</entry>

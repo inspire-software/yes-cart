@@ -165,6 +165,7 @@
 
     <!-- ShoppingCartPaymentVerificationView -->
     <entry key="gratis">бесплатно</entry>
+    <entry key="priceUponRequest">Цена по запросу</entry>
     <entry key="productName">Товар</entry>
     <entry key="amount">Всего</entry>
     <entry key="deliveryNum">Номер доставки</entry>
