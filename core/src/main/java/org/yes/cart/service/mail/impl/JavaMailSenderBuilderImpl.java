@@ -24,6 +24,8 @@ public class JavaMailSenderBuilderImpl implements JavaMailSenderBuilder {
 
     private final ShopService shopService;
 
+    private String connectionTimeout = "5000";
+
     public JavaMailSenderBuilderImpl(final ShopService shopService) {
         this.shopService = shopService;
     }
@@ -71,6 +73,8 @@ public class JavaMailSenderBuilderImpl implements JavaMailSenderBuilder {
                 final Properties properties = new Properties();
                 properties.put("mail.smtp.auth", smtpauth);
                 properties.put("mail.smtp.starttls.enable", starttls);
+                properties.put("mail.smtp.connectiontimeout", this.connectionTimeout);
+                properties.put("mail.smtp.timeout", this.connectionTimeout);
                 shopMailSender.setJavaMailProperties(properties);
 
                 return shopMailSender;
@@ -93,4 +97,7 @@ public class JavaMailSenderBuilderImpl implements JavaMailSenderBuilder {
         return null;
     }
 
+    public void setConnectionTimeout(final String connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+    }
 }

@@ -25,6 +25,7 @@
 
     <bean id="mailSenderBuilder" class="org.yes.cart.service.mail.impl.JavaMailSenderBuilderImpl">
         <constructor-arg index="0" ref="shopService"/>
+        <property name="connectionTimeout" value="${admin.mail.smtp.timeout}"/>
     </bean>
 
     <bean id="defaultMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
@@ -38,6 +39,9 @@
                 <prop key="mail.smtp.auth">${admin.mail.smtp.auth.enable}</prop>
                 <!-- Use TLS to encrypt communication with SMTP server -->
                 <prop key="mail.smtp.starttls.enable">${admin.mail.smtp.starttls.enable}</prop>
+                <!-- Timeout properties to prevent hanging connections -->
+                <prop key="mail.smtp.connectiontimeout">${admin.mail.smtp.timeout}</prop>
+                <prop key="mail.smtp.timeout">${admin.mail.smtp.timeout}</prop>
             </props>
         </property>
     </bean>
