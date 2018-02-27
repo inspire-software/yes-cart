@@ -964,13 +964,42 @@
         TAG varchar(45),
         PRICINGPOLICY varchar(255),
         REF varchar(255),
+        AUTO_GENERATED bit not null default 0,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
         UPDATED_BY varchar(64),
-        GUID varchar(36) not null,
+        GUID varchar(36) not null unique,
         primary key (SKUPRICE_ID)
     ) comment='Prices. Some discriminators like condition can be added' ;
+
+
+    create table TSKUPRICERULE (
+        SKUPRICERULE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        CODE varchar(255) not null unique,
+        RANK integer default 500,
+        SHOP_CODE varchar(255) not null,
+        CURRENCY varchar(5) not null,
+        RULE_ACTION varchar(1) not null,
+        ELIGIBILITY_CONDITION longtext not null,
+        MARGIN_PERCENT decimal(9,2),
+        MARGIN_AMOUNT decimal(9,2),
+        ROUNDING_UNIT decimal(9,2),
+        PRICE_TAG varchar(255),
+        PRICE_REF varchar(255),
+        NAME varchar(255) not null,
+        DESCRIPTION varchar(100),
+        TAG varchar(255),
+        ENABLED smallint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (SKUPRICERULE_ID)
+    );
+
 
     create table TSKUWAREHOUSE (
         SKUWAREHOUSE_ID bigint not null auto_increment,
@@ -1602,6 +1631,11 @@
     create index SKUPRICE_SKUCODE on TSKUPRICE (SKU_CODE);
     create index SKUPRICE_PRICINGPOLICY on TSKUPRICE (PRICINGPOLICY);
     create index SKUPRICE_REF on TSKUPRICE (REF);
+
+
+    create index SKUPRICERULE_SHOP_CODE on TSKUPRICERULE (SHOP_CODE);
+    create index SKUPRICERULE_CURRENCY on TSKUPRICERULE (CURRENCY);
+    create index SKUPRICERULE_ENABLED on TSKUPRICERULE (ENABLED);
 
     alter table TSKUWAREHOUSE 
         add index FKAC00F89A1C1544FC (WAREHOUSE_ID), 
