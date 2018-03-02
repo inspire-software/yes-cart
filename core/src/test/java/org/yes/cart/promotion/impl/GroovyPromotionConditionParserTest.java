@@ -20,8 +20,13 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.promotion.PromotionCondition;
+import org.yes.cart.promotion.PromotionConditionSupport;
+import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingContext;
 
 import java.util.HashMap;
 
@@ -39,7 +44,16 @@ public class GroovyPromotionConditionParserTest {
     @Test
     public void testParseGroovyConditionTrue() throws Exception {
 
-        GroovyPromotionConditionParser parser = new GroovyPromotionConditionParser();
+        final ShoppingCart cart = mockery.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = mockery.mock(ShoppingContext.class, "cartCtx");
+
+        mockery.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(10L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(1010L));
+        }});
+
+        final GroovyPromotionConditionParser parser = new GroovyPromotionConditionParser();
 
         final Class cl = parser.parseGroovyCondition(1L, "ABC#", "shoppingCart != null");
 
@@ -51,7 +65,7 @@ public class GroovyPromotionConditionParserTest {
         assertEquals("ABC#", condition.getPromotionCode());
 
         final boolean result = condition.isEligible(new HashMap<String, Object>() {{
-            put("shoppingCart", new Object());
+            put("shoppingCart", cart);
         }});
 
         assertTrue(result);
@@ -61,7 +75,16 @@ public class GroovyPromotionConditionParserTest {
     @Test
     public void testParseGroovyConditionFalse() throws Exception {
 
-        GroovyPromotionConditionParser parser = new GroovyPromotionConditionParser();
+        final ShoppingCart cart = mockery.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = mockery.mock(ShoppingContext.class, "cartCtx");
+
+        mockery.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(10L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(1010L));
+        }});
+
+        final GroovyPromotionConditionParser parser = new GroovyPromotionConditionParser();
 
         final Class cl = parser.parseGroovyCondition(1L, "ABC#", "shoppingCart != null; return false");
 
@@ -73,7 +96,7 @@ public class GroovyPromotionConditionParserTest {
         assertEquals("ABC#", condition.getPromotionCode());
 
         final boolean result = condition.isEligible(new HashMap<String, Object>() {{
-            put("shoppingCart", new Object());
+            put("shoppingCart", cart);
         }});
 
         assertFalse(result);
@@ -84,15 +107,20 @@ public class GroovyPromotionConditionParserTest {
     @Test
     public void testParseCache() throws Exception {
 
+        final ShoppingCart cart = mockery.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = mockery.mock(ShoppingContext.class, "cartCtx");
         final Promotion promotion = mockery.mock(Promotion.class, "promotion");
 
         mockery.checking(new Expectations() {{
             allowing(promotion).getPromotionId(); will(returnValue(1L));
             allowing(promotion).getCode(); will(returnValue("ABC#"));
             allowing(promotion).getEligibilityCondition(); will(returnValue("shoppingCart != null"));
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(10L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(1010L));
         }});
 
-        GroovyPromotionConditionParser parser = new GroovyPromotionConditionParser();
+        final GroovyPromotionConditionParser parser = new GroovyPromotionConditionParser();
 
         final PromotionCondition condition = parser.parse(promotion);
 
@@ -102,7 +130,7 @@ public class GroovyPromotionConditionParserTest {
         assertEquals("ABC#", condition.getPromotionCode());
 
         final boolean result = condition.isEligible(new HashMap<String, Object>() {{
-            put("shoppingCart", new Object());
+            put("shoppingCart", cart);
         }});
 
         assertTrue(result);
@@ -131,6 +159,50 @@ public class GroovyPromotionConditionParserTest {
         final boolean result = condition.isEligible(null);
 
         assertFalse(result);
+
+
+    }
+
+    @Test
+    public void testFunctionInjection() throws Exception {
+
+        final PromotionConditionSupport promotionConditionSupport = mockery.mock(PromotionConditionSupport.class, "promotionConditionSupport");
+
+        final ShoppingCart cart = mockery.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = mockery.mock(ShoppingContext.class, "cartCtx");
+        final CartItem cartItem = mockery.mock(CartItem.class, "cartItem");
+        final Promotion promotion = mockery.mock(Promotion.class, "promotion");
+        final Product product = mockery.mock(Product.class, "product");
+
+        mockery.checking(new Expectations() {{
+            allowing(promotion).getPromotionId(); will(returnValue(1L));
+            allowing(promotion).getCode(); will(returnValue("ABC#"));
+            allowing(promotion).getEligibilityCondition(); will(returnValue("product(SKU)?.featured"));
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(10L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(1010L));
+            allowing(cartItem).getProductSkuCode(); will(returnValue("SKU001"));
+            allowing(promotionConditionSupport).getProductBySkuCode("SKU001"); will(returnValue(product));
+            allowing(product).getFeatured(); will(returnValue(true));
+        }});
+
+        GroovyPromotionConditionParser parser = new GroovyPromotionConditionParser();
+
+        final PromotionCondition condition = parser.parse(promotion);
+
+        assertFalse(condition instanceof NullPromotionCondition);
+        assertEquals("PromotionABC_", condition.getClass().getSimpleName());
+        assertEquals(1L, condition.getPromotionId());
+        assertEquals("ABC#", condition.getPromotionCode());
+
+        final boolean result = condition.isEligible(new HashMap<String, Object>() {{
+            put("shoppingCart", cart);
+            put("shoppingCartItem", cartItem);
+            put("conditionSupport", promotionConditionSupport);
+        }});
+
+        assertTrue(result);
+
 
 
     }

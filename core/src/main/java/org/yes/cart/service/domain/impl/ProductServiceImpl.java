@@ -129,7 +129,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public List<Product> getProductByCategory(final long categoryId) {
+    public List<Product> findProductByCategory(final long categoryId) {
         return productDao.findByNamedQuery("PRODUCTS.BY.CATEGORYID", categoryId, now());
     }
 
@@ -494,7 +494,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public Pair<Integer, Integer> getProductQtyAll() {
+    public Pair<Integer, Integer> findProductQtyAll() {
 
         final int total = getGenericDao().findCountByCriteria(null);
         final int active = getGenericDao().findCountByCriteria(
@@ -508,9 +508,9 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public List<Product> getProductByCategory(final long categoryId,
-                                              final int firstResult,
-                                              final int maxResults) {
+    public List<Product> findProductByCategory(final long categoryId,
+                                               final int firstResult,
+                                               final int maxResults) {
         return productDao.findRangeByNamedQuery("PRODUCTS.BY.CATEGORYID",
                 firstResult,
                 maxResults,
@@ -798,10 +798,10 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public List<Product> getProductByCodeNameBrandType(final String code,
-                                                       final String name,
-                                                       final Long brandId,
-                                                       final Long productTypeId) {
+    public List<Product> findProductByCodeNameBrandType(final String code,
+                                                        final String name,
+                                                        final Long brandId,
+                                                        final Long productTypeId) {
 
         return productDao.findByNamedQuery(
                 "PRODUCT.BY.CODE.NAME.BRAND.TYPE",

@@ -34,12 +34,14 @@ import java.util.TreeSet;
 public class CustomerTagPromotionAction extends AbstractPromotionAction {
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal testDiscountValue(final Map<String, Object> context) {
         final Promotion promotion = getPromotion(context);
         return new BigDecimal(Integer.MAX_VALUE - promotion.getRank());
     }
 
     /** {@inheritDoc} */
+    @Override
     public void perform(final Map<String, Object> context) {
 
         final String tag = getRawPromotionActionContext(context);

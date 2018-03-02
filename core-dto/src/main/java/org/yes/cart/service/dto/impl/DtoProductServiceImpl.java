@@ -384,7 +384,7 @@ public class DtoProductServiceImpl
      * @return List of assined product DTOs
      */
     public List<ProductDTO> getProductByCategory(final long categoryId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Product> products = ((ProductService) service).getProductByCategory(categoryId);
+        final List<Product> products = ((ProductService) service).findProductByCategory(categoryId);
         final List<ProductDTO> dtos = new ArrayList<ProductDTO>(products.size());
         fillDTOs(products, dtos);
         return dtos;
@@ -406,7 +406,7 @@ public class DtoProductServiceImpl
             final long categoryId,
             final int firtsResult,
             final int maxResults) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Product> products = ((ProductService) service).getProductByCategory(categoryId, firtsResult, maxResults);
+        final List<Product> products = ((ProductService) service).findProductByCategory(categoryId, firtsResult, maxResults);
         final List<ProductDTO> dtos = new ArrayList<ProductDTO>(products.size());
         fillDTOs(products, dtos);
         return dtos;
@@ -429,7 +429,7 @@ public class DtoProductServiceImpl
         if (productTypeId > 0) {
             productType = productTypeId;
         }
-        final List<Product> products = ((ProductService) service).getProductByCodeNameBrandType(
+        final List<Product> products = ((ProductService) service).findProductByCodeNameBrandType(
                 code, name, brand, productType);
 
         final List<ProductDTO> dtos = new ArrayList<ProductDTO>(products.size());

@@ -1052,8 +1052,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productService-brandById")
     public Brand getBrandById(final long brandId) {
-        return brandService.findById(brandId);
+        return brandService.getById(brandId);
     }
 }

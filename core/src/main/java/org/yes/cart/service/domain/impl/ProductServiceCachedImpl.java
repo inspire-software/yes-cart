@@ -76,8 +76,8 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
-    public List<Product> getProductByCategory(final long categoryId) {
-        return productService.getProductByCategory(categoryId);
+    public List<Product> findProductByCategory(final long categoryId) {
+        return productService.findProductByCategory(categoryId);
     }
 
     /**
@@ -178,17 +178,17 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
-    public Pair<Integer, Integer> getProductQtyAll() {
-        return productService.getProductQtyAll();
+    public Pair<Integer, Integer> findProductQtyAll() {
+        return productService.findProductQtyAll();
     }
 
     /**
      * {@inheritDoc}
      */
-    public List<Product> getProductByCategory(final long categoryId,
-                                              final int firstResult,
-                                              final int maxResults) {
-        return productService.getProductByCategory(categoryId, firstResult, maxResults);
+    public List<Product> findProductByCategory(final long categoryId,
+                                               final int firstResult,
+                                               final int maxResults) {
+        return productService.findProductByCategory(categoryId, firstResult, maxResults);
     }
 
 
@@ -391,11 +391,11 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
-    public List<Product> getProductByCodeNameBrandType(final String code,
-                                                       final String name,
-                                                       final Long brandId,
-                                                       final Long productTypeId) {
-        return productService.getProductByCodeNameBrandType(code, name, brandId, productTypeId);
+    public List<Product> findProductByCodeNameBrandType(final String code,
+                                                        final String name,
+                                                        final Long brandId,
+                                                        final Long productTypeId) {
+        return productService.findProductByCodeNameBrandType(code, name, brandId, productTypeId);
     }
 
 

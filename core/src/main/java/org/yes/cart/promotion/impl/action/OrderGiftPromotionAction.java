@@ -65,6 +65,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal testDiscountValue(final Map<String, Object> context) {
         final ItemPromotionActionContext ctx = getPromotionActionContext(context);
         final Total itemTotal = getItemTotal(context);
@@ -141,6 +142,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
     }
 
     /** {@inheritDoc} */
+    @Override
     public void perform(final Map<String, Object> context) {
 
         final ItemPromotionActionContext ctx = getPromotionActionContext(context);

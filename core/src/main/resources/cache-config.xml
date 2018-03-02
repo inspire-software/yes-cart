@@ -627,6 +627,20 @@
         <entry key="Delete" value-ref="ProductDeleteUpdate"/>
     </util:map>
 
+    <!-- ###################### Brand  ################################################################################################################## -->
+
+    <util:set id="BrandAll">
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="productService-brandById"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+    </util:set>
+
+    <util:map id="BrandCUD">
+        <entry key="Create" value-ref="BrandAll"/>
+        <entry key="Update" value-ref="BrandAll"/>
+        <entry key="Delete" value-ref="BrandAll"/>
+    </util:map>
 
     <!-- ###################### ProductTypeAttr  ################################################################################################################## -->
 
@@ -892,6 +906,7 @@
         <entry key="AttrValueEntityProduct"    value-ref="ProductCUD"/>
         <entry key="AttrValueEntityProductSku" value-ref="ProductCUD"/>
         <entry key="ProductTypeEntity"         value-ref="ProductTypeCUD"/>
+        <entry key="BrandEntity"               value-ref="BrandCUD"/>
         <entry key="ShopEntity"                value-ref="ShopCUD"/>
         <entry key="AttrValueEntityShop"       value-ref="ShopCUD"/>
         <entry key="PromotionEntity"           value-ref="PromotionCUD"/>

@@ -23,6 +23,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.promotion.*;
 import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.shoppingcart.PricingPolicyProvider;
 
 import java.util.List;
 import java.util.Map;
@@ -41,23 +42,30 @@ public class PromotionContextFactoryImpl implements PromotionContextFactory {
     private final PromotionConditionParser promotionConditionParser;
     private final Map<String, Map<String, PromotionAction>> promotionActionMap;
     private final PromotionApplicationStrategy strategy;
+    private final PromotionConditionSupport conditionSupport;
+    private final PricingPolicyProvider pricingPolicyProvider;
 
     public PromotionContextFactoryImpl(final ShopService shopService,
                                        final PromotionService promotionService,
                                        final PromotionConditionParser promotionConditionParser,
                                        final Map<String, Map<String, PromotionAction>> promotionActionMap,
-                                       final PromotionApplicationStrategy strategy) {
+                                       final PromotionApplicationStrategy strategy,
+                                       final PromotionConditionSupport conditionSupport,
+                                       final PricingPolicyProvider pricingPolicyProvider) {
         this.shopService = shopService;
         this.promotionService = promotionService;
         this.promotionConditionParser = promotionConditionParser;
         this.promotionActionMap = promotionActionMap;
         this.strategy = strategy;
+        this.conditionSupport = conditionSupport;
+        this.pricingPolicyProvider = pricingPolicyProvider;
     }
 
     /** {@inheritDoc} */
+    @Override
     public PromotionContext getInstance(final String shopCode, final String currency) {
 
-        final PromotionContextImpl ctx = new PromotionContextImpl(shopCode, strategy);
+        final PromotionContextImpl ctx = new PromotionContextImpl(shopCode, currency, strategy, conditionSupport, pricingPolicyProvider);
         final List<Promotion> active = promotionService.getPromotionsByShopCode(shopCode, currency, true);
         for (final Promotion promotion : active) {
             final PromotionCondition condition = promotionConditionParser.parse(promotion);
@@ -80,17 +88,20 @@ public class PromotionContextFactoryImpl implements PromotionContextFactory {
     }
 
     /** {@inheritDoc} */
+    @Override
     public PromotionContext getInstance(final String shopCode, final String currency, final boolean ensureNew) {
         return proxy().getInstance(shopCode, currency);
     }
 
     /** {@inheritDoc} */
+    @Override
     public PromotionContext getInstance(final long shopId, final String currency) {
         final Shop shop = shopService.getById(shopId);
         return proxy().getInstance(shop.getCode(), currency);
     }
 
     /** {@inheritDoc} */
+    @Override
     public PromotionContext getInstance(final long shopId, final String currency, final boolean ensureNew) {
         final Shop shop = shopService.getById(shopId);
         return getInstance(shop.getCode(), currency, ensureNew);

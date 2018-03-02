@@ -29,6 +29,7 @@ import java.util.Map;
  */
 public interface PromotionCondition extends Serializable {
 
+    String VAR_CONDITION_SUPPORT = "conditionSupport";
     String VAR_ACTION_CONTEXT = "actionContext";
     String VAR_PROMOTION = "promotion";
     String VAR_PROMOTION_CODE = "promotionCode";

@@ -33,6 +33,7 @@ public class PromotionCouponCodeGeneratorImpl implements PromotionCouponCodeGene
     }
 
     /** {@inheritDoc} */
+    @Override
     public String generate() {
         return RandomStringUtils.randomAlphanumeric(length);
     }

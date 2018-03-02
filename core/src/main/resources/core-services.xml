@@ -767,15 +767,16 @@
     </bean>
 
 
-
-
-
-    <bean id="brandService" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.service.domain.impl.BrandServiceImpl">
-                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="brandDao"/>
+    <bean id="brandService" class="org.yes.cart.service.domain.impl.BrandServiceCachedImpl">
+        <constructor-arg>
+            <bean parent="txProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.service.domain.impl.BrandServiceImpl">
+                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="brandDao"/>
+                    </bean>
+                </property>
             </bean>
-        </property>
+        </constructor-arg>
     </bean>
 
     <bean id="carrierService" class="org.yes.cart.service.domain.impl.CarrierServiceCachedImpl">
@@ -970,6 +971,14 @@
 
     <bean id="promotionConditionParser" class="org.yes.cart.promotion.impl.GroovyPromotionConditionParser"/>
 
+    <bean id="promotionConditionSupport" class="org.yes.cart.promotion.impl.PromotionConditionSupportImpl">
+        <constructor-arg index="0" ref="productService"/>
+        <constructor-arg index="1" ref="brandService"/>
+        <constructor-arg index="2" ref="shopService"/>
+        <constructor-arg index="3" ref="categoryService"/>
+        <constructor-arg index="4" ref="productCategoryService"/>
+    </bean>
+
     <bean id="bestValuePromotionApplicationStrategy" class="org.yes.cart.promotion.impl.BestValuePromotionApplicationStrategyImpl">
         <constructor-arg index="0" ref="promotionCouponService"/>
     </bean>
@@ -1014,6 +1023,8 @@
                             </map>
                         </constructor-arg>
                         <constructor-arg index="4" ref="bestValuePromotionApplicationStrategy"/>
+                        <constructor-arg index="5" ref="promotionConditionSupport"/>
+                        <constructor-arg index="6" ref="pricingPolicyProvider"/>
                         <lookup-method name="getSelf" bean="promotionContextFactory"/>
                     </bean>
                 </property>

@@ -45,16 +45,19 @@ public class NullPromotionCondition implements PromotionCondition {
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getPromotionId() {
         return promotionId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getPromotionCode() {
         return promotionCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isEligible(final Map<String, Object> context) {
         LOG.warn("Null condition invoked for promo: {}", promotionCode);
         return false;

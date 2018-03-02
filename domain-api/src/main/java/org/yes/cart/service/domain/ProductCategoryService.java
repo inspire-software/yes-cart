@@ -18,6 +18,8 @@ package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.entity.ProductCategory;
 
+import java.util.List;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
@@ -40,9 +42,19 @@ public interface ProductCategoryService extends GenericService<ProductCategory> 
      *
      * @param categoryId  category id
      * @param productId   product id
+     *
      * @return {@link ProductCategory} if found, otherwise null
      */
     ProductCategory findByCategoryIdProductId(long categoryId,  long productId);
+
+    /**
+     * Find single product-category entity by category and product id.
+     *
+     * @param productId   product id
+     *
+     * @return {@link ProductCategory} if found, otherwise null
+     */
+    List<ProductCategory> findByCategoryIdsProductId(long productId);
 
     /**
      * Unlink product from all categories.

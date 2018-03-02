@@ -39,6 +39,15 @@ public class BrandServiceImpl extends BaseGenericServiceImpl<Brand> implements B
     /**
      * {@inheritDoc}
      */
+    @Override
+    public Brand getById(final long brandId) {
+        return findById(brandId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Brand findByNameOrGuid(final String nameOrGuid) {
 
         Brand brand = getGenericDao().findSingleByNamedQuery("BRAND.BY.NAME", nameOrGuid);

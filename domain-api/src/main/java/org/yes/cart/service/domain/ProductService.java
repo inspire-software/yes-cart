@@ -44,7 +44,7 @@ public interface ProductService extends GenericService<Product> {
      * @param categoryId category id
      * @return list of products
      */
-    List<Product> getProductByCategory(long categoryId);
+    List<Product> findProductByCategory(long categoryId);
 
     /**
      * Get random product from category
@@ -187,9 +187,9 @@ public interface ProductService extends GenericService<Product> {
      * @param maxResults  quantity results to return
      * @return list of products
      */
-    List<Product> getProductByCategory(long categoryId,
-                                       int firstResult,
-                                       int maxResults);
+    List<Product> findProductByCategory(long categoryId,
+                                        int firstResult,
+                                        int maxResults);
 
     /**
      * Get list of products by id list.
@@ -246,7 +246,7 @@ public interface ProductService extends GenericService<Product> {
      *
      * @return total and active
      */
-    Pair<Integer, Integer> getProductQtyAll();
+    Pair<Integer, Integer> findProductQtyAll();
 
 
     /**
@@ -469,10 +469,10 @@ public interface ProductService extends GenericService<Product> {
      * @param productTypeId product type id. use exact match
      * @return list of founded products
      */
-     List<Product> getProductByCodeNameBrandType(String code,
-                                                 String name,
-                                                 Long brandId,
-                                                 Long productTypeId);
+     List<Product> findProductByCodeNameBrandType(String code,
+                                                  String name,
+                                                  Long brandId,
+                                                  Long productTypeId);
 
 
     /**

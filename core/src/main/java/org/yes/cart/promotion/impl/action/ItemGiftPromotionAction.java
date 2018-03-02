@@ -68,6 +68,7 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal testDiscountValue(final Map<String, Object> context) {
         final ItemPromotionActionContext ctx = getPromotionActionContext(context);
         final CartItem cartItem = getShoppingCartItem(context);
@@ -145,6 +146,7 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
     }
 
     /** {@inheritDoc} */
+    @Override
     public void perform(final Map<String, Object> context) {
 
         final ItemPromotionActionContext ctx = getPromotionActionContext(context);

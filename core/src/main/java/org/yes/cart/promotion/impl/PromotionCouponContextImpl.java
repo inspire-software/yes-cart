@@ -54,6 +54,7 @@ public class PromotionCouponContextImpl implements PromotionCouponContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Total applyCouponPromo(final Customer customer, final ShoppingCart cart, final Total orderTotal) {
 
         final List<String> coupons = cart.getCoupons();

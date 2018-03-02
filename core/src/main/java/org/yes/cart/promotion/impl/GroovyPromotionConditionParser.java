@@ -41,6 +41,7 @@ public class GroovyPromotionConditionParser implements PromotionConditionParser 
     private final GroovyClassLoader gcl = new GroovyClassLoader();
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "promotionService-groovyCache", key = "#promotion.promotionId")
     public PromotionCondition parse(final Promotion promotion) {
 
@@ -68,6 +69,8 @@ public class GroovyPromotionConditionParser implements PromotionConditionParser 
         appendStartClass(script, promoId, promoCode);
         appendBody(script, condition);
         appendEndClass(script);
+
+        LOG.info("Creating promotion condition class {}\n{}", promoCode, script);
 
         return gcl.parseClass(script.toString());
 
@@ -101,13 +104,27 @@ public class GroovyPromotionConditionParser implements PromotionConditionParser 
         script.append("return '").append(promoCode).append("';\n");
         script.append("}\n");
         script.append("public boolean isEligible(Map<String, Object> context) {\n");
+        // Basic variables
         script.append("def registered = context.registered;\n");
         script.append("def customer = context.customer;\n");
         script.append("def customerTags = context.customerTags;\n");
+        script.append("def customerType = context.customerType;\n");
+        script.append("def pricingPolicy = context.pricingPolicy;\n");
         script.append("def shoppingCart = context.shoppingCart;\n");
         script.append("def shoppingCartItem = context.shoppingCartItem;\n");
         script.append("def shoppingCartItemTotal = context.shoppingCartItemTotal;\n");
         script.append("def shoppingCartOrderTotal = context.shoppingCartOrderTotal;\n");
+        script.append("def SKU = shoppingCartItem?.productSkuCode;\n");
+        script.append("def shopId = shoppingCart?.shoppingContext?.shopId;\n");
+        script.append("def customerShopId = shoppingCart?.shoppingContext?.customerShopId;\n");
+        // Functions
+        script.append("def product = { String code -> context.conditionSupport.getProductBySkuCode(code); }\n");
+        script.append("def productSku = { String code -> context.conditionSupport.getProductSkuByCode(code); }\n");
+        script.append("def brand = { String code -> context.conditionSupport.getProductBrand(code); }\n");
+        script.append("def hasProductAttribute = { String code, String attr -> context.conditionSupport.hasProductAttribute(code, attr); }\n");
+        script.append("def productAttributeValue = { String code, String attr -> context.conditionSupport.getProductAttribute(code, attr); }\n");
+        script.append("def isSKUofBrand = { String code, String... brandNames -> context.conditionSupport.isProductOfBrand(code, brandNames); }\n");
+        script.append("def isSKUinCategory = { String code, String... categoryGUIDs -> context.conditionSupport.isProductInCategory(code, customerShopId, categoryGUIDs); }\n");
     }
 
     /*

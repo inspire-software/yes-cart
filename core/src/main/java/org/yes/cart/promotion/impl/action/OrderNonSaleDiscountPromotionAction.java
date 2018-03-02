@@ -35,6 +35,7 @@ public class OrderNonSaleDiscountPromotionAction extends AbstractOrderPromotionA
     private static final Logger LOG = LoggerFactory.getLogger(OrderNonSaleDiscountPromotionAction.class);
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal testDiscountValue(final Map<String, Object> context) {
         return getDiscountValue(getRawPromotionActionContext(context));
     }
@@ -49,6 +50,7 @@ public class OrderNonSaleDiscountPromotionAction extends AbstractOrderPromotionA
     }
 
     /** {@inheritDoc} */
+    @Override
     public void perform(final Map<String, Object> context) {
         final BigDecimal discount = getDiscountValue(getRawPromotionActionContext(context));
         if (MoneyUtils.isPositive(discount)) {

@@ -2929,6 +2929,13 @@
        ]]>
     </query>
 
+    <query name="PRODUCT.IN.CATEGORY.ALL">
+        <![CDATA[
+       select pc from  ProductCategoryEntity pc
+            where  pc.product.productId =?1
+       ]]>
+    </query>
+
     <query name="DISCONTINUED.PRODUCTS.AFTER.DATE.CHANGED.AFTER">
         <![CDATA[
        select p.productId from ProductEntity p

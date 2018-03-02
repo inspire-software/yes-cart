@@ -75,6 +75,10 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
 
                 LOG.debug("Processing tagging for customer {} with tags {}", customer.getEmail(), tagsBefore);
 
+                if (customer.isGuest()) {
+                    continue; // skip guest accounts
+                }
+
                 for (final CustomerShop customerShop : customer.getShops()) {
 
                     final Shop shop = shopService.getById(customerShop.getShop().getShopId());
@@ -92,7 +96,7 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
                 if (!StringUtils.equals(tagsBefore, customer.getTag())) {
                     customerService.update(customer);
                     LOG.debug("Tags changed for customer {} with tags {} to {}",
-                            new Object[] { customer.getEmail(), tagsBefore, customer.getTag() });
+                            customer.getEmail(), tagsBefore, customer.getTag());
                     updated++;
                 } else {
                     LOG.debug("No tag change for customer {} with tags {}", customer.getEmail(), tagsBefore);

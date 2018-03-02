@@ -20,6 +20,8 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.service.domain.ProductCategoryService;
 
+import java.util.List;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -42,6 +44,7 @@ public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCa
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductCategory findByCategoryIdProductId(final long categoryId, final long productId) {
         return getGenericDao().findSingleByNamedQuery("PRODUCT.IN.CATEGORY", categoryId, productId);
     }
@@ -49,6 +52,15 @@ public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCa
     /**
      * {@inheritDoc}
      */
+    @Override
+    public List<ProductCategory> findByCategoryIdsProductId(final long productId) {
+        return getGenericDao().findByNamedQuery("PRODUCT.IN.CATEGORY.ALL", productId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void removeByCategoryProductIds(final long categoryId, final long productId) {
         getGenericDao().executeUpdate("REMOVE.PRODUCTCATEGORY.BY.CATEGORYID.PRODUCTID", categoryId, productId);
     }
@@ -56,6 +68,7 @@ public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCa
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeByProductIds(final long productId) {
         getGenericDao().executeUpdate("REMOVE.PRODUCTCATEGORIES.BY.PRODUCTID", productId);
     }
@@ -63,6 +76,7 @@ public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCa
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getNextRank(final long categoryId) {
         Integer maxRank = (Integer) getGenericDao().getScalarResultByNamedQuery("GET.MAX.RANK", categoryId);
         if (maxRank == null) {

@@ -95,7 +95,7 @@ public class VoDashboardWidgetPluginReindex implements VoDashboardWidgetPlugin {
             data.put("ftNodes", "-");
         }
 
-        final Pair<Integer, Integer> totalAndActive = this.productService.getProductQtyAll();
+        final Pair<Integer, Integer> totalAndActive = this.productService.findProductQtyAll();
 
         data.put("productCountTotal", totalAndActive.getFirst());
         data.put("productCountActive", totalAndActive.getSecond());

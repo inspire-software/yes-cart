@@ -37,6 +37,7 @@ public class ItemAmountOffPromotionAction extends AbstractItemPromotionAction im
     private static final Logger LOG = LoggerFactory.getLogger(ItemAmountOffPromotionAction.class);
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal testDiscountValue(final Map<String, Object> context) {
         final CartItem cartItem = getShoppingCartItem(context);
         return getDiscountValue(getRawPromotionActionContext(context), cartItem.getSalePrice());
@@ -65,6 +66,7 @@ public class ItemAmountOffPromotionAction extends AbstractItemPromotionAction im
     }
 
     /** {@inheritDoc} */
+    @Override
     public void perform(final Map<String, Object> context) {
         final BigDecimal amountOff = getAmountValue(getRawPromotionActionContext(context));
         if (MoneyUtils.isPositive(amountOff)) {

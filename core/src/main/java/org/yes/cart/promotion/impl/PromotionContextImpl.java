@@ -17,12 +17,12 @@
 package org.yes.cart.promotion.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.promotion.*;
-import org.yes.cart.shoppingcart.CartItem;
-import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.TotalImpl;
 import org.yes.cart.util.TimeContext;
 
@@ -37,15 +37,24 @@ import java.util.*;
 public class PromotionContextImpl implements PromotionContext {
 
     private final String shopCode;
+    private final String currency;
     private final PromotionApplicationStrategy strategy;
+    private final PromotionConditionSupport conditionSupport;
+    private final PricingPolicyProvider pricingPolicyProvider;
     private final Instant timestamp = TimeContext.getTime();
 
-    private final Map<String, List<List<PromoTriplet>>> promotionBuckets = new HashMap<String, List<List<PromoTriplet>>>();
-    private final Map<String, PromoTriplet> promotionByCode = new HashMap<String, PromoTriplet>();
+    private final Map<String, List<List<PromoTriplet>>> promotionBuckets = new HashMap<>();
 
-    public PromotionContextImpl(final String shopCode, final PromotionApplicationStrategy strategy) {
+    PromotionContextImpl(final String shopCode,
+                         final String currency,
+                         final PromotionApplicationStrategy strategy,
+                         final PromotionConditionSupport conditionSupport,
+                         final PricingPolicyProvider pricingPolicyProvider) {
         this.shopCode = shopCode;
+        this.currency = currency;
         this.strategy = strategy;
+        this.conditionSupport = conditionSupport;
+        this.pricingPolicyProvider = pricingPolicyProvider;
     }
 
     /**
@@ -55,35 +64,35 @@ public class PromotionContextImpl implements PromotionContext {
      * @param condition precompiled condition
      * @param action action to be performed
      */
-    public void addPromotion(final Promotion promotion,
-                             final PromotionCondition condition,
-                             final PromotionAction action) {
+    void addPromotion(final Promotion promotion,
+                      final PromotionCondition condition,
+                      final PromotionAction action) {
 
         final PromoTriplet promo = new PromoTripletImpl(promotion, condition, action);
-
-        promotionByCode.put(promotion.getCode(), promo);
 
         List<List<PromoTriplet>> buckets = promotionBuckets.get(promotion.getPromoType());
 
         if (buckets == null) {
-            buckets = new ArrayList<List<PromoTriplet>>();
-            buckets.add(new ArrayList<PromoTriplet>()); // 0th can be combined
+            buckets = new ArrayList<>();
+            buckets.add(new ArrayList<>()); // 0th can be combined
             promotionBuckets.put(promotion.getPromoType(), buckets);
         }
 
         if (promotion.isCanBeCombined()) {
             buckets.get(0).add(promo);
         } else {
-            buckets.add(Arrays.asList(promo));
+            buckets.add(Collections.singletonList(promo));
         }
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getShopCode() {
         return shopCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Instant getTimestamp() {
         return timestamp;
     }
@@ -95,14 +104,37 @@ public class PromotionContextImpl implements PromotionContext {
         return Collections.emptyList();
     }
 
-    private List<String> getCustomerPricingPolicies(Customer customer) {
-        if (customer != null && customer.getPricingPolicy() != null) {
-            return Arrays.asList(customer.getPricingPolicy().split(" "));
+    private String getCustomerType(final ShoppingCart shoppingCart, final Customer customer) {
+        if (shoppingCart != null) {
+            return shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_TYPE);
+        } else if (customer != null) {
+            return customer.getCustomerType();
+        }
+        return null;
+    }
+
+    private List<String> getCustomerPricingPolicies(final ShoppingCart shoppingCart, final Customer customer) {
+
+        if (shoppingCart != null) {
+            final PricingPolicyProvider.PricingPolicy pricingPolicy = pricingPolicyProvider.determinePricingPolicy(
+                    shoppingCart.getShoppingContext().getShopCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerEmail(),
+                    shoppingCart.getShoppingContext().getCountryCode(),
+                    shoppingCart.getShoppingContext().getStateCode()
+            );
+
+            if (pricingPolicy.getID() != null) {
+                return Collections.singletonList(pricingPolicy.getID());
+            }
+        } else if (customer != null) {
+            if (StringUtils.isNotEmpty(customer.getPricingPolicy())) {
+                return Collections.singletonList(customer.getPricingPolicy());
+            }
         }
         return Collections.emptyList();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void applyItemPromo(final Customer customer, final MutableShoppingCart cart) {
 
         cart.removeItemPromotions(); // remove all gifts and promo prices
@@ -113,12 +145,13 @@ public class PromotionContextImpl implements PromotionContext {
             return;
         }
 
-        final Map<String, Object> context = new HashMap<String, Object>();
-        context.put(PromotionCondition.VAR_REGISTERED, customer != null);
+        final Map<String, Object> context = new HashMap<>();
+        context.put(PromotionCondition.VAR_CONDITION_SUPPORT, this.conditionSupport);
+        context.put(PromotionCondition.VAR_REGISTERED, customer != null && !customer.isGuest());
         context.put(PromotionCondition.VAR_CUSTOMER, customer);
         context.put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
-        context.put(PromotionCondition.VAR_CUSTOMER_TYPE, customer != null ? customer.getCustomerType() : null);
-        context.put(PromotionCondition.VAR_CUSTOMER_PRICING_POLICY, getCustomerPricingPolicies(customer));
+        context.put(PromotionCondition.VAR_CUSTOMER_TYPE, getCustomerType(cart, customer));
+        context.put(PromotionCondition.VAR_CUSTOMER_PRICING_POLICY, getCustomerPricingPolicies(cart, customer));
         context.put(PromotionCondition.VAR_CART, cart);
 
         for (final CartItem item : cart.getCartItemList()) {
@@ -136,6 +169,7 @@ public class PromotionContextImpl implements PromotionContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Total applyOrderPromo(final Customer customer, final MutableShoppingCart cart, final Total itemTotal) {
 
         final List<List<PromoTriplet>> orderPromoBuckets = promotionBuckets.get(Promotion.TYPE_ORDER);
@@ -144,12 +178,13 @@ public class PromotionContextImpl implements PromotionContext {
             return new TotalImpl().add(itemTotal);
         }
 
-        final Map<String, Object> context = new HashMap<String, Object>();
-        context.put(PromotionCondition.VAR_REGISTERED, customer != null);
+        final Map<String, Object> context = new HashMap<>();
+        context.put(PromotionCondition.VAR_CONDITION_SUPPORT, this.conditionSupport);
+        context.put(PromotionCondition.VAR_REGISTERED, customer != null && !customer.isGuest());
         context.put(PromotionCondition.VAR_CUSTOMER, customer);
         context.put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
-        context.put(PromotionCondition.VAR_CUSTOMER_TYPE, customer != null ? customer.getCustomerType() : null);
-        context.put(PromotionCondition.VAR_CUSTOMER_PRICING_POLICY, getCustomerPricingPolicies(customer));
+        context.put(PromotionCondition.VAR_CUSTOMER_TYPE, getCustomerType(cart, customer));
+        context.put(PromotionCondition.VAR_CUSTOMER_PRICING_POLICY, getCustomerPricingPolicies(cart, customer));
         context.put(PromotionCondition.VAR_CART, cart);
         context.put(PromotionCondition.VAR_CART_ITEM_TOTAL, itemTotal);
         context.put(PromotionCondition.VAR_TMP_TOTAL, new TotalImpl().add(itemTotal));
@@ -161,6 +196,7 @@ public class PromotionContextImpl implements PromotionContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void applyShippingPromo(final Customer customer, final MutableShoppingCart cart, final Total orderTotal) {
 
         final List<List<PromoTriplet>> orderPromoBuckets = promotionBuckets.get(Promotion.TYPE_SHIPPING);
@@ -169,12 +205,13 @@ public class PromotionContextImpl implements PromotionContext {
             return;
         }
 
-        final Map<String, Object> context = new HashMap<String, Object>();
-        context.put(PromotionCondition.VAR_REGISTERED, customer != null);
+        final Map<String, Object> context = new HashMap<>();
+        context.put(PromotionCondition.VAR_CONDITION_SUPPORT, this.conditionSupport);
+        context.put(PromotionCondition.VAR_REGISTERED, customer != null && !customer.isGuest());
         context.put(PromotionCondition.VAR_CUSTOMER, customer);
         context.put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
-        context.put(PromotionCondition.VAR_CUSTOMER_TYPE, customer != null ? customer.getCustomerType() : null);
-        context.put(PromotionCondition.VAR_CUSTOMER_PRICING_POLICY, getCustomerPricingPolicies(customer));
+        context.put(PromotionCondition.VAR_CUSTOMER_TYPE, getCustomerType(cart, customer));
+        context.put(PromotionCondition.VAR_CUSTOMER_PRICING_POLICY, getCustomerPricingPolicies(cart, customer));
         context.put(PromotionCondition.VAR_CART, cart);
         context.put(PromotionCondition.VAR_CART_ORDER_TOTAL, orderTotal);
 
@@ -189,6 +226,7 @@ public class PromotionContextImpl implements PromotionContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void applyCustomerPromo(final Customer customer, final MutableShoppingCart cart) {
 
         if (customer == null) {
@@ -201,13 +239,13 @@ public class PromotionContextImpl implements PromotionContext {
             return;
         }
 
-        final Map<String, Object> context = new HashMap<String, Object>() {{
-            put(PromotionCondition.VAR_CUSTOMER, customer);
-            put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
-            put(PromotionCondition.VAR_CUSTOMER_TYPE, customer != null ? customer.getCustomerType() : null);
-            put(PromotionCondition.VAR_CUSTOMER_PRICING_POLICY, getCustomerPricingPolicies(customer));
-            put(PromotionCondition.VAR_CART, cart);
-        }};
+        final Map<String, Object> context = new HashMap<>();
+        context.put(PromotionCondition.VAR_CONDITION_SUPPORT, this.conditionSupport);
+        context.put(PromotionCondition.VAR_CUSTOMER, customer);
+        context.put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
+        context.put(PromotionCondition.VAR_CUSTOMER_TYPE, getCustomerType(cart, customer));
+        context.put(PromotionCondition.VAR_CUSTOMER_PRICING_POLICY, getCustomerPricingPolicies(cart, customer));
+        context.put(PromotionCondition.VAR_CART, cart);
 
         applyPromotions(tagPromoBuckets, context);
 

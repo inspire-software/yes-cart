@@ -35,12 +35,14 @@ public class PromotionContextFactoryCachedImpl implements PromotionContextFactor
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "promotionService-factoryGetInstance")
     public PromotionContext getInstance(final String shopCode, final String currency) {
         return factory.getInstance(shopCode, currency);
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "promotionService-factoryGetInstance"
     }, key = "#shopCode", condition = "#ensureNew == true")
@@ -49,11 +51,13 @@ public class PromotionContextFactoryCachedImpl implements PromotionContextFactor
     }
 
     /** {@inheritDoc} */
+    @Override
     public PromotionContext getInstance(final long shopId, final String currency) {
         return factory.getInstance(shopId, currency);
     }
 
     /** {@inheritDoc} */
+    @Override
     public PromotionContext getInstance(final long shopId, final String currency, final boolean ensureNew) {
         return factory.getInstance(shopId, currency, ensureNew);
     }
