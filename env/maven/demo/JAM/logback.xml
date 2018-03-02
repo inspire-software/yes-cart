@@ -154,6 +154,22 @@
         </triggeringPolicy>
     </appender>
 
+    <appender name="MAIL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <File>${catalina.base}/logs/yc-mail.log</File>
+        <Append>true</Append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>10</maxIndex>
+            <FileNamePattern>${catalina.base}/logs/yc-mail.log.%i</FileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
     <appender name="AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
         <File>${catalina.base}/logs/yc-audit.csv</File>
@@ -245,6 +261,49 @@
     </logger>
     <logger name="WS.OUT" level="ERROR"><!-- Interceptors log at INFO level -->
         <appender-ref ref="WS"/>
+    </logger>
+
+    <logger name="org.yes.cart.service.mail.impl.MailComposerImpl" level="INFO">
+        <appender-ref ref="MAIL"/>
+    </logger>
+    <logger name="org.yes.cart.bulkjob.mail.BulkMailProcessorImpl" level="INFO">
+        <appender-ref ref="MAIL"/>
+    </logger>
+    <logger name="org.yes.cart.domain.message.consumer.CustomerRegistrationMessageListener" level="INFO">
+        <appender-ref ref="MAIL"/>
+    </logger>
+    <logger name="org.yes.cart.domain.message.consumer.ManagerRegistrationMessageListener" level="INFO">
+        <appender-ref ref="MAIL"/>
+    </logger>
+    <logger name="org.yes.cart.domain.message.consumer.StandardMessageListener" level="INFO">
+        <appender-ref ref="MAIL"/>
+    </logger>
+    <logger name="org.yes.cart.web.aspect.ContactFormAspect" level="INFO">
+        <appender-ref ref="MAIL"/>
+    </logger>
+    <logger name="org.yes.cart.web.aspect.NewsletterAspect" level="INFO">
+        <appender-ref ref="MAIL"/>
+    </logger>
+    <logger name="org.yes.cart.web.aspect.RegistrationAspect" level="INFO">
+        <appender-ref ref="MAIL"/>
+    </logger>
+    <logger name="org.yes.cart.service.domain.aspect.impl.CustomerRegistrationAspect" level="INFO">
+        <appender-ref ref="MAIL"/>
+    </logger>
+    <logger name="org.yes.cart.service.domain.aspect.impl.ManagerRegistrationAspect" level="INFO">
+        <appender-ref ref="MAIL"/>
+    </logger>
+    <logger name="org.yes.cart.service.domain.aspect.impl.PaymentAspect" level="INFO">
+        <appender-ref ref="MAIL"/>
+    </logger>
+    <logger name="org.yes.cart.service.domain.aspect.impl.BaseOrderStateAspect" level="INFO">
+        <appender-ref ref="MAIL"/>
+    </logger>
+    <logger name="org.yes.cart.service.domain.aspect.impl.OrderStateChangeListenerAspect" level="DEBUG">
+        <appender-ref ref="MAIL"/>
+    </logger>
+    <logger name="org.yes.cart.orderexport.mail.EmailNotificationOrderExporterImpl" level="INFO">
+        <appender-ref ref="MAIL"/>
     </logger>
 
     <logger name="org.yes.cart.web.filter.payment" level="DEBUG">

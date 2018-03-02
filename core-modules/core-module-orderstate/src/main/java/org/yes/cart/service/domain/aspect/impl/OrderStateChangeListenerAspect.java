@@ -132,16 +132,20 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
                 final String shopperTemplate =  shopperTemplates.get(templateKey);
 
                 if (StringUtils.isNotBlank(shopperTemplate)) {
-
+                    LOG.debug("Using shopper template {} for event key {}", shopperTemplate, templateKey);
                     sendOrderNotification(pjp, orderEvent, shopperTemplate, orderEvent.getCustomerOrder().getEmail());
-
+                } else {
+                    LOG.debug("Shopper template is not available for event key {}", templateKey);
                 }
 
                 if (mastered) {
                     if (StringUtils.isBlank(subAdminEmail)) {
                         LOG.error(Markers.alert(), "Can't get sub-admin email address for shop " + orderShop.getCode());
                     } else if (StringUtils.isNotBlank(shopperTemplate)) {
+                        LOG.debug("Using sub shop admin template {} for event key {}", shopperTemplate, templateKey);
                         sendOrderNotification(pjp, orderEvent, shopperTemplate, subAdminEmail);
+                    } else {
+                        LOG.debug("Sub shop admin template is not available for event key {}", templateKey);
                     }
                 }
 
@@ -153,9 +157,10 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
                     final String adminTemplate = adminTemplates.get(templateKey);
 
                     if (StringUtils.isNotBlank(adminTemplate)) {
-
+                        LOG.debug("Using admin template {} for event key {}", adminTemplate, templateKey);
                         sendOrderNotification(pjp, orderEvent, adminTemplate, adminEmail);
-
+                    } else {
+                        LOG.debug("Admin template is not available for event key {}", templateKey);
                     }
                 }
 

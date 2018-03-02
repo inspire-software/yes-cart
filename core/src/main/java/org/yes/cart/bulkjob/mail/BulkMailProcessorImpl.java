@@ -66,7 +66,7 @@ public class BulkMailProcessorImpl implements Runnable {
         while (mail != null) {
 
             LOG.info("Preparing mail object {}/{} for {} with subject {}",
-                    new Object[] { mail.getMailId(), mail.getShopCode(), mail.getRecipients(), mail.getSubject() });
+                    mail.getMailId(), mail.getShopCode(), mail.getRecipients(), mail.getSubject());
 
             final String shopCode = mail.getShopCode();
 
