@@ -217,7 +217,7 @@
 
             <div *ngFor="let body of visibleContentBodies" class="panel panel-default">
               <div class="panel-heading">
-                <h3 class="panel-title"><span><button type="button" (click)="onCMSEdit(body)" class="btn btn-default btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}"><i class="fa fa-edit"></i></button></span> <span><button type="button" (click)="onCMSEditRaw(body)" class="btn btn-default btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}"><i class="fa fa-code"></i></button></span> {{ content.name }} <span [ngClass]="body.text ? 'label label-success' : 'label label-danger'">{{ body.lang }}</span></h3>
+                <h3 class="panel-title"><span><button type="button" (click)="onCMSEdit(body)" class="btn btn-default btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}"><i class="fa fa-edit"></i></button></span> <span><button type="button" (click)="onCMSEditRaw(body)" class="btn btn-default btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}"><i class="fa fa-code"></i></button></span> <span><button type="button" (click)="onCMSPreview(body)" class="btn btn-default btn-circle" title="{{ 'MODAL_BUTTON_PREVIEW' | translate }}"><i class="fa fa-desktop"></i></button></span> {{ content.name }} <span [ngClass]="body.text ? 'label label-success' : 'label label-danger'">{{ body.lang }}</span></h3>
               </div>
               <div class="panel-body" [innerHTML]="getCMSPreview(body)"></div>
             </div>
