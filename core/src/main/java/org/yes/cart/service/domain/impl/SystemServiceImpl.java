@@ -224,7 +224,7 @@ public class SystemServiceImpl implements SystemService {
             return this.previewShopURLTemplate;
         }
 
-        return addTailFileSeparator(attrValue);
+        return addTailUrlSeparator(attrValue);
     }
 
     /**
@@ -337,6 +337,13 @@ public class SystemServiceImpl implements SystemService {
     private String addTailFileSeparator(final String str) {
         if (!str.endsWith(File.separator)) {
             return str + File.separator;
+        }
+        return str;
+    }
+
+    private String addTailUrlSeparator(final String str) {
+        if (!str.endsWith("/")) {
+            return str + "/";
         }
         return str;
     }
