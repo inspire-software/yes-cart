@@ -124,6 +124,8 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
         registrationMessage.setTemplateName("adm-passwd");
 
         sendNotification(registrationMessage);
+
+        LOG.info("Manager message was send to queue {}", registrationMessage);
     }
 
     /** Handle reset password operation.

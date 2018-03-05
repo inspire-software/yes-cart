@@ -545,6 +545,11 @@ public class MailComposerImpl implements MailComposer {
             addAttachments(mail, attachments);
         }
 
+        LOG.info(
+                "Composing email for shop: {}, locale: {}, template: {}, chain: {}, from: {}, to: {}, subject: {}",
+                shopCode, locale, templateName, mailTemplateChain, mail.getFrom(), mail.getRecipients(), mail.getSubject()
+        );
+
     }
 
     /**

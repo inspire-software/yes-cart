@@ -381,6 +381,20 @@ export class ContentComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onCMSPreview(body:ContentBodyVO) {
+
+    let myWindow = window.open('', 'CMSPreview', 'width=1024,height=660');
+
+    let _preview = '<!DOCTYPE html><html><head><title>' +
+      this._content.name + '/' + body.lang + '</title><link type="text/css" rel="stylesheet" href="' +
+      this.shopPreviewCss + '"></head><body class="preview">' +
+      this.getCMSPreview(body) + '</body></html>';
+    myWindow.document.open();
+    myWindow.document.write(_preview);
+    myWindow.document.close();
+
+  }
+
   protected getCMSPreview(body:ContentBodyVO) {
 
     if (body.text && this.shopPreviewUrl !== null && this.shopPreviewUrl !== '/') {

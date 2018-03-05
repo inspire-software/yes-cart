@@ -104,7 +104,7 @@
         <javax.servlet.version>3.0.1</javax.servlet.version>
 
         <!-- Groovy support -->
-        <groovy-all.version>2.4.3</groovy-all.version>
+        <groovy-all.version>2.4.13</groovy-all.version>
 
         <!-- Storefront global versions -->
         <wicket.version>7.9.0</wicket.version>

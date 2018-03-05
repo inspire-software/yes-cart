@@ -2,6 +2,8 @@ package org.yes.cart.service.domain.aspect.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
@@ -22,6 +24,8 @@ import java.util.Map;
  * Time: 11:07 AM
  */
 public abstract class BaseOrderStateAspect extends BaseNotificationAspect  {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BaseOrderStateAspect.class);
 
     private final ThemeService themeService;
 
@@ -78,6 +82,9 @@ public abstract class BaseOrderStateAspect extends BaseNotificationAspect  {
                             params);
 
                     sendNotification(map);
+
+                    LOG.info("Sending order email with template {} for shop {}", template, shop.getCode());
+
                 }
 
             }

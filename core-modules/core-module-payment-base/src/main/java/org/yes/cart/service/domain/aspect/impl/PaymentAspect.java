@@ -207,21 +207,23 @@ public class PaymentAspect extends BaseNotificationAspect {
 
         // We only report online PG result to shoppers, as offline would be made by contacting shopper directly
         if (feature.isOnlineGateway() && StringUtils.isNotBlank(shopperTemplate)) {
-
+            LOG.debug("Using shopper template {} for event key {}", shopperTemplate, rez);
             sendPaymentNotification(pjp, order, gateway, rez, false, shopperTemplate, order.getEmail());
-
+        } else {
+            LOG.debug("Shopper template is not available for event key {}", rez);
         }
 
         // We notify admin with all PG results for audit purposes
         if (StringUtils.isNotBlank(adminTemplate)) {
             final String adminEmail = pgShop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
             if (StringUtils.isNotBlank(adminEmail)) {
-
+                LOG.debug("Using admin template {} for event key {}", adminTemplate, rez);
                 sendPaymentNotification(pjp, order, gateway, rez, true, adminTemplate, adminEmail);
-
             } else {
                 LOG.warn("Shop admin e-mail is not setup for: {}", order.getShop().getCode());
             }
+        } else {
+            LOG.debug("Admin template is not available for event key {}", rez);
         }
 
     }
