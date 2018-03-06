@@ -18,6 +18,8 @@ package org.yes.cart.domain.entity.bridge.support.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.CategoryRelationDTO;
 import org.yes.cart.domain.entity.Category;
@@ -35,6 +37,8 @@ import java.util.*;
  * Time: 1:55 PM
  */
 public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelationshipSupport {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCategoryRelationshipSupportImpl.class);
 
     private final GenericDAO<Shop, Long> shopDao;
     private final GenericDAO<Category, Long> categoryDao;
@@ -55,7 +59,9 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
      */
     public Category getCategoryById(final long pk) {
         final Category cat = categoryDao.findById(pk);
-        Hibernate.initialize(cat);
+        if (cat != null) {
+            Hibernate.initialize(cat);
+        }
         return cat;
     }
 
@@ -111,10 +117,18 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
 
         final Map<Long, Set<Long>> map = proxy().getAllCategoriesIdsMap();
 
-        for (ShopCategory shopCategory : shopDao.findById(shopId).getShopCategory()) {
+        final Shop shop = shopDao.findById(shopId);
 
-            appendChildren(result, shopCategory.getCategory().getCategoryId(), map);
+        if (shop != null && shop.getShopCategory() != null) {
 
+            for (ShopCategory shopCategory : shopDao.findById(shopId).getShopCategory()) {
+
+                appendChildren(result, shopCategory.getCategory().getCategoryId(), map);
+
+            }
+
+        } else {
+            LOG.warn("Attempted to get shop categories for shop {} but it either does not exist or has null categories", shopId);
         }
 
         return Collections.unmodifiableSet(result);
