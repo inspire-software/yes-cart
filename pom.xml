@@ -98,7 +98,7 @@
         <commons-dbcp.version>1.4</commons-dbcp.version>
 
         <!-- Crypto -->
-        <bcprov-jdk15on.version>1.58</bcprov-jdk15on.version>
+        <bcprov-jdk15on.version>1.59</bcprov-jdk15on.version>
 
         <!-- servlet API -->
         <javax.servlet.version>3.0.1</javax.servlet.version>
