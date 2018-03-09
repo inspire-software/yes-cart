@@ -338,3 +338,114 @@ update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'postF
 update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'postFinanceManualPaymentGateway' and P_LABEL like '%PF_SHA_IN';
 update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'postFinanceManualPaymentGateway' and P_LABEL like '%PF_SHA_OUT';
 
+--
+-- YC-000 RC review non-safe usage of variables in SHOP10_paymentpage_message content
+--
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Order Payment</h2>
+
+<% if (result) { %>
+   <p>
+      Your order has been successfully created. You will receive confirmation by e-mail.
+   </p>
+   <a href="/" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+      <a href="/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+   <% } %>
+<% } else {
+   if (binding.hasVariable(''missingStock'') && missingStock !=null) { %>
+      <p>
+         Item ${product} with code ${sku} has just gone out of stock. Please try to buy similar product
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
+   <% } else { %>
+      <p>
+         An error occurred while trying to create your order. Please try again.
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
+   <% } %>
+<% } %>
+
+' where GUID = '12510_CAV';
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Оплата заказа</h2>
+
+<% if (result) { %>
+   <p>
+      Ваш заказ был успешно оформлен. Вы получите уведомление на электронный адрес.
+   </p>
+   <a href="/" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+       <a href="/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+   <% } %>
+<% } else {
+   if (missingStock !=null) { %>
+      <p>
+         Недостаточное количество ${product} (код ${sku}) на складе. Попробуйте купить похожий продукт. Приносим свои извинения
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+   <% } else { %>
+      <p>
+         Произошла ошибка при создании Вашего заказа. Попробуйте еще раз.
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+   <% } %>
+<% } %>
+
+' where GUID = '12511_CAV';
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Оплата замовлення</h2>
+
+<% if (result) { %>
+   <p>
+      Ваше замовлення було успішно оформлено. Ви отримаєте повідомлення на електронну адресу.
+   </p>
+   <a href="/" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+      <a href="/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+   <% } %>
+<% } else {
+   if (binding.hasVariable(''missingStock'') && missingStock !=null) { %>
+      <p>
+         Недостатня кількість ${product} (код ${sku}) на складі. Спробуйте купити схожий товар. Приносимо вибачення
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+   <% } else { %>
+      <p>
+         Сталася помилка при створені Вашого замовлення. Спробуйте ще раз.
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+   <% } %>
+<% } %>
+
+' where GUID = '12513_CAV';
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Order Payment</h2>
+
+<% if (result) { %>
+   <p>
+      Ihre Bestellung wurde erfolgreich erstellt. Sie erhalten eine Bestätigung per E-Mail.
+   </p>
+   <a href="/" class="btn btn-primary2" rel="bookmark">Weiter mit Einkaufen</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+     <a href="/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung überprüfen</a>
+   <% } %>
+<% } else {
+   if (binding.hasVariable(''missingStock'') && missingStock !=null) { %>
+      <p>
+         Leider ist der Artikel in der gewünschten Anzahl ${product} mit Artikel Nummer ${sku} nicht an Lager. Versuchen Sie ein vergleichbares Produkt zu kaufen.
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+   <% } else { %>
+      <p>
+         Beim Erstellen Ihrer Bestellung ist ein Fehler aufgetreten. Bitte versuchen Sie es nochmals.
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+   <% } %>
+<% } %>
+
+' where GUID = '12514_CAV';

@@ -963,12 +963,12 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
       <a href="/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
    <% } %>
 <% } else {
-   if (missingStock !=null) { %>
+   if (binding.hasVariable(''missingStock'') && missingStock !=null) { %>
       <p>
          Item ${product} with code ${sku} has just gone out of stock. Please try to buy similar product
       </p>
       <a href="/" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
-   <% } else if (exception !=null) { %>
+   <% } else { %>
       <p>
          An error occurred while trying to create your order. Please try again.
       </p>
@@ -989,12 +989,12 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
        <a href="/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
    <% } %>
 <% } else {
-   if (missingStock !=null) { %>
+   if (binding.hasVariable(''missingStock'') && missingStock !=null) { %>
       <p>
          Недостаточное количество ${product} (код ${sku}) на складе. Попробуйте купить похожий продукт. Приносим свои извинения
       </p>
       <a href="/" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
-   <% } else if (exception !=null) { %>
+   <% } else { %>
       <p>
          Произошла ошибка при создании Вашего заказа. Попробуйте еще раз.
       </p>
@@ -1015,12 +1015,12 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
       <a href="/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
    <% } %>
 <% } else {
-   if (missingStock !=null) { %>
+   if (binding.hasVariable(''missingStock'') && missingStock !=null) { %>
       <p>
          Недостатня кількість ${product} (код ${sku}) на складі. Спробуйте купити схожий товар. Приносимо вибачення
       </p>
       <a href="/" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
-   <% } else if (exception !=null) { %>
+   <% } else { %>
       <p>
          Сталася помилка при створені Вашого замовлення. Спробуйте ще раз.
       </p>
@@ -1041,12 +1041,12 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
      <a href="/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung überprüfen</a>
    <% } %>
 <% } else {
-   if (missingStock !=null) { %>
+   if (binding.hasVariable(''missingStock'') && missingStock !=null) { %>
       <p>
          Leider ist der Artikel in der gewünschten Anzahl ${product} mit Artikel Nummer ${sku} nicht an Lager. Versuchen Sie ein vergleichbares Produkt zu kaufen.
       </p>
       <a href="/" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
-   <% } else if (exception !=null) { %>
+   <% } else { %>
       <p>
          Beim Erstellen Ihrer Bestellung ist ein Fehler aufgetreten. Bitte versuchen Sie es nochmals.
       </p>
