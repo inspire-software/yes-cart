@@ -449,3 +449,84 @@ update TCATEGORYATTRVALUE set VAL = '
 <% } %>
 
 ' where GUID = '12514_CAV';
+
+--
+-- YC-000 RC review non-safe usage of variables in SHOP10_resultpage_message content
+--
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Payment result</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Order successfully placed</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
+  	<a href="/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+  <% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Order was cancelled. This maybe due to payment failure or insufficient stock</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+<% } else { %>
+	<p>Errors in payment</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Back to Homepage</a>
+<% } %>
+
+' where GUID = '12520_CAV';
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Результат оплаты</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Заказ успешно оформлен</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
+  	<a href="/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+  <% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Заказ отменен. Возможная причина - это ошибка при оплате, либо недостаточное кол-во товара на складе</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+<% } else { %>
+	<p>Ошибки при оплате</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+<% } %>
+
+' where GUID = '12521_CAV';
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Результат оплати</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Замовлення успішно оформлене</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
+	  <a href="/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+	<% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Замовлення скасовано. Можлива причина - це помилка при оплаті, або недостатня кількість товару на складі</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+<% } else { %>
+	<p>Помилка при оплаті</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+<% } %>
+
+' where GUID = '12522_CAV';
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Resultat des Zahlungsvorgangs</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Bestellung erfolgreich getätigt</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
+   	<a href="/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung verfolgen</a>
+  <% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Die Bestellung wurde annuliert oder die Artikel ist nicht mehr an Lager. Das kann der Grund für den Abbruch der Zahlung sein</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
+<% } else { %>
+	<p>Fehler bei der Zahlung</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+<% } %>
+
+' where GUID = '12523_CAV';

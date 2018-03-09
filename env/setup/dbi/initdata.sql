@@ -1064,7 +1064,7 @@ def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''
 if (_status.equals("ok")) { %>
 	<p>Order successfully placed</p>
 	<a href="/" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
-  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
   	<a href="/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
   <% } %>
 <% } else if (_status.equals("cancel")) { %>
@@ -1083,7 +1083,7 @@ def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''
 if (_status.equals("ok")) { %>
 	<p>Заказ успешно оформлен</p>
 	<a href="/" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
-  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
   	<a href="/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
   <% } %>
 <% } else if (_status.equals("cancel")) { %>
@@ -1102,7 +1102,7 @@ def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''
 if (_status.equals("ok")) { %>
 	<p>Замовлення успішно оформлене</p>
 	<a href="/" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
-  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
 	  <a href="/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
 	<% } %>
 <% } else if (_status.equals("cancel")) { %>
@@ -1121,7 +1121,7 @@ def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''
 if (_status.equals("ok")) { %>
 	<p>Bestellung erfolgreich getätigt</p>
 	<a href="/" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
-  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
    	<a href="/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung verfolgen</a>
   <% } %>
 <% } else if (_status.equals("cancel")) { %>
