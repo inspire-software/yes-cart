@@ -121,7 +121,12 @@ public class AbstractWebPage extends WebPage {
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
-        if (StringUtils.isBlank(cart.getCurrentLocale())) {
+        if (cart == null) {
+            // Abnormal flow (possibly due incorrect URL pattern)
+            setResponsePage(Application.get().getHomePage());
+        }
+
+        if (cart != null && StringUtils.isBlank(cart.getCurrentLocale())) {
             getShoppingCartCommandFactory().execute(cart,
                     (Map) Collections.singletonMap(
                             ShoppingCartCommand.CMD_CHANGELOCALE,
