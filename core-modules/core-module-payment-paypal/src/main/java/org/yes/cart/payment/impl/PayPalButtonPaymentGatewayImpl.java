@@ -65,6 +65,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
 
     // Configuration parameters
     static final String PPB_ENVIRONMENT = "PPB_ENVIRONMENT";
+    static final String PPB_BUSINESS = "PPB_BUSINESS";
     static final String PPB_USER = "PPB_USER";
     static final String PPB_PASSWORD = "PPB_PASSWORD";
     static final String PPB_SIGNATURE = "PPB_SIGNATURE";
@@ -332,7 +333,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
         form.append(getHiddenFieldValue("upload", "1"));
         form.append(getHiddenFieldValue("paymentaction", "sale"));
 
-        form.append(getHiddenFieldParam("business", PPB_USER));
+        form.append(getHiddenFieldParam("business", PPB_BUSINESS, PPB_USER));
         form.append(getHiddenFieldParam("env", PPB_ENVIRONMENT));
         form.append(getHiddenFieldParam("notify_url", PPB_NOTIFYURL));
         form.append(getHiddenFieldParam("return", PPB_RETURNURL));

@@ -164,7 +164,19 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
 
                         paymentCallBackHandlerFacade.handlePaymentCallback(callback);
 
-                        ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_OK);
+                        final CustomerOrder updatedOrder = customerOrderService.findByReference(orderGuid);
+                        final String target;
+                        if (updatedOrder != null && updatedOrder.getOrderStatus().contains("cancel")) {
+                            target = paymentGatewayExternalForm.getParameterValue("CANCELURL");
+                        } else {
+                            target = paymentGatewayExternalForm.getParameterValue("RETURNURL");
+                        }
+                        // Send redirect to results page to confirm
+                        ((HttpServletResponse) servletResponse).sendRedirect(
+                                ((HttpServletResponse) servletResponse).encodeRedirectURL(target)
+                        );
+//
+//                        ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_OK);
 
                     } catch (OrderException e) {
 
@@ -181,8 +193,24 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
                     LOG.error("Transition failed during payment call back for " + getPaymentGatewayLabel() + " payment gateway: orderGuid verification failed");
                     LOG.error("Callback:\n{}", callbackDump);
 
-                    // Send 500, so that PG know that there was an issue and may resend the update
-                    ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    try {
+
+                        final PaymentProcessor paymentProcessor = getPaymentProcessor(customerOrder);
+
+                        final PaymentGatewayPayPalExpressCheckout paymentGatewayExternalForm = (PaymentGatewayPayPalExpressCheckout) paymentProcessor.getPaymentGateway();
+
+                        ((HttpServletResponse) servletResponse).sendRedirect(
+                                ((HttpServletResponse) servletResponse).encodeRedirectURL(paymentGatewayExternalForm.getParameterValue("CANCELURL"))
+                        );
+
+                    } catch (Exception exp) {
+
+                        LOG.error("Error during redirect to error " + exp.getMessage(), exp);
+
+                        // Send 500, so that PG know that there was an issue and may resend the update
+                        ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+                    }
 
                 }
 
