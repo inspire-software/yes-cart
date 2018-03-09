@@ -126,15 +126,17 @@ public class AbstractWebPage extends WebPage {
             setResponsePage(Application.get().getHomePage());
         }
 
-        if (cart != null && StringUtils.isBlank(cart.getCurrentLocale())) {
-            getShoppingCartCommandFactory().execute(cart,
-                    (Map) Collections.singletonMap(
-                            ShoppingCartCommand.CMD_CHANGELOCALE,
-                            getSession().getLocale().getLanguage()
-                    ));
+        if (cart != null) {
+            if (StringUtils.isBlank(cart.getCurrentLocale())) {
+                getShoppingCartCommandFactory().execute(cart,
+                        (Map) Collections.singletonMap(
+                                ShoppingCartCommand.CMD_CHANGELOCALE,
+                                getSession().getLocale().getLanguage()
+                        ));
+            }
+            // reinstate the current cart language as our session is transient
+            getSession().setLocale(new Locale(cart.getCurrentLocale()));
         }
-        // reinstate the current cart language as our session is transient
-        getSession().setLocale(new Locale(cart.getCurrentLocale()));
         setStatelessHint(true);
 
     }
