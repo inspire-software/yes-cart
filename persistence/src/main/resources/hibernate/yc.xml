@@ -2517,7 +2517,7 @@
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPPINGCARTSTATE_GUID" not-null="true"/>
         <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" index="SHOPPINGCARTSTATE_EMAIL"/>
         <property name="empty" column="EMPTY" type="boolean" />
-        <property name="state" column="CART_STATE" type="byte[]" length="16384" not-null="true"/>
+        <property name="state" column="CART_STATE" type="byte[]" length="65536" not-null="true"/>
         <property name="ordernum" column="ORDERNUM" type="string" length="16" not-null="false"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>

@@ -551,3 +551,9 @@ VALUES (14360, 'payPalExpressPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (14561, 'payPalButtonPaymentGateway', 'PPB_BUSINESS', '', 'Merchant email',
   'This value overrides ''Api user name'' and is passed as ''business'' parameter in button');
+
+--
+-- YC-000 RC Review increase CART_STATE to 64K
+--
+
+alter table TSHOPPINGCARTSTATE modify column CART_STATE varbinary(65536);
