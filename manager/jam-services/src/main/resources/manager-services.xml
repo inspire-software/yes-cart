@@ -388,6 +388,7 @@
                 </entry>
                 <entry key="ds.shipment.ready.waiting.payment">
                     <list>
+                        <value>start.shipment</value>
                         <value>start.shipment.manual.payment</value>
                     </list>
                 </entry>
