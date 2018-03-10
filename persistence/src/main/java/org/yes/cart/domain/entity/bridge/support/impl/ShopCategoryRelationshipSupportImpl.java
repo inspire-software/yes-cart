@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
+import org.yes.cart.util.log.Markers;
 
 import java.util.*;
 
@@ -121,14 +122,14 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
 
         if (shop != null && shop.getShopCategory() != null) {
 
-            for (ShopCategory shopCategory : shopDao.findById(shopId).getShopCategory()) {
+            for (final ShopCategory shopCategory : shop.getShopCategory()) {
 
                 appendChildren(result, shopCategory.getCategory().getCategoryId(), map);
 
             }
 
         } else {
-            LOG.warn("Attempted to get shop categories for shop {} but it either does not exist or has null categories", shopId);
+            LOG.warn(Markers.alert(), "Attempted to get shop categories for shop {} but it either does not exist or has null categories", shopId);
         }
 
         return Collections.unmodifiableSet(result);
