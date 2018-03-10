@@ -557,3 +557,11 @@ VALUES (14561, 'payPalButtonPaymentGateway', 'PPB_BUSINESS', '', 'Merchant email
 --
 
 alter table TSHOPPINGCARTSTATE modify column CART_STATE varbinary(65536);
+
+--
+-- YC-875 Preselect shipping methods if setting in shop is enabled
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8014,  'SHOP_CHECKOUT_PRESELECT_SHIPPING', 'SHOP_CHECKOUT_PRESELECT_SHIPPING',  0,  NULL,  'Checkout: pre-select shipping method',
+  'If enabled will forcefully pre-select shipping method during checkout',  1008, 1001, 0, 0, 0, 0);

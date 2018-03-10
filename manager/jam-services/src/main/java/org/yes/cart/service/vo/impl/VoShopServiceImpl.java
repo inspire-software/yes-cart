@@ -507,8 +507,10 @@ public class VoShopServiceImpl implements VoShopService {
                 attrsMap, AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_COUPONS, lang, false));
         summary.setCheckoutEnableMessage(getBooleanShopAttributeConfig(
                 attrsMap, AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG, lang, false));
-        summary.setCheckoutEnableQuanityPicker(getBooleanShopAttributeConfig(
+        summary.setCheckoutEnableQuantityPicker(getBooleanShopAttributeConfig(
                 attrsMap, AttributeNamesKeys.Shop.CART_ADD_ENABLE_QTY_PICKER, lang, false));
+        summary.setCheckoutEnablePreselectShipping(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_CHECKOUT_PRESELECT_SHIPPING, lang, false));
     }
 
     protected void addSearchConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {

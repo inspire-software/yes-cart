@@ -386,6 +386,11 @@ public interface AttributeNamesKeys {
         String SHOP_CHECKOUT_ENABLE_GUEST = "SHOP_CHECKOUT_ENABLE_GUEST";
 
         /**
+         * Preselect shipping method when opening shipping method page.
+         */
+        String SHOP_CHECKOUT_PRESELECT_SHIPPING = "SHOP_CHECKOUT_PRESELECT_SHIPPING";
+
+        /**
          * Supported by shop customer types for request for quote.
          */
         String SHOP_RFQ_CUSTOMER_TYPES = "SHOP_RFQ_CUSTOMER_TYPES";

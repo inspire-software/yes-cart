@@ -164,7 +164,8 @@ export interface ShopSummaryVO {
   checkoutEnableGuest: Pair<string, boolean>;
   checkoutEnableCoupons: Pair<string, boolean>;
   checkoutEnableMessage: Pair<string, boolean>;
-  checkoutEnableQuanityPicker: Pair<string, boolean>;
+  checkoutEnableQuantityPicker: Pair<string, boolean>;
+  checkoutEnablePreselectShipping: Pair<string, boolean>;
 
   searchInSubCatsEnable: Pair<string, boolean>;
   searchCompoundEnable: Pair<string, boolean>;

@@ -67,7 +67,8 @@ public class VoShopSummary {
     private MutablePair<String, Boolean> checkoutEnableGuest;
     private MutablePair<String, Boolean> checkoutEnableCoupons;
     private MutablePair<String, Boolean> checkoutEnableMessage;
-    private MutablePair<String, Boolean> checkoutEnableQuanityPicker;
+    private MutablePair<String, Boolean> checkoutEnableQuantityPicker;
+    private MutablePair<String, Boolean> checkoutEnablePreselectShipping;
 
     private MutablePair<String, Boolean> taxEnableShow;
     private MutablePair<String, Boolean> taxEnableShowNet;
@@ -323,12 +324,20 @@ public class VoShopSummary {
         this.checkoutEnableMessage = checkoutEnableMessage;
     }
 
-    public MutablePair<String, Boolean> getCheckoutEnableQuanityPicker() {
-        return checkoutEnableQuanityPicker;
+    public MutablePair<String, Boolean> getCheckoutEnableQuantityPicker() {
+        return checkoutEnableQuantityPicker;
     }
 
-    public void setCheckoutEnableQuanityPicker(final MutablePair<String, Boolean> checkoutEnableQuanityPicker) {
-        this.checkoutEnableQuanityPicker = checkoutEnableQuanityPicker;
+    public void setCheckoutEnableQuantityPicker(final MutablePair<String, Boolean> checkoutEnableQuantityPicker) {
+        this.checkoutEnableQuantityPicker = checkoutEnableQuantityPicker;
+    }
+
+    public MutablePair<String, Boolean> getCheckoutEnablePreselectShipping() {
+        return checkoutEnablePreselectShipping;
+    }
+
+    public void setCheckoutEnablePreselectShipping(final MutablePair<String, Boolean> checkoutEnablePreselectShipping) {
+        this.checkoutEnablePreselectShipping = checkoutEnablePreselectShipping;
     }
 
     public MutablePair<String, Boolean> getSearchInSubCatsEnable() {
