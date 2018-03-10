@@ -50,6 +50,7 @@ import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoIOSupport;
 import org.yes.cart.service.vo.VoShopService;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -332,6 +333,16 @@ public class VoShopServiceImpl implements VoShopService {
         summary.setMasterCode(shopDTO.getMasterCode());
         summary.setName(shopDTO.getName());
         summary.setThemeChain(StringUtils.join(themeService.getThemeChainByShopId(shopId, null), " > "));
+
+        final StringBuilder sysFileRoot = new StringBuilder(this.systemService.getSystemFileRepositoryDirectory());
+        sysFileRoot.append("shop");
+        if (shopDTO.getCode() != null) {
+            sysFileRoot.append(File.separator);
+            sysFileRoot.append(Character.toUpperCase(shopDTO.getCode().charAt(0)));
+            sysFileRoot.append(File.separator);
+            sysFileRoot.append(shopDTO.getCode());
+        }
+        summary.setSysFileRoot(sysFileRoot.toString());
     }
 
     protected void addSettingsConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {

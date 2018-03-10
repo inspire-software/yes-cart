@@ -34,6 +34,7 @@ public class VoShopSummary {
     private String code;
     private String name;
     private String themeChain;
+    private String sysFileRoot;
 
     private Long masterId;
     private String masterCode;
@@ -168,6 +169,14 @@ public class VoShopSummary {
 
     public void setThemeChain(final String themeChain) {
         this.themeChain = themeChain;
+    }
+
+    public String getSysFileRoot() {
+        return sysFileRoot;
+    }
+
+    public void setSysFileRoot(final String sysFileRoot) {
+        this.sysFileRoot = sysFileRoot;
     }
 
     public List<MutablePair<String, Boolean>> getCategories() {

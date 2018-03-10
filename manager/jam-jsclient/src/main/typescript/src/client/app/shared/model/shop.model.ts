@@ -137,6 +137,7 @@ export interface ShopSummaryVO {
   masterCode : string;
   name :string;
   themeChain : string;
+  sysFileRoot : string;
 
   categories: Pair<string, boolean>[];
 
