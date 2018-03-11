@@ -21,7 +21,7 @@
     <groupId>org.yes</groupId>
     <artifactId>yes-cart</artifactId>
     <packaging>pom</packaging>
-    <version>3.4.0</version>
+    <version>3.5.0-SNAPSHOT</version>
     <name>Yes Cart</name>
     <url>https://github.com/inspire-software/yes-cart</url>
     <modules>
