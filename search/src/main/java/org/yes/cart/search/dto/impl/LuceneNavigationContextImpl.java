@@ -55,7 +55,7 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
         if (navigationParameters == null) {
             this.navigationParameters = Collections.EMPTY_MAP;
         } else {
-            this.navigationParameters = navigationParameters;
+            this.navigationParameters = getMutableCopyFilterParametersInternal(navigationParameters);
         }
         this.productSkuQuery = productSkuQuery;
         this.productQuery = productQuery;
@@ -138,9 +138,13 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
      */
     @Override
     public Map<String, List<String>> getMutableCopyFilterParameters() {
+        return getMutableCopyFilterParametersInternal(navigationParameters);
+    }
+
+    private Map<String, List<String>> getMutableCopyFilterParametersInternal(final Map<String, List<String>> origin) {
         final Map<String, List<String>> copy = new LinkedHashMap<>();
-        for (final Map.Entry<String, List<String>> entry : navigationParameters.entrySet()) {
-            copy.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+        for (final Map.Entry<String, List<String>> entry : origin.entrySet()) {
+            copy.put(entry.getKey(), entry.getValue() == null ? null : new ArrayList<>(entry.getValue()));
         }
         return copy;
     }

@@ -121,15 +121,22 @@ public class AbstractWebPage extends WebPage {
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
-        if (StringUtils.isBlank(cart.getCurrentLocale())) {
-            getShoppingCartCommandFactory().execute(cart,
-                    (Map) Collections.singletonMap(
-                            ShoppingCartCommand.CMD_CHANGELOCALE,
-                            getSession().getLocale().getLanguage()
-                    ));
+        if (cart == null) {
+            // Abnormal flow (possibly due incorrect URL pattern)
+            setResponsePage(Application.get().getHomePage());
         }
-        // reinstate the current cart language as our session is transient
-        getSession().setLocale(new Locale(cart.getCurrentLocale()));
+
+        if (cart != null) {
+            if (StringUtils.isBlank(cart.getCurrentLocale())) {
+                getShoppingCartCommandFactory().execute(cart,
+                        (Map) Collections.singletonMap(
+                                ShoppingCartCommand.CMD_CHANGELOCALE,
+                                getSession().getLocale().getLanguage()
+                        ));
+            }
+            // reinstate the current cart language as our session is transient
+            getSession().setLocale(new Locale(cart.getCurrentLocale()));
+        }
         setStatelessHint(true);
 
     }

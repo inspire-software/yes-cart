@@ -211,6 +211,10 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   'Enables guest checkout customerType=B2G',  1008, 1001, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8014,  'SHOP_CHECKOUT_PRESELECT_SHIPPING', 'SHOP_CHECKOUT_PRESELECT_SHIPPING',  0,  NULL,  'Checkout: pre-select shipping method',
+  'If enabled will forcefully pre-select shipping method during checkout',  1008, 1001, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  5000,  'SHOP_SEARCH_ENABLE_COMPOUND', 'SHOP_SEARCH_ENABLE_COMPOUND',  0,  NULL,  'Search: compound search enable',
   'Enable compound search. If set to true preserved previously searched phrases until they are explicitly removed',  1008, 1001, 0, 0, 0, 0);
 
@@ -963,12 +967,12 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
       <a href="/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
    <% } %>
 <% } else {
-   if (missingStock !=null) { %>
+   if (binding.hasVariable(''missingStock'') && missingStock !=null) { %>
       <p>
          Item ${product} with code ${sku} has just gone out of stock. Please try to buy similar product
       </p>
       <a href="/" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
-   <% } else if (exception !=null) { %>
+   <% } else { %>
       <p>
          An error occurred while trying to create your order. Please try again.
       </p>
@@ -989,12 +993,12 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
        <a href="/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
    <% } %>
 <% } else {
-   if (missingStock !=null) { %>
+   if (binding.hasVariable(''missingStock'') && missingStock !=null) { %>
       <p>
          Недостаточное количество ${product} (код ${sku}) на складе. Попробуйте купить похожий продукт. Приносим свои извинения
       </p>
       <a href="/" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
-   <% } else if (exception !=null) { %>
+   <% } else { %>
       <p>
          Произошла ошибка при создании Вашего заказа. Попробуйте еще раз.
       </p>
@@ -1015,12 +1019,12 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
       <a href="/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
    <% } %>
 <% } else {
-   if (missingStock !=null) { %>
+   if (binding.hasVariable(''missingStock'') && missingStock !=null) { %>
       <p>
          Недостатня кількість ${product} (код ${sku}) на складі. Спробуйте купити схожий товар. Приносимо вибачення
       </p>
       <a href="/" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
-   <% } else if (exception !=null) { %>
+   <% } else { %>
       <p>
          Сталася помилка при створені Вашого замовлення. Спробуйте ще раз.
       </p>
@@ -1041,12 +1045,12 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
      <a href="/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung überprüfen</a>
    <% } %>
 <% } else {
-   if (missingStock !=null) { %>
+   if (binding.hasVariable(''missingStock'') && missingStock !=null) { %>
       <p>
          Leider ist der Artikel in der gewünschten Anzahl ${product} mit Artikel Nummer ${sku} nicht an Lager. Versuchen Sie ein vergleichbares Produkt zu kaufen.
       </p>
       <a href="/" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
-   <% } else if (exception !=null) { %>
+   <% } else { %>
       <p>
          Beim Erstellen Ihrer Bestellung ist ein Fehler aufgetreten. Bitte versuchen Sie es nochmals.
       </p>
@@ -1064,7 +1068,7 @@ def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''
 if (_status.equals("ok")) { %>
 	<p>Order successfully placed</p>
 	<a href="/" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
-  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
   	<a href="/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
   <% } %>
 <% } else if (_status.equals("cancel")) { %>
@@ -1083,7 +1087,7 @@ def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''
 if (_status.equals("ok")) { %>
 	<p>Заказ успешно оформлен</p>
 	<a href="/" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
-  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
   	<a href="/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
   <% } %>
 <% } else if (_status.equals("cancel")) { %>
@@ -1102,7 +1106,7 @@ def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''
 if (_status.equals("ok")) { %>
 	<p>Замовлення успішно оформлене</p>
 	<a href="/" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
-  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
 	  <a href="/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
 	<% } %>
 <% } else if (_status.equals("cancel")) { %>
@@ -1121,7 +1125,7 @@ def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''
 if (_status.equals("ok")) { %>
 	<p>Bestellung erfolgreich getätigt</p>
 	<a href="/" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
-  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
    	<a href="/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung verfolgen</a>
   <% } %>
 <% } else if (_status.equals("cancel")) { %>

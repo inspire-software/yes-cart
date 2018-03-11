@@ -404,12 +404,17 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
 
         final NvpBuilder npvs = new NvpBuilder();
 
-        npvs.addEncoded(PP_EC_RETURNURL, getParameterValue(PP_EC_RETURNURL));
+        final String confirmPaymentStep = getParameterValue(PP_EC_CALLBACK) +
+                "?orderGuid=" + payment.getOrderNumber() +
+                "&verify=" + verify; // Need verification to validate response
+
+//        npvs.addEncoded(PP_EC_RETURNURL, getParameterValue(PP_EC_RETURNURL));
+        npvs.addEncoded(PP_EC_RETURNURL, confirmPaymentStep); // This is return URL to confirm payment
         npvs.addEncoded(PP_EC_CANCELURL, getParameterValue(PP_EC_CANCELURL));
-        npvs.addEncoded(PP_EC_CALLBACK,
-                getParameterValue(PP_EC_CALLBACK) +
-                        "?orderGuid=" + payment.getOrderNumber() +
-                        "&verify=" + verify); // Need verification to validate response
+//        npvs.addEncoded(PP_EC_CALLBACK,
+//                getParameterValue(PP_EC_CALLBACK) +
+//                        "?orderGuid=" + payment.getOrderNumber() +
+//                        "&verify=" + verify); // Need verification to validate response
 
         npvs.addRaw("CALLBACKTIMEOUT", "3"); // PayPal recommended value
 
@@ -491,7 +496,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
         payment.setTransactionReferenceId(params.get("PAYMENTINFO_0_TRANSACTIONID"));
         payment.setTransactionAuthorizationCode(params.get("PAYERID"));
 
-        final CallbackAware.CallbackResult res = getExternalCallbackResult(parametersMap);
+        final CallbackAware.CallbackResult res = getExternalCallbackResult(params);
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
 

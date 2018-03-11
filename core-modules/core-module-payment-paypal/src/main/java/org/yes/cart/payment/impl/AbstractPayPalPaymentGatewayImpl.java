@@ -157,6 +157,14 @@ public abstract class AbstractPayPalPaymentGatewayImpl implements ConfigurablePa
         return getHiddenFieldValue(fieldName, value);
     }
 
+    protected String getHiddenFieldParam(final String fieldName, final String param, final String fallbackParam) {
+        final String value = getParameterValue(param);
+        if (StringUtils.isBlank(value)) {
+            return getHiddenFieldParam(fieldName, fallbackParam);
+        }
+        return getHiddenFieldValue(fieldName, value);
+    }
+
     /**
      * Dump map value into String.
      *

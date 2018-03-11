@@ -31,6 +31,7 @@ public abstract class AbstractPayPalNVPPaymentGatewayImpl extends AbstractPayPal
     protected static final String EQ = "=";
     protected static final String AND = "&";
 
+    // see https://developer.paypal.com/docs/classic/release-notes/merchant/PayPal_Merchant_API_Release_Notes_204/
     protected static final String PP_EC_VERSION = "VERSION";
     protected static final String PP_EC_METHOD = "METHOD";
     protected static final String PP_API_USER_NAME = "API_USER_NAME";
@@ -176,8 +177,7 @@ public abstract class AbstractPayPalNVPPaymentGatewayImpl extends AbstractPayPal
 
         npvb
                 .addRaw(PP_EC_METHOD, method)
-                //.addRaw(PP_EC_VERSION, "98.0")
-                .addRaw(PP_EC_VERSION, "123.0")
+                .addRaw(PP_EC_VERSION, getParameterValue(PP_EC_VERSION))
                 .addEncoded("PWD", getParameterValue(PP_API_USER_PASSWORD))
                 .addEncoded("USER", getParameterValue(PP_API_USER_NAME))
                 .addEncoded(PP_SIGNATURE, getParameterValue(PP_SIGNATURE));

@@ -188,7 +188,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
     public long verifyAccessAndUpdateAttributes(final List<MutablePair<V, Boolean>> vo, final boolean includeSecure) throws Exception {
 
         long objectId = 0L;
-        String imageCode = null;
+        String objectCode = null;
         final VoAssemblySupport.VoAssembler<V, D> asm =
                 voAssemblySupport.with(this.voClass, this.dtoClass);
 
@@ -200,7 +200,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                 if (!pair.getFirst()) {
                     throw new AccessDeniedException("Access is denied");
                 }
-                imageCode = pair.getSecond();
+                objectCode = pair.getSecond();
                 existing = mapAvById((List) genericAttrValueService.getEntityAttributes(objectId));
             } else if (objectId != determineObjectId(item.getFirst())) {
                 throw new AccessDeniedException("Access is denied");
@@ -233,13 +233,13 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                     boolean shouldIndex = false;
                     if (Etype.IMAGE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
                         final String existingImage = voIOSupport.
-                                getImageAsBase64(dto.getVal(), imageCode, this.imageStoragePrefix);
+                                getImageAsBase64(dto.getVal(), objectCode, this.imageStoragePrefix);
                         if (existingImage == null || !existingImage.equals(item.getFirst().getValBase64Data())) {
                             String formattedFilename = item.getFirst().getVal();
                             formattedFilename = voIOSupport.
                                     addImageToRepository(
                                             formattedFilename,
-                                            imageCode,
+                                            objectCode,
                                             dto.getAttributeDTO().getCode(),
                                             item.getFirst().getValBase64Data(),
                                             this.imageStoragePrefix
@@ -253,7 +253,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                         formattedFilename = voIOSupport.
                                 addFileToRepository(
                                         formattedFilename,
-                                        imageCode,
+                                        objectCode,
                                         dto.getAttributeDTO().getCode(),
                                         item.getFirst().getValBase64Data(),
                                         this.fileStoragePrefix
@@ -265,10 +265,10 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                         formattedFilename = voIOSupport.
                                 addSystemFileToRepository(
                                         formattedFilename,
-                                        imageCode,
+                                        objectCode,
                                         dto.getAttributeDTO().getCode(),
                                         item.getFirst().getValBase64Data(),
-                                        this.fileStoragePrefix
+                                        this.sysfileStoragePrefix
                                 );
                         item.getFirst().setVal(formattedFilename);
                         shouldIndex = true;
@@ -301,7 +301,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                     formattedFilename = voIOSupport.
                             addImageToRepository(
                                     formattedFilename,
-                                    imageCode,
+                                    objectCode,
                                     dto.getAttributeDTO().getCode(),
                                     item.getFirst().getValBase64Data(),
                                     this.imageStoragePrefix
@@ -314,7 +314,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                     formattedFilename = voIOSupport.
                             addFileToRepository(
                                     formattedFilename,
-                                    imageCode,
+                                    objectCode,
                                     dto.getAttributeDTO().getCode(),
                                     item.getFirst().getValBase64Data(),
                                     this.fileStoragePrefix
@@ -326,7 +326,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                     formattedFilename = voIOSupport.
                             addSystemFileToRepository(
                                     formattedFilename,
-                                    imageCode,
+                                    objectCode,
                                     dto.getAttributeDTO().getCode(),
                                     item.getFirst().getValBase64Data(),
                                     this.sysfileStoragePrefix

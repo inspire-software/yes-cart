@@ -259,6 +259,7 @@
   "SHOP_URL": "URL",
   "SHOP_URL_PRIMARY": "Primary",
   "SHOP_THEME_CHAIN": "Theme chain",
+  "SHOP_SYS_FILE_ROOT": "System files root directory",
   "SHOP_EMAIL_TEMPLATES": "Email templates",
   "SHOP_EMAIL_TEMPLATES_CMS": "CMS",
   "SHOP_EMAIL_TEMPLATES_FROM": "From",

@@ -338,3 +338,230 @@ update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'postF
 update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'postFinanceManualPaymentGateway' and P_LABEL like '%PF_SHA_IN';
 update TPAYMENTGATEWAYPARAMETER set SECURE_ATTRIBUTE = 1 where PG_LABEL = 'postFinanceManualPaymentGateway' and P_LABEL like '%PF_SHA_OUT';
 
+--
+-- YC-000 RC review non-safe usage of variables in SHOP10_paymentpage_message content
+--
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Order Payment</h2>
+
+<% if (result) { %>
+   <p>
+      Your order has been successfully created. You will receive confirmation by e-mail.
+   </p>
+   <a href="/" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+      <a href="/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+   <% } %>
+<% } else {
+   if (binding.hasVariable(''missingStock'') && missingStock !=null) { %>
+      <p>
+         Item ${product} with code ${sku} has just gone out of stock. Please try to buy similar product
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
+   <% } else { %>
+      <p>
+         An error occurred while trying to create your order. Please try again.
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
+   <% } %>
+<% } %>
+
+' where GUID = '12510_CAV';
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Оплата заказа</h2>
+
+<% if (result) { %>
+   <p>
+      Ваш заказ был успешно оформлен. Вы получите уведомление на электронный адрес.
+   </p>
+   <a href="/" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+       <a href="/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+   <% } %>
+<% } else {
+   if (missingStock !=null) { %>
+      <p>
+         Недостаточное количество ${product} (код ${sku}) на складе. Попробуйте купить похожий продукт. Приносим свои извинения
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+   <% } else { %>
+      <p>
+         Произошла ошибка при создании Вашего заказа. Попробуйте еще раз.
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+   <% } %>
+<% } %>
+
+' where GUID = '12511_CAV';
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Оплата замовлення</h2>
+
+<% if (result) { %>
+   <p>
+      Ваше замовлення було успішно оформлено. Ви отримаєте повідомлення на електронну адресу.
+   </p>
+   <a href="/" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+      <a href="/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+   <% } %>
+<% } else {
+   if (binding.hasVariable(''missingStock'') && missingStock !=null) { %>
+      <p>
+         Недостатня кількість ${product} (код ${sku}) на складі. Спробуйте купити схожий товар. Приносимо вибачення
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+   <% } else { %>
+      <p>
+         Сталася помилка при створені Вашого замовлення. Спробуйте ще раз.
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+   <% } %>
+<% } %>
+
+' where GUID = '12513_CAV';
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Order Payment</h2>
+
+<% if (result) { %>
+   <p>
+      Ihre Bestellung wurde erfolgreich erstellt. Sie erhalten eine Bestätigung per E-Mail.
+   </p>
+   <a href="/" class="btn btn-primary2" rel="bookmark">Weiter mit Einkaufen</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+     <a href="/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung überprüfen</a>
+   <% } %>
+<% } else {
+   if (binding.hasVariable(''missingStock'') && missingStock !=null) { %>
+      <p>
+         Leider ist der Artikel in der gewünschten Anzahl ${product} mit Artikel Nummer ${sku} nicht an Lager. Versuchen Sie ein vergleichbares Produkt zu kaufen.
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+   <% } else { %>
+      <p>
+         Beim Erstellen Ihrer Bestellung ist ein Fehler aufgetreten. Bitte versuchen Sie es nochmals.
+      </p>
+      <a href="/" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+   <% } %>
+<% } %>
+
+' where GUID = '12514_CAV';
+
+--
+-- YC-000 RC review non-safe usage of variables in SHOP10_resultpage_message content
+--
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Payment result</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Order successfully placed</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
+  	<a href="/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+  <% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Order was cancelled. This maybe due to payment failure or insufficient stock</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+<% } else { %>
+	<p>Errors in payment</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Back to Homepage</a>
+<% } %>
+
+' where GUID = '12520_CAV';
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Результат оплаты</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Заказ успешно оформлен</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
+  	<a href="/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+  <% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Заказ отменен. Возможная причина - это ошибка при оплате, либо недостаточное кол-во товара на складе</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+<% } else { %>
+	<p>Ошибки при оплате</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+<% } %>
+
+' where GUID = '12521_CAV';
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Результат оплати</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Замовлення успішно оформлене</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
+	  <a href="/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+	<% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Замовлення скасовано. Можлива причина - це помилка при оплаті, або недостатня кількість товару на складі</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+<% } else { %>
+	<p>Помилка при оплаті</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+<% } %>
+
+' where GUID = '12522_CAV';
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Resultat des Zahlungsvorgangs</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Bestellung erfolgreich getätigt</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
+  <% if (binding.hasVariable(''order'') && order?.customer != null) { %>
+   	<a href="/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung verfolgen</a>
+  <% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Die Bestellung wurde annuliert oder die Artikel ist nicht mehr an Lager. Das kann der Grund für den Abbruch der Zahlung sein</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
+<% } else { %>
+	<p>Fehler bei der Zahlung</p>
+	<a href="/" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+<% } %>
+
+' where GUID = '12523_CAV';
+
+--
+-- YC-809 Upgrade paypal-core
+--
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (14256, 'payPalProPaymentGateway',
+'VERSION',
+'204.0'
+, 'Merchant API version', 'see https://developer.paypal.com/docs/classic/release-notes/merchant/PayPal_Merchant_API_Release_Notes_204/');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (14360, 'payPalExpressPaymentGateway',
+'VERSION',
+'204.0'
+, 'Merchant API version', 'see https://developer.paypal.com/docs/classic/release-notes/merchant/PayPal_Merchant_API_Release_Notes_204/');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (14561, 'payPalButtonPaymentGateway', 'PPB_BUSINESS', '', 'Merchant email',
+  'This value overrides ''Api user name'' and is passed as ''business'' parameter in button');
+
+--
+-- YC-000 RC Review increase CART_STATE to 64K
+--
+
+alter table TSHOPPINGCARTSTATE modify column CART_STATE varbinary(65536);
+
+--
+-- YC-875 Preselect shipping methods if setting in shop is enabled
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8014,  'SHOP_CHECKOUT_PRESELECT_SHIPPING', 'SHOP_CHECKOUT_PRESELECT_SHIPPING',  0,  NULL,  'Checkout: pre-select shipping method',
+  'If enabled will forcefully pre-select shipping method during checkout',  1008, 1001, 0, 0, 0, 0);

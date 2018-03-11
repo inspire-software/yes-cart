@@ -94,10 +94,8 @@ public class VoIOSupportImpl implements VoIOSupport {
             throw new IOException("Unable to read BASE64 file");
         }
 
-        return dtoFileService.addFileToRepository(
-                ensureCorrectFileName(fileName, code, attributeFileCode),
-                code, fileBody, storagePrefix, path
-        );
+        // System files must keep original name, they are to be referenced internally
+        return dtoFileService.addFileToRepository(fileName, code, fileBody, storagePrefix, path);
 
     }
 

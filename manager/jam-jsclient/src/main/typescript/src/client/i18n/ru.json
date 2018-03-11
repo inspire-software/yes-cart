@@ -259,6 +259,7 @@
   "SHOP_URL": "URL",
   "SHOP_URL_PRIMARY": "Основной",
   "SHOP_THEME_CHAIN": "Темы",
+  "SHOP_SYS_FILE_ROOT": "Корневой каталог системных файлов",
   "SHOP_EMAIL_TEMPLATES": "Шаблоны эл. почты",
   "SHOP_EMAIL_TEMPLATES_CMS": "CMS",
   "SHOP_EMAIL_TEMPLATES_FROM": "От",

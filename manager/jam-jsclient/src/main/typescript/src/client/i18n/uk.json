@@ -259,6 +259,7 @@
   "SHOP_URL": "URL",
   "SHOP_URL_PRIMARY": "Основний",
   "SHOP_THEME_CHAIN": "Теми",
+  "SHOP_SYS_FILE_ROOT": "Кореневий каталог системних файлів",
   "SHOP_EMAIL_TEMPLATES": "Шаблони ел. пошти",
   "SHOP_EMAIL_TEMPLATES_CMS": "CMS",
   "SHOP_EMAIL_TEMPLATES_FROM": "Від",
