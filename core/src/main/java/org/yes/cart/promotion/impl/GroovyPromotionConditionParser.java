@@ -70,7 +70,7 @@ public class GroovyPromotionConditionParser implements PromotionConditionParser 
         appendBody(script, condition);
         appendEndClass(script);
 
-        LOG.info("Creating promotion condition class {}\n{}", promoCode, script);
+        LOG.debug("Creating promotion condition class {}\n{}", promoCode, script);
 
         return gcl.parseClass(script.toString());
 
