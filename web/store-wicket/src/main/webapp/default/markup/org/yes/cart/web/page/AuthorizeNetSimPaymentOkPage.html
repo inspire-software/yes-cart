@@ -18,21 +18,8 @@
 <html  xmlns:wicket="http://wicket.apache.org">
 
 <wicket:head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
+
     <meta name="robots" content="noindex" />
-    <wicket:link>
-        <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
-        <script type="text/javascript" src="../../../../../js/jquery-migrate-1.1.0.min.js"></script>
-        <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
-        <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
-        <link rel="stylesheet" href="../../../../../style/fonts.css"/>
-        <link rel="stylesheet" href="../../../../../style/yc.css"/>
-    </wicket:link>
-    <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
-    <wicket:container wicket:id="headerInclude">
-        [Shop specific header_include]
-    </wicket:container>
     <title wicket:id="pageTitle">[page title]</title>
     <meta wicket:id="description" name="description" content=""/>
     <meta wicket:id="keywords" name="keywords" content=""/>
@@ -58,13 +45,7 @@
 
     </div>
 
-    <wicket:link>
-        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
-        <!--[if lt IE 9]>
-        <script src="../../../../../js/html5.js"></script>
-        <![endif]-->
-        <script type="text/javascript" src="../../../../../js/yc.js"></script>
-    </wicket:link>
+    <wicket:container wicket:id="linksConverter">[Proper handling for absolute URL]</wicket:container>
 
 </body>
 </html>

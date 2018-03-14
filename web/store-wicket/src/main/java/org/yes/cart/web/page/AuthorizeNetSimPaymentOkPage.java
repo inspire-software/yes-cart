@@ -16,6 +16,8 @@
 
 package org.yes.cart.web.page;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -34,8 +36,6 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.page.component.header.HeaderMetaInclude;
-import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
@@ -96,8 +96,6 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
         super(params);
 
         add(new FeedbackPanel(FEEDBACK));
-        add(new ServerSideJs("serverSideJs"));
-        add(new HeaderMetaInclude("headerInclude"));
 
     }
 
@@ -143,13 +141,14 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
                     || CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT.equals(customerOrder.getOrderStatus())) {
                 doCleanCart = true;
                 error(getLocalizer().getString("orderErrorCancelled", this));
+                continueButton = "";
             } else {
                 // Could be paid or pending callback, so just display success
                 doCleanCart = true;
                 info(getLocalizer().getString("orderSuccess", this));
+                final PaymentGateway pg = checkoutServiceFacade.getOrderPaymentGateway(customerOrder);
+                continueButton = pg.getParameterValue("ORDER_RECEIPT_URL");
             }
-            final PaymentGateway pg = checkoutServiceFacade.getOrderPaymentGateway(customerOrder);
-            continueButton = pg.getParameterValue("ORDER_RECEIPT_URL");
         } else {
             doCleanCart = false; // no order for cart so don't clean
             cartGuid = null;
@@ -161,7 +160,17 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
             cleanCart(cartGuid);
         }
 
-        addOrReplace(new ExternalLink("continueButton", continueButton));
+        addOrReplace(new ExternalLink("continueButton", continueButton).setVisible(StringUtils.isNotBlank(continueButton)));
+
+        final StringBuilder linksConverter = new StringBuilder();
+        if (StringUtils.isNotBlank(continueButton)) {
+            linksConverter
+                    .append("<script type=\"text/javascript\">")
+                    .append("window.location.href = '").append(continueButton).append("';")
+                    .append("</script>");
+        }
+
+        addOrReplace(new Label("linksConverter", linksConverter.toString()).setEscapeModelStrings(false));
 
         super.onBeforeRender();
 
