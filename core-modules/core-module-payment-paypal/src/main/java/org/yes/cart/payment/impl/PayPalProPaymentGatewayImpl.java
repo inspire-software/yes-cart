@@ -157,6 +157,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
 
     private NvpBuilder createAuthRequest(final Payment payment, final String paymentAction) {
         final NvpBuilder npvs = new NvpBuilder();
+        npvs.addRaw("MSGSUBID", UUID.randomUUID().toString());
         npvs.addRaw("PAYMENTACTION", paymentAction);
         npvs.addRaw("INVNUM", payment.getOrderShipment());
         npvs.addRaw("CREDITCARDTYPE", payment.getCardType());
@@ -241,7 +242,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
             }
             npvs.addEncoded("CITY", payment.getBillingAddress().getCity());
             npvs.addEncoded("STATE", payment.getBillingAddress().getStateCode());
-            npvs.addEncoded("ZIP", payment.getBillingAddress().getStateCode());
+            npvs.addEncoded("ZIP", payment.getBillingAddress().getPostcode());
             npvs.addEncoded("COUNTRYCODE", payment.getBillingAddress().getCountryCode());
         }
 
@@ -253,7 +254,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
             }
             npvs.addEncoded("SHIPTOCITY", payment.getShippingAddress().getCity());
             npvs.addEncoded("SHIPTOSTATE", payment.getShippingAddress().getStateCode());
-            npvs.addEncoded("SHIPTOZIP", payment.getShippingAddress().getStateCode());
+            npvs.addEncoded("SHIPTOZIP", payment.getShippingAddress().getPostcode());
             npvs.addEncoded("SHIPTOCOUNTRY", payment.getShippingAddress().getCountryCode());
         }
 
