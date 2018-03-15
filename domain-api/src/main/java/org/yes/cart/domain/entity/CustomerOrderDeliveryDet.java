@@ -55,6 +55,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return quantity of sku.
      */
+    @Override
     BigDecimal getQty();
 
     /**
@@ -69,6 +70,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return SKU code of purchased item
      */
+    @Override
     String getProductSkuCode();
 
     /**
@@ -83,6 +85,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return copy of product name
      */
+    @Override
     String getProductName();
 
     /**
@@ -95,6 +98,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
     /**
      * @return supplier code.
      */
+    @Override
     String getSupplierCode();
 
     /**
@@ -237,7 +241,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
     void setSupplierInvoiceNo(String invoiceNo);
 
     /**
-     * Inovice date, see {@link #getSupplierInvoiceNo()}.
+     * Invoice date, see {@link #getSupplierInvoiceNo()}.
      *
      * @return invoice date
      */
@@ -269,6 +273,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return price per single sku.
      */
+    @Override
     BigDecimal getPrice();
 
     /**
@@ -283,6 +288,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return after tax price
      */
+    @Override
     BigDecimal getNetPrice();
 
     /**
@@ -297,6 +303,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return before tax price
      */
+    @Override
     BigDecimal getGrossPrice();
 
     /**
@@ -311,6 +318,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return tax code
      */
+    @Override
     String getTaxCode();
 
     /**
@@ -325,6 +333,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return tax rate 0-99
      */
+    @Override
     BigDecimal getTaxRate();
 
     /**
@@ -339,6 +348,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return true if exclusive, false if inclusive
      */
+    @Override
     boolean isTaxExclusiveOfPrice();
 
     /**
@@ -353,6 +363,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return price
      */
+    @Override
     BigDecimal getSalePrice();
 
     /**
@@ -367,6 +378,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return list price
      */
+    @Override
     BigDecimal getListPrice();
 
     /**
@@ -382,6 +394,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return true if this is a promotion gift
      */
+    @Override
     boolean isGift();
 
     /**
@@ -395,6 +408,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return true if promotions have been applied
      */
+    @Override
     boolean isPromoApplied();
 
     /**
@@ -409,6 +423,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return true if this is a fixed price offer
      */
+    @Override
     boolean isFixedPrice();
 
     /**
@@ -424,6 +439,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return comma separated promo codes
      */
+    @Override
     String getAppliedPromo();
 
     /**

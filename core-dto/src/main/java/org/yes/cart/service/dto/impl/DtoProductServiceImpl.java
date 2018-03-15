@@ -395,7 +395,7 @@ public class DtoProductServiceImpl
      * Get the all products in category without product availability dependancy
      *
      * @param categoryId  category id
-     * @param firtsResult index of first result
+     * @param firstResult index of first result
      * @param maxResults  quantity results to return
      * @return list of products
      * @throws UnableToCreateInstanceException
@@ -404,9 +404,9 @@ public class DtoProductServiceImpl
      */
     public List<ProductDTO> getProductByCategoryWithPaging(
             final long categoryId,
-            final int firtsResult,
+            final int firstResult,
             final int maxResults) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Product> products = ((ProductService) service).findProductByCategory(categoryId, firtsResult, maxResults);
+        final List<Product> products = ((ProductService) service).findProductByCategory(categoryId, firstResult, maxResults);
         final List<ProductDTO> dtos = new ArrayList<ProductDTO>(products.size());
         fillDTOs(products, dtos);
         return dtos;

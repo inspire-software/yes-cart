@@ -32,7 +32,7 @@ public interface DtoProductTypeAttrService extends GenericDTOService<ProductType
     /**
      * Get the product type attributes.
      *
-     * @param productTypeId proruct type id
+     * @param productTypeId product type id
      * @return list of {@link ProductTypeAttrDTO}, that belong to product type.
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case of reflection problem

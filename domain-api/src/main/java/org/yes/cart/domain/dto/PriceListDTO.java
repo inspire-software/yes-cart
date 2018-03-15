@@ -113,7 +113,7 @@ public interface PriceListDTO extends Identifiable {
     /**
      * Set minimal price
      *
-     * @param minimalPrice
+     * @param minimalPrice minimal price
      */
     void setMinimalPrice(BigDecimal minimalPrice);
 

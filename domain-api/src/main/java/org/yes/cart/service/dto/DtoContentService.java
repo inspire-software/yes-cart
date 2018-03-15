@@ -60,8 +60,8 @@ public interface DtoContentService extends GenericDTOService<CategoryDTO>, Gener
      *
      * @return list of matching categories
      *
-     * @throws UnmappedInterfaceException
-     * @throws UnableToCreateInstanceException
+     * @throws UnmappedInterfaceException error
+     * @throws UnableToCreateInstanceException error
      */
     List<CategoryDTO> findBy(long shopId, String filter, int page, int pageSize)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;

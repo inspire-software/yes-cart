@@ -64,7 +64,7 @@ public interface DtoProductService extends GenericDTOService<ProductDTO>, Generi
      * Get products, that assigned to given category id.
      *
      * @param categoryId given category id
-     * @return List of assined product DTOs
+     * @return List of assigned product DTOs
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case of reflection problem
      * @throws org.yes.cart.exception.UnmappedInterfaceException
@@ -77,7 +77,7 @@ public interface DtoProductService extends GenericDTOService<ProductDTO>, Generi
      * Get the all products in category.
      *
      * @param categoryId  category id
-     * @param firtsResult index of first result
+     * @param firstResult index of first result
      * @param maxResults  quantity results to return
      * @return list of products
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
@@ -87,7 +87,7 @@ public interface DtoProductService extends GenericDTOService<ProductDTO>, Generi
      */
     List<ProductDTO> getProductByCategoryWithPaging(
             long categoryId,
-            int firtsResult,
+            int firstResult,
             int maxResults) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**

@@ -39,7 +39,7 @@ public interface DeliveryCostRegionalPriceResolver {
      * @param cart current cart
      * @param carrierSlaBaseCode currently this is CarrierSla.GUID
      * @param policy pricing policy to enforce
-     * @param qty quantity tier (this is an arbitrary figure, OOTB it is considered number of deliveries, however it
+     * @param qty quantity tier (this is an arbitrary figure, default use is the number of deliveries, however it
      *            is possible to treat this as other tier, such as parcel weight calculated from product attributes)
      *
      */

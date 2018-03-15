@@ -47,6 +47,7 @@ public interface Warehouse extends Auditable, Codable {
      *
      * @return warehouse code.
      */
+    @Override
     String getCode();
 
     /**
@@ -54,6 +55,7 @@ public interface Warehouse extends Auditable, Codable {
      *
      * @param code warehouse code.
      */
+    @Override
     void setCode(String code);
 
 

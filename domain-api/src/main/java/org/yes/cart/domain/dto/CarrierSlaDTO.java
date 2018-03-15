@@ -19,7 +19,6 @@ package org.yes.cart.domain.dto;
 import org.yes.cart.domain.entity.Codable;
 import org.yes.cart.domain.entity.Identifiable;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -137,16 +136,16 @@ public interface CarrierSlaDTO extends Identifiable, Codable {
     void setScript(String script);
 
     /**
-     * Get max deys delivery.
+     * Get max days delivery.
      *
-     * @return max deys delivery.
+     * @return max days delivery.
      */
     Integer getMaxDays();
 
     /**
-     * Set max deys delivery.
+     * Set max days delivery.
      *
-     * @param maxDays max deys delivery.
+     * @param maxDays max days delivery.
      */
     void setMaxDays(Integer maxDays);
 

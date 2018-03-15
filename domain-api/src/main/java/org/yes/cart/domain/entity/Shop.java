@@ -37,6 +37,7 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      *
      * @return shop code.
      */
+    @Override
     String getCode();
 
     /**
@@ -44,6 +45,7 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      *
      * @param code shop code.
      */
+    @Override
     void setCode(String code);
 
 
@@ -80,6 +82,7 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      *
      * @return shop name.
      */
+    @Override
     String getName();
 
     /**
@@ -87,6 +90,7 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      *
      * @param name shop name.
      */
+    @Override
     void setName(String name);
 
     /**
@@ -94,6 +98,7 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      *
      * @return description.
      */
+    @Override
     String getDescription();
 
     /**
@@ -101,6 +106,7 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      *
      * @param description shop description
      */
+    @Override
     void setDescription(String description);
 
     /**
@@ -149,16 +155,16 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
 
 
     /**
-     * Get the named advertizing places.
+     * Get the named advertising places.
      *
-     * @return named advertizing places.
+     * @return named advertising places.
      */
     Collection<ShopAdvPlace> getAdvertisingPlaces();
 
     /**
-     * Set named advertizing places.
+     * Set named advertising places.
      *
-     * @param advertisingPlaces named advertizing places.
+     * @param advertisingPlaces named advertising places.
      */
     void setAdvertisingPlaces(Collection<ShopAdvPlace> advertisingPlaces);
 
@@ -175,6 +181,7 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      * @param attributeCode code of attribute
      * @return collection of product attributes filtered by attribute name or empty collection if no attribute were found.
      */
+    @Override
     Collection<AttrValueShop> getAttributesByCode(String attributeCode);
 
     /**
@@ -413,6 +420,7 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      * @param attributeCode code of attribute
      * @return single {@link AttrValue} or null if not found.
      */
+    @Override
     AttrValueShop getAttributeByCode(String attributeCode);
 
 
@@ -452,12 +460,6 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      * @return separated by comma all supported currencies by shop or null if not set.
      */
     String getSupportedCurrencies();
-
-    /**
-     * Set supported currency
-     * @param currencies comma separated list of supported currencies.
-     */
-    //void updateSupportedCurrencies(String currencies);
 
     /**
      * Get all supported currencies. First in list is default.

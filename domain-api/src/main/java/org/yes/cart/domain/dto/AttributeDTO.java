@@ -203,14 +203,14 @@ public interface AttributeDTO extends Identifiable {
     /**
      * Allow failover search for category attributes.
      *
-     * @return true if failvover allowed.
+     * @return true if failover allowed.
      */
     boolean isAllowfailover();
 
     /**
-     * Set search failower flag.
+     * Set search failover flag.
      *
-     * @param allowfailover true if faiover allowed.
+     * @param allowfailover true if failover allowed.
      */
     void setAllowfailover(boolean allowfailover);
 

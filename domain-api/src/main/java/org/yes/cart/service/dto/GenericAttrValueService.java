@@ -73,8 +73,8 @@ public interface GenericAttrValueService {
      * @param attrValue   new attribute vale for given entity
      * @param entityPk entity pk value
      * @return created value
-     * @throws UnmappedInterfaceException
-     * @throws UnableToCreateInstanceException
+     * @throws UnmappedInterfaceException error
+     * @throws UnableToCreateInstanceException error
      */
     AttrValueDTO createAndBindAttrVal(long entityPk, String attrName, String attrValue)  throws UnmappedInterfaceException, UnableToCreateInstanceException;
 

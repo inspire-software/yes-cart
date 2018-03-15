@@ -22,7 +22,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.service.domain.HashHelper;
-import org.yes.cart.service.domain.PassPhrazeGenerator;
+import org.yes.cart.service.domain.PassPhraseGenerator;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -37,10 +37,10 @@ public class TestCustomerRegistrationAspect {
 
     private final HashHelper passwordHashHelper;
 
-    private final PassPhrazeGenerator phrazeGenerator;
+    private final PassPhraseGenerator phrazeGenerator;
 
 
-    public TestCustomerRegistrationAspect(final HashHelper passwordHashHelper, final PassPhrazeGenerator phrazeGenerator) {
+    public TestCustomerRegistrationAspect(final HashHelper passwordHashHelper, final PassPhraseGenerator phrazeGenerator) {
         this.passwordHashHelper = passwordHashHelper;
         this.phrazeGenerator = phrazeGenerator;
     }

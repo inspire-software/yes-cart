@@ -16,7 +16,6 @@
 
 package org.yes.cart.domain.dto;
 
-import org.yes.cart.domain.entity.Auditable;
 import org.yes.cart.domain.entity.Guidable;
 import org.yes.cart.domain.entity.Identifiable;
 

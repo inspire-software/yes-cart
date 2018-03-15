@@ -44,6 +44,7 @@ public interface ShopCategory extends Auditable, Rankable {
      *
      * @return category rank in shop.
      */
+    @Override
     int getRank();
 
     /**
@@ -51,6 +52,7 @@ public interface ShopCategory extends Auditable, Rankable {
      *
      * @param rank rank
      */
+    @Override
     void setRank(int rank);
 
     /**

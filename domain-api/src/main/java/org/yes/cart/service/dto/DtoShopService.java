@@ -20,7 +20,6 @@ import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
-import java.util.Collection;
 import java.util.List;
 
 /**

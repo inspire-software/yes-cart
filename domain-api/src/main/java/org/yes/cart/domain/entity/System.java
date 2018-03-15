@@ -26,11 +26,13 @@ public interface System extends Auditable, Codable {
     /**
      * @return code identifier
      */
+    @Override
     String getCode();
 
     /**
      * @param code code identifier
      */
+    @Override
     void setCode(String code);
 
     /**

@@ -40,11 +40,13 @@ public class RangeListImpl implements RangeList {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<RangeNode> getRanges() {
         return ranges;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setRanges(final List<RangeNode> ranges) {
         this.ranges = ranges;
     }

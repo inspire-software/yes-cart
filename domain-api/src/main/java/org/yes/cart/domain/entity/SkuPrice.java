@@ -235,6 +235,7 @@ public interface SkuPrice extends Auditable, Taggable {
      *
      * @return tag or null.
      */
+    @Override
     String getTag();
 
     /**
@@ -242,6 +243,7 @@ public interface SkuPrice extends Auditable, Taggable {
      *
      * @param tag price tag
      */
+    @Override
     void setTag(String tag);
 
 

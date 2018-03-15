@@ -14,36 +14,43 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.domain;
+package org.yes.cart.domain.entity;
 
-import org.yes.cart.domain.entity.DataDescriptor;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
- * User: denispavlov
- * Date: 01/06/2015
- * Time: 12:57
+ * Product ensemble option.
+ * <p/>
+ * User: Igor Azarny iazarny@yahoo.com
+ * Date: 07-May-2011
+ * Time: 11:12:54
  */
-public interface DataDescriptorService extends GenericService<DataDescriptor> {
+
+public interface ProductEnsembleOption extends Auditable {
 
     /**
-     * Find descriptor by name.
-     *
-     * @param name name
-     *
-     * @return single descriptor
      */
-    DataDescriptor findByName(String name);
+    long getEnsembleOptId();
+
+    void setEnsembleOptId(long ensembleOptId);
 
     /**
-     * Find descriptors by given names.
-     *
-     * @param names names
-     *
-     * @return all descriptors matching given names
      */
-    List<DataDescriptor> findByNames(Collection<String> names);
+    int getQty();
+
+    void setQty(int qty);
+
+    /**
+     */
+    Product getProduct();
+
+    void setProduct(Product product);
+
+    /**
+     */
+    ProductSku getSku();
+
+    void setSku(ProductSku sku);
 
 }
+
+

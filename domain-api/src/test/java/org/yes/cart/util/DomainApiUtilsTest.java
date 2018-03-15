@@ -18,7 +18,6 @@ package org.yes.cart.util;
 
 import org.junit.Test;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertFalse;

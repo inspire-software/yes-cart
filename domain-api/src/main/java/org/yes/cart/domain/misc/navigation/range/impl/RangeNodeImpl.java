@@ -35,31 +35,37 @@ public class RangeNodeImpl implements RangeNode {
     private List<DisplayValue> i18n;
 
     /** {@inheritDoc} */
+    @Override
     public String getFrom() {
         return from;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setFrom(final String from) {
         this.from = from;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getTo() {
         return to;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setTo(final String to) {
         this.to = to;
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<DisplayValue> getI18n() {
         return i18n;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setI18n(final List<DisplayValue> fromDisplay) {
         this.i18n = fromDisplay;
     }

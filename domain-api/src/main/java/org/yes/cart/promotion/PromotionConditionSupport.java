@@ -93,7 +93,7 @@ public interface PromotionConditionSupport {
     boolean isProductOfBrand(String sku, String ... brandNames);
 
     /**
-     * Determine if given SKU is in certain category with fallback to parent reacheable in specified
+     * Determine if given SKU is in certain category with fallback to parent reachable in specified
      * shop.
      *
      * @param sku code

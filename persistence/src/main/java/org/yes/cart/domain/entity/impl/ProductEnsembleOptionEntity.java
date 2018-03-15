@@ -18,6 +18,7 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductEnsembleOption;
 import org.yes.cart.domain.entity.ProductSku;
 
 import java.time.Instant;
@@ -27,7 +28,7 @@ import java.time.Instant;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.ProductEnsebleOption, java.io.Serializable {
+public class ProductEnsembleOptionEntity implements ProductEnsembleOption, java.io.Serializable {
 
     private long ensembleOptId;
     private long version;
@@ -41,7 +42,7 @@ public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.Pr
     private String updatedBy;
     private String guid;
 
-    public ProductEnsebleOptionEntity() {
+    public ProductEnsembleOptionEntity() {
     }
 
 

@@ -13,21 +13,25 @@ public class DisplayValueImpl implements DisplayValue {
     private String value;
 
     /** {@inheritDoc} */
+    @Override
     public String getLang() {
         return lang;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setLang(final String lang) {
         this.lang = lang;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getValue() {
         return value;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setValue(final String value) {
         this.value = value;
     }

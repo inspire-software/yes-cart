@@ -37,7 +37,7 @@ public class HttpParamsUtils {
      * @return simple string key value parameters mapping
      */
     public static Map<String, String> createSingleValueMap(Map httpParams) {
-        final Map<String, String> clean = new HashMap<String, String>();
+        final Map<String, String> clean = new HashMap<>();
         if (httpParams != null) {
             for (final Map.Entry<Object, Object> entry : ((Map<Object, Object>) httpParams).entrySet()) {
                 final String value = getSingleValue(entry.getValue());
@@ -81,7 +81,7 @@ public class HttpParamsUtils {
      * @return simple string key value parameters mapping
      */
     public static Map<String, String[]> createArrayValueMap(Map httpParams) {
-        final Map<String, String[]> clean = new HashMap<String, String[]>();
+        final Map<String, String[]> clean = new HashMap<>();
         if (httpParams != null) {
             for (final Map.Entry<Object, Object> entry : ((Map<Object, Object>) httpParams).entrySet()) {
                 final String[] value = getArrayValue(entry.getValue());
@@ -108,7 +108,7 @@ public class HttpParamsUtils {
 
     }
 
-    private static List<String> CARD_PARAMS = Arrays.asList(
+    private static final List<String> CARD_PARAMS = Arrays.asList(
             // CyberSource
             "card_accountNumber", "card_cvNumber",
             // AuthNET, PayPal

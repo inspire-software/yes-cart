@@ -72,6 +72,7 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      *
      * @return product code.
      */
+    @Override
     String getCode();
 
     /**
@@ -80,6 +81,7 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      *
      * @param code unique code
      */
+    @Override
     void setCode(String code);
 
     /**
@@ -299,22 +301,6 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      */
     Set<AttrValueProduct> getAttributes();
 
-    /**
-     * Get all products attributes filtered by given attribute code.
-     *
-     * @param attributeCode code of attribute
-     * @return collection of product attributes filtered by attribute name or empty collection if no attribute were found.
-     */
-    ///////////////////////////////////////////////////////////////Collection<AttrValueProduct> getAttributesByCode(String attributeCode);
-
-    /**
-     * Get single attribute.
-     *
-     * @param attributeCode code of attribute
-     * @return single {@link AttrValue} or null if not found.
-     */
-    ///////////////////////////////////////////////////////////////AttrValueProduct getAttributeByCode(String attributeCode);
-
 
     /**
      * Set collection of products attributes.
@@ -338,18 +324,18 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
     void setProductCategory(Set<ProductCategory> productCategory);
 
     /**
-     * Get {@link ProductEnsebleOption} for product if it has enseble flag
+     * Get {@link ProductEnsembleOption} for product if it has ensemble flag
      *
-     * @return Set of {@link ProductEnsebleOption} for product.
+     * @return Set of {@link ProductEnsembleOption} for product.
      */
-    Set<ProductEnsebleOption> getEnsebleOption();
+    Set<ProductEnsembleOption> getEnsembleOption();
 
     /**
-     * Set {@link ProductEnsebleOption} for product.
+     * Set {@link ProductEnsembleOption} for product.
      *
-     * @param ensebleOption {@link ProductEnsebleOption} for product
+     * @param ensembleOption {@link ProductEnsembleOption} for product
      */
-    void setEnsebleOption(Set<ProductEnsebleOption> ensebleOption);
+    void setEnsembleOption(Set<ProductEnsembleOption> ensembleOption);
 
     /**
      * Set the product {@link ProductAssociation}, like up-sell, cross-sell, etc..
@@ -372,6 +358,7 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      *
      * @return product name.
      */
+    @Override
     String getName();
 
     /**
@@ -379,6 +366,7 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      *
      * @param name product name.
      */
+    @Override
     void setName(String name);
 
     /**
@@ -400,6 +388,7 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      *
      * @return product description.
      */
+    @Override
     String getDescription();
 
     /**
@@ -407,6 +396,7 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      *
      * @param description product description.
      */
+    @Override
     void setDescription(String description);
 
     /**
@@ -464,6 +454,7 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      *
      * @return space separated product tags
      */
+    @Override
     String getTag();
 
     /**
@@ -471,6 +462,7 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      *
      * @param tag space separated product tags.
      */
+    @Override
     void setTag(String tag);
 
     /**

@@ -17,7 +17,7 @@
 package org.yes.cart.exception;
 
 /**
- * Exception thrown in case if object could not be retrieved from persistance layer.
+ * Exception thrown in case if object could not be retrieved from persistence layer.
  * <p/>
  * User: dogma
  * Date: Jan 24, 2011

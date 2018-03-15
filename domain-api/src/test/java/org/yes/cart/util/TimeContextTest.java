@@ -96,7 +96,9 @@ public class TimeContextTest {
 
         try {
             Thread.sleep(10L);
-        } catch (InterruptedException ie) {}
+        } catch (InterruptedException ie) {
+            // OK
+        }
 
         TimeContext.clear();
 

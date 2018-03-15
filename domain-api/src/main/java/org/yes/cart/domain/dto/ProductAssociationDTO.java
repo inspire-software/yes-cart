@@ -49,9 +49,9 @@ public interface ProductAssociationDTO extends Identifiable {
     int getRank();
 
     /**
-     * Set rank of asscosiation.
+     * Set rank of association.
      *
-     * @param rank rank of asscosiation.
+     * @param rank rank of association.
      */
     void setRank(int rank);
 
@@ -94,7 +94,7 @@ public interface ProductAssociationDTO extends Identifiable {
     /**
      * Product code.
      *
-     * @param associatedCode
+     * @param associatedCode code
      */
     void setAssociatedCode(String associatedCode);
 
@@ -108,7 +108,7 @@ public interface ProductAssociationDTO extends Identifiable {
     /**
      * Product name.
      *
-     * @param associatedName
+     * @param associatedName name
      */
     void setAssociatedName(String associatedName);
 

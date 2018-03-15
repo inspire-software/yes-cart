@@ -17,7 +17,7 @@
 package org.yes.cart.domain.entity;
 
 /**
- * Product attrbute value.
+ * Product attribute value.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011

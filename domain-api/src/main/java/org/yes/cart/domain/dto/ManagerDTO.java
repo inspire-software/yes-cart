@@ -28,7 +28,7 @@ import org.yes.cart.domain.entity.Identifiable;
 public interface ManagerDTO extends Identifiable {
 
     /**
-     * Primapy key.
+     * Primary key.
      *
      * @return pk value.
      */

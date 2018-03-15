@@ -39,16 +39,19 @@ public class CategoryPriceNavigationXStreamProvider implements XStreamProvider<P
     private XStream xStream;
 
     /** {@inheritDoc} */
+    @Override
     public PriceTierTree fromXML(final String xml) {
         return (PriceTierTree) provide().fromXML(xml);
     }
 
     /** {@inheritDoc} */
+    @Override
     public PriceTierTree fromXML(final InputStream is) {
         return (PriceTierTree) provide().fromXML(is);
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toXML(final PriceTierTree object) {
         return provide().toXML(object);
     }

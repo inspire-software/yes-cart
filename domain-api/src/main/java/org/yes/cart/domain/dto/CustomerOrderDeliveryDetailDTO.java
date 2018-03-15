@@ -246,7 +246,7 @@ public interface CustomerOrderDeliveryDetailDTO extends Identifiable {
     void setSupplierInvoiceNo(String invoiceNo);
 
     /**
-     * Inovice date, see {@link #getSupplierInvoiceNo()}.
+     * Invoice date, see {@link #getSupplierInvoiceNo()}.
      *
      * @return invoice date
      */

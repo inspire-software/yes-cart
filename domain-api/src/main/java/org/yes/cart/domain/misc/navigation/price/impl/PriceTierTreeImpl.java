@@ -36,9 +36,10 @@ public class PriceTierTreeImpl implements PriceTierTree {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getSupportedCurrencies() {
         if (priceMap == null) {
-            priceMap = new HashMap<String, List<PriceTierNode>>();
+            priceMap = new HashMap<>();
         }
         return priceMap.keySet();
     }
@@ -46,9 +47,10 @@ public class PriceTierTreeImpl implements PriceTierTree {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<PriceTierNode> getPriceTierNodes(final String currency) {
         if (priceMap == null) {
-            priceMap = new HashMap<String, List<PriceTierNode>>();
+            priceMap = new HashMap<>();
         }
         return priceMap.get(currency);
     }
@@ -56,9 +58,10 @@ public class PriceTierTreeImpl implements PriceTierTree {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<PriceTierNode> addPriceTierNode(final String currency, final List<PriceTierNode> priceTierNodes) {
         if (priceMap == null) {
-            priceMap = new HashMap<String, List<PriceTierNode>>();
+            priceMap = new HashMap<>();
         }
         priceMap.put(currency, priceTierNodes);
         return priceTierNodes;

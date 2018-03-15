@@ -36,7 +36,7 @@ public interface ProdTypeAttributeViewGroup extends Auditable, Rankable, Nameabl
     void setProdTypeAttributeViewGroupId(long prodTypeAttributeViewGroupId);
 
     /**
-     * Comma separated attribute list. For example WEIGHT,LENGHT,HEIGHT
+     * Comma separated attribute list. For example WEIGHT,LENGTH,HEIGHT
      *
      * @return comm  separated attribute list.
      */
@@ -64,12 +64,14 @@ public interface ProdTypeAttributeViewGroup extends Auditable, Rankable, Nameabl
      * Rank .
      * @return rank.
      */
+    @Override
     int getRank();
 
     /**
      * Rank .
      * @param rank rank.
      */
+    @Override
     void setRank(int rank);
 
      /**
@@ -77,13 +79,15 @@ public interface ProdTypeAttributeViewGroup extends Auditable, Rankable, Nameabl
      *
      * @return name of view group.
      */
-    String getName();
+     @Override
+     String getName();
 
     /**
      * Set name of view group.
      *
      * @param name name.
      */
+    @Override
     void setName(String name);
 
     /**

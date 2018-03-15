@@ -33,7 +33,7 @@ public interface DtoProductAssociationService extends GenericDTOService<ProductA
      * Get all product associations.
      *
      * @param productId product primary key
-     * @return list of product assotiations
+     * @return list of product associations
      */
     List<ProductAssociationDTO> getProductAssociations(long productId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;

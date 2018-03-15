@@ -32,7 +32,7 @@ public class StringI18NModel implements I18NModel {
     public static final String SEPARATOR = "#~#";
 
     // Must be sorted so that we preserve order in the toString();
-    private final Map<String, String> values = new TreeMap<String, String>();
+    private final Map<String, String> values = new TreeMap<>();
 
     private String toStringCache = null;
 
@@ -59,6 +59,7 @@ public class StringI18NModel implements I18NModel {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getValue(final String locale) {
         if (locale != null) {
             return values.get(locale);
@@ -67,12 +68,14 @@ public class StringI18NModel implements I18NModel {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void putValue(final String locale, final String value) {
         toStringCache = null;
         values.put(locale, value);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getAllValues() {
         return values;
     }

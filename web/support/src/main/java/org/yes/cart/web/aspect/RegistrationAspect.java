@@ -37,7 +37,7 @@ import org.yes.cart.domain.message.consumer.CustomerRegistrationMessageListener;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.MailService;
-import org.yes.cart.service.domain.PassPhrazeGenerator;
+import org.yes.cart.service.domain.PassPhraseGenerator;
 import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.theme.ThemeService;
@@ -63,7 +63,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
     private final HashHelper passwordHashHelper;
 
-    private final PassPhrazeGenerator phrazeGenerator;
+    private final PassPhraseGenerator phrazeGenerator;
 
     private final MailService mailService;
 
@@ -76,14 +76,14 @@ public class RegistrationAspect extends BaseNotificationAspect {
      * Construct customer aspect.
      *
      * @param taskExecutor    {@link org.springframework.core.task.TaskExecutor} to execute task.
-     * @param phrazeGenerator {@link org.yes.cart.service.domain.PassPhrazeGenerator}
+     * @param phrazeGenerator {@link PassPhraseGenerator}
      * @param passwordHashHelper      {@link org.yes.cart.service.domain.HashHelper}
      * @param mailService     persists mail object to be picked up by bulk email job
      * @param mailComposer    mail composer generates message to be sent
      * @param themeService    theme service
      */
     public RegistrationAspect(final TaskExecutor taskExecutor,
-                              final PassPhrazeGenerator phrazeGenerator,
+                              final PassPhraseGenerator phrazeGenerator,
                               final HashHelper passwordHashHelper,
                               final MailService mailService,
                               final MailComposer mailComposer,

@@ -173,9 +173,9 @@ public interface ProductTypeDTO extends Identifiable, Guidable {
     void setDigital(boolean digital);
 
     /**
-     * Is digital product donwloadable ?
+     * Is digital product downloadable ?
      *
-     * @return true in case if digital product can be donwloaded.
+     * @return true in case if digital product can be downloaded.
      */
     boolean isDownloadable();
 

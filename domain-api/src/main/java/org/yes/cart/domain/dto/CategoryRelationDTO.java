@@ -44,14 +44,14 @@ public interface CategoryRelationDTO extends Identifiable, Guidable {
     void setCategoryId(long categoryId);
 
     /**
-     * Get parrent pk value.
+     * Get parent pk value.
      *
-     * @return parrent pk value.
+     * @return parent pk value.
      */
     long getParentId();
 
     /**
-     * Set parrent pk value.
+     * Set parent pk value.
      *
      * @param parentId parent pk value.
      */

@@ -117,7 +117,7 @@ public interface CarrierDTO extends Identifiable {
     void setWorldwide(boolean worldwide);
 
     /**
-     * Is carrier perform country devilery.
+     * Is carrier perform country delivery.
      *
      * @return true if performs country delivery.
      */
@@ -131,7 +131,7 @@ public interface CarrierDTO extends Identifiable {
     void setCountry(boolean country);
 
     /**
-     * Is carrier perform state devilery.
+     * Is carrier perform state delivery.
      *
      * @return true if performs state delivery.
      */
@@ -141,12 +141,12 @@ public interface CarrierDTO extends Identifiable {
     /**
      * Set state delivery flag.
      *
-     * @param state state devivery flag
+     * @param state state delivery flag
      */
     void setState(boolean state);
 
     /**
-     * Is carrier perform local (city) devilery.
+     * Is carrier perform local (city) delivery.
      *
      * @return true if performs local (city)  delivery.
      */

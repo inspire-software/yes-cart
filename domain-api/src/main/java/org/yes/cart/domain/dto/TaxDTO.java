@@ -61,7 +61,7 @@ public interface TaxDTO extends Codable, Identifiable, Guidable {
     boolean getExclusiveOfPrice();
 
     /**
-     * Set tax exlusive flag.
+     * Set tax exclusive flag.
      *
      * @param exclusiveOfPrice exclusive flag
      */

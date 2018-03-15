@@ -37,14 +37,17 @@ public class NonI18NModel implements I18NModel {
         this.value = value;
     }
 
+    @Override
     public String getValue(final String locale) {
         return this.value;
     }
 
+    @Override
     public void putValue(final String locale, final String value) {
         // do nothing
     }
 
+    @Override
     public Map<String, String> getAllValues() {
         return Collections.emptyMap();
     }

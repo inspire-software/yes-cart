@@ -29,7 +29,7 @@ import org.yes.cart.domain.entity.Identifiable;
 public interface AssociationDTO extends Identifiable {
 
     /**
-     * @return pkimary key.
+     * @return primary key.
      */
     long getAssociationId();
 

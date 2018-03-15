@@ -17,7 +17,6 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.ShopDTO;
-import org.yes.cart.domain.dto.ShopWarehouseDTO;
 import org.yes.cart.domain.dto.SkuWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
@@ -110,7 +109,7 @@ public interface DtoWarehouseService extends GenericDTOService<WarehouseDTO> {
     void assignWarehouse(long warehouseId, long shopId, boolean soft) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Unassign given warehouse from shop
+     * Un-assign given warehouse from shop
      *
      * @param warehouseId warehouse id
      * @param shopId      shop id

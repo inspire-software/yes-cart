@@ -28,6 +28,7 @@ import java.util.Comparator;
  * Time: 14:21:21
  */
 public class SkuPriceQuantityComparatorImpl implements Comparator<SkuPrice> {
+    @Override
     public int compare(final SkuPrice skuPrice1, final SkuPrice skuPrice2) {
         final int byTier = skuPrice1.getQuantity().compareTo(skuPrice2.getQuantity());
         if (byTier == 0) {

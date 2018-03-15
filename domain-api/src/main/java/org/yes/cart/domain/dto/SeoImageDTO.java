@@ -55,7 +55,7 @@ public interface SeoImageDTO extends Identifiable {
     /**
      * Set alternative text.
      *
-     * @param alt
+     * @param alt alternative text
      */
     void setAlt(String alt);
 
@@ -83,7 +83,7 @@ public interface SeoImageDTO extends Identifiable {
     /**
      * Set image title.
      *
-     * @param title
+     * @param title title
      */
     void setTitle(String title);
 

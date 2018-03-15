@@ -16,7 +16,6 @@
 
 package org.yes.cart.domain.entity;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 
 /**
@@ -25,7 +24,7 @@ import java.util.Collection;
  * Time: 11:12:54
  * <p/>
  * Product sku. Sku is product or product variation.
- * By default one product has at leat one sku
+ * By default one product has at least one sku
  * or several in case of multisku product.
  * Sku is abbreviation from stock keeping unit.
  * Attribute values is distinguish between sku for multisku product.
@@ -49,6 +48,7 @@ public interface ProductSku extends Auditable, Attributable, Rankable, Nameable,
      *
      * @return sku code
      */
+    @Override
     String getCode();
 
     /**
@@ -57,6 +57,7 @@ public interface ProductSku extends Auditable, Attributable, Rankable, Nameable,
      *
      * @param code code
      */
+    @Override
     void setCode(String code);
 
     /**
@@ -140,22 +141,6 @@ public interface ProductSku extends Auditable, Attributable, Rankable, Nameable,
      */
     Collection<AttrValueProductSku> getAttributes();
 
-    /**
-     * Get all products attributes filtered by given name.
-     *
-     * @param attributeCode code of attribute
-     * @return collection of product attributes filtered by attribute name or empty collection if no attribute were found.
-     */
-    ///////////////////////// Collection<AttrValueProductSku> getAttributesByCode(String attributeCode);
-
-    /**
-     * Get single attribute.
-     *
-     * @param attributeCode code of attribute
-     * @return single {@link AttrValueProductSku} or null if not found.
-     */
-    ///////////////////////// AttrValueProductSku getAttributeByCode(String attributeCode);
-
 
     /**
      * Set collection of products attributes.
@@ -171,6 +156,7 @@ public interface ProductSku extends Auditable, Attributable, Rankable, Nameable,
      *
      * @return sku name.
      */
+    @Override
     String getName();
 
     /**
@@ -178,6 +164,7 @@ public interface ProductSku extends Auditable, Attributable, Rankable, Nameable,
      *
      * @param name sku name.
      */
+    @Override
     void setName(String name);
 
     /**
@@ -200,23 +187,27 @@ public interface ProductSku extends Auditable, Attributable, Rankable, Nameable,
      *
      * @return sku description.
      */
+    @Override
     String getDescription();
 
     /**
-     * Set sku decription.
+     * Set sku description.
      *
-     * @param description sku decription.
+     * @param description sku description.
      */
+    @Override
     void setDescription(String description);
 
     /**
      * {@inheritDoc}
      */
+    @Override
     int getRank();
 
     /**
      * {@inheritDoc}
      */
+    @Override
     void setRank(int rank);
 
     /**

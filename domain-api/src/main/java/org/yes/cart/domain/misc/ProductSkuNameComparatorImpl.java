@@ -29,6 +29,7 @@ public class ProductSkuNameComparatorImpl implements Comparator<ProductSku> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int compare(final ProductSku sku1, final ProductSku sku2) {
         return sku1.getName().compareTo(sku2.getName());
     }

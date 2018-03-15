@@ -26,13 +26,15 @@ package org.yes.cart.domain.entity;
 public interface Role extends Codable, Guidable {
 
     /**
-     * @return unque role code
+     * @return unique role code
      */
+    @Override
     String getCode();
 
     /**
      * @param code unique role code
      */
+    @Override
     void setCode(String code);
 
     /**

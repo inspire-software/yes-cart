@@ -90,6 +90,7 @@ public interface Category extends Auditable, Attributable, Rankable, Nameable, S
      *
      * @return category rank.
      */
+    @Override
     int getRank();
 
     /**
@@ -97,6 +98,7 @@ public interface Category extends Auditable, Attributable, Rankable, Nameable, S
      *
      * @param rank category rank
      */
+    @Override
     void setRank(int rank);
 
     /**
@@ -119,6 +121,7 @@ public interface Category extends Auditable, Attributable, Rankable, Nameable, S
      *
      * @return category name.
      */
+    @Override
     String getName();
 
     /**
@@ -126,6 +129,7 @@ public interface Category extends Auditable, Attributable, Rankable, Nameable, S
      *
      * @param name category name.
      */
+    @Override
     void setName(String name);
 
     /**
@@ -147,6 +151,7 @@ public interface Category extends Auditable, Attributable, Rankable, Nameable, S
      *
      * @return category description.
      */
+    @Override
     String getDescription();
 
     /**
@@ -154,6 +159,7 @@ public interface Category extends Auditable, Attributable, Rankable, Nameable, S
      *
      * @param description description
      */
+    @Override
     void setDescription(String description);
 
     /**

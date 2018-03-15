@@ -45,6 +45,7 @@ public interface Brand extends Auditable, Attributable {
      *
      * @return name.
      */
+    @Override
     String getName();
 
     /**
@@ -52,6 +53,7 @@ public interface Brand extends Auditable, Attributable {
      *
      * @param name name
      */
+    @Override
     void setName(String name);
 
     /**
@@ -59,6 +61,7 @@ public interface Brand extends Auditable, Attributable {
      *
      * @return description.
      */
+    @Override
     String getDescription();
 
     /**
@@ -66,6 +69,7 @@ public interface Brand extends Auditable, Attributable {
      *
      * @param description description
      */
+    @Override
     void setDescription(String description);
 
     /**

@@ -40,16 +40,19 @@ public class ProductTypeRangeListXStreamProvider implements XStreamProvider<Rang
     private XStream xStream;
 
     /** {@inheritDoc} */
+    @Override
     public RangeList fromXML(final String xml) {
         return (RangeList) provide().fromXML(xml);
     }
 
     /** {@inheritDoc} */
+    @Override
     public RangeList fromXML(final InputStream is) {
         return (RangeList) provide().fromXML(is);
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toXML(final RangeList object) {
         return provide().toXML(object);
     }

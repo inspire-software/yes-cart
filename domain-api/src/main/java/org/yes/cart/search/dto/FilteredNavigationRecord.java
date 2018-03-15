@@ -121,6 +121,7 @@ public interface FilteredNavigationRecord extends Rankable, Cloneable, Serializa
      *
      * @return rank
      */
+    @Override
     int getRank();
 
     /**
@@ -128,6 +129,7 @@ public interface FilteredNavigationRecord extends Rankable, Cloneable, Serializa
      *
      * @param rank rank
      */
+    @Override
     void setRank(int rank);
 
     /**

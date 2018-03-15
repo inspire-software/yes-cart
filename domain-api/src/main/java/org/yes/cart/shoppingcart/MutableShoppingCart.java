@@ -293,6 +293,7 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      *
      * @return instance of {@link ShoppingContext}
      */
+    @Override
     MutableShoppingContext getShoppingContext();
 
     /**
@@ -300,6 +301,7 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      *
      * @return order information.
      */
+    @Override
     MutableOrderInfo getOrderInfo();
 
     /**
@@ -328,6 +330,7 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      *
      * @return order number
      */
+    @Override
     String getOrdernum();
 
     /**

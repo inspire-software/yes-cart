@@ -28,6 +28,7 @@ public interface ResultsIterator<T> extends Iterator<T> {
     /**
      * Always throw exception as this is a read only scroll.
      */
+    @Override
     void remove();
 
     /**

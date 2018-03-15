@@ -37,14 +37,18 @@ public interface ShopAdvPlaceRule extends Auditable, Rankable, Nameable {
 
     /**
      */
+    @Override
     int getRank();
 
+    @Override
     void setRank(int rank);
 
     /**
      */
+    @Override
     String getName();
 
+    @Override
     void setName(String name);
 
     /**

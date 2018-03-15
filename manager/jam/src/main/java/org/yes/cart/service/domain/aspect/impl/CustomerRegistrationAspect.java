@@ -37,7 +37,7 @@ import org.yes.cart.domain.message.consumer.CustomerRegistrationMessageListener;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.MailService;
-import org.yes.cart.service.domain.PassPhrazeGenerator;
+import org.yes.cart.service.domain.PassPhraseGenerator;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.util.TimeContext;
@@ -61,7 +61,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
 
     private final HashHelper passwordHashHelper;
 
-    private final PassPhrazeGenerator phrazeGenerator;
+    private final PassPhraseGenerator phrazeGenerator;
 
     private final MailService mailService;
 
@@ -74,14 +74,14 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
      * Construct customer aspect.
      *
      * @param taskExecutor    {@link TaskExecutor} to execute task.
-     * @param phrazeGenerator {@link PassPhrazeGenerator}
+     * @param phrazeGenerator {@link PassPhraseGenerator}
      * @param passwordHashHelper      {@link HashHelper}
      * @param mailService     persists mail object to be picked up by bulk email job
      * @param mailComposer    mail composer generates message to be sent
      * @param themeService    theme service
      */
     public CustomerRegistrationAspect(final TaskExecutor taskExecutor,
-                                      final PassPhrazeGenerator phrazeGenerator,
+                                      final PassPhraseGenerator phrazeGenerator,
                                       final HashHelper passwordHashHelper,
                                       final MailService mailService,
                                       final MailComposer mailComposer,

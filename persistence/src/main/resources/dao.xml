@@ -105,7 +105,7 @@
                 <entry key="org.yes.cart.domain.entity.Product" value="org.yes.cart.domain.entity.impl.ProductEntity"/>
                 <entry key="org.yes.cart.domain.entity.ProductAssociation" value="org.yes.cart.domain.entity.impl.ProductAssociationEntity"/>
                 <entry key="org.yes.cart.domain.entity.ProductCategory" value="org.yes.cart.domain.entity.impl.ProductCategoryEntity"/>
-                <entry key="org.yes.cart.domain.entity.ProductEnsebleOption" value="org.yes.cart.domain.entity.impl.ProductEnsebleOptionEntity"/>
+                <entry key="org.yes.cart.domain.entity.ProductEnsembleOption" value="org.yes.cart.domain.entity.impl.ProductEnsembleOptionEntity"/>
                 <entry key="org.yes.cart.domain.entity.ProductSku" value="org.yes.cart.domain.entity.impl.ProductSkuEntity"/>
                 <entry key="org.yes.cart.domain.entity.ProductType" value="org.yes.cart.domain.entity.impl.ProductTypeEntity"/>
                 <entry key="org.yes.cart.domain.entity.ProductTypeAttr" value="org.yes.cart.domain.entity.impl.ProductTypeAttrEntity"/>

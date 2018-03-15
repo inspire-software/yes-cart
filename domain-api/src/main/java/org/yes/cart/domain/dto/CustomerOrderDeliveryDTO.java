@@ -227,7 +227,7 @@ public interface CustomerOrderDeliveryDTO   extends Identifiable {
     /**
      * Delivery remarks (could be used for third party integrations or in JAM)
      *
-     * @param deliveryRemarks
+     * @param deliveryRemarks remarks
      */
     void setDeliveryRemarks(String deliveryRemarks);
 
@@ -420,7 +420,7 @@ public interface CustomerOrderDeliveryDTO   extends Identifiable {
 
     /**
      * Get the order number. Order number not a pk value, it
-     * can be slighty different and depends from active {@link org.yes.cart.service.order.OrderNumberGenerator}
+     * can be slightly different and depends from active {@link org.yes.cart.service.order.OrderNumberGenerator}
      * implementation.
      *
      * @return order number

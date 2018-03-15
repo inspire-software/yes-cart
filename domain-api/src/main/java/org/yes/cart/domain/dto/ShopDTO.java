@@ -108,7 +108,7 @@ public interface ShopDTO extends Identifiable {
     String getDescription();
 
     /**
-     * Set descrotion.
+     * Set description.
      *
      * @param description shop description.
      */

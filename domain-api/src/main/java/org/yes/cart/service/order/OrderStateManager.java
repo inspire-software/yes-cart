@@ -77,7 +77,7 @@ public interface OrderStateManager {
      *
      * @param orderEvent event to fire transition
      * @return true in case if order state transition or one of the delivery state transition  was  successful
-     * @throws  {@link OrderException} in case if transition can not be done
+     * @throws OrderException in case if transition can not be done
      */
     boolean fireTransition(OrderEvent orderEvent) throws OrderException;
 

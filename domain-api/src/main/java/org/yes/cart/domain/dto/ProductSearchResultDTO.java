@@ -34,6 +34,7 @@ public interface ProductSearchResultDTO extends Identifiable {
      * Get product id.
      * @return product id.
      */
+    @Override
     long getId();
 
     /**

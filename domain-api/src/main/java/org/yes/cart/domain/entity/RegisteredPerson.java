@@ -19,7 +19,7 @@ package org.yes.cart.domain.entity;
 import java.time.Instant;
 
 /**
- * Represent any registered person in system: customer, admid, call center , etc.
+ * Represent any registered person in system: customer, admin, call center , etc.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011

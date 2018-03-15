@@ -16,7 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.yes.cart.service.domain.PassPhrazeGenerator;
+import org.yes.cart.service.domain.PassPhraseGenerator;
 
 /**
  * (C)opypasted from some internet resource, sorry, dont remember.
@@ -25,7 +25,7 @@ import org.yes.cart.service.domain.PassPhrazeGenerator;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class PassPhraseGeneratorImpl implements PassPhrazeGenerator {
+public class PassPhraseGeneratorImpl implements PassPhraseGenerator {
 
     /**
      * Minimum length for a decent password

@@ -37,10 +37,10 @@ public interface ManagerService extends GenericService<Manager> {
     void resetPassword(Manager manager);
 
     /**
-     * Create manager and assing it to manage particular shop.
+     * Create manager and assign it to manage particular shop.
      *
      * @param manager to reset password
-     * @param shop    shop to assing
+     * @param shop    shop to assign
      * @return customer instance
      */
     Manager create(final Manager manager, final Shop shop);

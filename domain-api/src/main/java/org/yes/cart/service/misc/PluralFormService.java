@@ -18,7 +18,7 @@ package org.yes.cart.service.misc;
 
 /**
  *
- * Responcible to provide plural forms for differen languages.
+ * Responsible to provide plural forms for different languages.
  *
  * Igor Azarny iazarny@yahoo.com
  * Date: 21-Sep-2011

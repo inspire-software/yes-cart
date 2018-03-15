@@ -34,7 +34,7 @@ public final class ExceptionUtil {
      * Convert stack trace of an exception to string.
      *
      * @param exception exception
-     * @return full stack strace as string
+     * @return full stack trace as string
      */
     public static String stackTraceToString(final Exception exception) {
         StringWriter sw = new StringWriter();

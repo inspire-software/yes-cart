@@ -30,6 +30,7 @@ public class RankableComparatorImpl implements Comparator<Rankable> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int compare(final Rankable object1, final Rankable object2) {
         return object1.getRank() - object2.getRank();
     }

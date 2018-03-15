@@ -62,7 +62,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     private Set<AttrValueProduct> attributes = new HashSet<AttrValueProduct>(0);
     private Set<ProductCategory> productCategory = new HashSet<ProductCategory>(0);
     private Collection<ProductSku> sku = new ArrayList<ProductSku>(0);
-    private Set<ProductEnsebleOption> ensebleOption = new HashSet<ProductEnsebleOption>(0);
+    private Set<ProductEnsembleOption> ensebleOption = new HashSet<ProductEnsembleOption>(0);
     private Set<ProductAssociation> productAssociations = new HashSet<ProductAssociation>(0);
     private Boolean featured;
     private SeoEntity seoInternal;
@@ -289,12 +289,12 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.sku = sku;
     }
 
-    public Set<ProductEnsebleOption> getEnsebleOption() {
+    public Set<ProductEnsembleOption> getEnsembleOption() {
         return this.ensebleOption;
     }
 
-    public void setEnsebleOption(Set<ProductEnsebleOption> ensebleOption) {
-        this.ensebleOption = ensebleOption;
+    public void setEnsembleOption(Set<ProductEnsembleOption> ensembleOption) {
+        this.ensebleOption = ensembleOption;
     }
 
     public Set<ProductAssociation> getProductAssociations() {

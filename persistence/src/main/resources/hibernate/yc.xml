@@ -1129,11 +1129,11 @@
         </bag>
 
 
-        <set name="ensebleOption" inverse="false" lazy="true" cascade="all">
+        <set name="ensembleOption" inverse="false" lazy="true" cascade="all">
             <key>
                 <column name="PRODUCT_ID" not-null="false"/>
             </key>
-            <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ProductEnsebleOptionEntity"/>
+            <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ProductEnsembleOptionEntity"/>
         </set>
 
         <set name="productAssociations" inverse="false" lazy="true" cascade="all">
@@ -1170,7 +1170,7 @@
         <property name="guid" column="GUID" type="string" length="36" unique-key="PRODUCT_GUID" not-null="true"/>
     </class>
 
-    <class name="org.yes.cart.domain.entity.impl.ProductEnsebleOptionEntity" table="TENSEMBLEOPT">
+    <class name="org.yes.cart.domain.entity.impl.ProductEnsembleOptionEntity" table="TENSEMBLEOPT">
         <comment>Ensemble options - how many particular sku in ensemble</comment>
         <id name="ensembleOptId" column="ENSEMBLEOPT_ID" type="long">
             <generator class="native">
@@ -3866,7 +3866,7 @@
 
     <query name="REMOVE.ALL.ENSEMBLEOPTS.BY.SKUID">
         <![CDATA[
-            delete from ProductEnsebleOptionEntity  eo   where eo.sku.skuId  = ?1
+            delete from ProductEnsembleOptionEntity  eo   where eo.sku.skuId  = ?1
         ]]>
     </query>
 

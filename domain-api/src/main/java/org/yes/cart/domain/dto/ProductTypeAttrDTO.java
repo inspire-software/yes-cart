@@ -194,7 +194,7 @@ public interface ProductTypeAttrDTO extends Identifiable {
     /**
      * Navigation type.
      *
-     * @param navigationType
+     * @param navigationType type
      */
     void setNavigationType(String navigationType);
 

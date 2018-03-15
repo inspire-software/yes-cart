@@ -44,13 +44,15 @@ public interface ProductAssociation extends Auditable, Rankable {
      *
      * @return rank.
      */
+    @Override
     int getRank();
 
     /**
-     * Set rank of asscosiation.
+     * Set rank of association.
      *
-     * @param rank rank of asscosiation.
+     * @param rank rank of association.
      */
+    @Override
     void setRank(int rank);
 
     /**

@@ -85,21 +85,6 @@ public interface ProductType extends Auditable {
      */
     void setDescription(String description);
 
-    /**
-     */
-    //Map<String,AttrValue> getAttribute();
-
-    //void setAttribute(Map<String,AttrValue> attribute);
-
-    /**
-     * Extended attributes definition.
-     *
-     * @return map of attribute code, and extended attribute definition
-     * @see org.yes.cart.domain.entity.ProductTypeAttr
-     */
-    //Map<String, ProductTypeAttr> getAttributeExt();
-
-    //void setAttributeExt(Map<String, ProductTypeAttr> attributeExt);
 
     Collection<ProductTypeAttr> getAttributes();
 

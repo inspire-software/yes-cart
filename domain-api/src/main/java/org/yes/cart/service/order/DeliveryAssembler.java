@@ -35,12 +35,12 @@ import java.util.Map;
  * </table>
  * <p/>
  * Delivery group 1 - can be shipped
- * Delivery group 2 - awaiting for date, than check kinventory
+ * Delivery group 2 - awaiting for date, than check inventory
  * Delivery group 3 - awaiting for inventory
  * Delivery group 4 - electronic delivery
  * <p/>
- * Note 1 - in case if current date more that product start availibility date and inventory available
- * Note 2 - in case if current date more that product start availibility date and no inventory
+ * Note 1 - in case if current date more that product start availability date and inventory available
+ * Note 2 - in case if current date more that product start availability date and no inventory
  * <p/>
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com

@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.dto;
 
-import org.yes.cart.domain.dto.BrandDTO;
 import org.yes.cart.domain.dto.CustomerDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;

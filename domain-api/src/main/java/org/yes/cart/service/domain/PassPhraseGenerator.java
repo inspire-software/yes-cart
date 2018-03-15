@@ -14,25 +14,18 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.search.dao;
-
-import org.yes.cart.domain.misc.Pair;
+package org.yes.cart.service.domain;
 
 /**
- * User: denispavlov
- * Date: 31/03/2017
- * Time: 08:36
+ * User: Igor Azarny iazarny@yahoo.com
+ * Date: 07-May-2011
+ * Time: 11:13:01
  */
-public interface DocumentAdapter<T, PK, D> {
-
+public interface PassPhraseGenerator {
     /**
-     * Adapet persistent entity into an index document object.
+     * Generate a random pass phrase string with a random password.
      *
-     * @param entity entity to adapt
-     *
-     * @return pair of primary key and document. if document is null this denotes that
-     *         this entity should not be indexed (or removed from index)
+     * @return generated pass phrase
      */
-    Pair<PK, D> adapt(T entity);
-
+    String getNextPassPhrase();
 }

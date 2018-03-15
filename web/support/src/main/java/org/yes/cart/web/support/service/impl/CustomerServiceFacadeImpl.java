@@ -44,13 +44,13 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     private final CustomerService customerService;
     private final CustomerWishListService customerWishListService;
     private final AttributeService attributeService;
-    private final PassPhrazeGenerator phrazeGenerator;
+    private final PassPhraseGenerator phrazeGenerator;
     private final CustomerCustomisationSupport customerCustomisationSupport;
 
     public CustomerServiceFacadeImpl(final CustomerService customerService,
                                      final CustomerWishListService customerWishListService,
                                      final AttributeService attributeService,
-                                     final PassPhrazeGenerator phrazeGenerator,
+                                     final PassPhraseGenerator phrazeGenerator,
                                      final CustomerCustomisationSupport customerCustomisationSupport) {
         this.customerService = customerService;
         this.customerWishListService = customerWishListService;

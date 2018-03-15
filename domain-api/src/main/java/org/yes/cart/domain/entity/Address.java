@@ -214,9 +214,9 @@ public interface Address extends Auditable {
 
 
     /**
-     * Set deafult flag.
+     * Set default flag.
      *
-     * @param defaultAddress defalt address flag
+     * @param defaultAddress default address flag
      */
     void setDefaultAddress(boolean defaultAddress);
 

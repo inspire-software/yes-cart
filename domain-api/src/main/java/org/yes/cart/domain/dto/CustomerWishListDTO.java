@@ -88,16 +88,16 @@ public interface CustomerWishListDTO extends Identifiable {
 
 
     /**
-     * Get type of wsih list item.
+     * Get type of wish list item.
      *
-     * @return type of wsih list item
+     * @return type of wish list item
      */
     String getWlType();
 
     /**
-     * Set type of wsih list item
+     * Set type of wish list item
      *
-     * @param wlType type of wsih list item to set.
+     * @param wlType type of wish list item to set.
      */
     void setWlType(final String wlType);
 

@@ -16,8 +16,6 @@
 
 package org.yes.cart.domain.entity;
 
-import java.util.Set;
-
 /**
  * Attribute group interface.
  * <p/>
@@ -48,6 +46,7 @@ public interface AttributeGroup extends Auditable, Codable {
      *
      * @return attribute group code.
      */
+    @Override
     String getCode();
 
     /**
@@ -55,6 +54,7 @@ public interface AttributeGroup extends Auditable, Codable {
      *
      * @param code code value.
      */
+    @Override
     void setCode(String code);
 
     /**

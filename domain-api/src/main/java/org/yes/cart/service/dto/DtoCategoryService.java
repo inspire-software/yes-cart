@@ -39,8 +39,8 @@ public interface DtoCategoryService extends GenericDTOService<CategoryDTO>, Gene
      *
      * @return list of matching categories
      *
-     * @throws UnmappedInterfaceException
-     * @throws UnableToCreateInstanceException
+     * @throws UnmappedInterfaceException error
+     * @throws UnableToCreateInstanceException error
      */
     List<CategoryDTO> findBy(String filter, int page, int pageSize)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
@@ -111,7 +111,7 @@ public interface DtoCategoryService extends GenericDTOService<CategoryDTO>, Gene
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Unassign category from shop.
+     * Un-assign category from shop.
      *
      * @param categoryId category id
      * @param shopId     shop id

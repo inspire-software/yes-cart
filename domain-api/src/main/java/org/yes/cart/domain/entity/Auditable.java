@@ -55,22 +55,22 @@ public interface Auditable extends Identifiable, Guidable, Versionable {
     void setUpdatedTimestamp(Instant updatedTimestamp);
 
     /**
-     * @return created by user identificator.
+     * @return created by user identifier.
      */
     String getCreatedBy();
 
     /**
-     * @param createdBy created by user identificator.
+     * @param createdBy created by user identifier.
      */
     void setCreatedBy(String createdBy);
 
     /**
-     * @return updated by user identificator.
+     * @return updated by user identifier.
      */
     String getUpdatedBy();
 
     /**
-     * @param updatedBy updated by user identificator.
+     * @param updatedBy updated by user identifier.
      */
     void setUpdatedBy(String updatedBy);
 

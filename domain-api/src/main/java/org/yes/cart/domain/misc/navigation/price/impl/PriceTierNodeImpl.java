@@ -31,27 +31,31 @@ public class PriceTierNodeImpl implements PriceTierNode {
     private BigDecimal to;
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getFrom() {
         return from;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setFrom(final BigDecimal from) {
         this.from = from;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getTo() {
         return to;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setTo(final BigDecimal to) {
         this.to = to;
     }
 
     /**
-     * Defualt PriceTierNodeImpl constructor. 
+     * Default PriceTierNodeImpl constructor.
      */
     public PriceTierNodeImpl() {
         super();

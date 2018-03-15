@@ -27,9 +27,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
- * User managment service allow
+ * User management service allow
  * to manage users, roles and
- * relationы between them.
+ * relationships between them.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
@@ -100,7 +100,7 @@ public interface ManagementService {
      * Get the assigned to manager shops
      *
      * @param userId user email
-     * @param includeSubs
+     * @param includeSubs include sub shops
      * @return list of assigned shops
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration error

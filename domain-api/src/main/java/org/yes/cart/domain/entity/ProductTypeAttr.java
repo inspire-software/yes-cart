@@ -78,6 +78,7 @@ public interface ProductTypeAttr extends Auditable, Rankable {
      *
      * @return rank
      */
+    @Override
     int getRank();
 
     /**
@@ -85,6 +86,7 @@ public interface ProductTypeAttr extends Auditable, Rankable {
      *
      * @param rank to set.
      */
+    @Override
     void setRank(int rank);
 
     /**

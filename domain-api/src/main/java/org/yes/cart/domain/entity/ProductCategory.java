@@ -74,6 +74,7 @@ public interface ProductCategory extends Auditable, Rankable {
      *
      * @return order of product in category.
      */
+    @Override
     int getRank();
 
     /**
@@ -81,6 +82,7 @@ public interface ProductCategory extends Auditable, Rankable {
      *
      * @param rank order of product in category.
      */
+    @Override
     void setRank(int rank);
 
 }

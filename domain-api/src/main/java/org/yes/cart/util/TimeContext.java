@@ -26,7 +26,7 @@ import java.time.*;
 public final class TimeContext {
 
     private static final ZoneId DEFAULT_ZONE = ZoneId.systemDefault();
-    private static final ThreadLocal<Instant> NOW = new ThreadLocal<Instant>();
+    private static final ThreadLocal<Instant> NOW = new ThreadLocal<>();
     private static final ThreadLocal<ZoneId> ZONE = ThreadLocal.withInitial(() -> DEFAULT_ZONE);
 
     private TimeContext() {
@@ -131,7 +131,7 @@ public final class TimeContext {
      * Set zone ID.
      *
      * Zone ID to use for localized date/datetime conversions.
-     * Settinf this value to null results in resetting zone id to {@link #DEFAULT_ZONE}
+     * Setting this value to null results in resetting zone id to {@link #DEFAULT_ZONE}
      *
      * @param zoneId zone ID
      */

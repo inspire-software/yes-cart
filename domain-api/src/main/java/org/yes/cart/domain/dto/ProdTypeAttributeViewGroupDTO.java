@@ -40,7 +40,7 @@ public interface ProdTypeAttributeViewGroupDTO extends Identifiable {
     void setProdTypeAttributeViewGroupId(long prodTypeAttributeViewGroupId);
 
     /**
-     * Comma separated attribute list. For example WEIGHT,LENGHT,HEIGHT
+     * Comma separated attribute list. For example WEIGHT,LENGTH,HEIGHT
      *
      * @return comm  separated attribute list.
      */

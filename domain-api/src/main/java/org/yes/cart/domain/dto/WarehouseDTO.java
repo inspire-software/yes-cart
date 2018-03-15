@@ -108,7 +108,7 @@ public interface WarehouseDTO extends Identifiable {
     /**
      * Get country.
      *
-     * @return coubtry.
+     * @return country.
      */
     String getCountryCode();
 

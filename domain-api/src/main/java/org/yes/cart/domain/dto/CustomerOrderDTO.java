@@ -49,7 +49,7 @@ public interface CustomerOrderDTO extends Identifiable {
 
     /**
      * Get the order number. Order number not a pk value, it
-     * can be slighty different and depends from active {@link org.yes.cart.service.order.OrderNumberGenerator}
+     * can be slightly different and depends from active {@link org.yes.cart.service.order.OrderNumberGenerator}
      * implementation.
      *
      * @return order number
@@ -268,14 +268,14 @@ public interface CustomerOrderDTO extends Identifiable {
     void setB2bEmployeeId(String b2bEmployeeId);
 
     /**
-     * B2B refernce for the chargeable department/ manager in charge of paying for this etc
+     * B2B reference for the chargeable department/ manager in charge of paying for this etc
      *
      * @return internal charge ID
      */
     String getB2bChargeId();
 
     /**
-     * B2B refernce for the chargeable department/ manager in charge of paying for this etc
+     * B2B reference for the chargeable department/ manager in charge of paying for this etc
      *
      * @param b2bChargeId internal charge ID
      */

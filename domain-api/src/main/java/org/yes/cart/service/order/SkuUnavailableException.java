@@ -54,7 +54,7 @@ public class SkuUnavailableException extends OrderAssemblyException {
     }
 
     /**
-     * Flag to determine if the product is online at the time of throuwing exception.
+     * Flag to determine if the product is online at the time of throwing exception.
      * true if online (then this is thrown due to item being out of stock), false if offline.
      * Unresolved SKU are always assumed to be online.
      *

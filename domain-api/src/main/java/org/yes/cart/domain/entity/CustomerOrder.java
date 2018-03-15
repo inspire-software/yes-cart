@@ -484,14 +484,14 @@ public interface CustomerOrder extends Auditable {
     void setB2bEmployeeId(String b2bEmployeeId);
 
     /**
-     * B2B refernce for the chargeable department/ manager in charge of paying for this etc
+     * B2B reference for the chargeable department/ manager in charge of paying for this etc
      *
      * @return internal charge ID
      */
     String getB2bChargeId();
 
     /**
-     * B2B refernce for the chargeable department/ manager in charge of paying for this etc
+     * B2B reference for the chargeable department/ manager in charge of paying for this etc
      *
      * @param b2bChargeId internal charge ID
      */
@@ -656,7 +656,7 @@ public interface CustomerOrder extends Auditable {
      * Get delivery by given number.
      *
      * @param deliveryNumber given delivery number
-     * @return Delivery if foud, otherwise null
+     * @return Delivery if found, otherwise null
      */
     CustomerOrderDelivery getCustomerOrderDelivery(String deliveryNumber);
 

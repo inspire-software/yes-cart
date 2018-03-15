@@ -40,6 +40,7 @@ public class FailoverStringI18NModel implements I18NModel {
         this.failover = failover;
     }
 
+    @Override
     public String getValue(final String locale) {
         final String val = model.getValue(locale);
         if (val == null || val.length() == 0) {
@@ -48,10 +49,12 @@ public class FailoverStringI18NModel implements I18NModel {
         return val;
     }
 
+    @Override
     public void putValue(final String locale, final String value) {
         model.putValue(locale, value);
     }
 
+    @Override
     public Map<String, String> getAllValues() {
         return model.getAllValues();
     }

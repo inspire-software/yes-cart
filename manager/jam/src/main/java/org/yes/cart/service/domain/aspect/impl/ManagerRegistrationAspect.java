@@ -28,7 +28,7 @@ import org.yes.cart.domain.message.consumer.ManagerRegistrationMessageListener;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.MailService;
-import org.yes.cart.service.domain.PassPhrazeGenerator;
+import org.yes.cart.service.domain.PassPhraseGenerator;
 import org.yes.cart.service.mail.MailComposer;
 
 import java.io.Serializable;
@@ -50,7 +50,7 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
 
     private final HashHelper passwordHashHelper;
 
-    private final PassPhrazeGenerator phrazeGenerator;
+    private final PassPhraseGenerator phrazeGenerator;
 
     private final MailService mailService;
 
@@ -62,7 +62,7 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
      * Constructor for aspect with asynchronous notification.
      */
     public ManagerRegistrationAspect(final TaskExecutor taskExecutor,
-                                     final PassPhrazeGenerator phrazeGenerator,
+                                     final PassPhraseGenerator phrazeGenerator,
                                      final HashHelper passwordHashHelper,
                                      final MailService mailService,
                                      final MailComposer mailComposer
@@ -79,7 +79,7 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
      *  Constructor for aspect with synchronous notification.
      */
     public ManagerRegistrationAspect(
-            final PassPhrazeGenerator phrazeGenerator,
+            final PassPhraseGenerator phrazeGenerator,
             final HashHelper passwordHashHelper,
             final MailService mailService,
             final MailComposer mailComposer) {

@@ -115,7 +115,7 @@ public interface AddressDTO extends Identifiable {
     /**
      * Get country.
      *
-     * @return coubtry.
+     * @return country.
      */
     String getCountryCode();
 

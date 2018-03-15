@@ -26,7 +26,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
  */
 public final class ShoppingCartContext {
 
-    private static final ThreadLocal<ShoppingCart> SHOPPING_CART_THREAD_LOCAL = new ThreadLocal<ShoppingCart>();
+    private static final ThreadLocal<ShoppingCart> SHOPPING_CART_THREAD_LOCAL = new ThreadLocal<>();
 
     private ShoppingCartContext() {
         // no instance

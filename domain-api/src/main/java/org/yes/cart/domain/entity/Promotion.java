@@ -132,11 +132,13 @@ public interface Promotion extends Auditable, Codable, Taggable, Rankable, Namea
     /**
      * @return default name for this promo
      */
+    @Override
     String getName();
 
     /**
      * @param name default name for this promo
      */
+    @Override
     void setName(String name);
 
     /**
@@ -230,6 +232,7 @@ public interface Promotion extends Auditable, Codable, Taggable, Rankable, Namea
      *
      * @return promotion rank.
      */
+    @Override
     int getRank();
 
     /**
@@ -237,6 +240,7 @@ public interface Promotion extends Auditable, Codable, Taggable, Rankable, Namea
      *
      * @param rank promotion rank
      */
+    @Override
     void setRank(int rank);
 
 

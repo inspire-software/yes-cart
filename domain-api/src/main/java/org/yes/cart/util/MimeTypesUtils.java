@@ -62,7 +62,7 @@ public final class MimeTypesUtils {
 
         // nothing found -> look up our in extension map to find manually mapped types
         if (contentType == null) {
-            final String extension = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length());;
+            final String extension = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length());
             return EXT_MIMETYPE_MAP.get(extension);
         }
         return contentType;

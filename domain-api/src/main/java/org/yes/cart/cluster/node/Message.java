@@ -26,7 +26,7 @@ import java.util.List;
  */
 public interface Message extends Serializable {
 
-    final Serializable LOST = new Serializable() { };
+    Serializable LOST = new Serializable() { };
 
     /**
      * @return nodeId of the message sender ({@link org.yes.cart.cluster.node.Node#getNodeId()})

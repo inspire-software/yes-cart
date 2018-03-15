@@ -20,8 +20,8 @@ package org.yes.cart.domain.entity;
 /**
  * Associations between products. It can be:
  * Cross sell - other related products from other categories.
- * up sell - the simular products with higher prices.
- * accesories - accessories to product, like charger for mobile phone.
+ * up sell - the similar products with higher prices.
+ * accessories - accessories to product, like charger for mobile phone.
  * who buy also buy - dynamic association, base on different customers buy history.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
@@ -52,11 +52,13 @@ public interface Association extends Auditable, Codable {
      *
      * @return unique human readable association code
      */
+    @Override
     String getCode();
 
     /**
      * @param code unique human readable association code to use.
      */
+    @Override
     void setCode(String code);
 
     /**

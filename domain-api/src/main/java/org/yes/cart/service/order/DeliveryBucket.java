@@ -23,7 +23,7 @@ package org.yes.cart.service.order;
  * Bucket must implement equals() and hashCode() correctly so that it can be used in
  * maps and adequately compared.
  *
- * This interface inherits Comparable so that it can be priritised as well.
+ * This interface inherits Comparable so that it can be prioritised as well.
  *
  * User: denispavlov
  * Date: 18/02/2016

@@ -48,16 +48,18 @@ public class MapConverter extends AbstractCollectionConverter {
         this.entryNodeValue = entryNodeValue;
     }
 
+    @Override
     public boolean canConvert(Class type) {
         return type.equals(HashMap.class)
                 || type.equals(Hashtable.class)
                 || (JVM.is14() && type.getName().equals("java.util.LinkedHashMap"));
     }
 
+    @Override
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
         Map map = (Map) source;
-        for (Iterator iterator = map.entrySet().iterator(); iterator.hasNext();) {
-            Map.Entry entry = (Map.Entry) iterator.next();
+        for (final Object o : map.entrySet()) {
+            Map.Entry entry = (Map.Entry) o;
             writer.startNode(this.entryNode);
 
             writeItem(this.entryNodeKey, entry.getKey(), context, writer);
@@ -68,15 +70,15 @@ public class MapConverter extends AbstractCollectionConverter {
     }
 
     protected void writeItem(String nodeName, Object item, MarshallingContext context, HierarchicalStreamWriter writer) {
-        // PUBLISHED API METHOD! If changing signature, ensure backwards compatability.
+        // PUBLISHED API METHOD! If changing signature, ensure backwards compatibility.
         if (item != null) {
-            String name = nodeName;
-            ExtendedHierarchicalStreamWriterHelper.startNode(writer, name, item.getClass());
+            ExtendedHierarchicalStreamWriterHelper.startNode(writer, nodeName, item.getClass());
             context.convertAnother(item);
             writer.endNode();
         }
     }
 
+    @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         Map map = (Map) createCollection(context.getRequiredType());
         populateMap(reader, context, map);

@@ -19,7 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 
 /**
- * User: igora Igor Azarny
+ * User: Igor Azarny
  * Date: 12/12/12
  * Time: 9:53 AM
  */

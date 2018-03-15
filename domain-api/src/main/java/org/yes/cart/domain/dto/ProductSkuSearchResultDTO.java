@@ -27,6 +27,7 @@ public interface ProductSkuSearchResultDTO extends Identifiable {
      * Get product SKU id.
      * @return product SKU id.
      */
+    @Override
     long getId();
 
     /**

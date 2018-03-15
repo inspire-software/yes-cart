@@ -46,6 +46,7 @@ public interface Attribute extends Auditable, Rankable, Codable, Nameable, Clone
      *
      * @return attribute code.
      */
+    @Override
     String getCode();
 
     /**
@@ -53,6 +54,7 @@ public interface Attribute extends Auditable, Rankable, Codable, Nameable, Clone
      *
      * @param code code value
      */
+    @Override
     void setCode(String code);
 
     /**
@@ -102,6 +104,7 @@ public interface Attribute extends Auditable, Rankable, Codable, Nameable, Clone
      *
      * @return attribute name.
      */
+    @Override
     String getName();
 
     /**
@@ -109,6 +112,7 @@ public interface Attribute extends Auditable, Rankable, Codable, Nameable, Clone
      *
      * @param name name
      */
+    @Override
     void setName(String name);
 
     /**
@@ -184,14 +188,14 @@ public interface Attribute extends Auditable, Rankable, Codable, Nameable, Clone
     /**
      * Allow failover search for category attributes.
      *
-     * @return true if failvover allowed.
+     * @return true if failover allowed.
      */
     boolean isAllowfailover();
 
     /**
-     * Set search failower flag.
+     * Set search failover flag.
      *
-     * @param allowfailover true if faiover allowed.
+     * @param allowfailover true if failover allowed.
      */
     void setAllowfailover(boolean allowfailover);
 
@@ -230,6 +234,7 @@ public interface Attribute extends Auditable, Rankable, Codable, Nameable, Clone
      *
      * @return order in UI form.
      */
+    @Override
     int getRank();
 
     /**
@@ -237,6 +242,7 @@ public interface Attribute extends Auditable, Rankable, Codable, Nameable, Clone
      *
      * @param rank order in UI form
      */
+    @Override
     void setRank(int rank);
 
     /**

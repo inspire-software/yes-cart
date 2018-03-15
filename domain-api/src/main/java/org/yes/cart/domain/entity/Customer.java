@@ -189,7 +189,7 @@ public interface Customer extends RegisteredPerson, Auditable, Taggable {
     List<Address> getAddresses(String addressType);
 
     /**
-     * Get default address wuth given type.
+     * Get default address with given type.
      *
      * @param addressType address type
      * @return default address

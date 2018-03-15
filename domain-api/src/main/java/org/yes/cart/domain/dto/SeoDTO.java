@@ -36,7 +36,7 @@ public interface SeoDTO extends Identifiable {
     /**
      * Set seo pk value.
      *
-     * @param seoId
+     * @param seoId seo id
      */
     void setSeoId(long seoId);
 
