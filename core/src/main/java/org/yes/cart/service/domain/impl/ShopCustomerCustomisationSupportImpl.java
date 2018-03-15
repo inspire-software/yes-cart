@@ -55,15 +55,17 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
 
 
     /** {@inheritDoc} */
+    @Override
     public String getGuestCustomerType(final Shop shop) {
         return GUEST_TYPE;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Set<String> getCustomerTypes(final Shop shop, final boolean includeGuest) {
 
         final AttrValue types = getShopCustomerTypes(shop);
-        final Set<String> codes = new HashSet<String>();
+        final Set<String> codes = new HashSet<>();
         if (types != null && StringUtils.isNotBlank(types.getVal())) {
             for (final String code : StringUtils.split(types.getVal(), ',')) {
                 codes.add(code.trim());
@@ -83,6 +85,7 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
 
 
     /** {@inheritDoc} */
+    @Override
     public List<Pair<String, I18NModel>> getSupportedCustomerTypes(final Shop shop) {
 
         final AttrValue av = getShopCustomerTypes(shop);
@@ -91,21 +94,21 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
             final String[] types = StringUtils.split(av.getVal(), ',');
 
             final I18NModel model = new StringI18NModel(av.getDisplayVal());
-            final Map<String, String[]> values = new HashMap<String, String[]>();
+            final Map<String, String[]> values = new HashMap<>();
             for (final Map.Entry<String, String> displayValues : model.getAllValues().entrySet()) {
                 values.put(displayValues.getKey(), StringUtils.split(displayValues.getValue(), ','));
             }
 
-            final List<Pair<String, I18NModel>> out = new ArrayList<Pair<String, I18NModel>>(types.length);
+            final List<Pair<String, I18NModel>> out = new ArrayList<>(types.length);
             for (int i = 0; i < types.length; i++) {
                 final String type = types[i].trim();
-                final Map<String, String> names = new HashMap<String, String>();
+                final Map<String, String> names = new HashMap<>();
                 for (final Map.Entry<String, String[]> entry : values.entrySet()) {
                     if (entry.getValue().length > i) {
                         names.put(entry.getKey(), entry.getValue()[i]);
                     }
                 }
-                out.add(new Pair<String, I18NModel>(type, new FailoverStringI18NModel(names, type)));
+                out.add(new Pair<>(type, new FailoverStringI18NModel(names, type)));
             }
             return out;
         }
@@ -115,22 +118,26 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
 
 
     /** {@inheritDoc} */
+    @Override
     public boolean isGuestCheckoutSupported(final Shop shop) {
         final String val = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CHECKOUT_ENABLE_GUEST);
         return val != null && Boolean.valueOf(val);
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isCustomerTypeSupported(final Shop shop, final String customerType) {
         return getCustomerTypes(shop, false).contains(customerType);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getSupportedRegistrationFormAttributesAsList(final Shop shop, final String customerType) {
         return shop.getSupportedRegistrationFormAttributesAsList(customerType);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<AttrValueWithAttribute> getRegistrationAttributes(final Shop shop, final String customerType) {
 
         final Set<String> types = getCustomerTypes(shop, true);
@@ -150,8 +157,8 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
             return Collections.emptyList();
         }
 
-        final List<AttrValueWithAttribute> registration = new ArrayList<AttrValueWithAttribute>();
-        final Map<String, AttrValueCustomer> map = new HashMap<String, AttrValueCustomer>(attrValueCollection.size());
+        final List<AttrValueWithAttribute> registration = new ArrayList<>();
+        final Map<String, AttrValueCustomer> map = new HashMap<>(attrValueCollection.size());
         for (final AttrValueCustomer av : attrValueCollection) {
             map.put(av.getAttributeCode(), av);
         }
@@ -166,17 +173,24 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getSupportedProfileFormAttributesAsList(final Shop shop, final String customerType) {
         return shop.getSupportedProfileFormAttributesAsList(customerType);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getSupportedProfileFormReadOnlyAttributesAsList(final Shop shop, final String customerType) {
         return shop.getSupportedProfileFormReadOnlyAttributesAsList(customerType);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Pair<AttrValueWithAttribute, Boolean>> getProfileAttributes(final Shop shop, final Customer customer) {
+
+        if (customer == null || shop == null) {
+            return Collections.emptyList();
+        }
 
         final List<String> allowed = getSupportedProfileFormAttributesAsList(shop, customer.getCustomerType());
         if (CollectionUtils.isEmpty(allowed)) {
@@ -192,8 +206,8 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
         }
 
 
-        final List<Pair<AttrValueWithAttribute, Boolean>> profile = new ArrayList<Pair<AttrValueWithAttribute, Boolean>>();
-        final Map<String, AttrValueWithAttribute> map = new HashMap<String, AttrValueWithAttribute>(attrValueCollection.size());
+        final List<Pair<AttrValueWithAttribute, Boolean>> profile = new ArrayList<>();
+        final Map<String, AttrValueWithAttribute> map = new HashMap<>(attrValueCollection.size());
         for (final AttrValueCustomer av : attrValueCollection) {
             map.put(
                     av.getAttributeCode(),
@@ -212,7 +226,7 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
         for (final String code : allowed) {
             final AttrValueWithAttribute av = map.get(code);
             if (av != null) {
-                profile.add(new Pair<AttrValueWithAttribute, Boolean>(av, readonly.contains(code)));
+                profile.add(new Pair<>(av, readonly.contains(code)));
             }
         }
 
