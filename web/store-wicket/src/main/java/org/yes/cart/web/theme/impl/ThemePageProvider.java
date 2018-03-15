@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public class ThemePageProvider extends ClassReference<IRequestablePage> {
 
-    private final Map<String, IProvider<Class<IRequestablePage>>> pages = new HashMap<String, IProvider<Class<IRequestablePage>>>();
+    private final Map<String, IProvider<Class<IRequestablePage>>> pages = new HashMap<>();
 
     public ThemePageProvider(final Map<String, Class<IRequestablePage>> pages) {
         super(IRequestablePage.class);
@@ -47,6 +47,7 @@ public class ThemePageProvider extends ClassReference<IRequestablePage> {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<IRequestablePage> get() {
         List<String> themeChain = ApplicationDirector.getCurrentThemeChain();
         for (final String theme : themeChain) {

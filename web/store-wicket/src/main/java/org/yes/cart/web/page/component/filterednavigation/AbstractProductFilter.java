@@ -47,7 +47,7 @@ import java.util.Set;
  * |Black     7|
  * -------------
  * </pre>
- * Where Color - atribute name
+ * Where Color - attribute name
  * and Green, Red, Black available attribute values and available quantity of products.
  *
  * User: Igor Azarny iazarny@yahoo.com
@@ -159,7 +159,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
      */
     protected List<Block> adaptNavigationRecords(final List<FilteredNavigationRecord> records) {
 
-        final List<Block> navBlocks = new ArrayList<Block>();
+        final List<Block> navBlocks = new ArrayList<>();
 
         String head = StringUtils.EMPTY;
         Block currentBlock = null;
@@ -213,11 +213,13 @@ public abstract class AbstractProductFilter extends BaseComponent {
     }
 
     /** {@inheritDoc} */
+    @Override
     protected void onBeforeRender() {
         add(
                 new ListView<Block>(
                         FILTERED_NAVIGATION_LIST,
                         adaptNavigationRecords(navigationRecords)) {
+                    @Override
                     protected void populateItem(ListItem<Block> pairListItem) {
                         final Block block = pairListItem.getModelObject();
                         if ("i18n".equalsIgnoreCase(block.getTemplate())) {
@@ -328,7 +330,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
         private final String code;
         private final String template;
 
-        private final List<Value> values = new ArrayList<Value>();
+        private final List<Value> values = new ArrayList<>();
 
         Block(final String code, final String template, final String label) {
             this.code = code;

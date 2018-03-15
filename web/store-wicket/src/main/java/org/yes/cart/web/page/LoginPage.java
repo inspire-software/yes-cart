@@ -89,6 +89,7 @@ public class LoginPage extends AbstractWebPage {
      *
      * @return page title
      */
+    @Override
     public IModel<String> getPageTitle() {
         return new StringResourceModel("login",this);
     }

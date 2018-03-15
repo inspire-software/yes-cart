@@ -27,8 +27,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -50,8 +48,6 @@ import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.util.WicketUtil;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -92,23 +88,23 @@ public class AbstractWebPage extends WebPage {
     /**
      * Page title.
      */
-    public static final String PAGE_TITLE = "pageTitle";
+    private static final String PAGE_TITLE = "pageTitle";
     /**
      * Meta created.
      */
-    public static final String CREATED = "created";
+    private static final String CREATED = "created";
     /**
      * Meta description.
      */
-    public static final String DESCRIPTION = "description";
+    private static final String DESCRIPTION = "description";
     /**
      * Meta keywords.
      */
-    public static final String KEYWORDS = "keywords";
+    private static final String KEYWORDS = "keywords";
     /**
      * Meta keywords.
      */
-    public static final String CANONICAL = "relCanonical";
+    private static final String CANONICAL = "relCanonical";
 
 
     /**
@@ -129,7 +125,7 @@ public class AbstractWebPage extends WebPage {
         if (cart != null) {
             if (StringUtils.isBlank(cart.getCurrentLocale())) {
                 getShoppingCartCommandFactory().execute(cart,
-                        (Map) Collections.singletonMap(
+                        Collections.singletonMap(
                                 ShoppingCartCommand.CMD_CHANGELOCALE,
                                 getSession().getLocale().getLanguage()
                         ));
@@ -142,6 +138,7 @@ public class AbstractWebPage extends WebPage {
     }
 
 
+    @Override
     protected void onBeforeRender() {
 
         super.onBeforeRender();
@@ -180,13 +177,10 @@ public class AbstractWebPage extends WebPage {
 
         if (Application.get().getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT && !isPageStateless()) {
 
-            final List<String> statefulComponentIds = new ArrayList<String>();
-            this.visitChildren(Component.class, new IVisitor<Component, Object>() {
-                @Override
-                public void component(final Component object, final IVisit<Object> objectIVisit) {
-                    if (!object.isStateless()) {
-                        statefulComponentIds.add(object.getId());
-                    }
+            final List<String> statefulComponentIds = new ArrayList<>();
+            this.visitChildren(Component.class, (object, objectIVisit) -> {
+                if (!object.isStateless()) {
+                    statefulComponentIds.add(object.getId());
                 }
             });
             LOG.warn("[DEV] Page {} is stateful because of the following components: {}", getClass().getCanonicalName(), statefulComponentIds);
@@ -209,7 +203,7 @@ public class AbstractWebPage extends WebPage {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
         final PageParameters params = getPageParameters();
-        final Map<String, String> paramsMap = wicketUtil.pageParametesAsMap(params);
+        final Map<String, String> paramsMap = wicketUtil.pageParametersAsMap(params);
         try {
 
             getShoppingCartCommandFactory().execute(cart, (Map) paramsMap);
@@ -241,8 +235,8 @@ public class AbstractWebPage extends WebPage {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         if (cart.isModified()) {
             getShoppingCartPersister().persistShoppingCart(
-                    (HttpServletRequest) getRequest().getContainerRequest(),
-                    (HttpServletResponse) getResponse().getContainerResponse(),
+                    getRequest().getContainerRequest(),
+                    getResponse().getContainerResponse(),
                     cart
             );
         }
@@ -376,10 +370,10 @@ public class AbstractWebPage extends WebPage {
             final String lang = getLocale().getLanguage();
             final String title = getPageTitle(shop.getSeo(), lang);
             if (title != null) {
-                return new Model<String>(title);
+                return new Model<>(title);
             }
         }
-        return new Model<String>(shop.getName());
+        return new Model<>(shop.getName());
     }
 
     protected String getPageTitle(final Seo seo, final String language) {
@@ -404,7 +398,7 @@ public class AbstractWebPage extends WebPage {
             final String lang = getLocale().getLanguage();
             final String title = getDescription(shop.getSeo(), lang);
             if (title != null) {
-                return new Model<String>(title);
+                return new Model<>(title);
             }
         }
         return null;
@@ -431,7 +425,7 @@ public class AbstractWebPage extends WebPage {
             final String lang = getLocale().getLanguage();
             final String title = getKeywords(shop.getSeo(), lang);
             if (title != null) {
-                return new Model<String>(title);
+                return new Model<>(title);
             }
         }
         return null;
@@ -443,7 +437,7 @@ public class AbstractWebPage extends WebPage {
      * @return page created
      */
     public IModel<String> getCreated() {
-        return new Model<String>(DateUtils.formatSDT());
+        return new Model<>(DateUtils.formatSDT());
     }
 
     protected String getKeywords(final Seo seo, final String language) {

@@ -67,6 +67,7 @@ public class ContactPage  extends AbstractWebPage {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void onBeforeRender() {
 
         executeHttpPostedCommands();
@@ -95,6 +96,7 @@ public class ContactPage  extends AbstractWebPage {
      *
      * @return page title
      */
+    @Override
     public IModel<String> getPageTitle() {
         return new StringResourceModel("contact",this);
     }
@@ -124,7 +126,7 @@ public class ContactPage  extends AbstractWebPage {
         /**
          * Set email.
          *
-         * @param email
+         * @param email email
          */
         public void setEmail(final String email) {
             this.email = email;
@@ -211,7 +213,7 @@ public class ContactPage  extends AbstractWebPage {
 
             super(id);
 
-            setModel(new CompoundPropertyModel<ContactForm>(ContactForm.this));
+            setModel(new CompoundPropertyModel<>(ContactForm.this));
 
 
             add(
@@ -250,7 +252,7 @@ public class ContactPage  extends AbstractWebPage {
                         @Override
                         public void onSubmit() {
 
-                            final Map<String, Object> data = new HashMap<String, Object>();
+                            final Map<String, Object> data = new HashMap<>();
                             data.put("name", getName());
                             data.put("phone", getPhone());
                             data.put("email", getEmail());

@@ -136,7 +136,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
         final Pair<String, String> imageSize = categoryServiceFacade.getThumbnailSizeConfig(0L, browsingShopId);
 
         add(
-                new ListView<CustomerOrderDelivery>(DELIVERY_LIST, new ArrayList<CustomerOrderDelivery>(customerOrder.getDelivery()))
+                new ListView<CustomerOrderDelivery>(DELIVERY_LIST, new ArrayList<>(customerOrder.getDelivery()))
                 {
 
                     @Override
@@ -148,7 +148,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                         final String slaName = getI18NSupport().getFailoverModel(sla.getDisplayName(), sla.getName()).getValue(selectedLocale);
 
-                        final List<CustomerOrderDeliveryDet> deliveryDet = new ArrayList<CustomerOrderDeliveryDet>(delivery.getDetail());
+                        final List<CustomerOrderDeliveryDet> deliveryDet = new ArrayList<>(delivery.getDetail());
 
                         final PriceModel deliveryTotal = checkoutServiceFacade.getOrderDeliveryTotalSub(customerOrder, delivery, getCurrentCart());
                         final PriceModel deliveryShipping = checkoutServiceFacade.getOrderDeliveryTotalShipping(customerOrder, delivery, getCurrentCart());
@@ -158,11 +158,11 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                         final boolean showDeliveryTime;
                         if (delivery.getDeliveryConfirmed() != null) {
                             deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryConfirmed",
-                                    Collections.<String, Object>singletonMap("date", DateUtils.formatCustomer(delivery.getDeliveryConfirmed(), getLocale())));
+                                    Collections.singletonMap("date", DateUtils.formatCustomer(delivery.getDeliveryConfirmed(), getLocale())));
                             showDeliveryTime = true;
                         } else if (delivery.getDeliveryGuaranteed() != null) {
                             deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryGuaranteed",
-                                    Collections.<String, Object>singletonMap("date", DateUtils.formatCustomer(delivery.getDeliveryGuaranteed(), getLocale())));
+                                    Collections.singletonMap("date", DateUtils.formatCustomer(delivery.getDeliveryGuaranteed(), getLocale())));
                             showDeliveryTime = true;
                         } else if (delivery.getDeliveryEstimatedMin() != null) {
                             if (delivery.getDeliveryEstimatedMax() != null) {
@@ -174,12 +174,12 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                 showDeliveryTime = true;
                             } else {
                                 deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryEstimatedX",
-                                        Collections.<String, Object>singletonMap("from", DateUtils.formatCustomer(delivery.getDeliveryEstimatedMin(), getLocale())));
+                                        Collections.singletonMap("from", DateUtils.formatCustomer(delivery.getDeliveryEstimatedMin(), getLocale())));
                                 showDeliveryTime = true;
                             }
                         } else if (delivery.getRequestedDeliveryDate() != null) {
                             deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryRequested",
-                                    Collections.<String, Object>singletonMap("date", DateUtils.formatCustomer(delivery.getRequestedDeliveryDate(), getLocale())));
+                                    Collections.singletonMap("date", DateUtils.formatCustomer(delivery.getRequestedDeliveryDate(), getLocale())));
                             showDeliveryTime = true;
                         } else {
                             deliveryTime = null;
@@ -225,11 +225,11 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                 final boolean showDeliveryTime;
                                                 if (det.getDeliveryConfirmed() != null) {
                                                     deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryConfirmed",
-                                                            Collections.<String, Object>singletonMap("date", DateUtils.formatCustomer(det.getDeliveryConfirmed(), getLocale())));
+                                                            Collections.singletonMap("date", DateUtils.formatCustomer(det.getDeliveryConfirmed(), getLocale())));
                                                     showDeliveryTime = true;
                                                 } else if (det.getDeliveryGuaranteed() != null) {
                                                     deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryGuaranteed",
-                                                            Collections.<String, Object>singletonMap("date", DateUtils.formatCustomer(det.getDeliveryGuaranteed(), getLocale())));
+                                                            Collections.singletonMap("date", DateUtils.formatCustomer(det.getDeliveryGuaranteed(), getLocale())));
                                                     showDeliveryTime = true;
                                                 } else if (det.getDeliveryEstimatedMin() != null) {
                                                     if (det.getDeliveryEstimatedMax() != null) {
@@ -241,7 +241,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                         showDeliveryTime = true;
                                                     } else {
                                                         deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryEstimatedX",
-                                                                Collections.<String, Object>singletonMap("from", DateUtils.formatCustomer(det.getDeliveryEstimatedMin(), getLocale())));
+                                                                Collections.singletonMap("from", DateUtils.formatCustomer(det.getDeliveryEstimatedMin(), getLocale())));
                                                         showDeliveryTime = true;
                                                     }
                                                 } else {
@@ -353,9 +353,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
         final PriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
 
-        final PriceView priceView = new PriceView(ITEM_PRICE, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount(), cartItem.isGift());
-
-        return priceView;
+        return new PriceView(ITEM_PRICE, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount(), cartItem.isGift());
     }
 
 
@@ -365,9 +363,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
         final PriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, true);
 
-        final PriceView priceView = new PriceView(ITEM_TOTAL, model, null, false, false, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
-
-        return priceView;
+        return new PriceView(ITEM_TOTAL, model, null, false, false, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
 
     }
 

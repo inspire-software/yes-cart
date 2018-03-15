@@ -79,7 +79,7 @@ public class ShoppingCartCouponsList extends ListView<String> {
 
         couponListItem.add(new Label(LIST_ITEM_TEXT,
                 getLocalizer().getString(messageKey, this.getParent(),
-                        new Model<ValueMap>(new ValueMap(Collections.singletonMap("coupon", couponCode))))));
+                        new Model<>(new ValueMap(Collections.singletonMap("coupon", couponCode))))));
 
         couponListItem.add(wicketSupportFacade.links()
                 .newRemoveCouponLink(REMOVE_COUPON, couponCode,

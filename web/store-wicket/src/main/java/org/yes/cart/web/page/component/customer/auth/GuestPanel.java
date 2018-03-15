@@ -130,7 +130,7 @@ public class GuestPanel extends BaseComponent {
                 CheckoutPage.STEP,
                 CheckoutPage.STEP_ADDR
         );
-        return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
+        return new Pair<>(successfulPage, parameters);
     }
 
 
@@ -156,7 +156,7 @@ public class GuestPanel extends BaseComponent {
         /**
          * Set email.
          *
-         * @param email
+         * @param email email
          */
         public void setEmail(final String email) {
             this.email = email;
@@ -194,7 +194,7 @@ public class GuestPanel extends BaseComponent {
 
             super(id);
 
-            setModel(new CompoundPropertyModel<GuestForm>(GuestForm.this));
+            setModel(new CompoundPropertyModel<>(GuestForm.this));
 
 
             setCustomerType(customerType);
@@ -236,7 +236,7 @@ public class GuestPanel extends BaseComponent {
                         @Override
                         public void onSubmit() {
 
-                            final Map<String, Object> data = new HashMap<String, Object>();
+                            final Map<String, Object> data = new HashMap<>();
                             // Data is now relayed via custom attributes, so we can sort and arrange all attributes on
                             // registration form.
                             // data.put("firstname", getFirstname());
@@ -293,18 +293,16 @@ public class GuestPanel extends BaseComponent {
                 attrValue.getAttribute().getDisplayName(),
                 attrValue.getAttribute().getName());
 
-        final Label rez = new Label(NAME, new AbstractReadOnlyModel<String>() {
+        return new Label(NAME, new AbstractReadOnlyModel<String>() {
 
             private final I18NModel m = model;
 
             @Override
             public String getObject() {
-                final String lang = getLocale().getLanguage();
-                return m.getValue(lang);
+                final String lang1 = getLocale().getLanguage();
+                return m.getValue(lang1);
             }
         });
-
-        return rez;
     }
 
 

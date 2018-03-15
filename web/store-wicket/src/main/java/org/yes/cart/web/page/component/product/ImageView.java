@@ -84,8 +84,8 @@ public class ImageView extends BaseComponent {
         final String width = imageSize.getFirst();
         final String height = imageSize.getSecond();
 
-        final String tumbWidth = thumbSize.getFirst();
-        final String tumbHeight = thumbSize.getSecond();
+        final String thumbWidth = thumbSize.getFirst();
+        final String thumbHeight = thumbSize.getSecond();
 
         final String lang = getLocale().getLanguage();
 
@@ -124,10 +124,10 @@ public class ImageView extends BaseComponent {
                                 new ExternalLink(ALT_IMAGE_REF, depictable.getImage("as", "is", pair.getFirst(), lang))
                                         .add(
                                                 createSeoImage(
-                                                        new ContextImage(ALT_IMAGE, depictable.getImage(tumbWidth, tumbHeight, pair.getFirst(), lang))
+                                                        new ContextImage(ALT_IMAGE, depictable.getImage(thumbWidth, thumbHeight, pair.getFirst(), lang))
                                                                 .add(
-                                                                        new AttributeModifier(HTML_WIDTH, tumbWidth),
-                                                                        new AttributeModifier(HTML_HEIGHT, tumbHeight)
+                                                                        new AttributeModifier(HTML_WIDTH, thumbWidth),
+                                                                        new AttributeModifier(HTML_HEIGHT, thumbHeight)
                                                                 ),
                                                         depictable.getSeoImage(pair.getSecond()), lang)
 

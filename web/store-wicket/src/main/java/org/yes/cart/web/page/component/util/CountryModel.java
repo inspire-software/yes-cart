@@ -50,10 +50,12 @@ public class CountryModel implements IModel<Country> {
 
     }
 
+    @Override
     public Country getObject() {
         return country;
     }
 
+    @Override
     public void setObject(final Country country) {
         this.country = country;
         if (country == null) {
@@ -63,6 +65,7 @@ public class CountryModel implements IModel<Country> {
         }
     }
 
+    @Override
     public void detach() {
 
         if (country instanceof IDetachable) {

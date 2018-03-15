@@ -63,6 +63,7 @@ public class StorefrontWebSession extends AuthenticatedWebSession {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean authenticate(final String username, final String password) {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, cart,
@@ -79,6 +80,7 @@ public class StorefrontWebSession extends AuthenticatedWebSession {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Roles getRoles() {
         if (isSignedIn()) {
             return new Roles(Roles.USER);

@@ -171,7 +171,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         final String message;
         if (!pqm.canOrderMore()) {
 
-            final Map<String, Object> mparams = new HashMap<String, Object>();
+            final Map<String, Object> mparams = new HashMap<>();
             mparams.put("cart", pqm.getCartQty().toPlainString());
 
             message = getLocalizer().getString("quantityPickerFullTooltip", this,
@@ -179,7 +179,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
         } else if (pqm.hasMax()) {
 
-            final Map<String, Object> mparams = new HashMap<String, Object>();
+            final Map<String, Object> mparams = new HashMap<>();
             mparams.put("min", pqm.getMin().toPlainString());
             mparams.put("step", pqm.getStep().toPlainString());
             mparams.put("max", pqm.getMax().toPlainString());
@@ -190,7 +190,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
         } else {
 
-            final Map<String, Object> mparams = new HashMap<String, Object>();
+            final Map<String, Object> mparams = new HashMap<>();
             mparams.put("min", pqm.getMin().toPlainString());
             mparams.put("step", pqm.getStep().toPlainString());
             mparams.put("cart", pqm.getCartQty().toPlainString());
@@ -200,8 +200,8 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         }
 
 
-        final TextField<BigDecimal> quantity = new TextField<BigDecimal>(QUANTITY_TEXT,
-                new Model<BigDecimal>(pqm.getCartQty()));
+        final TextField<BigDecimal> quantity = new TextField<>(QUANTITY_TEXT,
+                new Model<>(pqm.getCartQty()));
         quantity.add(new AttributeModifier("title", message));
 
         cartItemListItem.add(
@@ -274,7 +274,6 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
                 if (StringUtils.isNotBlank(qty)) {
                     qty = qty.replace(',', '.');
                 }
-                final String skuCode  = productSkuCode;
                 /*try {
                     skuCode = URLEncoder.encode(productSkuCode, "UTF-8");
                 } catch (UnsupportedEncodingException e) {
@@ -289,7 +288,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
                     setResponsePage(
                             getPage().getPageClass(),
                             new PageParameters()
-                                    .add(ShoppingCartCommand.CMD_SETQTYSKU, skuCode)
+                                    .add(ShoppingCartCommand.CMD_SETQTYSKU, productSkuCode)
                                     .add(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, qty)
                     );
 

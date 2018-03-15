@@ -146,16 +146,17 @@ public class ShippingView extends BaseComponent {
 
         final Component shippingSelector = new RadioGroup<CarrierSla>(
                 CARRIER_SLA_LIST,
-                new PropertyModel<CarrierSla>(this, "carrierSla")) {
+                new PropertyModel<>(this, "carrierSla")) {
 
             /** {@inheritDoc} */
+            @Override
             protected void onSelectionChanged(final CarrierSla descriptor) {
                 super.onSelectionChanged(carrierSla);
 
 
                 final ShoppingCart cart = getCurrentCart();
 
-                final Set<Long> slaSelection = new HashSet<Long>(cart.getCarrierSlaId().values());
+                final Set<Long> slaSelection = new HashSet<>(cart.getCarrierSlaId().values());
                 slaSelection.add(carrierSla.getCarrierslaId());
 
                 final Pair<Boolean, Boolean> addressNotRequired = shippingServiceFacade.isAddressNotRequired(slaSelection);
@@ -229,8 +230,9 @@ public class ShippingView extends BaseComponent {
             }
         }.add(
                 new ListView<CarrierSla>("shippingList", carrierSlas) {
+                    @Override
                     protected void populateItem(final ListItem<CarrierSla> shippingItem) {
-                        shippingItem.add(new Radio<CarrierSla>("shippingLabel", new Model<CarrierSla>(shippingItem.getModelObject())));
+                        shippingItem.add(new Radio<>("shippingLabel", new Model<>(shippingItem.getModelObject())));
 
                         final String shippingName =
                                 getI18NSupport().getFailoverModel(
@@ -253,13 +255,13 @@ public class ShippingView extends BaseComponent {
 
                         if (showDateSelect) {
 
-                            final IModel<Date> model = new PropertyModel<Date>(ShippingView.this, "requestedDate");
+                            final IModel<Date> model = new PropertyModel<>(ShippingView.this, "requestedDate");
 
                             final String namedDateSelectorId = "namedDaySelection" + getCarrierSla().getCarrierslaId() + supplier;
                             final DateTextField namedDateSelector = new DateTextField("namedDaySelection", model, "dd/MM/yyyy"); // TODO: format in settings?
                             namedDateSelector.add(new AttributeModifier("id", namedDateSelectorId));
 
-                            String js = "";
+                            String js;
 
                             final String suffix = selection.getSecond().getCarrierslaId() + supplier;
                             final String minKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + "Min" + suffix;
@@ -277,31 +279,31 @@ public class ShippingView extends BaseComponent {
                             final StringBuilder jsOut = new StringBuilder();
                             jsOut.append("        <script type=\"text/javascript\">\n");
                             jsOut.append("            $(function () {\n");
-                            jsOut.append("                var _input = $('#" + namedDateSelectorId + "')\n");
+                            jsOut.append("                var _input = $('#").append(namedDateSelectorId).append("')\n");
                             jsOut.append("                _input.parent().datetimepicker({\n");
                             jsOut.append("                    format: 'DD/MM/YYYY',\n");
                             jsOut.append("                    ignoreReadonly: true,\n");
                             if (getRequestedDate() != null) {
-                                jsOut.append("                date: new Date(" + getRequestedDate().getTime() + "),\n");
+                                jsOut.append("                date: new Date(").append(getRequestedDate().getTime()).append("),\n");
                             }
-                            jsOut.append("                    minDate: new Date(" + min + "),\n");
-                            jsOut.append("                    maxDate: new Date(" + max + "),\n");
+                            jsOut.append("                    minDate: new Date(").append(min).append("),\n");
+                            jsOut.append("                    maxDate: new Date(").append(max).append("),\n");
                             if (excludedDays != null) {
                                 jsOut.append("                disabledDates: [\n");
                                 for (final String excludedDay : excludedDays) {
-                                    jsOut.append("                 new Date(" + excludedDay + "),\n");
+                                    jsOut.append("                 new Date(").append(excludedDay).append("),\n");
                                 }
                                 jsOut.append("                ],\n");
                             }
                             if (excludedWeekdays != null) {
                                 jsOut.append("                daysOfWeekDisabled: [\n");
                                 for (final String excludedWeekday : excludedWeekdays) {
-                                    jsOut.append("                " + (NumberUtils.toInt(excludedWeekday) - 1) + ",");
+                                    jsOut.append("                ").append(NumberUtils.toInt(excludedWeekday) - 1).append(",");
                                 }
                                 jsOut.append("                ],\n");
                             }
-                            jsOut.append("                    locale: '" + getLocale().getLanguage() + "'\n");
-                            jsOut.append("                }).on('dp.change', function() { setTimeout(function() { $('#" + namedDateSelectorId + "').closest('form').submit(); }, 200); });\n");
+                            jsOut.append("                    locale: '").append(getLocale().getLanguage()).append("'\n");
+                            jsOut.append("                }).on('dp.change', function() { setTimeout(function() { $('#").append(namedDateSelectorId).append("').closest('form').submit(); }, 200); });\n");
                             jsOut.append("            });\n");
                             jsOut.append("        </script>\n");
 

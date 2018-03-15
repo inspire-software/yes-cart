@@ -33,6 +33,7 @@ public class StorefrontRequestCycleListener extends AbstractRequestCycleListener
     private static final Logger LOG = LoggerFactory.getLogger(StorefrontRequestCycleListener.class);
 
     /** {@inheritDoc} */
+    @Override
     public IRequestHandler onException(final RequestCycle cycle, final Exception ex) {
         if (ex instanceof SeoEntryIdInvalidException)  {
             LOG.error(ex.getMessage());

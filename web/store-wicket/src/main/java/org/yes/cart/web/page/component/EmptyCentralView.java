@@ -42,7 +42,7 @@ public class EmptyCentralView extends AbstractCentralView {
      * @param navigationContext navigation context.
      */
     public EmptyCentralView(final String id, final NavigationContext navigationContext) {
-        super(id, 0l, navigationContext);
+        super(id, 0L, navigationContext);
     }
 
     /**
@@ -54,7 +54,7 @@ public class EmptyCentralView extends AbstractCentralView {
      * @param navigationContext navigation context.
      */
     public EmptyCentralView(final String id, final long categoryId, final NavigationContext navigationContext) {
-        super(id, 0l, navigationContext);
+        super(id, 0L, navigationContext);
     }
 
 
@@ -72,7 +72,7 @@ public class EmptyCentralView extends AbstractCentralView {
     }
 
     private String getContentInclude(long shopId, String contentUri, String lang) {
-        final Map<String, Object> homepageCtx = new HashMap<String, Object>();
+        final Map<String, Object> homepageCtx = new HashMap<>();
         homepageCtx.put("shop", getCurrentShop());
         homepageCtx.put("shoppingCart", getCurrentCart());
         String content = contentServiceFacade.getDynamicContentBody(

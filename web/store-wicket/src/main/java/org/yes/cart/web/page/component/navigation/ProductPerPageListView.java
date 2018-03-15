@@ -56,6 +56,7 @@ public class ProductPerPageListView extends ListView<String> {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void populateItem(ListItem<String> stringListItem) {
 
         final String pageSize = stringListItem.getModelObject();

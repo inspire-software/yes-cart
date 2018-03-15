@@ -46,7 +46,7 @@ public class ShoppingCartSavedItemsList extends WishListView {
      */
     public ShoppingCartSavedItemsList(final String id,
                                       final Model<String> customerEmail) {
-        super(id, customerEmail, new Model<String>(CustomerWishList.CART_SAVE_FOR_LATER), new Model<String>(null));
+        super(id, customerEmail, new Model<>(CustomerWishList.CART_SAVE_FOR_LATER), new Model<>(null));
     }
 
 
@@ -68,6 +68,7 @@ public class ShoppingCartSavedItemsList extends WishListView {
      *
      * @return link
      */
+    @Override
     protected Link determineAtbLink(final LinksSupport links,
                                     final String linkId,
                                     final ProductSearchResultDTO product,

@@ -55,7 +55,7 @@ public class BooleanEditor extends Fragment {
 
         inner = model;
 
-        final CheckBox checkboxField = new CheckBox(EDIT, new PropertyModel<Boolean>(this, "innerValue"));
+        final CheckBox checkboxField = new CheckBox(EDIT, new PropertyModel<>(this, "innerValue"));
         checkboxField.setLabel(labelModel);
         checkboxField.setRequired(attrValue.getAttribute().isMandatory());
         checkboxField.setEnabled(!readOnly);

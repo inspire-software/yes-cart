@@ -38,7 +38,7 @@ import java.math.BigDecimal;
  */
 public class PriceProductFilter extends AbstractProductFilter {
 
-    private Boolean visibilityRezult;
+    private Boolean visibilityResult;
 
     @SpringBean(name = ServiceSpringKeys.PRICE_NAVIGATION)
     private PriceNavigation priceNavigation;
@@ -73,6 +73,7 @@ public class PriceProductFilter extends AbstractProductFilter {
      * @param valueToAdapt - expected value in following format CUR-LOW-HIGH
      * @return currency symbol  low high
      */
+    @Override
     protected String adaptValueForLinkLabel(final String valueToAdapt, final String displayValue) {
         Pair<String, Pair<BigDecimal, BigDecimal>> pair = priceNavigation.decomposePriceRequestParams(valueToAdapt);
         Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(pair.getFirst());
@@ -93,9 +94,10 @@ public class PriceProductFilter extends AbstractProductFilter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isVisible() {
 
-        if(visibilityRezult == null) {
+        if(visibilityResult == null) {
 
             final ShoppingCart cart = getCurrentCart();
 
@@ -108,13 +110,13 @@ public class PriceProductFilter extends AbstractProductFilter {
                     )
             );
 
-            visibilityRezult = super.isVisible()
+            visibilityResult = super.isVisible()
                     && getNavigationRecords() != null
                     && !getNavigationRecords().isEmpty();
 
         }
 
-        return visibilityRezult;
+        return visibilityResult;
 
     }
 

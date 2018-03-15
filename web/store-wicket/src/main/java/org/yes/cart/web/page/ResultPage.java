@@ -101,7 +101,7 @@ public class ResultPage extends AbstractWebPage {
         final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(orderNum);
         final Map<String, Object> contentParams = new HashMap<>();
         contentParams.put("order", customerOrder);
-        contentParams.putAll(getWicketUtil().pageParametesAsMap(params));
+        contentParams.putAll(getWicketUtil().pageParametersAsMap(params));
 
         if (StringUtils.isNotBlank(status)) {
             // Trust the return page as chances are the actual payment callback has not yet happened

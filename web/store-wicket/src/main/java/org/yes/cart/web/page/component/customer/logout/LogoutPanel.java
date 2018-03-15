@@ -48,6 +48,7 @@ public class LogoutPanel  extends BaseComponent {
         super(id);
     }
 
+    @Override
     protected void onBeforeRender() {
 
         final Link logOff = getWicketSupportFacade().links().newLogOffLink(LOGOFF_LINK,
@@ -74,11 +75,12 @@ public class LogoutPanel  extends BaseComponent {
     private String getSalutation(final String salutationKey, final String name) {
 
         return WicketUtil.createStringResourceModel(this, salutationKey,
-                Collections.<String, Object>singletonMap("customer", name)).getString();
+                Collections.singletonMap("customer", name)).getString();
 
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isVisible() {
         return ShoppingCart.LOGGED_IN == getCurrentCart().getLogonState()
                 || AuthenticatedWebSession.get().isSignedIn();

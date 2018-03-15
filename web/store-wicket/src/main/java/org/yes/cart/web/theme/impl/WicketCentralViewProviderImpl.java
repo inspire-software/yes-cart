@@ -69,6 +69,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
     /**
      * {@inheritDoc}
      */
+    @Override
     public AbstractCentralView getCentralPanel(final Pair<String, String> rendererLabel,
                                                final String wicketComponentId,
                                                final long categoryId,

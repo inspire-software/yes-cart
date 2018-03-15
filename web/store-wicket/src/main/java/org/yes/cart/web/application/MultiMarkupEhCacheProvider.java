@@ -75,7 +75,7 @@ public class MultiMarkupEhCacheProvider<T> implements MarkupCache.ICache<String,
     @Override
     public Collection<T> getValues() {
         final Ehcache ehcache = (Ehcache) CACHE.getNativeCache();
-        final List<T> values = new ArrayList<T>();
+        final List<T> values = new ArrayList<>();
         for (final Object key : ehcache.getKeys()) {
             final Element elem = ehcache.get(key);
             if (elem.getObjectValue() != null && !elem.isExpired()) {

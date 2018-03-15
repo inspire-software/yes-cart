@@ -118,20 +118,20 @@ public class PaymentPage extends AbstractWebPage {
         addOrReplace(
                 new FeedbackPanel(FEEDBACK));
 
-        final Map<String, Object> resultParam = new HashMap<String, Object>();
+        final Map<String, Object> resultParam = new HashMap<>();
 
         try {
 
             final Map param =  getWicketUtil().getHttpServletRequest().getParameterMap();
-            final Map mparam = new HashMap();
-            mparam.putAll(param);
-            mparam.put(PaymentMiscParam.CLIENT_IP, getShopperIPAddress());
+            final Map paramsAndIP = new HashMap();
+            paramsAndIP.putAll(param);
+            paramsAndIP.put(PaymentMiscParam.CLIENT_IP, getShopperIPAddress());
 
             final ShoppingCart cart = getCurrentCart();
 
             if (cart.getCartItemsCount() > 0) {
 
-                result = paymentProcessFacade.pay(cart, mparam);
+                result = paymentProcessFacade.pay(cart, paramsAndIP);
                 resultParam.put("order", checkoutServiceFacade.findByReference(cart.getGuid()));
                 resultParam.put("result", result);
 
@@ -213,7 +213,7 @@ public class PaymentPage extends AbstractWebPage {
 
         final ProductSku productSku = productServiceFacade.getProductSkuBySkuCode(sku);
 
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put("product", getI18NSupport().getFailoverModel(productSku.getDisplayName(), productSku.getName()).getValue(getLocale().getLanguage()));
         param.put("sku", sku);
         final String errorMessage =
@@ -244,6 +244,7 @@ public class PaymentPage extends AbstractWebPage {
         return new Fragment(RESULT_CONTAINER, NEGATIVE_RESULT_FRAGMENT, this)
                 .add(
                         new ListView<CustomerOrderPayment>(PAYMENT_DETAIL_LIST, payments) {
+                            @Override
                             protected void populateItem(final ListItem<CustomerOrderPayment> item) {
                                 final CustomerOrderPayment payment = item.getModelObject();
                                 item.add(new Label(PAYMENT_ID_LABEL, String.valueOf(payment.getCustomerOrderPaymentId())));

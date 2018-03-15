@@ -1,8 +1,5 @@
 package org.yes.cart.web.page.component.filterednavigation;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.yes.cart.domain.misc.Pair;
-
 import java.util.List;
 
 /**
@@ -34,6 +31,7 @@ public class I18nFilterView extends BaseFilterView {
         try {
             return getString(keyValue.getLabel());
         } catch (Exception exp) {
+            // catch for wicket unknown resource key exception
         }
         return super.getValueLabel(keyValue);
     }

@@ -16,11 +16,6 @@
 
 package org.yes.cart.web.resource;
 
-/**
- * User: denispavlov
- * Date: 13-08-28
- * Time: 3:51 PM
- */
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -47,6 +42,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Base class for dynamically generated Resources.
+ *
+ * User: denispavlov
+ * Date: 13-08-28
+ * Time: 3:51 PM
  */
 public abstract class AbstractDynamicResource extends AbstractResource
 {

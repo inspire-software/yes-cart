@@ -46,6 +46,7 @@ public class ProductAssociationsView extends AbstractProductSearchResultList {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ProductSearchResultDTO> getProductListToShow() {
         return associatedProductList;
     }

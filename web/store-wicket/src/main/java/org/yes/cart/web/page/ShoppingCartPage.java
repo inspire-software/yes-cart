@@ -83,10 +83,10 @@ public class ShoppingCartPage extends AbstractWebPage {
 
             if ("ec".equals(checkoutError.toString())) {
                 warn(getLocalizer().getString("orderErrorCouponInvalid", this,
-                        new Model<ValueMap>(new ValueMap(Collections.singletonMap("coupon", params.get("ec").toString())))));
+                        new Model<>(new ValueMap(Collections.singletonMap("coupon", params.get("ec").toString())))));
             } else if ("es".equals(checkoutError.toString())) {
                 warn(getLocalizer().getString("orderErrorSkuInvalid", this,
-                        new Model<ValueMap>(new ValueMap(Collections.singletonMap("sku", params.get("es").toString())))));
+                        new Model<>(new ValueMap(Collections.singletonMap("sku", params.get("es").toString())))));
             } else {
                 error(getLocalizer().getString("orderErrorGeneral", this));
             }
@@ -122,6 +122,7 @@ public class ShoppingCartPage extends AbstractWebPage {
      *
      * @return page title
      */
+    @Override
     public IModel<String> getPageTitle() {
         return new StringResourceModel("shoppingCart", this);
     }

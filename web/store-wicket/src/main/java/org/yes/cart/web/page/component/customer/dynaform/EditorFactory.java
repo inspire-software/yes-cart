@@ -100,6 +100,7 @@ public class EditorFactory implements Serializable {
 
                 private final I18NModel m = choices;
 
+                @Override
                 public List<Pair<String, String>> getObject() {
                     final String lang = markupContainer.getLocale().getLanguage();
                     final List<Pair<String, String>> list = (List<Pair<String, String>>) CONVERSION_SERVICE.convert(
@@ -108,7 +109,7 @@ public class EditorFactory implements Serializable {
                             TypeDescriptor.valueOf(List.class)
                     );
                     if (list == null) {
-                        return new ArrayList<Pair<String, String>>();
+                        return new ArrayList<>();
                     }
                     return list;
                 }
@@ -130,7 +131,7 @@ public class EditorFactory implements Serializable {
                     attrValue.getAttribute().getCode()).getValue(language);
 
             final IModel model = new PropertyModel(attrValue, VALUE_FILED);
-            return new StringEditor(id, markupContainer, model, labelModel, new Model<String>(regexError), attrValue, notEditable);
+            return new StringEditor(id, markupContainer, model, labelModel, new Model<>(regexError), attrValue, notEditable);
         }
     }
 }

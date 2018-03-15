@@ -47,6 +47,7 @@ public class URLPagingNavigation extends PagingNavigation {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected AbstractLink newPagingNavigationLink(final String id, final IPageable pageable, final long pageIndex) {
 
         final LinksSupport links = ((AbstractWebPage) getPage()).getWicketSupportFacade().links();

@@ -34,7 +34,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
-import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
@@ -115,11 +114,12 @@ public class RegisterPanel extends BaseComponent {
 
         final Component typeSelector = new RadioGroup<String>(
                 CUSTOMER_TYPE_RADIO_GROUP,
-                new PropertyModel<String>(RegisterPanel.this, "customerType")) {
+                new PropertyModel<>(RegisterPanel.this, "customerType")) {
 
             /**
              * {@inheritDoc}
              */
+            @Override
             protected void onSelectionChanged(final String descriptor) {
                 // Change the form
                 RegisterPanel.this.get(REGISTER_FORM).replaceWith(new RegisterForm(REGISTER_FORM, customerType, target.getFirst(), target.getSecond()));
@@ -133,8 +133,9 @@ public class RegisterPanel extends BaseComponent {
 
         }.add(
                 new ListView<Pair<String, I18NModel>>("customerTypeList", availableTypes) {
+                    @Override
                     protected void populateItem(final ListItem<Pair<String, I18NModel>> customerTypeItem) {
-                        customerTypeItem.add(new Radio<String>("customerTypeLabel", new Model<String>(customerTypeItem.getModelObject().getFirst())));
+                        customerTypeItem.add(new Radio<>("customerTypeLabel", new Model<>(customerTypeItem.getModelObject().getFirst())));
                         customerTypeItem.add(new Label("customerType", customerTypeItem.getModelObject().getSecond().getValue(getLocale().getLanguage())));
                     }
                 }
@@ -184,7 +185,7 @@ public class RegisterPanel extends BaseComponent {
         } else {
             successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/profile").get();
         }
-        return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
+        return new Pair<>(successfulPage, parameters);
     }
 
 
@@ -210,7 +211,7 @@ public class RegisterPanel extends BaseComponent {
         /**
          * Set email.
          *
-         * @param email
+         * @param email email
          */
         public void setEmail(final String email) {
             this.email = email;
@@ -248,7 +249,7 @@ public class RegisterPanel extends BaseComponent {
 
             super(id);
 
-            setModel(new CompoundPropertyModel<RegisterForm>(RegisterForm.this));
+            setModel(new CompoundPropertyModel<>(RegisterForm.this));
 
 
             setCustomerType(customerType);
@@ -308,7 +309,7 @@ public class RegisterPanel extends BaseComponent {
 
                             } else {
 
-                                final Map<String, Object> data = new HashMap<String, Object>();
+                                final Map<String, Object> data = new HashMap<>();
                                 // Data is now relayed via custom attributes, so we can sort and arrange all attributes on
                                 // registration form.
                                 // data.put("firstname", getFirstname());
@@ -371,18 +372,16 @@ public class RegisterPanel extends BaseComponent {
                 attrValue.getAttribute().getDisplayName(),
                 attrValue.getAttribute().getName());
 
-        final Label rez = new Label(NAME, new AbstractReadOnlyModel<String>() {
+        return new Label(NAME, new AbstractReadOnlyModel<String>() {
 
             private final I18NModel m = model;
 
             @Override
             public String getObject() {
-                final String lang = getLocale().getLanguage();
-                return m.getValue(lang);
+                final String lang1 = getLocale().getLanguage();
+                return m.getValue(lang1);
             }
         });
-
-        return rez;
     }
 
 

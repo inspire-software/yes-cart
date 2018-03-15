@@ -49,7 +49,7 @@ public class PairModel implements IModel<Pair<String,String>> {
 
     /**
      * Construct pair model.
-     * @param propertyModel property model to perform converion.
+     * @param propertyModel property model to perform conversion.
      * @param options all available options.
      */
     public PairModel(final PropertyModel propertyModel, final List<Pair<String, String>> options) {
@@ -70,6 +70,7 @@ public class PairModel implements IModel<Pair<String,String>> {
      *
      * @return The model object
      */
+    @Override
     public Pair<String, String> getObject() {
         return pair;
     }
@@ -79,6 +80,7 @@ public class PairModel implements IModel<Pair<String,String>> {
      *
      * @param object The model object
      */
+    @Override
     public void setObject(final Pair<String, String> object) {
         this.pair = object;
         propertyModel.setObject(object.getFirst());
@@ -88,6 +90,7 @@ public class PairModel implements IModel<Pair<String,String>> {
      * Detaches model after use. This is generally used to null out transient references that can be
      * re-attached later.
      */
+    @Override
     public void detach() {
         if (pair instanceof IDetachable) {
             ((IDetachable)pair).detach();

@@ -53,7 +53,7 @@ public class PriceTierView extends BaseComponent {
      */
     public PriceTierView(final String id, final Collection<PriceModel> rawPrices) {
         super(id);
-        skuPrices = new ArrayList<PriceModel>(rawPrices);
+        skuPrices = new ArrayList<>(rawPrices);
     }
 
     /** {@inheritDoc} */
@@ -62,6 +62,7 @@ public class PriceTierView extends BaseComponent {
 
         add(
             new ListView<PriceModel>(PRICE_TIERS_LIST, skuPrices) {
+                @Override
                 protected void populateItem(ListItem<PriceModel> listItem) {
                     listItem.add(
                             new Label(QUANTITY_LABEL, String.valueOf(listItem.getModelObject().getQuantity().intValue()))

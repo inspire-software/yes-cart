@@ -53,6 +53,7 @@ public class QuantityPickerPanel extends BaseComponent {
         this.sku = sku;
     }
 
+    @Override
     protected void onBeforeRender() {
 
         final ShoppingCart cart = getCurrentCart();
@@ -63,7 +64,7 @@ public class QuantityPickerPanel extends BaseComponent {
         final String message;
         if (!pqm.canOrderMore()) {
 
-            final Map<String, Object> params = new HashMap<String, Object>();
+            final Map<String, Object> params = new HashMap<>();
             params.put("cart", pqm.getCartQty().toPlainString());
 
             message = getLocalizer().getString("quantityPickerFullTooltip", this,
@@ -71,7 +72,7 @@ public class QuantityPickerPanel extends BaseComponent {
 
         } else if (pqm.hasMax()) {
 
-            final Map<String, Object> params = new HashMap<String, Object>();
+            final Map<String, Object> params = new HashMap<>();
             params.put("min", pqm.getMin().toPlainString());
             params.put("step", pqm.getStep().toPlainString());
             params.put("max", pqm.getMax().toPlainString());
@@ -82,7 +83,7 @@ public class QuantityPickerPanel extends BaseComponent {
 
         } else {
 
-            final Map<String, Object> params = new HashMap<String, Object>();
+            final Map<String, Object> params = new HashMap<>();
             params.put("min", pqm.getMin().toPlainString());
             params.put("step", pqm.getStep().toPlainString());
             params.put("cart", pqm.getCartQty().toPlainString());

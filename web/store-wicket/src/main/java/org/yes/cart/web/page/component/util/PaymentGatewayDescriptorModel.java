@@ -57,6 +57,7 @@ public class PaymentGatewayDescriptorModel implements IModel<Pair<PaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public Pair<PaymentGatewayDescriptor, String> getObject() {
         return paymentGatewayDescriptor;
     }
@@ -64,6 +65,7 @@ public class PaymentGatewayDescriptorModel implements IModel<Pair<PaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setObject(final Pair<PaymentGatewayDescriptor, String> paymentGatewayDescriptor) {
         this.paymentGatewayDescriptor = paymentGatewayDescriptor;
         if (paymentGatewayDescriptor == null) {
@@ -76,6 +78,7 @@ public class PaymentGatewayDescriptorModel implements IModel<Pair<PaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public void detach() {
         if (paymentGatewayDescriptor instanceof IDetachable) {
             ((IDetachable) paymentGatewayDescriptor).detach();

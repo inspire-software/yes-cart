@@ -44,29 +44,35 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductSea
         this.products = products;
     }
 
+    @Override
     public Iterator<? extends ProductSearchResultDTO> iterator(final long first, final long count) {
         return products.getResults().iterator();
     }
 
 
+    @Override
     public long size() {
         return products.getTotalHits();
     }
 
+    @Override
     public IModel<ProductSearchResultDTO> model(ProductSearchResultDTO productDecorator) {
 
         IModel<ProductSearchResultDTO> model = new IModel<ProductSearchResultDTO>() {
 
             private ProductSearchResultDTO product;
 
+            @Override
             public ProductSearchResultDTO getObject() {
                 return product;
             }
 
+            @Override
             public void setObject(final ProductSearchResultDTO product) {
                 this.product = product;
             }
 
+            @Override
             public void detach() {
                 //Nothing to do
             }

@@ -64,7 +64,7 @@ public class PasswordPanel extends BaseComponent {
                         customerServiceFacade.resetPassword(getCurrentShop(), getModelObject());
 
                         info(WicketUtil.createStringResourceModel(this, "newPasswordRequestEmailSent",
-                                Collections.<String, Object>singletonMap("email", getModelObject().getEmail())).getString());
+                                Collections.singletonMap("email", getModelObject().getEmail())).getString());
                         super.onSubmit();
                     }
 

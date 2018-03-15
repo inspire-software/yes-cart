@@ -28,7 +28,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
@@ -45,9 +44,9 @@ import java.util.Map;
 
 /**
  * Dynamic form to work with different attribute values. Form fields and field editors
- * depends from attributes, that desribed for customers.
+ * depends from attributes, that described for customers.
  * Panel can be refactored, in case if some dynamic behaviour will be need for other entities, that
- * has attributes. Just add callback to store particular entity when, attributes will be submited.
+ * has attributes. Just add callback to store particular entity when, attributes will be submitted.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 10/23/11
@@ -106,7 +105,7 @@ public class DynaFormPanel extends BaseComponent {
             protected void onSubmit() {
                 LOG.debug("Attributes will be updated for customer [{}]", customer.getEmail());
 
-                final Map<String, String> values = new HashMap<String, String>();
+                final Map<String, String> values = new HashMap<>();
                 for (Pair<? extends AttrValueWithAttribute, Boolean> av : attrValueCollection) {
                     LOG.debug("Attribute with code [{}] has value [{}], readonly [{}]",
                                     av.getFirst().getAttribute().getCode(),
@@ -192,18 +191,16 @@ public class DynaFormPanel extends BaseComponent {
                 attrValue.getAttribute().getDisplayName(),
                 attrValue.getAttribute().getName());
 
-        final Label rez = new Label(NAME, new AbstractReadOnlyModel<String>() {
+        return new Label(NAME, new AbstractReadOnlyModel<String>() {
 
             private final I18NModel m = model;
 
             @Override
             public String getObject() {
-                final String lang = getLocale().getLanguage();
-                return m.getValue(lang);
+                final String lang1 = getLocale().getLanguage();
+                return m.getValue(lang1);
             }
         });
-
-        return rez;
     }
 
 

@@ -45,6 +45,7 @@ public class SortableCategoryDataProvider extends SortableDataProvider<CategoryD
     /**
      * {@inheritDoc}
      */
+    @Override
     public Iterator<? extends CategoryDecorator> iterator(final long i, final long i1) {
         return categories.iterator();
     }
@@ -52,6 +53,7 @@ public class SortableCategoryDataProvider extends SortableDataProvider<CategoryD
     /**
      * {@inheritDoc}
      */
+    @Override
     public long size() {
         return categories.size();
     }
@@ -59,19 +61,23 @@ public class SortableCategoryDataProvider extends SortableDataProvider<CategoryD
     /**
      * {@inheritDoc}
      */
+    @Override
     public IModel<CategoryDecorator> model(final CategoryDecorator category) {
         IModel<CategoryDecorator> model = new IModel<CategoryDecorator>() {
 
             private CategoryDecorator category;
 
+            @Override
             public CategoryDecorator getObject() {
                 return category;
             }
 
+            @Override
             public void setObject(final CategoryDecorator product) {
                 this.category = product;
             }
 
+            @Override
             public void detach() {
                 //Nothing to do
             }

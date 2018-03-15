@@ -53,6 +53,7 @@ public class StandardHeader  extends BaseComponent {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void onBeforeRender() {
 
         addOrReplace(new CookiePolicyInclude("cookiePolicy"));

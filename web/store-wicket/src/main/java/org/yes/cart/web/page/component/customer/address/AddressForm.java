@@ -80,10 +80,6 @@ public class AddressForm extends Form<Address> {
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
-    private final static int SMALL_LENGTH = 16;
-    private final static int MEDIUM_LENGTH = 128;
-    private final static int LARGE_LENGTH = 256;
-
     @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
     private AddressBookFacade addressBookFacade;
 
@@ -94,9 +90,6 @@ public class AddressForm extends Form<Address> {
     private I18NWebSupport i18NWebSupport;
 
     private final EditorFactory editorFactory = new EditorFactory();
-
-    private final Class<? extends Page> successPage;
-    private final PageParameters successPageParameters;
 
     private final List<AttrValueWithAttribute> values;
 
@@ -121,10 +114,6 @@ public class AddressForm extends Form<Address> {
 
         super(s, addressIModel);
 
-        this.successPage = successPage;
-        this.successPageParameters = successPageParameters;
-
-
         final Address address = addressIModel.getObject();
 
         preprocessAddress(address);
@@ -143,7 +132,7 @@ public class AddressForm extends Form<Address> {
                 .getShopCustomerAddressAttributes(address.getCustomer(), ApplicationDirector.getCurrentShop(), addressType);
 
 
-        final Map<String, AttrValue> valuesMap = new HashMap<String, AttrValue>();
+        final Map<String, AttrValue> valuesMap = new HashMap<>();
         for (final AttrValueWithAttribute av : values) {
             valuesMap.put(av.getAttribute().getVal(), av);
             try {
@@ -155,7 +144,7 @@ public class AddressForm extends Form<Address> {
         }
 
         final AttrValue stateCode = valuesMap.get("stateCode");
-        final AbstractChoice<State, State> stateDropDownChoice = new DropDownChoice<State>(
+        final AbstractChoice<State, State> stateDropDownChoice = new DropDownChoice<>(
                 STATE,
                 new StateModel(new PropertyModel(stateCode, "val"), stateList),
                 stateList).setChoiceRenderer(new StateRenderer());
@@ -248,12 +237,10 @@ public class AddressForm extends Form<Address> {
                             Long.valueOf(addr.getAddressId()).equals(cart.getOrderInfo().getDeliveryAddressId())) {
                         final String key = Address.ADDR_TYPE_BILLING.equals(addressType) ?
                                 ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS : ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS;
-                        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, cart,
-                                (Map) new HashMap() {{
-                                    put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);
-                                    put(key, addr);
-                                }}
-                        );
+                        final Map parameters = new HashMap();
+                        parameters.put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);
+                        parameters.put(key, addr);
+                        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, cart, parameters);
                     }
                 }
                 setResponsePage(successPage, successPageParameters);
@@ -318,22 +305,20 @@ public class AddressForm extends Form<Address> {
                 attrValue.getAttribute().getName());
         final String prop = attrValue.getAttribute().getVal();
 
-        final Label rez = new Label(NAME, new AbstractReadOnlyModel<String>() {
+        return new Label(NAME, new AbstractReadOnlyModel<String>() {
 
             private final I18NModel m = model;
 
             @Override
             public String getObject() {
-                final String lang = getLocale().getLanguage();
-                final String name = m.getValue(lang);
+                final String lang1 = getLocale().getLanguage();
+                final String name = m.getValue(lang1);
                 if (StringUtils.isNotBlank(name)) {
                     return name;
                 }
                 return getLocalizer().getString(prop, AddressForm.this);
             }
         });
-
-        return rez;
     }
 
 

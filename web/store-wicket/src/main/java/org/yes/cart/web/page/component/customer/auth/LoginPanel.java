@@ -123,7 +123,7 @@ public class LoginPanel extends BaseComponent {
         } else {
             successfulPage = Application.get().getHomePage();
         }
-        return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
+        return new Pair<>(successfulPage, parameters);
     }
 
 
@@ -170,7 +170,7 @@ public class LoginPanel extends BaseComponent {
 
             super(id);
 
-            setModel(new CompoundPropertyModel<LoginForm>(LoginForm.this));
+            setModel(new CompoundPropertyModel<>(LoginForm.this));
 
 
             add(
@@ -205,7 +205,7 @@ public class LoginPanel extends BaseComponent {
                         ((AbstractWebPage) getPage()).persistCartIfNecessary();
 
                         info(WicketUtil.createStringResourceModel(this, "newPasswordRequestEmailSent",
-                                Collections.<String, Object>singletonMap("email", email)).getString());
+                                Collections.singletonMap("email", email)).getString());
                         setRestorePassword(null);
                     } else {
                         error(getLocalizer().getString("customerNotExists", this));

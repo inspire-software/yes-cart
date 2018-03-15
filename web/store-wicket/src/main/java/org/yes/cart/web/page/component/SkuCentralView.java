@@ -363,7 +363,7 @@ public class SkuCentralView extends AbstractCentralView {
                 shop.getShopId(), browsingStoreId, Association.CROSS_SELL
         );
 
-        final List<ProductSearchResultDTO> productsSell = new ArrayList<ProductSearchResultDTO>();
+        final List<ProductSearchResultDTO> productsSell = new ArrayList<>();
         if (productsUp != null) {
             productsSell.addAll(productsUp);
         }

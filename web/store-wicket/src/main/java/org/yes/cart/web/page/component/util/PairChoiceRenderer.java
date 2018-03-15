@@ -30,6 +30,7 @@ import org.yes.cart.domain.misc.Pair;
 public class PairChoiceRenderer extends ChoiceRenderer {
 
     /** {@inheritDoc} */
+    @Override
     public Object getDisplayValue(final Object object) {
         return ((Pair<String, String>)object).getSecond();
     }

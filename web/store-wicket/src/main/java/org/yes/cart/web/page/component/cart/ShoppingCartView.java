@@ -116,7 +116,7 @@ public class ShoppingCartView extends BaseComponent {
         final Form cartForm = new StatelessForm(CART_FORM);
 
         cartForm.addOrReplace(new ShoppingCartItemsList(ITEMS_LIST, cart.getCartItemList()).setVisible(cart.getCartItemsCount() > 0));
-        cartForm.addOrReplace(new ShoppingCartSavedItemsList(SAVED_LIST, new Model<String>(cart.getCustomerEmail())));
+        cartForm.addOrReplace(new ShoppingCartSavedItemsList(SAVED_LIST, new Model<>(cart.getCustomerEmail())));
 
         cartForm.addOrReplace(
                 new PriceView(
@@ -141,7 +141,7 @@ public class ShoppingCartView extends BaseComponent {
         // COUPONS
         cartForm.addOrReplace(new Label(COUPON_INCLUDE, "").setVisible(allowCoupons));
 
-        final TextField<String> couponCode = new TextField<String>(COUPON_CODE_INPUT, new Model<String>());
+        final TextField<String> couponCode = new TextField<>(COUPON_CODE_INPUT, new Model<>());
         couponCode.setVisible(allowCoupons);
         cartForm.addOrReplace(couponCode);
 
@@ -171,7 +171,7 @@ public class ShoppingCartView extends BaseComponent {
 
         cartForm.addOrReplace(new Label(ORDERMSG_INCLUDE, "").setEscapeModelStrings(false).setVisible(allowMessages));
 
-        final TextField<String> messageInput = new TextField<String>(ORDERMSG_INPUT, new Model<String>());
+        final TextField<String> messageInput = new TextField<>(ORDERMSG_INPUT, new Model<>());
         messageInput.setVisible(allowMessages);
         cartForm.addOrReplace(messageInput);
 
@@ -211,16 +211,16 @@ public class ShoppingCartView extends BaseComponent {
                 try {
                     if (CartValidityModelMessage.MessageType.ERROR == message.getMessageType()) {
                         error(getLocalizer().getString(message.getMessageKey(), this,
-                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
+                                new Model<>(new ValueMap(message.getMessageArgs()))));
                     } else if (CartValidityModelMessage.MessageType.INFO == message.getMessageType()) {
                         info(getLocalizer().getString(message.getMessageKey(), this,
-                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
+                                new Model<>(new ValueMap(message.getMessageArgs()))));
                     } else if (CartValidityModelMessage.MessageType.SUCCESS == message.getMessageType()) {
                         success(getLocalizer().getString(message.getMessageKey(), this,
-                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
+                                new Model<>(new ValueMap(message.getMessageArgs()))));
                     } else {
                         warn(getLocalizer().getString(message.getMessageKey(), this,
-                                new Model<ValueMap>(new ValueMap(message.getMessageArgs()))));
+                                new Model<>(new ValueMap(message.getMessageArgs()))));
                     }
                 } catch (MissingResourceException exp) {
                     warn(message.getMessageKey());
@@ -240,7 +240,7 @@ public class ShoppingCartView extends BaseComponent {
         final long shopId = shop.getShopId();
         final String lang = getLocale().getLanguage();
 
-        final Map<String, Object> dynaCtx = new HashMap<String, Object>();
+        final Map<String, Object> dynaCtx = new HashMap<>();
         dynaCtx.put("shop", shop);
         dynaCtx.put("shoppingCart", cart);
 

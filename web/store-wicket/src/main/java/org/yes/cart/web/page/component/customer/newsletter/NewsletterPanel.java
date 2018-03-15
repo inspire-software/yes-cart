@@ -80,7 +80,7 @@ public class NewsletterPanel extends BaseComponent {
         public SingUpForm(final String id) {
             super(id);
 
-            setModel(new CompoundPropertyModel<SingUpForm>(SingUpForm.this));
+            setModel(new CompoundPropertyModel<>(SingUpForm.this));
 
             final TextField<String> emailInput = (TextField<String>) new TextField<String>(EMAIL_INPUT)
                     .setRequired(true)
@@ -98,7 +98,7 @@ public class NewsletterPanel extends BaseComponent {
                         public void onSubmit() {
 
                             if (!SingUpForm.this.hasError()) {
-                                customerServiceFacade.registerNewsletter(getCurrentShop(), getEmail(), new HashMap<String, Object>());
+                                customerServiceFacade.registerNewsletter(getCurrentShop(), getEmail(), new HashMap<>());
 
                                 final PageParameters params = new PageParameters(getPage().getPageParameters());
                                 params.add("signupok", Boolean.TRUE);

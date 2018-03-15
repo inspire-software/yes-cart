@@ -60,7 +60,7 @@ public class WicketUtilTest {
             .add("asd", "dsa")
             .add("cmd2", "ppp");
         assertEquals(3, parametersToFilter.getNamedKeys().size());
-        Map<String, String> filtered = new WicketUtil(commandConfig).pageParametesAsMap(parametersToFilter);
+        Map<String, String> filtered = new WicketUtil(commandConfig).pageParametersAsMap(parametersToFilter);
         assertNotNull(filtered);
         assertEquals(2, filtered.size());
         assertEquals("ppp", filtered.get("cmd2"));

@@ -48,6 +48,7 @@ public class CheckoutHeader extends BaseComponent {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void onBeforeRender() {
 
         addOrReplace(new CookiePolicyInclude("cookiePolicy"));

@@ -43,6 +43,7 @@ public class FaqPage extends AbstractWebPage {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void onBeforeRender() {
 
         add(
@@ -63,6 +64,7 @@ public class FaqPage extends AbstractWebPage {
      *
      * @return page title
      */
+    @Override
     public IModel<String> getPageTitle() {
         return new StringResourceModel("faqTitle",this);
     }

@@ -45,7 +45,7 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
 
     private ClassReference<IRequestablePage> loginPage;
     private ClassReference<IRequestablePage> homePage;
-    private Map<String, ClassReference<IRequestablePage>> pageByUri = new HashMap<String, ClassReference<IRequestablePage>>();
+    private Map<String, ClassReference<IRequestablePage>> pageByUri = new HashMap<>();
 
     public WicketPagesMounterImpl(final IPageParametersEncoder encoder,
                                   final Map<String, Map<String, Class<IRequestablePage>>> pageMapping,
@@ -58,6 +58,7 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void mountPages(final WebApplication webApplication) {
 
         for (Map.Entry<String, Map<String, Class<IRequestablePage>>> pageMappingEntry : pageMapping.entrySet()) {
@@ -95,16 +96,19 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
     }
 
     /** {@inheritDoc} */
+    @Override
     public ClassReference<IRequestablePage> getHomePageProvider() {
         return homePage;
     }
 
     /** {@inheritDoc} */
+    @Override
     public ClassReference<IRequestablePage> getLoginPageProvider() {
         return loginPage;
     }
 
     /** {@inheritDoc} */
+    @Override
     public ClassReference<IRequestablePage> getPageProviderByUri(final String uri) {
         return pageByUri.get(uri);
     }

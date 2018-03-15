@@ -37,7 +37,7 @@ public class MultiWebApplicationPath {
     private static final Logger LOG = LoggerFactory.getLogger(MultiWebApplicationPath.class);
 
     /** The list of urls in the path */
-    private final List<String> webappPaths = new ArrayList<String>();
+    private final List<String> webappPaths = new ArrayList<>();
 
     /** The web apps servlet context */
     private final ServletContext servletContext;

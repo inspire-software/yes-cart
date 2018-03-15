@@ -38,6 +38,7 @@ public class MultiMarkupFactory extends MarkupFactory {
     /**
      * {@inheritDoc}
      */
+    @Override
     public IMarkupCache getMarkupCache() {
         if (multiMarkupCache == null) {
             multiMarkupCache = getNewInstance();
@@ -58,6 +59,7 @@ public class MultiMarkupFactory extends MarkupFactory {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean hasMarkupCache() {
         return multiMarkupCache != null;
     }

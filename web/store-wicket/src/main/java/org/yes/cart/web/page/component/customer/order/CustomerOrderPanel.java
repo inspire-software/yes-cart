@@ -122,6 +122,7 @@ public class CustomerOrderPanel extends BaseComponent {
                     new Fragment(ORDER_INFORMATION, ORDER_INFORMATION_FRAGMENT, this)
                             .add(
                                     new ListView<CustomerOrder>(ORDER_LIST, orders) {
+                                        @Override
                                         protected void populateItem(final ListItem<CustomerOrder> customerOrderListItem) {
 
                                             final CustomerOrder order = customerOrderListItem.getModelObject();
@@ -163,7 +164,7 @@ public class CustomerOrderPanel extends BaseComponent {
 
     }
 
-    private final static Set<String> SUPPORTED_VIEWS = new HashSet<String>(Arrays.asList("week", "month", "year", "all"));
+    private final static Set<String> SUPPORTED_VIEWS = new HashSet<>(Arrays.asList("week", "month", "year", "all"));
     private final static String DEFAULT_VIEW = "month";
 
     private LocalDateTime determineDate(final PageParameters pageParameters) {
@@ -204,17 +205,11 @@ public class CustomerOrderPanel extends BaseComponent {
         final List<CustomerOrder> orders = customerOrderService.findCustomerOrders(customer, date);
 
         // remove temporary orders
-        final Iterator<CustomerOrder> ordersIt = orders.iterator();
-        while (ordersIt.hasNext()) {
-            final CustomerOrder order = ordersIt.next();
-            if (CustomerOrder.ORDER_STATUS_NONE.equals(order.getOrderStatus())
-                    || order.getShop().getShopId() != cart.getShoppingContext().getCustomerShopId()) {
-                ordersIt.remove();
-            }
-        }
+        orders.removeIf(order -> CustomerOrder.ORDER_STATUS_NONE.equals(order.getOrderStatus())
+                || order.getShop().getShopId() != cart.getShoppingContext().getCustomerShopId());
 
         // sort
-        Collections.sort(orders, Collections.reverseOrder(new CustomerOrderComparator()));
+        orders.sort(Collections.reverseOrder(new CustomerOrderComparator()));
 
         return orders;
     }

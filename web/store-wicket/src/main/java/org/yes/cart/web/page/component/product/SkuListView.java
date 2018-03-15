@@ -47,7 +47,7 @@ public class SkuListView extends BaseComponent {
      *
      * @param id         component id
      * @param skus       list of skus
-     * @param currentSku sku, that shown at this momen
+     * @param currentSku sku, that shown at this moment
      * @param productView is it product or particular sku view
      */
     public SkuListView(final String id,
@@ -57,7 +57,7 @@ public class SkuListView extends BaseComponent {
         super(id);
         this.currentSku = currentSku;
         this.productView = productView;
-        skusToShow = new ArrayList<ProductSku>(skus);
+        skusToShow = new ArrayList<>(skus);
         //skusToShow.remove(currentSku);
 
     }
@@ -69,6 +69,7 @@ public class SkuListView extends BaseComponent {
     protected void onBeforeRender() {
         add(
                 new ListView<ProductSku>(SKU_LIST, skusToShow) {
+                    @Override
                     protected void populateItem(final ListItem<ProductSku> productSkuListItem) {
                         productSkuListItem.add(
                                 new SkuInListView(SKU_VIEW, productSkuListItem.getModelObject())

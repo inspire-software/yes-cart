@@ -24,7 +24,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -43,12 +42,7 @@ public class BaseFilterView extends BaseComponent {
     private final static String QUANTITY = "quantity";
     // ------------------------------------- MARKUP IDs END   ---------------------------------- //
 
-    private static final Comparator<AbstractProductFilter.Value> VALUE_COMPARATOR = new Comparator<AbstractProductFilter.Value>() {
-        public int compare(final AbstractProductFilter.Value o1,
-                           final AbstractProductFilter.Value o2) {
-            return o1.getLabel().compareToIgnoreCase(o2.getLabel());
-        }
-    };
+    private static final Comparator<AbstractProductFilter.Value> VALUE_COMPARATOR = (o1, o2) -> o1.getLabel().compareToIgnoreCase(o2.getLabel());
 
     private final String code;
     private final String head;
@@ -84,10 +78,8 @@ public class BaseFilterView extends BaseComponent {
     private List<AbstractProductFilter.Value> cutTheTail(final List<AbstractProductFilter.Value> navigationList, final int recordLimit) {
 
         if (navigationList.size() > recordLimit && recordLimit > 0) {
-            Collections.sort(
-                    navigationList,
-                    VALUE_COMPARATOR
-            );
+
+            navigationList.sort(VALUE_COMPARATOR);
 
             return navigationList.subList(0, recordLimit);
 
@@ -98,6 +90,7 @@ public class BaseFilterView extends BaseComponent {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void onBeforeRender() {
         if (isVisible()) {
 
@@ -109,6 +102,7 @@ public class BaseFilterView extends BaseComponent {
             );
             add(
                     new ListView<AbstractProductFilter.Value>(LINK_LIST, linkList) {
+                        @Override
                         protected void populateItem(final ListItem<AbstractProductFilter.Value> pairListItem) {
                             final AbstractProductFilter.Value value = pairListItem.getModelObject();
                             final Link link = links.newLink(LINK, value.getParameters());
@@ -120,9 +114,9 @@ public class BaseFilterView extends BaseComponent {
                             final String cssClass = getValueCssClass(value);
                             link.add(new AttributeModifier("class", cssClass));
 
-                            final Label valueVabel = new Label(LINK_NAME, getValueLabel(value));
-                            valueVabel.setEscapeModelStrings(false);
-                            link.add(valueVabel);
+                            final Label valueLabel = new Label(LINK_NAME, getValueLabel(value));
+                            valueLabel.setEscapeModelStrings(false);
+                            link.add(valueLabel);
 
                             final String quantity = getValueQuantity(value);
                             link.add( new Label(QUANTITY, quantity).setVisible(quantity != null));
@@ -175,6 +169,7 @@ public class BaseFilterView extends BaseComponent {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isVisible() {
         return linkList != null && !linkList.isEmpty() && showGroupCounter();
     }
@@ -186,14 +181,6 @@ public class BaseFilterView extends BaseComponent {
      */
     private boolean showGroupCounter() {
         return true;
-        /*int summ = 0;
-        for (Pair<Pair<String, Integer>, PageParameters> keyValue :  linkList) {
-            summ += keyValue.getFirst().getSecond();
-            if (summ > 1 ) {
-                break;
-            }
-        }
-        return summ > 1; */
     }
 
 }

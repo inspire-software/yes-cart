@@ -83,6 +83,7 @@ public class RegistrationPage  extends AbstractWebPage {
      *
      * @return page title
      */
+    @Override
     public IModel<String> getPageTitle() {
         return new StringResourceModel("registration",this);
     }

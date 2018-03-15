@@ -48,7 +48,7 @@ import org.yes.cart.web.theme.WicketPagesMounter;
  */
 public class CreateEditAddressPage extends AbstractWebPage {
 
-    public final static String RETURN_TO_SELFCARE = "profile";
+    public final static String RETURN_TO_PROFILE = "profile";
     public final static String RETURN_TO_CHECKOUT = "checkout";
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
@@ -78,7 +78,7 @@ public class CreateEditAddressPage extends AbstractWebPage {
         final ShoppingCart cart = getCurrentCart();
         final Shop shop = getCurrentShop();
 
-        final boolean isCheckout = !RETURN_TO_SELFCARE.equals(params.get(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL).toString());
+        final boolean isCheckout = !RETURN_TO_PROFILE.equals(params.get(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL).toString());
 
         final Customer customer =
                 isCheckout ?
@@ -109,7 +109,7 @@ public class CreateEditAddressPage extends AbstractWebPage {
         add(
                 new AddressForm(
                         ADDRESS_FORM,
-                        new Model<Address>(address),
+                        new Model<>(address),
                         addrType,
                         successTarget.getFirst(),
                         successTarget.getSecond(),
@@ -149,7 +149,7 @@ public class CreateEditAddressPage extends AbstractWebPage {
         } else {
             successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/profile").get();
         }
-        return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
+        return new Pair<>(successfulPage, parameters);
     }
 
 
@@ -180,6 +180,7 @@ public class CreateEditAddressPage extends AbstractWebPage {
      *
      * @return page title
      */
+    @Override
     public IModel<String> getPageTitle() {
         return new StringResourceModel("createEditAddress",this);
     }

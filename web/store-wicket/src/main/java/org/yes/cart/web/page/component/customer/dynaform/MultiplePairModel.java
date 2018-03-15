@@ -30,7 +30,7 @@ import java.util.List;
  *
 *
  * Class to work with multiple selection from list of pairs. The
- * actual selection will be stored or retreived as comma separated list of
+ * actual selection will be stored or retrieved as comma separated list of
  * keys from selected pairs.
  *
  *
@@ -43,20 +43,20 @@ public class MultiplePairModel   implements IModel<List<Pair<String,String>>> {
      /**
      * this is actual result of selection.
      */
-    private List<Pair<String, String>> pairList = new ArrayList<Pair<String, String>>();
+    private List<Pair<String, String>> pairList = new ArrayList<>();
 
     private final PropertyModel propertyModel;
 
     /**
      * Construct model.
-     * @param propertyModel property model to perform converion.
+     * @param propertyModel property model to perform conversion.
      * @param options all available options.
      */
     public MultiplePairModel(final PropertyModel propertyModel, final List<Pair<String, String>> options) {
         this.propertyModel = propertyModel;
         final String selectedKeysAsString = (String) propertyModel.getObject();
         if (StringUtils.isNotBlank(selectedKeysAsString)) {
-            final List<String> selectedKeys = new ArrayList<String>(
+            final List<String> selectedKeys = new ArrayList<>(
                     Arrays.asList(selectedKeysAsString.split(",")));
             for (Pair<String, String> option : options) {
                 if (selectedKeys.contains(option.getFirst())) {
@@ -67,11 +67,13 @@ public class MultiplePairModel   implements IModel<List<Pair<String,String>>> {
     }
 
     /** {@inheritDoc}*/
+    @Override
     public List<Pair<String, String>> getObject() {
         return pairList;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setObject(final List<Pair<String, String>> pairs) {
 
         pairList = pairs;
@@ -97,6 +99,7 @@ public class MultiplePairModel   implements IModel<List<Pair<String,String>>> {
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void detach() {
         if (pairList instanceof IDetachable) {
             ((IDetachable)pairList).detach();

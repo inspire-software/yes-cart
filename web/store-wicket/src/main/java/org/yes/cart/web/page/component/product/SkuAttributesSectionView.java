@@ -66,6 +66,7 @@ public class SkuAttributesSectionView extends BaseComponent {
 
         add(
                 new ListView<Pair<String, String>>(KEY_VALUES_LIST, headKeyValues.getSecond()) {
+                    @Override
                     protected void populateItem(ListItem<Pair<String, String>> pairListItem) {
                         final Pair<String, String> keyValue = pairListItem.getModelObject();
                         pairListItem.add(

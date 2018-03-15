@@ -85,6 +85,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
 
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "breadCrumbBuilder-breadCrumbs")
     public List<Crumb> getBreadCrumbs(final String locale,
                                       final long shopId,
@@ -95,7 +96,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                                       final String queryPrefix,
                                       final String tagPrefix) {
 
-        final List<Crumb> crumbs = new ArrayList<Crumb>();
+        final List<Crumb> crumbs = new ArrayList<>();
         crumbs.addAll(getCategoriesCrumbs(shopId, categoryId, shopCategoryIds, pageParameters.getNamedKeys().contains(WebParametersKeys.CONTENT_ID)));
         crumbs.addAll(getFilteredNavigationCrumbs(locale, pageParameters, pricePrefix, queryPrefix, tagPrefix));
         return crumbs;
@@ -106,13 +107,13 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                                                     final String pricePrefix,
                                                     final String queryPrefix,
                                                     final String tagPrefix) {
-        final List<Crumb> navigationCrumbs = new ArrayList<Crumb>();
+        final List<Crumb> navigationCrumbs = new ArrayList<>();
         fillAttributes(locale, navigationCrumbs, pageParameters, pricePrefix, queryPrefix, tagPrefix);
         return navigationCrumbs;
     }
 
     private List<Crumb> getCategoriesCrumbs(final long shopId, final long categoryId, final Set<Long> shopCategoryIds, final boolean isContent) {
-        final List<Crumb> categoriesCrumbs = new ArrayList<Crumb>();
+        final List<Crumb> categoriesCrumbs = new ArrayList<>();
         if (categoryId > 0) {
             fillCategories(categoriesCrumbs, shopId, categoryId, shopCategoryIds, isContent);
             Collections.reverse(categoriesCrumbs);
@@ -130,7 +131,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
      * @param isContent        true if this is content hierarchy, category otherwise
      */
     private void fillCategories(final List<Crumb> categoriesCrumbs, final long shopId, final long categoryId, final Set<Long> shopCategoryIds, final boolean isContent) {
-        if (categoryId > 0l && shopCategoryIds.contains(categoryId)) {
+        if (categoryId > 0L && shopCategoryIds.contains(categoryId)) {
             final Category category = categoryService.getById(categoryId);
             if (!category.isRoot() && !CentralViewLabel.INCLUDE.equals(category.getUitemplate())) {
                 categoriesCrumbs.add(

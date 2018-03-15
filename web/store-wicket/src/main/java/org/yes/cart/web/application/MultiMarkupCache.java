@@ -51,7 +51,7 @@ public class MultiMarkupCache extends MarkupCache {
     public MultiMarkupCache(final ICache<String, Markup> markupCache,
                             final ICache<String, String> markupKeyCache) {
         super();
-        /**
+        /*
          * MarkupCache invokes same method ({@link #newCacheImplementation()}) for both
          * fields therefore it is very unreliable to depend on the order of execution.
          *
@@ -69,7 +69,8 @@ public class MultiMarkupCache extends MarkupCache {
 	 *            The MarkupContainer requesting the markup resource stream
 	 * @return IMarkupResourceStreamProvider
 	 */
-	public IMarkupCacheKeyProvider getMarkupCacheKeyProvider(final MarkupContainer container) {
+	@Override
+    public IMarkupCacheKeyProvider getMarkupCacheKeyProvider(final MarkupContainer container) {
 		if (container instanceof IMarkupCacheKeyProvider)	{
 			return (IMarkupCacheKeyProvider)container;
 		}

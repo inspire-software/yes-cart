@@ -98,6 +98,7 @@ public class BreadCrumbsView extends BaseComponent {
     }
 
     /** {@inheritDoc} */
+    @Override
     protected void onBeforeRender() {
 
         add(
@@ -108,6 +109,7 @@ public class BreadCrumbsView extends BaseComponent {
                         BREADCRUMBS_LIST,
                         getCrumbs() ) {
 
+                    @Override
                     protected void populateItem(final ListItem<Crumb> crumbListItem) {
                         final Crumb crumb = crumbListItem.getModelObject();
                         final I18NModel crumbModel;
@@ -116,6 +118,7 @@ public class BreadCrumbsView extends BaseComponent {
                             try {
                                 tag = getString(tag);
                             } catch (Exception exp) {
+                                // catch for wicket unknown resource key exception
                             }
                             crumbModel = getI18NSupport().getFailoverModel(null, tag);
                         } else if (ProductSearchQueryBuilder.PRODUCT_INSTOCK_FIELD.equals(crumb.getKey())) {
@@ -123,6 +126,7 @@ public class BreadCrumbsView extends BaseComponent {
                             try {
                                 inStock = getString(ProductSearchQueryBuilder.PRODUCT_INSTOCK_FIELD + inStock);
                             } catch (Exception exp) {
+                                // catch for wicket unknown resource key exception
                             }
                             crumbModel = getI18NSupport().getFailoverModel(null, inStock);
                         } else {

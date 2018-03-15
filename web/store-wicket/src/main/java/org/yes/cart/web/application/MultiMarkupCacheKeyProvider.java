@@ -37,7 +37,8 @@ public class MultiMarkupCacheKeyProvider extends DefaultMarkupCacheKeyProvider {
 	 * @return Key that uniquely identifies any markup that might be associated with this markup
 	 *         container.
 	 */
-	public String getCacheKey(final MarkupContainer container, final Class<?> clazz) {
+	@Override
+    public String getCacheKey(final MarkupContainer container, final Class<?> clazz) {
 
             return ShopCodeContext.getShopCode() + '_' + super.getCacheKey(container, clazz);
 

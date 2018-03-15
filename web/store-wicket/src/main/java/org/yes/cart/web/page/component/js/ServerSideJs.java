@@ -2,7 +2,6 @@ package org.yes.cart.web.page.component.js;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.yes.cart.web.page.component.BaseComponent;
-import org.yes.cart.web.util.WicketUtil;
 
 /**
  * User: denispavlov

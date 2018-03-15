@@ -88,6 +88,7 @@ public class StorefrontApplication extends AuthenticatedWebApplication
     /**
      * @see org.apache.wicket.Application#getHomePage()
      */
+    @Override
     public Class<Page> getHomePage() {
         return homePageProvider.get();
     }
@@ -97,6 +98,7 @@ public class StorefrontApplication extends AuthenticatedWebApplication
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void init() {
 
         enableResourceAccess();
@@ -163,6 +165,7 @@ public class StorefrontApplication extends AuthenticatedWebApplication
     /**
      * {@inheritDoc}
      */
+    @Override
     protected Class<? extends WebPage> getSignInPageClass() {
         return loginPageProvider.get();
     }
@@ -241,6 +244,7 @@ public class StorefrontApplication extends AuthenticatedWebApplication
     /**
      * {@inheritDoc}
      */
+    @Override
     public IResourceStream find(final Class<?> aClass, final String s) {
         return configureMultiWebApplicationPath().find(aClass, s);
     }
@@ -248,6 +252,7 @@ public class StorefrontApplication extends AuthenticatedWebApplication
     /**
      * {@inheritDoc}
      */
+    @Override
     public RequestCycle get(final RequestCycleContext context) {
         return new RequestCycle(context);
     }

@@ -14,7 +14,6 @@ import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.ProductServiceFacade;
-import org.yes.cart.web.util.WicketUtil;
 
 /**
  * User: denispavlov

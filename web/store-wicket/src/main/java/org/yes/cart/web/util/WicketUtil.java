@@ -88,8 +88,8 @@ public class WicketUtil {
      * @param pageParameters given parameters to transform.
      * @return parameters transformed to map
      */
-    public Map<String, String> pageParametesAsMap(final PageParameters pageParameters) {
-        final Map<String, String> map = new LinkedHashMap<String, String>();
+    public Map<String, String> pageParametersAsMap(final PageParameters pageParameters) {
+        final Map<String, String> map = new LinkedHashMap<>();
         if (pageParameters != null) {
             for (String key : pageParameters.getNamedKeys()) {
                 if (!commandConfig.isInternalCommandKey(key)) {
@@ -107,12 +107,12 @@ public class WicketUtil {
      * @param pageParameters given parameters to transform.
      * @return parameters transformed to map
      */
-    public Map<String, List<String>> pageParametesAsMultiMap(final PageParameters pageParameters) {
-        final Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
+    public Map<String, List<String>> pageParametersAsMultiMap(final PageParameters pageParameters) {
+        final Map<String, List<String>> map = new LinkedHashMap<>();
         if (pageParameters != null) {
             for (String key : pageParameters.getNamedKeys()) {
                 if (!commandConfig.isInternalCommandKey(key)) {
-                    final List<String> vals = new ArrayList<String>();
+                    final List<String> vals = new ArrayList<>();
                     for (final StringValue value : pageParameters.getValues(key)) {
                         vals.add(value.toString());
                     }
@@ -317,7 +317,7 @@ public class WicketUtil {
                                                                 final Map<String, Object> parameters) {
         if (parameters != null) {
             final ValueMap params = new ValueMap(parameters);
-            return new StringResourceModel(resourceKey, component, new Model<ValueMap>(params));
+            return new StringResourceModel(resourceKey, component, new Model<>(params));
         }
         return new StringResourceModel(resourceKey, component, null);
     }

@@ -46,7 +46,6 @@ import org.yes.cart.web.theme.WicketPagesMounter;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -57,12 +56,12 @@ public class ManageAddressesView extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
 
-    protected final static String SELECT_ADDRESSES_FORM = "selectAddressForm";
+    private final static String SELECT_ADDRESSES_FORM = "selectAddressForm";
     protected final static String EDIT_ADDRESSES_FORM = "editAddressForm";
-    protected final static String ADDRESS_RADIO_GROUP = "addressRadioGroup";
-    protected final static String ADDRESS_RADIO = "addressRadio";
+    private final static String ADDRESS_RADIO_GROUP = "addressRadioGroup";
+    private final static String ADDRESS_RADIO = "addressRadio";
 
-    protected final static String ADDRESSES_LIST = "addressList";
+    private final static String ADDRESSES_LIST = "addressList";
 
     private final static String CREATE_LINK = "createLink";
     private final static String EDIT_LINK = "editLink";
@@ -104,17 +103,16 @@ public class ManageAddressesView extends BaseComponent {
                 new Form(SELECT_ADDRESSES_FORM).add(
                         new RadioGroup<Address>(
                                 ADDRESS_RADIO_GROUP,
-                                new Model<Address>(addressBookFacade.getDefaultAddress(customerModel.getObject(), getCurrentCustomerShop(), addressType))) {
+                                new Model<>(addressBookFacade.getDefaultAddress(customerModel.getObject(), getCurrentCustomerShop(), addressType))) {
 
                             @Override
-                            protected void onSelectionChanged(final Address o) {
-                                final Address address = o;
+                            protected void onSelectionChanged(final Address address) {
                                 super.onSelectionChanged(address);
                                 addressBookFacade.useAsDefault(address, getCurrentCustomerShop());
                                 final String key = Address.ADDR_TYPE_BILLING.equals(addressType) ?
                                         ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS : ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS;
                                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, getCurrentCart(),
-                                        (Map) new HashMap() {{
+                                        new HashMap() {{
                                             put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);
                                             put(key, address);
                                         }}
@@ -145,6 +143,7 @@ public class ManageAddressesView extends BaseComponent {
                                 )
                                 .add(
                                         new ListView<Address>(ADDRESSES_LIST, allowed) {
+                                            @Override
                                             protected void populateItem(final ListItem<Address> addressListItem) {
                                                 populateAddress(addressListItem, addressListItem.getModelObject(), returnToCheckout);
                                             }
@@ -179,7 +178,7 @@ public class ManageAddressesView extends BaseComponent {
         );
 
         addressListItem
-                .add(new Radio<Address>(ADDRESS_RADIO, new Model<Address>(address)))
+                .add(new Radio<>(ADDRESS_RADIO, new Model<>(address)))
                 .add(new Label(FORMATTED_ADDRESS, makeHtml(addressString)).setEscapeModelStrings(false))
                 .add(
                         new SubmitLink(EDIT_LINK) {
@@ -201,9 +200,9 @@ public class ManageAddressesView extends BaseComponent {
                                 final Shop shop = ((AbstractWebPage) getPage()).getCurrentCustomerShop();
                                 addressBookFacade.remove(address, shop);
                                 if (returnToCheckout) {
-                                    setResponsePage((Class) wicketPagesMounter.getPageProviderByUri("/checkout").get());
+                                    setResponsePage(wicketPagesMounter.getPageProviderByUri("/checkout").get());
                                 } else {
-                                    setResponsePage((Class) wicketPagesMounter.getPageProviderByUri("/profile").get());
+                                    setResponsePage(wicketPagesMounter.getPageProviderByUri("/profile").get());
                                 }
                             }
                         }.setDefaultFormProcessing(false)
@@ -228,11 +227,11 @@ public class ManageAddressesView extends BaseComponent {
         final PageParameters parameters = new PageParameters();
 
         parameters.add(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL,
-                isCheckout ? CreateEditAddressPage.RETURN_TO_CHECKOUT : CreateEditAddressPage.RETURN_TO_SELFCARE);
+                isCheckout ? CreateEditAddressPage.RETURN_TO_CHECKOUT : CreateEditAddressPage.RETURN_TO_PROFILE);
         parameters.add(WebParametersKeys.ADDRESS_ID, String.valueOf(addressId));
         parameters.add(WebParametersKeys.ADDRESS_TYPE, addressType);
 
-        return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
+        return new Pair<>(successfulPage, parameters);
     }
 
 

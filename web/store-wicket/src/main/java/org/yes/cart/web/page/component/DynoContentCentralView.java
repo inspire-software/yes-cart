@@ -55,7 +55,7 @@ public class DynoContentCentralView extends AbstractCentralView {
 
         final String lang = getLocale().getLanguage();
         final String contentBody;
-        if (getCategoryId() > 0l) {
+        if (getCategoryId() > 0L) {
             contentBody = contentServiceFacade.getDynamicContentBody(getCategoryId(), getCurrentShopId(), lang, new HashMap<String, Object>() {{
                 put("shoppingCart", getCurrentCart());
                 put("shop", getCurrentShop());

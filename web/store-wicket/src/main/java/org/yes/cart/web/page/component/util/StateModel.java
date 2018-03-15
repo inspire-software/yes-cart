@@ -48,10 +48,12 @@ public class StateModel implements IModel<State> {
         }
     }
 
+    @Override
     public State getObject() {
         return state;
     }
 
+    @Override
     public void setObject(final State state) {
         this.state = state;
         if (state == null) {
@@ -61,6 +63,7 @@ public class StateModel implements IModel<State> {
         }
     }
 
+    @Override
     public void detach() {
         if (state instanceof IDetachable) {
             ((IDetachable)state).detach();

@@ -115,6 +115,7 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
         addOrReplace(
                 new ListView<ProductSearchResultDTO>(PRODUCT_LIST, getProductListToShow())
                 {
+                    @Override
                     protected void populateItem(ListItem<ProductSearchResultDTO> listItem)
                     {
 

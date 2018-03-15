@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class WicketResourceMounterImpl implements WicketResourceMounter {
 
-    private final List<String> enabledPatterns = new ArrayList<String>();
+    private final List<String> enabledPatterns = new ArrayList<>();
 
     private IResource sitemapXml;
     private IResource orderPdf;

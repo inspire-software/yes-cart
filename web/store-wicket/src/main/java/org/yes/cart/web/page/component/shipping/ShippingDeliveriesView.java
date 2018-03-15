@@ -106,13 +106,13 @@ public class ShippingDeliveriesView extends BaseComponent {
         final String selectedLocale = getLocale().getLanguage();
 
         final Map<DeliveryBucket, List<CartItem>> bucketItemsMap = shoppingCart.getCartItemMap();
-        final List<Pair<String, List<CartItem>>> supplierItems = new ArrayList<Pair<String, List<CartItem>>>(bucketItemsMap.size());
-        final Map<String, List<CartItem>> supplierItemsMap = new HashMap<String, List<CartItem>>();
+        final List<Pair<String, List<CartItem>>> supplierItems = new ArrayList<>(bucketItemsMap.size());
+        final Map<String, List<CartItem>> supplierItemsMap = new HashMap<>();
         for (final Map.Entry<DeliveryBucket, List<CartItem>> bucketItem : bucketItemsMap.entrySet()) {
             List<CartItem> items = supplierItemsMap.get(bucketItem.getKey().getSupplier());
             if (items == null) {
-                items = new ArrayList<CartItem>();
-                supplierItems.add(new Pair<String, List<CartItem>>(bucketItem.getKey().getSupplier(), items));
+                items = new ArrayList<>();
+                supplierItems.add(new Pair<>(bucketItem.getKey().getSupplier(), items));
                 supplierItemsMap.put(bucketItem.getKey().getSupplier(), items);
             }
             items.addAll(bucketItem.getValue());
@@ -133,7 +133,7 @@ public class ShippingDeliveriesView extends BaseComponent {
 
                         final Pair<String, List<CartItem>> delivery = customerOrderDeliveryListItem.getModelObject();
 
-                        final List<CartItem> deliveryDet = new ArrayList<CartItem>(delivery.getSecond());
+                        final List<CartItem> deliveryDet = new ArrayList<>(delivery.getSecond());
                         String supplierName = supplierNames.get(delivery.getFirst());
                         if (supplierName == null) {
                             supplierName = delivery.getFirst();
@@ -214,6 +214,7 @@ public class ShippingDeliveriesView extends BaseComponent {
         final Component multiDelivery = new CheckBox("multipleDelivery", new PropertyModel(this, "multipleDelivery")) {
 
             /** {@inheritDoc} */
+            @Override
             protected boolean wantOnSelectionChangedNotifications() {
                 return true;
             }
@@ -253,9 +254,7 @@ public class ShippingDeliveriesView extends BaseComponent {
 
         final PriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
 
-        final PriceView priceView = new PriceView(ITEM_PRICE, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount(), cartItem.isGift());
-
-        return priceView;
+        return new PriceView(ITEM_PRICE, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount(), cartItem.isGift());
     }
 
 
@@ -265,9 +264,7 @@ public class ShippingDeliveriesView extends BaseComponent {
 
         final PriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, true);
 
-        final PriceView priceView = new PriceView(ITEM_TOTAL, model, null, false, false, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
-
-        return priceView;
+        return new PriceView(ITEM_TOTAL, model, null, false, false, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
 
     }
 

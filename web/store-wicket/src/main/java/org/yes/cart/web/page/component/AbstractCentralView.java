@@ -98,7 +98,7 @@ public abstract class AbstractCentralView extends BaseComponent {
             final String lang = getLocale().getLanguage();
             final String title = getPageTitle(seoable.getSeo(), lang);
             if (title != null) {
-                return new Model<String>(title);
+                return new Model<>(title);
             }
         }
         return null;
@@ -130,7 +130,7 @@ public abstract class AbstractCentralView extends BaseComponent {
 
 
     /**
-     * Get opage description
+     * Get page description
      * @return description
      */
     public IModel<String> getDescription() {
@@ -139,7 +139,7 @@ public abstract class AbstractCentralView extends BaseComponent {
             final String lang = getLocale().getLanguage();
             final String description = getDescription(seoable.getSeo(), lang);
             if (description != null) {
-                return new Model<String>(description);
+                return new Model<>(description);
             }
         }
         return null;
@@ -168,7 +168,7 @@ public abstract class AbstractCentralView extends BaseComponent {
             final String lang = getLocale().getLanguage();
             final String keywords = getKeywords(seoable.getSeo(), lang);
             if (keywords != null) {
-                return new Model<String>(keywords);
+                return new Model<>(keywords);
             }
         }
         return null;
@@ -203,7 +203,7 @@ public abstract class AbstractCentralView extends BaseComponent {
             final String lang = getLocale().getLanguage();
             final String relCanonical = getRelCanonical(seoable.getSeo(), lang);
             if (relCanonical != null) {
-                return new Model<String>(relCanonical);
+                return new Model<>(relCanonical);
             }
         }
         return null;

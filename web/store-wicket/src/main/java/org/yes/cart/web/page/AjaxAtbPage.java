@@ -49,7 +49,7 @@ public class AjaxAtbPage extends AbstractWebPage {
         addOrReplace(new SmallShoppingCartView("smallCart"));
         addOrReplace(new Label("productAddedMsg",
                 WicketUtil.createStringResourceModel(this, "itemAdded",
-                        Collections.<String, Object>singletonMap("sku", skuValue))));
+                        Collections.singletonMap("sku", skuValue))));
 
         final ProductSku productSku = productServiceFacade.getProductSkuBySkuCode(sku);
         final ShoppingCart cart = getCurrentCart();
@@ -59,7 +59,7 @@ public class AjaxAtbPage extends AbstractWebPage {
         final String message;
         if (!pqm.canOrderMore()) {
 
-            final Map<String, Object> params = new HashMap<String, Object>();
+            final Map<String, Object> params = new HashMap<>();
             params.put("cart", pqm.getCartQty().toPlainString());
 
             message = getLocalizer().getString("quantityPickerFullTooltip", this,
@@ -67,7 +67,7 @@ public class AjaxAtbPage extends AbstractWebPage {
 
         } else if (pqm.hasMax()) {
 
-            final Map<String, Object> params = new HashMap<String, Object>();
+            final Map<String, Object> params = new HashMap<>();
             params.put("min", pqm.getMin().toPlainString());
             params.put("step", pqm.getStep().toPlainString());
             params.put("max", pqm.getMax().toPlainString());
@@ -78,7 +78,7 @@ public class AjaxAtbPage extends AbstractWebPage {
 
         } else {
 
-            final Map<String, Object> params = new HashMap<String, Object>();
+            final Map<String, Object> params = new HashMap<>();
             params.put("min", pqm.getMin().toPlainString());
             params.put("step", pqm.getStep().toPlainString());
             params.put("cart", pqm.getCartQty().toPlainString());

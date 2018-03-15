@@ -140,12 +140,14 @@ public class ProductsCentralView extends AbstractCentralView {
 
         final GridView<ProductSearchResultDTO> productDataView = new GridView<ProductSearchResultDTO>(PRODUCT_LIST, dataProvider) {
 
+            @Override
             protected void populateItem(Item<ProductSearchResultDTO> productItem) {
                 productItem.add(
                         new ProductInListView(PRODUCT, productItem.getModelObject(), widthHeight)
                 );
             }
 
+            @Override
             protected void populateEmptyItem(Item<ProductSearchResultDTO> productItem) {
                 productItem.add(
                         new Label(PRODUCT, StringUtils.EMPTY).setVisible(false)
@@ -186,13 +188,13 @@ public class ProductsCentralView extends AbstractCentralView {
     private Pair<String, Boolean> getSortField() {
         String sort = getPage().getPageParameters().get(WebParametersKeys.SORT).toString();
         if (sort != null) {
-            return new Pair<String, Boolean>(sort, false);
+            return new Pair<>(sort, false);
         }
         sort = getPage().getPageParameters().get(WebParametersKeys.SORT_REVERSE).toString();
         if (sort != null) {
-            return new Pair<String, Boolean>(sort, true);
+            return new Pair<>(sort, true);
         }
-        return new Pair<String, Boolean>(null, false);
+        return new Pair<>(null, false);
     }
 
 

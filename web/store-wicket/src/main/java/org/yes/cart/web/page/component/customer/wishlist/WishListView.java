@@ -60,7 +60,7 @@ public class WishListView extends AbstractProductSearchResultList {
 
     private List<ProductSearchResultDTO> products = null;
 
-    private Map<ProductSearchResultDTO, CustomerWishList> wishListDataByProduct = new HashMap<ProductSearchResultDTO, CustomerWishList>();
+    private Map<ProductSearchResultDTO, CustomerWishList> wishListDataByProduct = new HashMap<>();
 
     private final Model<String> customerEmail;
     private final Model<String> wishListType;
@@ -77,9 +77,9 @@ public class WishListView extends AbstractProductSearchResultList {
     public WishListView(final String id) {
         this(
                 id,
-                new Model<String>(ApplicationDirector.getShoppingCart().getCustomerEmail()),
-                new Model<String>(null),
-                new Model<String>(null)
+                new Model<>(ApplicationDirector.getShoppingCart().getCustomerEmail()),
+                new Model<>(null),
+                new Model<>(null)
         );
     }
 
@@ -120,14 +120,14 @@ public class WishListView extends AbstractProductSearchResultList {
     public List<ProductSearchResultDTO> getProductListToShow() {
         if (products == null) {
 
-            final List<CustomerWishList> wishList = new ArrayList<CustomerWishList>(customerServiceFacade.getCustomerWishListByEmail(
+            final List<CustomerWishList> wishList = new ArrayList<>(customerServiceFacade.getCustomerWishListByEmail(
                     getCurrentShop(),
                     this.wishListType.getObject(), this.customerEmail.getObject(),
-                    ownerViewing ? null : CustomerWishList.SHARED, this.wishListTag.getObject() != null ? new String[] { this.wishListTag.getObject() } : null));
+                    ownerViewing ? null : CustomerWishList.SHARED, this.wishListTag.getObject() != null ? new String[]{this.wishListTag.getObject()} : null));
 
             if (CollectionUtils.isNotEmpty(wishList)) {
 
-                final List<String> productIds = new ArrayList<String>();
+                final List<String> productIds = new ArrayList<>();
 
                 for (final CustomerWishList item : wishList) {
 
@@ -141,7 +141,7 @@ public class WishListView extends AbstractProductSearchResultList {
                 final List<ProductSearchResultDTO> uniqueProducts = productServiceFacade.getListProducts(
                         productIds, -1L, shopId, browsingShopId);
 
-                final List<ProductSearchResultDTO> wishListProducts = new ArrayList<ProductSearchResultDTO>();
+                final List<ProductSearchResultDTO> wishListProducts = new ArrayList<>();
 
                 for (final CustomerWishList item : wishList) {
 

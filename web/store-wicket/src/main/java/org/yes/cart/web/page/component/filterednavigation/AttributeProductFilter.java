@@ -36,7 +36,7 @@ public class AttributeProductFilter extends AbstractProductFilter {
 
     private boolean filteredNavigationByAttribute = false;
 
-    private Boolean visibilityRezult;
+    private Boolean visibilityResult;
 
     @SpringBean(name = StorefrontServiceSpringKeys.FILTERNAV_SUPPORT_ATTRIBUTES)
     private AttributeFilteredNavigationSupport attributeFilteredNavigationSupport;
@@ -100,19 +100,20 @@ public class AttributeProductFilter extends AbstractProductFilter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isVisible() {
 
         if (filteredNavigationByAttribute) {
 
-            if (visibilityRezult == null) {
+            if (visibilityResult == null) {
 
-                visibilityRezult = super.isVisible()
+                visibilityResult = super.isVisible()
                         && getNavigationRecords() != null
                         && !getNavigationRecords().isEmpty();
 
             }
 
-            return visibilityRezult;
+            return visibilityResult;
 
         }
 

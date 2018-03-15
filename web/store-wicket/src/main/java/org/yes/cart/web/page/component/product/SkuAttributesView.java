@@ -76,25 +76,25 @@ public class SkuAttributesView extends BaseComponent {
     private List<Pair<String, List<Pair<String, String>>>> adapt(
             final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attributes) {
 
-        final List<Pair<String, List<Pair<String, String>>>> displayGroups = new ArrayList<Pair<String, List<Pair<String, String>>>>(attributes.size());
+        final List<Pair<String, List<Pair<String, String>>>> displayGroups = new ArrayList<>(attributes.size());
         for (final Pair<String, String> group : attributes.keySet()) {
 
             final Map<Pair<String, String>, List<Pair<String, String>>> attrs = attributes.get(group);
-            final List<Pair<String, String>> displayAttrs = new ArrayList<Pair<String, String>>(attrs.size());
+            final List<Pair<String, String>> displayAttrs = new ArrayList<>(attrs.size());
 
-            displayGroups.add(new Pair<String, List<Pair<String, String>>>(group.getSecond(), displayAttrs));
+            displayGroups.add(new Pair<>(group.getSecond(), displayAttrs));
 
             for (final Pair<String, String> attr : attrs.keySet()) {
 
                 final List<Pair<String, String>> values = attrs.get(attr);
 
                 final StringBuilder csv = new StringBuilder();
-                for (int i = 0; i < values.size(); i++) {
-                    csv.append(values.get(i).getSecond()).append(", ");
+                for (final Pair<String, String> value : values) {
+                    csv.append(value.getSecond()).append(", ");
                 }
                 csv.delete(csv.length() - 2, csv.length());
 
-                displayAttrs.add(new Pair<String, String>(attr.getSecond(), csv.toString()));
+                displayAttrs.add(new Pair<>(attr.getSecond(), csv.toString()));
             }
         }
         return displayGroups;
@@ -107,6 +107,7 @@ public class SkuAttributesView extends BaseComponent {
         add(
                 new ListView<Pair<String, List<Pair<String, String>>>>(ATTR_GROUPS, attributesToShow) {
 
+                    @Override
                     protected void populateItem(ListItem<Pair<String, List<Pair<String, String>>>> pairListItem) {
                         final Pair<String, List<Pair<String, String>>> item = pairListItem.getModelObject();
                         pairListItem.add(

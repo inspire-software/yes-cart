@@ -71,7 +71,7 @@ public class SubCategoriesCentralView extends AbstractCentralView {
 
     private List<CategoryDecorator> decorate(final List<Category> categories) {
         final DecoratorFacade facade = getDecoratorFacade();
-        final List<CategoryDecorator> rez = new ArrayList<CategoryDecorator>();
+        final List<CategoryDecorator> rez = new ArrayList<>();
         for (Category cat : categories) {
             rez.add((CategoryDecorator) facade.decorate(cat, getWicketUtil().getHttpServletRequest().getContextPath(), true));
         }
@@ -101,6 +101,7 @@ public class SubCategoriesCentralView extends AbstractCentralView {
         final GridView<CategoryDecorator> categoryView = new GridView<CategoryDecorator>(CATEGORY_LIST, dataProvider) {
 
             /** {@inheritDoc} */
+            @Override
             protected void populateItem(Item<CategoryDecorator> categoryItem) {
 
                 categoryItem.add(
@@ -111,6 +112,7 @@ public class SubCategoriesCentralView extends AbstractCentralView {
 
             }
 
+            @Override
             protected void populateEmptyItem(Item<CategoryDecorator> categoryItem) {
 
                 categoryItem.add(

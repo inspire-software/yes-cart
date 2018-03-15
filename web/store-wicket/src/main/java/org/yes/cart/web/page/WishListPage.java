@@ -95,9 +95,9 @@ public class WishListPage extends AbstractWebPage {
                 customer = null;
                 publicKey = null;
                 // Redirect away from profile!
-                final PageParameters rparams = new PageParameters();
-                rparams.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
-                setResponsePage(Application.get().getHomePage(), rparams);
+                final PageParameters logOutParams = new PageParameters();
+                logOutParams.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
+                setResponsePage(Application.get().getHomePage(), logOutParams);
             }
         } else {
             publicKey = null;
@@ -123,7 +123,7 @@ public class WishListPage extends AbstractWebPage {
 
         add(new FeedbackPanel(FEEDBACK));
         add(
-                new WishListView(WISHLIST_PANEL, new Model<String>(email), new Model<String>(CustomerWishList.SIMPLE_WISH_ITEM), new Model<String>(tag))
+                new WishListView(WISHLIST_PANEL, new Model<>(email), new Model<>(CustomerWishList.SIMPLE_WISH_ITEM), new Model<>(tag))
                     .setVisible(customer != null)
                     .add(new AttributeModifier("data-publickey", safePublicKey))
         );
@@ -168,6 +168,7 @@ public class WishListPage extends AbstractWebPage {
      *
      * @return page title
      */
+    @Override
     public IModel<String> getPageTitle() {
         return new StringResourceModel("wishlist",this);
     }

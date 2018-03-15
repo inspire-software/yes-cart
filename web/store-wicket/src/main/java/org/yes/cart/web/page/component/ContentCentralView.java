@@ -57,7 +57,7 @@ public class ContentCentralView extends AbstractCentralView {
 
         final String lang = getLocale().getLanguage();
         final String contentBody;
-        if (getCategoryId() > 0l) {
+        if (getCategoryId() > 0L) {
             contentBody = contentServiceFacade.getContentBody(getCategoryId(), getCurrentShopId(), lang);
         } else {
             contentBody = "";

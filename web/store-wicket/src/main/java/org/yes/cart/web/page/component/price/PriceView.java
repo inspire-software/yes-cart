@@ -76,8 +76,8 @@ public class PriceView extends BaseComponent {
     private final boolean showTaxAmount;
     private final boolean showGratis;
 
-    private static final Pair<BigDecimal, BigDecimal> NULL = new Pair<BigDecimal, BigDecimal>(null, null);
-    private static final String[] EMPTY_FORMATED_PRICE = new String[] { StringUtils.EMPTY, StringUtils.EMPTY };
+    private static final Pair<BigDecimal, BigDecimal> NULL = new Pair<>(null, null);
+    private static final String[] EMPTY_FORMATTED_PRICE = new String[] { StringUtils.EMPTY, StringUtils.EMPTY };
 
     @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
@@ -149,7 +149,7 @@ public class PriceView extends BaseComponent {
             final String priceString = price.setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP).toPlainString();
             formatted = StringUtils.split(priceString, '.');
         } else { // if price was null
-            formatted = EMPTY_FORMATED_PRICE;
+            formatted = EMPTY_FORMATTED_PRICE;
         }
         return formatted;
     }
@@ -221,7 +221,7 @@ public class PriceView extends BaseComponent {
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_CURRENCY)));
 
 
-        final Map<String, Object> tax = new HashMap<String, Object>();
+        final Map<String, Object> tax = new HashMap<>();
         if (this.showTaxAmount) {
             tax.put("tax", this.priceModel.getPriceTax() != null ? this.priceModel.getPriceTax().toPlainString() : Total.ZERO.toPlainString());
         } else {
@@ -253,7 +253,7 @@ public class PriceView extends BaseComponent {
 
         final Label discount = new Label(SAVE_LABEL,
                 WicketUtil.createStringResourceModel(this, "savePercent",
-                        Collections.<String, Object>singletonMap("discount", savePercent)));
+                        Collections.singletonMap("discount", savePercent)));
 
         discount.setVisible(showSave);
         discount.setEscapeModelStrings(false);

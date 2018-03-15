@@ -49,6 +49,7 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
     /**
      * {@inheritDoc}
      */
+    @Override
     public Url encodePageParameters(final PageParameters pageParameters) {
         final Url url = new Url();
         for (PageParameters.NamedPair pair : pageParameters.getAllNamed()) {
@@ -122,6 +123,7 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
     /**
      * {@inheritDoc}
      */
+    @Override
     public PageParameters decodePageParameters(final Url url) {
         final PageParameters parameters = new PageParameters();
         String name = null;

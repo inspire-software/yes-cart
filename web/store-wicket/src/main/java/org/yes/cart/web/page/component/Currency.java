@@ -83,6 +83,7 @@ public class Currency extends BaseComponent {
 
         add( new ListView<String>(CURRENCY_LIST, supportedCurrencies) {
 
+            @Override
             protected void populateItem(ListItem<String> stringListItem) {
 
                 final String currencyCode = stringListItem.getModelObject();

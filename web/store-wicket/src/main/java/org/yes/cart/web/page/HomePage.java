@@ -89,7 +89,7 @@ public class HomePage extends AbstractWebPage {
 
         executeHttpPostedCommands();
 
-        final Map<String, List<String>> mapParams = getWicketUtil().pageParametesAsMultiMap(getPageParameters());
+        final Map<String, List<String>> mapParams = getWicketUtil().pageParametersAsMultiMap(getPageParameters());
 
         final Pair<String, String> centralViewLabel = centralViewResolver.resolveMainPanelRendererLabel(mapParams);
 
@@ -99,7 +99,7 @@ public class HomePage extends AbstractWebPage {
         } else if (mapParams.containsKey(WebParametersKeys.CONTENT_ID)) {
             categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.CONTENT_ID)));
         } else {
-            categoryId = 0l;
+            categoryId = 0L;
         }
 
         final long shopId = getCurrentShopId();
@@ -200,6 +200,7 @@ public class HomePage extends AbstractWebPage {
      *
      * @return page title
      */
+    @Override
     public IModel<String> getPageTitle() {
         final AbstractCentralView centralPanel = getCentralPanel();
         if (centralPanel != null) {
@@ -209,7 +210,7 @@ public class HomePage extends AbstractWebPage {
             }
             final String shop = super.getPageTitle().getObject();
             if (StringUtils.isNotEmpty(shop)) {
-                return new Model<String>(rez.getObject() + " - " + shop);
+                return new Model<>(rez.getObject() + " - " + shop);
             }
             return rez;
         }
@@ -222,6 +223,7 @@ public class HomePage extends AbstractWebPage {
      *
      * @return description
      */
+    @Override
     public IModel<String> getDescription() {
         final AbstractCentralView centralPanel = getCentralPanel();
         if (centralPanel != null) {
@@ -239,6 +241,7 @@ public class HomePage extends AbstractWebPage {
      *
      * @return keywords
      */
+    @Override
     public IModel<String> getKeywords() {
         final AbstractCentralView centralPanel = getCentralPanel();
         if (centralPanel != null) {
@@ -256,6 +259,7 @@ public class HomePage extends AbstractWebPage {
      *
      * @return link
      */
+    @Override
     public IModel<String> getRelCanonical() {
         final AbstractCentralView centralPanel = getCentralPanel();
         if (centralPanel != null) {

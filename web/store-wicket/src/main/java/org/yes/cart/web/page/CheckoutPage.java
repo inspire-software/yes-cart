@@ -64,6 +64,7 @@ import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.page.component.shipping.ShippingDeliveriesView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.*;
+import org.yes.cart.web.theme.WicketPagesMounter;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -93,19 +94,19 @@ public class CheckoutPage extends AbstractWebPage {
     private static final Logger LOG = LoggerFactory.getLogger(CheckoutPage.class);
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
-    public static final String NAVIGATION_THREE_FRAGMENT = "threeStepNavigationFragment";
-    public static final String NAVIGATION_FOUR_FRAGMENT = "fourStepNavigationFragment";
-    public static final String LOGIN_FRAGMENT = "loginFragment";
+    private static final String NAVIGATION_THREE_FRAGMENT = "threeStepNavigationFragment";
+    private static final String NAVIGATION_FOUR_FRAGMENT = "fourStepNavigationFragment";
+    private static final String LOGIN_FRAGMENT = "loginFragment";
 
-    public static final String ADDRESS_FRAGMENT = "addressFragment";
-    public static final String SHIPPING_ADDRESS_VIEW = "shippingAddress";
-    public static final String BILLING_ADDRESS_VIEW = "billingAddress";
-    public static final String BILLING_THE_SAME_FORM = "billingTheSameForm";
-    public static final String BILLING_THE_SAME = "billingTheSame";
+    private static final String ADDRESS_FRAGMENT = "addressFragment";
+    private static final String SHIPPING_ADDRESS_VIEW = "shippingAddress";
+    private static final String BILLING_ADDRESS_VIEW = "billingAddress";
+    private static final String BILLING_THE_SAME_FORM = "billingTheSameForm";
+    private static final String BILLING_THE_SAME = "billingTheSame";
 
 
-    public static final String SHIPMENT_FRAGMENT = "shipmentFragment";
-    public static final String SHIPMENT_VIEW = "shipmentView";
+    private static final String SHIPMENT_FRAGMENT = "shipmentFragment";
+    private static final String SHIPMENT_VIEW = "shipmentView";
 
     private static final String PAYMENT_FRAGMENT = "paymentFragment";
     private static final String PAYMENT_FRAGMENT_OPTIONS_FORM = "paymentOptionsForm";
@@ -115,24 +116,24 @@ public class CheckoutPage extends AbstractWebPage {
     private static final String PAYMENT_FRAGMENT_PAYMENT_FORM = "dynamicPaymentForm";
 
 
-    public static final String CONTENT_VIEW = "content";
-    public static final String NAVIGATION_VIEW = "navigation";
+    private static final String CONTENT_VIEW = "content";
+    private static final String NAVIGATION_VIEW = "navigation";
 
-    public static final String PART_REGISTER_VIEW = "registerView";
-    public static final String PART_LOGIN_VIEW = "loginView";
-    public static final String PART_GUEST_VIEW = "guestView";
+    private static final String PART_REGISTER_VIEW = "registerView";
+    private static final String PART_LOGIN_VIEW = "loginView";
+    private static final String PART_GUEST_VIEW = "guestView";
 
-    public static final String ERROR = "e";
-    public static final String ERROR_COUPON = "ec";
-    public static final String ERROR_SKU = "es";
+    private static final String ERROR = "e";
+    private static final String ERROR_COUPON = "ec";
+    private static final String ERROR_SKU = "es";
 
     public static final String STEP = "step";
-    public static final String GUEST = "guest";
+    private static final String GUEST = "guest";
 
-    public static final String STEP_LOGIN = "login";
+    private static final String STEP_LOGIN = "login";
     public static final String STEP_ADDR = "address";
-    public static final String STEP_SHIPMENT = "ship";
-    public static final String STEP_PAY = "payment";
+    private static final String STEP_SHIPMENT = "ship";
+    private static final String STEP_PAY = "payment";
 
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
@@ -164,6 +165,9 @@ public class CheckoutPage extends AbstractWebPage {
 
     @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
     protected ContentServiceFacade contentServiceFacade;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_PAGES_MOUNTER)
+    private WicketPagesMounter wicketPagesMounter;
 
     /**
      * Construct page.
@@ -259,14 +263,14 @@ public class CheckoutPage extends AbstractWebPage {
                 final PageParameters parameters = new PageParameters(getPageParameters());
                 parameters.set(STEP, STEP_SHIPMENT);
                 setResponsePage(this.getClass(), parameters);
-                return createShippmentFragment();
+                return createShipmentFragment();
             }
             return createAddressFragment();
         } else if (STEP_SHIPMENT.equals(currentStep)) {
 
             performOrderSplittingBeforeShipping();
 
-            return createShippmentFragment();
+            return createShipmentFragment();
         } else if (STEP_PAY.equals(currentStep)) {
             // Need to make sure we execute commands before we recreate order (we may need to choose another SLA)
             executeHttpPostedCommands();
@@ -284,7 +288,7 @@ public class CheckoutPage extends AbstractWebPage {
                 final PageParameters parameters = new PageParameters(getPageParameters());
                 parameters.set(STEP, STEP_SHIPMENT);
                 setResponsePage(this.getClass(), parameters);
-                return createShippmentFragment();
+                return createShipmentFragment();
             }
 
             recreateOrderBeforePayment();
@@ -301,7 +305,7 @@ public class CheckoutPage extends AbstractWebPage {
 
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SPLITCARTITEMS,
                 cart,
-                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SPLITCARTITEMS, ShoppingCartCommand.CMD_SPLITCARTITEMS));
+                Collections.singletonMap(ShoppingCartCommand.CMD_SPLITCARTITEMS, ShoppingCartCommand.CMD_SPLITCARTITEMS));
 
         persistCartIfNecessary();
 
@@ -313,7 +317,7 @@ public class CheckoutPage extends AbstractWebPage {
 
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
                 cart,
-                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
+                Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
 
         persistCartIfNecessary();
 
@@ -325,14 +329,14 @@ public class CheckoutPage extends AbstractWebPage {
 
             LOG.warn(checkoutDisabled.getMessage());
 
-            setResponsePage(ShoppingCartPage.class, new PageParameters().set(ERROR, "1"));
+            setResponsePage(wicketPagesMounter.getPageProviderByUri("/cart").get(), new PageParameters().set(ERROR, "1"));
 
 
         } catch (CouponCodeInvalidException invalidCoupon) {
 
             LOG.warn(invalidCoupon.getMessage());
 
-            setResponsePage(ShoppingCartPage.class, new PageParameters()
+            setResponsePage(wicketPagesMounter.getPageProviderByUri("/cart").get(), new PageParameters()
                             .set(ERROR, ERROR_COUPON)
                             .set(ERROR_COUPON, invalidCoupon.getCoupon()));
 
@@ -340,7 +344,7 @@ public class CheckoutPage extends AbstractWebPage {
 
             LOG.warn(skuUnavailable.getMessage());
 
-            setResponsePage(ShoppingCartPage.class, new PageParameters()
+            setResponsePage(wicketPagesMounter.getPageProviderByUri("/cart").get(), new PageParameters()
                     .set(ERROR, ERROR_SKU)
                     .set(ERROR_SKU, "(" + skuUnavailable.getSkuCode() + ") " + skuUnavailable.getSkuName()));
 
@@ -348,7 +352,7 @@ public class CheckoutPage extends AbstractWebPage {
 
             LOG.error(assembly.getMessage(), assembly);
 
-            setResponsePage(ShoppingCartPage.class, new PageParameters().set(ERROR, "1"));
+            setResponsePage(wicketPagesMounter.getPageProviderByUri("/cart").get(), new PageParameters().set(ERROR, "1"));
 
         }
     }
@@ -421,15 +425,16 @@ public class CheckoutPage extends AbstractWebPage {
 
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETPGLABEL,
                 shoppingCart,
-                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, null));
+                Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, null));
         persistCartIfNecessary();
 
         rez.addOrReplace(new Label(PAYMENT_FRAGMENT_PAYMENT_FORM));
         rez.addOrReplace(new ShoppingCartPaymentVerificationView("orderVerificationView", shoppingCart.getGuid(), false));
 
-        final Component multiDelivery = new CheckBox(PAYMENT_FRAGMENT_MD_CHECKBOX, new Model<Boolean>(multipleDelivery)) {
+        final Component multiDelivery = new CheckBox(PAYMENT_FRAGMENT_MD_CHECKBOX, new Model<>(multipleDelivery)) {
 
             /** {@inheritDoc} */
+            @Override
             protected boolean wantOnSelectionChangedNotifications() {
                 return true;
             }
@@ -439,7 +444,7 @@ public class CheckoutPage extends AbstractWebPage {
                 setModelObject(!getModelObject());
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_MULTIPLEDELIVERY,
                         getCurrentCart(),
-                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, getModelObject().toString()));
+                        Collections.singletonMap(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, getModelObject().toString()));
                 super.onSelectionChanged();
                 persistCartIfNecessary();
                 setResponsePage(
@@ -461,9 +466,10 @@ public class CheckoutPage extends AbstractWebPage {
 
         final Component pgSelector = new RadioGroup<String>(
                 PAYMENT_FRAGMENT_GATEWAY_CHECKBOX,
-                new PropertyModel<String>(orderInfo, "paymentGatewayLabel")) {
+                new PropertyModel<>(orderInfo, "paymentGatewayLabel")) {
 
             /** {@inheritDoc} */
+            @Override
             protected void onSelectionChanged(final String descriptor) {
 
                 final ShoppingCart cart = getCurrentCart();
@@ -485,7 +491,7 @@ public class CheckoutPage extends AbstractWebPage {
                 final BigDecimal grandTotal = total.getTotalAmount();
 
                 // update pgLabel and delivery info on the order
-                order.setPgLabel((String) descriptor);
+                order.setPgLabel(descriptor);
                 checkoutServiceFacade.estimateDeliveryTimeForOnlinePaymentOrder(order);
                 checkoutServiceFacade.update(order);
 
@@ -502,7 +508,7 @@ public class CheckoutPage extends AbstractWebPage {
 
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETPGLABEL,
                         cart,
-                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, descriptor));
+                        Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, descriptor));
 
                 persistCartIfNecessary();
 
@@ -510,14 +516,16 @@ public class CheckoutPage extends AbstractWebPage {
 
 
             /** {@inheritDoc} */
+            @Override
             protected boolean wantOnSelectionChangedNotifications() {
                 return true;
             }
 
         }.add(
                 new ListView<Pair<PaymentGatewayDescriptor, String>>("pgList", available) {
+                    @Override
                     protected void populateItem(final ListItem<Pair<PaymentGatewayDescriptor, String>> pgListItem) {
-                        pgListItem.add(new Radio<String>("pgListLabel", new Model<String>(pgListItem.getModelObject().getFirst().getLabel())));
+                        pgListItem.add(new Radio<>("pgListLabel", new Model<>(pgListItem.getModelObject().getFirst().getLabel())));
                         pgListItem.add(new Label("pgListName", pgListItem.getModelObject().getSecond()));
                         final boolean infoVisible = pgListItem.getModelObject().getFirst().getLabel().equals(orderInfo.getPaymentGatewayLabel());
                         final long contentShopId = getCurrentShopId();
@@ -619,9 +627,7 @@ public class CheckoutPage extends AbstractWebPage {
             // that triggers internal payment information processing via filter
             return ((PaymentGatewayExternalForm) gateway).getPostActionUrl();
         }
-        /**
-         * By default all payment processors and gateways  parked to page, that mounted with this url
-         */
+        // By default all payment processors and gateways  parked to page, that mounted with this url
         return "payment";
     }
 
@@ -631,7 +637,7 @@ public class CheckoutPage extends AbstractWebPage {
      * @return shipment method fragment
      */
 
-    private MarkupContainer createShippmentFragment() {
+    private MarkupContainer createShipmentFragment() {
         return new Fragment(CONTENT_VIEW, SHIPMENT_FRAGMENT, this)
                 .add(
                         new ShippingDeliveriesView(SHIPMENT_VIEW, false)
@@ -655,9 +661,9 @@ public class CheckoutPage extends AbstractWebPage {
 
         final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
-        final Model<Customer> customerModel = new Model<Customer>(customer);
+        final Model<Customer> customerModel = new Model<>(customer);
 
-        final ManageAddressesView shipppingAddress =
+        final ManageAddressesView shippingAddress =
                 new ManageAddressesView(SHIPPING_ADDRESS_VIEW, customerModel, Address.ADDR_TYPE_SHIPPING, true);
 
         final ManageAddressesView billingAddress =
@@ -666,14 +672,14 @@ public class CheckoutPage extends AbstractWebPage {
         rez = new Fragment(CONTENT_VIEW, ADDRESS_FRAGMENT, this);
 
         rez.add(
-                shipppingAddress
+                shippingAddress
         ).add(
                 billingAddress.setVisible(!billingAddressHidden)
         );
 
         rez.add(
                 new Form(BILLING_THE_SAME_FORM).add(
-                        new CheckBox(BILLING_THE_SAME, new Model<Boolean>(billingAddressHidden)) {
+                        new CheckBox(BILLING_THE_SAME, new Model<>(billingAddressHidden)) {
 
                             @Override
                             protected boolean wantOnSelectionChangedNotifications() {
@@ -686,7 +692,7 @@ public class CheckoutPage extends AbstractWebPage {
                                 setModelObject(billingHidden);
                                 billingAddress.setVisible(!billingHidden);
                                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SEPARATEBILLING, getCurrentCart(),
-                                        (Map) new HashMap() {{
+                                        new HashMap() {{
                                             put(ShoppingCartCommand.CMD_SEPARATEBILLING, String.valueOf(!billingHidden));
                                         }}
                                 );

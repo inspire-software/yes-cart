@@ -73,12 +73,12 @@ public class OrdersPage extends AbstractWebPage {
         } else {
             customer = null;
             // Redirect away from profile!
-            final PageParameters rparams = new PageParameters();
-            rparams.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
-            setResponsePage(Application.get().getHomePage(), rparams);
+            final PageParameters logOutParams = new PageParameters();
+            logOutParams.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
+            setResponsePage(Application.get().getHomePage(), logOutParams);
         }
 
-        final Model<Customer> customerModel = new Model<Customer>(customer);
+        final Model<Customer> customerModel = new Model<>(customer);
 
         add(new FeedbackPanel(FEEDBACK));
         add(new CustomerOrderPanel(ORDERS_PANEL, customerModel));
@@ -114,6 +114,7 @@ public class OrdersPage extends AbstractWebPage {
      *
      * @return page title
      */
+    @Override
     public IModel<String> getPageTitle() {
         return new StringResourceModel("ordersSummary",this);
     }

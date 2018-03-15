@@ -84,9 +84,9 @@ public class OrderPage extends AbstractWebPage {
         } else {
             customer = null;
             // Redirect away from profile!
-            final PageParameters rparams = new PageParameters();
-            rparams.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
-            setResponsePage(Application.get().getHomePage(), rparams);
+            final PageParameters logOutParams = new PageParameters();
+            logOutParams.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
+            setResponsePage(Application.get().getHomePage(), logOutParams);
         }
 
         final String orderGuid = params.get("order").toString();
@@ -101,7 +101,7 @@ public class OrderPage extends AbstractWebPage {
         if (customerOrder != null) {
             add(new Label(ORDER_NUM,
                     WicketUtil.createStringResourceModel(this, "orderNoTitle",
-                            Collections.<String, Object>singletonMap("ordernum", customerOrder.getOrdernum()))));
+                            Collections.singletonMap("ordernum", customerOrder.getOrdernum()))));
             add(new Label(ORDER_STATE,
                     WicketUtil.createStringResourceModel(this, customerOrder.getOrderStatus())));
             add(new ShoppingCartPaymentVerificationView(ORDER_PANEL, orderGuid, true));
@@ -147,6 +147,7 @@ public class OrderPage extends AbstractWebPage {
      *
      * @return page title
      */
+    @Override
     public IModel<String> getPageTitle() {
         return new StringResourceModel("ordersSummary",this);
     }
