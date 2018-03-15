@@ -61,13 +61,13 @@ public class CartRO implements Serializable {
             dtoToEntityMatcher = NoopMatcher.class,
             readOnly = true
     )
-    private List<CartItemRO> cartItems = new ArrayList<CartItemRO>();
-    private List<CartItemRO> items = new ArrayList<CartItemRO>();
-    private List<CartItemRO> gifts = new ArrayList<CartItemRO>();
+    private List<CartItemRO> cartItems = new ArrayList<>();
+    private List<CartItemRO> items = new ArrayList<>();
+    private List<CartItemRO> gifts = new ArrayList<>();
     @DtoField(readOnly = true)
-    private List<String> coupons = new ArrayList<String>();
+    private List<String> coupons = new ArrayList<>();
     @DtoField(readOnly = true)
-    private List<String> appliedCoupons = new ArrayList<String>();
+    private List<String> appliedCoupons = new ArrayList<>();
     @DtoCollection(
             value = "shippingList",
             dtoBeanKey = "org.yes.cart.domain.ro.CartItemRO",
@@ -77,7 +77,7 @@ public class CartRO implements Serializable {
             dtoToEntityMatcher = NoopMatcher.class,
             readOnly = true
     )
-    private List<CartItemRO> shipping = new ArrayList<CartItemRO>();
+    private List<CartItemRO> shipping = new ArrayList<>();
 
     @DtoField(readOnly = true)
     private String guid;
@@ -143,7 +143,7 @@ public class CartRO implements Serializable {
     @XmlElement(name = "item")
     public List<CartItemRO> getItems() {
         if (items == null) {
-            items = new ArrayList<CartItemRO>();
+            items = new ArrayList<>();
         }
         return items;
     }
@@ -152,7 +152,7 @@ public class CartRO implements Serializable {
     @XmlElement(name = "gift")
     public List<CartItemRO> getGifts() {
         if (gifts == null) {
-            gifts = new ArrayList<CartItemRO>();
+            gifts = new ArrayList<>();
         }
         return gifts;
     }
@@ -161,7 +161,7 @@ public class CartRO implements Serializable {
     @XmlElement(name = "shipping-cost")
     public List<CartItemRO> getShipping() {
         if (shipping == null) {
-            shipping = new ArrayList<CartItemRO>();
+            shipping = new ArrayList<>();
         }
         return shipping;
     }
@@ -253,8 +253,8 @@ public class CartRO implements Serializable {
     }
 
     public void setCartItems(final List<CartItemRO> cartItems) {
-        final List<CartItemRO> itemsOnly = new ArrayList<CartItemRO>();
-        final List<CartItemRO> giftsOnly = new ArrayList<CartItemRO>();
+        final List<CartItemRO> itemsOnly = new ArrayList<>();
+        final List<CartItemRO> giftsOnly = new ArrayList<>();
         for (final CartItemRO item : cartItems) {
             if (item.isGift()) {
                 giftsOnly.add(item);

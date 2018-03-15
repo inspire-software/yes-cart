@@ -96,7 +96,7 @@ public class DeliveryRO implements Serializable {
             dtoToEntityMatcher = NoopMatcher.class,
             readOnly = true
     )
-    private List<DeliveryItemRO> deliveryItems = new ArrayList<DeliveryItemRO>();
+    private List<DeliveryItemRO> deliveryItems = new ArrayList<>();
 
     @XmlAttribute(name = "customer-order-delivery-id")
     public long getCustomerOrderDeliveryId() {

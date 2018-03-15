@@ -707,7 +707,7 @@ public class SearchController {
 
         result.setTotalResults(products.getTotalHits());
 
-        final List<ProductSearchResultRO> ros = new ArrayList<ProductSearchResultRO>();
+        final List<ProductSearchResultRO> ros = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(products.getResults())) {
 
             final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
@@ -757,7 +757,7 @@ public class SearchController {
         }
 
         final List<String> pageSortingValues = categoryServiceFacade.getPageSortingOptionsConfig(categoryId, browsingShopId);
-        final Map<String, String> sortPageValues = new LinkedHashMap<String, String>();
+        final Map<String, String> sortPageValues = new LinkedHashMap<>();
         for (final String pageSortingValue : pageSortingValues) {
             final ProductSortingUtils.SupportedSorting sorting = ProductSortingUtils.getConfiguration(pageSortingValue);
             if (sorting != null) {
@@ -789,7 +789,7 @@ public class SearchController {
 
         final Pair<List<Long>, Boolean> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, browsingShopId);
 
-        final Map<String, List> mapParams = new HashMap<String, List>();
+        final Map<String, List> mapParams = new HashMap<>();
 
         if (result.getSearch().getParameters() != null) {
             mapParams.putAll(result.getSearch().getParameters());

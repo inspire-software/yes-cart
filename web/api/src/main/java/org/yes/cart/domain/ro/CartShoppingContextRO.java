@@ -18,7 +18,6 @@ package org.yes.cart.domain.ro;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import org.yes.cart.shoppingcart.MutableShoppingContext;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -98,7 +97,7 @@ public class CartShoppingContextRO implements Serializable {
     }
 
     public void setLatestViewedSkus(final List<String> latestViewedSkus) {
-        this.latestViewedSkus = latestViewedSkus != null ? new ArrayList<String>(latestViewedSkus) : new ArrayList<String>(0);
+        this.latestViewedSkus = latestViewedSkus != null ? new ArrayList<>(latestViewedSkus) : new ArrayList<>(0);
     }
 
     @XmlElementWrapper(name = "latest-viewed-categories")
@@ -108,7 +107,7 @@ public class CartShoppingContextRO implements Serializable {
     }
 
     public void setLatestViewedCategories(final List<String> latestViewedCategories) {
-        this.latestViewedCategories = latestViewedCategories != null ? new ArrayList<String>(latestViewedCategories) : new ArrayList<String>(0);
+        this.latestViewedCategories = latestViewedCategories != null ? new ArrayList<>(latestViewedCategories) : new ArrayList<>(0);
     }
 
     @XmlElement(name = "customer-name")
@@ -127,7 +126,7 @@ public class CartShoppingContextRO implements Serializable {
     }
 
     public void setCustomerShops(final List<String> shops) {
-        this.customerShops = shops != null ? new ArrayList<String>(shops) : new ArrayList<String>(0);
+        this.customerShops = shops != null ? new ArrayList<>(shops) : new ArrayList<>(0);
     }
 
     @XmlAttribute(name = "shop-id")

@@ -80,7 +80,7 @@ public class CarrierRO implements Serializable {
             dtoToEntityMatcher = NoopMatcher.class,
             readOnly = true
     )
-    private List<CarrierSlaRO> carrierSla = new ArrayList<CarrierSlaRO>();
+    private List<CarrierSlaRO> carrierSla = new ArrayList<>();
 
 
     @XmlAttribute(name = "carrier-id")

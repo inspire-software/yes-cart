@@ -421,7 +421,7 @@ public class ContentController {
 
         }
 
-        return new ArrayList<ContentRO>();
+        return new ArrayList<>();
 
     }
 
@@ -601,7 +601,7 @@ public class ContentController {
     private List<BreadcrumbRO> generateBreadcrumbs(final long contentId, final long shopId) {
 
 
-        final List<BreadcrumbRO> crumbs = new ArrayList<BreadcrumbRO>();
+        final List<BreadcrumbRO> crumbs = new ArrayList<>();
 
         long current = contentId;
 
@@ -634,19 +634,12 @@ public class ContentController {
             final List<Attribute> cntAttrs = attributeService.getAvailableAttributesByGroupCodeStartsWith(
                     AttributeGroupNames.CATEGORY, "CONTENT_BODY_");
             if (!cntAttrs.isEmpty()) {
-                final List<Long> cntAttrsIds = new ArrayList<Long>();
+                final List<Long> cntAttrsIds = new ArrayList<>();
                 for (final Attribute cntAttr : cntAttrs) {
                     cntAttrsIds.add(cntAttr.getId());
                 }
 
-                final Iterator<AttrValueCategoryRO> it = attrs.iterator();
-                while (it.hasNext()) {
-
-                    final AttrValueCategoryRO val = it.next();
-                    if (cntAttrsIds.contains(val.getAttributeId())) {
-                        it.remove();
-                    }
-                }
+                attrs.removeIf(val -> cntAttrsIds.contains(val.getAttributeId()));
             }
         }
 
@@ -659,7 +652,7 @@ public class ContentController {
 
         if (parameters != null && !parameters.isEmpty()) {
 
-            final Map<String, Object> params = new HashMap<String, Object>(parameters);
+            final Map<String, Object> params = new HashMap<>(parameters);
 
             params.put("shop", cartMixin.getCurrentShop());
             params.put("shoppingCart", cart);

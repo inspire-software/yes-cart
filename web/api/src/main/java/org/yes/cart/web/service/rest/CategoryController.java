@@ -67,7 +67,7 @@ public class CategoryController {
 
         final long browsingShopId = cartMixin.getCurrentCustomerShopId();
         final String lang = cartMixin.getCurrentCart().getCurrentLocale();
-        final List<Category> categories = categoryServiceFacade.getCurrentCategoryMenu(0l, browsingShopId, lang);
+        final List<Category> categories = categoryServiceFacade.getCurrentCategoryMenu(0L, browsingShopId, lang);
 
         final List<CategoryRO> cats = mappingMixin.map(categories, CategoryRO.class, Category.class);
         if (cats.size() > 0) {
@@ -457,7 +457,7 @@ public class CategoryController {
             return cats;
 
         }
-        return new ArrayList<CategoryRO>();
+        return new ArrayList<>();
     }
 
 
@@ -655,7 +655,7 @@ public class CategoryController {
 
     private List<BreadcrumbRO> generateBreadcrumbs(final long categoryId, final long browsingShopId) {
 
-        final List<BreadcrumbRO> crumbs = new ArrayList<BreadcrumbRO>();
+        final List<BreadcrumbRO> crumbs = new ArrayList<>();
 
         long current = categoryId;
 

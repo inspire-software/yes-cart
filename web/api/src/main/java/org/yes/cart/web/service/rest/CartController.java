@@ -304,7 +304,7 @@ public class CartController {
         if (Boolean.valueOf(request.getParameter("updatePrices"))) {
             shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
                     cart,
-                    (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
+                    Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
 
         }
 
@@ -386,7 +386,7 @@ public class CartController {
 
         if (MapUtils.isNotEmpty(params)) {
 
-            final Map<String, Object> safe = new HashMap<String, Object>();
+            final Map<String, Object> safe = new HashMap<>();
             for (final Map.Entry<String, Object> entry : params.entrySet()) {
                 if (!commandConfig.isInternalCommandKey(entry.getKey())) {
                     safe.put(entry.getKey(), entry.getValue());
@@ -848,7 +848,7 @@ public class CartController {
 
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SPLITCARTITEMS,
                 cart,
-                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SPLITCARTITEMS, ShoppingCartCommand.CMD_SPLITCARTITEMS));
+                Collections.singletonMap(ShoppingCartCommand.CMD_SPLITCARTITEMS, ShoppingCartCommand.CMD_SPLITCARTITEMS));
 
     }
 
@@ -860,7 +860,7 @@ public class CartController {
         final List<String> suppliers = cart.getCartItemsSuppliers();
         final Map<String, String> supplierNames = shippingServiceFacade.getCartItemsSuppliers(cart);
 
-        final List<CartCarrierRO> ros = new ArrayList<CartCarrierRO>();
+        final List<CartCarrierRO> ros = new ArrayList<>();
         for (final String supplier : suppliers) {
 
             final CartCarrierRO cartCarrier = new CartCarrierRO();
@@ -1244,7 +1244,7 @@ public class CartController {
 
                 final ShoppingCart cart = cartMixin.getCurrentCart();
 
-                final Map<String, Long> selection = new HashMap<String, Long>();
+                final Map<String, Long> selection = new HashMap<>();
                 for (final String slaIdRaw : slaIds) {
 
                     final int sepPos = slaIdRaw.indexOf('-');
@@ -1272,7 +1272,7 @@ public class CartController {
 
                 if (!selection.isEmpty()) {
 
-                    final Map<String, Long> slaSelection = new HashMap<String, Long>();
+                    final Map<String, Long> slaSelection = new HashMap<>();
                     slaSelection.putAll(cart.getCarrierSlaId());
                     final StringBuilder slaSelectionParam = new StringBuilder();
                     for (final Map.Entry<String, Long> one : selection.entrySet()) {
@@ -1311,7 +1311,7 @@ public class CartController {
                         if (customer != null) {
 
                             final Shop customerShop = cartMixin.getCurrentCustomerShop();
-                            final List<Address> optionAddress = new ArrayList<Address>();
+                            final List<Address> optionAddress = new ArrayList<>();
                             optionAddress.addAll(addressBookFacade.getAddresses(customer, customerShop, Address.ADDR_TYPE_SHIPPING));
                             optionAddress.addAll(addressBookFacade.getAddresses(customer, customerShop, Address.ADDR_TYPE_BILLING));
 
@@ -1328,7 +1328,7 @@ public class CartController {
 
                     if ((billing != null || billingNotRequired) && (delivery != null || deliveryNotRequired)) {
 
-                        final Map<String, Object> params = new HashMap<String, Object>();
+                        final Map<String, Object> params = new HashMap<>();
                         params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, slaSelectionParam.toString());
                         params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, billingNotRequired);
                         params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billing);
@@ -1339,7 +1339,7 @@ public class CartController {
 
                         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
                                 cart,
-                                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
+                                Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
 
 
                     }
@@ -1739,7 +1739,7 @@ public class CartController {
 
                         if (optionAddress != null && optionAddress.getAddressId() > 0) {
 
-                            final Map<String, Object> params = new HashMap<String, Object>();
+                            final Map<String, Object> params = new HashMap<>();
                             params.put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);
                             if (Address.ADDR_TYPE_BILLING.equals(type) || option.isShippingSameAsBilling()) {
                                 params.put(ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS, optionAddress);
@@ -1773,7 +1773,7 @@ public class CartController {
 
         final List<Pair<PaymentGatewayDescriptor, String>> descriptors = checkoutServiceFacade.getPaymentGatewaysDescriptors(shop, cart);
 
-        final List<PaymentGatewayRO> ros = new ArrayList<PaymentGatewayRO>();
+        final List<PaymentGatewayRO> ros = new ArrayList<>();
         for (final Pair<PaymentGatewayDescriptor, String> descriptor : descriptors) {
             final PaymentGatewayRO ro = new PaymentGatewayRO();
             ro.setPgLabel(descriptor.getFirst().getLabel());
@@ -2115,11 +2115,11 @@ public class CartController {
             if (pg.getPgLabel().equals(option.getPgLabel())) {
                 final ShoppingCart cart = cartMixin.getCurrentCart();
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETPGLABEL, cart,
-                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, option.getPgLabel()));
+                        Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, option.getPgLabel()));
 
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
                         cart,
-                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
+                        Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
             }
         }
 
@@ -2199,7 +2199,7 @@ public class CartController {
         ro.setCheckoutBlocked(validation.isCheckoutBlocked());
 
         if (validation.getMessages() != null) {
-            ro.setItems(new ArrayList<CartValidationItemRO>());
+            ro.setItems(new ArrayList<>());
             for (final CartValidityModelMessage message: validation.getMessages()) {
                 final CartValidationItemRO itemRo = new CartValidationItemRO();
                 itemRo.setCheckoutBlocking(message.isCheckoutBlocking());
@@ -2464,14 +2464,14 @@ public class CartController {
         }
 
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, cart,
-                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, String.valueOf(option.isForceSingleDelivery())));
+                Collections.singletonMap(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, String.valueOf(option.isForceSingleDelivery())));
         cartMixin.persistShoppingCart(request, response);
 
         if (cart.getCartItemsCount() == 0) {
 
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);
-            final Map<String, String> problems = new HashMap<String, String>();
+            final Map<String, String> problems = new HashMap<>();
             problems.put("CART_ITEMS", "MISSING");
             review.setProblems(problems);
             return review;
@@ -2483,7 +2483,7 @@ public class CartController {
             // Must have an address if it is required
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);
-            final Map<String, String> problems = new HashMap<String, String>();
+            final Map<String, String> problems = new HashMap<>();
             if (!cart.isBillingAddressNotRequired()) {
                 problems.put("BILLING_ADDRESS", "MISSING");
             }
@@ -2498,7 +2498,7 @@ public class CartController {
             // Must select a carrier
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);
-            final Map<String, String> problems = new HashMap<String, String>();
+            final Map<String, String> problems = new HashMap<>();
             problems.put("SHIPPING_METHOD", "MISSING");
             review.setProblems(problems);
             return review;
@@ -2508,7 +2508,7 @@ public class CartController {
             // Must select a carrier
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);
-            final Map<String, String> problems = new HashMap<String, String>();
+            final Map<String, String> problems = new HashMap<>();
             problems.put("SHIPPING_METHOD", "INVALID");
             review.setProblems(problems);
             return review;
@@ -2518,7 +2518,7 @@ public class CartController {
             // Must select a PG
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);
-            final Map<String, String> problems = new HashMap<String, String>();
+            final Map<String, String> problems = new HashMap<>();
             problems.put("PAYMENT_METHOD", "MISSING");
             review.setProblems(problems);
             return review;
@@ -2617,7 +2617,7 @@ public class CartController {
 
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);
-            final Map<String, String> problems = new HashMap<String, String>();
+            final Map<String, String> problems = new HashMap<>();
             problems.put("ERROR_CHECKOUT", "DISABLED");
             review.setProblems(problems);
             return review;
@@ -2628,7 +2628,7 @@ public class CartController {
 
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);
-            final Map<String, String> problems = new HashMap<String, String>();
+            final Map<String, String> problems = new HashMap<>();
             problems.put("ERROR_COUPON", invalidCoupon.getCoupon());
             review.setProblems(problems);
             return review;
@@ -2639,7 +2639,7 @@ public class CartController {
 
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);
-            final Map<String, String> problems = new HashMap<String, String>();
+            final Map<String, String> problems = new HashMap<>();
             problems.put("ERROR_SKU", skuUnavailable.getSkuCode());
             review.setProblems(problems);
             return review;
@@ -2650,7 +2650,7 @@ public class CartController {
 
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);
-            final Map<String, String> problems = new HashMap<String, String>();
+            final Map<String, String> problems = new HashMap<>();
             problems.put("CART_ITEMS", assembly.getMessage());
             review.setProblems(problems);
             return review;
@@ -2889,7 +2889,7 @@ public class CartController {
                 if (order == null) {
 
                     placed.setSuccess(false);
-                    final Map<String, String> problems = new HashMap<String, String>();
+                    final Map<String, String> problems = new HashMap<>();
                     problems.put("ORDER", "MISSING");
                     placed.setProblems(problems);
 
@@ -2929,7 +2929,7 @@ public class CartController {
                     } else {
 
                         placed.setSuccess(false);
-                        final Map<String, String> problems = new HashMap<String, String>();
+                        final Map<String, String> problems = new HashMap<>();
                         problems.put("PAYMENT_METHOD", "PAYMENT_FAILED");
                         placed.setProblems(problems);
 
@@ -2938,7 +2938,7 @@ public class CartController {
             } else {
 
                 placed.setSuccess(false);
-                final Map<String, String> problems = new HashMap<String, String>();
+                final Map<String, String> problems = new HashMap<>();
                 problems.put("CART_ITEMS", "MISSING");
                 placed.setProblems(problems);
 
@@ -2948,14 +2948,14 @@ public class CartController {
         } catch (OrderItemAllocationException e) {
 
             placed.setSuccess(false);
-            final Map<String, String> problems = new HashMap<String, String>();
+            final Map<String, String> problems = new HashMap<>();
             problems.put("CART_ITEM_OUT_OF_STOCK", e.getProductSkuCode());
             placed.setProblems(problems);
 
         } catch (OrderException e) {
 
             placed.setSuccess(false);
-            final Map<String, String> problems = new HashMap<String, String>();
+            final Map<String, String> problems = new HashMap<>();
             problems.put("ORDER", e.getMessage());
             placed.setProblems(problems);
 

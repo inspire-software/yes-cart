@@ -505,7 +505,7 @@ public class AuthenticationController {
 
             final List<String> supported = languageService.getSupportedLanguages(shop.getCode());
 
-            final Map<String, String> displayChoice = new HashMap<String, String>();
+            final Map<String, String> displayChoice = new HashMap<>();
             for (final Pair<String, I18NModel> allowedType : allowedTypes) {
                 for (final String lang : supported) {
                     final String i18n = allowedType.getSecond().getValue(lang);
@@ -524,7 +524,7 @@ public class AuthenticationController {
             avrogc.setAttributeCode("guestCheckoutEnabled");
             avrogc.setVal(String.valueOf(customerServiceFacade.isShopGuestCheckoutSupported(shop)));
 
-            formRO.setCustom(new ArrayList<AttrValueAndAttributeRO>(Arrays.asList(avrogc, avroct)));
+            formRO.setCustom(new ArrayList<>(Arrays.asList(avrogc, avroct)));
 
         }
 
@@ -686,7 +686,7 @@ public class AuthenticationController {
         }
 
 
-        final Map<String, Object> data = new HashMap<String, Object>();
+        final Map<String, Object> data = new HashMap<>();
         data.put("customerType", registerRO.getCustomerType());
 
         if (registerRO.getCustom() != null) {
@@ -875,7 +875,7 @@ public class AuthenticationController {
 
         }
 
-        final Map<String, Object> data = new HashMap<String, Object>();
+        final Map<String, Object> data = new HashMap<>();
         data.put("customerType", registerRO.getCustomerType());
         data.put("cartGuid", cart.getGuid());
 
@@ -1111,7 +1111,7 @@ public class AuthenticationController {
         }
 
         final Shop shop = cartMixin.getCurrentShop();
-        customerServiceFacade.registerNewsletter(shop, email, new HashMap<String, Object>());
+        customerServiceFacade.registerNewsletter(shop, email, new HashMap<>());
 
         return new AuthenticationResultRO();
 
@@ -1202,7 +1202,7 @@ public class AuthenticationController {
 
         }
 
-        final Map<String, Object> data = new HashMap<String, Object>();
+        final Map<String, Object> data = new HashMap<>();
         data.put("name", name);
         data.put("phone", phone);
         data.put("email", email);

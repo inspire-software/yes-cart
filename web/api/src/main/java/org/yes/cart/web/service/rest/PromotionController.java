@@ -178,7 +178,7 @@ public class PromotionController {
 
         final Map<String, PromotionModel> promoData = productServiceFacade.getPromotionModel(promotions);
 
-        final List<PromotionRO> all = new ArrayList<PromotionRO>();
+        final List<PromotionRO> all = new ArrayList<>();
 
         for (final Map.Entry<String, PromotionModel> promo : promoData.entrySet()) {
 

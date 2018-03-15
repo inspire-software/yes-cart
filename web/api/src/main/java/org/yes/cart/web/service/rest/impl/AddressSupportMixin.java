@@ -58,7 +58,7 @@ public class AddressSupportMixin extends RoMappingMixin {
                                               final Shop customerShop,
                                               final String addressType) {
 
-        final List<AddressRO> ros = new ArrayList<AddressRO>();
+        final List<AddressRO> ros = new ArrayList<>();
 
         final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
@@ -67,7 +67,7 @@ public class AddressSupportMixin extends RoMappingMixin {
             final List<Country> countries = addressBookFacade.getAllCountries(shop.getCode(), addressType);
 
 
-            final List<Address> addresses = new ArrayList<Address>(addressBookFacade.getAddresses(customer, customerShop, addressType));
+            final List<Address> addresses = new ArrayList<>(addressBookFacade.getAddresses(customer, customerShop, addressType));
 
             for (final Address address : addresses) {
 

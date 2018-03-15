@@ -32,11 +32,12 @@ import java.util.Map;
 public class ProductAvailabilityModelATSConverter implements ValueConverter {
 
     /** {@inheritDoc} */
+    @Override
     public Object convertToDto(final Object object, final BeanFactory beanFactory) {
 
         final ProductAvailabilityModel model = (ProductAvailabilityModel) object;
 
-        final Map<String, BigDecimal> values = new HashMap<String, BigDecimal>();
+        final Map<String, BigDecimal> values = new HashMap<>();
 
         for (final String sku : model.getSkuCodes()) {
 
@@ -48,6 +49,7 @@ public class ProductAvailabilityModelATSConverter implements ValueConverter {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Object convertToEntity(final Object object, final Object oldEntity, final BeanFactory beanFactory) {
         throw new UnsupportedOperationException();
     }

@@ -35,10 +35,11 @@ import java.util.Map;
 public class StoredAttributesConverter implements ValueConverter {
 
     /** {@inheritDoc} */
+    @Override
     public Object convertToDto(final Object object, final BeanFactory beanFactory) {
         if (object instanceof StoredAttributesDTO) {
             final StoredAttributesDTO attributes = (StoredAttributesDTO) object;
-            final List<ProductSearchResultAttributeRO> ros = new ArrayList<ProductSearchResultAttributeRO>();
+            final List<ProductSearchResultAttributeRO> ros = new ArrayList<>();
             for (final Map.Entry<String, Pair<String, I18NModel>> storedAttribute : attributes.getAllValues().entrySet()) {
                 final ProductSearchResultAttributeRO ro = new ProductSearchResultAttributeRO();
                 ro.setCode(storedAttribute.getKey());
@@ -55,6 +56,7 @@ public class StoredAttributesConverter implements ValueConverter {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Object convertToEntity(final Object object, final Object oldEntity, final BeanFactory beanFactory) {
         throw new UnsupportedOperationException();
     }

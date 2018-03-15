@@ -35,7 +35,7 @@ public class StringMapAdapter extends XmlAdapter<StringMapAdapter.AdaptedMap, Ma
     @XmlType(name = "string-map")
     public static class AdaptedMap {
 
-        public List<Entry> entry = new ArrayList<Entry>();
+        public List<Entry> entry = new ArrayList<>();
 
     }
 
@@ -53,7 +53,7 @@ public class StringMapAdapter extends XmlAdapter<StringMapAdapter.AdaptedMap, Ma
     @Override
     public Map<String, String> unmarshal(AdaptedMap adaptedMap) throws Exception {
         if (adaptedMap != null && adaptedMap.entry != null && !adaptedMap.entry.isEmpty()) {
-            Map<String, String> map = new HashMap<String, String>();
+            Map<String, String> map = new HashMap<>();
             for(Entry entry : adaptedMap.entry) {
                 map.put(entry.key, entry.value);
             }

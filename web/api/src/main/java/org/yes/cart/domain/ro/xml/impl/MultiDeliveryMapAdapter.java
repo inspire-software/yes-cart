@@ -37,7 +37,7 @@ public class MultiDeliveryMapAdapter extends XmlAdapter<MultiDeliveryMapAdapter.
     public static class AdaptedMap {
 
         @XmlElement(name = "multi-delivery")
-        public List<Entry> selection = new ArrayList<Entry>();
+        public List<Entry> selection = new ArrayList<>();
 
     }
 
@@ -55,7 +55,7 @@ public class MultiDeliveryMapAdapter extends XmlAdapter<MultiDeliveryMapAdapter.
     @Override
     public Map<String, Boolean> unmarshal(AdaptedMap adaptedMap) throws Exception {
         if (adaptedMap != null && adaptedMap.selection != null && !adaptedMap.selection.isEmpty()) {
-            Map<String, Boolean> map = new HashMap<String, Boolean>();
+            Map<String, Boolean> map = new HashMap<>();
             for(Entry entry : adaptedMap.selection) {
                 map.put(entry.key, entry.value);
             }

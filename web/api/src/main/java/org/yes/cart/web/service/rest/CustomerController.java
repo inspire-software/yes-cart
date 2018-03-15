@@ -170,7 +170,7 @@ public class CustomerController {
         final CustomerRO ro = mappingMixin.map(customer, CustomerRO.class, Customer.class);
 
         // Only map allowed attributes
-        final List<AttrValueCustomerRO> profileAttrs = new ArrayList<AttrValueCustomerRO>();
+        final List<AttrValueCustomerRO> profileAttrs = new ArrayList<>();
         for (final Pair<AttrValueWithAttribute, Boolean> av : customerServiceFacade.getCustomerProfileAttributes(shop, customer)) {
             final AttrValueAndAttributeRO ava = mappingMixin.map(av.getFirst(), AttrValueAndAttributeRO.class, AttrValueWithAttribute.class);
             profileAttrs.add(new AttrValueCustomerRO(ava, ro.getCustomerId()));
@@ -375,7 +375,7 @@ public class CustomerController {
 
         final CustomerUpdatedRO result = new CustomerUpdatedRO();
         result.setSuccess(true);
-        final Map<String, String> problems = new HashMap<String, String>();
+        final Map<String, String> problems = new HashMap<>();
         result.setProblems(problems);
 
         if (StringUtils.isBlank(update.getFirstname())) {
@@ -392,10 +392,10 @@ public class CustomerController {
 
         }
 
-        final Map<String, String> valuesToUpdate = new HashMap<String, String>();
+        final Map<String, String> valuesToUpdate = new HashMap<>();
         if (CollectionUtils.isNotEmpty(update.getAttributes())) {
 
-            final Map<String, AttrValueCustomerRO> valuesInThisUpdate = new HashMap<String, AttrValueCustomerRO>();
+            final Map<String, AttrValueCustomerRO> valuesInThisUpdate = new HashMap<>();
             for (final AttrValueCustomerRO avRO : update.getAttributes()) {
                 valuesInThisUpdate.put(avRO.getAttributeCode(), avRO);
             }
@@ -1147,7 +1147,7 @@ public class CustomerController {
 
         if (CollectionUtils.isNotEmpty(wishList)) {
 
-            final List<String> productIds = new ArrayList<String>();
+            final List<String> productIds = new ArrayList<>();
 
             for (final CustomerWishList item : wishList) {
 
@@ -1158,7 +1158,7 @@ public class CustomerController {
             final List<ProductSearchResultDTO> uniqueProducts = productServiceFacade.getListProducts(
                     productIds, -1L, shop.getShopId(), browsingShopId);
 
-            final List<ProductWishlistRO> wlRo = new ArrayList<ProductWishlistRO>();
+            final List<ProductWishlistRO> wlRo = new ArrayList<>();
 
             for (final CustomerWishList item : wishList) {
 
@@ -1640,7 +1640,7 @@ public class CustomerController {
         final List<ProductSearchResultDTO> viewedProducts = productServiceFacade.getListProducts(
                 productIds, -1L, shopId, browsingShopId);
 
-        final List<ProductSearchResultRO> rvRo = new ArrayList<ProductSearchResultRO>();
+        final List<ProductSearchResultRO> rvRo = new ArrayList<>();
 
         final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
 
@@ -2277,19 +2277,13 @@ public class CustomerController {
             final List<CustomerOrder> orders = customerOrderService.findCustomerOrders(customer, since);
 
             // remove temporary orders
-            final Iterator<CustomerOrder> ordersIt = orders.iterator();
-            while (ordersIt.hasNext()) {
-                final CustomerOrder order = ordersIt.next();
-                if (CustomerOrder.ORDER_STATUS_NONE.equals(order.getOrderStatus())
-                        || order.getShop().getShopId() != cart.getShoppingContext().getCustomerShopId()) {
-                    ordersIt.remove();
-                }
-            }
+            orders.removeIf(order -> CustomerOrder.ORDER_STATUS_NONE.equals(order.getOrderStatus())
+                    || order.getShop().getShopId() != cart.getShoppingContext().getCustomerShopId());
 
             // sort
-            Collections.sort(orders, new CustomerOrderComparator());
+            orders.sort(new CustomerOrderComparator());
 
-            final List<OrderRO> ros = new ArrayList<OrderRO>();
+            final List<OrderRO> ros = new ArrayList<>();
             for (final CustomerOrder order : orders) {
 
                 final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(order.getCurrency());

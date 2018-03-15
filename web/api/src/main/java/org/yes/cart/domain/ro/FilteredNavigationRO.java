@@ -32,7 +32,7 @@ public class FilteredNavigationRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
-    private List<FilteredNavigationAttributeRO> fnAttributes = new ArrayList<FilteredNavigationAttributeRO>();
+    private List<FilteredNavigationAttributeRO> fnAttributes = new ArrayList<>();
 
     @XmlElement(name = "fn-attribute")
     public List<FilteredNavigationAttributeRO> getFnAttributes() {

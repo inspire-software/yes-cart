@@ -123,7 +123,7 @@ public class ProductController {
 
             prodRO.setPrice(priceRo);
 
-            final List<ProductSkuRO> skuRo = new ArrayList<ProductSkuRO>();
+            final List<ProductSkuRO> skuRo = new ArrayList<>();
             if (CollectionUtils.isNotEmpty(productEntity.getSku())) {
                 for (final ProductSku sku : productEntity.getSku()) {
                     final ProductSkuRO skuRoItem = viewSkuInternal(sku, cart, symbol);
@@ -491,7 +491,7 @@ public class ProductController {
 
         final String[] productsIds = StringUtils.split(products, '|');
 
-        final List<ProductRO> ros = new ArrayList<ProductRO>(productsIds.length);
+        final List<ProductRO> ros = new ArrayList<>(productsIds.length);
 
         for (final String productId : productsIds) {
 
@@ -892,7 +892,7 @@ public class ProductController {
 
         final List<ProductSearchResultDTO> productAssociations = productServiceFacade.getProductAssociations(productId, shopId, browsingShopId, type);
 
-        final List<ProductSearchResultRO> ros = new ArrayList<ProductSearchResultRO>();
+        final List<ProductSearchResultRO> ros = new ArrayList<>();
 
         if (CollectionUtils.isNotEmpty(productAssociations)) {
 
@@ -1373,7 +1373,7 @@ public class ProductController {
 
         final String[] skuIds = StringUtils.split(skus, '|');
 
-        final List<ProductSkuRO> ros = new ArrayList<ProductSkuRO>(skuIds.length);
+        final List<ProductSkuRO> ros = new ArrayList<>(skuIds.length);
 
         for (final String skuId : skuIds) {
 

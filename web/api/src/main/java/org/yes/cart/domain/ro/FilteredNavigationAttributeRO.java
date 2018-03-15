@@ -40,7 +40,7 @@ public class FilteredNavigationAttributeRO implements Serializable {
     private String navigationTemplate;
     private String navigationType;
 
-    private List<FilteredNavigationAttributeValueRO> fnValues = new ArrayList<FilteredNavigationAttributeValueRO>();
+    private List<FilteredNavigationAttributeValueRO> fnValues = new ArrayList<>();
 
     public String getCode() {
         return code;

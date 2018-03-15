@@ -35,7 +35,7 @@ public class I18nMapAdapter extends XmlAdapter<I18nMapAdapter.AdaptedMap, Map<St
     @XmlType(name = "i18n-map")
     public static class AdaptedMap {
 
-        public List<Entry> value = new ArrayList<Entry>();
+        public List<Entry> value = new ArrayList<>();
 
     }
 
@@ -53,7 +53,7 @@ public class I18nMapAdapter extends XmlAdapter<I18nMapAdapter.AdaptedMap, Map<St
     @Override
     public Map<String, String> unmarshal(AdaptedMap adaptedMap) throws Exception {
         if (adaptedMap != null && adaptedMap.value != null && !adaptedMap.value.isEmpty()) {
-            Map<String, String> map = new HashMap<String, String>();
+            Map<String, String> map = new HashMap<>();
             for(Entry entry : adaptedMap.value) {
                 map.put(entry.language, entry.value);
             }

@@ -55,7 +55,7 @@ public class RoMappingMixin {
      * @return list of RO
      */
     public <RO, Entity> List<RO> map(final List<Entity> objects, final Class<RO> ro, final Class<Entity> entity) {
-        final List<RO> ros = new ArrayList<RO>();
+        final List<RO> ros = new ArrayList<>();
         if (objects != null) {
             DTOAssembler.newAssembler(ro, entity).assembleDtos(ros, objects, adaptersRepository.getAll(), dtoFactory);
         }
@@ -74,7 +74,7 @@ public class RoMappingMixin {
      * @return set of RO
      */
     public <RO, Entity> Set<RO> map(final Set<Entity> objects, final Class<RO> ro, final Class<Entity> entity) {
-        final Set<RO> ros = new HashSet<RO>();
+        final Set<RO> ros = new HashSet<>();
         if (objects != null) {
             DTOAssembler.newAssembler(ro, entity).assembleDtos(ros, objects, adaptersRepository.getAll(), dtoFactory);
         }
@@ -94,7 +94,7 @@ public class RoMappingMixin {
      */
     public <RO, Entity> RO map(final Entity object, final Class<RO> ro, final Class<Entity> entity) {
         if (entity != null) {
-            final RO dto = (RO) dtoFactory.getByIface(ro);
+            final RO dto = dtoFactory.getByIface(ro);
             DTOAssembler.newAssembler(ro, entity).assembleDto(dto, object, adaptersRepository.getAll(), dtoFactory);
             return dto;
         }

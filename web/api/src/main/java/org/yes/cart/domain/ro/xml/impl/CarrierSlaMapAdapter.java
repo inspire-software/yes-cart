@@ -35,7 +35,7 @@ public class CarrierSlaMapAdapter extends XmlAdapter<CarrierSlaMapAdapter.Adapte
     @XmlType(name = "carrier-sla")
     public static class AdaptedMap {
 
-        public List<Entry> selection = new ArrayList<Entry>();
+        public List<Entry> selection = new ArrayList<>();
 
     }
 
@@ -53,7 +53,7 @@ public class CarrierSlaMapAdapter extends XmlAdapter<CarrierSlaMapAdapter.Adapte
     @Override
     public Map<String, Long> unmarshal(AdaptedMap adaptedMap) throws Exception {
         if (adaptedMap != null && adaptedMap.selection != null && !adaptedMap.selection.isEmpty()) {
-            Map<String, Long> map = new HashMap<String, Long>();
+            Map<String, Long> map = new HashMap<>();
             for(Entry entry : adaptedMap.selection) {
                 map.put(entry.key, entry.value);
             }

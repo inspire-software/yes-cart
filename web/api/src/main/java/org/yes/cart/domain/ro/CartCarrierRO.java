@@ -57,7 +57,7 @@ public class CartCarrierRO implements Serializable {
     @XmlElement(name = "carrier")
     public List<CarrierRO> getCarriers() {
         if (carriers == null) {
-            carriers = new ArrayList<CarrierRO>();
+            carriers = new ArrayList<>();
         }
         return carriers;
     }

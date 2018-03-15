@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.ro.TokenRO;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.shoppingcart.support.ShoppingCartPersister;
 

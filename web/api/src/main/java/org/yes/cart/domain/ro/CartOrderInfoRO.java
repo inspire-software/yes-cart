@@ -74,7 +74,7 @@ public class CartOrderInfoRO implements Serializable {
     @XmlElement(name = "order-details")
     public Map<String, String> getDetails() {
         if (this.details == null) {
-            this.details = new HashMap<String, String>();
+            this.details = new HashMap<>();
         }
         return this.details;
     }
@@ -91,7 +91,7 @@ public class CartOrderInfoRO implements Serializable {
     @XmlElement(name = "carrier-sla-ids")
     public Map<String, Long> getCarrierSlaId() {
         if (this.carrierSlaId == null) {
-            this.carrierSlaId = new HashMap<String, Long>();
+            this.carrierSlaId = new HashMap<>();
         }
         return carrierSlaId;
     }
@@ -180,7 +180,7 @@ public class CartOrderInfoRO implements Serializable {
     @XmlElement(name = "multiple-delivery-available")
     public Map<String, Boolean> getMultipleDeliveryAvailable() {
         if (this.multipleDeliveryAvailable == null) {
-            this.multipleDeliveryAvailable = new HashMap<String, Boolean>();
+            this.multipleDeliveryAvailable = new HashMap<>();
         }
         return multipleDeliveryAvailable;
     }

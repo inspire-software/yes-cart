@@ -109,7 +109,7 @@ public class OrderRO implements Serializable {
 
     private CartTotalRO total;
 
-    private List<DeliveryRO> deliveries = new ArrayList<DeliveryRO>(3);
+    private List<DeliveryRO> deliveries = new ArrayList<>(3);
 
     @DtoCollection(
             value = "orderDetail",
@@ -120,7 +120,7 @@ public class OrderRO implements Serializable {
             dtoToEntityMatcher = NoopMatcher.class,
             readOnly = true
     )
-    private List<OrderItemRO> orderItems = new ArrayList<OrderItemRO>();
+    private List<OrderItemRO> orderItems = new ArrayList<>();
 
     @DtoField(value = "b2bRef", readOnly = true)
     private String b2bRef;

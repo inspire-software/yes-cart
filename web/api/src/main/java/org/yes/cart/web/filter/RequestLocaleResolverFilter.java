@@ -52,6 +52,7 @@ public class RequestLocaleResolverFilter extends  AbstractFilter implements Filt
     /**
      * {@inheritDoc}
      */
+    @Override
     public ServletRequest doBefore(final ServletRequest servletRequest, final ServletResponse servletResponse) throws IOException, ServletException {
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
@@ -86,12 +87,14 @@ public class RequestLocaleResolverFilter extends  AbstractFilter implements Filt
     /**
      * {@inheritDoc}
      */
+    @Override
     public void doAfter(final ServletRequest servletRequest,
                         final ServletResponse servletResponse) throws IOException, ServletException {
         // nothing
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setServletContext(final ServletContext servletContext) {
         this.servletContext = servletContext;
     }
