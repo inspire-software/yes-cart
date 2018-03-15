@@ -52,7 +52,7 @@
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
-            <artifactId>core-module-payment-base</artifactId>
+            <artifactId>payment-module-base</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

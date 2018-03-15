@@ -229,27 +229,27 @@
             <dependencies>
                 <dependency>
                     <groupId>org.yes</groupId>
-                    <artifactId>core-module-payment-liqpay</artifactId>
+                    <artifactId>payment-module-liqpay</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.yes</groupId>
-                    <artifactId>core-module-payment-cybersource</artifactId>
+                    <artifactId>payment-module-cybersource</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.yes</groupId>
-                    <artifactId>core-module-payment-authorizenet</artifactId>
+                    <artifactId>payment-module-authorizenet</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.yes</groupId>
-                    <artifactId>core-module-payment-paypal</artifactId>
+                    <artifactId>payment-module-paypal</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.yes</groupId>
-                    <artifactId>core-module-payment-postfinance</artifactId>
+                    <artifactId>payment-module-postfinance</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
             </dependencies>
@@ -260,7 +260,7 @@
             <dependencies>
                 <dependency>
                     <groupId>org.yes</groupId>
-                    <artifactId>core-module-payment-liqpay</artifactId>
+                    <artifactId>payment-module-liqpay</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
             </dependencies>
@@ -271,7 +271,7 @@
             <dependencies>
                 <dependency>
                     <groupId>org.yes</groupId>
-                    <artifactId>core-module-payment-cybersource</artifactId>
+                    <artifactId>payment-module-cybersource</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
             </dependencies>
@@ -282,7 +282,7 @@
             <dependencies>
                 <dependency>
                     <groupId>org.yes</groupId>
-                    <artifactId>core-module-payment-authorizenet</artifactId>
+                    <artifactId>payment-module-authorizenet</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
             </dependencies>
@@ -293,7 +293,7 @@
             <dependencies>
                 <dependency>
                     <groupId>org.yes</groupId>
-                    <artifactId>core-module-payment-paypal</artifactId>
+                    <artifactId>payment-module-paypal</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
             </dependencies>
@@ -304,7 +304,7 @@
             <dependencies>
                 <dependency>
                     <groupId>org.yes</groupId>
-                    <artifactId>core-module-payment-postfinance</artifactId>
+                    <artifactId>payment-module-postfinance</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
             </dependencies>

@@ -29,12 +29,6 @@
     <modules>
         <module>core-module-http</module>
         <module>core-module-ws</module>
-        <module>core-module-payment-base</module>
-        <module>core-module-payment-paypal</module>
-        <module>core-module-payment-cybersource</module>
-        <module>core-module-payment-authorizenet</module>
-        <module>core-module-payment-liqpay</module>
-        <module>core-module-payment-postfinance</module>
         <module>core-module-orderstate</module>
         <module>core-module-cluster-jgroups</module>
         <module>core-module-cluster-ws</module>

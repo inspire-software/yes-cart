@@ -46,34 +46,6 @@ core-modules/core-module-orderstate/core-module-orderstate.iml
 
 core-modules/core-module-orderstate/target/**
 
-core-modules/core-module-payment-authorizenet/core-module-payment-authorizenet.iml
-
-core-modules/core-module-payment-authorizenet/logs/net.authorize.aim.log
-
-core-modules/core-module-payment-authorizenet/target/**
-
-core-modules/core-module-payment-base/core-module-payment-base.iml
-
-core-modules/core-module-payment-base/target/**
-
-core-modules/core-module-payment-cybersource/core-module-payment-cybersource.iml
-
-core-modules/core-module-payment-cybersource/target/**
-
-core-modules/core-module-payment-liqpay/core-module-payment-liqpay.iml
-
-core-modules/core-module-payment-liqpay/target/**
-
-core-modules/core-module-payment-paypal/core-module-payment-paypal.iml
-
-core-modules/core-module-payment-paypal/target/**
-
-core-modules/core-module-payment-postfinance/core-module-payment-postfinance.iml
-
-core-modules/core-module-payment-postfinance/target/**
-
-core-modules/core-module-reports/core-module-reports.iml
-
 core-modules/core-module-reports/target/**
 
 core-modules/core-module-cart/core-module-cart.iml
@@ -129,6 +101,34 @@ manager/jam-services/target/**
 manager/jam-vo/jam-vo.iml
 
 manager/jam-vo/target/**
+
+payment-modules/payment-module-authorizenet/payment-module-authorizenet.iml
+
+payment-modules/payment-module-authorizenet/logs/net.authorize.aim.log
+
+payment-modules/payment-module-authorizenet/target/**
+
+payment-modules/payment-module-base/payment-module-base.iml
+
+payment-modules/payment-module-base/target/**
+
+payment-modules/payment-module-cybersource/payment-module-cybersource.iml
+
+payment-modules/payment-module-cybersource/target/**
+
+payment-modules/payment-module-liqpay/payment-module-liqpay.iml
+
+payment-modules/payment-module-liqpay/target/**
+
+payment-modules/payment-module-paypal/payment-module-paypal.iml
+
+payment-modules/payment-module-paypal/target/**
+
+payment-modules/payment-module-postfinance/payment-module-postfinance.iml
+
+payment-modules/payment-module-postfinance/target/**
+
+core-modules/core-module-reports/core-module-reports.iml
 
 payment-api/payment-api.iml
 

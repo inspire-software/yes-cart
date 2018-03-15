@@ -204,9 +204,9 @@
                 </includes>
             </testResource>
             <testResource>
-                <directory>../../core-modules/core-module-payment-base/src/test/resources</directory>
+                <directory>../../payment-modules/payment-module-base/src/test/resources</directory>
                 <includes>
-                    <include>**/test-core-module-payment-base.xml</include>
+                    <include>**/test-payment-module-base.xml</include>
                 </includes>
             </testResource>
             <testResource>

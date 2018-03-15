@@ -23,6 +23,6 @@
     <import resource="classpath:payment-persistence.xml"/>
     <import resource="classpath:payment-api.xml"/>
     <import resource="classpath:core-payments.xml"/>
-    <import resource="classpath:core-module-payment-base.xml"/>
+    <import resource="classpath:payment-module-base.xml"/>
 
 </beans>

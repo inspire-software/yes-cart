@@ -27,7 +27,7 @@
 
     <import resource="classpath:core-services.xml"/>
     <import resource="classpath:core-payments.xml"/>
-    <import resource="classpath:core-module-payment-base.xml"/>
+    <import resource="classpath:payment-module-base.xml"/>
     <import resource="core-orderstate-cronjob.xml"/>
 
     <!-- ################################# order flow state manager  ########################################## -->

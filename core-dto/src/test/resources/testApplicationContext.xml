@@ -37,6 +37,6 @@
 
     <import resource="classpath:core-payments.xml"/>
     <import resource="classpath:test-payment-api.xml"/>
-    <import resource="classpath:test-core-module-payment-base.xml"/>
+    <import resource="classpath:test-payment-module-base.xml"/>
 
 </beans>

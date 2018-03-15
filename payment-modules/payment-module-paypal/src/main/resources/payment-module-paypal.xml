@@ -1,0 +1,107 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <aop:aspectj-autoproxy/>
+
+    <context:annotation-config/>
+
+    <import resource="classpath:payment-api.xml"/>
+    <import resource="classpath:core-payments.xml"/>
+
+
+    <bean id="payPalButtonPaymentGateway" class="org.yes.cart.payment.impl.PayPalButtonPaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
+
+    <bean id="payPalProPaymentGateway" class="org.yes.cart.payment.impl.PayPalProPaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
+
+    <bean id="payPalExpressPaymentGateway" class="org.yes.cart.payment.impl.PayPalExpressCheckoutPaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
+
+
+
+    <bean id="payPalButtonPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="payPalButtonPaymentGatewayLabel"/>
+        <property name="url" value="payPalButtonPaymentGateway"/>
+        <property name="description" value="PayPal Button payment gateway"/>
+    </bean>
+
+    <bean id="payPalProPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="payPalProPaymentGatewayLabel"/>
+        <property name="url" value="payPalProPaymentGateway"/>
+        <property name="description" value="PayPal Pro payment gateway"/>
+    </bean>
+
+    <bean id="payPalExpressPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="payPalExpressPaymentGatewayLabel"/>
+        <property name="url" value="payPalExpressPaymentGateway"/>
+        <property name="description" value="PayPal Express checkout payment gateway"/>
+    </bean>
+
+    <bean id="paypalPaymentModule" class="org.yes.cart.payment.impl.PaymentModuleImpl">
+        <property name="descriptor">
+            <bean class="org.yes.cart.payment.persistence.entity.impl.DescriptorImpl">
+                <property name="label" value="paypalPaymentModule"/>
+                <property name="description"
+                          value="PayPal button, express and pro payment module"/>
+            </bean>
+        </property>
+        <property name="gateways">
+            <map>
+                <entry key="payPalButtonPaymentGateway" value-ref="payPalButtonPaymentGatewayDescriptor"/>
+                <entry key="payPalProPaymentGateway" value-ref="payPalProPaymentGatewayDescriptor"/>
+                <entry key="payPalExpressPaymentGateway" value-ref="payPalExpressPaymentGatewayDescriptor"/>
+            </map>
+        </property>
+        <property name="paymentModulesManager" ref="paymentModulesManager"/>
+    </bean>
+
+    <!-- ##### WEB CALLBACKS ################################################################## -->
+
+    <bean id="payPalButtonCheckoutFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
+        <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2">
+            <bean class="org.yes.cart.web.support.request.impl.HeaderOrientedIPResolverImpl"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="payPalExpressCheckoutFilter" class="org.yes.cart.web.filter.payment.PayPalExpressCheckoutFilter">
+        <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2">
+            <bean class="org.yes.cart.web.support.request.impl.HeaderOrientedIPResolverImpl"/>
+        </constructor-arg>
+        <constructor-arg index="3" ref="paymentProcessorFactory"/>
+        <constructor-arg index="4" ref="customerOrderService"/>
+    </bean>
+
+</beans>

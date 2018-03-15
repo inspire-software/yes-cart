@@ -18,13 +18,13 @@ SET foreign_key_checks = 0;
 
 USE yespay;
 
-SOURCE core-modules/core-module-payment-base/src/main/resources/sql/mysql/create-tables.sql;
-SOURCE core-modules/core-module-payment-base/src/main/resources/sql/payinitdata.sql;
-SOURCE core-modules/core-module-payment-liqpay/src/main/resources/sql/payinitdata.sql;
-SOURCE core-modules/core-module-payment-cybersource/src/main/resources/sql/payinitdata.sql;
-SOURCE core-modules/core-module-payment-authorizenet/src/main/resources/sql/payinitdata.sql;
-SOURCE core-modules/core-module-payment-paypal/src/main/resources/sql/payinitdata.sql;
-SOURCE core-modules/core-module-payment-postfinance/src/main/resources/sql/payinitdata.sql;
+SOURCE payment-modules/payment-module-base/src/main/resources/sql/mysql/create-tables.sql;
+SOURCE payment-modules/payment-module-base/src/main/resources/sql/payinitdata.sql;
+SOURCE payment-modules/payment-module-liqpay/src/main/resources/sql/payinitdata.sql;
+SOURCE payment-modules/payment-module-cybersource/src/main/resources/sql/payinitdata.sql;
+SOURCE payment-modules/payment-module-authorizenet/src/main/resources/sql/payinitdata.sql;
+SOURCE payment-modules/payment-module-paypal/src/main/resources/sql/payinitdata.sql;
+SOURCE payment-modules/payment-module-postfinance/src/main/resources/sql/payinitdata.sql;
 
 USE yes;
 

@@ -35,6 +35,7 @@
         <module>theme</module>
         <module>web</module>
         <module>manager</module>
+        <module>payment-modules</module>
     </modules>
     <properties>
 

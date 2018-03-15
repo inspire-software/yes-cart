@@ -1,0 +1,85 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <aop:aspectj-autoproxy/>
+
+    <context:annotation-config/>
+
+    <import resource="classpath:payment-api.xml"/>
+    <import resource="classpath:core-payments.xml"/>
+
+    <bean id="authorizeNetAimPaymentGateway" class="org.yes.cart.payment.impl.AuthorizeNetAimPaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
+
+    <bean id="authorizeNetSimPaymentGateway" class="org.yes.cart.payment.impl.AuthorizeNetSimPaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
+
+
+    <bean id="authorizeNetAimPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="authorizeNetAimPaymentGatewayLabel"/>
+        <property name="url" value="authorizeNetAimPaymentGateway"/>
+        <property name="description" value="Authorize.net advanced integration mode payment pateway"/>
+    </bean>
+
+    <bean id="authorizeNetSimPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="authorizeNetSimPaymentGatewayLabel"/>
+        <property name="url" value="authorizeNetSimPaymentGateway"/>
+        <property name="description" value="Authorize.net server integration mode payment pateway"/>
+    </bean>
+
+    <bean id="authorizeNetPaymentModule" class="org.yes.cart.payment.impl.PaymentModuleImpl">
+        <property name="descriptor">
+            <bean class="org.yes.cart.payment.persistence.entity.impl.DescriptorImpl">
+                <property name="label" value="authorizeNetPaymentModule"/>
+                <property name="description"
+                          value="Authorize Net payment module"/>
+            </bean>
+        </property>
+        <property name="gateways">
+            <map>
+                <entry key="authorizeNetAimPaymentGateway" value-ref="authorizeNetAimPaymentGatewayDescriptor"/>
+                <entry key="authorizeNetSimPaymentGateway" value-ref="authorizeNetSimPaymentGatewayDescriptor"/>
+            </map>
+        </property>
+        <property name="paymentModulesManager" ref="paymentModulesManager"/>
+    </bean>
+
+
+    <!-- ##### WEB CALLBACKS ################################################################## -->
+
+    <bean id="anetPaymentCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
+        <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2">
+            <bean class="org.yes.cart.web.support.request.impl.HeaderOrientedIPResolverImpl"/>
+        </constructor-arg>
+    </bean>
+
+</beans>
