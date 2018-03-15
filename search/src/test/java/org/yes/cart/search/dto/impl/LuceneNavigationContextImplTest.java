@@ -191,8 +191,8 @@ public class LuceneNavigationContextImplTest {
     @Test
     public void testEqualsByCategories1() throws Exception {
 
-        final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<Long>(Arrays.asList(10L)), false, Collections.EMPTY_MAP, null, null);
-        final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<Long>(Arrays.asList(10L)), false, Collections.EMPTY_MAP, null, null);
+        final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<>(Collections.singletonList(10L)), false, Collections.EMPTY_MAP, null, null);
+        final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<>(Collections.singletonList(10L)), false, Collections.EMPTY_MAP, null, null);
         assertTrue(ctx1.equals(ctx2));
         assertTrue(ctx2.equals(ctx1));
         assertEquals(ctx1.hashCode(), ctx2.hashCode());
@@ -202,8 +202,8 @@ public class LuceneNavigationContextImplTest {
     @Test
     public void testEqualsByCategories2() throws Exception {
 
-        final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<Long>(Arrays.asList(10L, 11L)), false, Collections.EMPTY_MAP, null, null);
-        final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<Long>(Arrays.asList(10L, 11L)), false, Collections.EMPTY_MAP, null, null);
+        final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<>(Arrays.asList(10L, 11L)), false, Collections.EMPTY_MAP, null, null);
+        final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<>(Arrays.asList(10L, 11L)), false, Collections.EMPTY_MAP, null, null);
         assertTrue(ctx1.equals(ctx2));
         assertTrue(ctx2.equals(ctx1));
         assertEquals(ctx1.hashCode(), ctx2.hashCode());
@@ -213,8 +213,8 @@ public class LuceneNavigationContextImplTest {
     @Test
     public void testNotEqualsByCategories1() throws Exception {
 
-        final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<Long>(Arrays.asList(10L)), false, Collections.EMPTY_MAP, null, null);
-        final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<Long>(Arrays.asList(11L)), false, Collections.EMPTY_MAP, null, null);
+        final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<>(Collections.singletonList(10L)), false, Collections.EMPTY_MAP, null, null);
+        final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<>(Collections.singletonList(11L)), false, Collections.EMPTY_MAP, null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
         assertFalse(ctx1.hashCode() == ctx2.hashCode());
@@ -224,7 +224,7 @@ public class LuceneNavigationContextImplTest {
     @Test
     public void testNotEqualsByCategories2() throws Exception {
 
-        final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<Long>(Arrays.asList(10L)), false, Collections.EMPTY_MAP, null, null);
+        final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<>(Collections.singletonList(10L)), false, Collections.EMPTY_MAP, null, null);
         final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false, Collections.EMPTY_MAP, null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
@@ -237,7 +237,7 @@ public class LuceneNavigationContextImplTest {
     public void testNotEqualsByCategories3() throws Exception {
 
         final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false, Collections.EMPTY_MAP, null, null);
-        final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<Long>(Arrays.asList(10L)), false, Collections.EMPTY_MAP, null, null);
+        final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<>(Collections.singletonList(10L)), false, Collections.EMPTY_MAP, null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
         assertFalse(ctx1.hashCode() == ctx2.hashCode());
@@ -247,8 +247,8 @@ public class LuceneNavigationContextImplTest {
     @Test
     public void testNotEqualsByCategories4() throws Exception {
 
-        final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<Long>(Arrays.asList(10L)), false, Collections.EMPTY_MAP, null, null);
-        final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<Long>(Arrays.asList(10L, 11L)), false, Collections.EMPTY_MAP, null, null);
+        final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<>(Collections.singletonList(10L)), false, Collections.EMPTY_MAP, null, null);
+        final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<>(Arrays.asList(10L, 11L)), false, Collections.EMPTY_MAP, null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
         assertFalse(ctx1.hashCode() == ctx2.hashCode());
@@ -258,8 +258,8 @@ public class LuceneNavigationContextImplTest {
     @Test
     public void testNotEqualsByCategories5() throws Exception {
 
-        final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<Long>(Arrays.asList(10L, 11L)), false, Collections.EMPTY_MAP, null, null);
-        final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<Long>(Arrays.asList(10L)), false, Collections.EMPTY_MAP, null, null);
+        final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<>(Arrays.asList(10L, 11L)), false, Collections.EMPTY_MAP, null, null);
+        final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", new ArrayList<>(Collections.singletonList(10L)), false, Collections.EMPTY_MAP, null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
         assertFalse(ctx1.hashCode() == ctx2.hashCode());
@@ -270,8 +270,8 @@ public class LuceneNavigationContextImplTest {
     @Test
     public void testEqualsByParams1() throws Exception {
 
-        final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false, (Map) Collections.singletonMap("p1", null), null, null);
-        final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false, (Map) Collections.singletonMap("p1", null), null, null);
+        final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false, Collections.singletonMap("p1", null), null, null);
+        final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false, Collections.singletonMap("p1", null), null, null);
         assertTrue(ctx1.equals(ctx2));
         assertTrue(ctx2.equals(ctx1));
         assertEquals(ctx1.hashCode(), ctx2.hashCode());
@@ -283,9 +283,9 @@ public class LuceneNavigationContextImplTest {
     public void testEqualsByParams2() throws Exception {
 
         final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false,
-                (Map) Collections.singletonMap("p1", new ArrayList<String>(Arrays.asList("1", "2"))), null, null);
+                Collections.singletonMap("p1", new ArrayList<>(Arrays.asList("1", "2"))), null, null);
         final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false,
-                (Map) Collections.singletonMap("p1", new ArrayList<String>(Arrays.asList("1", "2"))), null, null);
+                Collections.singletonMap("p1", new ArrayList<>(Arrays.asList("1", "2"))), null, null);
         assertTrue(ctx1.equals(ctx2));
         assertTrue(ctx2.equals(ctx1));
         assertEquals(ctx1.hashCode(), ctx2.hashCode());
@@ -297,14 +297,14 @@ public class LuceneNavigationContextImplTest {
     public void testEqualsByParams3() throws Exception {
 
         final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false,
-                (Map) new HashMap() {{
-                    put("p1", new ArrayList<String>(Arrays.asList("1", "2")));
-                    put("p2", new ArrayList<String>(Arrays.asList("3", "4")));
+                new HashMap() {{
+                    put("p1", new ArrayList<>(Arrays.asList("1", "2")));
+                    put("p2", new ArrayList<>(Arrays.asList("3", "4")));
                 }}, null, null);
         final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false,
-                (Map)  new HashMap() {{
-                    put("p1", new ArrayList<String>(Arrays.asList("1", "2")));
-                    put("p2", new ArrayList<String>(Arrays.asList("3", "4")));
+                new HashMap() {{
+                    put("p1", new ArrayList<>(Arrays.asList("1", "2")));
+                    put("p2", new ArrayList<>(Arrays.asList("3", "4")));
                 }}, null, null);
         assertTrue(ctx1.equals(ctx2));
         assertTrue(ctx2.equals(ctx1));
@@ -319,7 +319,7 @@ public class LuceneNavigationContextImplTest {
         final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false,
                 Collections.EMPTY_MAP, null, null);
         final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false,
-                (Map) Collections.singletonMap("p1", new ArrayList<String>(Arrays.asList("1", "2"))), null, null);
+                Collections.singletonMap("p1", new ArrayList<>(Arrays.asList("1", "2"))), null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
         assertFalse(ctx1.hashCode() == ctx2.hashCode());
@@ -331,7 +331,7 @@ public class LuceneNavigationContextImplTest {
     public void testNotEqualsByParams2() throws Exception {
 
         final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false,
-                (Map) Collections.singletonMap("p1", new ArrayList<String>(Arrays.asList("1", "2"))), null, null);
+                Collections.singletonMap("p1", new ArrayList<>(Arrays.asList("1", "2"))), null, null);
         final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false,
                 Collections.EMPTY_MAP, null, null);
         assertFalse(ctx1.equals(ctx2));
@@ -346,12 +346,12 @@ public class LuceneNavigationContextImplTest {
     public void testNotEqualsByParams3() throws Exception {
 
         final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false,
-                (Map) new HashMap() {{
-                    put("p1", new ArrayList<String>(Arrays.asList("1", "2")));
+                new HashMap() {{
+                    put("p1", new ArrayList<>(Arrays.asList("1", "2")));
                 }}, null, null);
         final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false,
-                (Map)  new HashMap() {{
-                    put("p1", new ArrayList<String>(Arrays.asList("1", "3")));
+                new HashMap() {{
+                    put("p1", new ArrayList<>(Arrays.asList("1", "3")));
                 }}, null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
@@ -364,14 +364,14 @@ public class LuceneNavigationContextImplTest {
     public void testEqualsByParams4() throws Exception {
 
         final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false,
-                (Map) new HashMap() {{
-                    put("p1", new ArrayList<String>(Arrays.asList("1", "2")));
-                    put("p2", new ArrayList<String>(Arrays.asList("4", "3")));
+                new HashMap() {{
+                    put("p1", new ArrayList<>(Arrays.asList("1", "2")));
+                    put("p2", new ArrayList<>(Arrays.asList("4", "3")));
                 }}, null, null);
         final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false,
-                (Map)  new HashMap() {{
-                    put("p1", new ArrayList<String>(Arrays.asList("1", "2")));
-                    put("p2", new ArrayList<String>(Arrays.asList("3", "4")));
+                new HashMap() {{
+                    put("p1", new ArrayList<>(Arrays.asList("1", "2")));
+                    put("p2", new ArrayList<>(Arrays.asList("3", "4")));
                 }}, null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
@@ -384,9 +384,9 @@ public class LuceneNavigationContextImplTest {
     public void testEqualsAfterCopy() throws Exception {
 
         final LuceneNavigationContextImpl ctx1 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false,
-                (Map) new HashMap() {{
-                    put("p1", new ArrayList<String>(Arrays.asList("1", "2")));
-                    put("p2", new ArrayList<String>(Arrays.asList("4", "3")));
+                new HashMap() {{
+                    put("p1", new ArrayList<>(Arrays.asList("1", "2")));
+                    put("p2", new ArrayList<>(Arrays.asList("4", "3")));
                 }}, null, null);
 
         final LuceneNavigationContextImpl ctx2 = new LuceneNavigationContextImpl(10L, 10L, "en", null, false,

@@ -45,9 +45,9 @@ public class PriceSearchQueryBuilderTest {
 
         final PriceNavigation priceNavigation = context.mock(PriceNavigation.class, "priceNavigation");
 
-        final PriceSearchQueryBuilder buider = new PriceSearchQueryBuilder(priceNavigation);
+        final PriceSearchQueryBuilder builder = new PriceSearchQueryBuilder(priceNavigation);
 
-        final List<Query> query = buider.createQueryChain(null, "price", null);
+        final List<Query> query = builder.createQueryChain(null, "price", null);
         assertNull(query);
 
     }
@@ -57,9 +57,9 @@ public class PriceSearchQueryBuilderTest {
 
         final PriceNavigation priceNavigation = context.mock(PriceNavigation.class, "priceNavigation");
 
-        final PriceSearchQueryBuilder buider = new PriceSearchQueryBuilder(priceNavigation);
+        final PriceSearchQueryBuilder builder = new PriceSearchQueryBuilder(priceNavigation);
 
-        final List<Query> query = buider.createQueryChain(null, "price", "   ");
+        final List<Query> query = builder.createQueryChain(null, "price", "   ");
         assertNull(query);
 
     }
@@ -69,11 +69,11 @@ public class PriceSearchQueryBuilderTest {
 
         final PriceNavigation priceNavigation = context.mock(PriceNavigation.class, "priceNavigation");
 
-        final PriceSearchQueryBuilder buider = new PriceSearchQueryBuilder(priceNavigation);
+        final PriceSearchQueryBuilder builder = new PriceSearchQueryBuilder(priceNavigation);
 
         final Pair<String, Pair<BigDecimal, BigDecimal>> priceRange =
-                new Pair<String, Pair<BigDecimal, BigDecimal>>("EUR",
-                        new Pair<BigDecimal, BigDecimal>(
+                new Pair<>("EUR",
+                        new Pair<>(
                                 new BigDecimal("10"),
                                 new BigDecimal("20")));
 
@@ -84,7 +84,7 @@ public class PriceSearchQueryBuilderTest {
             oneOf(navigationContext).getCustomerShopId(); will(returnValue(1010L));
         }});
 
-        final List<Query> query = buider.createQueryChain(navigationContext, "price", "EUR-_-10-_-20");
+        final List<Query> query = builder.createQueryChain(navigationContext, "price", "EUR-_-10-_-20");
         assertNotNull(query);
         assertEquals(1, query.size());
         assertEquals("facet_price_1010_EUR_range:[1000 TO 1999]", query.get(0).toString());

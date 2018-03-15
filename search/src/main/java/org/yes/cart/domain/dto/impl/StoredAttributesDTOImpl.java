@@ -38,7 +38,7 @@ public class StoredAttributesDTOImpl implements StoredAttributesDTO, Serializabl
     public static final String SEPARATOR = "#$#";
 
     @JsonIgnore
-    private final Map<String, Pair<String, I18NModel>> values = new HashMap<String, Pair<String, I18NModel>>();
+    private final Map<String, Pair<String, I18NModel>> values = new HashMap<>();
 
     public StoredAttributesDTOImpl(final Map<String, Pair<String, I18NModel>> values) {
         if (values != null && !values.isEmpty()) {
@@ -66,11 +66,11 @@ public class StoredAttributesDTOImpl implements StoredAttributesDTO, Serializabl
                     if (displayValue != null && displayValue.length() > 0) {
                         final I18NModel model = new StringI18NModel(displayValue);
                         if (!model.getAllValues().isEmpty()) {
-                            values.put(key, new Pair<String, I18NModel>(value, model));
+                            values.put(key, new Pair<>(value, model));
                             continue;
                         }
                     }
-                    values.put(key, new Pair<String, I18NModel>(value, null));
+                    values.put(key, new Pair<>(value, null));
                 }
             }
         }
@@ -96,7 +96,7 @@ public class StoredAttributesDTOImpl implements StoredAttributesDTO, Serializabl
                     model = null;
                 }
             }
-            values.put(code, new Pair<String, I18NModel>(value, model));
+            values.put(code, new Pair<>(value, model));
         } else {
             values.remove(code);
         }

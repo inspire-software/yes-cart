@@ -64,7 +64,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
         LOGFTQ.debug("Run count query {}", query);
 
-        final List<Long> pks = new ArrayList<Long>();
+        final List<Long> pks = new ArrayList<>();
 
         IndexSearcher searcher = this.luceneIndexProvider.provideIndexReader();
         try {
@@ -97,7 +97,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
         LOGFTQ.debug("Run count query {}", query);
 
-        final List<Long> pks = new ArrayList<Long>();
+        final List<Long> pks = new ArrayList<>();
 
         IndexSearcher searcher = this.luceneIndexProvider.provideIndexReader();
         try {
@@ -145,7 +145,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
         IndexSearcher searcher = this.luceneIndexProvider.provideIndexReader();
         try {
-            final Set<String> retrieve = new HashSet<String>(Arrays.asList(fields));
+            final Set<String> retrieve = new HashSet<>(Arrays.asList(fields));
             final TopDocs topDocs;
             Sort sort = null;
             if (StringUtils.isNotBlank(sortFieldName)) {
@@ -158,7 +158,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
                 lastResult = lastResult > topDocs.totalHits ? topDocs.totalHits : lastResult;
 
-                final List<Object[]> resItems = new ArrayList<Object[]>(lastResult - firstResult);
+                final List<Object[]> resItems = new ArrayList<>(lastResult - firstResult);
 
                 for (int i = firstResult; i < lastResult; i++) {
                     final ScoreDoc hit = topDocs.scoreDocs[i];
@@ -171,7 +171,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                     logExplanation(searcher, query, sort, hit.doc);
                 }
 
-                return new Pair<List<Object[]>, Integer>(resItems, topDocs.totalHits);
+                return new Pair<>(resItems, topDocs.totalHits);
             }
         } catch (IllegalStateException ise) {
             LOG.warn("Failed to run query " + query + ", caused: " + ise.getMessage());
@@ -219,7 +219,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
         LOGFTQ.debug("Run facet query {}", query);
 
-        final Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> result = new LinkedHashMap<String, List<Pair<Pair<String, I18NModel>, Integer>>>();
+        final Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> result = new LinkedHashMap<>();
 
         final FacetsCollector fc = new FacetsCollector();
 
@@ -232,7 +232,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
                 try {
                     // always reset to empty first (could be multiple attribute mappings with invalid fields type in index, so hard reset)
-                    final List<Pair<Pair<String, I18NModel>, Integer>> values = new ArrayList<Pair<Pair<String, I18NModel>, Integer>>();
+                    final List<Pair<Pair<String, I18NModel>, Integer>> values = new ArrayList<>();
                     result.put(request.getFacetName(), values);
 
                     final FacetsConfig facetsConfig = new FacetsConfig();
@@ -269,7 +269,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                         if (topValues != null && topValues.value != null && topValues.value.intValue() > 0) {
 
                             final Map<String, Pair<Pair<String, I18NModel>, Integer>> distinctFacetValues =
-                                    new LinkedHashMap<String, Pair<Pair<String, I18NModel>, Integer>>(topValues.labelValues.length * 2);
+                                    new LinkedHashMap<>(topValues.labelValues.length * 2);
 
                             for (final LabelAndValue lav : topValues.labelValues) {
 
@@ -278,12 +278,12 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                                 if (pos != -1) {
                                     final String value = lav.label.substring(0, pos);
                                     final String displayValue = lav.label.substring(pos + Constants.FACET_NAVIGATION_DELIMITER.length());
-                                    label = new Pair<String, I18NModel>(
+                                    label = new Pair<>(
                                             value,
                                             new StringI18NModel(displayValue)
                                     );
                                 } else {
-                                    label = new Pair<String, I18NModel>(
+                                    label = new Pair<>(
                                             lav.label,
                                             null
                                     );
@@ -297,18 +297,18 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                                             label.getSecond().getAllValues().size()) {
                                         distinctFacetValues.put(
                                                 label.getFirst(),
-                                                new Pair<Pair<String, I18NModel>, Integer>(existing.getFirst(), lav.value.intValue() + existing.getSecond())
+                                                new Pair<>(existing.getFirst(), lav.value.intValue() + existing.getSecond())
                                         );
                                     } else {
                                         distinctFacetValues.put(
                                                 label.getFirst(),
-                                                new Pair<Pair<String, I18NModel>, Integer>(label, lav.value.intValue() + existing.getSecond())
+                                                new Pair<>(label, lav.value.intValue() + existing.getSecond())
                                         );
                                     }
                                 } else {
                                     distinctFacetValues.put(
                                             label.getFirst(),
-                                            new Pair<Pair<String, I18NModel>, Integer>(label, lav.value.intValue())
+                                            new Pair<>(label, lav.value.intValue())
                                     );
                                 }
 
@@ -320,10 +320,8 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                         }
 
                     }
-                } catch (IllegalArgumentException iae) {
+                } catch (IllegalArgumentException | IllegalStateException iae) {
                     LOG.warn(Markers.alert(), "Failed to create facet for request " + request + ", caused: " + iae.getMessage());
-                } catch (IllegalStateException ise) {
-                    LOG.warn(Markers.alert(), "Failed to create facet for request " + request + ", caused: " + ise.getMessage());
                 } catch (Exception exp) {
                     LOG.error(Markers.alert(), "Failed to create facet for request " + request + ", caused: " + exp.getMessage(), exp);
                 }

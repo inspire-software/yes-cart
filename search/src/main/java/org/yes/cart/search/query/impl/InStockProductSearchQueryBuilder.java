@@ -46,6 +46,6 @@ public class InStockProductSearchQueryBuilder extends AbstractSearchQueryBuilder
             strValue = "0".equals(value) ? "0" : "1";
         }
 
-        return Collections.<Query>singletonList(createNumericQuery(PRODUCT_SHOP_INSTOCK_FLAG_FIELD + strValue, navigationContext.getCustomerShopId()));
+        return Collections.singletonList(createNumericQuery(PRODUCT_SHOP_INSTOCK_FLAG_FIELD + strValue, navigationContext.getCustomerShopId()));
     }
 }

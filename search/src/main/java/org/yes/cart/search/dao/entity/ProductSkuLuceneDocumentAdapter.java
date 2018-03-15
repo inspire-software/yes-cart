@@ -122,7 +122,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                 // must be last step so that we have fully modified object serialised to index
                 addObjectDefaultField(document, result);
 
-                return new Pair<Long, Document[]>(entity.getSkuId(), new Document[]{document});
+                return new Pair<>(entity.getSkuId(), new Document[]{document});
 
             } catch (Exception exp) {
                 LOGFTQ.error(Markers.alert(),
@@ -133,7 +133,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
             }
 
         }
-        return entity != null ? new Pair<Long, Document[]>(entity.getSkuId(), null) : null;
+        return entity != null ? new Pair<>(entity.getSkuId(), null) : null;
 
     }
 
@@ -188,9 +188,9 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
 
         StoredAttributesDTO storedAttributes = result.getAttributes();
 
-        final List<AttrValue> attributes = new ArrayList<AttrValue>(entity.getAttributes());
+        final List<AttrValue> attributes = new ArrayList<>(entity.getAttributes());
 
-        final Map<String, Long> numRangeFields = new HashMap<String, Long>();
+        final Map<String, Long> numRangeFields = new HashMap<>();
 
         for (final AttrValue attrValue : attributes) {
 

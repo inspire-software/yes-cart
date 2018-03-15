@@ -70,14 +70,14 @@ public abstract class AbstractStrictFieldSearchQueryBuilder extends AbstractSear
                 }
 
                 if (hasClause) {
-                    return Collections.<Query>singletonList(aggregatedQuery.build());
+                    return Collections.singletonList(aggregatedQuery.build());
                 }
 
             } else if (singleValues.size() == 1) {
 
                 final Query clause = createTermQuery(escapeValue(singleValues.iterator().next()));
                 if (clause != null) {
-                    return Collections.<Query>singletonList(clause);
+                    return Collections.singletonList(clause);
                 }
 
             }
@@ -86,7 +86,7 @@ public abstract class AbstractStrictFieldSearchQueryBuilder extends AbstractSear
 
         final Query clause = createTermQuery(escapeValue(value));
         if (clause != null) {
-            return Collections.<Query>singletonList(clause);
+            return Collections.singletonList(clause);
         }
         return null;
 

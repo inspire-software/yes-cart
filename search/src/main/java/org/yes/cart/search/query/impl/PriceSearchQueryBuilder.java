@@ -70,6 +70,6 @@ public class PriceSearchQueryBuilder extends AbstractSearchQueryBuilderImpl impl
         final Long to = SearchUtil.priceToLong(priceParams.getSecond().getSecond());
 
         // field name for from and to will be the same
-        return Collections.<Query>singletonList(createRangeQuery(facet + "_range", from, to));
+        return Collections.singletonList(createRangeQuery(facet + "_range", from, to));
     }
 }

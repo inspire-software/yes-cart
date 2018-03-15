@@ -38,10 +38,10 @@ public class PriceNavigationImpl implements PriceNavigation {
     public Pair<String, Pair<BigDecimal, BigDecimal>> decomposePriceRequestParams(final String val) {
         final String[] currencyPriceBorders = StringUtils.split(val, Constants.RANGE_NAVIGATION_DELIMITER);
         final Pair<BigDecimal, BigDecimal> priceBorders =
-                new Pair<BigDecimal, BigDecimal>(
+                new Pair<>(
                         convertToDecimal(currencyPriceBorders[1]),
                         convertToDecimal(currencyPriceBorders[2]));
-        return new Pair<String, Pair<BigDecimal, BigDecimal>>(
+        return new Pair<>(
                 currencyPriceBorders[0],
                 priceBorders
         );

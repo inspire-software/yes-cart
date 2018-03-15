@@ -14,12 +14,12 @@ import java.util.*;
  */
 public class ProductSearchResultNavDTOImpl implements ProductSearchResultNavDTO {
 
-    private final Map<String, List<ProductSearchResultNavItemDTO>> data = new HashMap<String, List<ProductSearchResultNavItemDTO>>();
+    private final Map<String, List<ProductSearchResultNavItemDTO>> data = new HashMap<>();
 
     public ProductSearchResultNavDTOImpl(final Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> data) {
         if (data != null) {
             for (final Map.Entry<String, List<Pair<Pair<String, I18NModel>, Integer>>> entry : data.entrySet()) {
-                final List<ProductSearchResultNavItemDTO> list = new ArrayList<ProductSearchResultNavItemDTO>();
+                final List<ProductSearchResultNavItemDTO> list = new ArrayList<>();
                 this.data.put(entry.getKey(), list);
                 for (final Pair<Pair<String, I18NModel>, Integer> entryItem : entry.getValue()) {
                     list.add(new ProductSearchResultNavItemDTOImpl(entryItem));

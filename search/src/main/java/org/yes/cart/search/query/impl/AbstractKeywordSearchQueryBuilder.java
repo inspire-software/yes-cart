@@ -76,7 +76,7 @@ public abstract class AbstractKeywordSearchQueryBuilder extends AbstractSearchQu
 
         final boolean useStems = isUseStems(words, stems);
 
-        final List<Query> queries = new ArrayList<Query>();
+        final List<Query> queries = new ArrayList<>();
 
         final Query exactAllTerms = createKeywordQueryExactAll(words);
         if (exactAllTerms != null) {

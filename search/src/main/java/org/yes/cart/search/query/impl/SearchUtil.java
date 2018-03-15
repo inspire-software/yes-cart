@@ -39,23 +39,23 @@ import java.util.*;
  */
 public class SearchUtil {
 
-    private static Map<String, Analysis> LANGUAGE_SPECIFIC = new HashMap<String, Analysis>();
+    private static Map<String, Analysis> LANGUAGE_SPECIFIC = new HashMap<>();
     static {
         initAnalysis();
     }
 
     /**
-     * Tokenize search phraze and clean from empty strings.
+     * Tokenize search phrase and clean from empty strings.
      *
-     * @param phraze optional phraze
+     * @param phrase optional phrase
      * @param charThreshold character threshold for single words. e.g. if set to 3 will skip words less than 3 characters
      *
-     * @return list of tokens, that found in phraze.
+     * @return list of tokens, that found in phrase.
      */
-    public static List<String> splitForSearch(final String phraze, final int charThreshold) {
-        if (phraze != null) {
-            String [] token = StringUtils.splitPreserveAllTokens(phraze, "| ;/\\");
-            List<String> words = new ArrayList<String>(token.length);
+    public static List<String> splitForSearch(final String phrase, final int charThreshold) {
+        if (phrase != null) {
+            String [] token = StringUtils.splitPreserveAllTokens(phrase, "| ;/\\");
+            List<String> words = new ArrayList<>(token.length);
             for (final String aToken : token) {
                 if (StringUtils.isNotBlank(aToken)) {
                     String clean = aToken.trim();
@@ -89,7 +89,7 @@ public class SearchUtil {
                             if (pos >= charThreshold &&
                                     /* more than just dashed min words */ clean.length() > charThreshold * 2 + 1 &&
                                     /* full words */ pos != 0 && (pos < clean.length() - charThreshold) &&
-                                    /* doubke dash */ clean.charAt(pos + 1) != '-') {
+                                    /* double dash */ clean.charAt(pos + 1) != '-') {
                                 words.add(clean.substring(0, pos));
                                 words.add(clean.substring(pos + 1, clean.length()));
                             } else {
@@ -106,16 +106,16 @@ public class SearchUtil {
 
 
     /**
-     * Tokenize search phraze and clean from empty strings.
+     * Tokenize search phrase and clean from empty strings.
      *
      * @param lang   language to assume the phrase is in
-     * @param phraze optional phraze
+     * @param phrase optional phrase
      *
-     * @return list of tokens, that found in phraze.
+     * @return list of tokens, that found in phrase.
      */
-    public static List<String> analyseForSearch(final String lang, final String phraze) {
+    public static List<String> analyseForSearch(final String lang, final String phrase) {
         final Analysis analysis = LANGUAGE_SPECIFIC.getOrDefault(lang, LANGUAGE_SPECIFIC.get("default"));
-        return analysis.analyse(phraze);
+        return analysis.analyse(phrase);
     }
 
     private static class Analysis extends ThreadLocal<Analyzer> {
@@ -124,14 +124,16 @@ public class SearchUtil {
 
             final TokenStream stream = get().tokenStream("X", search);
 
-            final List<String> result = new ArrayList<String>();
+            final List<String> result = new ArrayList<>();
             try {
                 stream.reset();
                 while(stream.incrementToken()) {
                     result.add(stream.getAttribute(TermToBytesRefAttribute.class).getBytesRef().utf8ToString());
                 }
                 stream.close();
-            } catch (IOException e) { }
+            } catch (IOException e) {
+                // OK
+            }
 
             return result;
 

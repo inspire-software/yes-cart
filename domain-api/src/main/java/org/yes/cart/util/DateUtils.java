@@ -348,11 +348,7 @@ public final class DateUtils {
     }
 
     private static DateTimeFormatter lazyLoad(final String pattern, final Locale locale) {
-        Map<String, DateTimeFormatter> dtfLocal = CUSTOM_LOCAL.get(locale);
-        if (dtfLocal == null) {
-            dtfLocal = new ConcurrentHashMap<>();
-            CUSTOM_LOCAL.put(locale, dtfLocal);
-        }
+        final Map<String, DateTimeFormatter> dtfLocal = CUSTOM_LOCAL.computeIfAbsent(locale, k -> new ConcurrentHashMap<>());
         DateTimeFormatter dtf = dtfLocal.get(pattern);
         if (dtf == null) {
             LOG.info("Add new custom date time formatter using pattern {} for {}", pattern, locale);

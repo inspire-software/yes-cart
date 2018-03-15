@@ -34,6 +34,6 @@ public class FeaturedProductSearchQueryBuilder extends AbstractSearchQueryBuilde
      * {@inheritDoc}
      */
     public List<Query> createQueryChain(final NavigationContext<Query> navigationContext, final String parameter, final Object value) {
-        return Collections.<Query>singletonList(createTermQuery(PRODUCT_FEATURED_FIELD, "true"));
+        return Collections.singletonList(createTermQuery(PRODUCT_FEATURED_FIELD, "true"));
     }
 }

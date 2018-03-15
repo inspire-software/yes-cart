@@ -104,7 +104,7 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
 
             if (LOGFTQ.isTraceEnabled()) {
                 LOGFTQ.trace("Processed index entity {} with PK {}, added: {}, removed: {}, failed: {}",
-                        new Object[] { name, primaryKey, counts[0], counts[1], counts[2] });
+                        name, primaryKey, counts[0], counts[1], counts[2]);
             }
 
             // Refresh ensures we use an updated index
@@ -126,7 +126,7 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
      * @param indexTime  time of this index (added as field to added documents)
      * @param counts     counts[3] = { added, removed, failed }
      *
-     * @throws IOException
+     * @throws IOException error
      */
     protected void fullTextSearchReindexSingleEntity(final IndexWriter iw,
                                                       final String indexName,
@@ -158,7 +158,7 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
                     iw.addDocument(facetsConfig.build(document));
                     counts[0]++;
                 } catch (Exception sde) {
-                    LOGFTQ.error("Updating {} document _PK:{} failed ... cause: {}", new Object[] { indexName, documents.getFirst(), sde.getMessage() });
+                    LOGFTQ.error("Updating {} document _PK:{} failed ... cause: {}", indexName, documents.getFirst(), sde.getMessage());
                     counts[2]++;
                 }
             }
@@ -223,7 +223,9 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
             while (asyncRunningState.get() == RUNNING) {
                 try {
                     Thread.sleep(1000L);
-                } catch (InterruptedException e) { }
+                } catch (InterruptedException e) {
+                    // OK
+                }
             }
 
         }
@@ -268,88 +270,87 @@ public abstract class IndexBuilderLuceneImpl<T, PK extends Serializable> impleme
     protected abstract void endTx(Object tx);
 
     private Runnable createIndexingRunnable(final boolean async, final int batchSize) {
-        return new Runnable() {
-            @Override
-            public void run() {
-                long index = 0;
-                long counts[] = new long[] { 0L, 0L, 0L };
+        return () -> {
+            long index = 0;
+            long counts[] = new long[] { 0L, 0L, 0L };
 
-                final Logger log = LOGFTQ;
+            final Logger log = LOGFTQ;
 
-                Object tx = null;
-                try {
-                    TimeContext.setNow(); // TODO: Time Machine
-                    currentIndexingCount.set(0);
+            Object tx = null;
+            try {
+                TimeContext.setNow(); // TODO: Time Machine
+                currentIndexingCount.set(0);
 
-                    final String name = indexProvider.getName();
+                final String name = indexProvider.getName();
 
-                    if (log.isInfoEnabled()) {
-                        log.info("Full reindex for {} class", name);
-                    }
-
-                    if (async) {
-                        tx = startTx();
-                    }
-
-                    final long indexTime = now();
-                    final IndexWriter iw = indexProvider.provideIndexWriter();
-
-                    final ResultsIterator<T> all = findAllIterator();
-
-                    try {
-
-                        while (all.hasNext()) {
-
-                            final T entity = unproxyEntity(all.next());
-
-                            final Pair<PK, Document[]> documents = documentAdapter.toDocument(entity);
-                            boolean remove = documents == null || documents.getSecond() == null || documents.getSecond().length == 0;
-
-                            fullTextSearchReindexSingleEntity(iw, name, documents, remove, indexTime, counts);
-
-                            index++;
-
-                            if (index % batchSize == 0) {
-                                // TODO: may need to revisit this in favour of iw.flush()
-                                iw.commit();  //apply changes to indexes
-                                indexProvider.refreshIfNecessary(); // make changes visible
-                                endBatch(tx);
-                                if (log.isInfoEnabled()) {
-                                    log.info("Indexed {} items of {} class", index, indexProvider.getName());
-                                }
-                            }
-                            currentIndexingCount.compareAndSet(index - 1, index);
-                        }
-
-                        // Remove unindexed values
-                        iw.deleteDocuments(LongPoint.newRangeQuery(LuceneDocumentAdapterUtils.FIELD_INDEXTIME, 0, indexTime - 1));
-
-                    } finally {
-                        all.close();
-                    }
-
-                    iw.commit();  //apply changes to indexes
-                    indexProvider.refreshIfNecessary(); // make changes visible
-                    endBatch(tx);
-                    if (log.isInfoEnabled()) {
-                        log.info("Indexed {} items of {} class, added: {}, removed: {}, failed: {}", new Object[] { index, indexProvider.getName(), counts[0], counts[1], counts[2] });
-                    }
-                    iw.forceMerge(1, true); // optimise the index
-                } catch (Exception exp) {
-                    LOGFTQ.error("Error during indexing", exp);
-                } finally {
-                    asyncRunningState.set(COMPLETED);
-                    if (async) {
-                        try {
-                            endTx(tx);
-                        } catch (Exception exp) { }
-                        SearchUtil.destroy(); // ensure analysers are unloaded
-                    }
-                    if (log.isInfoEnabled()) {
-                        log.info("Full reindex for {} class ... COMPLETED", indexProvider.getName());
-                    }
-                    TimeContext.destroy();
+                if (log.isInfoEnabled()) {
+                    log.info("Full reindex for {} class", name);
                 }
+
+                if (async) {
+                    tx = startTx();
+                }
+
+                final long indexTime = now();
+                final IndexWriter iw = indexProvider.provideIndexWriter();
+
+                final ResultsIterator<T> all = findAllIterator();
+
+                try {
+
+                    while (all.hasNext()) {
+
+                        final T entity = unproxyEntity(all.next());
+
+                        final Pair<PK, Document[]> documents = documentAdapter.toDocument(entity);
+                        boolean remove = documents == null || documents.getSecond() == null || documents.getSecond().length == 0;
+
+                        fullTextSearchReindexSingleEntity(iw, name, documents, remove, indexTime, counts);
+
+                        index++;
+
+                        if (index % batchSize == 0) {
+                            // TODO: may need to revisit this in favour of iw.flush()
+                            iw.commit();  //apply changes to indexes
+                            indexProvider.refreshIfNecessary(); // make changes visible
+                            endBatch(tx);
+                            if (log.isInfoEnabled()) {
+                                log.info("Indexed {} items of {} class", index, indexProvider.getName());
+                            }
+                        }
+                        currentIndexingCount.compareAndSet(index - 1, index);
+                    }
+
+                    // Remove unindexed values
+                    iw.deleteDocuments(LongPoint.newRangeQuery(LuceneDocumentAdapterUtils.FIELD_INDEXTIME, 0, indexTime - 1));
+
+                } finally {
+                    all.close();
+                }
+
+                iw.commit();  //apply changes to indexes
+                indexProvider.refreshIfNecessary(); // make changes visible
+                endBatch(tx);
+                if (log.isInfoEnabled()) {
+                    log.info("Indexed {} items of {} class, added: {}, removed: {}, failed: {}", index, indexProvider.getName(), counts[0], counts[1], counts[2]);
+                }
+                iw.forceMerge(1, true); // optimise the index
+            } catch (Exception exp) {
+                LOGFTQ.error("Error during indexing", exp);
+            } finally {
+                asyncRunningState.set(COMPLETED);
+                if (async) {
+                    try {
+                        endTx(tx);
+                    } catch (Exception exp) {
+                        // OK
+                    }
+                    SearchUtil.destroy(); // ensure analysers are unloaded
+                }
+                if (log.isInfoEnabled()) {
+                    log.info("Full reindex for {} class ... COMPLETED", indexProvider.getName());
+                }
+                TimeContext.destroy();
             }
         };
     }

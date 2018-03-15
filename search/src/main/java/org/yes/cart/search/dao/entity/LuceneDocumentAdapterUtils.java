@@ -126,7 +126,7 @@ public class LuceneDocumentAdapterUtils {
 
         if (StringUtils.isNotBlank(serialized)) {
             try {
-                return (T) MAPPER.readValue(serialized, clazz);
+                return MAPPER.readValue(serialized, clazz);
             } catch (Exception exp) {
                 LOGFTQ.error("Unable to de-serialise the object in field: " + FIELD_OBJECT + ", object: " + serialized, exp);
             }
@@ -519,7 +519,7 @@ public class LuceneDocumentAdapterUtils {
 
         if (values != null && values.length > 0) {
             final StringBuilder all = new StringBuilder();
-            for (final String value : new HashSet<String>(Arrays.asList(values))) {
+            for (final String value : new HashSet<>(Arrays.asList(values))) {
                 if (value != null) {
                     all.append(value).append(' ');
                 }

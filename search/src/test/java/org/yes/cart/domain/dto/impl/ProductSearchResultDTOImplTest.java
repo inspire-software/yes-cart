@@ -60,7 +60,7 @@ public class ProductSearchResultDTOImplTest {
         first.setUpdatedTimestamp(Instant.now());
         first.setAvailability(1);
         first.setQtyOnWarehouse(new HashMap<Long, Map<String, BigDecimal>>() {{
-            put(10L, new HashMap<String, BigDecimal>());
+            put(10L, new HashMap<>());
         }});
         first.setDefaultImage("FirstDefaultImage");
         first.setFeatured(true);

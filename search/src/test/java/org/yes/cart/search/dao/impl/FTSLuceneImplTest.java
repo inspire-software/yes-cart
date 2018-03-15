@@ -134,7 +134,7 @@ public class FTSLuceneImplTest {
                     }
                 }
             }
-            return new Pair<Long, Document[]>(pk, new Document[] { ldoc });
+            return new Pair<>(pk, new Document[]{ldoc});
         }
 
         public void setFacets(final List<String> facets) {
@@ -419,7 +419,7 @@ public class FTSLuceneImplTest {
         Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> rez;
         List<Pair<Pair<String, I18NModel>, Integer>> facets;
 
-        final FilteredNavigationRecordRequest r1 = new FilteredNavigationRecordRequestImpl("PK Range", "_PK_facet", Arrays.asList(new Pair<String, String>("000000", "100001"), new Pair<String, String>("100001", "999999")));
+        final FilteredNavigationRecordRequest r1 = new FilteredNavigationRecordRequestImpl("PK Range", "_PK_facet", Arrays.asList(new Pair<>("000000", "100001"), new Pair<>("100001", "999999")));
         final FilteredNavigationRecordRequest f1 = new FilteredNavigationRecordRequestImpl("Names", "name_facet", false);
         final FilteredNavigationRecordRequest f2 = new FilteredNavigationRecordRequestImpl("Descriptions", "desc_facet", true);
 

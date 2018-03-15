@@ -220,7 +220,7 @@ public class LuceneIndexProviderImpl implements LuceneIndexProvider, Initializin
             return FSDirectory.open(path);
         } else if (uri.startsWith("mmap://")) {
             final Path path = fromString("mmap://", uri);
-            LOGFTQ.info("Starting NMap directory for {} at {}", name, path.toFile().getAbsolutePath());
+            LOGFTQ.info("Starting MMap directory for {} at {}", name, path.toFile().getAbsolutePath());
             return new MMapDirectory(path);
         } else if (uri.startsWith("nio://")) {
             final Path path = fromString("nio://", uri);

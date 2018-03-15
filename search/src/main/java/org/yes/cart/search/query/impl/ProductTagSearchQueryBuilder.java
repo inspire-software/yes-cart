@@ -71,14 +71,14 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
                 }
 
                 if (hasClause) {
-                    return Collections.<Query>singletonList(aggregatedQuery.build());
+                    return Collections.singletonList(aggregatedQuery.build());
                 }
 
         } else if (singleValues.size() == 1) {
 
                 final Query clause = createTagQuery(navigationContext, escapeValue(singleValues.iterator().next()));
                 if (clause != null) {
-                    return Collections.<Query>singletonList(clause);
+                    return Collections.singletonList(clause);
                 }
 
             }
@@ -87,7 +87,7 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
 
         final Query clause = createTagQuery(navigationContext, escapeValue(value));
         if (clause != null) {
-            return Collections.<Query>singletonList(clause);
+            return Collections.singletonList(clause);
         }
         return null;
 

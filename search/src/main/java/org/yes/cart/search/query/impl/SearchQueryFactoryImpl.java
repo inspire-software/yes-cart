@@ -131,7 +131,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
     }
 
     private static final Set<String> SKU_BOOST_FIELDS = new HashSet<>(
-            Arrays.asList(
+            Collections.singletonList(
                     "rank_boost"
             )
     );
@@ -170,11 +170,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
             if (!CollectionUtils.isEmpty(chain)) {
                 snowball.add(chain.get(0), BooleanClause.Occur.MUST);
 
-                List<String> paramValues = navigationParameters.get(param);
-                if (paramValues == null) {
-                    paramValues = new ArrayList<String>(2);
-                    navigationParameters.put(param, paramValues);
-                }
+                final List<String> paramValues = navigationParameters.computeIfAbsent(param, k -> new ArrayList<>(2));
                 paramValues.add(String.valueOf(value)); // record original value as string
 
             }
@@ -210,7 +206,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
             }
 
             SearchQueryBuilder<Query> builder = skuBuilders.get(ProductSearchQueryBuilder.PRODUCT_ID_FIELD);
-            final List<Long> productIds = new ArrayList<Long>();
+            final List<Long> productIds = new ArrayList<>();
             for (final ProductSearchResultDTO product : products) {
                 productIds.add(product.getId());
             }
@@ -249,12 +245,12 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
         final Set<String> allowedAttributeCodes = attributeService.getAllNavigatableAttributeCodes();
         final Set<String> allowedBuilderCodes = productBuilders.keySet();
 
-        final List<Query> productQueryStrictClauses = new ArrayList<Query>();
-        final List<Query> productQueryRelaxedClause = new ArrayList<Query>();
-        final List<Query> skuQueryStrictClauses = new ArrayList<Query>();
-        final List<Query> skuQueryRelaxedClause = new ArrayList<Query>();
+        final List<Query> productQueryStrictClauses = new ArrayList<>();
+        final List<Query> productQueryRelaxedClause = new ArrayList<>();
+        final List<Query> skuQueryStrictClauses = new ArrayList<>();
+        final List<Query> skuQueryRelaxedClause = new ArrayList<>();
 
-        final Map<String, List<String>> navigationParameters = new HashMap<String, List<String>>();
+        final Map<String, List<String>> navigationParameters = new HashMap<>();
         if (requestParameters != null) {
             for (Map.Entry<String, List> entry : requestParameters.entrySet()) {
                 final String decodedKeyName = entry.getKey();
@@ -337,7 +333,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
         }
 
         Query prod = null;
-        Query sku = null;
+        Query sku;
 
         if (CollectionUtils.isEmpty(productQueryRelaxedClause)) {
             // strict matches only (e.g. filternav, tags)

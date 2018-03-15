@@ -80,8 +80,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
             try {
 
-                final Map<String, ProductSearchResultDTO> resultsByFc = new HashMap<String, ProductSearchResultDTO>();
-                final Map<ProductSearchResultDTO, Set<Long>> availableIn = new HashMap<ProductSearchResultDTO, Set<Long>>();
+                final Map<String, ProductSearchResultDTO> resultsByFc = new HashMap<>();
+                final Map<ProductSearchResultDTO, Set<Long>> availableIn = new HashMap<>();
 
                 populateResultsByFc(entity, now, resultsByFc, availableIn);
 
@@ -202,7 +202,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
                 }
 
-                return new Pair<Long, Document[]>(entity.getProductId(), documents);
+                return new Pair<>(entity.getProductId(), documents);
             } catch (Exception exp) {
                 LOGFTQ.error(Markers.alert(),
                         "Unable to adapt product {} to index document", entity.getCode());
@@ -212,7 +212,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
             }
 
         }
-        return entity != null ? new Pair<Long, Document[]>(entity.getProductId(), null) : null;
+        return entity != null ? new Pair<>(entity.getProductId(), null) : null;
     }
 
     /**
@@ -231,13 +231,13 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
         StoredAttributesDTO storedAttributes = result.getAttributes();
 
-        final List<AttrValue> attributes = new ArrayList<AttrValue>(entity.getAttributes());
+        final List<AttrValue> attributes = new ArrayList<>(entity.getAttributes());
         for (final ProductSku sku : entity.getSku()) {
             attributes.addAll(sku.getAttributes());
         }
 
-        final Map<String, String> sortFields = new HashMap<String, String>();
-        final Map<String, Long> numRangeFields = new HashMap<String, Long>();
+        final Map<String, String> sortFields = new HashMap<>();
+        final Map<String, Long> numRangeFields = new HashMap<>();
 
         for (final AttrValue attrValue : attributes) {
 
@@ -370,7 +370,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      */
     protected List<SkuPrice> determineAllActivePrices(final Product entity) {
 
-        final List<SkuPrice> all = new ArrayList<SkuPrice>();
+        final List<SkuPrice> all = new ArrayList<>();
 
         for (final ProductSku sku : entity.getSku()) {
 
@@ -397,7 +397,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
         Set<Long> availableIn = null;
         if (!allPrices.isEmpty()) {
 
-            final Map<Long, Map<String, SkuPrice>> lowestQuantityPrice = new HashMap<Long, Map<String, SkuPrice>>();
+            final Map<Long, Map<String, SkuPrice>> lowestQuantityPrice = new HashMap<>();
             for (final SkuPrice skuPrice : allPrices) {
 
                 if (!available.contains(skuPrice.getShop().getShopId())) {
@@ -416,7 +416,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 final Map<String, SkuPrice> lowestQuantityPriceByShop = lowestQuantityPrice.get(skuPrice.getShop().getShopId());
                 if (lowestQuantityPriceByShop == null) {
                     // if we do not have a "byShop" this is the new lowest price
-                    final Map<String, SkuPrice> newLowestQuantity = new HashMap<String, SkuPrice>();
+                    final Map<String, SkuPrice> newLowestQuantity = new HashMap<>();
                     newLowestQuantity.put(skuPrice.getCurrency(), skuPrice);
                     lowestQuantityPrice.put(skuPrice.getShop().getShopId(), newLowestQuantity);
                 } else {
@@ -439,7 +439,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
             }
 
             if (!lowestQuantityPrice.isEmpty()) {
-                availableIn = new HashSet<Long>();
+                availableIn = new HashSet<>();
                 for (final Map.Entry<Long, Map<String, SkuPrice>> shop : lowestQuantityPrice.entrySet()) {
                     for (final Map.Entry<String, SkuPrice> currency : shop.getValue().entrySet()) {
 
@@ -518,7 +518,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
     private void addCategoryFields(final Document document, final Product entity, final Set<Long> available, final LocalDateTime now) {
 
-        final Set<Long> availableCategories = new HashSet<Long>();
+        final Set<Long> availableCategories = new HashSet<>();
 
         int rank = 0;
         int count = 0;
@@ -740,7 +740,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
         final List<Shop> shops = shopWarehouseSupport.getAll();
         final Map<Long, Set<Long>> shopsByFulfilment = shopWarehouseSupport.getShopsByFulfilmentMap();
 
-        final Map<ProductSearchResultDTO, Map<Long, Map<String, BigDecimal>>> qtyOnWarehouse = new HashMap<ProductSearchResultDTO, Map<Long, Map<String, BigDecimal>>>();
+        final Map<ProductSearchResultDTO, Map<Long, Map<String, BigDecimal>>> qtyOnWarehouse = new HashMap<>();
 
         // Stock and prices are per SKU so need to determine if we have valid ones
         for (final ProductSku sku : entity.getSku()) {
@@ -769,11 +769,11 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                                     if (withFc == null) {
                                         withFc = base.copy();
                                         withFc.setFulfilmentCentreCode(code);
-                                        final Map<Long, Map<String, BigDecimal>> qty = new HashMap<Long, Map<String, BigDecimal>>();
+                                        final Map<Long, Map<String, BigDecimal>> qty = new HashMap<>();
                                         withFc.setQtyOnWarehouse(qty);
                                         qtyOnWarehouse.put(withFc, qty);
                                         resultsByFc.put(code, withFc);
-                                        availableIn.put(withFc, new HashSet<Long>());
+                                        availableIn.put(withFc, new HashSet<>());
                                     }
                                     final Set<Long> withFcAvailableIn = availableIn.get(withFc);
 
@@ -782,13 +782,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                                     for (final Long sh : shs) {
 
                                         withFcAvailableIn.add(sh);
-                                        Map<Long, Map<String, BigDecimal>> qtyByShop = qtyOnWarehouse.get(withFc);
-                                        Map<String, BigDecimal> qtyBySku = qtyByShop.get(sh);
-                                        if (qtyBySku == null) {
-                                            qtyBySku = new HashMap<String, BigDecimal>();
-                                            qtyByShop.put(sh, qtyBySku);
-                                        }
-
+                                        final Map<Long, Map<String, BigDecimal>> qtyByShop = qtyOnWarehouse.get(withFc);
+                                        final Map<String, BigDecimal> qtyBySku = qtyByShop.computeIfAbsent(sh, k -> new HashMap<>());
                                         qtyBySku.put(sku.getCode(), atsAdd);
 
                                     }
@@ -807,11 +802,11 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 if (noFc == null) {
                     noFc = base.copy();
                     noFc.setFulfilmentCentreCode(NO_FC_CODE);
-                    final Map<Long, Map<String, BigDecimal>> qty = new HashMap<Long, Map<String, BigDecimal>>();
+                    final Map<Long, Map<String, BigDecimal>> qty = new HashMap<>();
                     noFc.setQtyOnWarehouse(qty);
                     qtyOnWarehouse.put(noFc, qty);
                     resultsByFc.put(NO_FC_CODE, noFc);
-                    availableIn.put(noFc, new HashSet<Long>());
+                    availableIn.put(noFc, new HashSet<>());
                 }
                 final Set<Long> noFcAvailableIn = availableIn.get(noFc);
 
@@ -819,13 +814,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
                     // Available as perpetual (preorder/backorder must have stock)
                     noFcAvailableIn.add(shop.getShopId());
-                    Map<Long, Map<String, BigDecimal>> qtyByShop = qtyOnWarehouse.get(noFc);
-                    Map<String, BigDecimal> qtyBySku = qtyByShop.get(shop.getShopId());
-                    if (qtyBySku == null) {
-                        qtyBySku = new HashMap<String, BigDecimal>();
-                        qtyByShop.put(shop.getShopId(), qtyBySku);
-                    }
-
+                    final Map<Long, Map<String, BigDecimal>> qtyByShop = qtyOnWarehouse.get(noFc);
+                    final Map<String, BigDecimal> qtyBySku = qtyByShop.computeIfAbsent(shop.getShopId(), k -> new HashMap<>());
                     qtyBySku.put(sku.getCode(), BigDecimal.ONE);
 
                 }

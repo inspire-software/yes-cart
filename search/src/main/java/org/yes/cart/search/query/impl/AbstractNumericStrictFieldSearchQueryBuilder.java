@@ -62,11 +62,11 @@ public abstract class AbstractNumericStrictFieldSearchQueryBuilder extends Abstr
                     final long number = toNumber(singleValue);
                     aggregatedQuery.add(createNumericQuery(field, number, boost), BooleanClause.Occur.SHOULD);
                 }
-                return Collections.<Query>singletonList(aggregatedQuery.build());
+                return Collections.singletonList(aggregatedQuery.build());
 
             } else if (singleValues.size() == 1) {
                 final long number = toNumber(singleValues.iterator().next());
-                return Collections.<Query>singletonList(createNumericQuery(field, number, boost));
+                return Collections.singletonList(createNumericQuery(field, number, boost));
             } else {
                 return null;
             }
@@ -78,7 +78,7 @@ public abstract class AbstractNumericStrictFieldSearchQueryBuilder extends Abstr
         }
 
         final long number = toNumber(value);
-        return Collections.<Query>singletonList(createNumericQuery(field, number, boost));
+        return Collections.singletonList(createNumericQuery(field, number, boost));
     }
 
     private Long toNumber(final Object value) {
