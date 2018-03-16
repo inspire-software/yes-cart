@@ -80,14 +80,15 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPostActionUrl() {
-        final String url = getParameterValue(PPB_POST_URL);
-        return url;
+        return getParameterValue(PPB_POST_URL);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSubmitButton(final String locale) {
 
         String submit = getParameterValue(PPB_BUYBUTTON + "_" + locale);
@@ -102,20 +103,19 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
 
     protected IPNMessage createIPNMessage(final Map<String, String[]> requestParams) {
 
-        final Map<String, String> configurationMap = new HashMap<String, String>();
+        final Map<String, String> configurationMap = new HashMap<>();
         setParameterIfNotNull(configurationMap, "acct1.UserName", PPB_USER);
         setParameterIfNotNull(configurationMap, "acct1.Password", PPB_PASSWORD);
         setParameterIfNotNull(configurationMap, "acct1.Signature", PPB_SIGNATURE);
         setParameterIfNotNull(configurationMap, "mode", PPB_ENVIRONMENT);
 
-        final IPNMessage ipn = new IPNMessage(requestParams, configurationMap);
-
-        return ipn;
+        return new IPNMessage(requestParams, configurationMap);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Callback convertToCallback(final Map privateCallBackParameters) {
 
         final IPNMessage ipn = createIPNMessage(privateCallBackParameters);
@@ -159,6 +159,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
 
         final Map<String, String[]> request = HttpParamsUtils.createArrayValueMap(callbackResult);
@@ -252,6 +253,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorizeCapture(final Payment payment) {
         return payment;
     }
@@ -259,6 +261,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorize(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
@@ -272,6 +275,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment reverseAuthorization(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
@@ -285,6 +289,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment capture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
@@ -298,6 +303,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment voidCapture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
@@ -311,6 +317,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment refund(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);
@@ -324,6 +331,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String currencyCode, final String orderReference, final Payment payment) {
 
         final StringBuilder form = new StringBuilder();
@@ -400,6 +408,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment createPaymentPrototype(final String operation, final Map map) {
 
         final Payment payment = new PaymentImpl();
@@ -447,6 +456,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabel() {
         return "payPalButtonPaymentGateway";
     }
@@ -454,6 +464,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
     }

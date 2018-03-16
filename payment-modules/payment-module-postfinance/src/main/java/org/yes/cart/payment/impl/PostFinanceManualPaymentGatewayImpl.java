@@ -44,6 +44,7 @@ public class PostFinanceManualPaymentGatewayImpl extends PostFinancePaymentGatew
      *
      * @return operation
      */
+    @Override
     protected String getExternalFormOperation() {
         return "RES";
     }
@@ -51,6 +52,7 @@ public class PostFinanceManualPaymentGatewayImpl extends PostFinancePaymentGatew
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorizeCapture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
@@ -64,6 +66,7 @@ public class PostFinanceManualPaymentGatewayImpl extends PostFinancePaymentGatew
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorize(final Payment paymentIn) {
         return paymentIn;
     }
@@ -71,6 +74,7 @@ public class PostFinanceManualPaymentGatewayImpl extends PostFinancePaymentGatew
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabel() {
         return "postFinanceManualPaymentGateway";
     }
@@ -78,6 +82,7 @@ public class PostFinanceManualPaymentGatewayImpl extends PostFinancePaymentGatew
     /**
      * {@inheritDoc}
      */
+    @Override
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
     }

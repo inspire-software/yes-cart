@@ -81,6 +81,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPostActionUrl() {
         final String url = getParameterValue(LP_POST_URL);
         if (url.endsWith("/")) {
@@ -92,6 +93,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSubmitButton(final String locale) {
         return null;
     }
@@ -99,6 +101,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Callback convertToCallback(final Map privateCallBackParameters) {
 
         if (privateCallBackParameters != null) {
@@ -165,6 +168,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
 
         String statusRes = null;
@@ -263,12 +267,13 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
                               final String currencyCode, final String orderReference, final Payment payment) {
 
         final LiqPay api = getLiqPayAPI();
 
-        final HashMap<String, String> params = new LinkedHashMap<String, String>();
+        final HashMap<String, String> params = new LinkedHashMap<>();
         params.put("amount", amount.setScale(2, RoundingMode.HALF_UP).toPlainString());
         params.put("server_url", getParameterValue(LP_SERVER_URL));
         params.put("description", getDescription(payment));
@@ -312,6 +317,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorizeCapture(final Payment payment) {
         return payment;
     }
@@ -321,6 +327,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
      * <p/>
      * Shipment not included. Will be added at capture operation.
      */
+    @Override
     public Payment authorize(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
@@ -334,6 +341,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment reverseAuthorization(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
@@ -347,6 +355,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment capture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
@@ -360,6 +369,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment voidCapture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
@@ -373,6 +383,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment refund(final Payment payment) {
 
         final LiqPay api = getLiqPayAPI();
@@ -397,6 +408,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment createPaymentPrototype(final String operation, final Map map) {
 
         final Payment payment = new PaymentImpl();
@@ -422,6 +434,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabel() {
         return "liqPayPaymentGateway";
     }
@@ -429,6 +442,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
     }

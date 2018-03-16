@@ -23,7 +23,7 @@ public class PaymentLocaleTranslatorImpl implements PaymentLocaleTranslator {
         final String mapping = paymentGateway.getParameterValue("LANGUAGE_MAP");
         if (StringUtils.isNotBlank(mapping)) {
 
-            final Map<String, String> all = new HashMap<String, String>();
+            final Map<String, String> all = new HashMap<>();
 
             final String[] map = StringUtils.split(mapping, ',');
             for (final String mapItem : map) {

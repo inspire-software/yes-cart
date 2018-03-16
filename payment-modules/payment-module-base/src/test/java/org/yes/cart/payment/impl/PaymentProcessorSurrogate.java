@@ -18,23 +18,15 @@ package org.yes.cart.payment.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayInternalForm;
-import org.yes.cart.payment.dto.Payment;
-import org.yes.cart.payment.dto.impl.PaymentImpl;
-import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
-import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.payment.impl.PaymentProcessorImpl;
 
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * This is surrogate for real processor, need to keep common processing logic during different pg tests.
@@ -81,6 +73,7 @@ public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
      *               forceSinglePayment, only one payment will be created (hack to support pay pal express).
      * @return status of operation.
      */
+    @Override
     public String authorizeCapture(final CustomerOrder order, final Map params) {
 
         return super.authorizeCapture(order, params);
@@ -95,6 +88,7 @@ public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
      *
      * @param orderNum order with some authorized payments
      */
+    @Override
     public void reverseAuthorizations(final String orderNum) {
 
         super.reverseAuthorizations(orderNum);

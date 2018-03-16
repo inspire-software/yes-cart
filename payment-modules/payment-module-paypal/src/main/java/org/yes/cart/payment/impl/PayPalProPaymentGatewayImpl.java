@@ -59,6 +59,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabel() {
         return "payPalProPaymentGateway";
     }
@@ -66,6 +67,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public synchronized PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
     }
@@ -73,6 +75,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorize(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
@@ -83,6 +86,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorizeCapture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH_CAPTURE);
@@ -97,6 +101,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment reverseAuthorization(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
@@ -110,6 +115,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
      * <p/>
      * {@inheritDoc}
      */
+    @Override
     public Payment voidCapture(final Payment paymentIn) {
 
         final Payment reverse = reverseAuthorization(paymentIn);
@@ -125,6 +131,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment refund(final Payment paymentIn) {
         final Payment reverse = reverseAuthorization(paymentIn);
         if (Payment.PAYMENT_STATUS_OK.equals(reverse.getPaymentProcessorResult())) {
@@ -138,6 +145,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment capture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
@@ -314,6 +322,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
                               final String currencyCode, final String orderReference, final Payment payment) {
         return getHtmlForm(cardHolderName, locale);
@@ -342,6 +351,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment createPaymentPrototype(final String operation, final Map parametersMap) {
 
         final Map<String, String> params = HttpParamsUtils.createSingleValueMap(parametersMap);

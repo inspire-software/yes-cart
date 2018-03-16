@@ -175,10 +175,10 @@ public class AbstractPostFinancePaymentGatewayImplTest {
         };
 
 
-        final Map<String, String> params1 = new LinkedHashMap<String, String>();
+        final Map<String, String> params1 = new LinkedHashMap<>();
         params1.put("P1", "123");
         params1.put("P2", "345");
-        final Map<String, String> params2 = new LinkedHashMap<String, String>();
+        final Map<String, String> params2 = new LinkedHashMap<>();
         params2.put("P1", "123");
         params2.put("P2", "345");
 
@@ -197,7 +197,7 @@ public class AbstractPostFinancePaymentGatewayImplTest {
         assertEquals(sha1_3, sha1_4);
 
         // Example from PostFinance dev manual
-        final Map<String, String> params3 = new LinkedHashMap<String, String>();
+        final Map<String, String> params3 = new LinkedHashMap<>();
         params3.put("AMOUNT", "1500");
         params3.put("CURRENCY", "EUR");
         params3.put("LANGUAGE", "en_US");

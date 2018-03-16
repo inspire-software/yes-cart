@@ -26,7 +26,7 @@ public class PostFinancePaymentGatewayImplTest {
     @Test
     public void testGetHtmlForm() throws Exception {
 
-        final Map<String, String> params = new HashMap<String, String>();
+        final Map<String, String> params = new HashMap<>();
         params.put(PostFinancePaymentGatewayImpl.PF_POST_URL, "http://www.postfinance.com/pay");
         params.put(PostFinancePaymentGatewayImpl.PF_RESULT_URL_HOME, "http://mydomain.com/result");
         params.put(PostFinancePaymentGatewayImpl.PF_RESULT_URL_CATALOG, "http://mydomain.com/result");
@@ -175,7 +175,7 @@ public class PostFinancePaymentGatewayImplTest {
 
 
 
-        final Map<String, String> params = new HashMap<String, String>();
+        final Map<String, String> params = new HashMap<>();
         params.put(PostFinancePaymentGatewayImpl.PF_SHA_OUT, "Mysecretsig1875!?");
 
         final PostFinancePaymentGatewayImpl gatewayImpl = new PostFinancePaymentGatewayImpl() {
@@ -211,7 +211,7 @@ public class PostFinancePaymentGatewayImplTest {
         assertNull(badCallback.getOrderGuid());
         assertNull(badCallback.getAmount());
 
-        final Map<String, String> sorted = new TreeMap<String, String>();
+        final Map<String, String> sorted = new TreeMap<>();
         gatewayImpl.copyHttpParamsAndRemoveSignature(callBackresult, sorted);
         final String validSignature = new PostFinancePaymentGatewayImpl().sha1sign(sorted, "Mysecretsig1875!?");
         callBackresult.put("SHASIGN", validSignature);

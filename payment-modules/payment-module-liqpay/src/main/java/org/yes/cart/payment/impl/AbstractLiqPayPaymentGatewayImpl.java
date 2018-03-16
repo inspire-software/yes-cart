@@ -22,8 +22,6 @@ import org.yes.cart.payment.service.ConfigurablePaymentGateway;
 import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
 
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Map;
 
@@ -43,6 +41,7 @@ public abstract class AbstractLiqPayPaymentGatewayImpl implements ConfigurablePa
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getShopCode() {
         return shopCode;
     }
@@ -50,6 +49,7 @@ public abstract class AbstractLiqPayPaymentGatewayImpl implements ConfigurablePa
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName(final String locale) {
         String pgName = getParameterValue("name_" + locale);
         if (pgName == null) {
@@ -66,6 +66,7 @@ public abstract class AbstractLiqPayPaymentGatewayImpl implements ConfigurablePa
      * {@inheritDoc}
      */
 
+    @Override
     public Collection<PaymentGatewayParameter> getPaymentGatewayParameters() {
         if (allParameters == null) {
             allParameters = paymentGatewayParameterService.findAll(getLabel(), shopCode);
@@ -77,6 +78,7 @@ public abstract class AbstractLiqPayPaymentGatewayImpl implements ConfigurablePa
      * {@inheritDoc}
      */
 
+    @Override
     public void deleteParameter(final String parameterLabel) {
         paymentGatewayParameterService.deleteByLabel(getLabel(), parameterLabel);
         allParameters = null;
@@ -86,6 +88,7 @@ public abstract class AbstractLiqPayPaymentGatewayImpl implements ConfigurablePa
      * {@inheritDoc}
      */
 
+    @Override
     public void addParameter(final PaymentGatewayParameter paymentGatewayParameter) {
         paymentGatewayParameterService.create(paymentGatewayParameter);
         allParameters = null;
@@ -95,6 +98,7 @@ public abstract class AbstractLiqPayPaymentGatewayImpl implements ConfigurablePa
      * {@inheritDoc}
      */
 
+    @Override
     public void updateParameter(final PaymentGatewayParameter paymentGatewayParameter) {
         paymentGatewayParameterService.update(paymentGatewayParameter);
         allParameters = null;
@@ -118,6 +122,7 @@ public abstract class AbstractLiqPayPaymentGatewayImpl implements ConfigurablePa
      * @param valueLabel key to search
      * @return value or null if not found
      */
+    @Override
     public String getParameterValue(final String valueLabel) {
         if (valueLabel == null || valueLabel.startsWith("#")) {
             return null; // Need to prevent direct access to Shop specific attributes
@@ -169,6 +174,7 @@ public abstract class AbstractLiqPayPaymentGatewayImpl implements ConfigurablePa
     /**
      * {@inheritDoc}
      */
+    @Override
     public void accept(final PaymentGatewayConfigurationVisitor visitor) {
         this.shopCode = visitor.getConfiguration("shopCode");
     }

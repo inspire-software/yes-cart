@@ -51,6 +51,7 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getShopCode() {
         return shopCode;
     }
@@ -58,6 +59,7 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName(final String locale) {
         String pgName = getParameterValue("name_" + locale);
         if (pgName == null) {
@@ -74,6 +76,7 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
      * {@inheritDoc}
      */
 
+    @Override
     public Collection<PaymentGatewayParameter> getPaymentGatewayParameters() {
         if (allParameters == null) {
             allParameters = paymentGatewayParameterService.findAll(getLabel(), shopCode);
@@ -85,6 +88,7 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
      * {@inheritDoc}
      */
 
+    @Override
     public void deleteParameter(final String parameterLabel) {
         paymentGatewayParameterService.deleteByLabel(getLabel(), parameterLabel);
         allParameters = null;
@@ -94,6 +98,7 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
      * {@inheritDoc}
      */
 
+    @Override
     public void addParameter(final PaymentGatewayParameter paymentGatewayParameter) {
         paymentGatewayParameterService.create(paymentGatewayParameter);
         allParameters = null;
@@ -103,6 +108,7 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
      * {@inheritDoc}
      */
 
+    @Override
     public void updateParameter(final PaymentGatewayParameter paymentGatewayParameter) {
         paymentGatewayParameterService.update(paymentGatewayParameter);
         allParameters = null;
@@ -126,6 +132,7 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
      * @param valueLabel key to search
      * @return value or null if not found
      */
+    @Override
     public String getParameterValue(final String valueLabel) {
         if (valueLabel == null || valueLabel.startsWith("#")) {
             return null; // Need to prevent direct access to Shop specific attributes
@@ -197,6 +204,7 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
     /**
      * {@inheritDoc}
      */
+    @Override
     public void accept(final PaymentGatewayConfigurationVisitor visitor) {
         this.shopCode = visitor.getConfiguration("shopCode");
     }

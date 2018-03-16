@@ -72,12 +72,12 @@ public class PaymentAspect extends BaseNotificationAspect {
 
     private final PaymentModulesManager paymentModulesManager;
 
-    private Map<String, String> authoriseShopperTemplates = new HashMap<String, String>();
-    private Map<String, String> cancelShopperTemplates = new HashMap<String, String>();
-    private Map<String, String> shipmentShopperTemplates = new HashMap<String, String>();
-    private Map<String, String> authoriseAdminTemplates = new HashMap<String, String>();
-    private Map<String, String> cancelAdminTemplates = new HashMap<String, String>();
-    private Map<String, String> shipmentAdminTemplates = new HashMap<String, String>();
+    private Map<String, String> authoriseShopperTemplates = new HashMap<>();
+    private Map<String, String> cancelShopperTemplates = new HashMap<>();
+    private Map<String, String> shipmentShopperTemplates = new HashMap<>();
+    private Map<String, String> authoriseAdminTemplates = new HashMap<>();
+    private Map<String, String> cancelAdminTemplates = new HashMap<>();
+    private Map<String, String> shipmentAdminTemplates = new HashMap<>();
 
 
     /**
@@ -106,6 +106,7 @@ public class PaymentAspect extends BaseNotificationAspect {
 
     }
 
+    @Override
     public Runnable getTask(final Serializable serializableMessage) {
         return new StandardMessageListener(
                 mailService,
@@ -260,7 +261,7 @@ public class PaymentAspect extends BaseNotificationAspect {
 
             if (StringUtils.isNotBlank(recipient)) {
 
-                final HashMap<String, Object> map = new HashMap<String, Object>();
+                final HashMap<String, Object> map = new HashMap<>();
 
                 MailUtils.appendMethodParamaters(map, pjp.getArgs());
 

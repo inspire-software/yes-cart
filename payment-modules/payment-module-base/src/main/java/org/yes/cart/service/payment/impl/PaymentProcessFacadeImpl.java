@@ -60,6 +60,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade, Applicati
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean pay(final ShoppingCart shoppingCart, final Map paymentParameter) throws OrderException {
 
 
@@ -95,6 +96,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade, Applicati
         return orderStateManager;
     }
 
+    @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }

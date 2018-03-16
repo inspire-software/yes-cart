@@ -43,7 +43,7 @@ public class LiqPayPaymentGatewayImplTest {
     @Test
     public void testGetHtmlForm() throws Exception {
 
-        final Map<String, String> params = new HashMap<String, String>();
+        final Map<String, String> params = new HashMap<>();
         params.put(LiqPayPaymentGatewayImpl.LP_MERCHANT_ID, "00001");
         params.put(LiqPayPaymentGatewayImpl.LP_MERCHANT_KEY, "secret");
         params.put(LiqPayPaymentGatewayImpl.LP_PAYWAY_URL, "card");
@@ -122,7 +122,7 @@ public class LiqPayPaymentGatewayImplTest {
     }
 
     private void testIsSuccessWithStatus(final String status, final String expectedStatus) {
-        final Map<String, String> params = new HashMap<String, String>();
+        final Map<String, String> params = new HashMap<>();
         params.put(LiqPayPaymentGatewayImpl.LP_MERCHANT_ID, "00001");
         params.put(LiqPayPaymentGatewayImpl.LP_MERCHANT_KEY, "secret");
         params.put(LiqPayPaymentGatewayImpl.LP_PAYWAY_URL, "card");

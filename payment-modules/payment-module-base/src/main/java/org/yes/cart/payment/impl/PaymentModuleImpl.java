@@ -36,17 +36,20 @@ public class PaymentModuleImpl implements PaymentModule {
     private Map<String, PaymentGatewayDescriptor> gateways;
 
     /** {@inheritDoc} */
+    @Override
     public Descriptor getPaymentModuleDescriptor() {
         return descriptor;
     }
 
 
     /** {@inheritDoc} */
+    @Override
     public Collection<PaymentGatewayDescriptor> getPaymentGateways() {
         return gateways.values();
     }
 
     /** {@inheritDoc} */
+    @Override
     public PaymentGatewayDescriptor getPaymentGateway(final String label) {
         return gateways.get(label);
     }

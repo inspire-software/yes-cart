@@ -65,6 +65,7 @@ public abstract class AbstractPayPalNVPPaymentGatewayImpl extends AbstractPayPal
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment refund(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
 
@@ -142,7 +143,7 @@ public abstract class AbstractPayPalNVPPaymentGatewayImpl extends AbstractPayPal
      * @return map
      */
     public Map<String, String> deformatNVP(final String pPayload) {
-        Map<String, String> nvp = new HashMap<String, String>();
+        Map<String, String> nvp = new HashMap<>();
         StringTokenizer stTok = new StringTokenizer(pPayload, AND);
         while (stTok.hasMoreTokens()) {
             StringTokenizer stInternalTokenizer = new StringTokenizer(stTok.nextToken(), EQ);
@@ -168,7 +169,7 @@ public abstract class AbstractPayPalNVPPaymentGatewayImpl extends AbstractPayPal
      *
      * @return response
      *
-     * @throws IOException
+     * @throws IOException errors
      */
     protected Map<String, String> performHttpCall(final String method,
                                                   final Map<String, String> nvp) throws IOException {
@@ -275,7 +276,7 @@ public abstract class AbstractPayPalNVPPaymentGatewayImpl extends AbstractPayPal
      */
     protected class NvpBuilder {
 
-        private Map<String, String> npv = new LinkedHashMap<String, String>();
+        private Map<String, String> npv = new LinkedHashMap<>();
 
         /**
          * Add raw name value pair.

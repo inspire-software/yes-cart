@@ -40,6 +40,7 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
         return "classpath:test-payment-module-base.xml";
     }
 
+    @Override
     protected ApplicationContext createContext() {
         return new ClassPathXmlApplicationContext(testContextName());
     }
@@ -98,7 +99,7 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
     }
 
     protected Map createCardParameters() {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put("ccHolderName", "JOHN DOU");
         params.put("ccNumber", getVisaCardNumber());
         params.put("ccExpireMonth", "12");  // paypal test account

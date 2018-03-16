@@ -88,6 +88,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
 
     }
 
+    @Override
     protected String testContextName() {
         return "test-payment-module-paypal.xml";
     }
@@ -121,7 +122,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, payPalProPaymentGateway);
 
 
-            final Map<String, PaymentGatewayParameter> params = new HashMap<String, PaymentGatewayParameter>();
+            final Map<String, PaymentGatewayParameter> params = new HashMap<>();
             for (final PaymentGatewayParameter param : payPalProPaymentGateway.getPaymentGatewayParameters()) {
                 params.put(param.getLabel(), param);
             }
@@ -339,8 +340,9 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
                         PaymentGateway.AUTH_CAPTURE).size());
     }
 
+    @Override
     protected Map createCardParameters() {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put("ccHolderName", "JOHN DOU");
         params.put("ccNumber", getVisaCardNumber());
         params.put("ccExpireMonth", expMM);  // paypal test account
@@ -351,6 +353,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         return params;
     }
 
+    @Override
     public String getVisaCardNumber() {
         return card;  //this is from test account
     }

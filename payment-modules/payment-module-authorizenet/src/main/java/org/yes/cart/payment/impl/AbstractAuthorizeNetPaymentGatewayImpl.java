@@ -148,7 +148,7 @@ public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractAut
         order.setPurchaseOrderNumber(payment.getOrderShipment());
         order.setTotalAmount(payment.getPaymentAmount());
 
-        final List<net.authorize.data.OrderItem> itemsInDelivery = new ArrayList<net.authorize.data.OrderItem>(payment.getOrderItems().size());
+        final List<net.authorize.data.OrderItem> itemsInDelivery = new ArrayList<>(payment.getOrderItems().size());
         for (PaymentLine paymentLine : payment.getOrderItems()) {
             if (paymentLine.isShipment()) {
                 final ShippingCharges shipping = ShippingCharges.createShippingCharges();

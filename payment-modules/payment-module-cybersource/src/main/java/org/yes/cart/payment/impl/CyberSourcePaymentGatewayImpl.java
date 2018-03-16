@@ -162,6 +162,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabel() {
         return "cyberSourcePaymentGateway";
     }
@@ -169,6 +170,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public synchronized PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
     }
@@ -177,11 +179,12 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorize(final Payment payment) {
 
         LOG.debug("Authorize: {}", payment);
 
-        final HashMap<String, String> request = new HashMap<String, String>();
+        final HashMap<String, String> request = new HashMap<>();
         request.put("ccAuthService_run", "true");
         request.put("merchantReferenceCode",
                 StringUtils.isBlank(payment.getTransactionReferenceId()) ?
@@ -287,16 +290,6 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
                 request.put(addressPrefix + "state", address.getStateCode());
             }
 
-            /**
-             * Commented out because of
-             * invalidField_0=billTo_phoneNumber
-             * invalidField_1=shipTo_phoneNumber
-
-             if (address.getPhoneList() != null) {
-             request.put(addressPrefix + "phoneNumber", address.getCountryCode());
-             }
-             */
-
         }
 
 
@@ -305,11 +298,12 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment reverseAuthorization(final Payment payment) {
 
         LOG.debug("Reverse authorization: {}", payment);
 
-        final HashMap<String, String> request = new HashMap<String, String>();
+        final HashMap<String, String> request = new HashMap<>();
 
         request.put("ccAuthReversalService_run", "true");
 
@@ -329,11 +323,12 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment capture(final Payment payment) {
 
         LOG.debug("Capture: {}", payment);
 
-        final HashMap<String, String> request = new HashMap<String, String>();
+        final HashMap<String, String> request = new HashMap<>();
         request.put("ccCaptureService_run", "true");
         request.put("ccCaptureService_authRequestID", payment.getTransactionAuthorizationCode());
         request.put("ccCaptureService_authRequestToken", payment.getTransactionRequestToken());
@@ -352,6 +347,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorizeCapture(final Payment payment) {
         Payment authPayment = authorize(payment);
         return capture(payment);
@@ -360,11 +356,12 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment voidCapture(final Payment payment) {
 
         LOG.debug("Void capture: {}", payment);
 
-        final HashMap<String, String> request = new HashMap<String, String>();
+        final HashMap<String, String> request = new HashMap<>();
 
         request.put("voidService_run", "true");
 
@@ -383,11 +380,12 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment refund(final Payment payment) {
 
         LOG.debug("Credit on prev auth: {}", payment);
 
-        final HashMap<String, String> request = new HashMap<String, String>();
+        final HashMap<String, String> request = new HashMap<>();
 
         request.put("ccCreditService_run", "true");
 

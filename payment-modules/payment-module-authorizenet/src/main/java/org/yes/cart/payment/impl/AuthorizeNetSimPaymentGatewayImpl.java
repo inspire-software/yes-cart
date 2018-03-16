@@ -55,11 +55,6 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     protected static final String AN_MD5_HASH_KEY = "MD5_HASH_KEY";
 
     /**
-     * Merchant host
-     */
-    //protected static final String AN_MERCHANT_HOST = "MERCHANT_HOST";
-
-    /**
      * SIM/DPM relay response URL
      */
     protected static final String AN_RELAY_RESPONSE_URL = "RELAY_RESPONSE_URL";
@@ -117,6 +112,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabel() {
         return "authorizeNetSimPaymentGateway";
     }
@@ -124,6 +120,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
+    @Override
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
     }
@@ -133,6 +130,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * Values https://test.authorize.net/gateway/transact.dll test env
      * https://secure.authorize.net/gateway/transact.dll production
      */
+    @Override
     public String getPostActionUrl() {
         return getParameterValue(AN_POST_URL);
     }
@@ -140,6 +138,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSubmitButton(final String locale) {
         return null;
     }
@@ -148,6 +147,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorizeCapture(final Payment payment) {
         return payment;
     }
@@ -155,6 +155,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorize(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
@@ -168,6 +169,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment reverseAuthorization(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
@@ -181,6 +183,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment capture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
@@ -194,6 +197,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment voidCapture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
@@ -207,6 +211,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment refund(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);
@@ -289,7 +294,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
 
     protected boolean isValid(final Map privateCallBackParameters) {
 
-        final Map<String, String[]> params = new HashMap<String, String[]>();
+        final Map<String, String[]> params = new HashMap<>();
         for (final Map.Entry param : (Set<Map.Entry>) privateCallBackParameters.entrySet()) {
             if (param.getValue() instanceof String[]) {
                 params.put(String.valueOf(param.getKey()), (String[]) param.getValue());
@@ -329,6 +334,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
+    @Override
     public Callback convertToCallback(final Map privateCallBackParameters) {
 
         if (isValid(privateCallBackParameters)) {
@@ -371,6 +377,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
+    @Override
     public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
 
         /*
@@ -601,6 +608,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      *
      * @return true in case in payment was ok, false in case if payment failed
      */
+    @Override
     public Payment createPaymentPrototype(final String operation, final Map privateCallBackParameters) {
 
         final Payment payment = new PaymentImpl();

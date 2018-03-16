@@ -34,6 +34,7 @@ public class PaymentProcessorFactoryImplTest extends BaseCoreDBTestCase {
 
     private PaymentProcessorFactory paymentProcessorFactory;
 
+    @Override
     @Before
     public void setUp() {
         paymentProcessorFactory = (PaymentProcessorFactory) ctx().getBean(ServiceSpringKeys.PAYMENT_PROCESSOR_FACTORY);

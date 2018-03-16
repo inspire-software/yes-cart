@@ -81,6 +81,7 @@ public class CyberSourcePaymentGatewayImplTest extends PaymentModuleDBTestCase {
 
     }
 
+    @Override
     protected String testContextName() {
         return "test-payment-module-cybersource.xml";
     }
@@ -110,7 +111,7 @@ public class CyberSourcePaymentGatewayImplTest extends PaymentModuleDBTestCase {
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, cyberSourcePaymentGateway);
 
 
-            final Map<String, PaymentGatewayParameter> params = new HashMap<String, PaymentGatewayParameter>();
+            final Map<String, PaymentGatewayParameter> params = new HashMap<>();
             for (final PaymentGatewayParameter param : cyberSourcePaymentGateway.getPaymentGatewayParameters()) {
                 params.put(param.getLabel(), param);
             }
@@ -311,6 +312,7 @@ public class CyberSourcePaymentGatewayImplTest extends PaymentModuleDBTestCase {
                         null).size());
     }
 
+    @Override
     public String getVisaCardNumber() {
         return "4111111111111111";
     }

@@ -73,6 +73,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public PaymentGateway getPaymentGateway() {
         return paymentGateway;
     }
@@ -80,6 +81,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isPaymentGatewayEnabled() {
         return paymentGateway != null;
     }
@@ -89,6 +91,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      *
      * @param paymentGateway see PaymentGatewayInternalForm to use.
      */
+    @Override
     public void setPaymentGateway(final PaymentGateway paymentGateway) {
         this.paymentGateway = paymentGateway;
     }
@@ -163,6 +166,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String authorize(final CustomerOrder order, final Map params) {
 
         if (getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize()) {
@@ -265,6 +269,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String shipmentComplete(final CustomerOrder order, final String orderShipmentNumber, final Map params) {
 
         if (getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize()) {
@@ -347,6 +352,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String cancelOrder(final CustomerOrder order, final Map params) {
 
         if (!CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus()) &&
@@ -497,6 +503,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      *
      * @return status of operation.
      */
+    @Override
     public String refundNotification(final CustomerOrder order, final Map params) {
 
         final CallbackAware.Callback callback = (CallbackAware.Callback) params.get(CallbackAware.CALLBACK_PARAM);
@@ -517,7 +524,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         final List<CustomerOrderPayment> paymentsToRollBack = determineOpenCaptures(order.getOrdernum(), null);
 
-        final List<CustomerOrderPayment> paymentsInThisRefund = new ArrayList<CustomerOrderPayment>(paymentsToRollBack);
+        final List<CustomerOrderPayment> paymentsInThisRefund = new ArrayList<>(paymentsToRollBack);
 
         for (CustomerOrderPayment customerOrderPayment : paymentsToRollBack) {
             if (MoneyUtils.isFirstEqualToSecond(refundAmount, customerOrderPayment.getPaymentAmount())) {
@@ -607,6 +614,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      *                             order
      * @return list of  payments with details
      */
+    @Override
     public List<Payment> createPaymentsToAuthorize(final CustomerOrder order,
                                                    final boolean forceSinglePaymentIn,
                                                    final Map params,
@@ -622,7 +630,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 transactionOperation,
                 getPaymentGateway().getLabel());
 
-        final List<Payment> rez = new ArrayList<Payment>();
+        final List<Payment> rez = new ArrayList<>();
         if (forceSinglePayment || !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment()) {
 
             final List<CustomerOrderPayment> existing = customerOrderPaymentService.findBy(order.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, transactionOperation);
@@ -784,7 +792,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         payment.setOrderCurrency(order.getCurrency());
         payment.setOrderLocale(order.getLocale());
 
-        return new Pair<BigDecimal, BigDecimal>(itemsAndShipping, itemsAndShippingTax);
+        return new Pair<>(itemsAndShipping, itemsAndShippingTax);
     }
 
     private void fillPaymentShipment(final CustomerOrder order, final CustomerOrderDelivery delivery, final Payment payment) {
@@ -877,7 +885,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
     protected List<CustomerOrderPayment> determineOpenAuthorisations(final String orderNumber, final String orderShipmentNumber) {
 
-        final List<CustomerOrderPayment> paymentsToCapture = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(
+        final List<CustomerOrderPayment> paymentsToCapture = new ArrayList<>(customerOrderPaymentService.findBy(
                 orderNumber,
                 orderShipmentNumber,
                 Payment.PAYMENT_STATUS_OK,
@@ -886,11 +894,11 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         if (!paymentsToCapture.isEmpty()) {
 
-            final List<CustomerOrderPayment> paymentsCapturedOrReversedAuth = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(
+            final List<CustomerOrderPayment> paymentsCapturedOrReversedAuth = new ArrayList<>(customerOrderPaymentService.findBy(
                     orderNumber,
                     orderShipmentNumber,
-                    new String[] { Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_PROCESSING },
-                    new String[] { PaymentGateway.CAPTURE, PaymentGateway.REVERSE_AUTH }
+                    new String[]{Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_PROCESSING},
+                    new String[]{PaymentGateway.CAPTURE, PaymentGateway.REVERSE_AUTH}
             ));
 
             filterOutAlreadyProcessed(paymentsToCapture, paymentsCapturedOrReversedAuth);
@@ -903,27 +911,27 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
     protected List<CustomerOrderPayment> determineOpenCaptures(final String orderNumber, final String orderShipmentNumber) {
 
-        final List<CustomerOrderPayment> paymentsCaptured = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(
+        final List<CustomerOrderPayment> paymentsCaptured = new ArrayList<>(customerOrderPaymentService.findBy(
                 orderNumber,
                 orderShipmentNumber,
-                new String[] { Payment.PAYMENT_STATUS_OK },
-                new String[] { PaymentGateway.CAPTURE, PaymentGateway.AUTH_CAPTURE }
+                new String[]{Payment.PAYMENT_STATUS_OK},
+                new String[]{PaymentGateway.CAPTURE, PaymentGateway.AUTH_CAPTURE}
         ));
 
-        final List<CustomerOrderPayment> paymentsProcessing = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(
+        final List<CustomerOrderPayment> paymentsProcessing = new ArrayList<>(customerOrderPaymentService.findBy(
                 orderNumber,
                 orderShipmentNumber,
-                new String[] { Payment.PAYMENT_STATUS_PROCESSING },
-                new String[] { PaymentGateway.CAPTURE, PaymentGateway.AUTH_CAPTURE }
+                new String[]{Payment.PAYMENT_STATUS_PROCESSING},
+                new String[]{PaymentGateway.CAPTURE, PaymentGateway.AUTH_CAPTURE}
         ));
 
         if (!paymentsProcessing.isEmpty()) {
 
-            final List<CustomerOrderPayment> paymentsFailed = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(
+            final List<CustomerOrderPayment> paymentsFailed = new ArrayList<>(customerOrderPaymentService.findBy(
                     orderNumber,
                     orderShipmentNumber,
-                    new String[] { Payment.PAYMENT_STATUS_FAILED, Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED },
-                    new String[] { PaymentGateway.CAPTURE, PaymentGateway.AUTH_CAPTURE }
+                    new String[]{Payment.PAYMENT_STATUS_FAILED, Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED},
+                    new String[]{PaymentGateway.CAPTURE, PaymentGateway.AUTH_CAPTURE}
             ));
 
             // Remove all captured from processing
@@ -937,11 +945,11 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         if (!paymentsCaptured.isEmpty()) {
 
-            final List<CustomerOrderPayment> paymentsRefunded = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(
+            final List<CustomerOrderPayment> paymentsRefunded = new ArrayList<>(customerOrderPaymentService.findBy(
                     orderNumber,
                     orderShipmentNumber,
-                    new String[] { Payment.PAYMENT_STATUS_OK },
-                    new String[] { PaymentGateway.VOID_CAPTURE, PaymentGateway.REFUND }
+                    new String[]{Payment.PAYMENT_STATUS_OK},
+                    new String[]{PaymentGateway.VOID_CAPTURE, PaymentGateway.REFUND}
             ));
 
             filterOutAlreadyProcessed(paymentsCaptured, paymentsRefunded);

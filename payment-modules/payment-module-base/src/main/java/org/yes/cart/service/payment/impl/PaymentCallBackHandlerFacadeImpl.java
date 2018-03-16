@@ -78,6 +78,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
     /**
      * {@inheritDoc}
      */
+    @Override
     public PaymentGatewayCallback registerCallback(final Map parameters,
                                                    final String paymentGatewayLabel,
                                                    final String shopCode,
@@ -98,6 +99,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
     /**
      * {@inheritDoc}
      */
+    @Override
     public void handlePaymentCallback(final PaymentGatewayCallback callback) throws OrderException {
 
         final Map parameters = callback.getParameterMap();
@@ -174,7 +176,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
                     // 1. Payment callback should not get processes further because we should have captured all funds by now
                     // for AuthCapture payment gateways.
 
-                    // 2. Authorise per shipment calls are made by specilized payment gateways that run direct calls with
+                    // 2. Authorise per shipment calls are made by specialized payment gateways that run direct calls with
                     // synchronous response, so processing those callbacks is unnecessary (in fact it may lead to capturing
                     // payments more than once)
 
@@ -386,6 +388,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
         return orderStateManager;
     }
 
+    @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }

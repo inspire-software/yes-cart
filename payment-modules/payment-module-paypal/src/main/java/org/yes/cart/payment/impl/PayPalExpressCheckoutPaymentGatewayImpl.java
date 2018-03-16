@@ -84,6 +84,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
     /**
      * {@inheritDoc}
      */
+    @Override
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
     }
@@ -92,6 +93,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
     /**
      * Get the POST url for form
      */
+    @Override
     public String getPostActionUrl() {
         // This is the PayPalExpressCheckoutFilter mapping, which performs setExpressCheckoutMethod
         // and then redirects to PayPal to login and authorise the payment
@@ -101,6 +103,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSubmitButton(final String locale) {
 
         String submit = getParameterValue(PP_SUBMIT_BTN + "_" + locale);
@@ -116,6 +119,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorizeCapture(final Payment payment) {
         return payment;
     }
@@ -123,6 +127,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorize(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
@@ -136,6 +141,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment reverseAuthorization(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
@@ -149,6 +155,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment capture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
@@ -162,6 +169,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment voidCapture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
@@ -175,6 +183,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment refund(final Payment paymentIn) {
         return super.refund(paymentIn);
     }
@@ -182,6 +191,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
     /**
      * {@inheritDoc}
      */
+    @Override
     public Callback convertToCallback(final Map privateCallBackParameters) {
         return new BasicCallbackInfoImpl(
                 HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID)),
@@ -215,6 +225,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
      *
      * @return map of parsed key - values with detail information
      */
+    @Override
     public Map<String, String> doExpressCheckoutPayment(final Payment payment,
                                                         final String token) {
 
@@ -394,6 +405,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
      *
      * @return continue URL
      */
+    @Override
     public String setExpressCheckoutMethod(final Payment payment, final String verify) {
 
         Assert.notNull(payment, "Payment must be provided");
@@ -467,6 +479,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
      *
      * @return true in case of success
      */
+    @Override
     public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
         if (isAckSuccess(callbackResult)) {
             return CallbackAware.CallbackResult.OK;
@@ -478,6 +491,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
      * {@inheritDoc}
      * All fields are hidden, hence not need to localize and etc.
      */
+    @Override
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
                               final String currencyCode, final String orderReference, final Payment payment) {
         final StringBuilder stringBuilder = new StringBuilder();
@@ -488,6 +502,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment createPaymentPrototype(final String operation, final Map parametersMap) {
 
         final Payment payment = new PaymentImpl();
@@ -508,6 +523,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabel() {
         return "payPalExpressPaymentGateway";
     }

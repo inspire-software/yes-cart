@@ -57,7 +57,7 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
     protected final IPResolver ipResolver;
 
     // Use Weak map to prevent memory leaks, Shop is kept in cache, so once it expires the pattern will expire too.
-    private final Map<Shop, Pattern> patternCache = new WeakHashMap<Shop, Pattern>();
+    private final Map<Shop, Pattern> patternCache = new WeakHashMap<>();
     private String paymentGatewayLabel;
 
     /**
@@ -83,6 +83,7 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
     /**
      * {@inheritDoc}
      */
+    @Override
     public ServletRequest doBefore(final ServletRequest servletRequest,
                                    final ServletResponse servletResponse) throws IOException, ServletException {
 
@@ -131,6 +132,7 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void doAfter(final ServletRequest servletRequest, final ServletResponse servletResponse) throws IOException, ServletException {
         //nothing
     }

@@ -104,14 +104,15 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPostActionUrl() {
-        final String url = getParameterValue(PF_POST_URL);
-        return url;
+        return getParameterValue(PF_POST_URL);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSubmitButton(final String locale) {
         return null;
     }
@@ -120,12 +121,13 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Callback convertToCallback(final Map privateCallBackParameters) {
 
         if (privateCallBackParameters != null) {
 
             final Map<String, String> params = HttpParamsUtils.createSingleValueMap(privateCallBackParameters);
-            final Map<String, String> sorted = new TreeMap<String, String>();
+            final Map<String, String> sorted = new TreeMap<>();
             final String signature = copyHttpParamsAndRemoveSignature(params, sorted);
             final String verify = sha1sign(sorted, getParameterValue(PF_SHA_OUT));
             if (verify.equals(signature)) {
@@ -186,6 +188,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
 
         String statusRes = null;
@@ -193,7 +196,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
         if (callbackResult != null) {
 
             final Map<String, String> params = HttpParamsUtils.createSingleValueMap(callbackResult);
-            final Map<String, String> sorted = new TreeMap<String, String>();
+            final Map<String, String> sorted = new TreeMap<>();
             final String signature = copyHttpParamsAndRemoveSignature(params, sorted);
             final String verify = sha1sign(sorted, getParameterValue(PF_SHA_OUT));
             if (verify.equals(signature)) {
@@ -231,12 +234,13 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
                               final String currencyCode, final String orderReference, final Payment payment) {
 
 
         // Parameters must be in apha order for hash
-        final Map<String, String> params = new TreeMap<String, String>();
+        final Map<String, String> params = new TreeMap<>();
 
         // 1. general parameters
 
@@ -495,7 +499,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
         stringBuilder.append(payment.getOrderNumber());
         if (stringBuilder.length() > 100) {
             // Only 100 chars allowed
-            return stringBuilder.substring(0, 100).toString();
+            return stringBuilder.substring(0, 100);
         }
         return stringBuilder.toString();
     }
@@ -504,6 +508,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorizeCapture(final Payment payment) {
         return payment;
     }
@@ -513,6 +518,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
      * <p/>
      * Shipment not included. Will be added at capture operation.
      */
+    @Override
     public Payment authorize(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
@@ -526,6 +532,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment reverseAuthorization(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
@@ -539,6 +546,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment capture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
@@ -552,6 +560,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment voidCapture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
@@ -565,6 +574,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment refund(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);
@@ -579,11 +589,12 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment createPaymentPrototype(final String operation, final Map map) {
 
         final Payment payment = new PaymentImpl();
         final Map<String, String> raw = HttpParamsUtils.createSingleValueMap(map);
-        final Map<String, String> sorted = new TreeMap<String, String>();
+        final Map<String, String> sorted = new TreeMap<>();
         copyHttpParamsAndRemoveSignature(raw, sorted);
         final String amount = sorted.get("AMOUNT");
         if (amount != null) {
@@ -624,6 +635,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabel() {
         return "postFinancePaymentGateway";
     }
@@ -631,6 +643,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
+    @Override
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
     }

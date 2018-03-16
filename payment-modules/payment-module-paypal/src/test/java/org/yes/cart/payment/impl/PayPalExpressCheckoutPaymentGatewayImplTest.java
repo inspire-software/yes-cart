@@ -79,6 +79,7 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends PaymentModuleDB
 
     }
 
+    @Override
     protected String testContextName() {
         return "test-payment-module-paypal.xml";
     }
@@ -106,7 +107,7 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends PaymentModuleDB
         if (allowed) {
             paymentGateway = (PayPalExpressCheckoutPaymentGatewayImpl) ctx().getBean("payPalExpressPaymentGateway");
 
-            final Map<String, PaymentGatewayParameter> params = new HashMap<String, PaymentGatewayParameter>();
+            final Map<String, PaymentGatewayParameter> params = new HashMap<>();
             for (final PaymentGatewayParameter param : paymentGateway.getPaymentGatewayParameters()) {
                 params.put(param.getLabel(), param);
             }
@@ -208,7 +209,7 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends PaymentModuleDB
                 false
         );
 
-        payment.setOrderItems(new ArrayList<PaymentLine>(Arrays.asList(sku1, sku2, ship)));
+        payment.setOrderItems(new ArrayList<>(Arrays.asList(sku1, sku2, ship)));
 
         return payment;
     }

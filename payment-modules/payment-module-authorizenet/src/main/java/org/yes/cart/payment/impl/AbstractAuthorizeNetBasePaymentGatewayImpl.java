@@ -53,6 +53,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getShopCode() {
         return shopCode;
     }
@@ -60,6 +61,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName(final String locale) {
         String pgName = getParameterValue("name_" + locale);
         if (pgName == null) {
@@ -74,6 +76,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
                               final String currencyCode, final String orderReference, final Payment payment) {
         return getHtmlForm(cardHolderName, locale);
@@ -106,6 +109,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
      * {@inheritDoc}
      */
 
+    @Override
     public Collection<PaymentGatewayParameter> getPaymentGatewayParameters() {
         if (allParameters == null) {
             allParameters = paymentGatewayParameterService.findAll(getLabel(), shopCode);
@@ -117,6 +121,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
      * {@inheritDoc}
      */
 
+    @Override
     public void deleteParameter(final String parameterLabel) {
         paymentGatewayParameterService.deleteByLabel(getLabel(), parameterLabel);
         allParameters = null;
@@ -126,6 +131,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
      * {@inheritDoc}
      */
 
+    @Override
     public void addParameter(final PaymentGatewayParameter paymentGatewayParameter) {
         paymentGatewayParameterService.create(paymentGatewayParameter);
         allParameters = null;
@@ -135,6 +141,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
      * {@inheritDoc}
      */
 
+    @Override
     public void updateParameter(final PaymentGatewayParameter paymentGatewayParameter) {
         paymentGatewayParameterService.update(paymentGatewayParameter);
         allParameters = null;
@@ -143,6 +150,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment createPaymentPrototype(final String operation, final Map parametersMap) {
 
         final Map<String, String> params = HttpParamsUtils.createSingleValueMap(parametersMap);
@@ -181,6 +189,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
      * @param valueLabel key to search
      * @return value or null if not found
      */
+    @Override
     public String getParameterValue(final String valueLabel) {
         if (valueLabel == null || valueLabel.startsWith("#")) {
             return null; // Need to prevent direct access to Shop specific attributes
@@ -229,6 +238,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
     /**
      * {@inheritDoc}
      */
+    @Override
     public void accept(final PaymentGatewayConfigurationVisitor visitor) {
         this.shopCode = visitor.getConfiguration("shopCode");
     }

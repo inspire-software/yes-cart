@@ -81,6 +81,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
         return enabled;
     }
 
+    @Override
     protected String testContextName() {
         return "test-payment-module-authorizenet.xml";
     }
@@ -110,7 +111,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
             authorizeNetAimPaymentGateway = (PaymentGatewayInternalForm) ctx().getBean("authorizeNetAimPaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, authorizeNetAimPaymentGateway);
 
-            final Map<String, PaymentGatewayParameter> params = new HashMap<String, PaymentGatewayParameter>();
+            final Map<String, PaymentGatewayParameter> params = new HashMap<>();
             for (final PaymentGatewayParameter param : authorizeNetAimPaymentGateway.getPaymentGatewayParameters()) {
                 params.put(param.getLabel(), param);
             }
@@ -337,6 +338,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
                         PaymentGateway.AUTH_CAPTURE).size());
     }
 
+    @Override
     public String getVisaCardNumber() {
         return "4007000000027"; // Second Visa Test Card: 4012888818888
     }

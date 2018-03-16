@@ -54,7 +54,7 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
     @Test
     public void testGetHtmlForm() throws Exception {
 
-        final Map<String, String> params = new HashMap<String, String>();
+        final Map<String, String> params = new HashMap<>();
         params.put(AuthorizeNetSimPaymentGatewayImpl.AN_POST_URL, "http://www.authorize.com/pay");
         params.put(AuthorizeNetSimPaymentGatewayImpl.AN_CANCEL_URL, "http://mydomain.com/result/hint/cancel");
         params.put(AuthorizeNetSimPaymentGatewayImpl.AN_RETURN_POLICY_URL, "http://mydomain.com/retunrpolicy");
@@ -255,7 +255,7 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
 
 
 
-        final Map<String, String> params = new HashMap<String, String>();
+        final Map<String, String> params = new HashMap<>();
         params.put(AuthorizeNetSimPaymentGatewayImpl.AN_MD5_HASH_KEY, "Simon");
         params.put(AuthorizeNetSimPaymentGatewayImpl.AN_API_LOGIN_ID, "Login1");
 
@@ -312,7 +312,7 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
 
 
 
-        final Map<String, String> params = new HashMap<String, String>();
+        final Map<String, String> params = new HashMap<>();
         params.put(AuthorizeNetSimPaymentGatewayImpl.AN_MD5_HASH_KEY, "Simon");
         params.put(AuthorizeNetSimPaymentGatewayImpl.AN_API_LOGIN_ID, "yescartauthorise1");
         params.put(AuthorizeNetSimPaymentGatewayImpl.AN_API_LOGIN_ID, "5yaqwaA8Uk5X");

@@ -62,7 +62,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
     );
 
 
-    private static final Map<String, PaymentGatewayParameter> gatewayConfig = new HashMap<String, PaymentGatewayParameter>();
+    private static final Map<String, PaymentGatewayParameter> gatewayConfig = new HashMap<>();
 
 
     /**
@@ -77,6 +77,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabel() {
         return "testExtFormPaymentGateway";
     }
@@ -84,6 +85,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
     }
@@ -91,6 +93,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPostActionUrl() {
         return "https://some.payment.gateway.domain.com/bender-pay.cgi";
     }
@@ -98,6 +101,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSubmitButton(final String locale) {
         return null;
     }
@@ -105,6 +109,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Callback convertToCallback(final Map privateCallBackParameters) {
         CallbackOperation op = CallbackOperation.PAYMENT;
         String responseCode = HttpParamsUtils.getSingleValue(privateCallBackParameters.get(AUTH_RESPONSE_CODE_PARAM_KEY));
@@ -135,6 +140,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
 
         String responseCode = callbackResult.get(AUTH_RESPONSE_CODE_PARAM_KEY);
@@ -158,6 +164,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment createPaymentPrototype(final String operation, final Map privateCallBackParameters) {
         final Payment payment = new PaymentImpl();
 
@@ -183,6 +190,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorizeCapture(final Payment paymentIn) {
         return (Payment) SerializationUtils.clone(paymentIn);
     }
@@ -190,6 +198,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorize(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
@@ -203,6 +212,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment reverseAuthorization(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
@@ -216,6 +226,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment capture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
@@ -229,6 +240,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment voidCapture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
@@ -242,6 +254,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment refund(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);

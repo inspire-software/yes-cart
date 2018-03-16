@@ -25,10 +25,8 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

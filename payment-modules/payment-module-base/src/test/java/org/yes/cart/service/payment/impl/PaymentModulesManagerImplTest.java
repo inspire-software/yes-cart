@@ -56,6 +56,7 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
     PaymentModulesManager paymentModulesManager;
 
 
+    @Override
     @Before
     public void setUp() {
         

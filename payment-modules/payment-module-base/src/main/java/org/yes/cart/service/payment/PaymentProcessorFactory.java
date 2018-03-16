@@ -18,8 +18,8 @@ package org.yes.cart.service.payment;
 
 /**
  *
- * Create {@link PaymentProcessor} for client and inject partucular PaymentGateway.
- * Payment gateway specified by his label in descriptor. To get the partucular payment gateway use the
+ * Create {@link PaymentProcessor} for client and inject particular PaymentGateway.
+ * Payment gateway specified by his label in descriptor. To get the particular payment gateway use the
  * {@link org.yes.cart.service.payment.PaymentModulesManager}
  *
  * User: Igor Azarny iazarny@yahoo.com

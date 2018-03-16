@@ -36,13 +36,14 @@ public class PaymentProcessorFactoryImpl implements ApplicationContextAware, Pay
     private final String paymentProcessorBeanId;
 
     /** {@inheritDoc} */
+    @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
 
     /**
-     * Construct factory of payment parocessors.
+     * Construct factory of payment processors.
      * @param paymentModulesManager {@link PaymentModulesManager}
      * @param paymentProcessorBeanId bean id of selected payment gateway.
      */
@@ -53,6 +54,7 @@ public class PaymentProcessorFactoryImpl implements ApplicationContextAware, Pay
     
 
     /** {@inheritDoc} */
+    @Override
     public PaymentProcessor create(final String paymentGatewayLabel, final String shopCode) {
 
         final PaymentProcessor paymentProcessor = (PaymentProcessor) applicationContext.getBean(paymentProcessorBeanId);

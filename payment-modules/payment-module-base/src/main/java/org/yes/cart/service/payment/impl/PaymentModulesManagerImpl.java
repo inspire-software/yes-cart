@@ -31,7 +31,6 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.locator.ServiceLocator;
 import org.yes.cart.service.payment.PaymentModulesManager;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
 
@@ -52,7 +51,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
     private final SystemService systemService;
     private final ShopService shopService;
 
-    private final Map<String, PaymentModule> paymentModulesMap = new HashMap<String, PaymentModule>();
+    private final Map<String, PaymentModule> paymentModulesMap = new HashMap<>();
 
     /**
      * Construct PG module manager.
@@ -72,6 +71,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<PaymentModule> getPaymentModules() {
         return Collections.unmodifiableCollection(paymentModulesMap.values());
     }
@@ -79,6 +79,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<PaymentGatewayDescriptor> getPaymentGatewaysDescriptors(final String paymentModuleLabel) {
         return paymentModulesMap.get(paymentModuleLabel).getPaymentGateways();
     }
@@ -86,6 +87,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void allowPaymentGateway(final String label) {
 
         final String[] allowed = StringUtils.split(systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL), ',');
@@ -100,7 +102,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
         } else  if (!Arrays.asList(allowed).contains(label)) {       //not yet allowed
 
 
-            final List<String> updated = new ArrayList<String>(Arrays.asList(allowed));
+            final List<String> updated = new ArrayList<>(Arrays.asList(allowed));
             updated.add(label);
 
             systemService.updateAttributeValue(
@@ -115,6 +117,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void allowPaymentGatewayForShop(final String label, final String shopCode) {
 
         final Shop shop = shopService.getShopByCode(shopCode);
@@ -136,7 +139,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
                 } else  if (!Arrays.asList(allowed).contains(label)) {       //not yet allowed
 
 
-                    final List<String> updated = new ArrayList<String>(Arrays.asList(allowed));
+                    final List<String> updated = new ArrayList<>(Arrays.asList(allowed));
                     updated.add(label);
 
                     shopService.updateAttributeValue(
@@ -162,13 +165,14 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void disallowPaymentGateway(final String label) {
 
         final String[] allowed = StringUtils.split(systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL), ',');
 
         if (allowed != null && Arrays.asList(allowed).contains(label)) {       //need to remove
 
-            final List<String> updated = new ArrayList<String>(Arrays.asList(allowed));
+            final List<String> updated = new ArrayList<>(Arrays.asList(allowed));
             updated.remove(label);
 
             systemService.updateAttributeValue(
@@ -183,6 +187,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void disallowPaymentGatewayForShop(final String label, final String shopCode) {
 
 
@@ -196,7 +201,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
                 final String[] allowed = StringUtils.split(av.getVal(), ',');
                 if (allowed != null && Arrays.asList(allowed).contains(label)) {       //need to remove
 
-                    final List<String> updated = new ArrayList<String>(Arrays.asList(allowed));
+                    final List<String> updated = new ArrayList<>(Arrays.asList(allowed));
                     updated.remove(label);
 
                     shopService.updateAttributeValue(
@@ -215,8 +220,9 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<PaymentGatewayDescriptor> getPaymentGatewaysDescriptors(final boolean includeDisabled, final String shopCode) {
-        final List<PaymentGatewayDescriptor> paymentGatewayDescriptors = new ArrayList<PaymentGatewayDescriptor>();
+        final List<PaymentGatewayDescriptor> paymentGatewayDescriptors = new ArrayList<>();
 
         for (final Map.Entry<String, PaymentModule> moduleEntry : paymentModulesMap.entrySet()) {
             paymentGatewayDescriptors.addAll(moduleEntry.getValue().getPaymentGateways());
@@ -255,14 +261,8 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
 
         }
 
-        Collections.sort(
-                paymentGatewayDescriptors,
-                new Comparator<PaymentGatewayDescriptor>() {
-                    public int compare(final PaymentGatewayDescriptor pgd1, final PaymentGatewayDescriptor pgd2) {
-                        return pgd1.getLabel().compareToIgnoreCase(pgd2.getLabel());
-                    }
-                }
-        );
+        paymentGatewayDescriptors.sort((pgd1, pgd2) -> pgd1.getLabel().compareToIgnoreCase(pgd2.getLabel()));
+
         return paymentGatewayDescriptors;
     }
 
@@ -272,7 +272,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
 
             final List<String> enabled = Arrays.asList(allowed);
 
-            final List<PaymentGatewayDescriptor> allowedDescr = new ArrayList<PaymentGatewayDescriptor>();
+            final List<PaymentGatewayDescriptor> allowedDescr = new ArrayList<>();
             for (final PaymentGatewayDescriptor descriptor : paymentGatewayDescriptors) {
                 if (enabled.contains(descriptor.getLabel())) {
                     allowedDescr.add(descriptor);
@@ -290,6 +290,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
     /**
      * {@inheritDoc}
      */
+    @Override
     public PaymentGateway getPaymentGateway(final String paymentGatewayLabel, final String shopCode) {
 
         for (final Map.Entry<String, PaymentModule> moduleEntry : paymentModulesMap.entrySet()) {
@@ -297,7 +298,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
                 if (pgDescriptor.getLabel().equals(paymentGatewayLabel)) {
 
                     final PaymentGatewayConfigurationVisitor visitor = new PaymentGatewayConfigurationVisitorImpl(
-                            (Map) Collections.singletonMap("shopCode", shopCode)
+                            Collections.singletonMap("shopCode", shopCode)
                     );
 
                     final PaymentGateway pg = serviceLocator.getServiceInstance(
@@ -323,6 +324,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void register(final PaymentModule paymentModule) {
 
         final String label = paymentModule.getPaymentModuleDescriptor().getLabel();

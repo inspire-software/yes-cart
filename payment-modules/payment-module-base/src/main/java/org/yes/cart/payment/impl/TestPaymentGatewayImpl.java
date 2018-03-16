@@ -59,7 +59,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     public static final String UNSETTLED_NO = "UNSETTLED_SEQNO_";
 
 
-    private static final Set<String> ADDITIONAL_CONFIG = new HashSet<String>(Arrays.asList(
+    private static final Set<String> ADDITIONAL_CONFIG = new HashSet<>(Arrays.asList(
 
             AUTH_FAIL, REVERSE_AUTH_FAIL, CAPTURE_FAIL, AUTH_CAPTURE_FAIL, VOID_CAPTURE_FAIL, REFUND_FAIL,
             PROCESSING, UNSETTLED,
@@ -157,7 +157,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     };
 
 
-    private static final Map<String, PaymentGatewayParameter> gatewayConfig = new HashMap<String, PaymentGatewayParameter>();
+    private static final Map<String, PaymentGatewayParameter> gatewayConfig = new HashMap<>();
 
 
     /**
@@ -216,6 +216,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabel() {
         return "testPaymentGateway";
     }
@@ -224,6 +225,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return paymentGatewayFeature;
     }
@@ -231,16 +233,17 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<PaymentGatewayParameter> getPaymentGatewayParameters() {
-        List<PaymentGatewayParameter> all = new ArrayList<PaymentGatewayParameter>(super.getPaymentGatewayParameters());
+        List<PaymentGatewayParameter> all = new ArrayList<>(super.getPaymentGatewayParameters());
 
-        final Map<String, Integer> existing = new HashMap<String, Integer>();
+        final Map<String, Integer> existing = new HashMap<>();
         int counter = 0;
         for (final PaymentGatewayParameter pgp : all) {
             existing.put(pgp.getLabel(), counter++);
         }
 
-        final Set<String> extra = new HashSet<String>(ADDITIONAL_CONFIG);
+        final Set<String> extra = new HashSet<>(ADDITIONAL_CONFIG);
         for (final Map.Entry<String, PaymentGatewayParameter> entry : gatewayConfig.entrySet()) {
             if (extra.contains(entry.getKey())) {
                 extra.remove(entry.getKey());
@@ -266,6 +269,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public void deleteParameter(final String label) {
         if (gatewayConfig.containsKey(label)) {
             gatewayConfig.remove(label);
@@ -275,6 +279,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addParameter(final PaymentGatewayParameter paymentGatewayParameter) {
         if (StringUtils.isNotBlank(paymentGatewayParameter.getValue())) {
             gatewayConfig.put(paymentGatewayParameter.getLabel(), paymentGatewayParameter);
@@ -286,6 +291,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public void updateParameter(final PaymentGatewayParameter paymentGatewayParameter) {
 
         if (ADDITIONAL_CONFIG.contains(paymentGatewayParameter.getLabel())
@@ -313,6 +319,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorize(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
@@ -343,6 +350,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorizeCapture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH_CAPTURE);
@@ -382,6 +390,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment reverseAuthorization(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
@@ -408,6 +417,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment capture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
@@ -438,6 +448,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment voidCapture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
@@ -459,6 +470,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment refund(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);

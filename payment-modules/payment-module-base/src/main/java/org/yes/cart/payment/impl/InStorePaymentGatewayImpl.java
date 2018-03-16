@@ -48,6 +48,7 @@ public class InStorePaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabel() {
         return "inStorePaymentGateway";
     }
@@ -55,6 +56,7 @@ public class InStorePaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
     }
@@ -63,6 +65,7 @@ public class InStorePaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorize(Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
@@ -76,6 +79,7 @@ public class InStorePaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment reverseAuthorization(Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
@@ -89,6 +93,7 @@ public class InStorePaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment capture(Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
@@ -102,6 +107,7 @@ public class InStorePaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment authorizeCapture(Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH_CAPTURE);
@@ -115,6 +121,7 @@ public class InStorePaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment voidCapture(Payment paymentIn) {
        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
@@ -128,6 +135,7 @@ public class InStorePaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Payment refund(Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);
