@@ -26,7 +26,8 @@ import org.yes.cart.bulkcommon.model.ImpExDescriptor;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkimport.model.ImportTuple;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * User: denispavlov

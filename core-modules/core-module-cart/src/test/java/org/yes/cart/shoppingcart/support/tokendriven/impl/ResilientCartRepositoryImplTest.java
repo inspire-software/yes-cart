@@ -36,7 +36,6 @@ import org.yes.cart.shoppingcart.support.tokendriven.CartUpdateProcessor;
 
 import java.io.*;
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.Assert.*;

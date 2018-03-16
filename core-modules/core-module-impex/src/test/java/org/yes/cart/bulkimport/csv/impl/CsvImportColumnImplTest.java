@@ -17,8 +17,6 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.junit.Test;
-import org.yes.cart.bulkcommon.model.ImpExColumn;
-import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 
 import java.util.Map;

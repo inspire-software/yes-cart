@@ -20,9 +20,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
-import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkcommon.service.DataDescriptorResolver;
 import org.yes.cart.bulkcommon.service.DataDescriptorTuplizer;
+import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.domain.entity.DataDescriptor;
 import org.yes.cart.stream.xml.XStreamProvider;
 

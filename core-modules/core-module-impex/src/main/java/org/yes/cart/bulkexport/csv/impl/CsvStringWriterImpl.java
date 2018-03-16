@@ -19,7 +19,10 @@ package org.yes.cart.bulkexport.csv.impl;
 import au.com.bytecode.opencsv.CSVWriter;
 import org.yes.cart.bulkexport.csv.CsvStringWriter;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 
 /**
  * User: denispavlov

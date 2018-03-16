@@ -9,12 +9,11 @@ import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.theme.ThemeService;
 
 import javax.servlet.ServletContext;
-
 import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * User: denispavlov

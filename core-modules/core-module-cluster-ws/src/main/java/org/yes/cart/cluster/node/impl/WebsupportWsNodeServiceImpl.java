@@ -25,7 +25,6 @@ import org.yes.cart.service.domain.SystemService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

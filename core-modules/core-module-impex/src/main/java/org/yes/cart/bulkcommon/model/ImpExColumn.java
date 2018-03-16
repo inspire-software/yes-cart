@@ -16,8 +16,6 @@
 
 package org.yes.cart.bulkcommon.model;
 
-import org.yes.cart.bulkexport.model.ExportTuple;
-
 /**
  * Single import/export column description.
  * <p/>

@@ -8,7 +8,7 @@ import org.yes.cart.utils.impl.ExtendedConversionService;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: denispavlov

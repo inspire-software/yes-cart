@@ -19,7 +19,6 @@ package org.yes.cart.bulkimport.csv.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
-import org.yes.cart.bulkexport.model.ExportTuple;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportDescriptor;

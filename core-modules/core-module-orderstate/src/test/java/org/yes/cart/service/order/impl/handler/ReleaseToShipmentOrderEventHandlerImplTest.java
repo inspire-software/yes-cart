@@ -34,7 +34,6 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertNull;
 
 /**
  * Test covers flow from Order in progress, Delivery ready for shipment flow.

@@ -24,7 +24,6 @@ import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.stream.xml.CsvImportDescriptorXStreamProvider;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

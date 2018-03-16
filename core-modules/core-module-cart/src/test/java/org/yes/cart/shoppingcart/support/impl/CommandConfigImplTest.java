@@ -17,7 +17,6 @@
 package org.yes.cart.shoppingcart.support.impl;
 
 import org.junit.Test;
-import org.yes.cart.shoppingcart.support.impl.CommandConfigImpl;
 
 import java.util.Arrays;
 

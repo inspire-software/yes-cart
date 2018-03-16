@@ -32,7 +32,10 @@ import org.yes.cart.web.service.ws.client.WsClientAbstractFactory;
 import org.yes.cart.web.service.ws.client.WsClientFactory;
 
 import java.net.ConnectException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * User: denispavlov

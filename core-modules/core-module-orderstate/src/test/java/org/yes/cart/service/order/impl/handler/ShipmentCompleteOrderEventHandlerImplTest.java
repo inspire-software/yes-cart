@@ -19,16 +19,19 @@ package org.yes.cart.service.order.impl.handler;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 
 import static org.junit.Assert.*;
 

@@ -25,7 +25,6 @@ import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportTuple;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
