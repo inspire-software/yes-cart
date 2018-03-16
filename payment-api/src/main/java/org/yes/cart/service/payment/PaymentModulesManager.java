@@ -36,7 +36,7 @@ public interface PaymentModulesManager {
 
 
     /**
-     * Get list of payment modules. At least one payment module available in OOTB configuration.
+     * Get list of payment modules.
      *
      * @return list of payment modules.
      */

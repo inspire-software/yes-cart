@@ -91,6 +91,7 @@ public class PaymentLineImpl implements PaymentLine {
      *
      * @return sku name.
      */
+    @Override
     public String getSkuName() {
         return skuName;
     }
@@ -100,6 +101,7 @@ public class PaymentLineImpl implements PaymentLine {
      *
      * @param skuName sku name.
      */
+    @Override
     public void setSkuName(final String skuName) {
         this.skuName = skuName;
     }
@@ -109,6 +111,7 @@ public class PaymentLineImpl implements PaymentLine {
      *
      * @return sku code.
      */
+    @Override
     public String getSkuCode() {
         return skuCode;
     }
@@ -118,6 +121,7 @@ public class PaymentLineImpl implements PaymentLine {
      *
      * @param skuCode sku code.
      */
+    @Override
     public void setSkuCode(final String skuCode) {
         this.skuCode = skuCode;
     }
@@ -127,6 +131,7 @@ public class PaymentLineImpl implements PaymentLine {
      *
      * @return quantity.
      */
+    @Override
     public BigDecimal getQuantity() {
         return quantity;
     }
@@ -136,6 +141,7 @@ public class PaymentLineImpl implements PaymentLine {
      *
      * @param quantity quantity.
      */
+    @Override
     public void setQuantity(final BigDecimal quantity) {
         this.quantity = quantity;
     }
@@ -145,6 +151,7 @@ public class PaymentLineImpl implements PaymentLine {
      *
      * @return tax.
      */
+    @Override
     public BigDecimal getTaxAmount() {
         return taxAmount;
     }
@@ -154,6 +161,7 @@ public class PaymentLineImpl implements PaymentLine {
      *
      * @param taxAmount tax.
      */
+    @Override
     public void setTaxAmount(final BigDecimal taxAmount) {
         this.taxAmount = taxAmount;
     }
@@ -163,6 +171,7 @@ public class PaymentLineImpl implements PaymentLine {
      *
      * @return price.
      */
+    @Override
     public BigDecimal getUnitPrice() {
         return unitPrice;
     }
@@ -172,23 +181,24 @@ public class PaymentLineImpl implements PaymentLine {
      *
      * @param unitPrice price.
      */
+    @Override
     public void setUnitPrice(final BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 
 
     /**
-     * Is item shipment.
-     * @return true if item is shipment
+     * {@inheritDoc}
      */
+    @Override
     public boolean isShipment() {
         return shipment;
     }
 
     /**
-     * Set shpipment flag
-     * @param shipment shipment flag
+     * {@inheritDoc}
      */
+    @Override
     public void setShipment(final boolean shipment) {
         this.shipment = shipment;
     }

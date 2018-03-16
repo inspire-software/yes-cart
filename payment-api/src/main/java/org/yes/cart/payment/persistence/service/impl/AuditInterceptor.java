@@ -42,7 +42,7 @@ public class AuditInterceptor extends EmptyInterceptor {
 
     private final Logger LOG = LoggerFactory.getLogger("AUDIT");
 
-    private Map<String, Set<String>> prohibitedFields = new HashMap<String, Set<String>>();
+    private Map<String, Set<String>> prohibitedFields = new HashMap<>();
 
     private String getUserName() {
 

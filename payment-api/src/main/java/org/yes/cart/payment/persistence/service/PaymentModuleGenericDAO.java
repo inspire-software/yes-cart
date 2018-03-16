@@ -78,7 +78,7 @@ public interface PaymentModuleGenericDAO<T, PK extends Serializable> {
      *
      * @return entity or null if not found
      */
-    <T> T findSingleByNamedQuery(String namedQueryName, Object... parameters);
+    T findSingleByNamedQuery(String namedQueryName, Object... parameters);
 
     /**
      * Find entities by criteria.

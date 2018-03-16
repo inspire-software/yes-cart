@@ -54,6 +54,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getShopCode() {
         return shopCode;
     }
@@ -61,6 +62,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setShopCode(final String shopCode) {
         this.shopCode = shopCode;
     }
@@ -68,6 +70,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isProcessed() {
         return processed;
     }
@@ -76,6 +79,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setProcessed(final boolean processed) {
         this.processed = processed;
     }
@@ -83,6 +87,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabel() {
         return label;
     }
@@ -90,6 +95,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setLabel(final String label) {
         this.label = label;
     }
@@ -105,6 +111,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map getParameterMap() {
         if (parameterMap == null) {
             parameterMap = parseParameters(parameterMapInternal);
@@ -115,8 +122,9 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setParameterMap(final Map parameterMap) {
-        this.parameterMap = new LinkedHashMap<String, String[]>();
+        this.parameterMap = new LinkedHashMap<>();
         if (parameterMap != null) {
             for (final Object setEntry : parameterMap.entrySet()) {
                 final Map.Entry entry = (Map.Entry) setEntry;
@@ -131,7 +139,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     }
 
     Map<String, String[]> parseParameters(final String parameters) {
-        final Map<String, String[]> map = new LinkedHashMap<String, String[]>();
+        final Map<String, String[]> map = new LinkedHashMap<>();
         final String[] params = StringUtils.split(parameters, '\n');
         for (final String param : params) {
             final String[] nameAndValues = StringUtils.splitPreserveAllTokens(param, '=');
@@ -164,6 +172,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getRequestDump() {
         return requestDump;
     }
@@ -171,6 +180,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setRequestDump(final String requestDump) {
         this.requestDump = requestDump;
     }
@@ -178,6 +188,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -185,6 +196,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
@@ -192,6 +204,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -199,6 +212,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
@@ -206,6 +220,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -213,6 +228,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
@@ -220,6 +236,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -227,6 +244,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
@@ -234,6 +252,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getGuid() {
         return this.guid;
     }
@@ -241,6 +260,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setGuid(final String guid) {
         this.guid = guid;
     }
@@ -249,6 +269,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getPaymentGatewayCallbackId() {
         return paymentGatewayCallbackId;
     }
@@ -256,6 +277,7 @@ public class PaymentGatewayCallbackEntity implements PaymentGatewayCallback, Ser
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPaymentGatewayCallbackId(final long paymentGatewayCallbackId) {
         this.paymentGatewayCallbackId = paymentGatewayCallbackId;
     }

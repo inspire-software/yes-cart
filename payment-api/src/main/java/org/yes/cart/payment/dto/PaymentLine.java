@@ -104,12 +104,12 @@ public interface PaymentLine extends Serializable {
      * Is item shipment.
      * @return true if item is shipment
      */
-    public boolean isShipment();
+    boolean isShipment();
 
     /**
-     * Set shpipment flag
+     * Set shipment flag
      * @param shipment shipment flag
      */
-    public void setShipment(boolean shipment);
+    void setShipment(boolean shipment);
 
 }

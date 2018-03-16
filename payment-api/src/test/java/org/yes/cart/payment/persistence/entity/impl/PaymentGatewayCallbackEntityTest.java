@@ -35,7 +35,7 @@ public class PaymentGatewayCallbackEntityTest {
     @Test
     public void testParameterMapEmpty() throws Exception {
 
-        final Map<String, String[]> values1 = new LinkedHashMap<String, String[]>();
+        final Map<String, String[]> values1 = new LinkedHashMap<>();
 
         entity1.setParameterMap(values1);
 
@@ -53,7 +53,7 @@ public class PaymentGatewayCallbackEntityTest {
     @Test
     public void testParameterMap() throws Exception {
 
-        final Map<String, String[]> values1 = new LinkedHashMap<String, String[]>();
+        final Map<String, String[]> values1 = new LinkedHashMap<>();
         values1.put("key1", new String[] { "value1" });
         values1.put("key2", new String[] { "value21", "value22", "value23" });
         values1.put("key3", new String[] { "value3" });
@@ -73,7 +73,7 @@ public class PaymentGatewayCallbackEntityTest {
 
         final Map<String, String[]> values2 = entity2.getParameterMap();
 
-        final List<String> keys = new ArrayList<String>(values2.keySet());
+        final List<String> keys = new ArrayList<>(values2.keySet());
         assertArrayEquals(new String[] { "key1", "key2", "key3", "key4" }, keys.toArray());
 
         assertArrayEquals(new String[] { "value1" }, values2.get("key1"));

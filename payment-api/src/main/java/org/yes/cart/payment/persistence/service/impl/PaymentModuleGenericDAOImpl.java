@@ -72,6 +72,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @Override
     public T findById(final PK id) {
         return findById(id, false);
     }
@@ -79,13 +80,14 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public T findById(final PK id, final boolean lock) {
         T entity;
         if (lock) {
-            entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id, LockOptions.UPGRADE);
+            entity = sessionFactory.getCurrentSession().get(getPersistentClass(), id, LockOptions.UPGRADE);
         } else {
-            entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id);
+            entity = sessionFactory.getCurrentSession().get(getPersistentClass(), id);
         }
         return entity;
     }
@@ -93,9 +95,10 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public T findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
-        List<T> rez = (List<T>) this.findByNamedQuery(namedQueryName, parameters);
+        List<T> rez = this.findByNamedQuery(namedQueryName, parameters);
         if (!rez.isEmpty()) {
             return rez.get(0);
         }
@@ -105,6 +108,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object> findByQuery(final String hsqlQuery, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
         setQueryParameters(query, parameters);
@@ -116,6 +120,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<T> findByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
@@ -128,6 +133,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<T> findAll() {
         final Query query = sessionFactory.getCurrentSession().createQuery(this.selectAllHql);
@@ -138,6 +144,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public T saveOrUpdate(final T entity) {
         sessionFactory.getCurrentSession().saveOrUpdate(entity);
@@ -148,6 +155,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public T create(final T entity) {
         sessionFactory.getCurrentSession().saveOrUpdate(entity);
@@ -157,6 +165,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public T update(final T entity) {
         sessionFactory.getCurrentSession().saveOrUpdate(entity);
@@ -166,6 +175,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @Override
     public void delete(final T entity) {
         if (entity != null) {
             sessionFactory.getCurrentSession().delete(entity);
@@ -176,6 +186,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<T> findByCriteria(final String eCriteria, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(eCriteria != null ? this.selectAllHql.concat(eCriteria) : this.selectAllHql);
@@ -186,6 +197,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<T> findRangeByCriteria(final String eCriteria, final int firstResult, final int maxResults, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(eCriteria != null ? this.selectAllHql.concat(eCriteria) : this.selectAllHql);
@@ -198,6 +210,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @Override
     public T findSingleByCriteria(final String eCriteria, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(eCriteria != null ? this.selectAllHql.concat(eCriteria) : this.selectAllHql);
         setQueryParameters(query, parameters);

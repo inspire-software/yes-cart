@@ -65,6 +65,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getShopperIpAddress() {
         return shopperIpAddress;
     }
@@ -72,6 +73,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setShopperIpAddress(final String shopperIpAddress) {
         this.shopperIpAddress = shopperIpAddress;
     }
@@ -95,6 +97,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCardHolderName() {
         return this.cardHolderName;
     }
@@ -102,6 +105,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCardHolderName(final String cardHolderName) {
         this.cardHolderName = cardHolderName;
     }
@@ -110,6 +114,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCardExpireYear() {
         return this.cardExpireYear;
     }
@@ -117,6 +122,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCardExpireYear(final String cardExpireYear) {
         this.cardExpireYear = cardExpireYear;
     }
@@ -124,6 +130,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCardExpireMonth() {
         return this.cardExpireMonth;
     }
@@ -131,6 +138,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCardExpireMonth(final String cardExpireMonth) {
         this.cardExpireMonth = cardExpireMonth;
     }
@@ -138,6 +146,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDate getCardStartDate() {
         return this.cardStartDate;
     }
@@ -145,6 +154,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCardStartDate(final LocalDate cardStartDate) {
         this.cardStartDate = cardStartDate;
     }
@@ -152,6 +162,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDateTime getOrderDate() {
         return this.orderDate;
     }
@@ -159,6 +170,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderDate(final LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
@@ -166,6 +178,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getPaymentAmount() {
         return paymentAmount;
     }
@@ -173,6 +186,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPaymentAmount(final BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
     }
@@ -180,6 +194,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getTaxAmount() {
         return taxAmount;
     }
@@ -187,6 +202,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTaxAmount(final BigDecimal taxAmount) {
         this.taxAmount = taxAmount;
     }
@@ -194,6 +210,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getOrderCurrency() {
         return this.orderCurrency;
     }
@@ -201,6 +218,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderCurrency(final String orderCurrency) {
         this.orderCurrency = orderCurrency;
     }
@@ -208,6 +226,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getOrderNumber() {
         return this.orderNumber;
     }
@@ -215,6 +234,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderNumber(final String orderNumber) {
         this.orderNumber = orderNumber;
     }
@@ -222,6 +242,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getOrderShipment() {
         return this.orderShipment;
     }
@@ -229,6 +250,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderShipment(final String orderShipment) {
         this.orderShipment = orderShipment;
     }
@@ -236,6 +258,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTransactionReferenceId() {
         return this.transactionReferenceId;
     }
@@ -243,6 +266,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTransactionReferenceId(final String transactionReferenceId) {
         this.transactionReferenceId = transactionReferenceId;
     }
@@ -250,6 +274,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTransactionRequestToken() {
         return this.transactionRequestToken;
     }
@@ -257,6 +282,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTransactionRequestToken(final String transactionRequestToken) {
         this.transactionRequestToken = transactionRequestToken;
     }
@@ -264,6 +290,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTransactionAuthorizationCode() {
         return this.transactionAuthorizationCode;
     }
@@ -271,6 +298,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTransactionAuthorizationCode(final String transactionAuthorizationCode) {
         this.transactionAuthorizationCode = transactionAuthorizationCode;
     }
@@ -278,6 +306,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTransactionGatewayLabel() {
         return this.transactionGatewayLabel;
     }
@@ -285,6 +314,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTransactionGatewayLabel(final String transactionGatewayLabel) {
         this.transactionGatewayLabel = transactionGatewayLabel;
     }
@@ -292,6 +322,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTransactionOperation() {
         return this.transactionOperation;
     }
@@ -299,11 +330,13 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTransactionOperation(final String transactionOperation) {
         this.transactionOperation = transactionOperation;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getTransactionOperationResultCode() {
         return this.transactionOperationResultCode;
     }
@@ -311,6 +344,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTransactionOperationResultCode(final String transactionOperationResultCode) {
         this.transactionOperationResultCode = transactionOperationResultCode;
     }
@@ -319,6 +353,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTransactionOperationResultMessage() {
         return this.transactionOperationResultMessage;
     }
@@ -326,6 +361,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTransactionOperationResultMessage(final String transactionOperationResultMessage) {
         this.transactionOperationResultMessage = transactionOperationResultMessage;
     }
@@ -333,6 +369,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPaymentProcessorResult() {
         return this.paymentProcessorResult;
     }
@@ -340,6 +377,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPaymentProcessorResult(final String paymentProcessorResult) {
         this.paymentProcessorResult = paymentProcessorResult;
     }
@@ -347,6 +385,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isPaymentProcessorBatchSettlement() {
         return this.paymentProcessorBatchSettlement;
     }
@@ -354,6 +393,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPaymentProcessorBatchSettlement(final boolean paymentProcessorBatchSettlement) {
         this.paymentProcessorBatchSettlement = paymentProcessorBatchSettlement;
     }
@@ -361,6 +401,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -368,6 +409,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
@@ -375,6 +417,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -382,6 +425,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
@@ -389,6 +433,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -396,6 +441,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
@@ -403,6 +449,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -410,6 +457,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
@@ -417,6 +465,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getGuid() {
         return this.guid;
     }
@@ -424,6 +473,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setGuid(final String guid) {
         this.guid = guid;
     }
@@ -432,6 +482,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getCustomerOrderPaymentId() {
         return this.customerOrderPaymentId;
     }
@@ -439,6 +490,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCustomerOrderPaymentId(final long customerOrderPaymentId) {
         this.customerOrderPaymentId = customerOrderPaymentId;
     }
@@ -454,20 +506,15 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
      *
      * @return 4 last digits of credit card.
      */
+    @Override
     public String getCardNumber() {
         return cardNumber;
     }
 
     /**
-     * Store last 4 digits only, because of:
-     * 1. security reason
-     * 2. authorize net need for credit operation  4 last digits
-     *
-     * @param cardNumber card number.
-     */
-    /**
      * {@inheritDoc}
      */
+    @Override
     public void setCardNumber(final String cardNumber) {
         if (cardNumber != null && cardNumber.length() > 4) {
             this.cardNumber = cardNumber.substring(cardNumber.length() - 4, cardNumber.length());
@@ -480,6 +527,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCardIssueNumber() {
         return cardIssueNumber;
     }
@@ -487,6 +535,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCardIssueNumber(final String cardIssueNumber) {
         this.cardIssueNumber = cardIssueNumber;
     }
@@ -494,6 +543,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getShopCode() {
         return shopCode;
     }
@@ -501,6 +551,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setShopCode(final String shopCode) {
         this.shopCode = shopCode;
     }

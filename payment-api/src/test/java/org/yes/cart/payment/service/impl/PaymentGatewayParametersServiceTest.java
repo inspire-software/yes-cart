@@ -86,7 +86,7 @@ public class PaymentGatewayParametersServiceTest extends BasePaymentModuleDBTest
         service.create(createParameter("pgLabel", "#SHOP20_label2", "shop20red2"));
 
         final Collection<PaymentGatewayParameter> defParamsNull = service.findAll("pgLabel", null);
-        final Set<String> defParamsNullLabels = new HashSet<String>();
+        final Set<String> defParamsNullLabels = new HashSet<>();
         for (final PaymentGatewayParameter param : defParamsNull) {
             defParamsNullLabels.add(param.getLabel());
         }
@@ -95,7 +95,7 @@ public class PaymentGatewayParametersServiceTest extends BasePaymentModuleDBTest
         assertTrue(defParamsNullLabels.contains("label2"));
 
         final Collection<PaymentGatewayParameter> defParamsDEFAULT = service.findAll("pgLabel", "DEFAULT");
-        final Set<String> defParamsDEFAULTLabels = new HashSet<String>();
+        final Set<String> defParamsDEFAULTLabels = new HashSet<>();
         for (final PaymentGatewayParameter param : defParamsDEFAULT) {
             defParamsDEFAULTLabels.add(param.getLabel());
         }
@@ -104,7 +104,7 @@ public class PaymentGatewayParametersServiceTest extends BasePaymentModuleDBTest
         assertTrue(defParamsDEFAULTLabels.contains("label2"));
 
         final Collection<PaymentGatewayParameter> defParamsSHOP10 = service.findAll("pgLabel", "SHOP10");
-        final Set<String> defParamsSHOP10Labels = new HashSet<String>();
+        final Set<String> defParamsSHOP10Labels = new HashSet<>();
         for (final PaymentGatewayParameter param : defParamsSHOP10) {
             defParamsSHOP10Labels.add(param.getLabel());
         }
@@ -115,7 +115,7 @@ public class PaymentGatewayParametersServiceTest extends BasePaymentModuleDBTest
         assertTrue(defParamsSHOP10Labels.contains("#SHOP10_label2"));
 
         final Collection<PaymentGatewayParameter> defParamsSHOP20 = service.findAll("pgLabel", "SHOP20");
-        final Set<String> defParamsSHOP20Labels = new HashSet<String>();
+        final Set<String> defParamsSHOP20Labels = new HashSet<>();
         for (final PaymentGatewayParameter param : defParamsSHOP20) {
             defParamsSHOP20Labels.add(param.getLabel());
         }

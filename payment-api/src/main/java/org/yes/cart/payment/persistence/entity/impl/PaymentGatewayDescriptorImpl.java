@@ -57,6 +57,7 @@ public class PaymentGatewayDescriptorImpl extends DescriptorImpl implements Paym
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUrl() {
         return url;
     }
@@ -73,6 +74,7 @@ public class PaymentGatewayDescriptorImpl extends DescriptorImpl implements Paym
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLogin() {
         return login;
     }
@@ -80,6 +82,7 @@ public class PaymentGatewayDescriptorImpl extends DescriptorImpl implements Paym
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setLogin(final String login) {
         this.login = login;
     }
@@ -87,6 +90,7 @@ public class PaymentGatewayDescriptorImpl extends DescriptorImpl implements Paym
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPassword() {
         return password;
     }
@@ -94,6 +98,7 @@ public class PaymentGatewayDescriptorImpl extends DescriptorImpl implements Paym
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPassword(final String password) {
         this.password = password;
     }

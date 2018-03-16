@@ -84,7 +84,7 @@ public class PaymentImpl implements Payment {
      * Default constructor.
      */
     public PaymentImpl() {
-        orderItems = new ArrayList<PaymentLine>();
+        orderItems = new ArrayList<>();
         paymentAmount = BigDecimal.ZERO;
         taxAmount = BigDecimal.ZERO;
     }
@@ -92,6 +92,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getShopperIpAddress() {
         return shopperIpAddress;
     }
@@ -99,6 +100,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setShopperIpAddress(final String shopperIpAddress) {
         this.shopperIpAddress = shopperIpAddress;
     }
@@ -106,6 +108,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getPaymentAmount() {
         return this.paymentAmount;
     }
@@ -113,6 +116,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPaymentAmount(final BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
     }
@@ -120,6 +124,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getTaxAmount() {
         return taxAmount;
     }
@@ -127,6 +132,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTaxAmount(final BigDecimal taxAmount) {
         this.taxAmount = taxAmount;
     }
@@ -134,6 +140,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPaymentProcessorResult() {
         return paymentProcessorResult;
     }
@@ -141,6 +148,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPaymentProcessorResult(final String paymentProcessorResult) {
         this.paymentProcessorResult = paymentProcessorResult;
     }
@@ -148,6 +156,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isPaymentProcessorBatchSettlement() {
         return paymentProcessorBatchSettlement;
     }
@@ -155,6 +164,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPaymentProcessorBatchSettlement(final boolean paymentProcessorBatchSettlement) {
         this.paymentProcessorBatchSettlement = paymentProcessorBatchSettlement;
     }
@@ -162,6 +172,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getBillingEmail() {
         return billingEmail;
     }
@@ -169,6 +180,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setBillingEmail(final String billingEmail) {
         this.billingEmail = billingEmail;
     }
@@ -177,6 +189,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCardType() {
         return cardType;
     }
@@ -184,6 +197,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCardType(final String cardType) {
         this.cardType = cardType;
     }
@@ -191,6 +205,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCardHolderName() {
         return cardHolderName;
     }
@@ -198,6 +213,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCardHolderName(final String cardHolderName) {
         this.cardHolderName = cardHolderName;
     }
@@ -205,6 +221,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCardNumber() {
         return cardNumber;
     }
@@ -212,6 +229,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCardNumber(final String cardNumber) {
         this.cardNumber = cardNumber;
     }
@@ -219,6 +237,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCardExpireYear() {
         return cardExpireYear;
     }
@@ -226,6 +245,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCardExpireYear(final String cardExpireYear) {
         this.cardExpireYear = cardExpireYear;
     }
@@ -233,6 +253,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCardExpireMonth() {
         return cardExpireMonth;
     }
@@ -240,6 +261,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCardExpireMonth(final String cardExpireMonth) {
         this.cardExpireMonth = cardExpireMonth;
     }
@@ -247,6 +269,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCardIssueNumber() {
         return cardIssueNumber;
     }
@@ -254,6 +277,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCardIssueNumber(final String cardIssueNumber) {
         this.cardIssueNumber = cardIssueNumber;
     }
@@ -261,6 +285,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCardCvv2Code() {
         return cardCvv2Code;
     }
@@ -268,6 +293,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCardCvv2Code(final String cardCvv2Code) {
         this.cardCvv2Code = cardCvv2Code;
     }
@@ -275,6 +301,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDate getCardStartDate() {
         return cardStartDate;
     }
@@ -282,6 +309,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCardStartDate(final LocalDate cardStartDate) {
         this.cardStartDate = cardStartDate;
     }
@@ -289,6 +317,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDateTime getOrderDate() {
         return orderDate;
     }
@@ -296,6 +325,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderDate(final LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
@@ -304,6 +334,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getOrderCurrency() {
         return orderCurrency;
     }
@@ -311,6 +342,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderCurrency(final String orderCurrency) {
         this.orderCurrency = orderCurrency;
     }
@@ -318,6 +350,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getOrderLocale() {
         return orderLocale;
     }
@@ -325,6 +358,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderLocale(final String orderLocale) {
         this.orderLocale = orderLocale;
     }
@@ -332,6 +366,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<PaymentLine> getOrderItems() {
         return orderItems;
     }
@@ -339,6 +374,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderItems(final List<PaymentLine> orderItems) {
         this.orderItems = orderItems;
     }
@@ -346,6 +382,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getOrderNumber() {
         return orderNumber;
     }
@@ -353,6 +390,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderNumber(final String orderNumber) {
         this.orderNumber = orderNumber;
     }
@@ -360,6 +398,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getOrderShipment() {
         return orderShipment;
     }
@@ -367,6 +406,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderShipment(final String orderShipment) {
         this.orderShipment = orderShipment;
     }
@@ -374,6 +414,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTransactionReferenceId() {
         return transactionReferenceId;
     }
@@ -381,6 +422,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTransactionReferenceId(final String transactionReferenceId) {
         this.transactionReferenceId = transactionReferenceId;
     }
@@ -388,6 +430,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTransactionRequestToken() {
         return transactionRequestToken;
     }
@@ -395,6 +438,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTransactionRequestToken(final String transactionRequestToken) {
         this.transactionRequestToken = transactionRequestToken;
     }
@@ -402,6 +446,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTransactionAuthorizationCode() {
         return transactionAuthorizationCode;
     }
@@ -409,6 +454,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTransactionAuthorizationCode(final String transactionAuthorizationCode) {
         this.transactionAuthorizationCode = transactionAuthorizationCode;
     }
@@ -416,6 +462,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTransactionOperation() {
         return transactionOperation;
     }
@@ -423,6 +470,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTransactionOperation(final String transactionOperation) {
         this.transactionOperation = transactionOperation;
     }
@@ -430,6 +478,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTransactionOperationResultCode() {
         return transactionOperationResultCode;
     }
@@ -437,22 +486,27 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTransactionOperationResultCode(final String transactionOperationResultCode) {
         this.transactionOperationResultCode = transactionOperationResultCode;
     }
 
+    @Override
     public String getTransactionOperationResultMessage() {
         return transactionOperationResultMessage;
     }
 
+    @Override
     public void setTransactionOperationResultMessage(final String transactionOperationResultMessage) {
         this.transactionOperationResultMessage = transactionOperationResultMessage;
     }
 
+    @Override
     public String getTransactionGatewayLabel() {
         return transactionGatewayLabel;
     }
 
+    @Override
     public void setTransactionGatewayLabel(final String transactionGatewayLabel) {
         this.transactionGatewayLabel = transactionGatewayLabel;
     }
@@ -460,6 +514,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getShippingAddressString() {
         return shippingAddressString;
     }
@@ -467,6 +522,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setShippingAddressString(final String shippingAddressString) {
         this.shippingAddressString = shippingAddressString;
     }
@@ -474,6 +530,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getBillingAddressString() {
         return billingAddressString;
     }
@@ -481,6 +538,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setBillingAddressString(final String billingAddressString) {
         this.billingAddressString = billingAddressString;
     }
@@ -488,6 +546,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public PaymentAddress getShippingAddress() {
         return shippingAddress;
     }
@@ -495,6 +554,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setShippingAddress(final PaymentAddress shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
@@ -502,6 +562,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public PaymentAddress getBillingAddress() {
         return billingAddress;
     }
@@ -509,6 +570,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setBillingAddress(final PaymentAddress billingAddress) {
         this.billingAddress = billingAddress;
     }

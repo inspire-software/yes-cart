@@ -43,6 +43,7 @@ public class PaymentGatewayParameterServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void deleteByLabel(final String paymentGatewayLabel, final String parameterLabel) {
         PaymentGatewayParameter toDelete = getGenericDao().findSingleByCriteria(
                 " where e.pgLabel = ?1 and e.label = ?2",
@@ -58,6 +59,7 @@ public class PaymentGatewayParameterServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<PaymentGatewayParameter> findAll(final String label, final String shopCode) {
         if (shopCode != null && !"DEFAULT".equals(shopCode)) {
             return getGenericDao().findByCriteria(

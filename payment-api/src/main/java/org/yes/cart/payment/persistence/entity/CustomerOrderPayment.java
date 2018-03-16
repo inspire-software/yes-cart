@@ -196,7 +196,7 @@ public interface CustomerOrderPayment extends Auditable {
     /**
      * Set transaction reference id.
      *
-     * @param transactionReferenceId
+     * @param transactionReferenceId transaction id
      */
     void setTransactionReferenceId(String transactionReferenceId);
 
@@ -277,7 +277,7 @@ public interface CustomerOrderPayment extends Auditable {
     /**
      * Get message if any.
      *
-     * @return result messagae
+     * @return result message
      */
     String getTransactionOperationResultMessage();
 

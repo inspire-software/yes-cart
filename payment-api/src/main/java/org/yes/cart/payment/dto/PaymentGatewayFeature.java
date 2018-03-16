@@ -41,7 +41,7 @@ public interface PaymentGatewayFeature extends Serializable {
 
     /**
      * Is payment gateway supports authorize. Payment processor may use
-     * the AuthotizeCapture opration if not.
+     * the Authorize Capture operation otherwise.
      *
      * @return true if supports
      */
@@ -84,7 +84,7 @@ public interface PaymentGatewayFeature extends Serializable {
     boolean isSupportRefund();
 
     /**
-     * Is form will be processed on external site. If true, than need to provide backgound urls.
+     * Is form will be processed on external site. If true, than need to provide external site urls (and callbacks).
      *
      * @return true
      */

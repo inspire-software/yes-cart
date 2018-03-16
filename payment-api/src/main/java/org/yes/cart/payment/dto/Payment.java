@@ -307,7 +307,7 @@ public interface Payment extends Serializable {
 
 
     /**
-     * Get transaction reference id. Ref id set by payment gateway. In out case it will be eq to delivery nimber
+     * Get transaction reference id. Ref id set by payment gateway. In out case it will be eq to delivery number
      * if PG does not set value.
      *
      * @return reference id

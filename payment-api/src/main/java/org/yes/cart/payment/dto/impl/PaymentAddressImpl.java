@@ -42,6 +42,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCity() {
         return city;
     }
@@ -49,6 +50,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCity(final String city) {
         this.city = city;
     }
@@ -56,6 +58,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPostcode() {
         return postcode;
     }
@@ -63,6 +66,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPostcode(final String postcode) {
         this.postcode = postcode;
     }
@@ -70,6 +74,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAddrline1() {
         return addrline1;
     }
@@ -77,6 +82,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAddrline1(final String addrline1) {
         this.addrline1 = addrline1;
     }
@@ -84,6 +90,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAddrline2() {
         return addrline2;
     }
@@ -91,6 +98,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAddrline2(final String addrline2) {
         this.addrline2 = addrline2;
     }
@@ -98,6 +106,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAddressType() {
         return addressType;
     }
@@ -105,6 +114,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAddressType(final String addressType) {
         this.addressType = addressType;
     }
@@ -112,6 +122,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCountryCode() {
         return countryCode;
     }
@@ -119,6 +130,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCountryCode(final String countryCode) {
         this.countryCode = countryCode;
     }
@@ -126,6 +138,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getStateCode() {
         return stateCode;
     }
@@ -133,6 +146,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setStateCode(final String stateCode) {
         this.stateCode = stateCode;
     }
@@ -140,6 +154,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPhone1() {
         return phone1;
     }
@@ -147,6 +162,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPhone1(final String phone1) {
         this.phone1 = phone1;
     }
@@ -154,6 +170,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getFirstname() {
         return firstname;
     }
@@ -161,6 +178,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setFirstname(final String firstname) {
         this.firstname = firstname;
     }
@@ -168,6 +186,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLastname() {
         return lastname;
     }
@@ -175,6 +194,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setLastname(final String lastname) {
         this.lastname = lastname;
     }
@@ -182,6 +202,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMiddlename() {
         return middlename;
     }
@@ -189,6 +210,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMiddlename(final String middlename) {
         this.middlename = middlename;
     }

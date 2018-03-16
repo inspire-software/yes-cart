@@ -49,16 +49,21 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * Construct PaymentGatewayFeature
      *
-     * @param supportAuthorize
-     * @param supportAuthorizePerShipment
-     * @param supportCapture
-     * @param supportAuthorizeCapture
-     * @param supportVoid
-     * @param supportReverseAuthorization
-     * @param supportRefund
-     * @param externalFormProcessing
-     * @param additionalFeatures
-     * @param onlineGateway               is this online payment gateway
+     * @param supportAuthorize            supports AUTH
+     * @param supportAuthorizePerShipment supports AUTH per shipment
+     * @param supportCapture              supports CAPTURE
+     * @param supportAuthorizeCapture     supports AUTH_CAPTURE (AUTH+CAPTURE in single transaction)
+     * @param supportVoid                 supports VOID (reverse CAPTURE)
+     * @param supportReverseAuthorization supports reverse AUTH
+     * @param supportRefund               supports REFUND
+     * @param externalFormProcessing      transaction processing is done outside of sellers site (e.g. pay button
+     *                                    that redirects to PG site and then returns customer to main site once
+     *                                    transaction is completed)
+     * @param additionalFeatures          custom features
+     * @param onlineGateway               is this online payment gateway (if true, payment is processed by automatic
+     *                                    process and is fully traceable, false means offline payment such as payments
+     *                                    over the phone where traceability is reduced to makring that payment was taken
+     *                                    by someone at some point)
      * @param requireDetails true in case if gateway require payment details for html form
      */
     @SuppressWarnings("PMD.ExcessiveParameterList")
@@ -95,6 +100,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
+    @Override
     public boolean isOnlineGateway() {
         return onlineGateway;
     }
@@ -102,6 +108,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
+    @Override
     public boolean isAutoCapture() {
         return autoCapture;
     }
@@ -109,6 +116,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
+    @Override
     public boolean isSupportAuthorizePerShipment() {
         return supportAuthorizePerShipment;
     }
@@ -116,6 +124,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
+    @Override
     public boolean isSupportAuthorize() {
         return supportAuthorize;
     }
@@ -123,6 +132,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
+    @Override
     public boolean isSupportCapture() {
         return supportCapture;
     }
@@ -130,6 +140,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
+    @Override
     public boolean isSupportAuthorizeCapture() {
         return supportAuthorizeCapture;
     }
@@ -137,6 +148,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
+    @Override
     public boolean isSupportVoid() {
         return supportVoid;
     }
@@ -144,6 +156,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
+    @Override
     public boolean isSupportReverseAuthorization() {
         return supportReverseAuthorization;
     }
@@ -151,6 +164,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
+    @Override
     public boolean isSupportRefund() {
         return supportRefund;
     }
@@ -158,6 +172,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
+    @Override
     public boolean isExternalFormProcessing() {
         return externalFormProcessing;
     }
@@ -166,6 +181,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
+    @Override
     public String getAdditionalFeatures() {
         return additionalFeatures;
     }
@@ -173,6 +189,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
+    @Override
     public boolean isRequireDetails() {
         return requireDetails;
     }
@@ -180,6 +197,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
+    @Override
     public boolean isSupportCaptureMore() {
         return supportCaptureMore;
     }
@@ -187,6 +205,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     /**
      * {@inheritDoc }
      */
+    @Override
     public boolean isSupportCaptureLess() {
         return supportCaptureLess;
     }

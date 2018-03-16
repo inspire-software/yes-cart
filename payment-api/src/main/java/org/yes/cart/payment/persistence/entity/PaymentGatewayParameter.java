@@ -119,11 +119,13 @@ public interface PaymentGatewayParameter extends Serializable, Descriptor, Audit
      *
      * @return guid that uniquely identifies this object.
      */
+    @Override
     String getGuid();
 
     /**
      * @param guid guid that uniquely identifies this object.
      */
+    @Override
     void setGuid(String guid);
 
 }

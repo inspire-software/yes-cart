@@ -47,6 +47,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
     /**
      * @return pk value
      */
+    @Override
     public long getPaymentGatewayParameterId() {
         return paymentGatewayParameterId;
     }
@@ -54,6 +55,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
     /**
      * @param paymentGatewayParameterId pk value
      */
+    @Override
     public void setPaymentGatewayParameterId(final long paymentGatewayParameterId) {
         this.paymentGatewayParameterId = paymentGatewayParameterId;
     }
@@ -61,6 +63,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getValue() {
         return value;
     }
@@ -68,6 +71,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setValue(final String value) {
         this.value = value;
     }
@@ -109,6 +113,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
      *
      * @return name
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -118,6 +123,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
      *
      * @param name name
      */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
@@ -127,6 +133,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
      *
      * @return Description
      */
+    @Override
     public String getDescription() {
         return description;
     }
@@ -136,6 +143,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
      *
      * @param description Description
      */
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }
@@ -145,6 +153,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
      *
      * @return label.
      */
+    @Override
     public String getLabel() {
         return label;
     }
@@ -154,6 +163,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
      *
      * @param label label
      */
+    @Override
     public void setLabel(final String label) {
         this.label = label;
     }
@@ -161,6 +171,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPgLabel() {
         return pgLabel;
     }
@@ -168,46 +179,57 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPgLabel(final String pgLabel) {
         this.pgLabel = pgLabel;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(final String guid) {
         this.guid = guid;
     }

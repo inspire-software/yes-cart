@@ -59,6 +59,7 @@ public class CustomerOrderPaymentServiceImpl
      *
      * @return order amount
      */
+    @Override
     public BigDecimal getOrderAmount(final String orderNumber) {
 
         final List<CustomerOrderPayment> payments = findBy(orderNumber, null,
@@ -69,7 +70,7 @@ public class CustomerOrderPaymentServiceImpl
         BigDecimal debit = BigDecimal.ZERO;
         BigDecimal voided = BigDecimal.ZERO;
 
-        List<BigDecimal> credited = new ArrayList<BigDecimal>();
+        List<BigDecimal> credited = new ArrayList<>();
 
         for (CustomerOrderPayment payment : payments) {
             // only tracking real payments (including unsettled)
@@ -99,13 +100,14 @@ public class CustomerOrderPaymentServiceImpl
 
         }
 
-        return credit.subtract(debit).setScale(DEFAULT_SCALE);
+        return credit.subtract(debit).setScale(DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
     }
 
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CustomerOrderPayment> findBy(final String orderNumber,
                                              final LocalDateTime fromDate,
                                              final LocalDateTime tillDate,
@@ -129,6 +131,7 @@ public class CustomerOrderPaymentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CustomerOrderPayment> findBy(final String orderNumber,
                                              final String shipmentNumber,
                                              final String paymentProcessorResult,
@@ -147,6 +150,7 @@ public class CustomerOrderPaymentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CustomerOrderPayment> findBy(final String orderNumber,
                                              final String shipmentNumber,
                                              final String[] paymentProcessorResult,

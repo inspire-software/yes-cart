@@ -39,6 +39,7 @@ public class PaymentGatewayConfigurationVisitorImpl implements PaymentGatewayCon
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getConfigurationKeys() {
         return configuration.keySet();
     }
@@ -46,6 +47,7 @@ public class PaymentGatewayConfigurationVisitorImpl implements PaymentGatewayCon
     /**
      * {@inheritDoc}
      */
+    @Override
     public <T> T getConfiguration(final String key) {
         return (T) configuration.get(key);
     }
@@ -53,6 +55,7 @@ public class PaymentGatewayConfigurationVisitorImpl implements PaymentGatewayCon
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visit(final PaymentGateway paymentGateway) {
 
         if (paymentGateway instanceof ConfigurablePaymentGateway) {

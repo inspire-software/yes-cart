@@ -27,7 +27,7 @@ import java.time.Instant;
  * for particular user(s) in time frame(s). Change slice used for apply changes, that
  * already done on staging server, to productions server.
  * Guid field allow to make a decision what records shall be inserted/updated.
- * Here we have some limitionations for transfer change slices:
+ * Here we have some limitations for transfer change slices:
  * 1. The same changes on several different staging servers will be added to production server.
  */
 public interface Auditable extends Serializable {

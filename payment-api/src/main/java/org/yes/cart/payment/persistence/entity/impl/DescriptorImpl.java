@@ -37,6 +37,7 @@ public class DescriptorImpl implements Descriptor {
      *
      * @return Description
      */
+    @Override
     public String getDescription() {
         return description;
     }
@@ -46,6 +47,7 @@ public class DescriptorImpl implements Descriptor {
      *
      * @param description Description
      */
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }
@@ -55,6 +57,7 @@ public class DescriptorImpl implements Descriptor {
      *
      * @return label.
      */
+    @Override
     public String getLabel() {
         return label;
     }
@@ -64,6 +67,7 @@ public class DescriptorImpl implements Descriptor {
      *
      * @param label label
      */
+    @Override
     public void setLabel(final String label) {
         this.label = label;
     }

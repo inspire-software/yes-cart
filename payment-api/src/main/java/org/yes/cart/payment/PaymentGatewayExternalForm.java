@@ -16,8 +16,6 @@
 
 package org.yes.cart.payment;
 
-import java.util.Map;
-
 /**
  * Payment gateway interface with external form processing. I.e. form action of post operation located on the
  * URL, that belong to particular payment gateway.
