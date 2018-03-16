@@ -52,122 +52,152 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     }
 
 
+    @Override
     public ProductSku getSkus() {
         return this.skus;
     }
 
+    @Override
     public void setSkus(ProductSku skus) {
         this.skus = skus;
     }
 
+    @Override
     public Customer getCustomer() {
         return this.customer;
     }
 
+    @Override
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
+    @Override
     public String getWlType() {
         return this.wlType;
     }
 
+    @Override
     public void setWlType(String wlType) {
         this.wlType = wlType;
     }
 
+    @Override
     public String getVisibility() {
         return visibility;
     }
 
+    @Override
     public void setVisibility(final String visibility) {
         this.visibility = visibility;
     }
 
+    @Override
     public String getTag() {
         return tag;
     }
 
+    @Override
     public void setTag(final String tag) {
         this.tag = tag;
     }
 
+    @Override
     public BigDecimal getQuantity() {
         return quantity;
     }
 
+    @Override
     public void setQuantity(final BigDecimal quantity) {
         this.quantity = quantity;
     }
 
+    @Override
     public BigDecimal getRegularPriceWhenAdded() {
         return regularPriceWhenAdded;
     }
 
+    @Override
     public void setRegularPriceWhenAdded(final BigDecimal regularPriceWhenAdded) {
         this.regularPriceWhenAdded = regularPriceWhenAdded;
     }
 
+    @Override
     public String getRegularPriceCurrencyWhenAdded() {
         return regularPriceCurrencyWhenAdded;
     }
 
+    @Override
     public void setRegularPriceCurrencyWhenAdded(final String regularPriceCurrencyWhenAdded) {
         this.regularPriceCurrencyWhenAdded = regularPriceCurrencyWhenAdded;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getCustomerwishlistId() {
         return this.customerwishlistId;
     }
 
+    @Override
     public long getId() {
         return this.customerwishlistId;
     }
 
+    @Override
     public void setCustomerwishlistId(long customerwishlistId) {
         this.customerwishlistId = customerwishlistId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

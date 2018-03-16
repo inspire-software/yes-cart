@@ -37,7 +37,7 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
     private String name;
     private String description;
     private Shop shop;
-    private Set<ShopAdvPlaceRule> shopAdvPlaceRules = new HashSet<ShopAdvPlaceRule>(0);
+    private Set<ShopAdvPlaceRule> shopAdvPlaceRules = new HashSet<>(0);
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
     private String createdBy;
@@ -49,91 +49,113 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
 
 
 
+    @Override
     public String getName() {
         return this.name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getDescription() {
         return this.description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Override
     public Shop getShop() {
         return this.shop;
     }
 
+    @Override
     public void setShop(Shop shop) {
         this.shop = shop;
     }
 
+    @Override
     public Set<ShopAdvPlaceRule> getShopAdvPlaceRules() {
         return this.shopAdvPlaceRules;
     }
 
+    @Override
     public void setShopAdvPlaceRules(Set<ShopAdvPlaceRule> shopAdvPlaceRules) {
         this.shopAdvPlaceRules = shopAdvPlaceRules;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getShopadvplaceId() {
         return this.shopadvplaceId;
     }
 
 
+    @Override
     public long getId() {
         return this.shopadvplaceId;
     }
 
+    @Override
     public void setShopadvplaceId(long shopadvplaceId) {
         this.shopadvplaceId = shopadvplaceId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

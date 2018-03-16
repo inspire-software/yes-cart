@@ -45,99 +45,123 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
 
 
 
+    @Override
     public String getImageName() {
         return this.imageName;
     }
 
+    @Override
     public void setImageName(String imageName) {
         this.imageName = imageName;
     }
 
+    @Override
     public String getAlt() {
         return this.alt;
     }
 
+    @Override
     public void setAlt(String alt) {
         this.alt = alt;
     }
 
+    @Override
     public String getDisplayAlt() {
         return displayAlt;
     }
 
+    @Override
     public void setDisplayAlt(final String displayAlt) {
         this.displayAlt = displayAlt;
     }
 
+    @Override
     public String getTitle() {
         return this.title;
     }
 
+    @Override
     public void setTitle(String title) {
         this.title = title;
     }
 
+    @Override
     public String getDisplayTitle() {
         return displayTitle;
     }
 
+    @Override
     public void setDisplayTitle(final String displayTitle) {
         this.displayTitle = displayTitle;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getSeoImageId() {
         return this.seoImageId;
     }
 
 
+    @Override
     public long getId() {
         return this.seoImageId;
     }
 
+    @Override
     public void setSeoImageId(long seoImageId) {
         this.seoImageId = seoImageId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

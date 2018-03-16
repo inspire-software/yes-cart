@@ -47,9 +47,9 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     private String uitemplate;
     private LocalDateTime availablefrom;
     private LocalDateTime availableto;
-    private Collection<AttrValueCategory> attributes = new ArrayList<AttrValueCategory>(0);
+    private Collection<AttrValueCategory> attributes = new ArrayList<>(0);
     private SeoEntity seoInternal;
-    private Set<ProductCategory> productCategory = new HashSet<ProductCategory>(0);
+    private Set<ProductCategory> productCategory = new HashSet<>(0);
     private Boolean navigationByAttributes;
     private Boolean navigationByPrice;
     private String navigationByPriceTiers;
@@ -64,90 +64,112 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
 
 
 
+    @Override
     public long getParentId() {
         return this.parentId;
     }
 
+    @Override
     public void setParentId(long parentId) {
         this.parentId = parentId;
     }
 
+    @Override
     public Long getLinkToId() {
         return linkToId;
     }
 
+    @Override
     public void setLinkToId(final Long linkToId) {
         this.linkToId = linkToId;
     }
 
+    @Override
     public int getRank() {
         return this.rank;
     }
 
+    @Override
     public void setRank(int rank) {
         this.rank = rank;
     }
 
+    @Override
     public ProductType getProductType() {
         return this.productType;
     }
 
+    @Override
     public void setProductType(ProductType productType) {
         this.productType = productType;
     }
 
+    @Override
     public String getName() {
         return this.name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getDisplayName() {
         return this.displayName;
     }
 
+    @Override
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
+    @Override
     public String getDescription() {
         return this.description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Override
     public String getUitemplate() {
         return this.uitemplate;
     }
 
+    @Override
     public void setUitemplate(String uitemplate) {
         this.uitemplate = uitemplate;
     }
 
+    @Override
     public LocalDateTime getAvailablefrom() {
         return this.availablefrom;
     }
 
+    @Override
     public void setAvailablefrom(LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
+    @Override
     public LocalDateTime getAvailableto() {
         return this.availableto;
     }
 
+    @Override
     public void setAvailableto(LocalDateTime availableto) {
         this.availableto = availableto;
     }
 
+    @Override
     public Collection<AttrValueCategory> getAttributes() {
         return this.attributes;
     }
 
+    @Override
     public void setAttributes(Collection<AttrValueCategory> attributes) {
         this.attributes = attributes;
     }
@@ -160,86 +182,107 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.seoInternal = seo;
     }
 
+    @Override
     public Set<ProductCategory> getProductCategory() {
         return this.productCategory;
     }
 
+    @Override
     public void setProductCategory(Set<ProductCategory> productCategory) {
         this.productCategory = productCategory;
     }
 
+    @Override
     public Boolean getNavigationByAttributes() {
         return this.navigationByAttributes;
     }
 
+    @Override
     public void setNavigationByAttributes(Boolean navigationByAttributes) {
         this.navigationByAttributes = navigationByAttributes;
     }
 
+    @Override
     public Boolean getNavigationByPrice() {
         return this.navigationByPrice;
     }
 
+    @Override
     public void setNavigationByPrice(Boolean navigationByPrice) {
         this.navigationByPrice = navigationByPrice;
     }
 
+    @Override
     public String getNavigationByPriceTiers() {
         return this.navigationByPriceTiers;
     }
 
+    @Override
     public void setNavigationByPriceTiers(String navigationByPriceTiers) {
         this.navigationByPriceTiers = navigationByPriceTiers;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getCategoryId() {
         return this.categoryId;
     }
 
+    @Override
     public long getId() {
         return this.categoryId;
     }
 
+    @Override
     public void setCategoryId(long categoryId) {
         this.categoryId = categoryId;
     }
@@ -262,6 +305,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
 
     private PriceTierTree priceTierTreeCache = null;
 
+    @Override
     public PriceTierTree getNavigationByPriceTree() {
         if (priceTierTreeCache == null && StringUtils.isNotBlank(getNavigationByPriceTiers())) {
             priceTierTreeCache = xStreamProvider.fromXML(getNavigationByPriceTiers()); //This method like to eat CPU
@@ -270,6 +314,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
 
+    @Override
     public void setNavigationByPriceTree(PriceTierTree tree) {
         setNavigationByPriceTiers(xStreamProvider.toXML(tree));
         this.priceTierTreeCache = tree;
@@ -284,11 +329,12 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         return this.getClass().getName() + this.getCategoryId();
     }
 
+    @Override
     public Set<AttrValueCategory> getAttributesByCode(final String attributeCode) {
         if (attributeCode == null) {
             return null;
         }
-        final Set<AttrValueCategory> result = new HashSet<AttrValueCategory>();
+        final Set<AttrValueCategory> result = new HashSet<>();
         if (this.attributes != null) {
             for (AttrValueCategory attrValue : this.attributes) {
                 if (attributeCode.equals(attrValue.getAttributeCode())) {
@@ -302,6 +348,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         return result;
     }
 
+    @Override
     public AttrValueCategory getAttributeByCode(String attributeCode) {
         if (attributeCode == null) {
             return null;
@@ -318,12 +365,14 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
 
 
 
+    @Override
     public String getAttributeValueByCode(final String attributeCode) {
         final AttrValue val = getAttributeByCode(attributeCode);
         return val != null ? val.getVal() : null;
     }
 
 
+    @Override
     public boolean isAttributeValueByCodeTrue(final String attributeCode) {
         final AttrValue val = getAttributeByCode(attributeCode);
         return val != null && Boolean.valueOf(val.getVal());
@@ -331,8 +380,9 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
 
 
 
+    @Override
     public Map<String, AttrValue> getAllAttributesAsMap() {
-        final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
+        final Map<String, AttrValue> rez = new HashMap<>();
         for (AttrValue attrValue : getAllAttributes()) {
             if (attrValue != null && attrValue.getAttributeCode() != null) {
                 rez.put(attrValue.getAttributeCode(), attrValue);
@@ -341,12 +391,14 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         return rez;
     }
 
+    @Override
     public Collection<AttrValue> getAllAttributes() {
-        return new ArrayList<AttrValue>(attributes);
+        return new ArrayList<>(attributes);
     }
 
 
     /** {@inheritDoc} */
+    @Override
     public Seo getSeo() {
         SeoEntity seo = getSeoInternal();
         if (seo == null) {
@@ -357,10 +409,12 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSeo(final Seo seo) {
         this.setSeoInternal((SeoEntity) seo);
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

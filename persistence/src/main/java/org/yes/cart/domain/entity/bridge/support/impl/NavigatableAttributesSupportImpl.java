@@ -42,6 +42,7 @@ public class NavigatableAttributesSupportImpl implements NavigatableAttributesSu
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getAllNavigatableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.NAVIGATION.UNIQUE", Boolean.TRUE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
@@ -55,6 +56,7 @@ public class NavigatableAttributesSupportImpl implements NavigatableAttributesSu
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getAllSearchableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.SEARCH.UNIQUE", Boolean.TRUE, Boolean.FALSE);
         return new HashSet<String>(allowedAttributeNames);
@@ -63,6 +65,7 @@ public class NavigatableAttributesSupportImpl implements NavigatableAttributesSu
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getAllSearchablePrimaryAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.SEARCH.PRIMARY.UNIQUE", Boolean.TRUE, Boolean.TRUE);
         return new HashSet<String>(allowedAttributeNames);
@@ -71,6 +74,7 @@ public class NavigatableAttributesSupportImpl implements NavigatableAttributesSu
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getAllStorableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.STORE.UNIQUE", Boolean.TRUE);
         return new HashSet<String>(allowedAttributeNames);
@@ -79,6 +83,7 @@ public class NavigatableAttributesSupportImpl implements NavigatableAttributesSu
     /**
      * {@inheritDoc}
      */
+    @Override
     public Attribute getByAttributeCode(final String attributeCode) {
         final Attribute attribute = attributeDao.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", attributeCode);
         if (attribute != null) {

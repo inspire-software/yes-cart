@@ -29,8 +29,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -52,20 +51,20 @@ public class PriceTierTreeTest {
     public void testXmlSerialization() {
         PriceTierTree tree = new PriceTierTreeImpl();
 
-        List<PriceTierNode> list = new ArrayList<PriceTierNode>();
+        List<PriceTierNode> list = new ArrayList<>();
         list.add(new PriceTierNodeImpl(BigDecimal.ZERO, BigDecimal.ONE));
         list.add(new PriceTierNodeImpl(BigDecimal.ONE, BigDecimal.TEN));
         tree.addPriceTierNode("EUR", list);
 
-        list = new ArrayList<PriceTierNode>();
+        list = new ArrayList<>();
         list.add(new PriceTierNodeImpl(BigDecimal.ONE, new BigDecimal(2)));
         list.add(new PriceTierNodeImpl(new BigDecimal(2), new BigDecimal(9)));
         tree.addPriceTierNode("USD", list);
 
         String result = getXStream().toXML(tree);
         assertNotNull(result);
-        assertTrue(result.indexOf("USD") > -1);
-        assertTrue(result.indexOf("EUR") > -1);
-        assertTrue(result.indexOf("UAH") == -1);
+        assertTrue(result.contains("USD"));
+        assertTrue(result.contains("EUR"));
+        assertFalse(result.contains("UAH"));
     }
 }

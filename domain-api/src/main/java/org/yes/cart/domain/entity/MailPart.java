@@ -23,6 +23,16 @@ package org.yes.cart.domain.entity;
  */
 public interface MailPart extends Auditable {
 
+    /**
+     * @return mail part PK
+     */
+    long getMailPartId();
+
+    /**
+     * @param mailPartId mail part PK
+     */
+    void setMailPartId(final long mailPartId);
+
 
     /**
      * @return resource id

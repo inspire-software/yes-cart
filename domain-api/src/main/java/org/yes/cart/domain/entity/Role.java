@@ -23,7 +23,7 @@ package org.yes.cart.domain.entity;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface Role extends Codable, Guidable {
+public interface Role extends Auditable, Codable, Guidable {
 
     /**
      * @return unique role code

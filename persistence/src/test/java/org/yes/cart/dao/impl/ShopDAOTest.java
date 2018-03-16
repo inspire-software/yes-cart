@@ -42,10 +42,11 @@ import static org.junit.Assert.*;
 public class ShopDAOTest extends AbstractTestDAO {
 
     private GenericDAO<Shop, Long> shopDao;
-    private Set<Long> cleanupPks = new HashSet<Long>();
+    private final Set<Long> cleanupPks = new HashSet<>();
     private static final String URL1 = "www.shop1.yescart.org";
     private static final String URL2 = "shop1.yescart.org";
 
+    @Override
     @Before
     public void setUp()  {
         shopDao = (GenericDAO<Shop, Long>) ctx().getBean(DaoServiceBeanKeys.SHOP_DAO);
@@ -55,6 +56,7 @@ public class ShopDAOTest extends AbstractTestDAO {
     @After
     public void cleanUp() {
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 for (Long pk : cleanupPks) {
                     Shop shop = shopDao.findById(pk);
@@ -70,6 +72,7 @@ public class ShopDAOTest extends AbstractTestDAO {
     public void testShopDao() {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 Shop shop = new ShopEntity();

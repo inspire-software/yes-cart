@@ -48,82 +48,102 @@ public class ProductEnsembleOptionEntity implements ProductEnsembleOption, java.
 
 
 
+    @Override
     public int getQty() {
         return this.qty;
     }
 
+    @Override
     public void setQty(int qty) {
         this.qty = qty;
     }
 
+    @Override
     public Product getProduct() {
         return this.product;
     }
 
+    @Override
     public void setProduct(Product product) {
         this.product = product;
     }
 
+    @Override
     public ProductSku getSku() {
         return this.sku;
     }
 
+    @Override
     public void setSku(ProductSku sku) {
         this.sku = sku;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getEnsembleOptId() {
         return this.ensembleOptId;
     }
 
+    @Override
     public long getId() {
         return this.ensembleOptId;
     }
 
+    @Override
     public void setEnsembleOptId(long ensembleOptId) {
         this.ensembleOptId = ensembleOptId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

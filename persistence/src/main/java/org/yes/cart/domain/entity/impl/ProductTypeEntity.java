@@ -37,8 +37,8 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     private String name;
     private String displayName;
     private String description;
-    private Collection<ProdTypeAttributeViewGroup> attributeViewGroup = new ArrayList<ProdTypeAttributeViewGroup>(0);
-    private Collection<ProductTypeAttr> attributes = new ArrayList<ProductTypeAttr>(0);
+    private Collection<ProdTypeAttributeViewGroup> attributeViewGroup = new ArrayList<>(0);
+    private Collection<ProductTypeAttr> attributes = new ArrayList<>(0);
     private String uitemplate;
     private String uisearchtemplate;
     private boolean service;
@@ -57,154 +57,192 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
 
 
 
+    @Override
     public String getName() {
         return this.name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getDisplayName() {
         return displayName;
     }
 
+    @Override
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
 
+    @Override
     public String getDescription() {
         return this.description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Override
     public Collection<ProdTypeAttributeViewGroup> getAttributeViewGroup() {
         return this.attributeViewGroup;
     }
 
+    @Override
     public void setAttributeViewGroup(Collection<ProdTypeAttributeViewGroup> attributeViewGroup) {
         this.attributeViewGroup = attributeViewGroup;
     }
 
+    @Override
     public Collection<ProductTypeAttr> getAttributes() {
         return this.attributes;
     }
 
+    @Override
     public void setAttributes(Collection<ProductTypeAttr> attributes) {
         this.attributes = attributes;
     }
 
+    @Override
     public String getUitemplate() {
         return this.uitemplate;
     }
 
+    @Override
     public void setUitemplate(String uitemplate) {
         this.uitemplate = uitemplate;
     }
 
+    @Override
     public String getUisearchtemplate() {
         return this.uisearchtemplate;
     }
 
+    @Override
     public void setUisearchtemplate(String uisearchtemplate) {
         this.uisearchtemplate = uisearchtemplate;
     }
 
+    @Override
     public boolean isService() {
         return this.service;
     }
 
+    @Override
     public void setService(boolean service) {
         this.service = service;
     }
 
+    @Override
     public boolean isEnsemble() {
         return this.ensemble;
     }
 
+    @Override
     public void setEnsemble(boolean ensemble) {
         this.ensemble = ensemble;
     }
 
+    @Override
     public boolean isShippable() {
         return this.shippable;
     }
 
+    @Override
     public void setShippable(boolean shippable) {
         this.shippable = shippable;
     }
 
+    @Override
     public boolean isDigital() {
         return this.digital;
     }
 
+    @Override
     public void setDigital(boolean digital) {
         this.digital = digital;
     }
 
+    @Override
     public boolean isDownloadable() {
         return this.downloadable;
     }
 
+    @Override
     public void setDownloadable(boolean downloadable) {
         this.downloadable = downloadable;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getProducttypeId() {
         return this.producttypeId;
     }
 
+    @Override
     public long getId() {
         return this.producttypeId;
     }
 
+    @Override
     public void setProducttypeId(long producttypeId) {
         this.producttypeId = producttypeId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

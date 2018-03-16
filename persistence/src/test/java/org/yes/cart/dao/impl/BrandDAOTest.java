@@ -41,6 +41,7 @@ public class BrandDAOTest extends AbstractTestDAO {
     private GenericDAO<Brand, Long> brandDAO;
 
 
+    @Override
     @Before
     public void setUp() {
         attributeDAO = (GenericDAO<Attribute, Long>) ctx().getBean(DaoServiceBeanKeys.ATTRIBUTE_DAO);
@@ -52,6 +53,7 @@ public class BrandDAOTest extends AbstractTestDAO {
     @Test
     public void testAddEmptyBrand() {
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 
@@ -87,6 +89,7 @@ public class BrandDAOTest extends AbstractTestDAO {
     public void testAddBrandWithAttributeValues() {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 Brand entityWithAttributes = new BrandEntity();

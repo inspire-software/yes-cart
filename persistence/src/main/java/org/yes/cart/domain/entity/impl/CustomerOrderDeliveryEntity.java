@@ -67,7 +67,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     private String lastExportStatus;
     private String lastExportDeliveryStatus;
 
-    private Collection<CustomerOrderDeliveryDet> detail = new ArrayList<CustomerOrderDeliveryDet>(0);
+    private Collection<CustomerOrderDeliveryDet> detail = new ArrayList<>(0);
     private CarrierSla carrierSla;
     private CustomerOrder customerOrder;
     private String deliveryGroup;
@@ -82,274 +82,342 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
 
 
 
+    @Override
     public String getDeliveryNum() {
         return this.deliveryNum;
     }
 
+    @Override
     public void setDeliveryNum(String deliveryNum) {
         this.deliveryNum = deliveryNum;
     }
 
+    @Override
     public String getRefNo() {
         return this.refNo;
     }
 
+    @Override
     public void setRefNo(String refNo) {
         this.refNo = refNo;
     }
 
+    @Override
     public BigDecimal getPrice() {
         return this.price;
     }
 
+    @Override
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
+    @Override
     public BigDecimal getNetPrice() {
         return netPrice;
     }
 
+    @Override
     public void setNetPrice(final BigDecimal netPrice) {
         this.netPrice = netPrice;
     }
 
+    @Override
     public BigDecimal getGrossPrice() {
         return grossPrice;
     }
 
+    @Override
     public void setGrossPrice(final BigDecimal grossPrice) {
         this.grossPrice = grossPrice;
     }
 
+    @Override
     public BigDecimal getTaxRate() {
         return taxRate;
     }
 
+    @Override
     public void setTaxRate(final BigDecimal taxRate) {
         this.taxRate = taxRate;
     }
 
+    @Override
     public String getTaxCode() {
         return taxCode;
     }
 
+    @Override
     public void setTaxCode(final String taxCode) {
         this.taxCode = taxCode;
     }
 
+    @Override
     public boolean isTaxExclusiveOfPrice() {
         return taxExclusiveOfPrice;
     }
 
+    @Override
     public void setTaxExclusiveOfPrice(final boolean taxExclusiveOfPrice) {
         this.taxExclusiveOfPrice = taxExclusiveOfPrice;
     }
 
+    @Override
     public BigDecimal getListPrice() {
         return listPrice;
     }
 
+    @Override
     public void setListPrice(final BigDecimal listPrice) {
         this.listPrice = listPrice;
     }
 
+    @Override
     public boolean isPromoApplied() {
         return promoApplied;
     }
 
+    @Override
     public void setPromoApplied(final boolean promoApplied) {
         this.promoApplied = promoApplied;
     }
 
+    @Override
     public String getAppliedPromo() {
         return appliedPromo;
     }
 
+    @Override
     public void setAppliedPromo(final String appliedPromo) {
         this.appliedPromo = appliedPromo;
     }
 
+    @Override
     public String getDeliveryStatus() {
         return this.deliveryStatus;
     }
 
+    @Override
     public void setDeliveryStatus(String deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
     }
 
+    @Override
     public String getDeliveryRemarks() {
         return deliveryRemarks;
     }
 
+    @Override
     public void setDeliveryRemarks(final String deliveryRemarks) {
         this.deliveryRemarks = deliveryRemarks;
     }
 
+    @Override
     public LocalDateTime getDeliveryEstimatedMin() {
         return deliveryEstimatedMin;
     }
 
+    @Override
     public void setDeliveryEstimatedMin(final LocalDateTime deliveryEstimatedMin) {
         this.deliveryEstimatedMin = deliveryEstimatedMin;
     }
 
+    @Override
     public LocalDateTime getDeliveryEstimatedMax() {
         return deliveryEstimatedMax;
     }
 
+    @Override
     public void setDeliveryEstimatedMax(final LocalDateTime deliveryEstimatedMax) {
         this.deliveryEstimatedMax = deliveryEstimatedMax;
     }
 
+    @Override
     public LocalDateTime getDeliveryGuaranteed() {
         return deliveryGuaranteed;
     }
 
+    @Override
     public void setDeliveryGuaranteed(final LocalDateTime deliveryGuaranteed) {
         this.deliveryGuaranteed = deliveryGuaranteed;
     }
 
+    @Override
     public LocalDateTime getDeliveryConfirmed() {
         return deliveryConfirmed;
     }
 
+    @Override
     public void setDeliveryConfirmed(final LocalDateTime deliveryConfirmed) {
         this.deliveryConfirmed = deliveryConfirmed;
     }
 
+    @Override
     public LocalDateTime getRequestedDeliveryDate() {
         return requestedDeliveryDate;
     }
 
+    @Override
     public void setRequestedDeliveryDate(final LocalDateTime requestedDeliveryDate) {
         this.requestedDeliveryDate = requestedDeliveryDate;
     }
 
+    @Override
     public String getEligibleForExport() {
         return eligibleForExport;
     }
 
+    @Override
     public void setEligibleForExport(final String eligibleForExport) {
         this.eligibleForExport = eligibleForExport;
     }
 
+    @Override
     public boolean isBlockExport() {
         return blockExport;
     }
 
+    @Override
     public void setBlockExport(final boolean blockExport) {
         this.blockExport = blockExport;
     }
 
+    @Override
     public Instant getLastExportDate() {
         return lastExportDate;
     }
 
+    @Override
     public void setLastExportDate(final Instant lastExportDate) {
         this.lastExportDate = lastExportDate;
     }
 
+    @Override
     public String getLastExportStatus() {
         return lastExportStatus;
     }
 
+    @Override
     public void setLastExportStatus(final String lastExportStatus) {
         this.lastExportStatus = lastExportStatus;
     }
 
+    @Override
     public String getLastExportDeliveryStatus() {
         return lastExportDeliveryStatus;
     }
 
+    @Override
     public void setLastExportDeliveryStatus(final String lastExportDeliveryStatus) {
         this.lastExportDeliveryStatus = lastExportDeliveryStatus;
     }
 
+    @Override
     public Collection<CustomerOrderDeliveryDet> getDetail() {
         return this.detail;
     }
 
+    @Override
     public void setDetail(Collection<CustomerOrderDeliveryDet> detail) {
         this.detail = detail;
     }
 
+    @Override
     public CarrierSla getCarrierSla() {
         return this.carrierSla;
     }
 
+    @Override
     public void setCarrierSla(CarrierSla carrierSla) {
         this.carrierSla = carrierSla;
     }
 
+    @Override
     public CustomerOrder getCustomerOrder() {
         return this.customerOrder;
     }
 
+    @Override
     public void setCustomerOrder(CustomerOrder customerOrder) {
         this.customerOrder = customerOrder;
     }
 
+    @Override
     public String getDeliveryGroup() {
         return this.deliveryGroup;
     }
 
+    @Override
     public void setDeliveryGroup(String deliveryGroup) {
         this.deliveryGroup = deliveryGroup;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getCustomerOrderDeliveryId() {
         return this.customerOrderDeliveryId;
     }
 
+    @Override
     public long getId() {
         return this.customerOrderDeliveryId;
     }
 
+    @Override
     public void setCustomerOrderDeliveryId(long customerOrderDeliveryId) {
         this.customerOrderDeliveryId = customerOrderDeliveryId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

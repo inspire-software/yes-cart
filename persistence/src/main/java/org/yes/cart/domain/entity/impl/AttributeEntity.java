@@ -62,171 +62,213 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
 
+    @Override
     public boolean isMandatory() {
         return this.mandatory;
     }
 
+    @Override
     public void setMandatory(boolean mandatory) {
         this.mandatory = mandatory;
     }
 
+    @Override
     public boolean isSecure() {
         return secure;
     }
 
+    @Override
     public void setSecure(final boolean secure) {
         this.secure = secure;
     }
 
+    @Override
     public boolean isAllowduplicate() {
         return this.allowduplicate;
     }
 
+    @Override
     public void setAllowduplicate(boolean allowduplicate) {
         this.allowduplicate = allowduplicate;
     }
 
+    @Override
     public boolean isAllowfailover() {
         return this.allowfailover;
     }
 
+    @Override
     public void setAllowfailover(boolean allowfailover) {
         this.allowfailover = allowfailover;
     }
 
+    @Override
     public String getVal() {
         return this.val;
     }
 
+    @Override
     public void setVal(String val) {
         this.val = val;
     }
 
+    @Override
     public String getRegexp() {
         return this.regexp;
     }
 
+    @Override
     public void setRegexp(String regexp) {
         this.regexp = regexp;
     }
 
+    @Override
     public String getValidationFailedMessage() {
         return this.validationFailedMessage;
     }
 
+    @Override
     public void setValidationFailedMessage(String validationFailedMessage) {
         this.validationFailedMessage = validationFailedMessage;
     }
 
+    @Override
     public int getRank() {
         return this.rank;
     }
 
+    @Override
     public void setRank(int rank) {
         this.rank = rank;
     }
 
+    @Override
     public String getChoiceData() {
         return this.choiceData;
     }
 
+    @Override
     public void setChoiceData(String choiceData) {
         this.choiceData = choiceData;
     }
 
+    @Override
     public String getName() {
         return this.name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getDisplayName() {
         return this.displayName;
     }
 
+    @Override
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
+    @Override
     public String getDescription() {
         return this.description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Override
     public Etype getEtype() {
         return this.etype;
     }
 
+    @Override
     public void setEtype(Etype etype) {
         this.etype = etype;
     }
 
+    @Override
     public AttributeGroup getAttributeGroup() {
         return this.attributeGroup;
     }
 
+    @Override
     public void setAttributeGroup(AttributeGroup attributeGroup) {
         this.attributeGroup = attributeGroup;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getAttributeId() {
         return this.attributeId;
     }
 
+    @Override
     public long getId() {
         return this.attributeId;
     }
 
 
+    @Override
     public void setAttributeId(long attributeId) {
         this.attributeId = attributeId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -235,42 +277,52 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.version = version;
     }
 
+    @Override
     public String getCode() {
         return this.code;
     }
 
+    @Override
     public void setCode(String code) {
         this.code = code;
     }
 
+    @Override
     public boolean isStore() {
         return store;
     }
 
+    @Override
     public void setStore(final boolean store) {
         this.store = store;
     }
 
+    @Override
     public boolean isSearch() {
         return search;
     }
 
+    @Override
     public void setSearch(final boolean search) {
         this.search = search;
     }
 
+    @Override
     public boolean isPrimary() {
         return primary;
     }
 
+    @Override
     public void setPrimary(final boolean primary) {
         this.primary = primary;
     }
 
+    @Override
     public boolean isNavigation() {
         return navigation;
     }
 
+    @Override
     public void setNavigation(final boolean navigation) {
         this.navigation = navigation;
     }
@@ -288,11 +340,13 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         return (int) (attributeId ^ (attributeId >>> 32));
     }
 
+    @Override
     public  org.yes.cart.domain.entity.Attribute copy() throws CloneNotSupportedException {
         return this.clone();
 
     }
 
+    @Override
     protected AttributeEntity clone() throws CloneNotSupportedException {
         return new AttributeEntity(
                 this.isMandatory(),

@@ -48,11 +48,12 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
         this.categoryService = categoryService;
     }
 
-    private final static Pair<List<Long>, Boolean> SHOP = new Pair<List<Long>, Boolean>(null, Boolean.FALSE);
+    private final static Pair<List<Long>, Boolean> SHOP = new Pair<>(null, Boolean.FALSE);
 
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-searchCategoriesIds")
     public Pair<List<Long>, Boolean> getSearchCategoriesIds(final long categoryId, final long customerShopId) {
 
@@ -101,7 +102,7 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
 
                 final List<Long> catIds = categoryService.getCategoryIdAndLinkId(categoryId);
 
-                return new Pair<List<Long>, Boolean>(catIds, lookInSubCats);
+                return new Pair<>(catIds, lookInSubCats);
             }
         }
         return SHOP;
@@ -112,6 +113,7 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-categoryNewArrivalDate")
     public int getCategoryNewArrivalOffsetDays(final long categoryId, final long customerShopId) {
 

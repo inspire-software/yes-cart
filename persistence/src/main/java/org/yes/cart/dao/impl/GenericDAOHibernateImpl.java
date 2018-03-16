@@ -78,6 +78,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public EntityFactory getEntityFactory() {
         return entityFactory;
     }
@@ -85,6 +86,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public <I> I getEntityIdentifier(final Object entity) {
         if (entity == null) {
             // That's ok - it is null
@@ -105,6 +107,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public T findById(PK id) {
         return findById(id, false);
     }
@@ -112,13 +115,14 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public T findById(final PK id, final boolean lock) {
         T entity;
         if (lock) {
-            entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id, LockOptions.UPGRADE);
+            entity = sessionFactory.getCurrentSession().get(getPersistentClass(), id, LockOptions.UPGRADE);
         } else {
-            entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id);
+            entity = sessionFactory.getCurrentSession().get(getPersistentClass(), id);
         }
         return entity;
     }
@@ -126,9 +130,10 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public T findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
-        List<T> rez = (List<T>) this.findByNamedQuery(namedQueryName, parameters);
+        List<T> rez = this.findByNamedQuery(namedQueryName, parameters);
         if (!rez.isEmpty()) {
             return rez.get(0);
         }
@@ -138,9 +143,10 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public T findSingleByNamedQueryCached(final String namedQueryName, final Object... parameters) {
-        List<T> rez = (List<T>) this.findByNamedQueryCached(namedQueryName, parameters);
+        List<T> rez = this.findByNamedQueryCached(namedQueryName, parameters);
         if (!rez.isEmpty()) {
             return rez.get(0);
         }
@@ -150,6 +156,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getScalarResultByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         setQueryParameters(query, parameters);
@@ -159,6 +166,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object> findByQuery(final String hsqlQuery, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
         setQueryParameters(query, parameters);
@@ -169,17 +177,19 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public ResultsIterator<Object> findByQueryIterator(final String hsqlQuery, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
         if (parameters != null) {
             setQueryParameters(query, parameters);
         }
-        return new ResultsIteratorImpl<Object>(query.scroll(ScrollMode.FORWARD_ONLY));
+        return new ResultsIteratorImpl<>(query.scroll(ScrollMode.FORWARD_ONLY));
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object findSingleByQuery(final String hsqlQuery, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
         setQueryParameters(query, parameters);
@@ -203,6 +213,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<T> findByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
@@ -215,6 +226,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public ResultsIterator<T> findByNamedQueryIterator(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
@@ -229,12 +241,13 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
                      would fail at Derby ResultSet level complaining about type TYPE_SCROLL_INSENSITIVE
 
          */
-        return new ResultsIteratorImpl<T>(query.scroll(ScrollMode.SCROLL_INSENSITIVE));
+        return new ResultsIteratorImpl<>(query.scroll(ScrollMode.SCROLL_INSENSITIVE));
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<T> findByNamedQueryForUpdate(final String namedQueryName, final int timeout, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
@@ -251,6 +264,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<T> findByNamedQueryCached(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
@@ -263,6 +277,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<Object> findQueryObjectByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
@@ -273,17 +288,19 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public ResultsIterator<Object> findQueryObjectByNamedQueryIterator(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         setQueryParameters(query, parameters);
         final ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
-        return new ResultsIteratorImpl<Object>(results);
+        return new ResultsIteratorImpl<>(results);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<Object> findQueryObjectRangeByNamedQuery(final String namedQueryName, final int firstResult, final int maxResults, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
@@ -296,6 +313,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<Object[]> findQueryObjectsByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
@@ -306,6 +324,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<Object[]> findQueryObjectsRangeByNamedQuery(final String namedQueryName, final int firstResult, final int maxResults, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
@@ -318,6 +337,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<T> findRangeByNamedQuery(final String namedQueryName,
                                          final int firstResult,
@@ -334,6 +354,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<T> findAll() {
         final Query query = sessionFactory.getCurrentSession().createQuery(this.selectAllHql);
@@ -344,15 +365,17 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public ResultsIterator<T> findAllIterator() {
         final Query query = sessionFactory.getCurrentSession().createQuery(this.selectAllHql);
         final ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
-        return new ResultsIteratorImpl<T>(results);
+        return new ResultsIteratorImpl<>(results);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public T saveOrUpdate(final T entity) {
         sessionFactory.getCurrentSession().saveOrUpdate(entity);
@@ -363,6 +386,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public T create(final T entity) {
         sessionFactory.getCurrentSession().saveOrUpdate(entity);
@@ -372,6 +396,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public T update(final T entity) {
         sessionFactory.getCurrentSession().saveOrUpdate(entity);
@@ -381,6 +406,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public void delete(final Object entity) {
         if (entity != null) {
             sessionFactory.getCurrentSession().delete(entity);
@@ -391,6 +417,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public void refresh(final Object entity) {
         sessionFactory.getCurrentSession().refresh(entity);
     }
@@ -398,6 +425,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public void evict(Object entity) {
         sessionFactory.getCurrentSession().evict(entity);
 
@@ -406,6 +434,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<T> findByCriteria(final String eCriteria, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(eCriteria != null ? this.selectAllHql.concat(eCriteria) : this.selectAllHql);
@@ -416,6 +445,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<T> findRangeByCriteria(final String eCriteria, final int firstResult, final int maxResults, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(eCriteria != null ? this.selectAllHql.concat(eCriteria) : this.selectAllHql);
@@ -438,6 +468,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public T findSingleByCriteria(final String eCriteria, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(eCriteria != null ? this.selectAllHql.concat(eCriteria) : this.selectAllHql);
         setQueryParameters(query, parameters);
@@ -456,6 +487,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public int executeNativeUpdate(final String nativeQuery) {
         NativeQuery sqlQuery = sessionFactory.getCurrentSession().createNativeQuery(nativeQuery);
         return sqlQuery.executeUpdate();
@@ -464,6 +496,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public List executeNativeQuery(final String nativeQuery) {
         NativeQuery sqlQuery = sessionFactory.getCurrentSession().createNativeQuery(nativeQuery);
         return sqlQuery.list();
@@ -472,6 +505,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public List executeHsqlQuery(final String hsql) {
         Query query = sessionFactory.getCurrentSession().createQuery(hsql);
         return query.list();
@@ -481,6 +515,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public int executeHsqlUpdate(final String hsql, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(hsql);
         setQueryParameters(query, parameters);
@@ -491,6 +526,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public int executeNativeUpdate(final String nativeQuery, final Object... parameters) {
         NativeQuery sqlQuery = sessionFactory.getCurrentSession().createNativeQuery(nativeQuery);
         setQueryParameters(sqlQuery, parameters);
@@ -501,6 +537,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public int executeUpdate(final String namedQueryName, final Object... parameters) {
         final Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         setQueryParameters(query, parameters);
@@ -524,6 +561,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public void flushClear() {
         sessionFactory.getCurrentSession().flush();
         sessionFactory.getCurrentSession().clear();
@@ -532,6 +570,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public void flush() {
         sessionFactory.getCurrentSession().flush();
     }
@@ -539,6 +578,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
     /**
      * {@inheritDoc}
      */
+    @Override
     public void clear() {
         sessionFactory.getCurrentSession().clear();
     }

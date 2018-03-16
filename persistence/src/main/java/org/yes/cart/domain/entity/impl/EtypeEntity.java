@@ -41,75 +41,93 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
     }
 
 
+    @Override
     public String getJavatype() {
         return this.javatype;
     }
 
+    @Override
     public void setJavatype(String javatype) {
         this.javatype = javatype;
     }
 
+    @Override
     public String getBusinesstype() {
         return this.businesstype;
     }
 
+    @Override
     public void setBusinesstype(String businesstype) {
         this.businesstype = businesstype;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getEtypeId() {
         return this.etypeId;
     }
 
+    @Override
     public long getId() {
         return this.etypeId;
     }
 
 
+    @Override
     public void setEtypeId(long etypeId) {
         this.etypeId = etypeId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

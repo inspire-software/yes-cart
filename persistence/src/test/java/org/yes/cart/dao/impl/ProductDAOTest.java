@@ -57,6 +57,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     private GenericDAO<SkuWarehouse, Long> skuWareHouseDao;
     private GenericDAO<Warehouse, Long> warehouseDao;
 
+    @Override
     @Before
     public void setUp()  {
         productDao = (GenericFTSCapableDAO<Product, Long, Object>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO);
@@ -76,6 +77,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     public void testCreateNewProductNoSkuNoCategory() throws InterruptedException {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -140,6 +142,7 @@ public class ProductDAOTest extends AbstractTestDAO {
 
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -179,7 +182,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 // assign it to category
                 ProductCategory productCategory = assignToCategory(product, 128L);
 
-                List<Product> products = null;
+                List<Product> products;
 
                 final SearchQueryBuilder<Query> queryBuilder = new ProductSkuCodeSearchQueryBuilder();
                 final List<Query> query = queryBuilder.createQueryChain(null, null, Collections.singletonList("SONY_PRODUCT_CODE"));
@@ -210,6 +213,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     public void testCreateNewProductWithStandardAvailabilityAndThenMakeItOutOfStock() throws InterruptedException {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -249,7 +253,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 // assign it to category
                 ProductCategory productCategory = assignToCategory(product, 128L);
 
-                List<Product> products = null;
+                List<Product> products;
 
                 final SearchQueryBuilder<Query> skuCodeQueryBuilder = new ProductSkuCodeSearchQueryBuilder();
                 final List<Query> queryBySku = skuCodeQueryBuilder.createQueryChain(null, null, Collections.singletonList("SONY_PRODUCT_CODE"));
@@ -293,6 +297,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     public void testCreateNewProductWithPreorderAvailabilityOutOfStock() throws InterruptedException {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -326,7 +331,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 // assign it to category
                 ProductCategory productCategory = assignToCategory(product, 128L);
 
-                List<Product> products = null;
+                List<Product> products;
 
                 final SearchQueryBuilder<Query> queryBuilder = new ProductSkuCodeSearchQueryBuilder();
                 final List<Query> query = queryBuilder.createQueryChain(null, null, Collections.singletonList("SONY_PRODUCT_CODE"));
@@ -358,6 +363,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     public void testCreateNewProductWithBackorderAvailabilityOutOfStock() throws InterruptedException {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -389,7 +395,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 // assign it to category
                 ProductCategory productCategory = assignToCategory(product, 128L);
 
-                List<Product> products = null;
+                List<Product> products;
 
                 final SearchQueryBuilder<Query> queryBuilder = new ProductSkuCodeSearchQueryBuilder();
                 final List<Query> query = queryBuilder.createQueryChain(null, null, Collections.singletonList("SONY_PRODUCT_CODE"));
@@ -421,6 +427,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     public void testCreateNewProductWithAlwaysAvailabilityOutOfStock() throws InterruptedException {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false, 1000);
@@ -452,7 +459,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 // assign it to category
                 ProductCategory productCategory = assignToCategory(product, 128L);
 
-                List<Product> products = null;
+                List<Product> products;
 
                 final SearchQueryBuilder queryBuilder = new ProductSkuCodeSearchQueryBuilder();
                 final List<Query> query = queryBuilder.createQueryChain(null, null, Collections.singletonList("SONY_PRODUCT_CODE"));

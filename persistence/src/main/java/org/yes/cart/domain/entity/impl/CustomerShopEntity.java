@@ -45,26 +45,32 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
     }
 
 
+    @Override
     public Customer getCustomer() {
         return this.customer;
     }
 
+    @Override
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
+    @Override
     public Shop getShop() {
         return this.shop;
     }
 
+    @Override
     public void setShop(Shop shop) {
         this.shop = shop;
     }
 
+    @Override
     public boolean isDisabled() {
         return disabled;
     }
 
+    @Override
     public void setDisabled(final boolean disabled) {
         this.disabled = disabled;
     }
@@ -101,14 +107,17 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getCustomerShopId() {
         return this.customerShopId;
     }
@@ -118,6 +127,7 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
         return this.customerShopId;
     }
 
+    @Override
     public void setCustomerShopId(long customerShopId) {
         this.customerShopId = customerShopId;
     }

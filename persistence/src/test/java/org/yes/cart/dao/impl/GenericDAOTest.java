@@ -38,6 +38,7 @@ public class GenericDAOTest extends AbstractTestDAO {
     private GenericDAO<Brand, Long> brandDao;
     private EntityFactory entityFactory;
 
+    @Override
     @Before
     public void setUp()  {
         brandDao = (GenericDAO<Brand, Long>) ctx().getBean(DaoServiceBeanKeys.BRAND_DAO);
@@ -49,6 +50,7 @@ public class GenericDAOTest extends AbstractTestDAO {
     public void testUpdateWithNativeQuery() {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 String sql = "update tbrand set description = 'zzz' where brand_id = :1";
@@ -77,6 +79,7 @@ public class GenericDAOTest extends AbstractTestDAO {
     public void testDeleteWithNativeQuery() {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 Brand brand = entityFactory.getByIface(Brand.class);

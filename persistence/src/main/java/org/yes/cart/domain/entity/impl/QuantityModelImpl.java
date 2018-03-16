@@ -87,66 +87,79 @@ public class QuantityModelImpl implements QuantityModel {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean canOrderLess() {
         return canOrderLess;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean canOrderMore() {
         return canOrderMore;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean hasMin() {
         return hasMin;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean hasMax() {
         return hasMax;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean hasStep() {
         return hasStep;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean hasMinMaxStep() {
         return hasMin || hasStep || hasMax;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getMin() {
         return min;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getMinOrder() {
         return minOrder;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getMax() {
         return max;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getMaxOrder() {
         return maxOrder;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getStep() {
         return step;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getCartQty() {
         return cartQty;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getValidAddQty(final BigDecimal addQty) {
         final BigDecimal toAdd;
         if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(this.minOrder, addQty)) {
@@ -157,7 +170,7 @@ public class QuantityModelImpl implements QuantityModel {
         final BigDecimal rem = cartQty.add(toAdd).setScale(step.scale(), RoundingMode.HALF_UP); // trial add
 
         if (MoneyUtils.isFirstBiggerThanSecond(rem, max)) { // check we are not over max
-            return max.subtract(cartQty).setScale(step.scale());
+            return max.subtract(cartQty).setScale(step.scale(), RoundingMode.FLOOR);
         }
 
         final BigDecimal multiplier = rem.subtract(min).divide(step, 0, RoundingMode.FLOOR);
@@ -165,6 +178,7 @@ public class QuantityModelImpl implements QuantityModel {
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getValidRemoveQty(final BigDecimal remQty) {
         final BigDecimal toRemove;
         if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(this.step, remQty)) {
@@ -183,6 +197,7 @@ public class QuantityModelImpl implements QuantityModel {
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getValidSetQty(final BigDecimal qty) {
         if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(min, qty)) {
             return min;

@@ -48,7 +48,7 @@ public class AuditInterceptor extends EmptyInterceptor {
 
     private final Logger LOG = LoggerFactory.getLogger("AUDIT");
 
-    private Map<String, Set<String>> prohibitedFields = new HashMap<String, Set<String>>();
+    private final Map<String, Set<String>> prohibitedFields = new HashMap<>();
 
     public AuditInterceptor() {
         // set logging headers

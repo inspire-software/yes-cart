@@ -27,7 +27,7 @@ import org.yes.cart.domain.misc.navigation.range.impl.RangeNodeImpl;
 import org.yes.cart.stream.xml.XStreamProvider;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -75,9 +75,9 @@ public class RangeListImplTest {
     @Test
     public void testXmlSerialization() {
         RangeList rangeList = new RangeListImpl();
-        List<RangeNode> nodes = new ArrayList<RangeNode>();
+        List<RangeNode> nodes = new ArrayList<>();
         nodes.add(new RangeNodeImpl("0.001", "0.999"));
-        nodes.get(0).setI18n(new ArrayList<DisplayValue>(Arrays.asList(
+        nodes.get(0).setI18n(new ArrayList<>(Collections.singletonList(
                 (DisplayValue) new DisplayValueImpl("en", "from val")
         )));
         nodes.add(new RangeNodeImpl("1.000", "1.999"));

@@ -18,7 +18,6 @@ package org.yes.cart.utils;
 
 import org.hibernate.jpa.TypedParameterValue;
 import org.hibernate.type.IntegerType;
-import org.hibernate.type.StringType;
 import org.junit.Test;
 
 import java.util.Collection;

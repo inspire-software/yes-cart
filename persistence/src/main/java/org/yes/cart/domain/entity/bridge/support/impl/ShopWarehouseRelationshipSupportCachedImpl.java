@@ -39,12 +39,14 @@ public class ShopWarehouseRelationshipSupportCachedImpl implements ShopWarehouse
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "shopService-allShops")
     public List<Shop> getAll() {
         return support.getAll();
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "shopService-allShopsFulfilmentMap")
     public Map<Long, Set<Long>> getShopsByFulfilmentMap() {
         return support.getShopsByFulfilmentMap();
@@ -53,12 +55,14 @@ public class ShopWarehouseRelationshipSupportCachedImpl implements ShopWarehouse
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "shopService-shopWarehousesIds")
     public Set<Long> getShopWarehouseIds(final long shopId, final boolean includeDisabled) {
         return support.getShopWarehouseIds(shopId, includeDisabled);
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "shopService-shopWarehouses")
     public List<Warehouse> getShopWarehouses(final long shopId, final boolean includeDisabled) {
         return support.getShopWarehouses(shopId, includeDisabled);

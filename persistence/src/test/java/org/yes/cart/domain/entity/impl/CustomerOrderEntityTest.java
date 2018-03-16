@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entity.impl;
 
 import org.junit.Test;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class CustomerOrderEntityTest {
         final CustomerOrderEntity order = new CustomerOrderEntity();
         order.setGrossPrice(new BigDecimal("80.00"));
         order.setNetPrice(new BigDecimal("66.67"));
-        order.setDelivery(new ArrayList<CustomerOrderDelivery>());
+        order.setDelivery(new ArrayList<>());
 
         final CustomerOrderDeliveryEntity delivery = new CustomerOrderDeliveryEntity();
         delivery.setGrossPrice(new BigDecimal("20.00"));

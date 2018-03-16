@@ -37,58 +37,72 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
     }
 
 
+    @Override
     public String getUri() {
         return this.uri;
     }
 
+    @Override
     public void setUri(String uri) {
         this.uri = uri;
     }
 
+    @Override
     public String getTitle() {
         return this.title;
     }
 
+    @Override
     public void setTitle(String title) {
         this.title = title;
     }
 
+    @Override
     public String getDisplayTitle() {
         return displayTitle;
     }
 
+    @Override
     public void setDisplayTitle(final String displayTitle) {
         this.displayTitle = displayTitle;
     }
 
+    @Override
     public String getMetakeywords() {
         return this.metakeywords;
     }
 
+    @Override
     public void setMetakeywords(String metakeywords) {
         this.metakeywords = metakeywords;
     }
 
+    @Override
     public String getDisplayMetakeywords() {
         return displayMetakeywords;
     }
 
+    @Override
     public void setDisplayMetakeywords(final String displayMetakeywords) {
         this.displayMetakeywords = displayMetakeywords;
     }
 
+    @Override
     public String getMetadescription() {
         return this.metadescription;
     }
 
+    @Override
     public void setMetadescription(String metadescription) {
         this.metadescription = metadescription;
     }
 
+    @Override
     public String getDisplayMetadescription() {
         return displayMetadescription;
     }
 
+    @Override
     public void setDisplayMetadescription(final String displayMetadescription) {
         this.displayMetadescription = displayMetadescription;
     }

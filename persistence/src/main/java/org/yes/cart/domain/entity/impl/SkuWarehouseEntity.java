@@ -46,90 +46,112 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
 
+    @Override
     public Warehouse getWarehouse() {
         return this.warehouse;
     }
 
+    @Override
     public void setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
     }
 
+    @Override
     public String getSkuCode() {
         return skuCode;
     }
 
+    @Override
     public void setSkuCode(final String skuCode) {
         this.skuCode = skuCode;
     }
 
+    @Override
     public BigDecimal getQuantity() {
         return this.quantity;
     }
 
+    @Override
     public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 
+    @Override
     public BigDecimal getReserved() {
         return this.reserved;
     }
 
+    @Override
     public void setReserved(BigDecimal reserved) {
         this.reserved = reserved;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getSkuWarehouseId() {
         return skuWarehouseId;
     }
 
+    @Override
     public long getId() {
         return this.skuWarehouseId;
     }
 
+    @Override
     public void setSkuWarehouseId(long skuWarehouseId) {
         this.skuWarehouseId = skuWarehouseId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -138,19 +160,23 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
         this.version = version;
     }
 
+    @Override
     public boolean isAvailableToSell() {
         return MoneyUtils.isPositive(getQuantity())
                 && MoneyUtils.isFirstBiggerThanSecond(getQuantity(), getReserved());
     }
 
+    @Override
     public boolean isAvailableToSell(final BigDecimal required) {
         return MoneyUtils.isFirstBiggerThanOrEqualToSecond(getAvailableToSell(), required);
     }
 
+    @Override
     public boolean isAvailableToAllocate(final BigDecimal required) {
         return MoneyUtils.isFirstBiggerThanOrEqualToSecond(getQuantity(), required);
     }
 
+    @Override
     public BigDecimal getAvailableToSell() {
         return MoneyUtils.notNull(getQuantity()).subtract(
                 MoneyUtils.notNull(getReserved(), BigDecimal.ZERO));

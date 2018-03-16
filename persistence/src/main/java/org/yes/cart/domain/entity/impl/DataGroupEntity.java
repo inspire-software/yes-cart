@@ -42,18 +42,22 @@ public class DataGroupEntity implements DataGroup, Serializable {
     private String createdBy;
     private String updatedBy;
 
+    @Override
     public long getId() {
         return datagroupId;
     }
 
+    @Override
     public long getDatagroupId() {
         return datagroupId;
     }
 
+    @Override
     public void setDatagroupId(final long datagroupId) {
         this.datagroupId = datagroupId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -62,82 +66,102 @@ public class DataGroupEntity implements DataGroup, Serializable {
         this.version = version;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
+    @Override
     public String getDisplayName() {
         return displayName;
     }
 
+    @Override
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
 
+    @Override
     public String getQualifier() {
         return qualifier;
     }
 
+    @Override
     public void setQualifier(final String qualifier) {
         this.qualifier = qualifier;
     }
 
+    @Override
     public String getType() {
         return type;
     }
 
+    @Override
     public void setType(final String type) {
         this.type = type;
     }
 
+    @Override
     public String getDescriptors() {
         return descriptors;
     }
 
+    @Override
     public void setDescriptors(final String descriptors) {
         this.descriptors = descriptors;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return createdBy;
     }
 
+    @Override
     public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return name;
     }
 
+    @Override
     public void setGuid(final String guid) {
         this.name = guid;
     }

@@ -45,6 +45,7 @@ public class SkuWarehouseRelationshipSupportImpl implements SkuWarehouseRelation
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getWarehouseCode(final SkuWarehouse skuWarehouse) {
         if (skuWarehouse != null) {
             final Warehouse warehouse = warehouseDao.findById(skuWarehouse.getWarehouse().getWarehouseId());
@@ -56,12 +57,14 @@ public class SkuWarehouseRelationshipSupportImpl implements SkuWarehouseRelation
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<SkuWarehouse> getQuantityOnWarehouse(final String sku) {
 
         return skuWarehouseDao.findByNamedQuery("SKUS.ON.WAREHOUSES.BY.SKUCODE.ALL", sku);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<SkuWarehouse> getQuantityOnWarehouse(final String sku, final Warehouse warehouse) {
 
         return skuWarehouseDao.findByNamedQuery("SKUS.ON.WAREHOUSE.BY.SKUCODE.WAREHOUSEID", sku, warehouse.getWarehouseId());
@@ -69,13 +72,14 @@ public class SkuWarehouseRelationshipSupportImpl implements SkuWarehouseRelation
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<SkuWarehouse> getQuantityOnWarehouses(final String sku, final Collection<Warehouse> warehouses) {
 
         if (CollectionUtils.isEmpty(warehouses)) {
             return Collections.emptyList();
         }
 
-        final List<Long> ids = new ArrayList<Long>();
+        final List<Long> ids = new ArrayList<>();
         for (final Warehouse warehouse : warehouses) {
             ids.add(warehouse.getWarehouseId());
         }

@@ -59,11 +59,11 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     private Brand brand;
     private ProductType producttype;
     private int availability;
-    private Set<AttrValueProduct> attributes = new HashSet<AttrValueProduct>(0);
-    private Set<ProductCategory> productCategory = new HashSet<ProductCategory>(0);
-    private Collection<ProductSku> sku = new ArrayList<ProductSku>(0);
-    private Set<ProductEnsembleOption> ensebleOption = new HashSet<ProductEnsembleOption>(0);
-    private Set<ProductAssociation> productAssociations = new HashSet<ProductAssociation>(0);
+    private Set<AttrValueProduct> attributes = new HashSet<>(0);
+    private Set<ProductCategory> productCategory = new HashSet<>(0);
+    private Collection<ProductSku> sku = new ArrayList<>(0);
+    private Set<ProductEnsembleOption> ensebleOption = new HashSet<>(0);
+    private Set<ProductAssociation> productAssociations = new HashSet<>(0);
     private Boolean featured;
     private SeoEntity seoInternal;
     private BigDecimal minOrderQuantity;
@@ -80,117 +80,144 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
 
 
+    @Override
     public String getCode() {
         return this.code;
     }
 
+    @Override
     public void setCode(String code) {
         this.code = code;
     }
 
+    @Override
     public String getManufacturerCode() {
         return manufacturerCode;
     }
 
+    @Override
     public void setManufacturerCode(final String manufacturerCode) {
         this.manufacturerCode = manufacturerCode;
     }
 
+    @Override
     public String getManufacturerPartCode() {
         return manufacturerPartCode;
     }
 
+    @Override
     public void setManufacturerPartCode(final String manufacturerPartCode) {
         this.manufacturerPartCode = manufacturerPartCode;
     }
 
+    @Override
     public String getSupplierCode() {
         return supplierCode;
     }
 
+    @Override
     public void setSupplierCode(final String supplierCode) {
         this.supplierCode = supplierCode;
     }
 
+    @Override
     public String getSupplierCatalogCode() {
         return supplierCatalogCode;
     }
 
+    @Override
     public void setSupplierCatalogCode(final String supplierCatalogCode) {
         this.supplierCatalogCode = supplierCatalogCode;
     }
 
+    @Override
     public String getPimCode() {
         return pimCode;
     }
 
+    @Override
     public void setPimCode(final String pimCode) {
         this.pimCode = pimCode;
     }
 
+    @Override
     public boolean getPimDisabled() {
         return pimDisabled;
     }
 
+    @Override
     public void setPimDisabled(final boolean pimDisabled) {
         this.pimDisabled = pimDisabled;
     }
 
+    @Override
     public boolean getPimOutdated() {
         return pimOutdated;
     }
 
+    @Override
     public void setPimOutdated(final boolean pimOutdated) {
         this.pimOutdated = pimOutdated;
     }
 
+    @Override
     public Instant getPimUpdated() {
         return pimUpdated;
     }
 
+    @Override
     public void setPimUpdated(final Instant pimUpdated) {
         this.pimUpdated = pimUpdated;
     }
 
+    @Override
     public LocalDateTime getAvailablefrom() {
         return this.availablefrom;
     }
 
+    @Override
     public void setAvailablefrom(LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
     /** {@inheritDoc} */
+    @Override
     public LocalDateTime getAvailableto() {
         return this.availableto;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAvailableto(LocalDateTime availableto) {
         this.availableto = availableto;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getName() {
         return this.name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getDisplayName() {
         return this.displayName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getDescriptionAsIs() {
         final StringBuilder builder = new StringBuilder();
         for (AttrValue attr : attributes) {
@@ -221,26 +248,32 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return description;
     }
 
+    @Override
     public String getDescription() {
         return this.description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Override
     public String getTag() {
         return this.tag;
     }
 
+    @Override
     public void setTag(String tag) {
         this.tag = tag;
     }
 
+    @Override
     public Brand getBrand() {
         return this.brand;
     }
 
+    @Override
     public void setBrand(Brand brand) {
         this.brand = brand;
     }
@@ -249,66 +282,82 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return String.valueOf(getProducttype().getProducttypeId());
     }
 
+    @Override
     public ProductType getProducttype() {
         return this.producttype;
     }
 
+    @Override
     public void setProducttype(ProductType producttype) {
         this.producttype = producttype;
     }
 
+    @Override
     public int getAvailability() {
         return this.availability;
     }
 
+    @Override
     public void setAvailability(int availability) {
         this.availability = availability;
     }
 
+    @Override
     public Set<AttrValueProduct> getAttributes() {
         return this.attributes;
     }
 
+    @Override
     public void setAttributes(Set<AttrValueProduct> attributes) {
         this.attributes = attributes;
     }
 
+    @Override
     public Set<ProductCategory> getProductCategory() {
         return this.productCategory;
     }
 
+    @Override
     public void setProductCategory(Set<ProductCategory> productCategory) {
         this.productCategory = productCategory;
     }
 
+    @Override
     public Collection<ProductSku> getSku() {
         return this.sku;
     }
 
+    @Override
     public void setSku(Collection<ProductSku> sku) {
         this.sku = sku;
     }
 
+    @Override
     public Set<ProductEnsembleOption> getEnsembleOption() {
         return this.ensebleOption;
     }
 
+    @Override
     public void setEnsembleOption(Set<ProductEnsembleOption> ensembleOption) {
         this.ensebleOption = ensembleOption;
     }
 
+    @Override
     public Set<ProductAssociation> getProductAssociations() {
         return this.productAssociations;
     }
 
+    @Override
     public void setProductAssociations(Set<ProductAssociation> productAssociations) {
         this.productAssociations = productAssociations;
     }
 
+    @Override
     public Boolean getFeatured() {
         return this.featured;
     }
 
+    @Override
     public void setFeatured(Boolean featured) {
         this.featured = featured;
     }
@@ -321,59 +370,73 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.seoInternal = seo;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getProductId() {
         return this.productId;
     }
 
+    @Override
     public long getId() {
         return this.productId;
     }
 
 
+    @Override
     public void setProductId(long productId) {
         this.productId = productId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -404,6 +467,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return null;
     }
 
+    @Override
     public ProductSku getDefaultSku() {
         if (defaultProductSku == null) {
             if (this.getSku() != null && !this.getSku().isEmpty()) {
@@ -426,8 +490,9 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return defaultProductSku;
     }
 
+    @Override
     public Collection<AttrValueProduct> getAttributesByCode(final String attributeCode) {
-        final Collection<AttrValueProduct> result = new ArrayList<AttrValueProduct>();
+        final Collection<AttrValueProduct> result = new ArrayList<>();
         if (attributeCode != null && this.attributes != null) {
             for (AttrValueProduct attrValue : this.attributes) {
                 if (attributeCode.equals(attrValue.getAttributeCode())) {
@@ -438,8 +503,9 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return result;
     }
 
+    @Override
     public Map<String, AttrValue> getAllAttributesAsMap() {
-        final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
+        final Map<String, AttrValue> rez = new HashMap<>();
         if (this.attributes != null) {
             for (AttrValue attrValue : this.attributes) {
                 if (attrValue != null && attrValue.getAttributeCode() != null) {
@@ -450,6 +516,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return rez;
     }
 
+    @Override
     public AttrValueProduct getAttributeByCode(final String attributeCode) {
         if (attributeCode != null) {
             if (this.attributes != null) {
@@ -465,12 +532,14 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
 
 
+    @Override
     public String getAttributeValueByCode(final String attributeCode) {
         final AttrValue val = getAttributeByCode(attributeCode);
         return val != null ? val.getVal() : null;
     }
 
 
+    @Override
     public boolean isAttributeValueByCodeTrue(final String attributeCode) {
         final AttrValue val = getAttributeByCode(attributeCode);
         return val != null && Boolean.valueOf(val.getVal());
@@ -478,14 +547,17 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
 
 
+    @Override
     public Collection<AttrValue> getAllAttributes() {
-        return new ArrayList<AttrValue>(attributes);
+        return new ArrayList<>(attributes);
     }
 
+    @Override
     public ProductSku getSku(final String skuCode) {
         return getDefaultSku();
     }
 
+    @Override
     public boolean isMultiSkuProduct() {
         return sku.size() > 1;
     }
@@ -497,6 +569,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
 
     /** {@inheritDoc} */
+    @Override
     public Seo getSeo() {
         SeoEntity seo = getSeoInternal();
         if (seo == null) {
@@ -507,30 +580,37 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSeo(final Seo seo) {
         this.setSeoInternal((SeoEntity) seo);
     }
 
+    @Override
     public BigDecimal getMinOrderQuantity() {
         return minOrderQuantity;
     }
 
+    @Override
     public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
         this.minOrderQuantity = minOrderQuantity;
     }
 
+    @Override
     public BigDecimal getMaxOrderQuantity() {
         return maxOrderQuantity;
     }
 
+    @Override
     public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
         this.maxOrderQuantity = maxOrderQuantity;
     }
 
+    @Override
     public BigDecimal getStepOrderQuantity() {
         return stepOrderQuantity;
     }
 
+    @Override
     public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
         this.stepOrderQuantity = stepOrderQuantity;
     }

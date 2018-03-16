@@ -45,15 +45,17 @@ public class ShopWarehouseRelationshipSupportImpl implements ShopWarehouseRelati
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Shop> getAll() {
         return this.shopDao.findAll();
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<Long, Set<Long>> getShopsByFulfilmentMap() {
 
         final List<ShopWarehouse> swAll = this.shopWarehouseDao.findAll();
-        final Map<Long, Set<Long>> map = new HashMap<Long, Set<Long>>(swAll.size() * 2);
+        final Map<Long, Set<Long>> map = new HashMap<>(swAll.size() * 2);
 
         for (final ShopWarehouse sw : swAll) {
 
@@ -62,12 +64,7 @@ public class ShopWarehouseRelationshipSupportImpl implements ShopWarehouseRelati
                 final long wId = sw.getWarehouse().getWarehouseId();
                 final long sId = sw.getShop().getShopId();
 
-                Set<Long> sws = map.get(wId);
-                if (sws == null) {
-                    sws = new HashSet<Long>();
-                    map.put(wId, sws);
-                }
-
+                final Set<Long> sws = map.computeIfAbsent(wId, k -> new HashSet<>());
                 sws.add(sId);
             }
 
@@ -77,22 +74,24 @@ public class ShopWarehouseRelationshipSupportImpl implements ShopWarehouseRelati
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Warehouse> getShopWarehouses(final long shopId, final boolean includeDisabled) {
         if (includeDisabled) {
-            return new ArrayList<Warehouse>(warehouseDao.findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP", shopId));
+            return new ArrayList<>(warehouseDao.findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP", shopId));
         }
-        return new ArrayList<Warehouse>(warehouseDao.findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP.DISABLED", shopId, Boolean.FALSE));
+        return new ArrayList<>(warehouseDao.findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP.DISABLED", shopId, Boolean.FALSE));
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Long> getShopWarehouseIds(final long shopId, final boolean includeDisabled) {
         return transform(getShopWarehouses(shopId, includeDisabled));
     }
 
     public Set<Long> transform(final Collection<Warehouse> warehouses) {
-        final Set<Long> result = new LinkedHashSet<Long>(warehouses.size());
+        final Set<Long> result = new LinkedHashSet<>(warehouses.size());
         for (Warehouse category : warehouses) {
             result.add(category.getWarehouseId());
         }

@@ -42,8 +42,8 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     private boolean country;
     private boolean state;
     private boolean local;
-    private Collection<CarrierSla> carrierSla = new ArrayList<CarrierSla>(0);
-    private Collection<CarrierShop> shops = new ArrayList<CarrierShop>(0);
+    private Collection<CarrierSla> carrierSla = new ArrayList<>(0);
+    private Collection<CarrierShop> shops = new ArrayList<>(0);
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
     private String createdBy;
@@ -55,138 +55,172 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
 
 
 
+    @Override
     public String getName() {
         return this.name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getDisplayName() {
         return displayName;
     }
 
+    @Override
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
 
+    @Override
     public String getDescription() {
         return this.description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Override
     public String getDisplayDescription() {
         return displayDescription;
     }
 
+    @Override
     public void setDisplayDescription(final String displayDescription) {
         this.displayDescription = displayDescription;
     }
 
+    @Override
     public boolean isWorldwide() {
         return this.worldwide;
     }
 
+    @Override
     public void setWorldwide(boolean worldwide) {
         this.worldwide = worldwide;
     }
 
+    @Override
     public boolean isCountry() {
         return this.country;
     }
 
+    @Override
     public void setCountry(boolean country) {
         this.country = country;
     }
 
+    @Override
     public boolean isState() {
         return this.state;
     }
 
+    @Override
     public void setState(boolean state) {
         this.state = state;
     }
 
+    @Override
     public boolean isLocal() {
         return this.local;
     }
 
+    @Override
     public void setLocal(boolean local) {
         this.local = local;
     }
 
+    @Override
     public Collection<CarrierSla> getCarrierSla() {
         return this.carrierSla;
     }
 
+    @Override
     public void setCarrierSla(Collection<CarrierSla> carrierSla) {
         this.carrierSla = carrierSla;
     }
 
+    @Override
     public Collection<CarrierShop> getShops() {
         return shops;
     }
 
+    @Override
     public void setShops(final Collection<CarrierShop> shops) {
         this.shops = shops;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getCarrierId() {
         return this.carrierId;
     }
 
+    @Override
     public long getId() {
         return this.carrierId;
     }
 
+    @Override
     public void setCarrierId(long carrierId) {
         this.carrierId = carrierId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

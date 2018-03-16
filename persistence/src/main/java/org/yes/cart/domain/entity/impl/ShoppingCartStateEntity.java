@@ -40,91 +40,113 @@ public class ShoppingCartStateEntity implements ShoppingCartState, java.io.Seria
     public ShoppingCartStateEntity() {
     }
 
+    @Override
     public String getCustomerEmail() {
         return customerEmail;
     }
 
+    @Override
     public void setCustomerEmail(final String customerEmail) {
         this.customerEmail = customerEmail;
     }
 
+    @Override
     public String getOrdernum() {
         return ordernum;
     }
 
+    @Override
     public void setOrdernum(final String ordernum) {
         this.ordernum = ordernum;
     }
 
+    @Override
     public Boolean getEmpty() {
         return empty;
     }
 
+    @Override
     public void setEmpty(final Boolean empty) {
         this.empty = empty;
     }
 
+    @Override
     public byte[] getState() {
         return state;
     }
 
+    @Override
     public void setState(final byte[] state) {
         this.state = state;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
 
+    @Override
     public long getShoppingCartStateId() {
         return shoppingCartStateId;
     }
 
+    @Override
     public void setShoppingCartStateId(final long shoppingCartStateId) {
         this.shoppingCartStateId = shoppingCartStateId;
     }
 
+    @Override
     public long getId() {
         return this.shoppingCartStateId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

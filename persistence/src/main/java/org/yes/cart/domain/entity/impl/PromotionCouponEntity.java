@@ -43,18 +43,22 @@ public class PromotionCouponEntity implements PromotionCoupon, java.io.Serializa
     private String createdBy;
     private String updatedBy;
 
+    @Override
     public long getId() {
         return promotioncouponId;
     }
 
+    @Override
     public long getPromotioncouponId() {
         return promotioncouponId;
     }
 
+    @Override
     public void setPromotioncouponId(final long promotioncouponId) {
         this.promotioncouponId = promotioncouponId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -63,82 +67,102 @@ public class PromotionCouponEntity implements PromotionCoupon, java.io.Serializa
         this.version = version;
     }
 
+    @Override
     public String getCode() {
         return code;
     }
 
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
 
+    @Override
     public Promotion getPromotion() {
         return promotion;
     }
 
+    @Override
     public void setPromotion(final Promotion promotion) {
         this.promotion = promotion;
     }
 
+    @Override
     public int getUsageLimit() {
         return usageLimit;
     }
 
+    @Override
     public void setUsageLimit(final int usageLimit) {
         this.usageLimit = usageLimit;
     }
 
+    @Override
     public int getUsageLimitPerCustomer() {
         return usageLimitPerCustomer;
     }
 
+    @Override
     public void setUsageLimitPerCustomer(final int usageLimitPerCustomer) {
         this.usageLimitPerCustomer = usageLimitPerCustomer;
     }
 
+    @Override
     public int getUsageCount() {
         return usageCount;
     }
 
+    @Override
     public void setUsageCount(final int usageCount) {
         this.usageCount = usageCount;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return createdBy;
     }
 
+    @Override
     public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return code;
     }
 
+    @Override
     public void setGuid(final String guid) {
         this.code = guid;
     }

@@ -41,12 +41,12 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private String description;
     private String fspointer;
     private boolean disabled;
-    private Set<ShopUrl> shopUrl = new HashSet<ShopUrl>(0);
-    private Set<ShopAlias> shopAlias = new HashSet<ShopAlias>(0);
-    private Collection<ShopAdvPlace> advertisingPlaces = new ArrayList<ShopAdvPlace>(0);
-    private Collection<AttrValueShop> attributes = new ArrayList<AttrValueShop>(0);
+    private Set<ShopUrl> shopUrl = new HashSet<>(0);
+    private Set<ShopAlias> shopAlias = new HashSet<>(0);
+    private Collection<ShopAdvPlace> advertisingPlaces = new ArrayList<>(0);
+    private Collection<AttrValueShop> attributes = new ArrayList<>(0);
     private SeoEntity seoInternal;
-    private Collection<ShopCategory> shopCategory = new ArrayList<ShopCategory>(0);
+    private Collection<ShopCategory> shopCategory = new ArrayList<>(0);
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
     private String createdBy;
@@ -65,11 +65,11 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private List<String> supportedBillingCountriesAsList;
     private List<String> supportedLanguagesAsList;
 
-    private Map<String, List<String>> supportedRegistrationFormAttributesByType = new HashMap<String, List<String>>();
-    private Map<String, List<String>> supportedProfileFormAttributesByType = new HashMap<String, List<String>>();
-    private Map<String, List<String>> supportedProfileFormReadOnlyAttributesByType = new HashMap<String, List<String>>();
+    private final Map<String, List<String>> supportedRegistrationFormAttributesByType = new HashMap<>();
+    private final Map<String, List<String>> supportedProfileFormAttributesByType = new HashMap<>();
+    private final Map<String, List<String>> supportedProfileFormReadOnlyAttributesByType = new HashMap<>();
 
-    private Map<String, String> addressFormattingByTypeByLanguageByCountryCodeByCustomerType = new HashMap<String, String>();
+    private final Map<String, String> addressFormattingByTypeByLanguageByCountryCodeByCustomerType = new HashMap<>();
 
     private Set<String> sfRequireCustomerRegistrationApprovalTypes;
     private Set<String> sfRequireCustomerRegistrationNotificationTypes;
@@ -89,7 +89,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Set<String> sfHidePricesTypes;
 
     private Boolean B2BProfileActive = null;
-    private Boolean B2BAddresBookActive = null;
+    private Boolean B2BAddressBookActive = null;
     private Boolean B2BStrictPriceActive = null;
     private Boolean sfPageTraceOn = null;
     private Boolean sfRequireCustomerLogin = null;
@@ -104,46 +104,57 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
 
 
+    @Override
     public String getCode() {
         return this.code;
     }
 
+    @Override
     public void setCode(String code) {
         this.code = code;
     }
 
+    @Override
     public String getName() {
         return this.name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getDescription() {
         return this.description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Override
     public String getFspointer() {
         return this.fspointer;
     }
 
+    @Override
     public void setFspointer(String fspointer) {
         this.fspointer = fspointer;
     }
 
+    @Override
     public boolean isDisabled() {
         return disabled;
     }
 
+    @Override
     public void setDisabled(final boolean disabled) {
         this.disabled = disabled;
     }
 
+    @Override
     public Shop getMaster() {
         return master;
     }
@@ -153,55 +164,61 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.master = master;
     }
 
+    @Override
     public Set<ShopUrl> getShopUrl() {
         return this.shopUrl;
     }
 
+    @Override
     public void setShopUrl(Set<ShopUrl> shopUrl) {
         this.shopUrl = shopUrl;
     }
 
+    @Override
     public Set<ShopAlias> getShopAlias() {
         return shopAlias;
     }
 
+    @Override
     public void setShopAlias(final Set<ShopAlias> shopAlias) {
         this.shopAlias = shopAlias;
     }
 
+    @Override
     public Collection<ShopAdvPlace> getAdvertisingPlaces() {
         return this.advertisingPlaces;
     }
 
+    @Override
     public void setAdvertisingPlaces(Collection<ShopAdvPlace> advertisingPlaces) {
         this.advertisingPlaces = advertisingPlaces;
     }
 
+    @Override
     public Collection<AttrValueShop> getAttributes() {
         return this.attributes;
     }
 
+    @Override
     public void setAttributes(Collection<AttrValueShop> attributes) {
         this.attributes = attributes;
     }
 
+    @Override
     public Collection<AttrValue> getAllAttributes() {
-        return new ArrayList<AttrValue>(attributes != null ? attributes : Collections.<AttrValue>emptyList());
+        return new ArrayList<>(attributes != null ? attributes : Collections.emptyList());
     }
 
     private void resetAttributesMapsInternal() {
-        final Map<String, AttrValueShop> rez = new HashMap<String, AttrValueShop>(this.attributes != null ? this.attributes.size() * 2 : 50);
-        final Map<String, List<AttrValueShop>> rezMulti = new HashMap<String, List<AttrValueShop>>(this.attributes != null ? this.attributes.size() * 2 : 50);
+        final Map<String, AttrValueShop> rez = new HashMap<>(this.attributes != null ? this.attributes.size() * 2 : 50);
+        final Map<String, List<AttrValueShop>> rezMulti = new HashMap<>(this.attributes != null ? this.attributes.size() * 2 : 50);
         if (this.attributes != null) {
             for (AttrValueShop attrValue : this.attributes) {
                 if (attrValue != null && attrValue.getAttributeCode() != null) {
                     final String code = attrValue.getAttributeCode();
                     rez.put(code, attrValue);
-                    List<AttrValueShop> attrs = rezMulti.get(code);
-                    if (attrs == null) {
-                        attrs = new ArrayList<AttrValueShop>(1); // Most values are single, preserve memory
-                        rezMulti.put(code, attrs);
-                    }
+                    final List<AttrValueShop> attrs = rezMulti.computeIfAbsent(code, k -> new ArrayList<>(1));
+                    // Most values are single, preserve memory
                     attrs.add(attrValue);
                 }
             }
@@ -224,6 +241,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.attributesMapMulti;
     }
 
+    @Override
     public Map<String, AttrValue> getAllAttributesAsMap() {
         return (Map) this.getAttributesMapInternal(false);
     }
@@ -236,66 +254,82 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.seoInternal = seo;
     }
 
+    @Override
     public Collection<ShopCategory> getShopCategory() {
         return this.shopCategory;
     }
 
+    @Override
     public void setShopCategory(Collection<ShopCategory> shopCategory) {
         this.shopCategory = shopCategory;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getShopId() {
         return this.shopId;
     }
 
+    @Override
     public long getId() {
         return this.shopId;
     }
 
+    @Override
     public void setShopId(long shopId) {
         this.shopId = shopId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -304,10 +338,12 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.version = version;
     }
 
+    @Override
     public String getSupportedCurrencies() {
         return getAttributeValueByCode(AttributeNamesKeys.Shop.SUPPORTED_CURRENCIES);
     }
 
+    @Override
     public String getDefaultCurrency() {
         List<String> currencies = getSupportedCurrenciesAsList();
         if (currencies != null && !currencies.isEmpty()) {
@@ -316,6 +352,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return null;
     }
 
+    @Override
     public List<String> getSupportedCurrenciesAsList() {
         if (supportedCurrenciesAsList == null) {
             supportedCurrenciesAsList = getCsvValuesTrimmedAsListRaw(getSupportedCurrencies());
@@ -324,10 +361,12 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
 
+    @Override
     public String getSupportedShippingCountries() {
         return getAttributeValueByCode(AttributeNamesKeys.Shop.SUPPORTED_COUNTRY_SHIP);
     }
 
+    @Override
     public List<String> getSupportedShippingCountriesAsList() {
         if (supportedShippingCountriesAsList == null) {
             supportedShippingCountriesAsList = getCsvValuesTrimmedAsListRaw(getSupportedShippingCountries());
@@ -335,10 +374,12 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return supportedShippingCountriesAsList;
     }
 
+    @Override
     public String getSupportedBillingCountries() {
         return getAttributeValueByCode(AttributeNamesKeys.Shop.SUPPORTED_COUNTRY_BILL);
     }
 
+    @Override
     public List<String> getSupportedBillingCountriesAsList() {
         if (supportedBillingCountriesAsList == null) {
             supportedBillingCountriesAsList = getCsvValuesTrimmedAsListRaw(getSupportedBillingCountries());
@@ -346,10 +387,12 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return supportedBillingCountriesAsList;
     }
 
+    @Override
     public String getSupportedLanguages() {
         return getAttributeValueByCode(AttributeNamesKeys.Shop.SUPPORTED_LANGUAGES);
     }
 
+    @Override
     public List<String> getSupportedLanguagesAsList() {
         if (supportedLanguagesAsList == null) {
             supportedLanguagesAsList = getCsvValuesTrimmedAsListRaw(getSupportedLanguages());
@@ -357,6 +400,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return supportedLanguagesAsList;
     }
 
+    @Override
     public String getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType(final String countryCode, final String locale, final String customerType, final String addressType) {
 
         final String countryKey = StringUtils.isNotBlank(customerType) ? countryCode + "_" + customerType : countryCode;
@@ -421,6 +465,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return format;
     }
 
+    @Override
     public String getSupportedRegistrationFormAttributes(final String customerType) {
         if (StringUtils.isBlank(customerType)) {
             return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_REGISTRATION_ATTRIBUTES_PREFIX);
@@ -428,15 +473,13 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_REGISTRATION_ATTRIBUTES_PREFIX + '_' + customerType);
     }
 
+    @Override
     public List<String> getSupportedRegistrationFormAttributesAsList(final String customerType) {
-        List<String> supportedRegistrationFormAttributesAsList = this.supportedRegistrationFormAttributesByType.get(customerType);
-        if (supportedRegistrationFormAttributesAsList == null) {
-            supportedRegistrationFormAttributesAsList = getCsvValuesTrimmedAsListRaw(getSupportedRegistrationFormAttributes(customerType));
-            this.supportedRegistrationFormAttributesByType.put(customerType, supportedRegistrationFormAttributesAsList);
-        }
-        return supportedRegistrationFormAttributesAsList;
+        return this.supportedRegistrationFormAttributesByType.computeIfAbsent(
+                customerType, t -> getCsvValuesTrimmedAsListRaw(getSupportedRegistrationFormAttributes(t)));
     }
 
+    @Override
     public String getSupportedProfileFormAttributes(final String customerType) {
         if (StringUtils.isBlank(customerType)) {
             return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE_PREFIX);
@@ -444,15 +487,13 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE_PREFIX + '_' + customerType);
     }
 
+    @Override
     public List<String> getSupportedProfileFormAttributesAsList(final String customerType) {
-        List<String> supportedProfileFormAttributesAsList = this.supportedProfileFormAttributesByType.get(customerType);
-        if (supportedProfileFormAttributesAsList == null) {
-            supportedProfileFormAttributesAsList = getCsvValuesTrimmedAsListRaw(getSupportedProfileFormAttributes(customerType));
-            this.supportedProfileFormAttributesByType.put(customerType, supportedProfileFormAttributesAsList);
-        }
-        return supportedProfileFormAttributesAsList;
+        return this.supportedProfileFormAttributesByType.computeIfAbsent(
+                customerType, t -> getCsvValuesTrimmedAsListRaw(getSupportedProfileFormAttributes(t)));
     }
 
+    @Override
     public String getSupportedProfileFormReadOnlyAttributes(final String customerType) {
         if (StringUtils.isBlank(customerType)) {
             return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_READONLY_PREFIX);
@@ -460,19 +501,18 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_READONLY_PREFIX + '_' + customerType);
     }
 
+    @Override
     public List<String> getSupportedProfileFormReadOnlyAttributesAsList(final String customerType) {
-        List<String> supportedProfileFormReadOnlyAttributesAsList = this.supportedProfileFormReadOnlyAttributesByType.get(customerType);
-        if (supportedProfileFormReadOnlyAttributesAsList == null) {
-            supportedProfileFormReadOnlyAttributesAsList = getCsvValuesTrimmedAsListRaw(getSupportedProfileFormReadOnlyAttributes(customerType));
-            this.supportedProfileFormReadOnlyAttributesByType.put(customerType, supportedProfileFormReadOnlyAttributesAsList);
-        }
-        return supportedProfileFormReadOnlyAttributesAsList;
+        return this.supportedProfileFormReadOnlyAttributesByType.computeIfAbsent(
+                customerType, t -> getCsvValuesTrimmedAsListRaw(getSupportedProfileFormReadOnlyAttributes(t)));
     }
 
+    @Override
     public String getProductStoredAttributes() {
         return getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_STORED_ATTRIBUTES);
     }
 
+    @Override
     public List<String> getProductStoredAttributesAsList() {
         if (productStoredAttributesAsList == null) {
             productStoredAttributesAsList = getCsvValuesTrimmedAsListRaw(getProductStoredAttributes());
@@ -480,10 +520,12 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return productStoredAttributesAsList;
     }
 
+    @Override
     public String getDisabledCarrierSla() {
         return getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CARRIER_SLA_DISABLED);
     }
 
+    @Override
     public Set<Long> getDisabledCarrierSlaAsSet() {
         if (carrierSlaDisabledAsSet == null) {
             carrierSlaDisabledAsSet = getCsvValuesTrimmedAsSetLong(AttributeNamesKeys.Shop.SHOP_CARRIER_SLA_DISABLED);
@@ -491,13 +533,15 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return carrierSlaDisabledAsSet;
     }
 
+    @Override
     public String getSupportedCarrierSlaRanks() {
         return getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CARRIER_SLA_RANKS);
     }
 
+    @Override
     public Map<Long, Integer> getSupportedCarrierSlaRanksAsMap() {
         if (carrierSlaRanksAsMap == null) {
-            final Map<Long, Integer> map = new HashMap<Long, Integer>();
+            final Map<Long, Integer> map = new HashMap<>();
             final String conf = getSupportedCarrierSlaRanks();
             if (StringUtils.isNotBlank(conf)) {
                 try {
@@ -515,8 +559,9 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return carrierSlaRanksAsMap;
     }
 
+    @Override
     public Collection<AttrValueShop> getAttributesByCode(final String attributeCode) {
-        final Collection<AttrValueShop> result = new ArrayList<AttrValueShop>();
+        final Collection<AttrValueShop> result = new ArrayList<>();
         if (attributeCode != null) {
             final List<AttrValueShop> list = this.getAttributesMapMultiInternal(false).get(attributeCode); // build maps
             if (list != null) {
@@ -526,6 +571,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return result;
     }
 
+    @Override
     public AttrValueShop getAttributeByCode(final String attributeCode) {
         if (attributeCode == null) {
             return null;
@@ -533,16 +579,19 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.getAttributesMapInternal(false).get(attributeCode);
     }
 
+    @Override
     public String getAttributeValueByCode(final String attributeCode) {
         final AttrValueShop val = getAttributeByCode(attributeCode);
         return val != null ? val.getVal() : null;
     }
 
+    @Override
     public boolean isAttributeValueByCodeTrue(final String attributeCode) {
         final AttrValueShop val = getAttributeByCode(attributeCode);
         return val != null && Boolean.valueOf(val.getVal());
     }
 
+    @Override
     public boolean isB2BProfileActive() {
         if (this.B2BProfileActive == null) {
             this.B2BProfileActive = isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B);
@@ -550,13 +599,15 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.B2BProfileActive;
     }
 
+    @Override
     public boolean isB2BAddressBookActive() {
-        if (this.B2BAddresBookActive == null) {
-            this.B2BAddresBookActive = isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B_ADDRESSBOOK);
+        if (this.B2BAddressBookActive == null) {
+            this.B2BAddressBookActive = isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B_ADDRESSBOOK);
         }
-        return this.B2BAddresBookActive;
+        return this.B2BAddressBookActive;
     }
 
+    @Override
     public boolean isB2BStrictPriceActive() {
         if (this.B2BStrictPriceActive == null) {
             this.B2BStrictPriceActive = isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B_STRICT_PRICE);
@@ -564,6 +615,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.B2BStrictPriceActive;
     }
 
+    @Override
     public boolean isSfPageTraceOn() {
         if (this.sfPageTraceOn == null) {
             this.sfPageTraceOn = isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_SF_PAGE_TRACE);
@@ -571,6 +623,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfPageTraceOn;
     }
 
+    @Override
     public boolean isSfRequireCustomerLogin() {
         if (this.sfRequireCustomerLogin == null) {
             this.sfRequireCustomerLogin = isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_LOGIN);
@@ -585,6 +638,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfRequireCustomerRegistrationApprovalTypes;
     }
 
+    @Override
     public boolean isSfRequireCustomerRegistrationApproval(final String customerType) {
         return getSfRequireCustomerRegistrationApprovalTypes().contains(customerType);
     }
@@ -597,6 +651,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfRequireCustomerRegistrationNotificationTypes;
     }
 
+    @Override
     public boolean isSfRequireCustomerRegistrationNotification(final String customerType) {
         return getSfRequireCustomerRegistrationNotificationTypes().contains(customerType);
     }
@@ -608,6 +663,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfRequireCustomerOrderApprovalTypes;
     }
 
+    @Override
     public boolean isSfRequireCustomerOrderApproval(final String customerType) {
         return getSfRequireCustomerOrderApprovalTypes().contains(customerType);
     }
@@ -619,6 +675,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfBlockCustomerCheckoutTypes;
     }
 
+    @Override
     public boolean isSfBlockCustomerCheckout(final String customerType) {
         return getSfBlockCustomerCheckoutTypes().contains(customerType);
     }
@@ -630,6 +687,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfRepeatOrdersEnabledTypes;
     }
 
+    @Override
     public boolean isSfRepeatOrdersEnabled(final String customerType) {
         return getSfRepeatOrdersEnabledTypes().contains(customerType);
     }
@@ -641,6 +699,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfShoppingListsEnabledTypes;
     }
 
+    @Override
     public boolean isSfShoppingListsEnabled(final String customerType) {
         return getSfShoppingListsEnabledTypes().contains(customerType);
     }
@@ -652,6 +711,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfB2BOrderLineRemarksEnabledTypes;
     }
 
+    @Override
     public boolean isSfB2BOrderLineRemarksEnabled(final String customerType) {
         return getSfB2BOrderLineRemarksEnabledTypes().contains(customerType);
     }
@@ -663,6 +723,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfB2BOrderFormEnabledTypes;
     }
 
+    @Override
     public boolean isSfB2BOrderFormEnabled(final String customerType) {
         return getSfB2BOrderFormEnabledTypes().contains(customerType);
     }
@@ -674,14 +735,17 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfRFQEnabledTypes;
     }
 
+    @Override
     public boolean isSfRFQEnabled(final String customerType) {
         return getSfRFQEnabledTypes().contains(customerType);
     }
 
+    @Override
     public boolean isSfPromoCouponsEnabled(final String customerType) {
         return isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_COUPONS);
     }
 
+    @Override
     public boolean isSfOrderMessageEnabled(final String customerType) {
         return isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG);
     }
@@ -694,6 +758,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfAddressBookDisabledTypes;
     }
 
+    @Override
     public boolean isSfAddressBookEnabled(final String customerType) {
         return !getSfAddressBookDisabledTypes().contains(customerType);
     }
@@ -706,6 +771,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfShowTaxInfoTypes;
     }
 
+    @Override
     public boolean isSfShowTaxInfo(final String customerType) {
         return getSfShowTaxInfoTypes().contains(customerType);
     }
@@ -719,6 +785,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
 
+    @Override
     public boolean isSfShowTaxNet(final String customerType) {
         return getSfShowTaxNetTypes().contains(customerType);
     }
@@ -732,6 +799,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
 
+    @Override
     public boolean isSfShowTaxAmount(final String customerType) {
         return getSfShowTaxAmountTypes().contains(customerType);
     }
@@ -744,6 +812,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfShowTaxOptionsTypes;
     }
 
+    @Override
     public boolean isSfShowTaxOptions(final String customerType) {
         return getSfShowTaxOptionsTypes().contains(customerType);
     }
@@ -755,6 +824,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfShowSameBillingAddressDisabledTypes;
     }
 
+    @Override
     public boolean isSfShowSameBillingAddressDisabledTypes(final String customerType) {
         return getSfShowSameBillingAddressDisabledTypes().contains(customerType);
     }
@@ -766,14 +836,17 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.sfHidePricesTypes;
     }
 
+    @Override
     public boolean isSfHidePricesTypes(final String customerType) {
         return getSfHidePricesTypes().contains(customerType);
     }
 
+    @Override
     public String getDefaultShopUrl() {
         return getDefaultShopUrlWithProtocol("http://");
     }
 
+    @Override
     public String getDefaultShopSecureUrl() {
         return getDefaultShopUrlWithProtocol("https://");
     }
@@ -796,7 +869,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     protected Set<Long> getCsvValuesTrimmedAsSetLong(final String attributeKey) {
         final List<String> csv = getCsvValuesTrimmedAsListRaw(getAttributeValueByCode(attributeKey));
         if (CollectionUtils.isNotEmpty(csv)) {
-            final Set<Long> set = new HashSet<Long>();
+            final Set<Long> set = new HashSet<>();
             for (final String item : csv) {
                 set.add(NumberUtils.toLong(item));
             }
@@ -808,7 +881,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     protected Set<String> getCsvValuesTrimmedAsSet(final String attributeKey) {
         final List<String> csv = getCsvValuesTrimmedAsList(attributeKey);
         if (CollectionUtils.isNotEmpty(csv)) {
-            return Collections.unmodifiableSet(new HashSet<String>(csv));
+            return Collections.unmodifiableSet(new HashSet<>(csv));
         }
         return Collections.emptySet();
     }
@@ -821,7 +894,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     protected List<String> getCsvValuesTrimmedAsListRaw(final String raw) {
         if (raw != null) {
             final String[] split = StringUtils.split(raw, ',');
-            final List<String> csv = new ArrayList<String>(split.length);
+            final List<String> csv = new ArrayList<>(split.length);
             for (final String value : split) {
                 if (StringUtils.isNotBlank(value)) {
                     csv.add(value.trim());
@@ -833,6 +906,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
 
+    @Override
     public Seo getSeo() {
         SeoEntity seo = getSeoInternal();
         if (seo == null) {
@@ -842,6 +916,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return seo;
     }
 
+    @Override
     public void setSeo(final Seo seo) {
         this.setSeoInternal((SeoEntity) seo);
     }

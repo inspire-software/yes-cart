@@ -41,26 +41,32 @@ public class CarrierShopEntity implements CarrierShop, java.io.Serializable {
     }
 
 
+    @Override
     public Carrier getCarrier() {
         return carrier;
     }
 
+    @Override
     public void setCarrier(final Carrier carrier) {
         this.carrier = carrier;
     }
 
+    @Override
     public Shop getShop() {
         return this.shop;
     }
 
+    @Override
     public void setShop(Shop shop) {
         this.shop = shop;
     }
 
+    @Override
     public boolean isDisabled() {
         return disabled;
     }
 
+    @Override
     public void setDisabled(final boolean disabled) {
         this.disabled = disabled;
     }
@@ -97,14 +103,17 @@ public class CarrierShopEntity implements CarrierShop, java.io.Serializable {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getCarrierShopId() {
         return this.carrierShopId;
     }
@@ -114,6 +123,7 @@ public class CarrierShopEntity implements CarrierShop, java.io.Serializable {
         return this.carrierShopId;
     }
 
+    @Override
     public void setCarrierShopId(long carrierShopId) {
         this.carrierShopId = carrierShopId;
     }

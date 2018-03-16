@@ -52,18 +52,22 @@ public class MailPartEntity implements MailPart, Serializable {
         this.mail = mail;
     }
 
+    @Override
     public long getId() {
         return mailPartId;
     }
 
+    @Override
     public long getMailPartId() {
         return mailPartId;
     }
 
+    @Override
     public void setMailPartId(final long mailPartId) {
         this.mailPartId = mailPartId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -72,66 +76,82 @@ public class MailPartEntity implements MailPart, Serializable {
         this.version = version;
     }
 
+    @Override
     public String getResourceId() {
         return resourceId;
     }
 
+    @Override
     public void setResourceId(final String resourceId) {
         this.resourceId = resourceId;
     }
 
+    @Override
     public String getFilename() {
         return filename;
     }
 
+    @Override
     public void setFilename(final String filename) {
         this.filename = filename;
     }
 
+    @Override
     public byte[] getData() {
         return data;
     }
 
+    @Override
     public void setData(final byte[] data) {
         this.data = data;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return createdBy;
     }
 
+    @Override
     public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return guid;
     }
 
+    @Override
     public void setGuid(final String guid) {
         this.guid = guid;
     }

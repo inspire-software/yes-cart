@@ -42,6 +42,7 @@ public class CategoryDAOTest extends AbstractTestDAO {
     private GenericDAO<Category, Long> categoryDao;
     private GenericDAO<Shop, Long> shopDao;
 
+    @Override
     @Before
     public void setUp()  {
         shopDao = (GenericDAO<Shop, Long>) ctx().getBean(DaoServiceBeanKeys.SHOP_DAO);
@@ -58,6 +59,7 @@ public class CategoryDAOTest extends AbstractTestDAO {
     public void resolveCategoriesbyShop() {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.yescart.org");
@@ -71,11 +73,11 @@ public class CategoryDAOTest extends AbstractTestDAO {
                 Iterator<ShopCategory> categoryIterator = assignedCategories.iterator();
                 // because categories can be out of available scope
                 // assertTrue(assignedCategories.size() == shop.getShopCategory().size());
-                List<Long> allAssignedCategories = new ArrayList<Long>();
+                List<Long> allAssignedCategories = new ArrayList<>();
                 for (ShopCategory allShopCat : shop.getShopCategory()) {
                     allAssignedCategories.add(allShopCat.getShopCategoryId());
                 }
-                List<Long> allAssignedAvailableCategories = new ArrayList<Long>();
+                List<Long> allAssignedAvailableCategories = new ArrayList<>();
                 for (ShopCategory allShopCat : assignedCategories) {
                     allAssignedAvailableCategories.add(allShopCat.getShopCategoryId());
                 }

@@ -60,6 +60,7 @@ public class PromotionModelImpl implements PromotionModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCode() {
         return code;
     }
@@ -67,6 +68,7 @@ public class PromotionModelImpl implements PromotionModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCouponCode() {
         return couponCode;
     }
@@ -74,6 +76,7 @@ public class PromotionModelImpl implements PromotionModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getType() {
         return type;
     }
@@ -81,6 +84,7 @@ public class PromotionModelImpl implements PromotionModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAction() {
         return action;
     }
@@ -88,6 +92,7 @@ public class PromotionModelImpl implements PromotionModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getContext() {
         return context;
     }
@@ -95,6 +100,7 @@ public class PromotionModelImpl implements PromotionModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public I18NModel getName() {
         return name;
     }
@@ -102,6 +108,7 @@ public class PromotionModelImpl implements PromotionModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public I18NModel getDescription() {
         return description;
     }
@@ -109,6 +116,7 @@ public class PromotionModelImpl implements PromotionModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDateTime getActiveFrom() {
         return activeFrom;
     }
@@ -116,6 +124,7 @@ public class PromotionModelImpl implements PromotionModel {
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDateTime getActiveTo() {
         return activeTo;
     }

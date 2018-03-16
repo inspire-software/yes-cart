@@ -41,18 +41,22 @@ public class PromotionCouponUsageEntity implements PromotionCouponUsage, java.io
     private String createdBy;
     private String updatedBy;
 
+    @Override
     public long getId() {
         return promotioncouponusageId;
     }
 
+    @Override
     public long getPromotioncouponusageId() {
         return promotioncouponusageId;
     }
 
+    @Override
     public void setPromotioncouponusageId(final long promotioncouponusageId) {
         this.promotioncouponusageId = promotioncouponusageId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -61,66 +65,82 @@ public class PromotionCouponUsageEntity implements PromotionCouponUsage, java.io
         this.version = version;
     }
 
+    @Override
     public PromotionCoupon getCoupon() {
         return coupon;
     }
 
+    @Override
     public void setCoupon(final PromotionCoupon coupon) {
         this.coupon = coupon;
     }
 
+    @Override
     public String getCustomerEmail() {
         return customerEmail;
     }
 
+    @Override
     public void setCustomerEmail(final String customerEmail) {
         this.customerEmail = customerEmail;
     }
 
+    @Override
     public CustomerOrder getCustomerOrder() {
         return customerOrder;
     }
 
+    @Override
     public void setCustomerOrder(final CustomerOrder customerOrder) {
         this.customerOrder = customerOrder;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return createdBy;
     }
 
+    @Override
     public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return String.valueOf(promotioncouponusageId);
     }
 
+    @Override
     public void setGuid(final String guid) {
         // nothing
     }

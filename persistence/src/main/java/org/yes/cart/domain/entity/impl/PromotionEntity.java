@@ -62,18 +62,22 @@ public class PromotionEntity implements Promotion, java.io.Serializable {
     private String updatedBy;
     private String guid;
 
+    @Override
     public long getId() {
         return promotionId;
     }
 
+    @Override
     public long getPromotionId() {
         return promotionId;
     }
 
+    @Override
     public void setPromotionId(final long promotionId) {
         this.promotionId = promotionId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -82,186 +86,232 @@ public class PromotionEntity implements Promotion, java.io.Serializable {
         this.version = version;
     }
 
+    @Override
     public String getShopCode() {
         return shopCode;
     }
 
+    @Override
     public void setShopCode(final String shopCode) {
         this.shopCode = shopCode;
     }
 
+    @Override
     public String getCurrency() {
         return currency;
     }
 
+    @Override
     public void setCurrency(final String currency) {
         this.currency = currency;
     }
 
+    @Override
     public String getCode() {
         return code;
     }
 
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
 
+    @Override
     public String getPromoType() {
         return promoType;
     }
 
+    @Override
     public void setPromoType(final String promoType) {
         this.promoType = promoType;
     }
 
+    @Override
     public String getPromoAction() {
         return promoAction;
     }
 
+    @Override
     public void setPromoAction(final String promoAction) {
         this.promoAction = promoAction;
     }
 
+    @Override
     public String getEligibilityCondition() {
         return eligibilityCondition;
     }
 
+    @Override
     public void setEligibilityCondition(final String eligibilityCondition) {
         this.eligibilityCondition = eligibilityCondition;
     }
 
+    @Override
     public String getPromoActionContext() {
         return promoActionContext;
     }
 
+    @Override
     public void setPromoActionContext(final String promoActionContext) {
         this.promoActionContext = promoActionContext;
     }
 
+    @Override
     public String getTag() {
         return tag;
     }
 
+    @Override
     public void setTag(final String tag) {
         this.tag = tag;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
+    @Override
     public String getDisplayName() {
         return displayName;
     }
 
+    @Override
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }
 
+    @Override
     public String getDisplayDescription() {
         return displayDescription;
     }
 
+    @Override
     public void setDisplayDescription(final String displayDescription) {
         this.displayDescription = displayDescription;
     }
 
+    @Override
     public boolean isCouponTriggered() {
         return couponTriggered;
     }
 
+    @Override
     public void setCouponTriggered(final boolean couponTriggered) {
         this.couponTriggered = couponTriggered;
     }
 
+    @Override
     public boolean isCanBeCombined() {
         return canBeCombined;
     }
 
+    @Override
     public void setCanBeCombined(final boolean canBeCombined) {
         this.canBeCombined = canBeCombined;
     }
 
+    @Override
     public boolean isEnabled() {
         return enabled;
     }
 
+    @Override
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
     }
 
+    @Override
     public LocalDateTime getEnabledFrom() {
         return enabledFrom;
     }
 
+    @Override
     public void setEnabledFrom(final LocalDateTime enabledFrom) {
         this.enabledFrom = enabledFrom;
     }
 
+    @Override
     public LocalDateTime getEnabledTo() {
         return enabledTo;
     }
 
+    @Override
     public void setEnabledTo(final LocalDateTime enabledTo) {
         this.enabledTo = enabledTo;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return createdBy;
     }
 
+    @Override
     public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return guid;
     }
 
+    @Override
     public void setGuid(final String guid) {
         this.guid = guid;
     }
 
+    @Override
     public int getRank() {
         return rank;
     }
 
+    @Override
     public void setRank(final int rank) {
         this.rank = rank;
     }

@@ -79,179 +79,223 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
 
 
 
+    @Override
     public BigDecimal getQty() {
         return this.qty;
     }
 
+    @Override
     public void setQty(BigDecimal qty) {
         this.qty = qty;
     }
 
+    @Override
     public BigDecimal getPrice() {
         return this.price;
     }
 
+    @Override
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
+    @Override
     public BigDecimal getNetPrice() {
         return netPrice;
     }
 
+    @Override
     public void setNetPrice(final BigDecimal netPrice) {
         this.netPrice = netPrice;
     }
 
+    @Override
     public BigDecimal getGrossPrice() {
         return grossPrice;
     }
 
+    @Override
     public void setGrossPrice(final BigDecimal grossPrice) {
         this.grossPrice = grossPrice;
     }
 
+    @Override
     public BigDecimal getTaxRate() {
         return taxRate;
     }
 
+    @Override
     public void setTaxRate(final BigDecimal taxRate) {
         this.taxRate = taxRate;
     }
 
+    @Override
     public String getTaxCode() {
         return taxCode;
     }
 
+    @Override
     public void setTaxCode(final String taxCode) {
         this.taxCode = taxCode;
     }
 
+    @Override
     public boolean isTaxExclusiveOfPrice() {
         return taxExclusiveOfPrice;
     }
 
+    @Override
     public void setTaxExclusiveOfPrice(final boolean taxExclusiveOfPrice) {
         this.taxExclusiveOfPrice = taxExclusiveOfPrice;
     }
 
+    @Override
     public BigDecimal getSalePrice() {
         return salePrice;
     }
 
+    @Override
     public void setSalePrice(final BigDecimal salePrice) {
         this.salePrice = salePrice;
     }
 
+    @Override
     public BigDecimal getListPrice() {
         return listPrice;
     }
 
+    @Override
     public void setListPrice(BigDecimal listPrice) {
         this.listPrice = listPrice;
     }
 
+    @Override
     public boolean isGift() {
         return gift;
     }
 
+    @Override
     public void setGift(final boolean gift) {
         this.gift = gift;
     }
 
+    @Override
     public boolean isPromoApplied() {
         return promoApplied;
     }
 
+    @Override
     public void setPromoApplied(final boolean promoApplied) {
         this.promoApplied = promoApplied;
     }
 
+    @Override
     public boolean isFixedPrice() {
         return fixedPrice;
     }
 
+    @Override
     public void setFixedPrice(final boolean fixedPrice) {
         this.fixedPrice = fixedPrice;
     }
 
+    @Override
     public String getAppliedPromo() {
         return appliedPromo;
     }
 
+    @Override
     public void setAppliedPromo(final String appliedPromo) {
         this.appliedPromo = appliedPromo;
     }
 
+    @Override
     public String getProductSkuCode() {
         return productSkuCode;
     }
 
+    @Override
     public void setProductSkuCode(final String productSkuCode) {
         this.productSkuCode = productSkuCode;
     }
 
+    @Override
     public String getProductName() {
         return productName;
     }
 
+    @Override
     public void setProductName(final String productName) {
         this.productName = productName;
     }
 
+    @Override
     public String getSupplierCode() {
         return supplierCode;
     }
 
+    @Override
     public String getDeliveryGroup() {
         return "";
     }
 
+    @Override
     public DeliveryBucket getDeliveryBucket() {
         final String supplierCode = this.supplierCode == null ? "" : this.supplierCode;
         return new DeliveryBucketImpl(getDeliveryGroup(), supplierCode, getCustomerOrder().getOrdernum());
     }
 
+    @Override
     public void setSupplierCode(final String supplierCode) {
         this.supplierCode = supplierCode;
     }
 
+    @Override
     public String getDeliveryRemarks() {
         return deliveryRemarks;
     }
 
+    @Override
     public void setDeliveryRemarks(final String deliveryRemarks) {
         this.deliveryRemarks = deliveryRemarks;
     }
 
+    @Override
     public LocalDateTime getDeliveryEstimatedMin() {
         return deliveryEstimatedMin;
     }
 
+    @Override
     public void setDeliveryEstimatedMin(final LocalDateTime deliveryEstimatedMin) {
         this.deliveryEstimatedMin = deliveryEstimatedMin;
     }
 
+    @Override
     public LocalDateTime getDeliveryEstimatedMax() {
         return deliveryEstimatedMax;
     }
 
+    @Override
     public void setDeliveryEstimatedMax(final LocalDateTime deliveryEstimatedMax) {
         this.deliveryEstimatedMax = deliveryEstimatedMax;
     }
 
+    @Override
     public LocalDateTime getDeliveryGuaranteed() {
         return deliveryGuaranteed;
     }
 
+    @Override
     public void setDeliveryGuaranteed(final LocalDateTime deliveryGuaranteed) {
         this.deliveryGuaranteed = deliveryGuaranteed;
     }
 
+    @Override
     public String getB2bRemarks() {
         return b2bRemarks;
     }
 
+    @Override
     public void setB2bRemarks(final String b2bRemarks) {
         this.b2bRemarks = b2bRemarks;
     }
@@ -264,10 +308,12 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.storedAttributes = new CustomerOrderDetAttributesImpl(storedAttributesInternal);
     }
 
+    @Override
     public Pair<String, String> getValue(final String code) {
         return storedAttributes != null ? storedAttributes.getValue(code) : null;
     }
 
+    @Override
     public void putValue(final String code, final String value, final String displayValue) {
         if (storedAttributes == null) {
             storedAttributes = new CustomerOrderDetAttributesImpl();
@@ -275,74 +321,92 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         storedAttributes.putValue(code, value, displayValue);
     }
 
+    @Override
     public Map<String, Pair<String, String>> getAllValues() {
-        return storedAttributes != null ? storedAttributes.getAllValues() : Collections.<String, Pair<String, String>>emptyMap();
+        return storedAttributes != null ? storedAttributes.getAllValues() : Collections.emptyMap();
     }
 
+    @Override
     public void setAllValues(final Map<String, Pair<String, String>> allValues) {
         this.storedAttributes = new CustomerOrderDetAttributesImpl(allValues);
     }
 
+    @Override
     public CustomerOrder getCustomerOrder() {
         return this.customerOrder;
     }
 
+    @Override
     public void setCustomerOrder(CustomerOrder customerOrder) {
         this.customerOrder = customerOrder;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getCustomerOrderDetId() {
         return this.customerOrderDetId;
     }
 
+    @Override
     public long getId() {
         return this.customerOrderDetId;
     }
 
+    @Override
     public void setCustomerOrderDetId(long customerOrderDetId) {
         this.customerOrderDetId = customerOrderDetId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

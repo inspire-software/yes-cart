@@ -31,15 +31,17 @@ import java.util.Map;
 public class EntityFactoryImpl implements EntityFactory {
 
 
-    private Map<String, String> classNamesMap = new HashMap<String, String>();
+    private Map<String, String> classNamesMap = new HashMap<>();
 
     /** {@inheritDoc} */
+    @Override
     public Class getImplClass(final Class interfaceClass) {
         final String ifaceName = interfaceClass.getCanonicalName();
         return getImplClass(ifaceName);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class getImplClass(final String ifaceName) {
         final String className = classNamesMap.get(ifaceName);
         if (className != null) {
@@ -53,6 +55,7 @@ public class EntityFactoryImpl implements EntityFactory {
     }
 
     /** {@inheritDoc} */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T getByKey(final String ifaceName) {
         final String className = classNamesMap.get(ifaceName);
@@ -67,11 +70,12 @@ public class EntityFactoryImpl implements EntityFactory {
                 throw new InstantiationError("Cant create instance of " + className + " reason " + e.getMessage());
             }
         }
-        throw new InstantiationError("Class instance not found for " + className + ". Interface " + ifaceName);
+        throw new InstantiationError("Class instance not found for [null]. Interface " + ifaceName);
 
     }
 
     /** {@inheritDoc} */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T getByIface(final Class interfaceClass) {
         return (T) getByKey(interfaceClass.getName());

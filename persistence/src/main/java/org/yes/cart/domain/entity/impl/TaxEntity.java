@@ -48,26 +48,32 @@ public class TaxEntity implements Tax, Serializable {
     private String guid;
 
 
+    @Override
     public String getGuid() {
         return guid;
     }
 
+    @Override
     public void setGuid(final String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getId() {
         return taxId;
     }
 
+    @Override
     public long getTaxId() {
         return taxId;
     }
 
+    @Override
     public void setTaxId(final long taxId) {
         this.taxId = taxId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -76,82 +82,102 @@ public class TaxEntity implements Tax, Serializable {
         this.version = version;
     }
 
+    @Override
     public BigDecimal getTaxRate() {
         return taxRate;
     }
 
+    @Override
     public void setTaxRate(final BigDecimal taxRate) {
         this.taxRate = taxRate;
     }
 
+    @Override
     public boolean getExclusiveOfPrice() {
         return exclusiveOfPrice;
     }
 
+    @Override
     public void setExclusiveOfPrice(final boolean exclusiveOfPrice) {
         this.exclusiveOfPrice = exclusiveOfPrice;
     }
 
+    @Override
     public String getShopCode() {
         return shopCode;
     }
 
+    @Override
     public void setShopCode(final String shopCode) {
         this.shopCode = shopCode;
     }
 
+    @Override
     public String getCurrency() {
         return currency;
     }
 
+    @Override
     public void setCurrency(final String currency) {
         this.currency = currency;
     }
 
+    @Override
     public String getCode() {
         return code;
     }
 
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return createdBy;
     }
 
+    @Override
     public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }

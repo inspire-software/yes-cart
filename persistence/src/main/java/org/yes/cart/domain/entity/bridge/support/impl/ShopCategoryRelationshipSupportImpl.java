@@ -51,6 +51,7 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Shop> getAll() {
         return this.shopDao.findAll();
     }
@@ -58,6 +59,7 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category getCategoryById(final long pk) {
         final Category cat = categoryDao.findById(pk);
         if (cat != null) {
@@ -69,6 +71,7 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
     /**
      * {@inheritDoc}
      */
+    @Override
     public CategoryRelationDTO getCategoryRelationById(final long categoryId) {
         final List rez = categoryDao.findQueryObjectByNamedQuery("CATEGORYRELATION.BY.ID", categoryId);
         if (CollectionUtils.isNotEmpty(rez)) {
@@ -80,9 +83,10 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Long> getCategoryParentsIds(final long categoryId) {
         final CategoryRelationDTO category = proxy().getCategoryRelationById(categoryId);
-        final Set<Long> parents = new HashSet<Long>();
+        final Set<Long> parents = new HashSet<>();
         if (category != null && !category.isRoot()) {
             parents.addAll(proxy().getCategoryLinkedIds(category.getCategoryId()));
             final CategoryRelationDTO parent = proxy().getCategoryRelationById(category.getParentId());
@@ -98,6 +102,7 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Long> getCategoryLinkedIds(long categoryId) {
         return Collections.unmodifiableSet(new HashSet(categoryDao.findQueryObjectByNamedQuery("LINKED.CATEGORY.IDS.BY.ID", categoryId)));
     }
@@ -105,6 +110,7 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<Long, Set<Long>> getAllCategoriesIdsMap() {
         return loadCategoryMapping();
     }
@@ -112,9 +118,10 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Long> getShopCategoriesIds(final long shopId) {
 
-        final Set<Long> result = new HashSet<Long>();
+        final Set<Long> result = new HashSet<>();
 
         final Map<Long, Set<Long>> map = proxy().getAllCategoriesIdsMap();
 
@@ -139,9 +146,10 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Long> getShopContentIds(final long shopId) {
 
-        final Set<Long> result = new HashSet<Long>();
+        final Set<Long> result = new HashSet<>();
 
         final Map<Long, Set<Long>> map = proxy().getAllCategoriesIdsMap();
 
@@ -172,8 +180,8 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
 
         final List<Object[]> idParentLinkList = (List) this.categoryDao.findQueryObjectByNamedQuery("CATEGORY.PARENT.LINK.ALL");
 
-        final Map<Long, Set<Long>> all = new HashMap<Long, Set<Long>>(idParentLinkList.size() + 100);
-        final List<Object[]> idParentLinkList2 = new ArrayList<Object[]>(idParentLinkList.size() > 100 ? 10 : idParentLinkList.size() / 10);
+        final Map<Long, Set<Long>> all = new HashMap<>(idParentLinkList.size() + 100);
+        final List<Object[]> idParentLinkList2 = new ArrayList<>(idParentLinkList.size() > 100 ? 10 : idParentLinkList.size() / 10);
 
         for (final Object[] idParentLink : idParentLinkList) {
 
@@ -183,11 +191,7 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
 
             if (parent > 0L && !id.equals(parent)) {
 
-                Set<Long> children = all.get(parent);
-                if (children == null) {
-                    children = new HashSet<Long>();
-                    all.put(parent, children);
-                }
+                final Set<Long> children = all.computeIfAbsent(parent, k -> new HashSet<>());
                 children.add(id);
                 if (link != null) {
                     children.add(link); // Add linked category as a linked child

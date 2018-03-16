@@ -39,6 +39,7 @@ public class SkuPriceRelationshipSupportCachedImpl implements SkuPriceRelationsh
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "shopService-allShopsMap")
     public Map<Long, Set<Shop>> getAllShopsAndSubs() {
         return support.getAllShopsAndSubs();
@@ -46,24 +47,28 @@ public class SkuPriceRelationshipSupportCachedImpl implements SkuPriceRelationsh
 
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "shopService-allShops")
     public List<Shop> getAll() {
         return support.getAll();
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "shopService-allNonSubShops")
     public List<Shop> getAllNonSub() {
         return support.getAllNonSub();
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "shopService-subShopsByMaster")
     public List<Shop> getAllMastered(final long masterId) {
         return support.getAllMastered(masterId);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<SkuPrice> getSkuPrices(final String sku) {
         return support.getSkuPrices(sku);
     }

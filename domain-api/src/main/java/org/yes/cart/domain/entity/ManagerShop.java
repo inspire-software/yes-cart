@@ -19,7 +19,7 @@ package org.yes.cart.domain.entity;
 /**
  * Represent relation between manager and shop to support federated environment.
  */
-public interface ManagerShop extends Guidable {
+public interface ManagerShop extends Auditable, Guidable {
 
     /**
      * Get pk;

@@ -38,6 +38,7 @@ public class NavigatableAttributesSupportCachedImpl implements NavigatableAttrib
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-allNavigatableAttributeCodes")
     public Set<String> getAllNavigatableAttributeCodes() {
         return support.getAllNavigatableAttributeCodes();
@@ -46,6 +47,7 @@ public class NavigatableAttributesSupportCachedImpl implements NavigatableAttrib
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-allSearchableAttributeCodes")
     public Set<String> getAllSearchableAttributeCodes() {
         return support.getAllSearchableAttributeCodes();
@@ -54,6 +56,7 @@ public class NavigatableAttributesSupportCachedImpl implements NavigatableAttrib
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-allSearchablePrimaryAttributeCodes")
     public Set<String> getAllSearchablePrimaryAttributeCodes() {
         return support.getAllSearchablePrimaryAttributeCodes();
@@ -62,6 +65,7 @@ public class NavigatableAttributesSupportCachedImpl implements NavigatableAttrib
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-allStorableAttributeCodes")
     public Set<String> getAllStorableAttributeCodes() {
         return support.getAllStorableAttributeCodes();
@@ -70,6 +74,7 @@ public class NavigatableAttributesSupportCachedImpl implements NavigatableAttrib
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-byAttributeCode")
     public Attribute getByAttributeCode(final String attributeCode) {
         return support.getByAttributeCode(attributeCode);

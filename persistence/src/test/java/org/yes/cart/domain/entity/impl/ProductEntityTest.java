@@ -29,7 +29,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 /**
- * User: igora Igor Azarny
+ * User: Igor Azarny
  * Date: 6/6/13
  * Time: 3:26 PM
  */

@@ -46,99 +46,123 @@ public class AttrValueEntityCustomer implements org.yes.cart.domain.entity.AttrV
     }
 
 
+    @Override
     public Customer getCustomer() {
         return this.customer;
     }
 
+    @Override
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
+    @Override
     public String getVal() {
         return this.val;
     }
 
+    @Override
     public void setVal(String val) {
         this.val = val;
     }
 
+    @Override
     public String getIndexedVal() {
         return indexedVal;
     }
 
+    @Override
     public void setIndexedVal(final String indexedVal) {
         this.indexedVal = indexedVal;
     }
 
+    @Override
     public String getDisplayVal() {
         return this.displayVal;
     }
 
+    @Override
     public void setDisplayVal(String displayVal) {
         this.displayVal = displayVal;
     }
 
+    @Override
     public String getAttributeCode() {
         return attributeCode;
     }
 
+    @Override
     public void setAttributeCode(final String attributeCode) {
         this.attributeCode = attributeCode;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getAttrvalueId() {
         return this.attrvalueId;
     }
 
+    @Override
     public long getId() {
         return this.attrvalueId;
     }
 
 
+    @Override
     public void setAttrvalueId(long attrvalueId) {
         this.attrvalueId = attrvalueId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

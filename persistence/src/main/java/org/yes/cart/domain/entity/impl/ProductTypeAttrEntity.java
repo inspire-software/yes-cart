@@ -53,155 +53,193 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
 
+    @Override
     public Attribute getAttribute() {
         return this.attribute;
     }
 
+    @Override
     public void setAttribute(Attribute attribute) {
         this.attribute = attribute;
     }
 
+    @Override
     public ProductType getProducttype() {
         return this.producttype;
     }
 
+    @Override
     public void setProducttype(ProductType producttype) {
         this.producttype = producttype;
     }
 
+    @Override
     public int getRank() {
         return this.rank;
     }
 
+    @Override
     public void setRank(int rank) {
         this.rank = rank;
     }
 
+    @Override
     public boolean isVisible() {
         return this.visible;
     }
 
+    @Override
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
 
+    @Override
     public boolean isSimilarity() {
         return this.similarity;
     }
 
+    @Override
     public void setSimilarity(boolean similarity) {
         this.similarity = similarity;
     }
 
+    @Override
     public boolean isStore() {
         return attribute.isStore();
     }
 
+    @Override
     public void setStore(final boolean store) {
         throw new UnsupportedOperationException("Set this attribute on AttributeEntity");
     }
 
+    @Override
     public boolean isSearch() {
         return attribute.isSearch();
     }
 
+    @Override
     public void setSearch(final boolean search) {
         throw new UnsupportedOperationException("Set this attribute on AttributeEntity");
     }
 
+    @Override
     public boolean isPrimary() {
         return attribute.isPrimary();
     }
 
+    @Override
     public void setPrimary(final boolean primary) {
         throw new UnsupportedOperationException("Set this attribute on AttributeEntity");
     }
 
+    @Override
     public boolean isNavigation() {
         return attribute.isNavigation();
     }
 
+    @Override
     public void setNavigation(boolean navigation) {
         throw new UnsupportedOperationException("Set this attribute on AttributeEntity");
     }
 
+    @Override
     public String getNavigationTemplate() {
         return navigationTemplate;
     }
 
+    @Override
     public void setNavigationTemplate(final String navigationTemplate) {
         this.navigationTemplate = navigationTemplate;
     }
 
+    @Override
     public String getNavigationType() {
         return this.navigationType;
     }
 
+    @Override
     public void setNavigationType(String navigationType) {
         this.navigationType = navigationType;
     }
 
+    @Override
     public String getRangeNavigation() {
         return this.rangeNavigation;
     }
 
+    @Override
     public void setRangeNavigation(String rangeNavigation) {
         this.rangeNavigation = rangeNavigation;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getProductTypeAttrId() {
         return productTypeAttrId;
     }
 
+    @Override
     public long getId() {
         return this.productTypeAttrId;
     }
 
 
+    @Override
     public void setProductTypeAttrId(long productTypeAttrId) {
         this.productTypeAttrId = productTypeAttrId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -214,6 +252,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
 
     private RangeList rangeListCache = null;
 
+    @Override
     public RangeList getRangeList() {
         if (rangeListCache == null && getRangeNavigation() != null) {
             rangeListCache = (RangeList) xStreamProvider.fromXML(getRangeNavigation());
@@ -221,6 +260,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         return rangeListCache;
     }
 
+    @Override
     public void setRangeList(final RangeList rangeList) {
         setRangeNavigation(xStreamProvider.toXML(rangeList));
         this.rangeListCache = rangeList;

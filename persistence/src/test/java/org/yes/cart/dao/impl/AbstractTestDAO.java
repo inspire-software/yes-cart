@@ -82,11 +82,7 @@ public abstract class AbstractTestDAO  {
             session = sessionFactory.openSession();
             dbTester = createDatabaseTester();
             if (dbTester != null) {
-                try {
-                    dbTester.onSetup();
-                } catch (Exception e) {
-                    throw e;
-                }
+                dbTester.onSetup();
             }
         }
 

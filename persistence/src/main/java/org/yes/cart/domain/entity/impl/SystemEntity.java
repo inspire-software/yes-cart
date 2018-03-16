@@ -35,7 +35,7 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
     private String code;
     private String name;
     private String description;
-    private Map<String, AttrValueSystem> attributes = new HashMap<String, AttrValueSystem>(0);
+    private Map<String, AttrValueSystem> attributes = new HashMap<>(0);
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
     private String createdBy;
@@ -47,90 +47,112 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
 
 
 
+    @Override
     public String getCode() {
         return this.code;
     }
 
+    @Override
     public void setCode(String code) {
         this.code = code;
     }
 
+    @Override
     public String getName() {
         return this.name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getDescription() {
         return this.description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Override
     public Map<String, AttrValueSystem> getAttributes() {
         return this.attributes;
     }
 
+    @Override
     public void setAttributes(Map<String, AttrValueSystem> attributes) {
         this.attributes = attributes;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getSystemId() {
         return this.systemId;
     }
 
+    @Override
     public long getId() {
         return this.systemId;
     }
 
+    @Override
     public void setSystemId(long systemId) {
         this.systemId = systemId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

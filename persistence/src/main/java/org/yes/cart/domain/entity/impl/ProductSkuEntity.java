@@ -50,8 +50,8 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     private Product product;
     private int rank;
     private String barCode;
-    private Collection<SkuPrice> skuPrice = new ArrayList<SkuPrice>(0);
-    private Collection<AttrValueProductSku> attributes = new ArrayList<AttrValueProductSku>(0);
+    private Collection<SkuPrice> skuPrice = new ArrayList<>(0);
+    private Collection<AttrValueProductSku> attributes = new ArrayList<>(0);
     private SeoEntity seoInternal;
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
@@ -64,98 +64,122 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
 
 
 
+    @Override
     public String getCode() {
         return this.code;
     }
 
+    @Override
     public void setCode(String code) {
         this.code = code;
     }
 
+    @Override
     public String getManufacturerCode() {
         return manufacturerCode;
     }
 
+    @Override
     public void setManufacturerCode(final String manufacturerCode) {
         this.manufacturerCode = manufacturerCode;
     }
 
+    @Override
     public String getManufacturerPartCode() {
         return manufacturerPartCode;
     }
 
+    @Override
     public void setManufacturerPartCode(final String manufacturerPartCode) {
         this.manufacturerPartCode = manufacturerPartCode;
     }
 
+    @Override
     public String getSupplierCode() {
         return supplierCode;
     }
 
+    @Override
     public void setSupplierCode(final String supplierCode) {
         this.supplierCode = supplierCode;
     }
 
+    @Override
     public String getSupplierCatalogCode() {
         return supplierCatalogCode;
     }
 
+    @Override
     public void setSupplierCatalogCode(final String supplierCatalogCode) {
         this.supplierCatalogCode = supplierCatalogCode;
     }
 
+    @Override
     public String getName() {
         return this.name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getDisplayName() {
         return this.displayName;
     }
 
+    @Override
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
+    @Override
     public String getDescription() {
         return this.description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Override
     public Product getProduct() {
         return this.product;
     }
 
+    @Override
     public void setProduct(Product product) {
         this.product = product;
     }
 
+    @Override
     public int getRank() {
         return this.rank;
     }
 
+    @Override
     public void setRank(int rank) {
         this.rank = rank;
     }
 
+    @Override
     public String getBarCode() {
         return this.barCode;
     }
 
+    @Override
     public void setBarCode(String barCode) {
         this.barCode = barCode;
     }
 
+    @Override
     public Collection<AttrValueProductSku> getAttributes() {
         return this.attributes;
     }
 
+    @Override
     public void setAttributes(Collection<AttrValueProductSku> attributes) {
         this.attributes = attributes;
     }
@@ -168,58 +192,72 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.seoInternal = seo;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getSkuId() {
         return this.skuId;
     }
 
+    @Override
     public long getId() {
         return this.skuId;
     }
 
+    @Override
     public void setSkuId(long skuId) {
         this.skuId = skuId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -228,8 +266,9 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.version = version;
     }
 
+    @Override
     public Collection<AttrValueProductSku> getAttributesByCode(final String attributeCode) {
-        final Collection<AttrValueProductSku> result = new ArrayList<AttrValueProductSku>();
+        final Collection<AttrValueProductSku> result = new ArrayList<>();
         if (attributeCode != null && this.attributes != null) {
             for (AttrValueProductSku attrValue : this.attributes) {
                 if (attributeCode.equals(attrValue.getAttributeCode())) {
@@ -240,6 +279,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         return result;
     }
 
+    @Override
     public AttrValueProductSku getAttributeByCode(final String attributeCode) {
         if (attributeCode == null) {
             return null;
@@ -256,12 +296,14 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
 
 
 
+    @Override
     public String getAttributeValueByCode(final String attributeCode) {
         final AttrValue val = getAttributeByCode(attributeCode);
         return val != null ? val.getVal() : null;
     }
 
 
+    @Override
     public boolean isAttributeValueByCodeTrue(final String attributeCode) {
         final AttrValue val = getAttributeByCode(attributeCode);
         return val != null && Boolean.valueOf(val.getVal());
@@ -269,8 +311,9 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
 
 
 
+    @Override
     public Map<String, AttrValue> getAllAttributesAsMap() {
-        final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
+        final Map<String, AttrValue> rez = new HashMap<>();
         if (this.attributes != null) {
             for (AttrValue attrValue : this.attributes) {
                 if (attrValue != null && attrValue.getAttributeCode() != null) {
@@ -281,11 +324,13 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         return rez;
     }
 
+    @Override
     public Collection<AttrValue> getAllAttributes() {
-        return new ArrayList<AttrValue>(attributes);
+        return new ArrayList<>(attributes);
     }
 
 
+    @Override
     public Seo getSeo() {
         SeoEntity seo = getSeoInternal();
         if (seo == null) {
@@ -295,6 +340,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         return seo;
     }
 
+    @Override
     public void setSeo(final Seo seo) {
         this.setSeoInternal((SeoEntity) seo);
     }

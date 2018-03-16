@@ -50,17 +50,17 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (ASSOCIATION_ID)
-    ) comment='Cross/up/accesories/who buy also buy sell' ;
+    ) comment='Cross/up/accessories/who buy also buy sell' ;
 
     create table TATTRIBUTE (
         ATTRIBUTE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         CODE varchar(255) not null  unique,
-        SECURE_ATTRIBUTE bit default 0 not null comment 'Attribute contains secinsitive data if secure flag is true',
+        SECURE_ATTRIBUTE bit default 0 not null comment 'Attribute contains sensitive data if secure flag is true',
         MANDATORY bit not null comment 'Attribute must have the default value if mandatory flag is true',
         ALLOWDUPLICATE bit default 0 not null comment 'Allow to duplicate attr values. Example color - red and black',
         ALLOWFAILOVER bit default 0 not null comment 'Allow search attribute value in parent object',
-        VAL longtext comment 'Default value , shall be force inserted for new attributes, if attribute is mandaroty',
+        VAL longtext comment 'Default value , shall be force inserted for new attributes, if attribute is mandatoty',
         REXP longtext comment 'Regular expression to validate user input on UI.',
         V_FAILED_MSG longtext comment 'Message if type, mandatory or re validation failed',
         RANK integer default 500 comment 'What order in dynamic form on UI',
@@ -107,7 +107,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (BRAND_ID)
-    ) comment='Product brand / manafacturer' ;
+    ) comment='Product brand / manufacturer' ;
 
     create table TBRANDATTRVALUE (
         ATTRVALUE_ID bigint not null auto_increment,
@@ -347,7 +347,7 @@
     create table TCUSTOMERORDERDELIVERY (
         CUSTOMERORDERDELIVERY_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        DELIVERYNUM varchar(255) comment 'Order contract in case of splited orders (XXX-1,XXX-2, etc). Delivery contract XXX-2-DDD1,XXX-2-DDD2, XXX-2-DDD3, where XXX order num, DDD delivery num.',
+        DELIVERYNUM varchar(255) comment 'Order contract in case of split orders (XXX-1,XXX-2, etc). Delivery contract XXX-2-DDD1,XXX-2-DDD2, XXX-2-DDD3, where XXX order num, DDD delivery num.',
         REF_NO varchar(255) comment 'External ref number',
         PRICE decimal(19,2) not null,
         LIST_PRICE decimal(19,2) not null,
@@ -504,7 +504,7 @@
         ETYPE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         JAVATYPE varchar(255) not null comment 'Shows the java type',
-        BUSINESSTYPE varchar(255) comment 'Used mosty on UI. How to represent product, category, attributes, etc',
+        BUSINESSTYPE varchar(255) comment 'Used mostly on UI. How to represent product, category, attributes, etc',
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
@@ -681,7 +681,7 @@
         VERSION bigint not null default 0,
         PRODUCT_ID bigint not null,
         CATEGORY_ID bigint not null,
-        RANK integer comment 'What the default order of particular product in partcular category',
+        RANK integer comment 'What the default order of particular product in particular category',
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),

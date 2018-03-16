@@ -76,67 +76,82 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
 
 
 
+    @Override
     public String getName() {
         return this.name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getDisplayName() {
         return displayName;
     }
 
+    @Override
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
 
+    @Override
     public String getDescription() {
         return this.description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Override
     public String getDisplayDescription() {
         return displayDescription;
     }
 
+    @Override
     public void setDisplayDescription(final String displayDescription) {
         this.displayDescription = displayDescription;
     }
 
+    @Override
     public Integer getMaxDays() {
         return this.maxDays;
     }
 
+    @Override
     public void setMaxDays(Integer maxDays) {
         this.maxDays = maxDays;
     }
 
+    @Override
     public Integer getMinDays() {
         return minDays;
     }
 
+    @Override
     public void setMinDays(final Integer minDays) {
         this.minDays = minDays;
     }
 
+    @Override
     public String getExcludeWeekDays() {
         return excludeWeekDays;
     }
 
+    @Override
     public void setExcludeWeekDays(final String excludeWeekDays) {
         this.excludeWeekDays = excludeWeekDays;
         this.excludeWeekDaysList = null;
     }
 
+    @Override
     public List<Integer> getExcludeWeekDaysAsList() {
         if (excludeWeekDaysList == null) {
             if (excludeWeekDays != null) {
-                final List<Integer> days = new ArrayList<Integer>(7);
+                final List<Integer> days = new ArrayList<>(7);
                 for (final String day : Arrays.asList(StringUtils.split(excludeWeekDays, ','))) {
                     days.add(NumberUtils.toInt(day));
                 }
@@ -150,17 +165,20 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
 
     }
 
+    @Override
     public String getExcludeDates() {
         return excludeDates;
     }
 
+    @Override
     public void setExcludeDates(final String excludeDates) {
         this.excludeDates = excludeDates;
     }
 
+    @Override
     public Map<LocalDate, LocalDate> getExcludeDatesAsMap() {
 
-        final Map<LocalDate, LocalDate> dates = new HashMap<LocalDate, LocalDate>();
+        final Map<LocalDate, LocalDate> dates = new HashMap<>();
         if (StringUtils.isNotBlank(getExcludeDates())) {
 
             final String[] all = StringUtils.split(getExcludeDates(), ',');
@@ -193,47 +211,58 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
 
     }
 
+    @Override
     public boolean isGuaranteed() {
         return guaranteed;
     }
 
+    @Override
     public void setGuaranteed(final boolean guaranteed) {
         this.guaranteed = guaranteed;
     }
 
+    @Override
     public boolean isNamedDay() {
         return namedDay;
     }
 
+    @Override
     public void setNamedDay(final boolean namedDay) {
         this.namedDay = namedDay;
     }
 
+    @Override
     public String getSlaType() {
         return this.slaType;
     }
 
+    @Override
     public void setSlaType(String slaType) {
         this.slaType = slaType;
     }
 
+    @Override
     public String getScript() {
         return this.script;
     }
 
+    @Override
     public void setScript(String script) {
         this.script = script;
     }
 
+    @Override
     public String getExcludeCustomerTypes() {
         return excludeCustomerTypes;
     }
 
+    @Override
     public void setExcludeCustomerTypes(final String excludeCustomerTypes) {
         this.excludeCustomerTypes = excludeCustomerTypes;
         this.excludeCustomerTypesList = null;
     }
 
+    @Override
     public List<String> getExcludeCustomerTypesAsList() {
         if (excludeCustomerTypesList == null) {
             if (excludeCustomerTypes != null) {
@@ -246,15 +275,18 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         return excludeCustomerTypesList;
     }
 
+    @Override
     public String getSupportedPaymentGateways() {
         return supportedPaymentGateways;
     }
 
+    @Override
     public void setSupportedPaymentGateways(final String supportedPaymentGateways) {
         this.supportedPaymentGateways = supportedPaymentGateways;
         this.supportedPaymentGatewaysAsList = null;
     }
 
+    @Override
     public List<String> getSupportedPaymentGatewaysAsList() {
         if (supportedPaymentGatewaysAsList == null) {
             if (supportedPaymentGateways != null) {
@@ -273,15 +305,18 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     }
 
 
+    @Override
     public String getSupportedFulfilmentCentres() {
         return supportedFulfilmentCentres;
     }
 
+    @Override
     public void setSupportedFulfilmentCentres(final String supportedFulfilmentCentres) {
         this.supportedFulfilmentCentres = supportedFulfilmentCentres;
         this.supportedFulfilmentCentresAsList = null;
     }
 
+    @Override
     public List<String> getSupportedFulfilmentCentresAsList() {
         if (supportedFulfilmentCentresAsList == null) {
             if (supportedFulfilmentCentres != null) {
@@ -299,91 +334,113 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     }
 
 
+    @Override
     public boolean isBillingAddressNotRequired() {
         return billingAddressNotRequired;
     }
 
+    @Override
     public void setBillingAddressNotRequired(final boolean billingAddressNotRequired) {
         this.billingAddressNotRequired = billingAddressNotRequired;
     }
 
+    @Override
     public boolean isDeliveryAddressNotRequired() {
         return deliveryAddressNotRequired;
     }
 
+    @Override
     public void setDeliveryAddressNotRequired(final boolean deliveryAddressNotRequired) {
         this.deliveryAddressNotRequired = deliveryAddressNotRequired;
     }
 
+    @Override
     public String getExternalRef() {
         return externalRef;
     }
 
+    @Override
     public void setExternalRef(final String externalRef) {
         this.externalRef = externalRef;
     }
 
+    @Override
     public Carrier getCarrier() {
         return this.carrier;
     }
 
+    @Override
     public void setCarrier(Carrier carrier) {
         this.carrier = carrier;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return this.createdBy;
     }
 
+    @Override
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return this.updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return this.guid;
     }
 
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
+    @Override
     public long getCarrierslaId() {
         return this.carrierslaId;
     }
 
 
+    @Override
     public long getId() {
         return this.carrierslaId;
     }
 
+    @Override
     public void setCarrierslaId(long carrierslaId) {
         this.carrierslaId = carrierslaId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

@@ -32,7 +32,7 @@ public class CustomerOrderDetAttributesImpl implements Serializable {
 
     public static final String SEPARATOR = "#$#";
 
-    private final Map<String, Pair<String, String>> values = new LinkedHashMap<String, Pair<String, String>>();
+    private final Map<String, Pair<String, String>> values = new LinkedHashMap<>();
 
     public CustomerOrderDetAttributesImpl(final Map<String, Pair<String, String>> values) {
         if (values != null && !values.isEmpty()) {
@@ -49,10 +49,10 @@ public class CustomerOrderDetAttributesImpl implements Serializable {
                 final String displayValue = valueTriplets[i + 2];
                 if (value != null && value.length() > 0) {
                     if (displayValue != null && displayValue.length() > 0) {
-                        values.put(key, new Pair<String, String>(value, displayValue));
+                        values.put(key, new Pair<>(value, displayValue));
                         continue;
                     }
-                    values.put(key, new Pair<String, String>(value, null));
+                    values.put(key, new Pair<>(value, null));
                 }
             }
         }
@@ -67,7 +67,7 @@ public class CustomerOrderDetAttributesImpl implements Serializable {
 
     public void putValue(final String code, final String value, final String displayValue) {
         if (value != null && value.length() > 0) {
-            values.put(code, new Pair<String, String>(value, displayValue));
+            values.put(code, new Pair<>(value, displayValue));
         } else {
             values.remove(code);
         }

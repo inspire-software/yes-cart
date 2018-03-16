@@ -32,7 +32,7 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
 
     public static final BigDecimal PERPETUAL = new BigDecimal(Integer.MAX_VALUE);
 
-    private static final SortedSet<String> NO_SKU = new TreeSet<String>();
+    private static final SortedSet<String> NO_SKU = new TreeSet<>();
 
     private final boolean available;
     private final int availability;
@@ -56,8 +56,8 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
         }
         if (inventoryQty != null) {
             inStock = false;
-            availableToSellQuantity = new HashMap<String, BigDecimal>(inventoryQty);
-            skuCodes = new TreeSet<String>(inventoryQty.keySet());
+            availableToSellQuantity = new HashMap<>(inventoryQty);
+            skuCodes = new TreeSet<>(inventoryQty.keySet());
             if (!perpetual) {
                 for (final BigDecimal qty : inventoryQty.values()) {
                     if (MoneyUtils.isPositive(qty)) {
@@ -77,31 +77,37 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isAvailable() {
         return available;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isInStock() {
         return inStock;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isPerpetual() {
         return perpetual;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getAvailability() {
         return availability;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getDefaultSkuCode() {
         return defaultSku;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getFirstAvailableSkuCode() {
         if (firstAvailableSku == null) {
             firstAvailableSku = determineFirstAvailableSkuCode(defaultSku, skuCodes);
@@ -109,7 +115,7 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
         return firstAvailableSku;
     }
 
-    public String determineFirstAvailableSkuCode(final String defaultSku, final SortedSet<String> skuCodes) {
+    private String determineFirstAvailableSkuCode(final String defaultSku, final SortedSet<String> skuCodes) {
         final BigDecimal defValue = getAvailableToSellQuantity(defaultSku);
         if (MoneyUtils.isPositive(defValue)) {
             return defaultSku;
@@ -125,11 +131,13 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
 
 
     /** {@inheritDoc} */
+    @Override
     public SortedSet<String> getSkuCodes() {
         return skuCodes;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getAvailableToSellQuantity(final String skuCode) {
         if (perpetual) {
             return PERPETUAL;

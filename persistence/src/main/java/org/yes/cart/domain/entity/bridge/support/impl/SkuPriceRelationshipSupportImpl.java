@@ -40,21 +40,15 @@ public class SkuPriceRelationshipSupportImpl implements SkuPriceRelationshipSupp
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<Long, Set<Shop>> getAllShopsAndSubs() {
         final List<Shop> all = this.self().getAll();
-        final Map<Long, Set<Shop>> shopsMap = new HashMap<Long, Set<Shop>>();
+        final Map<Long, Set<Shop>> shopsMap = new HashMap<>();
         for (final Shop shop : all) {
             if (shop.getMaster() == null) {
-                final Set<Shop> subs = shopsMap.get(shop.getShopId());
-                if (subs == null) {
-                    shopsMap.put(shop.getShopId(), new HashSet<Shop>());
-                }
+                shopsMap.computeIfAbsent(shop.getShopId(), k -> new HashSet<>());
             } else {
-                Set<Shop> subs = shopsMap.get(shop.getMaster().getShopId());
-                if (subs == null) {
-                    subs = new HashSet<Shop>();
-                    shopsMap.put(shop.getMaster().getShopId(), subs);
-                }
+                Set<Shop> subs = shopsMap.computeIfAbsent(shop.getMaster().getShopId(), k -> new HashSet<>());
                 subs.add(shop);
             }
         }
@@ -63,21 +57,25 @@ public class SkuPriceRelationshipSupportImpl implements SkuPriceRelationshipSupp
 
 
     /** {@inheritDoc} */
+    @Override
     public List<Shop> getAll() {
         return this.shopDao.findAll();
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Shop> getAllNonSub() {
         return this.shopDao.findByNamedQuery("SHOP.NONSUB.ONLY");
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Shop> getAllMastered(final long masterId) {
         return this.shopDao.findByNamedQuery("SHOP.BY.MASTER.ID", masterId);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<SkuPrice> getSkuPrices(final String sku) {
         return skuPriceDao.findByNamedQuery("SKUPRICE.BY.SKUCODE.ALL", sku);
     }

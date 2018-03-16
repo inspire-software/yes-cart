@@ -55,7 +55,7 @@ public class ShopEntityTest {
             allowing(u3).getUrl(); will(returnValue("www.u3.com"));
         }});
 
-        shopEntity.setShopUrl(new HashSet<ShopUrl>(Arrays.asList(u1, u2, u3)));
+        shopEntity.setShopUrl(new HashSet<>(Arrays.asList(u1, u2, u3)));
 
         assertEquals("http://www.u2.com", shopEntity.getDefaultShopUrl());
 
@@ -81,7 +81,7 @@ public class ShopEntityTest {
             allowing(u3).getUrl(); will(returnValue("127.0.0.1"));
         }});
 
-        shopEntity.setShopUrl(new HashSet<ShopUrl>(Arrays.asList(u1, u2, u3)));
+        shopEntity.setShopUrl(new HashSet<>(Arrays.asList(u1, u2, u3)));
 
         assertEquals("http://www.u2.com", shopEntity.getDefaultShopUrl());
 

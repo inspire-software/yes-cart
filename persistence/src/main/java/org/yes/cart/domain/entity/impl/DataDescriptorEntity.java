@@ -41,18 +41,22 @@ public class DataDescriptorEntity implements DataDescriptor, Serializable {
     private String updatedBy;
 
 
+    @Override
     public long getId() {
         return datadescriptorId;
     }
 
+    @Override
     public long getDatadescriptorId() {
         return datadescriptorId;
     }
 
+    @Override
     public void setDatadescriptorId(final long datadescriptorId) {
         this.datadescriptorId = datadescriptorId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -61,66 +65,82 @@ public class DataDescriptorEntity implements DataDescriptor, Serializable {
         this.version = version;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
+    @Override
     public String getType() {
         return type;
     }
 
+    @Override
     public void setType(final String type) {
         this.type = type;
     }
 
+    @Override
     public String getValue() {
         return value;
     }
 
+    @Override
     public void setValue(final String value) {
         this.value = value;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return createdBy;
     }
 
+    @Override
     public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return name;
     }
 
+    @Override
     public void setGuid(final String guid) {
         this.name = guid;
     }

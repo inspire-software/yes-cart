@@ -52,7 +52,7 @@ public class DeliveryBucketImplTest {
         assertTrue(0 < new DeliveryBucketImpl("D1", "S001", "Q1").compareTo(new DeliveryBucketImpl("D1", "S001")));
 
 
-        final SortedMap<DeliveryBucket, Object> buckets = new TreeMap<DeliveryBucket, Object>();
+        final SortedMap<DeliveryBucket, Object> buckets = new TreeMap<>();
         buckets.put(new DeliveryBucketImpl("D1", "S001"), new Object());
         buckets.put(new DeliveryBucketImpl("D2", "S001"), new Object());
         buckets.put(new DeliveryBucketImpl("D3", "S001"), new Object());
@@ -66,8 +66,8 @@ public class DeliveryBucketImplTest {
         buckets.put(new DeliveryBucketImpl("D4", "S002"), new Object());
         buckets.put(new DeliveryBucketImpl("D5", "S002"), new Object());
 
-        final List<String> order = new ArrayList<String>(Arrays.asList(
-                "S001_D1_", "S001_D2_", "S001_D3_",   "S001_D3_Q1", "S001_D4_", "S001_D5_",
+        final List<String> order = new ArrayList<>(Arrays.asList(
+                "S001_D1_", "S001_D2_", "S001_D3_", "S001_D3_Q1", "S001_D4_", "S001_D5_",
                 "S002_D1_", "S002_D2_", "S002_D3_Q1", "S002_D3_Q2", "S002_D4_", "S002_D5_"
         ));
 

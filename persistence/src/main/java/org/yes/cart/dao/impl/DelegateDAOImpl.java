@@ -42,6 +42,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public EntityFactory getEntityFactory() {
         return delegate.getEntityFactory();
     }
@@ -49,6 +50,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public <I> I getEntityIdentifier(final Object entity) {
         return delegate.getEntityIdentifier(entity);
     }
@@ -56,6 +58,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public T findById(final PK id, final boolean lock) {
         return delegate.findById(id, lock);
     }
@@ -63,6 +66,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public T findById(final PK id) {
         return delegate.findById(id);
     }
@@ -70,6 +74,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<T> findAll() {
         return delegate.findAll();
     }
@@ -77,6 +82,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public ResultsIterator<T> findAllIterator() {
         return delegate.findAllIterator();
     }
@@ -84,6 +90,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public T findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
         return delegate.findSingleByNamedQuery(namedQueryName, parameters);
     }
@@ -91,6 +98,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public T findSingleByNamedQueryCached(final String namedQueryName, final Object... parameters) {
         return delegate.findSingleByNamedQueryCached(namedQueryName, parameters);
     }
@@ -98,6 +106,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object> findByQuery(final String hsqlQuery, final Object... parameters) {
         return delegate.findByQuery(hsqlQuery, parameters);
     }
@@ -105,6 +114,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public ResultsIterator<Object> findByQueryIterator(final String hsqlQuery, final Object... parameters) {
         return delegate.findByQueryIterator(hsqlQuery, parameters);
     }
@@ -112,6 +122,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object findSingleByQuery(final String hsqlQuery, final Object... parameters) {
         return delegate.findSingleByQuery(hsqlQuery, parameters);
     }
@@ -119,6 +130,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getScalarResultByNamedQuery(final String namedQueryName, final Object... parameters) {
         return delegate.getScalarResultByNamedQuery(namedQueryName, parameters);
     }
@@ -126,6 +138,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<T> findByNamedQuery(final String namedQueryName, final Object... parameters) {
         return delegate.findByNamedQuery(namedQueryName, parameters);
     }
@@ -133,6 +146,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public ResultsIterator<T> findByNamedQueryIterator(final String namedQueryName, final Object... parameters) {
         return delegate.findByNamedQueryIterator(namedQueryName, parameters);
     }
@@ -140,6 +154,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<T> findByNamedQueryForUpdate(final String namedQueryName, final int timeout, final Object... parameters) {
         return delegate.findByNamedQueryForUpdate(namedQueryName, timeout, parameters);
     }
@@ -147,6 +162,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<T> findByNamedQueryCached(final String namedQueryName, final Object... parameters) {
         return delegate.findByNamedQueryCached(namedQueryName, parameters);
     }
@@ -154,6 +170,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object> findQueryObjectByNamedQuery(final String namedQueryName, final Object... parameters) {
         return delegate.findQueryObjectByNamedQuery(namedQueryName, parameters);
     }
@@ -161,6 +178,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public ResultsIterator<Object> findQueryObjectByNamedQueryIterator(final String namedQueryName, final Object... parameters) {
         return delegate.findQueryObjectByNamedQueryIterator(namedQueryName, parameters);
     }
@@ -168,6 +186,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object> findQueryObjectRangeByNamedQuery(final String namedQueryName, final int firstResult, final int maxResults, final Object... parameters) {
         return delegate.findQueryObjectRangeByNamedQuery(namedQueryName, firstResult, maxResults, parameters);
     }
@@ -175,6 +194,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object[]> findQueryObjectsByNamedQuery(final String namedQueryName, final Object... parameters) {
         return delegate.findQueryObjectsByNamedQuery(namedQueryName, parameters);
     }
@@ -182,6 +202,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object[]> findQueryObjectsRangeByNamedQuery(final String namedQueryName, final int firstResult, final int maxResults, final Object... parameters) {
         return delegate.findQueryObjectsRangeByNamedQuery(namedQueryName, firstResult, maxResults, parameters);
     }
@@ -189,6 +210,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<T> findRangeByNamedQuery(final String namedQueryName, final int firstResult, final int maxResults, final Object... parameters) {
         return delegate.findRangeByNamedQuery(namedQueryName, firstResult, maxResults, parameters);
     }
@@ -196,6 +218,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<T> findByCriteria(final String eCriteria, final Object... parameters) {
         return delegate.findByCriteria(eCriteria, parameters);
     }
@@ -203,6 +226,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<T> findRangeByCriteria(final String eCriteria, final int firstResult, final int maxResults, final Object... parameters) {
         return delegate.findRangeByCriteria(eCriteria, firstResult, maxResults, parameters);
     }
@@ -210,6 +234,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return delegate.findCountByCriteria(eCriteria, parameters);
     }
@@ -217,6 +242,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public T findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return delegate.findSingleByCriteria(eCriteria, parameters);
     }
@@ -224,6 +250,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public T create(final T entity) {
         return delegate.create(entity);
     }
@@ -231,6 +258,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public T update(final T entity) {
         return delegate.update(entity);
     }
@@ -238,6 +266,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public T saveOrUpdate(final T entity) {
         return delegate.saveOrUpdate(entity);
     }
@@ -245,6 +274,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public void delete(final Object entity) {
         delegate.delete(entity);
     }
@@ -252,6 +282,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public void refresh(final Object entity) {
         delegate.refresh(entity);
     }
@@ -259,6 +290,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public void evict(final Object entity) {
         delegate.evict(entity);
     }
@@ -266,6 +298,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public int executeNativeUpdate(final String nativeQuery) {
         return delegate.executeNativeUpdate(nativeQuery);
     }
@@ -273,6 +306,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public List executeNativeQuery(final String nativeQuery) {
         return delegate.executeNativeQuery(nativeQuery);
     }
@@ -280,6 +314,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public List executeHsqlQuery(final String hsql) {
         return delegate.executeHsqlQuery(hsql);
     }
@@ -287,6 +322,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public int executeHsqlUpdate(final String hsql, final Object... parameters) {
         return delegate.executeHsqlUpdate(hsql, parameters);
     }
@@ -294,6 +330,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public int executeUpdate(final String namedQueryName, final Object... parameters) {
         return delegate.executeUpdate(namedQueryName, parameters);
     }
@@ -301,6 +338,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public int executeNativeUpdate(final String nativeQuery, final Object... parameters) {
         return delegate.executeNativeUpdate(nativeQuery, parameters);
     }
@@ -308,6 +346,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public void flushClear() {
         delegate.flushClear();
     }
@@ -315,6 +354,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public void flush() {
         delegate.flush();
     }
@@ -322,6 +362,7 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     /**
      * {@inheritDoc}
      */
+    @Override
     public void clear() {
         delegate.clear();
     }

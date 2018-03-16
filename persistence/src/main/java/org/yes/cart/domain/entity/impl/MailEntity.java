@@ -43,7 +43,7 @@ public class MailEntity implements Mail, Serializable {
     private String bcc;
     private String textVersion;
     private String htmlVersion;
-    private Set<MailPart> parts = new HashSet<MailPart>();
+    private Set<MailPart> parts = new HashSet<>();
 
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
@@ -51,18 +51,22 @@ public class MailEntity implements Mail, Serializable {
     private String updatedBy;
     private String guid;
 
+    @Override
     public long getId() {
         return mailId;
     }
 
+    @Override
     public long getMailId() {
         return mailId;
     }
 
+    @Override
     public void setMailId(final long mailId) {
         this.mailId = mailId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -71,70 +75,87 @@ public class MailEntity implements Mail, Serializable {
         this.version = version;
     }
 
+    @Override
     public String getShopCode() {
         return shopCode;
     }
 
+    @Override
     public void setShopCode(final String shopCode) {
         this.shopCode = shopCode;
     }
 
+    @Override
     public String getSubject() {
         return subject;
     }
 
+    @Override
     public void setSubject(final String subject) {
         this.subject = subject;
     }
 
+    @Override
     public String getFrom() {
         return from;
     }
 
+    @Override
     public void setFrom(final String from) {
         this.from = from;
     }
 
+    @Override
     public String getRecipients() {
         return recipients;
     }
 
+    @Override
     public void setRecipients(final String recipients) {
         this.recipients = recipients;
     }
 
+    @Override
     public String getCc() {
         return cc;
     }
 
+    @Override
     public void setCc(final String cc) {
         this.cc = cc;
     }
 
+    @Override
     public String getBcc() {
         return bcc;
     }
 
+    @Override
     public void setBcc(final String bcc) {
         this.bcc = bcc;
     }
 
+    @Override
     public String getTextVersion() {
         return textVersion;
     }
 
+    @Override
     public void setTextVersion(final String textVersion) {
         this.textVersion = textVersion;
     }
 
+    @Override
     public String getHtmlVersion() {
         return htmlVersion;
     }
 
+    @Override
     public void setHtmlVersion(final String htmlVersion) {
         this.htmlVersion = htmlVersion;
     }
 
+    @Override
     public Set<MailPart> getParts() {
         return parts;
     }
@@ -143,6 +164,7 @@ public class MailEntity implements Mail, Serializable {
         this.parts = parts;
     }
 
+    @Override
     public MailPart addPart() {
         final MailPartEntity part = new MailPartEntity();
         part.setMail(this);
@@ -150,42 +172,52 @@ public class MailEntity implements Mail, Serializable {
         return part;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return createdBy;
     }
 
+    @Override
     public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return guid;
     }
 
+    @Override
     public void setGuid(final String guid) {
         this.guid = guid;
     }

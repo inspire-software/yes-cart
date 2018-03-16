@@ -43,18 +43,22 @@ public class TaxConfigEntity implements TaxConfig, Serializable {
     private String updatedBy;
     private String guid;
 
+    @Override
     public long getId() {
         return taxConfigId;
     }
 
+    @Override
     public long getTaxConfigId() {
         return taxConfigId;
     }
 
+    @Override
     public void setTaxConfigId(final long taxConfigId) {
         this.taxConfigId = taxConfigId;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }
@@ -63,74 +67,92 @@ public class TaxConfigEntity implements TaxConfig, Serializable {
         this.version = version;
     }
 
+    @Override
     public Tax getTax() {
         return tax;
     }
 
+    @Override
     public void setTax(final Tax tax) {
         this.tax = tax;
     }
 
+    @Override
     public String getProductCode() {
         return productCode;
     }
 
+    @Override
     public void setProductCode(final String productCode) {
         this.productCode = productCode;
     }
 
+    @Override
     public String getStateCode() {
         return stateCode;
     }
 
+    @Override
     public void setStateCode(final String stateCode) {
         this.stateCode = stateCode;
     }
 
+    @Override
     public String getCountryCode() {
         return countryCode;
     }
 
+    @Override
     public void setCountryCode(final String countryCode) {
         this.countryCode = countryCode;
     }
 
+    @Override
     public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
+    @Override
     public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Override
     public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
+    @Override
     public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
+    @Override
     public String getCreatedBy() {
         return createdBy;
     }
 
+    @Override
     public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
+    @Override
     public String getUpdatedBy() {
         return updatedBy;
     }
 
+    @Override
     public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    @Override
     public String getGuid() {
         return guid;
     }
 
+    @Override
     public void setGuid(final String guid) {
         this.guid = guid;
     }
