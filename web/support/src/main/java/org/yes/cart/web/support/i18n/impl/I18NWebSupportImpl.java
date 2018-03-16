@@ -31,6 +31,7 @@ public class I18NWebSupportImpl implements I18NWebSupport {
     /**
      * {@inheritDoc}
      */
+    @Override
     public I18NModel getDefaultModel(final Object i18nObject) {
         return new StringI18NModel(i18nObject != null ? String.valueOf(i18nObject) : null);
     }
@@ -38,6 +39,7 @@ public class I18NWebSupportImpl implements I18NWebSupport {
     /**
      * {@inheritDoc}
      */
+    @Override
     public I18NModel getFailoverModel(final Object i18nObject, final String failover) {
         return new FailoverStringI18NModel(i18nObject != null ? String.valueOf(i18nObject) : null, failover);
     }

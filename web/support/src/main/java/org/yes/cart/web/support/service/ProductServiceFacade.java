@@ -23,7 +23,6 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.domain.entity.PriceModel;
 
 import java.math.BigDecimal;
 import java.util.List;

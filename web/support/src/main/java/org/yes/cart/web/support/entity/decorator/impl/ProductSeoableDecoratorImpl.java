@@ -54,7 +54,7 @@ public class ProductSeoableDecoratorImpl extends AbstractSeoableDecoratorImpl<Pr
                 final String av = seoable.getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + lang);
 
                 if (StringUtils.isNotBlank(av)) {
-                    final Map<String, String> values = new HashMap<String, String>();
+                    final Map<String, String> values = new HashMap<>();
                     values.put(lang, removeTags(av));
                     return new StringI18NModel(values).toString();
                 }

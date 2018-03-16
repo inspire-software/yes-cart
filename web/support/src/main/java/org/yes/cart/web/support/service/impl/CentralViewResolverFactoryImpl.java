@@ -34,7 +34,7 @@ public class CentralViewResolverFactoryImpl implements CentralViewResolver {
 
     private List<CentralViewResolver> resolvers;
 
-    private static final Pair<String, String> DEFAULT = new Pair<String, String>(CentralViewLabel.DEFAULT, CentralViewLabel.DEFAULT);
+    private static final Pair<String, String> DEFAULT = new Pair<>(CentralViewLabel.DEFAULT, CentralViewLabel.DEFAULT);
 
     public CentralViewResolverFactoryImpl(final List<CentralViewResolver> resolvers) {
         this.resolvers = resolvers;
@@ -47,6 +47,7 @@ public class CentralViewResolverFactoryImpl implements CentralViewResolver {
      *
      * @return resolved main panel renderer label
      */
+    @Override
     public Pair<String, String> resolveMainPanelRendererLabel(final Map parameters) {
 
         for (final CentralViewResolver resolver : resolvers) {

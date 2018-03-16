@@ -95,6 +95,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      * {@inheritDoc}
      * @param lang
      */
+    @Override
     public List<Pair<String, String>> getImageAttributeFileNames(final String lang) {
 
         return productImageService.getImageAttributeFileNames(this, lang);
@@ -104,6 +105,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getImage(final String width, final String height, final String imageAttributeName, final String lang) {
         return productImageService.getImage(
                     this,
@@ -120,6 +122,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDefaultImage(final String width, final String height, final String lang) {
         final String imageAttributeName = getImageAttributeFileNames(lang).get(0).getFirst();
         return productImageService.getImage(
@@ -137,6 +140,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueProduct getAttributeByCode(final String attributeCode) {
         return (AttrValueProduct) attrValueMap.get(attributeCode);
     }
@@ -144,6 +148,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     /**
      * {@inheritDoc}
      */
+    @Override
     public SeoImage getSeoImage(final String fileName) {
         return imageService.getSeoImage(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN + fileName);
     }
@@ -151,6 +156,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName(final String locale) {
         return i18NWebSupport.getFailoverModel(getDisplayName(), getName()).getValue(locale);
     }
@@ -158,6 +164,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAttributeValue(final String attribute) {
         final AttrValueProduct val =  getAttributeByCode(attribute);
         return val != null ? val.getVal() : "";
@@ -166,14 +173,16 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAttributeValue(final String locale, final String attribute) {
-        final AttrValueProduct lval =  getAttributeByCode(attribute);
-        return lval != null ? i18NWebSupport.getFailoverModel(lval.getDisplayVal(), lval.getVal()).getValue(locale) : "";
+        final AttrValueProduct val =  getAttributeByCode(attribute);
+        return val != null ? i18NWebSupport.getFailoverModel(val.getDisplayVal(), val.getVal()).getValue(locale) : "";
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDescription(final String locale) {
         if (this.attrValueMap.isEmpty()) {
             return getDescription();

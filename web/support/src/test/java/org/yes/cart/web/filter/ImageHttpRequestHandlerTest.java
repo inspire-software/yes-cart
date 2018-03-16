@@ -20,7 +20,6 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.yes.cart.service.domain.SystemService;
 
 import static org.junit.Assert.assertEquals;

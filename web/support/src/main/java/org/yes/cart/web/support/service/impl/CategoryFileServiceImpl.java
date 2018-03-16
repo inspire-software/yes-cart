@@ -34,6 +34,7 @@ public class CategoryFileServiceImpl extends AbstractImageServiceImpl implements
      * {@inheritDoc}
      * @param attributableOrStrategy
      */
+    @Override
     protected String getRepositoryUrlPattern(final Object attributableOrStrategy) {
         return Constants.CATEGORY_FILE_REPOSITORY_URL_PATTERN;
     }
@@ -43,6 +44,7 @@ public class CategoryFileServiceImpl extends AbstractImageServiceImpl implements
      * {@inheritDoc}
      * @param attributableOrStrategy
      */
+    @Override
     protected String getAttributePrefix(final Object attributableOrStrategy) {
         return AttributeNamesKeys.Category.CATEGORY_FILE_PREFIX;
     }

@@ -63,6 +63,7 @@ public class DecoratorFacadeImpl implements DecoratorFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public <T extends ObjectDecorator> T decorate(final Object object,
                                                   final String servletContextPath,
                                                   final boolean withAttributes) {

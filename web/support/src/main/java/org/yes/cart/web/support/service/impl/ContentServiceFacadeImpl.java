@@ -50,6 +50,7 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category getContent(final long contentId, final long shopId) {
         if (contentId > 0L && shopService.getShopContentIds(shopId).contains(contentId)) {
             return contentService.getById(contentId);
@@ -60,6 +61,7 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category getContent(final String contentUri, final long shopId) {
 
         if (StringUtils.isBlank(contentUri)) {
@@ -92,6 +94,7 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getContentBody(final long contentId, final long shopId, final String locale) {
         if (contentId > 0L && shopService.getShopContentIds(shopId).contains(contentId)) {
             return contentService.getContentBody(contentId, locale);
@@ -102,6 +105,7 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "contentService-contentBody")
     public String getContentBody(final String contentUri, final long shopId, final String locale) {
 
@@ -134,6 +138,7 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDynamicContentBody(final long contentId, final long shopId, final String locale, final Map<String, Object> context) {
         if (contentId > 0L && shopService.getShopContentIds(shopId).contains(contentId)) {
             return contentService.getDynamicContentBody(contentId, locale, context);
@@ -144,6 +149,7 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDynamicContentBody(final String contentUri, final long shopId, final String locale, final Map<String, Object> context) {
 
         if (StringUtils.isBlank(contentUri)) {
@@ -175,21 +181,16 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-currentCategoryMenu")
     public List<Category> getCurrentContentMenu(final long currentContentId, final long shopId, final String locale) {
 
         if (currentContentId > 0L && shopService.getShopContentIds(shopId).contains(currentContentId)) {
 
-            final List<Category> categories = new ArrayList<Category>(contentService.getChildContent(currentContentId));
-            final Iterator<Category> itCat = categories.iterator();
-            while (itCat.hasNext()) {
-                final Category cat = itCat.next();
-                if (CentralViewLabel.INCLUDE.equals(cat.getUitemplate())) {
-                    itCat.remove();
-                }
-            }
+            final List<Category> categories = new ArrayList<>(contentService.getChildContent(currentContentId));
+            categories.removeIf(cat -> CentralViewLabel.INCLUDE.equals(cat.getUitemplate()));
 
-            Collections.sort(categories, new CategoryRankDisplayNameComparator(locale));
+            categories.sort(new CategoryRankDisplayNameComparator(locale));
 
             return categories;
 
@@ -206,11 +207,12 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
             };
 
     private static final Pair<String, String> DEFAULT_CATEGORYLIST_IMAGE_SIZE =
-            new Pair<String, String>(Constants.DEFAULT_CATEGORYLIST_IMAGE_SIZE[0], Constants.DEFAULT_CATEGORYLIST_IMAGE_SIZE[1]);
+            new Pair<>(Constants.DEFAULT_CATEGORYLIST_IMAGE_SIZE[0], Constants.DEFAULT_CATEGORYLIST_IMAGE_SIZE[1]);
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Pair<String, String> getContentListImageSizeConfig(final long contentId, final long shopId) {
 
         return getImageSizeConfig(contentId, shopId, CATEGORYLIST_IMAGE_SIZE, DEFAULT_CATEGORYLIST_IMAGE_SIZE);
@@ -221,6 +223,7 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<String> getItemsPerPageOptionsConfig(final long contentId, final long shopId) {
 
         if (contentId > 0L && shopService.getShopContentIds(shopId).contains(contentId)) {
@@ -243,6 +246,7 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getContentListColumnOptionsConfig(final long contentId, final long shopId) {
 
         return getLimitSizeConfig(contentId, shopId, AttributeNamesKeys.Category.CATEGORY_PRODUCTS_COLUMNS, Constants.PRODUCT_COLUMNS_SIZE);
@@ -278,7 +282,7 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
 
             final String[] size = contentService.getContentAttributeRecursive(null, categoryId, widthAndHeightAttribute);
             if (size != null && size.length == 2) {
-                return new Pair<String, String>(size[0], size[1]);
+                return new Pair<>(size[0], size[1]);
             }
 
         }

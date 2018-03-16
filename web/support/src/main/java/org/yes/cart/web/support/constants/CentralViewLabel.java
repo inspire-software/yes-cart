@@ -26,24 +26,24 @@ package org.yes.cart.web.support.constants;
  */
 public interface CentralViewLabel {
 
-    public static final String INCLUDE = "include";
+    String INCLUDE = "include";
 
-    public static final String CONTENT = "content";
+    String CONTENT = "content";
 
-    public static final String DYNOCONTENT = "dynocontent";
+    String DYNOCONTENT = "dynocontent";
 
-    public static final String CATEGORY = "category";
+    String CATEGORY = "category";
 
-    public static final String SUBCATEGORIES_LIST = "subcats";
+    String SUBCATEGORIES_LIST = "subcats";
 
-    public static final String PRODUCTS_LIST = "products";
+    String PRODUCTS_LIST = "products";
 
-    public static final String PRODUCT = "product";
+    String PRODUCT = "product";
 
-    public static final String SKU = "sku";
+    String SKU = "sku";
 
-    public static final String SEARCH_LIST = "searchrez";
+    String SEARCH_LIST = "searchrez";
 
-    public static final String DEFAULT = "default";
+    String DEFAULT = "default";
 
 }

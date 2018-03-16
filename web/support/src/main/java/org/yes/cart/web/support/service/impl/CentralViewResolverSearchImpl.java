@@ -38,7 +38,7 @@ import java.util.Set;
  */
 public class CentralViewResolverSearchImpl implements CentralViewResolver {
 
-    private static final Pair<String, String> DEFAULT = new Pair<String, String>(CentralViewLabel.SEARCH_LIST, CentralViewLabel.SEARCH_LIST);
+    private static final Pair<String, String> DEFAULT = new Pair<>(CentralViewLabel.SEARCH_LIST, CentralViewLabel.SEARCH_LIST);
 
     private final ShopService shopService;
     private final AttributeService attributeService;
@@ -78,7 +78,7 @@ public class CentralViewResolverSearchImpl implements CentralViewResolver {
 
                     final String searchTemplate = shopService.getShopCategorySearchTemplate(shopId, categoryId);
                     if (StringUtils.isNotBlank(searchTemplate)) {
-                        return new Pair<String, String>(searchTemplate, CentralViewLabel.SEARCH_LIST);
+                        return new Pair<>(searchTemplate, CentralViewLabel.SEARCH_LIST);
                     }
                 }
             }

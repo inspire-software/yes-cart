@@ -39,6 +39,7 @@ public class AbstractSeoableDecoratorImpl<T extends Seoable> implements Seoable 
     }
 
     /** {@inheritDoc} */
+    @Override
     public Seo getSeo() {
 
         return this.seo;
@@ -46,6 +47,7 @@ public class AbstractSeoableDecoratorImpl<T extends Seoable> implements Seoable 
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSeo(final Seo seo) {
         throw new UnsupportedOperationException("Read only");
     }
@@ -61,16 +63,19 @@ public class AbstractSeoableDecoratorImpl<T extends Seoable> implements Seoable 
         }
 
         /** {@inheritDoc} */
+        @Override
         public String getUri() {
             return seo.getUri();
         }
 
         /** {@inheritDoc} */
+        @Override
         public void setUri(final String uri) {
             throw new UnsupportedOperationException("Read only");
         }
 
         /** {@inheritDoc} */
+        @Override
         public String getTitle() {
             if (StringUtils.isBlank(seo.getTitle())) {
                 return getTitle(seoable);
@@ -88,11 +93,13 @@ public class AbstractSeoableDecoratorImpl<T extends Seoable> implements Seoable 
         protected abstract String getTitle(final T seoable);
 
         /** {@inheritDoc} */
+        @Override
         public void setTitle(final String title) {
             throw new UnsupportedOperationException("Read only");
         }
 
         /** {@inheritDoc} */
+        @Override
         public String getDisplayTitle() {
             if (StringUtils.isBlank(seo.getDisplayTitle()) && StringUtils.isBlank(seo.getTitle())) {
                 return getDisplayTitle(seoable);
@@ -110,31 +117,37 @@ public class AbstractSeoableDecoratorImpl<T extends Seoable> implements Seoable 
         protected abstract String getDisplayTitle(final T seoable);
 
         /** {@inheritDoc} */
+        @Override
         public void setDisplayTitle(final String title) {
             throw new UnsupportedOperationException("Read only");
         }
 
         /** {@inheritDoc} */
+        @Override
         public String getMetakeywords() {
             return seo.getMetakeywords();
         }
 
         /** {@inheritDoc} */
+        @Override
         public void setMetakeywords(final String metakeywords) {
             throw new UnsupportedOperationException("Read only");
         }
 
         /** {@inheritDoc} */
+        @Override
         public String getDisplayMetakeywords() {
             return seo.getDisplayMetakeywords();
         }
 
         /** {@inheritDoc} */
+        @Override
         public void setDisplayMetakeywords(final String metakeywords) {
             throw new UnsupportedOperationException("Read only");
         }
 
         /** {@inheritDoc} */
+        @Override
         public String getMetadescription() {
             if (StringUtils.isBlank(seo.getMetadescription())) {
                 return getMetadescription(seoable);
@@ -152,11 +165,13 @@ public class AbstractSeoableDecoratorImpl<T extends Seoable> implements Seoable 
         protected abstract String getMetadescription(final T seoable);
 
         /** {@inheritDoc} */
+        @Override
         public void setMetadescription(final String metadescription) {
             throw new UnsupportedOperationException("Read only");
         }
 
         /** {@inheritDoc} */
+        @Override
         public String getDisplayMetadescription() {
             if (StringUtils.isBlank(seo.getDisplayMetadescription()) && StringUtils.isBlank(seo.getMetadescription())) {
                 return getDisplayMetadescription(seoable);
@@ -175,6 +190,7 @@ public class AbstractSeoableDecoratorImpl<T extends Seoable> implements Seoable 
         protected abstract String getDisplayMetadescription(final T seoable);
 
         /** {@inheritDoc} */
+        @Override
         public void setDisplayMetadescription(final String metadescription) {
             throw new UnsupportedOperationException("Read only");
         }
@@ -198,6 +214,6 @@ public class AbstractSeoableDecoratorImpl<T extends Seoable> implements Seoable 
         }
 
 
-    };
+    }
 
 }

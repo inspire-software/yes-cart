@@ -48,6 +48,7 @@ public class ProductImageServiceImpl extends AbstractImageServiceImpl implements
 
     /** {@inheritDoc}
      * @param attributableOrStrategy*/
+    @Override
     protected String getRepositoryUrlPattern(final Object attributableOrStrategy) {
         return Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN;
     }
@@ -55,6 +56,7 @@ public class ProductImageServiceImpl extends AbstractImageServiceImpl implements
 
     /** {@inheritDoc}
      * @param attributableOrStrategy*/
+    @Override
     protected String getAttributePrefix(final Object attributableOrStrategy) {
         return AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX;
     }

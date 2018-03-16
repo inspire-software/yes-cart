@@ -76,6 +76,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ServletRequest doBefore(final ServletRequest request,
                                    final ServletResponse response) throws IOException, ServletException {
 
@@ -144,7 +145,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
      */
     private void setDefaultValuesIfNecessary(final Shop shop, final ShoppingCart cart) {
 
-        final Map<String, Object> params = new HashMap<String, Object>();
+        final Map<String, Object> params = new HashMap<>();
         if (cart.getCurrencyCode() == null && shop != null) { // new cart only may satisfy this condition
 
             params.put(ShoppingCartCommand.CMD_SETSHOP, shop.getShopId());
@@ -164,6 +165,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void doAfter(final ServletRequest servletRequest, final ServletResponse servletResponse) throws IOException, ServletException {
         ApplicationDirector.setShoppingCart(null);
         servletRequest.removeAttribute("ShoppingCart");

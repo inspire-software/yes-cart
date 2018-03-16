@@ -32,12 +32,14 @@ public class BrandFileServiceImpl extends AbstractImageServiceImpl implements At
 
     /** {@inheritDoc}
      * @param attributableOrStrategy*/
+    @Override
     protected String getRepositoryUrlPattern(final Object attributableOrStrategy) {
         return Constants.BRAND_FILE_REPOSITORY_URL_PATTERN;
     }
 
     /** {@inheritDoc}
      * @param attributableOrStrategy*/
+    @Override
     protected String getAttributePrefix(final Object attributableOrStrategy) {
         return AttributeNamesKeys.Brand.BRAND_FILE_PREFIX;
     }

@@ -51,6 +51,7 @@ public class CategoryImageRetrieveStrategyRandomProductImpl implements CategoryI
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getImageName(final Attributable category, final String attributeCodeHint, final String locale) {
         Product product = productService.getRandomProductByCategory((Category)category);
         if (product != null) {
@@ -71,6 +72,7 @@ public class CategoryImageRetrieveStrategyRandomProductImpl implements CategoryI
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getImageRepositoryUrlPattern() {
         return Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN;
     }
@@ -78,6 +80,7 @@ public class CategoryImageRetrieveStrategyRandomProductImpl implements CategoryI
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getImageAttributePrefix() {
         return AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX;
     }

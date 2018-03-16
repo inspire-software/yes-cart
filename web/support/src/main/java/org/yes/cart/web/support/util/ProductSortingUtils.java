@@ -56,17 +56,20 @@ public class ProductSortingUtils {
     private static final Map<String, SupportedSorting> SUPPORTED_MAPPING = new HashMap<String, SupportedSorting>() {{
         put("name", new SupportedSorting("byName", ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD));
         put("displayName", new SupportedSorting("byName", ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_SORT_FIELD) {
+            @Override
             public String resolveSortField(final long shopId, final String language, final String currency) {
                 return this.sortFieldBase + language;
             }
         });
         put("basePrice", new SupportedSorting("byPrice", null) {
+            @Override
             public String resolveSortField(final long shopId, final String language, final String currency) {
                 final String facetName = SearchUtil.priceFacetName(shopId, currency);
                 return facetName + "_sort";
             }
         });
         put("inStock", new SupportedSorting("byAvailability", ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD) {
+            @Override
             public String resolveSortField(final long shopId, final String language, final String currency) {
                 return this.sortFieldBase + shopId;
             }

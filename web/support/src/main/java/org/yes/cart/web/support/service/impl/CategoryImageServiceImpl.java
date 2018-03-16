@@ -76,6 +76,7 @@ public class CategoryImageServiceImpl extends AbstractImageServiceImpl implement
      * {@inheritDoc}
      * @param attributableOrStrategy
      */
+    @Override
     protected String getRepositoryUrlPattern(final Object attributableOrStrategy) {
         final CategoryImageRetrieveStrategy strategy = getCategoryImageStrategy(attributableOrStrategy);
         return strategy.getImageRepositoryUrlPattern();
@@ -86,6 +87,7 @@ public class CategoryImageServiceImpl extends AbstractImageServiceImpl implement
      * {@inheritDoc}
      * @param attributableOrStrategy
      */
+    @Override
     protected String getAttributePrefix(final Object attributableOrStrategy) {
         final CategoryImageRetrieveStrategy strategy = getCategoryImageStrategy(attributableOrStrategy);
         return strategy.getImageAttributePrefix();
@@ -94,6 +96,7 @@ public class CategoryImageServiceImpl extends AbstractImageServiceImpl implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getImage(final Attributable category,
                            final String httpServletContextPath,
                            final String locale, final String width,

@@ -226,7 +226,7 @@ public interface CheckoutServiceFacade {
     CartValidityModel validateCart(ShoppingCart shoppingCart);
 
     /**
-     * Estimate the delivery time according to carrier sla and ietms in the order. This method is
+     * Estimate the delivery time according to carrier sla and items in the order. This method is
      * aimed at online PG's only. The rationale is that we can estimate delivery for paid (or confirmed)
      * orders. For online PG orders the payment is taken straight away and thus it is safe to
      * provide delivery estimation time. For offline orders there may be some time for interaction

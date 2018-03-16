@@ -46,7 +46,7 @@ public class CentralViewResolverSearchImplTest {
 
     private final Mockery context = new JUnit4Mockery();
 
-    private static final Set<String> NAV = new HashSet<String>(Arrays.asList("nav1", "nav2"));
+    private static final Set<String> NAV = new HashSet<>(Arrays.asList("nav1", "nav2"));
 
     private static final ShoppingCartImpl CART = new ShoppingCartImpl();
     static {

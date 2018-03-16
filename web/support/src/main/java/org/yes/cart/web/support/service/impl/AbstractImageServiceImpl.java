@@ -94,6 +94,7 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
      * @param imageName          name of image
      * @return image uri.
      */
+    @Override
     public String getImageURI(final Object object,
                               final String servletContextPath,
                               final String locale,
@@ -144,6 +145,7 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
 
 
     /** {@inheritDoc} */
+    @Override
     public String getImage(final Attributable attributable,
                            final String httpServletContextPath,
                            final String locale,
@@ -170,11 +172,12 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
 
     private Pair<String, String> createNoDefaultImagePair(final Attributable attributable) {
 
-        return new Pair<String, String>(getAttributePrefix(attributable) + "0", Constants.NO_IMAGE);
+        return new Pair<>(getAttributePrefix(attributable) + "0", Constants.NO_IMAGE);
 
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Pair<String, String>> getImageAttributeFileNames(final Attributable attributable, final String lang) {
 
         final String prefix = getAttributePrefix(attributable);
@@ -193,7 +196,7 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
         if (CollectionUtils.isEmpty(values)) {
             return Collections.singletonList(createNoDefaultImagePair(attributable));
         }
-        final Map<String, String> attrToFileMap = new TreeMap<String, String>(); // sort naturally
+        final Map<String, String> attrToFileMap = new TreeMap<>(); // sort naturally
         for (final AttrValue av : values) {
             final String code = av.getAttributeCode();
             if (code.startsWith(prefix) && StringUtils.isNotBlank(av.getVal())) {
@@ -215,9 +218,9 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
             return Collections.singletonList(createNoDefaultImagePair(attributable));
         }
 
-        final List<Pair<String, String>> pairs = new ArrayList<Pair<String, String>>(attrToFileMap.size());
+        final List<Pair<String, String>> pairs = new ArrayList<>(attrToFileMap.size());
         for (final Map.Entry<String, String> entry : attrToFileMap.entrySet()) {
-            pairs.add(new Pair<String, String>(entry.getKey(), entry.getValue()));
+            pairs.add(new Pair<>(entry.getKey(), entry.getValue()));
         }
         return Collections.unmodifiableList(pairs);
     }

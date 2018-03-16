@@ -33,11 +33,11 @@ import java.util.List;
 
 public class ApplicationDirector {
 
-    private static final ThreadLocal<String> DOMAIN_THREAD_LOCAL = new ThreadLocal<String>();
-    private static final ThreadLocal<Shop> SHOP_THREAD_LOCAL = new ThreadLocal<Shop>();
-    private static final ThreadLocal<Shop> CUSTOMER_SHOP_THREAD_LOCAL = new ThreadLocal<Shop>();
-    private static final ThreadLocal<List<String>> CURRENT_THEME_CHAIN_THREAD_LOCAL = new ThreadLocal<List<String>>();
-    private static final ThreadLocal<String> SHOPPER_IP_ADDRESS_THREAD_LOCAL = new ThreadLocal<String>();
+    private static final ThreadLocal<String> DOMAIN_THREAD_LOCAL = new ThreadLocal<>();
+    private static final ThreadLocal<Shop> SHOP_THREAD_LOCAL = new ThreadLocal<>();
+    private static final ThreadLocal<Shop> CUSTOMER_SHOP_THREAD_LOCAL = new ThreadLocal<>();
+    private static final ThreadLocal<List<String>> CURRENT_THEME_CHAIN_THREAD_LOCAL = new ThreadLocal<>();
+    private static final ThreadLocal<String> SHOPPER_IP_ADDRESS_THREAD_LOCAL = new ThreadLocal<>();
 
     /**
      * Get shopper ip address.

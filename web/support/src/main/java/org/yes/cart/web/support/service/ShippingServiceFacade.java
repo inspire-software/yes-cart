@@ -34,7 +34,7 @@ import java.util.Map;
 public interface ShippingServiceFacade {
 
     /**
-     * Check if adddresses are required given current SLA selection.
+     * Check if addresses are required given current SLA selection.
      *
      * @param carrierSlaIds SLA ids
      *
@@ -56,7 +56,7 @@ public interface ShippingServiceFacade {
     /**
      * Find all applicable carriers for given shopping cart. This method could be potentially cached
      * however the logic for selecting carriers may be delicate and depending on other factors, so need
-     * to be careful - hence left uncached OOTB.
+     * to be careful - hence left un-cached.
      *
      * @param shoppingCart current cart
      * @param supplier supplier

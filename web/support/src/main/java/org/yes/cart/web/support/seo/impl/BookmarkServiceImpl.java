@@ -81,6 +81,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String saveBookmarkForCategory(final String bookmark) {
 
         Pair<Long, String> seoData = getPairOfPkAndUriFromValueWrapper(CATEGORY_CACHE.get(bookmark));
@@ -91,7 +92,7 @@ public class BookmarkServiceImpl implements BookmarkService {
             final Long existingCategoryId = categoryService.findCategoryIdBySeoUri(bookmark);
             if (existingCategoryId != null) {
                 // The bookmark is SEO Uri so encoding it is bookmark itself, decoding however should return PK
-                final Pair<Long, String> pkAndUri = new Pair<Long, String>(existingCategoryId, bookmark);
+                final Pair<Long, String> pkAndUri = new Pair<>(existingCategoryId, bookmark);
                 CATEGORY_CACHE.put(existingCategoryId.toString(), pkAndUri);
                 CATEGORY_CACHE.put(bookmark, pkAndUri);
                 seoData = pkAndUri;
@@ -104,7 +105,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                     final String categorySeoUri = categoryService.findSeoUriByCategoryId(categoryId);
                     if (StringUtils.isNotBlank(categorySeoUri)) {
                         // This is a valid category and categorySeoUri will be either SEO URI or categoryId as String
-                        final Pair<Long, String> pkAndUri = new Pair<Long, String>(categoryId, categorySeoUri);
+                        final Pair<Long, String> pkAndUri = new Pair<>(categoryId, categorySeoUri);
                         CATEGORY_CACHE.put(bookmark, pkAndUri);
                         CATEGORY_CACHE.put(categorySeoUri, pkAndUri);
                         seoData = pkAndUri;
@@ -123,6 +124,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long getCategoryForURI(final String uri) {
 
         Pair<Long, String> id = getPairOfPkAndUriFromValueWrapper(CATEGORY_CACHE.get(uri));
@@ -143,6 +145,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String saveBookmarkForContent(final String bookmark) {
 
         Pair<Long, String> seoData = getPairOfPkAndUriFromValueWrapper(CONTENT_CACHE.get(bookmark));
@@ -153,7 +156,7 @@ public class BookmarkServiceImpl implements BookmarkService {
             final Long existingContentId = contentService.findContentIdBySeoUri(bookmark);
             if (existingContentId != null) {
                 // The bookmark is SEO Uri so encoding it is bookmark itself, decoding however should return PK
-                final Pair<Long, String> pkAndUri = new Pair<Long, String>(existingContentId, bookmark);
+                final Pair<Long, String> pkAndUri = new Pair<>(existingContentId, bookmark);
                 CONTENT_CACHE.put(existingContentId.toString(), pkAndUri);
                 CONTENT_CACHE.put(bookmark, pkAndUri);
                 seoData = pkAndUri;
@@ -166,7 +169,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                     final String contentSeoUri = contentService.findSeoUriByContentId(contentId);
                     if (StringUtils.isNotBlank(contentSeoUri)) {
                         // This is a valid category and contentSeoUri will be either SEO URI or contentId as String
-                        final Pair<Long, String> pkAndUri = new Pair<Long, String>(contentId, contentSeoUri);
+                        final Pair<Long, String> pkAndUri = new Pair<>(contentId, contentSeoUri);
                         CONTENT_CACHE.put(bookmark, pkAndUri);
                         CONTENT_CACHE.put(contentSeoUri, pkAndUri);
                         seoData = pkAndUri;
@@ -184,6 +187,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long getContentForURI(final String uri) {
 
         Pair<Long, String> id = getPairOfPkAndUriFromValueWrapper(CONTENT_CACHE.get(uri));
@@ -204,6 +208,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String saveBookmarkForProduct(final String bookmark) {
 
         Pair<Long, String> seoData = getPairOfPkAndUriFromValueWrapper(PRODUCT_CACHE.get(bookmark));
@@ -214,7 +219,7 @@ public class BookmarkServiceImpl implements BookmarkService {
             final Long existingProductId = productService.findProductIdBySeoUri(bookmark);
             if (existingProductId != null) {
                 // The bookmark is SEO Uri so encoding it is bookmark itself, decoding however should return PK
-                final Pair<Long, String> pkAndUri = new Pair<Long, String>(existingProductId, bookmark);
+                final Pair<Long, String> pkAndUri = new Pair<>(existingProductId, bookmark);
                 PRODUCT_CACHE.put(existingProductId.toString(), pkAndUri);
                 PRODUCT_CACHE.put(bookmark, pkAndUri);
                 seoData = pkAndUri;
@@ -227,7 +232,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                     final String productSeoUri = productService.findSeoUriByProductId(productId);
                     if (StringUtils.isNotBlank(productSeoUri)) {
                         // This is a valid product and productSeoUri will be either SEO URI or productId as String
-                        final Pair<Long, String> pkAndUri = new Pair<Long, String>(productId, productSeoUri);
+                        final Pair<Long, String> pkAndUri = new Pair<>(productId, productSeoUri);
                         PRODUCT_CACHE.put(bookmark, pkAndUri);
                         PRODUCT_CACHE.put(productSeoUri, pkAndUri);
                         seoData = pkAndUri;
@@ -246,6 +251,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long getProductForURI(final String uri) {
 
         Pair<Long, String> id = getPairOfPkAndUriFromValueWrapper(PRODUCT_CACHE.get(uri));
@@ -267,6 +273,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String saveBookmarkForSku(final String bookmark) {
 
         Pair<Long, String> seoData = getPairOfPkAndUriFromValueWrapper(SKU_CACHE.get(bookmark));
@@ -277,7 +284,7 @@ public class BookmarkServiceImpl implements BookmarkService {
             final Long existingSkuId = productService.findProductSkuIdBySeoUri(bookmark);
             if (existingSkuId != null) {
                 // The bookmark is SEO Uri so encoding it is bookmark itself, decoding however should return PK
-                final Pair<Long, String> pkAndUri = new Pair<Long, String>(existingSkuId, bookmark);
+                final Pair<Long, String> pkAndUri = new Pair<>(existingSkuId, bookmark);
                 SKU_CACHE.put(existingSkuId.toString(), pkAndUri);
                 SKU_CACHE.put(bookmark, pkAndUri);
                 seoData = pkAndUri;
@@ -290,7 +297,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                     final String productSkuUri = productService.findSeoUriByProductSkuId(skuId);
                     if (StringUtils.isNotBlank(productSkuUri)) {
                         // This is a valid SKU and productSkuUri will be either SEO URI or skuId as String
-                        final Pair<Long, String> pkAndUri = new Pair<Long, String>(skuId, productSkuUri);
+                        final Pair<Long, String> pkAndUri = new Pair<>(skuId, productSkuUri);
                         SKU_CACHE.put(bookmark, pkAndUri);
                         SKU_CACHE.put(productSkuUri, pkAndUri);
                         seoData = pkAndUri;
@@ -309,6 +316,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long getSkuForURI(final String uri) {
 
         Pair<Long, String> id = getPairOfPkAndUriFromValueWrapper(SKU_CACHE.get(uri));

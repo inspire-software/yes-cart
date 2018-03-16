@@ -92,6 +92,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductSku getSkuById(final Long skuId) {
 
         return productService.getSkuById(skuId, true);
@@ -101,6 +102,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Product getProductById(final Long productId) {
 
         return productService.getProductById(productId, true);
@@ -110,6 +112,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductSku getProductSkuBySkuCode(final String skuCode) {
 
         return productSkuService.getProductSkuBySkuCode(skuCode);
@@ -119,6 +122,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(final String locale,
                                                                                                                  final long productId,
                                                                                                                  final long skuId,
@@ -129,6 +133,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> getCompareAttributes(final String locale,
                                                                                                                               final List<Long> productId,
                                                                                                                               final List<Long> skuId) {
@@ -140,6 +145,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "productService-productAssociationsIds")
     public List<ProductSearchResultDTO> getProductAssociations(final long productId,
                                                                final long shopId,
@@ -170,6 +176,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "productService-featuredProducts")
     public List<ProductSearchResultDTO> getFeaturedProducts(final long categoryId,
                                                             final long shopId,
@@ -186,7 +193,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         final NavigationContext featured = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, categories,
                 false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD,
-                        (List) Collections.singletonList("true")));
+                        Collections.singletonList("true")));
 
         return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
                 featured, 0, limit, null, false).getResults());
@@ -195,6 +202,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "productService-newProducts")
     public List<ProductSearchResultDTO> getNewProducts(final long categoryId,
                                                        final long shopId,
@@ -210,7 +218,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         }
         final NavigationContext newarrival = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, newArrivalCats,
                 false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
-                        (List) Collections.singletonList(ProductSearchQueryBuilder.TAG_NEWARRIVAL)));
+                        Collections.singletonList(ProductSearchQueryBuilder.TAG_NEWARRIVAL)));
 
         return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
                 newarrival, 0, limit, null, true).getResults());
@@ -219,6 +227,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "productService-taggedProducts")
     public List<ProductSearchResultDTO> getTaggedProducts(final long categoryId,
                                                           final long shopId,
@@ -236,7 +245,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         final NavigationContext tagged = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, categories,
                 false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
-                        (List) Collections.singletonList(tag)));
+                        Collections.singletonList(tag)));
 
         return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
                 tagged, 0, limit, null, false).getResults());
@@ -245,6 +254,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ProductSearchResultDTO> getListProducts(final List<String> productIds,
                                                         final long categoryId,
                                                         final long shopId,
@@ -274,6 +284,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductSearchResultPageDTO getListProducts(final NavigationContext context,
                                                       final int firstResult,
                                                       final int maxResults,
@@ -292,13 +303,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                     skuContext
             );
             // Need list of skus to maintain priority order
-            final Map<Long, List<ProductSkuSearchResultDTO>> skuMap = new HashMap<Long, List<ProductSkuSearchResultDTO>>();
+            final Map<Long, List<ProductSkuSearchResultDTO>> skuMap = new HashMap<>();
             for (ProductSkuSearchResultDTO sku : skus) {
-                List<ProductSkuSearchResultDTO> skuForProduct = skuMap.get(sku.getProductId());
-                if (skuForProduct == null) {
-                    skuForProduct = new ArrayList<ProductSkuSearchResultDTO>();
-                    skuMap.put(sku.getProductId(), skuForProduct);
-                }
+                List<ProductSkuSearchResultDTO> skuForProduct = skuMap.computeIfAbsent(sku.getProductId(), k -> new ArrayList<>());
                 skuForProduct.add(sku);
             }
             for (final ProductSearchResultDTO product : result.getResults()) {
@@ -312,6 +319,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductAvailabilityModel getProductAvailability(final ProductSearchResultDTO product, final long customerShopId) {
 
         return productAvailabilityStrategy.getAvailabilityModel(customerShopId, product);
@@ -321,6 +329,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductAvailabilityModel getProductAvailability(final Product product, final long customerShopId) {
 
         return productAvailabilityStrategy.getAvailabilityModel(customerShopId, product);
@@ -330,6 +339,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductAvailabilityModel getProductAvailability(final ProductSku product, final long customerShopId) {
 
         return productAvailabilityStrategy.getAvailabilityModel(customerShopId, product);
@@ -339,6 +349,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductAvailabilityModel getProductAvailability(final String skuCode, final long customerShopId) {
 
         return productAvailabilityStrategy.getAvailabilityModel(customerShopId, skuCode);
@@ -348,6 +359,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public QuantityModel getProductQuantity(final BigDecimal cartQty, final Product product) {
 
         return productQuantityStrategy.getQuantityModel(cartQty, product);
@@ -357,6 +369,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public QuantityModel getProductQuantity(final BigDecimal cartQty, final ProductSku product) {
 
         return productQuantityStrategy.getQuantityModel(cartQty, product);
@@ -366,6 +379,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public QuantityModel getProductQuantity(final BigDecimal cartQty, final ProductSearchResultDTO product) {
 
         return productQuantityStrategy.getQuantityModel(cartQty, product);
@@ -375,6 +389,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public QuantityModel getProductQuantity(final BigDecimal cartQty, final BigDecimal min, final BigDecimal max, final BigDecimal step) {
 
         return productQuantityStrategy.getQuantityModel(cartQty, min, max, step);
@@ -473,7 +488,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                                                       final CustomerWishList item) {
 
         if (cart.getShoppingContext().isHidePrices()) {
-            return new Pair<PriceModel, CustomerWishList.PriceChange>(
+            return new Pair<>(
                     getNullProductPriceModel(cart.getCurrencyCode()),
                     new CustomerWishList.PriceChange(CustomerWishList.PriceChangeType.NOCHANGE, null)
             );
@@ -495,19 +510,19 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 if (MoneyUtils.isFirstEqualToSecond(addedPrice, saleNow)) {
                     // no change
                     if (MoneyUtils.isFirstBiggerThanSecond(listAndSale.getFirst(), addedPrice)) {
-                        price = new Pair<BigDecimal, BigDecimal>(listAndSale.getFirst(), addedPrice);
+                        price = new Pair<>(listAndSale.getFirst(), addedPrice);
                         priceInfo = new CustomerWishList.PriceChange(
                                 CustomerWishList.PriceChangeType.ONSALE,
                                 MoneyUtils.getDiscountDisplayValue(listAndSale.getFirst(), addedPrice)
                         );
                     } else {
                         // not on sale
-                        price = new Pair<BigDecimal, BigDecimal>(addedPrice, null);
+                        price = new Pair<>(addedPrice, null);
                         priceInfo = new CustomerWishList.PriceChange(CustomerWishList.PriceChangeType.NOCHANGE, null);
                     }
                 } else if (MoneyUtils.isFirstBiggerThanSecond(addedPrice, saleNow)) {
                     // price dropped since added
-                    price = new Pair<BigDecimal, BigDecimal>(addedPrice, saleNow);
+                    price = new Pair<>(addedPrice, saleNow);
                     priceInfo = new CustomerWishList.PriceChange(
                             CustomerWishList.PriceChangeType.DECREASED,
                             MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow)
@@ -531,19 +546,20 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
             }
         } else {
             // Item is not priced now so it cannot be bought
-            price = new Pair<BigDecimal, BigDecimal>(null, null);
+            price = new Pair<>(null, null);
             priceInfo = new CustomerWishList.PriceChange(CustomerWishList.PriceChangeType.OFFLINE, null);
         }
 
         final PriceModel model = getSkuPrice(cart, sku, BigDecimal.ONE, priceNow.isPriceUponRequest(), price.getFirst(), price.getSecond());
 
-        return new Pair<PriceModel, CustomerWishList.PriceChange>(model, priceInfo);
+        return new Pair<>(model, priceInfo);
 
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public PriceModel getSkuPrice(final ShoppingCart cart,
                                   final Long productId,
                                   final String skuCode,
@@ -575,6 +591,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public PriceModel getSkuPrice(final ShoppingCart cart,
                                   final String ref,
                                   final BigDecimal quantity,
@@ -670,6 +687,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public PriceModel getSkuPrice(final ShoppingCart cart, final CartItem item, boolean total) {
 
         if (cart.getShoppingContext().isHidePrices()) {
@@ -689,6 +707,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public PriceModel getSkuPrice(final String currency,
                                   final boolean showTax,
                                   final boolean showTaxNet,
@@ -833,6 +852,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<PriceModel> getSkuPrices(final ShoppingCart cart,
                                          final Long productId,
                                          final String skuCode) {
@@ -842,7 +862,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
             if (CollectionUtils.isNotEmpty(prices)) {
 
-                final List<PriceModel> models = new ArrayList<PriceModel>(prices.size());
+                final List<PriceModel> models = new ArrayList<>(prices.size());
                 for (final SkuPrice price : prices) {
 
                     final Pair<BigDecimal, BigDecimal> listAndSale = price.getSalePriceForCalculation();
@@ -869,6 +889,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public PriceModel getCartItemsTotal(final ShoppingCart cart) {
 
         final String currency = cart.getCurrencyCode();
@@ -895,8 +916,8 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
                 final BigDecimal totalAdjusted = showTaxNet ? net : gross;
 
-                final Set<String> taxes = new TreeSet<String>(); // sorts and de-dup's
-                final Set<BigDecimal> rates = new TreeSet<BigDecimal>();
+                final Set<String> taxes = new TreeSet<>(); // sorts and de-duplicate
+                final Set<BigDecimal> rates = new TreeSet<>();
                 for (final CartItem item : cart.getCartItemList()) {
                     if (StringUtils.isNotBlank(item.getTaxCode())) {
                         taxes.add(item.getTaxCode());
@@ -984,6 +1005,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, PromotionModel> getPromotionModel(final String appliedPromo) {
 
         if (StringUtils.isBlank(appliedPromo)) {
@@ -991,7 +1013,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         }
 
         final String[] promoCodes = StringUtils.split(appliedPromo, ',');
-        final Map<String, PromotionModel> result = new LinkedHashMap<String, PromotionModel>(promoCodes.length * 2);
+        final Map<String, PromotionModel> result = new LinkedHashMap<>(promoCodes.length * 2);
 
         for (final String code : promoCodes) {
 
@@ -1052,6 +1074,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Brand getBrandById(final long brandId) {
         return brandService.getById(brandId);
     }

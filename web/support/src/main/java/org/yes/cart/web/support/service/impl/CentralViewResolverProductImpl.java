@@ -36,8 +36,8 @@ import java.util.Map;
  */
 public class CentralViewResolverProductImpl implements CentralViewResolver {
 
-    private static final Pair<String, String> DEFAULT_S = new Pair<String, String>(CentralViewLabel.SKU, CentralViewLabel.SKU);
-    private static final Pair<String, String> DEFAULT_P = new Pair<String, String>(CentralViewLabel.PRODUCT, CentralViewLabel.PRODUCT);
+    private static final Pair<String, String> DEFAULT_S = new Pair<>(CentralViewLabel.SKU, CentralViewLabel.SKU);
+    private static final Pair<String, String> DEFAULT_P = new Pair<>(CentralViewLabel.PRODUCT, CentralViewLabel.PRODUCT);
 
     private final ProductService productService;
 
@@ -69,7 +69,7 @@ public class CentralViewResolverProductImpl implements CentralViewResolver {
                 if (sku != null) {
                     final String template = sku.getProduct().getProducttype().getUitemplate();
                     if (StringUtils.isNotBlank(template)) {
-                        return new Pair<String, String>(template, CentralViewLabel.SKU);
+                        return new Pair<>(template, CentralViewLabel.SKU);
                     }
                     return DEFAULT_S;
                 }
@@ -81,7 +81,7 @@ public class CentralViewResolverProductImpl implements CentralViewResolver {
                 if (product != null) {
                     final String template = product.getProducttype().getUitemplate();
                     if (StringUtils.isNotBlank(template)) {
-                        return new Pair<String, String>(template, CentralViewLabel.PRODUCT);
+                        return new Pair<>(template, CentralViewLabel.PRODUCT);
                     }
                     return DEFAULT_P;
                 }

@@ -75,6 +75,7 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "filteredNavigationSupport-priceFilteredNavigationRecords")
     public List<FilteredNavigationRecord> getFilteredNavigationRecords(final NavigationContext navigationContext,
                                                                        final Long categoryId,
@@ -82,7 +83,7 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
                                                                        final String locale,
                                                                        final String recordName) {
 
-        final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
+        final List<FilteredNavigationRecord> navigationList = new ArrayList<>();
 
         if (!navigationContext.isFilteredBy(ProductSearchQueryBuilder.PRODUCT_PRICE)) {
 
@@ -106,16 +107,16 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
                     shop);
 
             final String priceFacet = SearchUtil.priceFacetName(navigationContext.getCustomerShopId(), currency);
-            final List<Pair<String, String>> rangeValues = new ArrayList<Pair<String, String>>();
+            final List<Pair<String, String>> rangeValues = new ArrayList<>();
             for (FilteredNavigationRecord record : allNavigationRecords) {
 
                 final Pair<String, Pair<BigDecimal, BigDecimal>> range =
                     priceNavigation.decomposePriceRequestParams(record.getValue());
 
-                rangeValues.add(new Pair<String, String>(
+                rangeValues.add(new Pair<>(
                         String.valueOf(SearchUtil.priceToLong(range.getSecond().getFirst())),
                         String.valueOf(SearchUtil.priceToLong(range.getSecond().getSecond()))
-                        ));
+                ));
             }
             final FilteredNavigationRecordRequest request = new FilteredNavigationRecordRequestImpl("priceFacet", priceFacet, rangeValues);
 

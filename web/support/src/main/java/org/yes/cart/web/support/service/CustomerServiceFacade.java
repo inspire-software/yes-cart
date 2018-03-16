@@ -16,7 +16,10 @@
 
 package org.yes.cart.web.support.service;
 
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
+import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.CustomerWishList;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -158,7 +161,7 @@ public interface CustomerServiceFacade {
      *
      * @param shop shop
      *
-     * @return flag to determine if gues checkout is supported
+     * @return flag to determine if guest checkout is supported
      */
     boolean isShopGuestCheckoutSupported(Shop shop);
 
@@ -168,7 +171,7 @@ public interface CustomerServiceFacade {
      * @param shop shop
      * @param customerType type code
      *
-     * @return flag to determine if gues checkout is supported
+     * @return flag to determine if guest checkout is supported
      */
     boolean isShopCustomerTypeSupported(Shop shop, String customerType);
 

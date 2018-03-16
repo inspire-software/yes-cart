@@ -89,6 +89,7 @@ public abstract class AbstractFileServiceImpl implements AttributableFileService
      * @param fileName          name of file
      * @return file uri.
      */
+    @Override
     public String getFileURI(final Object object,
                              final String servletContextPath,
                              final String locale,
@@ -129,6 +130,7 @@ public abstract class AbstractFileServiceImpl implements AttributableFileService
 
 
     /** {@inheritDoc} */
+    @Override
     public String getFile(final Attributable attributable,
                           final String httpServletContextPath,
                           final String locale,
@@ -153,11 +155,12 @@ public abstract class AbstractFileServiceImpl implements AttributableFileService
 
     private Pair<String, String> createNoDefaultFilePair(final Attributable attributable) {
 
-        return new Pair<String, String>(getAttributePrefix(attributable) + "0", Constants.NO_FILE);
+        return new Pair<>(getAttributePrefix(attributable) + "0", Constants.NO_FILE);
 
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Pair<String, String>> getFileAttributeFileNames(final Attributable attributable, final String lang) {
 
         final String prefix = getAttributePrefix(attributable);
@@ -176,7 +179,7 @@ public abstract class AbstractFileServiceImpl implements AttributableFileService
         if (CollectionUtils.isEmpty(values)) {
             return Collections.singletonList(createNoDefaultFilePair(attributable));
         }
-        final Map<String, String> attrToFileMap = new TreeMap<String, String>(); // sort naturally
+        final Map<String, String> attrToFileMap = new TreeMap<>(); // sort naturally
         for (final AttrValue av : values) {
             final String code = av.getAttributeCode();
             if (code.startsWith(prefix) && StringUtils.isNotBlank(av.getVal())) {
@@ -198,9 +201,9 @@ public abstract class AbstractFileServiceImpl implements AttributableFileService
             return Collections.singletonList(createNoDefaultFilePair(attributable));
         }
 
-        final List<Pair<String, String>> pairs = new ArrayList<Pair<String, String>>(attrToFileMap.size());
+        final List<Pair<String, String>> pairs = new ArrayList<>(attrToFileMap.size());
         for (final Map.Entry<String, String> entry : attrToFileMap.entrySet()) {
-            pairs.add(new Pair<String, String>(entry.getKey(), entry.getValue()));
+            pairs.add(new Pair<>(entry.getKey(), entry.getValue()));
         }
         return Collections.unmodifiableList(pairs);
     }

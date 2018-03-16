@@ -20,7 +20,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
@@ -171,7 +170,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
     private Set<Long> appendCategories(final OutputStreamWriter writer, final Shop shop, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
 
-        final Set<Long> accessible = new HashSet<Long>();
+        final Set<Long> accessible = new HashSet<>();
 
         writer.write("<!-- Categories -->\n");
 
@@ -261,44 +260,41 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
         writer.write("<!-- Products -->\n");
 
-        productService.findAllIterator(new ResultsIteratorCallback<Product>() {
-            @Override
-            public boolean withNext(final Product product) {
+        productService.findAllIterator(product -> {
 
-                if (DomainApiUtils.isObjectAvailableNow(true, product.getAvailablefrom(), product.getAvailableto(), now)) {
+            if (DomainApiUtils.isObjectAvailableNow(true, product.getAvailablefrom(), product.getAvailableto(), now)) {
 
-                    try {
-                        for (final ProductCategory productCategory : product.getProductCategory()) {
-                            if (accessible.contains(productCategory.getCategory().getCategoryId())) {
+                try {
+                    for (final ProductCategory productCategory : product.getProductCategory()) {
+                        if (accessible.contains(productCategory.getCategory().getCategoryId())) {
 
-                                appendProductLoc(writer, product, languages, urlBase);
+                            appendProductLoc(writer, product, languages, urlBase);
 
-                                if (product.isMultiSkuProduct()) {
+                            if (product.isMultiSkuProduct()) {
 
-                                    for (final ProductSku sku : product.getSku()) {
+                                for (final ProductSku sku : product.getSku()) {
 
-                                        appendSkuLoc(writer, sku, languages, urlBase);
-
-                                    }
+                                    appendSkuLoc(writer, sku, languages, urlBase);
 
                                 }
 
-                                break;
                             }
 
+                            break;
                         }
-                    } catch (IOException ioe) {
-
-                        LOG.error("Error generating sitemap for " + shop.getCode(), ioe);
-                        return false; // no point to continue if we have IO failure
 
                     }
+                } catch (IOException ioe) {
+
+                    LOG.error("Error generating sitemap for " + shop.getCode(), ioe);
+                    return false; // no point to continue if we have IO failure
 
                 }
 
-                return true; // read fully
-
             }
+
+            return true; // read fully
+
         });
 
         writer.write("<!-- End of Products -->\n");
@@ -362,6 +358,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
             this.file = file;
         }
 
+        @Override
         public void close() throws IOException {
             try {
                 super.close();

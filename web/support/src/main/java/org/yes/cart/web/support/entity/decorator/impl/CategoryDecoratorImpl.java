@@ -79,6 +79,7 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
      * {@inheritDoc}
      * @param lang
      */
+    @Override
     public List<Pair<String, String>> getImageAttributeFileNames(final String lang) {
 
         return categoryImageService.getImageAttributeFileNames(this, lang);
@@ -88,6 +89,7 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getImage(final String width, final String height, final String imageAttributeName, final String lang) {
         return categoryImageService.getImage(
                     this,
@@ -103,6 +105,7 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDefaultImage(final String width, final String height, final String lang) {
         final String defaultAttribute = getImageAttributeFileNames(lang).get(0).getFirst();
         return getImage(width, height, defaultAttribute, lang);
@@ -112,6 +115,7 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
     /**
      * {@inheritDoc}
      */
+    @Override
     public SeoImage getSeoImage(final String fileName) {
         if (StringUtils.isBlank(fileName)) {
             return null;
@@ -120,6 +124,7 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getName(final String locale) {
         return i18NWebSupport.getFailoverModel(getDisplayName(), getName()).getValue(locale);
     }
@@ -137,11 +142,13 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
 
 
     /** {@inheritDoc} */
+    @Override
     public String getAttributeValue(final String attribute) {
         return getAttributeValue(null, attribute, null);
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getAttributeValue(final String locale, final String attribute) {
         return getAttributeValue(locale, attribute, null);
     }
@@ -149,6 +156,7 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDescription(final String locale) {
         return getAttributeValue(null, AttributeNamesKeys.Category.CATEGORY_DESCRIPTION_PREFIX + locale, getDescription());
     }

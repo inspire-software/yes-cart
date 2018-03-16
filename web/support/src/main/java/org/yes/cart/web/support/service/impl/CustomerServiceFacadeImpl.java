@@ -44,37 +44,41 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     private final CustomerService customerService;
     private final CustomerWishListService customerWishListService;
     private final AttributeService attributeService;
-    private final PassPhraseGenerator phrazeGenerator;
+    private final PassPhraseGenerator phraseGenerator;
     private final CustomerCustomisationSupport customerCustomisationSupport;
 
     public CustomerServiceFacadeImpl(final CustomerService customerService,
                                      final CustomerWishListService customerWishListService,
                                      final AttributeService attributeService,
-                                     final PassPhraseGenerator phrazeGenerator,
+                                     final PassPhraseGenerator phraseGenerator,
                                      final CustomerCustomisationSupport customerCustomisationSupport) {
         this.customerService = customerService;
         this.customerWishListService = customerWishListService;
         this.attributeService = attributeService;
-        this.phrazeGenerator = phrazeGenerator;
+        this.phraseGenerator = phraseGenerator;
         this.customerCustomisationSupport = customerCustomisationSupport;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isCustomerRegistered(final Shop shop, final String email) {
         return customerService.isCustomerExists(email, shop);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Customer getCustomerByEmail(final Shop shop, final String email) {
         return customerService.getCustomerByEmail(email, shop);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Customer getGuestByCart(final Shop shop, final ShoppingCart cart) {
         return customerService.getCustomerByEmail(cart.getGuid(), shop);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Customer getCheckoutCustomer(final Shop shop, final ShoppingCart cart) {
         if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
             return getCustomerByEmail(shop, cart.getCustomerEmail());
@@ -83,9 +87,10 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
-    public List<CustomerWishList> getCustomerWishListByEmail(final Shop shop, final String type, final String email,final String visibility, final String... tags) {
+    @Override
+    public List<CustomerWishList> getCustomerWishListByEmail(final Shop shop, final String type, final String email, final String visibility, final String... tags) {
 
-        final List<CustomerWishList> filtered = new ArrayList<CustomerWishList>();
+        final List<CustomerWishList> filtered = new ArrayList<>();
         final Customer customer = customerService.getCustomerByEmail(email, shop);
         if (customer != null) {
             final List<CustomerWishList> allItems = customerWishListService.findWishListByCustomerId(customer.getCustomerId());
@@ -127,11 +132,13 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void resetPassword(final Shop shop, final Customer customer) {
         customerService.resetPassword(customer, shop, null);
     }
 
     /** {@inheritDoc} */
+    @Override
     public String registerCustomer(Shop registrationShop, String email, Map<String, Object> registrationData) {
 
         final Object customerTypeData = registrationData.get("customerType");
@@ -161,7 +168,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
             return null;
         }
 
-        final String password = phrazeGenerator.getNextPassPhrase();
+        final String password = phraseGenerator.getNextPassPhrase();
         customer.setPassword(password); // aspect will create hash but we need to generate password to be able to auto-login
 
         registerCustomerCustomAttributes(customer, customerType, configShop, registrationData);
@@ -172,7 +179,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     private void registerCustomerCustomAttributes(final Customer customer, final String customerType, final Shop configShop, final Map<String, Object> registrationData) {
-        final Map<String, Object> attrData = new HashMap<String, Object>(registrationData);
+        final Map<String, Object> attrData = new HashMap<>(registrationData);
         attrData.remove("salutation");
         attrData.remove("firstname");
         attrData.remove("lastname");
@@ -183,7 +190,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         }
 
         final List<String> allowed = customerCustomisationSupport.getSupportedRegistrationFormAttributesAsList(configShop, customerType);
-        final List<String> allowedFull = new ArrayList<String>();
+        final List<String> allowedFull = new ArrayList<>();
         allowedFull.addAll(allowed);
         allowedFull.add(AttributeNamesKeys.Customer.CUSTOMER_PHONE);
 
@@ -224,6 +231,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
 
     /** {@inheritDoc} */
+    @Override
     public String registerGuest(Shop registrationShop, String email, Map<String, Object> registrationData) {
 
         final String customerType = GUEST_TYPE;
@@ -279,6 +287,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
 
     /** {@inheritDoc} */
+    @Override
     public String registerNewsletter(final Shop registrationShop,
                                      final String email,
                                      final Map<String, Object> registrationData) {
@@ -286,6 +295,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String registerEmailRequest(final Shop registrationShop,
                                        final String email,
                                        final Map<String, Object> registrationData) {
@@ -293,6 +303,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Pair<String, I18NModel>> getShopSupportedCustomerTypes(final Shop shop) {
 
         return customerCustomisationSupport.getSupportedCustomerTypes(shop);
@@ -300,6 +311,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isShopGuestCheckoutSupported(final Shop shop) {
 
         return customerCustomisationSupport.isGuestCheckoutSupported(shop);
@@ -307,6 +319,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isShopCustomerTypeSupported(final Shop shop, final String customerType) {
 
         return customerCustomisationSupport.isCustomerTypeSupported(shop, customerType);
@@ -314,35 +327,35 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<AttrValueWithAttribute> getShopRegistrationAttributes(final Shop shop, final String customerType) {
 
-        final List<AttrValueWithAttribute> registration = customerCustomisationSupport.getRegistrationAttributes(shop, customerType);
-
-        return registration;  // CPOINT - possibly need to filter some out
+        return customerCustomisationSupport.getRegistrationAttributes(shop, customerType);
     }
 
 
     /** {@inheritDoc} */
+    @Override
     public List<Pair<AttrValueWithAttribute, Boolean>> getCustomerProfileAttributes(final Shop shop, final Customer customer) {
 
-        final List<Pair<AttrValueWithAttribute, Boolean>> profile = customerCustomisationSupport.getProfileAttributes(shop, customer);
-
-        return profile;  // CPOINT - possibly need to filter some out
+        return customerCustomisationSupport.getProfileAttributes(shop, customer);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void updateCustomer(final Shop shop, final Customer customer) {
         customerService.update(customer);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void updateCustomerAttributes(final Shop profileShop, final Customer customer, final Map<String, String> values) {
 
         final List<String> allowed = customerCustomisationSupport.getSupportedProfileFormAttributesAsList(profileShop, customer.getCustomerType());
 
         if (CollectionUtils.isNotEmpty(allowed)) {
             // must explicitly configure to avoid exposing personal data
-            final List<String> readonly = new ArrayList<String>(customerCustomisationSupport.getSupportedProfileFormReadOnlyAttributesAsList(profileShop, customer.getCustomerType()));
+            final List<String> readonly = new ArrayList<>(customerCustomisationSupport.getSupportedProfileFormReadOnlyAttributesAsList(profileShop, customer.getCustomerType()));
             // Ensure dummy attributes are not updated
             readonly.addAll(Arrays.asList("salutation", "firstname", "middlename", "lastname"));
 
@@ -387,9 +400,10 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCustomerPublicKey(final Customer customer) {
         if (StringUtils.isBlank(customer.getPublicKey())) {
-            final String phrase = phrazeGenerator.getNextPassPhrase();
+            final String phrase = phraseGenerator.getNextPassPhrase();
             customer.setPublicKey(phrase);
             customerService.update(customer);
         }
@@ -397,6 +411,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Customer getCustomerByPublicKey(final String publicKey) {
         if (StringUtils.isNotBlank(publicKey)) {
             int lastDashPos = publicKey.lastIndexOf('-');

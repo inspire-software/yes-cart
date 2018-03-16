@@ -16,20 +16,16 @@
 
 package org.yes.cart.cluster.service.impl;
 
-import org.yes.cart.cluster.node.Message;
-import org.yes.cart.cluster.node.MessageListener;
 import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.cluster.service.WarmUpService;
 import org.yes.cart.domain.entity.Country;
-import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.promotion.PromotionConditionParser;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.misc.LanguageService;
-import org.yes.cart.cluster.service.WarmUpService;
 import org.yes.cart.web.support.service.AddressBookFacade;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -143,12 +139,9 @@ public class WarmUpServiceImpl implements WarmUpService {
      */
     public void setNodeService(final NodeService nodeService) {
 
-        nodeService.subscribe("WarmUpService.warmUp", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                WarmUpServiceImpl.this.warmUp();
-                return "OK";
-            }
+        nodeService.subscribe("WarmUpService.warmUp", message -> {
+            WarmUpServiceImpl.this.warmUp();
+            return "OK";
         });
 
     }

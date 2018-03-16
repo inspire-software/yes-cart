@@ -95,7 +95,7 @@ public class AbstractImageServiceImplTest {
 
         final AttrValue av1 = context.mock(AttrValue.class, "av1");
 
-        final List<AttrValue> avs = Arrays.asList(av1);
+        final List<AttrValue> avs = Collections.singletonList(av1);
 
         context.checking(new Expectations() {{
             oneOf(attributable).getAllAttributes(); will(returnValue(avs));

@@ -427,7 +427,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
             }
             if (carrierSlaPGs == null) {
                 // initialise first
-                carrierSlaPGs = new HashSet<String>(carrierSla.getSupportedPaymentGatewaysAsList());
+                carrierSlaPGs = new HashSet<>(carrierSla.getSupportedPaymentGatewaysAsList());
             } else {
                 // every subsequent SLA will limit supported PGs via intersection
                 carrierSlaPGs.retainAll(carrierSla.getSupportedPaymentGatewaysAsList());
@@ -439,8 +439,8 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
         }
 
         final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false, cart.getShoppingContext().getShopCode());
-        final List<Pair<PaymentGatewayDescriptor, String>> available = new ArrayList<Pair<PaymentGatewayDescriptor, String>>(descriptors.size());
-        final Map<String, Integer> sorting = new HashMap<String, Integer>();
+        final List<Pair<PaymentGatewayDescriptor, String>> available = new ArrayList<>(descriptors.size());
+        final Map<String, Integer> sorting = new HashMap<>();
         final boolean approve = cart.getOrderInfo().isDetailByKeyTrue(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER);
         for (final PaymentGatewayDescriptor descriptor : descriptors) {
             if (carrierSlaPGs.contains(descriptor.getLabel())) {
@@ -448,7 +448,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                 if (approve && gateway.getPaymentGatewayFeatures().isOnlineGateway()) {
                     continue; // TODO: online PG's should not be allowed through approve flow at least for now
                 }
-                available.add(new Pair<PaymentGatewayDescriptor, String>(descriptor, gateway.getName(lang)));
+                available.add(new Pair<>(descriptor, gateway.getName(lang)));
                 final String priority = gateway.getParameterValue("priority");
                 if (priority == null) {
                     sorting.put(descriptor.getLabel(), 0);
@@ -458,19 +458,14 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
             }
         }
 
-        Collections.sort(
-                available,
-                new Comparator<Pair<PaymentGatewayDescriptor, String>>() {
-                    public int compare(final Pair<PaymentGatewayDescriptor, String> pgd1, final Pair<PaymentGatewayDescriptor, String> pgd2) {
-                        final int priority1 = sorting.get(pgd1.getFirst().getLabel());
-                        final int priority2 = sorting.get(pgd2.getFirst().getLabel());
-                        if (priority1 == priority2) {
-                            return pgd1.getSecond().compareToIgnoreCase(pgd2.getSecond()); // if no priority sort naturally by name
-                        }
-                        return Integer.compare(priority1, priority2); // if prioritised then sort by priority
-                    }
-                }
-        );
+        available.sort((pgd1, pgd2) -> {
+            final int priority1 = sorting.get(pgd1.getFirst().getLabel());
+            final int priority2 = sorting.get(pgd2.getFirst().getLabel());
+            if (priority1 == priority2) {
+                return pgd1.getSecond().compareToIgnoreCase(pgd2.getSecond()); // if no priority sort naturally by name
+            }
+            return Integer.compare(priority1, priority2); // if prioritised then sort by priority
+        });
 
         return available;
 
@@ -507,7 +502,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     @Override
     public Set<String> getOrderPromoCodes(final CustomerOrder customerOrder) {
 
-        final Set<String> allPromos = new HashSet<String>();
+        final Set<String> allPromos = new HashSet<>();
 
         if (StringUtils.isNotBlank(customerOrder.getAppliedPromo())) {
             allPromos.addAll(Arrays.asList(StringUtils.split(customerOrder.getAppliedPromo(), ',')));
@@ -520,7 +515,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     @Override
     public Set<String> getOrderShippingPromoCodes(final CustomerOrderDelivery orderDelivery) {
 
-        final Set<String> allPromos = new HashSet<String>();
+        final Set<String> allPromos = new HashSet<>();
 
         if (StringUtils.isNotBlank(orderDelivery.getAppliedPromo())) {
             allPromos.addAll(Arrays.asList(StringUtils.split(orderDelivery.getAppliedPromo(), ',')));
@@ -533,7 +528,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     @Override
     public Set<String> getOrderItemPromoCodes(final CartItem orderDeliveryDet) {
 
-        final Set<String> allPromos = new HashSet<String>();
+        final Set<String> allPromos = new HashSet<>();
 
         if (StringUtils.isNotBlank(orderDeliveryDet.getAppliedPromo())) {
             allPromos.addAll(Arrays.asList(StringUtils.split(orderDeliveryDet.getAppliedPromo(), ',')));
@@ -602,7 +597,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
         if (order != null) {
             final Pair data = new Pair(order, order.getDelivery());
 
-            final Map<String, Object> values = new HashMap<String, Object>();
+            final Map<String, Object> values = new HashMap<>();
             values.put("orderNumber", order.getOrdernum());
             values.put("shop", order.getShop());
 

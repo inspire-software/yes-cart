@@ -15,14 +15,11 @@
  */
 package org.yes.cart.cluster.service.impl;
 
-import org.yes.cart.cluster.node.Message;
-import org.yes.cart.cluster.node.MessageListener;
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.cluster.node.NodeService;
-import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.cluster.service.CacheDirector;
+import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -50,61 +47,43 @@ public class WsCacheDirectorImpl extends CacheDirectorImpl implements CacheDirec
 
         this.nodeService = nodeService;
 
-        nodeService.subscribe("CacheDirector.getCacheInfo", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                final Node node = nodeService.getCurrentNode();
-                final ArrayList<CacheInfoDTOImpl> caches = new ArrayList<CacheInfoDTOImpl>();
-                for (final CacheInfoDTOImpl cache : WsCacheDirectorImpl.this.getCacheInfo()) {
-                    cache.setNodeId(node.getId());
-                    cache.setNodeUri(node.getChannel());
-                    caches.add(cache);
-                }
-                return caches;
+        nodeService.subscribe("CacheDirector.getCacheInfo", message -> {
+            final Node node = nodeService.getCurrentNode();
+            final ArrayList<CacheInfoDTOImpl> caches = new ArrayList<>();
+            for (final CacheInfoDTOImpl cache : WsCacheDirectorImpl.this.getCacheInfo()) {
+                cache.setNodeId(node.getId());
+                cache.setNodeUri(node.getChannel());
+                caches.add(cache);
             }
+            return caches;
         });
-        nodeService.subscribe("CacheDirector.evictAllCache", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                final Boolean force = (Boolean) message.getPayload();
-                WsCacheDirectorImpl.this.evictAllCache(force != null && force);
-                return "OK";
-            }
+        nodeService.subscribe("CacheDirector.evictAllCache", message -> {
+            final Boolean force = (Boolean) message.getPayload();
+            WsCacheDirectorImpl.this.evictAllCache(force != null && force);
+            return "OK";
         });
-        nodeService.subscribe("CacheDirector.evictCache", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                WsCacheDirectorImpl.this.evictCache((String) message.getPayload());
-                return "OK";
-            }
+        nodeService.subscribe("CacheDirector.evictCache", message -> {
+            WsCacheDirectorImpl.this.evictCache((String) message.getPayload());
+            return "OK";
         });
-        nodeService.subscribe("CacheDirector.enableStats", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                WsCacheDirectorImpl.this.enableStats((String) message.getPayload());
-                return "OK";
-            }
+        nodeService.subscribe("CacheDirector.enableStats", message -> {
+            WsCacheDirectorImpl.this.enableStats((String) message.getPayload());
+            return "OK";
         });
-        nodeService.subscribe("CacheDirector.disableStats", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                WsCacheDirectorImpl.this.disableStats((String) message.getPayload());
-                return "OK";
-            }
+        nodeService.subscribe("CacheDirector.disableStats", message -> {
+            WsCacheDirectorImpl.this.disableStats((String) message.getPayload());
+            return "OK";
         });
-        nodeService.subscribe("CacheDirector.onCacheableChange", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
+        nodeService.subscribe("CacheDirector.onCacheableChange", message -> {
 
-                final Map<String, Object> payload = (Map<String, Object>) message.getPayload();
+            final Map<String, Object> payload = (Map<String, Object>) message.getPayload();
 
-                return WsCacheDirectorImpl.this.onCacheableChange(
-                        (String) payload.get("entityOperation"),
-                        (String) payload.get("entityName"),
-                        (Long) payload.get("pkValue")
-                );
+            return WsCacheDirectorImpl.this.onCacheableChange(
+                    (String) payload.get("entityOperation"),
+                    (String) payload.get("entityName"),
+                    (Long) payload.get("pkValue")
+            );
 
-            }
         });
     }
 

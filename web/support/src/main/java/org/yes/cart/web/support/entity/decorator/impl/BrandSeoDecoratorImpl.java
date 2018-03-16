@@ -33,58 +33,72 @@ public class BrandSeoDecoratorImpl implements Seo {
         this.brand = brand;
     }
 
+    @Override
     public String getUri() {
         return ProductSearchQueryBuilder.BRAND_FIELD + "/" + this.brand.getName().toLowerCase();
     }
 
+    @Override
     public void setUri(final String uri) {
         throw new UnsupportedOperationException("Read only");
     }
 
+    @Override
     public String getTitle() {
         return this.brand.getName();
     }
 
+    @Override
     public void setTitle(final String title) {
         throw new UnsupportedOperationException("Read only");
     }
 
+    @Override
     public String getDisplayTitle() {
         return null;
     }
 
+    @Override
     public void setDisplayTitle(final String title) {
         throw new UnsupportedOperationException("Read only");
     }
 
+    @Override
     public String getMetakeywords() {
         return this.brand.getName();
     }
 
+    @Override
     public void setMetakeywords(final String metakeywords) {
         throw new UnsupportedOperationException("Read only");
     }
 
+    @Override
     public String getDisplayMetakeywords() {
         return null;
     }
 
+    @Override
     public void setDisplayMetakeywords(final String metakeywords) {
         throw new UnsupportedOperationException("Read only");
     }
 
+    @Override
     public String getMetadescription() {
         return null;
     }
 
+    @Override
     public void setMetadescription(final String metadescription) {
         throw new UnsupportedOperationException("Read only");
     }
 
+    @Override
     public String getDisplayMetadescription() {
         return null;
     }
 
+    @Override
     public void setDisplayMetadescription(final String metadescription) {
         throw new UnsupportedOperationException("Read only");
     }

@@ -219,6 +219,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ServletRequest doBefore(final ServletRequest servletRequest,
                                    final ServletResponse servletResponse) throws IOException, ServletException {
         handleRequestInternal(
@@ -230,6 +231,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void doAfter(final ServletRequest servletRequest,
                         final ServletResponse servletResponse) throws IOException, ServletException {
         //do nothing

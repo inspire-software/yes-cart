@@ -34,7 +34,9 @@ import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -58,6 +60,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category getCategory(final long categoryId, final long customerShopId) {
         if (categoryId > 0L && shopService.getShopCategoriesIds(customerShopId).contains(categoryId)) {
             final Category category = categoryService.getById(categoryId);
@@ -71,6 +74,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category getDefaultNavigationCategory(final long customerShopId) {
         return shopService.getDefaultNavigationCategory(customerShopId);
     }
@@ -78,6 +82,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Pair<List<Long>, Boolean> getSearchCategoriesIds(final long categoryId, final long customerShopId) {
 
         return shopSearchSupportService.getSearchCategoriesIds(categoryId, customerShopId);
@@ -87,6 +92,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-currentCategoryMenu")
     public List<Category> getCurrentCategoryMenu(final long currentCategoryId, final long customerShopId, final String locale) {
 
@@ -94,23 +100,17 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
 
         if (currentCategoryId > 0L && shopService.getShopCategoriesIds(customerShopId).contains(currentCategoryId)) {
 
-            categories = new ArrayList<Category>(categoryService.getChildCategories(currentCategoryId));
+            categories = new ArrayList<>(categoryService.getChildCategories(currentCategoryId));
 
         } else {
 
-            categories = new ArrayList<Category>(shopService.getTopLevelCategories(customerShopId));
+            categories = new ArrayList<>(shopService.getTopLevelCategories(customerShopId));
 
         }
 
-        final Iterator<Category> itCat = categories.iterator();
-        while (itCat.hasNext()) {
-            final Category cat = itCat.next();
-            if (CentralViewLabel.INCLUDE.equals(cat.getUitemplate())) {
-                itCat.remove();
-            }
-        }
+        categories.removeIf(cat -> CentralViewLabel.INCLUDE.equals(cat.getUitemplate()));
 
-        Collections.sort(categories, new CategoryRankDisplayNameComparator(locale));
+        categories.sort(new CategoryRankDisplayNameComparator(locale));
 
         return categories;
 
@@ -130,11 +130,12 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
             };
 
     private static final Pair<String, String> DEFAULT_THUMB_SIZE =
-            new Pair<String, String>(Constants.DEFAULT_THUMB_SIZE[0], Constants.DEFAULT_THUMB_SIZE[1]);
+            new Pair<>(Constants.DEFAULT_THUMB_SIZE[0], Constants.DEFAULT_THUMB_SIZE[1]);
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Pair<String, String> getThumbnailSizeConfig(final long categoryId, final long customerShopId) {
 
         return getImageSizeConfig(categoryId, customerShopId, CATEGORY_THUMBNAIL_SIZE, SHOP_THUMBNAIL_SIZE, DEFAULT_THUMB_SIZE);
@@ -154,11 +155,12 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
             };
 
     private static final Pair<String, String> DEFAULT_PRODUCTLIST_IMAGE_SIZE =
-            new Pair<String, String>(Constants.DEFAULT_PRODUCTLIST_IMAGE_SIZE[0], Constants.DEFAULT_PRODUCTLIST_IMAGE_SIZE[1]);
+            new Pair<>(Constants.DEFAULT_PRODUCTLIST_IMAGE_SIZE[0], Constants.DEFAULT_PRODUCTLIST_IMAGE_SIZE[1]);
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Pair<String, String> getProductListImageSizeConfig(final long categoryId, final long customerShopId) {
 
         return getImageSizeConfig(categoryId, customerShopId, CATEGORY_PRODUCTLIST_IMAGE_SIZE, SHOP_PRODUCTLIST_IMAGE_SIZE, DEFAULT_PRODUCTLIST_IMAGE_SIZE);
@@ -178,11 +180,12 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
             };
 
     private static final Pair<String, String> DEFAULT_CATEGORYLIST_IMAGE_SIZE =
-            new Pair<String, String>(Constants.DEFAULT_CATEGORYLIST_IMAGE_SIZE[0], Constants.DEFAULT_CATEGORYLIST_IMAGE_SIZE[1]);
+            new Pair<>(Constants.DEFAULT_CATEGORYLIST_IMAGE_SIZE[0], Constants.DEFAULT_CATEGORYLIST_IMAGE_SIZE[1]);
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Pair<String, String> getCategoryListImageSizeConfig(final long categoryId, final long customerShopId) {
 
         return getImageSizeConfig(categoryId, customerShopId, CATEGORY_CATEGORYLIST_IMAGE_SIZE, SHOP_CATEGORYLIST_IMAGE_SIZE, DEFAULT_CATEGORYLIST_IMAGE_SIZE);
@@ -192,6 +195,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getFeaturedListSizeConfig(final long categoryId, final long customerShopId) {
 
         return getLimitSizeConfig(categoryId, customerShopId,
@@ -204,6 +208,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-categoryNewArrivalLimit")
     public int getNewArrivalListSizeConfig(final long categoryId, final long customerShopId) {
 
@@ -252,6 +257,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-categoryNewArrivalDate")
     public int getCategoryNewArrivalOffsetDays(final long categoryId, final long customerShopId) {
 
@@ -263,6 +269,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<String> getItemsPerPageOptionsConfig(final long categoryId, final long customerShopId) {
 
         return getCSVConfig(categoryId,
@@ -276,6 +283,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<String> getPageSortingOptionsConfig(final long categoryId, final long customerShopId) {
 
 
@@ -290,6 +298,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getProductListColumnOptionsConfig(final long categoryId, final long customerShopId) {
 
         return getLimitSizeConfig(categoryId, customerShopId,
@@ -303,6 +312,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getCategoryListColumnOptionsConfig(final long categoryId, final long customerShopId) {
 
         return getLimitSizeConfig(categoryId, customerShopId,
@@ -427,7 +437,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
                         break;
                     }
                 } else {
-                    return new Pair<String, String>(size1, size2);
+                    return new Pair<>(size1, size2);
                 }
             }
 
@@ -438,14 +448,14 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
             final String widthAttrValueShop = shop.getAttributeValueByCode(shopWidthAndHeightAttribute[0]);
             final String heightAttrValueShop = shop.getAttributeValueByCode(shopWidthAndHeightAttribute[1]);
             if (StringUtils.isNotBlank(widthAttrValueShop) && StringUtils.isNotBlank(heightAttrValueShop)) {
-                return new Pair<String, String>(widthAttrValueShop, heightAttrValueShop);
+                return new Pair<>(widthAttrValueShop, heightAttrValueShop);
             }
             if (shop.getMaster() != null) {
                 final Shop master = shopService.getById(shop.getMaster().getShopId());
                 final String widthAttrValueShopMaster = master.getAttributeValueByCode(shopWidthAndHeightAttribute[0]);
                 final String heightAttrValueShopMaster = master.getAttributeValueByCode(shopWidthAndHeightAttribute[1]);
                 if (StringUtils.isNotBlank(widthAttrValueShopMaster) && StringUtils.isNotBlank(heightAttrValueShopMaster)) {
-                    return new Pair<String, String>(widthAttrValueShopMaster, heightAttrValueShopMaster);
+                    return new Pair<>(widthAttrValueShopMaster, heightAttrValueShopMaster);
                 }
             }
         }
@@ -457,6 +467,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long getCategoryProductTypeId(final long categoryId, final long customerShopId) {
         if (categoryId > 0L && shopService.getShopCategoriesIds(customerShopId).contains(categoryId)) {
             return shopService.getShopCategoryProductTypeId(customerShopId, categoryId);
@@ -467,6 +478,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long getCategoryParentId(final long categoryId, final long customerShopId) {
         return shopService.getShopCategoryParentId(customerShopId, categoryId);
     }
@@ -474,6 +486,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getCategoryFilterLimitConfig(final long categoryId, final long customerShopId) {
 
         return getLimitSizeConfig(categoryId, customerShopId,

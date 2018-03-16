@@ -54,27 +54,25 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
     private final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
 
-    private static final Comparator<FilteredNavigationRecord> COMPARATOR = new Comparator<FilteredNavigationRecord>() {
-        public int compare(final FilteredNavigationRecord record1, final FilteredNavigationRecord record2) {
-            int rez = record1.getRank() - record2.getRank();
-            if (rez == 0) {
-                if (record1.getDisplayName() != null && record2.getDisplayName() != null) {
-                    rez = record1.getDisplayName().compareToIgnoreCase(record2.getDisplayName());
-                    if (rez != 0) {
-                        return rez;
-                    }
-                }
-                rez = record1.getName().compareToIgnoreCase(record2.getName());
-                if (rez == 0 && !ProductTypeAttr.NAVIGATION_TYPE_RANGE.equals(record1.getType())) {
-                    if (record1.getDisplayValue() != null && record2.getDisplayValue() != null) {
-                        rez = record1.getDisplayValue().compareToIgnoreCase(record2.getDisplayValue());
-                    } else {
-                        rez = record1.getValue().compareToIgnoreCase(record2.getValue());
-                    }
+    private static final Comparator<FilteredNavigationRecord> COMPARATOR = (record1, record2) -> {
+        int rez = record1.getRank() - record2.getRank();
+        if (rez == 0) {
+            if (record1.getDisplayName() != null && record2.getDisplayName() != null) {
+                rez = record1.getDisplayName().compareToIgnoreCase(record2.getDisplayName());
+                if (rez != 0) {
+                    return rez;
                 }
             }
-            return rez;
+            rez = record1.getName().compareToIgnoreCase(record2.getName());
+            if (rez == 0 && !ProductTypeAttr.NAVIGATION_TYPE_RANGE.equals(record1.getType())) {
+                if (record1.getDisplayValue() != null && record2.getDisplayValue() != null) {
+                    rez = record1.getDisplayValue().compareToIgnoreCase(record2.getDisplayValue());
+                } else {
+                    rez = record1.getValue().compareToIgnoreCase(record2.getValue());
+                }
+            }
         }
+        return rez;
     };
 
     private final ProductTypeAttrService productTypeAttrService;
@@ -89,12 +87,13 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "filteredNavigationSupport-attributeFilteredNavigationRecords")
     public List<FilteredNavigationRecord> getFilteredNavigationRecords(final NavigationContext navigationContext,
                                                                        final String locale,
                                                                        final long productTypeId) {
 
-        final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
+        final List<FilteredNavigationRecord> navigationList = new ArrayList<>();
 
         if (productTypeId > 0L) {
 
@@ -104,9 +103,9 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
                 return Collections.emptyList();
             }
 
-            final List<FilteredNavigationRecordRequest> requests = new ArrayList<FilteredNavigationRecordRequest>();
-            final Map<String, FilteredNavigationRecordRequest> requestsMap = new HashMap<String, FilteredNavigationRecordRequest>();
-            final Map<String, ProductTypeAttr> pTypes = new HashMap<String, ProductTypeAttr>();
+            final List<FilteredNavigationRecordRequest> requests = new ArrayList<>();
+            final Map<String, FilteredNavigationRecordRequest> requestsMap = new HashMap<>();
+            final Map<String, ProductTypeAttr> pTypes = new HashMap<>();
             for (final ProductTypeAttr pta : ptas) {
 
                 final String facetName = pta.getAttribute().getCode();
@@ -116,7 +115,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
                     final String fieldName = "facetr_" + facetName;
 
-                    final List<Pair<String, String>> rangeValues = new ArrayList<Pair<String, String>>();
+                    final List<Pair<String, String>> rangeValues = new ArrayList<>();
                     final RangeList rangeList = pta.getRangeList();
                     if (rangeList != null && rangeList.getRanges() != null) {
                         for (RangeNode node : rangeList.getRanges()) {
@@ -129,7 +128,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
                                 continue;
                             }
 
-                            rangeValues.add(new Pair<String, String>(
+                            rangeValues.add(new Pair<>(
                                     from.toString(),
                                     to.toString()
                             ));
@@ -169,7 +168,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
 
             // Alpha sort
-            Collections.sort(navigationList, COMPARATOR);
+            navigationList.sort(COMPARATOR);
 
         }
 
@@ -277,7 +276,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
     private Map<String, String> getRangeValueDisplayNames(final List<DisplayValue> displayValues) {
 
-        final Map<String, String> display = new HashMap<String, String>();
+        final Map<String, String> display = new HashMap<>();
         if (displayValues != null) {
             for (final DisplayValue dv :displayValues) {
                 display.put(dv.getLang(), dv.getValue());

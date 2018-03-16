@@ -34,8 +34,8 @@ import java.util.Map;
  */
 public class CentralViewResolverContentImpl implements CentralViewResolver {
 
-    private static final Pair<String, String> DEFAULT = new Pair<String, String>(CentralViewLabel.CONTENT, CentralViewLabel.CONTENT);
-    private static final Pair<String, String> DEFAULT_DYNO = new Pair<String, String>(CentralViewLabel.DYNOCONTENT, CentralViewLabel.DYNOCONTENT);
+    private static final Pair<String, String> DEFAULT = new Pair<>(CentralViewLabel.CONTENT, CentralViewLabel.CONTENT);
+    private static final Pair<String, String> DEFAULT_DYNO = new Pair<>(CentralViewLabel.DYNOCONTENT, CentralViewLabel.DYNOCONTENT);
 
     private final ContentService contentService;
 
@@ -65,7 +65,7 @@ public class CentralViewResolverContentImpl implements CentralViewResolver {
                     if (CentralViewLabel.DYNOCONTENT.equals(template)) {
                         return DEFAULT_DYNO;
                     }
-                    return new Pair<String, String>(template, CentralViewLabel.CONTENT);
+                    return new Pair<>(template, CentralViewLabel.CONTENT);
                 }
                 return DEFAULT;
             }

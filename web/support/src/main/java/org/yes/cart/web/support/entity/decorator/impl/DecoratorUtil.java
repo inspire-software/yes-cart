@@ -20,7 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.Seo;
 
 /**
- * User: igora Igor Azarny
+ * User: Igor Azarny
  * Date: 6/19/12
  * Time: 4:38 PM
  */

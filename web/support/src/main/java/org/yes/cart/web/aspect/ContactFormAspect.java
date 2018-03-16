@@ -133,6 +133,7 @@ public class ContactFormAspect extends BaseNotificationAspect {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Runnable getTask(Serializable serializableMessage) {
         return new CustomerRegistrationMessageListener(
                 mailService,
@@ -142,7 +143,7 @@ public class ContactFormAspect extends BaseNotificationAspect {
     }
 
     private Set<String> transformShopUrls(final Shop shop) {
-        final Set<String> rez = new HashSet<String>();
+        final Set<String> rez = new HashSet<>();
         rez.add(shop.getDefaultShopUrl());
         return rez;
     }

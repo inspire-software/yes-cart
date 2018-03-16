@@ -49,6 +49,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean customerHasAtLeastOneAddress(final String email, final Shop customerShop) {
 
         if (StringUtils.isNotBlank(email)) {
@@ -64,9 +65,10 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Address> getAddresses(final Customer customer, final Shop customerShop, final String addressType) {
 
-        final List<Address> allowed = new ArrayList<Address>();
+        final List<Address> allowed = new ArrayList<>();
         if (customer != null) {
             final Shop configShop = customerShop.getMaster() != null ? customerShop.getMaster() : customerShop;
             final Collection<Address> allAvailable = getAddressbook(customerShop, customer, addressType);
@@ -83,6 +85,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Address getAddress(final Customer customer, final Shop customerShop, final String addrId, final String addressType) {
         long pk;
         try {
@@ -121,6 +124,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
      * @param addressType type of address
      * @return address instance
      */
+    @Override
     public Address getDefaultAddress(final Customer customer, final Shop customerShop, final String addressType) {
         if (customer == null || customerShop == null) {
             return null;
@@ -154,6 +158,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
 
     /** {@inheritDoc} */
+    @Override
     public Address copyAddress(final Customer customer, final Shop customerShop, final String addrId, final String addressType) {
 
         final Address original = getAddress(customer, customerShop, addrId, addressType);
@@ -199,6 +204,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<AttrValueWithAttribute> getShopCustomerAddressAttributes(final Customer customer, final Shop shop, final String addressType) {
 
         return addressCustomisationSupport.getShopCustomerAddressAttributes(customer, shop, addressType);
@@ -206,6 +212,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Country> getAllCountries(final String shopCode, final String addressType) {
 
         return addressCustomisationSupport.getAllCountries(shopCode, addressType);
@@ -213,6 +220,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<State> getStatesByCountry(final String countryCode) {
 
         return addressCustomisationSupport.getStatesByCountry(countryCode);
@@ -220,6 +228,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void createOrUpdate(final Address address, final Shop customerShop) {
         if (!customerShop.isB2BAddressBookActive() &&
                 customerShop.isSfAddressBookEnabled(address.getCustomer().getCustomerType())) {
@@ -234,6 +243,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void remove(Address address, final Shop customerShop) {
 
         if (!customerShop.isB2BAddressBookActive() &&
@@ -254,6 +264,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Address useAsDefault(Address address, final Shop customerShop) {
         if (!customerShop.isB2BAddressBookActive()) {
             return addressService.updateSetDefault(address);
@@ -262,6 +273,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String formatAddressFor(final Address address, final Shop shop, final Customer customer, final String lang) {
 
         return addressCustomisationSupport.formatAddressFor(address, shop, customer, lang);

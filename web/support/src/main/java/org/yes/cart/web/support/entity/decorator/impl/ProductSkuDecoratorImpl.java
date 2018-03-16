@@ -108,6 +108,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      * {@inheritDoc}
      * @param lang
      */
+    @Override
     public List<Pair<String, String>> getImageAttributeFileNames(final String lang) {
 
         return productSkuImageService.getImageAttributeFileNames(this, lang);
@@ -117,6 +118,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getImage(final String width, final String height, final String imageAttributeName, final String lang) {
         return productSkuImageService.getImage(
                     this,
@@ -132,6 +134,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDefaultImage(final String width, final String height, final String lang) {
         final String imageAttributeName = getImageAttributeFileNames(lang).get(0).getFirst();
         return productSkuImageService.getImage(
@@ -148,6 +151,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
     /**
      * {@inheritDoc}
      */
+    @Override
     public SeoImage getSeoImage(final String fileName) {
         return imageService.getSeoImage(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN + fileName);
     }
@@ -156,6 +160,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName(final String locale) {
         return i18NWebSupport.getFailoverModel(getDisplayName(), getName()).getValue(locale);
     }
@@ -163,6 +168,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAttributeValue(final String attribute) {
         final AttrValueProductSku val =  getAttributeByCode(attribute);
         return val != null ? val.getVal() : "";
@@ -171,14 +177,16 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAttributeValue(final String locale, final String attribute) {
-        final AttrValueProductSku lval =  getAttributeByCode(attribute);
-        return lval != null ? i18NWebSupport.getFailoverModel(lval.getDisplayVal(), lval.getVal()).getValue(locale) : "";
+        final AttrValueProductSku val =  getAttributeByCode(attribute);
+        return val != null ? i18NWebSupport.getFailoverModel(val.getDisplayVal(), val.getVal()).getValue(locale) : "";
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDescription(final String locale) {
 
         final String desc = getAttributeValue(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);

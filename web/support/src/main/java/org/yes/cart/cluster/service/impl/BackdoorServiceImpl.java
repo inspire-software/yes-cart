@@ -24,8 +24,6 @@ import org.apache.lucene.search.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.cache.CacheBundleHelper;
-import org.yes.cart.cluster.node.Message;
-import org.yes.cart.cluster.node.MessageListener;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.service.BackdoorService;
 import org.yes.cart.cluster.service.WarmUpService;
@@ -107,6 +105,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object[] getProductReindexingState() {
         if (isLuceneIndexDisabled()) {
             return INDEX_DISABLED_STATUS;
@@ -122,6 +121,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object[] getProductSkuReindexingState() {
         if (isLuceneIndexDisabled()) {
             return INDEX_DISABLED_STATUS;
@@ -138,6 +138,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexAllProducts() {
         if (!isLuceneIndexDisabled()) {
 
@@ -160,6 +161,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexAllProductsSku() {
         if (!isLuceneIndexDisabled()) {
             productService.reindexProductsSku(getProductIndexBatchSize());
@@ -169,6 +171,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexShopProducts(final long shopPk) {
         if (!isLuceneIndexDisabled()) {
             productService.reindexProducts(shopPk, getProductIndexBatchSize());
@@ -178,6 +181,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexShopProductsSku(final long shopPk) {
         if (!isLuceneIndexDisabled()) {
             productService.reindexProductsSku(shopPk, getProductIndexBatchSize());
@@ -187,6 +191,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProduct(final long productPk) {
         if (!isLuceneIndexDisabled()) {
             productService.reindexProduct(productPk);
@@ -196,6 +201,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductSku(final long productPk) {
         if (!isLuceneIndexDisabled()) {
             productService.reindexProductSku(productPk);
@@ -205,6 +211,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductSkuCode(final String productCode) {
         if (!isLuceneIndexDisabled()) {
             productService.reindexProductSku(productCode);
@@ -214,6 +221,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProducts(final long[] productPks) {
         if (!isLuceneIndexDisabled()) {
             for (long pk : productPks) {
@@ -225,6 +233,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object[]> sqlQuery(final String query) {
 
         if (StringUtils.isNotBlank(query)) {
@@ -248,6 +257,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object[]> hsqlQuery(final String query) {
 
         if (StringUtils.isNotBlank(query)) {
@@ -269,6 +279,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object[]> luceneQuery(final String luceneQuery) {
 
         final QueryParser queryParser = new QueryParser("", new AsIsAnalyzer(false));
@@ -294,6 +305,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reloadConfigurations() {
 
         if (CollectionUtils.isNotEmpty(this.configurationListeners)) {
@@ -312,130 +324,78 @@ public class BackdoorServiceImpl implements BackdoorService {
      */
     public void setNodeService(final NodeService nodeService) {
         this.nodeService = nodeService;
-        this.nodeService.subscribe("BackdoorService.ping", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                BackdoorServiceImpl.this.ping();
-                return "OK";
+        this.nodeService.subscribe("BackdoorService.ping", message -> {
+            BackdoorServiceImpl.this.ping();
+            return "OK";
+        });
+        this.nodeService.subscribe("BackdoorService.warmUp", message -> {
+            BackdoorServiceImpl.this.warmUp();
+            return "OK";
+        });
+        this.nodeService.subscribe("BackdoorService.getProductReindexingState", message -> BackdoorServiceImpl.this.getProductReindexingState());
+        this.nodeService.subscribe("BackdoorService.getProductSkuReindexingState", message -> BackdoorServiceImpl.this.getProductSkuReindexingState());
+        this.nodeService.subscribe("BackdoorService.reindexAllProducts", message -> {
+            BackdoorServiceImpl.this.reindexAllProducts();
+            return "OK";
+        });
+        this.nodeService.subscribe("BackdoorService.reindexAllProductsSku", message -> {
+            BackdoorServiceImpl.this.reindexAllProductsSku();
+            return "OK";
+        });
+        this.nodeService.subscribe("BackdoorService.reindexShopProducts", message -> {
+            BackdoorServiceImpl.this.reindexShopProducts((Long) message.getPayload());
+            return "OK";
+        });
+        this.nodeService.subscribe("BackdoorService.reindexShopProductsSku", message -> {
+            BackdoorServiceImpl.this.reindexShopProductsSku((Long) message.getPayload());
+            return "OK";
+        });
+        this.nodeService.subscribe("BackdoorService.reindexProduct", message -> {
+            BackdoorServiceImpl.this.reindexProduct((Long) message.getPayload());
+            return "OK";
+        });
+        this.nodeService.subscribe("BackdoorService.reindexProductSku", message -> {
+            BackdoorServiceImpl.this.reindexProductSku((Long) message.getPayload());
+            return "OK";
+        });
+        this.nodeService.subscribe("BackdoorService.reindexProductSkuCode", message -> {
+            BackdoorServiceImpl.this.reindexProductSkuCode((String) message.getPayload());
+            return "OK";
+        });
+        this.nodeService.subscribe("BackdoorService.reindexProducts", message -> {
+            BackdoorServiceImpl.this.reindexProducts((long[]) message.getPayload());
+            return "OK";
+        });
+        this.nodeService.subscribe("BackdoorService.sqlQuery", message -> {
+            try {
+                return new ArrayList<Serializable[]>((List) self().sqlQuery((String) message.getPayload()));
+            } catch (Exception e) {
+                final String msg = "Cant parse SQL query : " + message.getPayload() + " Error : " + e.getMessage();
+                LOG.warn(msg);
+                return new ArrayList<>(Collections.singletonList(new Serializable[]{e.getMessage()}));
             }
         });
-        this.nodeService.subscribe("BackdoorService.warmUp", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                BackdoorServiceImpl.this.warmUp();
-                return "OK";
+        this.nodeService.subscribe("BackdoorService.hsqlQuery", message -> {
+            try {
+                return new ArrayList<Serializable[]>((List) self().hsqlQuery((String) message.getPayload()));
+            } catch (Exception e) {
+                final String msg = "Cant parse HQL query : " + message.getPayload() + " Error : " + e.getMessage();
+                LOG.warn(msg);
+                return new ArrayList<>(Collections.singletonList(new Serializable[]{e.getMessage()}));
             }
         });
-        this.nodeService.subscribe("BackdoorService.getProductReindexingState", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                return BackdoorServiceImpl.this.getProductReindexingState();
+        this.nodeService.subscribe("BackdoorService.luceneQuery", message -> {
+            try {
+                return new ArrayList<Serializable[]>((List) self().luceneQuery((String) message.getPayload()));
+            } catch (Exception e) {
+                final String msg = "Cant parse FT query : " + message.getPayload() + " Error : " + e.getMessage();
+                LOG.warn(msg);
+                return new ArrayList<>(Collections.singletonList(new Serializable[]{e.getMessage()}));
             }
         });
-        this.nodeService.subscribe("BackdoorService.getProductSkuReindexingState", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                return BackdoorServiceImpl.this.getProductSkuReindexingState();
-            }
-        });
-        this.nodeService.subscribe("BackdoorService.reindexAllProducts", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                BackdoorServiceImpl.this.reindexAllProducts();
-                return "OK";
-            }
-        });
-        this.nodeService.subscribe("BackdoorService.reindexAllProductsSku", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                BackdoorServiceImpl.this.reindexAllProductsSku();
-                return "OK";
-            }
-        });
-        this.nodeService.subscribe("BackdoorService.reindexShopProducts", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                BackdoorServiceImpl.this.reindexShopProducts((Long) message.getPayload());
-                return "OK";
-            }
-        });
-        this.nodeService.subscribe("BackdoorService.reindexShopProductsSku", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                BackdoorServiceImpl.this.reindexShopProductsSku((Long) message.getPayload());
-                return "OK";
-            }
-        });
-        this.nodeService.subscribe("BackdoorService.reindexProduct", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                BackdoorServiceImpl.this.reindexProduct((Long) message.getPayload());
-                return "OK";
-            }
-        });
-        this.nodeService.subscribe("BackdoorService.reindexProductSku", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                BackdoorServiceImpl.this.reindexProductSku((Long) message.getPayload());
-                return "OK";
-            }
-        });
-        this.nodeService.subscribe("BackdoorService.reindexProductSkuCode", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                BackdoorServiceImpl.this.reindexProductSkuCode((String) message.getPayload());
-                return "OK";
-            }
-        });
-        this.nodeService.subscribe("BackdoorService.reindexProducts", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                BackdoorServiceImpl.this.reindexProducts((long[]) message.getPayload());
-                return "OK";
-            }
-        });
-        this.nodeService.subscribe("BackdoorService.sqlQuery", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                try {
-                    return new ArrayList<Serializable[]>((List) self().sqlQuery((String) message.getPayload()));
-                } catch (Exception e) {
-                    final String msg = "Cant parse SQL query : " + message.getPayload() + " Error : " + e.getMessage();
-                    LOG.warn(msg);
-                    return new ArrayList<Serializable[]>(Collections.singletonList(new Serializable[]{e.getMessage()}));
-                }
-            }
-        });
-        this.nodeService.subscribe("BackdoorService.hsqlQuery", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                try {
-                    return new ArrayList<Serializable[]>((List) self().hsqlQuery((String) message.getPayload()));
-                } catch (Exception e) {
-                    final String msg = "Cant parse HQL query : " + message.getPayload() + " Error : " + e.getMessage();
-                    LOG.warn(msg);
-                    return new ArrayList<Serializable[]>(Collections.singletonList(new Serializable[]{e.getMessage()}));
-                }
-            }
-        });
-        this.nodeService.subscribe("BackdoorService.luceneQuery", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                try {
-                    return new ArrayList<Serializable[]>((List) self().luceneQuery((String) message.getPayload()));
-                } catch (Exception e) {
-                    final String msg = "Cant parse FT query : " + message.getPayload() + " Error : " + e.getMessage();
-                    LOG.warn(msg);
-                    return new ArrayList<Serializable[]>(Collections.singletonList(new Serializable[]{e.getMessage()}));
-                }
-            }
-        });
-        this.nodeService.subscribe("BackdoorService.reloadConfigurations", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                BackdoorServiceImpl.this.reloadConfigurations();
-                return "OK";
-            }
+        this.nodeService.subscribe("BackdoorService.reloadConfigurations", message -> {
+            BackdoorServiceImpl.this.reloadConfigurations();
+            return "OK";
         });
     }
 

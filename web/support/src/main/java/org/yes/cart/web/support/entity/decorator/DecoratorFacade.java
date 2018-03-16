@@ -17,7 +17,7 @@
 package org.yes.cart.web.support.entity.decorator;
 
 /**
- * Simple facae for creating entity decorators for Web.
+ * Simple facade for creating entity decorators for Web.
  * User: denispavlov
  * Date: 12-08-20
  * Time: 5:23 PM
@@ -27,7 +27,7 @@ public interface DecoratorFacade {
     /**
      * Get decorator object for storefront.
      *
-     * @param object decoratable object
+     * @param object object to decorate
      * @param servletContextPath path
      * @param withAttributes true if decorator should load attributes
      *

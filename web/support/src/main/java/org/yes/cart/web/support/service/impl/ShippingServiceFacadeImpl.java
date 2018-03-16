@@ -85,7 +85,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
             }
         }
 
-        return new Pair<Boolean, Boolean>(billing, delivery);
+        return new Pair<>(billing, delivery);
     }
 
     /** {@inheritDoc} */
@@ -128,7 +128,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
     private List<Carrier> deepCopyCarriers(final List<Carrier> cached) {
 
-        final List<Carrier> carriers = new ArrayList<Carrier>(cached.size());
+        final List<Carrier> carriers = new ArrayList<>(cached.size());
         for (final Carrier cache : cached) {
 
             carriers.add((Carrier) SerializationUtils.clone(cache));
@@ -205,29 +205,26 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
         final Map<Long, Integer> ranks = shop.getSupportedCarrierSlaRanksAsMap();
         final String locale = shoppingCart.getCurrentLocale();
 
-        final List<CarrierSla> carrierSlas = new ArrayList<CarrierSla>();
+        final List<CarrierSla> carrierSlas = new ArrayList<>();
         for (Carrier carrier : carriersChoices) {
             carrierSlas.addAll(carrier.getCarrierSla());
         }
 
-        Collections.sort(carrierSlas, new Comparator<CarrierSla>() {
-            @Override
-            public int compare(final CarrierSla o1, final CarrierSla o2) {
+        carrierSlas.sort((o1, o2) -> {
 
-                final Integer o1rank = ranks.get(o1.getCarrierslaId());
-                final Integer o2rank = ranks.get(o2.getCarrierslaId());
+            final Integer o1rank = ranks.get(o1.getCarrierslaId());
+            final Integer o2rank = ranks.get(o2.getCarrierslaId());
 
-                final int byRank = Integer.compare(o1rank != null ? o1rank : 0, o2rank != null ? o2rank : 0);
-                if (byRank == 0) {
+            final int byRank = Integer.compare(o1rank != null ? o1rank : 0, o2rank != null ? o2rank : 0);
+            if (byRank == 0) {
 
-                    final String o1name = new FailoverStringI18NModel(o1.getDisplayName(), o1.getName()).getValue(locale);
-                    final String o2name = new FailoverStringI18NModel(o2.getDisplayName(), o2.getName()).getValue(locale);
+                final String o1name = new FailoverStringI18NModel(o1.getDisplayName(), o1.getName()).getValue(locale);
+                final String o2name = new FailoverStringI18NModel(o2.getDisplayName(), o2.getName()).getValue(locale);
 
-                    return o1name.compareToIgnoreCase(o2name);
+                return o1name.compareToIgnoreCase(o2name);
 
-                }
-                return byRank;
             }
+            return byRank;
         });
 
         return carrierSlas;
@@ -243,7 +240,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
             return getCarrierSla(slaId, carriersChoices);
         }
 
-        return new Pair<Carrier, CarrierSla>(null, null);
+        return new Pair<>(null, null);
     }
 
 
@@ -255,13 +252,13 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
             for (Carrier carrier : carriersChoices) {
                 for (CarrierSla carrierSla : carrier.getCarrierSla()) {
                     if (slaId == carrierSla.getCarrierslaId()) {
-                        return new Pair<Carrier, CarrierSla>(carrier, carrierSla);
+                        return new Pair<>(carrier, carrierSla);
                     }
                 }
             }
         }
 
-        return new Pair<Carrier, CarrierSla>(null, null);
+        return new Pair<>(null, null);
     }
 
     static final String CART_SHIPPING_TOTAL_REF = "yc-cart-shipping-total";
@@ -269,6 +266,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public PriceModel getCartShippingTotal(final ShoppingCart cart) {
 
         final String currency = cart.getCurrencyCode();
@@ -293,8 +291,8 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
                 final BigDecimal totalAdjusted = showTaxNet ? net : gross;
 
-                final Set<String> taxes = new TreeSet<String>(); // sorts and de-dup's
-                final Set<BigDecimal> rates = new TreeSet<BigDecimal>();
+                final Set<String> taxes = new TreeSet<>(); // sorts and de-dup's
+                final Set<BigDecimal> rates = new TreeSet<>();
                 for (final CartItem item : cart.getShippingList()) {
                     if (StringUtils.isNotBlank(item.getTaxCode())) {
                         taxes.add(item.getTaxCode());
@@ -383,6 +381,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public PriceModel getCartShippingSupplierTotal(final ShoppingCart cart, final String supplier) {
 
         final String currency = cart.getCurrencyCode();
@@ -394,8 +393,8 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
         BigDecimal net = Total.ZERO;
         BigDecimal gross = Total.ZERO;
 
-        final Set<String> taxes = new TreeSet<String>(); // sorts and de-dup's
-        final Set<BigDecimal> rates = new TreeSet<BigDecimal>();
+        final Set<String> taxes = new TreeSet<>(); // sorts and de-dup's
+        final Set<BigDecimal> rates = new TreeSet<>();
 
         for (final CartItem shipping : cart.getShippingList()) {
             if (supplier.equals(shipping.getSupplierCode())) {
@@ -507,12 +506,13 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getCartItemsSuppliers(final ShoppingCart cart) {
 
         final String lang = cart.getCurrentLocale();
         final List<Warehouse> suppliers = warehouseService.getByShopId(cart.getShoppingContext().getCustomerShopId(), false);
 
-        final Map<String, String> namesByCode = new HashMap<String, String>();
+        final Map<String, String> namesByCode = new HashMap<>();
         for (final Warehouse supplier : suppliers) {
             namesByCode.put(supplier.getCode(), new FailoverStringI18NModel(
                     supplier.getDisplayName(),

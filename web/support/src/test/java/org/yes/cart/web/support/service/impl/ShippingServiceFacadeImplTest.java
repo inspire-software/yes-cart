@@ -168,7 +168,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping)));
+            allowing(cart).getShippingList(); will(returnValue(Collections.singletonList(shipping)));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
             allowing(cartTotal).getDeliveryListCost(); will(returnValue(new BigDecimal("80.00")));
             allowing(cartTotal).getDeliveryCost(); will(returnValue(new BigDecimal("80.00")));
@@ -222,7 +222,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping)));
+            allowing(cart).getShippingList(); will(returnValue(Collections.singletonList(shipping)));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
             allowing(cartTotal).getDeliveryListCost(); will(returnValue(new BigDecimal("100.00")));
             allowing(cartTotal).getDeliveryCost(); will(returnValue(new BigDecimal("80.00")));
@@ -275,7 +275,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping)));
+            allowing(cart).getShippingList(); will(returnValue(Collections.singletonList(shipping)));
             allowing(cart).getTotal(); will(returnValue(cartTotal));
             allowing(cartTotal).getDeliveryListCost(); will(returnValue(new BigDecimal("100.00")));
             allowing(cartTotal).getDeliveryCost(); will(returnValue(new BigDecimal("0.00")));
@@ -2020,7 +2020,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping)));
+            allowing(cart).getShippingList(); will(returnValue(Collections.singletonList(shipping)));
             allowing(shipping).getSupplierCode(); will(returnValue("SUP1"));
             allowing(shipping).getQty(); will(returnValue(new BigDecimal("1")));
             allowing(shipping).getListPrice(); will(returnValue(new BigDecimal("80.00")));
@@ -2075,7 +2075,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping)));
+            allowing(cart).getShippingList(); will(returnValue(Collections.singletonList(shipping)));
             allowing(shipping).getSupplierCode(); will(returnValue("SUP1"));
             allowing(shipping).getQty(); will(returnValue(new BigDecimal("1")));
             allowing(shipping).getListPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -2129,7 +2129,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping)));
+            allowing(cart).getShippingList(); will(returnValue(Collections.singletonList(shipping)));
             allowing(shipping).getSupplierCode(); will(returnValue("SUP1"));
             allowing(shipping).getQty(); will(returnValue(new BigDecimal("1")));
             allowing(shipping).getListPrice(); will(returnValue(new BigDecimal("100.00")));

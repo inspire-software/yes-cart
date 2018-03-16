@@ -18,19 +18,13 @@ package org.yes.cart.web.filter;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
-import org.yes.cart.shoppingcart.support.CartDetuplizationException;
-import org.yes.cart.shoppingcart.support.CartTuplizer;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 /**
  * User: denispavlov
@@ -44,6 +38,7 @@ public class ShopRequireLoginFilter extends AbstractFilter implements Filter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ServletRequest doBefore(final ServletRequest request,
                                    final ServletResponse response) throws IOException, ServletException {
 
@@ -64,6 +59,7 @@ public class ShopRequireLoginFilter extends AbstractFilter implements Filter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void doAfter(final ServletRequest servletRequest,
                         final ServletResponse servletResponse) throws IOException, ServletException {
         // Nothing

@@ -15,13 +15,9 @@
  */
 package org.yes.cart.cluster.service.impl;
 
-import org.yes.cart.cluster.node.Message;
-import org.yes.cart.cluster.node.MessageListener;
 import org.yes.cart.cluster.node.NodeService;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.cluster.service.AlertDirector;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -46,18 +42,10 @@ public class WsAlertDirectorImpl extends AlertDirectorImpl implements AlertDirec
 
         this.nodeService = nodeService;
 
-        nodeService.subscribe("AlertDirector.getAlerts", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                return new ArrayList<Pair<String, String>>(WsAlertDirectorImpl.this.getAlerts());
-            }
-        });
-        nodeService.subscribe("AlertDirector.clear", new MessageListener() {
-            @Override
-            public Serializable onMessageReceived(final Message message) {
-                WsAlertDirectorImpl.this.clear();
-                return "OK";
-            }
+        nodeService.subscribe("AlertDirector.getAlerts", message -> new ArrayList<>(WsAlertDirectorImpl.this.getAlerts()));
+        nodeService.subscribe("AlertDirector.clear", message -> {
+            WsAlertDirectorImpl.this.clear();
+            return "OK";
         });
     }
 

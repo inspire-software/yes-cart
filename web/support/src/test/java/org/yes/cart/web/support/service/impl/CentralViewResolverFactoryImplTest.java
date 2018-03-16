@@ -49,7 +49,7 @@ public class CentralViewResolverFactoryImplTest {
         final Map params = context.mock(Map.class, "params");
 
         context.checking(new Expectations() {{
-            oneOf(r1).resolveMainPanelRendererLabel(params); will(returnValue(new Pair<String, String>("1", "2")));
+            oneOf(r1).resolveMainPanelRendererLabel(params); will(returnValue(new Pair<>("1", "2")));
         }});
 
         CentralViewResolverFactoryImpl resolver = new CentralViewResolverFactoryImpl(Arrays.asList(r1, r2, r3));
@@ -73,7 +73,7 @@ public class CentralViewResolverFactoryImplTest {
 
         context.checking(new Expectations() {{
             oneOf(r1).resolveMainPanelRendererLabel(params); will(returnValue(null));
-            oneOf(r2).resolveMainPanelRendererLabel(params); will(returnValue(new Pair<String, String>("1", "2")));
+            oneOf(r2).resolveMainPanelRendererLabel(params); will(returnValue(new Pair<>("1", "2")));
         }});
 
         CentralViewResolverFactoryImpl resolver = new CentralViewResolverFactoryImpl(Arrays.asList(r1, r2, r3));
@@ -98,7 +98,7 @@ public class CentralViewResolverFactoryImplTest {
         context.checking(new Expectations() {{
             oneOf(r1).resolveMainPanelRendererLabel(params); will(returnValue(null));
             oneOf(r2).resolveMainPanelRendererLabel(params); will(returnValue(null));
-            oneOf(r3).resolveMainPanelRendererLabel(params); will(returnValue(new Pair<String, String>("1", "2")));
+            oneOf(r3).resolveMainPanelRendererLabel(params); will(returnValue(new Pair<>("1", "2")));
         }});
 
         CentralViewResolverFactoryImpl resolver = new CentralViewResolverFactoryImpl(Arrays.asList(r1, r2, r3));

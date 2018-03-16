@@ -25,7 +25,6 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.util.TimeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.request.IPResolver;
 import org.yes.cart.web.support.request.impl.HttpServletRequestWrapper;
@@ -71,6 +70,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
     /**
      * {@inheritDoc}
      */
+    @Override
     public ServletRequest doBefore(final ServletRequest servletRequest,
                                    final ServletResponse servletResponse) throws IOException, ServletException {
 
@@ -140,6 +140,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
     /**
      * {@inheritDoc}
      */
+    @Override
     public void doAfter(final ServletRequest servletRequest,
                         final ServletResponse servletResponse) throws IOException, ServletException {
 
@@ -149,6 +150,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setServletContext(final ServletContext servletContext) {
         this.servletContext = servletContext;
     }

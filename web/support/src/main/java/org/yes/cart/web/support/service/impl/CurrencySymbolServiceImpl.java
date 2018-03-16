@@ -40,8 +40,8 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
      */
     public CurrencySymbolServiceImpl(final Map<String, String> currencyCodeSymbol,
                                      final Set<String> currencySymbolAfterAmount) {
-        this.currencyCodeSymbol = new HashMap<String, String>(currencyCodeSymbol);
-        this.currencySymbolAfterAmount = new HashSet<String>(currencySymbolAfterAmount);
+        this.currencyCodeSymbol = new HashMap<>(currencyCodeSymbol);
+        this.currencySymbolAfterAmount = new HashSet<>(currencySymbolAfterAmount);
     }
 
     private String getCurrencySymbolInternal(final String currencyCode) {
@@ -55,24 +55,26 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Pair<String, Boolean> getCurrencySymbol(final String currencyCode) {
         final String symbols = currencyCodeSymbol.get(currencyCode);
         if (symbols == null) {
-            return new Pair<String, Boolean>(currencyCode, false);
+            return new Pair<>(currencyCode, false);
         }
-        return new Pair<String, Boolean>(symbols, currencySymbolAfterAmount.contains(currencyCode));
+        return new Pair<>(symbols, currencySymbolAfterAmount.contains(currencyCode));
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Pair<String, String>> getCurrencyToDisplayAsList(final String currenciesListString) {
         if (StringUtils.isNotBlank(currenciesListString)) {
             final String [] currCodes = currenciesListString.split(",");
-            final List<Pair<String, String>> rez = new ArrayList<Pair<String, String>>(currCodes.length);
+            final List<Pair<String, String>> rez = new ArrayList<>(currCodes.length);
             for (String currCode : currCodes) {
                 rez.add(
-                  new Pair<String, String>(currCode, getCurrencySymbolInternal(currCode))
+                        new Pair<>(currCode, getCurrencySymbolInternal(currCode))
                 );
             }
             return rez;
@@ -83,10 +85,11 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public  Map<String, String> getCurrencyToDisplayAsMap(final String currenciesListString){
         if (StringUtils.isNotBlank(currenciesListString)) {
             final String [] currCodes = currenciesListString.split(",");
-            final Map<String, String> rez = new LinkedHashMap<String, String>(currCodes.length);
+            final Map<String, String> rez = new LinkedHashMap<>(currCodes.length);
             for (String currCode : currCodes) {
                 rez.put(getCurrencySymbolInternal(currCode), currCode);
             }

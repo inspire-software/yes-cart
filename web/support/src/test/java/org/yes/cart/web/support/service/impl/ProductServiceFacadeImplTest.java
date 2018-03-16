@@ -4247,7 +4247,7 @@ public class ProductServiceFacadeImplTest {
         final LocalDateTime end = TimeContext.getLocalDateTime();
 
         context.checking(new Expectations() {{
-            allowing(promotionService).findByParameters("CODE1", null, null, null, null, null, Boolean.TRUE); will(returnValue(Arrays.asList(code1)));
+            allowing(promotionService).findByParameters("CODE1", null, null, null, null, null, Boolean.TRUE); will(returnValue(Collections.singletonList(code1)));
             allowing(code1).getCode(); will(returnValue("CODE1"));
             allowing(code1).getPromoType(); will(returnValue("T1"));
             allowing(code1).getPromoAction(); will(returnValue("A1"));
@@ -4293,7 +4293,7 @@ public class ProductServiceFacadeImplTest {
         final LocalDateTime end = TimeContext.getLocalDateTime();
 
         context.checking(new Expectations() {{
-            allowing(promotionService).findByParameters("CODE1", null, null, null, null, null, Boolean.TRUE); will(returnValue(Arrays.asList(code1)));
+            allowing(promotionService).findByParameters("CODE1", null, null, null, null, null, Boolean.TRUE); will(returnValue(Collections.singletonList(code1)));
             allowing(code1).getCode(); will(returnValue("CODE1"));
             allowing(code1).getPromoType(); will(returnValue("T1"));
             allowing(code1).getPromoAction(); will(returnValue("A1"));
@@ -4342,7 +4342,7 @@ public class ProductServiceFacadeImplTest {
 
         context.checking(new Expectations() {{
             allowing(promotionService).findByParameters("CODE0", null, null, null, null, null, Boolean.TRUE);
-            will(returnValue(Arrays.asList(code0)));
+            will(returnValue(Collections.singletonList(code0)));
             allowing(code0).getCode();
             will(returnValue("CODE0"));
             allowing(code0).getPromoType();
@@ -4364,7 +4364,7 @@ public class ProductServiceFacadeImplTest {
             allowing(code0).getEnabledTo();
             will(returnValue(end));
             allowing(promotionService).findByParameters("CODE1", null, null, null, null, null, Boolean.TRUE);
-            will(returnValue(Arrays.asList(code1)));
+            will(returnValue(Collections.singletonList(code1)));
             allowing(code1).getCode();
             will(returnValue("CODE1"));
             allowing(code1).getPromoType();
@@ -4386,7 +4386,7 @@ public class ProductServiceFacadeImplTest {
             allowing(code1).getEnabledTo();
             will(returnValue(end));
             allowing(promotionService).findByParameters("CODE2", null, null, null, null, null, Boolean.TRUE);
-            will(returnValue(Arrays.asList(code2)));
+            will(returnValue(Collections.singletonList(code2)));
             allowing(code2).getCode();
             will(returnValue("CODE2"));
             allowing(code2).getPromoType();

@@ -43,9 +43,9 @@ import java.util.Map;
  */
 public class CentralViewResolverCategoryImpl implements CentralViewResolver {
 
-    private static final Pair<String, String> DEFAULT = new Pair<String, String>(CentralViewLabel.CATEGORY, CentralViewLabel.CATEGORY);
-    private static final Pair<String, String> DEFAULT_PL = new Pair<String, String>(CentralViewLabel.PRODUCTS_LIST, CentralViewLabel.PRODUCTS_LIST);
-    private static final Pair<String, String> DEFAULT_SC = new Pair<String, String>(CentralViewLabel.SUBCATEGORIES_LIST, CentralViewLabel.SUBCATEGORIES_LIST);
+    private static final Pair<String, String> DEFAULT = new Pair<>(CentralViewLabel.CATEGORY, CentralViewLabel.CATEGORY);
+    private static final Pair<String, String> DEFAULT_PL = new Pair<>(CentralViewLabel.PRODUCTS_LIST, CentralViewLabel.PRODUCTS_LIST);
+    private static final Pair<String, String> DEFAULT_SC = new Pair<>(CentralViewLabel.SUBCATEGORIES_LIST, CentralViewLabel.SUBCATEGORIES_LIST);
 
     private final ShopService shopService;
     private final CategoryService categoryService;
@@ -101,7 +101,7 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
                     } else if (CentralViewLabel.SUBCATEGORIES_LIST.equals(template)) {
                         return DEFAULT_SC;
                     }
-                    return new Pair<String, String>(template, CentralViewLabel.CATEGORY);
+                    return new Pair<>(template, CentralViewLabel.CATEGORY);
                 }
 
                 final Pair<List<Long>, Boolean> catIds = determineSearchCategories(categoryId, browsingShopId);
@@ -118,7 +118,7 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
 
                     final String searchTemplate = shopService.getShopCategorySearchTemplate(browsingShopId, categoryId);
                     if (StringUtils.isNotBlank(searchTemplate)) {
-                        return new Pair<String, String>(searchTemplate, CentralViewLabel.PRODUCTS_LIST);
+                        return new Pair<>(searchTemplate, CentralViewLabel.PRODUCTS_LIST);
                     }
 
                     return DEFAULT_PL;

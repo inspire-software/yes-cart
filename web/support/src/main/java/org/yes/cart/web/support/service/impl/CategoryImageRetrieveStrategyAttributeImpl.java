@@ -43,6 +43,7 @@ public class CategoryImageRetrieveStrategyAttributeImpl implements CategoryImage
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getImageName(final Attributable category, final String attributeCodeHint, final String locale) {
         final String attrValue = category.getAttributeValueByCode(StringUtils.isBlank(attributeCodeHint) ? attributeCode : attributeCodeHint);
         if (StringUtils.isBlank(attrValue)) {
@@ -54,6 +55,7 @@ public class CategoryImageRetrieveStrategyAttributeImpl implements CategoryImage
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getImageRepositoryUrlPattern() {
         return Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN;
     }
@@ -61,6 +63,7 @@ public class CategoryImageRetrieveStrategyAttributeImpl implements CategoryImage
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getImageAttributePrefix() {
         return AttributeNamesKeys.Category.CATEGORY_IMAGE_PREFIX;
     }
