@@ -13,7 +13,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * User: denispavlov
@@ -213,7 +214,7 @@ public class ThemeServiceImplTest {
             allowing(shopService).getById(1L);
             will(returnValue(shop));
             allowing(shop).getShopUrl();
-            will(returnValue(new HashSet<ShopUrl>(Arrays.asList(url1, url2, url3))));
+            will(returnValue(new HashSet<>(Arrays.asList(url1, url2, url3))));
             allowing(url1).getUrl();
             will(returnValue("www.default.com"));
             allowing(url1).getThemeChain();

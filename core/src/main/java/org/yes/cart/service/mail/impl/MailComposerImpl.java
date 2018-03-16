@@ -84,29 +84,26 @@ public class MailComposerImpl implements MailComposer {
         classLoader.loadClass(DecimalFormat.class.getName());
         this.templateSupport = templateSupport;
 
-        this.templateSupport.registerFunction("include", new MailComposerTemplateSupport.FunctionProvider() {
-            @Override
-            public Object doAction(final Object... params) {
+        this.templateSupport.registerFunction("include", params -> {
 
-                if (params != null && params.length == 3) {
+            if (params != null && params.length == 3) {
 
-                    final String uri = String.valueOf(params[0]);
+                final String uri = String.valueOf(params[0]);
 
-                    final String locale = String.valueOf(params[1]);
-                    final Map<String, Object> context = (Map<String, Object>) params[2];
+                final String locale = String.valueOf(params[1]);
+                final Map<String, Object> context = (Map<String, Object>) params[2];
 
-                    final Map<String, Object> mailComposer = (Map<String, Object>) context.get("MailComposer");
-                    final List<String> mailTemplateChain = (List<String>) mailComposer.get("mailTemplateChain");
-                    final String shopCode = (String) mailComposer.get("shopCode");
-                    final String ext = (String) mailComposer.get("ext");
-                    final Map<String, Object> model = (Map<String, Object>) mailComposer.get("model");
+                final Map<String, Object> mailComposer = (Map<String, Object>) context.get("MailComposer");
+                final List<String> mailTemplateChain = (List<String>) mailComposer.get("mailTemplateChain");
+                final String shopCode = (String) mailComposer.get("shopCode");
+                final String ext = (String) mailComposer.get("ext");
+                final Map<String, Object> model = (Map<String, Object>) mailComposer.get("model");
 
-                    return processTemplate(mailTemplateChain, shopCode, locale, uri, ext, model, true);
+                return processTemplate(mailTemplateChain, shopCode, locale, uri, ext, model, true);
 
-                }
-
-                return "";
             }
+
+            return "";
         });
 
 
@@ -170,7 +167,7 @@ public class MailComposerImpl implements MailComposer {
      */
     Map<String, byte[]> collectAttachments(final Map<String, Object> model) {
 
-        final Map<String, byte[]> attachments = new HashMap<String, byte[]>();
+        final Map<String, byte[]> attachments = new HashMap<>();
         for (final String key : model.keySet()) {
             if (key.startsWith(ATTACHMENT_PREFIX)) {
 
@@ -291,7 +288,7 @@ public class MailComposerImpl implements MailComposer {
     Pair<String, String> convertAttachmentKeyIntoContentTypeAndFilename(final String key) {
         try {
             final String[] contentTypeAndFile = key.substring(ATTACHMENT_PREFIX.length()).split(ATTACHMENT_SUFFIX);
-            return new Pair<String, String>(contentTypeAndFile[0], contentTypeAndFile[1]);
+            return new Pair<>(contentTypeAndFile[0], contentTypeAndFile[1]);
         } catch (Exception exp) {
             LOG.error("Invalid attachment key {} ... attachment is skipped", key);
             return null;
@@ -304,8 +301,8 @@ public class MailComposerImpl implements MailComposer {
      * @param helper mime message helper
      * @param attachments attachments from model
      *
-     * @throws MessagingException
-     * @throws IOException
+     * @throws MessagingException error
+     * @throws IOException error
      */
     void addAttachments(final MimeMessageHelper helper,
                         final Map<String, byte[]> attachments) throws MessagingException, IOException {
@@ -342,7 +339,7 @@ public class MailComposerImpl implements MailComposer {
      * @return list of resource ids in template order.
      */
     List<String> getResourcesId(final String htmlTemplate) {
-        final List<String> resourceIds = new ArrayList<String>();
+        final List<String> resourceIds = new ArrayList<>();
         final Matcher matcher = getResourcePattern().matcher(htmlTemplate);
         while (matcher.find()) {
             resourceIds.add(matcher.group(1));
@@ -426,8 +423,8 @@ public class MailComposerImpl implements MailComposer {
             // Get top level template
             final String template = mailTemplateResourcesProvider.getTemplate(mailTemplateChain, shopCode, locale, fileName, ext);
 
-            final Map<String, Object> enhancedModel = new HashMap<String, Object>(model);
-            final Map<String, Object> mailComposer = new HashMap<String, Object>();
+            final Map<String, Object> enhancedModel = new HashMap<>(model);
+            final Map<String, Object> mailComposer = new HashMap<>();
             enhancedModel.put("MailComposer", mailComposer);
             mailComposer.put("mailTemplateChain", mailTemplateChain);
             mailComposer.put("shopCode", shopCode);
@@ -558,8 +555,8 @@ public class MailComposerImpl implements MailComposer {
      * @param mail mail
      * @param attachments attachments from model
      *
-     * @throws MessagingException
-     * @throws IOException
+     * @throws MessagingException error
+     * @throws IOException error
      */
     void addAttachments(final Mail mail,
                         final Map<String, byte[]> attachments) throws MessagingException, IOException {
@@ -704,6 +701,7 @@ public class MailComposerImpl implements MailComposer {
      *
      * @return HTML version with all resources embeded as BASE64 URLs
      */
+    @Override
     public String convertMessageToHTML(final Mail mail) {
 
         final StringBuilder htmlTemplate = new StringBuilder(mail.getHtmlVersion());

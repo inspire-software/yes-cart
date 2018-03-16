@@ -47,6 +47,7 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
     private Shop shop;
     private Warehouse warehouse;
 
+    @Override
     @Before
     public void setUp() {
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
@@ -88,6 +89,7 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
         warehouseService.assignWarehouse(warehouse.getWarehouseId(), shop.getShopId(), false);
         final long[] pk = new long[1];
         getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 final Iterator<ShopWarehouse> it = warehouseService.findById(warehouse.getWarehouseId()).getWarehouseShop().iterator();
                 ShopWarehouse shopWarehouse = null;

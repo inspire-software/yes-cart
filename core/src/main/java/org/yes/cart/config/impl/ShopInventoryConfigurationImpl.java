@@ -50,6 +50,7 @@ public class ShopInventoryConfigurationImpl extends AbstractShopConfigurationImp
     }
 
     /** {@inheritDoc} */
+    @Override
     protected void doConfigurations(final Shop shop, final List<Shop> subs, final Properties properties) {
 
         this.registerCustomProductAvailabilityStrategy(shop, subs, properties);

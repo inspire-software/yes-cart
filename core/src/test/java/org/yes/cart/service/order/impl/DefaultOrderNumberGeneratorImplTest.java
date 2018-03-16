@@ -24,7 +24,6 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.util.DateUtils;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
@@ -171,9 +170,7 @@ public class DefaultOrderNumberGeneratorImplTest {
         public void run() {
             try {
                 gate.await();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (BrokenBarrierException e) {
+            } catch (InterruptedException | BrokenBarrierException e) {
                 throw new RuntimeException(e);
             }
             String orderNum = defaultOrderNumberGenerator.getNextOrderNumber();

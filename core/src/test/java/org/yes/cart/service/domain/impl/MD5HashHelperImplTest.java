@@ -73,7 +73,7 @@ public class MD5HashHelperImplTest {
      * 3. Modify SQL in initial.sql and insert your values for admin email and password hash.
      * 4. Run insert statement on the server to be able to login to newly installed server.
      *
-     * @throws Exception
+     * @throws Exception  error
      */
     @Test
     public void testCreatePasswordForProdServerInitialisation() throws Exception {

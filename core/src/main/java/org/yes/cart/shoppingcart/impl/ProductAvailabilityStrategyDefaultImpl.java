@@ -50,6 +50,7 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductAvailabilityModel getAvailabilityModel(final long shopId, final Product product) {
 
         final List<Warehouse> warehouses = warehouseService.getByShopId(shopId, false);
@@ -64,6 +65,7 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductAvailabilityModel getAvailabilityModel(final long shopId, final ProductSearchResultDTO product) {
 
         final Map<String, BigDecimal> skuInventory = product.getQtyOnWarehouse(shopId);
@@ -77,6 +79,7 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductAvailabilityModel getAvailabilityModel(final long shopId, final ProductSku sku) {
 
         final Product product = sku.getProduct();
@@ -92,6 +95,7 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductAvailabilityModel getAvailabilityModel(final long shopId, final String skuCode) {
 
         final List<Warehouse> warehouses = warehouseService.getByShopId(shopId, false);

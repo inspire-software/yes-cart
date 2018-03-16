@@ -44,6 +44,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Shop getShopByOrderGuid(final String orderGuid) {
         return shopService.getShopByOrderGuid(orderGuid);
     }
@@ -51,6 +52,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "shopService-shopByCode")
     public Shop getShopByCode(final String shopCode) {
         return shopService.getShopByCode(shopCode);
@@ -59,6 +61,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "shopService-allNonSubShops")
     public List<Shop> getNonSubShops() {
         return shopService.getNonSubShops();
@@ -66,6 +69,7 @@ public class ShopServiceCachedImpl implements ShopService {
 
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "shopService-allShopsMap")
     public Map<Long, Set<Long>> getAllShopsAndSubs() {
         return shopService.getAllShopsAndSubs();
@@ -75,6 +79,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "shopService-subShopsByMaster")
     public List<Shop> getSubShopsByMaster(final long masterId) {
         return shopService.getSubShopsByMaster(masterId);
@@ -83,6 +88,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Shop getSubShopByNameAndMaster(final String shopName, final long masterId) {
         return shopService.getSubShopByNameAndMaster(shopName, masterId);
     }
@@ -90,6 +96,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Shop getShopByOrderNum(final String orderNum) {
         return shopService.getShopByOrderNum(orderNum);
     }
@@ -98,6 +105,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "shopService-shopById")
     public Shop getById(final long shopId) {
         return shopService.getById(shopId);
@@ -106,6 +114,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "shopService-allShops")
     public List<Shop> getAll() {
         return shopService.getAll();
@@ -114,6 +123,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "shopService-shopByDomainName")
     public Shop getShopByDomainName(final String serverName) {
         return shopService.getShopByDomainName(serverName);
@@ -123,6 +133,7 @@ public class ShopServiceCachedImpl implements ShopService {
      * {@inheritDoc}
      */
     // @Cacheable(value = "shopService-shopCategoriesIds") already cached at shopCategorySupport
+    @Override
     public Set<Long> getShopCategoriesIds(final long shopId) {
         return shopService.getShopCategoriesIds(shopId);
     }
@@ -131,6 +142,7 @@ public class ShopServiceCachedImpl implements ShopService {
      * {@inheritDoc}
      */
     // @Cacheable(value = "shopService-shopContentIds")  already cached at shopCategorySupport
+    @Override
     public Set<Long> getShopContentIds(final long shopId) {
         return shopService.getShopContentIds(shopId);
     }
@@ -138,12 +150,14 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "shopService-shopAllCategoriesIds")
     public Set<Long> getShopAllCategoriesIds(final long shopId) {
         return shopService.getShopAllCategoriesIds(shopId);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> findAllSupportedCurrenciesByShops() {
         return shopService.findAllSupportedCurrenciesByShops();
     }
@@ -154,6 +168,7 @@ public class ShopServiceCachedImpl implements ShopService {
      * @param shopId given shop
      * @return list of assigned top level categories
      */
+    @Override
     @Cacheable(value = "categoryService-topLevelCategories"/*, key="shop.shopId"*/)
     public Set<Category> getTopLevelCategories(final Long shopId) {
         return shopService.getTopLevelCategories(shopId);
@@ -162,6 +177,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Category> findAllByShopId(final long shopId) {
         return shopService.findAllByShopId(shopId);
     }
@@ -169,6 +185,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-defaultNavigationCategory")
     public Category getDefaultNavigationCategory(final long shopId) {
         return shopService.getDefaultNavigationCategory(shopId);
@@ -177,6 +194,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "shopService-shopCategoryParentId")
     public Long getShopCategoryParentId(final long shopId, final long categoryId) {
         return shopService.getShopCategoryParentId(shopId, categoryId);
@@ -185,6 +203,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "shopService-shopCategoryTemplate")
     public String getShopCategoryTemplate(final long shopId, final long categoryId) {
         return shopService.getShopCategoryTemplate(shopId, categoryId);
@@ -193,6 +212,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "shopService-shopCategorySearchTemplate")
     public String getShopCategorySearchTemplate(final long shopId, final long categoryId) {
         return shopService.getShopCategorySearchTemplate(shopId, categoryId);
@@ -201,6 +221,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "shopService-shopCategoryProductTypeId")
     public Long getShopCategoryProductTypeId(final long shopId, final long categoryId) {
         return shopService.getShopCategoryProductTypeId(shopId, categoryId);
@@ -209,6 +230,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findShopIdByCode(final String code) {
         return shopService.findShopIdByCode(code);
     }
@@ -220,6 +242,7 @@ public class ShopServiceCachedImpl implements ShopService {
      * @param attributeKey attribute key
      * @param attributeValue attribute value.
      */
+    @Override
     @CacheEvict(value ={
             "shopService-shopByCode",
             "shopService-shopById",
@@ -242,6 +265,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Shop> findAll() {
         return shopService.findAll();
     }
@@ -249,6 +273,7 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<Shop> callback) {
         shopService.findAllIterator(callback);
     }
@@ -256,11 +281,13 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Shop findById(final long pk) {
         return shopService.findById(pk);
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value ={
             "shopService-allCategoriesIdsMap",
             "shopService-shopCategoriesIds",
@@ -281,6 +308,7 @@ public class ShopServiceCachedImpl implements ShopService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value ={
             "shopService-shopByCode",
             "shopService-shopById",
@@ -304,6 +332,7 @@ public class ShopServiceCachedImpl implements ShopService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value ={
             "shopService-shopByCode",
             "shopService-shopById",
@@ -331,21 +360,25 @@ public class ShopServiceCachedImpl implements ShopService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Shop> findByCriteria(final String eCriteria, final Object... parameters) {
         return shopService.findByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return shopService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Shop findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return shopService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public GenericDAO<Shop, Long> getGenericDao() {
         return shopService.getGenericDao();
     }

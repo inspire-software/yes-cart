@@ -46,6 +46,7 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
     private ProductSkuService productSkuService;
     private ShopService shopService;
 
+    @Override
     @Before
     public void setUp() {
         service = (CustomerWishListService) ctx().getBean(ServiceSpringKeys.CUSTOMER_WISH_LIST_SERVICE);

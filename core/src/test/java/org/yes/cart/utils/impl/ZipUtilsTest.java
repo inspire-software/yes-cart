@@ -29,8 +29,9 @@ import static org.junit.Assert.assertTrue;
  */
 public class ZipUtilsTest {
     /**
-     * TEst non ascii arc file entry
-     * @throws Exception
+     * Test non ascii arc file entry.
+     *
+     * @throws Exception  error
      */
     @Test
     public void testUnzipArchive() throws Exception {

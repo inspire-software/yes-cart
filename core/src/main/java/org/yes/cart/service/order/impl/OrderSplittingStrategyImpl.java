@@ -61,12 +61,12 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
     public DeliveryBucket determineDeliveryBucket(final CartItem item,
                                                   final ShoppingCart cart) {
 
-        final Map<String, Boolean> onePhysicalDelivery = new HashMap<String, Boolean>();
+        final Map<String, Boolean> onePhysicalDelivery = new HashMap<>();
         for (final Map.Entry<String, Boolean> isAllowed : cart.getOrderInfo().getMultipleDeliveryAvailable().entrySet()) {
             onePhysicalDelivery.put(isAllowed.getKey(), !cart.getOrderInfo().isMultipleDelivery() || !isAllowed.getValue());
         }
 
-        final Map<DeliveryBucket, List<CartItem>> deliveryGroups = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> deliveryGroups = new HashMap<>();
 
         DeliveryBucket itemBucket = item.getDeliveryBucket();
         if (item.getDeliveryBucket() == null) {
@@ -81,11 +81,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
             final boolean itemToCheck = item.isGift() == cartItem.isGift() && item.getProductSkuCode().equals(cartItem.getProductSkuCode());
             final DeliveryBucket cartItemBucket = itemToCheck ? itemBucket : cartItem.getDeliveryBucket();
             if (cartItemBucket != null) {
-                List<CartItem> items = deliveryGroups.get(cartItemBucket);
-                if (items == null) {
-                    items = new ArrayList<CartItem>();
-                    deliveryGroups.put(cartItemBucket, items);
-                }
+                List<CartItem> items = deliveryGroups.computeIfAbsent(cartItemBucket, k -> new ArrayList<>());
                 items.add(cartItem);
             }
         }
@@ -117,7 +113,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
                                                                         final Map<String, Boolean> onePhysicalDelivery) {
 
         // use tree map to preserve natural order by delivery group i.e. D1, D2, D3 etc.
-        final Map<DeliveryBucket, List<CartItem>> deliveryGroups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> deliveryGroups = new TreeMap<>();
 
         final Map<String, Warehouse> warehouses = warehouseService.getByShopIdMapped(shopId, false);
 
@@ -128,7 +124,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
             final DeliveryBucket bucket = new DeliveryBucketImpl(deliveryGroup.getFirst(), deliveryGroup.getSecond());
 
             if (!deliveryGroups.containsKey(bucket)) {
-                deliveryGroups.put(bucket, new ArrayList<CartItem>());
+                deliveryGroups.put(bucket, new ArrayList<>());
             }
 
             deliveryGroups.get(bucket).add(cartItem);
@@ -145,8 +141,8 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
         final Map<String, Integer> deliveryQty = getPhysicalDeliveriesQty(deliveryGroups);
 
-        final List<DeliveryBucket> removeBuckets = new ArrayList<DeliveryBucket>();
-        final Map<DeliveryBucket, List<CartItem>> collectors = new HashMap<DeliveryBucket, List<CartItem>>();
+        final List<DeliveryBucket> removeBuckets = new ArrayList<>();
+        final Map<DeliveryBucket, List<CartItem>> collectors = new HashMap<>();
 
         for (Map.Entry<DeliveryBucket, List<CartItem>> entry : deliveryGroups.entrySet()) {
 
@@ -163,11 +159,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
                     final DeliveryBucket mix = new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, supplier);
 
-                    List<CartItem> collector = collectors.get(mix);
-                    if (collector == null) {
-                        collector = new ArrayList<CartItem>();
-                        collectors.put(mix, collector);
-                    }
+                    List<CartItem> collector = collectors.computeIfAbsent(mix, k -> new ArrayList<>());
 
                     removeBuckets.add(entry.getKey());
                     collector.addAll(entry.getValue());
@@ -222,7 +214,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
         // Must not create orders with items that are unavailable
         if (!isAvailableNow && !isAvailableLater) {
-            return new Pair<String, String>(
+            return new Pair<>(
                     CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP,
                     StringUtils.isNotBlank(item.getSupplierCode()) ? item.getSupplierCode() : ""
             );
@@ -232,12 +224,12 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
             // We do not track inventory for this item, so supplier is the same as stated on the item (could be null)
             if (digital) {
-                return new Pair<String, String>(
+                return new Pair<>(
                         CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP,
                         StringUtils.isNotBlank(item.getSupplierCode()) ? item.getSupplierCode() : ""
                 );
             }
-            return  new Pair<String, String>(
+            return new Pair<>(
                     CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
                     StringUtils.isNotBlank(item.getSupplierCode()) ? item.getSupplierCode() : ""
             );
@@ -267,7 +259,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
                 // preorders that are launched become standard later in the flow but for now we allow all orders
                 if (preorderNotYetAvailable) {
-                    return new Pair<String, String>(
+                    return new Pair<>(
                             CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP,
                             warehouse.getCode()
                     );
@@ -277,14 +269,14 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
                 if (inStock) {
                     // Enough quantity
-                    return new Pair<String, String>(
+                    return new Pair<>(
                             CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
                             warehouse.getCode()
                     );
                 } else {
                     if (backorder) {
                         // Not-enough quantity but available on backorder
-                        return new Pair<String, String>(
+                        return new Pair<>(
                                 CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP,
                                 warehouse.getCode()
                         );
@@ -298,12 +290,12 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
         }
 
         if (oosWarehouse == null) {
-            return new Pair<String, String>(
+            return new Pair<>(
                     CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP,
                     StringUtils.isNotBlank(item.getSupplierCode()) ? item.getSupplierCode() : ""
             );
         }
-        return new Pair<String, String>(
+        return new Pair<>(
                 CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP,
                 oosWarehouse.getCode()
         );
@@ -319,19 +311,14 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
      * @return map where key is supplier and value is physical delivery count
      */
     Map<String, Integer> getPhysicalDeliveriesQty(final Map<DeliveryBucket, List<CartItem>> deliveryMap) {
-        final Map<String, Integer> counts = new HashMap<String, Integer>();
+        final Map<String, Integer> counts = new HashMap<>();
         for (final DeliveryBucket bucket : deliveryMap.keySet()) {
 
             int delta = CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(bucket.getGroup()) ||
                     CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP.equals(bucket.getGroup()) ||
                     CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP.equals(bucket.getGroup()) ? 0 : 1;
 
-            Integer count = counts.get(bucket.getSupplier());
-            if (count == null) {
-                counts.put(bucket.getSupplier(), delta);
-            } else {
-                counts.put(bucket.getSupplier(), count + delta);
-            }
+            counts.merge(bucket.getSupplier(), delta, (a, b) -> a + b);
         }
         return counts;
     }
@@ -342,7 +329,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
         // Pre-select single option to disable multi-delivery for non-supporting fulfilment centres
         final Map<String, Warehouse> warehouses = this.warehouseService.getByShopIdMapped(shopId, false);
-        final Map<String, Boolean> single = new HashMap<String, Boolean>();
+        final Map<String, Boolean> single = new HashMap<>();
         single.put("", Boolean.TRUE); // By default only non stock items are in shop so it is single anyway TODO: remove this after YC-668
         for (final Map.Entry<String, Warehouse> warehouse : warehouses.entrySet()) {
             single.put(warehouse.getKey(), !warehouse.getValue().isMultipleShippingSupported());
@@ -351,7 +338,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
         // Determine buckets with default settings
         final Map<DeliveryBucket, List<CartItem>> deliveryGroups = determineDeliveryBuckets(shopId, items, single);
         final Map<String, Integer> countBySupplier = getPhysicalDeliveriesQty(deliveryGroups);
-        final Map<String, Boolean> multipleBySupplier = new HashMap<String, Boolean>();
+        final Map<String, Boolean> multipleBySupplier = new HashMap<>();
         for (final Map.Entry<String, Integer> entry : countBySupplier.entrySet()) {
             multipleBySupplier.put(entry.getKey(), entry.getValue() > 1);
         }

@@ -68,7 +68,7 @@ public class BestValuePromotionApplicationStrategyImpl implements PromotionAppli
                     continue;
                 }
 
-                final List<PromoTriplet> applicable = new ArrayList<PromoTriplet>(promoBucket.size());
+                final List<PromoTriplet> applicable = new ArrayList<>(promoBucket.size());
 
                 BigDecimal discountValue = BigDecimal.ZERO;
 
@@ -150,7 +150,7 @@ public class BestValuePromotionApplicationStrategyImpl implements PromotionAppli
             return Collections.emptyMap();
         }
 
-        final Map<Long, PromotionCoupon> map = new HashMap<Long, PromotionCoupon>();
+        final Map<Long, PromotionCoupon> map = new HashMap<>();
         for (final String couponCode : couponCodes) {
 
             final PromotionCoupon coupon = promotionCouponService.findValidPromotionCoupon(couponCode, cart.getCustomerEmail());

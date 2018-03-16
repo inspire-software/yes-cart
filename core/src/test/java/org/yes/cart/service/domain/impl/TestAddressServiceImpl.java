@@ -43,6 +43,7 @@ public class TestAddressServiceImpl extends BaseCoreDBTestCase {
     private CustomerService customerService;
     private ShopService shopService;
 
+    @Override
     @Before
     public void setUp() {
         addressService = (AddressService) ctx().getBean(ServiceSpringKeys.ADDRESS_SERVICE);

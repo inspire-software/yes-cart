@@ -27,6 +27,7 @@ import java.time.Instant;
 public class StringValueToInstantConverter implements Converter<String, Instant> {
 
     /** {@inheritDoc} */
+    @Override
     public Instant convert(final String str) {
         return DateUtils.iParseSDT(str);
     }

@@ -43,6 +43,7 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public byte[] resizeImage(final String original,
                               final String resized,
                               final String width,
@@ -53,6 +54,7 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public byte[] resizeImage(final String original,
                               final byte[] content,
                               final String width,
@@ -61,6 +63,7 @@ public class ImageServiceCachedImpl implements ImageService {
         return imageService.resizeImage(original, content, width, height, cropToFit);
     }
 
+    @Override
     public byte[] resizeImage(final String original,
                               final byte[] content,
                               final String width,
@@ -71,6 +74,7 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isSizeAllowed(final String size) {
         return imageService.isSizeAllowed(size);
     }
@@ -78,22 +82,26 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isSizeAllowed(final String width, final String height) {
         return imageService.isSizeAllowed(width, height);
     }
 
     /** {@inheritDoc} */
+    @Override
     public MediaFileNameStrategy getImageNameStrategy(final String url) {
         return imageService.getImageNameStrategy(url);
     }
 
     /** {@inheritDoc} */
+    @Override
     public byte[] resizeImage(final String original, final String resized, final String width, final String height, final boolean cropToFit) {
         return imageService.resizeImage(original, resized, width, height, cropToFit);
     }
 
 
     /** {@inheritDoc} */
+    @Override
     public boolean isImageInRepository(final String fullFileName,
                                        final String code,
                                        final String storagePrefix,
@@ -102,6 +110,7 @@ public class ImageServiceCachedImpl implements ImageService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String addImageToRepository(final String fullFileName,
                                        final String code,
                                        final byte[] imgBody,
@@ -111,11 +120,13 @@ public class ImageServiceCachedImpl implements ImageService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public byte[] imageToByteArray(final String fileName, final String code, final String storagePrefix, final String pathToRepository) throws IOException {
         return imageService.imageToByteArray(fileName, code, storagePrefix, pathToRepository);
     }
 
     /** {@inheritDoc}*/
+    @Override
     public boolean deleteImage(final String imageFileName, final String storagePrefix, final String pathToRepository) {
         return imageService.deleteImage(imageFileName, storagePrefix, pathToRepository);
     }
@@ -123,6 +134,7 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "imageService-seoImage")
     public SeoImage getSeoImage(final String imageName) {
         return imageService.getSeoImage(imageName);
@@ -131,6 +143,7 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "imageService-seoImage"
     }, allEntries = true)
@@ -141,6 +154,7 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<SeoImage> findAll() {
         return imageService.findAll();
     }
@@ -148,6 +162,7 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<SeoImage> callback) {
         imageService.findAllIterator(callback);
     }
@@ -155,6 +170,7 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public SeoImage findById(final long pk) {
         return imageService.findById(pk);
     }
@@ -162,6 +178,7 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public SeoImage create(final SeoImage instance) {
         return imageService.create(instance);
     }
@@ -169,6 +186,7 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "imageService-seoImage"
     }, allEntries = true)
@@ -179,6 +197,7 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<SeoImage> findByCriteria(final String eCriteria, final Object... parameters) {
         return imageService.findByCriteria(eCriteria, parameters);
     }
@@ -186,6 +205,7 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return imageService.findCountByCriteria(eCriteria, parameters);
     }
@@ -193,6 +213,7 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public SeoImage findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return imageService.findSingleByCriteria(eCriteria, parameters);
     }
@@ -200,6 +221,7 @@ public class ImageServiceCachedImpl implements ImageService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public GenericDAO<SeoImage, Long> getGenericDao() {
         return imageService.getGenericDao();
     }

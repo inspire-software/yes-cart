@@ -49,7 +49,7 @@ public class SetIpInternalCommandImplTest extends BaseCoreDBTestCase {
 
         assertNull(shoppingCart.getShoppingContext().getLatestViewedSkus());
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_INTERNAL_SETIP, "127.0.0.1");
         commands.execute(shoppingCart, (Map) params);
 

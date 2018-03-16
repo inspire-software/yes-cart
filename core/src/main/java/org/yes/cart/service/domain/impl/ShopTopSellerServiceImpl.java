@@ -58,14 +58,15 @@ public class ShopTopSellerServiceImpl extends BaseGenericServiceImpl<ShopTopSell
     /** {@inheritDoc} */
     //Use stored procedures in case if it will reduce performance on big data set
     //Bad ORM fashion
+    @Override
     public void updateTopSellers(final int calculationPeriodInDays) {
         final LocalDateTime calendar = now().plusDays(-calculationPeriodInDays);
         List<Shop> shops = shopDao.findAll();
         for(Shop shop : shops) {
             getGenericDao().executeUpdate("TOP.SELLER.SHOP.CLEAN", shop);
             List<Object[]> list = getGenericDao().findQueryObjectsByNamedQuery("TOP.SELLER.SHOP.CALCULATE", shop, calendar);
-            final Map<Long, BigDecimal> topSellersCount = new HashMap<Long, BigDecimal>();
-            final Map<Long, Product> topSellersProducts = new HashMap<Long, Product>();
+            final Map<Long, BigDecimal> topSellersCount = new HashMap<>();
+            final Map<Long, Product> topSellersProducts = new HashMap<>();
             for(Object [] tuple : list) {
                 final String skuCode = (String) tuple[0];
                 final BigDecimal qty = (BigDecimal) tuple[1];
@@ -74,12 +75,7 @@ public class ShopTopSellerServiceImpl extends BaseGenericServiceImpl<ShopTopSell
                 if (product != null) {
                     topSellersProducts.put(product.getProductId(), product);
 
-                    final BigDecimal runningTotal = topSellersCount.get(product.getProductId());
-                    if (runningTotal != null) {
-                        topSellersCount.put(product.getProductId(), runningTotal.add(qty));
-                    } else {
-                        topSellersCount.put(product.getProductId(), qty);
-                    }
+                    topSellersCount.merge(product.getProductId(), qty, BigDecimal::add);
                 }
             }
             for(Map.Entry<Long, Product> top : topSellersProducts.entrySet()) {

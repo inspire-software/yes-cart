@@ -59,6 +59,7 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
     }
 
     /** {@inheritDoc} */
+    @Override
     public void visit(final CustomerOrder order) {
 
         final Collection<CustomerOrderDelivery> deliveries = order.getDelivery();
@@ -77,6 +78,7 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
     }
 
     /** {@inheritDoc} */
+    @Override
     public void visit(final CustomerOrderDelivery delivery) {
 
         final Map<String, Warehouse> warehouseByCode = getFulfilmentCentresMap(delivery.getCustomerOrder());
@@ -434,7 +436,7 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
         LocalDate thisDate = startDate;
         if (!exclusions.isEmpty()) {
 
-            final TreeSet<LocalDate> startDates = new TreeSet<LocalDate>(exclusions.keySet());
+            final TreeSet<LocalDate> startDates = new TreeSet<>(exclusions.keySet());
 
             while (true) {
                 final LocalDate beforeOrEqual = startDates.floor(thisDate);

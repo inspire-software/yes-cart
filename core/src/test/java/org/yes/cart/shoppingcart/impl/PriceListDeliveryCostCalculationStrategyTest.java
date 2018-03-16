@@ -288,7 +288,7 @@ public class PriceListDeliveryCostCalculationStrategyTest {
         final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
         final DeliveryBucket bucket2 = context.mock(DeliveryBucket.class, "bucket2");
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
         buckets.put(bucket1, Collections.EMPTY_LIST);
         buckets.put(bucket2, Collections.EMPTY_LIST);
 
@@ -359,7 +359,7 @@ public class PriceListDeliveryCostCalculationStrategyTest {
         final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
         final DeliveryBucket bucket2 = context.mock(DeliveryBucket.class, "bucket2");
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
         buckets.put(bucket1, Collections.EMPTY_LIST);
         buckets.put(bucket2, Collections.EMPTY_LIST);
 
@@ -431,7 +431,7 @@ public class PriceListDeliveryCostCalculationStrategyTest {
         final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
         final DeliveryBucket bucket2 = context.mock(DeliveryBucket.class, "bucket2");
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
         buckets.put(bucket1, Collections.EMPTY_LIST);
         buckets.put(bucket2, Collections.EMPTY_LIST);
 
@@ -474,7 +474,7 @@ public class PriceListDeliveryCostCalculationStrategyTest {
         final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
         final DeliveryBucket bucket2 = context.mock(DeliveryBucket.class, "bucket2");
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
         buckets.put(bucket1, Collections.EMPTY_LIST);
         buckets.put(bucket2, Collections.EMPTY_LIST);
 

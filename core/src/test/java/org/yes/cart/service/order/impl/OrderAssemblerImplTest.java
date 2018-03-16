@@ -43,6 +43,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
     private OrderAssembler orderAssembler;
     private CustomerOrderService customerOrderService;
 
+    @Override
     @Before
     public void setUp()  {
         orderAssembler = (OrderAssembler) ctx().getBean(ServiceSpringKeys.ORDER_ASSEMBLER);

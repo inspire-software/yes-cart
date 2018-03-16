@@ -31,8 +31,8 @@ public class CustomerOrderPaymentComparator implements Comparator<CustomerOrderP
     /**
      * {@inheritDoc}
      */
+    @Override
     public int compare(final CustomerOrderPayment orderPayment1, final CustomerOrderPayment orderPayment2) {
-        return (orderPayment1.getCustomerOrderPaymentId() < orderPayment2.getCustomerOrderPaymentId() ?
-                -1 : (orderPayment1.getCustomerOrderPaymentId() == orderPayment2.getCustomerOrderPaymentId() ? 0 : 1));
+        return (Long.compare(orderPayment1.getCustomerOrderPaymentId(), orderPayment2.getCustomerOrderPaymentId()));
     }
 }

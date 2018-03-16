@@ -33,6 +33,7 @@ import java.util.Map;
 public class CleanCartCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     /** {@inheritDoc} */
+    @Override
     public String getCmdKey() {
         return CMD_CLEAN;
     }

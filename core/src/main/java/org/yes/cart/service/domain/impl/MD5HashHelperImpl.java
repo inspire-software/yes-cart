@@ -60,6 +60,7 @@ public class MD5HashHelperImpl implements HashHelper, PasswordEncoder {
      * @throws java.security.NoSuchAlgorithmException     NoSuchAlgorithmException
      * @throws java.io.UnsupportedEncodingException UnsupportedEncodingException
      */
+    @Override
     @Cacheable(value = "passwordHashHelper-hash")
     public String getHash(final String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         final MessageDigest digest = MessageDigest.getInstance("MD5");
@@ -73,7 +74,7 @@ public class MD5HashHelperImpl implements HashHelper, PasswordEncoder {
     }
 
     private String convertToHex(final byte[] data) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < data.length; i++) {
             int halfbyte = (data[i] >>> 4) & 0x0F;
             int two_halfs = 0;

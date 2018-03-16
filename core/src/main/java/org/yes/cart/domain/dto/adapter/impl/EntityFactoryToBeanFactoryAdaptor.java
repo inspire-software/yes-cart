@@ -35,11 +35,13 @@ public class EntityFactoryToBeanFactoryAdaptor implements com.inspiresoftware.li
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class getClazz(final String entityBeanKey) {
         return service.getGenericDao().getEntityFactory().getImplClass(entityBeanKey);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Object get(final String entityBeanKey) {
         return service.getGenericDao().getEntityFactory().getByKey(entityBeanKey);
     }

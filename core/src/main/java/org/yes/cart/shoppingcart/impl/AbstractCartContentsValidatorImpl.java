@@ -85,7 +85,7 @@ public abstract class AbstractCartContentsValidatorImpl implements CartContentsV
 
     protected static class CartValidityModelImpl implements CartValidityModel {
 
-        private final List<CartValidityModelMessage> messages = new ArrayList<CartValidityModelMessage>();
+        private final List<CartValidityModelMessage> messages = new ArrayList<>();
 
         protected CartValidityModelImpl() {
         }

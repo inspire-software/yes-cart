@@ -33,6 +33,7 @@ public class JavaMailSenderBuilderImpl implements JavaMailSenderBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "mailSenderBuilder-buildJavaMailSender")
     public JavaMailSender buildJavaMailSender(final String shopCode) {
 

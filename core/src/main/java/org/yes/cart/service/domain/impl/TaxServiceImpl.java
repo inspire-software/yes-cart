@@ -35,16 +35,19 @@ public class TaxServiceImpl  extends BaseGenericServiceImpl<Tax> implements TaxS
     }
 
     /** {@inheritDoc} */
+    @Override
     public Tax getById(final long pk) {
         return findById(pk);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Tax> getTaxesByShopCode(final String shopCode, final String currency) {
         return getGenericDao().findByNamedQuery("TAX.BY.SHOPCODE.CURRENCY", shopCode, currency);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Tax> findByParameters(final String code, final String shopCode, final String currency) {
 
         return getGenericDao().findByNamedQuery(
@@ -65,18 +68,21 @@ public class TaxServiceImpl  extends BaseGenericServiceImpl<Tax> implements TaxS
     }
 
     /** {@inheritDoc} */
+    @Override
     public Tax create(final Tax instance) {
         regenerateGuid(instance);
         return super.create(instance);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Tax update(final Tax instance) {
         regenerateGuid(instance);
         return super.update(instance);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void delete(final Tax instance) {
         super.delete(instance);
     }

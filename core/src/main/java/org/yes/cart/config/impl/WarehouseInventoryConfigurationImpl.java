@@ -47,6 +47,7 @@ public class WarehouseInventoryConfigurationImpl extends AbstractWarehouseConfig
     }
 
     /** {@inheritDoc} */
+    @Override
     protected void doConfigurations(final Warehouse warehouse, final Properties properties) {
         this.registerCustomInventoryResolver(warehouse, properties);
     }

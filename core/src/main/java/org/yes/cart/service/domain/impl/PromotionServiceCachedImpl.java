@@ -39,12 +39,14 @@ public class PromotionServiceCachedImpl implements PromotionService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "promotionService-promotionsByShopCode")
     public List<Promotion> getPromotionsByShopCode(final String shopCode, final String currency, final boolean active) {
         return promotionService.getPromotionsByShopCode(shopCode, currency, active);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Promotion> findByParameters(final String code,
                                             final String shopCode,
                                             final String currency,
@@ -58,6 +60,7 @@ public class PromotionServiceCachedImpl implements PromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findPromotionIdByCode(final String code) {
         return promotionService.findPromotionIdByCode(code);
     }
@@ -65,6 +68,7 @@ public class PromotionServiceCachedImpl implements PromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Promotion> findAll() {
         return promotionService.findAll();
     }
@@ -72,6 +76,7 @@ public class PromotionServiceCachedImpl implements PromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<Promotion> callback) {
         promotionService.findAllIterator(callback);
     }
@@ -79,12 +84,14 @@ public class PromotionServiceCachedImpl implements PromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Promotion findById(final long pk) {
         return promotionService.findById(pk);
     }
 
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "promotionService-promotionsByShopCode",
             "promotionService-factoryGetInstance",
@@ -95,6 +102,7 @@ public class PromotionServiceCachedImpl implements PromotionService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "promotionService-promotionsByShopCode",
             "promotionService-factoryGetInstance",
@@ -105,6 +113,7 @@ public class PromotionServiceCachedImpl implements PromotionService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "promotionService-promotionsByShopCode",
             "promotionService-factoryGetInstance",
@@ -117,6 +126,7 @@ public class PromotionServiceCachedImpl implements PromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Promotion> findByCriteria(final String eCriteria, final Object... parameters) {
         return promotionService.findByCriteria(eCriteria, parameters);
     }
@@ -124,6 +134,7 @@ public class PromotionServiceCachedImpl implements PromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return promotionService.findCountByCriteria(eCriteria, parameters);
     }
@@ -131,6 +142,7 @@ public class PromotionServiceCachedImpl implements PromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Promotion findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return promotionService.findSingleByCriteria(eCriteria, parameters);
     }
@@ -138,6 +150,7 @@ public class PromotionServiceCachedImpl implements PromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public GenericDAO<Promotion, Long> getGenericDao() {
         return promotionService.getGenericDao();
     }

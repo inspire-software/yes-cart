@@ -108,6 +108,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
                 try {
                     Thread.sleep(getDeltaCheckDelay());
                 } catch (InterruptedException e) {
+                    // OK
                 }
                 productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
                 int delta = productSkus.size() - count;
@@ -127,7 +128,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
 
             if (runBatch) {
                 int fromIndex = 0;
-                int toIndex = 0;
+                int toIndex;
                 while (fromIndex < productSkus.size()) {
 
                     if (isFullIndexInProgress()) {

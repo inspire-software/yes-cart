@@ -54,11 +54,13 @@ public abstract class AbstractMediaFileNameStrategyImpl implements MediaFileName
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getUrlPath() {
         return urlPath;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getRelativeInternalRootDirectory() {
         return relativeInternalRootDirectory;
     }
@@ -75,6 +77,7 @@ public abstract class AbstractMediaFileNameStrategyImpl implements MediaFileName
     /**
      * {@inheritDoc}
      */
+    @Override
     public String resolveObjectCode(final String url) {
 
         if (StringUtils.isNotBlank(url)) {
@@ -121,6 +124,7 @@ public abstract class AbstractMediaFileNameStrategyImpl implements MediaFileName
     /**
      * {@inheritDoc}
      */
+    @Override
     public String resolveLocale(final String url) {
 
         if (StringUtils.isNotBlank(url)) {
@@ -147,6 +151,7 @@ public abstract class AbstractMediaFileNameStrategyImpl implements MediaFileName
     /**
      * {@inheritDoc}
      */
+    @Override
     public String resolveSuffix(final String url) {
 
         if (StringUtils.isNotBlank(url)) {
@@ -185,6 +190,7 @@ public abstract class AbstractMediaFileNameStrategyImpl implements MediaFileName
     }
 
     /** {@inheritDoc} */
+    @Override
     public String resolveFileName(final String url) {
 
         // We only use File class to reuse native filename resolution mechanism
@@ -198,12 +204,14 @@ public abstract class AbstractMediaFileNameStrategyImpl implements MediaFileName
     }
 
     /** {@inheritDoc} */
+    @Override
     public String resolveRelativeInternalFileNamePath(final String fileName, final String code, final String locale) {
         return resolveRelativeInternalFileNamePath(fileName, code, locale, null, null);
     }
 
 
     /** {@inheritDoc} */
+    @Override
     public String resolveRelativeInternalFileNamePath(final String fileName, final String code, final String locale, final String width, final String height) {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(relativeInternalRootDirectory);
@@ -227,6 +235,7 @@ public abstract class AbstractMediaFileNameStrategyImpl implements MediaFileName
     /**
      * {@inheritDoc}
      */
+    @Override
     public String createRollingFileName(final String fullFileName, final String code, final String suffix, final String locale) {
 
         final String systemPart =

@@ -36,6 +36,7 @@ public class StateServiceImpl extends BaseGenericServiceImpl<State> implements S
         super(genericDao);
     }
 
+    @Override
     public List<State> findByCountry(final String countryCode) {
 
         return getGenericDao().findByCriteria(

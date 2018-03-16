@@ -100,11 +100,13 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductSku getSkuById(final Long skuId) {
         return proxy().getSkuById(skuId, false);
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductSku getSkuById(final Long skuId, final boolean withAttributes) {
         final ProductSku sku =  productSkuService.getGenericDao().findById(skuId);
         if (sku != null && withAttributes) {
@@ -120,6 +122,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param productId given id, which identify product
      * @return image file name if found.
      */
+    @Override
     public String getDefaultImage(final Long productId) {
         final Map<Long, String> images = proxy().getAllProductsAttributeValues(AttributeNamesKeys.Product.PRODUCT_DEFAULT_IMAGE_ATTR_NAME);
         return images.get(productId);
@@ -129,6 +132,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Product> findProductByCategory(final long categoryId) {
         return productDao.findByNamedQuery("PRODUCTS.BY.CATEGORYID", categoryId, now());
     }
@@ -140,6 +144,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public Product getRandomProductByCategory(final Category category) {
         final int qty = getProductQty(category.getCategoryId());
         if (qty > 0) {
@@ -156,16 +161,13 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return null;
     }
 
-    private static final Comparator<Pair> BY_SECOND = new Comparator<Pair>() {
-        public int compare(final Pair pair1, final Pair pair2) {
-            return ((String) pair1.getSecond()).compareTo((String) pair2.getSecond());
-        }
-    };
+    private static final Comparator<Pair> BY_SECOND = (pair1, pair2) -> ((String) pair1.getSecond()).compareTo((String) pair2.getSecond());
 
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(
             final String locale, final long productId, final long skuId, final long productTypeId) {
 
@@ -189,15 +191,15 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             return Collections.emptyMap();
         }
 
-        final Map<String, Pair<String, String>> viewsGroupsI18n = new HashMap<String, Pair<String, String>>();
-        final Map<String, Pair<String, String>> attrI18n = new HashMap<String, Pair<String, String>>();
+        final Map<String, Pair<String, String>> viewsGroupsI18n = new HashMap<>();
+        final Map<String, Pair<String, String>> attrI18n = new HashMap<>();
 
         final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attributesToShow =
-                new TreeMap<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>>(BY_SECOND);
+                new TreeMap<>(BY_SECOND);
 
         final Map<String, I18NModel> attrDisplayNames = attributeService.getAllAttributeNames();
         final List<Attribute> multivalue = attributeService.findAttributesWithMultipleValues(AttributeGroupNames.PRODUCT);
-        final Set<String> multivalueCodes = new HashSet<String>();
+        final Set<String> multivalueCodes = new HashSet<>();
         if (!CollectionUtils.isEmpty(multivalue)) {
             for (final Attribute multi : multivalue) {
                 multivalueCodes.add(multi.getCode());
@@ -238,7 +240,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             final I18NModel attrModel = attrDisplayNames.get(attrValue.getAttributeCode());
             final String name = attrModel != null ? attrModel.getValue(locale) : attrValue.getAttributeCode();
 
-            attr = new Pair<String, String>(attrValue.getAttributeCode(), name);
+            attr = new Pair<>(attrValue.getAttributeCode(), name);
             attrI18n.put(attrValue.getAttributeCode(), attr);
         }
 
@@ -256,11 +258,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 attrValuesInGroup = attributesToShow.get(group);
             } else {
                 viewsGroupsI18n.put(groupForAttr.getFirst(), groupForAttr);
-                attrValuesInGroup = new TreeMap<Pair<String, String>, List<Pair<String, String>>>(BY_SECOND);
+                attrValuesInGroup = new TreeMap<>(BY_SECOND);
                 attributesToShow.put(groupForAttr, attrValuesInGroup);
             }
 
-            final Pair<String, String> val = new Pair<String, String>(
+            final Pair<String, String> val = new Pair<>(
                     attrValue.getVal(),
                     new FailoverStringI18NModel(
                             attrValue.getDisplayVal(),
@@ -277,7 +279,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                     attrValuesForAttr.set(0, val); // replace with latest (hopefully SKU)
                 }
             } else {
-                attrValuesForAttr = new ArrayList<Pair<String, String>>();
+                attrValuesForAttr = new ArrayList<>();
                 attrValuesInGroup.put(attr, attrValuesForAttr);
                 attrValuesForAttr.add(val);
             }
@@ -293,17 +295,13 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         if (CollectionUtils.isEmpty(attributeViewGroup)) {
             return Collections.emptyMap();
         }
-        final Map<String, List<Pair<String, String>>> map = new HashMap<String, List<Pair<String, String>>>();
+        final Map<String, List<Pair<String, String>>> map = new HashMap<>();
         for (final ProdTypeAttributeViewGroup group : attributeViewGroup) {
             if (group.getAttrCodeList() != null) {
                 final String[] attributesCodes = group.getAttrCodeList().split(",");
                 for (final String attrCode : attributesCodes) {
-                    List<Pair<String, String>> groups = map.get(attrCode);
-                    if (groups == null) {
-                        groups = new ArrayList<Pair<String, String>>();
-                        map.put(attrCode, groups);
-                    }
-                    groups.add(new Pair<String, String>(
+                    List<Pair<String, String>> groups = map.computeIfAbsent(attrCode, k -> new ArrayList<>());
+                    groups.add(new Pair<>(
                             String.valueOf(group.getProdTypeAttributeViewGroupId()),
                             new FailoverStringI18NModel(
                                     group.getDisplayName(),
@@ -319,12 +317,13 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> getCompareAttributes(final String locale,
                                                                                                                               final List<Long> productId,
                                                                                                                               final List<Long> skuId) {
 
         final Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> view =
-                new TreeMap<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>>(BY_SECOND);
+                new TreeMap<>(BY_SECOND);
 
         for (final Long id : productId) {
 
@@ -364,27 +363,13 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
         for (final Map.Entry<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> group : add.entrySet()) {
 
-            Map<Pair<String, String>, Map<String, List<Pair<String, String>>>> attributesInGroup = view.get(group.getKey());
-
-            if (attributesInGroup == null) {
-
-                attributesInGroup = new TreeMap<Pair<String, String>, Map<String, List<Pair<String, String>>>>(BY_SECOND);
-                view.put(group.getKey(), attributesInGroup);
-
-            }
+            Map<Pair<String, String>, Map<String, List<Pair<String, String>>>> attributesInGroup = view.computeIfAbsent(group.getKey(), k -> new TreeMap<>(BY_SECOND));
 
             for (final Map.Entry<Pair<String, String>, List<Pair<String, String>>> attribute : group.getValue().entrySet()) {
 
-                Map<String, List<Pair<String, String>>> valueByProduct = attributesInGroup.get(attribute.getKey());
+                Map<String, List<Pair<String, String>>> valueByProduct = attributesInGroup.computeIfAbsent(attribute.getKey(), k -> new HashMap<>());
 
-                if (valueByProduct == null) {
-
-                    valueByProduct = new HashMap<String, List<Pair<String, String>>>();
-                    attributesInGroup.put(attribute.getKey(), valueByProduct);
-
-                }
-
-                valueByProduct.put(id, new ArrayList<Pair<String, String>>(attribute.getValue()));
+                valueByProduct.put(id, new ArrayList<>(attribute.getValue()));
 
 
             }
@@ -397,10 +382,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<Long, String> getAllProductsAttributeValues(final String attributeCode) {
         final List<Object[]> values = (List) getGenericDao().findByNamedQuery("ALL.PRODUCT.ATTR.VALUE", attributeCode);
         if (values != null && !values.isEmpty()) {
-            final Map<Long, String> map = new HashMap<Long, String>();
+            final Map<Long, String> map = new HashMap<>();
             for (final Object[] value : values) {
                 map.put((Long) value[0], (String) value[1]);
             }
@@ -412,6 +398,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductSku getProductSkuByCode(final String skuCode) {
         return productSkuService.getProductSkuBySkuCode(skuCode);
     }
@@ -422,6 +409,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param skuCode sku code
      * @return product sku for this sku code
      */
+    @Override
     public Product getProductBySkuCode(final String skuCode) {
         return (Product) productDao.getScalarResultByNamedQuery("PRODUCT.BY.SKU.CODE", skuCode);
     }
@@ -430,6 +418,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public Product getProductById(final Long productId) {
         // by default we use product with attributes, so true is better for caching
         return proxy().getProductById(productId, true);
@@ -438,6 +427,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public Product getProductById(final Long productId, final boolean withAttribute) {
         final Product prod = productDao.findById(productId); // query with
         if (prod != null && withAttribute) {
@@ -449,6 +439,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductSearchResultPageDTO getProductSearchResultDTOByQuery(final NavigationContext navigationContext,
                                                                        final int firstResult,
                                                                        final int maxResults,
@@ -466,7 +457,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 LuceneDocumentAdapterUtils.FIELD_OBJECT
         );
 
-        final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.getFirst().size());
+        final List<ProductSearchResultDTO> rez = new ArrayList<>(searchRez.getFirst().size());
         for (Object[] obj : searchRez.getFirst()) {
             final ProductSearchResultDTO dto = LuceneDocumentAdapterUtils.readObjectFieldValue((String) obj[2], ProductSearchResultDTOImpl.class);
             rez.add(dto);
@@ -479,6 +470,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductSearchResultNavDTO findFilteredNavigationRecords(final NavigationContext baseNavigationContext, final List<FilteredNavigationRecordRequest> request) {
         return new ProductSearchResultNavDTOImpl(productDao.fullTextSearchNavigation(baseNavigationContext.getProductQuery(), request));
     }
@@ -486,6 +478,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getProductQty(final NavigationContext navigationContext) {
         return productDao.fullTextSearchCount(navigationContext.getProductQuery());
     }
@@ -494,6 +487,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public Pair<Integer, Integer> findProductQtyAll() {
 
         final int total = getGenericDao().findCountByCriteria(null);
@@ -508,6 +502,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Product> findProductByCategory(final long categoryId,
                                                final int firstResult,
                                                final int maxResults) {
@@ -523,6 +518,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Product> getProductByIdList(final List idList) {
         if (idList == null || idList.isEmpty()) {
             return Collections.EMPTY_LIST;
@@ -534,6 +530,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findProductIdBySeoUri(final String seoUri) {
         List<Object> list = productDao.findQueryObjectByNamedQuery("PRODUCT.ID.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
@@ -549,6 +546,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findProductIdByGUID(final String guid) {
         List<Object> list = productDao.findQueryObjectByNamedQuery("PRODUCT.ID.BY.GUID", guid);
         if (list != null && !list.isEmpty()) {
@@ -564,6 +562,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findProductIdByCode(final String code) {
         List<Object> list = productDao.findQueryObjectByNamedQuery("PRODUCT.ID.BY.CODE", code);
         if (list != null && !list.isEmpty()) {
@@ -578,6 +577,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> findProductIdsByManufacturerCode(final String code) {
         return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.MANUFACTURER.CODE", code);
     }
@@ -585,6 +585,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> findProductIdsByBarCode(final String code) {
         return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.SKU.BARCODE", code);
     }
@@ -592,6 +593,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> findProductIdsByBarCodes(final Collection<String> codes) {
         return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.SKU.BARCODES", codes);
     }
@@ -599,6 +601,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> findProductIdsByPimCode(final String code) {
         return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.PIM.CODE", code);
     }
@@ -606,6 +609,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> findProductIdsByUnavailableBefore(final LocalDateTime before) {
         return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.AVAILABLETO", before);
     }
@@ -613,6 +617,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> findProductIdsByAttributeValue(final String attrCode, final String attrValue) {
         return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.ATTRIBUTE.CODE.AND.VALUE", attrCode, attrValue);
     }
@@ -620,6 +625,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public String findSeoUriByProductId(final Long productId) {
         List<Object> list = productDao.findQueryObjectByNamedQuery("SEO.URI.BY.PRODUCT.ID", productId);
         if (list != null && !list.isEmpty()) {
@@ -635,6 +641,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findProductSkuIdBySeoUri(final String seoUri) {
         List<Object> list = productSkuService.getGenericDao().findQueryObjectByNamedQuery("SKU.ID.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
@@ -649,6 +656,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findProductSkuIdByGUID(final String guid) {
         List<Object> list = productSkuService.getGenericDao().findQueryObjectByNamedQuery("SKU.ID.BY.GUID", guid);
         if (list != null && !list.isEmpty()) {
@@ -663,6 +671,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findProductSkuIdByCode(final String code) {
         List<Object> list = productSkuService.getGenericDao().findQueryObjectByNamedQuery("SKU.ID.BY.CODE", code);
         if (list != null && !list.isEmpty()) {
@@ -677,6 +686,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public String findSeoUriByProductSkuId(final Long skuId) {
         List<Object> list = productSkuService.getGenericDao().findQueryObjectByNamedQuery("SEO.URI.BY.SKU.ID", skuId);
         if (list != null && !list.isEmpty()) {
@@ -692,6 +702,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getProductQty(final long categoryId) {
         return Integer.valueOf(
                 String.valueOf(productDao.getScalarResultByNamedQuery("PRODUCTS.QTY.BY.CATEGORYID", categoryId, now())));
@@ -701,6 +712,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public IndexBuilder.FTIndexState getProductsFullTextIndexState() {
         return productDao.getFullTextIndexState();
     }
@@ -708,6 +720,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public IndexBuilder.FTIndexState getProductsSkuFullTextIndexState() {
         return productSkuDao.getFullTextIndexState();
     }
@@ -715,6 +728,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProducts(final int batchSize) {
         productDao.fullTextSearchReindex(true, batchSize);
     }
@@ -723,6 +737,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProducts(final int batchSize, final boolean async) {
         productDao.fullTextSearchReindex(async, batchSize);
     }
@@ -730,6 +745,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductsSku(final int batchSize) {
         productSkuDao.fullTextSearchReindex(true, batchSize);
     }
@@ -738,6 +754,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductsSku(final int batchSize, final boolean async) {
         productSkuDao.fullTextSearchReindex(async, batchSize);
     }
@@ -745,6 +762,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProducts(final Long shopId, final int batchSize) {
         final Set<Long> categories = shopCategoryRelationshipSupport.getShopCategoriesIds(shopId);
         productDao.fullTextSearchReindex(true, batchSize);
@@ -754,6 +772,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductsSku(final Long shopId, final int batchSize) {
         final Set<Long> categories = shopCategoryRelationshipSupport.getShopCategoriesIds(shopId);
         productSkuDao.fullTextSearchReindex(true, batchSize);
@@ -762,6 +781,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProduct(final Long pk) {
         final Product product = findById(pk);
         if (product != null) {
@@ -775,6 +795,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductSku(final Long pk) {
         final ProductSku productSku = productSkuService.findById(pk);
         if (productSku != null) {
@@ -786,6 +807,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductSku(final String code) {
         final ProductSku productSku = productSkuService.findProductSkuBySkuCode(code);
         if (productSku != null) {
@@ -798,6 +820,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Product> findProductByCodeNameBrandType(final String code,
                                                         final String name,
                                                         final Long brandId,
@@ -820,6 +843,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param instance instance to persist
      * @return persisted instanse
      */
+    @Override
     public Product create(final Product instance) {
 
         ProductSku sku = productDao.getEntityFactory().getByIface(ProductSku.class);

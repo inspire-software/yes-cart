@@ -39,6 +39,7 @@ public class ProductIndexingPerformanceTest extends AbstractTestDAO {
     private GenericFTSCapableDAO<Product, Long, Object> productDao;
     private GenericFTSCapableDAO<ProductSku, Long, Object> productSkuDao;
 
+    @Override
     @Before
     public void setUp()  {
         productDao = (GenericFTSCapableDAO<Product, Long, Object>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO);
@@ -56,6 +57,7 @@ public class ProductIndexingPerformanceTest extends AbstractTestDAO {
     private void runIndexing(final String entity, final GenericFTSCapableDAO dao, final int maxIterations, final int batchSize) throws InterruptedException {
 
         getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 System.out.println("Starting " + entity + " test with count: " + dao.findCountByCriteria(null));

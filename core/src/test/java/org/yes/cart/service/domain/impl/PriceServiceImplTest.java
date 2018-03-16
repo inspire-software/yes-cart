@@ -47,6 +47,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     private PriceService priceService;
     private ProductService productService;
 
+    @Override
     @Before
     public void setUp() {
         productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);

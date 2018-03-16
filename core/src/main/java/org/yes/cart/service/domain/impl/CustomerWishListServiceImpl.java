@@ -39,6 +39,7 @@ public class CustomerWishListServiceImpl extends BaseGenericServiceImpl<Customer
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<CustomerWishList> findWishListByCustomerId(final long customerId) {
         final List<CustomerWishList> wishList = getGenericDao().findByNamedQuery("WISHLIST.BY.CUSTOMER", customerId);
         for (final CustomerWishList item : wishList) {
@@ -49,16 +50,19 @@ public class CustomerWishListServiceImpl extends BaseGenericServiceImpl<Customer
     }
 
     /** {@inheritDoc} */
+    @Override
     public CustomerWishList create(final CustomerWishList instance) {
         return super.create(instance);
     }
 
     /** {@inheritDoc} */
+    @Override
     public CustomerWishList update(final CustomerWishList instance) {
         return super.update(instance);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void delete(final CustomerWishList instance) {
         super.delete(instance);
     }

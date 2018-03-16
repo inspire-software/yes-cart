@@ -69,6 +69,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
     }
 
     /** {@inheritDoc} */
+    @Override
     public Total calculate(final MutableShoppingCart cart) {
 
         if (!cart.getCarrierSlaId().isEmpty()) {
@@ -77,7 +78,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
 
             for (final Map.Entry<String, Long> supplierCarrierSla : cart.getCarrierSlaId().entrySet()) {
 
-                final Map<DeliveryBucket, List<CartItem>> cartBuckets = new HashMap<DeliveryBucket, List<CartItem>>();
+                final Map<DeliveryBucket, List<CartItem>> cartBuckets = new HashMap<>();
                 for (final Map.Entry<DeliveryBucket, List<CartItem>> bucket : cart.getCartItemMap().entrySet()) {
                     // Add shipping line for every bucket by this supplier (e.g. if we have multi delivery)
                     if (bucket.getKey().getSupplier().equals(supplierCarrierSla.getKey())) {
@@ -233,7 +234,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
             }
         }
 
-        return new Pair<BigDecimal, BigDecimal>(weight, volume);
+        return new Pair<>(weight, volume);
     }
 
     protected SkuPrice getSkuPrice(final MutableShoppingCart cart, final String carrierSlaId, final PricingPolicyProvider.PricingPolicy policy, final BigDecimal qty) {

@@ -134,6 +134,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public byte[] resizeImage(final String filename,
                               final byte[] content,
                               final String width,
@@ -144,6 +145,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public byte[] resizeImage(final String filename,
                               final byte[] content,
                               final String width,
@@ -304,6 +306,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isSizeAllowed(final String size) {
 
         final SystemService systemService = getSystemService();
@@ -317,16 +320,19 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isSizeAllowed(final String width, final String height) {
         return isSizeAllowed(width + "x" + height);
     }
 
     /** {@inheritDoc} */
+    @Override
     public MediaFileNameStrategy getImageNameStrategy(final String url) {
         return mediaFileNameStrategyResolver.getMediaFileNameStrategy(url);
     }
 
     /** {@inheritDoc} */
+    @Override
     public byte[] resizeImage(final String original,
                               final String resized,
                               final String width,
@@ -335,6 +341,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
     }
 
     /** {@inheritDoc} */
+    @Override
     public byte[] resizeImage(final String original,
                               final String resized,
                               final String width,
@@ -385,6 +392,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isImageInRepository(final String fullFileName,
                                        final String code,
                                        final String storagePrefix,
@@ -400,6 +408,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
     }
 
     /** {@inheritDoc} */
+    @Override
     public String addImageToRepository(final String fullFileName,
                                        final String code,
                                        final byte[] imgBody,
@@ -442,6 +451,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
     }
 
     /** {@inheritDoc} */
+    @Override
     public byte[] imageToByteArray(final String fileName,
                                    final String code,
                                    final String storagePrefix,
@@ -456,6 +466,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
     }
 
     /** {@inheritDoc}*/
+    @Override
     public boolean deleteImage(final String imageFileName,
                                final String storagePrefix,
                                final String pathToRepository) {
@@ -481,6 +492,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public SeoImage getSeoImage(final String imageName) {
         final List<SeoImage> seoImages = seoImageDao.findByCriteria(" where e.imageName = ?1", imageName);
         if (seoImages == null || seoImages.isEmpty()) {

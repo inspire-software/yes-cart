@@ -90,6 +90,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public CustomerOrderDelivery findDelivery(final long deliveryId) {
         return customerOrderDeliveryDao.findById(deliveryId);
     }
@@ -97,6 +98,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public CustomerOrderDelivery findDeliveryByNumber(final String deliveryNum) {
         return customerOrderDeliveryDao.findSingleByCriteria(" where e.deliveryNum = ?1", deliveryNum);
     }
@@ -104,6 +106,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> findEligibleForExportOrderIds() {
         return (List) customerOrderDeliveryDao.findQueryObjectByNamedQuery("ORDERS.IDS.BY.ELIGIBLE.FOR.EXPORT", Boolean.FALSE);
     }
@@ -111,6 +114,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> findAwaitingDeliveriesIds(final List<String> skuCodes, final String deliveryStatus, final List<String> orderStatus) {
 
         final List<Long> waitingDeliveries;
@@ -133,6 +137,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public ResultsIterator<CustomerOrderDelivery> findAwaitingDeliveries(final List<String> skuCodes, final String deliveryStatus, final List<String> orderStatus) {
 
         final ResultsIterator<CustomerOrderDelivery> waitingDeliveries;
@@ -157,6 +162,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CustomerOrder> findCustomerOrdersByCriteria(
             final long customerId,
             final String firstName,
@@ -184,6 +190,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CustomerOrder> findCustomerOrdersByDeliveryIds(final Collection<Long> deliveryIds) {
         return getGenericDao().findByNamedQuery("ORDERS.BY.DELIVERY.IDS", deliveryIds);
     }
@@ -191,6 +198,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CustomerOrder> findCustomerOrders(final long customerId, final LocalDateTime since) {
         return findCustomerOrders(customerDao.findById(customerId), since);
     }
@@ -199,6 +207,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CustomerOrder> findCustomerOrders(final Customer customer, final LocalDateTime since) {
         if (since == null) {
             return getGenericDao().findByCriteria(
@@ -213,6 +222,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, Boolean> isOrderMultipleDeliveriesAllowed(final ShoppingCart shoppingCart) {
 
         return orderSplittingStrategy.isMultipleDeliveriesAllowed(
@@ -225,6 +235,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public CartValidityModel validateCart(final ShoppingCart shoppingCart) {
         return cartContentsValidator.validate(shoppingCart);
     }
@@ -232,6 +243,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public CustomerOrder createFromCart(final ShoppingCart shoppingCart)
             throws OrderAssemblyException {
 
@@ -245,7 +257,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             throw new OrderAssemblyException("Cart validation failed");
         }
 
-        final Map<String, Boolean> onePhysicalDelivery = new HashMap<String, Boolean>();
+        final Map<String, Boolean> onePhysicalDelivery = new HashMap<>();
         for (final Map.Entry<String, Boolean> isAllowed : shoppingCart.getOrderInfo().getMultipleDeliveryAvailable().entrySet()) {
             onePhysicalDelivery.put(isAllowed.getKey(), !shoppingCart.getOrderInfo().isMultipleDelivery() || !isAllowed.getValue());
         }
@@ -296,6 +308,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public CustomerOrder findByReference(final String reference) {
         final CustomerOrder order = findByGuid(reference);
         if (order == null) {
@@ -307,6 +320,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public CustomerOrder findByDeliveryReference(final String reference) {
         final CustomerOrderDelivery delivery = findDeliveryByNumber(reference);
         if (delivery != null) {
@@ -319,6 +333,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public CustomerOrder findByGuid(final String shoppingCartGuid) {
         return getGenericDao().findSingleByCriteria(
                 " where e.cartGuid = ?1", shoppingCartGuid
@@ -328,6 +343,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public CustomerOrder findByOrderNumber(final String orderNumber) {
         return getGenericDao().findSingleByCriteria(
                 " where e.ordernum = ?1", orderNumber
@@ -337,6 +353,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    @Override
     public void delete(final CustomerOrder instance) {
         for (CustomerOrderDelivery delivery : instance.getDelivery()) {
             this.genericDao.delete(delivery);

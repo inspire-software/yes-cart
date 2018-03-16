@@ -23,6 +23,7 @@ import org.yes.cart.service.domain.TaxService;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -100,7 +101,7 @@ public class TaxServiceImplTest extends BaseCoreDBTestCase {
             assertTrue(expectedEur.contains(tax.getTaxId()));
         }
 
-        final List<Long> expectedUsd = Arrays.asList(1020L);
+        final List<Long> expectedUsd = Collections.singletonList(1020L);
         final List<Tax> usdTaxes = taxService.getTaxesByShopCode("SHOIP1", "USD");
         assertFalse(usdTaxes.isEmpty());
         assertEquals(1, usdTaxes.size());
@@ -108,7 +109,7 @@ public class TaxServiceImplTest extends BaseCoreDBTestCase {
             assertTrue(expectedUsd.contains(tax.getTaxId()));
         }
 
-        final List<Long> expectedUah = Arrays.asList(1030L);
+        final List<Long> expectedUah = Collections.singletonList(1030L);
         final List<Tax> uahTaxes = taxService.getTaxesByShopCode("SHOIP1", "UAH");
         assertFalse(uahTaxes.isEmpty());
         assertEquals(1, uahTaxes.size());

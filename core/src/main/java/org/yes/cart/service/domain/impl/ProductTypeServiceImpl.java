@@ -41,6 +41,7 @@ public class ProductTypeServiceImpl extends BaseGenericServiceImpl<ProductType> 
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ProductType> findByAttributeCode(final String code) {
         return getGenericDao().findByNamedQuery("PRODUCT.TYPE.BY.ATTRIBUTE.CODE", code);
     }
@@ -48,6 +49,7 @@ public class ProductTypeServiceImpl extends BaseGenericServiceImpl<ProductType> 
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ProductType> findAllAssignedToCategories() {
         return getGenericDao().findByNamedQuery("PRODUCT.TYPES.ASSIGNED.TO.CATEGORIES");
     }

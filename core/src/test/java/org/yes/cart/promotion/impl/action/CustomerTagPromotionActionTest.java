@@ -70,6 +70,7 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
             // Promotion context is not transactional and therefore we need surrounding
             // transaction and fresh from db customer object to be able deeply navigate the object graph
             getTx().execute(new TransactionCallbackWithoutResult() {
+                @Override
                 public void doInTransactionWithoutResult(TransactionStatus status) {
 
                     final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null, null);
@@ -118,6 +119,7 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
             // Promotion context is not transactional and therefore we need surrounding
             // transaction and fresh from db customer object to be able deeply navigate the object graph
             getTx().execute(new TransactionCallbackWithoutResult() {
+                @Override
                 public void doInTransactionWithoutResult(TransactionStatus status) {
 
                     final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null, null);
@@ -181,6 +183,7 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
             // Promotion context is not transactional and therefore we need surrounding
             // transaction and fresh from db customer object to be able deeply navigate the object graph
             getTx().execute(new TransactionCallbackWithoutResult() {
+                @Override
                 public void doInTransactionWithoutResult(TransactionStatus status) {
 
                     final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null, null);
@@ -248,6 +251,7 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
             // Promotion context is not transactional and therefore we need surrounding
             // transaction and fresh from db customer object to be able deeply navigate the object graph
             getTx().execute(new TransactionCallbackWithoutResult() {
+                @Override
                 public void doInTransactionWithoutResult(TransactionStatus status) {
 
                     final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null, null);

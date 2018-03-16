@@ -21,7 +21,6 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.entity.DataDescriptor;
 import org.yes.cart.service.domain.DataDescriptorService;
-import org.yes.cart.service.domain.DataGroupService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +37,7 @@ public class DataDescriptorServiceImplTest extends BaseCoreDBTestCase {
     private DataDescriptorService dataDescriptorService;
 
 
+    @Override
     @Before
     public void setUp() {
         dataDescriptorService = (DataDescriptorService) ctx().getBean("dataDescriptorService");

@@ -46,6 +46,7 @@ public class SetPaymentGatewayLabelCommandImpl extends AbstractCartCommandImpl  
     /**
     * @return command key
     */
+    @Override
     public String getCmdKey() {
        return CMD_SETPGLABEL;
     }

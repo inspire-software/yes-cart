@@ -44,6 +44,7 @@ public class SetBillingSeparateFromShippingAddressCommandImpl extends AbstractCa
     /**
      * @return command key
      */
+    @Override
     public String getCmdKey() {
         return CMD_SEPARATEBILLING;
     }

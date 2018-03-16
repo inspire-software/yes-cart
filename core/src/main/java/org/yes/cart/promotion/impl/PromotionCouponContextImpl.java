@@ -85,8 +85,8 @@ public class PromotionCouponContextImpl implements PromotionCouponContext {
 
     private List<List<PromoTriplet>> createPromotionBuckets(final ShoppingCart cart, final List<String> coupons) {
 
-        final List<List<PromoTriplet>> buckets = new ArrayList<List<PromoTriplet>>();
-        buckets.add(new ArrayList<PromoTriplet>());  // 0th can be combined
+        final List<List<PromoTriplet>> buckets = new ArrayList<>();
+        buckets.add(new ArrayList<>());  // 0th can be combined
 
         for (final String code : coupons) {
 
@@ -107,7 +107,7 @@ public class PromotionCouponContextImpl implements PromotionCouponContext {
                         if (promotion.isCanBeCombined()) {
                             buckets.get(0).add(promo);
                         } else {
-                            buckets.add(Arrays.asList(promo));
+                            buckets.add(Collections.singletonList(promo));
                         }
 
                     } else {

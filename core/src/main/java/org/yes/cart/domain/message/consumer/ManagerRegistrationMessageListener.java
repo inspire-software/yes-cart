@@ -61,6 +61,7 @@ public class ManagerRegistrationMessageListener implements Runnable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void run() {
 
         try {
@@ -80,7 +81,7 @@ public class ManagerRegistrationMessageListener implements Runnable {
      */
     void processMessage(final RegistrationMessage registrationMessage) throws Exception {
 
-        final Map<String, Object> model = new HashMap<String, Object>();
+        final Map<String, Object> model = new HashMap<>();
         model.put("password", registrationMessage.getPassword());
         model.put("salutation", registrationMessage.getSalutation());
         model.put("firstName", registrationMessage.getFirstname());

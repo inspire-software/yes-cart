@@ -22,7 +22,6 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.yes.cart.service.domain.ContentServiceTemplateSupport;
 import org.yes.cart.service.domain.TemplateSupport;
 
 import java.util.HashMap;
@@ -114,14 +113,11 @@ public class ContentServiceTemplateSupportGroovyImplTest {
         final TemplateSupport templates = new GroovySimpleTemplateSupportImpl(cacheManager);
         final ContentServiceTemplateSupportGroovyImpl support = new ContentServiceTemplateSupportGroovyImpl(templates);
 
-        support.registerFunction("isAwesome", new ContentServiceTemplateSupport.FunctionProvider() {
-            @Override
-            public Object doAction(final Object... params) {
-                assertEquals("YC", params[0]);
-                assertEquals("en", params[1]);
-                assertTrue(params[2] instanceof Map);
-                return "YC is awesome!";
-            }
+        support.registerFunction("isAwesome", params -> {
+            assertEquals("YC", params[0]);
+            assertEquals("en", params[1]);
+            assertTrue(params[2] instanceof Map);
+            return "YC is awesome!";
         });
 
         final String out = support.processTemplate("${isAwesome(name)}", "en", new HashMap<String, Object>() {{

@@ -47,11 +47,13 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Address> getAddressesByCustomerId(final long customerId) {
         return getGenericDao().findByNamedQuery("ADDRESSES.BY.CUSTOMER", customerId);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Address> getAddressesByCustomerId(final long customerId, final String addressType) {
         return getGenericDao().findByNamedQuery("ADDRESSES.BY.CUSTOMER.TYPE", customerId, addressType);
     }
@@ -60,6 +62,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "customerService-customerByEmail"
     }, allEntries = true)
@@ -72,6 +75,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "customerService-customerByEmail"
     }, allEntries = true)
@@ -83,6 +87,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "customerService-customerByEmail"
     }, allEntries = true)
@@ -93,6 +98,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "customerService-customerByEmail"
     }, allEntries = true)
@@ -113,6 +119,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public String formatAddressFor(final Address address, final Shop shop, final Customer customer, final String lang) {
 
         final String customerType = customer != null ? customer.getCustomerType() : null;

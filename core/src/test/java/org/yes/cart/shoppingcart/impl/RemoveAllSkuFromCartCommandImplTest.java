@@ -18,7 +18,6 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -52,13 +51,13 @@ public class RemoveAllSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
         }});
 
         assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST2");
         params.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "10");
         commands.execute(shoppingCart, (Map) params);
 
         assertTrue("Expected 221.70 but was " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("221.70")).equals(shoppingCart.getTotal().getSubTotal()));
-        params = new HashMap<String, String>();
+        params = new HashMap<>();
         params.put(RemoveAllSkuFromCartCommandImpl.CMD_REMOVEALLSKU, "CC_TEST2");
         commands.execute(shoppingCart, (Map) params);
         assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());

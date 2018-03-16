@@ -34,12 +34,14 @@ import java.util.Map;
 public class I18NStringConverter implements ValueConverter {
 
     /** {@inheritDoc} */
+    @Override
     public Object convertToDto(final Object object, final BeanFactory beanFactory) {
         final I18NModel model = new StringI18NModel((String) object);
         return model.getAllValues();
     }
 
     /** {@inheritDoc} */
+    @Override
     public Object convertToEntity(final Object object, final Object oldEntity, final BeanFactory beanFactory) {
         final I18NModel model = new StringI18NModel((Map<String, String>) object);
         return model.toString();

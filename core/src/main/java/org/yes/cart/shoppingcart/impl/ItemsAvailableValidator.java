@@ -54,7 +54,7 @@ public class ItemsAvailableValidator extends AbstractCartContentsValidatorImpl {
 
         }
 
-        final List<CartValidityModelMessage> unavailable = new ArrayList<CartValidityModelMessage>();
+        final List<CartValidityModelMessage> unavailable = new ArrayList<>();
         for (final Map.Entry<DeliveryBucket, List<CartItem>> bucketAndItems : cart.getCartItemMap().entrySet()) {
 
             final boolean offline = CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP.equals(bucketAndItems.getKey().getGroup());

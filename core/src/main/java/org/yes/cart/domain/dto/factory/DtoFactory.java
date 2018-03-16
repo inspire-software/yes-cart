@@ -29,16 +29,4 @@ import java.io.Serializable;
  */
 public interface DtoFactory extends BeanFactory, Serializable {
 
-    /**
-     * @param iface interface for which to create an instance.
-     * @return new object instace
-     * @throws UnmappedInterfaceException thrown when no concrete class is mapped for
-     *                                    given interface
-     * @throws UnableToCreateInstanceException
-     *                                    throw when JVM cannot instanciate new class
-     *                                    instance.
-     */
-    //<T> T getByKey(final Class<T> iface)
-     //       throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
 }

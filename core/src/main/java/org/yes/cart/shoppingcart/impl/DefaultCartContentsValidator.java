@@ -37,7 +37,7 @@ public class DefaultCartContentsValidator extends AbstractCartContentsValidatorI
     private static final Logger LOG = LoggerFactory.getLogger(DefaultCartContentsValidator.class);
 
     private final CartContentsValidator defaultValidator;
-    private final Map<String, CartContentsValidator> customValidators = new HashMap<String, CartContentsValidator>();
+    private final Map<String, CartContentsValidator> customValidators = new HashMap<>();
 
     public DefaultCartContentsValidator(final CartContentsValidator defaultValidator) {
         this.defaultValidator = defaultValidator;

@@ -43,6 +43,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-rootCategory")
     public Category getRootCategory() {
         return categoryService.getRootCategory();
@@ -51,6 +52,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> getCategoryLinks(final long categoryId) {
         return categoryService.getCategoryLinks(categoryId);
     }
@@ -58,6 +60,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-categoryTemplate")
     public String getCategoryTemplate(final long categoryId) {
         return categoryService.getCategoryTemplate(categoryId);
@@ -66,6 +69,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-categorySearchTemplate")
     public String getCategorySearchTemplate(final long categoryId) {
         return categoryService.getCategorySearchTemplate(categoryId);
@@ -74,6 +78,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-categoryProductTypeId")
     public Long getCategoryProductTypeId(final long categoryId) {
         return categoryService.getCategoryProductTypeId(categoryId);
@@ -83,6 +88,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-categoryHasChildren")
     public boolean isCategoryHasChildren(final long categoryId) {
         return categoryService.isCategoryHasChildren(categoryId);
@@ -91,6 +97,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-childCategories")
     public List<Category> getChildCategories(final long categoryId) {
         return categoryService.getChildCategories(categoryId);
@@ -99,6 +106,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> findChildCategoriesWithAvailability(final long categoryId, final boolean withAvailability) {
         return categoryService.findChildCategoriesWithAvailability(categoryId, withAvailability);
     }
@@ -106,6 +114,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-childCategoriesRecursive")
     public Set<Category> getChildCategoriesRecursive(final long categoryId) {
         return categoryService.getChildCategoriesRecursive(categoryId);
@@ -114,6 +123,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-childCategoriesRecursiveIds")
     public List<Long> getChildCategoriesRecursiveIds(final long categoryId) {
         return categoryService.getChildCategoriesRecursiveIds(categoryId);
@@ -122,6 +132,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-childCategoriesRecursiveIdsWithLinks")
     public List<Long> getChildCategoriesRecursiveIdsAndLinkIds(final long categoryId) {
         return categoryService.getChildCategoriesRecursiveIdsAndLinkIds(categoryId);
@@ -130,6 +141,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> findBy(final String code, final String name, final String uri, final int page, final int pageSize) {
         return categoryService.findBy(code, name, uri, page, pageSize);
     }
@@ -137,6 +149,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-categoryIdsWithLinks")
     public List<Long> getCategoryIdAndLinkId(final long categoryId) {
         return categoryService.getCategoryIdAndLinkId(categoryId);
@@ -145,6 +158,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "categoryService-categoryHasSubcategory")
     public boolean isCategoryHasSubcategory(final long topCategoryId, final long subCategoryId) {
         return categoryService.isCategoryHasSubcategory(topCategoryId, subCategoryId);
@@ -153,6 +167,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc} Just to cache
      */
+    @Override
     @Cacheable(value = "categoryService-byId")
     public Category getById(final long categoryId) {
         return categoryService.getById(categoryId);
@@ -161,6 +176,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findCategoryIdBySeoUri(final String seoUri) {
         return categoryService.findCategoryIdBySeoUri(seoUri);
     }
@@ -168,6 +184,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findCategoryIdByGUID(final String guid) {
         return categoryService.findCategoryIdByGUID(guid);
     }
@@ -175,6 +192,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String findSeoUriByCategoryId(final Long categoryId) {
         return categoryService.findSeoUriByCategoryId(categoryId);
     }
@@ -182,6 +200,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category findCategoryIdBySeoUriOrGuid(final String seoUriOrGuid) {
         return categoryService.findCategoryIdBySeoUriOrGuid(seoUriOrGuid);
     }
@@ -189,6 +208,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> findByProductId(final long productId) {
         return categoryService.findByProductId(productId);
     }
@@ -197,6 +217,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> findAll() {
         return categoryService.findAll();
     }
@@ -204,6 +225,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<Category> callback) {
         categoryService.findAllIterator(callback);
     }
@@ -211,6 +233,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category findById(final long pk) {
         return categoryService.findById(pk);
     }
@@ -218,6 +241,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "categoryService-topLevelCategories",
             "categoryService-currentCategoryMenu",
@@ -245,6 +269,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "categoryService-topLevelCategories",
             "categoryService-currentCategoryMenu",
@@ -282,6 +307,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "categoryService-topLevelCategories",
             "categoryService-currentCategoryMenu",
@@ -316,6 +342,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> findByCriteria(final String eCriteria, final Object... parameters) {
         return categoryService.findByCriteria(eCriteria, parameters);
     }
@@ -323,6 +350,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return categoryService.findCountByCriteria(eCriteria, parameters);
     }
@@ -330,6 +358,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return categoryService.findSingleByCriteria(eCriteria, parameters);
     }
@@ -337,6 +366,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public GenericDAO<Category, Long> getGenericDao() {
         return categoryService.getGenericDao();
     }

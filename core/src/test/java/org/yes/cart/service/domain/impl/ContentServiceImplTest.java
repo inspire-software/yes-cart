@@ -40,6 +40,7 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
 
     private ContentService contentService;
 
+    @Override
     @Before
     public void setUp() {
         contentService = (ContentService) ctx().getBean(ServiceSpringKeys.CONTENT_SERVICE);
@@ -113,7 +114,7 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetChildCategoriesRecursiveTest() {
-        Set<Long> contentIds = new HashSet<Long>();
+        Set<Long> contentIds = new HashSet<>();
         contentIds.addAll(Arrays.asList(10105L, 10106L, 10107L, 10108L, 10109L));
         Set<Category> contents = contentService.getChildContentRecursive(10105L);
         for (Category content : contents) {
@@ -123,7 +124,7 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetChildCategoriesRecursiveNullTest() {
-        Set<Category> contents = contentService.getChildContentRecursive(0l);
+        Set<Category> contents = contentService.getChildContentRecursive(0L);
         assertTrue(contents.isEmpty());
     }
 

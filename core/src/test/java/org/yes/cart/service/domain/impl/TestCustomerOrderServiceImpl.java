@@ -42,6 +42,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
     private CustomerOrderService customerOrderService;
 
 
+    @Override
     @Before
     public void setUp() {
         customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
@@ -118,6 +119,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
     /**
      * @return cart with one digital available product.
      */
+    @Override
     protected ShoppingCart getShoppingCart2(final String customerEmail, final boolean multi) {
         final ShoppingCart cart = getShoppingCart2(getEmptyCart(customerEmail));
         prepareMultiDeliveriesAndRecalculate(cart, multi);
@@ -129,13 +131,13 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         // this digital product available
-        Map<String, String> param = new HashMap<String, String>();
+        Map<String, String> param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST9");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart,
                 (Map) param);
 
-        param = new HashMap<String, String>();
+        param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "200.00");
         commands.execute(shoppingCart,

@@ -29,7 +29,8 @@ public class AttributeRankComparator implements Comparator<Attribute> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int compare(final Attribute attr1, final Attribute attr2) {
-        return (attr1.getRank() < attr2.getRank() ? -1 : (attr1.getRank() == attr2.getRank() ? 0 : 1));
+        return (Integer.compare(attr1.getRank(), attr2.getRank()));
     }
 }

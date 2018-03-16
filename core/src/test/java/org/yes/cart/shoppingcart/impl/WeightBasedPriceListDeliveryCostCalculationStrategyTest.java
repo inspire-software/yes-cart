@@ -31,6 +31,7 @@ import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -43,7 +44,7 @@ import static org.junit.Assert.*;
 public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
 
 
-    private static final BigDecimal MAX = new BigDecimal(Integer.MAX_VALUE).setScale(2);
+    private static final BigDecimal MAX = new BigDecimal(Integer.MAX_VALUE).setScale(2, RoundingMode.HALF_UP);
 
     private final Mockery context = new JUnit4Mockery();
 
@@ -1138,9 +1139,9 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
         final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
         final DeliveryBucket bucket2 = context.mock(DeliveryBucket.class, "bucket2");
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
-        buckets.put(bucket1, Arrays.asList(item1));
-        buckets.put(bucket2, Arrays.asList(item2));
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
+        buckets.put(bucket1, Collections.singletonList(item1));
+        buckets.put(bucket2, Collections.singletonList(item2));
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
@@ -1244,9 +1245,9 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
         final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
         final DeliveryBucket bucket2 = context.mock(DeliveryBucket.class, "bucket2");
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
-        buckets.put(bucket1, Arrays.asList(item1));
-        buckets.put(bucket2, Arrays.asList(item2));
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
+        buckets.put(bucket1, Collections.singletonList(item1));
+        buckets.put(bucket2, Collections.singletonList(item2));
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
@@ -1352,9 +1353,9 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
         final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
         final DeliveryBucket bucket2 = context.mock(DeliveryBucket.class, "bucket2");
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
         buckets.put(bucket1, Arrays.asList(item1, item2));
-        buckets.put(bucket2, Arrays.asList(item3));
+        buckets.put(bucket2, Collections.singletonList(item3));
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));

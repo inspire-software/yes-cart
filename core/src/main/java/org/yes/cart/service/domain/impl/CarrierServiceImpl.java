@@ -43,6 +43,7 @@ public class CarrierServiceImpl extends BaseGenericServiceImpl<Carrier> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Carrier> findCarriersByShopId(final long shopId, final boolean includeDisabled) {
         if (includeDisabled) {
             return getGenericDao().findByNamedQuery("CARRIER.BY.SHOPID", shopId);
@@ -53,13 +54,14 @@ public class CarrierServiceImpl extends BaseGenericServiceImpl<Carrier> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Carrier> getCarriersByShopId(final long shopId) {
         // This method must be READONLY transaction since we are modifying the list of SLA
         final List<Carrier> rez  = findCarriersByShopId(shopId, false);
         if (CollectionUtils.isEmpty(rez)) {
             return Collections.emptyList();
         }
-        return new ArrayList<Carrier>(rez);
+        return new ArrayList<>(rez);
     }
 
 }

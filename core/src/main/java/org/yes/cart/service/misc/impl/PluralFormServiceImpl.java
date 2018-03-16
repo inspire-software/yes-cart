@@ -26,6 +26,7 @@ import org.yes.cart.service.misc.PluralFormService;
 public class PluralFormServiceImpl implements PluralFormService {
 
     /** {@inheritDoc} */
+    @Override
     public String getPluralForm(final String lang, final int num, final String[] form) {
 
         int index = 0;

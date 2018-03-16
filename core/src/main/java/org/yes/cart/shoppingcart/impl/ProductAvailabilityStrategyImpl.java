@@ -38,7 +38,7 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
     private static final Logger LOG = LoggerFactory.getLogger(ProductAvailabilityStrategyImpl.class);
 
     private final ProductAvailabilityStrategy defaultAvailabilityStrategy;
-    private final Map<Long, ProductAvailabilityStrategy> customAvailabilityStrategies = new HashMap<Long, ProductAvailabilityStrategy>();
+    private final Map<Long, ProductAvailabilityStrategy> customAvailabilityStrategies = new HashMap<>();
 
     public ProductAvailabilityStrategyImpl(final ProductAvailabilityStrategy defaultAvailabilityStrategy) {
         this.defaultAvailabilityStrategy = defaultAvailabilityStrategy;
@@ -77,12 +77,14 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean supports(final Object configuration) {
         return configuration instanceof ProductAvailabilityStrategy ||
                 (configuration instanceof Class && ProductAvailabilityStrategy.class.isAssignableFrom((Class<?>) configuration));
     }
 
     /** {@inheritDoc} */
+    @Override
     public void register(final Long shopCode, final ProductAvailabilityStrategy strategy) {
 
         if (strategy != null) {

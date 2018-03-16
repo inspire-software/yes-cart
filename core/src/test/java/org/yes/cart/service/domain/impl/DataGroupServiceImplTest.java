@@ -36,6 +36,7 @@ public class DataGroupServiceImplTest extends BaseCoreDBTestCase {
     private DataGroupService dataGroupService;
 
 
+    @Override
     @Before
     public void setUp() {
         dataGroupService = (DataGroupService) ctx().getBean("dataGroupService");

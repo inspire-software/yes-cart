@@ -48,6 +48,7 @@ public class DefaultDeliveryCostCalculationStrategy implements DeliveryCostCalcu
     }
 
     /** {@inheritDoc} */
+    @Override
     public Total calculate(final MutableShoppingCart cart) {
 
         cart.removeShipping();
@@ -56,8 +57,8 @@ public class DefaultDeliveryCostCalculationStrategy implements DeliveryCostCalcu
 
             Total total = null;
 
-            final Set<Long> uniqueCarrierSlaIds = new HashSet<Long>(cart.getCarrierSlaId().values());
-            final Set<DeliveryCostCalculationStrategy> strategyExecutionPlan = new HashSet<DeliveryCostCalculationStrategy>();
+            final Set<Long> uniqueCarrierSlaIds = new HashSet<>(cart.getCarrierSlaId().values());
+            final Set<DeliveryCostCalculationStrategy> strategyExecutionPlan = new HashSet<>();
 
             for (final Long carrierSlaId : uniqueCarrierSlaIds) {
 

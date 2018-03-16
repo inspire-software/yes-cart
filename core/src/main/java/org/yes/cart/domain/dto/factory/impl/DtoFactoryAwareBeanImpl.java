@@ -42,6 +42,7 @@ public class DtoFactoryAwareBeanImpl implements DtoFactoryAwareBean {
     }
 
     /** {@inheritDoc} */
+    @Override
     public DtoFactory getFactory() {
         return dtoFactory;
     }

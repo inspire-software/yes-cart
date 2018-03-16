@@ -39,6 +39,7 @@ public class ShoppingCartCommandConfigurationCustomerTypeVisitorImpl extends Abs
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visit(final MutableShoppingCart cart, final Object... args) {
 
         String customerType = determineType(determineCustomer(cart));

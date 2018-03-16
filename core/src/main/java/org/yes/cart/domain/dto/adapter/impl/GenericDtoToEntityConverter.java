@@ -38,6 +38,7 @@ public class GenericDtoToEntityConverter<T> implements EntityRetriever {
         this.genericDAO = genericDAO;
     }
 
+    @Override
     public Object retrieveByPrimaryKey(final Class entityInterface, final Class entityClass, final Object primaryKey) {
         if (primaryKey != null) {
             try {

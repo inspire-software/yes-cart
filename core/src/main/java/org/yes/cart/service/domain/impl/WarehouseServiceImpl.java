@@ -52,17 +52,19 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Warehouse> getByShopId(final long shopId, boolean includeDisabled) {
         if (includeDisabled) {
-            return new ArrayList<Warehouse>(getGenericDao().findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP", shopId));
+            return new ArrayList<>(getGenericDao().findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP", shopId));
         }
-        return new ArrayList<Warehouse>(getGenericDao().findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP.DISABLED", shopId, Boolean.FALSE));
+        return new ArrayList<>(getGenericDao().findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP.DISABLED", shopId, Boolean.FALSE));
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, Warehouse> getByShopIdMapped(final long shopId, final boolean includeDisabled) {
         final List<Warehouse> warehouses = getByShopId(shopId, false);
-        final Map<String, Warehouse> warehouseByCode = new HashMap<String, Warehouse>();
+        final Map<String, Warehouse> warehouseByCode = new HashMap<>();
         for (final Warehouse warehouse : warehouses) {
             warehouseByCode.put(warehouse.getCode(), warehouse);
         }
@@ -70,6 +72,7 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
+    @Override
     public void updateShopWarehouseRank(final long shopWarehouseId, final int newRank) {
          getGenericDao().executeUpdate(
                 "WAREHOUSE.UPDATE.RANK",
@@ -78,6 +81,7 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
+    @Override
     public ShopWarehouse findShopWarehouseById(final long shopWarehouseId) {
 
         return shopWarehouseDao.findById(shopWarehouseId);
@@ -85,6 +89,7 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
+    @Override
     public void assignWarehouse(final long warehouseId, final long shopId, final boolean soft) {
 
         final Warehouse warehouse = findById(warehouseId);
@@ -112,6 +117,7 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
+    @Override
     public void unassignWarehouse(final long warehouseId, final long shopId, final boolean soft) {
 
         final Warehouse warehouse = findById(warehouseId);

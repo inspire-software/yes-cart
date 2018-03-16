@@ -37,6 +37,7 @@ public class DataDescriptorServiceImpl extends BaseGenericServiceImpl<DataDescri
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<DataDescriptor> findByNames(final Collection<String> names) {
         return getGenericDao().findByNamedQuery("DATADESCRIPTOR.IN.NAMES", names);
     }
@@ -44,6 +45,7 @@ public class DataDescriptorServiceImpl extends BaseGenericServiceImpl<DataDescri
     /**
      * {@inheritDoc}
      */
+    @Override
     public DataDescriptor findByName(final String name) {
         final List<DataDescriptor> search = getGenericDao().findByNamedQuery("DATADESCRIPTOR.BY.NAME", name);
         if (search.isEmpty()) {

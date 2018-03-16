@@ -34,6 +34,7 @@ public class ServiceLocatorImplTest extends BaseCoreDBTestCase {
 
     private ServiceLocator serviceLocator;
 
+    @Override
     @Before
     public void setUp()  {
         serviceLocator = (ServiceLocator) ctx().getBean("testServiceLocator");

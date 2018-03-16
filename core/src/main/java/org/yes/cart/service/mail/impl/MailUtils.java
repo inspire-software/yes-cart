@@ -85,8 +85,8 @@ public final class MailUtils {
         final PaymentGatewayFeature feature = gateway.getPaymentGatewayFeatures();
         mailModel.put(StandardMessageListener.PAYMENT_GATEWAY_FEATURE, feature);
 
-        final Map<String, String> carrier = new HashMap<String, String>();
-        final Map<String, String> carrierSla = new HashMap<String, String>();
+        final Map<String, String> carrier = new HashMap<>();
+        final Map<String, String> carrierSla = new HashMap<>();
         for (final CustomerOrderDelivery delivery : order.getDelivery()) {
 
             final I18NModel carrierName = new FailoverStringI18NModel(
@@ -163,8 +163,8 @@ public final class MailUtils {
             mailModel.put(StandardMessageListener.DELIVERY_NUM, delivery.getDeliveryNum());
             mailModel.put(StandardMessageListener.DELIVERY_EXTERNAL_NUM, delivery.getRefNo());
         } else {
-            final Map<String, String> carrier = new HashMap<String, String>();
-            final Map<String, String> carrierSla = new HashMap<String, String>();
+            final Map<String, String> carrier = new HashMap<>();
+            final Map<String, String> carrierSla = new HashMap<>();
             for (final CustomerOrderDelivery orderDelivery : order.getDelivery()) {
 
                 final I18NModel carrierName = new FailoverStringI18NModel(

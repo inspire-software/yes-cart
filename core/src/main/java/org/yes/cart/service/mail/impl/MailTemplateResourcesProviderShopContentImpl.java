@@ -52,6 +52,7 @@ public class MailTemplateResourcesProviderShopContentImpl implements MailTemplat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTemplate(final List<String> mailTemplateChain,
                               final String shopCode,
                               final String locale,
@@ -72,6 +73,7 @@ public class MailTemplateResourcesProviderShopContentImpl implements MailTemplat
     /**
      * {@inheritDoc}
      */
+    @Override
     public byte[] getResource(final List<String> mailTemplateChain,
                               final String shopCode,
                               final String locale,

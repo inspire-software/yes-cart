@@ -38,6 +38,7 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
     private CustomerService customerService;
     private ShopService shopService;
 
+    @Override
     @Before
     public void setUp() {
         customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);

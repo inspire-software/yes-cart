@@ -41,6 +41,7 @@ public class ShoppingCartStateServiceImpl extends BaseGenericServiceImpl<Shoppin
     /**
      * {@inheritDoc}
      */
+    @Override
     public ShoppingCartState findByGuid(final String guid) {
         return shoppingCartStateDao.findSingleByNamedQuery("SHOPPINGCARTSTATE.BY.GUID", guid);
     }
@@ -48,6 +49,7 @@ public class ShoppingCartStateServiceImpl extends BaseGenericServiceImpl<Shoppin
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ShoppingCartState> findByCustomerEmail(final String email) {
         return shoppingCartStateDao.findByNamedQuery("SHOPPINGCARTSTATE.BY.EMAIL", email);
     }
@@ -55,6 +57,7 @@ public class ShoppingCartStateServiceImpl extends BaseGenericServiceImpl<Shoppin
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ShoppingCartState> findByOrdernum(final String ordernum) {
         return shoppingCartStateDao.findByNamedQuery("SHOPPINGCARTSTATE.BY.ORDERNUM", ordernum);
     }
@@ -62,6 +65,7 @@ public class ShoppingCartStateServiceImpl extends BaseGenericServiceImpl<Shoppin
     /**
      * {@inheritDoc}
      */
+    @Override
     public ResultsIterator<ShoppingCartState> findByModificationPrior(final Instant lastModification) {
         return shoppingCartStateDao.findByNamedQueryIterator("SHOPPINGCARTSTATE.BY.LASTMODIFIED", lastModification);
     }
@@ -69,6 +73,7 @@ public class ShoppingCartStateServiceImpl extends BaseGenericServiceImpl<Shoppin
     /**
      * {@inheritDoc}
      */
+    @Override
     public ResultsIterator<ShoppingCartState> findByModificationPrior(final Instant lastModification,
                                                                       final boolean emptyAnonymous) {
         if (!emptyAnonymous) {

@@ -41,6 +41,7 @@ public class SetIpInternalCommandImpl extends AbstractCartCommandImpl implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
 
@@ -66,6 +67,7 @@ public class SetIpInternalCommandImpl extends AbstractCartCommandImpl implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCmdKey() {
         return ShoppingCartCommand.CMD_INTERNAL_SETIP;
     }

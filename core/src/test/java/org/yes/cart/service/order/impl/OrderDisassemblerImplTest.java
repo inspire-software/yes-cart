@@ -47,6 +47,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
     private CustomerOrderService customerOrderService;
 
 
+    @Override
     @Before
     public void setUp()  {
         orderAssembler = (OrderAssembler) ctx().getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
@@ -607,7 +608,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_SETPRICE, sku);
         params.put(ShoppingCartCommand.CMD_SETPRICE_P_PRICE, offer.toPlainString());
         params.put(ShoppingCartCommand.CMD_SETPRICE_P_AUTH, "CC0001");
@@ -618,7 +619,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
 
 
     private Map<String, Boolean> getMultiSelection(ShoppingCart cart) {
-        final Map<String, Boolean> single = new HashMap<String, Boolean>();
+        final Map<String, Boolean> single = new HashMap<>();
         final boolean selected = cart.getOrderInfo().isMultipleDelivery();
         for (final Map.Entry<String, Boolean> allowed : cart.getOrderInfo().getMultipleDeliveryAvailable().entrySet()) {
             single.put(allowed.getKey(), !selected || !allowed.getValue());

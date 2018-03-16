@@ -43,6 +43,7 @@ public abstract class AbstractCartCommandImpl implements ConfigurableShoppingCar
     /**
      * {@inheritDoc}
      */
+    @Override
     public void configure(final ShoppingCartCommandConfigurationProvider provider) {
         this.configurationProvider = provider;
     }
@@ -50,6 +51,7 @@ public abstract class AbstractCartCommandImpl implements ConfigurableShoppingCar
     /**
      * {@inheritDoc}
      */
+    @Override
     public final void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
         // OOTB we only have mutable cart
         execute((MutableShoppingCart) shoppingCart, parameters);
@@ -140,6 +142,7 @@ public abstract class AbstractCartCommandImpl implements ConfigurableShoppingCar
 
 
     /** {@inheritDoc} */
+    @Override
     public int getPriority() {
         return priority;
     }

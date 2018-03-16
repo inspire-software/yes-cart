@@ -44,6 +44,7 @@ public class AddCouponEventCommandImpl extends AbstractCartCommandImpl implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCmdKey() {
         return CMD_ADDCOUPON;
     }

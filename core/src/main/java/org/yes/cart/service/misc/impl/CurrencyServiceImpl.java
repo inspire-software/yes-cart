@@ -50,20 +50,16 @@ public class CurrencyServiceImpl implements CurrencyService {
         properties.load(config.getInputStream());
 
         this.shopService = shopService;
-        this.currencyName = new TreeMap<String, String>(new Comparator<String>() {
-            public int compare(String o1, String o2) {
-                return o1.compareTo(o2);
-            }
-        });
+        this.currencyName = new TreeMap<>((o1, o2) -> o1.compareTo(o2));
         this.currencyName.putAll(getCurrencyNameFromConfig(properties));
-        this.supportedCurrencies = new ArrayList<String>(this.currencyName.keySet());
+        this.supportedCurrencies = new ArrayList<>(this.currencyName.keySet());
     }
 
     private Map<String, String> getCurrencyNameFromConfig(final Properties properties) {
 
         final String currencies = properties.getProperty("admin.supported.currencies", "ALL,AFN,ANG,ARS,AUD,AWG,AZN,BAM,BBD,BGN,BND,BOB,BRL,BSD,BWP,BYR,BZD,CAD,CHF,CLP,CNY,COP,CRC,CUP,CZK,DKK,DOP,EEK,EGP,EUR,FJD,FKP,GBP,GGP,GHC,GIP,GTQ,GYD,HKD,HNL,HRK,HUF,IDR,ILS,IMP,INR,IRR,ISK,JEP,JMD,JPY,KGS,KHR,KPW,KRW,KYD,KZT,LAK,LBP,LKR,LRD,LTL,LVL,MKD,MNT,MUR,MXN,MYR,MZN,NAD,NGN,NIO,NOK,NPR,NZD,OMR,PAB,PEN,PHP,PKR,PLN,PYG,QAR,RON,RSD,RUB,SAR,SBD,SCR,SEK,SGD,SHP,SOS,SRD,SVC,SYP,THB,TRL,TRY,TTD,TVD,TWD,UAH,USD,UYU,UZS,VEF,VND,XCD,YER,ZAR,ZWD");
 
-        final Map<String, String> all = new LinkedHashMap<String, String>();
+        final Map<String, String> all = new LinkedHashMap<>();
 
         for (final String lang : StringUtils.split(currencies, ',')) {
             all.put(lang, properties.getProperty("admin.supported.currencies." + lang, lang));

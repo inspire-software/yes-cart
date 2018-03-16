@@ -45,6 +45,7 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "priceService-minimalPrice")
     public SkuPrice getMinimalPrice(final Long productId,
                                     final String selectedSku,
@@ -60,6 +61,7 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "priceService-allCurrentPrices")
     public List<SkuPrice> getAllCurrentPrices(final Long productId,
                                               final String selectedSku,
@@ -74,6 +76,7 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "priceService-allPrices")
     public List<SkuPrice> getAllPrices(final Long productId, final String selectedSku, final String currencyCode) {
         return priceService.getAllPrices(productId, selectedSku, currencyCode);
@@ -82,6 +85,7 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<FilteredNavigationRecord> getPriceNavigationRecords(final PriceTierTree priceTierTree, final String currency, final Shop customerShop) {
         return priceService.getPriceNavigationRecords(priceTierTree, currency, customerShop);
     }
@@ -89,6 +93,7 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<SkuPrice> findAll() {
         return priceService.findAll();
     }
@@ -96,6 +101,7 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<SkuPrice> callback) {
         priceService.findAllIterator(callback);
     }
@@ -103,6 +109,7 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public SkuPrice findById(final long pk) {
         return priceService.findById(pk);
     }
@@ -110,6 +117,7 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "imageService-seoImage" ,
             "priceService-minimalPrice",
@@ -123,6 +131,7 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "imageService-seoImage" ,
             "priceService-minimalPrice",
@@ -136,6 +145,7 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "imageService-seoImage" ,
             "priceService-minimalPrice",
@@ -149,6 +159,7 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<SkuPrice> findByCriteria(final String eCriteria, final Object... parameters) {
         return priceService.findByCriteria(eCriteria, parameters);
     }
@@ -156,6 +167,7 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return priceService.findCountByCriteria(eCriteria, parameters);
     }
@@ -163,6 +175,7 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public SkuPrice findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return priceService.findSingleByCriteria(eCriteria, parameters);
     }
@@ -170,6 +183,7 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public GenericDAO<SkuPrice, Long> getGenericDao() {
         return priceService.getGenericDao();
     }

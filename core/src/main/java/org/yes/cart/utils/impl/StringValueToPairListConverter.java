@@ -38,6 +38,7 @@ public class StringValueToPairListConverter implements Converter<String, List> {
      * @param values comma separated values
      * @return list of string pairs
      */
+    @Override
     public List convert(final String values) {
         return getOptions(values);
     }
@@ -50,13 +51,13 @@ public class StringValueToPairListConverter implements Converter<String, List> {
      * @return list of string pairs
      */
     List<Pair<String, String>> getOptions(final String values) {
-        final List<Pair<String, String>> res = new ArrayList<Pair<String, String>>();
+        final List<Pair<String, String>> res = new ArrayList<>();
         if (StringUtils.isNotBlank(values)) {
             final String [] entryies= values.split(",");
             for (String entry : entryies) {
                 final String [] keyValue = entry.split("-");
                 res.add(
-                       new Pair<String, String>(keyValue[0], keyValue[keyValue.length - 1])
+                        new Pair<>(keyValue[0], keyValue[keyValue.length - 1])
                 );
             }
         }

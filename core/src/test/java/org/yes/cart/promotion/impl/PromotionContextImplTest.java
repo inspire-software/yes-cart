@@ -47,7 +47,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
 
 
         final PromotionService promotionService = ctx().getBean("promotionService", PromotionService.class);
-        final List<Promotion> promotions = new ArrayList<Promotion>();
+        final List<Promotion> promotions = new ArrayList<>();
 
         MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
@@ -64,7 +64,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
 
         try {
             // add qualifying items
-            Map<String, String> param = new HashMap<String, String>();
+            Map<String, String> param = new HashMap<>();
             param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
             param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) param);
@@ -118,7 +118,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
 
 
         final PromotionService promotionService = ctx().getBean("promotionService", PromotionService.class);
-        final List<Promotion> promotions = new ArrayList<Promotion>();
+        final List<Promotion> promotions = new ArrayList<>();
 
         MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
@@ -135,7 +135,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
 
         try {
             // add qualifying items
-            Map<String, String> param = new HashMap<String, String>();
+            Map<String, String> param = new HashMap<>();
             param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
             param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) param);
@@ -195,7 +195,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
 
 
         final PromotionService promotionService = ctx().getBean("promotionService", PromotionService.class);
-        final List<Promotion> promotions = new ArrayList<Promotion>();
+        final List<Promotion> promotions = new ArrayList<>();
 
         MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
@@ -212,7 +212,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
 
         try {
             // add qualifying items
-            Map<String, String> param = new HashMap<String, String>();
+            Map<String, String> param = new HashMap<>();
             param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
             param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) param);
@@ -271,7 +271,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
 
 
         final PromotionService promotionService = ctx().getBean("promotionService", PromotionService.class);
-        final List<Promotion> promotions = new ArrayList<Promotion>();
+        final List<Promotion> promotions = new ArrayList<>();
 
         MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
@@ -288,7 +288,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
 
         try {
             // add qualifying items
-            Map<String, String> param = new HashMap<String, String>();
+            Map<String, String> param = new HashMap<>();
             param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
             param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) param);
@@ -340,7 +340,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
 
 
             // add many qualifying items to get better value promotions
-            Map<String, String> param2 = new HashMap<String, String>();
+            Map<String, String> param2 = new HashMap<>();
             param2.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
             param2.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "20.00");
             commands.execute(shoppingCart, (Map) param2);

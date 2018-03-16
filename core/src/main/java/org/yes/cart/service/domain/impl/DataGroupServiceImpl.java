@@ -36,6 +36,7 @@ public class DataGroupServiceImpl extends BaseGenericServiceImpl<DataGroup> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<DataGroup> findByType(final String type) {
         return getGenericDao().findByNamedQuery("DATAGROUPS.BY.TYPE", type);
     }
@@ -44,6 +45,7 @@ public class DataGroupServiceImpl extends BaseGenericServiceImpl<DataGroup> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public DataGroup findByName(final String name) {
         final List<DataGroup> groups = getGenericDao().findByNamedQuery("DATAGROUP.BY.NAME", name);
         if (groups.isEmpty()) {

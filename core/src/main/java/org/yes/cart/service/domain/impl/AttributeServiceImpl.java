@@ -56,6 +56,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Attribute> findByAttributeGroupCode(final String attributeGroupCode) {
         return attributeDao.findByNamedQuery("ATTRIBUTES.BY.GROUPCODE", attributeGroupCode);
     }
@@ -63,6 +64,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Attribute findByAttributeCode(final String attributeCode) {
         final Attribute attribute = attributeDao.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", attributeCode);
         if (attribute != null) {
@@ -75,6 +77,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Attribute> findAttributesWithMultipleValues(final String attributeGroupCode) {
         List<Attribute> attr = attributeDao.findByNamedQuery(
                 "ATTRIBUTES.WITH.MULTIPLE.VALUES.BY.GROUPCODE",
@@ -105,6 +108,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Attribute> findAvailableAttributes(final String attributeGroupCode, final List<String> exclude) {
         if (exclude == null || exclude.isEmpty()) {
             return findByAttributeGroupCode(attributeGroupCode);
@@ -119,6 +123,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Attribute getByAttributeCode(final String attributeCode) {
         return findByAttributeCode(attributeCode);
     }
@@ -126,6 +131,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Attribute> findAttributesByCodes(final String attributeGroupCode, final List<String> codes) {
         if (codes == null || codes.isEmpty()) {
             return Collections.emptyList();
@@ -144,6 +150,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Attribute> getAvailableAttributesByProductTypeId(final long productTypeId) {
         return initEntities(getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.PROD.TYPE.ID", productTypeId));
     }
@@ -151,6 +158,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Attribute> getAvailableImageAttributesByGroupCode(final String attributeGroupCode) {
         return initEntities(getGenericDao().findByNamedQuery("PRODUCTS.IMAGE.ATTRIBUTE.BY.GROUP.CODE", attributeGroupCode));
     }
@@ -158,6 +166,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Attribute> getAvailableAttributesByGroupCodeStartsWith(final String attributeGroupCode, final String codePrefix) {
         return initEntities(getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.GROUP.CODE.LIKE.CODE", attributeGroupCode, codePrefix + "%"));
     }
@@ -178,6 +187,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getAllAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.UNIQUE");
         allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
@@ -191,6 +201,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getAllNavigatableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.NAVIGATION.UNIQUE", Boolean.TRUE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
@@ -204,6 +215,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getAllSearchableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.SEARCH.UNIQUE", Boolean.TRUE, Boolean.FALSE);
         return new HashSet<String>(allowedAttributeNames);
@@ -212,6 +224,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getAllSearchablePrimaryAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.SEARCH.PRIMARY.UNIQUE", Boolean.TRUE, Boolean.TRUE);
         return new HashSet<String>(allowedAttributeNames);
@@ -220,6 +233,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getAllStorableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.STORE.UNIQUE", Boolean.TRUE);
         return new HashSet<String>(allowedAttributeNames);
@@ -228,6 +242,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, Integer> getSingleNavigatableAttributeCodesByProductType(final long productTypeId) {
         final List<Object[]> allowedAttributeNames = attributeDao
                 .findQueryObjectsByNamedQuery("ATTRIBUTE.CODES.AND.RANK.SINGLE.NAVIGATION.UNIQUE.BY.PRODUCTTYPE.ID",
@@ -235,7 +250,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         if (allowedAttributeNames.isEmpty()) {
             return Collections.emptyMap();
         }
-        final Map<String, Integer> map = new HashMap<String, Integer>();
+        final Map<String, Integer> map = new HashMap<>();
         for (final Object[] codeAndRank : allowedAttributeNames) {
             map.put((String) codeAndRank[0], (Integer) codeAndRank[1]);
         }
@@ -245,6 +260,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public I18NModel getNavigatableAttributeDisplayValue(final String attrCode, final String value) {
 
         final List<Object> productSkuDV = attributeDao.findQueryObjectRangeByNamedQuery(
@@ -271,8 +287,9 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, I18NModel> getAllAttributeNames() {
-        Map<String, I18NModel> result = new HashMap<String, I18NModel>();
+        Map<String, I18NModel> result = new HashMap<>();
         List<Object[]> codeNameList = attributeDao.findQueryObjectsByNamedQuery(
                 "ATTRIBUTE.CODE.NAMES.ALL");
         if (codeNameList != null) {
@@ -289,8 +306,9 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, I18NModel> getAttributeNamesByCodes(final Set<String> codes) {
-        Map<String, I18NModel> result = new HashMap<String, I18NModel>();
+        Map<String, I18NModel> result = new HashMap<>();
         List<Object[]> codeNameList = attributeDao.findQueryObjectsByNamedQuery(
                 "ATTRIBUTE.CODE.NAMES",
                 codes);

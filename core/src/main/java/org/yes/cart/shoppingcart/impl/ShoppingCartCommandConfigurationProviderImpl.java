@@ -36,7 +36,7 @@ public class ShoppingCartCommandConfigurationProviderImpl implements ShoppingCar
     private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartCommandConfigurationProviderImpl.class);
 
     private final Map<String, ShoppingCartCommandConfigurationVisitor<MutableShoppingCart>> providers =
-            new HashMap<String, ShoppingCartCommandConfigurationVisitor<MutableShoppingCart>>();
+            new HashMap<>();
 
     public ShoppingCartCommandConfigurationProviderImpl(final Set<ShoppingCartCommandConfigurationVisitor<MutableShoppingCart>> providers) {
         for (final ShoppingCartCommandConfigurationVisitor<MutableShoppingCart> provider : providers) {
@@ -47,6 +47,7 @@ public class ShoppingCartCommandConfigurationProviderImpl implements ShoppingCar
     /**
      * {@inheritDoc}
      */
+    @Override
     public ShoppingCartCommandConfigurationVisitor<MutableShoppingCart> provide(final String visitorId) {
         final ShoppingCartCommandConfigurationVisitor<MutableShoppingCart> provider = this.providers.get(visitorId);
         if (provider == null) {
@@ -58,6 +59,7 @@ public class ShoppingCartCommandConfigurationProviderImpl implements ShoppingCar
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getVisitorIds() {
         return this.providers.keySet();
     }
@@ -67,6 +69,7 @@ public class ShoppingCartCommandConfigurationProviderImpl implements ShoppingCar
             /**
              * {@inheritDoc}
              */
+            @Override
             public String getId() {
                 return "NOOP";
             }
@@ -74,6 +77,7 @@ public class ShoppingCartCommandConfigurationProviderImpl implements ShoppingCar
             /**
              * {@inheritDoc}
              */
+            @Override
             public void visit(final MutableShoppingCart cart, final Object ... args) {
                 LOG.error("Unknown ShoppingCartCommandConfigurationVisitor {} using NOOP", id);
             }

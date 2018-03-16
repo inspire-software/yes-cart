@@ -52,6 +52,7 @@ public class SetSkuPriceEventCommandImpl extends AbstractCartCommandImpl {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCmdKey() {
         return CMD_SETPRICE;
     }

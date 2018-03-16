@@ -51,7 +51,7 @@ public class LoginCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         shoppingCart.getShoppingContext().setShopCode(shop20.getCode());
         shoppingCart.getShoppingContext().setShopId(shop20.getShopId());
         commands.execute(shoppingCart, (Map) params);
@@ -90,7 +90,7 @@ public class LoginCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         shoppingCart.getShoppingContext().setShopCode(shop20.getCode());
         shoppingCart.getShoppingContext().setShopId(shop20.getShopId());
         commands.execute(shoppingCart, (Map) params);

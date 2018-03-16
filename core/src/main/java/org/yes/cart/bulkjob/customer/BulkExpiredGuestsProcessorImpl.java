@@ -43,7 +43,7 @@ public class BulkExpiredGuestsProcessorImpl implements Runnable {
 
     private final CustomerService customerService;
     private final SystemService systemService;
-    private long expiredTimeoutMs = 1 * MS_IN_DAY;
+    private long expiredTimeoutMs = MS_IN_DAY;
     private int batchSize = 20;
 
     public BulkExpiredGuestsProcessorImpl(final CustomerService customerService,

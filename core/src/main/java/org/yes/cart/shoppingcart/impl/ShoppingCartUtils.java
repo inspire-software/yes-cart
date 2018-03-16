@@ -46,7 +46,7 @@ public final class ShoppingCartUtils {
      */
     public static List<CartItem> getCartItemImmutableList(final List<? extends CartItem> items, final List<? extends CartItem> gifts) {
 
-        final List<CartItem> immutableItems = new ArrayList<CartItem>(items.size());
+        final List<CartItem> immutableItems = new ArrayList<>(items.size());
 
         // first items (in the order they were added)
         addCartItemsToImmutableList(immutableItems, items);
@@ -65,7 +65,7 @@ public final class ShoppingCartUtils {
      */
     public static List<CartItem> getShippingImmutableList(final List<? extends CartItem> items) {
 
-        final List<CartItem> immutableItems = new ArrayList<CartItem>(items.size());
+        final List<CartItem> immutableItems = new ArrayList<>(items.size());
 
         addCartItemsToImmutableList(immutableItems, items);
 
@@ -91,7 +91,7 @@ public final class ShoppingCartUtils {
      */
     public static Map<DeliveryBucket, List<CartItem>> getCartItemImmutableMap(final List<? extends CartItem> items, final List<? extends CartItem> gifts) {
 
-        final Map<DeliveryBucket, List<CartItem>> map = new LinkedHashMap<DeliveryBucket, List<CartItem>>(items.size() * 2);
+        final Map<DeliveryBucket, List<CartItem>> map = new LinkedHashMap<>(items.size() * 2);
 
         addCartItemsToImmutableMap(map, items);
         addCartItemsToImmutableMap(map, gifts);
@@ -108,7 +108,7 @@ public final class ShoppingCartUtils {
      */
     public static Map<DeliveryBucket, List<CartItem>> getShippingImmutableMap(final List<? extends CartItem> items) {
 
-        final Map<DeliveryBucket, List<CartItem>> map = new LinkedHashMap<DeliveryBucket, List<CartItem>>(items.size() * 2);
+        final Map<DeliveryBucket, List<CartItem>> map = new LinkedHashMap<>(items.size() * 2);
 
         addCartItemsToImmutableMap(map, items);
 
@@ -121,11 +121,7 @@ public final class ShoppingCartUtils {
         for (final CartItem item : itemsToAdd) {
             final DeliveryBucket itemBucket = item.getDeliveryBucket();
             final DeliveryBucket bucket = itemBucket != null ? itemBucket : DEFAULT_DELIVERY_BUCKET;
-            List<CartItem> supplierItems = fullMap.get(bucket);
-            if (supplierItems == null) {
-                supplierItems = new ArrayList<CartItem>();
-                fullMap.put(bucket, supplierItems);
-            }
+            List<CartItem> supplierItems = fullMap.computeIfAbsent(bucket, k -> new ArrayList<>());
             supplierItems.add(new ImmutableCartItemImpl(item));
         }
 
@@ -211,7 +207,7 @@ public final class ShoppingCartUtils {
      * @return unique list of supplier codes
      */
     public static List<String> getCartItemsSuppliers(final List<? extends CartItem> items, final List<? extends CartItem> gifts) {
-        final Set<String> codes = new HashSet<String>();
+        final Set<String> codes = new HashSet<>();
         for (CartItem cartItem : items) {
             if (cartItem.getSupplierCode() != null) {
                 codes.add(cartItem.getSupplierCode());
@@ -222,7 +218,7 @@ public final class ShoppingCartUtils {
                 codes.add(cartItem.getSupplierCode());
             }
         }
-        return new ArrayList<String>(codes);
+        return new ArrayList<>(codes);
     }
 
 

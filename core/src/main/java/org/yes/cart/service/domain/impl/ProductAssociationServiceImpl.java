@@ -52,6 +52,7 @@ public class ProductAssociationServiceImpl
      * @param productId product primary key
      * @return list of product associations
      */
+    @Override
     public List<ProductAssociation> findProductAssociations(final Long productId) {
         return productAssociationDao.findByNamedQuery("PRODUCT.ASSOCIATIONS", productId);
     }
@@ -65,6 +66,7 @@ public class ProductAssociationServiceImpl
      * @param associationCode association code [up, cross, etc]
      * @return list of product associations
      */
+    @Override
     public List<ProductAssociation> findProductAssociations(final Long productId, final String associationCode) {
         return productAssociationDao.findByNamedQuery("PRODUCT.ASSOCIATIONS.BY.TYPE", productId, associationCode);
     }
@@ -76,6 +78,7 @@ public class ProductAssociationServiceImpl
      * @param associationCode association code [up, cross, etc]
      * @return list of product associations
      */
+    @Override
     public List<String> getProductAssociationsProductCodes(final Long productId, final String associationCode) {
         return (List) productAssociationDao.findQueryObjectByNamedQuery("PRODUCT.ASSOCIATIONS.CODES.BY.TYPE", productId, associationCode);
     }

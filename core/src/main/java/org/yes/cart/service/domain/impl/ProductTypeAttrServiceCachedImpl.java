@@ -40,39 +40,46 @@ public class ProductTypeAttrServiceCachedImpl implements ProductTypeAttrService 
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "productTypeAttrService-viewGroupsByProductTypeId")
     public List<ProdTypeAttributeViewGroup> getViewGroupsByProductTypeId(final long productTypeId) {
         return productTypeAttrService.getViewGroupsByProductTypeId(productTypeId);
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "productTypeAttrService-byProductTypeId")
     public List<ProductTypeAttr> getByProductTypeId(final long productTypeId) {
         return productTypeAttrService.getByProductTypeId(productTypeId);
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "productTypeAttrService-navigatableByProductTypeId")
     public List<ProductTypeAttr> getNavigatableByProductTypeId(final long productTypeId) {
         return productTypeAttrService.getNavigatableByProductTypeId(productTypeId);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<ProductTypeAttr> findAll() {
         return productTypeAttrService.findAll();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<ProductTypeAttr> callback) {
         productTypeAttrService.findAllIterator(callback);
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductTypeAttr findById(final long pk) {
         return productTypeAttrService.findById(pk);
     }
 
     /** {@inheritDoc}*/
+    @Override
     @CacheEvict(value ={
             "productTypeAttrService-byProductTypeId",
             "productTypeAttrService-navigatableByProductTypeId",
@@ -83,6 +90,7 @@ public class ProductTypeAttrServiceCachedImpl implements ProductTypeAttrService 
     }
 
     /** {@inheritDoc}*/
+    @Override
     @CacheEvict(value ={
             "productTypeAttrService-byProductTypeId",
             "productTypeAttrService-navigatableByProductTypeId",
@@ -93,6 +101,7 @@ public class ProductTypeAttrServiceCachedImpl implements ProductTypeAttrService 
     }
 
     /** {@inheritDoc}*/
+    @Override
     @CacheEvict(value ={
             "productTypeAttrService-byProductTypeId",
             "productTypeAttrService-navigatableByProductTypeId",
@@ -103,21 +112,25 @@ public class ProductTypeAttrServiceCachedImpl implements ProductTypeAttrService 
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<ProductTypeAttr> findByCriteria(final String eCriteria, final Object... parameters) {
         return productTypeAttrService.findByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return productTypeAttrService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductTypeAttr findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return productTypeAttrService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public GenericDAO<ProductTypeAttr, Long> getGenericDao() {
         return productTypeAttrService.getGenericDao();
     }

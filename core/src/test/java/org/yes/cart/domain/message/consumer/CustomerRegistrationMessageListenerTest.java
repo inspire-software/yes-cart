@@ -36,7 +36,7 @@ import org.yes.cart.service.mail.impl.MailComposerTemplateSupportGroovyImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -69,7 +69,7 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         final MailService mailService = (MailService) ctx().getBean("mailService");
         final MailTemplateResourcesProvider mailTemplateResourcesProvider = mockery.mock(MailTemplateResourcesProvider.class);
 
-        final List<String> templateChain = Arrays.asList("SHOIP1/mail/");
+        final List<String> templateChain = Collections.singletonList("SHOIP1/mail/");
 
         mockery.checking(new Expectations() {{
             oneOf(mailTemplateResourcesProvider).getTemplate(templateChain, "SHOIP1", "en", "customerChangePassword", ".txt");
@@ -116,7 +116,7 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         registrationMessage.setShopCode("SHOIP1");
         registrationMessage.setShopMailFrom("noreply@shop.com");
         registrationMessage.setShopName("Gadget universe");
-        registrationMessage.setShopUrl(new HashSet<String>());
+        registrationMessage.setShopUrl(new HashSet<>());
         registrationMessage.getShopUrl().add("www.somegadget.com");
         registrationMessage.getShopUrl().add("somegadget.com");
         registrationMessage.setMailTemplatePathChain(templateChain);

@@ -46,6 +46,7 @@ public class SetMultipleDeliveryCommandImpl extends SplitCartItemsCommandImpl im
     /**
      * @return command key
      */
+    @Override
     public String getCmdKey() {
         return CMD_MULTIPLEDELIVERY;
     }

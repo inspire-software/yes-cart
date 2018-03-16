@@ -42,11 +42,13 @@ public class ManagerServiceImpl extends BaseGenericServiceImpl<Manager> implemen
     }
 
     /** {@inheritDoc } */
+    @Override
     public void resetPassword(final Manager manager) {
         getGenericDao().update(manager);        
     }
 
     /** {@inheritDoc } */
+    @Override
     public Manager create(final Manager manager, final Shop shop) {
         if (shop != null) {
             final ManagerShop managerShop = getGenericDao().getEntityFactory().getByIface(ManagerShop.class);
@@ -58,6 +60,7 @@ public class ManagerServiceImpl extends BaseGenericServiceImpl<Manager> implemen
     }
 
     /** {@inheritDoc } */
+    @Override
     public List<Manager> findByEmail(final String email) {
         if (StringUtils.isBlank(email)) {
             return Collections.emptyList();

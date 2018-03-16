@@ -74,6 +74,7 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<AttrValueWithAttribute> getShopCustomerAddressAttributes(final Customer customer, final Shop shop, final String addressType) {
 
         final List<String> addressFormAttributes = getAddressFormAttributeList(customer, shop, addressType);
@@ -83,12 +84,12 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
             formFieldsConfig = createDefaultFormFieldConfig();
         }
 
-        final Map<String, Attribute> formFieldsConfigMap = new HashMap<String, Attribute>();
+        final Map<String, Attribute> formFieldsConfigMap = new HashMap<>();
         for (final Attribute attribute : formFieldsConfig) {
             formFieldsConfigMap.put(attribute.getCode(), attribute);
         }
 
-        final List<AttrValueWithAttribute> addressAttributes = new ArrayList<AttrValueWithAttribute>();
+        final List<AttrValueWithAttribute> addressAttributes = new ArrayList<>();
         for (final String formFieldConfigName : addressFormAttributes) {
             final Attribute formFieldConfig = formFieldsConfigMap.get(formFieldConfigName);
             if (formFieldConfig != null) {
@@ -106,7 +107,7 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
         etype.setBusinesstype("String");
         etype.setJavatype("java.lang.String");
 
-        final List<Attribute> attributes = new ArrayList<Attribute>();
+        final List<Attribute> attributes = new ArrayList<>();
         for (final String addressFormAttribute : DEFAULT_FIELDS) {
             final Attribute attr = attributeService.getGenericDao().getEntityFactory().getByIface(Attribute.class);
             attr.setVal(addressFormAttribute);
@@ -120,7 +121,7 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
 
     private List<String> getAddressFormAttributeList(final Customer customer, final Shop shop, final String addressType) {
 
-        List<String> addressFormAttributes = new ArrayList<String>(DEFAULT_FIELDS);
+        List<String> addressFormAttributes = new ArrayList<>(DEFAULT_FIELDS);
 
         final List<String> formConfigsToTry = new ArrayList<>();
 
@@ -129,7 +130,7 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
 
         final List<Attribute> formConfigs = attributeService.findAttributesByCodes(AttributeGroupNames.ADDRESS, formConfigsToTry);
 
-        final Map<String, Attribute> formConfigsMap = new HashMap<String, Attribute>();
+        final Map<String, Attribute> formConfigsMap = new HashMap<>();
         for (final Attribute attr : formConfigs) {
             formConfigsMap.put(attr.getCode(), attr);
         }
@@ -137,7 +138,7 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
         for (final String configToTry : formConfigsToTry) {
             if (formConfigsMap.containsKey(configToTry)) {
                 if (StringUtils.isNotBlank(formConfigsMap.get(configToTry).getVal())) {
-                    final List<String> formAttrs = new ArrayList<String>();
+                    final List<String> formAttrs = new ArrayList<>();
                     for (final String formAttr : StringUtils.split(formConfigsMap.get(configToTry).getVal(), ',')) {
                         if (StringUtils.isNotBlank(formAttr)) {
                             formAttrs.add(formAttr.trim());
@@ -167,6 +168,7 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "addressBookService-allCountries")
     public List<Country> getAllCountries(final String shopCode, final String addressType) {
         final Shop shop = shopService.getShopByCode(shopCode);
@@ -184,6 +186,7 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "addressBookService-statesByCountry")
     public List<State> getStatesByCountry(final String countryCode) {
         return stateService.findByCountry(countryCode);
@@ -191,6 +194,7 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
 
 
     /** {@inheritDoc} */
+    @Override
     public String formatAddressFor(final Address address, final Shop shop, final Customer customer, final String lang) {
         return addressService.formatAddressFor(address, shop, customer, lang);
     }

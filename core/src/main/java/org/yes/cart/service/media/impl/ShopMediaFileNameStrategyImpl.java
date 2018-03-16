@@ -50,6 +50,7 @@ public class ShopMediaFileNameStrategyImpl extends AbstractMediaFileNameStrategy
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String resolveObjectCodeInternal(final String url) {
 
         final String val = resolveFileName(url);

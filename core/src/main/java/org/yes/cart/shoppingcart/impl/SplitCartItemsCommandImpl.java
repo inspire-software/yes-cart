@@ -51,6 +51,7 @@ public class SplitCartItemsCommandImpl extends AbstractCartCommandImpl implement
     /**
      * @return command key
      */
+    @Override
     public String getCmdKey() {
         return CMD_SPLITCARTITEMS;
     }
@@ -85,7 +86,7 @@ public class SplitCartItemsCommandImpl extends AbstractCartCommandImpl implement
         final Map<String, Boolean> isMultiAllowed =
                 this.orderSplittingStrategy.isMultipleDeliveriesAllowed(shopId, shoppingCart.getCartItemList());
 
-        final Map<String, Boolean> singleSelected = new HashMap<String, Boolean>();
+        final Map<String, Boolean> singleSelected = new HashMap<>();
         for (final Map.Entry<String, Boolean> isAllowedForSupplier : isMultiAllowed.entrySet()) {
             singleSelected.put(isAllowedForSupplier.getKey(), !isAllowedForSupplier.getValue() || !shoppingCart.getOrderInfo().isMultipleDelivery());
         }

@@ -38,7 +38,7 @@ public class ServiceLocatorImpl implements ServiceLocator {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceLocatorImpl.class);
 
-    private final Map<String, InstantiationStrategy> protocolStrategyMap = new HashMap<String, InstantiationStrategy>();
+    private final Map<String, InstantiationStrategy> protocolStrategyMap = new HashMap<>();
 
     /**
      * Construct the service locator.
@@ -99,6 +99,7 @@ public class ServiceLocatorImpl implements ServiceLocator {
 
 
     /** {@inheritDoc} */
+    @Override
     public <T> T getServiceInstance(final String serviceUrl,
                                     final Class<T> iface,
                                     final String loginName,
@@ -117,6 +118,7 @@ public class ServiceLocatorImpl implements ServiceLocator {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void register(final InstantiationStrategy instantiationStrategy) {
         for (final String protocol : instantiationStrategy.getProtocols()) {
             protocolStrategyMap.put(protocol, instantiationStrategy);

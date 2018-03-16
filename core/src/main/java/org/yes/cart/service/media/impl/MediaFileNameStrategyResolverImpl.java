@@ -47,18 +47,19 @@ public class MediaFileNameStrategyResolverImpl implements MediaFileNameStrategyR
                                              final List<MediaFileNameStrategy> urlToStrategies) {
 
         this.defaultStrategy = defaultStrategy;
-        final Map<String, MediaFileNameStrategy> urlToStrategyMap = new HashMap<String, MediaFileNameStrategy>();
+        final Map<String, MediaFileNameStrategy> urlToStrategyMap = new HashMap<>();
         for (final MediaFileNameStrategy strategy : urlToStrategies) {
             urlToStrategyMap.put(strategy.getUrlPath(), strategy);
         }
         this.urlToStrategyMap = urlToStrategyMap;
-        this.urls = new ArrayList<String>(urlToStrategyMap.keySet()).toArray(new String[urlToStrategyMap.keySet().size()]);
+        this.urls = new ArrayList<>(urlToStrategyMap.keySet()).toArray(new String[urlToStrategyMap.keySet().size()]);
     }
 
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public MediaFileNameStrategy getMediaFileNameStrategy(final String mediaUrl) {
 
         for (final String url : urls) {

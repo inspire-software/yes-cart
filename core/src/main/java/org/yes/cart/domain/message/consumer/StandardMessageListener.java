@@ -195,6 +195,7 @@ public class StandardMessageListener implements Runnable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void run() {
 
         final Map<String, Object> map = (Map<String, Object>) objectMessage;
@@ -262,7 +263,7 @@ public class StandardMessageListener implements Runnable {
      */
     private void enrichMapWithProducts(final Map<String, Object> map) {
 
-        final Map<String, ProductSku> products = new HashMap<String, ProductSku>();
+        final Map<String, ProductSku> products = new HashMap<>();
 
         for (final CustomerOrderDet orderDet : ((CustomerOrder) map.get(ROOT)).getOrderDetail()) {
 

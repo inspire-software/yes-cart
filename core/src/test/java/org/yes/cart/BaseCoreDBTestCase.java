@@ -58,6 +58,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         return this.getClass().getSimpleName() + "." + testName.getMethodName();
     }
 
+    @Override
     protected synchronized ApplicationContext createContext() {
         if (sharedContext == null) {
             sharedContext = new ClassPathXmlApplicationContext("testApplicationContext.xml");
@@ -85,7 +86,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
     protected ShoppingCart getEmptyCart(String email) {
         MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, email);
         params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
 
@@ -118,11 +119,11 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         // this digital product available
-        Map<String, String> param = new HashMap<String, String>();
+        Map<String, String> param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, firstCode);
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
-        param = new HashMap<String, String>();
+        param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, secondCode);
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
         commands.execute(shoppingCart, (Map) param);
@@ -143,34 +144,34 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         ShoppingCart shoppingCart = getEmptyCartByPrefix(prefix);
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        Map<String, String> param = new HashMap<String, String>();
+        Map<String, String> param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
-        param = new HashMap<String, String>();
+        param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "200.00");
         commands.execute(shoppingCart, (Map) param);
 
-        param = new HashMap<String, String>();
+        param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "3.00");
         commands.execute(shoppingCart, (Map) param);
 
-        param = new HashMap<String, String>();
+        param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST7");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
         // this digital product not available to date
-        param = new HashMap<String, String>();
+        param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST8");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
         // this digital product available
-        param = new HashMap<String, String>();
+        param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST9");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
@@ -186,7 +187,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         Map<String, String> params;
-        params = new HashMap<String, String>();
+        params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customerEmail);
         params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
 
@@ -206,32 +207,32 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
 
-        Map<String, String> param = new HashMap<String, String>();
+        Map<String, String> param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
-        param = new HashMap<String, String>();
+        param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "200.00");
         commands.execute(shoppingCart, (Map) param);
 
-        param = new HashMap<String, String>();
+        param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "3.00");
         commands.execute(shoppingCart, (Map) param);
 
-        param = new HashMap<String, String>();
+        param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST7");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
-        param = new HashMap<String, String>();
+        param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST8");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
-        param = new HashMap<String, String>();
+        param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST9");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
@@ -257,7 +258,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
     protected void setCustomDetail(final ShoppingCart shoppingCart, final String detail) {
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
         Map<String, String> params;
-        params = new HashMap<String, String>();
+        params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_SETORDERDETAILS, detail);
         commands.execute(shoppingCart, (Map) params);
     }
@@ -265,7 +266,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
     protected void setIPAddress(final ShoppingCart shoppingCart, final String ip) {
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
         Map<String, String> params;
-        params = new HashMap<String, String>();
+        params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_INTERNAL_SETIP, ip);
         commands.execute(shoppingCart, (Map) params);
     }
@@ -274,7 +275,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_SPLITCARTITEMS, ShoppingCartCommand.CMD_SPLITCARTITEMS);
 
         commands.execute(shoppingCart, (Map) params);
@@ -285,7 +286,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, Boolean.valueOf(multi).toString());
 
         commands.execute(shoppingCart, (Map) params);
@@ -406,7 +407,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
     protected Map<String, Cache> getCacheMap() {
         final CacheManager cm = ctx().getBean("cacheManager", CacheManager.class);
         final Collection<String> cacheNames = cm.getCacheNames();
-        final Map<String, Cache> cacheMap = new HashMap<String, Cache> (cacheNames.size());
+        final Map<String, Cache> cacheMap = new HashMap<>(cacheNames.size());
         for (String cacheName : cacheNames) {
 
             cacheMap.put(cacheName, cm.getCache(cacheName));

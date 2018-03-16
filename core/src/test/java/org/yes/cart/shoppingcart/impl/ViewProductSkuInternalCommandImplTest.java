@@ -51,7 +51,7 @@ public class ViewProductSkuInternalCommandImplTest extends BaseCoreDBTestCase {
 
         // Test adding single sku
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, "1");
         commands.execute(shoppingCart, (Map) params);
 

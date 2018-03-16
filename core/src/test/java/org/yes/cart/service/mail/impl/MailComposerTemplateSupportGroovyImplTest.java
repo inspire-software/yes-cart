@@ -8,7 +8,6 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.service.domain.TemplateSupport;
 import org.yes.cart.service.domain.impl.GroovySimpleTemplateSupportImpl;
-import org.yes.cart.service.mail.MailComposerTemplateSupport;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -99,14 +98,11 @@ public class MailComposerTemplateSupportGroovyImplTest {
         final TemplateSupport templates = new GroovySimpleTemplateSupportImpl(cacheManager);
         final MailComposerTemplateSupportGroovyImpl support = new MailComposerTemplateSupportGroovyImpl(templates);
 
-        support.registerFunction("isAwesome", new MailComposerTemplateSupport.FunctionProvider() {
-            @Override
-            public Object doAction(final Object... params) {
-                assertEquals("YC", params[0]);
-                assertEquals("en", params[1]);
-                assertTrue(params[2] instanceof Map);
-                return "YC is awesome!";
-            }
+        support.registerFunction("isAwesome", params -> {
+            assertEquals("YC", params[0]);
+            assertEquals("en", params[1]);
+            assertTrue(params[2] instanceof Map);
+            return "YC is awesome!";
         });
 
         final String out = support.processTemplate("${isAwesome(name)}", "en", new HashMap<String, Object>() {{

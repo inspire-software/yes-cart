@@ -32,6 +32,7 @@ public class BigDecimalToFloatValueConverter implements ValueConverter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object convertToDto(final Object object, final com.inspiresoftware.lib.dto.geda.adapter.BeanFactory beanFactory) {
         return new BigDecimal((Float) object);
     }
@@ -39,7 +40,8 @@ public class BigDecimalToFloatValueConverter implements ValueConverter {
     /**
      * {@inheritDoc}
      */
-    public Object convertToEntity(final Object object,final Object oldEntity, final com.inspiresoftware.lib.dto.geda.adapter.BeanFactory beanFactory) {
+    @Override
+    public Object convertToEntity(final Object object, final Object oldEntity, final com.inspiresoftware.lib.dto.geda.adapter.BeanFactory beanFactory) {
         if (object instanceof BigDecimal) {
             return ((BigDecimal) object).floatValue();
         }

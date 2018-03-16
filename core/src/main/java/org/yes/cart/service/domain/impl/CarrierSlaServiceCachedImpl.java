@@ -39,32 +39,38 @@ public class CarrierSlaServiceCachedImpl implements CarrierSlaService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable("carrierSlaService-getById")
     public CarrierSla getById(final long carrierSlaId) {
         return carrierSlaService.getById(carrierSlaId);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<CarrierSla> findByCarrier(final long carrierId) {
         return carrierSlaService.findByCarrier(carrierId);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<CarrierSla> findAll() {
         return carrierSlaService.findAll();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<CarrierSla> callback) {
         carrierSlaService.findAllIterator(callback);
     }
 
     /** {@inheritDoc} */
+    @Override
     public CarrierSla findById(final long pk) {
         return carrierSlaService.findById(pk);
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "carrierSlaService-getById"
     }, allEntries = false, key = "#instance.carrierslaId")
@@ -73,6 +79,7 @@ public class CarrierSlaServiceCachedImpl implements CarrierSlaService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "carrierSlaService-getById"
     }, allEntries = false, key = "#instance.carrierslaId")
@@ -81,6 +88,7 @@ public class CarrierSlaServiceCachedImpl implements CarrierSlaService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "carrierSlaService-getById"
     }, allEntries = false, key = "#instance.carrierslaId")
@@ -89,21 +97,25 @@ public class CarrierSlaServiceCachedImpl implements CarrierSlaService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<CarrierSla> findByCriteria(final String eCriteria, final Object... parameters) {
         return carrierSlaService.findByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return carrierSlaService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public CarrierSla findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return carrierSlaService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public GenericDAO<CarrierSla, Long> getGenericDao() {
         return carrierSlaService.getGenericDao();
     }

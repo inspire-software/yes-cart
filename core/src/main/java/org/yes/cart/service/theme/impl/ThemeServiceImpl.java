@@ -36,7 +36,7 @@ import java.util.List;
 public class ThemeServiceImpl implements ThemeService {
 
     private static final String DEFAULT_THEME = "default";
-    private static final List<String> DEFAULT_CHAIN = Arrays.asList(DEFAULT_THEME);
+    private static final List<String> DEFAULT_CHAIN = Collections.singletonList(DEFAULT_THEME);
 
     private static final String MARKUP_ROOT         = "/markup/";
     private static final String MAILTEMPLATE_ROOT   = "/mail/";
@@ -51,6 +51,7 @@ public class ThemeServiceImpl implements ThemeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "themeService-themeChainByShopId")
     public List<String> getThemeChainByShopId(final Long shopId, final String domain) {
         if (shopId != null) {
@@ -76,13 +77,13 @@ public class ThemeServiceImpl implements ThemeService {
                 if (StringUtils.isNotBlank(themeCfg)) {
 
                     if (themeCfg.indexOf(';') == -1) {
-                        final List<String> tmpChain = new ArrayList<String>(Arrays.asList(themeCfg));
+                        final List<String> tmpChain = new ArrayList<>(Collections.singletonList(themeCfg));
                         if (!tmpChain.contains(DEFAULT_THEME)) {
                             tmpChain.add(DEFAULT_THEME);
                         }
                         return Collections.unmodifiableList(tmpChain);
                     }
-                    final List<String> tmpChain = new ArrayList<String>(Arrays.asList(StringUtils.split(themeCfg, ';')));
+                    final List<String> tmpChain = new ArrayList<>(Arrays.asList(StringUtils.split(themeCfg, ';')));
                     if (!tmpChain.contains(DEFAULT_THEME)) {
                         tmpChain.add(DEFAULT_THEME);
                     }
@@ -96,10 +97,11 @@ public class ThemeServiceImpl implements ThemeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "themeService-markupChainByShopId")
     public List<String> getMarkupChainByShopId(final Long shopId, final String domain) {
         final List<String> themes = getThemeChainByShopId(shopId, domain);
-        final List<String> markups = new ArrayList<String>(themes.size());
+        final List<String> markups = new ArrayList<>(themes.size());
         for (final String theme : themes) {
             markups.add(theme + MARKUP_ROOT);
         }
@@ -109,10 +111,11 @@ public class ThemeServiceImpl implements ThemeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "themeService-mailTemplateChainByShopId")
     public List<String> getMailTemplateChainByShopId(final Long shopId) {
         final List<String> themes = getThemeChainByShopId(shopId, null);
-        final List<String> mailtemplates = new ArrayList<String>(themes.size());
+        final List<String> mailtemplates = new ArrayList<>(themes.size());
         for (final String theme : themes) {
             mailtemplates.add(theme + MAILTEMPLATE_ROOT);
         }
@@ -122,10 +125,11 @@ public class ThemeServiceImpl implements ThemeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "themeService-reportsTemplateChainByShopId")
     public List<String> getReportsTemplateChainByShopId(final Long shopId) {
         final List<String> themes = getThemeChainByShopId(shopId, null);
-        final List<String> mailtemplates = new ArrayList<String>(themes.size());
+        final List<String> mailtemplates = new ArrayList<>(themes.size());
         for (final String theme : themes) {
             mailtemplates.add(theme + REPORTSTEMPLATE_ROOT);
         }

@@ -39,6 +39,7 @@ public class CategoryMediaFileNameStrategyImplTest extends BaseCoreDBTestCase {
     private MediaFileNameStrategy mediaFileNameStrategy;
     private CacheManager cacheManager;
 
+    @Override
     @Before
     public void setUp() {
         mediaFileNameStrategy = (MediaFileNameStrategy) ctx().getBean(ServiceSpringKeys.CATEGORY_IMAGE_NAME_STRATEGY);

@@ -39,6 +39,7 @@ public class PausableProcessorWrapperImpl implements Runnable, PausableProcessor
     /**
      * {@inheritDoc}
      */
+    @Override
     public void run() {
 
         if (!pauseInitialised) {
@@ -80,6 +81,7 @@ public class PausableProcessorWrapperImpl implements Runnable, PausableProcessor
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isPaused() {
         final String paused = systemService.getAttributeValue(pausePreferenceKey);
         return Boolean.valueOf(paused);
@@ -88,6 +90,7 @@ public class PausableProcessorWrapperImpl implements Runnable, PausableProcessor
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPaused(final boolean paused) {
         systemService.createOrGetAttributeValue(pausePreferenceKey, "Boolean");
         systemService.updateAttributeValue(pausePreferenceKey, String.valueOf(paused));

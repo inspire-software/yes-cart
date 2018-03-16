@@ -47,7 +47,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetPhysicalDeliveriesQty() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new HashMap<>();
 
         assertEquals(0, groups.size());
         assertTrue(new OrderSplittingStrategyImpl(null, null, null, null).getPhysicalDeliveriesQty(groups).isEmpty());
@@ -128,7 +128,7 @@ public class OrderSplittingStrategyImplTest {
 
         final CartItem d4 = context.mock(CartItem.class, "d4");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4));
 
@@ -149,7 +149,7 @@ public class OrderSplittingStrategyImplTest {
 
         final CartItem d4 = context.mock(CartItem.class, "d4");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4));
 
@@ -172,7 +172,7 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d4_1 = context.mock(CartItem.class, "d4_1");
         final CartItem d4_2 = context.mock(CartItem.class, "d4_2");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4_1));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d4_2));
@@ -204,7 +204,7 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d4_1 = context.mock(CartItem.class, "d4_1");
         final CartItem d4_2 = context.mock(CartItem.class, "d4_2");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4_1));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d4_2));
@@ -239,7 +239,7 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d3 = context.mock(CartItem.class, "d3");
         final CartItem d4 = context.mock(CartItem.class, "d4");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2));
@@ -273,7 +273,7 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d3 = context.mock(CartItem.class, "d3");
         final CartItem d4 = context.mock(CartItem.class, "d4");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2));
@@ -316,7 +316,7 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d3 = context.mock(CartItem.class, "d3");
         final CartItem d4 = context.mock(CartItem.class, "d4");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d1));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2));
@@ -357,7 +357,7 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d3 = context.mock(CartItem.class, "d3");
         final CartItem d4 = context.mock(CartItem.class, "d4");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d1));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2));
@@ -402,7 +402,7 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d3 = context.mock(CartItem.class, "d3");
         final CartItem d4 = context.mock(CartItem.class, "d4");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d1));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d2));
@@ -443,7 +443,7 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d3 = context.mock(CartItem.class, "d3");
         final CartItem d4 = context.mock(CartItem.class, "d4");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d1));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d2));
@@ -487,7 +487,7 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d2 = context.mock(CartItem.class, "d2");
         final CartItem d3 = context.mock(CartItem.class, "d3");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2));
@@ -514,7 +514,7 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d2 = context.mock(CartItem.class, "d2");
         final CartItem d3 = context.mock(CartItem.class, "d3");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2));
@@ -555,7 +555,7 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d2_3 = context.mock(CartItem.class, "d2_3");
         final CartItem d3_3 = context.mock(CartItem.class, "d3_3");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1_1));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2_1));
@@ -614,7 +614,7 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d2_3 = context.mock(CartItem.class, "d2_3");
         final CartItem d3_3 = context.mock(CartItem.class, "d3_3");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1_1));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2_1));
@@ -697,7 +697,7 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d2_3 = context.mock(CartItem.class, "d2_3");
         final CartItem d3_3 = context.mock(CartItem.class, "d3_3");
 
-        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1_1));
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d2_1));
@@ -813,7 +813,7 @@ public class OrderSplittingStrategyImplTest {
             }
         }});
 
-        assertEquals(new Pair<String, String>(expectedGroup, supplier), strategy.getDeliveryGroup(item, warehouses));
+        assertEquals(new Pair<>(expectedGroup, supplier), strategy.getDeliveryGroup(item, warehouses));
 
         context.assertIsSatisfied();
     }
@@ -1300,7 +1300,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetPhysicalDeliveriesQtyStandard() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
 
@@ -1322,7 +1322,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetPhysicalDeliveriesQtyPreorder() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
 
@@ -1344,7 +1344,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetPhysicalDeliveriesQtyBackorder() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d3 = context.mock(DeliveryBucket.class, "d3");
 
@@ -1366,7 +1366,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetPhysicalDeliveriesQtyElectronic() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d4 = context.mock(DeliveryBucket.class, "d4");
 
@@ -1388,7 +1388,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetPhysicalDeliveriesQtyNoStock() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket oos = context.mock(DeliveryBucket.class, "oos");
 
@@ -1410,7 +1410,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetPhysicalDeliveriesQtyOffline() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket off = context.mock(DeliveryBucket.class, "off");
 
@@ -1432,7 +1432,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetPhysicalDeliveriesQtyMix() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
         final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
@@ -1486,7 +1486,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGetPhysicalDeliveriesQtyStandardMultipleSuppliers() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
         final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
@@ -1545,7 +1545,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGroupDeliveriesIntoMixedIfNecessaryStandard() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
 
@@ -1566,7 +1566,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGroupDeliveriesIntoMixedIfNecessaryPreorder() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
 
@@ -1587,7 +1587,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGroupDeliveriesIntoMixedIfNecessaryBackorder() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d3 = context.mock(DeliveryBucket.class, "d3");
 
@@ -1608,7 +1608,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGroupDeliveriesIntoMixedIfNecessaryElectronic() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d4 = context.mock(DeliveryBucket.class, "d4");
 
@@ -1629,7 +1629,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGroupDeliveriesIntoMixedIfNecessaryNoStock() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket oos = context.mock(DeliveryBucket.class, "oos");
 
@@ -1650,7 +1650,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGroupDeliveriesIntoMixedIfNecessaryOffline() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket off = context.mock(DeliveryBucket.class, "off");
 
@@ -1671,7 +1671,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGroupDeliveriesIntoMixedIfNecessaryMixSingleTrue() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
         final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
@@ -1707,7 +1707,7 @@ public class OrderSplittingStrategyImplTest {
         assertNotNull(buckets);
         assertEquals(4, buckets.size());
 
-        final Set<String> expected = new HashSet<String>(Arrays.asList(
+        final Set<String> expected = new HashSet<>(Arrays.asList(
                 CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP,
                 CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP,
                 CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP,
@@ -1723,7 +1723,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGroupDeliveriesIntoMixedIfNecessaryMixSingleFalse() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
         final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
@@ -1759,7 +1759,7 @@ public class OrderSplittingStrategyImplTest {
         assertNotNull(buckets);
         assertEquals(6, buckets.size());
 
-        final Set<String> expected = new HashSet<String>(Arrays.asList(
+        final Set<String> expected = new HashSet<>(Arrays.asList(
                 CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
                 CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP,
                 CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP,
@@ -1777,7 +1777,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGroupDeliveriesIntoMixedIfNecessaryStandardMultipleSuppliersSingleTrue() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
         final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
@@ -1818,15 +1818,15 @@ public class OrderSplittingStrategyImplTest {
         assertEquals(5, buckets.size());
 
         final Map<String, Set<String>> expected = new HashMap<String, Set<String>>() {{
-            put("s1", new HashSet<String>(Arrays.asList(
+            put("s1", new HashSet<>(Arrays.asList(
                     CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP,
                     CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP,
                     CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP
             )));
-            put("s2", new HashSet<String>(Arrays.asList(
+            put("s2", new HashSet<>(Collections.singletonList(
                     CustomerOrderDelivery.MIX_DELIVERY_GROUP
             )));
-            put("s3", new HashSet<String>(Arrays.asList(
+            put("s3", new HashSet<>(Collections.singletonList(
                     CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP
             )));
         }};
@@ -1840,7 +1840,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGroupDeliveriesIntoMixedIfNecessaryStandardMultipleSuppliersSingleFalse() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
         final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
@@ -1881,16 +1881,16 @@ public class OrderSplittingStrategyImplTest {
         assertEquals(6, buckets.size());
 
         final Map<String, Set<String>> expected = new HashMap<String, Set<String>>() {{
-            put("s1", new HashSet<String>(Arrays.asList(
+            put("s1", new HashSet<>(Arrays.asList(
                     CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP,
                     CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP,
                     CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP
             )));
-            put("s2", new HashSet<String>(Arrays.asList(
+            put("s2", new HashSet<>(Arrays.asList(
                     CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
                     CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP
             )));
-            put("s3", new HashSet<String>(Arrays.asList(
+            put("s3", new HashSet<>(Collections.singletonList(
                     CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP
             )));
         }};
@@ -1904,7 +1904,7 @@ public class OrderSplittingStrategyImplTest {
     @Test
     public void testGroupDeliveriesIntoMixedIfNecessaryStandardMultipleSuppliersSingleMix() throws Exception {
 
-        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<>();
 
         final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
         final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
@@ -1945,15 +1945,15 @@ public class OrderSplittingStrategyImplTest {
         assertEquals(5, buckets.size());
 
         final Map<String, Set<String>> expected = new HashMap<String, Set<String>>() {{
-            put("s1", new HashSet<String>(Arrays.asList(
+            put("s1", new HashSet<>(Arrays.asList(
                     CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP,
                     CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP,
                     CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP
             )));
-            put("s2", new HashSet<String>(Arrays.asList(
+            put("s2", new HashSet<>(Collections.singletonList(
                     CustomerOrderDelivery.MIX_DELIVERY_GROUP
             )));
-            put("s3", new HashSet<String>(Arrays.asList(
+            put("s3", new HashSet<>(Collections.singletonList(
                     CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP
             )));
         }};
@@ -2135,7 +2135,7 @@ public class OrderSplittingStrategyImplTest {
         final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver) {
             @Override
             Pair<String, String> getDeliveryGroup(final CartItem item, final Map<String, Warehouse> warehouses) {
-                return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
+                return new Pair<>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
             }
         };
 
@@ -2186,7 +2186,7 @@ public class OrderSplittingStrategyImplTest {
         final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver) {
             @Override
             Pair<String, String> getDeliveryGroup(final CartItem item, final Map<String, Warehouse> warehouses) {
-                return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
+                return new Pair<>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
             }
         };
 
@@ -2241,7 +2241,7 @@ public class OrderSplittingStrategyImplTest {
         final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver) {
             @Override
             Pair<String, String> getDeliveryGroup(final CartItem item, final Map<String, Warehouse> warehouses) {
-                return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
+                return new Pair<>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
             }
         };
 
@@ -2297,7 +2297,7 @@ public class OrderSplittingStrategyImplTest {
         final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, inventoryResolver) {
             @Override
             Pair<String, String> getDeliveryGroup(final CartItem item, final Map<String, Warehouse> warehouses) {
-                return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
+                return new Pair<>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
             }
         };
 

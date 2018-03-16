@@ -74,6 +74,7 @@ public class PassPhraseGeneratorImpl implements PassPhraseGenerator {
      *
      * @return generated pass phraze
      */
+    @Override
     public String getNextPassPhrase() {
         final StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < passwordLenght; i++) {

@@ -54,11 +54,13 @@ public class PricingPolicyProviderCustomerAttributeImpl implements PricingPolicy
         }
 
         /** {@inheritDoc} */
+        @Override
         public String getID() {
             return id;
         }
 
         /** {@inheritDoc} */
+        @Override
         public Type getType() {
             return type;
         }
@@ -73,6 +75,7 @@ public class PricingPolicyProviderCustomerAttributeImpl implements PricingPolicy
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "priceService-determinePricingPolicy")
     public PricingPolicy determinePricingPolicy(final String shopCode, final String currency, final String customerEmail, String countryCode, String stateCode) {
 

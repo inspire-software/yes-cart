@@ -34,7 +34,7 @@ public class PricingPolicyProviderImpl implements PricingPolicyProvider, Configu
     private static final Logger LOG = LoggerFactory.getLogger(PricingPolicyProviderImpl.class);
 
     private final PricingPolicyProvider defaultPricingPolicyProvider;
-    private final Map<String, PricingPolicyProvider> customPricingPolicyProviders = new HashMap<String, PricingPolicyProvider>();
+    private final Map<String, PricingPolicyProvider> customPricingPolicyProviders = new HashMap<>();
 
     public PricingPolicyProviderImpl(final PricingPolicyProvider defaultPricingPolicyProvider) {
         this.defaultPricingPolicyProvider = defaultPricingPolicyProvider;
@@ -42,6 +42,7 @@ public class PricingPolicyProviderImpl implements PricingPolicyProvider, Configu
 
 
     /** {@inheritDoc} */
+    @Override
     public PricingPolicy determinePricingPolicy(final String shopCode, final String currency, final String customerEmail, String countryCode, String stateCode) {
 
         PricingPolicyProvider provider = getPricingPolicyProvider(shopCode);
@@ -58,12 +59,14 @@ public class PricingPolicyProviderImpl implements PricingPolicyProvider, Configu
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean supports(final Object configuration) {
         return configuration instanceof PricingPolicyProvider ||
                 (configuration instanceof Class && PricingPolicyProvider.class.isAssignableFrom((Class<?>) configuration));
     }
 
     /** {@inheritDoc} */
+    @Override
     public void register(final String shopCode, final PricingPolicyProvider provider) {
 
         if (provider != null) {

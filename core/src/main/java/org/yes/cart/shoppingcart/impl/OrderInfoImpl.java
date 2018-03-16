@@ -22,7 +22,6 @@ import org.yes.cart.shoppingcart.MutableOrderInfo;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -48,16 +47,19 @@ public class OrderInfoImpl implements MutableOrderInfo {
     private String orderMessage;
 
     /** {@inheritDoc} */
+    @Override
     public String getOrderMessage() {
         return orderMessage;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setOrderMessage(final String orderMessage) {
         putDetail(ORDER_MSG_KEY, orderMessage);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDetails(final Map<String, String> details) {
         getDetailsInternal().clear();
         if (details != null) {
@@ -69,6 +71,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void putDetail(final String key, final String detail) {
         if (StringUtils.isNotBlank(key)) {
             if (StringUtils.isBlank(detail)) {
@@ -86,41 +89,46 @@ public class OrderInfoImpl implements MutableOrderInfo {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getDetails() {
         return Collections.unmodifiableMap(getDetailsInternal());
     }
 
     protected Map<String, String> getDetailsInternal() {
         if (this.details == null) {
-            this.details = new HashMap<String, String>();
+            this.details = new HashMap<>();
         }
         return this.details;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getDetailByKey(final String key) {
         return getDetailsInternal().get(key);
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isDetailByKeyTrue(final String key) {
         final String detail = getDetailByKey(key);
         return detail != null && Boolean.valueOf(detail);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, Long> getCarrierSlaId() {
         return Collections.unmodifiableMap(getCarrierSlaIdInternal());
     }
 
     protected Map<String, Long> getCarrierSlaIdInternal() {
         if (this.carrierSlaId == null) {
-            this.carrierSlaId = new HashMap<String, Long>();
+            this.carrierSlaId = new HashMap<>();
         }
         return this.carrierSlaId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCarrierSlaId(final Map<String, Long> carrierSlaId) {
         getCarrierSlaIdInternal().clear();
         if (carrierSlaId != null) {
@@ -129,6 +137,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void putCarrierSlaId(final String supplier, final Long carrierSlaId) {
         if (carrierSlaId == null) {
             getCarrierSlaIdInternal().remove(supplier);
@@ -138,81 +147,97 @@ public class OrderInfoImpl implements MutableOrderInfo {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Long getBillingAddressId() {
         return billingAddressId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setBillingAddressId(final Long billingAddressId) {
         this.billingAddressId = billingAddressId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Long getDeliveryAddressId() {
         return deliveryAddressId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDeliveryAddressId(final Long deliveryAddressId) {
         this.deliveryAddressId = deliveryAddressId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isSeparateBillingAddress() {
         return separateBillingAddress;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSeparateBillingAddress(final boolean separateBillingAddress) {
         this.separateBillingAddress = separateBillingAddress;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isSeparateBillingAddressEnabled() {
         return separateBillingAddressEnabled;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSeparateBillingAddressEnabled(final boolean separateBillingAddressEnabled) {
         this.separateBillingAddressEnabled = separateBillingAddressEnabled;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isBillingAddressNotRequired() {
         return billingAddressNotRequired;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setBillingAddressNotRequired(final boolean billingAddressNotRequired) {
         this.billingAddressNotRequired = billingAddressNotRequired;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isDeliveryAddressNotRequired() {
         return deliveryAddressNotRequired;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDeliveryAddressNotRequired(final boolean deliveryAddressNotRequired) {
         this.deliveryAddressNotRequired = deliveryAddressNotRequired;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getPaymentGatewayLabel() {
         return paymentGatewayLabel;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setPaymentGatewayLabel(final String paymentGatewayLabel) {
         this.paymentGatewayLabel = paymentGatewayLabel;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isMultipleDelivery() {
         return multipleDelivery;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setMultipleDelivery(final boolean multipleDelivery) {
         this.multipleDelivery = multipleDelivery;
     }
@@ -220,17 +245,19 @@ public class OrderInfoImpl implements MutableOrderInfo {
 
     protected Map<String, Boolean> getMultipleDeliveryAvailableInternal() {
         if (this.multipleDeliveryAvailable == null) {
-            this.multipleDeliveryAvailable = new HashMap<String, Boolean>();
+            this.multipleDeliveryAvailable = new HashMap<>();
         }
         return this.multipleDeliveryAvailable;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, Boolean> getMultipleDeliveryAvailable() {
         return Collections.unmodifiableMap(getMultipleDeliveryAvailableInternal());
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setMultipleDeliveryAvailable(final Map<String, Boolean> multipleDeliveryAvailable) {
         getMultipleDeliveryAvailableInternal().clear();
         if (multipleDeliveryAvailable != null) {
@@ -240,6 +267,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
 
 
     /** {@inheritDoc} */
+    @Override
     public void putMultipleDeliveryAvailable(final String supplier, final Boolean multipleDeliveryAvailable) {
         if (multipleDeliveryAvailable == null) {
             getMultipleDeliveryAvailableInternal().remove(supplier);
@@ -249,6 +277,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void clearInfo() {
         this.paymentGatewayLabel = null;
         this.multipleDelivery = false;
@@ -264,16 +293,10 @@ public class OrderInfoImpl implements MutableOrderInfo {
         this.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_BY, null);
         this.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_DATE, null);
         this.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_REMARKS_ID, null);
-        final Iterator<Map.Entry<String, String>> details = getDetailsInternal().entrySet().iterator();
-        while (details.hasNext()) {
-            final Map.Entry<String, String> detail = details.next();
-            if (detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID) ||
-                    detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID) ||
-                    detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID) ||
-                    detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID) ||
-                    detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID)) {
-                details.remove();
-            }
-        }
+        getDetailsInternal().entrySet().removeIf(detail -> detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID) ||
+                detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID) ||
+                detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID) ||
+                detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID) ||
+                detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID));
     }
 }

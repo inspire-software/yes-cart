@@ -88,6 +88,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
      * @param shoppingCart cart
      * @return order with filled delivery
      */
+    @Override
     public CustomerOrder assembleCustomerOrder(final CustomerOrder order,
                                                final ShoppingCart shoppingCart,
                                                final Map<String, Boolean> onePhysicalDelivery) throws OrderAssemblyException {
@@ -248,10 +249,11 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, Boolean> isOrderMultipleDeliveriesAllowed(final CustomerOrder order) {
 
         return orderSplittingStrategy.isMultipleDeliveriesAllowed(order.getShop().getShopId(),
-                new ArrayList<CartItem>(order.getOrderDetail()));
+                new ArrayList<>(order.getOrderDetail()));
 
     }
 
@@ -269,7 +271,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
         final Map<DeliveryBucket, List<CustomerOrderDet>> buckets =
             (Map) orderSplittingStrategy.determineDeliveryBuckets(order.getShop().getShopId(),
-                new ArrayList<CartItem>(order.getOrderDetail()), onePhysicalDelivery);
+                    new ArrayList<>(order.getOrderDetail()), onePhysicalDelivery);
 
         for (final Map.Entry<DeliveryBucket, List<CustomerOrderDet>> bucket : buckets.entrySet()) {
 

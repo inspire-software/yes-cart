@@ -24,11 +24,12 @@ import org.yes.cart.service.domain.TaxConfigService;
 import org.yes.cart.service.domain.TaxService;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
@@ -142,14 +143,14 @@ public class TaxConfigServiceImplTest extends BaseCoreDBTestCase {
         assertEquals(1, comparator.compare(shop10_cctest1, shop10_ua_cctest1));
 
 
-        final List<TaxConfig> listUs = new ArrayList<TaxConfig>(Arrays.asList(
+        final List<TaxConfig> listUs = new ArrayList<>(Arrays.asList(
                 shop10_us_usus_cctest1,
                 shop10,
                 shop10_us_usus,
                 shop10_cctest1
         ));
 
-        Collections.sort(listUs, comparator);
+        listUs.sort(comparator);
 
         assertEquals(shop10_us_usus_cctest1, listUs.get(0));
         assertEquals(shop10_cctest1, listUs.get(1));
@@ -157,7 +158,7 @@ public class TaxConfigServiceImplTest extends BaseCoreDBTestCase {
         assertEquals(shop10, listUs.get(3));
 
 
-        final List<TaxConfig> listUa = new ArrayList<TaxConfig>(Arrays.asList(
+        final List<TaxConfig> listUa = new ArrayList<>(Arrays.asList(
                 shop10,
                 shop10_ua,
                 shop10_ua_cctest1,
@@ -165,7 +166,7 @@ public class TaxConfigServiceImplTest extends BaseCoreDBTestCase {
         ));
 
 
-        Collections.sort(listUa, comparator);
+        listUa.sort(comparator);
 
         assertEquals(shop10_ua_cctest1, listUa.get(0));
         assertEquals(shop10_cctest1, listUa.get(1));

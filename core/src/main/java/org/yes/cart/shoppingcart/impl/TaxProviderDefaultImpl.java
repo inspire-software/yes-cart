@@ -45,16 +45,19 @@ public class TaxProviderDefaultImpl implements TaxProvider {
         }
 
         /** {@inheritDoc} */
+        @Override
         public BigDecimal getRate() {
             return rate;
         }
 
         /** {@inheritDoc} */
+        @Override
         public String getCode() {
             return code;
         }
 
         /** {@inheritDoc} */
+        @Override
         public boolean isExcluded() {
             return excluded;
         }
@@ -92,6 +95,7 @@ public class TaxProviderDefaultImpl implements TaxProvider {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Tax determineTax(final String shopCode,
                             final String currency,
                             final String countryCode,

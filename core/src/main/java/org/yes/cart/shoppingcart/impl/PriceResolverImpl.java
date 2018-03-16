@@ -37,7 +37,7 @@ public class PriceResolverImpl implements PriceResolver, ConfigurationRegistry<L
     private static final Logger LOG = LoggerFactory.getLogger(PriceResolverImpl.class);
 
     private final PriceResolver defaultPriceResolver;
-    private final Map<Long, PriceResolver> customPriceResolvers = new HashMap<Long, PriceResolver>();
+    private final Map<Long, PriceResolver> customPriceResolvers = new HashMap<>();
 
     public PriceResolverImpl(final PriceResolver defaultPriceResolver) {
         this.defaultPriceResolver = defaultPriceResolver;
@@ -64,12 +64,14 @@ public class PriceResolverImpl implements PriceResolver, ConfigurationRegistry<L
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean supports(final Object configuration) {
         return configuration instanceof PriceResolver ||
                 (configuration instanceof Class && PriceResolver.class.isAssignableFrom((Class<?>) configuration));
     }
 
     /** {@inheritDoc} */
+    @Override
     public void register(final Long shopCode, final PriceResolver provider) {
 
         if (provider != null) {

@@ -21,9 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.yes.cart.cluster.service.CacheDirector;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.cluster.service.CacheDirector;
 
 import java.util.*;
 
@@ -55,9 +55,10 @@ public class CacheDirectorImpl implements CacheDirector {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CacheInfoDTOImpl> getCacheInfo() {
         final Collection<String> cacheNames = cacheManager.getCacheNames();
-        final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>(cacheNames.size());
+        final List<CacheInfoDTOImpl> rez = new ArrayList<>(cacheNames.size());
         for (String cacheName : cacheNames) {
             final Cache cache = cacheManager.getCache(cacheName);
             final net.sf.ehcache.Cache nativeCache = (net.sf.ehcache.Cache) cache.getNativeCache();
@@ -115,6 +116,7 @@ public class CacheDirectorImpl implements CacheDirector {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void evictAllCache(final boolean force) {
         final CacheManager cm = getCacheManager();
         for (String cacheName : cm.getCacheNames()) {
@@ -128,6 +130,7 @@ public class CacheDirectorImpl implements CacheDirector {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void evictCache(final String cacheName) {
         final CacheManager cm = getCacheManager();
         final Cache cache = cm.getCache(cacheName);
@@ -139,6 +142,7 @@ public class CacheDirectorImpl implements CacheDirector {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void enableStats(final String cacheName) {
         final CacheManager cm = getCacheManager();
         final Cache cache = cm.getCache(cacheName);
@@ -161,6 +165,7 @@ public class CacheDirectorImpl implements CacheDirector {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int onCacheableChange(final String entityOperation, final String entityName, final Long pkValue) {
 
         int cnt = 0;

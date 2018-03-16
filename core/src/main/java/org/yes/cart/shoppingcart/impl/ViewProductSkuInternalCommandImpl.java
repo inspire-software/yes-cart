@@ -67,14 +67,14 @@ public class ViewProductSkuInternalCommandImpl extends AbstractCartCommandImpl i
         List<String> skus = shoppingCart.getShoppingContext().getLatestViewedSkus();
 
         if (skus == null) {
-            skus = new LinkedList<String>();
+            skus = new LinkedList<>();
             shoppingCart.getShoppingContext().setLatestViewedSkus(skus);
         }
 
         if (!skus.contains(productId)) {
             if (skus.size() >= maxProductHistory) {
                 // if maxed out remove the first element
-                final List<String> last = new LinkedList<String>(skus.subList(1, skus.size()));
+                final List<String> last = new LinkedList<>(skus.subList(1, skus.size()));
                 skus.clear();
                 skus.addAll(last);
             }

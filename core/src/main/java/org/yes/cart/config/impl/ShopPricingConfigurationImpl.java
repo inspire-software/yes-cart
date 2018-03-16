@@ -66,6 +66,7 @@ public class ShopPricingConfigurationImpl extends AbstractShopConfigurationImpl 
     }
 
     /** {@inheritDoc} */
+    @Override
     protected void doConfigurations(final Shop shop, final List<Shop> subs, final Properties properties) {
         this.registerCustomTaxProvider(shop, subs, properties);
         this.registerCustomPricingPolicyProvider(shop, subs, properties);

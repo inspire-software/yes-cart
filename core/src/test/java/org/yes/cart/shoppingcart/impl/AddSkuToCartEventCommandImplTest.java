@@ -51,7 +51,7 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
                 (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
 
         commands.execute(shoppingCart, (Map) params);
@@ -87,7 +87,7 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
                 (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_ADDTOCART, "NOPROD-SKU");
 
         commands.execute(shoppingCart, (Map) params);

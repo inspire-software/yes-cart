@@ -27,6 +27,7 @@ import java.time.ZonedDateTime;
 public class StringValueToZonedDateTimeConverter implements Converter<String, ZonedDateTime> {
 
     /** {@inheritDoc} */
+    @Override
     public ZonedDateTime convert(final String str) {
         return DateUtils.zdtParseSDT(str);
     }

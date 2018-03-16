@@ -29,6 +29,7 @@ public class PriceDTOQuantityComparatorImpl implements Comparator<SkuPriceDTO> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int compare(final SkuPriceDTO priceDTO1, final SkuPriceDTO priceDTO2) {
         return priceDTO1.getQuantity().compareTo(priceDTO2.getQuantity());
     }

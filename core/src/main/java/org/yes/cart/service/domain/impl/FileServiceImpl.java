@@ -73,11 +73,13 @@ public class FileServiceImpl implements FileService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public MediaFileNameStrategy getFileNameStrategy(final String url) {
         return mediaFileNameStrategyResolver.getMediaFileNameStrategy(url);
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isFileInRepository(final String fullFileName,
                                       final String code,
                                       final String storagePrefix,
@@ -93,6 +95,7 @@ public class FileServiceImpl implements FileService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String addFileToRepository(final String fullFileName,
                                       final String code,
                                       final byte[] fileBody,
@@ -135,6 +138,7 @@ public class FileServiceImpl implements FileService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public byte[] fileToByteArray(final String fileName,
                                   final String code,
                                   final String storagePrefix,
@@ -149,6 +153,7 @@ public class FileServiceImpl implements FileService {
     }
 
     /** {@inheritDoc}*/
+    @Override
     public boolean deleteFile(final String imageFileName,
                               final String storagePrefix,
                               final String pathToRepository) {

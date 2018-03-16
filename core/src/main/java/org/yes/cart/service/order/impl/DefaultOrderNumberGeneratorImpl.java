@@ -73,6 +73,7 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
      *
      * @return Generated order number.
      */
+    @Override
     public synchronized String getNextOrderNumber() {
 
         final LocalDateTime now = now();
@@ -91,7 +92,7 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
         final long min = dateTime.getMinute();
         final long sec = dateTime.getSecond();
 
-        final long time = (year % 100) * 10000000000l + mth * 100000000l + day * 1000000l + hour * 10000l + min * 100 + sec;
+        final long time = (year % 100) * 10000000000L + mth * 100000000L + day * 1000000L + hour * 10000L + min * 100 + sec;
 
         return String.valueOf(time);
 

@@ -46,9 +46,10 @@ public class DeliveryCostRegionalPriceResolverImpl implements DeliveryCostRegion
     /**
      * {@inheritDoc}
      */
+    @Override
     public SkuPrice getSkuPrice(final ShoppingCart cart, final String carrierSlaBaseCode, final PricingPolicyProvider.PricingPolicy policy, final BigDecimal qty) {
 
-        SkuPrice price = null;
+        SkuPrice price;
 
         if (StringUtils.isNotBlank(cart.getShoppingContext().getCountryCode()) && StringUtils.isNotBlank(cart.getShoppingContext().getStateCode())) {
             final String stateSpecificSla = carrierSlaBaseCode + "_" + cart.getShoppingContext().getCountryCode() + "_" + cart.getShoppingContext().getStateCode();

@@ -57,7 +57,7 @@ public class ShoppingCartCommandFactoryImplTest {
         final ConfigurableShoppingCartCommand cmd1 = mockery.mock(ConfigurableShoppingCartCommand.class, "cmd1");
 
 
-        final List<ConfigurableShoppingCartCommand> commands = Arrays.asList(cmd1);
+        final List<ConfigurableShoppingCartCommand> commands = Collections.singletonList(cmd1);
 
         final ShoppingCartCommand[] chain =
                 new ShoppingCartCommandFactoryImpl(null).remapCommandChain(commands);

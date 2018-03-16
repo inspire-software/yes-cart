@@ -47,7 +47,7 @@ public class BulkEmptyAnonymousShoppingCartProcessorImpl implements Runnable {
     private final ShoppingCartStateService shoppingCartStateService;
     private final CustomerOrderService customerOrderService;
     private final SystemService systemService;
-    private long abandonedTimeoutMs = 1 * MS_IN_DAY;
+    private long abandonedTimeoutMs = MS_IN_DAY;
     private int batchSize = 20;
 
     public BulkEmptyAnonymousShoppingCartProcessorImpl(final ShoppingCartStateService shoppingCartStateService,

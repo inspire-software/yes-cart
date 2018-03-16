@@ -67,6 +67,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void run() {
 
         try {
@@ -90,7 +91,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
      */
     void processMessage(final RegistrationMessage registrationMessage) throws Exception {
 
-        final Map<String, Object> model = new HashMap<String, Object>();
+        final Map<String, Object> model = new HashMap<>();
         model.put("email", registrationMessage.getEmail());
         model.put("password", registrationMessage.getPassword());
         model.put("authToken", registrationMessage.getAuthToken());
@@ -128,7 +129,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
                 if (notifyAdminEmails != null) {
 
                     for (final String notifyAdminEmail : notifyAdminEmails) {
-                        final Map<String, Object> adminModel = new HashMap<String, Object>();
+                        final Map<String, Object> adminModel = new HashMap<>();
                         adminModel.put("email", registrationMessage.getEmail());
                         adminModel.put("salutation", registrationMessage.getSalutation());
                         adminModel.put("firstName", registrationMessage.getFirstname());

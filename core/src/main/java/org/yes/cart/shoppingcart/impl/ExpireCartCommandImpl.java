@@ -41,6 +41,7 @@ public class ExpireCartCommandImpl  extends AbstractCartCommandImpl implements S
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCmdKey() {
         return CMD_EXPIRE;
     }

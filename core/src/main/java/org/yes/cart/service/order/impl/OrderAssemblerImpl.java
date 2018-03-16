@@ -105,6 +105,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * @param shoppingCart given shopping cart
      * @return not persisted but filled with data order
      */
+    @Override
     public CustomerOrder assembleCustomerOrder(final ShoppingCart shoppingCart) throws OrderAssemblyException {
         return assembleCustomerOrder(shoppingCart, false);
     }
@@ -117,6 +118,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
      *
      * @return not persisted but filled with data order
      */
+    @Override
     public CustomerOrder assembleCustomerOrder(final ShoppingCart shoppingCart, final boolean temp) throws OrderAssemblyException {
 
         final CustomerOrder customerOrder = entityFactory.getByIface(CustomerOrder.class);
@@ -448,7 +450,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * @param customerOrderDet item to populate
      * @param temp             temporary
      *
-     * @throws OrderAssemblyException
+     * @throws OrderAssemblyException error
      */
     protected void fillOrderDetail(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final CartItem item, final CustomerOrderDet customerOrderDet, final boolean temp) throws OrderAssemblyException {
 
@@ -542,7 +544,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * @param customerOrderDet item to populate
      * @param temp             temporary
      *
-     * @throws OrderAssemblyException
+     * @throws OrderAssemblyException error
      */
     private void fillOrderDetailPricing(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final CartItem item, final CustomerOrderDet customerOrderDet, final boolean temp) throws OrderAssemblyException {
         if (!temp) {

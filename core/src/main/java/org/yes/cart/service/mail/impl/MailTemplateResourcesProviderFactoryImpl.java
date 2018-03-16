@@ -41,6 +41,7 @@ public class MailTemplateResourcesProviderFactoryImpl implements MailTemplateRes
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "themeService-mailTemplate")
     public String getTemplate(final List<String> mailTemplateChain,
                               final String shopCode,
@@ -61,6 +62,7 @@ public class MailTemplateResourcesProviderFactoryImpl implements MailTemplateRes
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "themeService-mailResource")
     public byte[] getResource(final List<String> mailTemplateChain,
                               final String shopCode,

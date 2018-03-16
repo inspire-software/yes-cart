@@ -44,6 +44,7 @@ public class RemoveCouponEventCommandImpl extends AbstractCartCommandImpl implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCmdKey() {
         return CMD_REMOVECOUPON;
     }

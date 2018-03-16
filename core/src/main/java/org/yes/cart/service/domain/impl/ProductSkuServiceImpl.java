@@ -63,6 +63,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<ProductSku> getAllProductSkus(final long productId) {
         final Product product = productDao.findById(productId);
         return product.getSku();
@@ -71,6 +72,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductSku findProductSkuBySkuCode(final String skuCode) {
         return getGenericDao().findSingleByCriteria(
                 " where e.code = ?1", skuCode
@@ -80,6 +82,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductSku getProductSkuBySkuCode(final String skuCode) {
         return findProductSkuBySkuCode(skuCode);
     }
@@ -87,6 +90,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ProductSkuSearchResultDTO> getProductSkuSearchResultDTOByQuery(final NavigationContext context) {
 
         final Pair<List<Object[]>, Integer> searchRez = ((GenericFTSCapableDAO) getGenericDao()).fullTextSearch(
@@ -100,7 +104,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
                 LuceneDocumentAdapterUtils.FIELD_OBJECT
         );
 
-        final List<ProductSkuSearchResultDTO> rez = new ArrayList<ProductSkuSearchResultDTO>(searchRez.getFirst().size());
+        final List<ProductSkuSearchResultDTO> rez = new ArrayList<>(searchRez.getFirst().size());
         for (Object[] obj : searchRez.getFirst()) {
             final ProductSkuSearchResultDTO dto = LuceneDocumentAdapterUtils.readObjectFieldValue((String) obj[2], ProductSkuSearchResultDTOImpl.class);
             rez.add(dto);
@@ -113,12 +117,13 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Pair<String, SkuPrice>> getAllPrices(final long productId) {
         final List<SkuPrice> prices = skuPriceDao.findByNamedQuery("SKUPRICE.BY.PRODUCT", productId);
         if (CollectionUtils.isNotEmpty(prices)) {
-            final List<Pair<String, SkuPrice>> rez = new ArrayList<Pair<String, SkuPrice>>(prices.size());
+            final List<Pair<String, SkuPrice>> rez = new ArrayList<>(prices.size());
             for (final SkuPrice price : prices) {
-                rez.add(new Pair<String, SkuPrice>(price.getSkuCode(), price));
+                rez.add(new Pair<>(price.getSkuCode(), price));
             }
             return rez;
         }
@@ -128,12 +133,13 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Pair<String, SkuWarehouse>> getAllInventory(final long productId) {
         final List<Object[]> inventory = (List) getGenericDao().findQueryObjectsByNamedQuery("SKUWAREHOUSE.BY.PRODUCT", productId);
         if (CollectionUtils.isNotEmpty(inventory)) {
-            final List<Pair<String, SkuWarehouse>> rez = new ArrayList<Pair<String, SkuWarehouse>>(inventory.size());
+            final List<Pair<String, SkuWarehouse>> rez = new ArrayList<>(inventory.size());
             for (final Object[] price : inventory) {
-                rez.add(new Pair<String, SkuWarehouse>((String) price[1], (SkuWarehouse) price[0]));
+                rez.add(new Pair<>((String) price[1], (SkuWarehouse) price[0]));
             }
             return rez;
         }
@@ -143,6 +149,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeAllPrices(final long productId) {
         final List<ProductSku> skus = getGenericDao().findByCriteria(" where e.product.productId = ?1" , productId);
         for (ProductSku sku : skus) {
@@ -153,6 +160,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeAllPrices(final ProductSku sku) {
          getGenericDao().executeUpdate("REMOVE.ALL.SKUPRICE.BY.SKUCODE", sku.getCode());
 
@@ -161,6 +169,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeAllInventory(final long productId) {
         final List<ProductSku> skus = getGenericDao().findByCriteria(" where e.product.productId = ?1" , productId);
         for (ProductSku sku : skus) {
@@ -171,6 +180,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeAllInventory(final ProductSku sku) {
             getGenericDao().executeUpdate("REMOVE.ALL.SKU.INVENTORY", sku.getCode());
     }
@@ -178,6 +188,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeAllWishLists(final ProductSku sku) {
         getGenericDao().executeUpdate("REMOVE.ALL.WISHLIST.BY.SKUID", sku.getSkuId());
     }
@@ -185,6 +196,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeAllEnsembleOptions(final ProductSku sku) {
         getGenericDao().executeUpdate("REMOVE.ALL.ENSEMBLEOPTS.BY.SKUID", sku.getSkuId());
     }

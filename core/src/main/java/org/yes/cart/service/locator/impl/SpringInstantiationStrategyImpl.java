@@ -44,6 +44,7 @@ public class SpringInstantiationStrategyImpl implements InstantiationStrategy, A
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getProtocols() {
         return Collections.singleton(null);
     }
@@ -51,6 +52,7 @@ public class SpringInstantiationStrategyImpl implements InstantiationStrategy, A
     /**
      * {@inheritDoc}
      */
+    @Override
     public <T> T getInstance(final String serviceUrl,
                              final Class<T> iface,
                              final String loginName,
@@ -62,6 +64,7 @@ public class SpringInstantiationStrategyImpl implements InstantiationStrategy, A
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings({"unchecked"})
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;

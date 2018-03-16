@@ -79,6 +79,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Customer getCustomerByEmail(final String email, Shop shop) {
         if (StringUtils.isNotBlank(email)) {
             Customer customer = getGenericDao().findSingleByNamedQuery("CUSTOMER.BY.EMAIL.SHOP", email.toLowerCase(), shop.getShopId(), Boolean.FALSE);
@@ -93,6 +94,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Customer getCustomerByToken(final String token) {
         Customer customer = getGenericDao().findSingleByCriteria(" where e.authToken = ?1", token);
         if (customer != null) {
@@ -104,6 +106,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Customer getCustomerByPublicKey(final String publicKey, final String lastName) {
         Customer customer = getGenericDao().findSingleByCriteria(" where e.publicKey = ?1 and e.lastname = ?2", publicKey, lastName);
         if (customer != null) {
@@ -115,8 +118,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Shop> getCustomerShops(final Customer customer) {
-        final List<Shop> shops = new ArrayList<Shop>();
+        final List<Shop> shops = new ArrayList<>();
         if (customer != null) {
             Customer cust = getGenericDao().findById(customer.getCustomerId());
             if (cust != null) {
@@ -136,6 +140,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public String formatNameFor(final Customer customer, final Shop shop) {
 
         if (shop != null) {
@@ -149,6 +154,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Customer> findCustomer(final String email,
                                        final String firstname,
                                        final String lastname,
@@ -173,6 +179,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCustomerExists(final String email, final Shop shop) {
         final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("EMAIL.CHECK", email.toLowerCase(), shop.getShopId());
         if (CollectionUtils.isNotEmpty(counts)) {
@@ -184,6 +191,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isPasswordValid(final String email, final Shop shop, final String password) {
         try {
 
@@ -204,10 +212,11 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<AttrValueCustomer> getRankedAttributeValues(final Customer customer) {
         final Map<String, AttrValueCustomer> filledAttributes;
         if (customer != null) {
-            filledAttributes = new HashMap<String, AttrValueCustomer>(customer.getAttributes().size());
+            filledAttributes = new HashMap<>(customer.getAttributes().size());
             for (AttrValueCustomer attrVal : customer.getAttributes()) {
                 filledAttributes.put(attrVal.getAttributeCode(), attrVal);
             }
@@ -215,9 +224,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             filledAttributes = Collections.EMPTY_MAP;
         }
         final List<Attribute> attributes = new ArrayList<Attribute>(attributeService.findAvailableAttributes(AttributeGroupNames.CUSTOMER, Collections.EMPTY_LIST));
-        Collections.sort(attributes, new AttributeRankComparator());
+        attributes.sort(new AttributeRankComparator());
 
-        final List<AttrValueCustomer> rez = new ArrayList<AttrValueCustomer>(attributes.size());
+        final List<AttrValueCustomer> rez = new ArrayList<>(attributes.size());
         for (Attribute attr : attributes) {
             final AttrValueCustomer existing = filledAttributes.get(attr.getCode());
             if (existing != null) {
@@ -236,6 +245,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public void resetPassword(final Customer customer, final Shop shop, final String authToken) {
         super.update(customer);
     }
@@ -244,6 +254,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Customer create(final Customer customer, final Shop shop) {
         if (shop != null) {
             final String customerType = StringUtils.isNotBlank(customer.getCustomerType()) ? customer.getCustomerType() : AttributeNamesKeys.Cart.CUSTOMER_TYPE_REGULAR;
@@ -263,6 +274,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Customer updateActivate(final Customer customer, final Shop shop, final boolean soft) {
 
         if (shop != null) {
@@ -290,6 +302,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Customer updateDeactivate(final Customer customer, final Shop shop, final boolean soft) {
 
         if (shop != null) {
@@ -313,6 +326,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Customer create(final Customer instance) {
         throw new UnsupportedOperationException("Please use create(final Customer customer, final Shop shop)");
     }
@@ -320,6 +334,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Customer update(final String email, final String shopCode) {
         final Shop shop = shopService.getShopByCode(shopCode);
         if (shop != null) {
@@ -341,6 +356,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Customer update(final Customer instance) {
         return super.update(instance);
     }
@@ -348,6 +364,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public void delete(final Customer instance) {
         for(CustomerShop cshop : instance.getShops()) {
             customerShopDao.delete(cshop);
@@ -358,6 +375,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public ResultsIterator<Customer> findGuestsBefore(final Instant date) {
         return getGenericDao().findByNamedQueryIterator("GUESTS.BEFORE.CREATED", Boolean.TRUE, date);
     }

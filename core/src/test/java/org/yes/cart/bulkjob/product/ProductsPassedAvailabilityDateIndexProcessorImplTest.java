@@ -31,7 +31,6 @@ import org.yes.cart.util.DateUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,7 +56,7 @@ public class ProductsPassedAvailabilityDateIndexProcessorImplTest extends BaseCo
         productService.reindexProduct(product.getId());
 
         final NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, null,
-                false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD, (List) Arrays.asList("9998")));
+                false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD, (List) Collections.singletonList("9998")));
 
         List<ProductSearchResultDTO> rez = productService.getProductSearchResultDTOByQuery(
                 context, 0, 1, null, false).getResults();

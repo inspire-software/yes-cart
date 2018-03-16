@@ -81,7 +81,7 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
             final int batchSize = getBatchSize();
 
             int fromIndex = 0;
-            int toIndex = 0;
+            int toIndex;
             while (fromIndex < discontinued.size()) {
 
                 toIndex = fromIndex + batchSize > discontinued.size() ? discontinued.size() : fromIndex + batchSize;

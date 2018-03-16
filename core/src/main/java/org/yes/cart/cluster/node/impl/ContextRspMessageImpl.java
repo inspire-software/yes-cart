@@ -51,6 +51,7 @@ public class ContextRspMessageImpl extends RspMessageImpl implements ContextRspM
     /**
      * {@inheritDoc}
      */
+    @Override
     public AsyncContext getAsyncContext() {
         return asyncContext;
     }

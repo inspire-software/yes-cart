@@ -39,7 +39,7 @@ public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactor
     private final ShoppingCartCommandConfigurationProvider configurationProvider;
 
     private ConfigurableShoppingCartCommand[] commands;
-    private final Map<String, ConfigurableShoppingCartCommand> commandByKey = new HashMap<String, ConfigurableShoppingCartCommand>();
+    private final Map<String, ConfigurableShoppingCartCommand> commandByKey = new HashMap<>();
 
     public ShoppingCartCommandFactoryImpl(final ShoppingCartCommandConfigurationProvider configurationProvider) {
         this.configurationProvider = configurationProvider;
@@ -63,13 +63,8 @@ public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactor
     }
 
     ConfigurableShoppingCartCommand[] remapCommandChain(final Collection<ConfigurableShoppingCartCommand> commands) {
-        final List<ConfigurableShoppingCartCommand> ordered = new ArrayList<ConfigurableShoppingCartCommand>(commands);
-        Collections.sort(ordered, new Comparator<ShoppingCartCommand>() {
-            @Override
-            public int compare(final ShoppingCartCommand cmd1, final ShoppingCartCommand cmd2) {
-                return cmd1.getPriority() - cmd2.getPriority();
-            }
-        });
+        final List<ConfigurableShoppingCartCommand> ordered = new ArrayList<>(commands);
+        ordered.sort((cmd1, cmd2) -> cmd1.getPriority() - cmd2.getPriority());
         return ordered.toArray(new ConfigurableShoppingCartCommand[ordered.size()]);
     }
 

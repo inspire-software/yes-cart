@@ -39,6 +39,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
 
     private AttributeService attributeService;
 
+    @Override
     @Before
     public void setUp() {
         attributeService = (AttributeService) ctx().getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
@@ -68,7 +69,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
     public void testFindAvailableAttributes1() {
         List<Attribute> attrs = attributeService.findAvailableAttributes(AttributeGroupNames.PRODUCT, null); // getByKey all
         assertEquals(24, attrs.size());
-        List<String> assignedAttributes = new ArrayList<String>();
+        List<String> assignedAttributes = new ArrayList<>();
         for (Attribute attr : attrs) {
             assignedAttributes.add(attr.getCode());
         }
@@ -110,12 +111,12 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
         assertNotNull(attributes);
         assertTrue(attributes.isEmpty());
         // get all except URI
-        attributes = attributeService.findAvailableAttributes(AttributeGroupNames.CATEGORY, Arrays.asList("URI"));
+        attributes = attributeService.findAvailableAttributes(AttributeGroupNames.CATEGORY, Collections.singletonList("URI"));
         assertNotNull(attributes);
         assertFalse(attributes.isEmpty());
         assertEquals("CATEGORY_ITEMS_PER_PAGE", attributes.get(0).getCode());
         // get just URI
-        attributes = attributeService.findAttributesByCodes(AttributeGroupNames.CATEGORY, Arrays.asList("URI"));
+        attributes = attributeService.findAttributesByCodes(AttributeGroupNames.CATEGORY, Collections.singletonList("URI"));
         assertNotNull(attributes);
         assertFalse(attributes.isEmpty());
         assertEquals("URI", attributes.get(0).getCode());

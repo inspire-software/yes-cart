@@ -31,9 +31,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MailComposerTemplateSupportGroovyImpl implements MailComposerTemplateSupport {
 
-    private final Map<String, FunctionProvider> functions = new HashMap<String, FunctionProvider>();
-    private final Map<String, FunctionProvider> functionsCtx = new HashMap<String, FunctionProvider>();
-    private final Map<String, Locale> localeCache = new ConcurrentHashMap<String, Locale>();
+    private final Map<String, FunctionProvider> functions = new HashMap<>();
+    private final Map<String, FunctionProvider> functionsCtx = new HashMap<>();
+    private final Map<String, Locale> localeCache = new ConcurrentHashMap<>();
 
     private final TemplateSupport templateSupport;
 
@@ -52,7 +52,7 @@ public class MailComposerTemplateSupportGroovyImpl implements MailComposerTempla
         templateWithFuncs.append(template);
 
         // Add context as variable to allow smuggling in object into template
-        final Map<String, Object> fullContext = new HashMap<String, Object>(context);
+        final Map<String, Object> fullContext = new HashMap<>(context);
         fullContext.put("locale", locale);
         fullContext.put("localeObject", lazyLoad(locale));
         fullContext.putAll(functionsCtx);
@@ -63,12 +63,7 @@ public class MailComposerTemplateSupportGroovyImpl implements MailComposerTempla
     }
 
     Locale lazyLoad(final String lang) {
-        Locale locale = this.localeCache.get(lang);
-        if (locale == null) {
-            locale = new Locale(lang);
-            this.localeCache.put(lang, locale);
-        }
-        return locale;
+        return this.localeCache.computeIfAbsent(lang, Locale::new);
     }
 
     /**

@@ -35,6 +35,7 @@ public class SystemServiceImplTest extends BaseCoreDBTestCase {
 
     private SystemService systemService;
 
+    @Override
     @Before
     public void setUp() {
         systemService = ctx().getBean(ServiceSpringKeys.SYSTEM_SERVICE, SystemService.class);

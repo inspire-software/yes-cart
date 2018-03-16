@@ -21,7 +21,6 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 
@@ -38,6 +37,7 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
 
     private ShopService shopService;
 
+    @Override
     @Before
     public void setUp()  {
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
@@ -85,7 +85,7 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
         Set<Long> categorySet = shopService.getShopCategoriesIds(70L);
         assertFalse(categorySet.isEmpty());
         assertEquals(categories.size(), categorySet.size());
-        assertTrue(categories.containsAll(categories));
+        assertTrue(categories.containsAll(categorySet));
     }
 
 

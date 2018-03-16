@@ -16,7 +16,6 @@ import org.yes.cart.shoppingcart.impl.DefaultAmountCalculationStrategy;
 import org.yes.cart.shoppingcart.impl.TotalImpl;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.Assert.*;
@@ -67,7 +66,7 @@ public class ShoppingCartCalculatorImplTest {
             allowing(currentCartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(currentCartCtx).getStateCode(); will(returnValue("GB-GB"));
             allowing(currentCartCtx).getCustomerEmail(); will(returnValue("bob.doe@somewhere.com"));
-            allowing(currentCartCtx).getCustomerShops(); will(returnValue(Arrays.asList("SHOP10")));
+            allowing(currentCartCtx).getCustomerShops(); will(returnValue(Collections.singletonList("SHOP10")));
             allowing(currentCartCtx).getLatestViewedSkus(); will(returnValue(null));
             allowing(currentCartCtx).getLatestViewedCategories(); will(returnValue(null));
             allowing(currentCartCtx).getResolvedIp(); will(returnValue("127.0.0.1"));
@@ -222,7 +221,7 @@ public class ShoppingCartCalculatorImplTest {
             allowing(currentCartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(currentCartCtx).getStateCode(); will(returnValue("GB-GB"));
             allowing(currentCartCtx).getCustomerEmail(); will(returnValue("bob.doe@somewhere.com"));
-            allowing(currentCartCtx).getCustomerShops(); will(returnValue(Arrays.asList("SHOP10")));
+            allowing(currentCartCtx).getCustomerShops(); will(returnValue(Collections.singletonList("SHOP10")));
             allowing(currentCartCtx).getLatestViewedSkus(); will(returnValue(null));
             allowing(currentCartCtx).getLatestViewedCategories(); will(returnValue(null));
             allowing(currentCartCtx).getResolvedIp(); will(returnValue("127.0.0.1"));
@@ -378,7 +377,7 @@ public class ShoppingCartCalculatorImplTest {
             allowing(currentCartCtx).getCountryCode(); will(returnValue("US"));
             allowing(currentCartCtx).getStateCode(); will(returnValue("US-US"));
             allowing(currentCartCtx).getCustomerEmail(); will(returnValue("bob.doe@somewhere.com"));
-            allowing(currentCartCtx).getCustomerShops(); will(returnValue(Arrays.asList("SHOP10")));
+            allowing(currentCartCtx).getCustomerShops(); will(returnValue(Collections.singletonList("SHOP10")));
             allowing(currentCartCtx).getLatestViewedSkus(); will(returnValue(null));
             allowing(currentCartCtx).getLatestViewedCategories(); will(returnValue(null));
             allowing(currentCartCtx).getResolvedIp(); will(returnValue("127.0.0.1"));

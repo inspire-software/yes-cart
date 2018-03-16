@@ -101,101 +101,121 @@ public class TotalImpl implements Total {
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getListSubTotal() {
         return listSubTotal;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getSaleSubTotal() {
         return saleSubTotal;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getNonSaleSubTotal() {
         return nonSaleSubTotal;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getPriceSubTotal() {
         return priceSubTotal;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isOrderPromoApplied() {
         return orderPromoApplied;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getAppliedOrderPromo() {
         return appliedOrderPromo;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getSubTotal() {
         return subTotal;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getSubTotalTax() {
         return subTotalTax;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getSubTotalAmount() {
         return subTotalAmount;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getDeliveryListCost() {
         return deliveryListCost;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getDeliveryCost() {
         return deliveryCost;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isDeliveryPromoApplied() {
         return deliveryPromoApplied;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getAppliedDeliveryPromo() {
         return appliedDeliveryPromo;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getDeliveryTax() {
         return deliveryTax;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getDeliveryCostAmount() {
         return deliveryCostAmount;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getTotal() {
         return total;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getTotalTax() {
         return totalTax;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getListTotalAmount() {
         return listTotalAmount;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Total add(final Total summand) {
         final TotalImpl sum = new TotalImpl(
                 listSubTotal,
@@ -244,7 +264,7 @@ public class TotalImpl implements Total {
         if (StringUtils.isBlank(first) && StringUtils.isBlank(second)) {
             return null;
         }
-        final Set<String> unique = new HashSet<String>();
+        final Set<String> unique = new HashSet<>();
         if (StringUtils.isNotBlank(first)) {
             for (final String item : StringUtils.split(first, ',')) {
                 if (StringUtils.isNotBlank(item)) {

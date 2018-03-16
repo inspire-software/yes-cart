@@ -58,7 +58,7 @@ public class AlertDirectorImpl implements AlertDirector {
     List<Pair<String, String>> getAll() {
         final net.sf.ehcache.Cache nativeCache = (net.sf.ehcache.Cache) getAlertsStorage().getNativeCache();
         final Map<Object, Element> elems = nativeCache.getAll(nativeCache.getKeys());
-        final List<Pair<String, String>> all = new ArrayList<Pair<String, String>>(100);
+        final List<Pair<String, String>> all = new ArrayList<>(100);
         for (final Map.Entry<Object, Element> elem : elems.entrySet()) {
             if (elem.getValue() != null && !elem.getValue().isExpired()) {
                 final LocalDateTime last = LocalDateTime.ofInstant(
@@ -66,7 +66,7 @@ public class AlertDirectorImpl implements AlertDirector {
                         DateUtils.zone()
                 );
                 final Pair<String, String> elemOriginal = (Pair<String, String>) elem.getValue().getObjectValue();
-                final Pair<String, String> elemWithLastTime = new Pair<String, String>(
+                final Pair<String, String> elemWithLastTime = new Pair<>(
                         DateUtils.formatSDT(last) + ": " + elemOriginal.getFirst(),
                         elemOriginal.getSecond()
                 );

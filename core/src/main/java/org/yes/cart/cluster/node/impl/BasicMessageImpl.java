@@ -53,6 +53,7 @@ public class BasicMessageImpl implements Message {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSource() {
         return source;
     }
@@ -60,6 +61,7 @@ public class BasicMessageImpl implements Message {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<String> getTargets() {
         return targets;
     }
@@ -67,6 +69,7 @@ public class BasicMessageImpl implements Message {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSubject() {
         return subject;
     }
@@ -74,6 +77,7 @@ public class BasicMessageImpl implements Message {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Serializable getPayload() {
         return payload;
     }

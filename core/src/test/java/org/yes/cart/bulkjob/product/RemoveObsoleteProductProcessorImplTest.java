@@ -55,10 +55,10 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus status) {
                 createProducts(
-                        new Pair<String, String>("OBS-001", "1999-01-01"),
-                        new Pair<String, String>("OBS-002", "1999-01-05"),
-                        new Pair<String, String>("OBS-003", "1999-01-10"),
-                        new Pair<String, String>("OBS-004", "1999-01-15")
+                        new Pair<>("OBS-001", "1999-01-01"),
+                        new Pair<>("OBS-002", "1999-01-05"),
+                        new Pair<>("OBS-003", "1999-01-10"),
+                        new Pair<>("OBS-004", "1999-01-15")
                 );
             }
         });

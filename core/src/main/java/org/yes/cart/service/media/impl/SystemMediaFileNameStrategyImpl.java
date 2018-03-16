@@ -39,6 +39,7 @@ public class SystemMediaFileNameStrategyImpl extends AbstractMediaFileNameStrate
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String resolveObjectCodeInternal(final String url) {
 
         return "YC";

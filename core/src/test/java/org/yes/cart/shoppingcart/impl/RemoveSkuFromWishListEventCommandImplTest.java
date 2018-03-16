@@ -62,7 +62,7 @@ public class RemoveSkuFromWishListEventCommandImplTest extends BaseCoreDBTestCas
 
 
         assertEquals(ShoppingCart.NOT_LOGGED, shoppingCart.getLogonState());
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customer.getEmail());
         params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
         params.put(LoginCommandImpl.CMD_LOGIN, "1");

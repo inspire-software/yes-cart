@@ -43,6 +43,7 @@ public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOPr
      *
      * @return file object
      */
+    @Override
     public abstract File resolveFileFromUri(final String uri, final Map<String, Object> context);
 
     /**

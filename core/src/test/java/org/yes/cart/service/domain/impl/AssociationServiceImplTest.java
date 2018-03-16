@@ -38,8 +38,9 @@ import static org.junit.Assert.*;
 public class AssociationServiceImplTest extends BaseCoreDBTestCase {
 
     private AssociationService associationService;
-    private Set<Long> cleanupPks = new HashSet<Long>();
+    private Set<Long> cleanupPks = new HashSet<>();
 
+    @Override
     @Before
     public void setUp() {
         associationService = (AssociationService) ctx().getBean(ServiceSpringKeys.ASSOCIATION_SERVICE);

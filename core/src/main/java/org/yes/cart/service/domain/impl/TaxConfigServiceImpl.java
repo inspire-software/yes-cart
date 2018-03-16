@@ -24,7 +24,6 @@ import org.yes.cart.service.domain.TaxConfigService;
 import org.yes.cart.service.domain.TaxService;
 import org.yes.cart.utils.HQLUtils;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -44,6 +43,7 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
     }
 
     /** {@inheritDoc} */
+    @Override
     public Long getTaxIdBy(final String shopCode, final String currency, final String countryCode, final String stateCode, final String productCode) {
 
         final List<Tax> shopTaxes = taxService.getTaxesByShopCode(shopCode, currency);
@@ -56,7 +56,7 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
             return null;
         }
 
-        Collections.sort(taxConfigs, PRIORITY);
+        taxConfigs.sort(PRIORITY);
 
         return taxConfigs.get(0).getTax().getTaxId();
 
@@ -112,6 +112,7 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
     };
 
     /** {@inheritDoc} */
+    @Override
     public List<TaxConfig> findByTaxId(final long taxId,
                                        final String countryCode,
                                        final String stateCode,
@@ -157,6 +158,7 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
     }
 
     /** {@inheritDoc} */
+    @Override
     public TaxConfig create(final TaxConfig instance) {
         cleanRegionalTaxCodes(instance);
         regenerateGuid(instance);
@@ -164,6 +166,7 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
     }
 
     /** {@inheritDoc} */
+    @Override
     public TaxConfig update(final TaxConfig instance) {
         cleanRegionalTaxCodes(instance);
         regenerateGuid(instance);
@@ -171,6 +174,7 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
     }
 
     /** {@inheritDoc} */
+    @Override
     public void delete(final TaxConfig instance) {
         super.delete(instance);
     }

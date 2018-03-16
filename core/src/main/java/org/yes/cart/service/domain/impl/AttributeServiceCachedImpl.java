@@ -44,6 +44,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Attribute> findByAttributeGroupCode(final String attributeGroupCode) {
         return attributeService.findByAttributeGroupCode(attributeGroupCode);
     }
@@ -51,6 +52,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Attribute findByAttributeCode(final String attributeCode) {
         return attributeService.findByAttributeCode(attributeCode);
     }
@@ -58,6 +60,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-byAttributeCode")
     public Attribute getByAttributeCode(final String attributeCode) {
         return attributeService.getByAttributeCode(attributeCode);
@@ -66,6 +69,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Attribute> findAttributesWithMultipleValues(final String attributeGroupCode) {
         return attributeService.findAttributesWithMultipleValues(attributeGroupCode);
     }
@@ -82,6 +86,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Attribute> findAvailableAttributes(final String attributeGroupCode, final List<String> exclude) {
         return attributeService.findAvailableAttributes(attributeGroupCode, exclude);
     }
@@ -89,6 +94,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Attribute> findAttributesByCodes(final String attributeGroupCode, final List<String> codes) {
         return attributeService.findAttributesByCodes(attributeGroupCode, codes);
     }
@@ -96,6 +102,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-availableAttributesByProductTypeId")
     public List<Attribute> getAvailableAttributesByProductTypeId(final long productTypeId) {
         return attributeService.getAvailableAttributesByProductTypeId(productTypeId);
@@ -104,6 +111,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-availableImageAttributesByGroupCode")
     public List<Attribute> getAvailableImageAttributesByGroupCode(final String attributeGroupCode) {
         return attributeService.getAvailableImageAttributesByGroupCode(attributeGroupCode);
@@ -112,6 +120,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-availableAttributesByGroupCodeStartsWith")
     public List<Attribute> getAvailableAttributesByGroupCodeStartsWith(final String attributeGroupCode, final String codePrefix) {
         return attributeService.getAvailableAttributesByGroupCodeStartsWith(attributeGroupCode, codePrefix);
@@ -120,6 +129,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-allAttributeCodes")
     public Set<String> getAllAttributeCodes() {
         return attributeService.getAllAttributeCodes();
@@ -128,6 +138,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-allNavigatableAttributeCodes")
     public Set<String> getAllNavigatableAttributeCodes() {
         return attributeService.getAllNavigatableAttributeCodes();
@@ -136,6 +147,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-allSearchableAttributeCodes")
     public Set<String> getAllSearchableAttributeCodes() {
         return attributeService.getAllSearchableAttributeCodes();
@@ -144,6 +156,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-allSearchablePrimaryAttributeCodes")
     public Set<String> getAllSearchablePrimaryAttributeCodes() {
         return attributeService.getAllSearchablePrimaryAttributeCodes();
@@ -152,6 +165,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-allStorableAttributeCodes")
     public Set<String> getAllStorableAttributeCodes() {
         return attributeService.getAllStorableAttributeCodes();
@@ -160,6 +174,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-singleNavigatableAttributeCodesByProductType")
     public Map<String, Integer> getSingleNavigatableAttributeCodesByProductType(final long productTypeId) {
         return attributeService.getSingleNavigatableAttributeCodesByProductType(productTypeId);
@@ -168,6 +183,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-navigatableAttributeDisplayValue")
     public I18NModel getNavigatableAttributeDisplayValue(final String attrCode, final String value) {
         return attributeService.getNavigatableAttributeDisplayValue(attrCode, value);
@@ -177,6 +193,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-allAttributeNames")
     public Map<String, I18NModel> getAllAttributeNames() {
         return attributeService.getAllAttributeNames();
@@ -185,6 +202,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "attributeService-attributeNamesByCodes")
     public Map<String, I18NModel> getAttributeNamesByCodes(final Set<String> codes) {
         return attributeService.getAttributeNamesByCodes(codes);
@@ -194,6 +212,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Attribute> findAll() {
         return attributeService.findAll();
     }
@@ -201,6 +220,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<Attribute> callback) {
         attributeService.findAllIterator(callback);
     }
@@ -209,11 +229,13 @@ public class AttributeServiceCachedImpl implements AttributeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Attribute findById(final long pk) {
         return attributeService.findById(pk);
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
             "attributeService-availableImageAttributesByGroupCode",
             "attributeService-availableAttributesByGroupCodeStartsWith",
@@ -233,6 +255,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
             "attributeService-availableImageAttributesByGroupCode",
             "attributeService-availableAttributesByGroupCodeStartsWith",
@@ -252,6 +275,7 @@ public class AttributeServiceCachedImpl implements AttributeService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
             "attributeService-availableImageAttributesByGroupCode",
             "attributeService-availableAttributesByGroupCodeStartsWith",
@@ -271,21 +295,25 @@ public class AttributeServiceCachedImpl implements AttributeService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Attribute> findByCriteria(final String eCriteria, final Object... parameters) {
         return attributeService.findByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return attributeService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Attribute findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return attributeService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public GenericDAO<Attribute, Long> getGenericDao() {
         return attributeService.getGenericDao();
     }

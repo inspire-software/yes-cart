@@ -44,6 +44,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "contentService-rootContent")
     public Category getRootContent(final long shopId) {
         return contentService.getRootContent(shopId);
@@ -52,6 +53,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = "contentService-rootContent")
     public Category createRootContent(final long shopId) {
         return contentService.createRootContent(shopId);
@@ -60,6 +62,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "contentService-contentTemplate" )
     public String getContentTemplate(final long contentId) {
         return contentService.getContentTemplate(contentId);
@@ -68,6 +71,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "contentService-contentBody")
     public String getContentBody(final long contentId, final String locale) {
         return contentService.getContentBody(contentId, locale);
@@ -76,6 +80,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "contentService-contentBody")
     public String getContentBody(final String contentUri, final String locale) {
         return contentService.getContentBody(contentUri, locale);
@@ -84,6 +89,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDynamicContentBody(final long contentId, final String locale, final Map<String, Object> context) {
         return contentService.getDynamicContentBody(contentId, locale, context);
     }
@@ -91,6 +97,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDynamicContentBody(final String contentUri, final String locale, final Map<String, Object> context) {
         return contentService.getDynamicContentBody(contentUri, locale, context);
     }
@@ -98,6 +105,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "contentService-contentAttributeRecursive")
     public String getContentAttributeRecursive(final String locale, final long contentId, final String attributeName, final String defaultValue) {
         return contentService.getContentAttributeRecursive(locale, contentId, attributeName, defaultValue);
@@ -106,6 +114,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "contentService-contentAttributesRecursive" )
     public String[] getContentAttributeRecursive(final String locale, final long contentId, final String[] attributeNames) {
         return contentService.getContentAttributeRecursive(locale, contentId, attributeNames);
@@ -114,6 +123,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "contentService-childContent")
     public List<Category> getChildContent(final long contentId) {
         return contentService.getChildContent(contentId);
@@ -122,6 +132,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> findChildContentWithAvailability(final long contentId, final boolean withAvailability) {
         return contentService.findChildContentWithAvailability(contentId, withAvailability);
     }
@@ -129,6 +140,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "contentService-childContentRecursive")
     public Set<Category> getChildContentRecursive(final long contentId) {
         return contentService.getChildContentRecursive(contentId);
@@ -137,6 +149,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> findBy(final long shopId, final String code, final String name, final String uri, final int page, final int pageSize) {
         return contentService.findBy(shopId, code, name, uri, page, pageSize);
     }
@@ -146,6 +159,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc} Just to cache
      */
+    @Override
     @Cacheable(value = "contentService-byId")
     public Category getById(final long categoryId) {
         return contentService.getById(categoryId);
@@ -154,6 +168,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findContentIdBySeoUri(final String seoUri) {
         return contentService.findContentIdBySeoUri(seoUri);
     }
@@ -161,6 +176,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findContentIdByGUID(final String guid) {
         return contentService.findContentIdByGUID(guid);
     }
@@ -168,6 +184,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String findSeoUriByContentId(final Long contentId) {
         return contentService.findSeoUriByContentId(contentId);
     }
@@ -175,6 +192,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "contentService-contentHasSubcontent")
     public boolean isContentHasSubcontent(final long topContentId, final long subContentId) {
         return contentService.isContentHasSubcontent(topContentId, subContentId);
@@ -183,6 +201,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> findAll() {
         return contentService.findAll();
     }
@@ -190,6 +209,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<Category> callback) {
         contentService.findAllIterator(callback);
     }
@@ -197,6 +217,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category findById(final long pk) {
         return contentService.findById(pk);
     }
@@ -204,6 +225,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "contentService-rootContent",
             "categoryService-currentCategoryMenu",
@@ -225,6 +247,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "contentService-rootContent",
             "categoryService-currentCategoryMenu",
@@ -247,6 +270,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value ={
             "contentService-rootContent",
             "categoryService-currentCategoryMenu",
@@ -269,6 +293,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> findByCriteria(final String eCriteria, final Object... parameters) {
         return contentService.findByCriteria(eCriteria, parameters);
     }
@@ -276,6 +301,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return contentService.findCountByCriteria(eCriteria, parameters);
     }
@@ -283,6 +309,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return contentService.findSingleByCriteria(eCriteria, parameters);
     }
@@ -290,6 +317,7 @@ public class ContentServiceCachedImpl implements ContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public GenericDAO<Category, Long> getGenericDao() {
         return contentService.getGenericDao();
     }

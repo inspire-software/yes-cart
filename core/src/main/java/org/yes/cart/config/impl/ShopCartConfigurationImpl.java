@@ -44,6 +44,7 @@ public class ShopCartConfigurationImpl extends AbstractShopConfigurationImpl {
     }
 
     /** {@inheritDoc} */
+    @Override
     protected void doConfigurations(final Shop shop, final List<Shop> subs, final Properties properties) {
         this.registerCustomCartContentsValidator(shop, subs, properties);
     }

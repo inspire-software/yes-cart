@@ -37,6 +37,7 @@ public class PromotionServiceImpl extends BaseGenericServiceImpl<Promotion> impl
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Promotion> getPromotionsByShopCode(final String shopCode, final String currency, final boolean active) {
         if (active) {
             final LocalDateTime now = now();
@@ -50,6 +51,7 @@ public class PromotionServiceImpl extends BaseGenericServiceImpl<Promotion> impl
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Promotion> findByParameters(final String code,
                                             final String shopCode,
                                             final String currency,
@@ -76,6 +78,7 @@ public class PromotionServiceImpl extends BaseGenericServiceImpl<Promotion> impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findPromotionIdByCode(final String code) {
         List<Object> list = getGenericDao().findQueryObjectByNamedQuery("PROMOTION.ID.BY.CODE", code);
         if (list != null && !list.isEmpty()) {

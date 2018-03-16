@@ -19,7 +19,6 @@ package org.yes.cart.service.domain.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuWarehouse;
@@ -48,6 +47,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     private SkuWarehouseService skuWarehouseService;
     private ProductSkuService productSkuService;
 
+    @Override
     @Before
     public void setUp()  {
         warehouseService = (WarehouseService) ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
@@ -84,7 +84,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         skuWarehouse.setQuantity(new BigDecimal("4.00"));
         skuWarehouse.setReserved(new BigDecimal("0.00"));
         skuWarehouseService.create(skuWarehouse);
-        List<Warehouse> warehouses = new ArrayList<Warehouse>();
+        List<Warehouse> warehouses = new ArrayList<>();
         warehouses.add(warehouseService.findById(3L));
         warehouses.add(warehouseService.findById(2L));
         warehouses.add(warehouseService.findById(1L));
@@ -99,7 +99,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetQuantity2() {
-        List<Warehouse> warehouses = new ArrayList<Warehouse>();
+        List<Warehouse> warehouses = new ArrayList<>();
         warehouses.add(warehouseService.findById(3L));
         warehouses.add(warehouseService.findById(2L));
         warehouses.add(warehouseService.findById(1L));

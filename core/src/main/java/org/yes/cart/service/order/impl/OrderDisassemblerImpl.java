@@ -55,6 +55,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
      * @param customerOrder given order
      * @return cart
      */
+    @Override
     public ShoppingCart assembleShoppingCart(final CustomerOrder customerOrder, final boolean promotionsDisabled) throws OrderAssemblyException {
 
         final ShoppingCartImpl shoppingCart = new ShoppingCartImpl();
@@ -131,9 +132,9 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
         mutableOrderInfo.setOrderMessage(customerOrder.getOrderMessage());
 
         final Collection<CustomerOrderDelivery> deliveries = customerOrder.getDelivery();
-        final Map<String, Integer> noOfStdDeliveriesBySupplier = new HashMap<String, Integer>();
+        final Map<String, Integer> noOfStdDeliveriesBySupplier = new HashMap<>();
         boolean multi = false;
-        final Map<String, Boolean> multiAvailable = new HashMap<String, Boolean>();
+        final Map<String, Boolean> multiAvailable = new HashMap<>();
         if (CollectionUtils.isNotEmpty(deliveries)) {
             for (final CustomerOrderDelivery delivery : deliveries) {
                 // Preset shipping methods by supplier from first item in the delivery
@@ -189,7 +190,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
         final Shop configShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
         mutableShoppingContext.setCustomerName(formatNameFor(customerOrder, configShop));
 
-        final List<String> customerShops = new ArrayList<String>();
+        final List<String> customerShops = new ArrayList<>();
         customerShops.add(customerOrder.getShop().getCode());
         mutableShoppingContext.setCustomerShops(customerShops); // Only use order's shop, since it may be guest checkout
         if (customerOrder.getShop().getMaster() != null) {

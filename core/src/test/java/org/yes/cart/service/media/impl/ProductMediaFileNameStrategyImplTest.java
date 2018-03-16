@@ -33,6 +33,7 @@ public class ProductMediaFileNameStrategyImplTest extends BaseCoreDBTestCase {
 
     private MediaFileNameStrategy mediaFileNameStrategy;
 
+    @Override
     @Before
     public void setUp() {
         mediaFileNameStrategy = (MediaFileNameStrategy) ctx().getBean(ServiceSpringKeys.PRODUCT_IMAGE_NAME_STRATEGY);

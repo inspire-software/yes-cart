@@ -45,6 +45,7 @@ public class MailTemplateResourcesProviderThemeImpl implements MailTemplateResou
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTemplate(final List<String> mailTemplateChain,
                               final String shopCode,
                               final String locale,
@@ -71,6 +72,7 @@ public class MailTemplateResourcesProviderThemeImpl implements MailTemplateResou
     /**
      * {@inheritDoc}
      */
+    @Override
     public byte[] getResource(final List<String> mailTemplateChain,
                               final String shopCode,
                               final String locale,
@@ -95,6 +97,7 @@ public class MailTemplateResourcesProviderThemeImpl implements MailTemplateResou
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setServletContext(final ServletContext servletContext) {
         this.servletContext = servletContext;
     }

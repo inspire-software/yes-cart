@@ -39,12 +39,14 @@ public class TaxConfigServiceCachedImpl implements TaxConfigService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable("taxConfigService-getTaxIdBy")
     public Long getTaxIdBy(final String shopCode, final String currency, final String countryCode, final String stateCode, final String productCode) {
         return taxConfigService.getTaxIdBy(shopCode, currency, countryCode, stateCode, productCode);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<TaxConfig> findByTaxId(final long taxId,
                                        final String countryCode,
                                        final String stateCode,
@@ -53,24 +55,28 @@ public class TaxConfigServiceCachedImpl implements TaxConfigService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = "taxConfigService-getTaxIdBy", allEntries = true)
     public TaxConfig create(final TaxConfig instance) {
         return taxConfigService.create(instance);
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = "taxConfigService-getTaxIdBy", allEntries = true)
     public TaxConfig update(final TaxConfig instance) {
         return taxConfigService.update(instance);
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = "taxConfigService-getTaxIdBy", allEntries = true)
     public void delete(final TaxConfig instance) {
         taxConfigService.delete(instance);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<TaxConfig> findAll() {
         return taxConfigService.findAll();
     }
@@ -78,31 +84,37 @@ public class TaxConfigServiceCachedImpl implements TaxConfigService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<TaxConfig> callback) {
         taxConfigService.findAllIterator(callback);
     }
 
     /** {@inheritDoc} */
+    @Override
     public TaxConfig findById(final long pk) {
         return taxConfigService.findById(pk);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<TaxConfig> findByCriteria(final String eCriteria, final Object... parameters) {
         return taxConfigService.findByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return taxConfigService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public TaxConfig findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return taxConfigService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public GenericDAO<TaxConfig, Long> getGenericDao() {
         return taxConfigService.getGenericDao();
     }

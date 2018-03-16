@@ -55,14 +55,15 @@ public class PriceListDeliveryCostCalculationStrategy implements DeliveryCostCal
     }
 
     /** {@inheritDoc} */
+    @Override
     public Total calculate(final MutableShoppingCart cart) {
 
         if (!cart.getCarrierSlaId().isEmpty()) {
 
             Total total = null;
 
-            final Set<DeliveryBucket> cartBuckets = new HashSet<DeliveryBucket>(cart.getCartItemMap().keySet());
-            final Set<DeliveryBucket> supplierBuckets = new HashSet<DeliveryBucket>();
+            final Set<DeliveryBucket> cartBuckets = new HashSet<>(cart.getCartItemMap().keySet());
+            final Set<DeliveryBucket> supplierBuckets = new HashSet<>();
 
             for (final Map.Entry<String, Long> supplierCarrierSla : cart.getCarrierSlaId().entrySet()) {
 

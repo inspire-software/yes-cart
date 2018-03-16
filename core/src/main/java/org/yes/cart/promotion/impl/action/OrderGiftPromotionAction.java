@@ -69,7 +69,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
     public BigDecimal testDiscountValue(final Map<String, Object> context) {
         final ItemPromotionActionContext ctx = getPromotionActionContext(context);
         final Total itemTotal = getItemTotal(context);
-        final BigDecimal giftQty = BigDecimal.ONE.multiply(ctx.getMultiplier(itemTotal.getPriceSubTotal())).setScale(0, RoundingMode.HALF_UP).setScale(2);
+        final BigDecimal giftQty = BigDecimal.ONE.multiply(ctx.getMultiplier(itemTotal.getPriceSubTotal())).setScale(0, RoundingMode.HALF_UP).setScale(2, RoundingMode.HALF_UP);
         if (MoneyUtils.isPositive(giftQty)) {
             final BigDecimal giftValue = getAmountValue(context);
             if (MoneyUtils.isPositive(giftValue) && MoneyUtils.isPositive(itemTotal.getPriceSubTotal())) {
@@ -152,7 +152,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
         final SkuPrice giftValue = getGiftPrices(ctx.getSubject(), cart);
         if (giftValue != null) {
             // add gift and set its price, we assume gift are in whole units
-            final BigDecimal giftQty = BigDecimal.ONE.multiply(ctx.getMultiplier(itemTotal.getPriceSubTotal())).setScale(0, RoundingMode.HALF_UP).setScale(2);
+            final BigDecimal giftQty = BigDecimal.ONE.multiply(ctx.getMultiplier(itemTotal.getPriceSubTotal())).setScale(0, RoundingMode.HALF_UP).setScale(2, RoundingMode.HALF_UP);
             cart.addGiftToCart(ctx.getSubject(), getSkuName(ctx.getSubject(), cart.getCurrentLocale()), giftQty, getPromotionCode(context));
 
             final Pair<BigDecimal, BigDecimal> listAndSale = giftValue.getSalePriceForCalculation();

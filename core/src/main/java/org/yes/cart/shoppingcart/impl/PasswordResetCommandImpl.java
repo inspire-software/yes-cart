@@ -58,6 +58,7 @@ public class PasswordResetCommandImpl extends AbstractCartCommandImpl implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCmdKey() {
         return CMD_RESET_PASSWORD;
     }

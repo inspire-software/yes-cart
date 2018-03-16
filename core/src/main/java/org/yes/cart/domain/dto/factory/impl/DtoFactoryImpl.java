@@ -38,23 +38,27 @@ public class DtoFactoryImpl implements DtoFactory {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class getClazz(final String entityBeanKey) {
         return getImplClass(entityBeanKey);
     }
 
 
     /** {@inheritDoc} */
+    @Override
     public Object get(final String entityBeanKey) {
         return getByKey(entityBeanKey);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class getImplClass(final Class interfaceClass) {
         final String ifaceName = interfaceClass.getCanonicalName();
         return getImplClass(ifaceName);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class getImplClass(final String ifaceName) {
         final String className = classMap.get(ifaceName);
         if (className != null) {
@@ -70,11 +74,13 @@ public class DtoFactoryImpl implements DtoFactory {
     }
 
     /** {@inheritDoc} */
+    @Override
     public <T> T getByKey(final String entityBeanKey) {
         return (T) getInternal(entityBeanKey);
     }
 
     /** {@inheritDoc} */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T getByIface(final Class iface) {
 

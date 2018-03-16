@@ -47,6 +47,7 @@ public class ChangeLocaleCartCommandImpl  extends AbstractCartCommandImpl {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCmdKey() {
         return CMD_CHANGELOCALE;
     }

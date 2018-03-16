@@ -60,9 +60,10 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<SkuWarehouse> getProductSkusOnWarehouse(final long productId, final long warehouseId) {
         final Product product = productService.getProductById(productId, true);
-        final Set<String> skus = new HashSet<String>();
+        final Set<String> skus = new HashSet<>();
         for (final ProductSku productSku : product.getSku()) {
             skus.add(productSku.getCode());
         }
@@ -75,12 +76,13 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, BigDecimal> getProductAvailableToSellQuantity(final long productId, final Collection<Warehouse> warehouses) {
 
         final Product product = productService.getProductById(productId, true);
 
-        final Map<String, BigDecimal> qty = new HashMap<String, BigDecimal>();
-        final Set<String> skuCodes = new HashSet<String>();
+        final Map<String, BigDecimal> qty = new HashMap<>();
+        final Set<String> skuCodes = new HashSet<>();
         for (final ProductSku sku : product.getSku()) {
             qty.put(sku.getCode(), BigDecimal.ZERO);
             skuCodes.add(sku.getCode());
@@ -90,7 +92,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
             return qty;
         }
 
-        final List<Long> whIds = new ArrayList<Long>();
+        final List<Long> whIds = new ArrayList<>();
         for (final Warehouse wh : warehouses) {
             whIds.add(wh.getWarehouseId());
         }
@@ -115,9 +117,10 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, BigDecimal> getProductSkuAvailableToSellQuantity(final String productSku, final Collection<Warehouse> warehouses) {
 
-        final Map<String, BigDecimal> qty = new HashMap<String, BigDecimal>();
+        final Map<String, BigDecimal> qty = new HashMap<>();
         qty.put(productSku, BigDecimal.ZERO);
 
         if (CollectionUtils.isEmpty(warehouses)) {
@@ -140,9 +143,10 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      * @param productSkuCode sku
      * @return pair of available and reserved quantity
      */
+    @Override
     public Pair<BigDecimal, BigDecimal> findQuantity(final Collection<Warehouse> warehouses, final String productSkuCode) {
 
-        final List<Object> warehouseIdList = new ArrayList<Object>(warehouses.size());
+        final List<Object> warehouseIdList = new ArrayList<>(warehouses.size());
         for (Warehouse wh : warehouses) {
             warehouseIdList.add(wh.getWarehouseId());
         }
@@ -166,7 +170,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
             }
         }
 
-        return new Pair<BigDecimal, BigDecimal>(quantity, reserved);
+        return new Pair<>(quantity, reserved);
 
     }
 
@@ -174,6 +178,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal reservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal reserveQty) {
 
         return reservation(warehouse, productSkuCode, reserveQty, false);
@@ -184,6 +189,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal reservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal reserveQty, final boolean allowBackorder) {
 
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
@@ -228,6 +234,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal voidReservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal voidQty) {
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
 
@@ -251,6 +258,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal credit(final Warehouse warehouse, final String productSkuCode, final BigDecimal addQty) {
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
 
@@ -272,6 +280,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal debit(final Warehouse warehouse, final String productSkuCode, final BigDecimal debitQty) {
 
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
@@ -293,12 +302,13 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     }
 
     /** {@inheritDoc}*/
+    @Override
     public SkuWarehouse create(SkuWarehouse instance) {
-        final SkuWarehouse rez = super.create(instance);
-        return rez;
+        return super.create(instance);
     }
 
     /** {@inheritDoc}*/
+    @Override
     public SkuWarehouse update(SkuWarehouse instance) {
         final SkuWarehouse rez = super.update(instance);
         getGenericDao().flush(); // Need to make changes immediately available
@@ -315,6 +325,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
 
     /** {@inheritDoc} */
+    @Override
     public SkuWarehouse findByWarehouseSku(final Warehouse warehouse, final String productSkuCode) {
         return getGenericDao().findSingleByNamedQuery(
                 "SKUS.ON.WAREHOUSE.BY.SKUCODE.WAREHOUSEID",
@@ -323,11 +334,13 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> findProductSkuForWhichInventoryChangedAfter(final Instant lastUpdate) {
         return (List) getGenericDao().findQueryObjectByNamedQuery("SKUCODE.FOR.SKUWAREHOUSE.CHANGED.SINCE", lastUpdate);
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isSkuAvailabilityPreorderOrBackorder(final String productSkuCode, final boolean checkAvailabilityDates) {
         ProductSku sku = productService.getProductSkuByCode(productSkuCode);
         if (sku != null) {

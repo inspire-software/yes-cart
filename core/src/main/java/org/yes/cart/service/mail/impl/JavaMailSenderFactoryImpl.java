@@ -24,6 +24,7 @@ public class JavaMailSenderFactoryImpl implements JavaMailSenderFactory {
     /**
      * {@inheritDoc}
      */
+    @Override
     public JavaMailSender getJavaMailSender(final String shopCode) {
         JavaMailSender sender = null;
         if (StringUtils.isNotEmpty(shopCode) && !"DEFAULT".equals(shopCode)) {

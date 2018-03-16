@@ -47,6 +47,7 @@ public class RestoreCartCommandImpl extends AbstractCartCommandImpl implements S
     /**
      * @return command key
      */
+    @Override
     public String getCmdKey() {
         return CMD_RESTORE;
     }

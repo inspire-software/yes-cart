@@ -38,11 +38,13 @@ public class CarrierSlaServiceImpl extends BaseGenericServiceImpl<CarrierSla> im
     }
 
     /** {@inheritDoc} */
+    @Override
     public CarrierSla getById(final long carrierSlaId) {
         return findById(carrierSlaId);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<CarrierSla> findByCarrier(final long carrierId) {
         return getGenericDao().findByNamedQuery("CARRIER.SLA.BY.CARRIER", carrierId);
     }

@@ -57,6 +57,7 @@ public class ShopCategoryServiceImpl extends BaseGenericServiceImpl<ShopCategory
     /**
      * {@inheritDoc}
      */
+    @Override
     public void deleteAll(final Category category) {
         if (category != null) {
             final Collection<ShopCategory> shopCategories = shopCategoryDao.findByCriteria(
@@ -70,6 +71,7 @@ public class ShopCategoryServiceImpl extends BaseGenericServiceImpl<ShopCategory
     /**
      * {@inheritDoc}
      */
+    @Override
     public ShopCategory findByShopCategory(final Shop shop, final Category category) {
         return shopCategoryDao.findSingleByCriteria(
                 " where e.category = ?1 and e.shop = ?2",
@@ -83,6 +85,7 @@ public class ShopCategoryServiceImpl extends BaseGenericServiceImpl<ShopCategory
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "categoryService-topLevelCategories",
             "categoryService-currentCategoryMenu",
@@ -112,6 +115,7 @@ public class ShopCategoryServiceImpl extends BaseGenericServiceImpl<ShopCategory
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "categoryService-topLevelCategories",
             "categoryService-currentCategoryMenu",

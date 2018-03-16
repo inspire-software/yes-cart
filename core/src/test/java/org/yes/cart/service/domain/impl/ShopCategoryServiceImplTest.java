@@ -41,6 +41,7 @@ public class ShopCategoryServiceImplTest extends BaseCoreDBTestCase {
     private ShopService shopService;
     private CategoryService categoryService;
 
+    @Override
     @Before
     public void setUp() {
         shopCategoryService = (ShopCategoryService) ctx().getBean(ServiceSpringKeys.SHOP_CATEGORY_SERVICE);

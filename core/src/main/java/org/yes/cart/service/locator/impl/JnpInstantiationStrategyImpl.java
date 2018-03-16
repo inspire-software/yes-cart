@@ -25,7 +25,9 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
-import java.util.*;
+import java.util.Collections;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -42,6 +44,7 @@ public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getProtocols() {
         return Collections.singleton("jnp");
     }
@@ -49,6 +52,7 @@ public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings({"unchecked"})
     public <T> T getInstance(final String serviceUrl,
                              final Class<T> iface,
@@ -60,7 +64,7 @@ public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
 
         try {
             final Object obj = internalLookup(serviceUrl);
-            if (serviceUrl.indexOf("/local") > -1 || serviceUrl.indexOf("java:") > -1) { /* JBoss specific */
+            if (serviceUrl.contains("/local") || serviceUrl.contains("java:")) { /* JBoss specific */
                 return (T) obj;
             } else {
                 return (T) PortableRemoteObject.narrow(obj, iface);
@@ -94,7 +98,7 @@ public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
      * @return jnp url of remote server
      */
     private String getProviderUrl(final String url) {
-        if (url.indexOf(AT_DELIMITER) > -1) {
+        if (url.contains(AT_DELIMITER)) {
             return url.split("@")[0];
         }
         return getDefaultProviderUrl();
@@ -111,7 +115,7 @@ public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
      * @return jndi name
      */
     private String getJndiName(final String url) {
-        if (url.indexOf(AT_DELIMITER) > -1) {
+        if (url.contains(AT_DELIMITER)) {
             return url.split(AT_DELIMITER)[1];
         }
         return url;

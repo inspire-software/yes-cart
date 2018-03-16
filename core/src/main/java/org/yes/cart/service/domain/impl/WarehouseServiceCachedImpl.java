@@ -41,12 +41,14 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "shopService-shopWarehouses")
     public List<Warehouse> getByShopId(final long shopId, final boolean includeDisabled) {
         return warehouseService.getByShopId(shopId, includeDisabled);
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "shopService-shopWarehousesMap")
     public Map<String, Warehouse> getByShopIdMapped(final long shopId, final boolean includeDisabled) {
         return warehouseService.getByShopIdMapped(shopId, includeDisabled);
@@ -55,16 +57,19 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
 
 
     /** {@inheritDoc} */
+    @Override
     public void updateShopWarehouseRank(final long shopWarehouseId, final int newRank) {
         warehouseService.updateShopWarehouseRank(shopWarehouseId, newRank);
     }
 
     /** {@inheritDoc} */
+    @Override
     public ShopWarehouse findShopWarehouseById(final long shopWarehouseId) {
         return warehouseService.findShopWarehouseById(shopWarehouseId);
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "shopService-shopWarehouses",
             "shopService-shopWarehousesMap",
@@ -78,6 +83,7 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
 
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "shopService-shopWarehouses",
             "shopService-shopWarehousesMap",
@@ -90,6 +96,7 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Warehouse> findAll() {
         return warehouseService.findAll();
     }
@@ -97,16 +104,19 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<Warehouse> callback) {
         warehouseService.findAllIterator(callback);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Warehouse findById(final long pk) {
         return warehouseService.findById(pk);
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "shopService-shopWarehouses",
             "shopService-shopWarehousesMap",
@@ -119,6 +129,7 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "shopService-shopWarehouses",
             "shopService-shopWarehousesMap",
@@ -131,6 +142,7 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "shopService-shopWarehouses",
             "shopService-shopWarehousesMap",
@@ -143,21 +155,25 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Warehouse> findByCriteria(final String eCriteria, final Object... parameters) {
         return warehouseService.findByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return warehouseService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public GenericDAO<Warehouse, Long> getGenericDao() {
         return warehouseService.getGenericDao();
     }
 
     /** {@inheritDoc} */
+    @Override
     public Warehouse findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return warehouseService.findSingleByCriteria(eCriteria, parameters);
     }

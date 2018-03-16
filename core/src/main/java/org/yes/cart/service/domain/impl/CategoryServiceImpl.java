@@ -55,6 +55,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category getRootCategory() {
         return categoryDao.findSingleByNamedQuery("ROOTCATEGORY");
     }
@@ -62,6 +63,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> getCategoryLinks(final long categoryId) {
         return (List) categoryDao.findQueryObjectByNamedQuery("LINKED.CATEGORY.IDS.BY.ID", categoryId);
     }
@@ -69,6 +71,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCategoryTemplate(final long categoryId) {
         final Category category = proxy().findById(categoryId);
         if (category != null && !category.isRoot()) {
@@ -84,6 +87,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCategorySearchTemplate(final long categoryId) {
         final Category category = proxy().findById(categoryId);
         if (category != null && !category.isRoot()) {
@@ -102,6 +106,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long getCategoryProductTypeId(final long categoryId) {
         final Category category = proxy().findById(categoryId);
         if (category != null && !category.isRoot()) {
@@ -117,6 +122,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCategoryHasChildren(final long categoryId) {
         final List<Long> id = getCategoryIdAndLinkId(categoryId);
         if (id != null) {
@@ -134,12 +140,13 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> getChildCategories(final long categoryId) {
 
         final Category current = proxy().getById(categoryId);
         if (current != null) {
             if (current.getLinkToId() != null) {
-                final List<Category> cats = new ArrayList<Category>();
+                final List<Category> cats = new ArrayList<>();
                 cats.addAll(findChildCategoriesWithAvailability(current.getLinkToId(), true));
                 cats.addAll(findChildCategoriesWithAvailability(categoryId, true));
                 return cats;
@@ -147,33 +154,23 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
 
             return findChildCategoriesWithAvailability(categoryId, true);
         }
-        return new ArrayList<Category>(0);
+        return new ArrayList<>(0);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> findChildCategoriesWithAvailability(final long categoryId, final boolean withAvailability) {
 
-        final List<Category> cats = new ArrayList<Category>(categoryDao.findByNamedQuery(
+        final List<Category> cats = new ArrayList<>(categoryDao.findByNamedQuery(
                 "CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING",
                 categoryId
         ));
         if (withAvailability) {
 
             final LocalDateTime now = now();
-            final Iterator<Category> it = cats.iterator();
-            while (it.hasNext()) {
-
-                final Category cat = it.next();
-
-                if (!DomainApiUtils.isObjectAvailableNow(true, cat.getAvailablefrom(), cat.getAvailableto(), now)) {
-
-                    it.remove();
-
-                }
-
-            }
+            cats.removeIf(cat -> !DomainApiUtils.isObjectAvailableNow(true, cat.getAvailablefrom(), cat.getAvailableto(), now));
 
         }
         return cats;
@@ -188,10 +185,11 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Category> getChildCategoriesRecursive(final long categoryId) {
         final Category thisCat = proxy().getById(categoryId);
         if (thisCat != null) {
-            final Set<Category> all = new HashSet<Category>();
+            final Set<Category> all = new HashSet<>();
             all.add(thisCat);
             loadChildCategoriesRecursiveInternal(all, thisCat);
             return all;
@@ -202,6 +200,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> getChildCategoriesRecursiveIds(final long categoryId) {
         final Set<Category> cats = proxy().getChildCategoriesRecursive(categoryId);
         if (cats.isEmpty()) {
@@ -213,6 +212,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> getChildCategoriesRecursiveIdsAndLinkIds(final long categoryId) {
         final Set<Category> cats = proxy().getChildCategoriesRecursive(categoryId);
         if (cats.isEmpty()) {
@@ -241,7 +241,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         final String uriP = HQLUtils.criteriaIlikeAnywhere(uri);
 
         final Category root = proxy().getRootCategory();
-        List<Category> cats = new ArrayList<Category>();
+        List<Category> cats;
         if ((codeP != null || nameP != null) && uriP != null) {
             cats = getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.CODE.NAME.URI", page * pageSize, pageSize, codeP, nameP, uriP);
         } else if (codeP == null && nameP == null && uriP != null) {
@@ -281,6 +281,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> getCategoryIdAndLinkId(final long categoryId) {
         final Category category = proxy().getById(categoryId);
         if (category != null) {
@@ -297,13 +298,14 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCategoryHasSubcategory(final long topCategoryId, final long subCategoryId) {
         final Category start = proxy().getById(subCategoryId);
         if (start != null) {
             if (subCategoryId == topCategoryId) {
                 return true;
             } else {
-                final List<Category> list = new ArrayList<Category>();
+                final List<Category> list = new ArrayList<>();
                 list.add(start);
                 addParent(list, topCategoryId);
                 return list.get(list.size() - 1).getCategoryId() == topCategoryId;
@@ -328,6 +330,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc} Just to cache
      */
+    @Override
     public Category getById(final long pk) {
         final Category cat = getGenericDao().findById(pk);
         Hibernate.initialize(cat);
@@ -335,27 +338,28 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     }
 
     private List<Long> transformToId(final Collection<Category> categories) {
-        final Set<Long> result = new LinkedHashSet<Long>(categories.size());
+        final Set<Long> result = new LinkedHashSet<>(categories.size());
         for (Category category : categories) {
             result.add(category.getCategoryId());
         }
-        return new ArrayList<Long>(result);
+        return new ArrayList<>(result);
     }
 
     private List<Long> transformToIdAndLinkId(final Collection<Category> categories) {
-        final Set<Long> result = new LinkedHashSet<Long>(categories.size());
+        final Set<Long> result = new LinkedHashSet<>(categories.size());
         for (Category category : categories) {
             result.add(category.getCategoryId());
             if (category.getLinkToId() != null) {
                 result.add(category.getLinkToId());
             }
         }
-        return new ArrayList<Long>(result);
+        return new ArrayList<>(result);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findCategoryIdBySeoUri(final String seoUri) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("CATEGORY.ID.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
@@ -370,6 +374,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findCategoryIdByGUID(final String guid) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("CATEGORY.ID.BY.GUID", guid);
         if (list != null && !list.isEmpty()) {
@@ -384,6 +389,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public String findSeoUriByCategoryId(final Long categoryId) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("SEO.URI.BY.CATEGORY.ID", categoryId);
         if (list != null && !list.isEmpty()) {
@@ -399,6 +405,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category findCategoryIdBySeoUriOrGuid(final String seoUriOrGuid) {
 
         final Category category = getGenericDao().findSingleByNamedQuery("CATEGORY.BY.SEO.URI", seoUriOrGuid);
@@ -411,6 +418,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> findByProductId(final long productId) {
         return categoryDao.findByNamedQuery(
                 "CATEGORIES.BY.PRODUCTID",

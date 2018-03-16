@@ -50,11 +50,13 @@ public class ProductServiceCachedImpl implements ProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductSku getSkuById(final Long skuId) {
         return productService.getSkuById(skuId);
     }
 
     /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "productService-skuById")
     public ProductSku getSkuById(final Long skuId, final boolean withAttributes) {
         return productService.getSkuById(skuId, withAttributes);
@@ -67,6 +69,7 @@ public class ProductServiceCachedImpl implements ProductService {
      * @param productId given id, which identify product
      * @return image file name if found.
      */
+    @Override
     @Cacheable(value = "productService-defaultImage")
     public String getDefaultImage(final Long productId) {
         return productService.getDefaultImage(productId);
@@ -76,6 +79,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Product> findProductByCategory(final long categoryId) {
         return productService.findProductByCategory(categoryId);
     }
@@ -83,6 +87,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "productService-randomProductByCategory"/*, key = "category.getCategoryId()"*/)
     public Product getRandomProductByCategory(final Category category) {
         return productService.getRandomProductByCategory(category);
@@ -93,6 +98,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "productService-productAttributes")
     public Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(
             final String locale, final long productId, final long skuId, final long productTypeId) {
@@ -102,6 +108,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> getCompareAttributes(final String locale,
                                                                                                                               final List<Long> productId,
                                                                                                                               final List<Long> skuId) {
@@ -111,6 +118,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "productService-allProductsAttributeValues")
     public Map<Long, String> getAllProductsAttributeValues(final String attributeCode) {
         return productService.getAllProductsAttributeValues(attributeCode);
@@ -119,6 +127,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductSku getProductSkuByCode(final String skuCode) {
         return productService.getProductSkuByCode(skuCode);
     }
@@ -129,6 +138,7 @@ public class ProductServiceCachedImpl implements ProductService {
      * @param skuCode sku code
      * @return product sku for this sku code
      */
+    @Override
     @Cacheable(value = "productService-productBySkuCode")
     public Product getProductBySkuCode(final String skuCode) {
         return productService.getProductBySkuCode(skuCode);
@@ -138,6 +148,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Product getProductById(final Long productId) {
         return productService.getProductById(productId);
     }
@@ -145,6 +156,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "productService-productById")
     public Product getProductById(final Long productId, final boolean withAttribute) {
         return productService.getProductById(productId, withAttribute);
@@ -153,6 +165,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "productService-productSearchResultDTOByQuery")
     public ProductSearchResultPageDTO getProductSearchResultDTOByQuery(final NavigationContext navigationContext, final int firstResult, final int maxResults, final String sortFieldName, final boolean reverse) {
         return productService.getProductSearchResultDTOByQuery(navigationContext, firstResult, maxResults, sortFieldName, reverse);
@@ -162,6 +175,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductSearchResultNavDTO findFilteredNavigationRecords(final NavigationContext baseNavigationContext, final List<FilteredNavigationRecordRequest> request) {
         return productService.findFilteredNavigationRecords(baseNavigationContext, request);
     }
@@ -169,6 +183,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "productService-productQtyByQuery")
     public int getProductQty(final NavigationContext navigationContext) {
         return productService.getProductQty(navigationContext);
@@ -178,6 +193,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Pair<Integer, Integer> findProductQtyAll() {
         return productService.findProductQtyAll();
     }
@@ -185,6 +201,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Product> findProductByCategory(final long categoryId,
                                                final int firstResult,
                                                final int maxResults) {
@@ -195,6 +212,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "productService-productByIdList")
     public List<Product> getProductByIdList(final List idList) {
         return productService.getProductByIdList(idList);
@@ -203,6 +221,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findProductIdBySeoUri(final String seoUri) {
         return productService.findProductIdBySeoUri(seoUri);
     }
@@ -210,6 +229,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findProductIdByGUID(final String guid) {
         return productService.findProductIdByGUID(guid);
     }
@@ -218,6 +238,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findProductIdByCode(final String code) {
         return productService.findProductIdByCode(code);
     }
@@ -225,6 +246,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> findProductIdsByManufacturerCode(final String code) {
         return productService.findProductIdsByManufacturerCode(code);
     }
@@ -232,6 +254,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> findProductIdsByBarCode(final String code) {
         return productService.findProductIdsByBarCode(code);
     }
@@ -239,6 +262,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> findProductIdsByBarCodes(final Collection<String> codes) {
         return productService.findProductIdsByBarCodes(codes);
     }
@@ -246,6 +270,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> findProductIdsByPimCode(final String code) {
         return productService.findProductIdsByPimCode(code);
     }
@@ -253,6 +278,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> findProductIdsByUnavailableBefore(final LocalDateTime before) {
         return productService.findProductIdsByUnavailableBefore(before);
     }
@@ -260,6 +286,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> findProductIdsByAttributeValue(final String attrCode, final String attrValue) {
         return productService.findProductIdsByAttributeValue(attrCode, attrValue);
     }
@@ -267,6 +294,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String findSeoUriByProductId(final Long productId) {
         return productService.findSeoUriByProductId(productId);
     }
@@ -274,6 +302,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findProductSkuIdBySeoUri(final String seoUri) {
         return productService.findProductSkuIdBySeoUri(seoUri);
     }
@@ -281,6 +310,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findProductSkuIdByGUID(final String guid) {
         return productService.findProductSkuIdByGUID(guid);
     }
@@ -288,6 +318,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findProductSkuIdByCode(final String code) {
         return productService.findProductSkuIdByCode(code);
     }
@@ -295,6 +326,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String findSeoUriByProductSkuId(final Long skuId) {
         return productService.findSeoUriByProductSkuId(skuId);
     }
@@ -302,6 +334,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "productService-productQtyByCategoryId")
     public int getProductQty(final long categoryId) {
         return productService.getProductQty(categoryId);
@@ -311,6 +344,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public IndexBuilder.FTIndexState getProductsFullTextIndexState() {
         return productService.getProductsFullTextIndexState();
     }
@@ -318,6 +352,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public IndexBuilder.FTIndexState getProductsSkuFullTextIndexState() {
         return productService.getProductsSkuFullTextIndexState();
     }
@@ -325,6 +360,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProducts(final int batchSize) {
         productService.reindexProducts(batchSize);
     }
@@ -333,6 +369,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProducts(final int batchSize, final boolean async) {
         productService.reindexProducts(batchSize, async);
     }
@@ -340,6 +377,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductsSku(final int batchSize) {
         productService.reindexProductsSku(batchSize);
     }
@@ -348,6 +386,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductsSku(final int batchSize, final boolean async) {
         productService.reindexProductsSku(batchSize, async);
     }
@@ -355,6 +394,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProducts(final Long shopId, final int batchSize) {
         productService.reindexProducts(shopId, batchSize);
     }
@@ -362,6 +402,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductsSku(final Long shopId, final int batchSize) {
         productService.reindexProductsSku(shopId, batchSize);
     }
@@ -369,6 +410,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProduct(final Long pk) {
         productService.reindexProduct(pk);
     }
@@ -376,6 +418,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductSku(final Long pk) {
         productService.reindexProductSku(pk);
     }
@@ -383,6 +426,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductSku(final String code) {
         productService.reindexProductSku(code);
     }
@@ -391,6 +435,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Product> findProductByCodeNameBrandType(final String code,
                                                         final String name,
                                                         final Long brandId,
@@ -402,6 +447,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Product> findAll() {
         return productService.findAll();
     }
@@ -409,6 +455,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<Product> callback) {
         productService.findAllIterator(callback);
     }
@@ -416,6 +463,7 @@ public class ProductServiceCachedImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Product findById(final long pk) {
         return productService.findById(pk);
     }
@@ -426,6 +474,7 @@ public class ProductServiceCachedImpl implements ProductService {
      * @param instance instance to persist
      * @return persisted instanse
      */
+    @Override
     @CacheEvict(value ={
             "productService-randomProductByCategory",
             "productService-productByQuery",
@@ -440,6 +489,7 @@ public class ProductServiceCachedImpl implements ProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value ={
             "productService-skuById",
             "productService-defaultImage",
@@ -464,6 +514,7 @@ public class ProductServiceCachedImpl implements ProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value ={
             "productService-skuById",
             "productService-defaultImage",
@@ -488,21 +539,25 @@ public class ProductServiceCachedImpl implements ProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Product> findByCriteria(final String eCriteria, final Object... parameters) {
         return productService.findByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return productService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Product findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return productService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public GenericDAO<Product, Long> getGenericDao() {
         return productService.getGenericDao();
     }

@@ -39,6 +39,7 @@ public class SetAddressesCartCommandImpl extends AbstractCartCommandImpl impleme
     /**
      * @return command key
      */
+    @Override
     public String getCmdKey() {
         return CMD_SETADDRESES;
     }

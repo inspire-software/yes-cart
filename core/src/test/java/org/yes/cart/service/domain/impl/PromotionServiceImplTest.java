@@ -21,11 +21,10 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.domain.PromotionService;
 
-import java.sql.ResultSet;
 import java.util.List;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * User: denispavlov

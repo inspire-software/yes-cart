@@ -78,6 +78,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public Shop getShopByOrderGuid(final String orderGuid) {
         return shopDao.findSingleByNamedQuery("SHOP.BY.ORDER.GUID", orderGuid);
     }
@@ -85,6 +86,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public Shop getShopByCode(final String shopCode) {
         return shopDao.findSingleByNamedQuery("SHOP.BY.CODE", shopCode);
     }
@@ -92,27 +94,22 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Shop> getNonSubShops() {
         return shopDao.findByNamedQuery("SHOP.NONSUB.ONLY");
     }
 
 
     /** {@inheritDoc} */
+    @Override
     public Map<Long, Set<Long>> getAllShopsAndSubs() {
         final List<Shop> all = this.proxy().getAll();
-        final Map<Long, Set<Long>> shopsMap = new HashMap<Long, Set<Long>>();
+        final Map<Long, Set<Long>> shopsMap = new HashMap<>();
         for (final Shop shop : all) {
             if (shop.getMaster() == null) {
-                final Set<Long> subs = shopsMap.get(shop.getShopId());
-                if (subs == null) {
-                    shopsMap.put(shop.getShopId(), new HashSet<Long>());
-                }
+                shopsMap.computeIfAbsent(shop.getShopId(), k -> new HashSet<>());
             } else {
-                Set<Long> subs = shopsMap.get(shop.getMaster().getShopId());
-                if (subs == null) {
-                    subs = new HashSet<Long>();
-                    shopsMap.put(shop.getMaster().getShopId(), subs);
-                }
+                Set<Long> subs = shopsMap.computeIfAbsent(shop.getMaster().getShopId(), k -> new HashSet<>());
                 subs.add(shop.getShopId());
             }
         }
@@ -123,6 +120,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Shop> getSubShopsByMaster(final long masterId) {
         return shopDao.findByNamedQuery("SHOP.BY.MASTER.ID", masterId);
     }
@@ -130,6 +128,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public Shop getSubShopByNameAndMaster(final String shopName, final long masterId) {
         return shopDao.findSingleByNamedQuery("SHOP.BY.NAME.AND.MASTER.ID", shopName, masterId);
     }
@@ -137,6 +136,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public Shop getShopByOrderNum(final String orderNum) {
         return shopDao.findSingleByNamedQuery("SHOP.BY.ORDER.NUM", orderNum);
     }
@@ -145,6 +145,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public Shop getById(final long shopId) {
         return shopDao.findById(shopId);
     }
@@ -152,6 +153,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Shop> getAll() {
         return super.findAll();
     }
@@ -159,6 +161,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public Shop getShopByDomainName(final String serverName) {
         return shopDao.findSingleByNamedQuery("SHOP.BY.URL", serverName);
     }
@@ -166,6 +169,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Long> getShopCategoriesIds(final long shopId) {
         return shopCategoryRelationshipSupport.getShopCategoriesIds(shopId);
     }
@@ -173,6 +177,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Long> getShopContentIds(final long shopId) {
         return shopCategoryRelationshipSupport.getShopContentIds(shopId);
     }
@@ -180,15 +185,16 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Long> getShopAllCategoriesIds(final long shopId) {
-        final Set<Long> all = new HashSet<Long>();
+        final Set<Long> all = new HashSet<>();
         all.addAll(getShopCategoriesIds(shopId));
         all.addAll(getShopContentIds(shopId));
         return all;
     }
 
     public Set<Long> transform(final Collection<Category> categories) {
-        final Set<Long> result = new LinkedHashSet<Long>(categories.size());
+        final Set<Long> result = new LinkedHashSet<>(categories.size());
         for (Category category : categories) {
             result.add(category.getCategoryId());
         }
@@ -197,9 +203,10 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
 
 
     /** {@inheritDoc} */
+    @Override
     public List<String> findAllSupportedCurrenciesByShops() {
         final List<Shop> shops = shopDao.findAll();
-        final Set<String> currencies = new TreeSet<String>();
+        final Set<String> currencies = new TreeSet<>();
 
         for(Shop shop : shops) {
             final String shopCurrencies = shop.getSupportedCurrencies();
@@ -217,10 +224,11 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      * @param shopId given shop
      * @return list of assigned top level categories
      */
+    @Override
     public Set<Category> getTopLevelCategories(final Long shopId) {
 
         final List<ShopCategory> top = (List) shopDao.findQueryObjectByNamedQuery("ALL.TOPCATEGORIES.BY.SHOPID", shopId);
-        final Set<Category> cats = new HashSet<Category>();
+        final Set<Category> cats = new HashSet<>();
         final LocalDateTime now = now();
         for (final ShopCategory shopCategory : top) {
             final Category category = categoryService.getById(shopCategory.getCategory().getCategoryId());
@@ -239,10 +247,11 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Category> findAllByShopId(final long shopId) {
 
         final List<ShopCategory> top = (List) shopDao.findQueryObjectByNamedQuery("ALL.TOPCATEGORIES.BY.SHOPID", shopId);
-        final Set<Category> cats = new HashSet<Category>();
+        final Set<Category> cats = new HashSet<>();
         for (final ShopCategory shopCategory : top) {
             final Category category = categoryService.findById(shopCategory.getCategory().getCategoryId());
             cats.add(category);
@@ -254,6 +263,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category getDefaultNavigationCategory(final long shopId) {
 
         final Shop shop = proxy().getById(shopId);
@@ -284,6 +294,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long getShopCategoryParentId(final long shopId, final long categoryId) {
 
         final Set<Long> shopCatIds = getShopCategoriesIds(shopId);
@@ -316,6 +327,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getShopCategoryTemplate(final long shopId, final long categoryId) {
         final Category category = categoryService.getById(categoryId);
         if (category != null && !category.isRoot()) {
@@ -343,6 +355,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getShopCategorySearchTemplate(final long shopId, final long categoryId) {
         final Category category = categoryService.getById(categoryId);
         if (category != null && !category.isRoot()) {
@@ -373,6 +386,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long getShopCategoryProductTypeId(final long shopId, final long categoryId) {
         final Category category = categoryService.getById(categoryId);
         if (category != null && !category.isRoot()) {
@@ -399,6 +413,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findShopIdByCode(final String code) {
         List<Object> list = shopDao.findQueryObjectByNamedQuery("SHOP.ID.BY.SHOPCODE", code);
         if (list != null && !list.isEmpty()) {
@@ -425,6 +440,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      * @param attributeKey attribute key
      * @param attributeValue attribute value.
      */
+    @Override
     public void updateAttributeValue(final long shopId, final String attributeKey, final String attributeValue) {
         final Shop shop = shopDao.findById(shopId);
         if (shop != null) {
@@ -446,6 +462,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     }
 
     /** {@inheritDoc} */
+    @Override
     public Shop create(final Shop instance) {
         final Shop shop = super.create(instance);
         final Category category = contentService.getRootContent(shop.getShopId());

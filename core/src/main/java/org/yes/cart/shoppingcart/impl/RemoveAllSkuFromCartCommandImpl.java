@@ -60,6 +60,7 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCmdKey() {
         return CMD_REMOVEALLSKU;
     }

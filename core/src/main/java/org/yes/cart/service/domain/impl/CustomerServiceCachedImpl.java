@@ -46,6 +46,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "customerService-customerByEmail", condition = "#shop != null", key = "#email + #shop.code")
     public Customer getCustomerByEmail(final String email, final Shop shop) {
         return customerService.getCustomerByEmail(email, shop);
@@ -54,6 +55,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Customer getCustomerByToken(final String token) {
         return customerService.getCustomerByToken(token);
     }
@@ -61,6 +63,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Customer getCustomerByPublicKey(final String publicKey, final String lastName) {
         return customerService.getCustomerByPublicKey(publicKey, lastName);
     }
@@ -68,6 +71,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Shop> getCustomerShops(final Customer customer) {
         return customerService.getCustomerShops(customer);
     }
@@ -75,6 +79,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String formatNameFor(final Customer customer, final Shop shop) {
         return customerService.formatNameFor(customer, shop);
     }
@@ -82,6 +87,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Customer> findCustomer(final String email,
                                        final String firstname,
                                        final String lastname,
@@ -95,6 +101,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCustomerExists(final String email, final Shop shop) {
         return customerService.isCustomerExists(email, shop);
     }
@@ -102,6 +109,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isPasswordValid(final String email, final Shop shop, final String password) {
         return customerService.isPasswordValid(email, shop, password);
     }
@@ -109,6 +117,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<AttrValueCustomer> getRankedAttributeValues(final Customer customer) {
         return customerService.getRankedAttributeValues(customer);
     }
@@ -117,6 +126,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "customerService-customerByEmail"
     }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
@@ -127,6 +137,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "customerService-customerByEmail"
     }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
@@ -137,6 +148,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "customerService-customerByEmail"
     }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
@@ -147,6 +159,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "customerService-customerByEmail"
     }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
@@ -157,6 +170,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Customer create(final Customer instance) {
         return customerService.create(instance);
     }
@@ -164,6 +178,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "customerService-customerByEmail"
     }, allEntries = false, key = "#email + #shopCode")
@@ -174,6 +189,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "customerService-customerByEmail"
     }, allEntries = true)
@@ -184,6 +200,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "customerService-customerByEmail"
     }, allEntries = true)
@@ -194,6 +211,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ResultsIterator<Customer> findGuestsBefore(final Instant date) {
         return customerService.findGuestsBefore(date);
     }
@@ -201,6 +219,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Customer> findAll() {
         return customerService.findAll();
     }
@@ -208,6 +227,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<Customer> callback) {
         customerService.findAllIterator(callback);
     }
@@ -215,6 +235,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Customer findById(final long pk) {
         return customerService.findById(pk);
     }
@@ -222,6 +243,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Customer> findByCriteria(final String eCriteria, final Object... parameters) {
         return customerService.findByCriteria(eCriteria, parameters);
     }
@@ -229,6 +251,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return customerService.findCountByCriteria(eCriteria, parameters);
     }
@@ -236,6 +259,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Customer findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return customerService.findSingleByCriteria(eCriteria, parameters);
     }
@@ -243,6 +267,7 @@ public class CustomerServiceCachedImpl implements CustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public GenericDAO<Customer, Long> getGenericDao() {
         return customerService.getGenericDao();
     }

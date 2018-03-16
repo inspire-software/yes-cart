@@ -41,6 +41,7 @@ public class CarrierServiceCachedImpl implements CarrierService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Carrier> findCarriersByShopId(final long shopId, final boolean includeDisabled) {
         return carrierService.findCarriersByShopId(shopId, includeDisabled);
     }
@@ -48,6 +49,7 @@ public class CarrierServiceCachedImpl implements CarrierService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable("carrierService-getCarriersByShopIdAndCurrency")
     public List<Carrier> getCarriersByShopId(final long shopId) {
         return carrierService.getCarriersByShopId(shopId);
@@ -56,6 +58,7 @@ public class CarrierServiceCachedImpl implements CarrierService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Carrier> findAll() {
         return carrierService.findAll();
     }
@@ -63,6 +66,7 @@ public class CarrierServiceCachedImpl implements CarrierService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<Carrier> callback) {
         carrierService.findAllIterator(callback);
     }
@@ -70,11 +74,13 @@ public class CarrierServiceCachedImpl implements CarrierService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Carrier findById(final long pk) {
         return carrierService.findById(pk);
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "carrierService-getCarriersByShopIdAndCurrency"
     }, allEntries = true)
@@ -83,6 +89,7 @@ public class CarrierServiceCachedImpl implements CarrierService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "carrierService-getCarriersByShopIdAndCurrency"
     }, allEntries = true)
@@ -91,6 +98,7 @@ public class CarrierServiceCachedImpl implements CarrierService {
     }
 
     /** {@inheritDoc} */
+    @Override
     @CacheEvict(value = {
             "carrierService-getCarriersByShopIdAndCurrency"
     }, allEntries = true)
@@ -101,6 +109,7 @@ public class CarrierServiceCachedImpl implements CarrierService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Carrier> findByCriteria(final String eCriteria, final Object... parameters) {
         return carrierService.findByCriteria(eCriteria, parameters);
     }
@@ -108,6 +117,7 @@ public class CarrierServiceCachedImpl implements CarrierService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return carrierService.findCountByCriteria(eCriteria, parameters);
     }
@@ -115,6 +125,7 @@ public class CarrierServiceCachedImpl implements CarrierService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Carrier findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return carrierService.findSingleByCriteria(eCriteria, parameters);
     }
@@ -122,6 +133,7 @@ public class CarrierServiceCachedImpl implements CarrierService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public GenericDAO<Carrier, Long> getGenericDao() {
         return carrierService.getGenericDao();
     }

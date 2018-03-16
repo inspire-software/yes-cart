@@ -44,6 +44,7 @@ public class ProductAssociationServiceCachedImpl implements ProductAssociationSe
      * @param productId product primary key
      * @return list of product associations
      */
+    @Override
     public List<ProductAssociation> findProductAssociations(final Long productId) {
         return productAssociationService.findProductAssociations(productId);
     }
@@ -57,6 +58,7 @@ public class ProductAssociationServiceCachedImpl implements ProductAssociationSe
      * @param associationCode association code [up, cross, etc]
      * @return list of product associations
      */
+    @Override
     public List<ProductAssociation> findProductAssociations(final Long productId, final String associationCode) {
         return productAssociationService.findProductAssociations(productId, associationCode);
     }
@@ -68,12 +70,14 @@ public class ProductAssociationServiceCachedImpl implements ProductAssociationSe
      * @param associationCode association code [up, cross, etc]
      * @return list of product associations
      */
+    @Override
     @Cacheable(value = "productService-productAssociationsIds")
     public List<String> getProductAssociationsProductCodes(final Long productId, final String associationCode) {
         return productAssociationService.getProductAssociationsProductCodes(productId, associationCode);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<ProductAssociation> findAll() {
         return productAssociationService.findAll();
     }
@@ -81,46 +85,55 @@ public class ProductAssociationServiceCachedImpl implements ProductAssociationSe
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<ProductAssociation> callback) {
         productAssociationService.findAllIterator(callback);
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductAssociation findById(final long pk) {
         return productAssociationService.findById(pk);
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductAssociation create(final ProductAssociation instance) {
         return productAssociationService.create(instance);
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductAssociation update(final ProductAssociation instance) {
         return productAssociationService.update(instance);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void delete(final ProductAssociation instance) {
         productAssociationService.delete(instance);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<ProductAssociation> findByCriteria(final String eCriteria, final Object... parameters) {
         return productAssociationService.findByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return productAssociationService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductAssociation findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return productAssociationService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public GenericDAO<ProductAssociation, Long> getGenericDao() {
         return productAssociationService.getGenericDao();
     }

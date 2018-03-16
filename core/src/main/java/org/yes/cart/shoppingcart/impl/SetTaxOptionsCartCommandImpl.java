@@ -41,6 +41,7 @@ public class SetTaxOptionsCartCommandImpl extends AbstractCartCommandImpl implem
     /**
      * @return command key
      */
+    @Override
     public String getCmdKey() {
         return CMD_SETTAXOPTIONS;
     }

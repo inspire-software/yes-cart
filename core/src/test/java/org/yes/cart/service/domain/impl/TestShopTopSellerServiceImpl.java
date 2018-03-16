@@ -48,6 +48,7 @@ public class TestShopTopSellerServiceImpl extends BaseCoreDBTestCase {
     private OrderAssembler orderAssembler;
     private CustomerOrderService customerOrderService;
 
+    @Override
     @Before
     public void setUp() {
         shopTopSellerService = (ShopTopSellerService) ctx().getBean(ServiceSpringKeys.SHOP_TOP_SELLER_SERVICE);

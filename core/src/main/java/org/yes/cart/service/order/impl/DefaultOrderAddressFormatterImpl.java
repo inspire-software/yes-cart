@@ -54,7 +54,7 @@ public class DefaultOrderAddressFormatterImpl implements OrderAddressFormatter {
         if (address != null) {
 
 
-            final Map<String, String> values = new HashMap<String, String>();
+            final Map<String, String> values = new HashMap<>();
             values.put("salutation", StringUtils.defaultString(address.getSalutation()));
             values.put("firstname", StringUtils.defaultString(address.getFirstname()));
             values.put("middlename", StringUtils.defaultString(address.getMiddlename()));

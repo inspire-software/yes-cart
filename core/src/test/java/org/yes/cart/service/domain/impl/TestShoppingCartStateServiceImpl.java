@@ -18,8 +18,6 @@ package org.yes.cart.service.domain.impl;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.ResultsIterator;
@@ -41,6 +39,7 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
     private ShoppingCartStateService shoppingCartStateService;
 
 
+    @Override
     @Before
     public void setUp()  {
         shoppingCartStateService = (ShoppingCartStateService) ctx().getBean(ServiceSpringKeys.SHOPPING_CART_STATE_SERVICE);
@@ -88,27 +87,21 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         final Instant tenSecondsAfterCreation = Instant.now().plusSeconds(10L);
         final Instant tenSecondsBeforeCreation = tenSecondsAfterCreation.plusSeconds(-20L);
 
-        getTxReadOnly().execute(new TransactionCallback<Object>() {
-            @Override
-            public Object doInTransaction(final TransactionStatus status) {
-                ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation);
-                assertNotNull(carts);
-                assertFalse(carts.hasNext());
-                carts.close();
-                return null;
-            }
+        getTxReadOnly().execute(status -> {
+            ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation);
+            assertNotNull(carts);
+            assertFalse(carts.hasNext());
+            carts.close();
+            return null;
         });
 
-        getTxReadOnly().execute(new TransactionCallback<Object>() {
-            @Override
-            public Object doInTransaction(final TransactionStatus status) {
-                ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation);
-                assertNotNull(carts);
-                assertTrue(carts.hasNext()); // one
-                assertFalse(carts.hasNext()); // no second
-                carts.close();
-                return null;
-            }
+        getTxReadOnly().execute(status -> {
+            ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation);
+            assertNotNull(carts);
+            assertTrue(carts.hasNext()); // one
+            assertFalse(carts.hasNext()); // no second
+            carts.close();
+            return null;
         });
 
         shoppingCartStateService.delete(shoppingCartStateService.findByGuid("CART-001"));
@@ -128,26 +121,20 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         final Instant tenSecondsAfterCreation = Instant.now().plusSeconds(10L);
         final Instant tenSecondsBeforeCreation = tenSecondsAfterCreation.plusSeconds(-20L);
 
-        getTxReadOnly().execute(new TransactionCallback<Object>() {
-            @Override
-            public Object doInTransaction(final TransactionStatus status) {
-                ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation, true);
-                assertNotNull(carts);
-                assertFalse(carts.hasNext());
-                carts.close();
-                return null;
-            }
+        getTxReadOnly().execute(status -> {
+            ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation, true);
+            assertNotNull(carts);
+            assertFalse(carts.hasNext());
+            carts.close();
+            return null;
         });
 
-        getTxReadOnly().execute(new TransactionCallback<Object>() {
-            @Override
-            public Object doInTransaction(final TransactionStatus status) {
-                ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation, true);
-                assertNotNull(carts);
-                assertFalse(carts.hasNext());
-                carts.close();
-                return null;
-            }
+        getTxReadOnly().execute(status -> {
+            ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation, true);
+            assertNotNull(carts);
+            assertFalse(carts.hasNext());
+            carts.close();
+            return null;
         });
 
         shoppingCartStateService.delete(shoppingCartStateService.findByGuid("CART-001"));
@@ -165,27 +152,21 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         final Instant tenSecondsAfterCreation = Instant.now().plusSeconds(10L);
         final Instant tenSecondsBeforeCreation = tenSecondsAfterCreation.plusSeconds(-20L);
 
-        getTxReadOnly().execute(new TransactionCallback<Object>() {
-            @Override
-            public Object doInTransaction(final TransactionStatus status) {
-                ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation, true);
-                assertNotNull(carts);
-                assertFalse(carts.hasNext());
-                carts.close();
-                return null;
-            }
+        getTxReadOnly().execute(status -> {
+            ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation, true);
+            assertNotNull(carts);
+            assertFalse(carts.hasNext());
+            carts.close();
+            return null;
         });
 
-        getTxReadOnly().execute(new TransactionCallback<Object>() {
-            @Override
-            public Object doInTransaction(final TransactionStatus status) {
-                ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation, true);
-                assertNotNull(carts);
-                assertTrue(carts.hasNext()); // one
-                assertFalse(carts.hasNext()); // no second
-                carts.close();
-                return null;
-            }
+        getTxReadOnly().execute(status -> {
+            ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation, true);
+            assertNotNull(carts);
+            assertTrue(carts.hasNext()); // one
+            assertFalse(carts.hasNext()); // no second
+            carts.close();
+            return null;
         });
 
         shoppingCartStateService.delete(shoppingCartStateService.findByGuid("CART-001"));

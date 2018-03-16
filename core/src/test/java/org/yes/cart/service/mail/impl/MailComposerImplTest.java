@@ -80,7 +80,7 @@ public class MailComposerImplTest {
 
         final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
-        Map<String, Object> model = new HashMap<String, Object>();
+        Map<String, Object> model = new HashMap<>();
         model.put("name", "Bender");
         MailComposerImpl mailComposer = new MailComposerImpl(provider, templates);
         String result = mailComposer.processTemplate(chain, shopCode, locale, fileName, ext, model);
@@ -338,15 +338,15 @@ public class MailComposerImplTest {
         final MailTemplateResourcesProvider mailTemplateResourcesProvider = mockery.mock(MailTemplateResourcesProvider.class);
 
         mockery.checking(new Expectations() {{
-            oneOf(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".txt");
+            oneOf(mailTemplateResourcesProvider).getTemplate(Collections.singletonList("default/mail/"), "SHOP10", "en", "imtest", ".txt");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.txt")), "UTF-8")));
-            oneOf(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".html");
+            oneOf(mailTemplateResourcesProvider).getTemplate(Collections.singletonList("default/mail/"), "SHOP10", "en", "imtest", ".html");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.html")), "UTF-8")));
-            oneOf(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".properties");
+            oneOf(mailTemplateResourcesProvider).getTemplate(Collections.singletonList("default/mail/"), "SHOP10", "en", "imtest", ".properties");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.properties")), "UTF-8")));
-            oneOf(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", "test.gif");
+            oneOf(mailTemplateResourcesProvider).getResource(Collections.singletonList("default/mail/"), "SHOP10", "en", "imtest", "test.gif");
             will(returnValue(IOUtils.toByteArray(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/resources/test.gif")))));
-            oneOf(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", "test.jpeg");
+            oneOf(mailTemplateResourcesProvider).getResource(Collections.singletonList("default/mail/"), "SHOP10", "en", "imtest", "test.jpeg");
             will(returnValue(IOUtils.toByteArray(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/resources/test.jpeg")))));
         }});
 
@@ -360,7 +360,7 @@ public class MailComposerImplTest {
                 message,
                 "SHOP10",
                 "en",
-                Arrays.asList("default/mail/"),
+                Collections.singletonList("default/mail/"),
                 "imtest",
                 "test@localhost.lo",
                 "to@somedomain.com",
@@ -385,14 +385,14 @@ public class MailComposerImplTest {
     }
 
     private Map<String, Object> createModel() {
-        Map<String, Object> model = new HashMap<String, Object>();
+        Map<String, Object> model = new HashMap<>();
         model.put("name", "Bender");
         model.put("with", Arrays.asList("blackjack", "poetess"));
         return model;
     }
 
     private Map<String, Object> createModelWithAttach() {
-        Map<String, Object> model = new HashMap<String, Object>();
+        Map<String, Object> model = new HashMap<>();
         model.put("name", "Bender");
         model.put("with", Arrays.asList("blackjack", "poetess"));
         model.put("attachment:image/jpeg;myimage.jpg", new byte[] { 1, 1, 1 });
@@ -424,7 +424,7 @@ public class MailComposerImplTest {
 
         final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
-        Map<String, Object> model = new HashMap<String,Object>();
+        Map<String, Object> model = new HashMap<>();
         model.put("root", new Pair("hi", "there"));
         MailComposerImpl mailComposer = new MailComposerImpl(provider, templates);
         String result = mailComposer.processTemplate(chain, shopCode, locale, fileName, ext, model);
@@ -559,15 +559,15 @@ public class MailComposerImplTest {
         final MailTemplateResourcesProvider mailTemplateResourcesProvider = mockery.mock(MailTemplateResourcesProvider.class);
 
         mockery.checking(new Expectations() {{
-            oneOf(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".txt");
+            oneOf(mailTemplateResourcesProvider).getTemplate(Collections.singletonList("default/mail/"), "SHOP10", "en", "imtest", ".txt");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.txt")), "UTF-8")));
-            oneOf(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".html");
+            oneOf(mailTemplateResourcesProvider).getTemplate(Collections.singletonList("default/mail/"), "SHOP10", "en", "imtest", ".html");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.html")), "UTF-8")));
-            oneOf(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", ".properties");
+            oneOf(mailTemplateResourcesProvider).getTemplate(Collections.singletonList("default/mail/"), "SHOP10", "en", "imtest", ".properties");
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.properties")), "UTF-8")));
-            oneOf(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", "test.gif");
+            oneOf(mailTemplateResourcesProvider).getResource(Collections.singletonList("default/mail/"), "SHOP10", "en", "imtest", "test.gif");
             will(returnValue(IOUtils.toByteArray(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/resources/test.gif")))));
-            oneOf(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "SHOP10", "en", "imtest", "test.jpeg");
+            oneOf(mailTemplateResourcesProvider).getResource(Collections.singletonList("default/mail/"), "SHOP10", "en", "imtest", "test.jpeg");
             will(returnValue(IOUtils.toByteArray(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/resources/test.jpeg")))));
         }});
 
@@ -577,7 +577,7 @@ public class MailComposerImplTest {
                 mail,
                 "SHOP10",
                 "en",
-                Arrays.asList("default/mail/"),
+                Collections.singletonList("default/mail/"),
                 "imtest",
                 "test@localhost.lo",
                 "to@somedomain.com",

@@ -34,6 +34,7 @@ public class AttrValueDTOComparatorImpl implements Comparator<AttrValueDTO> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int compare(final AttrValueDTO attrValueDTO1, final AttrValueDTO attrValueDTO2) {
 
         final String name1;

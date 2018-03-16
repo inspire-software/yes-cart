@@ -76,6 +76,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCmdKey() {
         return CMD_ADDTOWISHLIST;
     }
@@ -199,7 +200,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
                 item.setQuantity(quantity);
 
                 if (!CustomerWishList.SHOPPING_LIST_ITEM.equals(type)) {
-                    final Set<String> tag = new TreeSet<String>();
+                    final Set<String> tag = new TreeSet<>();
                     if (!tagsr && StringUtils.isNotBlank(item.getTag())) {
                         tag.addAll(Arrays.asList(StringUtils.split(item.getTag(), ' ')));
                     }

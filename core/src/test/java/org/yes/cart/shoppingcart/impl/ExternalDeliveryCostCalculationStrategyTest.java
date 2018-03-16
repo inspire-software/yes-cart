@@ -31,7 +31,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 /**
  * User: denispavlov
@@ -117,7 +118,7 @@ public class ExternalDeliveryCostCalculationStrategyTest {
         final DeliveryCostCalculationStrategy customStrategy = context.mock(DeliveryCostCalculationStrategy.class, "customStrategy");
         final Total customStrategyTotal = context.mock(Total.class, "customStrategyTotal");
 
-        final Map<String, Long> carriers = new LinkedHashMap<String, Long>();
+        final Map<String, Long> carriers = new LinkedHashMap<>();
         carriers.put("Main", 123L);
         carriers.put("Backorder", 123L);
 
@@ -150,7 +151,7 @@ public class ExternalDeliveryCostCalculationStrategyTest {
         final DeliveryCostCalculationStrategy customStrategy = context.mock(DeliveryCostCalculationStrategy.class, "customStrategy");
         final Total customStrategyTotal = context.mock(Total.class, "customStrategyTotal");
 
-        final Map<String, Long> carriers = new LinkedHashMap<String, Long>();
+        final Map<String, Long> carriers = new LinkedHashMap<>();
         carriers.put("Main", 123L);
         carriers.put("Backorder", 123L);
         carriers.put("Main2", 234L);
@@ -191,7 +192,7 @@ public class ExternalDeliveryCostCalculationStrategyTest {
         final Total customStrategyTotal2 = context.mock(Total.class, "customStrategyTotal2");
         final Total customStrategyTotalAll = context.mock(Total.class, "customStrategyTotalAll");
 
-        final Map<String, Long> carriers = new LinkedHashMap<String, Long>();
+        final Map<String, Long> carriers = new LinkedHashMap<>();
         carriers.put("Main", 123L);
         carriers.put("Backorder", 123L);
         carriers.put("Main2", 234L);
@@ -235,7 +236,7 @@ public class ExternalDeliveryCostCalculationStrategyTest {
         final Total customStrategyTotal = context.mock(Total.class, "customStrategyTotal");
         final Total customStrategyTotal2 = null;
 
-        final Map<String, Long> carriers = new LinkedHashMap<String, Long>();
+        final Map<String, Long> carriers = new LinkedHashMap<>();
         carriers.put("Main", 123L);
         carriers.put("Backorder", 123L);
         carriers.put("Main2", 234L);

@@ -25,10 +25,7 @@ import org.yes.cart.domain.entity.Auditable;
 import org.yes.cart.domain.misc.Pair;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -69,13 +66,13 @@ public class ObjectUtilTest {
     public void testToObjectArrayBasic() throws Exception {
 
         // Object transformation
-        Object [] objarr = ObjectUtil.toObjectArray(new Pair<String, Integer>("first", 10));
+        Object [] objarr = ObjectUtil.toObjectArray(new Pair<>("first", 10));
         assertEquals("Static: serialVersionUID", objarr[0]);
         assertEquals("first", objarr[1]);
         assertEquals("10", objarr[2]);
 
         // Object transformation with XML escaping (we are sending this over WebServices!!!)
-        Object [] objarrXML = ObjectUtil.toObjectArray(new Pair<String, Integer>("<first>", 10));
+        Object [] objarrXML = ObjectUtil.toObjectArray(new Pair<>("<first>", 10));
         assertEquals("Static: serialVersionUID", objarr[0]);
         assertEquals("&lt;first&gt;", objarrXML[1]);
         assertEquals("10", objarrXML[2]);
@@ -106,7 +103,7 @@ public class ObjectUtilTest {
     public void testToObjectArrayBasicPropertyCollection() throws Exception {
 
         // Object transformation
-        Object [] objarr = ObjectUtil.toObjectArray(new Pair<String, List<String>>("first", Arrays.asList("text")));
+        Object [] objarr = ObjectUtil.toObjectArray(new Pair<>("first", Collections.singletonList("text")));
         assertEquals("Static: serialVersionUID", objarr[0]);
         assertEquals("first", objarr[1]);
         assertEquals("Collection: second", objarr[2]);
@@ -117,7 +114,7 @@ public class ObjectUtilTest {
     public void testToObjectArrayBasicPropertyMap() throws Exception {
 
         // Object transformation
-        Object [] objarr = ObjectUtil.toObjectArray(new Pair<String, Map<String, String>>("first", Collections.singletonMap("key", "value")));
+        Object [] objarr = ObjectUtil.toObjectArray(new Pair<>("first", Collections.singletonMap("key", "value")));
         assertEquals("Static: serialVersionUID", objarr[0]);
         assertEquals("first", objarr[1]);
         assertEquals("Map: second", objarr[2]);
@@ -134,7 +131,7 @@ public class ObjectUtilTest {
         }});
 
         // Object transformation
-        Object [] objarr = ObjectUtil.toObjectArray(new Pair<String, Auditable>("first", auditable));
+        Object [] objarr = ObjectUtil.toObjectArray(new Pair<>("first", auditable));
         assertEquals("Static: serialVersionUID", objarr[0]);
         assertEquals("first", objarr[1]);
         assertEquals("123: second", objarr[2]);
@@ -156,50 +153,62 @@ public class ObjectUtilTest {
             private String updatedBy = "admin2";
             private String guid = "GUID-123";
 
+            @Override
             public long getId() {
                 return addressId;
             }
 
+            @Override
             public long getVersion() {
                 return version;
             }
 
+            @Override
             public Instant getCreatedTimestamp() {
                 return createdTimestamp;
             }
 
+            @Override
             public Instant getUpdatedTimestamp() {
                 return updatedTimestamp;
             }
 
+            @Override
             public String getCreatedBy() {
                 return createdBy;
             }
 
+            @Override
             public String getUpdatedBy() {
                 return updatedBy;
             }
 
+            @Override
             public String getGuid() {
                 return guid;
             }
 
+            @Override
             public void setCreatedTimestamp(final Instant createdTimestamp) {
                 this.createdTimestamp = createdTimestamp;
             }
 
+            @Override
             public void setUpdatedTimestamp(final Instant updatedTimestamp) {
                 this.updatedTimestamp = updatedTimestamp;
             }
 
+            @Override
             public void setCreatedBy(final String createdBy) {
                 this.createdBy = createdBy;
             }
 
+            @Override
             public void setUpdatedBy(final String updatedBy) {
                 this.updatedBy = updatedBy;
             }
 
+            @Override
             public void setGuid(final String guid) {
                 this.guid = guid;
             }
@@ -223,7 +232,7 @@ public class ObjectUtilTest {
         final PersistentCollection collection = context.mock(PersistentCollection.class, "auditable");
 
         // Object transformation
-        Object [] objarr = ObjectUtil.toObjectArray(new Pair<String, PersistentCollection>("first", collection));
+        Object [] objarr = ObjectUtil.toObjectArray(new Pair<>("first", collection));
         assertEquals("Static: serialVersionUID", objarr[0]);
         assertEquals("first", objarr[1]);
         assertEquals("Collection: second (H)", objarr[2]);

@@ -21,19 +21,15 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.dto.SeoImageDTO;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.service.dto.DtoImageService;
 
 import java.io.File;
 import java.util.UUID;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * User: igora Igor Azarny
@@ -46,6 +42,7 @@ public class ImageServiceImplTest  extends BaseCoreDBTestCase {
     private String imageName;
 
 
+    @Override
     @Before
     public void setUp() {
         imageService = (ImageService) ctx().getBean(ServiceSpringKeys.IMAGE_SERVICE);

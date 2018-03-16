@@ -24,9 +24,9 @@ import org.slf4j.helpers.MessageFormatter;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.yes.cart.cluster.service.AlertDirector;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.cluster.service.AlertDirector;
 import org.yes.cart.util.log.Markers;
 
 /**
@@ -47,14 +47,14 @@ public class AlertTurboFilter extends TurboFilter implements ApplicationContextA
         if ((Markers.alert() == marker) && (ALERTS != null)) {
             if (params == null || params.length == 0) {
                 ALERTS.publish(
-                        new Pair<String, String>(
+                        new Pair<>(
                                 format,
                                 ShopCodeContext.getShopCode()
                         )
                 );
             } else {
                 ALERTS.publish(
-                        new Pair<String, String>(
+                        new Pair<>(
                                 MessageFormatter.arrayFormat(format, params).getMessage(),
                                 ShopCodeContext.getShopCode()
                         )

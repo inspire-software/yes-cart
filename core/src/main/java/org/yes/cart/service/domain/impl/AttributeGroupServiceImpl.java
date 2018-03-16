@@ -31,7 +31,7 @@ public class AttributeGroupServiceImpl extends BaseGenericServiceImpl<AttributeG
 
     /**
      * Construct attribute group service.
-     * @param attributeGroupDao
+     * @param attributeGroupDao dao
      */
     public AttributeGroupServiceImpl(final GenericDAO<AttributeGroup, Long> attributeGroupDao) {
         super(attributeGroupDao);
@@ -45,6 +45,7 @@ public class AttributeGroupServiceImpl extends BaseGenericServiceImpl<AttributeG
      * @param code given code
      * @return {@link AttributeGroup} if found, otherwise null.
      */
+    @Override
     public AttributeGroup getAttributeGroupByCode(final String code) {
         return attributeGroupDao.findSingleByCriteria(" where e.code = ?1", code);
     }
@@ -55,6 +56,7 @@ public class AttributeGroupServiceImpl extends BaseGenericServiceImpl<AttributeG
      * Delete  {@link AttributeGroup} by given code.
      * @param code code of {@link AttributeGroup} to delete
      */
+    @Override
     public void delete(final String code) {
         attributeGroupDao.delete(
                 getAttributeGroupByCode(code)

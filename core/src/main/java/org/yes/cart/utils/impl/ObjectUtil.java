@@ -123,7 +123,7 @@ public class ObjectUtil {
      */
     public static List<Object[]> transformTypedResultListToArrayList(List listOfObjects) {
 
-        final List<Object[]> rezList = new ArrayList<Object[]>(listOfObjects.size());
+        final List<Object[]> rezList = new ArrayList<>(listOfObjects.size());
 
         for (Object obj : listOfObjects) {
 

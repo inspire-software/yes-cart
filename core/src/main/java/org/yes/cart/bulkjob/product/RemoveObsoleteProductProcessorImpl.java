@@ -103,15 +103,15 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
 
         LOG.info("Remove obsolete product {}/{}", product.getProductId(), product.getCode());
 
-        final List<Long> pAvIds = new ArrayList<Long>();
+        final List<Long> pAvIds = new ArrayList<>();
         for (final AttrValueProduct av : product.getAttributes()) {
             pAvIds.add(av.getAttrvalueId());
         }
-        final List<Long> skus = new ArrayList<Long>();
+        final List<Long> skus = new ArrayList<>();
         for (final ProductSku sku : product.getSku()) {
             skus.add(sku.getSkuId());
         }
-        final List<Long> assoc = new ArrayList<Long>();
+        final List<Long> assoc = new ArrayList<>();
         for (final ProductAssociation productAssociation : product.getProductAssociations()) {
             assoc.add(productAssociation.getProductassociationId());
         }
@@ -142,7 +142,7 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
             productSkuService.removeAllWishLists(sku);
             productSkuService.removeAllEnsembleOptions(sku);
 
-            final List<Long> sAvIds = new ArrayList<Long>();
+            final List<Long> sAvIds = new ArrayList<>();
             for (final AttrValueProductSku av : sku.getAttributes()) {
                 sAvIds.add(av.getAttrvalueId());
             }

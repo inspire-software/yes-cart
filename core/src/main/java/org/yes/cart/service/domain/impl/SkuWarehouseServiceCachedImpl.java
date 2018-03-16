@@ -47,6 +47,7 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "skuWarehouseService-productSkusOnWarehouse")
     public List<SkuWarehouse> getProductSkusOnWarehouse(final long productId, final long warehouseId) {
         return skuWarehouseService.getProductSkusOnWarehouse(productId, warehouseId);
@@ -55,6 +56,7 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "skuWarehouseService-productOnWarehouse")
     public Map<String, BigDecimal> getProductAvailableToSellQuantity(final long productId, final Collection<Warehouse> warehouses) {
         return skuWarehouseService.getProductAvailableToSellQuantity(productId, warehouses);
@@ -64,6 +66,7 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "skuWarehouseService-productOnWarehouse")
     public Map<String, BigDecimal> getProductSkuAvailableToSellQuantity(final String productSku, final Collection<Warehouse> warehouses) {
         return skuWarehouseService.getProductSkuAvailableToSellQuantity(productSku, warehouses);
@@ -77,6 +80,7 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
      * @param productSkuCode sku
      * @return pair of available and reserved quantity
      */
+    @Override
     public Pair<BigDecimal, BigDecimal> findQuantity(final Collection<Warehouse> warehouses, final String productSkuCode) {
         return skuWarehouseService.findQuantity(warehouses, productSkuCode);
     }
@@ -84,6 +88,7 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
@@ -95,6 +100,7 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
@@ -106,6 +112,7 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
@@ -117,6 +124,7 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
@@ -128,6 +136,7 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
@@ -137,6 +146,7 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     }
 
     /** {@inheritDoc}*/
+    @Override
     @CacheEvict(value = {
             "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
@@ -146,6 +156,7 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     }
 
     /** {@inheritDoc}*/
+    @Override
     @CacheEvict(value = {
             "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
@@ -155,21 +166,25 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public SkuWarehouse findByWarehouseSku(final Warehouse warehouse, final String productSkuCode) {
         return skuWarehouseService.findByWarehouseSku(warehouse, productSkuCode);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> findProductSkuForWhichInventoryChangedAfter(final Instant lastUpdate) {
         return skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastUpdate);
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isSkuAvailabilityPreorderOrBackorder(final String productSkuCode, final boolean checkAvailabilityDates) {
         return skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuCode, checkAvailabilityDates);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<SkuWarehouse> findAll() {
         return skuWarehouseService.findAll();
     }
@@ -177,36 +192,43 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<SkuWarehouse> callback) {
         skuWarehouseService.findAllIterator(callback);
     }
 
     /** {@inheritDoc} */
+    @Override
     public SkuWarehouse findById(final long pk) {
         return skuWarehouseService.findById(pk);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void delete(final SkuWarehouse instance) {
         skuWarehouseService.delete(instance);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<SkuWarehouse> findByCriteria(final String eCriteria, final Object... parameters) {
         return skuWarehouseService.findByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return skuWarehouseService.findCountByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public SkuWarehouse findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return skuWarehouseService.findSingleByCriteria(eCriteria, parameters);
     }
 
     /** {@inheritDoc} */
+    @Override
     public GenericDAO<SkuWarehouse, Long> getGenericDao() {
         return skuWarehouseService.getGenericDao();
     }

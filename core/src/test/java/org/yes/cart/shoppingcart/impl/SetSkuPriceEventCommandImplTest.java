@@ -18,7 +18,6 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -30,7 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Collections.singletonMap;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: denispavlov
@@ -52,7 +52,7 @@ public class SetSkuPriceEventCommandImplTest extends BaseCoreDBTestCase {
                 (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
         params.put(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, "5");
 

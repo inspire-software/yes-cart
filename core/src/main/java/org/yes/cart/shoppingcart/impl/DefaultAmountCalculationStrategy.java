@@ -94,6 +94,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
     }
 
     /** {@inheritDoc} */
+    @Override
     public Total calculate(final MutableShoppingCart cart) {
 
         final Customer customer;
@@ -196,11 +197,13 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
     }
 
     /** {@inheritDoc} */
+    @Override
     public Total calculate(final CustomerOrder order, final CustomerOrderDelivery orderDelivery) {
         return calculate(orderDelivery);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Total calculate(final CustomerOrder order) {
 
         Total deliveriesTotal = new TotalImpl();
@@ -212,7 +215,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
 
             }
         } else {
-            final Total deliveryTotal = calculateItemTotal(new ArrayList<CartItem>(order.getOrderDetail()));
+            final Total deliveryTotal = calculateItemTotal(new ArrayList<>(order.getOrderDetail()));
             deliveriesTotal = deliveriesTotal.add(deliveryTotal);
         }
 
@@ -256,7 +259,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
      */
     Total calculate(final CustomerOrderDelivery orderDelivery) {
 
-        final Total itemTotal = calculateItemTotal(new ArrayList<CartItem>(orderDelivery.getDetail()));
+        final Total itemTotal = calculateItemTotal(new ArrayList<>(orderDelivery.getDetail()));
 
         final BigDecimal deliveryTax = orderDelivery.getGrossPrice().subtract(orderDelivery.getNetPrice());
         final BigDecimal deliveryListAmount;

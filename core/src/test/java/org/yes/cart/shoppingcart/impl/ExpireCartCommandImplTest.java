@@ -56,7 +56,7 @@ public class ExpireCartCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customer.getEmail());
         params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
         params.put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);

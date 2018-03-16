@@ -32,10 +32,12 @@ public class CarrierSlaServiceImplTest extends BaseCoreDBTestCase {
 
     private CarrierService carrierService;
 
+    @Override
     protected String createDataSetFile() {
         return "initialdata_carrier.xml";
     }
 
+    @Override
     @Before
     public void setUp() {
         carrierService = (CarrierService) ctx().getBean(ServiceSpringKeys.CARRIER_SERVICE);

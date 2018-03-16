@@ -53,6 +53,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     private ProductService productService;
     private SearchQueryFactory searchQueryFactory;
 
+    @Override
     @Before
     public void setUp() {
         productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
@@ -118,13 +119,13 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
         CategoryService categoryService = (CategoryService) ctx().getBean(ServiceSpringKeys.CATEGORY_SERVICE);
         Category category = categoryService.findById(211L);
-        Set<Long> list = new HashSet<Long>();
+        Set<Long> list = new HashSet<>();
 
         final CacheManager cm = ctx().getBean("cacheManager", CacheManager.class);
         final Cache cache = cm.getCache("productService-randomProductByCategory");
 
         for (int i = 0; i < 10; i++) {
-            /**
+            /*
              * The value is cached, hence before get new value need to evict related cache "productService-randomProductByCategory"
              */
             cache.clear();
@@ -161,9 +162,9 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
         assertNotNull(attrs);
         assertFalse(attrs.isEmpty());
-        final Pair<String, String> dvdKey = new Pair<String, String>("3", "DVD Players view group");
+        final Pair<String, String> dvdKey = new Pair<>("3", "DVD Players view group");
         assertTrue(attrs.containsKey(dvdKey));
-        final Pair<String, String> weightKey = new Pair<String, String>("WEIGHT", "Weight");
+        final Pair<String, String> weightKey = new Pair<>("WEIGHT", "Weight");
         assertTrue(attrs.get(dvdKey).containsKey(weightKey));
         final List<Pair<String, String>> values = attrs.get(dvdKey).get(weightKey);
         assertEquals(1, values.size());
@@ -180,9 +181,9 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
         assertNotNull(attrs);
         assertFalse(attrs.isEmpty());
-        final Pair<String, String> dvdKey = new Pair<String, String>("3", "DVD Players view group");
+        final Pair<String, String> dvdKey = new Pair<>("3", "DVD Players view group");
         assertTrue(attrs.containsKey(dvdKey));
-        final Pair<String, String> weightKey = new Pair<String, String>("WEIGHT", "Weight");
+        final Pair<String, String> weightKey = new Pair<>("WEIGHT", "Weight");
         assertTrue(attrs.get(dvdKey).containsKey(weightKey));
         final List<Pair<String, String>> values = attrs.get(dvdKey).get(weightKey);
         assertEquals(1, values.size());
@@ -195,13 +196,13 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
         // bender vs bender-ua sku
         final Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> attrs =
-                productService.getCompareAttributes("en", Arrays.asList(9999L), Arrays.asList(9998L));
+                productService.getCompareAttributes("en", Collections.singletonList(9999L), Collections.singletonList(9998L));
 
         assertNotNull(attrs);
         assertFalse(attrs.isEmpty());
-        final Pair<String, String> dvdKey = new Pair<String, String>("3", "DVD Players view group");
+        final Pair<String, String> dvdKey = new Pair<>("3", "DVD Players view group");
         assertTrue(attrs.containsKey(dvdKey));
-        final Pair<String, String> weightKey = new Pair<String, String>("WEIGHT", "Weight");
+        final Pair<String, String> weightKey = new Pair<>("WEIGHT", "Weight");
         assertTrue(attrs.get(dvdKey).containsKey(weightKey));
         final Map<String, List<Pair<String, String>>> products = attrs.get(dvdKey).get(weightKey);
         assertEquals(2, products.size());
@@ -222,11 +223,12 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
         // Single category
         getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 ((GenericFTSCapableDAO) productService.getGenericDao()).fullTextSearchReindex(false, 1000);
 
-                NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, Arrays.asList(101L), false, null);
+                NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, Collections.singletonList(101L), false, null);
                 final ProductSearchResultPageDTO searchRes = productService.getProductSearchResultDTOByQuery(
                         context,
                         0,
@@ -246,11 +248,12 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
         // Category with subs
         getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 ((GenericFTSCapableDAO) productService.getGenericDao()).fullTextSearchReindex(false, 1000);
 
-                NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, Arrays.asList(101L), true, null);
+                NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, Collections.singletonList(101L), true, null);
                 final ProductSearchResultPageDTO searchRes = productService.getProductSearchResultDTOByQuery(
                         context,
                         0,
@@ -260,7 +263,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
                 );
                 assertTrue("Failed [" + context.toString() + "]", 2 < searchRes.getResults().size());
 
-                final Set<String> names = new HashSet<String>();
+                final Set<String> names = new HashSet<>();
                 for (final ProductSearchResultDTO item : searchRes.getResults()) {
                     names.add(item.getCode());
                 }

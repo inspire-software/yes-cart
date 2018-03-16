@@ -34,7 +34,7 @@ public class TaxProviderImpl implements TaxProvider, ConfigurationRegistry<Strin
     private static final Logger LOG = LoggerFactory.getLogger(TaxProviderImpl.class);
 
     private final TaxProvider defaultTaxProvider;
-    private final Map<String, TaxProvider> customTaxProviders = new HashMap<String, TaxProvider>();
+    private final Map<String, TaxProvider> customTaxProviders = new HashMap<>();
 
     public TaxProviderImpl(final TaxProvider defaultTaxProvider) {
         this.defaultTaxProvider = defaultTaxProvider;
@@ -55,12 +55,14 @@ public class TaxProviderImpl implements TaxProvider, ConfigurationRegistry<Strin
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean supports(final Object configuration) {
         return configuration instanceof TaxProvider ||
                 (configuration instanceof Class && TaxProvider.class.isAssignableFrom((Class<?>) configuration));
     }
 
     /** {@inheritDoc} */
+    @Override
     public void register(final String shopCode, final TaxProvider provider) {
 
         if (provider != null) {

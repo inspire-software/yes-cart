@@ -18,7 +18,6 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.service.domain.PromotionService;
@@ -64,7 +63,7 @@ public class AddCouponEventCommandImplTest extends BaseCoreDBTestCase {
         final String couponCodeInvalid = "CMDTEST-ADD002";
         createCoupon(couponCodeInvalid, "DIFFERENTSHOP", shoppingCart.getCurrencyCode());
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
         commands.execute(shoppingCart, (Map) params);
         assertTrue("Expected 19.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("19.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);

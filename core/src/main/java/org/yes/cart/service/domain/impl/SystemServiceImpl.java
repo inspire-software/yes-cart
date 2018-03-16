@@ -97,6 +97,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAttributeValue(final String key) {
 
         final String value = getStringFromValueWrapper(PREF_CACHE.get(key));
@@ -121,6 +122,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAttributeValueOrDefault(final String key, final String defaultValue) {
         final String original = getAttributeValue(key);
         if (StringUtils.isBlank(original)) {
@@ -132,6 +134,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String createOrGetAttributeValue(final String key, final String eType) {
         final String value = this.getAttributeValueOrDefault(key, null);
         if (value == null) {
@@ -148,6 +151,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, AttrValueSystem> findAttributeValues() {
         final System system = getSystem();
         if (system == null) {
@@ -159,6 +163,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public synchronized void updateAttributeValue(final String key, final String value) {
 
         AttrValueSystem attrVal = attrValueEntitySystemDao.findSingleByCriteria(" where e.attributeCode = ?1", key);
@@ -206,6 +211,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDefaultShopURL() {
         return proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_SHOP);
     }
@@ -213,6 +219,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPreviewShopURLTemplate() {
         final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_PREVIEW_URL_TEMPLATE);
         if (StringUtils.isBlank(attrValue)) {
@@ -230,6 +237,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPreviewShopURICss() {
         final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_PREVIEW_URI_CSS);
         if (StringUtils.isBlank(attrValue)) {
@@ -247,6 +255,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMailResourceDirectory() {
         return addTailFileSeparator(proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_MAILTEMPLATES_FSPOINTER));
     }
@@ -255,6 +264,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDefaultResourceDirectory() {
         return proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_FSPOINTER);
     }
@@ -262,6 +272,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getImageRepositoryDirectory() {
 
         final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_IMAGE_VAULT);
@@ -279,6 +290,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getFileRepositoryDirectory() {
 
         final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_FILE_VAULT);
@@ -296,6 +308,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSystemFileRepositoryDirectory() {
 
         final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_SYSFILE_VAULT);
@@ -314,6 +327,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Integer getEtagExpirationForImages() {
         final String expirationTimeout = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_ETAG_CACHE_IMAGES_TIME);
         if (expirationTimeout != null) {
@@ -325,6 +339,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Integer getEtagExpirationForPages() {
         final String expirationTimeout = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_ETAG_CACHE_PAGES_TIME);
         if (expirationTimeout != null) {
@@ -361,6 +376,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public GenericDAO getGenericDao() {
         return systemDao;
     }

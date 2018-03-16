@@ -70,35 +70,33 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         this.shopDao = shopDao;
         this.templateSupport = templateSupport;
 
-        this.templateSupport.registerFunction("include", new ContentServiceTemplateSupport.FunctionProvider() {
-            @Override
-            public Object doAction(final Object... params) {
+        this.templateSupport.registerFunction("include", params -> {
 
-                if (params != null && params.length == 3) {
+            if (params != null && params.length == 3) {
 
-                    final String uri = String.valueOf(params[0]);
+                final String uri = String.valueOf(params[0]);
 
-                    final Long contentId = proxy().findContentIdBySeoUri(uri);
+                final Long contentId = proxy().findContentIdBySeoUri(uri);
 
-                    if (contentId != null) {
-                        final String locale = String.valueOf(params[1]);
-                        final Map<String, Object> context = (Map<String, Object>) params[2];
+                if (contentId != null) {
+                    final String locale = String.valueOf(params[1]);
+                    final Map<String, Object> context = (Map<String, Object>) params[2];
 
 
-                        return proxy().getDynamicContentBody(contentId, locale, context);
-
-                    }
+                    return proxy().getDynamicContentBody(contentId, locale, context);
 
                 }
 
-                return "";
             }
+
+            return "";
         });
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category getRootContent(final long shopId) {
         if (shopId <= 0) {
             throw new IllegalArgumentException("Shop must not be null or transient");
@@ -109,6 +107,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public Category createRootContent(final long shopId) {
         final List<Object> shops = categoryDao.findQueryObjectByNamedQuery("SHOPCODE.BY.SHOP.ID", shopId);
         if (shops != null && shops.size() == 1) {
@@ -136,6 +135,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getContentTemplate(final long contentId) {
         final Category content = proxy().findById(contentId);
         if (content != null && !content.isRoot()) {
@@ -151,6 +151,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getContentBody(final long contentId, final String locale) {
         final String attributeKey = "CONTENT_BODY_" + locale + "_%";
         final List<Object> bodyList = categoryDao.findQueryObjectByNamedQuery("CONTENTBODY.BY.CONTENTID", contentId, attributeKey, now());
@@ -173,6 +174,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getContentBody(final String contentUri, final String locale) {
         final Long id = findContentIdBySeoUri(contentUri);
         if (id != null) {
@@ -184,6 +186,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDynamicContentBody(final long contentId, final String locale, final Map<String, Object> context) {
 
         final String rawContent = proxy().getContentBody(contentId, locale);
@@ -200,6 +203,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDynamicContentBody(final String contentUri, final String locale, final Map<String, Object> context) {
 
         final String rawContent = proxy().getContentBody(contentUri, locale);
@@ -216,6 +220,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getContentAttributeRecursive(final String locale, final long contentId, final String attributeName, final String defaultValue) {
 
         final Category content = proxy().getById(contentId);
@@ -243,6 +248,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public String[] getContentAttributeRecursive(final String locale, final long contentId, final String[] attributeNames) {
 
         final Category content;
@@ -278,6 +284,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> getChildContent(final long contentId) {
         return findChildContentWithAvailability(contentId, true);
     }
@@ -285,27 +292,17 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> findChildContentWithAvailability(final long contentId, final boolean withAvailability) {
 
-        final List<Category> cats = new ArrayList<Category>(categoryDao.findByNamedQuery(
+        final List<Category> cats = new ArrayList<>(categoryDao.findByNamedQuery(
                 "CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING",
                 contentId
         ));
         if (withAvailability) {
 
             final LocalDateTime now = now();
-            final Iterator<Category> it = cats.iterator();
-            while (it.hasNext()) {
-
-                final Category cat = it.next();
-
-                if (!DomainApiUtils.isObjectAvailableNow(true, cat.getAvailablefrom(), cat.getAvailableto(), now)) {
-
-                    it.remove();
-
-                }
-
-            }
+            cats.removeIf(cat -> !DomainApiUtils.isObjectAvailableNow(true, cat.getAvailablefrom(), cat.getAvailableto(), now));
 
         }
         return cats;
@@ -316,10 +313,11 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Category> getChildContentRecursive(final long contentId) {
         final Category thisCon = proxy().getById(contentId);
         if (thisCon != null) {
-            final Set<Category> all = new HashSet<Category>();
+            final Set<Category> all = new HashSet<>();
             all.add(thisCon);
             loadChildContentRecursiveInternal(all, thisCon);
             return all;
@@ -340,6 +338,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Category> findBy(final long shopId, final String code, final String name, final String uri, final int page, final int pageSize) {
 
         final String codeP = HQLUtils.criteriaIlikeAnywhere(code);
@@ -347,7 +346,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         final String uriP = HQLUtils.criteriaIlikeAnywhere(uri);
 
         final Category root = proxy().getRootContent(shopId);
-        List<Category> cats = new ArrayList<Category>();
+        List<Category> cats;
         if ((codeP != null || nameP != null) && uriP != null) {
             cats = getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.CODE.NAME.URI", page * pageSize, pageSize, codeP, nameP, uriP);
         } else if (codeP == null && nameP == null && uriP != null) {
@@ -387,6 +386,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc} Just to cache
      */
+    @Override
     public Category getById(final long pk) {
         return getGenericDao().findById(pk);
     }
@@ -394,6 +394,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findContentIdBySeoUri(final String seoUri) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("CATEGORY.ID.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
@@ -408,6 +409,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long findContentIdByGUID(final String guid) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("CATEGORY.ID.BY.GUID", guid);
         if (list != null && !list.isEmpty()) {
@@ -422,6 +424,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public String findSeoUriByContentId(final Long contentId) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("SEO.URI.BY.CATEGORY.ID", contentId);
         if (list != null && !list.isEmpty()) {
@@ -437,13 +440,14 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isContentHasSubcontent(final long topContentId, final long subContentId) {
         final Category start = proxy().getById(subContentId);
         if (start != null) {
             if (subContentId == topContentId) {
                 return true;
             } else {
-                final List<Category> list = new ArrayList<Category>();
+                final List<Category> list = new ArrayList<>();
                 list.add(start);
                 addParent(list, topContentId);
                 return list.get(list.size() - 1).getCategoryId() == topContentId;

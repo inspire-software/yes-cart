@@ -59,7 +59,7 @@ public class BulkMailProcessorImpl implements Runnable {
 
         LOG.info("Bulk send mail");
 
-        final Map<String, Integer> exceptionsThresholdsByShop = new HashMap<String, Integer>();
+        final Map<String, Integer> exceptionsThresholdsByShop = new HashMap<>();
 
         Long lastFailedEmailId = null;
         Mail mail = mailService.findOldestMail(lastFailedEmailId);

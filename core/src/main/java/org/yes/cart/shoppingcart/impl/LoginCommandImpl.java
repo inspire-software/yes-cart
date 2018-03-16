@@ -62,6 +62,7 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCmdKey() {
         return CMD_LOGIN;
     }
@@ -83,7 +84,7 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
             if (current != null && authenticate(email, current, passw)) {
 
                 final Customer customer = customerService.getCustomerByEmail(email, current);
-                final List<String> customerShops = new ArrayList<String>();
+                final List<String> customerShops = new ArrayList<>();
                 // set default shop
                 shoppingCart.getShoppingContext().setCustomerShopId(shoppingCart.getShoppingContext().getShopId());
                 shoppingCart.getShoppingContext().setCustomerShopCode(shoppingCart.getShoppingContext().getShopCode());

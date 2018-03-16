@@ -66,6 +66,7 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public SkuPrice getMinimalPrice(final Long productId,
                                     final String selectedSku,
                                     final long customerShopId,
@@ -148,6 +149,7 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<SkuPrice> getAllCurrentPrices(final Long productId,
                                               final String selectedSku,
                                               final long customerShopId,
@@ -166,12 +168,12 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
 
         final List<Pair<String, SkuPrice>> filtered = getSkuPricesFilteredByTimeFrame(skuPrices);
 
-        final List<SkuPrice> prices = new ArrayList<SkuPrice>();
+        final List<SkuPrice> prices = new ArrayList<>();
         for (final Pair<String, SkuPrice> price : filtered) {
             prices.add(price.getSecond());
         }
 
-        Collections.sort(prices, SORT_PRICE_BY_QUANTITY);
+        prices.sort(SORT_PRICE_BY_QUANTITY);
 
         final Iterator<SkuPrice> pricesIt = prices.iterator();
         BigDecimal tier = null;
@@ -201,7 +203,7 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
      */
     List<Pair<String, SkuPrice>> getSkuPricesFilteredByTimeFrame(final List<Pair<String, SkuPrice>> skuPrices) {
 
-        final List<Pair<String, SkuPrice>> allPrices = new LinkedList<Pair<String, SkuPrice>>();
+        final List<Pair<String, SkuPrice>> allPrices = new LinkedList<>();
 
         final LocalDateTime now = now();
         for (Pair<String, SkuPrice> skuPrice : skuPrices) {
@@ -276,7 +278,7 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
      */
     List<Pair<String, SkuPrice>> getSkuPricesFilteredByQuantity(final List<Pair<String, SkuPrice>> prices,
                                                                 final BigDecimal quantity) {
-        List<Pair<String, SkuPrice>> result = new ArrayList<Pair<String, SkuPrice>>();
+        List<Pair<String, SkuPrice>> result = new ArrayList<>();
         for (Pair<String, SkuPrice> skuPrice : prices) {
             if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(quantity, skuPrice.getSecond().getQuantity())) {
                 result.add(skuPrice);
@@ -310,9 +312,9 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
             }
         }
         if (CollectionUtils.isNotEmpty(prices)) {
-            final List<Pair<String, SkuPrice>> rez = new ArrayList<Pair<String, SkuPrice>>(prices.size());
+            final List<Pair<String, SkuPrice>> rez = new ArrayList<>(prices.size());
             for (final SkuPrice price : prices) {
-                rez.add(new Pair<String, SkuPrice>(price.getSkuCode(), price));
+                rez.add(new Pair<>(price.getSkuCode(), price));
             }
             return rez;
         }
@@ -345,9 +347,9 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
             }
         }
         if (CollectionUtils.isNotEmpty(prices)) {
-            final List<Pair<String, SkuPrice>> rez = new ArrayList<Pair<String, SkuPrice>>(prices.size());
+            final List<Pair<String, SkuPrice>> rez = new ArrayList<>(prices.size());
             for (final SkuPrice price : prices) {
-                rez.add(new Pair<String, SkuPrice>(price.getSkuCode(), price));
+                rez.add(new Pair<>(price.getSkuCode(), price));
             }
             return rez;
         }
@@ -358,6 +360,7 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<SkuPrice> getAllPrices(final Long productId, final String selectedSku, final String currencyCode) {
 
         if (productId != null) {
@@ -374,11 +377,12 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<FilteredNavigationRecord> getPriceNavigationRecords(final PriceTierTree priceTierTree,
                                                                     final String currency,
                                                                     final Shop customerShop) {
         final List<PriceTierNode> priceTierNodes = getPriceTierNodes(priceTierTree, currency, customerShop);
-        final List<FilteredNavigationRecord> result = new ArrayList<FilteredNavigationRecord>(priceTierNodes.size());
+        final List<FilteredNavigationRecord> result = new ArrayList<>(priceTierNodes.size());
         for (PriceTierNode priceTierNode : priceTierNodes) {
             result.add(
                     new FilteredNavigationRecordImpl(
@@ -427,6 +431,7 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public SkuPrice create(final SkuPrice instance) {
         ensureNonZeroPrices(instance);
         return super.create(instance);
@@ -435,6 +440,7 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public SkuPrice update(final SkuPrice instance) {
         ensureNonZeroPrices(instance);
         return super.update(instance);

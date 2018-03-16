@@ -52,11 +52,7 @@ public class LanguageServiceImpl implements LanguageService {
         properties.load(config.getInputStream());
 
         this.shopService = shopService;
-        this.languageName = new TreeMap<String, String>(new Comparator<String>() {
-            public int compare(String o1, String o2) {
-                return o1.compareTo(o2);
-            }
-        });
+        this.languageName = new TreeMap<>((o1, o2) -> o1.compareTo(o2));
         this.languageName.putAll(getLanguageNameFromConfig(properties));
         this.shopToLanguageMap = getShopToLanguageMapFromConfig(properties);
         this.supportedLanguages = this.shopToLanguageMap.get("DEFAULT");
@@ -66,7 +62,7 @@ public class LanguageServiceImpl implements LanguageService {
 
         final String langs = properties.getProperty("webapp.i18n.supported.locales", "en,de,ru,uk");
 
-        final Map<String, String> all = new LinkedHashMap<String, String>();
+        final Map<String, String> all = new LinkedHashMap<>();
 
         for (final String lang : StringUtils.split(langs, ',')) {
             all.put(lang, properties.getProperty("webapp.i18n.supported.locales." + lang, lang));
@@ -79,7 +75,7 @@ public class LanguageServiceImpl implements LanguageService {
 
         final String shops = properties.getProperty("webapp.i18n.supported.locales.specific", "DEFAULT");
 
-        final Map<String, List<String>> all = new LinkedHashMap<String, List<String>>();
+        final Map<String, List<String>> all = new LinkedHashMap<>();
 
         for (final String shop : StringUtils.split(shops, ',')) {
             all.put(shop, Arrays.asList(

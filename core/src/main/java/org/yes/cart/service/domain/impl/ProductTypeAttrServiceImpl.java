@@ -21,8 +21,6 @@ import org.yes.cart.domain.entity.ProdTypeAttributeViewGroup;
 import org.yes.cart.domain.entity.ProductTypeAttr;
 import org.yes.cart.service.domain.ProductTypeAttrService;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -41,42 +39,30 @@ public class ProductTypeAttrServiceImpl extends BaseGenericServiceImpl<ProductTy
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<ProdTypeAttributeViewGroup> getViewGroupsByProductTypeId(final long productTypeId) {
         final List<ProdTypeAttributeViewGroup> groups = (List) getGenericDao()
                 .findQueryObjectByNamedQuery("PRODUCT.TYPE.VIEWGROUP.BY.PROD.TYPE.ID", productTypeId);
         // Need to sort this here as ordering has adverse effect on query - do not use "order by rank"
-        Collections.sort(groups, new Comparator<ProdTypeAttributeViewGroup>() {
-            @Override
-            public int compare(final ProdTypeAttributeViewGroup g1, final ProdTypeAttributeViewGroup g2) {
-                return g1.getRank() - g2.getRank();
-            }
-        });
+        groups.sort((g1, g2) -> g1.getRank() - g2.getRank());
         return groups;
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<ProductTypeAttr> getByProductTypeId(final long productTypeId) {
         final List<ProductTypeAttr> attrs = getGenericDao().findByNamedQuery("PRODUCT.TYPE.ATTR.BY.PROD.TYPE.ID", productTypeId);
         // Need to sort this here as ordering has adverse effect on query - do not use "order by rank"
-        Collections.sort(attrs, new Comparator<ProductTypeAttr>() {
-            @Override
-            public int compare(final ProductTypeAttr a1, final ProductTypeAttr a2) {
-                return a1.getRank() - a2.getRank();
-            }
-        });
+        attrs.sort((a1, a2) -> a1.getRank() - a2.getRank());
         return attrs;
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<ProductTypeAttr> getNavigatableByProductTypeId(final long productTypeId) {
         final List<ProductTypeAttr> attrs = getGenericDao().findByNamedQuery("PRODUCT.TYPE.NAV.ATTR.BY.PROD.TYPE.ID", productTypeId, Boolean.TRUE, Boolean.TRUE);
         // Need to sort this here as ordering has adverse effect on query - do not use "order by rank"
-        Collections.sort(attrs, new Comparator<ProductTypeAttr>() {
-            @Override
-            public int compare(final ProductTypeAttr a1, final ProductTypeAttr a2) {
-                return a1.getRank() - a2.getRank();
-            }
-        });
+        attrs.sort((a1, a2) -> a1.getRank() - a2.getRank());
         return attrs;
     }
 

@@ -38,6 +38,7 @@ public class ShoppingCartCommandConfigurationCheckoutVisitorImpl extends Shoppin
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visit(final MutableShoppingCart cart, final Object... args) {
 
         final MutableOrderInfo info = cart.getOrderInfo();

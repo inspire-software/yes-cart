@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 public class StringValueToLocalDateTimeConverter implements Converter<String, LocalDateTime> {
 
     /** {@inheritDoc} */
+    @Override
     public LocalDateTime convert(final String str) {
         return DateUtils.ldtParseSDT(str);
     }

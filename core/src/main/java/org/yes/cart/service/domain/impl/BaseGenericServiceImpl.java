@@ -40,6 +40,7 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ENTITY> findAll() {
         return genericDao.findAll();
     }
@@ -47,6 +48,7 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<ENTITY> callback) {
 
         ResultsIterator<ENTITY> entities = null;
@@ -79,6 +81,7 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ENTITY findById(final long pk) {
         return genericDao.findById(pk);
     }
@@ -87,6 +90,7 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ENTITY create(final ENTITY instance) {
         return genericDao.create(instance);
     }
@@ -95,6 +99,7 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ENTITY update(final ENTITY instance) {
         return genericDao.update(instance);
     }
@@ -102,6 +107,7 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void delete(final ENTITY instance) {
         genericDao.delete(instance);
     }
@@ -111,6 +117,7 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
      *
      * @return generic dao
      */
+    @Override
     public GenericDAO<ENTITY, Long> getGenericDao() {
         return genericDao;
     }
@@ -118,6 +125,7 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ENTITY> findByCriteria(final String eCriteria, final Object... parameters) {
         return genericDao.findByCriteria(eCriteria, parameters);
 
@@ -126,6 +134,7 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return genericDao.findCountByCriteria(eCriteria, parameters);
     }
@@ -133,6 +142,7 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ENTITY findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return genericDao.findSingleByCriteria(eCriteria, parameters);
 

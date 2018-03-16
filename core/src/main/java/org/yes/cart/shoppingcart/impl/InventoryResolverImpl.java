@@ -37,7 +37,7 @@ public class InventoryResolverImpl implements InventoryResolver, ConfigurationRe
     private static final Logger LOG = LoggerFactory.getLogger(InventoryResolverImpl.class);
 
     private final InventoryResolver defaultInventoryResolver;
-    private final Map<String, InventoryResolver> customInventoryResolvers = new HashMap<String, InventoryResolver>();
+    private final Map<String, InventoryResolver> customInventoryResolvers = new HashMap<>();
 
     public InventoryResolverImpl(final InventoryResolver defaultInventoryResolver) {
         this.defaultInventoryResolver = defaultInventoryResolver;
@@ -89,12 +89,14 @@ public class InventoryResolverImpl implements InventoryResolver, ConfigurationRe
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean supports(final Object configuration) {
         return configuration instanceof InventoryResolver ||
                 (configuration instanceof Class && InventoryResolver.class.isAssignableFrom((Class<?>) configuration));
     }
 
     /** {@inheritDoc} */
+    @Override
     public void register(final String warehouseCode, final InventoryResolver provider) {
 
         if (provider != null) {

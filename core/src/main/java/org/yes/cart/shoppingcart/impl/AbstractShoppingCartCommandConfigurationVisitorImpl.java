@@ -43,6 +43,7 @@ public abstract class AbstractShoppingCartCommandConfigurationVisitorImpl implem
     }
 
 
+    @Override
     public String getId() {
         return visitorId;
     }

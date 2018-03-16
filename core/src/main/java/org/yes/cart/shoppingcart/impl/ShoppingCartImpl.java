@@ -50,13 +50,13 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartImpl.class);
 
     @JsonProperty
-    private List<CartItemImpl> items = new ArrayList<CartItemImpl>();
+    private List<CartItemImpl> items = new ArrayList<>();
     @JsonProperty
-    private List<CartItemImpl> gifts = new ArrayList<CartItemImpl>();
+    private List<CartItemImpl> gifts = new ArrayList<>();
     @JsonProperty
-    private Set<String> coupons = new TreeSet<String>();
+    private Set<String> coupons = new TreeSet<>();
     @JsonProperty
-    private List<CartItemImpl> shipping = new ArrayList<CartItemImpl>();
+    private List<CartItemImpl> shipping = new ArrayList<>();
 
     private String guid = java.util.UUID.randomUUID().toString();
 
@@ -90,12 +90,14 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void initialise(final AmountCalculationStrategy calculationStrategy) {
         this.calculationStrategy = calculationStrategy;
         this.processingStartTimestamp = now();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void markDirty() {
         this.modifiedTimestamp = now();
         if (!isModified()) {
@@ -105,6 +107,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void clean() {
         guid = java.util.UUID.randomUUID().toString();
         items.clear();
@@ -120,46 +123,54 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void recalculate() {
         total = getCalculationStrategy().calculate(this);
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public boolean isSeparateBillingAddress() {
         return getOrderInfo().isSeparateBillingAddress();
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public boolean isBillingAddressNotRequired() {
         return getOrderInfo().isBillingAddressNotRequired();
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public boolean isDeliveryAddressNotRequired() {
         return getOrderInfo().isDeliveryAddressNotRequired();
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public String getOrderMessage() {
         return getOrderInfo().getOrderMessage();
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getGuid() {
         return guid;
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public Map<String, Long> getCarrierSlaId() {
         return getOrderInfo().getCarrierSlaId();
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public boolean isAllCarrierSlaSelected() {
 
@@ -168,6 +179,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public boolean isAllCartItemsBucketed() {
 
@@ -176,6 +188,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public List<CartItem> getCartItemList() {
 
@@ -184,6 +197,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public Map<DeliveryBucket, List<CartItem>> getCartItemMap() {
 
@@ -192,6 +206,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public List<CartItem> getShippingList() {
 
@@ -201,6 +216,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
 
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public Map<DeliveryBucket, List<CartItem>> getShippingListMap() {
 
@@ -210,6 +226,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
 
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getProductSkuQuantity(final String sku) {
         final int skuIndex = indexOfProductSku(sku);
         if (skuIndex == -1) { //not found
@@ -219,6 +236,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean addProductSkuToCart(final String sku, final String skuName, final BigDecimal quantity) {
 
         final int skuIndex = indexOfProductSku(sku);
@@ -236,6 +254,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean addShippingToCart(final DeliveryBucket deliveryBucket, final String carrierSlaGUID, final String carrierSlaName, final BigDecimal quantity) {
         final int shipIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
         if (shipIndex != -1) {
@@ -254,6 +273,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean addGiftToCart(final String sku, final String skuName, final BigDecimal quantity, final String promotionCode) {
 
         final int skuIndex = indexOfGift(sku);
@@ -299,6 +319,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean setProductSkuToCart(final String sku, final String skuName, final BigDecimal quantity) {
 
         final CartItemImpl newItem = new CartItemImpl();
@@ -317,6 +338,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean setProductSkuDeliveryBucket(final String sku, final DeliveryBucket deliveryBucket) {
 
         final int skuIndex = indexOfProductSku(sku);
@@ -337,6 +359,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean setGiftDeliveryBucket(final String sku, final DeliveryBucket deliveryBucket) {
 
         final int skuIndex = indexOfGift(sku);
@@ -357,6 +380,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean removeCartItem(final String productSku) {
         final int skuIndex = indexOfProductSku(productSku);
         if (skuIndex != -1) {
@@ -367,6 +391,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean removeCartItemQuantity(final String productSku, final BigDecimal quantity) {
         final int skuIndex = indexOfProductSku(productSku);
         if (skuIndex != -1) {
@@ -381,6 +406,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean removeItemPromotions() {
         boolean removed = !getGifts().isEmpty();
         getGifts().clear();
@@ -399,6 +425,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
 
 
     /** {@inheritDoc} */
+    @Override
     public boolean removeItemOffers() {
         boolean removed = false;
 
@@ -416,6 +443,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
 
 
     /** {@inheritDoc} */
+    @Override
     public boolean removeShipping() {
         if (getShipping().isEmpty()) {
             return false;
@@ -425,6 +453,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean removeShipping(final String carrierSlaGUID, final DeliveryBucket deliveryBucket) {
         final int skuIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
         if (skuIndex != -1) {
@@ -435,6 +464,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean setProductSkuPrice(final String skuCode, final BigDecimal salePrice, final BigDecimal listPrice) {
         final int skuIndex = indexOfProductSku(skuCode);
         if (skuIndex != -1) {
@@ -463,6 +493,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean setShippingPrice(final String carrierSlaGUID, final DeliveryBucket deliveryBucket, final BigDecimal salePrice, final BigDecimal listPrice) {
         final int shipIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
         if (shipIndex != -1) {
@@ -479,6 +510,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean setGiftPrice(final String skuCode, final BigDecimal salePrice, final BigDecimal listPrice) {
         final int skuIndex = indexOfGift(skuCode);
         if (skuIndex != -1) {
@@ -498,6 +530,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean setProductSkuPromotion(final String skuCode, final BigDecimal promoPrice, final String promoCode) {
         final int skuIndex = indexOfProductSku(skuCode);
         if (skuIndex != -1) {
@@ -510,6 +543,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean setProductSkuOffer(final String skuCode, final BigDecimal fixedPrice, final String authCode) {
         final int skuIndex = indexOfProductSku(skuCode);
         if (skuIndex != -1) {
@@ -524,6 +558,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean setShippingPromotion(final String carrierSlaGUID, final DeliveryBucket deliveryBucket, final BigDecimal promoPrice, final String promoCode) {
         final int shipIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
         if (shipIndex != -1) {
@@ -536,6 +571,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean setProductSkuTax(final String skuCode, final BigDecimal netPrice, final BigDecimal grossPrice, final BigDecimal rate, final String taxCode, final boolean exclPrice) {
         final int skuIndex = indexOfProductSku(skuCode);
         if (skuIndex != -1) {
@@ -551,6 +587,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean setShippingTax(final String carrierSlaGUID, final DeliveryBucket deliveryBucket, final BigDecimal netPrice, final BigDecimal grossPrice, final BigDecimal rate, final String taxCode, final boolean exclPrice) {
         final int shipIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
         if (shipIndex != -1) {
@@ -566,16 +603,18 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getCoupons() {
-        return Collections.unmodifiableList(new ArrayList<String>(coupons));
+        return Collections.unmodifiableList(new ArrayList<>(coupons));
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public List<String> getAppliedCoupons() {
 
-        final List<String> all = new ArrayList<String>(coupons);
-        final List<String> applied = new ArrayList<String>();
+        final List<String> all = new ArrayList<>(coupons);
+        final List<String> applied = new ArrayList<>();
 
         if (!all.isEmpty()) {
             checkCouponPromoApplied(total.getAppliedOrderPromo(), all, applied);
@@ -625,16 +664,19 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean addCoupon(final String coupon) {
         return coupons.add(coupon);
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean removeCoupon(final String coupon) {
         return coupons.remove(coupon);
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public int getCartItemsCount() {
 
@@ -643,6 +685,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public List<String> getCartItemsSuppliers() {
 
@@ -651,22 +694,26 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public int indexOfProductSku(final String skuCode) {
         return ShoppingCartUtils.indexOf(skuCode, getItems());
     }
 
     /** {@inheritDoc} */
+    @Override
     public int indexOfShipping(final String carrierSlaId, final DeliveryBucket deliveryBucket) {
         return ShoppingCartUtils.indexOf(carrierSlaId, deliveryBucket, getShipping());
     }
 
     /** {@inheritDoc} */
+    @Override
     public int indexOfGift(final String skuCode) {
         return ShoppingCartUtils.indexOf(skuCode, getGifts());
     }
 
 
     /** {@inheritDoc} */
+    @Override
     public boolean contains(final String skuCode) {
         return (indexOfProductSku(skuCode) != -1);
     }
@@ -677,7 +724,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
      */
     List<CartItemImpl> getItems() {
         if (items == null) {
-            items = new ArrayList<CartItemImpl>();
+            items = new ArrayList<>();
         }
         return items;
     }
@@ -687,7 +734,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
      */
     List<CartItemImpl> getGifts() {
         if (gifts == null) {
-            gifts = new ArrayList<CartItemImpl>();
+            gifts = new ArrayList<>();
         }
         return gifts;
     }
@@ -697,73 +744,85 @@ public class ShoppingCartImpl implements MutableShoppingCart {
      */
     List<CartItemImpl> getShipping() {
         if (shipping == null) {
-            shipping = new ArrayList<CartItemImpl>();
+            shipping = new ArrayList<>();
         }
         return shipping;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCurrencyCode() {
         return currencyCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCurrencyCode(final String currencyCode) {
         this.currencyCode = currencyCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public String getCustomerName() {
         return getShoppingContext().getCustomerName();
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getModifiedTimestamp() {
         return modifiedTimestamp;
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public boolean isModified() {
         return processingStartTimestamp < modifiedTimestamp;
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public boolean hasGifts() {
         return !getGifts().isEmpty();
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public boolean isPromotionsDisabled() {
         return promotionsDisabled;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setPromotionsDisabled(final boolean promotionsDisabled) {
         this.promotionsDisabled = promotionsDisabled;
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public String getOrdernum() {
         return ordernum;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setOrdernum(final String ordernum) {
         this.ordernum = ordernum;
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public String getCustomerEmail() {
         return  getShoppingContext().getCustomerEmail();
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public int getLogonState() {
         if (StringUtils.isBlank(getCustomerEmail())
@@ -781,6 +840,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public MutableShoppingContext getShoppingContext() {
         if (shoppingContext == null) {
             shoppingContext = new ShoppingContextImpl();
@@ -789,16 +849,19 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCurrentLocale() {
         return currentLocale;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCurrentLocale(final String currentLocale) {
         this.currentLocale = currentLocale;
     }
 
     /** {@inheritDoc} */
+    @Override
     public MutableOrderInfo getOrderInfo() {
         if (orderInfo == null) {
             orderInfo = new OrderInfoImpl();
@@ -807,11 +870,13 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getProcessingStartTimestamp() {
         return processingStartTimestamp;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Total getTotal() {
         if (total == null) {
             LOG.error("Total requested before cart was recalculated - revise page flow to ensure that recalculation happens");

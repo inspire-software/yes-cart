@@ -47,14 +47,15 @@ public class ExternalDeliveryCostCalculationStrategy implements DeliveryCostCalc
     }
 
     /** {@inheritDoc} */
+    @Override
     public Total calculate(final MutableShoppingCart cart) {
 
         if (!cart.getCarrierSlaId().isEmpty()) {
 
             Total total = null;
 
-            final Set<Long> uniqueCarrierSlaIds = new HashSet<Long>(cart.getCarrierSlaId().values());
-            final Set<DeliveryCostCalculationStrategy> strategyExecutionPlan = new HashSet<DeliveryCostCalculationStrategy>();
+            final Set<Long> uniqueCarrierSlaIds = new HashSet<>(cart.getCarrierSlaId().values());
+            final Set<DeliveryCostCalculationStrategy> strategyExecutionPlan = new HashSet<>();
 
             for (final Long carrierSlaId : uniqueCarrierSlaIds) {
 

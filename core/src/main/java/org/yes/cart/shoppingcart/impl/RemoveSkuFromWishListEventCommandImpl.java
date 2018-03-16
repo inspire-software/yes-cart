@@ -72,6 +72,7 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCmdKey() {
         return CMD_REMOVEFROMWISHLIST;
     }

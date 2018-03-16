@@ -50,6 +50,7 @@ public class BrandMediaFileNameStrategyImpl extends AbstractMediaFileNameStrateg
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String resolveObjectCodeInternal(final String url) {
 
         final String val = resolveFileName(url);

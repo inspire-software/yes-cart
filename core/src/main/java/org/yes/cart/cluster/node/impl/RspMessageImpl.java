@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class RspMessageImpl extends BasicMessageImpl implements RspMessage {
 
-    private final List<Message> responses = new ArrayList<Message>();
+    private final List<Message> responses = new ArrayList<>();
 
     public RspMessageImpl(final String source,
                           final String subject,
@@ -49,6 +49,7 @@ public class RspMessageImpl extends BasicMessageImpl implements RspMessage {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addResponse(final Message message) {
         this.responses.add(message);
     }
@@ -56,6 +57,7 @@ public class RspMessageImpl extends BasicMessageImpl implements RspMessage {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Message> getResponses() {
         return Collections.unmodifiableList(this.responses);
     }

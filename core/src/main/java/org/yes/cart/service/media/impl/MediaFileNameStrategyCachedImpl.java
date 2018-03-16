@@ -33,11 +33,13 @@ public class MediaFileNameStrategyCachedImpl implements MediaFileNameStrategy {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getUrlPath() {
         return mediaFileNameStrategy.getUrlPath();
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getRelativeInternalRootDirectory() {
         return mediaFileNameStrategy.getRelativeInternalRootDirectory();
     }
@@ -45,6 +47,7 @@ public class MediaFileNameStrategyCachedImpl implements MediaFileNameStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "imageNameStrategy-resolveObjectCode")
     public String resolveObjectCode(final String url) {
         return mediaFileNameStrategy.resolveObjectCode(url);
@@ -53,6 +56,7 @@ public class MediaFileNameStrategyCachedImpl implements MediaFileNameStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "imageNameStrategy-resolveLocale")
     public String resolveLocale(final String url) {
         return mediaFileNameStrategy.resolveLocale(url);
@@ -61,27 +65,32 @@ public class MediaFileNameStrategyCachedImpl implements MediaFileNameStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "imageNameStrategy-resolveSuffix")
     public String resolveSuffix(final String url) {
         return mediaFileNameStrategy.resolveSuffix(url);
     }
 
     /** {@inheritDoc} */
+    @Override
     public String resolveFileName(final String url) {
         return mediaFileNameStrategy.resolveFileName(url);
     }
 
     /** {@inheritDoc} */
+    @Override
     public String resolveRelativeInternalFileNamePath(final String fileName, final String code, final String locale) {
         return mediaFileNameStrategy.resolveRelativeInternalFileNamePath(fileName, code, locale);
     }
 
     /** {@inheritDoc} */
+    @Override
     public String resolveRelativeInternalFileNamePath(final String fileName, final String code, final String locale, final String width, final String height) {
         return mediaFileNameStrategy.resolveRelativeInternalFileNamePath(fileName, code, locale, width, height);
     }
 
     /** {@inheritDoc} */
+    @Override
     public String createRollingFileName(final String fileName, final String code, final String suffix, final String locale) {
         return mediaFileNameStrategy.createRollingFileName(fileName, code, suffix, locale);
     }

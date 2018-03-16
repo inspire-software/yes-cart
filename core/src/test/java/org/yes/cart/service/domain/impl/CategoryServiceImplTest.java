@@ -21,7 +21,9 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.service.domain.*;
 
 import java.util.Arrays;
@@ -42,6 +44,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
     private CategoryService categoryService;
 
+    @Override
     @Before
     public void setUp() {
         categoryService = (CategoryService) ctx().getBean(ServiceSpringKeys.CATEGORY_SERVICE);
@@ -110,7 +113,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetChildCategoriesRecursiveTest() {
-        Set<Long> categoryIds = new HashSet<Long>();
+        Set<Long> categoryIds = new HashSet<>();
         categoryIds.addAll(Arrays.asList(101L, 102L, 103L, 104L, 105L, 143L, 144L));
         Set<Category> categories = categoryService.getChildCategoriesRecursive(101L);
         for (Category category : categories) {
@@ -120,7 +123,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetChildCategoriesRecursiveIdsTest() {
-        Set<Long> categoryIds = new HashSet<Long>();
+        Set<Long> categoryIds = new HashSet<>();
         categoryIds.addAll(Arrays.asList(101L, 102L, 103L, 104L, 105L, 143L, 144L));
         List<Long> categories = categoryService.getChildCategoriesRecursiveIds(101L);
         assertEquals(categoryIds.size(), categories.size());
@@ -129,7 +132,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetChildCategoriesRecursiveIdsWithLinksTest() {
-        Set<Long> categoryIds = new HashSet<Long>();
+        Set<Long> categoryIds = new HashSet<>();
         categoryIds.addAll(Arrays.asList(101L, 102L, 103L, 104L, 105L, 143L, 144L));
         List<Long> categories = categoryService.getChildCategoriesRecursiveIdsAndLinkIds(101L);
         assertEquals(categoryIds.size(), categories.size());
@@ -138,7 +141,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetChildCategoriesRecursiveLinkedTest() {
-        Set<Long> categoryIds = new HashSet<Long>();
+        Set<Long> categoryIds = new HashSet<>();
         categoryIds.addAll(Arrays.asList(401L, 411L, 313L));
         Set<Category> categories = categoryService.getChildCategoriesRecursive(401L);
         for (Category category : categories) {
@@ -148,7 +151,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetChildCategoriesRecursiveIdsLinkedTest() {
-        Set<Long> categoryIds = new HashSet<Long>();
+        Set<Long> categoryIds = new HashSet<>();
         categoryIds.addAll(Arrays.asList(401L, 411L, 313L));
         List<Long> categories = categoryService.getChildCategoriesRecursiveIds(401L);
         assertEquals(categoryIds.size(), categories.size());
@@ -157,7 +160,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetChildCategoriesRecursiveIdsWithLinksLinkedTest() {
-        Set<Long> categoryIds = new HashSet<Long>();
+        Set<Long> categoryIds = new HashSet<>();
         categoryIds.addAll(Arrays.asList(401L, 411L, 312L, 313L));
         List<Long> categories = categoryService.getChildCategoriesRecursiveIdsAndLinkIds(401L);
         assertEquals(categoryIds.size(), categories.size());
@@ -166,7 +169,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetChildCategoriesRecursiveNullTest() {
-        Set<Category> categories = categoryService.getChildCategoriesRecursive(0l);
+        Set<Category> categories = categoryService.getChildCategoriesRecursive(0L);
         assertTrue(categories.isEmpty());
     }
 

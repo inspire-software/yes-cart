@@ -30,9 +30,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -58,7 +56,7 @@ public class ProductSkuServiceImplTest extends BaseCoreDBTestCase {
         ProductSkuService productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
         Collection<ProductSku> skus = productSkuService.getAllProductSkus(REMOVE_ME_PK);
         assertEquals(2, skus.size());
-        final Set<String> skuCodes = new HashSet<String>();
+        final Set<String> skuCodes = new HashSet<>();
         for (final ProductSku sku : skus) {
             skuCodes.add(sku.getCode());
         }
@@ -88,7 +86,7 @@ public class ProductSkuServiceImplTest extends BaseCoreDBTestCase {
         ProductSkuService productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
         Collection<ProductSku> skus = productSkuService.getAllProductSkus(REMOVE_ME_PK);
         assertEquals(2, skus.size());
-        final Set<String> skuCodes = new HashSet<String>();
+        final Set<String> skuCodes = new HashSet<>();
         for (final ProductSku sku : skus) {
             skuCodes.add(sku.getCode());
         }

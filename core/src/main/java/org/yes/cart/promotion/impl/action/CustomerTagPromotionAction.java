@@ -49,7 +49,7 @@ public class CustomerTagPromotionAction extends AbstractPromotionAction {
 
         if (StringUtils.isNotBlank(tag) && customer != null) {
 
-            final Set<String> tags = new TreeSet<String>();
+            final Set<String> tags = new TreeSet<>();
             // Add existing tags - do not use the getCustomerTags() as this is the initial tags
             if (StringUtils.isNotBlank(customer.getTag())) {
                 tags.addAll(Arrays.asList(StringUtils.split(customer.getTag(), ' ')));

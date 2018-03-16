@@ -40,6 +40,7 @@ public class LogoutCommandImpl extends ExpireCartCommandImpl implements Shopping
     /**
      * @return command key
      */
+    @Override
     public String getCmdKey() {
         return CMD_LOGOUT;
     }

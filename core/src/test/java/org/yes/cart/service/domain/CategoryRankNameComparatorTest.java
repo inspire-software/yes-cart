@@ -8,7 +8,8 @@ import org.yes.cart.domain.entity.Category;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: denispavlov
@@ -32,10 +33,10 @@ public class CategoryRankNameComparatorTest {
             allowing(cat1).getCategoryId(); will(returnValue(1L));
         }});
 
-        final SortedSet<Category> set = new TreeSet<Category>(new CategoryRankNameComparator());
+        final SortedSet<Category> set = new TreeSet<>(new CategoryRankNameComparator());
         set.addAll(Arrays.asList(cat1, cat1));
 
-        final List<Category> list = new ArrayList<Category>(set);
+        final List<Category> list = new ArrayList<>(set);
         assertEquals(1, list.size());
         assertTrue(cat1 == list.get(0));
 
@@ -54,10 +55,10 @@ public class CategoryRankNameComparatorTest {
             allowing(cat2).getRank(); will(returnValue(1));
         }});
 
-        final SortedSet<Category> set = new TreeSet<Category>(new CategoryRankNameComparator());
+        final SortedSet<Category> set = new TreeSet<>(new CategoryRankNameComparator());
         set.addAll(Arrays.asList(cat1, cat2));
 
-        final List<Category> list = new ArrayList<Category>(set);
+        final List<Category> list = new ArrayList<>(set);
         assertTrue(cat1 == list.get(0));
         assertTrue(cat2 == list.get(1));
 
@@ -77,10 +78,10 @@ public class CategoryRankNameComparatorTest {
             allowing(cat2).getName(); will(returnValue("name 1"));
         }});
 
-        final SortedSet<Category> set = new TreeSet<Category>(new CategoryRankNameComparator());
+        final SortedSet<Category> set = new TreeSet<>(new CategoryRankNameComparator());
         set.addAll(Arrays.asList(cat1, cat2));
 
-        final List<Category> list = new ArrayList<Category>(set);
+        final List<Category> list = new ArrayList<>(set);
         assertTrue(cat2 == list.get(0));
         assertTrue(cat1 == list.get(1));
 
@@ -100,10 +101,10 @@ public class CategoryRankNameComparatorTest {
             allowing(cat2).getName(); will(returnValue("name 1"));
         }});
 
-        final SortedSet<Category> set = new TreeSet<Category>(new CategoryRankNameComparator());
+        final SortedSet<Category> set = new TreeSet<>(new CategoryRankNameComparator());
         set.addAll(Arrays.asList(cat1, cat2));
 
-        final List<Category> list = new ArrayList<Category>(set);
+        final List<Category> list = new ArrayList<>(set);
         assertTrue(cat2 == list.get(0));
         assertTrue(cat1 == list.get(1));
 
@@ -124,10 +125,10 @@ public class CategoryRankNameComparatorTest {
             allowing(cat2).getCategoryId(); will(returnValue(2L));
         }});
 
-        final SortedSet<Category> set = new TreeSet<Category>(new CategoryRankNameComparator());
+        final SortedSet<Category> set = new TreeSet<>(new CategoryRankNameComparator());
         set.addAll(Arrays.asList(cat1, cat2));
 
-        final List<Category> list = new ArrayList<Category>(set);
+        final List<Category> list = new ArrayList<>(set);
         assertTrue(cat1 == list.get(0));
         assertTrue(cat2 == list.get(1));
 

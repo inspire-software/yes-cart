@@ -57,6 +57,7 @@ public class SetCarrierSlaCartCommandImpl extends AbstractCartCommandImpl implem
     /**
      * @return command key
      */
+    @Override
     public String getCmdKey() {
         return CMD_SETCARRIERSLA;
     }
@@ -70,7 +71,7 @@ public class SetCarrierSlaCartCommandImpl extends AbstractCartCommandImpl implem
 
             if (slaIds != null && slaIds.length > 0) {
 
-                final Map<String, Long> selection = new HashMap<String, Long>();
+                final Map<String, Long> selection = new HashMap<>();
                 for (final String slaIdRaw : slaIds) {
 
                     final int sepPos = slaIdRaw.indexOf('-');

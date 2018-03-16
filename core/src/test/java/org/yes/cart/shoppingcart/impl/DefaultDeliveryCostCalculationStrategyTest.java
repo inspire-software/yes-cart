@@ -31,7 +31,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 /**
  * User: denispavlov
@@ -121,7 +122,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
         final Total strategyTotalB = context.mock(Total.class, "strategyTotalB");
         final Total strategyTotalAll = context.mock(Total.class, "strategyTotalAll");
 
-        final Map<String, Long> carriers = new LinkedHashMap<String, Long>();
+        final Map<String, Long> carriers = new LinkedHashMap<>();
         carriers.put("Main", 123L);
         carriers.put("Backorder", 234L);
 
@@ -138,7 +139,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
             allowing(strategyTotalB).add(strategyTotal); will(returnValue(strategyTotalAll));
         }});
 
-        final Map<String, DeliveryCostCalculationStrategy> strategies = new HashMap<String, DeliveryCostCalculationStrategy>();
+        final Map<String, DeliveryCostCalculationStrategy> strategies = new HashMap<>();
         strategies.put("S", strategy);
         strategies.put("B", strategyB);
 
@@ -161,7 +162,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
         final Total strategyTotal = null;
         final Total strategyTotalB = context.mock(Total.class, "strategyTotalB");
 
-        final Map<String, Long> carriers = new LinkedHashMap<String, Long>();
+        final Map<String, Long> carriers = new LinkedHashMap<>();
         carriers.put("Main", 123L);
         carriers.put("Backorder", 234L);
 
@@ -176,7 +177,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
             oneOf(strategyB).calculate(cart); will(returnValue(strategyTotalB));
         }});
 
-        final Map<String, DeliveryCostCalculationStrategy> strategies = new HashMap<String, DeliveryCostCalculationStrategy>();
+        final Map<String, DeliveryCostCalculationStrategy> strategies = new HashMap<>();
         strategies.put("S", strategy);
         strategies.put("B", strategyB);
 
@@ -199,7 +200,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
         final Total strategyTotal = context.mock(Total.class, "strategyTotal");
         final Total strategyTotalB = null;
 
-        final Map<String, Long> carriers = new LinkedHashMap<String, Long>();
+        final Map<String, Long> carriers = new LinkedHashMap<>();
         carriers.put("Main", 123L);
         carriers.put("Backorder", 234L);
 
@@ -214,7 +215,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
             oneOf(strategyB).calculate(cart); will(returnValue(strategyTotalB));
         }});
 
-        final Map<String, DeliveryCostCalculationStrategy> strategies = new HashMap<String, DeliveryCostCalculationStrategy>();
+        final Map<String, DeliveryCostCalculationStrategy> strategies = new HashMap<>();
         strategies.put("S", strategy);
         strategies.put("B", strategyB);
 

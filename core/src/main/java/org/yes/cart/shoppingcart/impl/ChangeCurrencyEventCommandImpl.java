@@ -56,6 +56,7 @@ public class ChangeCurrencyEventCommandImpl extends AbstractRecalculatePriceCart
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCmdKey() {
         return CMD_CHANGECURRENCY;
     }

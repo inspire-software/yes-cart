@@ -61,6 +61,7 @@ public class ProductMediaFileNameStrategyImpl extends AbstractMediaFileNameStrat
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String resolveObjectCodeInternal(final String url) {
 
         final String val = resolveFileName(url);

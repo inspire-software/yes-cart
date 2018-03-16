@@ -48,11 +48,13 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<PromotionCoupon> findByPromotionId(Long promotionId) {
         return getGenericDao().findByNamedQuery("COUPONS.BY.PROMOTION.ID", promotionId);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void create(Long promotionId, String couponCode, int limit, int limitPerUser) {
 
         final List<Object> promoIdAndCode = getGenericDao().findQueryObjectByNamedQuery("PROMOTION.ID.AND.CODE.BY.COUPON.CODE", couponCode);
@@ -68,7 +70,7 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
 
         final Promotion promotion = this.promotionDao.findById(promotionId);
         if (promotion == null || !promotion.isCouponTriggered()) {
-            throw new IllegalArgumentException("Coupon code '" + couponCode + "' cannot be added to non-coupon promotion: " + promotion.getCode());
+            throw new IllegalArgumentException("Coupon code '" + couponCode + "' cannot be added to non-coupon promotion: " + promotionId);
         }
         final PromotionCoupon coupon = getGenericDao().getEntityFactory().getByIface(PromotionCoupon.class);
         coupon.setPromotion(promotion);
@@ -82,11 +84,12 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
     }
 
     /** {@inheritDoc} */
+    @Override
     public void create(Long promotionId, int couponCount, int limit, int limitPerUser) {
 
         final Promotion promotion = this.promotionDao.findById(promotionId);
         if (promotion == null || !promotion.isCouponTriggered()) {
-            throw new IllegalArgumentException("Coupon codes cannot be added to non-coupon promotion: " + promotion.getCode());
+            throw new IllegalArgumentException("Coupon codes cannot be added to non-coupon promotion: " + promotionId);
         }
 
         for (int i = 0; i < couponCount; i++) {
@@ -113,6 +116,7 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
     }
 
     /** {@inheritDoc} */
+    @Override
     public PromotionCoupon findValidPromotionCoupon(String coupon, String customerEmail) {
 
         // Get enabled coupon code usage limit of which is greater than usage count
@@ -147,6 +151,7 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
     }
 
     /** {@inheritDoc} */
+    @Override
     public void updateUsage(final PromotionCoupon promotionCoupon, final int offset) {
 
         final List<Object> count = getGenericDao()

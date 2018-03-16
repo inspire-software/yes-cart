@@ -47,6 +47,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<ProductSku> getAllProductSkus(final long productId) {
         return productSkuService.getAllProductSkus(productId);
     }
@@ -54,6 +55,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductSku findProductSkuBySkuCode(final String skuCode) {
         return productSkuService.findProductSkuBySkuCode(skuCode);
     }
@@ -61,6 +63,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "productSkuService-productSkuBySkuCode")
     public ProductSku getProductSkuBySkuCode(final String skuCode) {
         return productSkuService.getProductSkuBySkuCode(skuCode);
@@ -69,6 +72,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @Cacheable(value = "productSkuService-productSkuSearchResultDTOByQuery")
     public List<ProductSkuSearchResultDTO> getProductSkuSearchResultDTOByQuery(final NavigationContext navigationContext) {
         return productSkuService.getProductSkuSearchResultDTOByQuery(navigationContext);
@@ -77,6 +81,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Pair<String, SkuPrice>> getAllPrices(final long productId) {
         return productSkuService.getAllPrices(productId);
     }
@@ -84,6 +89,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Pair<String, SkuWarehouse>> getAllInventory(final long productId) {
         return productSkuService.getAllInventory(productId);
     }
@@ -91,6 +97,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "productSkuService-productSkuBySkuCode",
             "productService-skuById"
@@ -102,6 +109,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "productSkuService-productSkuBySkuCode",
             "productService-skuById"
@@ -113,6 +121,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "skuWarehouseService-productSkusOnWarehouse",
             "skuWarehouseService-productOnWarehouse"
@@ -124,6 +133,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "skuWarehouseService-productSkusOnWarehouse",
             "skuWarehouseService-productOnWarehouse"
@@ -135,6 +145,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeAllWishLists(final ProductSku sku) {
         productSkuService.removeAllWishLists(sku);
     }
@@ -142,6 +153,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeAllEnsembleOptions(final ProductSku sku) {
         productSkuService.removeAllEnsembleOptions(sku);
     }
@@ -149,6 +161,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ProductSku> findAll() {
         return productSkuService.findAll();
     }
@@ -156,6 +169,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void findAllIterator(final ResultsIteratorCallback<ProductSku> callback) {
         productSkuService.findAllIterator(callback);
     }
@@ -163,6 +177,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductSku findById(final long pk) {
         return productSkuService.findById(pk);
     }
@@ -170,6 +185,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "skuWarehouseService-productSkusOnWarehouse",
             "skuWarehouseService-productOnWarehouse",
@@ -184,6 +200,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "productSkuService-productSkuBySkuCode",
             "productService-skuById"
@@ -195,6 +212,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     @CacheEvict(value = {
             "skuWarehouseService-productSkusOnWarehouse",
             "skuWarehouseService-productOnWarehouse",
@@ -209,6 +227,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ProductSku> findByCriteria(final String eCriteria, final Object... parameters) {
         return productSkuService.findByCriteria(eCriteria, parameters);
     }
@@ -216,6 +235,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int findCountByCriteria(final String eCriteria, final Object... parameters) {
         return productSkuService.findCountByCriteria(eCriteria, parameters);
     }
@@ -223,6 +243,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductSku findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return productSkuService.findSingleByCriteria(eCriteria, parameters);
     }
@@ -230,6 +251,7 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public GenericDAO<ProductSku, Long> getGenericDao() {
         return productSkuService.getGenericDao();
     }

@@ -79,6 +79,7 @@ public class NodeImpl implements Node {
     /**
      * @return true if this dto represents current server
      */
+    @Override
     public boolean isCurrent() {
         return current;
     }
@@ -93,6 +94,7 @@ public class NodeImpl implements Node {
     /**
      * @return true if current node is admin
      */
+    @Override
     public boolean isAdmin() {
         return admin;
     }
@@ -108,6 +110,7 @@ public class NodeImpl implements Node {
     /**
      * @return node id in the cluster
      */
+    @Override
     public String getId() {
         if (id == null) {
             id = fullNodeId(nodeId, clusterId);
@@ -125,6 +128,7 @@ public class NodeImpl implements Node {
     /**
      * @return node id
      */
+    @Override
     public String getNodeId() {
         return nodeId;
     }
@@ -139,6 +143,7 @@ public class NodeImpl implements Node {
     /**
      * @return type of node (SF[X], API or ADM; where [X] is storefront classifier)
      */
+    @Override
     public String getNodeType() {
         return nodeType;
     }
@@ -153,6 +158,7 @@ public class NodeImpl implements Node {
     /**
      * @return node config (DEFAULT, STAGING, PRODUCTION)
      */
+    @Override
     public String getNodeConfig() {
         return nodeConfig;
     }
@@ -167,6 +173,7 @@ public class NodeImpl implements Node {
     /**
      * @return cluster ID
      */
+    @Override
     public String getClusterId() {
         return clusterId;
     }
@@ -181,6 +188,7 @@ public class NodeImpl implements Node {
     /**
      * @return flag if lucene index is disabled
      */
+    @Override
     public boolean isFtIndexDisabled() {
         return ftIndexDisabled;
     }
@@ -195,6 +203,7 @@ public class NodeImpl implements Node {
     /**
      * @return channel
      */
+    @Override
     public String getChannel() {
         return channel;
     }
@@ -211,6 +220,7 @@ public class NodeImpl implements Node {
      *
      * @return version
      */
+    @Override
     public String getVersion() {
         return version;
     }
@@ -229,6 +239,7 @@ public class NodeImpl implements Node {
      *
      * @return build number
      */
+    @Override
     public String getBuildNo() {
         return buildNo;
     }
@@ -243,6 +254,7 @@ public class NodeImpl implements Node {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getFullVersion() {
         return (version != null ? version : "N/A") + (buildNo != null && buildNo.length() > 0 ?  "-rev." + buildNo : "");
     }

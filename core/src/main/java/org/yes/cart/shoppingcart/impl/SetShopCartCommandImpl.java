@@ -52,6 +52,7 @@ public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements 
     /**
      * @return command key
      */
+    @Override
     public String getCmdKey() {
         return CMD_SETSHOP;
     }

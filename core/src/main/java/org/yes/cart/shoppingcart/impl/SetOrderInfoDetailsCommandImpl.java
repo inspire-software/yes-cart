@@ -42,6 +42,7 @@ public class SetOrderInfoDetailsCommandImpl extends AbstractCartCommandImpl  imp
     /**
     * @return command key
     */
+    @Override
     public String getCmdKey() {
        return CMD_SETORDERDETAILS;
     }

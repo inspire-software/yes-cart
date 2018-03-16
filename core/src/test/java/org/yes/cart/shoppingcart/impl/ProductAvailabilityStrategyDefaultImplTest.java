@@ -26,10 +26,9 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
-import org.yes.cart.shoppingcart.impl.ProductAvailabilityStrategyDefaultImpl;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class ProductAvailabilityStrategyDefaultImplTest {
     private Product product;
     private ProductSku sku;
 
-    private long shopId = 10l;
+    private long shopId = 10L;
     private String skuCode = "SKU";
 
     @Test
@@ -348,7 +347,7 @@ public class ProductAvailabilityStrategyDefaultImplTest {
         skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
 
         final Warehouse warehouse = context.mock(Warehouse.class, "warehouse");
-        final List<Warehouse> warehouses = Arrays.asList(warehouse);
+        final List<Warehouse> warehouses = Collections.singletonList(warehouse);
 
         sku = context.mock(ProductSku.class, "sku");
         product = context.mock(Product.class, "product");

@@ -64,6 +64,7 @@ public class CartItemImpl implements CartItem {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getProductSkuCode() {
         return productSkuCode;
     }
@@ -82,6 +83,7 @@ public class CartItemImpl implements CartItem {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getProductName() {
         return productName;
     }
@@ -98,6 +100,7 @@ public class CartItemImpl implements CartItem {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSupplierCode() {
         return supplierCode;
     }
@@ -114,6 +117,7 @@ public class CartItemImpl implements CartItem {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDeliveryGroup() {
         return deliveryGroup;
     }
@@ -130,6 +134,7 @@ public class CartItemImpl implements CartItem {
     /**
      * {@inheritDoc}
      */
+    @Override
     @JsonIgnore
     public DeliveryBucket getDeliveryBucket() {
 
@@ -140,6 +145,7 @@ public class CartItemImpl implements CartItem {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getQty() {
         return new BigDecimal(quantity.toString());
     }
@@ -194,6 +200,7 @@ public class CartItemImpl implements CartItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getPrice() {
         return price;
     }
@@ -208,6 +215,7 @@ public class CartItemImpl implements CartItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getNetPrice() {
         return netPrice;
     }
@@ -222,6 +230,7 @@ public class CartItemImpl implements CartItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getGrossPrice() {
         return grossPrice;
     }
@@ -236,6 +245,7 @@ public class CartItemImpl implements CartItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getTaxCode() {
         return taxCode;
     }
@@ -250,6 +260,7 @@ public class CartItemImpl implements CartItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getTaxRate() {
         return taxRate;
     }
@@ -264,6 +275,7 @@ public class CartItemImpl implements CartItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isTaxExclusiveOfPrice() {
         return taxExclusiveOfPrice;
     }
@@ -278,6 +290,7 @@ public class CartItemImpl implements CartItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getListPrice() {
         return listPrice;
     }
@@ -292,6 +305,7 @@ public class CartItemImpl implements CartItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getSalePrice() {
         return salePrice;
     }
@@ -306,6 +320,7 @@ public class CartItemImpl implements CartItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isGift() {
         return gift;
     }
@@ -320,6 +335,7 @@ public class CartItemImpl implements CartItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isFixedPrice() {
         return fixedPrice;
     }
@@ -334,6 +350,7 @@ public class CartItemImpl implements CartItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isPromoApplied() {
         return promoApplied;
     }
@@ -348,6 +365,7 @@ public class CartItemImpl implements CartItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getAppliedPromo() {
         return appliedPromo;
     }

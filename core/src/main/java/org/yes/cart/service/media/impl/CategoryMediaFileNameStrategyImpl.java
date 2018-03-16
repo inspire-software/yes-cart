@@ -52,6 +52,7 @@ public class CategoryMediaFileNameStrategyImpl extends AbstractMediaFileNameStra
     /**
      * {@inheritDoc}
      */
+    @Override
     public String resolveObjectCode(final String url) {
 
         if (StringUtils.isNotBlank(url)) {
@@ -70,6 +71,7 @@ public class CategoryMediaFileNameStrategyImpl extends AbstractMediaFileNameStra
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String resolveObjectCodeInternal(final String url) {
 
         final String val = resolveFileName(url);
