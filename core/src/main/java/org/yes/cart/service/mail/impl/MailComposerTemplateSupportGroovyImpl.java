@@ -63,12 +63,10 @@ public class MailComposerTemplateSupportGroovyImpl implements MailComposerTempla
     }
 
     Locale lazyLoad(final String lang) {
-        Locale locale = this.localeCache.get(lang);
-        if (locale == null) {
-            locale = new Locale(lang);
-            this.localeCache.put(lang, locale);
+        if (lang == null) {
+            return null;
         }
-        return locale;
+        return this.localeCache.computeIfAbsent(lang, Locale::new);
     }
 
     /**
