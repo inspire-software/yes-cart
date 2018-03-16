@@ -41,11 +41,12 @@ public class InventoryReportWorker implements ReportWorker {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ReportPair> getParameterValues(final String lang, final String param, final Map<String, Object> currentSelection) {
         if ("warehouse".equals(param)) {
             try {
                 final List<VoFulfilmentCentre> warehouses = fulfilmentService.getAllFulfilmentCentres();
-                final List<ReportPair> select = new ArrayList<ReportPair>();
+                final List<ReportPair> select = new ArrayList<>();
                 for (final VoFulfilmentCentre warehouse : warehouses) {
                     select.add(new ReportPair(warehouse.getName(), String.valueOf(warehouse.getWarehouseId())));
                 }
@@ -61,6 +62,7 @@ public class InventoryReportWorker implements ReportWorker {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object> getResult(final String lang, final Map<String, Object> currentSelection) {
         final String warehouse = (String) currentSelection.get("warehouse");
         final String skuCode = (String) currentSelection.get("skuCode");
@@ -68,18 +70,15 @@ public class InventoryReportWorker implements ReportWorker {
         if (warehouseId > 0L) {
             try {
                 final List<VoInventory> result = fulfilmentService.getFilteredInventory(warehouseId, skuCode, Integer.MAX_VALUE);
-                Collections.sort(result, new Comparator<VoInventory>() {
-                    @Override
-                    public int compare(final VoInventory i1, final VoInventory i2) {
-                        int comp = i1.getSkuCode().compareTo(i2.getSkuCode());
+                result.sort((i1, i2) -> {
+                    int comp = i1.getSkuCode().compareTo(i2.getSkuCode());
+                    if (comp == 0) {
+                        comp = i1.getQuantity().compareTo(i2.getQuantity());
                         if (comp == 0) {
-                            comp = i1.getQuantity().compareTo(i2.getQuantity());
-                            if (comp == 0) {
-                                return Long.compare(i1.getSkuWarehouseId(), i2.getSkuWarehouseId());
-                            }
+                            return Long.compare(i1.getSkuWarehouseId(), i2.getSkuWarehouseId());
                         }
-                        return comp;
                     }
+                    return comp;
                 });
 
                 return (List) result;
@@ -93,8 +92,9 @@ public class InventoryReportWorker implements ReportWorker {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, Object> getEnhancedParameterValues(final List<Object> result, final Map<String, Object> currentSelection) {
-        return new HashMap<String, Object>(currentSelection);
+        return new HashMap<>(currentSelection);
     }
 
 }

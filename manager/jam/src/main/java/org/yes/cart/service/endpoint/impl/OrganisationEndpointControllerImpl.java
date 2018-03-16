@@ -33,7 +33,7 @@ public class OrganisationEndpointControllerImpl implements OrganisationEndpointC
 
     @Override
     public @ResponseBody
-    List<VoManagerInfo> getMamagers() throws Exception {
+    List<VoManagerInfo> getManagers() throws Exception {
         return voManagementService.getManagers();
     }
 

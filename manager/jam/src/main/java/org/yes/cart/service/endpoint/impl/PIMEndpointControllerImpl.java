@@ -181,7 +181,7 @@ public class PIMEndpointControllerImpl implements PIMEndpointController {
 
     private JobContext createJobContext() {
 
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS);
         param.put(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE, new HashMap<String, Boolean>());
         param.putAll(createAuthCtx().getAttributes());

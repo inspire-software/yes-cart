@@ -49,7 +49,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * Local FS import listener allows to scan local FS directory structure to detect imcoming
+ * Local FS import listener allows to scan local FS directory structure to detect incomming
  * import files that can be sent to the import service automatically.
  * <p>
  * Expected directory structure is:
@@ -190,7 +190,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
             LOG.info("Detected import directory root {}", importDirPath);
 
             final List<Map<String, String>> importGroupsMap = importDirectorService.getImportGroups("en");
-            final Set<String> importGroupNames = new HashSet<String>();
+            final Set<String> importGroupNames = new HashSet<>();
             for (final Map<String, String> group : importGroupsMap) {
                 importGroupNames.add(group.get("name"));
             }
@@ -370,7 +370,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
         final Properties configuration = new Properties();
         configuration.load(new FileInputStream(configProps));
 
-        final Map<Pattern, Map<String, String>> patternGroupMap = new HashMap<Pattern, Map<String, String>>();
+        final Map<Pattern, Map<String, String>> patternGroupMap = new HashMap<>();
 
         boolean hasAtLeastOneConfig = false;
         for (int i = 0; true; i++) {
@@ -406,7 +406,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
             try {
                 final Pattern regex = Pattern.compile(cfgRegex);
 
-                final Map<String, String> data = new HashMap<String, String>();
+                final Map<String, String> data = new HashMap<>();
                 data.put("group", cfgGroup.trim());
                 data.put("user", cfgUser.trim());
                 data.put("pass", cfgPass.trim());
@@ -463,8 +463,8 @@ public class LocalFileShareImportListenerImpl implements Runnable {
      * @return prioritised list of files
      */
     protected List<File> prioritiseProcessedFiles(final File[] files) {
-        final List<File> prioritised = new ArrayList<File>(Arrays.asList(files));
-        Collections.sort(prioritised, PRIORITY);
+        final List<File> prioritised = new ArrayList<>(Arrays.asList(files));
+        prioritised.sort(PRIORITY);
         return prioritised;
     }
 
@@ -507,7 +507,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
     );
 
     private AsyncContext createCtx(final String cacheTimeOutKey) {
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, cacheTimeOutKey);
         return createCtx(param);
     }

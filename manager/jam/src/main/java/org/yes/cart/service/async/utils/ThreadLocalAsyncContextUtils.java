@@ -32,7 +32,7 @@ import org.yes.cart.service.async.model.JobContext;
  */
 public final class ThreadLocalAsyncContextUtils {
 
-    private static final ThreadLocal<AsyncContext> CTX = new ThreadLocal<AsyncContext>();
+    private static final ThreadLocal<AsyncContext> CTX = new ThreadLocal<>();
 
     /**
      * Initialise security context from async context.

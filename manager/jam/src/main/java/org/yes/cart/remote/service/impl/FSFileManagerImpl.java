@@ -41,7 +41,7 @@ public class FSFileManagerImpl implements FileManager {
                              final String allowedPathsCsv) {
         this.importDirectorService = importDirectorService;
         this.exportDirectorService = exportDirectorService;
-        this.allowedPaths = new ArrayList<String>();
+        this.allowedPaths = new ArrayList<>();
         for (final String path : StringUtils.split(allowedPathsCsv, ',')) {
             this.allowedPaths.add(path.trim());
         }
@@ -53,7 +53,7 @@ public class FSFileManagerImpl implements FileManager {
 
         final File[] dirFiles = dir.listFiles();
         if (dirFiles != null) {
-            for (final File file : dir.listFiles()) {
+            for (final File file : dirFiles) {
 
                 if (file.isDirectory()) {
                     files.addAll(scanDir(file, prefix.concat("/").concat(file.getName())));
@@ -69,16 +69,12 @@ public class FSFileManagerImpl implements FileManager {
         return files;
     }
 
-    private static final Comparator<MutablePair<String, String>> SORT_BY_SYMBOLIC_NAME = new Comparator<MutablePair<String, String>>() {
-        @Override
-        public int compare(final MutablePair<String, String> o1, final MutablePair<String, String> o2) {
-            return o1.getSecond().compareTo(o2.getSecond());
-        }
-    };
+    private static final Comparator<MutablePair<String, String>> SORT_BY_SYMBOLIC_NAME = (o1, o2) -> o1.getSecond().compareTo(o2.getSecond());
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<MutablePair<String, String>> list(final String mode) throws IOException {
 
         final SecurityContext sc = SecurityContextHolder.getContext();
@@ -98,7 +94,7 @@ public class FSFileManagerImpl implements FileManager {
             if (importRoot.exists()) {
 
                 final List<MutablePair<String, String>> importFiles = scanDir(importRoot, "import:/");
-                Collections.sort(importFiles, SORT_BY_SYMBOLIC_NAME);
+                importFiles.sort(SORT_BY_SYMBOLIC_NAME);
                 list.addAll(importFiles);
 
             }
@@ -112,7 +108,7 @@ public class FSFileManagerImpl implements FileManager {
             if (exportRoot.exists()) {
 
                 final List<MutablePair<String, String>> importFiles = scanDir(exportRoot, "export:/");
-                Collections.sort(importFiles, SORT_BY_SYMBOLIC_NAME);
+                importFiles.sort(SORT_BY_SYMBOLIC_NAME);
                 list.addAll(importFiles);
 
             }
@@ -125,6 +121,7 @@ public class FSFileManagerImpl implements FileManager {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String upload(final byte[] bytes, final String fileName) throws IOException {
 
         final String importRoot = importDirectorService.getImportDirectory();
@@ -173,6 +170,7 @@ public class FSFileManagerImpl implements FileManager {
     /**
      * {@inheritDoc}
      */
+    @Override
     public byte[] download(final String fileName) throws IOException {
 
         final String exportRoot = this.exportDirectorService.getExportDirectory();
@@ -237,6 +235,7 @@ public class FSFileManagerImpl implements FileManager {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void delete(final String fileName) throws IOException {
 
         final SecurityContext sc = SecurityContextHolder.getContext();
@@ -270,6 +269,7 @@ public class FSFileManagerImpl implements FileManager {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String home() throws IOException {
 
         final SecurityContext sc = SecurityContextHolder.getContext();

@@ -50,31 +50,37 @@ public class ImpexEndpointControllerImpl implements ImpexEndpointController {
         this.exportDirectorService = exportDirectorService;
     }
 
+    @Override
     public @ResponseBody
     List<VoDataGroupInfo> getExportGroups(@PathVariable("lang") final String language) {
         return mapToGroups(this.exportDirectorService.getExportGroups(language));
     }
 
+    @Override
     public @ResponseBody
     String doExport(@PathVariable("group") final String descriptorGroup, @RequestBody(required = false) final String fileName) {
         return this.exportDirectorService.doExport(descriptorGroup, fileName, true);
     }
 
+    @Override
     public @ResponseBody
     VoJobStatus getExportStatus(@RequestParam("token")  final String token) {
         return statusToVo(this.exportDirectorService.getExportStatus(token));
     }
 
+    @Override
     public @ResponseBody
     List<VoDataGroupInfo> getImportGroups(@PathVariable("lang") final String language) {
         return mapToGroups(this.importDirectorService.getImportGroups(language));
     }
 
+    @Override
     public @ResponseBody
     String doImport(@PathVariable("group") final String descriptorGroup, @RequestBody(required = false) final String fileName) {
         return this.importDirectorService.doImport(descriptorGroup, fileName, true);
     }
 
+    @Override
     public @ResponseBody
     VoJobStatus getImportStatus(@RequestParam("token") final String token) {
         return statusToVo(this.importDirectorService.getImportStatus(token));

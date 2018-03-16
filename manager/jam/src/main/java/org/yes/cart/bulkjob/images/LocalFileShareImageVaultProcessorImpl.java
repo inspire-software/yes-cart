@@ -89,6 +89,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
         this.authenticationManager = authenticationManager;
     }
 
+    @Override
     public void run() {
 
         final String imgVault = systemService.getImageRepositoryDirectory();
@@ -134,26 +135,24 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
                         final AsyncContext cacheCtx = createCtx(AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
                         clusterService.evictAllCache(cacheCtx);
 
-                        if (reindex) {
-                            final AsyncContext reindexCtx = createCtx(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS);
-                            Thread.sleep(INDEX_GET_READY_TIMEOUT); // let cache invalidation run before index
-                            final String indexToken = reindexService.reindexAllProducts(reindexCtx);
-                            while (true) {
-                                Thread.sleep(INDEX_PING_INTERVAL);
-                                JobStatus reindexStatus = reindexService.getIndexJobStatus(reindexCtx, indexToken);
-                                if (reindexStatus.getState() == JobStatus.State.FINISHED) {
+                        final AsyncContext reindexCtx = createCtx(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS);
+                        Thread.sleep(INDEX_GET_READY_TIMEOUT); // let cache invalidation run before index
+                        final String indexToken = reindexService.reindexAllProducts(reindexCtx);
+                        while (true) {
+                            Thread.sleep(INDEX_PING_INTERVAL);
+                            JobStatus reindexStatus = reindexService.getIndexJobStatus(reindexCtx, indexToken);
+                            if (reindexStatus.getState() == JobStatus.State.FINISHED) {
 
-                                    LOG.info("Re-indexed products ... completed [{}]", reindexStatus.getCompletion());
+                                LOG.info("Re-indexed products ... completed [{}]", reindexStatus.getCompletion());
 
-                                    clusterService.evictAllCache(cacheCtx);
-                                    Thread.sleep(WARMUP_GET_READY_TIMEOUT);
-                                    clusterService.warmUp(cacheCtx);
-                                    break;
-                                }
+                                clusterService.evictAllCache(cacheCtx);
+                                Thread.sleep(WARMUP_GET_READY_TIMEOUT);
+                                clusterService.warmUp(cacheCtx);
+                                break;
                             }
                         }
                     } catch (Exception exp) {
-
+                       LOG.error(exp.getMessage(), exp);
                     }
 
                 }
@@ -173,7 +172,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
     private int scanRoot(final File imageVault) {
 
-        final Set<String> scanned = new HashSet<String>();
+        final Set<String> scanned = new HashSet<>();
         int count = 0;
 
         for (final MediaFileNameStrategy strategy : imageNameStrategies) {
@@ -274,7 +273,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
     }
 
     private AsyncContext createCtx(final String cacheTimeOutKey) {
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, cacheTimeOutKey);
         return createCtx(param);
     }

@@ -40,7 +40,7 @@ public interface FileManagerEndpointController {
      * List available files
      *
      * @return pair of absolute and human friendly paths
-     * @throws IOException
+     * @throws IOException errors
      */
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/list/{mode}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })

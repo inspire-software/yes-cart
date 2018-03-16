@@ -50,7 +50,7 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
 
     private final HashHelper passwordHashHelper;
 
-    private final PassPhraseGenerator phrazeGenerator;
+    private final PassPhraseGenerator phraseGenerator;
 
     private final MailService mailService;
 
@@ -62,14 +62,14 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
      * Constructor for aspect with asynchronous notification.
      */
     public ManagerRegistrationAspect(final TaskExecutor taskExecutor,
-                                     final PassPhraseGenerator phrazeGenerator,
+                                     final PassPhraseGenerator phraseGenerator,
                                      final HashHelper passwordHashHelper,
                                      final MailService mailService,
                                      final MailComposer mailComposer
     ) {
         super(taskExecutor);
         this.passwordHashHelper = passwordHashHelper;
-        this.phrazeGenerator = phrazeGenerator;
+        this.phraseGenerator = phraseGenerator;
         this.mailService = mailService;
         this.mailComposer = mailComposer;
 
@@ -78,14 +78,13 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
     /**
      *  Constructor for aspect with synchronous notification.
      */
-    public ManagerRegistrationAspect(
-            final PassPhraseGenerator phrazeGenerator,
-            final HashHelper passwordHashHelper,
-            final MailService mailService,
-            final MailComposer mailComposer) {
+    public ManagerRegistrationAspect(final PassPhraseGenerator phraseGenerator,
+                                     final HashHelper passwordHashHelper,
+                                     final MailService mailService,
+                                     final MailComposer mailComposer) {
         super(null);
         this.passwordHashHelper = passwordHashHelper;
-        this.phrazeGenerator = phrazeGenerator;
+        this.phraseGenerator = phraseGenerator;
         this.mailService = mailService;
         this.mailComposer = mailComposer;
 
@@ -108,7 +107,7 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
     }
 
     private void setNewPassword(Manager manager) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        final String generatedPassword  = phrazeGenerator.getNextPassPhrase();
+        final String generatedPassword  = phraseGenerator.getNextPassPhrase();
         final String passwordHash = passwordHashHelper.getHash(generatedPassword);
         manager.setPassword(passwordHash);
 

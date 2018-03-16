@@ -53,23 +53,26 @@ public class ContentEndpointControllerImpl implements ContentEndpointController 
         this.voMailService = voMailService;
     }
 
+    @Override
     public @ResponseBody
     List<VoContent> getShopContent(@PathVariable("shopId") final long shopId) throws Exception {
         return voContentService.getAll(shopId);
     }
 
+    @Override
     public @ResponseBody
     List<VoContent> getShopBranchContent(@PathVariable("shopId") final long shopId, @PathVariable("branch") final long branch, @RequestParam(value = "expand", required = false) final String expand) throws Exception {
         return voContentService.getBranch(shopId, branch, determineBranchIds(expand));
     }
 
+    @Override
     public @ResponseBody
     List<Long> getShopBranchesContentPaths(@PathVariable("shopId") final long shopId, @RequestParam(value = "expand", required = false) final String expand) throws Exception {
         return voContentService.getBranchesPaths(shopId, determineBranchIds(expand));
     }
 
     private List<Long> determineBranchIds(final @RequestParam(value = "expand", required = false) String expand) {
-        List<Long> expandIds = new ArrayList<Long>(50);
+        List<Long> expandIds = new ArrayList<>(50);
         if (StringUtils.isNotBlank(expand)) {
             for (final String expandItem : StringUtils.split(expand, '|')) {
                 final long id = NumberUtils.toLong(expandItem);
@@ -81,41 +84,49 @@ public class ContentEndpointControllerImpl implements ContentEndpointController 
         return expandIds;
     }
 
+    @Override
     public @ResponseBody
     List<VoContent> getFilteredContent(@PathVariable("shopId") final long shopId, @RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voContentService.getFiltered(shopId, filter, max);
     }
 
+    @Override
     public @ResponseBody
     VoContentWithBody getContentById(@PathVariable("id") final long id) throws Exception {
         return voContentService.getById(id);
     }
 
+    @Override
     public @ResponseBody
     VoContentWithBody createContent(@RequestBody final VoContent voContent) throws Exception {
         return voContentService.create(voContent);
     }
 
+    @Override
     public @ResponseBody
     VoContentWithBody updateContent(@RequestBody final VoContentWithBody voContent) throws Exception {
         return voContentService.update(voContent);
     }
 
+    @Override
     public @ResponseBody
     void removeContent(@PathVariable("id") final long id) throws Exception {
         voContentService.remove(id);
     }
 
+    @Override
     public @ResponseBody
     List<VoAttrValueContent> getContentAttributes(@PathVariable("contentId") final long contentId) throws Exception {
         return voContentService.getContentAttributes(contentId);
     }
 
+    @Override
     public @ResponseBody
     List<VoAttrValueContent> updateContent(@RequestBody final List<MutablePair<VoAttrValueContent, Boolean>> vo) throws Exception {
         return voContentService.update(vo);
     }
 
+    @Override
     public @ResponseBody
     List<VoContentBody> getContentBody(@PathVariable("contentId") final long contentId) throws Exception {
         return voContentService.getContentBody(contentId);

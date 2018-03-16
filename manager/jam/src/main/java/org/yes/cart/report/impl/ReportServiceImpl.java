@@ -17,7 +17,6 @@
 package org.yes.cart.report.impl;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.xml.sax.SAXException;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoReportDescriptor;
@@ -69,6 +68,7 @@ public class ReportServiceImpl implements ReportService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoReportDescriptor> getReportDescriptors() {
 
         final List<VoReportDescriptor> reports = new ArrayList<>();
@@ -100,11 +100,12 @@ public class ReportServiceImpl implements ReportService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoReportRequest getParameterValues(final VoReportRequest reportRequest) {
 
         if (reportRequest != null && reportWorkers.containsKey(reportRequest.getReportId())) {
 
-            final ReportDescriptor descriptor = getReportDescriptorbyId(reportRequest.getReportId());
+            final ReportDescriptor descriptor = getReportDescriptorById(reportRequest.getReportId());
             final ReportWorker reportWorker = reportWorkers.get(reportRequest.getReportId());
             final Map<String, Object> values = getReportRequestValueMap(reportRequest);
 
@@ -128,7 +129,7 @@ public class ReportServiceImpl implements ReportService {
 
                     final List<MutablePair<String, String>> selection = new ArrayList<>();
                     for (final ReportPair choice : option) {
-                        selection.add(new MutablePair<String, String>(choice.getValue(), choice.getLabel()));
+                        selection.add(new MutablePair<>(choice.getValue(), choice.getLabel()));
                     }
 
                     rp.setOptions(selection);
@@ -145,13 +146,9 @@ public class ReportServiceImpl implements ReportService {
     }
 
 
-    ReportDescriptor getReportDescriptorbyId(final String reportId) {
+    ReportDescriptor getReportDescriptorById(final String reportId) {
 
-        return (ReportDescriptor) CollectionUtils.find(reportDescriptors, new Predicate() {
-            public boolean evaluate(final Object o) {
-                return reportId.equalsIgnoreCase(((ReportDescriptor) o).getReportId());
-            }
-        });
+        return (ReportDescriptor) CollectionUtils.find(reportDescriptors, o -> reportId.equalsIgnoreCase(((ReportDescriptor) o).getReportId()));
 
     }
 
@@ -202,7 +199,7 @@ public class ReportServiceImpl implements ReportService {
                                  final List<Object> rez,
                                  final Map<String, Object> currentSelection) throws SAXException, IOException {
 
-        final ReportDescriptor descriptor = getReportDescriptorbyId(reportId);
+        final ReportDescriptor descriptor = getReportDescriptorById(reportId);
 
         if (CollectionUtils.isNotEmpty(rez)) {
 
@@ -246,7 +243,7 @@ public class ReportServiceImpl implements ReportService {
         if (reportWorkers.containsKey(reportId)) {
             return reportWorkers.get(reportId).getEnhancedParameterValues(result, currentSelection);
         }
-        final Map<String, Object> params = new HashMap<String, Object>();
+        final Map<String, Object> params = new HashMap<>();
         if (currentSelection != null) {
             params.putAll(currentSelection);
         }

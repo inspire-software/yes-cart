@@ -24,7 +24,7 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoAttribute;
 import org.yes.cart.domain.vo.VoAttributeGroup;
 import org.yes.cart.domain.vo.VoEtype;
-import org.yes.cart.service.vo.AttributeEndpointController;
+import org.yes.cart.service.endpoint.AttributeEndpointController;
 import org.yes.cart.service.vo.VoAttributeService;
 
 import java.util.List;
@@ -44,46 +44,55 @@ public class AttributeEndpointControllerImpl implements AttributeEndpointControl
         this.voAttributeService = voAttributeService;
     }
 
+    @Override
     public @ResponseBody
     List<VoEtype> getAllEtypes() throws Exception {
         return voAttributeService.getAllEtypes();
     }
 
+    @Override
     public @ResponseBody
     List<VoAttributeGroup> getAllGroups() throws Exception {
         return voAttributeService.getAllGroups();
     }
 
+    @Override
     public @ResponseBody
     List<VoAttribute> getAllAttributes(@PathVariable("group") final String group) throws Exception {
         return voAttributeService.getAllAttributes(group);
     }
 
+    @Override
     public @ResponseBody
     List<VoAttribute> getFilteredAttributes(@PathVariable("group") final String group, @RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
         return voAttributeService.getFilteredAttributes(group, filter, max);
     }
 
+    @Override
     public @ResponseBody
     List<MutablePair<Long, String>> getProductTypesByAttributeCode(@PathVariable("code") final String code) throws Exception {
         return voAttributeService.getProductTypesByAttributeCode(code);
     }
 
+    @Override
     public @ResponseBody
     VoAttribute getAttributeById(@PathVariable("id") final long id) throws Exception {
         return voAttributeService.getAttributeById(id);
     }
 
+    @Override
     public @ResponseBody
     VoAttribute createAttribute(@RequestBody final VoAttribute vo) throws Exception {
         return voAttributeService.createAttribute(vo);
     }
 
+    @Override
     public @ResponseBody
     VoAttribute updateAttribute(@RequestBody final VoAttribute vo) throws Exception {
         return voAttributeService.updateAttribute(vo);
     }
 
+    @Override
     public @ResponseBody
     void removeAttribute(@PathVariable("id") final long id) throws Exception {
         voAttributeService.removeAttribute(id);

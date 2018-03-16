@@ -59,6 +59,7 @@ public class DeliveryReportWorker implements ReportWorker {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ReportPair> getParameterValues(final String lang, final String param, final Map<String, Object> currentSelection) {
         return Collections.emptyList();
     }
@@ -66,6 +67,7 @@ public class DeliveryReportWorker implements ReportWorker {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object> getResult(final String lang, final Map<String, Object> currentSelection) {
 
         final String orderNumber = (String) currentSelection.get("orderNumber");
@@ -93,17 +95,18 @@ public class DeliveryReportWorker implements ReportWorker {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, Object> getEnhancedParameterValues(final List<Object> result, final Map<String, Object> currentSelection) {
         if (CollectionUtils.isNotEmpty(result)) {
             final long shopId = ((CustomerOrder) ((Pair) result.get(0)).getFirst()).getShop().getShopId();
             final Shop shop = shopService.getById(shopId);
             if (shop != null) {
-                final Map<String, Object> enhanced = new HashMap<String, Object>(currentSelection);
+                final Map<String, Object> enhanced = new HashMap<>(currentSelection);
                 enhanced.put("shop", shop);
                 return enhanced;
             }
         }
-        return new HashMap<String, Object>(currentSelection);
+        return new HashMap<>(currentSelection);
     }
 
 }

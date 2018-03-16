@@ -63,6 +63,7 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Node> getClusterInfo(final AsyncContext context) {
 
         final Message message = new ContextRspMessageImpl(
@@ -82,6 +83,7 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void warmUp(final AsyncContext context) {
 
         final Message message = new ContextRspMessageImpl(
@@ -98,6 +100,7 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, Pair<Long, Boolean>> getProductReindexingState(final AsyncContext context) {
 
         final Map<String, Boolean> indexFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
@@ -106,7 +109,7 @@ public class ClusterServiceImpl implements ClusterService {
         }
 
         final List<Node> cluster = nodeService.getSfNodes();
-        final List<String> targets = new ArrayList<String>();
+        final List<String> targets = new ArrayList<>();
         for (final Node node : cluster) {
             final Boolean finished = indexFinished.get(node.getId()) != null && indexFinished.get(node.getId());
             if (!finished) {
@@ -124,13 +127,13 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final Map<String, Pair<Long, Boolean>> indexStatus = new HashMap<String, Pair<Long, Boolean>>();
+        final Map<String, Pair<Long, Boolean>> indexStatus = new HashMap<>();
         for (final Message response : message.getResponses()) {
 
             final Object[] rsp = (Object[]) response.getPayload();
             indexStatus.put(
                     response.getSource(),
-                    new Pair<Long, Boolean>(Long.valueOf(ObjectUtils.defaultIfNull(rsp[1],"0").toString()), "DONE".equals(rsp[0])));
+                    new Pair<>(Long.valueOf(ObjectUtils.defaultIfNull(rsp[1], "0").toString()), "DONE".equals(rsp[0])));
 
         }
         return indexStatus;
@@ -140,6 +143,7 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, Pair<Long, Boolean>> getProductSkuReindexingState(final AsyncContext context) {
 
         final Map<String, Boolean> indexFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
@@ -149,7 +153,7 @@ public class ClusterServiceImpl implements ClusterService {
         }
 
         final List<Node> cluster = nodeService.getSfNodes();
-        final List<String> targets = new ArrayList<String>();
+        final List<String> targets = new ArrayList<>();
         for (final Node node : cluster) {
             final Boolean finished = indexFinished.get(node.getId()) != null && indexFinished.get(node.getId());
             if (!finished) {
@@ -167,12 +171,12 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final Map<String, Pair<Long, Boolean>> indexStatus = new HashMap<String, Pair<Long, Boolean>>();
+        final Map<String, Pair<Long, Boolean>> indexStatus = new HashMap<>();
         for (final Message response : message.getResponses()) {
 
             final Object[] rsp = (Object[]) response.getPayload();
             indexStatus.put(response.getSource(),
-                    new Pair<Long, Boolean>(Long.valueOf(ObjectUtils.defaultIfNull(rsp[1],"0").toString()), "DONE".equals(rsp[0])));
+                    new Pair<>(Long.valueOf(ObjectUtils.defaultIfNull(rsp[1], "0").toString()), "DONE".equals(rsp[0])));
 
         }
         return indexStatus;
@@ -182,6 +186,7 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexAllProducts(final AsyncContext context) {
 
         final Long shopId = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_SHOP);
@@ -201,6 +206,7 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexAllProductsSku(final AsyncContext context) {
 
         final Long shopId = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_SHOP);
@@ -220,10 +226,11 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProduct(final AsyncContext context, final long productPk) {
 
         final List<Node> cluster = nodeService.getSfNodes();
-        final List<String> targets = new ArrayList<String>();
+        final List<String> targets = new ArrayList<>();
         for (final Node node : cluster) {
             targets.add(node.getId());
         }
@@ -243,10 +250,11 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductSku(final AsyncContext context, final long productPk) {
 
         final List<Node> cluster = nodeService.getSfNodes();
-        final List<String> targets = new ArrayList<String>();
+        final List<String> targets = new ArrayList<>();
         for (final Node node : cluster) {
             targets.add(node.getId());
         }
@@ -266,10 +274,11 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductSkuCode(final AsyncContext context, final String productSkuCode) {
 
         final List<Node> cluster = nodeService.getSfNodes();
-        final List<String> targets = new ArrayList<String>();
+        final List<String> targets = new ArrayList<>();
         for (final Node node : cluster) {
             targets.add(node.getId());
         }
@@ -289,10 +298,11 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProducts(final AsyncContext context, final long[] productPks) {
 
         final List<Node> cluster = nodeService.getSfNodes();
-        final List<String> targets = new ArrayList<String>();
+        final List<String> targets = new ArrayList<>();
         for (final Node node : cluster) {
             targets.add(node.getId());
         }
@@ -312,6 +322,7 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object[]> sqlQuery(final AsyncContext context, final String query, final String node) {
 
         if (nodeService.getCurrentNodeId().equals(node)) {
@@ -320,13 +331,13 @@ public class ClusterServiceImpl implements ClusterService {
             } catch (Exception e) {
                 final String msg = "Cant parse SQL query : " + query + " Error : " + e.getMessage();
                 LOG.warn(msg);
-                return new ArrayList<Object[]>(Collections.singletonList(new Object[]{e.getMessage()}));
+                return new ArrayList<>(Collections.singletonList(new Object[]{e.getMessage()}));
             }
         }
 
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
-                Arrays.asList(node),
+                Collections.singletonList(node),
                 "BackdoorService.sqlQuery",
                 query,
                 context
@@ -347,6 +358,7 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object[]> hsqlQuery(final AsyncContext context, final String query, final String node) {
 
         if (nodeService.getCurrentNodeId().equals(node)) {
@@ -355,13 +367,13 @@ public class ClusterServiceImpl implements ClusterService {
             } catch (Exception e) {
                 final String msg = "Cant parse HQL query : " + query + " Error : " + e.getMessage();
                 LOG.warn(msg);
-                return new ArrayList<Object[]>(Collections.singletonList(new Object[]{e.getMessage()}));
+                return new ArrayList<>(Collections.singletonList(new Object[]{e.getMessage()}));
             }
         }
 
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
-                Arrays.asList(node),
+                Collections.singletonList(node),
                 "BackdoorService.hsqlQuery",
                 query,
                 context
@@ -382,11 +394,12 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object[]> luceneQuery(final AsyncContext context, final String query, final String node) {
 
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
-                Arrays.asList(node),
+                Collections.singletonList(node),
                 "BackdoorService.luceneQuery",
                 query,
                 context
@@ -408,10 +421,11 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reloadConfigurations(final AsyncContext context) {
 
         final List<Node> cluster = nodeService.getSfNodes();
-        final List<String> targets = new ArrayList<String>();
+        final List<String> targets = new ArrayList<>();
         for (final Node node : cluster) {
             targets.add(node.getId());
         }
@@ -434,11 +448,12 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, List<CacheInfoDTOImpl>> getCacheInfo(final AsyncContext context)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<Node> cluster = nodeService.getSfNodes();
-        final List<String> targets = new ArrayList<String>();
+        final List<String> targets = new ArrayList<>();
         for (final Node node : cluster) {
             targets.add(node.getId());
         }
@@ -453,7 +468,7 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final Map<String, List<CacheInfoDTOImpl>> info = new HashMap<String, List<CacheInfoDTOImpl>>();
+        final Map<String, List<CacheInfoDTOImpl>> info = new HashMap<>();
         if (CollectionUtils.isNotEmpty(message.getResponses())) {
 
             for (final Message response : message.getResponses()) {
@@ -480,13 +495,14 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, Boolean> evictAllCache(final AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final Boolean force = context.getAttribute("force");
         final boolean doForcefully = force != null && force;
 
         final List<Node> cluster = nodeService.getSfNodes();
-        final List<String> targets = new ArrayList<String>();
+        final List<String> targets = new ArrayList<>();
         for (final Node node : cluster) {
             targets.add(node.getId());
         }
@@ -501,7 +517,7 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
+        final Map<String, Boolean> evicts = new HashMap<>();
         if (CollectionUtils.isNotEmpty(message.getResponses())) {
 
             for (final Message response : message.getResponses()) {
@@ -522,10 +538,11 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, Boolean> evictCache(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<Node> cluster = nodeService.getSfNodes();
-        final List<String> targets = new ArrayList<String>();
+        final List<String> targets = new ArrayList<>();
         for (final Node node : cluster) {
             targets.add(node.getId());
         }
@@ -540,7 +557,7 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
+        final Map<String, Boolean> evicts = new HashMap<>();
         if (CollectionUtils.isNotEmpty(message.getResponses())) {
 
             for (final Message response : message.getResponses()) {
@@ -561,10 +578,11 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, Boolean> enableStats(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<Node> cluster = nodeService.getSfNodes();
-        final List<String> targets = new ArrayList<String>();
+        final List<String> targets = new ArrayList<>();
         for (final Node node : cluster) {
             targets.add(node.getId());
         }
@@ -579,7 +597,7 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final Map<String, Boolean> stats = new HashMap<String, Boolean>();
+        final Map<String, Boolean> stats = new HashMap<>();
         if (CollectionUtils.isNotEmpty(message.getResponses())) {
 
             for (final Message response : message.getResponses()) {
@@ -601,11 +619,12 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, Boolean> disableStats(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
 
         final List<Node> cluster = nodeService.getSfNodes();
-        final List<String> targets = new ArrayList<String>();
+        final List<String> targets = new ArrayList<>();
         for (final Node node : cluster) {
             targets.add(node.getId());
         }
@@ -620,7 +639,7 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final Map<String, Boolean> stats = new HashMap<String, Boolean>();
+        final Map<String, Boolean> stats = new HashMap<>();
         if (CollectionUtils.isNotEmpty(message.getResponses())) {
 
             for (final Message response : message.getResponses()) {
@@ -643,7 +662,7 @@ public class ClusterServiceImpl implements ClusterService {
 
 
         final List<Node> cluster = nodeService.getSfNodes();
-        final List<String> targets = new ArrayList<String>();
+        final List<String> targets = new ArrayList<>();
         for (final Node node : cluster) {
             targets.add(node.getId());
         }
@@ -658,7 +677,7 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final List<Pair<String, String>> alerts = new ArrayList<Pair<String, String>>(150);
+        final List<Pair<String, String>> alerts = new ArrayList<>(150);
         alerts.addAll(localAlertDirector.getAlerts());
         if (CollectionUtils.isNotEmpty(message.getResponses())) {
 

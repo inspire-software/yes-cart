@@ -56,41 +56,49 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
         this.voContentService = voContentService;
     }
 
+    @Override
     public @ResponseBody
     List<VoShop> getAll() throws Exception {
         return voShopService.getAll();
     }
 
+    @Override
     public @ResponseBody
     List<VoShop> getAllSubs(@PathVariable("id") final long id) throws Exception {
         return voShopService.getAllSubs(id);
     }
 
+    @Override
     public @ResponseBody
     VoShop getById(@PathVariable("id") final long id) throws Exception {
         return voShopService.getById(id);
     }
 
+    @Override
     public @ResponseBody
     VoShop create(@RequestBody final VoShop voShop) throws Exception {
         return voShopService.create(voShop);
     }
 
+    @Override
     public @ResponseBody
     VoShop createSub(@RequestBody final VoSubShop voShop) throws Exception {
         return voShopService.createSub(voShop);
     }
 
+    @Override
     public @ResponseBody
     VoShop update(@RequestBody final VoShop voShop) throws Exception {
         return voShopService.update(voShop);
     }
 
+    @Override
     public @ResponseBody
     void remove(@PathVariable("id") final long id) throws Exception {
         voShopService.remove(id);
     }
 
+    @Override
     public @ResponseBody
     VoShopSummary getSummary(@PathVariable("id") final long id, @PathVariable("lang") final String lang) throws Exception {
 
@@ -105,96 +113,115 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
 
     }
 
+    @Override
     public @ResponseBody
     VoShopSeo getLocalization(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopService.getShopLocale(shopId);
     }
 
+    @Override
     public @ResponseBody
     VoShopSeo update(@RequestBody final VoShopSeo voShopSeo) throws Exception {
         return voShopService.update(voShopSeo);
     }
 
+    @Override
     public @ResponseBody
     VoShopUrl getUrl(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopService.getShopUrls(shopId);
     }
 
+    @Override
     public @ResponseBody
     VoShopUrl update(@RequestBody final VoShopUrl voShopUrl)  throws Exception {
         return voShopService.update(voShopUrl);
     }
 
+    @Override
     public @ResponseBody
     VoShopAlias getAlias(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopService.getShopAliases(shopId);
     }
 
+    @Override
     public @ResponseBody
     VoShopAlias update(@RequestBody final VoShopAlias voShopAlias) throws Exception {
         return voShopService.update(voShopAlias);
     }
 
+    @Override
     public @ResponseBody
     VoShopSupportedCurrencies getCurrency(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopService.getShopCurrencies(shopId);
     }
 
+    @Override
     public @ResponseBody
     VoShopSupportedCurrencies update(@RequestBody final VoShopSupportedCurrencies supportedCurrencies) throws Exception {
         return voShopService.update(supportedCurrencies);
     }
 
+    @Override
     public @ResponseBody
     VoShopLanguages getLanguage(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopService.getShopLanguages(shopId);
     }
 
+    @Override
     public @ResponseBody
     VoShopLanguages update(@RequestBody final VoShopLanguages langs) throws Exception {
         return voShopService.update(langs);
     }
 
+    @Override
     public @ResponseBody
     VoShopLocations getLocation(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopService.getShopLocations(shopId);
     }
 
+    @Override
     public @ResponseBody
     VoShopLocations update(@RequestBody final VoShopLocations vo) throws Exception {
         return voShopService.update(vo);
     }
 
+    @Override
     public @ResponseBody
     List<VoCategory> getCategories(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopCategoryService.getAllByShopId(shopId);
     }
 
+    @Override
     public @ResponseBody
     List<VoCategory> update(@PathVariable("shopId") final long shopId, @RequestBody final List<VoCategory> voCategories) throws Exception {
         return voShopCategoryService.update(shopId, voCategories);
     }
 
+    @Override
     public @ResponseBody
     VoShop updateDisabledFlag(@PathVariable("shopId") final long shopId, @PathVariable("state") final boolean state) throws Exception {
         return voShopService.updateDisabledFlag(shopId, state);
     }
 
+    @Override
     public  @ResponseBody
     List<VoAttrValueShop> getShopAttributes(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopService.getShopAttributes(shopId, false);
     }
 
+    @Override
     public  @ResponseBody
     List<VoAttrValueShop> getShopAttributesSecure(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopService.getShopAttributes(shopId, true);
     }
 
+    @Override
     public  @ResponseBody
     List<VoAttrValueShop> update(@RequestBody final List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception {
         return voShopService.update(vo, false);
     }
 
+    @Override
     public  @ResponseBody
     List<VoAttrValueShop> updateSecure(@RequestBody final List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception {
         return voShopService.update(vo, true);

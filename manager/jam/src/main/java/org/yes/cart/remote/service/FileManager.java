@@ -16,7 +16,7 @@ public interface FileManager {
      * List available files
      *
      * @return pair of absolute and human friendly paths
-     * @throws IOException
+     * @throws IOException errors
      */
     List<MutablePair<String, String>> list(String mode) throws IOException;
 
@@ -46,7 +46,7 @@ public interface FileManager {
      *
      * @return home path
      *
-     * @throws IOException
+     * @throws IOException errors
      */
     String home() throws IOException;
 

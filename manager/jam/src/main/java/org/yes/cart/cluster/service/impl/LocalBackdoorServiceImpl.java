@@ -52,6 +52,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void warmUp() {
         throw new UnsupportedOperationException("ADMIN does nto support product warm up");
     }
@@ -59,6 +60,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object[] getProductReindexingState() {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
@@ -66,6 +68,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object[] getProductSkuReindexingState() {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
@@ -73,6 +76,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexAllProducts() {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
@@ -80,6 +84,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexAllProductsSku() {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
@@ -87,6 +92,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexShopProducts(final long shopPk) {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
@@ -94,6 +100,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexShopProductsSku(final long shopPk) {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
@@ -101,6 +108,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProduct(final long productPk) {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
@@ -108,6 +116,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductSku(final long productPk) {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
@@ -115,6 +124,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProductSkuCode(final String productCode) {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
@@ -122,6 +132,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reindexProducts(final long[] productPks) {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
@@ -129,6 +140,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object[]> sqlQuery(final String query) {
 
         if (StringUtils.isNotBlank(query)) {
@@ -152,6 +164,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object[]> hsqlQuery(final String query) {
 
         if (StringUtils.isNotBlank(query)) {
@@ -173,6 +186,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object[]> luceneQuery(final String luceneQuery) {
         throw new UnsupportedOperationException("ADMIN does not support product index");
     }
@@ -180,6 +194,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reloadConfigurations() {
 
         if (CollectionUtils.isNotEmpty(this.configurationListeners)) {

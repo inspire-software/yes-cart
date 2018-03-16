@@ -136,58 +136,54 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
         final Authentication auth = SecurityContextHolder.getContext() != null ? SecurityContextHolder.getContext().getAuthentication() : null;
         final String username = auth != null && auth.isAuthenticated() ? auth.getName() : null;
 
-        return new Runnable() {
+        return () -> {
 
-            @Override
-            public void run() {
+            try {
 
-                try {
-
-                    final AsyncContext threadContext;
-                    if (StringUtils.isBlank(username)) {
-                        threadContext = jobContext;
-                    } else {
-                        SecurityContextHolder.getContext().setAuthentication(new RunAsUserAuthentication(username, "", Collections.EMPTY_LIST));
-                        final Map<String, Object> params = new HashMap<String, Object>();
-                        params.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
-                        threadContext = asyncContextFactory.getInstance(params);
-                    }
-
-                    if (threadContext == null) {
-                        LOG.debug("Cannot invalidate cache for entity [" + entityName + "] pk value =  [" + pk + "] - no async context ");
-                        return;
-                    }
-
-
-                    final List<Node> cluster = nodeService.getSfNodes();
-                    final List<String> targets = new ArrayList<String>();
-                    for (final Node node : cluster) {
-                        targets.add(node.getId());
-                    }
-
-                    final HashMap<String, Object> payload = new HashMap<String, Object>();
-                    payload.put("entityOperation", op);
-                    payload.put("entityName", entityName);
-                    payload.put("pkValue", pk);
-
-                    final RspMessage message = new ContextRspMessageImpl(
-                            nodeService.getCurrentNodeId(),
-                            targets,
-                            "CacheDirector.onCacheableChange",
-                            payload,
-                            threadContext
-                    );
-
-                    nodeService.broadcast(message);
-
-
-                } catch (Exception exp) {
-                    LOG.error("Unable to perform cache eviction: " + exp.getMessage(), exp);
-                } finally {
-                    SecurityContextHolder.clearContext();
+                final AsyncContext threadContext;
+                if (StringUtils.isBlank(username)) {
+                    threadContext = jobContext;
+                } else {
+                    SecurityContextHolder.getContext().setAuthentication(new RunAsUserAuthentication(username, "", Collections.EMPTY_LIST));
+                    final Map<String, Object> params = new HashMap<>();
+                    params.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
+                    threadContext = asyncContextFactory.getInstance(params);
                 }
 
+                if (threadContext == null) {
+                    LOG.debug("Cannot invalidate cache for entity [" + entityName + "] pk value =  [" + pk + "] - no async context ");
+                    return;
+                }
+
+
+                final List<Node> cluster = nodeService.getSfNodes();
+                final List<String> targets = new ArrayList<>();
+                for (final Node node : cluster) {
+                    targets.add(node.getId());
+                }
+
+                final HashMap<String, Object> payload = new HashMap<>();
+                payload.put("entityOperation", op);
+                payload.put("entityName", entityName);
+                payload.put("pkValue", pk);
+
+                final RspMessage message = new ContextRspMessageImpl(
+                        nodeService.getCurrentNodeId(),
+                        targets,
+                        "CacheDirector.onCacheableChange",
+                        payload,
+                        threadContext
+                );
+
+                nodeService.broadcast(message);
+
+
+            } catch (Exception exp) {
+                LOG.error("Unable to perform cache eviction: " + exp.getMessage(), exp);
+            } finally {
+                SecurityContextHolder.clearContext();
             }
+
         };
 
     }
@@ -212,6 +208,7 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
@@ -219,7 +216,7 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
     /** IoC. Set configuration. */
     public void setEntityOperationCache(final Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache) {
         this.entityOperationCache = entityOperationCache;
-        this.cachedEntities = new HashSet<String>(this.entityOperationCache.keySet());
+        this.cachedEntities = new HashSet<>(this.entityOperationCache.keySet());
     }
 
     /** IoC. Set configuration. */

@@ -65,7 +65,7 @@ public class VoDashboardWidgetPluginCacheMonitoring implements VoDashboardWidget
         boolean hasHotCaches = false;
         final List<MutablePair<String, Integer>> data = new ArrayList<>();
         try {
-            final Map<String, Object> param = new HashMap<String, Object>();
+            final Map<String, Object> param = new HashMap<>();
             param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
             Map<String, List<CacheInfoDTOImpl>> caches = clusterService.getCacheInfo(createCtx(param));
             for (final String node : caches.keySet()) {
@@ -81,7 +81,7 @@ public class VoDashboardWidgetPluginCacheMonitoring implements VoDashboardWidget
                     }
                 }
 
-                data.add(new MutablePair<String, Integer>(node, counter));
+                data.add(new MutablePair<>(node, counter));
 
             }
 

@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class BulkJobAutoContextImpl implements AsyncContext {
 
-    private final Map<String, Object> attributes = new HashMap<String, Object>();
+    private final Map<String, Object> attributes = new HashMap<>();
 
     public BulkJobAutoContextImpl() {
         this(null);
@@ -66,11 +66,13 @@ public class BulkJobAutoContextImpl implements AsyncContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, Object> getAttributes() {
         return Collections.unmodifiableMap(this.attributes);
     }
 
     /** {@inheritDoc} */
+    @Override
     public <T> T getAttribute(final String name) {
         if (this.attributes.containsKey(name)) {
             return (T) this.attributes.get(name);

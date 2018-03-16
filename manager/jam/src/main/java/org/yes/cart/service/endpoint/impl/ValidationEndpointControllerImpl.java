@@ -39,6 +39,7 @@ public class ValidationEndpointControllerImpl implements ValidationEndpointContr
         this.voValidationService = voValidationService;
     }
 
+    @Override
     public @ResponseBody
     VoValidationResult validate(@RequestBody final VoValidationRequest vo) throws Exception {
         return this.voValidationService.validate(vo);

@@ -47,7 +47,7 @@ public class ProcessedFilesComparator implements Comparator<File> {
             if (timeCompare == 0) {
 
                 final String fn1 = m1.group(1) + m1.group(3);
-                final String fn2 = m2.group(1) + m2.group(3);;
+                final String fn2 = m2.group(1) + m2.group(3);
 
                 return fn1.compareTo(fn2);
 

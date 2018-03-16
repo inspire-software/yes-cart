@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.vo;
+package org.yes.cart.service.endpoint;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;

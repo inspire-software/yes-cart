@@ -46,6 +46,7 @@ public class PaymentReportWorker implements ReportWorker {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ReportPair> getParameterValues(final String lang, final String param, final Map<String, Object> currentSelection) {
         return Collections.emptyList();
     }
@@ -53,6 +54,7 @@ public class PaymentReportWorker implements ReportWorker {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Object> getResult(final String lang, final Map<String, Object> currentSelection) {
         final String orderNumber = (String) currentSelection.get("orderNumber");
         final String fromDate = (String) currentSelection.get("fromDate");
@@ -83,7 +85,8 @@ public class PaymentReportWorker implements ReportWorker {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, Object> getEnhancedParameterValues(final List<Object> result, final Map<String, Object> currentSelection) {
-        return new HashMap<String, Object>(currentSelection);
+        return new HashMap<>(currentSelection);
     }
 }

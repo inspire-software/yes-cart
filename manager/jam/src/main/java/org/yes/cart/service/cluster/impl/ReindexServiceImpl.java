@@ -82,6 +82,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
             private final JobContext context = ctx;
             private final JobStatusListener listener = ctx.getListener();
 
+            @Override
             public void run() {
 
                 listener.notifyPing();
@@ -97,12 +98,12 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                     listener.notifyMessage("Indexing stared\n");
 
                     final Map<String, Boolean> indexingFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
-                    final Map<String, Long> lastPositive = new HashMap<String, Long>();
-                    Map<String, Pair<Long, Boolean>> cnt = new HashMap<String, Pair<Long, Boolean>>();
+                    final Map<String, Long> lastPositive = new HashMap<>();
+                    Map<String, Pair<Long, Boolean>> cnt = new HashMap<>();
 
                     for (final Node yesNode : nodeService.getSfNodes()) {
                         indexingFinished.put(yesNode.getId(), Boolean.FALSE);
-                        cnt.put(yesNode.getId(), new Pair<Long, Boolean>(0L, Boolean.FALSE));
+                        cnt.put(yesNode.getId(), new Pair<>(0L, Boolean.FALSE));
                     }
 
                     // Trigger reindex
@@ -144,7 +145,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                     for (final Node yesNode : nodeService.getSfNodes()) {
                         indexingFinished.put(yesNode.getId(), Boolean.FALSE);
                         lastPositive.put(yesNode.getId(), 0L);
-                        cnt.put(yesNode.getId(), new Pair<Long, Boolean>(0L, Boolean.FALSE));
+                        cnt.put(yesNode.getId(), new Pair<>(0L, Boolean.FALSE));
                     }
 
                     // Trigger reindex
@@ -225,7 +226,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
     private JobContext createJobContext(final AsyncContext ctx, final long shopId, final String timeoutKey) {
 
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, timeoutKey);
         param.put(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE, new HashMap<String, Boolean>());
         if (shopId > 0L) {

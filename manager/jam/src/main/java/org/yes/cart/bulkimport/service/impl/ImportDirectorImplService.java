@@ -129,11 +129,13 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     }
 
     /** {@inheritDoc} */
+    @Override
     public JobStatus getImportStatus(final String token) {
         return getStatus(token);
     }
 
     /** {@inheritDoc} */
+    @Override
     public String doImport(final String descriptorGroup, final String fileName, final boolean async) {
 
         final AsyncContext ctx = getAsyncContext();
@@ -176,7 +178,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
         try {
             final List<Node> cluster = nodeService.getSfNodes();
-            final List<String> targets = new ArrayList<String>();
+            final List<String> targets = new ArrayList<>();
             for (final Node node : cluster) {
                 targets.add(node.getId());
             }
@@ -203,12 +205,14 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     }
 
+    @Override
     protected Runnable createJobRunnable(final JobContext ctx) {
         return new Runnable() {
 
             private final JobContext context = ctx;
             private final JobStatusListener listener = ctx.getListener();
 
+            @Override
             public void run() {
                 try {
                     ThreadLocalAsyncContextUtils.init(context);
@@ -312,8 +316,11 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                 }
             }
 
-            if (!pathToImportDirectory.equals(tempRoot)) {
-                new File(tempRoot).delete();
+            if (tempRoot != null && !pathToImportDirectory.equals(tempRoot)) {
+                final File tempRootFile = new File(tempRoot);
+                if (tempRootFile.exists()) {
+                    tempRootFile.delete();
+                }
             }
         }
     }
@@ -328,24 +335,22 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Map<String, String>> getImportGroups(final String language) {
 
         final List<DataGroup> dataGroups = dataDescriptorResolver.getGroups();
 
-        final Set<Map<String, String>> out = new TreeSet<Map<String, String>>(new Comparator<Map<String, String>>() {
-            @Override
-            public int compare(final Map<String, String> o1, final Map<String, String> o2) {
-                int comp = o1.get("label").compareToIgnoreCase(o2.get("label"));
-                if (comp == 0) {
-                    comp = o1.get("name").compareToIgnoreCase(o2.get("name"));
-                }
-                return comp;
+        final Set<Map<String, String>> out = new TreeSet<>((o1, o2) -> {
+            int comp = o1.get("label").compareToIgnoreCase(o2.get("label"));
+            if (comp == 0) {
+                comp = o1.get("name").compareToIgnoreCase(o2.get("name"));
             }
+            return comp;
         });
         for (final DataGroup dataGroup : dataGroups) {
             if (StringUtils.isBlank(dataGroup.getQualifier()) ||
                     federationFacade.isManageable(dataGroup.getQualifier(), ShopDTO.class)) {
-                final Map<String, String> grp = new HashMap<String, String>();
+                final Map<String, String> grp = new HashMap<>();
                 grp.put("name", dataGroup.getName());
                 final I18NModel model = new FailoverStringI18NModel(dataGroup.getDisplayName(), dataGroup.getName());
                 grp.put("label", model.getValue(language));
@@ -353,12 +358,13 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
             }
         }
 
-        return new ArrayList<Map<String, String>>(out);
+        return new ArrayList<>(out);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getImportDirectory() {
         return pathToImportDirectory;
     }
@@ -366,6 +372,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getArchiveDirectory() {
         return pathToArchiveDirectory;
     }

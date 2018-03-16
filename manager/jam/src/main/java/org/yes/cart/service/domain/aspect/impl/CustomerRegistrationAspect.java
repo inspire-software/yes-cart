@@ -61,7 +61,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
 
     private final HashHelper passwordHashHelper;
 
-    private final PassPhraseGenerator phrazeGenerator;
+    private final PassPhraseGenerator phraseGenerator;
 
     private final MailService mailService;
 
@@ -74,14 +74,14 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
      * Construct customer aspect.
      *
      * @param taskExecutor    {@link TaskExecutor} to execute task.
-     * @param phrazeGenerator {@link PassPhraseGenerator}
+     * @param phraseGenerator {@link PassPhraseGenerator}
      * @param passwordHashHelper      {@link HashHelper}
      * @param mailService     persists mail object to be picked up by bulk email job
      * @param mailComposer    mail composer generates message to be sent
      * @param themeService    theme service
      */
     public CustomerRegistrationAspect(final TaskExecutor taskExecutor,
-                                      final PassPhraseGenerator phrazeGenerator,
+                                      final PassPhraseGenerator phraseGenerator,
                                       final HashHelper passwordHashHelper,
                                       final MailService mailService,
                                       final MailComposer mailComposer,
@@ -89,7 +89,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
         super(taskExecutor);
 
         this.passwordHashHelper = passwordHashHelper;
-        this.phrazeGenerator = phrazeGenerator;
+        this.phraseGenerator = phraseGenerator;
         this.mailService = mailService;
         this.mailComposer = mailComposer;
 
@@ -131,7 +131,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
                 generatedPassword = registeredPerson.getPassword();
             } else {
                 // fallback as we must have a password (worst case customer will need to reset the password)
-                generatedPassword = phrazeGenerator.getNextPassPhrase();
+                generatedPassword = phraseGenerator.getNextPassPhrase();
             }
             // regenerate hash for new password
             generatedPasswordHash = passwordHashHelper.getHash(generatedPassword);
@@ -150,7 +150,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
                 }
 
                 // regenerate password
-                generatedPassword = phrazeGenerator.getNextPassPhrase();
+                generatedPassword = phraseGenerator.getNextPassPhrase();
                 generatedPasswordHash = passwordHashHelper.getHash(generatedPassword);
                 generatedToken = null;
                 generatedTokenExpiry = null;
@@ -159,7 +159,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
                 // Token is null so this is a new password reset request
                 generatedPassword = null;
                 generatedPasswordHash = registeredPerson.getPassword(); // same as before
-                generatedToken = phrazeGenerator.getNextPassPhrase();
+                generatedToken = phraseGenerator.getNextPassPhrase();
                 generatedTokenExpiry = determineExpiryTime(shop);
             }
         } else {
@@ -257,7 +257,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
 
         if (registeredPerson instanceof Customer) {
             final Customer customer = (Customer) registeredPerson;
-            final Map<String, Object> registrationData = new HashMap<String, Object>();
+            final Map<String, Object> registrationData = new HashMap<>();
             registrationData.put("customerType", customer.getCustomerType());
             registrationData.put("pricingPolicy", customer.getPricingPolicy());
             registrationData.put("tag", customer.getTag());
@@ -304,7 +304,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
 
     String[] getAllRecipients(final Shop shop, final String adminEmail, final String templateKey) {
 
-        final List<String> recipients = new ArrayList<String>();
+        final List<String> recipients = new ArrayList<>();
 
         if (StringUtils.isNotBlank(adminEmail) && recipients.isEmpty()) {
             // this is default shop admin email
@@ -321,6 +321,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Runnable getTask(Serializable serializableMessage) {
         return new CustomerRegistrationMessageListener(
                 mailService,
@@ -330,7 +331,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
     }
 
     private Set<String> transformShopUrls(final Shop shop) {
-        final Set<String> rez = new HashSet<String>();
+        final Set<String> rez = new HashSet<>();
         rez.add(shop.getDefaultShopUrl());
         return rez;
     }

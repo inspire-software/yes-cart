@@ -44,11 +44,13 @@ public class FileManagerEndpointControllerImpl implements FileManagerEndpointCon
         this.fileManager = fileManager;
     }
 
+    @Override
     public @ResponseBody
     List<MutablePair<String, String>> list(@PathVariable("mode") final String mode) throws IOException {
         return fileManager.list(mode);
     }
 
+    @Override
     public void download(@RequestParam("fileName") final String fileName, final HttpServletResponse response) throws IOException {
 
         final byte[] content = this.fileManager.download(fileName);
@@ -72,11 +74,13 @@ public class FileManagerEndpointControllerImpl implements FileManagerEndpointCon
 
     }
 
+    @Override
     public String upload(@RequestParam("file") MultipartFile file) throws IOException {
         this.fileManager.upload(file.getBytes(), file.getOriginalFilename());
         return "upload-success";
     }
 
+    @Override
     public @ResponseBody
     void delete(@RequestParam("fileName") final String fileName) throws IOException {
         this.fileManager.delete(fileName);

@@ -65,9 +65,10 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
     }
 
     /** {@inheritDoc} */
+    @Override
     public @ResponseBody
     List<VoClusterNode> getClusterInfo() throws Exception {
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
         final List<Node> cluster = clusterService.getClusterInfo(createCtx(param));
         return voAssemblySupport.assembleVos(VoClusterNode.class, Node.class, cluster);
@@ -75,9 +76,10 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
 
 
     /** {@inheritDoc} */
+    @Override
     public @ResponseBody
     List<VoClusterNode> reloadConfigurations() throws Exception {
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
         clusterService.reloadConfigurations(createCtx(param));
         evictAllCache();
@@ -86,33 +88,37 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
 
 
     /** {@inheritDoc} */
+    @Override
     public @ResponseBody
     List<Object[]> sqlQuery(@RequestBody final String query, @PathVariable("node") final String node) throws Exception{
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS);
         return clusterService.sqlQuery(createCtx(param), query, node);
     }
 
     /** {@inheritDoc} */
+    @Override
     public @ResponseBody
     List<Object[]> hsqlQuery(@RequestBody final String query, @PathVariable("node") final String node) throws Exception {
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS);
         return clusterService.hsqlQuery(createCtx(param), query, node);
     }
 
     /** {@inheritDoc} */
+    @Override
     public @ResponseBody
     List<Object[]> luceneQuery(@RequestBody final String query, @PathVariable("node") final String node) throws Exception {
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS);
         return clusterService.luceneQuery(createCtx(param), query, node);
     }
 
     /** {@inheritDoc} */
+    @Override
     public @ResponseBody
     List<VoCacheInfo> getCacheInfo() throws Exception {
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
         Map<String, List<CacheInfoDTOImpl>> caches = clusterService.getCacheInfo(createCtx(param));
         final List<VoCacheInfo> vos = new ArrayList<>(caches.size() * 250);
@@ -123,50 +129,56 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
     }
 
     /** {@inheritDoc} */
+    @Override
     public @ResponseBody
     List<VoCacheInfo> evictAllCache() throws Exception {
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
         clusterService.evictAllCache(createCtx(param));
         return getCacheInfo();
     }
 
     /** {@inheritDoc} */
+    @Override
     public @ResponseBody
     List<VoCacheInfo> evictCache(@PathVariable("name") final String name) throws Exception {
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
         clusterService.evictCache(createCtx(param), name);
         return getCacheInfo();
     }
 
     /** {@inheritDoc} */
+    @Override
     public @ResponseBody
     List<VoCacheInfo> enableStats(@PathVariable("name") final String name) throws Exception {
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
         clusterService.enableStats(createCtx(param), name);
         return getCacheInfo();
     }
 
     /** {@inheritDoc} */
+    @Override
     public @ResponseBody
     List<VoCacheInfo> disableStats(@PathVariable("name") final String name) throws Exception {
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
         clusterService.disableStats(createCtx(param), name);
         return getCacheInfo();
     }
 
     /** {@inheritDoc} */
+    @Override
     public @ResponseBody
     void warmUp() throws Exception {
-        final Map<String, Object> param = new HashMap<String, Object>();
+        final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
         clusterService.warmUp(createCtx(param));
     }
 
     /** {@inheritDoc} */
+    @Override
     public @ResponseBody
     VoJobStatus getIndexJobStatus(@PathVariable("token") final String token) {
         final JobStatus status = reindexService.getIndexJobStatus(createCtx(null), token);
@@ -181,6 +193,7 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
     }
 
     /** {@inheritDoc} */
+    @Override
     public @ResponseBody
     VoJobStatus reindexAllProducts() {
         final String token = reindexService.reindexAllProducts(createCtx(null));
@@ -188,6 +201,7 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
     }
 
     /** {@inheritDoc} */
+    @Override
     public @ResponseBody
     VoJobStatus reindexShopProducts(@PathVariable("id") final long shopPk) {
         final String token = reindexService.reindexShopProducts(createCtx(null), shopPk);

@@ -81,7 +81,7 @@ public class WebAppManagerAsyncContextFactory implements AsyncContextFactory {
      */
     public static class AsyncWebAppContextImpl implements AsyncContext {
 
-        private final Map<String, Object> attributes = new HashMap<String, Object>();
+        private final Map<String, Object> attributes = new HashMap<>();
 
         public AsyncWebAppContextImpl(Manager manager, Map<String, Object> attributes) {
 
@@ -99,11 +99,13 @@ public class WebAppManagerAsyncContextFactory implements AsyncContextFactory {
         }
 
         /** {@inheritDoc} */
+        @Override
         public Map<String, Object> getAttributes() {
             return Collections.unmodifiableMap(this.attributes);
         }
 
         /** {@inheritDoc} */
+        @Override
         public <T> T getAttribute(final String name) {
             if (this.attributes.containsKey(name)) {
                 return (T) this.attributes.get(name);

@@ -19,8 +19,6 @@ package org.yes.cart.service.cluster;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobStatus;
 
-import java.util.Map;
-
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 15-May-2011

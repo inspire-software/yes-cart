@@ -42,21 +42,25 @@ public class SystemPreferencesEndpointControllerImpl implements SystemPreference
         this.voSystemPreferencesService = voSystemPreferencesService;
     }
 
+    @Override
     public @ResponseBody
     List<VoAttrValueSystem> getSystemPreferences() throws Exception {
         return voSystemPreferencesService.getSystemPreferences(false);
     }
 
+    @Override
     public @ResponseBody
     List<VoAttrValueSystem> getSystemPreferencesSecure() throws Exception {
         return voSystemPreferencesService.getSystemPreferences(true);
     }
 
+    @Override
     public @ResponseBody
     List<VoAttrValueSystem> update(@RequestBody final List<MutablePair<VoAttrValueSystem, Boolean>> vo) throws Exception {
         return voSystemPreferencesService.update(vo, false);
     }
 
+    @Override
     public @ResponseBody
     List<VoAttrValueSystem> updateSecure(@RequestBody final List<MutablePair<VoAttrValueSystem, Boolean>> vo) throws Exception {
         return voSystemPreferencesService.update(vo, true);
