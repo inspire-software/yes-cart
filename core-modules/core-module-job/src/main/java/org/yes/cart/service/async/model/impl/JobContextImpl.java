@@ -32,7 +32,7 @@ public class JobContextImpl implements JobContext {
 
     private final boolean async;
     private final JobStatusListener listener;
-    private final Map<String, Object> attributes = new HashMap<String, Object>();
+    private final Map<String, Object> attributes = new HashMap<>();
 
     public JobContextImpl(final boolean async, final JobStatusListener listener) {
         this.async = async;
@@ -46,6 +46,7 @@ public class JobContextImpl implements JobContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public <T> T getAttribute(final String name) {
         if (this.attributes.containsKey(name)) {
             return (T) this.attributes.get(name);
@@ -54,16 +55,19 @@ public class JobContextImpl implements JobContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, Object> getAttributes() {
         return Collections.unmodifiableMap(attributes);
     }
 
     /** {@inheritDoc} */
+    @Override
     public JobStatusListener getListener() {
         return listener;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isAsync() {
         return async;
     }

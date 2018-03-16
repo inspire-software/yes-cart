@@ -52,6 +52,7 @@ public class PaymentProcessedOrderEventHandlerImpl extends AbstractOrderEventHan
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
@@ -66,6 +67,7 @@ public class PaymentProcessedOrderEventHandlerImpl extends AbstractOrderEventHan
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
 
@@ -103,6 +105,7 @@ public class PaymentProcessedOrderEventHandlerImpl extends AbstractOrderEventHan
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String getTransitionTarget(final OrderEvent orderEvent) {
         return CustomerOrder.ORDER_STATUS_PENDING;
     }

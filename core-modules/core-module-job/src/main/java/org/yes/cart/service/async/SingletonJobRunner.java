@@ -34,13 +34,14 @@ public abstract class SingletonJobRunner implements JobRunner {
     private final TaskExecutor executor;
 
     private final Object mutex = new Object();
-    private final Map<String, JobStatusListener> jobListeners = new ConcurrentHashMap<String, JobStatusListener>();
+    private final Map<String, JobStatusListener> jobListeners = new ConcurrentHashMap<>();
 
     protected SingletonJobRunner(final TaskExecutor executor) {
         this.executor = executor;
     }
 
     /** {@inheritDoc} */
+    @Override
     public JobStatus getStatus(final String token) {
         if (token == null || !jobListeners.containsKey(token)) {
             throw new IllegalArgumentException("Job token: " + token + " unknown");
@@ -54,6 +55,7 @@ public abstract class SingletonJobRunner implements JobRunner {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String doJob(final JobContext ctx) {
 
         final JobStatusListener listener = ctx.getListener();
@@ -76,6 +78,7 @@ public abstract class SingletonJobRunner implements JobRunner {
 
             private final Runnable jobRunnable = job;
 
+            @Override
             public void run() {
                 // ensure that we run one at a time by supplying mutex
                 synchronized (mutex) {

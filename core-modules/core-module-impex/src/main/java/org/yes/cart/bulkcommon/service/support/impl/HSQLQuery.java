@@ -42,16 +42,19 @@ public class HSQLQuery implements LookUpQuery {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getQueryType() {
         return HSQL;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getQueryString() {
         return hsql;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Object[] getParameters() {
         return params;
     }

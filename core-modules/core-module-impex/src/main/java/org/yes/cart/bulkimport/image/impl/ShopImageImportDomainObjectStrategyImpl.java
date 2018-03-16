@@ -71,7 +71,7 @@ public class ShopImageImportDomainObjectStrategyImpl extends AbstractImageImport
 
         validateAccessBeforeUpdate(shop, Shop.class);
 
-        final String attributeCode = AttributeNamesKeys.Shop.SHOP_IMAGE_PREFIX + suffix + (StringUtils.isNotEmpty(locale) ? "_" + locale : "");;
+        final String attributeCode = AttributeNamesKeys.Shop.SHOP_IMAGE_PREFIX + suffix + (StringUtils.isNotEmpty(locale) ? "_" + locale : "");
 
         AttrValueShop imageAttributeValue = null;
         final Collection<AttrValueShop> attributes = shop.getAttributes();

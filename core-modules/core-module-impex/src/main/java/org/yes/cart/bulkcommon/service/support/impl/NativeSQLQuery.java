@@ -42,16 +42,19 @@ public class NativeSQLQuery implements LookUpQuery {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getQueryType() {
-        return NAITIVE;
+        return NATIVE;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getQueryString() {
         return sql;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Object[] getParameters() {
         return params;
     }

@@ -43,7 +43,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
     private final WsClientAbstractFactory wsClientAbstractFactory;
 
-    private Set<String> reloadClusterTopics = new HashSet<String>();
+    private Set<String> reloadClusterTopics = new HashSet<>();
 
     public ManagerWsNodeServiceImpl(final SystemService systemService,
                                     final WsClientAbstractFactory wsClientAbstractFactory) {
@@ -54,6 +54,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public void broadcast(final Message message) {
 
         if (reloadClusterTopics.contains(message.getSubject())) {
@@ -71,14 +72,9 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
         final List<String> targets = message.getTargets();
 
-        final List<Node> cluster = new ArrayList<Node>(getSfNodes());
+        final List<Node> cluster = new ArrayList<>(getSfNodes());
         if (CollectionUtils.isNotEmpty(targets)) {
-            final Iterator<Node> clusterIt = cluster.iterator();
-            while (clusterIt.hasNext()) {
-                if (!targets.contains(clusterIt.next().getId())) {
-                    clusterIt.remove();
-                }
-            }
+            cluster.removeIf(node -> !targets.contains(node.getId()));
         }
 
 
@@ -86,7 +82,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
             try {
                 final WsClientFactory<WebServiceInboundChannel> factory =
                         getWebServiceInboundChannel(context, yesNode.getChannel(),
-                                (String) context.getAttribute(AsyncContext.TIMEOUT_KEY));
+                                context.getAttribute(AsyncContext.TIMEOUT_KEY));
 
                 WebServiceInboundChannel service = factory.getService();
                 try {
@@ -164,6 +160,6 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
      * @param reloadClusterTopics topics that will cause reloading of cluster xml mapping
      */
     public void setReloadClusterTopics(final Set<String> reloadClusterTopics) {
-        this.reloadClusterTopics = new HashSet<String>(reloadClusterTopics);
+        this.reloadClusterTopics = new HashSet<>(reloadClusterTopics);
     }
 }

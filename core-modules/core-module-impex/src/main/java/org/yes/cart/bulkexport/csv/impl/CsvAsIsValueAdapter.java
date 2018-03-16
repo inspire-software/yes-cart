@@ -30,6 +30,7 @@ public class CsvAsIsValueAdapter implements ValueAdapter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
         return rawValue;
     }

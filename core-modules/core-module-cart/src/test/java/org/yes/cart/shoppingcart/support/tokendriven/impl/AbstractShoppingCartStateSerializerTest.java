@@ -41,7 +41,7 @@ public abstract class AbstractShoppingCartStateSerializerTest {
 
 
     /**
-     * Create specifc cart so that we can assert all values before and after serialisation.
+     * Create specific cart so that we can assert all values before and after serialisation.
      *
      * @return deterministic cart
      */
@@ -205,9 +205,9 @@ public abstract class AbstractShoppingCartStateSerializerTest {
 
     /**
      * This routine create sampleSize number of shopping carts with 25 SKU, 3 gifts serialises all of them
-     * then deserialises all of them to measure time it takes for both.
+     * then deserialize all of them to measure time it takes for both.
      *
-     * @throws Exception
+     * @throws Exception errors
      */
     public void serializationPerformanceRoutine(ShoppingCartStateSerializer serializer,
                                                 int sampleSize,
@@ -215,8 +215,8 @@ public abstract class AbstractShoppingCartStateSerializerTest {
                                                 int giftCount,
                                                 int couponCount) throws Exception {
 
-        final List<ShoppingCart> carts = new ArrayList<ShoppingCart>(sampleSize);
-        final List<byte[]> cartsB = new ArrayList<byte[]>(sampleSize);
+        final List<ShoppingCart> carts = new ArrayList<>(sampleSize);
+        final List<byte[]> cartsB = new ArrayList<>(sampleSize);
         for (int i = 0; i < sampleSize; i++) {
             carts.add(createRandomCart(skuCount, giftCount, couponCount, i));
         }

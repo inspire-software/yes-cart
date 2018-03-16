@@ -120,7 +120,7 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
         final Collection<CustomerOrderDelivery> deliveries = customerOrderDelivery != null ?
                 Collections.singleton(customerOrderDelivery) : customerOrder.getDelivery();
 
-        final Set<String> supplierCodes = new HashSet<String>();
+        final Set<String> supplierCodes = new HashSet<>();
         if (deliveries != null) {
             for (final CustomerOrderDelivery delivery : deliveries) {
                 if (delivery.getEligibleForExport() != null && delivery.getDetail() != null) {
@@ -160,8 +160,8 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
 
         final Properties map = getSupplierNotificationsMap(customerOrder);
 
-        final Map<String, List<CustomerOrderDelivery>> deliveriesBySupplierCode = new HashMap<String, List<CustomerOrderDelivery>>();
-        final List<CustomerOrderDelivery> exportCandidates = new ArrayList<CustomerOrderDelivery>(customerOrderDeliveries);
+        final Map<String, List<CustomerOrderDelivery>> deliveriesBySupplierCode = new HashMap<>();
+        final List<CustomerOrderDelivery> exportCandidates = new ArrayList<>(customerOrderDeliveries);
 
         for (final CustomerOrderDelivery delivery : exportCandidates) {
             if (!delivery.isBlockExport() && delivery.getEligibleForExport() != null && !delivery.getDetail().isEmpty()) {
@@ -170,7 +170,7 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
                 if (map.containsKey(key)) {
                     List<CustomerOrderDelivery> dels = deliveriesBySupplierCode.get(supplierCode);
                     if (dels == null) {
-                        dels = new ArrayList<CustomerOrderDelivery>();
+                        dels = new ArrayList<>();
                         deliveriesBySupplierCode.put(key, dels);
                     }
                     dels.add(delivery);
@@ -178,8 +178,8 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
             }
         }
 
-        final Set<Long> exported = new HashSet<Long>();
-        final Map<String, String> audit = new HashMap<String, String>();
+        final Set<Long> exported = new HashSet<>();
+        final Map<String, String> audit = new HashMap<>();
         final String timestamp = DateUtils.formatSDT();
 
         for (final Map.Entry<String, List<CustomerOrderDelivery>> entry : deliveriesBySupplierCode.entrySet()) {
@@ -193,7 +193,7 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
             fillNotificationParameters(
                     customerOrder, entry.getValue(),
                     supplierTemplates.get(customerOrder.getOrderStatus()),
-                    Collections.<String, Object>singletonMap("supplierTemplateKey", entry.getKey()),
+                    Collections.singletonMap("supplierTemplateKey", entry.getKey()),
                     StringUtils.split(notify, ','));
 
             for (final CustomerOrderDelivery delivery : entry.getValue()) {
@@ -247,12 +247,11 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
 
         if (StringUtils.isNotBlank(emailTemplateName)) {
 
-            final CustomerOrder customerOrder = order;
-            final Shop shop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
+            final Shop shop = order.getShop().getMaster() != null ? order.getShop().getMaster() : order.getShop();
 
             for (String emailAddr : emailsAddresses) {
 
-                final HashMap<String, Object> map = new HashMap<String, Object>();
+                final HashMap<String, Object> map = new HashMap<>();
 
                 if (params != null) {
 
@@ -262,27 +261,27 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
                 map.put(StandardMessageListener.SHOP_CODE, shop.getCode());
                 map.put(StandardMessageListener.CUSTOMER_EMAIL, emailAddr);
                 map.put(StandardMessageListener.RESULT, true);
-                map.put(StandardMessageListener.ROOT, customerOrder);
+                map.put(StandardMessageListener.ROOT, order);
                 map.put(StandardMessageListener.TEMPLATE_FOLDER, themeService.getMailTemplateChainByShopId(shop.getShopId()));
                 map.put(StandardMessageListener.SHOP, shop);
-                map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
-                map.put(StandardMessageListener.SHIPPING_ADDRESS, customerOrder.getShippingAddressDetails());
-                map.put(StandardMessageListener.BILLING_ADDRESS, customerOrder.getBillingAddressDetails());
+                map.put(StandardMessageListener.CUSTOMER, order.getCustomer());
+                map.put(StandardMessageListener.SHIPPING_ADDRESS, order.getShippingAddressDetails());
+                map.put(StandardMessageListener.BILLING_ADDRESS, order.getBillingAddressDetails());
                 map.put(StandardMessageListener.TEMPLATE_NAME, emailTemplateName);
-                map.put(StandardMessageListener.LOCALE, customerOrder.getLocale());
+                map.put(StandardMessageListener.LOCALE, order.getLocale());
 
-                final Map<String, String> carrier = new HashMap<String, String>();
-                final Map<String, String> carrierSla = new HashMap<String, String>();
+                final Map<String, String> carrier = new HashMap<>();
+                final Map<String, String> carrierSla = new HashMap<>();
                 for (final CustomerOrderDelivery delivery : deliveries) {
 
                     final I18NModel carrierName = new FailoverStringI18NModel(
                             delivery.getCarrierSla().getCarrier().getDisplayName(),
                             delivery.getCarrierSla().getCarrier().getName());
-                    carrier.put(delivery.getDeliveryNum(), carrierName.getValue(customerOrder.getLocale()));
+                    carrier.put(delivery.getDeliveryNum(), carrierName.getValue(order.getLocale()));
                     final I18NModel carrierSlaName = new FailoverStringI18NModel(
                             delivery.getCarrierSla().getDisplayName(),
                             delivery.getCarrierSla().getName());
-                    carrierSla.put(delivery.getDeliveryNum(), carrierSlaName.getValue(customerOrder.getLocale()));
+                    carrierSla.put(delivery.getDeliveryNum(), carrierSlaName.getValue(order.getLocale()));
                 }
                 map.put(StandardMessageListener.DELIVERY_CARRIER, carrier);
                 map.put(StandardMessageListener.DELIVERY_CARRIER_SLA, carrierSla);
@@ -324,6 +323,7 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getExporterId() {
         return exporterId;
     }
@@ -340,6 +340,7 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getPriority() {
         return priority;
     }

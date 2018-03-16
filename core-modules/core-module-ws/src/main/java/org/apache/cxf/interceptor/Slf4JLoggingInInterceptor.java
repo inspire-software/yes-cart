@@ -38,6 +38,7 @@ public class Slf4JLoggingInInterceptor extends LoggingInInterceptor {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected Logger getLogger() {
         return logger;
     }
@@ -45,6 +46,7 @@ public class Slf4JLoggingInInterceptor extends LoggingInInterceptor {
     /**
      * {@inheritDoc}
      */
+    @Override
     Logger getMessageLogger(final Message message) {
         return getLogger();
     }

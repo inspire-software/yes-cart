@@ -23,11 +23,7 @@ public class CsvExportColumnImplTest {
     @Test
     public void testGetValue() {
 
-        final ValueAdapter adapter = new ValueAdapter() {
-            public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
-                return rawValue;
-            }
-        };
+        final ValueAdapter adapter = (rawValue, requiredType, impExColumn, tuple) -> rawValue;
 
         String reExpKey = "((\\D?\\S{4,}){1,}).*-?.*";
         String reExpValue = ".*-.*\\s{1,}((\\D?\\S{4,}){1,})\\s{0,}.*";
@@ -59,12 +55,12 @@ public class CsvExportColumnImplTest {
         column.setValueRegEx(reExpKey);
         assertEquals("Ключик", column.getValue(" Ключик       -  Значение", adapter, tuple));
 
-        //The same test on unicode strign with some noise
+        //The same test on unicode string with some noise
         column.setValueRegEx(reExpKey);
         assertEquals(getprops(), "result", column.getValue("as фыф result - шум 34 123.56 значение sd ыв #", adapter, tuple));
 
 
-        //The same test on unicode strign with some noise
+        //The same test on unicode string with some noise
         column.setValueRegEx(reExpKey);
         assertEquals("результат", column.getValue("as фыф результат - шум 34 123.56 значение sd ыв #", adapter, tuple));
 
@@ -122,16 +118,16 @@ public class CsvExportColumnImplTest {
     }
 
     String getprops() {
-        StringBuilder stryingBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         Properties prop = System.getProperties();
         Set<Map.Entry<Object, Object>> set = prop.entrySet();
         for (Map.Entry<Object, Object> ent : set) {
-            stryingBuilder.append(ent.getKey());
-            stryingBuilder.append("=");
-            stryingBuilder.append(ent.getValue());
-            stryingBuilder.append("\n");
+            stringBuilder.append(ent.getKey());
+            stringBuilder.append("=");
+            stringBuilder.append(ent.getValue());
+            stringBuilder.append("\n");
         }
-        return stryingBuilder.toString();
+        return stringBuilder.toString();
     }
 
 }

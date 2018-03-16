@@ -112,6 +112,7 @@ public interface ImportColumn extends ImpExColumn {
      *
      * @return {@link ImportDescriptor}
      */
+    @Override
     ImportDescriptor getDescriptor();
 
 }

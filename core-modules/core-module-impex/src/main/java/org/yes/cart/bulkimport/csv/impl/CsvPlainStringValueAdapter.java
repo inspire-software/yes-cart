@@ -32,12 +32,12 @@ public class CsvPlainStringValueAdapter implements ValueAdapter {
      *
      * @param rawValue raw value
      * @param requiredType required data type
-     * @param requiredType required data type
      * @param impExColumn impex column
      * @param tuple current tuple
      *
      * @return string value
      */
+    @Override
     public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
         if (rawValue != null) {
             return String.valueOf(rawValue);

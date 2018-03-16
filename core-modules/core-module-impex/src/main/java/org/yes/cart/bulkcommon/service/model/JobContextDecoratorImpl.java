@@ -33,7 +33,7 @@ import java.util.Map;
 public class JobContextDecoratorImpl implements JobContext {
 
     private final JobContext wrapped;
-    private final Map<String, Object> additionalAttributes = new HashMap<String, Object>();
+    private final Map<String, Object> additionalAttributes = new HashMap<>();
 
     public JobContextDecoratorImpl(final JobContext wrapped, final Map<String, Object> additionalAttributes) {
         this.wrapped = wrapped;
@@ -41,16 +41,19 @@ public class JobContextDecoratorImpl implements JobContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public JobStatusListener getListener() {
         return wrapped.getListener();
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isAsync() {
         return wrapped.isAsync();
     }
 
     /** {@inheritDoc} */
+    @Override
     public <T> T getAttribute(final String name) {
         if (this.additionalAttributes.containsKey(name)) {
             return (T) this.additionalAttributes.get(name);
@@ -59,8 +62,9 @@ public class JobContextDecoratorImpl implements JobContext {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, Object> getAttributes() {
-        final Map<String, Object> all = new HashMap<String, Object>();
+        final Map<String, Object> all = new HashMap<>();
         all.putAll(wrapped.getAttributes());
         all.putAll(additionalAttributes);
         return Collections.unmodifiableMap(all);

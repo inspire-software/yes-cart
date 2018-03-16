@@ -38,6 +38,7 @@ public abstract class AbstractFilter implements Filter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public final void doFilter(final ServletRequest servletRequest,
                                final ServletResponse servletResponse,
                                final FilterChain filterChain) throws IOException, ServletException {
@@ -85,6 +86,7 @@ public abstract class AbstractFilter implements Filter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
         this.filterConfig = filterConfig;
         if (StringUtils.isNotBlank(filterConfig.getInitParameter("excludePattern"))) {
@@ -95,6 +97,7 @@ public abstract class AbstractFilter implements Filter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void destroy() {
         filterConfig = null;
     }

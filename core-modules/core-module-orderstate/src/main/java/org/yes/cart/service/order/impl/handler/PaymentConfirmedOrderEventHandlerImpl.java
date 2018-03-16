@@ -46,6 +46,7 @@ public class PaymentConfirmedOrderEventHandlerImpl extends PaymentOkOrderEventHa
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderException {
 
         final CustomerOrder order = orderEvent.getCustomerOrder();

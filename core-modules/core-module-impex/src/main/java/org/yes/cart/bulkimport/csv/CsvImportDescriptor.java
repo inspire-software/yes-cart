@@ -33,6 +33,7 @@ public interface CsvImportDescriptor extends ImportDescriptor {
      *
      * @return {@link CsvImportFile}
      */
+    @Override
     CsvImportFile getImportFileDescriptor();
 
 }

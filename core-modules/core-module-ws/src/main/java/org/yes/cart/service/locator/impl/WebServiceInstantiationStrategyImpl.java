@@ -42,8 +42,9 @@ public class WebServiceInstantiationStrategyImpl implements InstantiationStrateg
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getProtocols() {
-        return Collections.unmodifiableSet(new HashSet<String>(
+        return Collections.unmodifiableSet(new HashSet<>(
                 Arrays.asList("http", "https")
         ));
     }
@@ -51,6 +52,7 @@ public class WebServiceInstantiationStrategyImpl implements InstantiationStrateg
     /**
      * {@inheritDoc}
      */
+    @Override
     public <T> T getInstance(final String serviceUrl,
                              final Class<T> iface,
                              final String loginName,
@@ -72,9 +74,7 @@ public class WebServiceInstantiationStrategyImpl implements InstantiationStrateg
             return (T) factory.create();
 
         } catch (Exception e) {
-            final RuntimeException instantiationException = new RuntimeException("Service " +serviceUrl + " cannot be instantiated");
-            instantiationException.initCause(e);
-            throw instantiationException; // NOPMD
+            throw new RuntimeException("Service " +serviceUrl + " cannot be instantiated", e);
         }
     }
 
@@ -88,7 +88,7 @@ public class WebServiceInstantiationStrategyImpl implements InstantiationStrateg
 
     /**
      * Just remove ?wsdl
-     * @param serviceUrl
+     * @param serviceUrl service URL
      * @return  service url without wsdl parameter.
      */
     String getServiceUrl(final String serviceUrl) {

@@ -63,6 +63,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
     private final Mockery mockery = new JUnit4Mockery();
 
+    @Override
     @Before
     public void setUp()  {
 
@@ -74,6 +75,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
+    @Override
     @After
     public void tearDown() throws Exception {
         bulkImportService = null;
@@ -86,7 +88,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void csvFileReaderTest() throws Exception {
 
-        ArrayList<String> allowedValue =  new ArrayList<String>();
+        ArrayList<String> allowedValue = new ArrayList<>();
         allowedValue.add("ION");
         allowedValue.add("Brother");
         allowedValue.add("Logitech");
@@ -146,7 +148,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
                 allowing(listener).notifyMessage(with(any(String.class)));
             }});
 
-            Set<String> importedFilesSet = new HashSet<String>();
+            Set<String> importedFilesSet = new HashSet<>();
 
             ResultSet rs;
 
@@ -722,12 +724,11 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             e.printStackTrace();
             fail(e.getMessage());
         } finally {
-            dumpDataBase("www", new String[] { "TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR",
+            dumpDataBase("www", "TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR",
                     "TPRODUCT", "TSKU", "TPRODUCTATTRVALUE",
                     "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY", "TCATEGORY", "TCATEGORYATTRVALUE",
-                    "TPRODTYPEATTRVIEWGROUP" ,
-                    "TSHOPCATEGORY", "TPROMOTION", "TPROMOTIONCOUPON", "TTAX", "TTAXCONFIG"
-            });
+                    "TPRODTYPEATTRVIEWGROUP",
+                    "TSHOPCATEGORY", "TPROMOTION", "TPROMOTIONCOUPON", "TTAX", "TTAXCONFIG");
         }
 
     }
@@ -739,10 +740,12 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             this.prefix = prefix;
         }
 
+        @Override
         public boolean matchesSafely(String s) {
             return s.startsWith(prefix);
         }
 
+        @Override
         public void describeTo(Description description) {
             description.appendText("a string starting with ").appendValue(prefix);
         }
@@ -755,10 +758,12 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             this.prefix = prefix;
         }
 
+        @Override
         public boolean matchesSafely(String s) {
             return !s.startsWith(prefix);
         }
 
+        @Override
         public void describeTo(Description description) {
             description.appendText("a string NOT starting with ").appendValue(prefix);
         }
@@ -771,10 +776,12 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             this.text = text;
         }
 
+        @Override
         public boolean matchesSafely(String s) {
             return s.contains(text);
         }
 
+        @Override
         public void describeTo(Description description) {
             description.appendText("a string containing text: ").appendValue(text);
         }
@@ -787,10 +794,12 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             this.text = text;
         }
 
+        @Override
         public boolean matchesSafely(String s) {
             return !s.contains(text);
         }
 
+        @Override
         public void describeTo(Description description) {
             description.appendText("a string NOT containing text: ").appendValue(text);
         }
@@ -839,7 +848,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             oneOf(listenerCarrierSla).notifyError(with(aStringStartingWith("unexpected error during import")), with(any(Exception.class)));
         }});
 
-        Set<String> importedFilesSet = new HashSet<String>();
+        Set<String> importedFilesSet = new HashSet<>();
 
         bulkImportService.doImport(createContext("src/test/resources/import/carriernames.xml", listenerCarrier, importedFilesSet));
 
@@ -848,8 +857,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         try {
             dumpDataBase(
                     "carrier",
-                    new String[] { "TCARRIER", "TCARRIERSLA" }
-            );
+                    "TCARRIER", "TCARRIERSLA");
         } catch (Exception e1) {
             e1.printStackTrace();
             fail(e1.getMessage());
@@ -897,7 +905,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         }});
 
 
-        Set<String> importedFilesSet = new HashSet<String>();
+        Set<String> importedFilesSet = new HashSet<>();
 
         bulkImportService.doImport(createContext("src/test/resources/import/shop.xml", listener, importedFilesSet));
 
@@ -943,7 +951,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         }});
 
 
-        Set<String> importedFilesSet = new HashSet<String>();
+        Set<String> importedFilesSet = new HashSet<>();
 
         bulkImportService.doImport(createContext("src/test/resources/import/conversiontest001.xml", listener, importedFilesSet));
 
@@ -993,7 +1001,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         }});
 
 
-        Set<String> importedFilesSet = new HashSet<String>();
+        Set<String> importedFilesSet = new HashSet<>();
 
         bulkImportService.doImport(createContext("src/test/resources/import/insertonlytest001a.xml", listener, importedFilesSet));
 
@@ -1083,7 +1091,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         }});
 
 
-        Set<String> importedFilesSet = new HashSet<String>();
+        Set<String> importedFilesSet = new HashSet<>();
 
         bulkImportService.doImport(createContext("src/test/resources/import/skipfktest001a.xml", listener, importedFilesSet));
 
@@ -1129,7 +1137,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         }});
 
 
-        Set<String> importedFilesSet = new HashSet<String>();
+        Set<String> importedFilesSet = new HashSet<>();
 
         bulkImportService.doImport(createContext("src/test/resources/import/skipnochangetest001a.xml", listener1, importedFilesSet));
 
@@ -1201,7 +1209,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         }});
 
 
-        Set<String> importedFilesSet = new HashSet<String>();
+        Set<String> importedFilesSet = new HashSet<>();
 
         bulkImportService.doImport(createContext("src/test/resources/import/modeinsertonly001a.xml", listener1, importedFilesSet));
 
@@ -1274,7 +1282,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         }});
 
 
-        Set<String> importedFilesSet = new HashSet<String>();
+        Set<String> importedFilesSet = new HashSet<>();
 
         bulkImportService.doImport(createContext("src/test/resources/import/modeupdateonly001a.xml", listener1, importedFilesSet));
 

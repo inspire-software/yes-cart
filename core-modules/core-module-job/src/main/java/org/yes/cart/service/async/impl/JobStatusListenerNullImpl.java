@@ -40,61 +40,73 @@ public class JobStatusListenerNullImpl implements JobStatusListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getJobToken() {
         return token.toString();
     }
 
     /** {@inheritDoc} */
+    @Override
     public JobStatus getLatestStatus() {
         return  new JobStatusImpl(getJobToken(), JobStatus.State.UNDEFINED, JobStatus.Completion.ERROR, message);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyPing() {
         // nothing
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyPing(final String msg) {
         // nothing
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyMessage(final String message) {
         throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyWarning(final String warning) {
         throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyError(final String error) {
         throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyError(final String error, final Exception exp) {
         throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyCompleted() {
         throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isCompleted() {
         return true;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getTimeoutValue() {
         return 0;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isTimedOut() {
         return false;
     }

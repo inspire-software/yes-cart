@@ -40,7 +40,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * User: igora
+ * User: Igor Azarnyi
  * Date: 9/2/13
  * Time: 5:14 PM
  */
@@ -52,8 +52,8 @@ public class PerUserPerServiceClientFactory<T> implements WsClientFactory<T> {
     private final String url;
     private final long timeout;
 
-    private final Map<Integer, T> pool = new ConcurrentHashMap<Integer, T>();
-    private final Map<Integer, Boolean> semaphore = new ConcurrentHashMap<Integer, Boolean>();
+    private final Map<Integer, T> pool = new ConcurrentHashMap<>();
+    private final Map<Integer, Boolean> semaphore = new ConcurrentHashMap<>();
 
     protected PerUserPerServiceClientFactory(final NodeService nodeService,
                                              final Class<T> serviceInterface,
@@ -165,10 +165,11 @@ public class PerUserPerServiceClientFactory<T> implements WsClientFactory<T> {
         /**
          * {@inheritDoc}
          */
+        @Override
         public void handle(final Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-            for (int i = 0; i < callbacks.length; i++) {
-                if (callbacks[i] instanceof WSPasswordCallback) {
-                    WSPasswordCallback pc = (WSPasswordCallback) callbacks[i];
+            for (final Callback callback : callbacks) {
+                if (callback instanceof WSPasswordCallback) {
+                    WSPasswordCallback pc = (WSPasswordCallback) callback;
                     pc.setPassword(password);
                 }
             }

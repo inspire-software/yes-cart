@@ -46,6 +46,7 @@ public class WebsupportWebServiceInboundChannel implements WebServiceInboundChan
     /**
      * {@inheritDoc}
      */
+    @Override
     public void ping() {
         LOG.info("Ping on {}", nodeService.getCurrentNode().getId());
     }
@@ -53,6 +54,7 @@ public class WebsupportWebServiceInboundChannel implements WebServiceInboundChan
     /**
      * {@inheritDoc}
      */
+    @Override
     public WsMessage accept(final WsMessage inbound) {
 
         final RspMessage wrapped = new RspMessageImpl(

@@ -25,6 +25,7 @@ import org.yes.cart.bulkimport.stream.xml.CsvImportDescriptorXStreamProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -41,7 +42,7 @@ public class CsvImportDescriptorImplTest {
 
         CsvImportDescriptorImpl descriptor = new CsvImportDescriptorImpl();
 
-        final List<CsvImportColumn> columns = new ArrayList<CsvImportColumn>();
+        final List<CsvImportColumn> columns = new ArrayList<>();
 
         CsvImportColumnImpl importColumn;
 
@@ -87,7 +88,7 @@ public class CsvImportDescriptorImplTest {
 
         CsvImportDescriptorImpl descriptor = new CsvImportDescriptorImpl();
 
-        final List<CsvImportColumn> columns = new ArrayList<CsvImportColumn>();
+        final List<CsvImportColumn> columns = new ArrayList<>();
 
         CsvImportColumnImpl importColumn;
 
@@ -175,13 +176,13 @@ public class CsvImportDescriptorImplTest {
         csvImportColumn.setLookupQuery("select a from table a");
         csvImportColumn.setValueRegEx(".*");
         csvImportColumn.setUseMasterObject(true);
-        csvImportDescriptor.setColumns((List) Arrays.asList(csvImportColumn));
+        csvImportDescriptor.setColumns(Collections.singletonList(csvImportColumn));
 
 
         final CsvImportDescriptorImpl descriptor = new CsvImportDescriptorImpl();
-        descriptor.setEntityType("SomeEntityIntefrace");
+        descriptor.setEntityType("SomeEntityInterface");
         descriptor.setColumns(
-                (List) Arrays.asList(new CsvImportColumnImpl(0, ImpExColumn.FIELD, "code", "re", "lookup query")));
+                Collections.singletonList(new CsvImportColumnImpl(0, ImpExColumn.FIELD, "code", "re", "lookup query")));
 
         csvImportColumn.setDescriptor(descriptor);
 

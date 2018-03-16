@@ -99,6 +99,7 @@ public abstract class AbstractImportService implements ImportService {
         /**
          * {@inheritDoc}
          */
+        @Override
         public boolean accept(final File dir, final String name) {
             return (name != null) && this.pattern.matcher(name).matches();
         }
@@ -111,7 +112,7 @@ public abstract class AbstractImportService implements ImportService {
      *
      * @param object target object to update
      *
-     * @throws AccessDeniedException
+     * @throws AccessDeniedException errors
      */
     protected void validateAccessBeforeUpdate(final Object object, final Class objectType) throws AccessDeniedException {
         if (!federationFacade.isManageable(object, objectType)) {
@@ -124,7 +125,7 @@ public abstract class AbstractImportService implements ImportService {
      *
      * @param object target object to update
      *
-     * @throws AccessDeniedException
+     * @throws AccessDeniedException errors
      */
     protected void validateAccessAfterUpdate(final Object object, final Class objectType) throws AccessDeniedException {
         if (!federationFacade.isManageable(object, objectType)) {

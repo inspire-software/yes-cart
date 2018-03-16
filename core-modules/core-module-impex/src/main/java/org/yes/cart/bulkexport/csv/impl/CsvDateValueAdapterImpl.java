@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CsvDateValueAdapterImpl implements ValueAdapter {
 
-    private static final Map<String, DateTimeFormatter> FORMATTERS = new ConcurrentHashMap<String, DateTimeFormatter>();
+    private static final Map<String, DateTimeFormatter> FORMATTERS = new ConcurrentHashMap<>();
 
     /**
      * {@inheritDoc}
@@ -46,12 +46,7 @@ public class CsvDateValueAdapterImpl implements ValueAdapter {
 
         if (rawValue != null && StringUtils.isNotBlank(pattern)) {
 
-            DateTimeFormatter dtf = FORMATTERS.get(pattern);
-            if (dtf == null) {
-                dtf = DateTimeFormatter.ofPattern(pattern);
-                FORMATTERS.put(pattern, dtf);
-            }
-
+            final DateTimeFormatter dtf = FORMATTERS.computeIfAbsent(pattern, DateTimeFormatter::ofPattern);
             return dtf.format((TemporalAccessor) rawValue);
         }
 

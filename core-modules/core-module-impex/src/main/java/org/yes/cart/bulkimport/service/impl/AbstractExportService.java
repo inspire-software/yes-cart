@@ -23,7 +23,7 @@ public abstract class AbstractExportService implements ExportService {
      *
      * @param object target object to update
      *
-     * @throws AccessDeniedException
+     * @throws AccessDeniedException errors
      */
     protected void validateAccessBeforeExport(final Object object, final Class objectType) throws AccessDeniedException {
         if (!federationFacade.isManageable(object, objectType)) {

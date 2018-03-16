@@ -18,6 +18,7 @@ package org.yes.cart.bulkexport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkcommon.model.ImpExColumn;
+import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkexport.csv.CsvExportColumn;
 import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
@@ -101,6 +102,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
      *
      * @return matched groups or 0 if column has not reg exp.
      */
+    @Override
     public int getGroupCount(final String rawValue) {
         if (getPattern() != null) {
             Matcher matcher = getPattern().matcher(rawValue);
@@ -117,6 +119,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getValue(final Object rawValue, final ValueAdapter adapter, final ExportTuple tuple) {
         if (getValueConstant() != null) {
             return getValueConstant();
@@ -152,6 +155,16 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
+    public Object getValue(final Object rawValue, final ValueAdapter adapter, final ImpExTuple tuple) {
+        return getValue(rawValue, adapter, (ExportTuple) tuple);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getColumnHeader() {
         return columnHeader;
     }
@@ -168,6 +181,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getFieldType() {
         return fieldType;
     }
@@ -184,6 +198,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDataType() {
         return dataType;
     }
@@ -200,6 +215,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -216,6 +232,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getValueRegEx() {
         return valueRegEx;
     }
@@ -233,6 +250,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Integer getValueRegExGroup() {
         if (valueRegExGroup == null) {
             return 1;
@@ -250,6 +268,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getValueRegExTemplate() {
         return valueRegExTemplate;
     }
@@ -264,6 +283,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLookupQuery() {
         return lookupQuery;
     }
@@ -280,6 +300,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public CsvExportDescriptor getDescriptor() {
         return descriptor;
     }
@@ -296,6 +317,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public CsvExportDescriptor getParentDescriptor() {
         return parentDescriptor;
     }
@@ -305,6 +327,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
      *
      * @param parentDescriptor parent
      */
+    @Override
     public void setParentDescriptor(final CsvExportDescriptor parentDescriptor) {
         this.parentDescriptor = parentDescriptor;
     }
@@ -312,6 +335,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isUseMasterObject() {
         return useMasterObject;
     }
@@ -319,6 +343,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setUseMasterObject(final boolean useMasterObject) {
         this.useMasterObject = useMasterObject;
     }
@@ -327,6 +352,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getValueConstant() {
         return valueConstant;
     }
@@ -344,6 +370,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getEntityType() {
         return entityType;
     }
@@ -358,6 +385,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLanguage() {
         return language;
     }
@@ -372,6 +400,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getContext() {
         return context;
     }

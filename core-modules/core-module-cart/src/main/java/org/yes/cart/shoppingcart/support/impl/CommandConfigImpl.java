@@ -36,8 +36,8 @@ public class CommandConfigImpl implements CommandConfig {
     /**
      * Temporally fields will be removed from parameter maps
      */
-    private final Set<String> cmdKeys = new HashSet<String>();
-    private final Set<String> cmdInternalKeys = new HashSet<String>();
+    private final Set<String> cmdKeys = new HashSet<>();
+    private final Set<String> cmdInternalKeys = new HashSet<>();
 
     public void setCmdKeys(final List<String> cmdKeys) {
         this.cmdKeys.addAll(cmdKeys);
@@ -65,6 +65,7 @@ public class CommandConfigImpl implements CommandConfig {
      *
      * @return true if this key represents a command
      */
+    @Override
     public boolean isCommandKey(final String key) {
         return cmdKeys.contains(key);
     }
@@ -76,6 +77,7 @@ public class CommandConfigImpl implements CommandConfig {
      *
      * @return true if this key represents an internal command
      */
+    @Override
     public boolean isInternalCommandKey(final String key) {
         return cmdInternalKeys.contains(key);
     }

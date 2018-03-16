@@ -17,6 +17,7 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkexport.model.ExportTuple;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
@@ -107,6 +108,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
      *
      * @return matched groups or 0 if column has not reg exp.
      */
+    @Override
     public int getGroupCount(final String rawValue) {
         if (getPattern() != null) {
             Matcher matcher = getPattern().matcher(rawValue);
@@ -124,6 +126,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List getValues(final String rawValue, final ValueAdapter adapter, final ImportTuple tuple) {
         List result = new ArrayList();
         if (getPattern() != null) {
@@ -141,19 +144,21 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
-    public Object getValue(final Object rawValue, final ValueAdapter adapter, final ExportTuple tuple) {
+    @Override
+    public Object getValue(final Object rawValue, final ValueAdapter adapter, final ImpExTuple tuple) {
         final String value;
         if (rawValue == null) {
             value = null;
         } else {
             value = String.valueOf(rawValue);
         }
-        return getValue(value, adapter, tuple);
+        return getValue(value, adapter, (ImportTuple) tuple);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getValue(final String rawValue, final ValueAdapter adapter, final ImportTuple tuple) {
         if (getValueConstant() != null) {
             return adapter.fromRaw(getValueConstant(), getDataType(), this, tuple);
@@ -183,6 +188,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getColumnIndex() {
         return columnIndex;
     }
@@ -199,6 +205,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getFieldType() {
         return fieldType;
     }
@@ -215,6 +222,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDataType() {
         return dataType;
     }
@@ -231,6 +239,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -247,6 +256,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getValueRegEx() {
         return valueRegEx;
     }
@@ -264,6 +274,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Integer getValueRegExGroup() {
         if (valueRegExGroup == null) {
             return 1;
@@ -281,6 +292,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getValueRegExTemplate() {
         return valueRegExTemplate;
     }
@@ -295,6 +307,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLookupQuery() {
         return lookupQuery;
     }
@@ -311,6 +324,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public CsvImportDescriptor getDescriptor() {
         return descriptor;
     }
@@ -328,6 +342,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public CsvImportDescriptor getParentDescriptor() {
         return parentDescriptor;
     }
@@ -337,6 +352,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
      *
      * @param parentDescriptor parent
      */
+    @Override
     public void setParentDescriptor(final CsvImportDescriptor parentDescriptor) {
         this.parentDescriptor = parentDescriptor;
     }
@@ -345,6 +361,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isUseMasterObject() {
         return useMasterObject;
     }
@@ -352,6 +369,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setUseMasterObject(final boolean useMasterObject) {
         this.useMasterObject = useMasterObject;
     }
@@ -360,6 +378,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isInsertOnly() {
         return insertOnly;
     }
@@ -367,6 +386,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setInsertOnly(final boolean insertOnly) {
         this.insertOnly = insertOnly;
     }
@@ -374,6 +394,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isUpdateOnly() {
         return updateOnly;
     }
@@ -381,6 +402,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setUpdateOnly(final boolean updateOnly) {
         this.updateOnly = updateOnly;
     }
@@ -388,6 +410,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isSkipUpdateForUnresolved() {
         return skipUpdateForUnresolved;
     }
@@ -395,6 +418,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSkipUpdateForUnresolved(final boolean skipUpdateForUnresolved) {
         this.skipUpdateForUnresolved = skipUpdateForUnresolved;
     }
@@ -402,6 +426,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getValueConstant() {
         return valueConstant;
     }
@@ -419,6 +444,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getEntityType() {
         return entityType;
     }
@@ -433,6 +459,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLanguage() {
         return language;
     }
@@ -447,6 +474,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getContext() {
         return context;
     }

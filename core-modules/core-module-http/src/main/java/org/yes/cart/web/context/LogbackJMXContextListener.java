@@ -29,6 +29,7 @@ import javax.servlet.ServletContextListener;
  */
 public class LogbackJMXContextListener implements ServletContextListener {
 
+    @Override
     public void contextDestroyed(ServletContextEvent sce) {
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
         try {
@@ -40,6 +41,7 @@ public class LogbackJMXContextListener implements ServletContextListener {
         }
     }
 
+    @Override
     public void contextInitialized(ServletContextEvent sce) {
 
     }

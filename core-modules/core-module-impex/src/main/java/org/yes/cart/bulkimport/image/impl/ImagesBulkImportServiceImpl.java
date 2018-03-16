@@ -63,6 +63,7 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public BulkImportResult doImport(final JobContext context) {
 
         final JobStatusListener statusListener = context.getListener();

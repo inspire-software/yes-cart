@@ -59,7 +59,7 @@ public class HttpUtilTest {
         Iterator<Map.Entry<String, List<String>>> parametersIt;
         Map.Entry<String, List<String>> p1, p2, p3, p4;
 
-        parameters = HttpUtil.getParameters(request, Collections.<String>emptySet());
+        parameters = HttpUtil.getParameters(request, Collections.emptySet());
 
         assertEquals(2, parameters.size());
 
@@ -77,7 +77,7 @@ public class HttpUtilTest {
         assertEquals(1, p2.getValue().size());
         assertEquals("b1", p2.getValue().get(0));
 
-        parameters = HttpUtil.getParameters(request, new HashSet<String>(Collections.singletonList("category")));
+        parameters = HttpUtil.getParameters(request, new HashSet<>(Collections.singletonList("category")));
 
         assertEquals(3, parameters.size());
 
@@ -100,7 +100,7 @@ public class HttpUtilTest {
         assertEquals(1, p3.getValue().size());
         assertEquals("b1", p3.getValue().get(0));
 
-        parameters = HttpUtil.getParameters(request, new HashSet<String>(Arrays.asList("sku", "category")));
+        parameters = HttpUtil.getParameters(request, new HashSet<>(Arrays.asList("sku", "category")));
 
         assertEquals(4, parameters.size());
 
@@ -139,7 +139,7 @@ public class HttpUtilTest {
         Iterator<Map.Entry<String, List<String>>> parametersIt;
         Map.Entry<String, List<String>> p1, p2, p3, p4;
 
-        parameters = HttpUtil.getParameters(request, Collections.<String>emptySet());
+        parameters = HttpUtil.getParameters(request, Collections.emptySet());
 
         assertEquals(2, parameters.size());
 
@@ -160,7 +160,7 @@ public class HttpUtilTest {
         assertEquals("b1", p2.getValue().get(0));
         assertEquals("b1", p2.getValue().get(1));
 
-        parameters = HttpUtil.getParameters(request, new HashSet<String>(Collections.singletonList("category")));
+        parameters = HttpUtil.getParameters(request, new HashSet<>(Collections.singletonList("category")));
 
         assertEquals(3, parameters.size());
 
@@ -187,7 +187,7 @@ public class HttpUtilTest {
         assertEquals("b1", p3.getValue().get(0));
         assertEquals("b1", p3.getValue().get(1));
 
-        parameters = HttpUtil.getParameters(request, new HashSet<String>(Arrays.asList("sku", "category")));
+        parameters = HttpUtil.getParameters(request, new HashSet<>(Arrays.asList("sku", "category")));
 
         assertEquals(4, parameters.size());
 
@@ -232,7 +232,7 @@ public class HttpUtilTest {
         Iterator<Map.Entry<String, List<String>>> parametersIt;
         Map.Entry<String, List<String>> p1, p2, p3, p4;
 
-        parameters = HttpUtil.getParameters(request, Collections.<String>emptySet(), true);
+        parameters = HttpUtil.getParameters(request, Collections.emptySet(), true);
 
         assertEquals(2, parameters.size());
 
@@ -250,7 +250,7 @@ public class HttpUtilTest {
         assertEquals(1, p2.getValue().size());
         assertEquals("b1", p2.getValue().get(0));
 
-        parameters = HttpUtil.getParameters(request, new HashSet<String>(Collections.singletonList("category")), true);
+        parameters = HttpUtil.getParameters(request, new HashSet<>(Collections.singletonList("category")), true);
 
         assertEquals(3, parameters.size());
 
@@ -273,7 +273,7 @@ public class HttpUtilTest {
         assertEquals(1, p3.getValue().size());
         assertEquals("b1", p3.getValue().get(0));
 
-        parameters = HttpUtil.getParameters(request, new HashSet<String>(Arrays.asList("sku", "category")), true);
+        parameters = HttpUtil.getParameters(request, new HashSet<>(Arrays.asList("sku", "category")), true);
 
         assertEquals(4, parameters.size());
 
@@ -314,7 +314,7 @@ public class HttpUtilTest {
         Iterator<Map.Entry<String, List<String>>> parametersIt;
         Map.Entry<String, List<String>> p1, p2, p3, p4;
 
-        parameters = HttpUtil.getParameters(request, Collections.<String>emptySet());
+        parameters = HttpUtil.getParameters(request, Collections.emptySet());
 
         assertEquals(2, parameters.size());
 
@@ -332,7 +332,7 @@ public class HttpUtilTest {
         assertEquals(1, p2.getValue().size());
         assertEquals("b1", p2.getValue().get(0));
 
-        parameters = HttpUtil.getParameters(request, new HashSet<String>(Collections.singletonList("category")));
+        parameters = HttpUtil.getParameters(request, new HashSet<>(Collections.singletonList("category")));
 
         assertEquals(3, parameters.size());
 
@@ -355,7 +355,7 @@ public class HttpUtilTest {
         assertEquals(1, p3.getValue().size());
         assertEquals("b1", p3.getValue().get(0));
 
-        parameters = HttpUtil.getParameters(request, new HashSet<String>(Arrays.asList("sku", "category")));
+        parameters = HttpUtil.getParameters(request, new HashSet<>(Arrays.asList("sku", "category")));
 
         assertEquals(4, parameters.size());
 
@@ -395,7 +395,7 @@ public class HttpUtilTest {
         Iterator<Map.Entry<String, List<String>>> parametersIt;
         Map.Entry<String, List<String>> p1, p2, p3, p4;
 
-        parameters = HttpUtil.getParameters(request, Collections.<String>emptySet());
+        parameters = HttpUtil.getParameters(request, Collections.emptySet());
 
         assertEquals(2, parameters.size());
 
@@ -416,7 +416,7 @@ public class HttpUtilTest {
         assertEquals("b1", p2.getValue().get(0));
         assertEquals("b1", p2.getValue().get(1));
 
-        parameters = HttpUtil.getParameters(request, new HashSet<String>(Collections.singletonList("category")));
+        parameters = HttpUtil.getParameters(request, new HashSet<>(Collections.singletonList("category")));
 
         assertEquals(3, parameters.size());
 
@@ -443,7 +443,7 @@ public class HttpUtilTest {
         assertEquals("b1", p3.getValue().get(0));
         assertEquals("b1", p3.getValue().get(1));
 
-        parameters = HttpUtil.getParameters(request, new HashSet<String>(Arrays.asList("sku", "category")));
+        parameters = HttpUtil.getParameters(request, new HashSet<>(Arrays.asList("sku", "category")));
 
         assertEquals(4, parameters.size());
 
@@ -488,7 +488,7 @@ public class HttpUtilTest {
         Iterator<Map.Entry<String, List<String>>> parametersIt;
         Map.Entry<String, List<String>> p1, p2, p3, p4;
 
-        parameters = HttpUtil.getParameters(request, Collections.<String>emptySet(), true);
+        parameters = HttpUtil.getParameters(request, Collections.emptySet(), true);
 
         assertEquals(2, parameters.size());
 
@@ -506,7 +506,7 @@ public class HttpUtilTest {
         assertEquals(1, p2.getValue().size());
         assertEquals("b1", p2.getValue().get(0));
 
-        parameters = HttpUtil.getParameters(request, new HashSet<String>(Collections.singletonList("category")), true);
+        parameters = HttpUtil.getParameters(request, new HashSet<>(Collections.singletonList("category")), true);
 
         assertEquals(3, parameters.size());
 
@@ -529,7 +529,7 @@ public class HttpUtilTest {
         assertEquals(1, p3.getValue().size());
         assertEquals("b1", p3.getValue().get(0));
 
-        parameters = HttpUtil.getParameters(request, new HashSet<String>(Arrays.asList("sku", "category")), true);
+        parameters = HttpUtil.getParameters(request, new HashSet<>(Arrays.asList("sku", "category")), true);
 
         assertEquals(4, parameters.size());
 
@@ -571,7 +571,7 @@ public class HttpUtilTest {
         Iterator<Map.Entry<String, List<String>>> parametersIt;
         Map.Entry<String, List<String>> p1, p2, p3, p4;
 
-        parameters = HttpUtil.allParameters(request, Collections.<String>emptySet());
+        parameters = HttpUtil.allParameters(request, Collections.emptySet());
 
         assertEquals(2, parameters.size());
 
@@ -589,7 +589,7 @@ public class HttpUtilTest {
         assertEquals(1, p2.getValue().size());
         assertEquals("b1", p2.getValue().get(0));
 
-        parameters = HttpUtil.allParameters(request, new HashSet<String>(Collections.singletonList("category")));
+        parameters = HttpUtil.allParameters(request, new HashSet<>(Collections.singletonList("category")));
 
         assertEquals(3, parameters.size());
 
@@ -612,7 +612,7 @@ public class HttpUtilTest {
         assertEquals(1, p3.getValue().size());
         assertEquals("b1", p3.getValue().get(0));
 
-        parameters = HttpUtil.allParameters(request, new HashSet<String>(Arrays.asList("sku", "category")));
+        parameters = HttpUtil.allParameters(request, new HashSet<>(Arrays.asList("sku", "category")));
 
         assertEquals(4, parameters.size());
 
@@ -656,7 +656,7 @@ public class HttpUtilTest {
         Iterator<Map.Entry<String, List<String>>> parametersIt;
         Map.Entry<String, List<String>> p1, p2, p3, p4;
 
-        parameters = HttpUtil.allParameters(request, Collections.<String>emptySet());
+        parameters = HttpUtil.allParameters(request, Collections.emptySet());
 
         assertEquals(2, parameters.size());
 
@@ -677,7 +677,7 @@ public class HttpUtilTest {
         assertEquals("b1", p2.getValue().get(0));
         assertEquals("b1", p2.getValue().get(1));
 
-        parameters = HttpUtil.allParameters(request, new HashSet<String>(Collections.singletonList("category")));
+        parameters = HttpUtil.allParameters(request, new HashSet<>(Collections.singletonList("category")));
 
         assertEquals(3, parameters.size());
 
@@ -704,7 +704,7 @@ public class HttpUtilTest {
         assertEquals("b1", p3.getValue().get(0));
         assertEquals("b1", p3.getValue().get(1));
 
-        parameters = HttpUtil.allParameters(request, new HashSet<String>(Arrays.asList("sku", "category")));
+        parameters = HttpUtil.allParameters(request, new HashSet<>(Arrays.asList("sku", "category")));
 
         assertEquals(4, parameters.size());
 
@@ -753,7 +753,7 @@ public class HttpUtilTest {
         Iterator<Map.Entry<String, List<String>>> parametersIt;
         Map.Entry<String, List<String>> p1, p2, p3, p4;
 
-        parameters = HttpUtil.allParameters(request, Collections.<String>emptySet(), true);
+        parameters = HttpUtil.allParameters(request, Collections.emptySet(), true);
 
         assertEquals(2, parameters.size());
 
@@ -771,7 +771,7 @@ public class HttpUtilTest {
         assertEquals(1, p2.getValue().size());
         assertEquals("b1", p2.getValue().get(0));
 
-        parameters = HttpUtil.allParameters(request, new HashSet<String>(Collections.singletonList("category")), true);
+        parameters = HttpUtil.allParameters(request, new HashSet<>(Collections.singletonList("category")), true);
 
         assertEquals(3, parameters.size());
 
@@ -794,7 +794,7 @@ public class HttpUtilTest {
         assertEquals(1, p3.getValue().size());
         assertEquals("b1", p3.getValue().get(0));
 
-        parameters = HttpUtil.allParameters(request, new HashSet<String>(Arrays.asList("sku", "category")), true);
+        parameters = HttpUtil.allParameters(request, new HashSet<>(Arrays.asList("sku", "category")), true);
 
         assertEquals(4, parameters.size());
 

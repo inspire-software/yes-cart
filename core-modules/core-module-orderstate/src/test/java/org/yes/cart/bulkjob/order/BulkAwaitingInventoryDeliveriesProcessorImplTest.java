@@ -47,6 +47,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
 
 
 
+    @Override
     @Before
     public void setUp()  {
         customerOrderService = ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE, CustomerOrderService.class);

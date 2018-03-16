@@ -52,9 +52,9 @@ public interface CsvExportFile extends ExportFile {
     /**
      * Set column delimiter.
      *
-     * @param columnDelimeter column delimiter
+     * @param columnDelimiter column delimiter
      */
-    void setColumnDelimiter(char columnDelimeter);
+    void setColumnDelimiter(char columnDelimiter);
 
     /**
      * Get text qualifier.

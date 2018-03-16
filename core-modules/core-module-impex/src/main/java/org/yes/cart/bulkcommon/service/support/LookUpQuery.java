@@ -25,7 +25,7 @@ package org.yes.cart.bulkcommon.service.support;
  */
 public interface LookUpQuery {
 
-    String NAITIVE = "NAITIVE";
+    String NATIVE = "NATIVE";
     String HSQL = "HSQL";
     String LUCENE = "LUCENE";
 

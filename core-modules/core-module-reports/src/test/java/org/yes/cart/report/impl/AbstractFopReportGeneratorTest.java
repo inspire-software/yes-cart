@@ -105,10 +105,12 @@ public class AbstractFopReportGeneratorTest {
 
 
     private static class TestResourceResolver implements ResourceResolver {
+        @Override
         public Resource getResource(URI uri) throws IOException {
             return new Resource(new FileInputStream(BASE + uri.toString()));
         }
 
+        @Override
         public OutputStream getOutputStream(URI uri) throws IOException {
             throw new IOException("Not supported");
         }
@@ -116,10 +118,12 @@ public class AbstractFopReportGeneratorTest {
 
     private static class TestTempResourceResolver implements TempResourceResolver {
 
+        @Override
         public OutputStream getOutputStream(String id) throws IOException {
             throw new IOException("Not supported");
         }
 
+        @Override
         public Resource getResource(final String id) throws IOException {
             throw new IOException("Not supported");
         }

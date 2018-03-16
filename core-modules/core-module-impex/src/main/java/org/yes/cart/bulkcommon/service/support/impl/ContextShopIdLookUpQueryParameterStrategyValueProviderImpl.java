@@ -40,6 +40,7 @@ public class ContextShopIdLookUpQueryParameterStrategyValueProviderImpl extends 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getPlaceholderValue(final String placeholder,
                                       final ImpExDescriptor descriptor,
                                       final Object masterObject,

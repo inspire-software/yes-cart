@@ -16,10 +16,7 @@
 
 package org.yes.cart.bulkexport.image;
 
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.JobStatusListener;
-
-import java.util.List;
 
 /**
  * User: denispavlov
@@ -42,7 +39,6 @@ public interface ImageExportDomainObjectStrategy {
      * Do necessary actions to export given image file with domain object.
      *
      * @param statusListener job status listener
-     * @param objectType type
      * @param fileName file name (no path) which will be saved to domain object image custom attribute
      *
      * @return true if export was successful

@@ -35,7 +35,7 @@ public class AbstractCryptedTuplizerImplTest {
         final String base64 = tup.toToken(cart);
         assertFalse("Splitting happens manually as it is media dependent", base64.contains("\n"));
 
-        final ShoppingCart restored = (ShoppingCart) tup.toObject(base64);
+        final ShoppingCart restored = tup.toObject(base64);
 
         assertNotNull(restored);
         assertEquals(1, restored.getCartItemList().size());

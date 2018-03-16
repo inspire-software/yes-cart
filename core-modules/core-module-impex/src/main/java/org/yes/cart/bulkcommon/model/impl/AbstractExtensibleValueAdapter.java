@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public abstract class AbstractExtensibleValueAdapter implements ExtensibleValueAdapter {
 
-    private final Map<String, ValueAdapter> extensions = new HashMap<String, ValueAdapter>();
+    private final Map<String, ValueAdapter> extensions = new HashMap<>();
 
 
     /**

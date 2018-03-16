@@ -61,6 +61,7 @@ public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImp
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
@@ -75,12 +76,13 @@ public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImp
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
             handleInternal(orderEvent);
             CustomerOrder order = orderEvent.getCustomerOrder();
 
-            final Set<CustomerOrderDelivery> allDeliveriesToConsider = new HashSet<CustomerOrderDelivery>(order.getDelivery());
+            final Set<CustomerOrderDelivery> allDeliveriesToConsider = new HashSet<>(order.getDelivery());
 
             // go through map entries (since it is linked hash map order is preserved)
             for (final Map.Entry<String, String> deliveryGroupEvent : GROUP_TRIGGER_MAP.entrySet()) {
@@ -112,6 +114,7 @@ public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImp
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String getTransitionTarget(final OrderEvent orderEvent) {
         return CustomerOrder.ORDER_STATUS_IN_PROGRESS;
     }

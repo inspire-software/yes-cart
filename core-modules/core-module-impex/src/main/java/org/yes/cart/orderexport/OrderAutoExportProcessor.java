@@ -16,8 +16,6 @@
 
 package org.yes.cart.orderexport;
 
-import org.yes.cart.domain.entity.CustomerOrder;
-
 /**
  * User: denispavlov
  * Date: 20/02/2017

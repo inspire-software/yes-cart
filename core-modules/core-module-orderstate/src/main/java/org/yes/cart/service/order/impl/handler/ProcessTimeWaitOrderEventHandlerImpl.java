@@ -30,6 +30,7 @@ public class ProcessTimeWaitOrderEventHandlerImpl implements OrderEventHandler {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean handle(final OrderEvent orderEvent) {
         synchronized (OrderEventHandler.syncMonitor) {
             orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);

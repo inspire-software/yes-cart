@@ -62,6 +62,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderException  {
         synchronized (OrderEventHandler.syncMonitor) {
             creditQuantity(orderEvent.getCustomerOrder());
@@ -73,6 +74,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String getTransitionTarget(final OrderEvent orderEvent) {
         return CustomerOrder.ORDER_STATUS_CANCELLED;
     }

@@ -40,6 +40,7 @@ public class ExternalRefundOrderEventHandlerImplTest extends AbstractEventHandle
     private CustomerOrderService orderService;
     private CustomerOrderPaymentService paymentService;
 
+    @Override
     @Before
     public void setUp()  {
         super.setUp();
@@ -1131,10 +1132,10 @@ public class ExternalRefundOrderEventHandlerImplTest extends AbstractEventHandle
 
         // Authorisation
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74"),
-                Arrays.asList(PaymentGateway.AUTH),
-                Arrays.asList(Payment.PAYMENT_STATUS_OK),
-                Arrays.asList(Boolean.FALSE));
+                Collections.singletonList("689.74"),
+                Collections.singletonList(PaymentGateway.AUTH),
+                Collections.singletonList(Payment.PAYMENT_STATUS_OK),
+                Collections.singletonList(Boolean.FALSE));
         assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
 

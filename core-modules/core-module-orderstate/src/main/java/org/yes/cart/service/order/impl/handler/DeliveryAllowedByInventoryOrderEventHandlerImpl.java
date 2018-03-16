@@ -57,6 +57,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl extends ProcessAllo
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderItemAllocationException {
         synchronized (OrderEventHandler.syncMonitor) {
 

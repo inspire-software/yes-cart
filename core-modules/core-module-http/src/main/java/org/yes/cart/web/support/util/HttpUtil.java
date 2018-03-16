@@ -24,7 +24,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -40,7 +39,7 @@ public class HttpUtil {
         stringBuilder.append(HttpParamsUtils.stringify("\nParameters\n", req.getParameterMap()));
 
         Enumeration attributeNames = req.getAttributeNames();
-        final Map<String, String> map = new HashMap<String, String>();
+        final Map<String, String> map = new HashMap<>();
         while (attributeNames.hasMoreElements()) {
             final String key = (String) attributeNames.nextElement();
             map.put(key, String.valueOf(req.getAttribute(key)));
@@ -52,7 +51,7 @@ public class HttpUtil {
     private static void dumpHeaders(final HttpServletRequest hReq, final StringBuilder stringBuilder) {
         final Enumeration headerNames = hReq.getHeaderNames();
         if (headerNames != null) {
-            final Map<String, String> map = new HashMap<String, String>();
+            final Map<String, String> map = new HashMap<>();
             while (headerNames.hasMoreElements()) {
                 final String key = (String) headerNames.nextElement();
                 map.put(key, String.valueOf(hReq.getHeader(key)));
@@ -64,7 +63,7 @@ public class HttpUtil {
     private static void dumpCookies(final HttpServletRequest hReq, final StringBuilder stringBuilder) {
         final Cookie[] cookies = hReq.getCookies();
         if (cookies != null) {
-            final Map<String, String> map = new HashMap<String, String>();
+            final Map<String, String> map = new HashMap<>();
             for (Cookie cookie : cookies) {
                 map.put(cookie.getName(), cookie.getValue());
             }
@@ -208,7 +207,7 @@ public class HttpUtil {
                                                           final boolean removeDuplicates) {
 
 
-        final Map<String, List<String>> parameters = new LinkedHashMap<String, List<String>>();
+        final Map<String, List<String>> parameters = new LinkedHashMap<>();
 
         final String[] request = StringUtils.splitPreserveAllTokens(requestURL, '?');
 
@@ -221,7 +220,7 @@ public class HttpUtil {
                 if (key != null) {
                     final List<String> values;
                     if (!parameters.containsKey(key)) {
-                        values = new LinkedList<String>();
+                        values = new LinkedList<>();
                         parameters.put(key, values);
                     } else {
                         values = parameters.get(key);
@@ -245,7 +244,7 @@ public class HttpUtil {
                 key = idx > 0 ? decodeUtf8UriParam(parameterPair.substring(0, idx)) : parameterPair;
                 final List<String> values;
                 if (!parameters.containsKey(key)) {
-                    values = new LinkedList<String>();
+                    values = new LinkedList<>();
                     parameters.put(key, values);
                 } else {
                     values = parameters.get(key);
@@ -332,7 +331,7 @@ public class HttpUtil {
 
             final List<String> values;
             if (!params.containsKey(key)) {
-                values = new LinkedList<String>();
+                values = new LinkedList<>();
                 params.put(key, values);
             } else {
                 values = params.get(key);

@@ -44,7 +44,7 @@ public class OrderDeliveryLineStatusUpdateImpl implements OrderDeliveryLineStatu
     private final boolean rejected;
     private final String supplierInvoiceNo;
     private final LocalDate supplierInvoiceDate;
-    private final Map<String, Pair<String, String>> additionalData = new HashMap<String, Pair<String, String>>();
+    private final Map<String, Pair<String, String>> additionalData = new HashMap<>();
 
 
     public OrderDeliveryLineStatusUpdateImpl(final Long orderLineRef,
@@ -101,54 +101,67 @@ public class OrderDeliveryLineStatusUpdateImpl implements OrderDeliveryLineStatu
         this.additionalData.putAll(additionalData);
     }
 
+    @Override
     public Long getOrderLineRef() {
         return orderLineRef;
     }
 
+    @Override
     public String getSKU() {
         return sku;
     }
 
+    @Override
     public String getOrderDeliveryStatus() {
         return orderDeliveryStatus;
     }
 
+    @Override
     public LocalDateTime getDeliveryEstimatedMin() {
         return deliveryEstimatedMin;
     }
 
+    @Override
     public LocalDateTime getDeliveryEstimatedMax() {
         return deliveryEstimatedMax;
     }
 
+    @Override
     public LocalDateTime getDeliveryGuaranteed() {
         return deliveryGuaranteed;
     }
 
+    @Override
     public LocalDateTime getDeliveryConfirmed() {
         return deliveryConfirmed;
     }
 
+    @Override
     public BigDecimal getOrderedQty() {
         return orderedQty;
     }
 
+    @Override
     public BigDecimal getDeliveredQty() {
         return deliveredQty;
     }
 
+    @Override
     public boolean isRejected() {
         return rejected;
     }
 
+    @Override
     public String getSupplierInvoiceNo() {
         return supplierInvoiceNo;
     }
 
+    @Override
     public LocalDate getSupplierInvoiceDate() {
         return supplierInvoiceDate;
     }
 
+    @Override
     public Map<String, Pair<String, String>> getAdditionalData() {
         return additionalData;
     }

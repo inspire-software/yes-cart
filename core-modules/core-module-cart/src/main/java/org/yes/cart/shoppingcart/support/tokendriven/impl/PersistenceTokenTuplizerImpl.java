@@ -23,7 +23,6 @@ import org.yes.cart.shoppingcart.support.CartDetuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizer;
 import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Map;
 

@@ -42,16 +42,19 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
     private XStream xStream;
 
     /** {@inheritDoc} */
+    @Override
     public CsvImportDescriptor fromXML(final String xml) {
         return (CsvImportDescriptor) provide().fromXML(xml);
     }
 
     /** {@inheritDoc} */
+    @Override
     public CsvImportDescriptor fromXML(final InputStream is) {
         return (CsvImportDescriptor) provide().fromXML(is);
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toXML(final CsvImportDescriptor object) {
         return provide().toXML(object);
     }

@@ -60,6 +60,7 @@ public class AuthenticationInInterceptor extends WSS4JInInterceptor implements I
     }
 
     /** {@inheritDoc} */
+    @Override
     public void afterPropertiesSet() throws Exception {
         Assert.notNull(getAuthenticationManager(), "Authentication manager must be set");
         Assert.notNull(getProperties(),"Interceptor properties must be set, even if empty");

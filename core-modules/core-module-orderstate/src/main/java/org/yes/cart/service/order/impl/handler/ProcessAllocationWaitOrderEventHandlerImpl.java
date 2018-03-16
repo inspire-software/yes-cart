@@ -30,6 +30,7 @@ public class ProcessAllocationWaitOrderEventHandlerImpl implements OrderEventHan
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean handle(final OrderEvent orderEvent) {
         synchronized (OrderEventHandler.syncMonitor) {
             orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT);

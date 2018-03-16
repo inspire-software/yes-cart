@@ -49,7 +49,7 @@ public class OrderDeliveryInfoUpdateProcessorImpl implements OrderDeliveryInfoUp
     private final CustomerOrderService customerOrderService;
     private final OrderStateManager orderStateManager;
 
-    private List<Iterator<OrderDeliveryStatusUpdate>> dataFeeds = new ArrayList<Iterator<OrderDeliveryStatusUpdate>>();
+    private List<Iterator<OrderDeliveryStatusUpdate>> dataFeeds = new ArrayList<>();
 
     public OrderDeliveryInfoUpdateProcessorImpl(final CustomerOrderService customerOrderService,
                                                 final OrderStateManager orderStateManager) {

@@ -6,7 +6,6 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkimport.model.ImportTuple;
 import org.yes.cart.util.DateUtils;
 
 import static org.junit.Assert.*;

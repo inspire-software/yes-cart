@@ -63,7 +63,7 @@ public class CsvExportDescriptorXStreamProviderTest {
         assertNotNull(desc.getColumns());
         assertEquals(11, desc.getColumns().size());
 
-        final List<ExportColumn> colums = new ArrayList<ExportColumn>(desc.getColumns());
+        final List<ExportColumn> colums = new ArrayList<>(desc.getColumns());
 
         final CsvExportColumn col0 = (CsvExportColumn) colums.get(0);
         assertNotNull(col0);

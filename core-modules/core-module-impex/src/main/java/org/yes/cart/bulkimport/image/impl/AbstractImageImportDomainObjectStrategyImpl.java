@@ -40,7 +40,7 @@ public abstract class AbstractImageImportDomainObjectStrategyImpl implements Ima
      *
      * @param object target object to update
      *
-     * @throws org.springframework.security.access.AccessDeniedException
+     * @throws org.springframework.security.access.AccessDeniedException errors
      */
     protected void validateAccessBeforeUpdate(final Object object, final Class objectType) throws AccessDeniedException {
         if (!federationFacade.isManageable(object, objectType)) {

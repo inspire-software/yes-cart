@@ -49,16 +49,19 @@ public class CsvImportTupleImpl implements CsvImportTuple {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSourceId() {
         return filename + ":" + lineNumber;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String[] getData() {
         return line;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Object getColumnValue(final ImportColumn column, final ValueAdapter valueAdapter) {
         final int colIndex = column.getColumnIndex();
         String rawValue = null;
@@ -72,11 +75,12 @@ public class CsvImportTupleImpl implements CsvImportTuple {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<ImportTuple<String, String[]>> getSubTuples(final ImportDescriptor importDescriptor, final ImportColumn column, final ValueAdapter valueAdapter) {
         if (ImpExColumn.SLAVE_TUPLE_FIELD.equals(column.getFieldType())) {
             final String rawValue = (String) getColumnValue(column, SUB_TUPLE);
             final String[] rows = rawValue.split(",");
-            final List<ImportTuple<String, String[]>> subTuples = new ArrayList<ImportTuple<String, String[]>>(rows.length);
+            final List<ImportTuple<String, String[]>> subTuples = new ArrayList<>(rows.length);
             int subLine = 0;
             for (String row : rows) {
                 subTuples.add(new CsvImportTupleImpl(filename + ":" + lineNumber + ":" + column.getName(), subLine++,
@@ -84,7 +88,7 @@ public class CsvImportTupleImpl implements CsvImportTuple {
             }
             return subTuples;
         } else if (ImpExColumn.SLAVE_INLINE_FIELD.equals(column.getFieldType())) {
-            return (List) Arrays.asList(this);
+            return (List) Collections.singletonList(this);
         }
         return Collections.emptyList();
     }

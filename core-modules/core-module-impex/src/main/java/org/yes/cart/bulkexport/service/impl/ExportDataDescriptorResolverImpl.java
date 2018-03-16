@@ -44,7 +44,7 @@ public class ExportDataDescriptorResolverImpl implements DataDescriptorResolver<
     private final DataGroupService dataGroupService;
     private final DataDescriptorService dataDescriptorService;
 
-    private final List<DataDescriptorTuplizer<ExportDescriptor>> tuplizers = new ArrayList<DataDescriptorTuplizer<ExportDescriptor>>();
+    private final List<DataDescriptorTuplizer<ExportDescriptor>> tuplizers = new ArrayList<>();
 
     public ExportDataDescriptorResolverImpl(final DataGroupService dataGroupService,
                                             final DataDescriptorService dataDescriptorService) {
@@ -55,6 +55,7 @@ public class ExportDataDescriptorResolverImpl implements DataDescriptorResolver<
     /**
      * {@inheritDoc}
      */
+    @Override
     public ExportDescriptor getByName(final String name) {
 
         final DataDescriptor dataDescriptor = dataDescriptorService.findByName(name);
@@ -79,6 +80,7 @@ public class ExportDataDescriptorResolverImpl implements DataDescriptorResolver<
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, ExportDescriptor> getByGroup(final String group) {
 
         final DataGroup dataGroup = dataGroupService.findByName(group);
@@ -86,7 +88,7 @@ public class ExportDataDescriptorResolverImpl implements DataDescriptorResolver<
 
             if (DataGroup.TYPE_EXPORT.equals(dataGroup.getType())) {
 
-                final Map<String, ExportDescriptor> out = new LinkedHashMap<String, ExportDescriptor>();
+                final Map<String, ExportDescriptor> out = new LinkedHashMap<>();
 
                 final String descriptors = dataGroup.getDescriptors();
                 if (StringUtils.isNotBlank(descriptors)) {
@@ -112,6 +114,7 @@ public class ExportDataDescriptorResolverImpl implements DataDescriptorResolver<
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<DataGroup> getGroups() {
         return dataGroupService.findByType(DataGroup.TYPE_EXPORT);
     }
@@ -119,6 +122,7 @@ public class ExportDataDescriptorResolverImpl implements DataDescriptorResolver<
     /**
      * {@inheritDoc}
      */
+    @Override
     public void register(final DataDescriptorTuplizer<ExportDescriptor> exportDescriptorDataDescriptorTuplizer) {
         for (final DataDescriptorTuplizer<ExportDescriptor> tuplizer : this.tuplizers) {
             if (exportDescriptorDataDescriptorTuplizer.equals(tuplizer)) {

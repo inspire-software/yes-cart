@@ -54,6 +54,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean handle(final OrderEvent orderEvent)  throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
             final LocalDateTime now = now();
@@ -79,6 +80,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }

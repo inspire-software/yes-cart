@@ -66,10 +66,11 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
 
     public static final long WAREHOUSE_ID = 1L;
 
-    private final List<String> testPgAlteredParameters = new ArrayList<String>();
-    private final List<String> testExtPgAlteredParameters = new ArrayList<String>();
+    private final List<String> testPgAlteredParameters = new ArrayList<>();
+    private final List<String> testExtPgAlteredParameters = new ArrayList<>();
     private static int COUNTER = 0;
 
+    @Override
     @Before
     public void setUp()  {
         super.setUp();
@@ -103,7 +104,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
      *
      * @return customer order for testing
      *
-     * @throws Exception
+     * @throws Exception errors
      */
     protected CustomerOrder createTestOrder(TestOrderType orderType, String pgLabel, boolean onePhysicalDelivery) throws Exception {
         return createTestOrder(orderType, pgLabel, onePhysicalDelivery, false);
@@ -118,7 +119,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
      *
      * @return customer order for testing
      *
-     * @throws Exception
+     * @throws Exception errors
      */
     protected CustomerOrder createTestSubOrder(TestOrderType orderType, String pgLabel, boolean onePhysicalDelivery) throws Exception {
         return createTestOrder(orderType, pgLabel, onePhysicalDelivery, true);
@@ -135,7 +136,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
      *
      * @return customer order for testing
      *
-     * @throws Exception
+     * @throws Exception errors
      */
     protected CustomerOrder createTestOrder(TestOrderType orderType, String pgLabel, boolean onePhysicalDelivery, boolean sub) throws Exception {
         Customer customer = sub ? createCustomerB2BSub("" + COUNTER++, false, false) : createCustomer("" + COUNTER++);
@@ -185,12 +186,12 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
 
     private  void addStdCartItems(final ShoppingCart shoppingCart, final ShoppingCartCommandFactory commands) {
 
-        Map<String, String> param = new HashMap<String, String>();
+        Map<String, String> param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST1");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
         commands.execute(shoppingCart, (Map) param);
 
-        param = new HashMap<String, String>();
+        param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST2");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
@@ -263,7 +264,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
 
     private  void addPreorderCartItems(final ShoppingCart shoppingCart, final ShoppingCartCommandFactory commands) {
 
-        Map<String, String> param = new HashMap<String, String>();
+        Map<String, String> param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "3.00");
         commands.execute(shoppingCart, (Map) param);
@@ -272,7 +273,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
 
     private  void addBackorderCartItems(final ShoppingCart shoppingCart, final ShoppingCartCommandFactory commands) {
 
-        Map<String, String> param = new HashMap<String, String>();
+        Map<String, String> param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5-NOINV");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "4.00");
         commands.execute(shoppingCart, (Map) param);
@@ -298,7 +299,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
 
     private  void addDigitalCartItems(final ShoppingCart shoppingCart, final ShoppingCartCommandFactory commands) {
 
-        Map<String, String> param = new HashMap<String, String>();
+        Map<String, String> param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST9");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "5.00");
         commands.execute(shoppingCart, (Map) param);
@@ -306,12 +307,13 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
     }
 
 
+    @Override
     protected ShoppingCart getEmptyCart(final String customerEmail) {
         MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customerEmail);
         params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
 
@@ -580,7 +582,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
                                             final String expectedResult,
                                             final boolean expectedSettled) {
 
-        assertMultiPaymentEntry(orderNum, Arrays.asList(expectedAmount), Arrays.asList(expectedOperation), Arrays.asList(expectedResult), Arrays.asList(expectedSettled));
+        assertMultiPaymentEntry(orderNum, Collections.singletonList(expectedAmount), Collections.singletonList(expectedOperation), Collections.singletonList(expectedResult), Collections.singletonList(expectedSettled));
 
     }
 
@@ -624,10 +626,10 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
                                            final List<String> expectedResult,
                                            final List<Boolean> expectedSettled) {
 
-        List<CustomerOrderPayment> rezList = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(orderNum, null, (String) null, (String) null));
+        List<CustomerOrderPayment> rezList = new ArrayList<>(customerOrderPaymentService.findBy(orderNum, null, (String) null, (String) null));
         assertEquals(expectedAmount.size(), rezList.size());
 
-        List<String> expected = new ArrayList<String>();
+        List<String> expected = new ArrayList<>();
         for (int i = 0; i < expectedAmount.size(); i++) {
             expected.add(expectedAmount.get(i) + "-" + expectedOperation.get(i) + "-" + expectedResult.get(i) + "-" +
                     // batch settlement is only for capture or auth_capture

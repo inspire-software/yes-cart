@@ -28,12 +28,12 @@ public interface JobStatus {
     /**
      * Current job state that describes if job is running or not.
      */
-    public enum State { UNDEFINED, STARTED, INPROGRESS, FINISHED }
+    enum State { UNDEFINED, STARTED, INPROGRESS, FINISHED }
 
     /**
      * Final outcome of the job
      */
-    public enum Completion { OK, ERROR }
+    enum Completion { OK, ERROR }
 
     /**
      * @return token to uniquely identify this job

@@ -57,11 +57,12 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
      */
     public CsvExportDescriptorImpl() {
         exportFileDescriptor = new CsvExportFileImpl();
-        columns = new ArrayList<CsvExportColumn>();
+        columns = new ArrayList<>();
         context = new CsvExportContextImpl();
     }
 
     /** {@inheritDoc} */
+    @Override
     public ExportContext getContext() {
         if (context == null) {
             context = new CsvExportContextImpl();
@@ -77,11 +78,13 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getEntityType() {
         return entityType;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class getEntityTypeClass() {
         if (entityTypeClass == null) {
             if (StringUtils.isNotBlank(entityType)) {
@@ -107,6 +110,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSelectSql() {
         return selectSql;
     }
@@ -121,6 +125,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
     public CsvExportFile getExportFileDescriptor() {
         return exportFileDescriptor;
     }
@@ -138,6 +143,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<ExportColumn> getColumns() {
         if (!initialised) {
             this.reloadMappings();
@@ -151,6 +157,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
     public ExportColumn getColumn(final String columnName) {
         if (!initialised) {
             this.reloadMappings();
@@ -161,6 +168,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<ExportColumn> getColumns(String fieldType) {
         if (!initialised) {
             this.reloadMappings();
@@ -178,23 +186,19 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
      * @param columns collection of export columns to set.
      */
     protected void setColumns(Collection<CsvExportColumn> columns) {
-        this.columns = new ArrayList<CsvExportColumn>();
+        this.columns = new ArrayList<>();
         this.columns.addAll(columns);
         this.reloadMappings();
     }
 
     private void reloadMappings() {
         initialised = true;
-        columnByName = new HashMap<String, ExportColumn>();
-        columnsByType = new HashMap<String, List<ExportColumn>>();
+        columnByName = new HashMap<>();
+        columnsByType = new HashMap<>();
 
         for (CsvExportColumn exportColumn : columns) {
             exportColumn.setParentDescriptor(this);
-            List<ExportColumn> byType = columnsByType.get(exportColumn.getFieldType());
-            if (byType == null) {
-                byType = new ArrayList<ExportColumn>();
-                columnsByType.put(exportColumn.getFieldType(), byType);
-            }
+            final List<ExportColumn> byType = columnsByType.computeIfAbsent(exportColumn.getFieldType(), k -> new ArrayList<>());
             byType.add(exportColumn);
             if (exportColumn.getName() != null && exportColumn.getName().length() > 0) {
                 columnByName.put(exportColumn.getName(), exportColumn);

@@ -42,7 +42,7 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
 
     private final CustomerOrderService customerOrderService;
 
-    private final Set<OrderExporter> orderExporters = new HashSet<OrderExporter>();
+    private final Set<OrderExporter> orderExporters = new HashSet<>();
 
     public OrderAutoExportProcessorImpl(final CustomerOrderService customerOrderService) {
         this.customerOrderService = customerOrderService;
@@ -76,7 +76,7 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
 
         final CustomerOrder customerOrder = customerOrderService.findById(customerOrderId);
 
-        final Collection<CustomerOrderDelivery> eligibleDeliveries = new ArrayList<CustomerOrderDelivery>();
+        final Collection<CustomerOrderDelivery> eligibleDeliveries = new ArrayList<>();
         if (StringUtils.isNotBlank(customerOrder.getEligibleForExport())) {
             for (final CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
                 if (StringUtils.isNotBlank(delivery.getEligibleForExport())) {
@@ -85,10 +85,10 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
             }
         }
 
-        final Set<Long> exported = new HashSet<Long>();
-        final Map<String, String> audit = new HashMap<String, String>();
+        final Set<Long> exported = new HashSet<>();
+        final Map<String, String> audit = new HashMap<>();
         String nextOrderEligibility = null;
-        Map<Long, String> nextDeliveryEligibility = new HashMap<Long, String>();
+        Map<Long, String> nextDeliveryEligibility = new HashMap<>();
 
         if (eligibleDeliveries.isEmpty()) {
             LOG.warn("Auto export for order {} in {} has no eligible deliveries. at least one delivery must be marked as eligible.",
@@ -177,12 +177,7 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
         return sorted;
     }
 
-    private static Comparator<OrderExporter> BY_PRIORITY = new Comparator<OrderExporter>() {
-        @Override
-        public int compare(final OrderExporter o1, final OrderExporter o2) {
-            return Integer.compare(o1.getPriority(), o2.getPriority());
-        }
-    };
+    private static Comparator<OrderExporter> BY_PRIORITY = (o1, o2) -> Integer.compare(o1.getPriority(), o2.getPriority());
 
     /** {@inheritDoc} */
     @Override
@@ -200,7 +195,7 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
     }
 
     protected Set<OrderExporter> determineApplicableExporters(final CustomerOrder customerOrder, final Collection<CustomerOrderDelivery> orderDeliveries) {
-        final Set<OrderExporter> applicable = new HashSet<OrderExporter>();
+        final Set<OrderExporter> applicable = new HashSet<>();
         for (final OrderExporter orderExporter : this.orderExporters) {
             if (orderExporter.supports(customerOrder, orderDeliveries)) {
                 applicable.add(orderExporter);

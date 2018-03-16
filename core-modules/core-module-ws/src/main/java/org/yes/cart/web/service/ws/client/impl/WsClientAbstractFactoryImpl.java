@@ -60,7 +60,7 @@ public class WsClientAbstractFactoryImpl implements WsClientAbstractFactory, App
 
         try {
             final String pwhash = hashed ? password : passwordHashHelper.getHash(password);
-            return new PerUserPerServiceClientFactory<S>(nodeService, service, userName, pwhash, url, timeout);
+            return new PerUserPerServiceClientFactory<>(nodeService, service, userName, pwhash, url, timeout);
         } catch (Exception e) {
             throw new RuntimeException("Unable to create password hash during WS client construction", e);
         }
@@ -71,7 +71,7 @@ public class WsClientAbstractFactoryImpl implements WsClientAbstractFactory, App
      *
      * @param applicationContext application context
      *
-     * @throws BeansException
+     * @throws BeansException errors
      */
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {

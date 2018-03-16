@@ -38,6 +38,7 @@ public class Slf4JLoggingOutInterceptor extends LoggingOutInterceptor {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected Logger getLogger() {
         return logger;
     }
@@ -45,6 +46,7 @@ public class Slf4JLoggingOutInterceptor extends LoggingOutInterceptor {
     /**
      * {@inheritDoc}
      */
+    @Override
     Logger getMessageLogger(final Message message) {
         return getLogger();
     }

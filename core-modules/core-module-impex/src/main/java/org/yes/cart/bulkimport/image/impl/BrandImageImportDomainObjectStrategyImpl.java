@@ -71,7 +71,7 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
 
         validateAccessBeforeUpdate(brand, Brand.class);
 
-        final String attributeCode = AttributeNamesKeys.Brand.BRAND_IMAGE_PREFIX + suffix + (StringUtils.isNotEmpty(locale) ? "_" + locale : "");;
+        final String attributeCode = AttributeNamesKeys.Brand.BRAND_IMAGE_PREFIX + suffix + (StringUtils.isNotEmpty(locale) ? "_" + locale : "");
 
         AttrValueBrand imageAttributeValue = null;
         final Collection<AttrValueBrand> attributes = brand.getAttributes();

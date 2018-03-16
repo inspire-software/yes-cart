@@ -69,7 +69,7 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
 
             // 4. Copy all items from old carts to current and delete them
             final List<ShoppingCartState> oldCartStates = shoppingCartStateService.findByCustomerEmail(shoppingCart.getCustomerEmail());
-            final Map<String, Object> cmdParams = new HashMap<String, Object>();
+            final Map<String, Object> cmdParams = new HashMap<>();
             for (final ShoppingCartState oldCartState : oldCartStates) {
                 // 4.1. Skip same cart
                 if (dbState.getGuid().equals(oldCartState.getGuid())) {
@@ -157,7 +157,7 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
         final ShoppingContext oldCartCtx = oldCart.getShoppingContext();
         final ShoppingContext shoppingCartCtx = shoppingCart.getShoppingContext();
         if (oldCartCtx.getLatestViewedSkus() != null && shoppingCartCtx instanceof MutableShoppingContext) {
-            final List<String> viewed = new ArrayList<String>();
+            final List<String> viewed = new ArrayList<>();
 
             // Current cart first
             if (shoppingCartCtx.getLatestViewedSkus() != null) {
@@ -168,7 +168,7 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
             ((MutableShoppingContext) shoppingCartCtx).setLatestViewedSkus(viewed);
         }
         if (oldCartCtx.getLatestViewedCategories() != null && shoppingCartCtx instanceof MutableShoppingContext) {
-            final List<String> viewed = new ArrayList<String>();
+            final List<String> viewed = new ArrayList<>();
 
             // Current cart first
             if (shoppingCartCtx.getLatestViewedCategories() != null) {
@@ -222,7 +222,7 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
     public void invalidateShoppingCart(final ShoppingCart shoppingCart) {
 
         shoppingCartCommandFactory.execute(shoppingCart,
-                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_EXPIRE, ShoppingCartCommand.CMD_EXPIRE));
+                Collections.singletonMap(ShoppingCartCommand.CMD_EXPIRE, ShoppingCartCommand.CMD_EXPIRE));
 
     }
 
@@ -235,7 +235,7 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
         if (cart instanceof MutableShoppingCart) {
             // deserializing old cart may contain invalid settings
             shoppingCartCommandFactory.execute(cart,
-                    (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RESTORE, ShoppingCartCommand.CMD_RESTORE));
+                    Collections.singletonMap(ShoppingCartCommand.CMD_RESTORE, ShoppingCartCommand.CMD_RESTORE));
         }
 
         return cart;

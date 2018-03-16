@@ -51,7 +51,7 @@ import static org.junit.Assert.*;
  * <p/>
  * This test covers the starting flow for all orders that may lead to:
  * Cancelled in case of successful VOID_CAPTURE/REFUND or absence of payment<p/>
- * Retuned in case of successful VOID_CAPTURE/REFUND or absence of payment<p/>
+ * Returned in case of successful VOID_CAPTURE/REFUND or absence of payment<p/>
  * <p/>
  * <p/>
  * This integration test covers work of the following transitional handlers:<p/>
@@ -77,6 +77,7 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
     private CustomerOrderService orderService;
     private CustomerOrderPaymentService paymentService;
 
+    @Override
     @Before
     public void setUp()  {
         super.setUp();
@@ -133,19 +134,19 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
         final CustomerOrder customerOrder = super.createTestOrder(orderType, pgLabel, onePhysicalDelivery);
 
         // deliberately remove all stock
-        return prepareTestOrderFailerReserve(customerOrder);
+        return prepareTestOrderFailedReserve(customerOrder);
 
     }
 
     protected CustomerOrder createTestSubOrderFailedReserve(final TestOrderType orderType, final String pgLabel, final boolean onePhysicalDelivery) throws Exception {
 
         final CustomerOrder customerOrder = super.createTestSubOrder(orderType, pgLabel, onePhysicalDelivery);
-        return prepareTestOrderFailerReserve(customerOrder);
+        return prepareTestOrderFailedReserve(customerOrder);
 
 
     }
 
-    private CustomerOrder prepareTestOrderFailerReserve(final CustomerOrder customerOrder) throws OrderException {
+    private CustomerOrder prepareTestOrderFailedReserve(final CustomerOrder customerOrder) throws OrderException {
         // deliberately remove all stock
         debitInventoryAndAssert(WAREHOUSE_ID, "CC_TEST1", "9.00", "0.00", "0.00");
 

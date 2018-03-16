@@ -28,11 +28,13 @@ public interface CsvImportColumn extends ImportColumn {
     /**
      * {@inheritDoc}
      */
+    @Override
     CsvImportDescriptor getDescriptor();
 
     /**
      * {@inheritDoc}
      */
+    @Override
     CsvImportDescriptor getParentDescriptor();
 
     /**

@@ -49,6 +49,7 @@ public class ReleaseToShipmentOrderEventHandlerImpl implements OrderEventHandler
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
 

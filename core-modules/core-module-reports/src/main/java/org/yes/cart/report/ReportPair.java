@@ -48,7 +48,7 @@ public class ReportPair {
     }
 
     /**
-     * Get lanuage.
+     * Get language.
      * @return lang label
      */
     public String getLabel() {

@@ -41,8 +41,7 @@ public class ShoppingCartStateSerializerSdkImpl implements ShoppingCartStateSeri
         try {
 
             objectInputStream = new ObjectInputStream(byteArrayInputStream);
-            final ShoppingCart shoppingCart = (ShoppingCart) objectInputStream.readObject();
-            return shoppingCart;
+            return (ShoppingCart) objectInputStream.readObject();
 
         } catch (Exception exception) {
             LOG.error("Unable to convert bytes assembled from tuple into object: " + exception.getMessage(), exception);

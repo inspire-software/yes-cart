@@ -31,6 +31,7 @@ public class TestShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCurrentUserSystemAdmin() {
         return true;
     }
@@ -38,6 +39,7 @@ public class TestShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCurrentUser(final String role) {
         return true;
     }
@@ -45,6 +47,7 @@ public class TestShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isShopAccessibleByCurrentManager(final String shopCode) {
         return true;
     }
@@ -52,6 +55,7 @@ public class TestShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isShopAccessibleByCurrentManager(final Long shopId) {
         return true;
     }
@@ -59,20 +63,23 @@ public class TestShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
-        return new HashSet<Long>(Arrays.asList(10L, 20L, 30L, 40L, 50L, 60L));
+        return new HashSet<>(Arrays.asList(10L, 20L, 30L, 40L, 50L, 60L));
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getAccessibleShopCodesByCurrentManager() {
-        return new HashSet<String>(Arrays.asList("SHOIP1", "SHOIP2", "SHOIP3", "SHOIP4", "SHOIP5", "JEWEL_SHOP"));
+        return new HashSet<>(Arrays.asList("SHOIP1", "SHOIP2", "SHOIP3", "SHOIP4", "SHOIP5", "JEWEL_SHOP"));
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ShopDTO> getAccessibleShopsByCurrentManager() {
         return Collections.emptyList();
     }
@@ -80,6 +87,7 @@ public class TestShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isEmployeeManageableByCurrentManager(final String employeeId) {
         return true;
     }

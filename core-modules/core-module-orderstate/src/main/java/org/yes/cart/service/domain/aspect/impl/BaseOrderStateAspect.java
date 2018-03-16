@@ -68,7 +68,7 @@ public abstract class BaseOrderStateAspect extends BaseNotificationAspect  {
 
                 if (StringUtils.isNotBlank(recipient)) {
 
-                    final HashMap<String, Object> map = new HashMap<String, Object>();
+                    final HashMap<String, Object> map = new HashMap<>();
 
                     MailUtils.appendMethodParamaters(map, pjp.getArgs());
 

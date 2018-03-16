@@ -26,6 +26,7 @@ import org.yes.cart.service.domain.SystemService;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -42,6 +43,7 @@ public class WebsupportWsNodeServiceImpl extends AbstractWsNodeServiceImpl imple
     /**
      * {@inheritDoc}
      */
+    @Override
     public void broadcast(final Message message) {
 
         log.debug("Sending message locally: {}", message);
@@ -49,7 +51,7 @@ public class WebsupportWsNodeServiceImpl extends AbstractWsNodeServiceImpl imple
         final List<MessageListener> subjectListeners = listeners.get(message.getSubject());
         if (CollectionUtils.isNotEmpty(subjectListeners)) {
 
-            final ArrayList<Serializable> rsp = new ArrayList<Serializable>();
+            final ArrayList<Serializable> rsp = new ArrayList<>();
             for (final MessageListener listener : subjectListeners) {
 
                 rsp.add(listener.onMessageReceived(message));
@@ -61,13 +63,13 @@ public class WebsupportWsNodeServiceImpl extends AbstractWsNodeServiceImpl imple
                 if (rsp.size() > 1) {
                     ((RspMessage) message).addResponse(new BasicMessageImpl(
                             getCurrentNodeId(),
-                            Arrays.asList(message.getSource()),
+                            Collections.singletonList(message.getSource()),
                             message.getSubject(),
                             rsp)); // if many listeners return list
                 } else if (rsp.size() == 1) {
                     ((RspMessage) message).addResponse(new BasicMessageImpl(
                             getCurrentNodeId(),
-                            Arrays.asList(message.getSource()),
+                            Collections.singletonList(message.getSource()),
                             message.getSubject(),
                             rsp.get(0))); // otherwise return first
                 }

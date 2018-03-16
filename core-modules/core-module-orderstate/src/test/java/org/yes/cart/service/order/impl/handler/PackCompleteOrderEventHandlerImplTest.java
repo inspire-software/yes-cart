@@ -58,6 +58,7 @@ public class PackCompleteOrderEventHandlerImplTest extends AbstractEventHandlerI
     private CustomerOrderService orderService;
     private CustomerOrderPaymentService paymentService;
 
+    @Override
     @Before
     public void setUp()  {
         super.setUp();

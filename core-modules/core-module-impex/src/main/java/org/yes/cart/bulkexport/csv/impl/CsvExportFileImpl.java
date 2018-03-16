@@ -37,6 +37,7 @@ public class CsvExportFileImpl implements CsvExportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public char getColumnDelimiter() {
         return columnDelimiter;
     }
@@ -44,6 +45,7 @@ public class CsvExportFileImpl implements CsvExportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setColumnDelimiter(char columnDelimiter) {
         this.columnDelimiter = columnDelimiter;
     }
@@ -51,6 +53,7 @@ public class CsvExportFileImpl implements CsvExportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public char getTextQualifier() {
         return textQualifier;
     }
@@ -58,6 +61,7 @@ public class CsvExportFileImpl implements CsvExportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTextQualifier(char textQualifier) {
         this.textQualifier = textQualifier;
     }
@@ -65,6 +69,7 @@ public class CsvExportFileImpl implements CsvExportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLineEnd() {
         return lineEnd;
     }
@@ -72,6 +77,7 @@ public class CsvExportFileImpl implements CsvExportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setLineEnd(final String lineEnd) {
         this.lineEnd = lineEnd;
     }
@@ -79,6 +85,7 @@ public class CsvExportFileImpl implements CsvExportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isPrintHeader() {
         return printHeader;
     }
@@ -86,6 +93,7 @@ public class CsvExportFileImpl implements CsvExportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPrintHeader(boolean printHeader) {
         this.printHeader = printHeader;
     }
@@ -93,6 +101,7 @@ public class CsvExportFileImpl implements CsvExportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getFileName() {
         return fileName;
     }
@@ -100,6 +109,7 @@ public class CsvExportFileImpl implements CsvExportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
@@ -107,6 +117,7 @@ public class CsvExportFileImpl implements CsvExportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getFileEncoding() {
         return fileEncoding;
     }
@@ -114,6 +125,7 @@ public class CsvExportFileImpl implements CsvExportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setFileEncoding(String fileEncoding) {
         this.fileEncoding = fileEncoding;
     }

@@ -36,6 +36,7 @@ public class CsvExportValueAdapter extends AbstractExtensibleValueAdapter implem
         this.extendedConversionService = extendedConversionService;
     }
 
+    @Override
     public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
 
         if (requiredType == null) {

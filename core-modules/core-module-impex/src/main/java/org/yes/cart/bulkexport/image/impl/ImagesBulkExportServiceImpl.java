@@ -59,6 +59,7 @@ public class ImagesBulkExportServiceImpl extends AbstractExportService implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public BulkExportResult doExport(final JobContext context) {
 
         final JobStatusListener statusListener = context.getListener();
@@ -100,7 +101,7 @@ public class ImagesBulkExportServiceImpl extends AbstractExportService implement
 
         } catch (Exception e) {
 
-            /**
+            /*
              * Programmatically rollback for any error during import - ALL or NOTHING.
              * But we do not throw exception since this is in a separate thread so not point
              * Need to finish gracefully with error status

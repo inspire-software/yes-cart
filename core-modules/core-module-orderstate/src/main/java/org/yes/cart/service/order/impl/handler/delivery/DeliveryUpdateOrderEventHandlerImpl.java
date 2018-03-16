@@ -75,6 +75,7 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
@@ -89,6 +90,7 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderException {
 
         synchronized (OrderEventHandler.syncMonitor) {
@@ -101,8 +103,8 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
 
             if (update != null) {
 
-                final Map<Long, OrderDeliveryLineStatusUpdate> detailsByPk = new HashMap<Long, OrderDeliveryLineStatusUpdate>();
-                final Map<String, OrderDeliveryLineStatusUpdate> detailsBySKU = new HashMap<String, OrderDeliveryLineStatusUpdate>();
+                final Map<Long, OrderDeliveryLineStatusUpdate> detailsByPk = new HashMap<>();
+                final Map<String, OrderDeliveryLineStatusUpdate> detailsBySKU = new HashMap<>();
 
                 for (final OrderDeliveryLineStatusUpdate lineUpdate : update.getLineStatus()) {
 

@@ -68,6 +68,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderItemAllocationException {
         synchronized (OrderEventHandler.syncMonitor) {
             allocateQuantity(orderEvent.getCustomerOrderDelivery());
@@ -127,7 +128,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
                                 orderDelivery.getDeliveryNum(), det.getProductSkuCode()
                         );
 
-                        /**
+                        /*
                          * For allocation we always must have stock items with inventory supported availability
                          */
                         throw new OrderItemAllocationException(
@@ -141,7 +142,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
                     final BigDecimal rem = inventoryResolver.debit(selected, skuCode, toAllocate);
 
                     if (MoneyUtils.isPositive(rem)) {
-                        /**
+                        /*
                          * For allocation we always must have stock items with inventory supported availability
                          */
                         throw new OrderItemAllocationException(

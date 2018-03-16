@@ -17,7 +17,6 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import au.com.bytecode.opencsv.CSVWriter;
-import org.yes.cart.bulkexport.csv.CsvFileWriter;
 import org.yes.cart.bulkexport.csv.CsvStringWriter;
 
 import java.io.*;
@@ -44,6 +43,7 @@ public class CsvStringWriterImpl implements CsvStringWriter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void open(final String[] headers,
                      final char columnDelimiter,
                      final char textQualifier,
@@ -65,6 +65,7 @@ public class CsvStringWriterImpl implements CsvStringWriter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void writeLine(final String[] line) throws IOException {
         if (rowsWritten == 0 && printHeaders) {
             rowsWritten++;
@@ -79,19 +80,22 @@ public class CsvStringWriterImpl implements CsvStringWriter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String close() throws IOException {
         if (csvWriter != null) {
             csvWriter.close();
         }
         if (outputStreamWriter != null) {
             outputStreamWriter.close();
+            return outputStreamWriter.toString();
         }
-        return outputStreamWriter.toString();
+        return "";
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getRowsWritten() {
         return rowsWritten;
     }

@@ -70,9 +70,9 @@ public class CsvImportDescriptorXStreamProviderTest {
         assertNotNull(desc.getColumns());
         assertEquals(11, desc.getColumns().size());
 
-        final List<ImportColumn> colums = new ArrayList<ImportColumn>(desc.getColumns());
+        final List<ImportColumn> columns = new ArrayList<>(desc.getColumns());
 
-        final CsvImportColumn col0 = (CsvImportColumn) colums.get(0);
+        final CsvImportColumn col0 = (CsvImportColumn) columns.get(0);
         assertNotNull(col0);
         assertEquals(0, col0.getColumnIndex());
         assertEquals(ImpExColumn.FK_FIELD, col0.getFieldType());
@@ -82,7 +82,7 @@ public class CsvImportDescriptorXStreamProviderTest {
         assertEquals("select b from AttributeGroupEntity b where b.code = {attributeGroup}", col0.getLookupQuery());
         assertEquals("CTX001", col0.getContext());
 
-        final CsvImportColumn col5 = (CsvImportColumn) colums.get(5);
+        final CsvImportColumn col5 = (CsvImportColumn) columns.get(5);
         assertNotNull(col5);
         assertEquals(4, col5.getColumnIndex());
         assertEquals(ImpExColumn.FIELD, col5.getFieldType());

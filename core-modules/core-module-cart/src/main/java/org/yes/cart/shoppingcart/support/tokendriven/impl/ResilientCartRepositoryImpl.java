@@ -224,29 +224,26 @@ public class ResilientCartRepositoryImpl implements CartRepository {
     }
 
     private Runnable createRunnable(final ShoppingCart shoppingCart, final String sccCode, final Long sccId) {
-        return new Runnable() {
-            @Override
-            public void run() {
+        return () -> {
 
-                if (sccCode != null) {
-                    ShopCodeContext.setShopCode(sccCode);
-                    ShopCodeContext.setShopId(sccId);
-                }
-
-                try {
-
-                    // Update process potentially can merge the cart with other stored states (e.g. when user logs in)
-                    cartUpdateProcessor.updateShoppingCart(shoppingCart);
-                    // So we re-save it in cache
-                    CART_CACHE.put(shoppingCart.getGuid(), shoppingCart);
-
-                } finally {
-                    if (sccCode != null) {
-                        ShopCodeContext.clear();
-                    }
-                }
-
+            if (sccCode != null) {
+                ShopCodeContext.setShopCode(sccCode);
+                ShopCodeContext.setShopId(sccId);
             }
+
+            try {
+
+                // Update process potentially can merge the cart with other stored states (e.g. when user logs in)
+                cartUpdateProcessor.updateShoppingCart(shoppingCart);
+                // So we re-save it in cache
+                CART_CACHE.put(shoppingCart.getGuid(), shoppingCart);
+
+            } finally {
+                if (sccCode != null) {
+                    ShopCodeContext.clear();
+                }
+            }
+
         };
     }
 

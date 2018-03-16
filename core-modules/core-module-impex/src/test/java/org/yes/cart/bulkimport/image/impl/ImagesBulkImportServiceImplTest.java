@@ -107,6 +107,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
     public void testDoImportSkuOnly() throws Exception {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 try {
@@ -123,7 +124,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     final JobContext context = mockery.mock(JobContext.class, "context");
                     final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
 
-                    final Set<String> imported = new HashSet<String>();
+                    final Set<String> imported = new HashSet<>();
 
                     mockery.checking(new Expectations() {{
                         allowing(context).getListener();
@@ -185,6 +186,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
     public void testDoImportProductAndSku() throws Exception {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 try {
@@ -201,7 +203,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     final JobContext context = mockery.mock(JobContext.class, "context");
                     final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
 
-                    final Set<String> imported = new HashSet<String>();
+                    final Set<String> imported = new HashSet<>();
 
                     mockery.checking(new Expectations() {{
                         allowing(context).getListener(); will(returnValue(listener));
@@ -257,6 +259,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
     public void testDoImportProductAndSkuCodeOnly() throws Exception {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 try {
@@ -273,7 +276,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     final JobContext context = mockery.mock(JobContext.class, "context");
                     final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
 
-                    final Set<String> imported = new HashSet<String>();
+                    final Set<String> imported = new HashSet<>();
 
                     mockery.checking(new Expectations() {{
                         allowing(context).getListener(); will(returnValue(listener));

@@ -44,7 +44,7 @@ public class ImportDataDescriptorResolverImpl implements DataDescriptorResolver<
     private final DataGroupService dataGroupService;
     private final DataDescriptorService dataDescriptorService;
 
-    private final List<DataDescriptorTuplizer<ImportDescriptor>> tuplizers = new ArrayList<DataDescriptorTuplizer<ImportDescriptor>>();
+    private final List<DataDescriptorTuplizer<ImportDescriptor>> tuplizers = new ArrayList<>();
 
     public ImportDataDescriptorResolverImpl(final DataGroupService dataGroupService,
                                             final DataDescriptorService dataDescriptorService) {
@@ -55,6 +55,7 @@ public class ImportDataDescriptorResolverImpl implements DataDescriptorResolver<
     /**
      * {@inheritDoc}
      */
+    @Override
     public ImportDescriptor getByName(final String name) {
 
         final DataDescriptor dataDescriptor = dataDescriptorService.findByName(name);
@@ -79,6 +80,7 @@ public class ImportDataDescriptorResolverImpl implements DataDescriptorResolver<
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, ImportDescriptor> getByGroup(final String group) {
 
         final DataGroup dataGroup = dataGroupService.findByName(group);
@@ -86,7 +88,7 @@ public class ImportDataDescriptorResolverImpl implements DataDescriptorResolver<
 
             if (DataGroup.TYPE_IMPORT.equals(dataGroup.getType())) {
 
-                final Map<String, ImportDescriptor> out = new LinkedHashMap<String, ImportDescriptor>();
+                final Map<String, ImportDescriptor> out = new LinkedHashMap<>();
 
                 final String descriptors = dataGroup.getDescriptors();
                 if (StringUtils.isNotBlank(descriptors)) {
@@ -112,6 +114,7 @@ public class ImportDataDescriptorResolverImpl implements DataDescriptorResolver<
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<DataGroup> getGroups() {
         return dataGroupService.findByType(DataGroup.TYPE_IMPORT);
     }
@@ -119,6 +122,7 @@ public class ImportDataDescriptorResolverImpl implements DataDescriptorResolver<
     /**
      * {@inheritDoc}
      */
+    @Override
     public void register(final DataDescriptorTuplizer<ImportDescriptor> importDescriptorDataDescriptorTuplizer) {
         for (final DataDescriptorTuplizer<ImportDescriptor> tuplizer : this.tuplizers) {
             if (importDescriptorDataDescriptorTuplizer.equals(tuplizer)) {

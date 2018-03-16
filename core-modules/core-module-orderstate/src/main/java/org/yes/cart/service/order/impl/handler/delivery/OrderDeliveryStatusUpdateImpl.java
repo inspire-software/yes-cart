@@ -32,7 +32,7 @@ public class OrderDeliveryStatusUpdateImpl implements OrderDeliveryStatusUpdate 
     private final String orderNumber;
     private final String supplierCode;
     private final List<OrderDeliveryLineStatusUpdate> lineStatus;
-    private final Map<String, Pair<String, String>> additionalData = new HashMap<String, Pair<String, String>>();
+    private final Map<String, Pair<String, String>> additionalData = new HashMap<>();
 
     public OrderDeliveryStatusUpdateImpl(final String orderNumber,
                                          final String supplierCode,
@@ -52,18 +52,22 @@ public class OrderDeliveryStatusUpdateImpl implements OrderDeliveryStatusUpdate 
         this.additionalData.putAll(additionalData);
     }
 
+    @Override
     public String getOrderNumber() {
         return orderNumber;
     }
 
+    @Override
     public String getSupplierCode() {
         return supplierCode;
     }
 
+    @Override
     public List<OrderDeliveryLineStatusUpdate> getLineStatus() {
         return lineStatus;
     }
 
+    @Override
     public Map<String, Pair<String, String>> getAdditionalData() {
         return additionalData;
     }

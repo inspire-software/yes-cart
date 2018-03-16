@@ -36,6 +36,7 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public char getColumnDelimiter() {
         return columnDelimiter;
     }
@@ -43,6 +44,7 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setColumnDelimiter(char columnDelimiter) {
         this.columnDelimiter = columnDelimiter;
     }
@@ -50,6 +52,7 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public char getTextQualifier() {
         return textQualifier;
     }
@@ -57,6 +60,7 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTextQualifier(char textQualifier) {
         this.textQualifier = textQualifier;
     }
@@ -64,6 +68,7 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isIgnoreFirstLine() {
         return ignoreFirstLine;
     }
@@ -71,6 +76,7 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setIgnoreFirstLine(boolean ignoreFirstLine) {
         this.ignoreFirstLine = ignoreFirstLine;
     }
@@ -78,6 +84,7 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getFileNameMask() {
         return fileNameMask;
     }
@@ -85,6 +92,7 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setFileNameMask(String fileNameMask) {
         this.fileNameMask = fileNameMask;
     }
@@ -92,6 +100,7 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getFileEncoding() {
         return fileEncoding;
     }
@@ -99,6 +108,7 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setFileEncoding(String fileEncoding) {
         this.fileEncoding = fileEncoding;
     }

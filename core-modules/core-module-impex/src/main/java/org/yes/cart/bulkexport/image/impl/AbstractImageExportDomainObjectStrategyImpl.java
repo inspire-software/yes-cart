@@ -56,7 +56,7 @@ public abstract class AbstractImageExportDomainObjectStrategyImpl<T> implements 
      *
      * @param object target object to update
      *
-     * @throws org.springframework.security.access.AccessDeniedException
+     * @throws org.springframework.security.access.AccessDeniedException errors
      */
     protected void validateAccessBeforeUpdate(final Object object, final Class objectType) throws AccessDeniedException {
         if (!federationFacade.isManageable(object, objectType)) {
@@ -68,6 +68,7 @@ public abstract class AbstractImageExportDomainObjectStrategyImpl<T> implements 
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean doImageExport(final JobStatusListener statusListener,
                                  final String fileName) {
 

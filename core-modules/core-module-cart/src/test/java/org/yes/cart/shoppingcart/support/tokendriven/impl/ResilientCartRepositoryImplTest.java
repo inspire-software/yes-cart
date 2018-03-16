@@ -37,6 +37,7 @@ import org.yes.cart.shoppingcart.support.tokendriven.CartUpdateProcessor;
 import java.io.*;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.Assert.*;
 
@@ -467,7 +468,7 @@ public class ResilientCartRepositoryImplTest {
         final MutableShoppingCart cart = new ShoppingCartImpl();
         cart.getShoppingContext().setCustomerEmail("bob@doe.com");
         cart.getShoppingContext().setCustomerName("bob@doe.com");
-        cart.getShoppingContext().setCustomerShops(Arrays.asList("SHOP10"));
+        cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
         cart.getShoppingContext().setShopCode("SHOP10");
         assertEquals(cart.getLogonState(), ShoppingCart.LOGGED_IN);
@@ -513,7 +514,7 @@ public class ResilientCartRepositoryImplTest {
         final MutableShoppingCart cart = new ShoppingCartImpl();
         cart.getShoppingContext().setCustomerEmail(null);
         cart.getShoppingContext().setCustomerName("bob@doe.com");
-        cart.getShoppingContext().setCustomerShops(Arrays.asList("SHOP10"));
+        cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
         cart.getShoppingContext().setShopCode("SHOP10");
         cart.getShoppingContext().setShopId(111L);
@@ -559,7 +560,7 @@ public class ResilientCartRepositoryImplTest {
         final MutableShoppingCart cart = new ShoppingCartImpl();
         cart.getShoppingContext().setCustomerEmail("bob@doe.com");
         cart.getShoppingContext().setCustomerName("bob@doe.com");
-        cart.getShoppingContext().setCustomerShops(Arrays.asList("SHOP10"));
+        cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
         cart.getShoppingContext().setShopCode("SHOP10");
         assertEquals(cart.getLogonState(), ShoppingCart.LOGGED_IN);
@@ -605,7 +606,7 @@ public class ResilientCartRepositoryImplTest {
         final MutableShoppingCart cart = new ShoppingCartImpl();
         cart.getShoppingContext().setCustomerEmail(null);
         cart.getShoppingContext().setCustomerName("bob@doe.com");
-        cart.getShoppingContext().setCustomerShops(Arrays.asList("SHOP10"));
+        cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
         cart.getShoppingContext().setShopCode("SHOP10");
         assertEquals(cart.getLogonState(), ShoppingCart.SESSION_EXPIRED);
@@ -650,7 +651,7 @@ public class ResilientCartRepositoryImplTest {
         final MutableShoppingCart cart = new ShoppingCartImpl();
         cart.getShoppingContext().setCustomerEmail("bob@doe.com");
         cart.getShoppingContext().setCustomerName("bob@doe.com");
-        cart.getShoppingContext().setCustomerShops(Arrays.asList("SHOP10"));
+        cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
         cart.getShoppingContext().setShopCode("SHOP10");
         assertEquals(cart.getLogonState(), ShoppingCart.LOGGED_IN);
@@ -703,7 +704,7 @@ public class ResilientCartRepositoryImplTest {
         final MutableShoppingCart cart = new ShoppingCartImpl();
         cart.getShoppingContext().setCustomerEmail(null);
         cart.getShoppingContext().setCustomerName("bob@doe.com");
-        cart.getShoppingContext().setCustomerShops(Arrays.asList("SHOP10"));
+        cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
         cart.getShoppingContext().setShopCode("SHOP10");
         assertEquals(cart.getLogonState(), ShoppingCart.SESSION_EXPIRED);
@@ -754,7 +755,7 @@ public class ResilientCartRepositoryImplTest {
         final MutableShoppingCart cart = new ShoppingCartImpl();
         cart.getShoppingContext().setCustomerEmail("bob@doe.com");
         cart.getShoppingContext().setCustomerName("bob@doe.com");
-        cart.getShoppingContext().setCustomerShops(Arrays.asList("SHOP10"));
+        cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
         cart.getShoppingContext().setShopCode("SHOP10");
         assertEquals(cart.getLogonState(), ShoppingCart.LOGGED_IN);
@@ -808,7 +809,7 @@ public class ResilientCartRepositoryImplTest {
         final MutableShoppingCart cart = new ShoppingCartImpl();
         cart.getShoppingContext().setCustomerEmail(null);
         cart.getShoppingContext().setCustomerName("bob@doe.com");
-        cart.getShoppingContext().setCustomerShops(Arrays.asList("SHOP10"));
+        cart.getShoppingContext().setCustomerShops(Collections.singletonList("SHOP10"));
         cart.getShoppingContext().setShopId(111L);
         cart.getShoppingContext().setShopCode("SHOP10");
         assertEquals(cart.getLogonState(), ShoppingCart.SESSION_EXPIRED);
@@ -866,7 +867,7 @@ public class ResilientCartRepositoryImplTest {
                 }
                 byteArrayOutputStream.close();
             } catch (IOException e) {
-
+                // OK
             }
         }
         return byteArrayOutputStream.toByteArray();
@@ -881,8 +882,7 @@ public class ResilientCartRepositoryImplTest {
         try {
 
             objectInputStream = new ObjectInputStream(byteArrayInputStream);
-            final ShoppingCart shoppingCart = (ShoppingCart) objectInputStream.readObject();
-            return shoppingCart;
+            return (ShoppingCart) objectInputStream.readObject();
 
         } catch (Exception exception) {
             return null;

@@ -69,11 +69,13 @@ public class JobStatusListenerImpl implements JobStatusListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getJobToken() {
         return token.toString();
     }
 
     /** {@inheritDoc} */
+    @Override
     public JobStatus getLatestStatus() {
 
         final JobStatus.State state;
@@ -103,11 +105,13 @@ public class JobStatusListenerImpl implements JobStatusListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyPing() {
         lastMsgTimestamp = System.currentTimeMillis();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyPing(final String msg) {
         pingMsg = msg;
         LOG.debug(msg);
@@ -115,6 +119,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyMessage(final String message) {
         if (result != null) {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
@@ -125,6 +130,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyWarning(final String warning) {
         if (result != null) {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
@@ -136,6 +142,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyError(final String error) {
         if (result != null) {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
@@ -147,12 +154,14 @@ public class JobStatusListenerImpl implements JobStatusListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyError(final String error, final Exception exp) {
         final String stack = ExceptionUtil.stackTraceToString(exp);
         notifyError(error + "\n" + stack);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyCompleted() {
         if (this.result != null) {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
@@ -173,16 +182,19 @@ public class JobStatusListenerImpl implements JobStatusListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isCompleted() {
         return result != null;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getTimeoutValue() {
         return timeout;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isTimedOut() {
         if (timedOut) {
             return true;

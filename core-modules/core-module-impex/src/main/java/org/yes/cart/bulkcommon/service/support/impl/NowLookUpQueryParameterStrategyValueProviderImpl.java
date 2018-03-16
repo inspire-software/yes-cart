@@ -22,8 +22,6 @@ import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkcommon.service.support.LookUpQueryParameterStrategyValueProvider;
 import org.yes.cart.util.TimeContext;
 
-import java.time.LocalDateTime;
-
 /**
  * User: denispavlov
  * Date: 11/06/2015
@@ -40,6 +38,7 @@ public class NowLookUpQueryParameterStrategyValueProviderImpl implements LookUpQ
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getPlaceholderValue(final String placeholder,
                                       final ImpExDescriptor descriptor,
                                       final Object masterObject,

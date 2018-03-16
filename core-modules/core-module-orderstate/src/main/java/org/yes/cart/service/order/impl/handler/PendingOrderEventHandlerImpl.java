@@ -74,6 +74,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
@@ -88,6 +89,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
 
@@ -186,7 +188,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                     final BigDecimal rem = inventoryResolver.reservation(selected, skuCode, toReserve, backorder || preorder);
 
                     if (MoneyUtils.isPositive(rem)) {
-                        /**
+                        /*
                          * For reservation we always must have stock items with inventory supported availability
                          */
                         throw new OrderItemAllocationException(
@@ -211,6 +213,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String getTransitionTarget(final OrderEvent orderEvent) {
         return CustomerOrder.ORDER_STATUS_PENDING;
     }

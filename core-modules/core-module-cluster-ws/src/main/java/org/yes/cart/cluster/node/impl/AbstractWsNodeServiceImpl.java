@@ -44,11 +44,11 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
 
     protected Logger log;
 
-    private final Map<String, String> configuration = new HashMap<String, String>();
+    private final Map<String, String> configuration = new HashMap<>();
     private Node node = new NodeImpl(true, "-", null, "DEFAULT", "YCCLUSTER", "N/A", "", true);
-    private final List<Node> cluster = new CopyOnWriteArrayList<Node>();
+    private final List<Node> cluster = new CopyOnWriteArrayList<>();
 
-    protected Map<String, List<MessageListener>> listeners = new HashMap<String, List<MessageListener>>();
+    protected Map<String, List<MessageListener>> listeners = new HashMap<>();
 
     private final SystemService systemService;
 
@@ -60,13 +60,15 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCurrentNodeId() {
         return node.getId();
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getConfiguration() {
-        final Map<String, String> all = new HashMap<String, String>();
+        final Map<String, String> all = new HashMap<>();
         all.putAll(configuration);
         all.put(
                 AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE,
@@ -104,6 +106,7 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Node> getCluster() {
 
         return Collections.unmodifiableList(this.cluster);
@@ -111,11 +114,13 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
     }
 
     /** {@inheritDoc} */
+    @Override
     public Node getCurrentNode() {
         return node;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Node getAdminNode() {
 
         final List<Node> cluster = getCluster();
@@ -128,10 +133,11 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Node> getSfNodes() {
 
         final List<Node> cluster = getCluster();
-        final List<Node> yes = new ArrayList<Node>();
+        final List<Node> yes = new ArrayList<>();
         for (final Node node : cluster) {
             if (!node.isAdmin()) {
                 yes.add(node);
@@ -141,10 +147,11 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Node> getOtherSfNodes() {
 
         final List<Node> cluster = getCluster();
-        final List<Node> yes = new ArrayList<Node>();
+        final List<Node> yes = new ArrayList<>();
         for (final Node node : cluster) {
             if (!node.isAdmin() && !node.isCurrent()) {
                 yes.add(node);
@@ -154,23 +161,22 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
     }
 
     /** {@inheritDoc} */
+    @Override
     public abstract void broadcast(final Message message);
 
 
     /** {@inheritDoc} */
+    @Override
     public void subscribe(final String subject, final MessageListener listener) {
         synchronized (this) {
-            List<MessageListener> subjectListeners = listeners.get(subject);
-            if (subjectListeners == null) {
-                subjectListeners = new ArrayList<MessageListener>();
-                listeners.put(subject, subjectListeners);
-            }
+            final List<MessageListener> subjectListeners = listeners.computeIfAbsent(subject, k -> new ArrayList<>());
             subjectListeners.add(listener);
             log.debug("Registering listener for topic {}", subject);
         }
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setServletContext(final ServletContext servletContext) {
 
         initNodeFromServletContext(servletContext);
@@ -224,7 +230,7 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
 
             final List<Node> cluster = wsConfigurationLoader.fromXML(wsConfiguration.getInputStream());
 
-            final List<Node> all = new ArrayList<Node>();
+            final List<Node> all = new ArrayList<>();
             all.add(this.node);
             for (final Node node : cluster) {
                 if (!node.getId().equals(this.node.getId())) {
@@ -312,6 +318,7 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
     /**
      * {@inheritDoc}
      */
+    @Override
     public void destroy() throws Exception {
 
         log.info("Closing WS channel for node {}", node.getId());

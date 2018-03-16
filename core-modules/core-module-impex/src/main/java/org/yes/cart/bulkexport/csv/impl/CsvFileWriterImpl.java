@@ -45,6 +45,7 @@ public class CsvFileWriterImpl implements CsvFileWriter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void open(final String csvFileName,
                      final String[] headers,
                      final char columnDelimiter,
@@ -68,6 +69,7 @@ public class CsvFileWriterImpl implements CsvFileWriter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void writeLine(final String[] line) throws IOException {
         if (rowsWritten == 0 && printHeaders) {
             rowsWritten++;
@@ -82,6 +84,7 @@ public class CsvFileWriterImpl implements CsvFileWriter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() throws IOException {
         if (csvWriter != null) {
             csvWriter.close();
@@ -97,6 +100,7 @@ public class CsvFileWriterImpl implements CsvFileWriter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getRowsWritten() {
         return rowsWritten;
     }

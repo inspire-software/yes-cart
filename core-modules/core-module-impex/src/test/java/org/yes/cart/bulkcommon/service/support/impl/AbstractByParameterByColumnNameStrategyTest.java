@@ -59,6 +59,7 @@ public class AbstractByParameterByColumnNameStrategyTest {
                 return true;
             }
 
+            @Override
             public LookUpQuery getQuery(final ImpExDescriptor descriptor,
                                         final Object masterObject,
                                         final ImpExTuple tuple,

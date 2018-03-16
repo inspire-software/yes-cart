@@ -49,17 +49,20 @@ public class CsvExportTupleImpl implements CsvExportTuple {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSourceId() {
         return data == null ? "NULL" :
                 data.getClass().getSimpleName() + ":" + (data instanceof Identifiable ? ((Identifiable) data).getId() : "N/A");
     }
 
     /** {@inheritDoc} */
+    @Override
     public Object getData() {
         return data;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Object getColumnValue(final ExportColumn column, final ValueAdapter adapter) {
         final Object rawValue = getObjectValue(column);
         return column.getValue(rawValue, adapter, this);
@@ -79,13 +82,14 @@ public class CsvExportTupleImpl implements CsvExportTuple {
     }
 
     /** {@inheritDoc} */
+    @Override
     public <I extends ImpExTuple<String, Object, ExportDescriptor, ExportColumn>> List<I> getSubTuples(final ExportDescriptor importDescriptor, final ExportColumn column, final ValueAdapter adapter) {
         if (ImpExColumn.SLAVE_TUPLE_FIELD.equals(column.getFieldType())
                 || ImpExColumn.SLAVE_INLINE_FIELD.equals(column.getFieldType())) {
             final Object rawValue = getObjectValue(column);
 
             if (rawValue instanceof Collection) {
-                final List<CsvExportTuple> tuples = new ArrayList<CsvExportTuple>();
+                final List<CsvExportTuple> tuples = new ArrayList<>();
                 for (final Object rawValueItem : (Collection) rawValue) {
                     tuples.add(new CsvExportTupleImpl(rawValueItem));
                 }

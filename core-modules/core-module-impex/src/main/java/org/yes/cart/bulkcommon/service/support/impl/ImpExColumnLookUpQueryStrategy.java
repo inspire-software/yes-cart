@@ -48,6 +48,7 @@ public class ImpExColumnLookUpQueryStrategy extends AbstractByParameterByColumnN
     }
 
     /** {@inheritDoc} */
+    @Override
     public LookUpQuery getQuery(final ImpExDescriptor descriptor,
                                 final Object masterObject,
                                 final ImpExTuple tuple,

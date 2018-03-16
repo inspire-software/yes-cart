@@ -50,6 +50,7 @@ public class WebInfXmlExportDataDescriptorTuplizerImpl implements DataDescriptor
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean supports(final DataDescriptor dataDescriptor) {
         return dataDescriptor != null && DataDescriptor.TYPE_WEBINF_XML.equals(dataDescriptor.getType());
     }
@@ -57,6 +58,7 @@ public class WebInfXmlExportDataDescriptorTuplizerImpl implements DataDescriptor
     /**
      * {@inheritDoc}
      */
+    @Override
     public ExportDescriptor toDescriptorObject(final DataDescriptor dataDescriptor) {
         if (supports(dataDescriptor)) {
 
@@ -90,6 +92,7 @@ public class WebInfXmlExportDataDescriptorTuplizerImpl implements DataDescriptor
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }

@@ -54,6 +54,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
     /**
      * {@inheritDoc}
      */
+    @Override
     public BulkExportResult doExport(final JobContext context) {
 
         final JobStatusListener statusListener = context.getListener();
@@ -99,7 +100,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
 
         } catch (Exception e) {
 
-            /**
+            /*
              * Programmatically rollback for any error during import - ALL or NOTHING.
              * But we do not throw exception since this is in a separate thread so not point
              * Need to finish gracefully with error status
@@ -140,7 +141,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
         try {
             final String filename = fileToExport;
 
-            final List<String> headers = new ArrayList<String>(csvExportDescriptor.getColumns().size());
+            final List<String> headers = new ArrayList<>(csvExportDescriptor.getColumns().size());
             for (final ExportColumn column : csvExportDescriptor.getColumns()) {
                 headers.add(column.getColumnHeader());
             }
@@ -341,8 +342,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                                                         final ExportTuple tuple) {
 
         final LookUpQuery query = columnLookUpQueryParameterStrategy.getQuery(exportDescriptor, masterObject, tuple, valueDataAdapter, queryTemplate);
-        final ResultsIterator<Object> object = genericDAO.findByQueryIterator(query.getQueryString(), query.getParameters());
-        return object;
+        return genericDAO.findByQueryIterator(query.getQueryString(), query.getParameters());
 
     }
 

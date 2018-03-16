@@ -94,6 +94,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      * @param context job context
      * @return result of the import
      */
+    @Override
     public BulkImportResult doImport(final JobContext context) {
 
         final JobStatusListener statusListener = context.getListener();
@@ -178,6 +179,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
     /**
      * {@inheritDoc}
      */
+    @Override
     public BulkImportResult doSingleFileImport(final JobStatusListener statusListener,
                                                final File fileToImport,
                                                final String csvImportDescriptorName,
@@ -186,7 +188,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
         try {
 
 
-            final Map<String, Pair<Object, Boolean>> entityCache = new HashMap<String, Pair<Object, Boolean>>();
+            final Map<String, Pair<Object, Boolean>> entityCache = new HashMap<>();
 
             final ImportDescriptor.ImportMode mode = csvImportDescriptor.getMode();
             final String msgInfoImp = MessageFormat.format("import file : {0} in {1} mode", fileToImport.getAbsolutePath(), mode);
@@ -241,7 +243,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
         } catch (Exception e) {
 
-            /**
+            /*
              * Programmatically rollback for any error during import - ALL or NOTHING - single file.
              * But we do not throw exception since this is in a separate thread so not point
              * Need to finish gracefully with error status
@@ -757,9 +759,9 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
             // no caching for prime select
             final Object prime = getExistingEntity(importDescriptor, importDescriptor.getSelectSql(), masterObject, tuple);
             if (prime == null) {
-                return new Pair<Object, Boolean>(genericDAO.getEntityFactory().getByKey(importDescriptor.getEntityType()), Boolean.TRUE);
+                return new Pair<>(genericDAO.getEntityFactory().getByKey(importDescriptor.getEntityType()), Boolean.TRUE);
             }
-            return new Pair<Object, Boolean>(prime, Boolean.FALSE);
+            return new Pair<>(prime, Boolean.FALSE);
         }
 
         final String key = cacheKey.keyFor(importDescriptor, column, masterObject, tuple, valueStringAdapter);
@@ -779,7 +781,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
             final Object existing = getExistingEntity(importDescriptor, column.getLookupQuery(), masterObject, tuple);
             if (existing == null) {
                 if (column.getEntityType() != null) {
-                    object = new Pair<Object, Boolean>(genericDAO.getEntityFactory().getByIface(
+                    object = new Pair<>(genericDAO.getEntityFactory().getByIface(
                             Class.forName(column.getEntityType())),
                             Boolean.TRUE
                     );
@@ -787,11 +789,9 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                     return null; // no cache for nulls
                 }
             } else {
-                object = new Pair<Object, Boolean>(existing, Boolean.FALSE);
+                object = new Pair<>(existing, Boolean.FALSE);
             }
-            if (object != null) {
-                entityCache.put(key, object);
-            }
+            entityCache.put(key, object);
         }
         return object;
     }
@@ -814,8 +814,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                                      final ImportTuple tuple) {
 
         final LookUpQuery query = columnLookUpQueryParameterStrategy.getQuery(importDescriptor, masterObject, tuple, valueDataAdapter, queryTemplate);
-        final Object object = genericDAO.findSingleByQuery(query.getQueryString(), query.getParameters());
-        return object;
+        return genericDAO.findSingleByQuery(query.getQueryString(), query.getParameters());
 
     }
 
@@ -836,8 +835,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                                              final ImportTuple tuple) {
 
         final LookUpQuery query = columnLookUpQueryParameterStrategy.getQuery(importDescriptor, masterObject, tuple, valueDataAdapter, queryTemplate);
-        final List<Object> object = genericDAO.findByQuery(query.getQueryString(), query.getParameters());
-        return object;
+        return genericDAO.findByQuery(query.getQueryString(), query.getParameters());
 
     }
 

@@ -60,6 +60,7 @@ public class OrderStateManagerImpl implements OrderStateManager {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean fireTransition(final OrderEvent orderEvent) throws OrderException {
         final OrderEventHandler handler = handlers.get(orderEvent.getEventId());
 
@@ -114,6 +115,7 @@ public class OrderStateManagerImpl implements OrderStateManager {
      *
      * @return before transition listeners map.
      */
+    @Override
     public Map<String, List<? extends OrderStateTransitionListener>> getBeforeListenersMap() {
         return beforeListenersMap;
     }
@@ -123,6 +125,7 @@ public class OrderStateManagerImpl implements OrderStateManager {
      *
      * @return handlers map.
      */
+    @Override
     public Map<String, OrderEventHandler> getHandlers() {
         return handlers;
     }
@@ -132,6 +135,7 @@ public class OrderStateManagerImpl implements OrderStateManager {
      *
      * @return after transition listeners map.
      */
+    @Override
     public Map<String, List<? extends OrderStateTransitionListener>> getAfterListenersMap() {
         return afterListenersMap;
     }

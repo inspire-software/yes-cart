@@ -42,6 +42,7 @@ public class ColumnLookUpQueryCacheKeyStrategy implements EntityCacheKeyStrategy
     }
 
     /** {@inheritDoc} */
+    @Override
     public String keyFor(final ImportDescriptor descriptor,
                          final ImportColumn column,
                          final Object masterObject,

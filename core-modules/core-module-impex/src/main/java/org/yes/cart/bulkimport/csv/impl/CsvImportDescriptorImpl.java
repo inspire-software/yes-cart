@@ -64,12 +64,13 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
      */
     public CsvImportDescriptorImpl() {
         importFileDescriptor = new CsvImportFileImpl();
-        columns = new ArrayList<CsvImportColumn>();
+        columns = new ArrayList<>();
         mode = ImportMode.MERGE;
         context = new CsvImportContextImpl();
     }
 
     /** {@inheritDoc} */
+    @Override
     public ImportMode getMode() {
         if (mode == null) {
             mode = ImportMode.MERGE;
@@ -88,6 +89,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getModeName() {
         return mode.name();
     }
@@ -104,6 +106,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     }
 
     /** {@inheritDoc} */
+    @Override
     public ImportContext getContext() {
         if (context == null) {
             context = new CsvImportContextImpl();
@@ -119,11 +122,13 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getEntityType() {
         return entityType;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class getEntityTypeClass() {
         if (entityTypeClass == null) {
             if (StringUtils.isNotBlank(entityType)) {
@@ -149,6 +154,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSelectSql() {
         return selectSql;
     }
@@ -161,6 +167,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getInsertSql() {
         return insertSql;
     }
@@ -173,6 +180,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getDeleteSql() {
         return deleteSql;
     }
@@ -194,6 +202,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
     public CsvImportFile getImportFileDescriptor() {
         return importFileDescriptor;
     }
@@ -211,6 +220,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<ImportColumn> getColumns() {
         if (!initialised) {
             this.reloadMappings();
@@ -224,6 +234,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
     public ImportColumn getColumn(final String columnName) {
         if (!initialised) {
             this.reloadMappings();
@@ -234,6 +245,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<ImportColumn> getColumns(String fieldType) {
         if (!initialised) {
             this.reloadMappings();
@@ -251,7 +263,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
      * @param columns collection of import columns to set.
      */
     protected void setColumns(Collection<CsvImportColumn> columns) {
-        this.columns = new ArrayList<CsvImportColumn>();
+        this.columns = new ArrayList<>();
         this.columns.addAll(columns);
         this.reloadMappings();
     }
@@ -260,6 +272,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getImportDirectory() {
         return importDirectory;
     }
@@ -269,6 +282,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
      *
      * @param importDirectory import folder to use.
      */
+    @Override
     public void setImportDirectory(final String importDirectory) {
         this.importDirectory = importDirectory;
     }
@@ -276,16 +290,12 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     private void reloadMappings() {
         initialised = true;
         pkColumn = null;
-        columnByName = new HashMap<String, ImportColumn>();
-        columnsByType = new HashMap<String, List<ImportColumn>>();
+        columnByName = new HashMap<>();
+        columnsByType = new HashMap<>();
 
         for (CsvImportColumn importColumn : columns) {
             importColumn.setParentDescriptor(this);
-            List<ImportColumn> byType = columnsByType.get(importColumn.getFieldType());
-            if (byType == null) {
-                byType = new ArrayList<ImportColumn>();
-                columnsByType.put(importColumn.getFieldType(), byType);
-            }
+            final List<ImportColumn> byType = columnsByType.computeIfAbsent(importColumn.getFieldType(), k -> new ArrayList<>());
             byType.add(importColumn);
             if (pkColumn == null && importColumn.getLookupQuery() != null && ImpExColumn.FIELD.equals(importColumn.getFieldType())) {
                 pkColumn = importColumn;

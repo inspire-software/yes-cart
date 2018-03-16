@@ -41,21 +41,25 @@ public class JobStatusImpl implements JobStatus {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getToken() {
         return token;
     }
 
     /** {@inheritDoc} */
+    @Override
     public State getState() {
         return state;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Completion getCompletion() {
         return completion;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getReport() {
         return report;
     }

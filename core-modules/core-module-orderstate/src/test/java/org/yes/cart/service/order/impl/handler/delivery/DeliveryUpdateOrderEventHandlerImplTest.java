@@ -53,6 +53,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
     private CustomerOrderService orderService;
     private CustomerOrderPaymentService paymentService;
 
+    @Override
     @Before
     public void setUp()  {
         super.setUp();
@@ -99,11 +100,11 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         final OrderDeliveryStatusUpdateImpl update1 = new OrderDeliveryStatusUpdateImpl(
                 customerOrder.getOrdernum(),
                 "WAREHOUSE_1",
-                Arrays.<OrderDeliveryLineStatusUpdate>asList(
-                    new OrderDeliveryLineStatusUpdateImpl(
-                            null, "CC_TEST1", "packing", date("2017-02-17"), date("2017-02-20"), null, null, null, null, false, null, null,
-                            Collections.singletonMap("TrackingURL", new Pair<String, String>("http://tracking.com?ref=00001", null))
-                    )
+                Collections.<OrderDeliveryLineStatusUpdate>singletonList(
+                        new OrderDeliveryLineStatusUpdateImpl(
+                                null, "CC_TEST1", "packing", date("2017-02-17"), date("2017-02-20"), null, null, null, null, false, null, null,
+                                Collections.singletonMap("TrackingURL", new Pair<>("http://tracking.com?ref=00001", null))
+                        )
                 )
         );
 
@@ -133,7 +134,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertNull(delivery1.getDeliveryGuaranteed());
 
         final Collection<CustomerOrderDeliveryDet> details1 = delivery1.getDetail();
-        final Map<String, CustomerOrderDeliveryDet> detailsBySKU1 = new HashMap<String, CustomerOrderDeliveryDet>();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU1 = new HashMap<>();
         for (final CustomerOrderDeliveryDet detail : details1) {
             detailsBySKU1.put(detail.getProductSkuCode(), detail);
         }
@@ -167,7 +168,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         final OrderDeliveryStatusUpdateImpl update2 = new OrderDeliveryStatusUpdateImpl(
                 customerOrder.getOrdernum(),
                 "WAREHOUSE_1",
-                Arrays.<OrderDeliveryLineStatusUpdate>asList(
+                Collections.<OrderDeliveryLineStatusUpdate>singletonList(
                         new OrderDeliveryLineStatusUpdateImpl(
                                 null, "CC_TEST2", "packing 2", date("2017-02-17"), date("2017-02-21"), null, null, null, null, false, null, null
                         )
@@ -200,7 +201,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertNull(delivery2.getDeliveryGuaranteed());
 
         final Collection<CustomerOrderDeliveryDet> details2 = delivery2.getDetail();
-        final Map<String, CustomerOrderDeliveryDet> detailsBySKU2 = new HashMap<String, CustomerOrderDeliveryDet>();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU2 = new HashMap<>();
         for (final CustomerOrderDeliveryDet detail : details2) {
             detailsBySKU2.put(detail.getProductSkuCode(), detail);
         }
@@ -279,7 +280,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         final OrderDeliveryStatusUpdateImpl update1 = new OrderDeliveryStatusUpdateImpl(
                 customerOrder.getOrdernum(),
                 "WAREHOUSE_1",
-                Arrays.<OrderDeliveryLineStatusUpdate>asList(
+                Collections.<OrderDeliveryLineStatusUpdate>singletonList(
                         new OrderDeliveryLineStatusUpdateImpl(
                                 null, "CC_TEST1", "packing", date("2017-02-17"), date("2017-02-20"), null, null, null, null, false, null, null
                         )
@@ -312,7 +313,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertNull(delivery1.getDeliveryGuaranteed());
 
         final Collection<CustomerOrderDeliveryDet> details1 = delivery1.getDetail();
-        final Map<String, CustomerOrderDeliveryDet> detailsBySKU1 = new HashMap<String, CustomerOrderDeliveryDet>();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU1 = new HashMap<>();
         for (final CustomerOrderDeliveryDet detail : details1) {
             detailsBySKU1.put(detail.getProductSkuCode(), detail);
         }
@@ -341,7 +342,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         final OrderDeliveryStatusUpdateImpl update2 = new OrderDeliveryStatusUpdateImpl(
                 customerOrder.getOrdernum(),
                 "WAREHOUSE_1",
-                Arrays.<OrderDeliveryLineStatusUpdate>asList(
+                Collections.<OrderDeliveryLineStatusUpdate>singletonList(
                         new OrderDeliveryLineStatusUpdateImpl(
                                 null, "CC_TEST2", "packing 2", date("2017-02-17"), date("2017-02-21"), null, null, null, null, false, null, null
                         )
@@ -374,7 +375,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertNull(delivery2.getDeliveryGuaranteed());
 
         final Collection<CustomerOrderDeliveryDet> details2 = delivery2.getDetail();
-        final Map<String, CustomerOrderDeliveryDet> detailsBySKU2 = new HashMap<String, CustomerOrderDeliveryDet>();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU2 = new HashMap<>();
         for (final CustomerOrderDeliveryDet detail : details2) {
             detailsBySKU2.put(detail.getProductSkuCode(), detail);
         }
@@ -440,7 +441,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertEquals(date("2017-02-21"), delivery3.getDeliveryConfirmed());
 
         final Collection<CustomerOrderDeliveryDet> details3 = delivery3.getDetail();
-        final Map<String, CustomerOrderDeliveryDet> detailsBySKU3 = new HashMap<String, CustomerOrderDeliveryDet>();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU3 = new HashMap<>();
         for (final CustomerOrderDeliveryDet detail : details3) {
             detailsBySKU3.put(detail.getProductSkuCode(), detail);
         }
@@ -523,7 +524,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         final OrderDeliveryStatusUpdateImpl update1 = new OrderDeliveryStatusUpdateImpl(
                 customerOrder.getOrdernum(),
                 "WAREHOUSE_1",
-                Arrays.<OrderDeliveryLineStatusUpdate>asList(
+                Collections.<OrderDeliveryLineStatusUpdate>singletonList(
                         new OrderDeliveryLineStatusUpdateImpl(
                                 null, "CC_TEST1", "packing", date("2017-02-17"), date("2017-02-20"), null, null, null, null, false, null, null
                         )
@@ -556,7 +557,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertNull(delivery1.getDeliveryGuaranteed());
 
         final Collection<CustomerOrderDeliveryDet> details1 = delivery1.getDetail();
-        final Map<String, CustomerOrderDeliveryDet> detailsBySKU1 = new HashMap<String, CustomerOrderDeliveryDet>();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU1 = new HashMap<>();
         for (final CustomerOrderDeliveryDet detail : details1) {
             detailsBySKU1.put(detail.getProductSkuCode(), detail);
         }
@@ -585,7 +586,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         final OrderDeliveryStatusUpdateImpl update2 = new OrderDeliveryStatusUpdateImpl(
                 customerOrder.getOrdernum(),
                 "WAREHOUSE_1",
-                Arrays.<OrderDeliveryLineStatusUpdate>asList(
+                Collections.<OrderDeliveryLineStatusUpdate>singletonList(
                         new OrderDeliveryLineStatusUpdateImpl(
                                 null, "CC_TEST2", "packing 2", date("2017-02-17"), date("2017-02-21"), null, null, null, null, false, null, null
                         )
@@ -618,7 +619,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertNull(delivery2.getDeliveryGuaranteed());
 
         final Collection<CustomerOrderDeliveryDet> details2 = delivery2.getDetail();
-        final Map<String, CustomerOrderDeliveryDet> detailsBySKU2 = new HashMap<String, CustomerOrderDeliveryDet>();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU2 = new HashMap<>();
         for (final CustomerOrderDeliveryDet detail : details2) {
             detailsBySKU2.put(detail.getProductSkuCode(), detail);
         }
@@ -684,7 +685,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertEquals(date("2017-02-21"), delivery3.getDeliveryConfirmed());
 
         final Collection<CustomerOrderDeliveryDet> details3 = delivery3.getDetail();
-        final Map<String, CustomerOrderDeliveryDet> detailsBySKU3 = new HashMap<String, CustomerOrderDeliveryDet>();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU3 = new HashMap<>();
         for (final CustomerOrderDeliveryDet detail : details3) {
             detailsBySKU3.put(detail.getProductSkuCode(), detail);
         }
@@ -754,7 +755,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         final OrderDeliveryStatusUpdateImpl update1 = new OrderDeliveryStatusUpdateImpl(
                 customerOrder.getOrdernum(),
                 "WAREHOUSE_1",
-                Arrays.<OrderDeliveryLineStatusUpdate>asList(
+                Collections.<OrderDeliveryLineStatusUpdate>singletonList(
                         new OrderDeliveryLineStatusUpdateImpl(
                                 null, "CC_TEST1", "packing", date("2017-02-17"), date("2017-02-20"), null, null, null, null, false, null, null
                         )
@@ -787,7 +788,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertNull(delivery1.getDeliveryGuaranteed());
 
         final Collection<CustomerOrderDeliveryDet> details1 = delivery1.getDetail();
-        final Map<String, CustomerOrderDeliveryDet> detailsBySKU1 = new HashMap<String, CustomerOrderDeliveryDet>();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU1 = new HashMap<>();
         for (final CustomerOrderDeliveryDet detail : details1) {
             detailsBySKU1.put(detail.getProductSkuCode(), detail);
         }
@@ -816,7 +817,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         final OrderDeliveryStatusUpdateImpl update2 = new OrderDeliveryStatusUpdateImpl(
                 customerOrder.getOrdernum(),
                 "WAREHOUSE_1",
-                Arrays.<OrderDeliveryLineStatusUpdate>asList(
+                Collections.<OrderDeliveryLineStatusUpdate>singletonList(
                         new OrderDeliveryLineStatusUpdateImpl(
                                 null, "CC_TEST2", "packing 2", date("2017-02-17"), date("2017-02-21"), null, null, null, null, false, null, null
                         )
@@ -849,7 +850,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertNull(delivery2.getDeliveryGuaranteed());
 
         final Collection<CustomerOrderDeliveryDet> details2 = delivery2.getDetail();
-        final Map<String, CustomerOrderDeliveryDet> detailsBySKU2 = new HashMap<String, CustomerOrderDeliveryDet>();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU2 = new HashMap<>();
         for (final CustomerOrderDeliveryDet detail : details2) {
             detailsBySKU2.put(detail.getProductSkuCode(), detail);
         }
@@ -919,7 +920,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertEquals(date("2017-02-21"), delivery3.getDeliveryConfirmed());
 
         final Collection<CustomerOrderDeliveryDet> details3 = delivery3.getDetail();
-        final Map<String, CustomerOrderDeliveryDet> detailsBySKU3 = new HashMap<String, CustomerOrderDeliveryDet>();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU3 = new HashMap<>();
         for (final CustomerOrderDeliveryDet detail : details3) {
             detailsBySKU3.put(detail.getProductSkuCode(), detail);
         }
@@ -992,9 +993,9 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         final OrderDeliveryStatusUpdateImpl update1 = new OrderDeliveryStatusUpdateImpl(
                 customerOrder.getOrdernum(),
                 "WAREHOUSE_1",
-                Arrays.<OrderDeliveryLineStatusUpdate>asList(
+                Collections.<OrderDeliveryLineStatusUpdate>singletonList(
                         new OrderDeliveryLineStatusUpdateImpl(
-                                null, "CC_TEST1", "delivered", date("2017-02-17"), date("2017-02-20"), null, date("2017-02-21"), null, new BigDecimal(2), false, "INV-001",  date("2017-02-22").toLocalDate()
+                                null, "CC_TEST1", "delivered", date("2017-02-17"), date("2017-02-20"), null, date("2017-02-21"), null, new BigDecimal(2), false, "INV-001", date("2017-02-22").toLocalDate()
                         )
                 )
         );
@@ -1025,7 +1026,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertNull(delivery1.getDeliveryGuaranteed());
 
         final Collection<CustomerOrderDeliveryDet> details1 = delivery1.getDetail();
-        final Map<String, CustomerOrderDeliveryDet> detailsBySKU1 = new HashMap<String, CustomerOrderDeliveryDet>();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU1 = new HashMap<>();
         for (final CustomerOrderDeliveryDet detail : details1) {
             detailsBySKU1.put(detail.getProductSkuCode(), detail);
         }
@@ -1054,9 +1055,9 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         final OrderDeliveryStatusUpdateImpl update2 = new OrderDeliveryStatusUpdateImpl(
                 customerOrder.getOrdernum(),
                 "WAREHOUSE_1",
-                Arrays.<OrderDeliveryLineStatusUpdate>asList(
+                Collections.<OrderDeliveryLineStatusUpdate>singletonList(
                         new OrderDeliveryLineStatusUpdateImpl(
-                                null, "CC_TEST2", "rejected", null, null, null, null, null, null, true, "INV-001",  date("2017-02-22").toLocalDate()
+                                null, "CC_TEST2", "rejected", null, null, null, null, null, null, true, "INV-001", date("2017-02-22").toLocalDate()
                         )
                 )
         );
@@ -1088,7 +1089,7 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertEquals(date("2017-02-21"), delivery2.getDeliveryConfirmed());
 
         final Collection<CustomerOrderDeliveryDet> details2 = delivery2.getDetail();
-        final Map<String, CustomerOrderDeliveryDet> detailsBySKU2 = new HashMap<String, CustomerOrderDeliveryDet>();
+        final Map<String, CustomerOrderDeliveryDet> detailsBySKU2 = new HashMap<>();
         for (final CustomerOrderDeliveryDet detail : details2) {
             detailsBySKU2.put(detail.getProductSkuCode(), detail);
         }

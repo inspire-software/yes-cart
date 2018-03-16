@@ -30,6 +30,7 @@ public class PaymentOfflineOrderEventHandlerImpl extends AbstractOrderEventHandl
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean handle(final OrderEvent orderEvent) {
         synchronized (OrderEventHandler.syncMonitor) {
             handleInternal(orderEvent);
@@ -40,6 +41,7 @@ public class PaymentOfflineOrderEventHandlerImpl extends AbstractOrderEventHandl
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String getTransitionTarget(final OrderEvent orderEvent) {
         return CustomerOrder.ORDER_STATUS_WAITING;
     }

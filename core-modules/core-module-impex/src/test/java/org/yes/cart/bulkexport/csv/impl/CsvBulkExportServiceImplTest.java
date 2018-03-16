@@ -59,6 +59,7 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
     private final Mockery mockery = new JUnit4Mockery();
 
+    @Override
     @Before
     public void setUp()  {
 
@@ -71,6 +72,7 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
     }
 
 
+    @Override
     @After
     public void tearDown() throws Exception {
         bulkExportService = null;
@@ -105,7 +107,7 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
                 allowing(listener).notifyMessage(with(any(String.class)));
             }});
 
-            Set<String> importedFilesSet = new HashSet<String>();
+            Set<String> importedFilesSet = new HashSet<>();
 
             ResultSet rs;
 
@@ -161,10 +163,12 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
             this.prefix = prefix;
         }
 
+        @Override
         public boolean matchesSafely(String s) {
             return s.startsWith(prefix);
         }
 
+        @Override
         public void describeTo(Description description) {
             description.appendText("a string starting with ").appendValue(prefix);
         }
@@ -177,10 +181,12 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
             this.text = text;
         }
 
+        @Override
         public boolean matchesSafely(String s) {
             return s.contains(text);
         }
 
+        @Override
         public void describeTo(Description description) {
             description.appendText("a string containing text: ").appendValue(text);
         }

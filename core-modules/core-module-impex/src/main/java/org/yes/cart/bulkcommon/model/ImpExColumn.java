@@ -18,8 +18,6 @@ package org.yes.cart.bulkcommon.model;
 
 import org.yes.cart.bulkexport.model.ExportTuple;
 
-import java.time.format.DateTimeFormatter;
-
 /**
  * Single import/export column description.
  * <p/>
@@ -102,12 +100,12 @@ public interface ImpExColumn {
      *
      * @return value
      */
-    Object getValue(Object rawValue, ValueAdapter adapter, ExportTuple tuple);
+    Object getValue(Object rawValue, ValueAdapter adapter, ImpExTuple tuple);
 
     /**
      * In case if column has reg exp.
      *
-     * @param value the whole value from {@link #getValue(Object, ValueAdapter, ExportTuple)}
+     * @param value the whole value from {@link #getValue(Object, ValueAdapter, ImpExTuple)}
      * @return matched groups or 0 if column has not reg exp.
      */
     int getGroupCount(String value);

@@ -27,8 +27,8 @@ public interface ImportService {
 
      enum BulkImportResult {
         OK,
-        ERROR;
-    }
+        ERROR
+     }
 
     /**
      * Perform bulk import.

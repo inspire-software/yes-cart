@@ -51,6 +51,7 @@ public class RefundProcessedOrderEventHandlerImpl extends AbstractOrderEventHand
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
 
@@ -79,6 +80,7 @@ public class RefundProcessedOrderEventHandlerImpl extends AbstractOrderEventHand
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String getTransitionTarget(final OrderEvent orderEvent) {
         if (CustomerOrder.ORDER_STATUS_RETURNED_WAITING_PAYMENT.equals(orderEvent.getCustomerOrder().getOrderStatus())) {
             return CustomerOrder.ORDER_STATUS_RETURNED;

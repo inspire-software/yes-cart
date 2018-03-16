@@ -56,7 +56,7 @@ public class ShoppingCartStateSerializerJacksonImplTest extends AbstractShopping
      *
      * Conclusion: to and back with 100 items is around ~2ms
      *
-     * @throws Exception
+     * @throws Exception errors
      */
     @Ignore("This is performance test for manual checks only")
     @Test

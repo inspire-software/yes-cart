@@ -37,7 +37,7 @@ public class ReportDescriptor {
     private boolean visible = true;
     private String xslfoBase;
 
-    private List<ReportParameter> parameters =  new ArrayList<ReportParameter>();
+    private List<ReportParameter> parameters = new ArrayList<>();
 
     /**
      * Is report visible on UI.

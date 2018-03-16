@@ -39,7 +39,7 @@ public class BasicShoppingCartPersisterImpl implements ShoppingCartPersister<Map
 
 
     /**
-     * Construct shopping cart persister phaze listener
+     * Construct shopping cart persister phase listener
      *
      * @param tuplizerPool        pool of tuplizer to manage cookie to object to cookie transformation
      */
@@ -51,6 +51,7 @@ public class BasicShoppingCartPersisterImpl implements ShoppingCartPersister<Map
     /**
      * {@inheritDoc}
      */
+    @Override
     public void persistShoppingCart(final Map httpServletRequest,
                                     final Map httpServletResponse,
                                     final ShoppingCart shoppingCart) {

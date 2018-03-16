@@ -45,6 +45,7 @@ public class HeaderOrientedIPResolverImpl implements IPResolver {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String resolve(final HttpServletRequest httpServletRequest) {
 
         for (final String header : HEADER_CHAIN) {

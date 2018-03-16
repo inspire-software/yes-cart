@@ -92,6 +92,7 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Runnable getTask(final Serializable serializableMessage) {
         return new StandardMessageListener(
                 mailService,

@@ -68,6 +68,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
     private CustomerOrderService orderService;
     private CustomerOrderPaymentService paymentService;
 
+    @Override
     @Before
     public void setUp()  {
         super.setUp();

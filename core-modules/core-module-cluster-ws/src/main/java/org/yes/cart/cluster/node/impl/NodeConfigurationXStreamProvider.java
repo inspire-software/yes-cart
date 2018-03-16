@@ -35,16 +35,19 @@ public class NodeConfigurationXStreamProvider implements XStreamProvider<List<No
     private XStream xStream;
 
     /** {@inheritDoc} */
+    @Override
     public List<Node> fromXML(final String xml) {
         return (List<Node>) provide().fromXML(xml);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Node> fromXML(final InputStream is) {
         return (List<Node>) provide().fromXML(is);
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toXML(final List<Node> object) {
         return provide().toXML(object);
     }

@@ -52,6 +52,7 @@ public interface ExportColumn extends ImpExColumn {
      *
      * @return {@link ExportDescriptor}
      */
+    @Override
     ExportDescriptor getDescriptor();
 
 
@@ -60,6 +61,7 @@ public interface ExportColumn extends ImpExColumn {
      *
      * @return true if need to use master object.
      */
+    @Override
     boolean isUseMasterObject();
 
     /**
@@ -67,6 +69,7 @@ public interface ExportColumn extends ImpExColumn {
      *
      * @param useMasterObject use master object flag.
      */
+    @Override
     void setUseMasterObject(boolean useMasterObject);
 
     /**
@@ -74,16 +77,19 @@ public interface ExportColumn extends ImpExColumn {
      *
      * @return filed constant
      */
+    @Override
     String getValueConstant();
 
     /**
      * @return entity type for FK's
      */
+    @Override
     String getEntityType();
 
     /**
      * @return language of the localisable value (or null if this is not localisable)
      */
+    @Override
     String getLanguage();
 
 }

@@ -58,7 +58,7 @@ public class ProductImageExportDomainObjectStrategyImpl extends AbstractImageExp
     @Override
     protected Set<String> getAllObjectImages(final Product next) {
 
-        final Set<String> images = new HashSet<String>();
+        final Set<String> images = new HashSet<>();
 
         try {
             validateAccessBeforeUpdate(next, Product.class);

@@ -39,6 +39,7 @@ public interface ImportDescriptor extends ImpExDescriptor<ImportContext, ImportC
      *
      * @return import context
      */
+    @Override
     ImportContext getContext();
 
     /**
@@ -53,6 +54,7 @@ public interface ImportDescriptor extends ImpExDescriptor<ImportContext, ImportC
      *
      * @return fully qualified entity interface
      */
+    @Override
     String getEntityType();
 
     /**
@@ -60,6 +62,7 @@ public interface ImportDescriptor extends ImpExDescriptor<ImportContext, ImportC
      *
      * @return entity interface
      */
+    @Override
     Class getEntityTypeClass();
 
     /**

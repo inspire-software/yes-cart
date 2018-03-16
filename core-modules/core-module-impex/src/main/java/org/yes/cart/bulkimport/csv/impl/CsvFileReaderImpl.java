@@ -45,6 +45,7 @@ public class CsvFileReaderImpl implements CsvFileReader {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void open(final String csvFileName,
                      final char columnDelimiter,
                      final char textQualifier,
@@ -61,6 +62,7 @@ public class CsvFileReaderImpl implements CsvFileReader {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String[] readLine() throws IOException {
         if (rowsRead == 0 && ignoreFirstLine) {
             rowsRead++;
@@ -76,6 +78,7 @@ public class CsvFileReaderImpl implements CsvFileReader {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() throws IOException {
         if (csvReader != null) {
             csvReader.close();
@@ -91,6 +94,7 @@ public class CsvFileReaderImpl implements CsvFileReader {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getRowsRead() {
         return rowsRead;
     }

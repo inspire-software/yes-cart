@@ -44,7 +44,7 @@ public class WsMessage {
         this.source = message.getSource();
         this.subject = message.getSubject();
         if (message.getTargets() != null) {
-            this.targets = new ArrayList<String>(message.getTargets());
+            this.targets = new ArrayList<>(message.getTargets());
         }
         this.payload = SerializationUtils.serialize(message.getPayload());
     }

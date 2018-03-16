@@ -31,6 +31,7 @@ public class CsvExportContextImpl implements ExportContext {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getShopCode() {
         return shopCode;
     }
@@ -47,6 +48,7 @@ public class CsvExportContextImpl implements ExportContext {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getShopCodeColumn() {
         return shopCodeColumn;
     }
