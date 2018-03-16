@@ -1157,7 +1157,7 @@
         CREATED_BY varchar(64),
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
-        CART_STATE varbinary(65536),
+        CART_STATE varbinary(55536),
         EMPTY bit not null,
         CUSTOMER_EMAIL varchar(255),
         ORDERNUM varchar(255),

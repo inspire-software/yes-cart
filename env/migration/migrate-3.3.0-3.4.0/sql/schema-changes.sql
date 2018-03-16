@@ -556,7 +556,7 @@ VALUES (14561, 'payPalButtonPaymentGateway', 'PPB_BUSINESS', '', 'Merchant email
 -- YC-000 RC Review increase CART_STATE to 64K
 --
 
-alter table TSHOPPINGCARTSTATE modify column CART_STATE varbinary(65536);
+alter table TSHOPPINGCARTSTATE modify column CART_STATE varbinary(55536);
 
 --
 -- YC-875 Preselect shipping methods if setting in shop is enabled
