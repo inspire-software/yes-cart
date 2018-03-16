@@ -56,6 +56,7 @@ public class DtoAttributeGroupServiceImpl
      * @throws UnableToCreateInstanceException in case of reflection problem
      * @throws UnmappedInterfaceException in case of configuration problem
      */
+    @Override
     public AttributeGroupDTO getAttributeGroupByCode(final String code)  throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final AttributeGroup attributeGroup =  getAttributeGroupService().getAttributeGroupByCode(code);
         if (attributeGroup != null) {
@@ -75,6 +76,7 @@ public class DtoAttributeGroupServiceImpl
      * @throws UnableToCreateInstanceException in case of reflection problem
      * @throws UnmappedInterfaceException in case of configuration problem
      */
+    @Override
     public AttributeGroupDTO create(final String code, final String name, final String description) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final AttributeGroup attributeGroup = getPersistenceEntityFactory().getByIface(AttributeGroup.class);
@@ -93,6 +95,7 @@ public class DtoAttributeGroupServiceImpl
      * @param description description
      * @return updated entity
      */
+    @Override
     public AttributeGroupDTO update(final String code, final String name, final String description) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final AttributeGroup attributeGroup = getAttributeGroupService().getAttributeGroupByCode(code);
         attributeGroup.setCode(code);
@@ -106,33 +109,39 @@ public class DtoAttributeGroupServiceImpl
      * Delete  {@link AttributeGroup} by given code.
      * @param code code of {@link AttributeGroup} to delete
      */
+    @Override
     public void remove(final String code) {
         getAttributeGroupService().delete(code);
     }
 
     /** {@inheritDoc}*/
+    @Override
     public AttributeGroupDTO create(final AttributeGroupDTO instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return create(instance.getCode(), instance.getName(), instance.getDescription());
     }
 
     /** {@inheritDoc}*/
+    @Override
     public AttributeGroupDTO update(final AttributeGroupDTO instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return update(instance.getCode(), instance.getName(), instance.getDescription());
     }
 
     /** {@inheritDoc}*/
+    @Override
     public Class<AttributeGroupDTO> getDtoIFace() {
         return AttributeGroupDTO.class;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public Class<AttributeGroupDTOImpl> getDtoImpl() {
         return AttributeGroupDTOImpl.class;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public Class<AttributeGroup> getEntityIFace() {
         return AttributeGroup.class;
     }

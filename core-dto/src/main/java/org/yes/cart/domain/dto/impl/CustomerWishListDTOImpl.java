@@ -47,6 +47,7 @@ public class CustomerWishListDTOImpl implements CustomerWishListDTO {
     private long customerId;
 
     /** {@inheritDoc} */
+    @Override
     public long getCustomerwishlistId() {
         return customerwishlistId;
     }
@@ -54,61 +55,73 @@ public class CustomerWishListDTOImpl implements CustomerWishListDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return customerwishlistId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCustomerwishlistId(final long customerwishlistId) {
         this.customerwishlistId = customerwishlistId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getSkuId() {
         return skuId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSkuId(final long skuId) {
         this.skuId = skuId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSkuCode() {
         return skuCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSkuCode(final String skuCode) {
         this.skuCode = skuCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSkuName() {
         return skuName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSkuName(final String skuName) {
         this.skuName = skuName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getWlType() {
         return wlType;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setWlType(final String wlType) {
         this.wlType = wlType;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getCustomerId() {
         return customerId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCustomerId(final long customerId) {
         this.customerId = customerId;
     }

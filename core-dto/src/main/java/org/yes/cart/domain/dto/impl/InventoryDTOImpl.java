@@ -56,76 +56,91 @@ public class InventoryDTOImpl implements InventoryDTO {
 
 
     /** {@inheritDoc} */
+    @Override
     public long getId() {
         return getSkuWarehouseId();
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getSkuWarehouseId() {
         return skuWarehouseId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSkuWarehouseId(final long skuWarehouseId) {
         this.skuWarehouseId = skuWarehouseId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSkuCode() {
         return skuCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSkuCode(final String skuCode) {
         this.skuCode = skuCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSkuName() {
         return skuName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSkuName(final String skuName) {
         this.skuName = skuName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getWarehouseCode() {
         return warehouseCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setWarehouseCode(final String warehouseCode) {
         this.warehouseCode = warehouseCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getWarehouseName() {
         return warehouseName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setWarehouseName(final String warehouseName) {
         this.warehouseName = warehouseName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getQuantity() {
         return quantity;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setQuantity(final BigDecimal quantity) {
         this.quantity = quantity;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getReserved() {
         return reserved;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setReserved(final BigDecimal reserved) {
         this.reserved = reserved;
     }

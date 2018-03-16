@@ -70,36 +70,43 @@ public class WarehouseDTOImpl implements WarehouseDTO {
 
 
     /** {@inheritDoc}*/
+    @Override
     public long getWarehouseId() {
         return warehouseId;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public long getId() {
         return warehouseId;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setWarehouseId(final long warehouseId) {
         this.warehouseId = warehouseId;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public String getCode() {
         return code;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public String getName() {
         return name;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
@@ -108,6 +115,7 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayNames() {
         return displayNames;
     }
@@ -115,86 +123,103 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayNames(final Map<String, String> displayNames) {
         this.displayNames = displayNames;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public String getDescription() {
         return description;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public String getCountryCode() {
         return countryCode;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setCountryCode(final String countryCode) {
         this.countryCode = countryCode;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public String getStateCode() {
         return stateCode;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setStateCode(final String stateCode) {
         this.stateCode = stateCode;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public String getCity() {
         return city;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setCity(final String city) {
         this.city = city;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public String getPostcode() {
         return postcode;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setPostcode(final String postcode) {
         this.postcode = postcode;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public int getDefaultStandardStockLeadTime() {
         return defaultStandardStockLeadTime;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setDefaultStandardStockLeadTime(final int defaultStandardStockLeadTime) {
         this.defaultStandardStockLeadTime = defaultStandardStockLeadTime;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public int getDefaultBackorderStockLeadTime() {
         return defaultBackorderStockLeadTime;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setDefaultBackorderStockLeadTime(final int defaultBackorderStockLeadTime) {
         this.defaultBackorderStockLeadTime = defaultBackorderStockLeadTime;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public boolean isMultipleShippingSupported() {
         return multipleShippingSupported;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setMultipleShippingSupported(final boolean multipleShippingSupported) {
         this.multipleShippingSupported = multipleShippingSupported;
     }

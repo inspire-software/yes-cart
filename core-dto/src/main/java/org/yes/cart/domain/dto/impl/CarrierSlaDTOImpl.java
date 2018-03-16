@@ -20,7 +20,6 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.CarrierSlaDTO;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -99,6 +98,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     private String externalRef;
 
     /** {@inheritDoc} */
+    @Override
     public long getCarrierslaId() {
         return carrierslaId;
     }
@@ -106,6 +106,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return carrierslaId;
     }
@@ -113,6 +114,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCarrierslaId(final long carrierslaId) {
         this.carrierslaId = carrierslaId;
     }
@@ -120,6 +122,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCode() {
         return code;
     }
@@ -127,6 +130,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
@@ -134,6 +138,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -141,6 +146,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
@@ -148,6 +154,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayNames() {
         return displayNames;
     }
@@ -155,6 +162,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayNames(final Map<String, String> displayNames) {
         this.displayNames = displayNames;
     }
@@ -162,6 +170,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDescription() {
         return description;
     }
@@ -169,6 +178,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }
@@ -176,6 +186,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayDescriptions() {
         return displayDescriptions;
     }
@@ -183,6 +194,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayDescriptions(final Map<String, String> displayDescriptions) {
         this.displayDescriptions = displayDescriptions;
     }
@@ -190,6 +202,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Integer getMaxDays() {
         return maxDays;
     }
@@ -197,6 +210,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMaxDays(final Integer maxDays) {
         this.maxDays = maxDays;
     }
@@ -204,6 +218,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Integer getMinDays() {
         return minDays;
     }
@@ -211,6 +226,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMinDays(final Integer minDays) {
         this.minDays = minDays;
     }
@@ -218,6 +234,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getExcludeWeekDays() {
         return excludeWeekDays;
     }
@@ -225,6 +242,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setExcludeWeekDays(final String excludeWeekDays) {
         this.excludeWeekDays = excludeWeekDays;
     }
@@ -232,6 +250,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getExcludeDates() {
         return excludeDates;
     }
@@ -239,6 +258,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setExcludeDates(final String excludeDates) {
         this.excludeDates = excludeDates;
     }
@@ -246,6 +266,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isGuaranteed() {
         return guaranteed;
     }
@@ -253,6 +274,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setGuaranteed(final boolean guaranteed) {
         this.guaranteed = guaranteed;
     }
@@ -260,6 +282,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isNamedDay() {
         return namedDay;
     }
@@ -267,6 +290,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setNamedDay(final boolean namedDay) {
         this.namedDay = namedDay;
     }
@@ -274,6 +298,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getExcludeCustomerTypes() {
         return excludeCustomerTypes;
     }
@@ -281,6 +306,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setExcludeCustomerTypes(final String excludeCustomerTypes) {
         this.excludeCustomerTypes = excludeCustomerTypes;
     }
@@ -288,6 +314,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSlaType() {
         return slaType;
     }
@@ -295,6 +322,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSlaType(final String slaType) {
         this.slaType = slaType;
     }
@@ -302,6 +330,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getScript() {
         return script;
     }
@@ -309,6 +338,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setScript(final String script) {
         this.script = script;
     }
@@ -316,6 +346,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSupportedPaymentGateways() {
         return supportedPaymentGateways;
     }
@@ -323,6 +354,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSupportedPaymentGateways(final String supportedPaymentGateways) {
         this.supportedPaymentGateways = supportedPaymentGateways;
     }
@@ -330,6 +362,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSupportedFulfilmentCentres() {
         return supportedFulfilmentCentres;
     }
@@ -337,6 +370,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSupportedFulfilmentCentres(final String supportedFulfilmentCentres) {
         this.supportedFulfilmentCentres = supportedFulfilmentCentres;
     }
@@ -344,6 +378,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isBillingAddressNotRequired() {
         return billingAddressNotRequired;
     }
@@ -351,6 +386,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setBillingAddressNotRequired(final boolean billingAddressNotRequired) {
         this.billingAddressNotRequired = billingAddressNotRequired;
     }
@@ -358,6 +394,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isDeliveryAddressNotRequired() {
         return deliveryAddressNotRequired;
     }
@@ -365,6 +402,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDeliveryAddressNotRequired(final boolean deliveryAddressNotRequired) {
         this.deliveryAddressNotRequired = deliveryAddressNotRequired;
     }
@@ -372,6 +410,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getExternalRef() {
         return externalRef;
     }
@@ -379,6 +418,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setExternalRef(final String externalRef) {
         this.externalRef = externalRef;
     }
@@ -386,6 +426,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getCarrierId() {
         return carrierId;
     }
@@ -393,6 +434,7 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCarrierId(final long carrierId) {
         this.carrierId = carrierId;
     }

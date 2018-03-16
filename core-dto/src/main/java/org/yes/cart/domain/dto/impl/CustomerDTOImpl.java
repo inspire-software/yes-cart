@@ -76,6 +76,7 @@ public class CustomerDTOImpl implements CustomerDTO {
 
 
     /** {@inheritDoc} */
+    @Override
     public long getCustomerId() {
         return customerId;
     }
@@ -83,100 +84,120 @@ public class CustomerDTOImpl implements CustomerDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return customerId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCustomerId(final long customerId) {
         this.customerId = customerId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getEmail() {
         return email;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setEmail(final String email) {
         this.email = email;
     }
                         /** {@inheritDoc} */
+    @Override
     public String getFirstname() {
         return firstname;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setFirstname(final String firstname) {
         this.firstname = firstname;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getLastname() {
         return lastname;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setLastname(final String lastname) {
         this.lastname = lastname;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getMiddlename() {
         return middlename;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setMiddlename(final String middlename) {
         this.middlename = middlename;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSalutation() {
         return salutation;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSalutation(final String salutation) {
         this.salutation = salutation;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Set<AttrValueCustomerDTO> getAttributes() {
         return attributes;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAttributes(final Set<AttrValueCustomerDTO> attributes) {
         this.attributes = attributes;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getTag() {
         return tag;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setTag(final String tag) {
         this.tag = tag;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCustomerType() {
         return customerType;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCustomerType(final String customerType) {
         this.customerType = customerType;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getPricingPolicy() {
         return pricingPolicy;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setPricingPolicy(final String pricingPolicy) {
         this.pricingPolicy = pricingPolicy;
     }

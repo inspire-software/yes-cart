@@ -62,6 +62,8 @@ public class DtoProductServiceImpl
         extends AbstractDtoServiceImpl<ProductDTO, ProductDTOImpl, Product>
         implements DtoProductService {
 
+    private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
+
     private final ProductService productService;
     private final DtoFactory dtoFactory;
 
@@ -97,7 +99,7 @@ public class DtoProductServiceImpl
      * @param dtoEtypeService    etype service
      * @param imageService       {@link ImageService} to manipulate  related images.
      * @param fileService {@link FileService} to manipulate related files
-     * @param productAssociationDao
+     * @param productAssociationDao  dao
      * @param systemService      system service
      */
     public DtoProductServiceImpl(
@@ -174,10 +176,11 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<ProductDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<ProductDTO> dtos = new ArrayList<ProductDTO>();
+        final List<ProductDTO> dtos = new ArrayList<>();
 
         List<Product> entities = Collections.emptyList();
 
@@ -272,6 +275,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public ProductSkuDTO getProductSkuByCode(final String skuCode)
             throws ObjectNotFoundException, UnableToWrapObjectException {
@@ -306,6 +310,7 @@ public class DtoProductServiceImpl
      * {@inheritDoc}
      * Default product sku will be also created.
      */
+    @Override
     public ProductDTO create(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         cleanProductOrderQuantities(instance);
         return super.create(instance);
@@ -314,6 +319,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductDTO update(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         cleanProductOrderQuantities(instance);
         return super.update(instance);
@@ -322,6 +328,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void createPostProcess(final ProductDTO dto, final Product entity) {
         ensureBlankUriIsNull(entity);
         ensureTagsAreLowercase(entity);
@@ -331,6 +338,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void updatePostProcess(final ProductDTO dto, final Product entity) {
         ensureBlankUriIsNull(entity);
         ensureTagsAreLowercase(entity);
@@ -354,6 +362,7 @@ public class DtoProductServiceImpl
      *
      * @return dto interface.
      */
+    @Override
     public Class<ProductDTO> getDtoIFace() {
         return ProductDTO.class;
     }
@@ -363,6 +372,7 @@ public class DtoProductServiceImpl
      *
      * @return dto implementation class.
      */
+    @Override
     public Class<ProductDTOImpl> getDtoImpl() {
         return ProductDTOImpl.class;
     }
@@ -372,6 +382,7 @@ public class DtoProductServiceImpl
      *
      * @return entity interface.
      */
+    @Override
     public Class<Product> getEntityIFace() {
         return Product.class;
     }
@@ -381,11 +392,12 @@ public class DtoProductServiceImpl
      * Get products, that assigned to given category id.
      *
      * @param categoryId given category id
-     * @return List of assined product DTOs
+     * @return List of assigned product DTOs
      */
+    @Override
     public List<ProductDTO> getProductByCategory(final long categoryId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Product> products = ((ProductService) service).findProductByCategory(categoryId);
-        final List<ProductDTO> dtos = new ArrayList<ProductDTO>(products.size());
+        final List<ProductDTO> dtos = new ArrayList<>(products.size());
         fillDTOs(products, dtos);
         return dtos;
     }
@@ -402,12 +414,13 @@ public class DtoProductServiceImpl
      *                                    in case of reflection problem
      * @throws UnmappedInterfaceException in case of configuration problem
      */
+    @Override
     public List<ProductDTO> getProductByCategoryWithPaging(
             final long categoryId,
             final int firstResult,
             final int maxResults) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Product> products = ((ProductService) service).findProductByCategory(categoryId, firstResult, maxResults);
-        final List<ProductDTO> dtos = new ArrayList<ProductDTO>(products.size());
+        final List<ProductDTO> dtos = new ArrayList<>(products.size());
         fillDTOs(products, dtos);
         return dtos;
     }
@@ -415,6 +428,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ProductDTO> getProductByCodeNameBrandType(
             final String code,
             final String name,
@@ -432,7 +446,7 @@ public class DtoProductServiceImpl
         final List<Product> products = ((ProductService) service).findProductByCodeNameBrandType(
                 code, name, brand, productType);
 
-        final List<ProductDTO> dtos = new ArrayList<ProductDTO>(products.size());
+        final List<ProductDTO> dtos = new ArrayList<>(products.size());
         fillDTOs(products, dtos);
         return dtos;
 
@@ -442,10 +456,11 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final ProductDTO productDTO = getById(entityPk);
-        final List<AttrValueProductDTO> productAttrs = new ArrayList<AttrValueProductDTO>(productDTO.getAttributes());
+        final List<AttrValueProductDTO> productAttrs = new ArrayList<>(productDTO.getAttributes());
 
         final List<AttributeDTO> ptList = dtoAttributeService.findAvailableAttributesByProductTypeId(
                 productDTO.getProductTypeDTO().getProducttypeId()
@@ -463,12 +478,12 @@ public class DtoProductServiceImpl
 
         ptList.addAll(mandatory);
 
-        final Set<String> existingAttrValueCodes = new HashSet<String>();
+        final Set<String> existingAttrValueCodes = new HashSet<>();
         for (final AttrValueProductDTO value : productAttrs) {
             existingAttrValueCodes.add(value.getAttributeDTO().getCode());
         }
 
-        final List<AttrValueProductDTO> full = new ArrayList<AttrValueProductDTO>(ptList.size());
+        final List<AttrValueProductDTO> full = new ArrayList<>(ptList.size());
         for (final AttributeDTO available : ptList) {
             if (!existingAttrValueCodes.contains(available.getCode())) {
                 // add blank value for available attribute
@@ -483,20 +498,17 @@ public class DtoProductServiceImpl
 
         CollectionUtils.filter(
                 full,
-                new Predicate() {
-                    public boolean evaluate(final Object object) {
-                        return ((AttrValueDTO) object).getAttributeDTO() != null;
-                    }
-                }
+                object -> ((AttrValueDTO) object).getAttributeDTO() != null
         );
 
-        Collections.sort(full, new AttrValueDTOComparatorImpl());
+        full.sort(ATTR_VALUE_DTO_COMPARATOR);
         return full;
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         final AttrValueProduct attrValue = attrValueEntityProductDao.findById(attrValueDTO.getAttrvalueId());
         attrValueAssembler.assembleEntity(attrValueDTO, attrValue, getAdaptersRepository(), dtoFactory);
@@ -507,6 +519,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
 
         final Attribute atr = attributeService.findById(attrValueDTO.getAttributeDTO().getAttributeId());
@@ -536,6 +549,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
@@ -544,11 +558,11 @@ public class DtoProductServiceImpl
             attribute = attributeService.findSingleByCriteria(" where e.name = ?1", attrName);
         }
 
-        AttributeDTO attrDto = null;
+        AttributeDTO attrDto;
 
         if (attribute == null) {
 
-            final Map<String, String> displayNames = new TreeMap<String, String>();
+            final Map<String, String> displayNames = new TreeMap<>();
             for (String lang : languageService.getSupportedLanguages()) {
                 displayNames.put(lang, attrName);
             }
@@ -596,6 +610,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void remove(long id) {
         dtoProductCategoryService.removeByProductIds(id);
         getDtoProductSkuService().removeAllInventory(id);
@@ -607,25 +622,26 @@ public class DtoProductServiceImpl
             return;
         }
 
-        final List<Long> avIds = new ArrayList<Long>();
+        final List<Long> avIds = new ArrayList<>();
         for (final AttrValueProduct av : product.getAttributes()) {
             avIds.add(av.getAttrvalueId());
         }
-        final List<Long> skus = new ArrayList<Long>();
+        final List<Long> skus = new ArrayList<>();
         for (final ProductSku sku : product.getSku()) {
             skus.add(sku.getSkuId());
         }
-        final List<Long> assoc = new ArrayList<Long>();
+        final List<Long> assoc = new ArrayList<>();
         for (final ProductAssociation productAssociation : product.getProductAssociations()) {
             assoc.add(productAssociation.getProductassociationId());
         }
-        product = null;
         getService().getGenericDao().clear(); // clear session
 
         for (final Long avId : avIds) {
             try {
                 deleteAttributeValue(avId);
-            } catch (Exception exp) {};
+            } catch (Exception exp) {
+                // OK
+            }
         }
 
         getService().getGenericDao().flushClear(); // ensure we flush delete and clear session
@@ -633,7 +649,9 @@ public class DtoProductServiceImpl
         for (final Long sku : skus) {
             try {
                 getDtoProductSkuService().remove(sku);
-            } catch (Exception exp) {};
+            } catch (Exception exp) {
+                // OK
+            }
         }
 
         getService().getGenericDao().flushClear(); // ensure we flush delete and clear session
@@ -651,6 +669,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public long deleteAttributeValue(final long attributeValuePk)
             throws UnableToCreateInstanceException, UnmappedInterfaceException {
         final AttrValueProduct attrValue = attrValueEntityProductDao.findById(attributeValuePk);
@@ -670,6 +689,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isUriAvailableForProduct(final String seoUri, final Long productId) {
 
         final Long prodId = ((ProductService) service).findProductIdBySeoUri(seoUri);
@@ -680,6 +700,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isGuidAvailableForProduct(final String guid, final Long productId) {
 
         final Long prodId = ((ProductService) service).findProductIdByGUID(guid);
@@ -690,6 +711,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCodeAvailableForProduct(final String code, final Long productId) {
 
         final Long prodId = ((ProductService) service).findProductIdByCode(code);
@@ -700,6 +722,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isUriAvailableForProductSku(final String seoUri, final Long productSkuId) {
 
         final Long skuId = ((ProductService) service).findProductSkuIdBySeoUri(seoUri);
@@ -711,6 +734,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isGuidAvailableForProductSku(final String guid, final Long productSkuId) {
 
         final Long skuId = ((ProductService) service).findProductSkuIdByGUID(guid);
@@ -721,6 +745,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCodeAvailableForProductSku(final String code, final Long productSkuId) {
 
         final Long skuId = ((ProductService) service).findProductSkuIdByCode(code);
@@ -732,6 +757,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
         final AttrValueProductDTO dto = new AttrValueProductDTOImpl();
         dto.setProductId(entityPk);

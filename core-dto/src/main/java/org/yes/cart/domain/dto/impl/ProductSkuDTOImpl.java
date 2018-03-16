@@ -124,6 +124,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getSkuId() {
         return skuId;
     }
@@ -131,6 +132,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return skuId;
     }
@@ -138,6 +140,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSkuId(final long skuId) {
         this.skuId = skuId;
     }
@@ -145,6 +148,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getGuid() {
         return guid;
     }
@@ -152,6 +156,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setGuid(final String guid) {
         this.guid = guid;
     }
@@ -159,6 +164,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCode() {
         return code;
     }
@@ -166,6 +172,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
@@ -173,6 +180,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getManufacturerCode() {
         return manufacturerCode;
     }
@@ -180,6 +188,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setManufacturerCode(final String manufacturerCode) {
         this.manufacturerCode = manufacturerCode;
     }
@@ -187,6 +196,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getManufacturerPartCode() {
         return manufacturerPartCode;
     }
@@ -194,6 +204,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setManufacturerPartCode(final String manufacturerPartCode) {
         this.manufacturerPartCode = manufacturerPartCode;
     }
@@ -201,6 +212,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSupplierCode() {
         return supplierCode;
     }
@@ -208,6 +220,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSupplierCode(final String supplierCode) {
         this.supplierCode = supplierCode;
     }
@@ -215,6 +228,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSupplierCatalogCode() {
         return supplierCatalogCode;
     }
@@ -222,6 +236,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSupplierCatalogCode(final String supplierCatalogCode) {
         this.supplierCatalogCode = supplierCatalogCode;
     }
@@ -229,6 +244,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -236,16 +252,19 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getDisplayNames() {
         return displayNames;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDisplayNames(final Map<String, String> displayNames) {
         this.displayNames = displayNames;
     }
@@ -253,6 +272,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDescription() {
         return description;
     }
@@ -260,6 +280,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }
@@ -267,6 +288,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getProductId() {
         return productId;
     }
@@ -274,6 +296,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setProductId(final long productId) {
         this.productId = productId;
     }
@@ -281,6 +304,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getRank() {
         return rank;
     }
@@ -288,6 +312,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setRank(final int rank) {
         this.rank = rank;
     }
@@ -295,6 +320,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getBarCode() {
         return barCode;
     }
@@ -302,6 +328,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setBarCode(final String barCode) {
         this.barCode = barCode;
     }
@@ -309,6 +336,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<AttrValueProductSkuDTO> getAttributes() {
         return attributes;
     }
@@ -316,6 +344,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAttributes(final Collection<AttrValueProductSkuDTO> attributes) {
         this.attributes = attributes;
     }
@@ -323,6 +352,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUri() {
         return uri;
     }
@@ -330,6 +360,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setUri(final String uri) {
         this.uri = uri;
     }
@@ -337,6 +368,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTitle() {
         return title;
     }
@@ -344,6 +376,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTitle(final String title) {
         this.title = title;
     }
@@ -351,6 +384,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayTitles() {
         return displayTitles;
     }
@@ -358,6 +392,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayTitles(final Map<String, String> displayTitles) {
         this.displayTitles = displayTitles;
     }
@@ -365,6 +400,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMetakeywords() {
         return metakeywords;
     }
@@ -372,6 +408,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMetakeywords(final String metakeywords) {
         this.metakeywords = metakeywords;
     }
@@ -379,6 +416,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayMetakeywords() {
         return displayMetakeywords;
     }
@@ -386,6 +424,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayMetakeywords(final Map<String, String> displayMetakeywords) {
         this.displayMetakeywords = displayMetakeywords;
     }
@@ -393,6 +432,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMetadescription() {
         return metadescription;
     }
@@ -400,6 +440,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMetadescription(final String metadescription) {
         this.metadescription = metadescription;
     }
@@ -407,6 +448,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayMetadescriptions() {
         return displayMetadescriptions;
     }
@@ -414,6 +456,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayMetadescriptions(final Map<String, String> displayMetadescriptions) {
         this.displayMetadescriptions = displayMetadescriptions;
     }

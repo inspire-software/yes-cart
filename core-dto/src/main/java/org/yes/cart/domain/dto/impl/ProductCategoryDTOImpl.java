@@ -49,26 +49,31 @@ public class ProductCategoryDTOImpl implements ProductCategoryDTO {
     private int rank;
 
     /** {@inheritDoc} */
+    @Override
     public String getCategoryCode() {
         return categoryCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCategoryCode(final String categoryCode) {
         this.categoryCode = categoryCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCategoryName() {
         return categoryName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCategoryName(final String categoryName) {
         this.categoryName = categoryName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getProductCategoryId() {
         return productCategoryId;
     }
@@ -76,42 +81,50 @@ public class ProductCategoryDTOImpl implements ProductCategoryDTO {
 /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return productCategoryId;
     }
 
 
     /** {@inheritDoc} */
+    @Override
     public void setProductCategoryId(final long productCategoryId) {
         this.productCategoryId = productCategoryId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getProductId() {
         return productId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setProductId(final long productId) {
         this.productId = productId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getCategoryId() {
         return categoryId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCategoryId(final long categoryId) {
         this.categoryId = categoryId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getRank() {
         return rank;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setRank(final int rank) {
         this.rank = rank;
     }

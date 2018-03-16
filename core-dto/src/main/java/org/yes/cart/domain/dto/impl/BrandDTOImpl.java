@@ -59,6 +59,7 @@ public class BrandDTOImpl implements BrandDTO {
     private Collection<AttrValueBrandDTO> attributes;
 
    /** {@inheritDoc}*/
+    @Override
     public long getBrandId() {
         return brandId;
     }
@@ -66,41 +67,49 @@ public class BrandDTOImpl implements BrandDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return brandId;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setBrandId(final long brandId) {
         this.brandId = brandId;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public String getName() {
         return name;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public String getDescription() {
         return description;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public Collection<AttrValueBrandDTO> getAttributes() {
         return attributes;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setAttributes(final Collection<AttrValueBrandDTO> attributes) {
         this.attributes = attributes;
     }

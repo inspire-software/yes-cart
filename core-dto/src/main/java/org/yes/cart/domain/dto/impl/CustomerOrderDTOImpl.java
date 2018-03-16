@@ -158,6 +158,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getAmount() {
         return amount;
     }
@@ -165,6 +166,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAmount(final BigDecimal amount) {
         this.amount = amount;
     }
@@ -172,6 +174,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getOrderTotal() {
         return orderTotal;
     }
@@ -179,6 +182,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderTotal(final BigDecimal orderTotal) {
         this.orderTotal = orderTotal;
     }
@@ -186,6 +190,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getOrderTotalTax() {
         return orderTotalTax;
     }
@@ -193,6 +198,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderTotalTax(final BigDecimal orderTotalTax) {
         this.orderTotalTax = orderTotalTax;
     }
@@ -200,6 +206,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getOrderGrossTotal() {
         return orderGrossTotal;
     }
@@ -207,6 +214,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderGrossTotal(final BigDecimal orderGrossTotal) {
         this.orderGrossTotal = orderGrossTotal;
     }
@@ -214,6 +222,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getOrderNetTotal() {
         return orderNetTotal;
     }
@@ -221,6 +230,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderNetTotal(final BigDecimal orderNetTotal) {
         this.orderNetTotal = orderNetTotal;
     }
@@ -228,6 +238,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getPrice() {
         return price;
     }
@@ -235,6 +246,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPrice(final BigDecimal price) {
         this.price = price;
     }
@@ -242,6 +254,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getNetPrice() {
         return netPrice;
     }
@@ -249,6 +262,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setNetPrice(final BigDecimal netPrice) {
         this.netPrice = netPrice;
     }
@@ -256,6 +270,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getGrossPrice() {
         return grossPrice;
     }
@@ -263,6 +278,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setGrossPrice(final BigDecimal grossPrice) {
         this.grossPrice = grossPrice;
     }
@@ -270,6 +286,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getListPrice() {
         return listPrice;
     }
@@ -277,6 +294,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setListPrice(final BigDecimal listPrice) {
         this.listPrice = listPrice;
     }
@@ -284,6 +302,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isPromoApplied() {
         return promoApplied;
     }
@@ -291,6 +310,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPromoApplied(final boolean promoApplied) {
         this.promoApplied = promoApplied;
     }
@@ -298,6 +318,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getAppliedPromo() {
         return appliedPromo;
     }
@@ -305,6 +326,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAppliedPromo(final String appliedPromo) {
         this.appliedPromo = appliedPromo;
     }
@@ -312,6 +334,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getCustomerorderId() {
         return customerorderId;
     }
@@ -319,6 +342,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return customerorderId;
     }
@@ -326,6 +350,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCustomerorderId(final long customerorderId) {
         this.customerorderId = customerorderId;
     }
@@ -333,6 +358,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getOrdernum() {
         return ordernum;
     }
@@ -340,6 +366,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrdernum(final String ordernum) {
         this.ordernum = ordernum;
     }
@@ -347,6 +374,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPgLabel() {
         return pgLabel;
     }
@@ -354,6 +382,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPgLabel(final String pgLabel) {
         this.pgLabel = pgLabel;
     }
@@ -361,6 +390,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getBillingAddress() {
         return billingAddress;
     }
@@ -368,6 +398,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setBillingAddress(final String billingAddress) {
         this.billingAddress = billingAddress;
     }
@@ -375,6 +406,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getShippingAddress() {
         return shippingAddress;
     }
@@ -382,6 +414,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setShippingAddress(final String shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
@@ -389,6 +422,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCartGuid() {
         return cartGuid;
     }
@@ -396,6 +430,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCartGuid(final String cartGuid) {
         this.cartGuid = cartGuid;
     }
@@ -403,6 +438,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCurrency() {
         return currency;
     }
@@ -410,6 +446,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCurrency(final String currency) {
         this.currency = currency;
     }
@@ -417,6 +454,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getOrderMessage() {
         return orderMessage;
     }
@@ -424,6 +462,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderMessage(final String orderMessage) {
         this.orderMessage = orderMessage;
     }
@@ -431,6 +470,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getOrderStatus() {
         return orderStatus;
     }
@@ -438,6 +478,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderStatus(final String orderStatus) {
         this.orderStatus = orderStatus;
     }
@@ -445,6 +486,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isMultipleShipmentOption() {
         return multipleShipmentOption;
     }
@@ -452,6 +494,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMultipleShipmentOption(final boolean multipleShipmentOption) {
         this.multipleShipmentOption = multipleShipmentOption;
     }
@@ -459,6 +502,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDateTime getOrderTimestamp() {
         return orderTimestamp;
     }
@@ -466,6 +510,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderTimestamp(final LocalDateTime orderTimestamp) {
         this.orderTimestamp = orderTimestamp;
     }
@@ -473,6 +518,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getOrderIp() {
         return orderIp;
     }
@@ -480,6 +526,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setOrderIp(final String orderIp) {
         this.orderIp = orderIp;
     }
@@ -487,6 +534,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getEmail() {
         return email;
     }
@@ -494,6 +542,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setEmail(final String email) {
         this.email = email;
     }
@@ -501,6 +550,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getFirstname() {
         return firstname;
     }
@@ -508,6 +558,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setFirstname(final String firstname) {
         this.firstname = firstname;
     }
@@ -515,6 +566,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLastname() {
         return lastname;
     }
@@ -522,6 +574,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setLastname(final String lastname) {
         this.lastname = lastname;
     }
@@ -529,6 +582,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMiddlename() {
         return middlename;
     }
@@ -536,6 +590,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMiddlename(final String middlename) {
         this.middlename = middlename;
     }
@@ -543,6 +598,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSalutation() {
         return salutation;
     }
@@ -550,6 +606,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSalutation(final String salutation) {
         this.salutation = salutation;
     }
@@ -557,6 +614,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getEligibleForExport() {
         return eligibleForExport;
     }
@@ -564,6 +622,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setEligibleForExport(final String eligibleForExport) {
         this.eligibleForExport = eligibleForExport;
     }
@@ -571,6 +630,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isBlockExport() {
         return blockExport;
     }
@@ -578,6 +638,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setBlockExport(final boolean blockExport) {
         this.blockExport = blockExport;
     }
@@ -585,6 +646,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Instant getLastExportDate() {
         return lastExportDate;
     }
@@ -592,6 +654,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setLastExportDate(final Instant lastExportDate) {
         this.lastExportDate = lastExportDate;
     }
@@ -599,6 +662,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLastExportStatus() {
         return lastExportStatus;
     }
@@ -606,6 +670,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setLastExportStatus(final String lastExportStatus) {
         this.lastExportStatus = lastExportStatus;
     }
@@ -613,6 +678,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLastExportOrderStatus() {
         return lastExportOrderStatus;
     }
@@ -620,6 +686,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setLastExportOrderStatus(final String lastExportOrderStatus) {
         this.lastExportOrderStatus = lastExportOrderStatus;
     }
@@ -627,6 +694,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getB2bRef() {
         return b2bRef;
     }
@@ -634,6 +702,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setB2bRef(final String b2bRef) {
         this.b2bRef = b2bRef;
     }
@@ -641,6 +710,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getB2bEmployeeId() {
         return b2bEmployeeId;
     }
@@ -648,6 +718,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setB2bEmployeeId(final String b2bEmployeeId) {
         this.b2bEmployeeId = b2bEmployeeId;
     }
@@ -655,6 +726,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getB2bChargeId() {
         return b2bChargeId;
     }
@@ -662,6 +734,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setB2bChargeId(final String b2bChargeId) {
         this.b2bChargeId = b2bChargeId;
     }
@@ -669,6 +742,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isB2bRequireApprove() {
         return b2bRequireApprove;
     }
@@ -676,6 +750,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setB2bRequireApprove(final boolean b2bRequireApprove) {
         this.b2bRequireApprove = b2bRequireApprove;
     }
@@ -683,6 +758,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getB2bApprovedBy() {
         return b2bApprovedBy;
     }
@@ -690,6 +766,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setB2bApprovedBy(final String b2bApprovedBy) {
         this.b2bApprovedBy = b2bApprovedBy;
     }
@@ -697,6 +774,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDateTime getB2bApprovedDate() {
         return b2bApprovedDate;
     }
@@ -704,6 +782,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setB2bApprovedDate(final LocalDateTime b2bApprovedDate) {
         this.b2bApprovedDate = b2bApprovedDate;
     }
@@ -711,6 +790,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getB2bRemarks() {
         return b2bRemarks;
     }
@@ -718,6 +798,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setB2bRemarks(final String b2bRemarks) {
         this.b2bRemarks = b2bRemarks;
     }
@@ -725,6 +806,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDateTime getRequestedDeliveryDate() {
         return requestedDeliveryDate;
     }
@@ -732,6 +814,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setRequestedDeliveryDate(final LocalDateTime requestedDeliveryDate) {
         this.requestedDeliveryDate = requestedDeliveryDate;
     }
@@ -739,6 +822,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, Pair<String, String>> getAllValues() {
         return allValues;
     }
@@ -746,6 +830,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAllValues(final Map<String, Pair<String, String>> allValues) {
         this.allValues = allValues;
     }
@@ -753,6 +838,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getCustomerId() {
         return customerId;
     }
@@ -760,6 +846,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCustomerId(final long customerId) {
         this.customerId = customerId;
     }
@@ -767,6 +854,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getShopId() {
         return shopId;
     }
@@ -774,19 +862,22 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setShopId(final long shopId) {
         this.shopId = shopId;
     }
 
     /**
      * {@inheritDoc}
-     */ public String getCode() {
+     */ @Override
+    public String getCode() {
         return code;
     }
 
     /**
      * {@inheritDoc}
-     */ public void setCode(final String code) {
+     */ @Override
+    public void setCode(final String code) {
         this.code = code;
     }
 

@@ -73,6 +73,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
     @DtoField(readOnly = true)
     private String appliedPromo;
 
+    @Override
     public String getProductSkuCode() {
         return productSkuCode;
     }
@@ -81,6 +82,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.productSkuCode = productSkuCode;
     }
 
+    @Override
     public String getProductName() {
         return productName;
     }
@@ -89,6 +91,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.productName = productName;
     }
 
+    @Override
     public String getSupplierCode() {
         return supplierCode;
     }
@@ -97,6 +100,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.supplierCode = supplierCode;
     }
 
+    @Override
     public String getDeliveryGroup() {
         return deliveryGroup;
     }
@@ -105,12 +109,14 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.deliveryGroup = deliveryGroup;
     }
 
+    @Override
     public DeliveryBucket getDeliveryBucket() {
 
         return ShoppingCartUtils.getDeliveryBucket(this);
 
     }
 
+    @Override
     public BigDecimal getQty() {
         return new BigDecimal(qty.toString());
     }
@@ -119,6 +125,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.qty = qty;
     }
 
+    @Override
     public BigDecimal getPrice() {
         return price;
     }
@@ -127,6 +134,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.price = price;
     }
 
+    @Override
     public BigDecimal getNetPrice() {
         return netPrice;
     }
@@ -135,6 +143,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.netPrice = netPrice;
     }
 
+    @Override
     public BigDecimal getGrossPrice() {
         return grossPrice;
     }
@@ -143,6 +152,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.grossPrice = grossPrice;
     }
 
+    @Override
     public String getTaxCode() {
         return taxCode;
     }
@@ -151,6 +161,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.taxCode = taxCode;
     }
 
+    @Override
     public BigDecimal getTaxRate() {
         return taxRate;
     }
@@ -159,6 +170,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.taxRate = taxRate;
     }
 
+    @Override
     public boolean isTaxExclusiveOfPrice() {
         return taxExclusiveOfPrice;
     }
@@ -167,6 +179,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.taxExclusiveOfPrice = taxExclusiveOfPrice;
     }
 
+    @Override
     public BigDecimal getListPrice() {
         return listPrice;
     }
@@ -175,6 +188,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.listPrice = listPrice;
     }
 
+    @Override
     public BigDecimal getSalePrice() {
         return salePrice;
     }
@@ -183,6 +197,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.salePrice = salePrice;
     }
 
+    @Override
     public boolean isGift() {
         return gift;
     }
@@ -191,6 +206,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.gift = gift;
     }
 
+    @Override
     public boolean isFixedPrice() {
         return fixedPrice;
     }
@@ -199,6 +215,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.fixedPrice = fixedPrice;
     }
 
+    @Override
     public boolean isPromoApplied() {
         return promoApplied;
     }
@@ -207,6 +224,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
         this.promoApplied = promoApplied;
     }
 
+    @Override
     public String getAppliedPromo() {
         return appliedPromo;
     }

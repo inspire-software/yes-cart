@@ -48,11 +48,13 @@ public class StateDTOImpl implements StateDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getStateId() {
         return stateId;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public long getId() {
         return stateId;
     }
@@ -60,6 +62,7 @@ public class StateDTOImpl implements StateDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setStateId(final long stateId) {
         this.stateId = stateId;
     }
@@ -67,6 +70,7 @@ public class StateDTOImpl implements StateDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCountryCode() {
         return countryCode;
     }
@@ -74,6 +78,7 @@ public class StateDTOImpl implements StateDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCountryCode(final String countryCode) {
         this.countryCode = countryCode;
     }
@@ -81,6 +86,7 @@ public class StateDTOImpl implements StateDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getStateCode() {
         return stateCode;
     }
@@ -88,6 +94,7 @@ public class StateDTOImpl implements StateDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setStateCode(final String stateCode) {
         this.stateCode = stateCode;
     }
@@ -95,6 +102,7 @@ public class StateDTOImpl implements StateDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -102,6 +110,7 @@ public class StateDTOImpl implements StateDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDisplayName() {
         return displayName;
     }
@@ -109,6 +118,7 @@ public class StateDTOImpl implements StateDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
@@ -116,6 +126,7 @@ public class StateDTOImpl implements StateDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }

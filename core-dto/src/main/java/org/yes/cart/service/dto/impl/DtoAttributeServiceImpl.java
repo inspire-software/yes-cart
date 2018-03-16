@@ -33,7 +33,6 @@ import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.utils.HQLUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -86,6 +85,7 @@ public class DtoAttributeServiceImpl
     }
 
     /** {@inheritDoc}  */
+    @Override
     public AttributeDTO findByAttributeCode(final String attributeCode)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final Attribute attribute =  ((AttributeService)service).findByAttributeCode(attributeCode);
@@ -93,15 +93,17 @@ public class DtoAttributeServiceImpl
     }
 
     /** {@inheritDoc}  */
+    @Override
     public List<AttributeDTO> findByAttributeGroupCode(final String attributeGroupCode)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Attribute> attributes =  ((AttributeService)service).findByAttributeGroupCode(attributeGroupCode);
-        final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attributes.size());
+        final List<AttributeDTO> attributesDTO = new ArrayList<>(attributes.size());
         fillDTOs(attributes, attributesDTO);
         return attributesDTO;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public List<AttributeDTO> findAvailableAttributes(
             final String attributeGroupCode,
             final List<String> assignedAttributeCodes)
@@ -110,49 +112,53 @@ public class DtoAttributeServiceImpl
         final List<Attribute> attributes =  ((AttributeService)service).findAvailableAttributes(
                 attributeGroupCode, assignedAttributeCodes);
 
-        final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attributes.size());
+        final List<AttributeDTO> attributesDTO = new ArrayList<>(attributes.size());
         fillDTOs(attributes, attributesDTO);
         return attributesDTO;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public List<AttributeDTO> findAvailableAttributesByProductTypeId(
             final long productTypeId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<Attribute> attributes = ((AttributeService)service).getAvailableAttributesByProductTypeId(productTypeId);
-        final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attributes.size());
+        final List<AttributeDTO> attributesDTO = new ArrayList<>(attributes.size());
         fillDTOs(attributes, attributesDTO);
         return attributesDTO;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public List<AttributeDTO> findAvailableImageAttributesByGroupCode(
             final String attributeGroupCode)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Attribute> attributes = ((AttributeService)service).getAvailableImageAttributesByGroupCode(attributeGroupCode);
-        final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attributes.size());
+        final List<AttributeDTO> attributesDTO = new ArrayList<>(attributes.size());
         fillDTOs(attributes, attributesDTO);
         return attributesDTO;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public List<AttributeDTO> findAvailableAttributesByGroupCodeStartsWith(
             final String attributeGroupCode,
             final String codePrefix)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Attribute> attributes = ((AttributeService)service).getAvailableAttributesByGroupCodeStartsWith(attributeGroupCode, codePrefix);
-        final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attributes.size());
+        final List<AttributeDTO> attributesDTO = new ArrayList<>(attributes.size());
         fillDTOs(attributes, attributesDTO);
         return attributesDTO;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public List<AttributeDTO> findAttributesWithMultipleValues(
             final String attributeGroupCode) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Attribute> attrs = ((AttributeService)service).findAttributesWithMultipleValues(attributeGroupCode);
         if (attrs != null) {
-            final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attrs.size());
+            final List<AttributeDTO> attributesDTO = new ArrayList<>(attrs.size());
             fillDTOs(attrs, attributesDTO);
             return attributesDTO;
 
@@ -163,9 +169,10 @@ public class DtoAttributeServiceImpl
     private final char[] CODE = new char[] { '#' };
 
     /** {@inheritDoc}  */
+    @Override
     public List<AttributeDTO> findAttributesBy(final String attributeGroupCode, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        List<Attribute> attrs = Collections.emptyList();
+        List<Attribute> attrs;
         if (StringUtils.isNotBlank(filter)) {
             final Pair<String, String> byCode = ComplexSearchUtils.checkSpecialSearch(filter, CODE);
             if (byCode != null) {
@@ -189,7 +196,7 @@ public class DtoAttributeServiceImpl
             );
         }
         if (CollectionUtils.isNotEmpty(attrs)) {
-            final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attrs.size());
+            final List<AttributeDTO> attributesDTO = new ArrayList<>(attrs.size());
             fillDTOs(attrs, attributesDTO);
             return attributesDTO;
 
@@ -198,16 +205,19 @@ public class DtoAttributeServiceImpl
     }
 
     /** {@inheritDoc}  */
+    @Override
     public Class<AttributeDTO> getDtoIFace() {
         return AttributeDTO.class;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public Class<AttributeDTOImpl> getDtoImpl() {
         return AttributeDTOImpl.class;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public Class<Attribute> getEntityIFace() {
         return Attribute.class;
     }

@@ -49,6 +49,7 @@ public class CountryDTOImpl implements CountryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getCountryId() {
         return countryId;
     }
@@ -56,6 +57,7 @@ public class CountryDTOImpl implements CountryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return countryId;
     }
@@ -63,6 +65,7 @@ public class CountryDTOImpl implements CountryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCountryId(final long countryId) {
         this.countryId = countryId;
     }
@@ -70,6 +73,7 @@ public class CountryDTOImpl implements CountryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCountryCode() {
         return countryCode;
     }
@@ -77,6 +81,7 @@ public class CountryDTOImpl implements CountryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCountryCode(final String countryCode) {
         this.countryCode = countryCode;
     }
@@ -84,6 +89,7 @@ public class CountryDTOImpl implements CountryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getIsoCode() {
         return isoCode;
     }
@@ -91,6 +97,7 @@ public class CountryDTOImpl implements CountryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setIsoCode(final String isoCode) {
         this.isoCode = isoCode;
     }
@@ -98,6 +105,7 @@ public class CountryDTOImpl implements CountryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -105,6 +113,7 @@ public class CountryDTOImpl implements CountryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
@@ -112,6 +121,7 @@ public class CountryDTOImpl implements CountryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDisplayName() {
         return displayName;
     }
@@ -119,6 +129,7 @@ public class CountryDTOImpl implements CountryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }

@@ -52,6 +52,7 @@ public class CustomerOrderTransitionServiceImpl implements CustomerOrderTransiti
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean transitionOrder(final String event,
                                    final String orderNumber,
                                    final String deliveryNumber,
@@ -92,6 +93,7 @@ public class CustomerOrderTransitionServiceImpl implements CustomerOrderTransiti
         return orderStateManager;
     }
 
+    @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }

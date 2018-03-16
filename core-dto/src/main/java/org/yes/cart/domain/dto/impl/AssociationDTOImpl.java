@@ -41,46 +41,55 @@ public class AssociationDTOImpl implements AssociationDTO {
     private String description;
 
     /** {@inheritDoc} */
+    @Override
     public long getAssociationId() {
         return associationId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getId() {
         return associationId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAssociationId(final long associationId) {
         this.associationId = associationId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCode() {
         return code;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getName() {
         return name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getDescription() {
         return description;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }

@@ -100,6 +100,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return shopId;
     }
@@ -108,6 +109,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCode() {
         return code;
     }
@@ -115,6 +117,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
@@ -122,6 +125,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -129,10 +133,12 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
@@ -140,10 +146,12 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }
 
+    @Override
     public String getFspointer() {
         return fspointer;
     }
@@ -151,6 +159,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setFspointer(final String fspointer) {
         this.fspointer = fspointer;
     }
@@ -158,6 +167,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isDisabled() {
         return disabled;
     }
@@ -165,10 +175,12 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisabled(final boolean disabled) {
         this.disabled = disabled;
     }
 
+    @Override
     public long getShopId() {
         return shopId;
     }
@@ -176,6 +188,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setShopId(final long shopId) {
         this.shopId = shopId;
     }
@@ -183,6 +196,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long getMasterId() {
         return masterId;
     }
@@ -190,6 +204,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMasterId(final Long masterId) {
         this.masterId = masterId;
     }
@@ -197,6 +212,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMasterCode() {
         return masterCode;
     }
@@ -204,6 +220,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMasterCode(final String masterCode) {
         this.masterCode = masterCode;
     }
@@ -211,6 +228,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUri() {
         return uri;
     }
@@ -218,6 +236,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setUri(final String uri) {
         this.uri = uri;
     }
@@ -225,6 +244,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTitle() {
         return title;
     }
@@ -232,6 +252,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTitle(final String title) {
         this.title = title;
     }
@@ -239,6 +260,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayTitles() {
         return displayTitles;
     }
@@ -246,6 +268,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayTitles(final Map<String, String> displayTitles) {
         this.displayTitles = displayTitles;
     }
@@ -253,6 +276,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMetakeywords() {
         return metakeywords;
     }
@@ -260,6 +284,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMetakeywords(final String metakeywords) {
         this.metakeywords = metakeywords;
     }
@@ -267,6 +292,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayMetakeywords() {
         return displayMetakeywords;
     }
@@ -274,6 +300,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayMetakeywords(final Map<String, String> displayMetakeywords) {
         this.displayMetakeywords = displayMetakeywords;
     }
@@ -281,6 +308,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMetadescription() {
         return metadescription;
     }
@@ -288,6 +316,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMetadescription(final String metadescription) {
         this.metadescription = metadescription;
     }
@@ -295,6 +324,7 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayMetadescriptions() {
         return displayMetadescriptions;
     }
@@ -302,16 +332,19 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayMetadescriptions(final Map<String, String> displayMetadescriptions) {
         this.displayMetadescriptions = displayMetadescriptions;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public Collection<AttrValueShopDTO> getAttributes() {
         return attributes;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setAttributes(final Collection<AttrValueShopDTO> attributes) {
         this.attributes = attributes;
     }

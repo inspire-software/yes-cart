@@ -67,6 +67,7 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
     @DtoField(readOnly = true)
     private String resolvedIp;
 
+    @Override
     public String getCustomerEmail() {
         return customerEmail;
     }
@@ -76,6 +77,7 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
     }
 
 
+    @Override
     public String getResolvedIp() {
         return resolvedIp;
     }
@@ -84,22 +86,25 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
         this.resolvedIp = resolvedIp;
     }
 
+    @Override
     public List<String> getLatestViewedSkus() {
         return latestViewedSkus;
     }
 
     public void setLatestViewedSkus(final List<String> latestViewedSkus) {
-        this.latestViewedSkus = latestViewedSkus != null ? new ArrayList<String>(latestViewedSkus) : new ArrayList<String>(0);
+        this.latestViewedSkus = latestViewedSkus != null ? new ArrayList<>(latestViewedSkus) : new ArrayList<>(0);
     }
 
+    @Override
     public List<String> getLatestViewedCategories() {
         return latestViewedCategories;
     }
 
     public void setLatestViewedCategories(final List<String> latestViewedCategories) {
-        this.latestViewedCategories = latestViewedCategories != null ? new ArrayList<String>(latestViewedCategories) : new ArrayList<String>(0);
+        this.latestViewedCategories = latestViewedCategories != null ? new ArrayList<>(latestViewedCategories) : new ArrayList<>(0);
     }
 
+    @Override
     public String getCustomerName() {
         return customerName;
     }
@@ -108,14 +113,16 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
         this.customerName = customerName;
     }
 
+    @Override
     public List<String> getCustomerShops() {
         return customerShops;
     }
 
     public void setCustomerShops(final List<String> shops) {
-        this.customerShops = shops != null ? new ArrayList<String>(shops) : new ArrayList<String>(0);
+        this.customerShops = shops != null ? new ArrayList<>(shops) : new ArrayList<>(0);
     }
 
+    @Override
     public long getShopId() {
         return shopId;
     }
@@ -124,6 +131,7 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
         this.shopId = shopId;
     }
 
+    @Override
     public String getShopCode() {
         return shopCode;
     }
@@ -132,6 +140,7 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
         this.shopCode = shopCode;
     }
 
+    @Override
     public long getCustomerShopId() {
         return customerShopId;
     }
@@ -140,6 +149,7 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
         this.customerShopId = customerShopId;
     }
 
+    @Override
     public String getCustomerShopCode() {
         return customerShopCode;
     }
@@ -148,6 +158,7 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
         this.customerShopCode = customerShopCode;
     }
 
+    @Override
     public String getCountryCode() {
         return countryCode;
     }
@@ -156,6 +167,7 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
         this.countryCode = countryCode;
     }
 
+    @Override
     public String getStateCode() {
         return stateCode;
     }
@@ -164,6 +176,7 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
         this.stateCode = stateCode;
     }
 
+    @Override
     public boolean isTaxInfoChangeViewEnabled() {
         return taxInfoChangeViewEnabled;
     }
@@ -172,6 +185,7 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
         this.taxInfoChangeViewEnabled = taxInfoChangeViewEnabled;
     }
 
+    @Override
     public boolean isTaxInfoEnabled() {
         return taxInfoEnabled;
     }
@@ -180,6 +194,7 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
         this.taxInfoEnabled = taxInfoEnabled;
     }
 
+    @Override
     public boolean isTaxInfoUseNet() {
         return taxInfoUseNet;
     }
@@ -188,6 +203,7 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
         this.taxInfoUseNet = taxInfoUseNet;
     }
 
+    @Override
     public boolean isTaxInfoShowAmount() {
         return taxInfoShowAmount;
     }
@@ -196,6 +212,7 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
         this.taxInfoShowAmount = taxInfoShowAmount;
     }
 
+    @Override
     public boolean isHidePrices() {
         return hidePrices;
     }

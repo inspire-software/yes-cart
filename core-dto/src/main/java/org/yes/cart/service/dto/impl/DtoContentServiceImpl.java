@@ -53,6 +53,7 @@ public class DtoContentServiceImpl
         implements DtoContentService {
 
     private static final CategoryRankNameComparator CATEGORY_RANK_NAME_COMPARATOR = new CategoryRankNameComparator();
+    private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
 
     private final GenericService<ProductType> productTypeService;
 
@@ -116,6 +117,7 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void createContentRoot(final long shopId) {
         ((ContentService) service).createRootContent(shopId);
     }
@@ -123,6 +125,7 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CategoryDTO> getAllWithAvailabilityFilter(final long shopId, final boolean withAvailabilityFiltering)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ContentService contentService = (ContentService) service;
@@ -143,11 +146,11 @@ public class DtoContentServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         if (rootDTO != null) {
             final ContentService contentService = (ContentService) service;
-            final List<Category> childContent = new ArrayList<Category>(contentService.findChildContentWithAvailability(
+            final List<Category> childContent = new ArrayList<>(contentService.findChildContentWithAvailability(
                     rootDTO.getCategoryId(),
                     withAvailabilityFiltering));
-            Collections.sort(childContent, CATEGORY_RANK_NAME_COMPARATOR);
-            final List<CategoryDTO> childCategoriesDTO = new ArrayList<CategoryDTO>(childContent.size());
+            childContent.sort(CATEGORY_RANK_NAME_COMPARATOR);
+            final List<CategoryDTO> childCategoriesDTO = new ArrayList<>(childContent.size());
             fillDTOs(childContent, childCategoriesDTO);
             rootDTO.setChildren(childCategoriesDTO);
             if (expandLevel > 1 || !expandNodes.isEmpty()) {
@@ -165,6 +168,7 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CategoryDTO> getBranchById(final long shopId, final long categoryId, final List<Long> expand)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return getBranchByIdWithAvailabilityFilter(shopId, categoryId, false, expand);
@@ -173,6 +177,7 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CategoryDTO> getBranchByIdWithAvailabilityFilter(final long shopId, final long contentId, final boolean withAvailabilityFiltering, final List<Long> expand)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
@@ -191,6 +196,7 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void assemblyPostProcess(final CategoryDTO dto, final Category entity) {
         dto.setParentName(getParentName(entity));
         super.assemblyPostProcess(dto, entity);
@@ -213,6 +219,7 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void createPostProcess(final CategoryDTO dto, final Category entity) {
         bindDictionaryData(dto, entity);
         ensureBlankUriIsNull(entity);
@@ -222,6 +229,7 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void updatePostProcess(final CategoryDTO dto, final Category entity) {
         bindDictionaryData(dto, entity);
         ensureBlankUriIsNull(entity);
@@ -252,6 +260,7 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CategoryDTO> getAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return getAllWithAvailabilityFilter(shopId, false);
     }
@@ -265,11 +274,12 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CategoryDTO> findBy(final long shopId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         ContentService contentService = (ContentService) service;
 
-        final List<CategoryDTO> contentDTO = new ArrayList<CategoryDTO>(pageSize);
+        final List<CategoryDTO> contentDTO = new ArrayList<>(pageSize);
 
         if (StringUtils.isNotBlank(filter)) {
             final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(filter, PARENT_OR_URI);
@@ -290,8 +300,8 @@ public class DtoContentServiceImpl
 
                     if (!parents.isEmpty()) {
 
-                        final Set<Long> dedup = new HashSet<Long>();
-                        final List<Category> parentsWithChildren = new ArrayList<Category>();
+                        final Set<Long> dedup = new HashSet<>();
+                        final List<Category> parentsWithChildren = new ArrayList<>();
                         for (final Category parent : parents) {
 
                             if (!dedup.contains(parent.getCategoryId())) {
@@ -328,6 +338,7 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isUriAvailableForContent(final String seoUri, final Long contentId) {
 
         final Long conId = ((ContentService) service).findContentIdBySeoUri(seoUri);
@@ -339,6 +350,7 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isGuidAvailableForContent(final String guid, final Long contentId) {
 
         final Long conId = ((ContentService) service).findContentIdByGUID(guid);
@@ -351,6 +363,7 @@ public class DtoContentServiceImpl
      *
      * @return dto interface.
      */
+    @Override
     public Class<CategoryDTO> getDtoIFace() {
         return CategoryDTO.class;
     }
@@ -360,6 +373,7 @@ public class DtoContentServiceImpl
      *
      * @return dto implementation class.
      */
+    @Override
     public Class<CategoryDTOImpl> getDtoImpl() {
         return CategoryDTOImpl.class;
     }
@@ -369,6 +383,7 @@ public class DtoContentServiceImpl
      *
      * @return entity interface.
      */
+    @Override
     public Class<Category> getEntityIFace() {
         return Category.class;
     }
@@ -376,13 +391,14 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<? extends AttrValueDTO> getEntityContentAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<AttrValueCategoryDTO> result = new ArrayList<AttrValueCategoryDTO>();
+        final List<AttrValueCategoryDTO> result = new ArrayList<>();
         final CategoryDTO categoryDTO = getById(entityPk);
         if (categoryDTO != null) {
             final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
                     AttributeGroupNames.CATEGORY, Collections.EMPTY_LIST);
-            final Map<String, AttributeDTO> contentAttrsDTOs = new HashMap<String, AttributeDTO>();
+            final Map<String, AttributeDTO> contentAttrsDTOs = new HashMap<>();
             for (final AttributeDTO attributeDTO : availableAttributeDTOs) {
                 final Matcher matcher = CONTENT_BODY_PART.matcher(attributeDTO.getCode());
                 if (matcher.find()) {
@@ -403,7 +419,7 @@ public class DtoContentServiceImpl
 
 
             for (final AttributeDTO attributeDTO : contentAttrsDTOs.values()) {
-                final Map<String, String> content = new HashMap<String, String>();
+                final Map<String, String> content = new HashMap<>();
 
                 for (AttrValueCategoryDTO attributeValueDTO : categoryDTO.getAttributes()) {
                     final Matcher matcher = CONTENT_BODY_PART.matcher(attributeValueDTO.getAttributeDTO().getCode());
@@ -420,7 +436,7 @@ public class DtoContentServiceImpl
                 }
 
                 final StringBuilder parts = new StringBuilder();
-                for (final String partNo : new TreeSet<String>(content.keySet())) {
+                for (final String partNo : new TreeSet<>(content.keySet())) {
                     parts.append(content.get(partNo));
                 }
 
@@ -433,7 +449,7 @@ public class DtoContentServiceImpl
 
 
             }
-            Collections.sort(result, new AttrValueDTOComparatorImpl());
+            result.sort(ATTR_VALUE_DTO_COMPARATOR);
         }
 
         return result;
@@ -442,9 +458,10 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<AttrValueCategoryDTO> result = new ArrayList<AttrValueCategoryDTO>();
+        final List<AttrValueCategoryDTO> result = new ArrayList<>();
         final CategoryDTO categoryDTO = getById(entityPk);
         if (categoryDTO != null) {
             result.addAll(categoryDTO.getAttributes());
@@ -457,7 +474,7 @@ public class DtoContentServiceImpl
                 attrValueCategoryDTO.setCategoryId(entityPk);
                 result.add(attrValueCategoryDTO);
             }
-            Collections.sort(result, new AttrValueDTOComparatorImpl());
+            result.sort(ATTR_VALUE_DTO_COMPARATOR);
         }
 
         return result;
@@ -481,6 +498,7 @@ public class DtoContentServiceImpl
      * @param attrValueDTO value to update
      * @return updated value
      */
+    @Override
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         final Matcher matcher = CONTENT_BODY.matcher(attrValueDTO.getAttributeDTO().getCode());
         if (matcher.find()) {
@@ -535,6 +553,7 @@ public class DtoContentServiceImpl
      *
      * @param attributeValuePk given pk value.
      */
+    @Override
     public long deleteAttributeValue(final long attributeValuePk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueEntityCategory valueEntityCategory = attrValueEntityCategoryDao.findById(attributeValuePk);
@@ -557,6 +576,7 @@ public class DtoContentServiceImpl
      * @param attrValueDTO value to persist
      * @return created value
      */
+    @Override
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
 
         final Attribute atr = attributeService.findById(attrValueDTO.getAttributeDTO().getAttributeId());
@@ -585,6 +605,7 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
@@ -594,6 +615,7 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
         final AttrValueCategoryDTO dto = new AttrValueCategoryDTOImpl();
         dto.setCategoryId(entityPk);

@@ -58,6 +58,7 @@ public class CarrierDTOImpl implements CarrierDTO {
     private Map<String, String> displayDescriptions;
 
     /** {@inheritDoc} */
+    @Override
     public long getCarrierId() {
         return carrierId;
     }
@@ -65,94 +66,112 @@ public class CarrierDTOImpl implements CarrierDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return carrierId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCarrierId(final long carrierId) {
         this.carrierId = carrierId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getName() {
         return name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getDisplayNames() {
         return displayNames;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDisplayNames(final Map<String, String> displayNames) {
         this.displayNames = displayNames;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getDescription() {
         return description;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }
 
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getDisplayDescriptions() {
         return displayDescriptions;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDisplayDescriptions(final Map<String, String> displayDescriptions) {
         this.displayDescriptions = displayDescriptions;
     }
 
 
     /** {@inheritDoc} */
+    @Override
     public boolean isWorldwide() {
         return worldwide;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setWorldwide(final boolean worldwide) {
         this.worldwide = worldwide;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isCountry() {
         return country;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCountry(final boolean country) {
         this.country = country;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isState() {
         return state;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setState(final boolean state) {
         this.state = state;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isLocal() {
         return local;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setLocal(final boolean local) {
         this.local = local;
     }

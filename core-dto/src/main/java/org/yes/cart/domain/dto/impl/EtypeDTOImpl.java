@@ -40,6 +40,7 @@ public class EtypeDTOImpl implements EtypeDTO {
     private String businesstype;
 
     /** {@inheritDoc} */
+    @Override
     public long getEtypeId() {
         return etypeId;
     }
@@ -47,31 +48,37 @@ public class EtypeDTOImpl implements EtypeDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return etypeId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setEtypeId(final long etypeId) {
         this.etypeId = etypeId;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public String getJavatype() {
         return javatype;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setJavatype(final String javatype) {
         this.javatype = javatype;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public String getBusinesstype() {
         return businesstype;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setBusinesstype(final String businesstype) {
         this.businesstype = businesstype;
     }

@@ -59,6 +59,7 @@ public class ProductAssociationDTOImpl implements ProductAssociationDTO {
     private String associatedName;
 
     /** {@inheritDoc} */
+    @Override
     public long getProductassociationId() {
         return productassociationId;
     }
@@ -66,61 +67,73 @@ public class ProductAssociationDTOImpl implements ProductAssociationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return productassociationId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setProductassociationId(final long productassociationId) {
         this.productassociationId = productassociationId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getRank() {
         return rank;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setRank(final int rank) {
         this.rank = rank;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getAssociationId() {
         return associationId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAssociationId(final long associationId) {
         this.associationId = associationId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getProductId() {
         return productId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setProductId(final long productId) {
         this.productId = productId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getAssociatedCode() {
         return associatedCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAssociatedCode(final String associatedCode) {
         this.associatedCode = associatedCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getAssociatedName() {
         return associatedName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAssociatedName(final String associatedName) {
         this.associatedName = associatedName;
     }

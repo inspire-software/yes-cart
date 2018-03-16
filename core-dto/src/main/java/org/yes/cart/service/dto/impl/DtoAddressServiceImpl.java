@@ -73,6 +73,7 @@ public class DtoAddressServiceImpl extends AbstractDtoServiceImpl<AddressDTO, Ad
 
 
     /** {@inheritDoc} */
+    @Override
     public List<AddressDTO> getAddressesByCustomerId(final long customerId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {        
         return getDTOs(((AddressService)service).getAddressesByCustomerId(customerId));
@@ -80,10 +81,11 @@ public class DtoAddressServiceImpl extends AbstractDtoServiceImpl<AddressDTO, Ad
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Pair<Long, String>> getFormattedAddressesByCustomerId(final long customerId, final long formattingShopId, final String lang)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<Pair<Long, String>> formatted = new ArrayList<Pair<Long, String>>();
+        final List<Pair<Long, String>> formatted = new ArrayList<>();
         final Customer customer = this.customerService.findById(customerId);
         if (customer != null) {
 
@@ -101,7 +103,7 @@ public class DtoAddressServiceImpl extends AbstractDtoServiceImpl<AddressDTO, Ad
             for (final Address address : addresses) {
 
                 formatted.add(
-                        new Pair<Long, String>(
+                        new Pair<>(
                                 address.getAddressId(),
                                 this.addressCustomisationSupport.formatAddressFor(address, shop, customer, lang)
                         )
@@ -113,11 +115,12 @@ public class DtoAddressServiceImpl extends AbstractDtoServiceImpl<AddressDTO, Ad
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<AttrValueCustomerDTO> getAddressForm(final long customerId, final long formattingShopId, final String addressType) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<AttrValueCustomerDTO> dtos = new ArrayList<AttrValueCustomerDTO>();
+        final List<AttrValueCustomerDTO> dtos = new ArrayList<>();
 
-        final List<Pair<Long, String>> formatted = new ArrayList<Pair<Long, String>>();
+        final List<Pair<Long, String>> formatted = new ArrayList<>();
         final Customer customer = this.customerService.findById(customerId);
         if (customer != null) {
 
@@ -151,6 +154,7 @@ public class DtoAddressServiceImpl extends AbstractDtoServiceImpl<AddressDTO, Ad
     }
 
     /** {@inheritDoc} */
+    @Override
     protected void createPostProcess(final AddressDTO dto, final Address entity) {
         if (dto.getCustomerId() > 0L) {
             entity.setCustomer(customerService.findById(dto.getCustomerId()));
@@ -158,6 +162,7 @@ public class DtoAddressServiceImpl extends AbstractDtoServiceImpl<AddressDTO, Ad
     }
 
     /** {@inheritDoc} */
+    @Override
     public AddressDTO update(final AddressDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         super.update(instance);
         if (instance.isDefaultAddress()) {
@@ -170,16 +175,19 @@ public class DtoAddressServiceImpl extends AbstractDtoServiceImpl<AddressDTO, Ad
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<AddressDTO> getDtoIFace() {
         return AddressDTO.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<AddressDTOImpl> getDtoImpl() {
         return AddressDTOImpl.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<Address> getEntityIFace() {
         return Address.class;
     }

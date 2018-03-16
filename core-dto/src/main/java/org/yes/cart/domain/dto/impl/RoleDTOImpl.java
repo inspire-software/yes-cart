@@ -42,6 +42,7 @@ public class RoleDTOImpl implements RoleDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getRoleId() {
         return roleId;
     }
@@ -50,6 +51,7 @@ public class RoleDTOImpl implements RoleDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return roleId;
     }
@@ -57,6 +59,7 @@ public class RoleDTOImpl implements RoleDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setRoleId(final long roleId) {
         this.roleId = roleId;
     }
@@ -64,6 +67,7 @@ public class RoleDTOImpl implements RoleDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCode() {
         return code;
     }
@@ -71,6 +75,7 @@ public class RoleDTOImpl implements RoleDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
@@ -78,6 +83,7 @@ public class RoleDTOImpl implements RoleDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDescription() {
         return description;
     }
@@ -85,6 +91,7 @@ public class RoleDTOImpl implements RoleDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }

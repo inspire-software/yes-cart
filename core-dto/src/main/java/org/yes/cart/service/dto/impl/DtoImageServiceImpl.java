@@ -55,20 +55,23 @@ public class DtoImageServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public String addImageToRepository(final String fullFileName,
-                                        final String code,
-                                        final byte[] imgBody,
-                                        final String storagePrefix,
-                                        final String pathToRepository) throws IOException {
+                                       final String code,
+                                       final byte[] imgBody,
+                                       final String storagePrefix,
+                                       final String pathToRepository) throws IOException {
         return imageService.addImageToRepository(fullFileName, code, imgBody, storagePrefix, pathToRepository);
     }
 
     /** {@inheritDoc} */
+    @Override
     public byte[] getImageAsByteArray(final String fileName, final String code, final String storagePrefix, final String pathToRepository) throws IOException {
         return imageService.imageToByteArray(fileName, code, storagePrefix, pathToRepository);
     }
 
     /** {@inheritDoc} */
+    @Override
     public SeoImageDTO getSeoImage(final String imageFileName) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final SeoImage seoImage = imageService.getSeoImage(imageFileName);
         if (seoImage != null) {
@@ -81,16 +84,19 @@ public class DtoImageServiceImpl
 
 
     /** {@inheritDoc} */
+    @Override
     public Class<SeoImageDTO> getDtoIFace() {
         return SeoImageDTO.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<SeoImageDTOImpl> getDtoImpl() {
         return SeoImageDTOImpl.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<SeoImage> getEntityIFace() {
         return SeoImage.class;
     }

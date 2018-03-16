@@ -48,6 +48,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getManagerId() {
         return managerId;
     }
@@ -55,6 +56,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return managerId;
     }
@@ -62,6 +64,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setManagerId(final long managerId) {
         this.managerId = managerId;
     }
@@ -69,6 +72,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getEmail() {
         return email;
     }
@@ -76,6 +80,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setEmail(final String email) {
         this.email = email;
     }
@@ -83,6 +88,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getFirstName() {
         return firstName;
     }
@@ -90,6 +96,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setFirstName(final String firstName) {
         this.firstName = firstName;
     }
@@ -97,6 +104,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLastName() {
         return lastName;
     }
@@ -104,6 +112,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setLastName(final String lastName) {
         this.lastName = lastName;
     }
@@ -111,6 +120,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean getEnabled() {
         return enabled;
     }
@@ -118,6 +128,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
     }

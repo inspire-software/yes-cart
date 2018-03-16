@@ -89,31 +89,34 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
 
 
     /** {@inheritDoc} */
+    @Override
     public List<ShopDTO> getShops() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return dtoShopService.getAll();
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getShopCurrencies(final ShopDTO shop) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         if (shop == null) {
-            return new ArrayList<String>();
+            return new ArrayList<>();
         }
         final String currencies = dtoShopService.getSupportedCurrencies(shop.getShopId());
         if (currencies == null) {
-            return new ArrayList<String>();
+            return new ArrayList<>();
         }
-        return new ArrayList<String>(Arrays.asList(currencies.split(",")));
+        return new ArrayList<>(Arrays.asList(currencies.split(",")));
     }
 
     private final static char[] CODE = new char[] { '!' };
     private final static char[] TAG_OR_POLICY = new char[] { '#' };
 
     /** {@inheritDoc} */
+    @Override
     public List<PriceListDTO> findBy(final long shopId, final String currency, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<PriceListDTO> priceList = new ArrayList<PriceListDTO>();
+        final List<PriceListDTO> priceList = new ArrayList<>();
 
-        List<SkuPrice> entities = Collections.emptyList();
+        List<SkuPrice> entities;
 
         if (shopId > 0 && StringUtils.isNotBlank(currency)) {
             // only allow lists for shop+currency selection
@@ -198,7 +201,7 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                                 HQLUtils.criteriaIeq(byCode.getSecond())
                         );
 
-                        final List<String> skuCodes = new ArrayList<String>();
+                        final List<String> skuCodes = new ArrayList<>();
                         for (final ProductSku sku : skus) {
                             skuCodes.add(sku.getCode()); // sku codes from product match
                         }
@@ -235,7 +238,7 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                                 HQLUtils.criteriaIlikeAnywhere(filter)
                         );
 
-                        final List<String> skuCodes = new ArrayList<String>();
+                        final List<String> skuCodes = new ArrayList<>();
                         for (final ProductSku sku : skus) {
                             skuCodes.add(sku.getCode()); // sku codes from product match
                         }
@@ -297,6 +300,7 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public PriceListDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final SkuPrice entity = skuPriceDAO.findById(id);
 
@@ -311,11 +315,13 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public PriceListDTO createPrice(final PriceListDTO price) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return savePrice(price);
     }
 
     /** {@inheritDoc} */
+    @Override
     public PriceListDTO updatePrice(final PriceListDTO price) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return savePrice(price);
     }
@@ -369,6 +375,7 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void removePrice(final long skuPriceId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         dtoProductSkuService.removeSkuPrice(skuPriceId);
     }

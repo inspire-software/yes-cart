@@ -40,36 +40,43 @@ public class ShopAliasDTOImpl implements ShopAliasDTO {
     private long shopId;
 
     /** {@inheritDoc}  */
+    @Override
     public String getAlias() {
         return alias;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public void setAlias(final String alias) {
         this.alias = alias;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public long getStoreAliasId() {
         return storeAliasId;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public void setStoreAliasId(final long storeAliasId) {
         this.storeAliasId = storeAliasId;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public long getId() {
         return storeAliasId;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public long getShopId() {
         return shopId;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public void setShopId(final long shopId) {
         this.shopId = shopId;
     }

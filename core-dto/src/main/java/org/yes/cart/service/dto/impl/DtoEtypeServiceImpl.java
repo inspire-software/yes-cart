@@ -48,16 +48,19 @@ public class DtoEtypeServiceImpl
 
 
     /** {@inheritDoc} */
+    @Override
     public Class<EtypeDTO> getDtoIFace() {
         return EtypeDTO.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<EtypeDTOImpl> getDtoImpl() {
         return EtypeDTOImpl.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<Etype> getEntityIFace() {
         return Etype.class;
     }

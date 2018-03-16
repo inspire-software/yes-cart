@@ -71,29 +71,33 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
 
 
     /** {@inheritDoc}*/
+    @Override
     public GenericService<IFACE> getService() {
         return service;
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<DTOIFACE> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<IFACE> entities = service.findAll();
-        final List<DTOIFACE> dtos = new ArrayList<DTOIFACE>(entities.size());
+        final List<DTOIFACE> dtos = new ArrayList<>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;
     }
 
     /** {@inheritDoc} */
+    @Override
     public DTOIFACE getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return getById(id, getAdaptersRepository());
     }
 
     /** {@inheritDoc} */
+    @Override
     public DTOIFACE getById(final long id, final Map converters)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final IFACE entity = service.findById(id);
         if (entity != null) {
-            final DTOIFACE dto = (DTOIFACE) dtoFactory.getByIface(getDtoIFace());
+            final DTOIFACE dto = dtoFactory.getByIface(getDtoIFace());
             assembler.assembleDto(dto, entity, converters, dtoFactory);
             assemblyPostProcess(dto, entity);
             return dto;
@@ -102,11 +106,13 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
     }
 
     /** {@inheritDoc} */
+    @Override
     public DTOIFACE getNew() throws UnableToCreateInstanceException, UnmappedInterfaceException {
         return (DTOIFACE) dtoFactory.getByIface(getDtoIFace());
     }
 
     /** {@inheritDoc} */
+    @Override
     public void remove(final long id) {
         service.delete(service.findById(id));
     }
@@ -121,7 +127,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
      */
     public List<DTOIFACE> getDTOs(final Collection<IFACE> entities)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        List<DTOIFACE> result = new ArrayList<DTOIFACE>();
+        List<DTOIFACE> result = new ArrayList<>();
         if (entities != null) {
             fillDTOs(entities, result);
         }
@@ -138,7 +144,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
      */
     public DTOIFACE fillDTO(final IFACE entity)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        DTOIFACE dto = (DTOIFACE) dtoFactory.getByIface(getDtoIFace());
+        DTOIFACE dto = dtoFactory.getByIface(getDtoIFace());
         assembler.assembleDto(dto, entity, getAdaptersRepository(), dtoFactory);
         assemblyPostProcess(dto, entity);
         return dto;
@@ -155,7 +161,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
     public void fillDTOs(final Collection<IFACE> entities, final Collection<DTOIFACE> dtos)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         for (IFACE entity : entities) {
-            DTOIFACE dto = (DTOIFACE) dtoFactory.getByIface(getDtoIFace());
+            DTOIFACE dto = dtoFactory.getByIface(getDtoIFace());
             assembler.assembleDto(dto, entity, getAdaptersRepository(), dtoFactory);
             assemblyPostProcess(dto, entity);
             dtos.add(dto);
@@ -216,10 +222,11 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
 
 
     /** {@inheritDoc}*/
+    @Override
     @SuppressWarnings({"unchecked"})
     public DTOIFACE create(final DTOIFACE instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        IFACE iface = (IFACE) getPersistenceEntityFactory().getByIface(getEntityIFace());
+        IFACE iface = getPersistenceEntityFactory().getByIface(getEntityIFace());
         assembler.assembleEntity(instance, iface, getAdaptersRepository(), entityFactory);
         createPostProcess(instance, iface);
         iface = service.create(iface);
@@ -240,6 +247,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
 
 
     /** {@inheritDoc}*/
+    @Override
     public DTOIFACE update(final DTOIFACE instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         IFACE iface = service.findById(instance.getId());
@@ -261,10 +269,6 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
     }
 
 
-
-    /** {@inheritDoc}*/
-   /* public abstract DTOIFACE update(DTOIFACE instance)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException; */
 
     /**
      * Get the dto interface.
@@ -293,7 +297,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
      * @return list of attribute codes.
      */
     protected List<String> getCodes(final List<? extends AttrValueDTO> attrValues) {
-        final List<String> codes = new ArrayList<String>(attrValues.size());
+        final List<String> codes = new ArrayList<>(attrValues.size());
         for(AttrValueDTO attrValueCategoryDTO : attrValues) {
             if (attrValueCategoryDTO != null && attrValueCategoryDTO.getAttributeDTO() != null) {
                 codes.add(

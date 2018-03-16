@@ -101,6 +101,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     /**
      * {@inheritDoc}
      */
+    @Override
     public CustomerOrderDTO create(final CustomerOrderDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnableToCreateInstanceException("Customer order cannot be created via back end", null);
     }
@@ -109,14 +110,17 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<CustomerOrderDTO> getDtoIFace() {
         return CustomerOrderDTO.class;
     }
 
+    @Override
     public Class<CustomerOrderDTOImpl> getDtoImpl() {
         return CustomerOrderDTOImpl.class;
     }
 
+    @Override
     public Class<CustomerOrder> getEntityIFace() {
         return CustomerOrder.class;
     }
@@ -124,6 +128,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     /**
      * {@inheritDoc}
      */
+    @Override
     public Result updateOrderSetConfirmed(final String orderNum) {
         final CustomerOrder order = ((CustomerOrderService) service).findByReference(orderNum);
         if (order == null) {
@@ -161,6 +166,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     /**
      * {@inheritDoc}
      */
+    @Override
     public Result updateOrderSetCancelled(final String orderNum) {
         final CustomerOrder order = ((CustomerOrderService) service).findByReference(orderNum);
         if (order == null) {
@@ -219,6 +225,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     /**
      * {@inheritDoc}
      */
+    @Override
     public Result updateOrderSetCancelledManual(final String orderNum, final String message) {
         final CustomerOrder order = ((CustomerOrderService) service).findByReference(orderNum);
         if (order == null) {
@@ -267,6 +274,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     /**
      * {@inheritDoc}
      */
+    @Override
     public Result updateExternalDeliveryRefNo(final String orderNum, final String deliveryNum, final String newRefNo) {
 
         final CustomerOrder order = ((CustomerOrderService) service).findByReference(orderNum);
@@ -293,6 +301,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     /**
      * {@inheritDoc}
      */
+    @Override
     public Result updateDeliveryStatus(final String orderNum, final String deliveryNum,
                                        final String currentStatus, final String destinationStatus) {
 
@@ -383,6 +392,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     /**
      * {@inheritDoc}
      */
+    @Override
     public Result updateDeliveryStatusManual(final String orderNum, final String deliveryNum,
                                              final String currentStatus, final String destinationStatus,
                                              final String message) {
@@ -449,6 +459,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(final String orderNum)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
@@ -461,6 +472,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(final String orderNum, final String deliveryNum)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final CustomerOrder customerOrder = ((CustomerOrderService) service).findByReference(orderNum);
@@ -472,7 +484,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                 LOG.error("Cannot determine capture less/more because gateway {} is not resolved for shop {}, could it be disabled?", customerOrder.getPgLabel(), customerOrder.getShop().getCode());
             }
 
-            final List<CustomerOrderDeliveryDTO> rez = new ArrayList<CustomerOrderDeliveryDTO>(customerOrder.getDelivery().size());
+            final List<CustomerOrderDeliveryDTO> rez = new ArrayList<>(customerOrder.getDelivery().size());
 
             for (CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
 
@@ -501,6 +513,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CustomerOrderDeliveryDetailDTO> findDeliveryDetailsByOrderNumber(final String orderNum) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<CustomerOrder> orderList = ((CustomerOrderService) service).findCustomerOrdersByCriteria(
@@ -508,11 +521,11 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
         if (CollectionUtils.isNotEmpty(orderList)) {
             final CustomerOrder customerOrder = orderList.get(0);
-            final List<CustomerOrderDeliveryDet> allDeliveryDet = new ArrayList<CustomerOrderDeliveryDet>();
+            final List<CustomerOrderDeliveryDet> allDeliveryDet = new ArrayList<>();
             for (CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
                 allDeliveryDet.addAll(orderDelivery.getDetail());
             }
-            final List<CustomerOrderDeliveryDetailDTO> rez = new ArrayList<CustomerOrderDeliveryDetailDTO>(allDeliveryDet.size());
+            final List<CustomerOrderDeliveryDetailDTO> rez = new ArrayList<>(allDeliveryDet.size());
 
             if (CollectionUtils.isNotEmpty(allDeliveryDet)) {
                 for (CustomerOrderDeliveryDet entity : allDeliveryDet) {
@@ -541,6 +554,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CustomerOrderDTO> findCustomerOrdersByCriteria(
             final long customerId,
             final String firstName,
@@ -561,17 +575,13 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                 toDate,
                 orderNum
         );
-        final List<CustomerOrderDTO> ordersDtos = new ArrayList<CustomerOrderDTO>(orders.size());
+        final List<CustomerOrderDTO> ordersDtos = new ArrayList<>(orders.size());
         fillDTOs(orders, ordersDtos);
-        Collections.sort(ordersDtos, ORDERS_REV_CHRONOLOGICAL);
+        ordersDtos.sort(ORDERS_REV_CHRONOLOGICAL);
         return ordersDtos;
     }
 
-    private static final Comparator<CustomerOrderDTO> ORDERS_REV_CHRONOLOGICAL = new Comparator<CustomerOrderDTO>() {
-        public int compare(final CustomerOrderDTO o1, final CustomerOrderDTO o2) {
-            return -o1.getOrderTimestamp().compareTo(o2.getOrderTimestamp());
-        }
-    };
+    private static final Comparator<CustomerOrderDTO> ORDERS_REV_CHRONOLOGICAL = (o1, o2) -> -o1.getOrderTimestamp().compareTo(o2.getOrderTimestamp());
 
 
     private final static char[] ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU = new char[] { '#', '?', '@', '!', '*', '^' };
@@ -718,7 +728,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         final List<String> orderStatusThatCouldHaveReservations = Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS, CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED);
         final List<String> skus = Collections.singletonList(sku);
         final CustomerOrderService cos = (CustomerOrderService) service;
-        final Set<Long> deliveryIds = new HashSet<Long>();
+        final Set<Long> deliveryIds = new HashSet<>();
 
         deliveryIds.addAll(cos.findAwaitingDeliveriesIds(
                 skus,
@@ -756,7 +766,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
         final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false, "DEFAULT");
 
-        final Map<String, String> available = new HashMap<String, String>();
+        final Map<String, String> available = new HashMap<>();
 
         for (final PaymentGatewayDescriptor descriptor : descriptors) {
 

@@ -52,6 +52,7 @@ public class DtoAssociationServiceImpl
      *
      * @return dto interface.
      */
+    @Override
     public Class<AssociationDTO> getDtoIFace() {
         return AssociationDTO.class;
     }
@@ -61,6 +62,7 @@ public class DtoAssociationServiceImpl
      *
      * @return dto implementation class.
      */
+    @Override
     public Class<AssociationDTOImpl> getDtoImpl() {
         return AssociationDTOImpl.class;
     }
@@ -70,6 +72,7 @@ public class DtoAssociationServiceImpl
      *
      * @return entity interface.
      */
+    @Override
     public Class<Association> getEntityIFace() {
         return Association.class;
     }

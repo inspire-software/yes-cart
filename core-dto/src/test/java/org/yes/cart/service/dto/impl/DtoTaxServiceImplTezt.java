@@ -40,6 +40,7 @@ public class DtoTaxServiceImplTezt extends BaseCoreDBTestCase {
     private DtoTaxService dtoTaxService;
     private DtoFactory dtoFactory;
 
+    @Override
     @Before
     public void setUp() {
         dtoTaxService = (DtoTaxService) ctx().getBean(DtoServiceSpringKeys.DTO_TAX_SERVICE);

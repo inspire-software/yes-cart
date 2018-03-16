@@ -30,16 +30,19 @@ public class DtoCustomerOrderDeliveryDetailServiceImpl extends AbstractDtoServic
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<CustomerOrderDeliveryDetailDTO> getDtoIFace() {
         return CustomerOrderDeliveryDetailDTO.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<CustomerOrderDeliveryDetailDTOImpl> getDtoImpl() {
         return CustomerOrderDeliveryDetailDTOImpl.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<CustomerOrderDeliveryDet> getEntityIFace() {
         return CustomerOrderDeliveryDet.class;
     }

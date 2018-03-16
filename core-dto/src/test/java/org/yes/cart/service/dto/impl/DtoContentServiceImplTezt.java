@@ -49,6 +49,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
     private DtoAttributeService dtoAttrService;
     public static final int QTY = 10;
 
+    @Override
     @Before
     public void setUp() {
         dtoFactory = (DtoFactory) ctx().getBean(DtoServiceSpringKeys.DTO_FACTORY);
@@ -105,6 +106,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
     public void testCreate() throws Exception {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
                     CategoryDTO dto = getDto();
@@ -126,6 +128,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
     public void testUpdate() throws Exception {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
                     CategoryDTO dto = getDto();
@@ -150,6 +153,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
     public void testRemove() throws Exception {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
                     CategoryDTO dto = getDto();
@@ -175,6 +179,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
     public void testGetAllByShopIdNoContent() throws Exception {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
                     List<CategoryDTO> list = dtoService.getAllByShopId(50L);
@@ -196,6 +201,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
     public void testGetAllByShopIdWithCreate() throws Exception {
         clearCache();
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
                     dtoService.createContentRoot(50L);
@@ -240,15 +246,14 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
     public void testDeleteAttributeValue() throws Exception {
 
         final List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(10105L);
-        final int totalSize = list.size();
 
         getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
 
 
-                    for (int i = 0; i < totalSize; i++) {
-                        AttrValueDTO dto = list.get(i);
+                    for (final AttrValueDTO dto : list) {
                         if (dto.getVal() != null) {
                             dtoService.deleteAttributeValue(dto.getAttrvalueId());
                         }
@@ -338,7 +343,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
         final List<AttrValueDTO> avsBefore = (List) dtoService.getEntityAttributes(10106L);
         for (final AttrValueDTO av : avsBefore) {
             if (av.getAttributeDTO().getCode().startsWith("CONTENT_BODY_en")) {
-                assertTrue(av.getAttrvalueId() == 0l);
+                assertTrue(av.getAttrvalueId() == 0L);
             }
         }
         final List<AttrValueDTO> avsBeforeC = (List) dtoService.getEntityContentAttributes(10106L);
@@ -365,7 +370,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
         final List<AttrValueDTO> avsAfterLarge = (List) dtoService.getEntityAttributes(10106L);
         for (final AttrValueDTO av : avsAfterLarge) {
             if (av.getAttributeDTO().getCode().startsWith("CONTENT_BODY_en")) {
-                assertTrue(av.getAttrvalueId() > 0l);
+                assertTrue(av.getAttrvalueId() > 0L);
             }
         }
         final List<AttrValueDTO> avsAfterLargeC = (List) dtoService.getEntityContentAttributes(10106L);
@@ -394,10 +399,10 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
         final List<AttrValueDTO> avsAfterSmall = (List) dtoService.getEntityAttributes(10106L);
         for (final AttrValueDTO av : avsAfterSmall) {
             if (av.getAttributeDTO().getCode().startsWith("CONTENT_BODY_en_1")) {
-                assertTrue(av.getAttrvalueId() > 0l);
+                assertTrue(av.getAttrvalueId() > 0L);
             }
             if (av.getAttributeDTO().getCode().startsWith("CONTENT_BODY_en_2")) {
-                assertTrue(av.getAttrvalueId() == 0l);
+                assertTrue(av.getAttrvalueId() == 0L);
             }
         }
         final List<AttrValueDTO> avsAfterSmallC = (List) dtoService.getEntityContentAttributes(10106L);

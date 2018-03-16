@@ -57,6 +57,7 @@ public class DtoProductTypeAttrServiceImpl
      *
      * @return dto interface.
      */
+    @Override
     public Class<ProductTypeAttrDTO> getDtoIFace() {
         return ProductTypeAttrDTO.class;
     }
@@ -66,6 +67,7 @@ public class DtoProductTypeAttrServiceImpl
      *
      * @return dto implementation class.
      */
+    @Override
     public Class<ProductTypeAttrDTOImpl> getDtoImpl() {
         return ProductTypeAttrDTOImpl.class;
     }
@@ -75,14 +77,16 @@ public class DtoProductTypeAttrServiceImpl
      *
      * @return entity interface.
      */
+    @Override
     public Class<ProductTypeAttr> getEntityIFace() {
         return ProductTypeAttr.class;
     }
 
+    @Override
     public List<ProductTypeAttrDTO> getByProductTypeId(final long productTypeId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<ProductTypeAttr> list = ((ProductTypeAttrService)service).getByProductTypeId(productTypeId);
-        final List<ProductTypeAttrDTO> result = new ArrayList<ProductTypeAttrDTO>(list.size());
+        final List<ProductTypeAttrDTO> result = new ArrayList<>(list.size());
         fillDTOs(list, result);
         return result;
     }

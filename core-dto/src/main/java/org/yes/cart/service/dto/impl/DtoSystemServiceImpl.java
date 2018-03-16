@@ -46,6 +46,8 @@ public class DtoSystemServiceImpl implements DtoSystemService {
 
     private static final long YC_ID = 100L;
 
+    private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
+
     private final SystemService systemService;
 
     private final Assembler attrValueAssembler;
@@ -68,9 +70,9 @@ public class DtoSystemServiceImpl implements DtoSystemService {
         this.adaptersRepository = adaptersRepository;
     }
 
-    private final Collection<AttrValueSystemDTO> getAttributesById() {
+    private Collection<AttrValueSystemDTO> getAttributesById() {
         final Map<String, AttrValueSystem> attrMap = systemService.findAttributeValues();
-        final List<AttrValueSystemDTO> values = new ArrayList<AttrValueSystemDTO>();
+        final List<AttrValueSystemDTO> values = new ArrayList<>();
         for (final AttrValueSystem attr : attrMap.values()) {
             AttrValueSystemDTO attrValueSystemDTO = dtoFactory.getByIface(AttrValueSystemDTO.class);
             this.attrValueAssembler.assembleDto(attrValueSystemDTO, attr, adaptersRepository.getAll(), dtoFactory);
@@ -81,9 +83,10 @@ public class DtoSystemServiceImpl implements DtoSystemService {
 
 
     /** {@inheritDoc}*/
+    @Override
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<AttrValueSystemDTO> result = new ArrayList<AttrValueSystemDTO>(getAttributesById());
+        final List<AttrValueSystemDTO> result = new ArrayList<>(getAttributesById());
         final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
                 AttributeGroupNames.SYSTEM,
                 getCodes(result));
@@ -93,17 +96,19 @@ public class DtoSystemServiceImpl implements DtoSystemService {
             attrValueSystemDTO.setSystemId(YC_ID);
             result.add(attrValueSystemDTO);
         }
-        Collections.sort(result, new AttrValueDTOComparatorImpl());
+        result.sort(ATTR_VALUE_DTO_COMPARATOR);
         return result;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         systemService.updateAttributeValue(attrValueDTO.getAttributeDTO().getCode(), attrValueDTO.getVal());
         return attrValueDTO;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
 
         Attribute atr = ((GenericService<Attribute>)dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
@@ -119,6 +124,7 @@ public class DtoSystemServiceImpl implements DtoSystemService {
     }
 
     /** {@inheritDoc}*/
+    @Override
     public long deleteAttributeValue(final long attributeValuePk) {
 
         final Collection<AttrValueSystemDTO> attrs = getAttributesById();
@@ -142,7 +148,7 @@ public class DtoSystemServiceImpl implements DtoSystemService {
      * @return list of attribute codes.
      */
     protected List<String> getCodes(final List<? extends AttrValueDTO> attrValues) {
-        final List<String> codes = new ArrayList<String>(attrValues.size());
+        final List<String> codes = new ArrayList<>(attrValues.size());
         for(AttrValueDTO attrValueCategoryDTO : attrValues) {
             if (attrValueCategoryDTO != null && attrValueCategoryDTO.getAttributeDTO() != null) {
                 codes.add(
@@ -156,6 +162,7 @@ public class DtoSystemServiceImpl implements DtoSystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
@@ -165,6 +172,7 @@ public class DtoSystemServiceImpl implements DtoSystemService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
         final AttrValueSystemDTO dto = new AttrValueSystemDTOImpl();
         dto.setSystemId(entityPk);

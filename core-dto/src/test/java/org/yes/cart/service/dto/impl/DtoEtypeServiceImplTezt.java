@@ -38,6 +38,7 @@ public class DtoEtypeServiceImplTezt extends BaseCoreDBTestCase {
     private DtoEtypeService dtoEtypeService;
     private DtoFactory dtoFactory;
 
+    @Override
     @Before
     public void setUp() {
         dtoEtypeService = (DtoEtypeService) ctx().getBean(DtoServiceSpringKeys.DTO_ETYPE_SERVICE);

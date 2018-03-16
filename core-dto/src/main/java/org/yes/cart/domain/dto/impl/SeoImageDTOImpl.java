@@ -52,66 +52,79 @@ public class SeoImageDTOImpl implements SeoImageDTO {
 
 
     /** {@inheritDoc}*/
+    @Override
     public long getSeoImageId() {
         return seoImageId;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public long getId() {
         return seoImageId;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setSeoImageId(final long seoImageId) {
         this.seoImageId = seoImageId;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public String getImageName() {
         return imageName;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setImageName(final String imageName) {
         this.imageName = imageName;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public String getAlt() {
         return alt;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setAlt(final String alt) {
         this.alt = alt;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public Map<String, String> getDisplayAlts() {
         return displayAlts;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setDisplayAlts(final Map<String, String> displayAlts) {
         this.displayAlts = displayAlts;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public String getTitle() {
         return title;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setTitle(final String title) {
         this.title = title;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public Map<String, String> getDisplayTitles() {
         return displayTitles;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public void setDisplayTitles(final Map<String, String> displayTitles) {
         this.displayTitles = displayTitles;
     }

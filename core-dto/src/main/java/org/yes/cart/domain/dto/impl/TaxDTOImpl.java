@@ -52,86 +52,103 @@ public class TaxDTOImpl implements TaxDTO {
     private String description;
 
     /** {@inheritDoc} */
+    @Override
     public long getId() {
         return taxId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getGuid() {
         return guid;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setGuid(final String guid) {
         this.guid = guid;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getTaxId() {
         return taxId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setTaxId(final long taxId) {
         this.taxId = taxId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getTaxRate() {
         return taxRate;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setTaxRate(final BigDecimal taxRate) {
         this.taxRate = taxRate;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean getExclusiveOfPrice() {
         return exclusiveOfPrice;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setExclusiveOfPrice(final boolean exclusiveOfPrice) {
         this.exclusiveOfPrice = exclusiveOfPrice;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getShopCode() {
         return shopCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setShopCode(final String shopCode) {
         this.shopCode = shopCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCurrency() {
         return currency;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCurrency(final String currency) {
         this.currency = currency;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCode() {
         return code;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getDescription() {
         return description;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }

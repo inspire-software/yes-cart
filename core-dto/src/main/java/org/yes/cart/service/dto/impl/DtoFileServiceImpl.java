@@ -38,6 +38,7 @@ public class DtoFileServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public String addFileToRepository(final String fullFileName,
                                       final String code,
                                       final byte[] fileBody,
@@ -47,6 +48,7 @@ public class DtoFileServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public byte[] getFileAsByteArray(final String fileName, final String code, final String storagePrefix, final String pathToRepository) throws IOException {
         return fileService.fileToByteArray(fileName, code, storagePrefix, pathToRepository);
     }

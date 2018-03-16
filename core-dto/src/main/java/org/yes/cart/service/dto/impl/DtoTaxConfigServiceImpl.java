@@ -65,9 +65,10 @@ public class DtoTaxConfigServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<TaxConfigDTO> findByTaxId(final long taxId, final String countryCode, final String stateCode, final String productCode) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<TaxConfig> configs = ((TaxConfigService) service).findByTaxId(taxId, countryCode, stateCode, productCode);
-        final List<TaxConfigDTO> dtos = new ArrayList<TaxConfigDTO>();
+        final List<TaxConfigDTO> dtos = new ArrayList<>();
         fillDTOs(configs, dtos);
         return dtos;
     }
@@ -80,6 +81,7 @@ public class DtoTaxConfigServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<TaxConfigDTO> findBy(final long taxId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<TaxConfigDTO> dtos = new ArrayList<>();
@@ -88,7 +90,7 @@ public class DtoTaxConfigServiceImpl
         if (taxId > 0) {
             // only allow lists for tax selection
 
-            List<TaxConfig> entities = Collections.emptyList();
+            List<TaxConfig> entities;
 
             if (StringUtils.isNotBlank(filter)) {
 
@@ -159,21 +161,25 @@ public class DtoTaxConfigServiceImpl
 
     }
 
+    @Override
     protected void createPostProcess(final TaxConfigDTO dto, final TaxConfig entity) {
         entity.setTax(taxService.findById(dto.getTaxId()));
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<TaxConfigDTO> getDtoIFace() {
         return TaxConfigDTO.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<TaxConfigDTOImpl> getDtoImpl() {
         return TaxConfigDTOImpl.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<TaxConfig> getEntityIFace() {
         return TaxConfig.class;
     }

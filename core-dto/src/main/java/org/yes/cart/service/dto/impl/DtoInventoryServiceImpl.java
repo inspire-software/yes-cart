@@ -84,9 +84,10 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<InventoryDTO> findBy(final long warehouseId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<InventoryDTO> inventory = new ArrayList<InventoryDTO>();
+        final List<InventoryDTO> inventory = new ArrayList<>();
 
         List<SkuWarehouse> entities = Collections.emptyList();
 
@@ -127,7 +128,7 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
                                 HQLUtils.criteriaIeq(byCode.getSecond())
                         );
 
-                        final List<String> skuCodes = new ArrayList<String>();
+                        final List<String> skuCodes = new ArrayList<>();
                         for (final ProductSku sku : skus) {
                             skuCodes.add(sku.getCode()); // sku codes from product match
                         }
@@ -162,7 +163,7 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
                                 HQLUtils.criteriaIlikeAnywhere(filter)
                         );
 
-                        final List<String> skuCodes = new ArrayList<String>();
+                        final List<String> skuCodes = new ArrayList<>();
                         for (final ProductSku sku : skus) {
                             skuCodes.add(sku.getCode()); // sku codes from product match
                         }
@@ -213,16 +214,19 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<WarehouseDTO> getWarehouses() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return dtoWarehouseService.getAll();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void removeInventory(final long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         dtoWarehouseService.removeSkuOnWarehouse(skuWarehouseId);
     }
 
     /** {@inheritDoc} */
+    @Override
     public InventoryDTO getInventory(final long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final InventoryDTO dto = dtoFactory.getByIface(InventoryDTO.class);
@@ -234,11 +238,13 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public InventoryDTO createInventory(final InventoryDTO inventory) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return saveInventory(inventory);
     }
 
     /** {@inheritDoc} */
+    @Override
     public InventoryDTO updateInventory(final InventoryDTO inventory) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return saveInventory(inventory);
     }

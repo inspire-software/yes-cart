@@ -58,22 +58,24 @@ public class DtoPromotionCouponServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<PromotionCouponDTO> getCouponsByPromotionId(Long promotionId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<PromotionCoupon> coupons = ((PromotionCouponService) service).findByPromotionId(promotionId);
-        final List<PromotionCouponDTO> dtos = new ArrayList<PromotionCouponDTO>();
+        final List<PromotionCouponDTO> dtos = new ArrayList<>();
         fillDTOs(coupons, dtos);
         return dtos;
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<PromotionCouponDTO> findBy(final long promotionId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<PromotionCouponDTO> dtos = new ArrayList<PromotionCouponDTO>();
+        final List<PromotionCouponDTO> dtos = new ArrayList<>();
 
         if (promotionId > 0L) {
 
-            List<PromotionCoupon> entities = Collections.emptyList();
+            List<PromotionCoupon> entities;
 
             if (StringUtils.isNotBlank(filter)) {
 
@@ -103,11 +105,11 @@ public class DtoPromotionCouponServiceImpl
 
     @Override
     public List<PromotionCouponDTO> findBy(final long promotionId, final Instant createdAfter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<PromotionCouponDTO> dtos = new ArrayList<PromotionCouponDTO>();
+        final List<PromotionCouponDTO> dtos = new ArrayList<>();
 
         if (promotionId > 0L) {
 
-            List<PromotionCoupon> entities = Collections.emptyList();
+            List<PromotionCoupon> entities;
 
             if (createdAfter != null) {
 
@@ -134,6 +136,7 @@ public class DtoPromotionCouponServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public byte[] getCouponsByPromotionIdExport(Long promotionId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final StringBuilder csv = new StringBuilder();
@@ -153,6 +156,7 @@ public class DtoPromotionCouponServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public PromotionCouponDTO create(PromotionCouponDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         if (instance.getCode() != null) {
@@ -167,22 +171,26 @@ public class DtoPromotionCouponServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public PromotionCouponDTO update(PromotionCouponDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         // Coupons must not be updated via UI because we may cripple usage integrity. Make users generate new/delete coupons instead.
         throw new UnsupportedOperationException();
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<PromotionCouponDTO> getDtoIFace() {
         return PromotionCouponDTO.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<PromotionCouponDTOImpl> getDtoImpl() {
         return PromotionCouponDTOImpl.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<PromotionCoupon> getEntityIFace() {
         return PromotionCoupon.class;
     }

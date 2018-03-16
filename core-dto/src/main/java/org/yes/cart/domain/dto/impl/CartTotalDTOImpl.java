@@ -71,78 +71,97 @@ public class CartTotalDTOImpl implements Total, Serializable {
     public CartTotalDTOImpl() {
     }
 
+    @Override
     public BigDecimal getListSubTotal() {
         return listSubTotal;
     }
 
+    @Override
     public BigDecimal getSaleSubTotal() {
         return saleSubTotal;
     }
 
+    @Override
     public BigDecimal getNonSaleSubTotal() {
         return nonSaleSubTotal;
     }
 
+    @Override
     public BigDecimal getPriceSubTotal() {
         return priceSubTotal;
     }
 
+    @Override
     public boolean isOrderPromoApplied() {
         return orderPromoApplied;
     }
 
+    @Override
     public String getAppliedOrderPromo() {
         return appliedOrderPromo;
     }
 
+    @Override
     public BigDecimal getSubTotal() {
         return subTotal;
     }
 
+    @Override
     public BigDecimal getSubTotalTax() {
         return subTotalTax;
     }
 
+    @Override
     public BigDecimal getSubTotalAmount() {
         return subTotalAmount;
     }
 
+    @Override
     public BigDecimal getDeliveryListCost() {
         return deliveryListCost;
     }
 
+    @Override
     public BigDecimal getDeliveryCost() {
         return deliveryCost;
     }
 
+    @Override
     public boolean isDeliveryPromoApplied() {
         return deliveryPromoApplied;
     }
 
+    @Override
     public String getAppliedDeliveryPromo() {
         return appliedDeliveryPromo;
     }
 
+    @Override
     public BigDecimal getDeliveryTax() {
         return deliveryTax;
     }
 
+    @Override
     public BigDecimal getDeliveryCostAmount() {
         return deliveryCostAmount;
     }
 
+    @Override
     public BigDecimal getTotal() {
         return total;
     }
 
+    @Override
     public BigDecimal getTotalTax() {
         return totalTax;
     }
 
+    @Override
     public BigDecimal getListTotalAmount() {
         return listTotalAmount;
     }
 
+    @Override
     public BigDecimal getTotalAmount() {
         return totalAmount;
     }
@@ -223,6 +242,7 @@ public class CartTotalDTOImpl implements Total, Serializable {
         this.totalAmount = totalAmount;
     }
 
+    @Override
     public Total add(final Total summand) {
         throw new UnsupportedOperationException("DTO objects must not be manipulated");
     }

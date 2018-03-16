@@ -86,6 +86,7 @@ public class DtoWarehouseServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<WarehouseDTO> getDtoIFace() {
         return WarehouseDTO.class;
     }
@@ -93,6 +94,7 @@ public class DtoWarehouseServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<WarehouseDTOImpl> getDtoImpl() {
         return WarehouseDTOImpl.class;
     }
@@ -100,6 +102,7 @@ public class DtoWarehouseServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<Warehouse> getEntityIFace() {
         return Warehouse.class;
     }
@@ -122,6 +125,7 @@ public class DtoWarehouseServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<WarehouseDTO, Boolean> findAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return findByShopId(shopId, true);
     }
@@ -129,18 +133,19 @@ public class DtoWarehouseServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<WarehouseDTO, Boolean> findByShopId(final long shopId, boolean includeDisabled) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         List<Warehouse> warehouses = ((WarehouseService) service).getByShopId(shopId, includeDisabled);
-        Set<Long> warehouseEnabledIds = new HashSet<Long>();
+        Set<Long> warehouseEnabledIds = new HashSet<>();
         if (includeDisabled) {
             for (final Warehouse warehouse : ((WarehouseService) service).getByShopId(shopId, false)) {
                 warehouseEnabledIds.add(warehouse.getWarehouseId());
             }
         }
-        List<WarehouseDTO> dtos = new ArrayList<WarehouseDTO>();
+        List<WarehouseDTO> dtos = new ArrayList<>();
         fillDTOs(warehouses, dtos);
-        Map<WarehouseDTO, Boolean> dtosAndFlag = new HashMap<WarehouseDTO, Boolean>();
+        Map<WarehouseDTO, Boolean> dtosAndFlag = new HashMap<>();
         for (final WarehouseDTO dto : dtos) {
             dtosAndFlag.put(dto, includeDisabled && !warehouseEnabledIds.contains(dto.getWarehouseId()));
         }
@@ -163,7 +168,7 @@ public class DtoWarehouseServiceImpl
         for (final ShopWarehouse shop : assigned) {
             enabledMap.put(shop.getShop().getShopId(), shop.isDisabled());
         }
-        final List<ShopDTO> shopDTOs = new ArrayList<ShopDTO>(assigned.size());
+        final List<ShopDTO> shopDTOs = new ArrayList<>(assigned.size());
         fillCarrierShopsDTOs(shopDTOs, assigned);
         final Map<ShopDTO, Boolean> dtoPairs = new LinkedHashMap<>(shopDTOs.size());
         for (final ShopDTO dto : shopDTOs) {
@@ -176,6 +181,7 @@ public class DtoWarehouseServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setShopWarehouseRank(final long shopWarehouseId, final int newRank) {
         ((WarehouseService) service).updateShopWarehouseRank(shopWarehouseId, newRank);
     }
@@ -183,6 +189,7 @@ public class DtoWarehouseServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void assignWarehouse(final long warehouseId, final long shopId, final boolean soft)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ((WarehouseService) service).assignWarehouse(warehouseId, shopId, soft);
@@ -191,6 +198,7 @@ public class DtoWarehouseServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void unassignWarehouse(final long warehouseId, final long shopId, final boolean soft) {
         ((WarehouseService) service).unassignWarehouse(warehouseId, shopId, soft);
     }
@@ -203,9 +211,10 @@ public class DtoWarehouseServiceImpl
      * @param warehouseId given warehouse id.
      * @return list of founded {@link SkuWarehouseDTO}
      */
+    @Override
     public List<SkuWarehouseDTO> findProductSkusOnWarehouse(final long productId, final long warehouseId) {
         final List<SkuWarehouse> skuWarehouses = skuWarehouseService.getProductSkusOnWarehouse(productId, warehouseId);
-        final List<SkuWarehouseDTO> result = new ArrayList<SkuWarehouseDTO>(skuWarehouses.size());
+        final List<SkuWarehouseDTO> result = new ArrayList<>(skuWarehouses.size());
         for (SkuWarehouse sw : skuWarehouses) {
             result.add(assembleSkuWarehouseDTO(sw));
         }
@@ -218,6 +227,7 @@ public class DtoWarehouseServiceImpl
      * @param skuWarehouseDTO given {@link SkuWarehouseDTO}
      * @return created SkuWarehouseDTO.
      */
+    @Override
     public SkuWarehouseDTO createSkuOnWarehouse(final SkuWarehouseDTO skuWarehouseDTO) {
         SkuWarehouse skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
         dtoSkuWarehouseAssembler.assembleEntity(
@@ -236,6 +246,7 @@ public class DtoWarehouseServiceImpl
      * @param skuWarehouseDTO given {@link SkuWarehouseDTO}
      * @return updated SkuWarehouseDTO.
      */
+    @Override
     public SkuWarehouseDTO updateSkuOnWarehouse(final SkuWarehouseDTO skuWarehouseDTO) {
         SkuWarehouse skuWarehouse = skuWarehouseService.findById(skuWarehouseDTO.getSkuWarehouseId());
         dtoSkuWarehouseAssembler.assembleEntity(
@@ -263,6 +274,7 @@ public class DtoWarehouseServiceImpl
      *
      * @param skuWarehouseId given pk value.
      */
+    @Override
     public void removeSkuOnWarehouse(final long skuWarehouseId) {
         final SkuWarehouse skuWarehouse = skuWarehouseService.findById(skuWarehouseId);
         skuWarehouse.setQuantity(BigDecimal.ZERO);
@@ -286,6 +298,7 @@ public class DtoWarehouseServiceImpl
      *
      * @return {@link org.yes.cart.service.domain.SkuWarehouseService}
      */
+    @Override
     public SkuWarehouseService getSkuWarehouseService() {
         return skuWarehouseService;
     }

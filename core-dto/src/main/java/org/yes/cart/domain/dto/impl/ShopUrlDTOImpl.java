@@ -46,55 +46,66 @@ public class ShopUrlDTOImpl implements ShopUrlDTO {
     private long shopId;
 
     /** {@inheritDoc}  */
+    @Override
     public String getUrl() {
         return url;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public void setUrl(final String url) {
         this.url = url;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public String getThemeChain() {
         return themeChain;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public void setThemeChain(final String themeChain) {
         this.themeChain = themeChain;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public boolean isPrimary() {
         return primary;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public void setPrimary(final boolean primary) {
         this.primary = primary;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public long getStoreUrlId() {
         return storeUrlId;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public long getId() {
         return storeUrlId;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public void setStoreUrlId(final long storeUrlId) {
         this.storeUrlId = storeUrlId;
     }
 
+    @Override
     public long getShopId() {
         return shopId;
     }
 
     /** {@inheritDoc}  */
+    @Override
     public void setShopId(final long shopId) {
         this.shopId = shopId;
     }

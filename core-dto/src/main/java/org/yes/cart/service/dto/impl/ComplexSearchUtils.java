@@ -90,7 +90,7 @@ class ComplexSearchUtils {
      *
      * Each date part is optional, so following is valid:
      * Before: <YYYY-MM-DD, <YYYY-MM, <YYYY
-     * AFter: YYYY-MM-DD<, YYYY-MM<, YYYY<
+     * After: YYYY-MM-DD<, YYYY-MM<, YYYY<
      *
      * @param filter non empty filter
      *

@@ -100,46 +100,55 @@ public class AttributeDTOImpl implements AttributeDTO {
 
 
     /** {@inheritDoc} */
+    @Override
     public int getRank() {
         return rank;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setRank(final int rank) {
         this.rank = rank;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getChoiceData() {
         return choiceData;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setChoiceData(final Map<String, String> choiceData) {
         this.choiceData = choiceData;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getValidationFailedMessage() {
         return validationFailedMessage;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setValidationFailedMessage(final Map<String, String> validationFailedMessage) {
         this.validationFailedMessage = validationFailedMessage;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getAttributegroupId() {
         return attributegroupId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAttributegroupId(final long attributegroupId) {
         this.attributegroupId = attributegroupId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getAttributeId() {
         return this.attributeId;
     }
@@ -147,21 +156,25 @@ public class AttributeDTOImpl implements AttributeDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return attributeId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAttributeId(final long attributeId) {
         this.attributeId = attributeId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCode() {
         return code;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
@@ -179,139 +192,167 @@ public class AttributeDTOImpl implements AttributeDTO {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isMandatory() {
         return mandatory;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setMandatory(final boolean mandatory) {
         this.mandatory = mandatory;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getVal() {
         return val;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setVal(final String val) {
         this.val = val;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getName() {
         return name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getDisplayNames() {
         return displayNames;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDisplayNames(final Map<String, String> displayNames) {
         this.displayNames = displayNames;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getDescription() {
         return description;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }
 
+    @Override
     public long getEtypeId() {
         return etypeId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setEtypeId(final long etypeId) {
         this.etypeId = etypeId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getEtypeName() {
         return etypeName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setEtypeName(final String etypeName) {
         this.etypeName = etypeName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isAllowduplicate() {
         return allowduplicate;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAllowduplicate(final boolean allowduplicate) {
         this.allowduplicate = allowduplicate;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isAllowfailover() {
         return allowfailover;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAllowfailover(final boolean allowfailover) {
         this.allowfailover = allowfailover;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getRegexp() {
         return regexp;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setRegexp(final String regexp) {
         this.regexp = regexp;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isStore() {
         return store;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setStore(final boolean store) {
         this.store = store;
     }
 
+    @Override
     public boolean isSearch() {
         return search;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSearch(final boolean search) {
         this.search = search;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isPrimary() {
         return primary;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setPrimary(final boolean primary) {
         this.primary = primary;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isNavigation() {
         return navigation;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setNavigation(final boolean navigation) {
         this.navigation = navigation;
     }

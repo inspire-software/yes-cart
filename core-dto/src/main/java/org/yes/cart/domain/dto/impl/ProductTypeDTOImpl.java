@@ -69,26 +69,31 @@ public class ProductTypeDTOImpl implements ProductTypeDTO {
     private boolean digital;
 
     /** {@inheritDoc} */
+    @Override
     public boolean isDownloadable() {
         return downloadable;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDownloadable(final boolean downloadable) {
         this.downloadable = downloadable;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isDigital() {
         return digital;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDigital(final boolean digital) {
         this.digital = digital;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getProducttypeId() {
         return producttypeId;
     }
@@ -96,102 +101,122 @@ public class ProductTypeDTOImpl implements ProductTypeDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return producttypeId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setProducttypeId(final long producttypeId) {
         this.producttypeId = producttypeId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getName() {
         return name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getDisplayNames() {
         return displayNames;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDisplayNames(final Map<String, String> displayNames) {
         this.displayNames = displayNames;
     }
 
 
     /** {@inheritDoc} */
+    @Override
     public String getGuid() {
         return guid;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setGuid(String guid) {
         this.guid = guid;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getDescription() {
         return description;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getUitemplate() {
         return uitemplate;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setUitemplate(final String uitemplate) {
         this.uitemplate = uitemplate;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getUisearchtemplate() {
         return uisearchtemplate;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setUisearchtemplate(final String uisearchtemplate) {
         this.uisearchtemplate = uisearchtemplate;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isService() {
         return service;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setService(final boolean service) {
         this.service = service;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isEnsemble() {
         return ensemble;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setEnsemble(final boolean ensemble) {
         this.ensemble = ensemble;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isShippable() {
         return shippable;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setShippable(final boolean shippable) {
         this.shippable = shippable;
     }

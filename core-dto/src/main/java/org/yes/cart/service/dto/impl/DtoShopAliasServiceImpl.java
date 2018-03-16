@@ -50,6 +50,7 @@ public class DtoShopAliasServiceImpl
     }
 
     /** {@inheritDoc}     */
+    @Override
     public ShopAliasDTO create(final ShopAliasDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ShopAlias shopUrl = getPersistenceEntityFactory().getByIface(ShopAlias.class);
         assembler.assembleEntity(instance, shopUrl, getAdaptersRepository(), dtoFactory);
@@ -60,9 +61,10 @@ public class DtoShopAliasServiceImpl
 
 
     /** {@inheritDoc} */
+    @Override
     public List<ShopAliasDTO> getAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final Shop shop = shopService.findById(shopId);
-        final List<ShopAliasDTO> shopAliasDTOs = new ArrayList<ShopAliasDTO>(shop.getShopUrl().size());
+        final List<ShopAliasDTO> shopAliasDTOs = new ArrayList<>(shop.getShopUrl().size());
         fillDTOs(shop.getShopAlias(), shopAliasDTOs);
         return shopAliasDTOs;
     }
@@ -70,16 +72,19 @@ public class DtoShopAliasServiceImpl
 
 
     /** {@inheritDoc}     */
+    @Override
     public Class<ShopAliasDTO> getDtoIFace() {
         return ShopAliasDTO.class;
     }
 
     /** {@inheritDoc}     */
+    @Override
     public Class<ShopAliasDTOImpl> getDtoImpl() {
         return ShopAliasDTOImpl.class;
     }
 
     /** {@inheritDoc}     */
+    @Override
     public Class<ShopAlias> getEntityIFace() {
         return ShopAlias.class;
     }

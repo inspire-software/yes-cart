@@ -59,6 +59,8 @@ public class DtoBrandServiceImpl
         extends AbstractDtoServiceImpl<BrandDTO, BrandDTOImpl, Brand>
         implements DtoBrandService {
 
+    private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
+
     private final Assembler attrValueAssembler;
     private final DtoAttributeService dtoAttributeService;
     private final GenericDAO<AttrValueEntityBrand, Long> attrValueEntityBrandDao;
@@ -106,6 +108,7 @@ public class DtoBrandServiceImpl
      *
      * @return dto interface.
      */
+    @Override
     public Class<BrandDTO> getDtoIFace() {
         return BrandDTO.class;
     }
@@ -115,6 +118,7 @@ public class DtoBrandServiceImpl
      *
      * @return dto implementation class.
      */
+    @Override
     public Class<BrandDTOImpl> getDtoImpl() {
         return BrandDTOImpl.class;
     }
@@ -124,13 +128,15 @@ public class DtoBrandServiceImpl
      *
      * @return entity interface.
      */
+    @Override
     public Class<Brand> getEntityIFace() {
         return Brand.class;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<AttrValueBrandDTO> result = new ArrayList<AttrValueBrandDTO>(getById(entityPk).getAttributes());
+        final List<AttrValueBrandDTO> result = new ArrayList<>(getById(entityPk).getAttributes());
         final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
                 AttributeGroupNames.BRAND,
                 getCodes(result));
@@ -140,11 +146,12 @@ public class DtoBrandServiceImpl
             attrValueBarndDTO.setBrandId(entityPk);
             result.add(attrValueBarndDTO);
         }
-        Collections.sort(result, new AttrValueDTOComparatorImpl());
+        result.sort(ATTR_VALUE_DTO_COMPARATOR);
         return result;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         final AttrValueEntityBrand valueEntityBrand = attrValueEntityBrandDao.findById(attrValueDTO.getAttrvalueId());
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityBrand, getAdaptersRepository(), dtoFactory);
@@ -154,6 +161,7 @@ public class DtoBrandServiceImpl
     }
 
     /** {@inheritDoc}*/
+    @Override
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
 
         final Attribute atr = ((GenericService<Attribute>)dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
@@ -181,6 +189,7 @@ public class DtoBrandServiceImpl
     }
 
     /** {@inheritDoc}*/
+    @Override
     public long deleteAttributeValue(final long attributeValuePk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueEntityBrand valueEntityBrand = attrValueEntityBrandDao.findById(attributeValuePk);
@@ -199,6 +208,7 @@ public class DtoBrandServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
@@ -207,6 +217,7 @@ public class DtoBrandServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<BrandDTO> findBrands(final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<Brand> entities;
@@ -219,7 +230,7 @@ public class DtoBrandServiceImpl
         } else {
             entities = service.findAll();
         }
-        final List<BrandDTO> dtos = new ArrayList<BrandDTO>(entities.size());
+        final List<BrandDTO> dtos = new ArrayList<>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;
 
@@ -228,6 +239,7 @@ public class DtoBrandServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<BrandDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final String iFilter = HQLUtils.criteriaIlikeAnywhere(filter);
@@ -237,7 +249,7 @@ public class DtoBrandServiceImpl
                 page * pageSize, pageSize,
                 iFilter, iFilter, iFilter);
 
-        final List<BrandDTO> dtos = new ArrayList<BrandDTO>(entities.size());
+        final List<BrandDTO> dtos = new ArrayList<>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;
 
@@ -246,6 +258,7 @@ public class DtoBrandServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
         final AttrValueBrandDTO dto = new AttrValueBrandDTOImpl();
         dto.setBrandId(entityPk);

@@ -127,6 +127,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getProductTypeName() {
         return productTypeName;
     }
@@ -134,6 +135,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setProductTypeName(final String productTypeName) {
         this.productTypeName = productTypeName;
     }
@@ -141,6 +143,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CategoryDTO> getChildren() {
         return children;
     }
@@ -148,6 +151,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setChildren(final List<CategoryDTO> children) {
         this.children = children;
     }
@@ -155,6 +159,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getCategoryId() {
         return categoryId;
     }
@@ -162,6 +167,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return categoryId;
     }
@@ -169,6 +175,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCategoryId(final long categoryId) {
         this.categoryId = categoryId;
     }
@@ -176,6 +183,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getParentId() {
         return parentId;
     }
@@ -183,6 +191,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setParentId(final long parentId) {
         this.parentId = parentId;
     }
@@ -190,6 +199,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getParentName() {
         return parentName;
     }
@@ -197,6 +207,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setParentName(final String parentName) {
         this.parentName = parentName;
     }
@@ -204,6 +215,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long getLinkToId() {
         return linkToId;
     }
@@ -211,6 +223,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setLinkToId(final Long linkToId) {
         this.linkToId = linkToId;
     }
@@ -218,6 +231,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLinkToName() {
         return linkToName;
     }
@@ -225,6 +239,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setLinkToName(final String linkToName) {
         this.linkToName = linkToName;
     }
@@ -232,6 +247,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getRank() {
         return rank;
     }
@@ -239,6 +255,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setRank(final int rank) {
         this.rank = rank;
     }
@@ -246,6 +263,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long getProductTypeId() {
         return productTypeId;
     }
@@ -253,6 +271,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setProductTypeId(final Long productTypeId) {
         this.productTypeId = productTypeId;
     }
@@ -260,6 +279,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getGuid() {
         return guid;
     }
@@ -267,6 +287,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setGuid(final String guid) {
         this.guid = guid;
     }
@@ -274,6 +295,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -281,16 +303,19 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getDisplayNames() {
         return displayNames;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDisplayNames(final Map<String, String> displayNames) {
         this.displayNames = displayNames;
     }
@@ -298,6 +323,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDescription() {
         return description;
     }
@@ -305,6 +331,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }
@@ -312,6 +339,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUitemplate() {
         return uitemplate;
     }
@@ -319,6 +347,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setUitemplate(final String uitemplate) {
         this.uitemplate = uitemplate;
     }
@@ -326,6 +355,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDateTime getAvailablefrom() {
         return availablefrom;
     }
@@ -333,6 +363,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
@@ -340,6 +371,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDateTime getAvailableto() {
         return availableto;
     }
@@ -347,6 +379,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
@@ -356,6 +389,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Boolean getNavigationByAttributes() {
         return navigationByAttributes;
     }
@@ -363,6 +397,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setNavigationByAttributes(final Boolean navigationByAttributes) {
         this.navigationByAttributes = navigationByAttributes;
     }
@@ -370,6 +405,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Boolean getNavigationByPrice() {
         return navigationByPrice;
     }
@@ -377,6 +413,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setNavigationByPrice(final Boolean navigationByPrice) {
         this.navigationByPrice = navigationByPrice;
     }
@@ -384,6 +421,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getNavigationByPriceTiers() {
         return navigationByPriceTiers;
     }
@@ -391,6 +429,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setNavigationByPriceTiers(final String navigationByPriceTiers) {
         this.navigationByPriceTiers = navigationByPriceTiers;
     }
@@ -398,6 +437,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<AttrValueCategoryDTO> getAttributes() {
         return attributes;
     }
@@ -405,6 +445,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAttributes(final Set<AttrValueCategoryDTO> attributes) {
         this.attributes = attributes;
     }
@@ -412,6 +453,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUri() {
         return uri;
     }
@@ -419,6 +461,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setUri(final String uri) {
         this.uri = uri;
     }
@@ -426,6 +469,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTitle() {
         return title;
     }
@@ -433,6 +477,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTitle(final String title) {
         this.title = title;
     }
@@ -440,6 +485,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayTitles() {
         return displayTitles;
     }
@@ -447,6 +493,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayTitles(final Map<String, String> displayTitles) {
         this.displayTitles = displayTitles;
     }
@@ -454,6 +501,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMetakeywords() {
         return metakeywords;
     }
@@ -461,6 +509,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMetakeywords(final String metakeywords) {
         this.metakeywords = metakeywords;
     }
@@ -468,6 +517,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayMetakeywords() {
         return displayMetakeywords;
     }
@@ -475,6 +525,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayMetakeywords(final Map<String, String> displayMetakeywords) {
         this.displayMetakeywords = displayMetakeywords;
     }
@@ -482,6 +533,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMetadescription() {
         return metadescription;
     }
@@ -489,6 +541,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMetadescription(final String metadescription) {
         this.metadescription = metadescription;
     }
@@ -496,6 +549,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayMetadescriptions() {
         return displayMetadescriptions;
     }
@@ -503,6 +557,7 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayMetadescriptions(final Map<String, String> displayMetadescriptions) {
         this.displayMetadescriptions = displayMetadescriptions;
     }

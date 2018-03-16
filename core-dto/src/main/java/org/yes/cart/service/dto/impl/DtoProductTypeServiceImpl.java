@@ -63,6 +63,7 @@ public class DtoProductTypeServiceImpl
      *
      * @return dto interface.
      */
+    @Override
     public Class<ProductTypeDTO> getDtoIFace() {
         return ProductTypeDTO.class;
     }
@@ -72,6 +73,7 @@ public class DtoProductTypeServiceImpl
      *
      * @return dto implementation class.
      */
+    @Override
     public Class<ProductTypeDTOImpl> getDtoImpl() {
         return ProductTypeDTOImpl.class;
     }
@@ -81,6 +83,7 @@ public class DtoProductTypeServiceImpl
      *
      * @return entity interface.
      */
+    @Override
     public Class<ProductType> getEntityIFace() {
         return ProductType.class;
     }
@@ -88,6 +91,7 @@ public class DtoProductTypeServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ProductTypeDTO> findProductTypes(final String name)  throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<ProductType> entities;
@@ -100,7 +104,7 @@ public class DtoProductTypeServiceImpl
         } else {
             entities = service.findAll();
         }
-        final List<ProductTypeDTO> dtos = new ArrayList<ProductTypeDTO>(entities.size());
+        final List<ProductTypeDTO> dtos = new ArrayList<>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;
     }
@@ -113,6 +117,7 @@ public class DtoProductTypeServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ProductTypeDTO> findBy(final String name, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<ProductType> entities;
@@ -149,7 +154,7 @@ public class DtoProductTypeServiceImpl
         } else {
             entities = service.getGenericDao().findRangeByCriteria(" order by e.name", page * pageSize, pageSize);
         }
-        final List<ProductTypeDTO> dtos = new ArrayList<ProductTypeDTO>(entities.size());
+        final List<ProductTypeDTO> dtos = new ArrayList<>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;
 
@@ -158,10 +163,11 @@ public class DtoProductTypeServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ProductTypeDTO> findByAttributeCode(final String code) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<ProductType> entities = ((ProductTypeService) service).findByAttributeCode(code);
-        final List<ProductTypeDTO> dtos = new ArrayList<ProductTypeDTO>(entities.size());
+        final List<ProductTypeDTO> dtos = new ArrayList<>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;
 

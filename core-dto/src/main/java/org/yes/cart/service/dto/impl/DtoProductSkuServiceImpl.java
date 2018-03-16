@@ -54,6 +54,7 @@ public class DtoProductSkuServiceImpl
         extends AbstractDtoServiceImpl<ProductSkuDTO, ProductSkuDTOImpl, ProductSku>
         implements DtoProductSkuService {
 
+    private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
 
     private DtoProductService dtoProductService;
     private final DtoAttributeService dtoAttributeService;
@@ -128,10 +129,11 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ProductSkuDTO> getAllProductSkus(final long productId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final Collection<ProductSku> skus = ((ProductSkuService) getService()).getAllProductSkus(productId);
-        final List<ProductSkuDTO> result = new ArrayList<ProductSkuDTO>(skus.size());
+        final List<ProductSkuDTO> result = new ArrayList<>(skus.size());
         fillDTOs(skus, result);
         return result;
     }
@@ -145,9 +147,10 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ProductSkuDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<ProductSkuDTO> dtos = new ArrayList<ProductSkuDTO>();
+        final List<ProductSkuDTO> dtos = new ArrayList<>();
 
         List<ProductSku> entities = Collections.emptyList();
 
@@ -199,10 +202,11 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<SkuPriceDTO> getAllProductPrices(final long productId, final String currency, final long shopId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<SkuPrice> prices = priceService.getAllPrices(productId, null, currency);
-        final List<SkuPriceDTO> result = new ArrayList<SkuPriceDTO>();
+        final List<SkuPriceDTO> result = new ArrayList<>();
         for (final SkuPrice price : prices) {
             if (price.getShop().getShopId() == shopId) {
                 final SkuPriceDTO dto = dtoFactory.getByIface(SkuPriceDTO.class);
@@ -230,6 +234,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public long createSkuPrice(final SkuPriceDTO skuPriceDTO) {
         SkuPrice skuPrice = getService().getGenericDao().getEntityFactory().getByIface(SkuPrice.class);
         skuPriceAssembler.assembleEntity(skuPriceDTO, skuPrice,
@@ -247,6 +252,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public long updateSkuPrice(final SkuPriceDTO skuPriceDTO) {
         final SkuPrice skuPrice = priceService.findById(skuPriceDTO.getSkuPriceId());
         skuPriceAssembler.assembleEntity(skuPriceDTO, skuPrice,
@@ -262,6 +268,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void createPostProcess(final ProductSkuDTO dto, final ProductSku entity) {
         ensureBlankUriIsNull(entity);
         super.createPostProcess(dto, entity);
@@ -270,6 +277,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void updatePostProcess(final ProductSkuDTO dto, final ProductSku entity) {
         ensureBlankUriIsNull(entity);
         super.updatePostProcess(dto, entity);
@@ -284,6 +292,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void remove(long id) {
 
         ProductSku sku =  getService().findById(id);
@@ -297,17 +306,18 @@ public class DtoProductSkuServiceImpl
         ((ProductSkuService)getService()).removeAllWishLists(sku);
         ((ProductSkuService)getService()).removeAllEnsembleOptions(sku);
 
-        final List<Long> avIds = new ArrayList<Long>();
+        final List<Long> avIds = new ArrayList<>();
         for (final AttrValueProductSku av : sku.getAttributes()) {
             avIds.add(av.getAttrvalueId());
         }
-        sku = null;
         getService().getGenericDao().clear(); // clear session
 
         for (final Long avId : avIds) {
             try {
                 deleteAttributeValue(avId);
-            } catch (Exception exp) {};
+            } catch (Exception exp) {
+                // OK
+            }
         }
         getService().getGenericDao().flushClear(); // ensure we flush delete and clear session
 
@@ -321,6 +331,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public SkuPriceDTO getSkuPrice(final long skuPriceId) {
         SkuPrice skuPrice = priceService.findById(skuPriceId);
         SkuPriceDTO skuPriceDTO = getAssemblerDtoFactory().getByIface(SkuPriceDTO.class);
@@ -333,6 +344,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeSkuPrice(final long skuPriceId) {
         priceService.delete(
                 priceService.findById(skuPriceId)
@@ -344,6 +356,7 @@ public class DtoProductSkuServiceImpl
      *
      * @param productId product pk value
      */
+    @Override
     public void removeAllPrices(final long productId) {
         ((ProductSkuService) getService()).removeAllPrices(productId);
 
@@ -354,6 +367,7 @@ public class DtoProductSkuServiceImpl
      *
      * @param productId product pk value
      */
+    @Override
     public void removeAllInventory(final long productId) {
         ((ProductSkuService) getService()).removeAllInventory(productId);
 
@@ -363,6 +377,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<ProductSkuDTO> getDtoIFace() {
         return ProductSkuDTO.class;
     }
@@ -370,6 +385,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<ProductSkuDTOImpl> getDtoImpl() {
         return ProductSkuDTOImpl.class;
     }
@@ -377,6 +393,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<ProductSku> getEntityIFace() {
         return ProductSku.class;
     }
@@ -385,14 +402,15 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final ProductSkuDTO sku = getById(entityPk);
-        final List<AttrValueProductSkuDTO> skuAttrs = new ArrayList<AttrValueProductSkuDTO>(sku.getAttributes());
+        final List<AttrValueProductSkuDTO> skuAttrs = new ArrayList<>(sku.getAttributes());
 
         final ProductDTO product = getDtoProductService().getById(sku.getProductId());
-        final List<AttrValueProductDTO> productAttrs = new ArrayList<AttrValueProductDTO>(product.getAttributes());
+        final List<AttrValueProductDTO> productAttrs = new ArrayList<>(product.getAttributes());
 
         final List<AttributeDTO> ptList = dtoAttributeService.findAvailableAttributesByProductTypeId(
                 product.getProductTypeDTO().getProducttypeId()
@@ -411,23 +429,19 @@ public class DtoProductSkuServiceImpl
         ptList.addAll(mandatory);
 
         // code to list as we may have multivalues
-        final Map<String, List<AttrValueProductDTO>> existingProductAttrValues = new HashMap<String, List<AttrValueProductDTO>>();
+        final Map<String, List<AttrValueProductDTO>> existingProductAttrValues = new HashMap<>();
         for (final AttrValueProductDTO value : productAttrs) {
             final String attrCode = value.getAttributeDTO().getCode();
-            List<AttrValueProductDTO> codeValues = existingProductAttrValues.get(attrCode);
-            if (codeValues == null) {
-                codeValues = new ArrayList<AttrValueProductDTO>();
-                existingProductAttrValues.put(attrCode, codeValues);
-            }
+            final List<AttrValueProductDTO> codeValues = existingProductAttrValues.computeIfAbsent(attrCode, k -> new ArrayList<>());
             codeValues.add(value);
         }
 
-        final Set<String> existingSkuAttrValueCodes = new HashSet<String>();
+        final Set<String> existingSkuAttrValueCodes = new HashSet<>();
         for (final AttrValueProductSkuDTO value : skuAttrs) {
             existingSkuAttrValueCodes.add(value.getAttributeDTO().getCode());
         }
 
-        final List<AttrValueProductSkuDTO> full = new ArrayList<AttrValueProductSkuDTO>(ptList.size());
+        final List<AttrValueProductSkuDTO> full = new ArrayList<>(ptList.size());
         for (final AttributeDTO available : ptList) {
             if (!existingSkuAttrValueCodes.contains(available.getCode())) {
 
@@ -459,20 +473,17 @@ public class DtoProductSkuServiceImpl
 
         CollectionUtils.filter(
                 full,
-                new Predicate() {
-                    public boolean evaluate(final Object object) {
-                        return ((AttrValueDTO) object).getAttributeDTO() != null;
-                    }
-                }
+                object -> ((AttrValueDTO) object).getAttributeDTO() != null
         );
 
-        Collections.sort(full, new AttrValueDTOComparatorImpl());
+        Collections.sort(full, ATTR_VALUE_DTO_COMPARATOR);
         return full;
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         final AttrValueProductSku attrValue = attrValueEntityProductSkuDao.findById(attrValueDTO.getAttrvalueId());
         attrValueAssembler.assembleEntity(attrValueDTO, attrValue, getAdaptersRepository(), dtoFactory);
@@ -484,6 +495,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
 
         final Attribute atr = attributeService.findById(attrValueDTO.getAttributeDTO().getAttributeId());
@@ -512,6 +524,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public long deleteAttributeValue(final long attributeValuePk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueProductSku attrValue = attrValueEntityProductSkuDao.findById(attributeValuePk);
@@ -530,6 +543,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
@@ -539,6 +553,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
         final AttrValueProductSkuDTO dto = new AttrValueProductSkuDTOImpl();
         dto.setSkuId(entityPk);

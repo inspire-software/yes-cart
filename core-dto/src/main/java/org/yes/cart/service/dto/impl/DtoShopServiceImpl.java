@@ -93,27 +93,31 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<ShopDTO> getAllTopLevel() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Shop> shops = ((ShopService) service).getNonSubShops();
-        final List<ShopDTO> dtos = new ArrayList<ShopDTO>();
+        final List<ShopDTO> dtos = new ArrayList<>();
         fillDTOs(shops, dtos);
         return dtos;
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<ShopDTO> getAllSubs(final long masterId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Shop> shops = ((ShopService) service).getSubShopsByMaster(masterId);
-        final List<ShopDTO> dtos = new ArrayList<ShopDTO>();
+        final List<ShopDTO> dtos = new ArrayList<>();
         fillDTOs(shops, dtos);
         return dtos;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSupportedCurrencies(final long shopId) {
         return service.findById(shopId).getSupportedCurrencies();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void updateSupportedCurrencies(final long shopId, final String currencies) {
         ((ShopService) service).updateAttributeValue(
                 shopId,
@@ -122,16 +126,19 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getAllSupportedCurrenciesByShops() {
         return ((ShopService)service).findAllSupportedCurrenciesByShops();
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSupportedShippingCountries(final long shopId) {
         return service.findById(shopId).getSupportedShippingCountries();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void updateSupportedShippingCountries(final long shopId, final String countries) {
         ((ShopService) service).updateAttributeValue(
                 shopId,
@@ -140,11 +147,13 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSupportedBillingCountries(final long shopId) {
         return service.findById(shopId).getSupportedBillingCountries();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void updateSupportedBillingCountries(final long shopId, final String countries) {
         ((ShopService) service).updateAttributeValue(
                 shopId,
@@ -153,11 +162,13 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSupportedLanguages(final long shopId) {
         return service.findById(shopId).getSupportedLanguages();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void updateSupportedLanguages(final long shopId, final String languages) {
         ((ShopService) service).updateAttributeValue(
                 shopId,
@@ -166,29 +177,33 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public ShopDTO getShopDtoByDomainName(final String serverDomainName) {
         final Shop shop =((ShopService)service).getShopByDomainName(serverDomainName);
-        final ShopDTO dto = (ShopDTO) dtoFactory.getByIface(getDtoIFace());
+        final ShopDTO dto = dtoFactory.getByIface(getDtoIFace());
         getAssembler().assembleDto(dto, shop, getAdaptersRepository(), getAssemblerDtoFactory());
         return dto;
     }
 
     /** {@inheritDoc} */
+    @Override
     public ShopDTO updateDisabledFlag(final long shopId, final boolean disabled) {
         final Shop shop = service.findById(shopId);
         shop.setDisabled(disabled);
         service.update(shop);
-        final ShopDTO dto = (ShopDTO) dtoFactory.getByIface(getDtoIFace());
+        final ShopDTO dto = dtoFactory.getByIface(getDtoIFace());
         getAssembler().assembleDto(dto, shop, getAdaptersRepository(), getAssemblerDtoFactory());
         return dto;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getDisabledCarrierSla(final long shopId) {
         return service.findById(shopId).getDisabledCarrierSla();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void updateDisabledCarrierSla(final long shopId, final String disabledPks) {
         ((ShopService) service).updateAttributeValue(
                 shopId,
@@ -197,11 +212,13 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSupportedCarrierSlaRanks(final long shopId) {
         return service.findById(shopId).getSupportedCarrierSlaRanks();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void updateSupportedCarrierSlaRanks(final long shopId, final String pksAndRanks) {
         ((ShopService) service).updateAttributeValue(
                 shopId,
@@ -210,23 +227,27 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<ShopDTO> getDtoIFace() {
         return ShopDTO.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<ShopDTOImpl> getDtoImpl() {
         return ShopDTOImpl.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<Shop> getEntityIFace() {
         return Shop.class;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<AttrValueShopDTO> result = new ArrayList<AttrValueShopDTO>(getById(entityPk).getAttributes());
+        final List<AttrValueShopDTO> result = new ArrayList<>(getById(entityPk).getAttributes());
         final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
                 AttributeGroupNames.SHOP,
                 getCodes(result));
@@ -236,11 +257,12 @@ public class DtoShopServiceImpl
             attrValueShopDTO.setShopId(entityPk);
             result.add(attrValueShopDTO);
         }
-        Collections.sort(result, new AttrValueDTOComparatorImpl());
+        result.sort(new AttrValueDTOComparatorImpl());
         return result;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         final AttrValueEntityShop valueEntityShop = attrValueEntityShopDao.findById(attrValueDTO.getAttrvalueId());
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityShop, getAdaptersRepository(), dtoFactory);
@@ -250,6 +272,7 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc}*/
+    @Override
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
 
         final Attribute atr = ((GenericService<Attribute>) dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
@@ -277,6 +300,7 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc}*/
+    @Override
     public long deleteAttributeValue(final long attributeValuePk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueEntityShop valueEntityShop = attrValueEntityShopDao.findById(attributeValuePk);
@@ -298,6 +322,7 @@ public class DtoShopServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
@@ -306,6 +331,7 @@ public class DtoShopServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
         final AttrValueShopDTO dto = new AttrValueShopDTOImpl();
         dto.setShopId(entityPk);

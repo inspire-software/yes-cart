@@ -179,6 +179,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getProductId() {
         return productId;
     }
@@ -186,6 +187,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return productId;
     }
@@ -193,6 +195,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setProductId(final long productId) {
         this.productId = productId;
     }
@@ -200,6 +203,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getGuid() {
         return guid;
     }
@@ -207,6 +211,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setGuid(final String guid) {
         this.guid = guid;
     }
@@ -214,6 +219,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCode() {
         return code;
     }
@@ -221,6 +227,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
@@ -228,6 +235,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getManufacturerCode() {
         return manufacturerCode;
     }
@@ -235,6 +243,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setManufacturerCode(final String manufacturerCode) {
         this.manufacturerCode = manufacturerCode;
     }
@@ -242,6 +251,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getManufacturerPartCode() {
         return manufacturerPartCode;
     }
@@ -249,6 +259,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setManufacturerPartCode(final String manufacturerPartCode) {
         this.manufacturerPartCode = manufacturerPartCode;
     }
@@ -256,6 +267,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSupplierCode() {
         return supplierCode;
     }
@@ -263,6 +275,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSupplierCode(final String supplierCode) {
         this.supplierCode = supplierCode;
     }
@@ -270,6 +283,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSupplierCatalogCode() {
         return supplierCatalogCode;
     }
@@ -277,6 +291,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSupplierCatalogCode(final String supplierCatalogCode) {
         this.supplierCatalogCode = supplierCatalogCode;
     }
@@ -284,6 +299,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getPimCode() {
         return pimCode;
     }
@@ -291,6 +307,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPimCode(final String pimCode) {
         this.pimCode = pimCode;
     }
@@ -298,6 +315,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean getPimDisabled() {
         return pimDisabled;
     }
@@ -305,6 +323,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPimDisabled(final boolean pimDisabled) {
         this.pimDisabled = pimDisabled;
     }
@@ -312,6 +331,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean getPimOutdated() {
         return pimOutdated;
     }
@@ -319,6 +339,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPimOutdated(final boolean pimOutdated) {
         this.pimOutdated = pimOutdated;
     }
@@ -326,6 +347,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Instant getPimUpdated() {
         return pimUpdated;
     }
@@ -333,6 +355,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPimUpdated(final Instant pimUpdated) {
         this.pimUpdated = pimUpdated;
     }
@@ -340,6 +363,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDateTime getAvailablefrom() {
         return availablefrom;
     }
@@ -347,6 +371,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
@@ -354,6 +379,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDateTime getAvailableto() {
         return availableto;
     }
@@ -361,6 +387,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
@@ -368,6 +395,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getAvailability() {
         return availability;
     }
@@ -375,6 +403,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAvailability(final int availability) {
         this.availability = availability;
     }
@@ -382,6 +411,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BrandDTO getBrandDTO() {
         return brandDTO;
     }
@@ -389,6 +419,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setBrandDTO(final BrandDTO brandDTO) {
         this.brandDTO = brandDTO;
     }
@@ -396,6 +427,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductTypeDTO getProductTypeDTO() {
         return productTypeDTO;
     }
@@ -403,6 +435,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setProductTypeDTO(final ProductTypeDTO productTypeDTO) {
         this.productTypeDTO = productTypeDTO;
     }
@@ -410,6 +443,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<ProductCategoryDTO> getProductCategoryDTOs() {
         return productCategoryDTOs;
     }
@@ -417,6 +451,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setProductCategoryDTOs(final Set<ProductCategoryDTO> productCategoryDTOs) {
         this.productCategoryDTOs = productCategoryDTOs;
     }
@@ -425,6 +460,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -432,16 +468,19 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getDisplayNames() {
         return displayNames;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDisplayNames(final Map<String, String> displayNames) {
         this.displayNames = displayNames;
     }
@@ -449,6 +488,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDescription() {
         return description;
     }
@@ -456,6 +496,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDescription(final String description) {
         this.description = description;
     }
@@ -463,6 +504,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Boolean getFeatured() {
         return featured;
     }
@@ -470,6 +512,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setFeatured(final Boolean featured) {
         this.featured = featured;
     }
@@ -477,6 +520,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getMinOrderQuantity() {
         return minOrderQuantity;
     }
@@ -484,6 +528,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
         this.minOrderQuantity = minOrderQuantity;
     }
@@ -491,6 +536,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getMaxOrderQuantity() {
         return maxOrderQuantity;
     }
@@ -498,6 +544,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
         this.maxOrderQuantity = maxOrderQuantity;
     }
@@ -505,6 +552,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public BigDecimal getStepOrderQuantity() {
         return stepOrderQuantity;
     }
@@ -512,6 +560,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
         this.stepOrderQuantity = stepOrderQuantity;
     }
@@ -519,6 +568,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<AttrValueProductDTO> getAttributes() {
         return attributes;
     }
@@ -526,6 +576,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAttributes(final Collection<AttrValueProductDTO> attributes) {
         this.attributes = attributes;
     }
@@ -533,6 +584,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTag() {
         return tag;
     }
@@ -540,6 +592,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTag(final String tag) {
         this.tag = tag;
     }
@@ -547,6 +600,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUri() {
         return uri;
     }
@@ -554,6 +608,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setUri(final String uri) {
         this.uri = uri;
     }
@@ -561,6 +616,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTitle() {
         return title;
     }
@@ -568,6 +624,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTitle(final String title) {
         this.title = title;
     }
@@ -575,6 +632,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayTitles() {
         return displayTitles;
     }
@@ -582,6 +640,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayTitles(final Map<String, String> displayTitles) {
         this.displayTitles = displayTitles;
     }
@@ -589,6 +648,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMetakeywords() {
         return metakeywords;
     }
@@ -596,6 +656,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMetakeywords(final String metakeywords) {
         this.metakeywords = metakeywords;
     }
@@ -603,6 +664,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayMetakeywords() {
         return displayMetakeywords;
     }
@@ -610,6 +672,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayMetakeywords(final Map<String, String> displayMetakeywords) {
         this.displayMetakeywords = displayMetakeywords;
     }
@@ -617,6 +680,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getMetadescription() {
         return metadescription;
     }
@@ -624,6 +688,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMetadescription(final String metadescription) {
         this.metadescription = metadescription;
     }
@@ -631,6 +696,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getDisplayMetadescriptions() {
         return displayMetadescriptions;
     }
@@ -638,6 +704,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayMetadescriptions(final Map<String, String> displayMetadescriptions) {
         this.displayMetadescriptions = displayMetadescriptions;
     }
@@ -645,6 +712,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ProductSkuDTO> getSku() {
         return sku;
     }
@@ -652,6 +720,7 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSku(final List<ProductSkuDTO> sku) {
         this.sku = sku;
     }

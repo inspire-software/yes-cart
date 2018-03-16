@@ -57,6 +57,7 @@ public class DtoPromotionServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<PromotionDTO> findByParameters(final String code,
                                                final String shopCode,
                                                final String currency,
@@ -66,7 +67,7 @@ public class DtoPromotionServiceImpl
                                                final Boolean enabled)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Promotion> promos = ((PromotionService) service).findByParameters(code, shopCode, currency, tag, type, action, enabled);
-        final List<PromotionDTO> dtos = new ArrayList<PromotionDTO>();
+        final List<PromotionDTO> dtos = new ArrayList<>();
         fillDTOs(promos, dtos);
         return dtos;
     }
@@ -342,7 +343,7 @@ public class DtoPromotionServiceImpl
     @Override
     public List<PromotionDTO> findByCodes(final Set<String> codes) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Promotion> promos = service.findByCriteria(" where e.code in (?1)", codes);
-        final List<PromotionDTO> dtos = new ArrayList<PromotionDTO>();
+        final List<PromotionDTO> dtos = new ArrayList<>();
         fillDTOs(promos, dtos);
         return dtos;
     }
@@ -372,16 +373,19 @@ public class DtoPromotionServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<PromotionDTO> getDtoIFace() {
         return PromotionDTO.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<PromotionDTOImpl> getDtoImpl() {
         return PromotionDTOImpl.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<Promotion> getEntityIFace() {
         return Promotion.class;
     }

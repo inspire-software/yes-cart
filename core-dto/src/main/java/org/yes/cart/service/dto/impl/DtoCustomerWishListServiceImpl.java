@@ -54,21 +54,25 @@ public class DtoCustomerWishListServiceImpl
 
 
     /** {@inheritDoc} */
+    @Override
     public Class<CustomerWishListDTO> getDtoIFace() {
         return CustomerWishListDTO.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<CustomerWishListDTOImpl> getDtoImpl() {
         return CustomerWishListDTOImpl.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<CustomerWishList> getEntityIFace() {
         return CustomerWishList.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<CustomerWishListDTO> getByCustomerId(final long customerId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return getDTOs(((CustomerWishListService)service).findWishListByCustomerId(customerId));

@@ -36,6 +36,7 @@ public class DtoImageServiceImplTezt extends BaseCoreDBTestCase {
 
     private DtoImageService dtoService;
 
+    @Override
     @Before
     public void setUp() {
         dtoService = (DtoImageService) ctx().getBean(DtoServiceSpringKeys.DTO_IMAGE_SERVICE);

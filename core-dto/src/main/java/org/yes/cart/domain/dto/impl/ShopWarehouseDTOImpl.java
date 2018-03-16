@@ -46,56 +46,67 @@ public class ShopWarehouseDTOImpl implements ShopWarehouseDTO {
     private int rank;
 
     /** {@inheritDoc} */
+    @Override
     public String getWarehouseName() {
         return warehouseName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setWarehouseName(final String warehouseName) {
         this.warehouseName = warehouseName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getShopWarehouseId() {
         return shopWarehouseId;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public long getId() {
         return shopWarehouseId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setShopWarehouseId(final long shopWarehouseId) {
         this.shopWarehouseId = shopWarehouseId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getShopId() {
         return shopId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setShopId(final long shopId) {
         this.shopId = shopId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getWarehouseId() {
         return warehouseId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setWarehouseId(final long warehouseId) {
         this.warehouseId = warehouseId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getRank() {
         return this.rank;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setRank(final int rank) {
         this.rank = rank;
     }

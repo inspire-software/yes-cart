@@ -53,6 +53,7 @@ public class AttrValueProductDTOImpl implements AttrValueProductDTO {
     private long productId;
 
     /** {@inheritDoc} */
+    @Override
     public long getAttrvalueId() {
         return attrvalueId;
     }
@@ -60,61 +61,73 @@ public class AttrValueProductDTOImpl implements AttrValueProductDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return attrvalueId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAttrvalueId(final long attrvalueId) {
         this.attrvalueId = attrvalueId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getVal() {
         return val;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setVal(final String val) {
         this.val = val;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getIndexedVal() {
         return indexedVal;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setIndexedVal(final String indexedVal) {
         this.indexedVal = indexedVal;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getDisplayVals() {
         return displayVals;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDisplayVals(final Map<String, String> displayVals) {
         this.displayVals = displayVals;
     }
 
     /** {@inheritDoc} */
+    @Override
     public AttributeDTO getAttributeDTO() {
         return attributeDTO;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAttributeDTO(final AttributeDTO attributeDTO) {
         this.attributeDTO = attributeDTO;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getProductId() {
         return productId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setProductId(final long productId) {
         this.productId = productId;
     }

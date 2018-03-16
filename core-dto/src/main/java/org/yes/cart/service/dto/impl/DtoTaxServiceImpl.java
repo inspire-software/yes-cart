@@ -59,13 +59,14 @@ public class DtoTaxServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<TaxDTO> findByParameters(final String code,
                                          final String shopCode,
                                          final String currency)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<Tax> taxes = ((TaxService) service).findByParameters(code, shopCode, currency);
-        final List<TaxDTO> dtos = new ArrayList<TaxDTO>();
+        final List<TaxDTO> dtos = new ArrayList<>();
         fillDTOs(taxes, dtos);
         return dtos;
     }
@@ -78,6 +79,7 @@ public class DtoTaxServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<TaxDTO> findBy(final String shopCode, final String currency, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<TaxDTO> dtos = new ArrayList<>();
@@ -86,7 +88,7 @@ public class DtoTaxServiceImpl
         if (StringUtils.isNotBlank(shopCode) && StringUtils.isNotBlank(currency)) {
             // only allow lists for shop+currency selection
 
-            List<Tax> entities = Collections.emptyList();
+            List<Tax> entities;
 
             if (StringUtils.isNotBlank(filter)) {
 
@@ -176,16 +178,19 @@ public class DtoTaxServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<TaxDTO> getDtoIFace() {
         return TaxDTO.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<TaxDTOImpl> getDtoImpl() {
         return TaxDTOImpl.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<Tax> getEntityIFace() {
         return Tax.class;
     }

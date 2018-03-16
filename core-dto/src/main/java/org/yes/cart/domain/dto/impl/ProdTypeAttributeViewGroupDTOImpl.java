@@ -58,66 +58,79 @@ public class ProdTypeAttributeViewGroupDTOImpl  implements ProdTypeAttributeView
     private Map<String, String> displayNames;
 
     /** {@inheritDoc} */
+    @Override
     public long getId() {
         return prodTypeAttributeViewGroupId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getProdTypeAttributeViewGroupId() {
         return prodTypeAttributeViewGroupId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setProdTypeAttributeViewGroupId(final long prodTypeAttributeViewGroupId) {
         this.prodTypeAttributeViewGroupId = prodTypeAttributeViewGroupId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getProducttypeId() {
         return producttypeId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setProducttypeId(final long producttypeId) {
         this.producttypeId = producttypeId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getAttrCodeList() {
         return attrCodeList;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAttrCodeList(final String attrCodeList) {
         this.attrCodeList = attrCodeList;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getRank() {
         return rank;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setRank(final int rank) {
         this.rank = rank;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getName() {
         return name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getDisplayNames() {
         return displayNames;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDisplayNames(final Map<String, String> displayNames) {
         this.displayNames = displayNames;
     }

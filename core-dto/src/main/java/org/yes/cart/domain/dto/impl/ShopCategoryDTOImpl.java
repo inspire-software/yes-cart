@@ -43,46 +43,55 @@ public class ShopCategoryDTOImpl  implements ShopCategoryDTO {
     private long categoryId;
 
     /** {@inheritDoc} */
+    @Override
     public long getShopCategoryId() {
         return shopCategoryId;
     }
 
     /** {@inheritDoc}*/
+    @Override
     public long getId() {
         return shopCategoryId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setShopCategoryId(final long shopCategoryId) {
         this.shopCategoryId = shopCategoryId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getRank() {
         return rank;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setRank(final int rank) {
         this.rank = rank;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getShopId() {
         return shopId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setShopId(final long shopId) {
         this.shopId = shopId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getCategoryId() {
         return categoryId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCategoryId(final long categoryId) {
         this.categoryId = categoryId;
     }

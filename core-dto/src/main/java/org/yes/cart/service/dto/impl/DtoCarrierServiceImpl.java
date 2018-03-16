@@ -28,7 +28,6 @@ import org.yes.cart.domain.dto.impl.ShopDTOImpl;
 import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.domain.entity.CarrierShop;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.CarrierService;
@@ -72,8 +71,9 @@ public class DtoCarrierServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<CarrierDTO, Map<ShopDTO, Boolean>> getAllWithShops() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Carrier> all = ((CarrierService) getService()).findAll();
+        final List<Carrier> all = getService().findAll();
         final Map<CarrierDTO, Map<ShopDTO, Boolean>> dtos = new LinkedHashMap<>(all.size() * 2);
         for (final Carrier carrier : all) {
             final CarrierDTO dto = getNew();
@@ -88,9 +88,10 @@ public class DtoCarrierServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<CarrierDTO, Boolean> findAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Carrier> all = ((CarrierService) getService()).findCarriersByShopId(shopId, true);
-        final List<CarrierDTO> dtos = new ArrayList<CarrierDTO>(all.size());
+        final List<CarrierDTO> dtos = new ArrayList<>(all.size());
         fillDTOs(all, dtos);
         final Map<Long, Boolean> disabledMap = new HashMap<>(dtos.size() * 2);
         for (final Carrier carrier : all) {
@@ -101,7 +102,7 @@ public class DtoCarrierServiceImpl
                 }
             }
         }
-        final Map<CarrierDTO, Boolean> dtoPairs = new LinkedHashMap<CarrierDTO, Boolean>(all.size());
+        final Map<CarrierDTO, Boolean> dtoPairs = new LinkedHashMap<>(all.size());
         for (final CarrierDTO dto : dtos) {
             dtoPairs.put(dto, disabledMap.get(dto.getCarrierId()));
         }
@@ -111,6 +112,7 @@ public class DtoCarrierServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<ShopDTO, Boolean> getAssignedCarrierShops(final long carrierId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final Carrier carrier = getService().findById(carrierId);
         return getShopAssignmentsForCarrier(carrier);
@@ -125,7 +127,7 @@ public class DtoCarrierServiceImpl
         for (final CarrierShop shop : assigned) {
             enabledMap.put(shop.getShop().getShopId(), shop.isDisabled());
         }
-        final List<ShopDTO> shopDTOs = new ArrayList<ShopDTO>(assigned.size());
+        final List<ShopDTO> shopDTOs = new ArrayList<>(assigned.size());
         fillCarrierShopsDTOs(shopDTOs, assigned);
         final Map<ShopDTO, Boolean> dtoPairs = new LinkedHashMap<>(shopDTOs.size());
         for (final ShopDTO dto : shopDTOs) {
@@ -137,6 +139,7 @@ public class DtoCarrierServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ShopDTO> getAvailableCarrierShops(final long carrierId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final Carrier carrier = getService().findById(carrierId);
         if (carrier == null) {
@@ -153,7 +156,7 @@ public class DtoCarrierServiceImpl
             }
         }
 
-        final List<ShopDTO> shopDTOs = new ArrayList<ShopDTO>(all.size());
+        final List<ShopDTO> shopDTOs = new ArrayList<>(all.size());
         fillShopsDTOs(shopDTOs, all);
 
         return shopDTOs;
@@ -182,6 +185,7 @@ public class DtoCarrierServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void assignToShop(final long carrierId, final long shopId, final boolean soft) {
         final Carrier carrier = getService().findById(carrierId);
         final Collection<CarrierShop> assigned = carrier.getShops();
@@ -208,6 +212,7 @@ public class DtoCarrierServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void unassignFromShop(final long carrierId, final long shopId, final boolean soft) {
         final Carrier carrier = getService().findById(carrierId);
         final Iterator<CarrierShop> assigned = carrier.getShops().iterator();
@@ -230,6 +235,7 @@ public class DtoCarrierServiceImpl
      *
      * @return dto interface.
      */
+    @Override
     public Class<CarrierDTO> getDtoIFace() {
         return CarrierDTO.class;
     }
@@ -239,6 +245,7 @@ public class DtoCarrierServiceImpl
      *
      * @return dto implementation class.
      */
+    @Override
     public Class<CarrierDTOImpl> getDtoImpl() {
         return CarrierDTOImpl.class;
     }
@@ -248,6 +255,7 @@ public class DtoCarrierServiceImpl
      *
      * @return entity interface.
      */
+    @Override
     public Class<Carrier> getEntityIFace() {
         return Carrier.class;
     }

@@ -57,6 +57,8 @@ public class DtoCustomerServiceImpl
         extends AbstractDtoServiceImpl<CustomerDTO, CustomerDTOImpl, Customer>
         implements DtoCustomerService {
 
+    private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
+
     private final DtoAttributeService dtoAttributeService;
 
     private final GenericDAO<AttrValueEntityCustomer, Long> attrValueEntityCustomerDao;
@@ -107,6 +109,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public CustomerDTO createForShop(final CustomerDTO instance, final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         Customer customer = getPersistenceEntityFactory().getByIface(getEntityIFace());
         assembler.assembleEntity(instance, customer, null, dtoFactory);
@@ -117,6 +120,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public CustomerDTO create(final CustomerDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnsupportedOperationException("Customers must have at least one shop assigned use #createForShop()");
     }
@@ -126,6 +130,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<CustomerDTO> getDtoIFace() {
         return CustomerDTO.class;
     }
@@ -133,6 +138,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<CustomerDTOImpl> getDtoImpl() {
         return CustomerDTOImpl.class;
     }
@@ -140,6 +146,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<Customer> getEntityIFace() {
         return Customer.class;
     }
@@ -147,10 +154,11 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<AttrValueCustomerDTO> result = new ArrayList<AttrValueCustomerDTO>();
+        final List<AttrValueCustomerDTO> result = new ArrayList<>();
         if (entityPk > 0L) {
 
             final CustomerDTO customerDTO = getById(entityPk);
@@ -177,7 +185,7 @@ public class DtoCustomerServiceImpl
                 }
                 result.add(attrValueCategoryDTO);
             }
-            Collections.sort(result, new AttrValueDTOComparatorImpl());
+            result.sort(ATTR_VALUE_DTO_COMPARATOR);
         }
         return result;
     }
@@ -185,6 +193,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueEntityCustomer attrValueCustomer = attrValueEntityCustomerDao.findById(attrValueDTO.getAttrvalueId());
         attrValueAssembler.assembleEntity(attrValueDTO, attrValueCustomer, getAdaptersRepository(), dtoFactory);
@@ -195,6 +204,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
 
         final Attribute atr = ((AttributeService) dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
@@ -257,6 +267,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public long deleteAttributeValue(final long attributeValuePk) {
         final AttrValueEntityCustomer valueEntityCustomer = attrValueEntityCustomerDao.findById(attributeValuePk);
         attrValueEntityCustomerDao.delete(valueEntityCustomer);
@@ -268,12 +279,13 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CustomerDTO> findCustomer(final String email) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Customer> entities = ((CustomerService)service).findByCriteria(
+        final List<Customer> entities = service.findByCriteria(
                 " where lower(e.email) = ?1",
                 email.toLowerCase()
         );
-        final List<CustomerDTO> dtos  = new ArrayList<CustomerDTO>(entities.size());
+        final List<CustomerDTO> dtos  = new ArrayList<>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;
     }
@@ -281,6 +293,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CustomerDTO> findCustomer(final String email,
                                           final String firstname,
                                           final String lastname,
@@ -289,7 +302,7 @@ public class DtoCustomerServiceImpl
                                           final String customerType,
                                           final String pricingPolicy) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Customer> entities = ((CustomerService)service).findCustomer(email, firstname, lastname, middlename, tag, customerType, pricingPolicy);
-        final List<CustomerDTO> dtos  = new ArrayList<CustomerDTO>(entities.size());
+        final List<CustomerDTO> dtos  = new ArrayList<>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;
     }
@@ -302,6 +315,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CustomerDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<CustomerDTO> customers = new ArrayList<>();
@@ -408,6 +422,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void resetPassword(final CustomerDTO customer, final long shopId) {
         final Customer cust = service.findById(customer.getCustomerId());
         if (cust != null) {
@@ -428,7 +443,7 @@ public class DtoCustomerServiceImpl
             if (StringUtils.isBlank(tags)) {
                 cust.setTag(null);
             } else {
-                final Set<String> unique = new TreeSet<String>();
+                final Set<String> unique = new TreeSet<>();
                 final String[] values = tags.split(" ");
                 for (final String value : values) {
                     if (StringUtils.isNotBlank(value)) {
@@ -453,6 +468,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
@@ -461,13 +477,14 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Map<ShopDTO, Boolean> getAssignedShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final Collection<CustomerShop> assigned = getService().findById(customerId).getShops();
         final Map<Long, Boolean> enabledMap = new HashMap<>(assigned.size() * 2);
         for (final CustomerShop shop : assigned) {
             enabledMap.put(shop.getShop().getShopId(), shop.isDisabled());
         }
-        final List<ShopDTO> shopDTOs = new ArrayList<ShopDTO>(assigned.size());
+        final List<ShopDTO> shopDTOs = new ArrayList<>(assigned.size());
         fillCarrierShopsDTOs(shopDTOs, assigned);
         final Map<ShopDTO, Boolean> dtoPairs = new LinkedHashMap<>(shopDTOs.size());
         for (final ShopDTO dto : shopDTOs) {
@@ -489,10 +506,11 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ShopDTO> getAvailableShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Shop> all = shopDao.findAll();
         final Set<ShopDTO> assigned = getAssignedShop(customerId).keySet();
-        final List<ShopDTO> available = new ArrayList<ShopDTO>(all.size());
+        final List<ShopDTO> available = new ArrayList<>(all.size());
         for (final Shop shop : all) {
             boolean match = false;
             for (final ShopDTO existing : assigned) {
@@ -512,6 +530,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void grantShop(final long customerId, final long shopId, final boolean soft) {
 
         final Customer customer = getService().findById(customerId);
@@ -525,6 +544,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void revokeShop(final long customerId, final long shopId, final boolean soft) {
 
         final Customer customer = getService().findById(customerId);
@@ -539,6 +559,7 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
         final AttrValueCustomerDTO dto = new AttrValueCustomerDTOImpl();
         dto.setCustomerId(entityPk);

@@ -41,7 +41,7 @@ public class DtoStateServiceImpl extends AbstractDtoServiceImpl<StateDTO, StateD
     /**
      * Construct state dto service.
      * @param dtoFactory    {@link org.yes.cart.domain.dto.factory.DtoFactory}
-     * @param stateGenericService generic serivce
+     * @param stateGenericService generic service
      * @param adaptersRepository     value converter
      */
     public DtoStateServiceImpl(final DtoFactory dtoFactory,
@@ -52,21 +52,25 @@ public class DtoStateServiceImpl extends AbstractDtoServiceImpl<StateDTO, StateD
 
 
     /** {@inheritDoc} */
+    @Override
     public Class<StateDTO> getDtoIFace() {
         return StateDTO.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<StateDTOImpl> getDtoImpl() {
         return StateDTOImpl.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Class<State> getEntityIFace() {
         return State.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<StateDTO> findByCountry(final String countryCode) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<State> states = ((StateService)service).findByCountry(countryCode);
         return getDTOs(states);

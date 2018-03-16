@@ -58,11 +58,12 @@ public class DtoProdTypeAttributeViewGroupServiceImpl
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<ProdTypeAttributeViewGroupDTO> getByProductTypeId(final long productTypeId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         ProductType prodType = productTypeService.findById(productTypeId);
-        final List<ProdTypeAttributeViewGroupDTO> rez = new ArrayList<ProdTypeAttributeViewGroupDTO>(prodType.getAttributeViewGroup().size());
+        final List<ProdTypeAttributeViewGroupDTO> rez = new ArrayList<>(prodType.getAttributeViewGroup().size());
         fillDTOs(prodType.getAttributeViewGroup(), rez);
         return rez;
 

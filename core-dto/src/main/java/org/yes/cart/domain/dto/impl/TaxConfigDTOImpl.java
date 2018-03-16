@@ -44,66 +44,79 @@ public class TaxConfigDTOImpl implements TaxConfigDTO {
     private String guid;
 
     /** {@inheritDoc} */
+    @Override
     public long getId() {
         return taxConfigId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getGuid() {
         return guid;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setGuid(final String guid) {
         this.guid = guid;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getTaxConfigId() {
         return taxConfigId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setTaxConfigId(final long taxConfigId) {
         this.taxConfigId = taxConfigId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getTaxId() {
         return taxId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setTaxId(final long taxId) {
         this.taxId = taxId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getProductCode() {
         return productCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setProductCode(final String productCode) {
         this.productCode = productCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getStateCode() {
         return stateCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setStateCode(final String stateCode) {
         this.stateCode = stateCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCountryCode() {
         return countryCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCountryCode(final String countryCode) {
         this.countryCode = countryCode;
     }

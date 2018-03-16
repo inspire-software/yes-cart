@@ -82,6 +82,7 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
 
 
     /** {@inheritDoc} */
+    @Override
     public long getProductTypeAttrId() {
         return productTypeAttrId;
     }
@@ -89,131 +90,157 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
      /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return productTypeAttrId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setProductTypeAttrId(final long productTypeAttrId) {
         this.productTypeAttrId = productTypeAttrId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public AttributeDTO getAttributeDTO() {
         return attributeDTO;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAttributeDTO(final AttributeDTO attributeDTO) {
         this.attributeDTO = attributeDTO;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getProducttypeId() {
         return producttypeId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setProducttypeId(final long producttypeId) {
         this.producttypeId = producttypeId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getRank() {
         return rank;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setRank(final int rank) {
         this.rank = rank;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isVisible() {
         return visible;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setVisible(final boolean visible) {
         this.visible = visible;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isSimilarity() {
         return similarity;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSimilarity(final boolean similarity) {
         this.similarity = similarity;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isStore() {
         return store;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setStore(final boolean store) {
         this.store = store;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isSearch() {
         return search;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setSearch(final boolean search) {
         this.search = search;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isPrimary() {
         return primary;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setPrimary(final boolean primary) {
         this.primary = primary;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isNavigation() {
         return navigation;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setNavigation(final boolean navigation) {
         this.navigation = navigation;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getNavigationTemplate() {
         return navigationTemplate;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setNavigationTemplate(final String navigationTemplate) {
         this.navigationTemplate = navigationTemplate;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getNavigationType() {
         return navigationType;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setNavigationType(final String navigationType) {
         this.navigationType = navigationType;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getRangeNavigation() {
         return rangeNavigation;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setRangeNavigation(final String rangeNavigation) {
         this.rangeNavigation = rangeNavigation;
     }

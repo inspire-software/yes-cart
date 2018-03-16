@@ -63,6 +63,7 @@ public class DtoProductCategoryServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductCategoryDTO create(final ProductCategoryDTO instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ProductCategory productCategory = getPersistenceEntityFactory().getByIface(ProductCategory.class);
@@ -76,6 +77,7 @@ public class DtoProductCategoryServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public ProductCategoryDTO update(final ProductCategoryDTO instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ProductCategory productCategory = service.findById(instance.getProductCategoryId());
@@ -92,6 +94,7 @@ public class DtoProductCategoryServiceImpl
      *
      * @return dto interface.
      */
+    @Override
     public Class<ProductCategoryDTO> getDtoIFace() {
         return ProductCategoryDTO.class;
     }
@@ -101,6 +104,7 @@ public class DtoProductCategoryServiceImpl
      *
      * @return dto implementation class.
      */
+    @Override
     public Class<ProductCategoryDTOImpl> getDtoImpl() {
         return ProductCategoryDTOImpl.class;
     }
@@ -110,11 +114,13 @@ public class DtoProductCategoryServiceImpl
      *
      * @return entity interface.
      */
+    @Override
     public Class<ProductCategory> getEntityIFace() {
         return ProductCategory.class;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void removeByCategoryProductIds(final long categoryId, final long productId) {
         ((ProductCategoryService)service).removeByCategoryProductIds(categoryId, productId);
     }
@@ -125,17 +131,20 @@ public class DtoProductCategoryServiceImpl
      * @param categoryId given category id
      * @param productId  given product id
      */
+    @Override
     public boolean isAssignedCategoryProductIds(final long categoryId, final long productId) {
         return  (((ProductCategoryService)service).findByCategoryIdProductId(categoryId, productId) != null)  ;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void removeByProductIds(final long productId) {
         ((ProductCategoryService)service).removeByProductIds(productId);
 
     }
 
     /** {@inheritDoc}*/
+    @Override
     public int getNextRank(final long categoryId) {
         return ((ProductCategoryService)service).getNextRank(categoryId);
 

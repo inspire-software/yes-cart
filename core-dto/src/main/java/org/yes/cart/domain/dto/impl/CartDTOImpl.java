@@ -62,13 +62,13 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
             dtoToEntityMatcher = NoopMatcher.class,
             readOnly = true
     )
-    private List<CartItem> cartItems = new ArrayList<CartItem>();
-    private List<CartItem> items = new ArrayList<CartItem>();
-    private List<CartItem> gifts = new ArrayList<CartItem>();
+    private List<CartItem> cartItems = new ArrayList<>();
+    private List<CartItem> items = new ArrayList<>();
+    private List<CartItem> gifts = new ArrayList<>();
     @DtoField(readOnly = true)
-    private List<String> coupons = new ArrayList<String>();
+    private List<String> coupons = new ArrayList<>();
     @DtoField(readOnly = true)
-    private List<String> appliedCoupons = new ArrayList<String>();
+    private List<String> appliedCoupons = new ArrayList<>();
     @DtoCollection(
             value = "shippingList",
             dtoBeanKey = "org.yes.cart.shoppingcart.CartItem",
@@ -78,7 +78,7 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
             dtoToEntityMatcher = NoopMatcher.class,
             readOnly = true
     )
-    private List<CartItem> shipping = new ArrayList<CartItem>();
+    private List<CartItem> shipping = new ArrayList<>();
 
     @DtoField(readOnly = true)
     private String guid;
@@ -123,14 +123,17 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
     private Total total = new CartTotalDTOImpl();
 
 
+    @Override
     public String getGuid() {
         return guid;
     }
 
+    @Override
     public List<String> getCoupons() {
         return coupons;
     }
 
+    @Override
     public List<String> getAppliedCoupons() {
         return appliedCoupons;
     }
@@ -138,25 +141,26 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
 
     public List<CartItem> getItems() {
         if (items == null) {
-            items = new ArrayList<CartItem>();
+            items = new ArrayList<>();
         }
         return items;
     }
 
     public List<CartItem> getGifts() {
         if (gifts == null) {
-            gifts = new ArrayList<CartItem>();
+            gifts = new ArrayList<>();
         }
         return gifts;
     }
 
     public List<CartItem> getShipping() {
         if (shipping == null) {
-            shipping = new ArrayList<CartItem>();
+            shipping = new ArrayList<>();
         }
         return shipping;
     }
 
+    @Override
     public String getCurrencyCode() {
         return currencyCode;
     }
@@ -165,18 +169,22 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
         this.currencyCode = currencyCode;
     }
 
+    @Override
     public long getModifiedTimestamp() {
         return modifiedTimestamp;
     }
 
+    @Override
     public boolean isModified() {
         return modified;
     }
 
+    @Override
     public int getLogonState() {
         return logonState;
     }
 
+    @Override
     public ShoppingContext getShoppingContext() {
         if (shoppingContext == null) {
             shoppingContext = new CartShoppingContextDTOImpl();
@@ -184,6 +192,7 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
         return shoppingContext;
     }
 
+    @Override
     public String getCurrentLocale() {
         return currentLocale;
     }
@@ -192,6 +201,7 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
         this.currentLocale = currentLocale;
     }
 
+    @Override
     public OrderInfo getOrderInfo() {
         if (orderInfo == null) {
             orderInfo = new CartOrderInfoDTOImpl();
@@ -199,10 +209,12 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
         return orderInfo;
     }
 
+    @Override
     public long getProcessingStartTimestamp() {
         return processingStartTimestamp;
     }
 
+    @Override
     public Total getTotal() {
         if (total == null) {
             total = new CartTotalDTOImpl();
@@ -215,8 +227,8 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
     }
 
     public void setCartItems(final List<CartItem> cartItems) {
-        final List<CartItem> itemsOnly = new ArrayList<CartItem>();
-        final List<CartItem> giftsOnly = new ArrayList<CartItem>();
+        final List<CartItem> itemsOnly = new ArrayList<>();
+        final List<CartItem> giftsOnly = new ArrayList<>();
         for (final CartItem item : cartItems) {
             if (item.isGift()) {
                 giftsOnly.add(item);
@@ -273,6 +285,7 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
         this.modified = modified;
     }
 
+    @Override
     public String getOrdernum() {
         return ordernum;
     }
@@ -281,18 +294,21 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
         this.ordernum = ordernum;
     }
 
+    @Override
     public List<CartItem> getCartItemList() {
 
         return ShoppingCartUtils.getCartItemImmutableList(getItems(), getGifts());
 
     }
 
+    @Override
     public Map<DeliveryBucket, List<CartItem>> getCartItemMap() {
 
         return ShoppingCartUtils.getCartItemImmutableMap(getItems(), getGifts());
 
     }
 
+    @Override
     public List<CartItem> getShippingList() {
 
         return ShoppingCartUtils.getShippingImmutableList(getShipping());
@@ -300,6 +316,7 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
     }
 
 
+    @Override
     public Map<DeliveryBucket, List<CartItem>> getShippingListMap() {
 
         return ShoppingCartUtils.getShippingImmutableMap(getShipping());
@@ -308,6 +325,7 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
 
 
     /** {@inheritDoc} */
+    @Override
     public BigDecimal getProductSkuQuantity(final String sku) {
         final int skuIndex = indexOfProductSku(sku);
         if (skuIndex == -1) { //not found
@@ -316,70 +334,85 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
         return getItems().get(skuIndex).getQty();
     }
 
+    @Override
     public int getCartItemsCount() {
 
         return ShoppingCartUtils.getCartItemsCount(getItems(), getGifts());
 
     }
 
+    @Override
     public List<String> getCartItemsSuppliers() {
 
         return ShoppingCartUtils.getCartItemsSuppliers(getItems(), getGifts());
 
     }
 
+    @Override
     public String getCustomerName() {
         return getShoppingContext().getCustomerName();
     }
 
+    @Override
     public String getCustomerEmail() {
         return getShoppingContext().getCustomerEmail();
     }
 
+    @Override
     public boolean isSeparateBillingAddress() {
         return getOrderInfo().isSeparateBillingAddress();
     }
 
+    @Override
     public boolean isBillingAddressNotRequired() {
         return getOrderInfo().isBillingAddressNotRequired();
     }
 
+    @Override
     public boolean isDeliveryAddressNotRequired() {
         return getOrderInfo().isDeliveryAddressNotRequired();
     }
 
+    @Override
     public Map<String, Long> getCarrierSlaId() {
         return getOrderInfo().getCarrierSlaId();
     }
 
+    @Override
     public boolean isAllCarrierSlaSelected() {
 
         return ShoppingCartUtils.isAllCarrierSlaSelected(getItems(), getGifts(), getCarrierSlaId());
 
     }
 
+    @Override
     public boolean isAllCartItemsBucketed() {
 
         return ShoppingCartUtils.isAllCartItemsBucketed(getItems(), getGifts());
 
     }
 
+    @Override
     public String getOrderMessage() {
         return getOrderInfo().getOrderMessage();
     }
 
+    @Override
     public boolean contains(final String skuCode) {
         return (indexOfProductSku(skuCode) != -1);
     }
 
+    @Override
     public int indexOfShipping(final String carrierSlaGUID, final DeliveryBucket deliveryBucket) {
         return ShoppingCartUtils.indexOf(carrierSlaGUID, deliveryBucket, getShipping());
     }
 
+    @Override
     public int indexOfProductSku(final String skuCode) {
         return ShoppingCartUtils.indexOf(skuCode, getItems());
     }
 
+    @Override
     public int indexOfGift(final String skuCode) {
         return ShoppingCartUtils.indexOf(skuCode, getGifts());
     }

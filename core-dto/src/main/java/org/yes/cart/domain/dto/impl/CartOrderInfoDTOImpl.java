@@ -55,6 +55,7 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
     @DtoField(readOnly = true)
     private String orderMessage;
 
+    @Override
     public String getOrderMessage() {
         return orderMessage;
     }
@@ -70,34 +71,38 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
         }
     }
 
+    @Override
     public Map<String, String> getDetails() {
         return Collections.unmodifiableMap(getDetailsInternal());
     }
 
     protected Map<String, String> getDetailsInternal() {
         if (this.details == null) {
-            this.details = new HashMap<String, String>();
+            this.details = new HashMap<>();
         }
         return this.details;
     }
 
+    @Override
     public String getDetailByKey(final String key) {
         return getDetailsInternal().get(key);
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isDetailByKeyTrue(final String key) {
         final String detail = getDetailByKey(key);
         return detail != null && Boolean.valueOf(detail);
     }
 
+    @Override
     public Map<String, Long> getCarrierSlaId() {
         return Collections.unmodifiableMap(getCarrierSlaIdInternal());
     }
 
     protected Map<String, Long> getCarrierSlaIdInternal() {
         if (this.carrierSlaId == null) {
-            this.carrierSlaId = new HashMap<String, Long>();
+            this.carrierSlaId = new HashMap<>();
         }
         return this.carrierSlaId;
     }
@@ -109,6 +114,7 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
         }
     }
 
+    @Override
     public Long getBillingAddressId() {
         return billingAddressId;
     }
@@ -117,6 +123,7 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
         this.billingAddressId = billingAddressId;
     }
 
+    @Override
     public Long getDeliveryAddressId() {
         return deliveryAddressId;
     }
@@ -125,6 +132,7 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
         this.deliveryAddressId = deliveryAddressId;
     }
 
+    @Override
     public boolean isSeparateBillingAddress() {
         return separateBillingAddress;
     }
@@ -133,6 +141,7 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
         this.separateBillingAddress = separateBillingAddress;
     }
 
+    @Override
     public boolean isSeparateBillingAddressEnabled() {
         return separateBillingAddressEnabled;
     }
@@ -141,6 +150,7 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
         this.separateBillingAddressEnabled = separateBillingAddressEnabled;
     }
 
+    @Override
     public boolean isBillingAddressNotRequired() {
         return billingAddressNotRequired;
     }
@@ -149,6 +159,7 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
         this.billingAddressNotRequired = billingAddressNotRequired;
     }
 
+    @Override
     public boolean isDeliveryAddressNotRequired() {
         return deliveryAddressNotRequired;
     }
@@ -157,6 +168,7 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
         this.deliveryAddressNotRequired = deliveryAddressNotRequired;
     }
 
+    @Override
     public String getPaymentGatewayLabel() {
         return paymentGatewayLabel;
     }
@@ -166,6 +178,7 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
     }
 
 
+    @Override
     public boolean isMultipleDelivery() {
         return multipleDelivery;
     }
@@ -174,6 +187,7 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
         this.multipleDelivery = multipleDelivery;
     }
 
+    @Override
     public Map<String, Boolean> getMultipleDeliveryAvailable() {
         return multipleDeliveryAvailable;
     }

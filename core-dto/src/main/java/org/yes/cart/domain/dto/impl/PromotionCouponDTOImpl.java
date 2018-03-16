@@ -44,66 +44,79 @@ public class PromotionCouponDTOImpl implements PromotionCouponDTO {
     private int usageCount;
 
     /** {@inheritDoc} */
+    @Override
     public long getId() {
         return promotioncouponId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getPromotioncouponId() {
         return promotioncouponId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setPromotioncouponId(long promotioncouponId) {
         this.promotioncouponId = promotioncouponId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getPromotionId() {
         return promotionId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setPromotionId(final long promotionId) {
         this.promotionId = promotionId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCode() {
         return code;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getUsageLimit() {
         return usageLimit;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setUsageLimit(int usageLimit) {
         this.usageLimit = usageLimit;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getUsageLimitPerCustomer() {
         return usageLimitPerCustomer;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setUsageLimitPerCustomer(int usageLimitPerCustomer) {
         this.usageLimitPerCustomer = usageLimitPerCustomer;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getUsageCount() {
         return usageCount;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setUsageCount(int usageCount) {
         this.usageCount = usageCount;
     }

@@ -39,7 +39,7 @@ public class DtoCountryServiceImpl
      * Construct country dto service.
      *
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
-     * @param countryGenericService    generic counry service
+     * @param countryGenericService    generic country service
      * @param adaptersRepository value converter
      */
     public DtoCountryServiceImpl(final DtoFactory dtoFactory,
@@ -52,6 +52,7 @@ public class DtoCountryServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<CountryDTO> getDtoIFace() {
         return CountryDTO.class;
     }
@@ -59,6 +60,7 @@ public class DtoCountryServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<CountryDTOImpl> getDtoImpl() {
         return CountryDTOImpl.class;
     }
@@ -66,6 +68,7 @@ public class DtoCountryServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<Country> getEntityIFace() {
         return Country.class;
     }

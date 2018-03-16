@@ -48,7 +48,7 @@ public class DtoCarrierSlaServiceImpl
      * Construct service.
      * @param dtoFactory dto factory
      * @param carrierSlaGenericService generic service to use
-     * @param AdaptersRepository convertor factory.
+     * @param AdaptersRepository converter factory.
      */
     public DtoCarrierSlaServiceImpl(final DtoFactory dtoFactory,
                                  final GenericService<CarrierSla> carrierSlaGenericService,
@@ -62,6 +62,7 @@ public class DtoCarrierSlaServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CarrierSlaDTO> findByCarrier(final long carrierId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return getDTOs(
                 ((CarrierSlaService)service).findByCarrier(carrierId)
@@ -77,9 +78,10 @@ public class DtoCarrierSlaServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<CarrierSlaDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<CarrierSlaDTO> dtos = new ArrayList<CarrierSlaDTO>();
+        final List<CarrierSlaDTO> dtos = new ArrayList<>();
 
         List<CarrierSla> entities = Collections.emptyList();
 
@@ -121,6 +123,7 @@ public class DtoCarrierSlaServiceImpl
      *
      * @return dto interface.
      */
+    @Override
     public Class<CarrierSlaDTO> getDtoIFace() {
         return CarrierSlaDTO.class;
     }
@@ -130,6 +133,7 @@ public class DtoCarrierSlaServiceImpl
      *
      * @return dto implementation class.
      */
+    @Override
     public Class<CarrierSlaDTOImpl> getDtoImpl() {
         return CarrierSlaDTOImpl.class;
     }
@@ -139,6 +143,7 @@ public class DtoCarrierSlaServiceImpl
      *
      * @return entity interface.
      */
+    @Override
     public Class<CarrierSla> getEntityIFace() {
         return CarrierSla.class;
     }
