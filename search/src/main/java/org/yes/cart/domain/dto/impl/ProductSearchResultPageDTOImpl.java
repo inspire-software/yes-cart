@@ -83,8 +83,10 @@ public class ProductSearchResultPageDTOImpl implements ProductSearchResultPageDT
     /** {@inheritDoc} */
     public ProductSearchResultPageDTO copy() {
         final List<ProductSearchResultDTO> copyResults = new ArrayList<>();
-        for (final ProductSearchResultDTO result : results) {
-            copyResults.add(result.copy());
+        if (this.results != null) {
+            for (final ProductSearchResultDTO result : results) {
+                copyResults.add(result.copy());
+            }
         }
         return new ProductSearchResultPageDTOImpl(copyResults, first, pageSize, totalHits, sortField, sortDesc);
     }
