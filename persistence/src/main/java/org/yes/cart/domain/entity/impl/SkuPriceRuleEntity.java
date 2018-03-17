@@ -25,6 +25,7 @@ public class SkuPriceRuleEntity implements org.yes.cart.domain.entity.SkuPriceRu
     private BigDecimal roundingUnit;
     private String priceTag;
     private String priceRef;
+    private String pricePolicy;
 
     private String tag;
 
@@ -163,6 +164,16 @@ public class SkuPriceRuleEntity implements org.yes.cart.domain.entity.SkuPriceRu
     @Override
     public void setPriceRef(final String priceRef) {
         this.priceRef = priceRef;
+    }
+
+    @Override
+    public String getPricePolicy() {
+        return pricePolicy;
+    }
+
+    @Override
+    public void setPricePolicy(final String pricePolicy) {
+        this.pricePolicy = pricePolicy;
     }
 
     @Override

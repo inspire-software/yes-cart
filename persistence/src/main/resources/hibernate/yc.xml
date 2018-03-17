@@ -1349,6 +1349,7 @@
         <property name="tag" column="TAG" type="string" length="255"/>
         <property name="priceTag" column="PRICE_TAG" type="string" length="255"/>
         <property name="priceRef" column="PRICE_REF" type="string" length="255"/>
+        <property name="pricePolicy" column="PRICE_POLICY" type="string" length="255"/>
 
         <property name="enabled" column="ENABLED" type="boolean" length="1" not-null="true" index="SKUPRICERULE_ENABLED"/>
 

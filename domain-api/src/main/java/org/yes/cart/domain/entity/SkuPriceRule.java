@@ -154,6 +154,20 @@ public interface SkuPriceRule extends Auditable, Codable, Taggable, Rankable, Na
     void setPriceRef(String priceRef);
 
     /**
+     * Optional price policy to add to generated price.
+     *
+     * @return price policy
+     */
+    String getPricePolicy();
+
+    /**
+     * Set price policy to add.
+     *
+     * @param pricePolicy price policy
+     */
+    void setPricePolicy(String pricePolicy);
+
+    /**
      * @return default description for this rule
      */
     String getDescription();
