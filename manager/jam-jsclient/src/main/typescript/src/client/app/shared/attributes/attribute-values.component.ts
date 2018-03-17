@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { AttrValueVO, AttributeVO, Pair } from './../model/index';
-import { Util } from './../services/index';
+import { I18nEventBus, Util } from './../services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
 import { FormValidationEvent, Futures, Future } from './../event/index';
 import { Config } from './../config/env.config';
@@ -523,6 +523,27 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     }
   }
 
+  getAttributeName(attr:AttributeVO):string {
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = attr.displayNames;
+    let def = attr.name != null ? attr.name : attr.code;
+
+    if (i18n == null) {
+      return def;
+    }
+
+    let namePair = i18n.find(_name => {
+      return _name.first == lang;
+    });
+
+    if (namePair != null) {
+      return namePair.second;
+    }
+
+    return def;
+  }
+
 
   private loadData() {
     if (this.masterObject && this._objectAttributes) {
@@ -570,7 +591,8 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
           val.attribute.code.toLowerCase().indexOf(_filter) !== -1 ||
           val.attribute.name.toLowerCase().indexOf(_filter) !== -1 ||
           val.attribute.description && val.attribute.description.toLowerCase().indexOf(_filter) !== -1 ||
-          val.val && val.val.toLowerCase().indexOf(_filter) !== -1
+          val.val && val.val.toLowerCase().indexOf(_filter) !== -1 ||
+          this.getAttributeName(val.attribute).toLowerCase().indexOf(_filter) !== -1
         );
       }
       LogUtil.debug('AttributeValuesComponent filterAttributes ' +  _filter, _filteredObjectAttributes);

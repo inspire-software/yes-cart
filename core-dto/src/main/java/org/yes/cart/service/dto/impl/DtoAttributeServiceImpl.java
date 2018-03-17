@@ -182,7 +182,7 @@ public class DtoAttributeServiceImpl
                 );
             } else {
                 attrs = service.getGenericDao().findRangeByCriteria(
-                        " where e.attributeGroup.code = ?1 and (lower(e.code) like ?2 or lower(e.name) like ?2 or lower(e.description) like ?2) order by e.name",
+                        " where e.attributeGroup.code = ?1 and (lower(e.code) like ?2 or lower(e.name) like ?2 or lower(e.displayName) like ?2 or lower(e.description) like ?2) order by e.name",
                         page * pageSize, pageSize,
                         attributeGroupCode,
                         HQLUtils.criteriaIlikeAnywhere(filter)

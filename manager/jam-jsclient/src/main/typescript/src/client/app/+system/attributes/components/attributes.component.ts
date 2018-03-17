@@ -15,6 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { AttributeGroupVO, AttributeVO } from './../../../shared/model/index';
+import { I18nEventBus } from './../../../shared/services/index';
 import { Config } from './../../../shared/config/env.config';
 import { LogUtil } from './../../../shared/log/index';
 
@@ -115,6 +116,29 @@ export class AttributesComponent implements OnInit, OnDestroy {
     }
     return '&nbsp;';
   }
+
+
+  protected getAttributeName(attr:AttributeVO):string {
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = attr.displayNames;
+    let def = attr.name != null ? attr.name : attr.code;
+
+    if (i18n == null) {
+      return def;
+    }
+
+    let namePair = i18n.find(_name => {
+      return _name.first == lang;
+    });
+
+    if (namePair != null) {
+      return namePair.second;
+    }
+
+    return def;
+  }
+
 
   private filterAttributes() {
 
