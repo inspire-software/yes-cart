@@ -27,7 +27,7 @@ public class VoReportDescriptor {
 
     private String reportId;
 
-    private List<VoReportParameter> parameters =  new ArrayList<VoReportParameter>();
+    private List<VoReportParameter> parameters = new ArrayList<>();
 
     public String getReportId() {
         return reportId;

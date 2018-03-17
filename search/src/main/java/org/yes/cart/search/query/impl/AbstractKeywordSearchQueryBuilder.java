@@ -47,6 +47,7 @@ public abstract class AbstractKeywordSearchQueryBuilder extends AbstractSearchQu
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Query> createQueryChain(final NavigationContext<Query> navigationContext, final String parameter, final Object value) {
 
         final StringBuilder all = new StringBuilder();

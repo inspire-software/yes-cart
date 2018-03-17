@@ -28,7 +28,7 @@ import java.util.List;
 @Dto
 public class VoCarrier extends VoCarrierInfo {
 
-    private List<VoCarrierShopLink> carrierShops = new ArrayList<VoCarrierShopLink>();
+    private List<VoCarrierShopLink> carrierShops = new ArrayList<>();
 
     public List<VoCarrierShopLink> getCarrierShops() {
         return carrierShops;

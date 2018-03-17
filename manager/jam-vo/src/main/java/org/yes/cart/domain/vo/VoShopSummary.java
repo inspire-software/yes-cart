@@ -39,30 +39,30 @@ public class VoShopSummary {
     private Long masterId;
     private String masterCode;
 
-    private List<MutablePair<String, Boolean>> categories = new ArrayList<MutablePair<String, Boolean>>();
+    private List<MutablePair<String, Boolean>> categories = new ArrayList<>();
 
-    private List<MutablePair<String, Boolean>> carriers = new ArrayList<MutablePair<String, Boolean>>();
+    private List<MutablePair<String, Boolean>> carriers = new ArrayList<>();
 
-    private List<MutablePair<String, Boolean>> fulfilmentCentres = new ArrayList<MutablePair<String, Boolean>>();
+    private List<MutablePair<String, Boolean>> fulfilmentCentres = new ArrayList<>();
 
-    private List<MutablePair<String, Boolean>> paymentGateways = new ArrayList<MutablePair<String, Boolean>>();
+    private List<MutablePair<String, Boolean>> paymentGateways = new ArrayList<>();
     private String paymentGatewaysIPsRegEx;
 
-    private List<MutablePair<String, String>> locales = new ArrayList<MutablePair<String, String>>();
-    private List<MutablePair<String, Boolean>> i18nOverrides = new ArrayList<MutablePair<String, Boolean>>();
+    private List<MutablePair<String, String>> locales = new ArrayList<>();
+    private List<MutablePair<String, Boolean>> i18nOverrides = new ArrayList<>();
 
-    private List<MutablePair<String, String>> currencies = new ArrayList<MutablePair<String, String>>();
+    private List<MutablePair<String, String>> currencies = new ArrayList<>();
 
-    private List<MutablePair<String, String>> billingLocations = new ArrayList<MutablePair<String, String>>();
-    private List<MutablePair<String, String>> shippingLocations = new ArrayList<MutablePair<String, String>>();
+    private List<MutablePair<String, String>> billingLocations = new ArrayList<>();
+    private List<MutablePair<String, String>> shippingLocations = new ArrayList<>();
 
     private String previewUrl;
     private String previewCss;
 
     private MutablePair<String, String> primaryUrlAndThemeChain;
-    private List<MutablePair<String, String>> aliasUrlAndThemeChain = new ArrayList<MutablePair<String, String>>();
+    private List<MutablePair<String, String>> aliasUrlAndThemeChain = new ArrayList<>();
 
-    private List<String> aliases = new ArrayList<String>();
+    private List<String> aliases = new ArrayList<>();
 
     private MutablePair<String, Boolean> checkoutEnableGuest;
     private MutablePair<String, Boolean> checkoutEnableCoupons;
@@ -89,7 +89,7 @@ public class VoShopSummary {
     private MutablePair<String, Boolean> cookiePolicy;
     private MutablePair<String, Boolean> anonymousBrowsing;
     private MutablePair<String, String> customerSession;
-    private List<MutablePair<String, String>> customerTypes = new ArrayList<MutablePair<String, String>>();
+    private List<MutablePair<String, String>> customerTypes = new ArrayList<>();
     private MutablePair<String, List<String>> customerTypesAbleToRegister;
     private MutablePair<String, List<String>> customerTypesRequireRegistrationApproval;
     private MutablePair<String, List<String>> customerTypesRequireRegistrationNotification;
@@ -108,11 +108,11 @@ public class VoShopSummary {
     private MutablePair<String, List<String>> customerTypesB2BOrderForm;
     private MutablePair<String, List<String>> customerTypesAddressBookDisabled;
 
-    private List<MutablePair<String, Boolean>> emailTemplates = new ArrayList<MutablePair<String, Boolean>>();
-    private List<MutablePair<String, Boolean>> emailTemplatesYCE = new ArrayList<MutablePair<String, Boolean>>();
-    private List<MutablePair<String, String>> emailTemplatesFrom = new ArrayList<MutablePair<String, String>>();
-    private List<MutablePair<String, String>> emailTemplatesTo = new ArrayList<MutablePair<String, String>>();
-    private List<MutablePair<String, Boolean>> emailTemplatesShop = new ArrayList<MutablePair<String, Boolean>>();
+    private List<MutablePair<String, Boolean>> emailTemplates = new ArrayList<>();
+    private List<MutablePair<String, Boolean>> emailTemplatesYCE = new ArrayList<>();
+    private List<MutablePair<String, String>> emailTemplatesFrom = new ArrayList<>();
+    private List<MutablePair<String, String>> emailTemplatesTo = new ArrayList<>();
+    private List<MutablePair<String, Boolean>> emailTemplatesShop = new ArrayList<>();
 
     private MutablePair<String, Boolean> sfPageTraceEnabled;
 

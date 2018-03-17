@@ -51,36 +51,43 @@ public class ProductSearchResultPageDTOImpl implements ProductSearchResultPageDT
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<ProductSearchResultDTO> getResults() {
         return results;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getFirst() {
         return first;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getPageSize() {
         return pageSize;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getTotalHits() {
         return totalHits;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getSortField() {
         return sortField;
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isSortDesc() {
         return sortDesc;
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductSearchResultPageDTO copy() {
         final List<ProductSearchResultDTO> copyResults = new ArrayList<>();
         if (this.results != null) {

@@ -50,6 +50,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCode() {
         return code;
     }
@@ -57,6 +58,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
@@ -64,6 +66,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getValue() {
         return value;
     }
@@ -71,6 +74,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setValue(final String value) {
         this.value = value;
     }
@@ -78,6 +82,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getCount() {
         return count;
     }
@@ -85,6 +90,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCount(final int itemsCount) {
         this.count = itemsCount;
     }
@@ -92,6 +98,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
@@ -99,6 +106,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -106,6 +114,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDisplayName() {
         return displayName;
     }
@@ -113,6 +122,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
@@ -120,6 +130,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getRank() {
         return rank;
     }
@@ -127,6 +138,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setRank(final int rank) {
         this.rank = rank;
     }
@@ -134,6 +146,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getType() {
         return type;
     }
@@ -141,6 +154,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setType(final String type) {
         this.type = type;
     }
@@ -148,6 +162,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTemplate() {
         return template;
     }
@@ -155,6 +170,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTemplate(final String template) {
         this.template = template;
     }
@@ -162,6 +178,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDisplayValue() {
         return displayValue;
     }
@@ -169,6 +186,7 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayValue(final String displayValue) {
         this.displayValue = displayValue;
     }

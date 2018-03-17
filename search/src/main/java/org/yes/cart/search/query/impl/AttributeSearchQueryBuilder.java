@@ -39,6 +39,7 @@ public class AttributeSearchQueryBuilder extends AbstractSearchQueryBuilderImpl 
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Query> createQueryChain(final NavigationContext<Query> navigationContext, final String parameter, final Object value) {
 
         if (StringUtils.isBlank(parameter)) {

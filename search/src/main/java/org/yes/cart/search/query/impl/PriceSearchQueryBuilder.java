@@ -46,6 +46,7 @@ public class PriceSearchQueryBuilder extends AbstractSearchQueryBuilderImpl impl
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Query> createQueryChain(final NavigationContext<Query> navigationContext, final String parameter, final Object value) {
 
         String strValue = null;

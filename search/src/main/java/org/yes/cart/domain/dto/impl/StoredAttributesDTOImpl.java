@@ -80,11 +80,13 @@ public class StoredAttributesDTOImpl implements StoredAttributesDTO, Serializabl
     }
 
     /** {@inheritDoc} */
+    @Override
     public Pair<String, I18NModel> getValue(final String code) {
         return values.get(code);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void putValue(final String code, final String value, final Object displayValue) {
         if (value != null && value.length() > 0) {
             I18NModel model = null;
@@ -103,6 +105,7 @@ public class StoredAttributesDTOImpl implements StoredAttributesDTO, Serializabl
     }
 
     /** {@inheritDoc} */
+    @Override
     @JsonIgnore
     public Map<String, Pair<String, I18NModel>> getAllValues() {
         return values;

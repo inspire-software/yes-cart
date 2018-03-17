@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.yes.cart.shoppingcart.support.CommandConfig;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -110,7 +111,7 @@ public class WicketUtilTest {
             .add("toRemove", "ppp");
         assertEquals(3, parametersToFilter.getNamedKeys().size());
         assertEquals(2, new WicketUtil(commandConfig).getFilteredRequestParameters(parametersToFilter).getNamedKeys().size());
-        PageParameters filtered = new WicketUtil(commandConfig).getFilteredRequestParameters(parametersToFilter, Arrays.asList("toRemove"));
+        PageParameters filtered = new WicketUtil(commandConfig).getFilteredRequestParameters(parametersToFilter, Collections.singletonList("toRemove"));
         assertNotNull(filtered);
         assertEquals(1, filtered.getNamedKeys().size());
         assertEquals("dsa", filtered.get("asd").toString());
@@ -177,7 +178,7 @@ public class WicketUtilTest {
             .add("retained2", "zzz");
         assertEquals(4, parametersToFilter.getNamedKeys().size());
         assertEquals(3, new WicketUtil(commandConfig).getFilteredRequestParameters(parametersToFilter).getNamedKeys().size());
-        PageParameters filtered = new WicketUtil(commandConfig).getRetainedRequestParameters(parametersToFilter, new HashSet<String>(Arrays.asList("retained1", "retained2")));
+        PageParameters filtered = new WicketUtil(commandConfig).getRetainedRequestParameters(parametersToFilter, new HashSet<>(Arrays.asList("retained1", "retained2")));
         assertNotNull(filtered);
         assertEquals(2, filtered.getNamedKeys().size());
         assertEquals("ppp", filtered.get("retained1").toString());

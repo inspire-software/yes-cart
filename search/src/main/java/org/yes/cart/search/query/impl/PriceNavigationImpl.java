@@ -35,6 +35,7 @@ public class PriceNavigationImpl implements PriceNavigation {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Pair<String, Pair<BigDecimal, BigDecimal>> decomposePriceRequestParams(final String val) {
         final String[] currencyPriceBorders = StringUtils.split(val, Constants.RANGE_NAVIGATION_DELIMITER);
         final Pair<BigDecimal, BigDecimal> priceBorders =
@@ -59,6 +60,7 @@ public class PriceNavigationImpl implements PriceNavigation {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String composePriceRequestParams(final String currency, final BigDecimal lowBorder, final BigDecimal highBorder) {
         return composePriceRequestParams(currency, lowBorder, highBorder, Constants.RANGE_NAVIGATION_DELIMITER, Constants.RANGE_NAVIGATION_DELIMITER);
     }
@@ -67,6 +69,7 @@ public class PriceNavigationImpl implements PriceNavigation {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String composePriceRequestParams(final String currency,
                                             final BigDecimal lowBorder,
                                             final BigDecimal highBorder,

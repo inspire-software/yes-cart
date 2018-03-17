@@ -17,7 +17,6 @@ package org.yes.cart.domain.vo.converter;
 
 import com.inspiresoftware.lib.dto.geda.adapter.BeanFactory;
 import com.inspiresoftware.lib.dto.geda.adapter.ValueConverter;
-import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
 
@@ -32,7 +31,7 @@ public class PairMapToPairListConverter implements ValueConverter {
 
     @Override
     public Object convertToDto(final Object object, final BeanFactory beanFactory) {
-        final List<MutablePair<String, MutablePair<String, String>>> list = new ArrayList<MutablePair<String, MutablePair<String, String>>>();
+        final List<MutablePair<String, MutablePair<String, String>>> list = new ArrayList<>();
         if (object instanceof Map) {
             final Map<String, Pair<String, String>> values = (Map<String, Pair<String, String>>) object;
             for (final Map.Entry<String, Pair<String, String>> entry : values.entrySet()) {
@@ -50,9 +49,9 @@ public class PairMapToPairListConverter implements ValueConverter {
         if (object instanceof List) {
             final List<MutablePair<String, MutablePair<String, String>>> list = (List<MutablePair<String, MutablePair<String, String>>>) object;
             if (!list.isEmpty()) {
-                final Map<String, Pair<String, String>> values = new HashMap<String, Pair<String, String>>();
+                final Map<String, Pair<String, String>> values = new HashMap<>();
                 for (final MutablePair<String, MutablePair<String, String>> value : list) {
-                    values.put(value.getFirst(), new Pair<String, String>(value.getSecond().getFirst(), value.getSecond().getSecond()));
+                    values.put(value.getFirst(), new Pair<>(value.getSecond().getFirst(), value.getSecond().getSecond()));
                 }
                 return values;
             }

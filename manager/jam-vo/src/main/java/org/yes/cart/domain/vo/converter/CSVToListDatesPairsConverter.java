@@ -39,7 +39,7 @@ public class CSVToListDatesPairsConverter implements ValueConverter {
 
     @Override
     public Object convertToDto(final Object object, final BeanFactory beanFactory) {
-        final List<MutablePair<String, String>> list = new ArrayList<MutablePair<String, String>>();
+        final List<MutablePair<String, String>> list = new ArrayList<>();
         if (object instanceof String) {
             final String[] dateRanges = StringUtils.split((String) object, ',');
             for (final String dates : dateRanges) {

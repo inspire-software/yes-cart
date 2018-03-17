@@ -28,7 +28,7 @@ import java.util.List;
 @Dto
 public class VoShopCarrierAndSla extends VoShopCarrier {
 
-    private List<VoShopCarrierSla> carrierSlas = new ArrayList<VoShopCarrierSla>();
+    private List<VoShopCarrierSla> carrierSlas = new ArrayList<>();
 
     public List<VoShopCarrierSla> getCarrierSlas() {
         return carrierSlas;

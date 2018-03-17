@@ -149,6 +149,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public NavigationContext<Query> getProductSnowBallQuery(final NavigationContext<Query> navigationContext,
                                                             final String param,
                                                             final Object value) {
@@ -192,6 +193,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public NavigationContext<Query> getSkuSnowBallQuery(final NavigationContext<Query> navigationContext,
                                                         final List<ProductSearchResultDTO> products) {
 
@@ -233,6 +235,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public NavigationContext<Query> getFilteredNavigationQueryChain(final long shopId,
                                                                     final long customerShopId,
                                                                     final String customerLanguage,

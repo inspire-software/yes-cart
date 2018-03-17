@@ -72,6 +72,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getCategoryId() {
         return categoryId;
     }
@@ -79,6 +80,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getId() {
         return categoryId;
     }
@@ -86,6 +88,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setCategoryId(final long categoryId) {
         this.categoryId = categoryId;
     }
@@ -93,6 +96,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getParentId() {
         return parentId;
     }
@@ -100,6 +104,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setParentId(final long parentId) {
         this.parentId = parentId;
     }
@@ -107,6 +112,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Long getLinkToId() {
         return linkToId;
     }
@@ -114,6 +120,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setLinkToId(final Long linkToId) {
         this.linkToId = linkToId;
     }
@@ -121,6 +128,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getRank() {
         return rank;
     }
@@ -128,6 +136,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setRank(final int rank) {
         this.rank = rank;
     }
@@ -135,6 +144,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDateTime getAvailablefrom() {
         return availablefrom;
     }
@@ -142,6 +152,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
@@ -149,6 +160,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public LocalDateTime getAvailableto() {
         return availableto;
     }
@@ -156,6 +168,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
@@ -163,6 +176,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getGuid() {
         return guid;
     }
@@ -170,6 +184,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setGuid(final String guid) {
         this.guid = guid;
     }
@@ -177,6 +192,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -184,6 +200,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
@@ -191,6 +208,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDisplayName() {
         return displayName;
     }
@@ -198,6 +216,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
@@ -205,6 +224,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isRoot() {
         return (getParentId() == 0L || getParentId() == getCategoryId());
     }

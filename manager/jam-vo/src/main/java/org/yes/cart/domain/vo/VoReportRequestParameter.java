@@ -18,7 +18,6 @@ package org.yes.cart.domain.vo;
 
 import org.yes.cart.domain.misc.MutablePair;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

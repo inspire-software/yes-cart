@@ -29,7 +29,7 @@ import java.util.List;
 @Dto
 public class VoFulfilmentCentre extends VoFulfilmentCentreInfo {
 
-    private List<VoFulfilmentCentreShopLink> fulfilmentShops = new ArrayList<VoFulfilmentCentreShopLink>();
+    private List<VoFulfilmentCentreShopLink> fulfilmentShops = new ArrayList<>();
 
     public List<VoFulfilmentCentreShopLink> getFulfilmentShops() {
         return fulfilmentShops;

@@ -34,6 +34,7 @@ public class NoopProductSearchQueryBuilder implements ProductSearchQueryBuilder<
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Query> createQueryChain(final NavigationContext<Query> navigationContext, final String parameter, final Object value) {
         return null;
     }

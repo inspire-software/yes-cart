@@ -91,11 +91,7 @@ public class VoAttributeGroup {
         if (!description.equals(that.description)) {
             return false;
         }
-        if (!name.equals(that.name)) {
-            return false;
-        }
-
-        return true;
+        return name.equals(that.name);
     }
 
     @Override

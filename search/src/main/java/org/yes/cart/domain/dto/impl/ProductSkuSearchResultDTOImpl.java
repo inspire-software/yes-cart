@@ -42,62 +42,74 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
     private StoredAttributesDTO attributes;
 
     /** {@inheritDoc} */
+    @Override
     public String getDefaultImage() {
         return defaultImage;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDefaultImage(final String defaultImage) {
         this.defaultImage = defaultImage;
     }
 
 
     /** {@inheritDoc} */
+    @Override
     public long getId() {
         return id;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setId(final long id) {
         this.id = id;
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getProductId() {
         return productId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setProductId(final long productId) {
         this.productId = productId;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCode() {
         return code;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setCode(final String code) {
         this.code = code;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getManufacturerCode() {
         return manufacturerCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setManufacturerCode(final String manufacturerCode) {
         this.manufacturerCode = manufacturerCode;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getDisplayName() {
         return displayName;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
         this.i18NModelName = new StringI18NModel(this.displayName);
@@ -105,6 +117,7 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
 
 
     /** {@inheritDoc} */
+    @Override
     public String getName(final String locale) {
         return (String) ObjectUtils.defaultIfNull(
                 this.i18NModelName.getValue(locale),
@@ -113,26 +126,31 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getName() {
         return name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setName(final String name) {
         this.name = name;
     }
 
     /** {@inheritDoc} */
+    @Override
     public StoredAttributesDTO getAttributes() {
         return attributes;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setAttributes(final StoredAttributesDTO attributes) {
         this.attributes = attributes;
     }
 
     /** {@inheritDoc} */
+    @Override
     public ProductSkuSearchResultDTO copy() {
         final ProductSkuSearchResultDTOImpl copy = new ProductSkuSearchResultDTOImpl();
         copy.setId(this.id);

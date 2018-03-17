@@ -33,7 +33,7 @@ public class VoUtils {
 
     public static List<MutablePair<String, String>> adaptMapToPairs(Map<String, String> map) {
         final Set<Map.Entry<String, String>> es = map != null ? map.entrySet() : Collections.EMPTY_SET;
-        List<MutablePair<String, String>> rez = new ArrayList<MutablePair<String, String>>(es.size());
+        List<MutablePair<String, String>> rez = new ArrayList<>(es.size());
         for (Map.Entry ent : es) {
             rez.add(MutablePair.of(ent.getKey(), ent.getValue()));
         }

@@ -28,16 +28,16 @@ import java.util.List;
  */
 public class VoAddressBook {
 
-    private List<VoAddress> addresses = new ArrayList<VoAddress>();
+    private List<VoAddress> addresses = new ArrayList<>();
 
     private long formattingShopId;
 
-    private List<MutablePair<Long, String>> formattedAddresses = new ArrayList<MutablePair<Long, String>>();
+    private List<MutablePair<Long, String>> formattedAddresses = new ArrayList<>();
 
-    private List<MutablePair<String, List<VoAttrValue>>> addressForm = new ArrayList<MutablePair<String, List<VoAttrValue>>>();
+    private List<MutablePair<String, List<VoAttrValue>>> addressForm = new ArrayList<>();
 
-    private List<MutablePair<String, List<MutablePair<String, String>>>> countries = new ArrayList<MutablePair<String, List<MutablePair<String, String>>>>();
-    private List<MutablePair<String, List<MutablePair<String, String>>>> states = new ArrayList<MutablePair<String, List<MutablePair<String, String>>>>();
+    private List<MutablePair<String, List<MutablePair<String, String>>>> countries = new ArrayList<>();
+    private List<MutablePair<String, List<MutablePair<String, String>>>> states = new ArrayList<>();
 
 
     public List<VoAddress> getAddresses() {

@@ -64,6 +64,7 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getShopId() {
         return shopId;
     }
@@ -71,6 +72,7 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public long getCustomerShopId() {
         return customerShopId;
     }
@@ -78,6 +80,7 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCustomerLanguage() {
         return customerLanguage;
     }
@@ -85,6 +88,7 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Long> getCategories() {
         if (categories == null) {
             return null;
@@ -95,6 +99,7 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isIncludeSubCategories() {
         return includeSubCategories;
     }
@@ -102,6 +107,7 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isGlobal() {
         return CollectionUtils.isEmpty(categories);
     }
@@ -109,6 +115,7 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isFilteredBy(final String attribute) {
         return navigationParameters.containsKey(attribute);
     }
@@ -152,6 +159,7 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Query getProductQuery() {
         return productQuery;
     }
@@ -159,6 +167,7 @@ public class LuceneNavigationContextImpl implements NavigationContext<Query> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Query getProductSkuQuery() {
         return productSkuQuery;
     }

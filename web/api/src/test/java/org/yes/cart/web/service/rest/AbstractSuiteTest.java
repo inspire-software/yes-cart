@@ -66,6 +66,7 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
         return webApplicationContext;
     }
 
+    @Override
     @Before
     public void setUp() {
 
@@ -87,6 +88,7 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
 
 
         tx.execute(new TransactionCallbackWithoutResult() {
+            @Override
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 ((GenericFTSCapableDAO<Product, Long, Object>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO)).fullTextSearchReindex(false, 1000);

@@ -47,11 +47,13 @@ public abstract class YcMockMvcResultHandlers {
 
                 private final Logger LOG = LoggerFactory.getLogger("RESTTEST");
 
+                @Override
                 public void printHeading(String heading) {
                     LOG.info("");
                     LOG.info(String.format("%20s:", heading));
                 }
 
+                @Override
                 public void printValue(String label, Object value) {
                     if (value != null && value.getClass().isArray()) {
                         value = CollectionUtils.arrayToList(value);

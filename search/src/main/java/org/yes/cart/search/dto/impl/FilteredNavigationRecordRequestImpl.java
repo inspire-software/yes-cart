@@ -95,6 +95,7 @@ public class FilteredNavigationRecordRequestImpl implements FilteredNavigationRe
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getFacetName() {
         return facetName;
     }
@@ -102,6 +103,7 @@ public class FilteredNavigationRecordRequestImpl implements FilteredNavigationRe
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getField() {
         return field;
     }
@@ -109,6 +111,7 @@ public class FilteredNavigationRecordRequestImpl implements FilteredNavigationRe
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isMultiValue() {
         return multiValue;
     }
@@ -116,6 +119,7 @@ public class FilteredNavigationRecordRequestImpl implements FilteredNavigationRe
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isRangeValue() {
         return rangeValue;
     }
@@ -123,6 +127,7 @@ public class FilteredNavigationRecordRequestImpl implements FilteredNavigationRe
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<Pair<String, String>> getRangeValues() {
         return rangeValues;
     }
