@@ -533,6 +533,10 @@ export class AddressBookComponent implements OnInit, OnDestroy {
             options: null
           };
 
+          if (fieldCfg.label == null || fieldCfg.label == '') {
+            fieldCfg.label = fieldCfg.name; // if address attribute is not defined need to display code
+          }
+
           if (fieldCfg.name == 'salutation') {
             fieldCfg.options = this.getSalutationOptions(field.attribute.choiceData, lang);
           }
