@@ -12,7 +12,7 @@
       <tbody>
       <tr *ngFor="let row of filteredObjectAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
         <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click" [title]="row.attribute.code">{{row.attribute.name}}  <i class="fa fa-lock" [hidden]="!row.attribute.secure"></i></a></td>
+          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click" [title]="row.attribute.code">{{getAttributeName(row.attribute)}}  <i class="fa fa-lock" [hidden]="!row.attribute.secure"></i></a></td>
           <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click" [title]="row.attribute.code">{{row.attribute.etypeName}} <span [innerHTML]="getSearchFlags(row.attribute)"></span></a></td>
           <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click text-force-break"><div [innerHTML]="getDisplayValue(row)"></div></a></td>
         </ng-template>
@@ -34,7 +34,7 @@
          positiveLabel="{{ 'MODAL_BUTTON_REMOVE' | translate }}"
          [valid]="true"
          (closed)="onDeleteConfirmationResult($event)">
-    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? (selectedRow.attribute.name + ': ' + selectedRow.val) : '') } }}
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? (getAttributeName(selectedRow.attribute) + ': ' + selectedRow.val) : '') } }}
   </yc-modal>
 
   <yc-modal #editModalDialog
@@ -54,7 +54,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-9">{{ attributeToEdit.attribute.name }}</div>
+            <div class="col-md-9">{{ getAttributeName(attributeToEdit.attribute) }}</div>
             <div class="col-md-3">
               <input name="val" type="checkbox" [(ngModel)]="attributeToEditBoolean" (ngModelChange)="onDataChange($event)">
             </div>
@@ -74,7 +74,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">{{ attributeToEdit.attribute.name }}</div>
+            <div class="col-md-6">{{ getAttributeName(attributeToEdit.attribute) }}</div>
             <div class="col-md-6">
               <input name="val" class="form-control" type="text" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)" required>
             </div>
@@ -95,7 +95,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-12">{{ attributeToEdit.attribute.name }}</div>
+            <div class="col-xs-12">{{ getAttributeName(attributeToEdit.attribute) }}</div>
             <div class="col-xs-12">
               <input name="val" class="form-control" type="text" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)" required>
             </div>
@@ -116,7 +116,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-12">{{ attributeToEdit.attribute.name }}</div>
+            <div class="col-xs-12">{{ getAttributeName(attributeToEdit.attribute) }}</div>
             <div class="col-xs-12">
               <textarea name="val" class="form-control" rows="6" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)" required></textarea>
             </div>
@@ -137,7 +137,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-12">{{ attributeToEdit.attribute.name }}</div>
+            <div class="col-xs-12">{{ getAttributeName(attributeToEdit.attribute) }}</div>
             <div class="col-xs-12">
               <yc-i18n-table [source]="attributeToEdit"
                              value="val"
@@ -166,7 +166,7 @@
             <div class="col-xs-12" [hidden]="!isImageUploadDisabled()">
               <p class="bg-danger">{{ 'MODAL_UPLOAD_DISABLED' | translate }}</p>
             </div>
-            <div class="col-xs-12">{{ attributeToEdit.attribute.name }}</div>
+            <div class="col-xs-12">{{ getAttributeName(attributeToEdit.attribute) }}</div>
             <div class="col-xs-12 av-file-upload"><a target="_dfile" href="../service/filevault/image/{{masterObjectType}}?fileName={{attributeToEdit.val}}"  [hidden]="attributeToEdit.val == null">{{ attributeToEdit.val }}</a> <button class="btn btn-default" type="button" (click)="onImageClickRelay()" [hidden]="isImageUploadDisabled()">{{ 'MODAL_BUTTON_UPLOAD' | translate }}</button></div>
             <div class="col-xs-12 av-file-upload"[hidden]="attributeToEdit.val == null"><input name="imageUrlCopy" class="form-control" type="text" readonly value="{{ attributeToEdit.val != null ? ('http://[domain]/imgvault/' + masterObjectType + '/' + attributeToEdit.val) : '' }}?w=[X]&h=[Y]"></div>
             <div class="col-xs-12 av-image-preview" [innerHTML]="attributeToEditImagePreview"></div>
@@ -197,7 +197,7 @@
             <div class="col-xs-12" [hidden]="!isFileUploadDisabled()">
               <p class="bg-danger">{{ 'MODAL_UPLOAD_DISABLED' | translate }}</p>
             </div>
-            <div class="col-xs-12">{{ attributeToEdit.attribute.name }}</div>
+            <div class="col-xs-12">{{ getAttributeName(attributeToEdit.attribute) }}</div>
             <div class="col-xs-12 av-file-upload"><a target="_dfile" href="../service/filevault/{{ attributeToEdit.attribute.etypeName === 'SystemFile' ? 'sysfile' : 'file' }}/{{masterObjectType}}?fileName={{attributeToEdit.val}}"  [hidden]="attributeToEdit.val == null">{{ attributeToEdit.val }}</a> <button class="btn btn-default" type="button" (click)="onFileClickRelay()" [hidden]="isFileUploadDisabled()">{{ 'MODAL_BUTTON_UPLOAD' | translate }}</button></div>
             <div class="col-xs-12 av-file-upload" [hidden]="attributeToEdit.val == null || attributeToEdit.attribute.etypeName === 'SystemFile'"><input name="fileUrlCopy" class="form-control" type="text" readonly value="{{ attributeToEdit.val != null ? ('http://[domain]/filevault/' + masterObjectType + '/' + attributeToEdit.val) : '' }}"></div>
           </div>
