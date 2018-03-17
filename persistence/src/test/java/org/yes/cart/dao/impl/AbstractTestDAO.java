@@ -142,7 +142,7 @@ public abstract class AbstractTestDAO  {
         }
         FileOutputStream fos = null;
         try {
-            final File dump = new File("target/test-classes/" + prefix + "_dataset.xml");
+            final File dump = new File("target" + File.separator + prefix + "_dataset.xml");
             if (!dump.exists()) {
                 dump.createNewFile();
             }
