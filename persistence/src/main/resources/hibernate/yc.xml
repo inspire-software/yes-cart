@@ -1353,6 +1353,9 @@
 
         <property name="enabled" column="ENABLED" type="boolean" length="1" not-null="true" index="SKUPRICERULE_ENABLED"/>
 
+        <property name="enabledFrom" column="ENABLED_FROM" type="java.time.LocalDateTime" not-null="false"/>
+        <property name="enabledTo" column="ENABLED_TO" type="java.time.LocalDateTime" not-null="false"/>
+
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
