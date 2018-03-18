@@ -150,11 +150,13 @@ public class VoProductServiceImpl implements VoProductService {
 
 
     /** {@inheritDoc} */
+    @Override
     public List<VoAssociation> getAllAssociations() throws Exception {
         return voAssemblySupport.assembleVos(VoAssociation.class, AssociationDTO.class, dtoAssociationService.getAll());
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoProduct> getFilteredProducts(final String filter, final int max) throws Exception {
 
         final List<VoProduct> results = new ArrayList<>();
@@ -174,6 +176,7 @@ public class VoProductServiceImpl implements VoProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public VoProductWithLinks getProductById(final long id) throws Exception {
 
         if (federationFacade.isManageable(id, ProductDTO.class)) {
@@ -195,6 +198,7 @@ public class VoProductServiceImpl implements VoProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public VoProductWithLinks updateProduct(final VoProductWithLinks vo) throws Exception {
 
         if (!federationFacade.isManageable(vo.getProductId(), ProductDTO.class)) {
@@ -243,8 +247,8 @@ public class VoProductServiceImpl implements VoProductService {
         }
 
 
-        final Map<Long, VoProductAssociation> keepAssoc = new HashMap<Long, VoProductAssociation>();
-        final List<VoProductAssociation> addAssoc = new ArrayList<VoProductAssociation>();
+        final Map<Long, VoProductAssociation> keepAssoc = new HashMap<>();
+        final List<VoProductAssociation> addAssoc = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(vo.getAssociations())) {
             for (final VoProductAssociation productAssociation : vo.getAssociations()) {
                 if (productAssociation.getProductassociationId() > 0L) {
@@ -281,6 +285,7 @@ public class VoProductServiceImpl implements VoProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public VoProductWithLinks createProduct(final VoProduct vo) throws Exception {
 
         if (CollectionUtils.isNotEmpty(vo.getProductCategories())) {
@@ -315,6 +320,7 @@ public class VoProductServiceImpl implements VoProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void removeProduct(final long id) throws Exception {
 
         if (federationFacade.isManageable(id, ProductDTO.class)) {
@@ -326,11 +332,13 @@ public class VoProductServiceImpl implements VoProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoAttrValueProduct> getProductAttributes(final long productId) throws Exception {
         return this.voProductAttributesCRUDTemplate.verifyAccessAndGetAttributes(productId, true);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoAttrValueProduct> updateProduct(final List<MutablePair<VoAttrValueProduct, Boolean>> vo) throws Exception {
 
         final long productId = this.voProductAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);
@@ -340,6 +348,7 @@ public class VoProductServiceImpl implements VoProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoProductSku> getProductSkuAll(final long productId) throws Exception {
 
         final List<VoProductSku> vos = new ArrayList<>();
@@ -357,9 +366,10 @@ public class VoProductServiceImpl implements VoProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoProductSku> getFilteredProductSkus(final String filter, final int max) throws Exception {
 
-        final List<VoProductSku> results = new ArrayList<VoProductSku>();
+        final List<VoProductSku> results = new ArrayList<>();
 
         int start = 0;
         do {
@@ -367,12 +377,7 @@ public class VoProductServiceImpl implements VoProductService {
             if (batch.isEmpty()) {
                 break;
             }
-            final Iterator<ProductSkuDTO> batchIt = batch.iterator();
-            while (batchIt.hasNext()) {
-                if (!federationFacade.isManageable(batchIt.next().getProductId(), ProductDTO.class)) {
-                    batchIt.remove();
-                }
-            }
+            batch.removeIf(productSkuDTO -> !federationFacade.isManageable(productSkuDTO.getProductId(), ProductDTO.class));
             results.addAll(voAssemblySupport.assembleVos(VoProductSku.class, ProductSkuDTO.class, batch));
             start++;
         } while (results.size() < max && max != Integer.MAX_VALUE);
@@ -380,6 +385,7 @@ public class VoProductServiceImpl implements VoProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public VoProductSku getSkuById(final long id) throws Exception {
 
         final ProductSkuDTO sku = dtoProductSkuService.getById(id);
@@ -394,6 +400,7 @@ public class VoProductServiceImpl implements VoProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public VoProductSku updateSku(final VoProductSku vo) throws Exception {
 
         ProductSkuDTO dto = dtoProductSkuService.getById(vo.getSkuId());
@@ -413,6 +420,7 @@ public class VoProductServiceImpl implements VoProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public VoProductSku createSku(final VoProductSku vo) throws Exception {
 
         if (vo != null && federationFacade.isManageable(vo.getProductId(), ProductDTO.class)) {
@@ -432,6 +440,7 @@ public class VoProductServiceImpl implements VoProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void removeSku(final long id) throws Exception {
 
         getSkuById(id); // check access
@@ -440,11 +449,13 @@ public class VoProductServiceImpl implements VoProductService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoAttrValueProductSku> getSkuAttributes(final long productId) throws Exception {
         return this.voSkuAttributesCRUDTemplate.verifyAccessAndGetAttributes(productId, true);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoAttrValueProductSku> updateSku(final List<MutablePair<VoAttrValueProductSku, Boolean>> vo) throws Exception {
 
         final long skuId = this.voSkuAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);

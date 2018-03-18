@@ -57,6 +57,7 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
 
 
     /** {@inheritDoc} */
+    @Override
     public VoAddressBook getAddressBook(final long customerId, final long formattingShopId, final String lang) throws Exception {
 
 
@@ -87,12 +88,12 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
         final ShopDTO shop = this.dtoShopService.getById(shopId);
         String billing = dtoShopService.getSupportedBillingCountries(shop.getMasterId() != null ? shop.getMasterId() : shop.getShopId());
         String shipping = dtoShopService.getSupportedShippingCountries(shop.getMasterId() != null ? shop.getMasterId() : shop.getShopId());
-        List<String> billingCodes = billing == null ? Collections.<String>emptyList() : Arrays.asList(billing.split(","));
-        List<String> shippingCodes = shipping == null ? Collections.<String>emptyList() : Arrays.asList(shipping.split(","));
+        List<String> billingCodes = billing == null ? Collections.emptyList() : Arrays.asList(billing.split(","));
+        List<String> shippingCodes = shipping == null ? Collections.emptyList() : Arrays.asList(shipping.split(","));
 
         final List<Country> countries = countryService.findAll();
-        final Map<String, List<MutablePair<String, String>>> allCountries = new HashMap<String, List<MutablePair<String, String>>>();
-        final Map<String, List<MutablePair<String, String>>> allStates = new HashMap<String, List<MutablePair<String, String>>>();
+        final Map<String, List<MutablePair<String, String>>> allCountries = new HashMap<>();
+        final Map<String, List<MutablePair<String, String>>> allStates = new HashMap<>();
         for (final Country country : countries) {
 
             final boolean billingCountry = billingCodes.contains(country.getCountryCode());
@@ -105,25 +106,17 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
                         country.getName() + (StringUtils.isNotBlank(country.getDisplayName()) ? " (" + country.getDisplayName() + ")" : ""));
 
                 if (billingCountry) {
-                    List<MutablePair<String, String>> allBilling = allCountries.get(Address.ADDR_TYPE_BILLING);
-                    if (allBilling == null) {
-                        allBilling = new ArrayList<MutablePair<String, String>>();
-                        allCountries.put(Address.ADDR_TYPE_BILLING, allBilling);
-                    }
+                    List<MutablePair<String, String>> allBilling = allCountries.computeIfAbsent(Address.ADDR_TYPE_BILLING, k -> new ArrayList<>());
                     allBilling.add(countryInfo);
                 }
 
                 if (shippingCountry) {
-                    List<MutablePair<String, String>> allShipping = allCountries.get(Address.ADDR_TYPE_SHIPPING);
-                    if (allShipping == null) {
-                        allShipping = new ArrayList<MutablePair<String, String>>();
-                        allCountries.put(Address.ADDR_TYPE_SHIPPING, allShipping);
-                    }
+                    List<MutablePair<String, String>> allShipping = allCountries.computeIfAbsent(Address.ADDR_TYPE_SHIPPING, k -> new ArrayList<>());
                     allShipping.add(countryInfo);
                 }
 
                 final List<State> states = stateService.findByCountry(country.getCountryCode());
-                final List<MutablePair<String, String>> countryStates = new ArrayList<MutablePair<String, String>>();
+                final List<MutablePair<String, String>> countryStates = new ArrayList<>();
                 for (final State state : states) {
                     countryStates.add(MutablePair.of(
                             state.getStateCode(),
@@ -134,14 +127,14 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
             }
         }
 
-        final List<MutablePair<String, List<MutablePair<String, String>>>> voCountries = new ArrayList<MutablePair<String, List<MutablePair<String, String>>>>();
+        final List<MutablePair<String, List<MutablePair<String, String>>>> voCountries = new ArrayList<>();
         for (final Map.Entry<String, List<MutablePair<String, String>>> countryEntry : allCountries.entrySet()) {
             voCountries.add(MutablePair.of(countryEntry.getKey(), countryEntry.getValue()));
         }
 
         addressBook.setCountries(voCountries);
 
-        final List<MutablePair<String, List<MutablePair<String, String>>>> voStates = new ArrayList<MutablePair<String, List<MutablePair<String, String>>>>();
+        final List<MutablePair<String, List<MutablePair<String, String>>>> voStates = new ArrayList<>();
         for (final Map.Entry<String, List<MutablePair<String, String>>> stateEntry : allStates.entrySet()) {
             voStates.add(MutablePair.of(stateEntry.getKey(), stateEntry.getValue()));
         }
@@ -161,7 +154,7 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
 
     protected void setFormattedAddresses(final VoAddressBook addressBook, final long customerId, final long formattingShopId, final String lang) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Pair<Long, String>> formattedOriginal = this.dtoAddressService.getFormattedAddressesByCustomerId(customerId, formattingShopId, lang);
-        final List<MutablePair<Long, String>> formatted = new ArrayList<MutablePair<Long, String>>();
+        final List<MutablePair<Long, String>> formatted = new ArrayList<>();
         for (final Pair<Long, String> formattedAddress : formattedOriginal) {
             formatted.add(MutablePair.of(formattedAddress.getFirst(), formattedAddress.getSecond()));
         }
@@ -169,7 +162,7 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
     }
 
     protected void setAddressFormFieldsConfiguration(final VoAddressBook addressBook, final long customerId, final long formattingShopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<MutablePair<String, List<VoAttrValue>>> addressForm = new ArrayList<MutablePair<String, List<VoAttrValue>>>();
+        final List<MutablePair<String, List<VoAttrValue>>> addressForm = new ArrayList<>();
         addressForm.add(
                 MutablePair.of(
                         Address.ADDR_TYPE_SHIPPING,
@@ -190,6 +183,7 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public VoAddress update(final VoAddress vo) throws Exception {
 
         AddressDTO address = vo != null ? this.dtoAddressService.getById(vo.getAddressId()) : null;
@@ -207,6 +201,7 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public VoAddress create(final VoAddress vo) throws Exception {
 
         if (vo != null && federationFacade.isManageable(vo.getCustomerId(), CustomerDTO.class)) {
@@ -226,6 +221,7 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void remove(final long id) throws Exception {
 
         final AddressDTO address = this.dtoAddressService.getById(id);

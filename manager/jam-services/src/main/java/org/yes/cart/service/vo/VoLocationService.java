@@ -32,7 +32,7 @@ public interface VoLocationService {
     /**
      * Get all vo in the system, filtered according to rights
      * @return all countries
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoCountry> getAllCountries() throws Exception;
 
@@ -41,7 +41,7 @@ public interface VoLocationService {
      *
      * @param id country id
      * @return vo
-     * @throws Exception
+     * @throws Exception errors
      */
     VoCountry getCountryById(long id) throws Exception;
 
@@ -49,7 +49,7 @@ public interface VoLocationService {
      * Create new vo
      * @param vo vo
      * @return persistent version
-     * @throws Exception
+     * @throws Exception errors
      */
     VoCountry createCountry(VoCountry vo)  throws Exception;
 
@@ -58,7 +58,7 @@ public interface VoLocationService {
      * Update vo
      * @param vo vo
      * @return persistent version
-     * @throws Exception
+     * @throws Exception errors
      */
     VoCountry updateCountry(VoCountry vo)  throws Exception;
 
@@ -67,7 +67,7 @@ public interface VoLocationService {
      * Remove vo.
      *
      * @param id country id
-     * @throws Exception
+     * @throws Exception errors
      */
     void removeCountry(long id) throws Exception;
 
@@ -76,7 +76,7 @@ public interface VoLocationService {
      * Get all vo in the system, filtered according to rights
      * @param id country id
      * @return all states by country id
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoState> getAllStates(long id) throws Exception;
 
@@ -85,7 +85,7 @@ public interface VoLocationService {
      *
      * @param id state id
      * @return vo
-     * @throws Exception
+     * @throws Exception errors
      */
     VoState getStateById(long id) throws Exception;
 
@@ -93,7 +93,7 @@ public interface VoLocationService {
      * Create new vo
      * @param vo vo
      * @return persistent version
-     * @throws Exception
+     * @throws Exception errors
      */
     VoState createState(VoState vo)  throws Exception;
 
@@ -102,7 +102,7 @@ public interface VoLocationService {
      * Update vo
      * @param vo vo
      * @return persistent version
-     * @throws Exception
+     * @throws Exception errors
      */
     VoState updateState(VoState vo)  throws Exception;
 
@@ -111,7 +111,7 @@ public interface VoLocationService {
      * Remove vo.
      *
      * @param id state id
-     * @throws Exception
+     * @throws Exception errors
      */
     void removeState(long id) throws Exception;
 

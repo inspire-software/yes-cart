@@ -59,6 +59,7 @@ public class VoPromotionServiceImpl implements VoPromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoPromotion> getFilteredPromotion(final String shopCode, final String currency, final String filter, final List<String> types, final List<String> actions, final int max) throws Exception {
 
         final List<VoPromotion> list = new ArrayList<>();
@@ -76,6 +77,7 @@ public class VoPromotionServiceImpl implements VoPromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoPromotion getPromotionById(final long id) throws Exception {
         final PromotionDTO dto = dtoPromotionService.getById(id);
         if (federationFacade.isManageable(dto.getShopCode(), ShopDTO.class)) {
@@ -88,6 +90,7 @@ public class VoPromotionServiceImpl implements VoPromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoPromotion updatePromotion(final VoPromotion vo) throws Exception {
         final PromotionDTO dto = dtoPromotionService.getById(vo.getPromotionId());
         if (dto != null && !dto.isEnabled() && federationFacade.isManageable(dto.getShopCode(), ShopDTO.class)) {
@@ -103,6 +106,7 @@ public class VoPromotionServiceImpl implements VoPromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoPromotion createPromotion(final VoPromotion vo) throws Exception {
         if (federationFacade.isManageable(vo.getShopCode(), ShopDTO.class)) {
             PromotionDTO dto = dtoPromotionService.getNew();
@@ -118,6 +122,7 @@ public class VoPromotionServiceImpl implements VoPromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removePromotion(final long id) throws Exception {
 
         getPromotionById(id); // check access
@@ -128,6 +133,7 @@ public class VoPromotionServiceImpl implements VoPromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void updateDisabledFlag(final long id, final boolean disabled) throws Exception {
 
         final PromotionDTO dto = dtoPromotionService.getById(id);
@@ -143,6 +149,7 @@ public class VoPromotionServiceImpl implements VoPromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoPromotionCoupon> getFilteredPromotionCoupons(final long promotionId, final String filter, final int max) throws Exception {
 
         getPromotionById(promotionId); // check access
@@ -155,6 +162,7 @@ public class VoPromotionServiceImpl implements VoPromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoPromotionCoupon> createPromotionCoupons(final VoPromotionCoupon vo) throws Exception {
 
         getPromotionById(vo.getPromotionId()); // check access
@@ -174,6 +182,7 @@ public class VoPromotionServiceImpl implements VoPromotionService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removePromotionCoupon(final long id) throws Exception {
 
         final PromotionCouponDTO couponDTO = dtoPromotionCouponService.getById(id);

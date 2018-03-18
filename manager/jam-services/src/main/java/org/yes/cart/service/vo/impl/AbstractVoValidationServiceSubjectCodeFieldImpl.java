@@ -42,6 +42,7 @@ public abstract class AbstractVoValidationServiceSubjectCodeFieldImpl implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoValidationResult validate(final VoValidationRequest request) {
 
         final String valueToCheck = request.getValue();

@@ -100,6 +100,7 @@ public class VoBrandServiceImpl implements VoBrandService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoBrand> getFiltered(final String filter, final int max) throws Exception {
 
         final List<VoBrand> results = new ArrayList<>();
@@ -116,6 +117,7 @@ public class VoBrandServiceImpl implements VoBrandService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoBrand getById(final long id) throws Exception {
         final BrandDTO brandDTO = dtoBrandService.getById(id);
         if (brandDTO != null && federationFacade.isCurrentUserSystemAdmin()) {
@@ -128,6 +130,7 @@ public class VoBrandServiceImpl implements VoBrandService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoBrand update(final VoBrand vo) throws Exception {
         final BrandDTO brandDTO = dtoBrandService.getById(vo.getBrandId());
         if (brandDTO != null && federationFacade.isCurrentUserSystemAdmin()) {
@@ -143,6 +146,7 @@ public class VoBrandServiceImpl implements VoBrandService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoBrand create(final VoBrand vo) throws Exception {
         if (federationFacade.isCurrentUserSystemAdmin()) {
             BrandDTO brandDTO = dtoBrandService.getNew();
@@ -158,6 +162,7 @@ public class VoBrandServiceImpl implements VoBrandService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void remove(final long id) throws Exception {
         if (federationFacade.isCurrentUserSystemAdmin()) {
             dtoBrandService.remove(id);
@@ -169,6 +174,7 @@ public class VoBrandServiceImpl implements VoBrandService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoAttrValueBrand> getBrandAttributes(final long brandId) throws Exception {
 
         return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(brandId, true);
@@ -178,6 +184,7 @@ public class VoBrandServiceImpl implements VoBrandService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoAttrValueBrand> update(final List<MutablePair<VoAttrValueBrand, Boolean>> vo) throws Exception {
 
         final long brandId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);

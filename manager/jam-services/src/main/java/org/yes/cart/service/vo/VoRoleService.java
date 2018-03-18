@@ -29,7 +29,7 @@ public interface VoRoleService {
     /**
      * Get all vo in the system, filtered according to rights
      * @return all roles
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoRole> getAllRoles() throws Exception;
 
@@ -37,7 +37,7 @@ public interface VoRoleService {
      * Create new vo
      * @param vo vo
      * @return persistent version
-     * @throws Exception
+     * @throws Exception errors
      */
     VoRole createRole(VoRole vo)  throws Exception;
 
@@ -45,7 +45,7 @@ public interface VoRoleService {
      * Update vo
      * @param vo vo
      * @return persistent version
-     * @throws Exception
+     * @throws Exception errors
      */
     VoRole updateRole(VoRole vo)  throws Exception;
 
@@ -54,7 +54,7 @@ public interface VoRoleService {
      * Remove vo.
      *
      * @param role role code
-     * @throws Exception
+     * @throws Exception errors
      */
     void removeRole(String role) throws Exception;
 }

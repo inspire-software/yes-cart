@@ -49,6 +49,7 @@ public class CategoryImpexFederationFilterImpl extends CacheableImpexFederationF
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
 
         if (!hasAccessRole()) {
@@ -56,7 +57,7 @@ public class CategoryImpexFederationFilterImpl extends CacheableImpexFederationF
         }
 
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
-        final Set<Long> manageableCategoryIds = new HashSet<Long>();
+        final Set<Long> manageableCategoryIds = new HashSet<>();
         for (final Long shopId : manageableShopIds) {
             manageableCategoryIds.addAll(shopService.getShopAllCategoriesIds(shopId));
         }

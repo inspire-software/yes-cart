@@ -67,30 +67,35 @@ public class VoAttributeServiceImpl implements VoAttributeService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoEtype> getAllEtypes() throws Exception {
         final List<EtypeDTO> etypeDTOs = dtoEtypeService.getAll();
         return voAssemblySupport.assembleVos(VoEtype.class, EtypeDTO.class, etypeDTOs);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoAttributeGroup> getAllGroups() throws Exception {
         final List<AttributeGroupDTO> groupDTOs = dtoAttributeGroupService.getAll();
         return voAssemblySupport.assembleVos(VoAttributeGroup.class, AttributeGroupDTO.class, groupDTOs);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoAttribute> getAllAttributes(final String group) throws Exception {
         final List<AttributeDTO> attributeDTOs = dtoAttributeService.findByAttributeGroupCode(group);
         return voAssemblySupport.assembleVos(VoAttribute.class, AttributeDTO.class, attributeDTOs);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoAttribute> getFilteredAttributes(final String group, final String filter, final int max) throws Exception {
         final List<AttributeDTO> attributeDTOs = dtoAttributeService.findAttributesBy(group, filter, 0, max);
         return voAssemblySupport.assembleVos(VoAttribute.class, AttributeDTO.class, attributeDTOs);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<MutablePair<Long, String>> getProductTypesByAttributeCode(final String code) throws Exception {
 
         final List<ProductTypeDTO> types = dtoProductTypeService.findByAttributeCode(code);

@@ -42,7 +42,7 @@ public interface VoAddressBookService {
      *
      * @param vo address to update
      * @return updated instance
-     * @throws Exception
+     * @throws Exception errors
      */
     VoAddress update(VoAddress vo) throws Exception;
 
@@ -51,7 +51,7 @@ public interface VoAddressBookService {
      *
      * @param vo given instance to persist
      * @return persisted instance
-     * @throws Exception
+     * @throws Exception errors
      */
     VoAddress create(VoAddress vo) throws Exception;
 
@@ -59,7 +59,7 @@ public interface VoAddressBookService {
      * Remove address by id.
      *
      * @param id address id
-     * @throws Exception
+     * @throws Exception errors
      */
     void remove(long id) throws Exception;
 

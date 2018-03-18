@@ -57,6 +57,7 @@ public class VoIOSupportImpl implements VoIOSupport {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String addFileToRepository(final String fileName,
                                       final String code,
                                       final String attributeFileCode,
@@ -81,6 +82,7 @@ public class VoIOSupportImpl implements VoIOSupport {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String addSystemFileToRepository(final String fileName,
                                             final String code,
                                             final String attributeFileCode,
@@ -102,6 +104,7 @@ public class VoIOSupportImpl implements VoIOSupport {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String addImageToRepository(final String fileName,
                                        final String code,
                                        final String attributeImageCode,
@@ -201,6 +204,7 @@ public class VoIOSupportImpl implements VoIOSupport {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getImageAsBase64(final String fileName,
                                    final String code,
                                    final String storagePrefix) {

@@ -38,7 +38,7 @@ public interface VoPaymentService {
      *
      * @return orders
      *
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoPayment> getFiltered(String filter, List<String> operations, List<String> statuses, int max) throws Exception;
 

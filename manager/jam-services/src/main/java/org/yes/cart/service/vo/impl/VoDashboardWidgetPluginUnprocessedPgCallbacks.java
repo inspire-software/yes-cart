@@ -82,21 +82,16 @@ public class VoDashboardWidgetPluginUnprocessedPgCallbacks implements VoDashboar
         );
         for (final PaymentGatewayCallback callback : callbacks) {
 
-            final Integer count = counts.get(callback.getLabel());
-            if (count == null) {
-                counts.put(callback.getLabel(), 1);
-            } else {
-                counts.put(callback.getLabel(), count + 1);
-            }
+            counts.merge(callback.getLabel(), 1, (a, b) -> a + b);
 
         }
 
         final List<MutablePair<String, Integer>> data = new ArrayList<>();
         if (counts.isEmpty()) {
-            data.add(new MutablePair<String, Integer>("-", 0));
+            data.add(new MutablePair<>("-", 0));
         } else {
             for (final Map.Entry<String, Integer> entry : counts.entrySet()) {
-                data.add(new MutablePair<String, Integer>(entry.getKey(), entry.getValue()));
+                data.add(new MutablePair<>(entry.getKey(), entry.getValue()));
             }
         }
 

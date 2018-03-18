@@ -46,6 +46,7 @@ public class CarrierUiFederationFilterImpl implements FederationFilter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void applyFederationFilter(final Collection list, final Class objectType) {
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
         final Iterator<CarrierDTO> carriersIt = list.iterator();
@@ -75,6 +76,7 @@ public class CarrierUiFederationFilterImpl implements FederationFilter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
         try {

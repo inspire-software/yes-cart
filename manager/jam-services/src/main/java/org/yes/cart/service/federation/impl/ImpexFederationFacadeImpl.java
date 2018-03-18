@@ -45,6 +45,7 @@ public class ImpexFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCurrentUserSystemAdmin() {
         return shopFederationStrategy.isCurrentUserSystemAdmin();
     }
@@ -52,6 +53,7 @@ public class ImpexFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCurrentUser(final String role) {
         return shopFederationStrategy.isCurrentUser(role);
     }
@@ -59,6 +61,7 @@ public class ImpexFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isShopAccessibleByCurrentManager(final String shopCode) {
         return shopFederationStrategy.isShopAccessibleByCurrentManager(shopCode);
     }
@@ -66,6 +69,7 @@ public class ImpexFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isShopAccessibleByCurrentManager(final Long shopId) {
         return shopFederationStrategy.isShopAccessibleByCurrentManager(shopId);
     }
@@ -73,6 +77,7 @@ public class ImpexFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
         return shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
     }
@@ -80,6 +85,7 @@ public class ImpexFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getAccessibleShopCodesByCurrentManager() {
         return shopFederationStrategy.getAccessibleShopCodesByCurrentManager();
     }
@@ -87,6 +93,7 @@ public class ImpexFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ShopDTO> getAccessibleShopsByCurrentManager() {
         return shopFederationStrategy.getAccessibleShopsByCurrentManager();
     }
@@ -94,6 +101,7 @@ public class ImpexFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void applyFederationFilter(final Collection list, final Class objectType) {
         throw new UnsupportedOperationException("Import can only work with individual objects");
     }
@@ -101,6 +109,7 @@ public class ImpexFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
         if (shopFederationStrategy.isCurrentUserSystemAdmin()) {
             return true;

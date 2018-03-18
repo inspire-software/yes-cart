@@ -38,6 +38,7 @@ public class VoValidationServiceImpl implements VoValidationService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoValidationResult validate(final VoValidationRequest request) {
 
         final String subject = request.getSubject();

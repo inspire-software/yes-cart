@@ -19,7 +19,6 @@ package org.yes.cart.service.vo;
 import org.yes.cart.domain.vo.VoLicenseAgreement;
 import org.yes.cart.domain.vo.VoManager;
 import org.yes.cart.domain.vo.VoManagerInfo;
-import org.yes.cart.domain.vo.VoRole;
 
 import java.util.List;
 
@@ -33,28 +32,28 @@ public interface VoManagementService {
     /**
      * Get information about current user
      * @return manager vo
-     * @throws Exception
+     * @throws Exception errors
      */
     VoManager getMyself() throws Exception;
 
     /**
      * Get license for current user
      * @return license vo
-     * @throws Exception
+     * @throws Exception errors
      */
     VoLicenseAgreement getMyAgreement() throws Exception;
 
     /**
      * Accept license for current user.
      * @return license vo
-     * @throws Exception
+     * @throws Exception errors
      */
     VoLicenseAgreement acceptMyAgreement() throws Exception;
 
     /**
      * Get all vo in the system, filtered according to rights
      * @return all managers
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoManagerInfo> getManagers() throws Exception;
 
@@ -63,7 +62,7 @@ public interface VoManagementService {
      *
      * @param email email
      * @return vo
-     * @throws Exception
+     * @throws Exception errors
      */
     VoManager getByEmail(String email) throws Exception;
 
@@ -71,7 +70,7 @@ public interface VoManagementService {
      * Create new vo
      * @param voManager vo
      * @return persistent version
-     * @throws Exception
+     * @throws Exception errors
      */
     VoManager createManager(VoManager voManager) throws Exception;
 
@@ -79,21 +78,21 @@ public interface VoManagementService {
      * Update vo
      * @param voManager vo
      * @return persistent version
-     * @throws Exception
+     * @throws Exception errors
      */
     VoManager updateManager(VoManager voManager) throws Exception;
 
     /**
      * Remove vo.
      * @param managerEmail manager email
-     * @throws Exception
+     * @throws Exception errors
      */
     void deleteManager(String managerEmail) throws Exception;
 
     /**
      * Reset password to given vo.
      * @param email manager email
-     * @throws Exception
+     * @throws Exception errors
      */
     void resetPassword(String email) throws Exception;
 
@@ -102,7 +101,7 @@ public interface VoManagementService {
      *
      * @param manager manager user name
      * @param disabled true if manager account is disabled
-     * @throws Exception
+     * @throws Exception errors
      */
     void updateDisabledFlag(String manager, boolean disabled) throws Exception;
 

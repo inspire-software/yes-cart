@@ -30,7 +30,7 @@ public interface VoCategoryService {
     /**
      * Get all categories in the system, filtered according to rights
      * @return list of categories
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoCategory> getAll() throws Exception;
 
@@ -40,7 +40,7 @@ public interface VoCategoryService {
      * @param categoryId branch to determine path for
      * @param expanded ids with paths to expand (must be full top-down paths)
      * @return list of categories
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoCategory> getBranch(long categoryId, List<Long> expanded) throws Exception;
 
@@ -49,7 +49,7 @@ public interface VoCategoryService {
      *
      * @param categoryId branch to determine path for
      * @return path to given category (full top-down path)
-     * @throws Exception
+     * @throws Exception errors
      */
     List<Long> getBranchPaths(long categoryId) throws Exception;
 
@@ -58,14 +58,14 @@ public interface VoCategoryService {
      *
      * @param categoryIds branches to determine path for
      * @return path to given category (full top-down paths)
-     * @throws Exception
+     * @throws Exception errors
      */
     List<Long> getBranchesPaths(List<Long> categoryIds) throws Exception;
 
     /**
      * Get all categories in the system, filtered by criteria and according to rights, up to max
      * @return list of categories
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoCategory> getFiltered(String filter, int max) throws Exception;
 
@@ -74,7 +74,7 @@ public interface VoCategoryService {
      *
      * @param id pk
      * @return category vo
-     * @throws Exception
+     * @throws Exception errors
      */
     VoCategory getById(long id) throws Exception;
 
@@ -82,7 +82,7 @@ public interface VoCategoryService {
      * Update category.
      * @param voCategory category
      * @return persistent version
-     * @throws Exception
+     * @throws Exception errors
      */
     VoCategory update(VoCategory voCategory)  throws Exception;
 
@@ -90,7 +90,7 @@ public interface VoCategoryService {
      * Create new category.
      * @param voCategory category
      * @return persistent version
-     * @throws Exception
+     * @throws Exception errors
      */
     VoCategory create(VoCategory voCategory)  throws Exception;
 
@@ -98,7 +98,7 @@ public interface VoCategoryService {
      * Remove category by id.
      *
      * @param id category
-     * @throws Exception
+     * @throws Exception errors
      */
     void remove(long id) throws Exception;
 
@@ -107,7 +107,7 @@ public interface VoCategoryService {
      * Get supported attributes by given category
      * @param categoryId given category id
      * @return attributes
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoAttrValueCategory> getCategoryAttributes(long categoryId) throws Exception;
 
@@ -117,7 +117,7 @@ public interface VoCategoryService {
      *
      * @param vo category attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
      * @return category attributes.
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoAttrValueCategory> update(List<MutablePair<VoAttrValueCategory, Boolean>> vo) throws Exception;
 

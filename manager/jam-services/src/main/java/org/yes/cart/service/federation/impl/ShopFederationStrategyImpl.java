@@ -57,6 +57,7 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCurrentUserSystemAdmin() {
         return isCurrentUser("ROLE_SMADMIN");
     }
@@ -64,6 +65,7 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCurrentUser(final String role) {
         if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null) {
             return false;
@@ -87,6 +89,7 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isShopAccessibleByCurrentManager(final String shopCode) {
         if (isCurrentUserSystemAdmin()) {
             return true;
@@ -98,6 +101,7 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isShopAccessibleByCurrentManager(final Long shopId) {
         if (isCurrentUserSystemAdmin()) {
             return true;
@@ -109,6 +113,7 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
         if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null) {
             return Collections.emptySet();
@@ -118,7 +123,7 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
         if (currentAssignedIds == null) {
             try {
                 final List<ShopDTO> currentAssigned = getAccessibleShopsByCurrentManager();
-                final Set<Long> tmpCurrentAssignedIds = new HashSet<Long>();
+                final Set<Long> tmpCurrentAssignedIds = new HashSet<>();
                 for (final ShopDTO shop : currentAssigned) {
                     tmpCurrentAssignedIds.add(shop.getShopId());
                 }
@@ -133,6 +138,7 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getAccessibleShopCodesByCurrentManager() {
         if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null) {
             return Collections.emptySet();
@@ -142,7 +148,7 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
         if (currentAssignedCodes == null) {
             try {
                 final List<ShopDTO> currentAssigned = getAccessibleShopsByCurrentManager();
-                final Set<String> tmpCurrentAssignedCodes = new HashSet<String>();
+                final Set<String> tmpCurrentAssignedCodes = new HashSet<>();
                 for (final ShopDTO shop : currentAssigned) {
                     tmpCurrentAssignedCodes.add(shop.getCode());
                 }
@@ -158,6 +164,7 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ShopDTO> getAccessibleShopsByCurrentManager() {
 
         final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -184,6 +191,7 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isEmployeeManageableByCurrentManager(final String employeeId) {
 
         final List<ShopDTO> employeeShops = getAccessibleShopsByManager(employeeId);

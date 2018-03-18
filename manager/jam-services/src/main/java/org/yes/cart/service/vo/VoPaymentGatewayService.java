@@ -19,7 +19,6 @@ package org.yes.cart.service.vo;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -56,7 +55,7 @@ public interface VoPaymentGatewayService {
      * @param shopCode given shop
      * @param lang locale for localised names
      *
-     * @throws Exception
+     * @throws Exception errors
      */
     void fillShopSummaryDetails(VoShopSummary summary, String shopCode, String lang) throws Exception;
 
@@ -136,7 +135,7 @@ public interface VoPaymentGatewayService {
      * @param vo PG attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
      * @param includeSecure include secure attributes (false to filter out)
      * @return PG attributes.
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoPaymentGatewayParameter> update(String pgLabel, List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo, boolean includeSecure) throws Exception;
 
@@ -148,7 +147,7 @@ public interface VoPaymentGatewayService {
      * @param vo PG attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
      * @param includeSecure include secure attributes (false to filter out)
      * @return PG attributes.
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoPaymentGatewayParameter> update(String shopCode, String pgLabel, List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo, boolean includeSecure) throws Exception;
 
@@ -158,7 +157,7 @@ public interface VoPaymentGatewayService {
      *
      * @param pgLabel PG label
      * @param disabled true if shop is disabled
-     * @throws Exception
+     * @throws Exception errors
      */
     void updateDisabledFlag(String pgLabel, boolean disabled) throws Exception;
 
@@ -168,7 +167,7 @@ public interface VoPaymentGatewayService {
      * @param shopCode shop code for which to set flag
      * @param pgLabel PG label
      * @param disabled true if shop is disabled
-     * @throws Exception
+     * @throws Exception errors
      */
     void updateDisabledFlag(String shopCode, String pgLabel, boolean disabled) throws Exception;
 

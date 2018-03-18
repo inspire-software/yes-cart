@@ -18,7 +18,6 @@ package org.yes.cart.service.vo.impl;
 
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
-import org.yes.cart.domain.vo.VoManagerInfo;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
 import org.yes.cart.service.vo.VoDashboardWidgetService;
 import org.yes.cart.service.vo.VoManagementService;

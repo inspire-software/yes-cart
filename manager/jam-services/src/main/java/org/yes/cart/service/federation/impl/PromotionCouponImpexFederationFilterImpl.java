@@ -41,6 +41,7 @@ public class PromotionCouponImpexFederationFilterImpl extends AbstractImpexFeder
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
 
         if (!hasAccessRole()) {

@@ -125,7 +125,7 @@ public class VoMailServiceImpl implements VoMailService {
             }
         }
 
-        final HashMap<String, Object> emailModel = new HashMap<String, Object>();
+        final HashMap<String, Object> emailModel = new HashMap<>();
         final Shop configShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
 
         if (template.contains("payment") || template.contains("shipment-complete")) {
@@ -225,7 +225,7 @@ public class VoMailServiceImpl implements VoMailService {
             for (final CustomerOrderDet det : customerOrder.getOrderDetail()) {
                 final ProductSku sku = productSkuService.getProductSkuBySkuCode(det.getProductSkuCode());
                 if (sku != null) {
-                    params = Collections.<String, Object>singletonMap("sku", sku);
+                    params = Collections.singletonMap("sku", sku);
                     break;
                 }
             }
@@ -275,7 +275,7 @@ public class VoMailServiceImpl implements VoMailService {
      */
     private void enrichMapWithProducts(final Map<String, Object> map, final CustomerOrder customerOrder) {
 
-        final Map<String, ProductSku> products = new HashMap<String, ProductSku>();
+        final Map<String, ProductSku> products = new HashMap<>();
 
         for (final CustomerOrderDet orderDet : customerOrder.getOrderDetail()) {
 

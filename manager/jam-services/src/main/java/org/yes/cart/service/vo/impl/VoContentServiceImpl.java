@@ -112,16 +112,12 @@ public class VoContentServiceImpl implements VoContentService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoContent> getBranch(final long shopId, final long contentId, final List<Long> expanded) throws Exception {
         if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
             final List<CategoryDTO> categoryDTOs = dtoContentService.getBranchById(shopId, contentId, expanded);
-            final List<VoContent> vos = new ArrayList<VoContent>();
-            final Iterator<CategoryDTO> categoryDTOit = categoryDTOs.iterator();
-            while (categoryDTOit.hasNext()) {
-                if (!federationFacade.isManageable(categoryDTOit.next().getCategoryId(), CategoryDTO.class)) {
-                    categoryDTOit.remove();
-                }
-            }
+            final List<VoContent> vos = new ArrayList<>();
+            categoryDTOs.removeIf(categoryDTO -> !federationFacade.isManageable(categoryDTO.getCategoryId(), CategoryDTO.class));
             adaptCategories(categoryDTOs, vos);
             return vos;
         }
@@ -129,8 +125,9 @@ public class VoContentServiceImpl implements VoContentService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Long> getBranchPaths(final long shopId, final long contentId) throws Exception {
-        final List<Long> path = new ArrayList<Long>();
+        final List<Long> path = new ArrayList<>();
         if (federationFacade.isShopAccessibleByCurrentManager(shopId) && federationFacade.isManageable(contentId, CategoryDTO.class)) {
 
             path.add(contentId);
@@ -145,8 +142,9 @@ public class VoContentServiceImpl implements VoContentService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Long> getBranchesPaths(final long shopId, final List<Long> contentIds) throws Exception {
-        final List<Long> path = new ArrayList<Long>();
+        final List<Long> path = new ArrayList<>();
         if (contentIds != null) {
             for (final Long categoryId : contentIds) {
                 path.addAll(getBranchPaths(shopId, categoryId));
@@ -166,13 +164,14 @@ public class VoContentServiceImpl implements VoContentService {
                     voAssemblySupport.assembleVo(VoContent.class, CategoryDTO.class, new VoContent(), dto);
             voContent.add(voCategory);
             if (dto.getChildren() != null) {
-                voCategory.setChildren(new ArrayList<VoContent>(dto.getChildren().size()));
+                voCategory.setChildren(new ArrayList<>(dto.getChildren().size()));
                 adaptCategories(dto.getChildren(), voCategory.getChildren());
             }
         }
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoContent> getFiltered(final long shopId, final String filter, final int max) throws Exception {
         if (federationFacade.isManageable(shopId, ShopDTO.class)){
 
@@ -206,6 +205,7 @@ public class VoContentServiceImpl implements VoContentService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public VoContentWithBody getById(final long id) throws Exception {
         final CategoryDTO content = dtoContentService.getById(id);
         if (content != null && federationFacade.isManageable(id, CategoryDTO.class)){
@@ -221,6 +221,7 @@ public class VoContentServiceImpl implements VoContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoContentWithBody update(final VoContentWithBody vo) throws Exception {
         final CategoryDTO categoryDTO = dtoContentService.getById(vo.getContentId());
         final long categoryId = categoryDTO != null && categoryDTO.getParentId() == vo.getParentId() ? vo.getContentId() : vo.getParentId();
@@ -236,6 +237,7 @@ public class VoContentServiceImpl implements VoContentService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public VoContentWithBody create(final VoContent voContent) throws Exception {
         final CategoryDTO categoryDTO = dtoContentService.getNew();
         if (voContent != null && federationFacade.isManageable(voContent.getParentId(), CategoryDTO.class)){
@@ -258,6 +260,7 @@ public class VoContentServiceImpl implements VoContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void remove(final long id) throws Exception {
         if (federationFacade.isManageable(id, CategoryDTO.class)) {
             dtoContentService.remove(id);
@@ -269,6 +272,7 @@ public class VoContentServiceImpl implements VoContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoAttrValueContent> getContentAttributes(final long contentId) throws Exception {
 
         return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(contentId, true);
@@ -278,6 +282,7 @@ public class VoContentServiceImpl implements VoContentService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoAttrValueContent> update(final List<MutablePair<VoAttrValueContent, Boolean>> vo) throws Exception {
 
         final long contentId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);
@@ -285,12 +290,7 @@ public class VoContentServiceImpl implements VoContentService {
         return getContentAttributes(contentId);
     }
 
-    private Comparator<VoContentBody> SORT_BY_LANG = new Comparator<VoContentBody>() {
-        @Override
-        public int compare(final VoContentBody o1, final VoContentBody o2) {
-            return o1.getLang().compareTo(o2.getLang());
-        }
-    };
+    private Comparator<VoContentBody> SORT_BY_LANG = (o1, o2) -> o1.getLang().compareTo(o2.getLang());
 
     @Override
     public List<VoContentBody> getContentBody(final long contentId) throws Exception {
@@ -306,7 +306,7 @@ public class VoContentServiceImpl implements VoContentService {
                 body.setText(ensureDynamicContentIsVisible(attr.getVal()));
                 bodies.add(body);
             }
-            Collections.sort(bodies, SORT_BY_LANG);
+            bodies.sort(SORT_BY_LANG);
             return bodies;
 
         } else {

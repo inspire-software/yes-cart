@@ -36,7 +36,6 @@ import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoCustomerOrderService;
 import org.yes.cart.util.MoneyUtils;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -195,13 +194,7 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
     }
 
     private void removeOrderDetails(final VoCustomerOrderInfo vo, final String displayValue) {
-        final Iterator<MutablePair<String, MutablePair<String, String>>> it = vo.getAllValues().iterator();
-        while (it.hasNext()) {
-            final MutablePair<String, MutablePair<String, String>> next = it.next();
-            if (displayValue.equals(next.getSecond().getSecond())) {
-                it.remove();
-            }
-        }
+        vo.getAllValues().removeIf(next -> displayValue.equals(next.getSecond().getSecond()));
     }
 
     private void removeAllDetails(final VoCustomerOrder vo, final String displayValue) {
@@ -215,13 +208,7 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
     }
 
     private void removeLineDetails(final VoCustomerOrderLine vo, final String displayValue) {
-        final Iterator<MutablePair<String, MutablePair<String, String>>> it = vo.getAllValues().iterator();
-        while (it.hasNext()) {
-            final MutablePair<String, MutablePair<String, String>> next = it.next();
-            if (displayValue.equals(next.getSecond().getSecond())) {
-                it.remove();
-            }
-        }
+        vo.getAllValues().removeIf(next -> displayValue.equals(next.getSecond().getSecond()));
     }
 
     private List<String> determineOrderStatusNextOptions(final VoCustomerOrderInfo vo) {

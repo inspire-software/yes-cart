@@ -55,6 +55,7 @@ public class VoProductTypeServiceImpl implements VoProductTypeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoProductTypeInfo> getFiltered(final String filter, final int max) throws Exception {
 
         final List<VoProductTypeInfo> results = new ArrayList<>();
@@ -70,6 +71,7 @@ public class VoProductTypeServiceImpl implements VoProductTypeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoProductType getById(final long id) throws Exception {
         final ProductTypeDTO typeDTO = dtoProductTypeService.getById(id);
         if (typeDTO != null /* && federationFacade.isCurrentUserSystemAdmin() */) {
@@ -86,6 +88,7 @@ public class VoProductTypeServiceImpl implements VoProductTypeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoProductType update(final VoProductType vo) throws Exception {
         final ProductTypeDTO typeDTO = dtoProductTypeService.getById(vo.getProducttypeId());
         if (typeDTO != null && federationFacade.isCurrentUserSystemAdmin()) {
@@ -136,6 +139,7 @@ public class VoProductTypeServiceImpl implements VoProductTypeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoProductType create(final VoProductTypeInfo vo) throws Exception {
         if (federationFacade.isCurrentUserSystemAdmin()) {
             ProductTypeDTO typeDTO = dtoProductTypeService.getNew();
@@ -151,6 +155,7 @@ public class VoProductTypeServiceImpl implements VoProductTypeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void remove(final long id) throws Exception {
         if (federationFacade.isCurrentUserSystemAdmin()) {
             dtoProductTypeService.remove(id);
@@ -163,6 +168,7 @@ public class VoProductTypeServiceImpl implements VoProductTypeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoProductTypeAttr> getTypeAttributes(final long typeId) throws Exception {
 
         final List<ProductTypeAttrDTO> attributes = dtoProductTypeAttrService.getByProductTypeId(typeId);
@@ -175,6 +181,7 @@ public class VoProductTypeServiceImpl implements VoProductTypeService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoProductTypeAttr> update(final List<MutablePair<VoProductTypeAttr, Boolean>> vo) throws Exception {
 
         long typeId = 0L;
@@ -226,7 +233,7 @@ public class VoProductTypeServiceImpl implements VoProductTypeService {
     }
 
     private Map<Long, ProductTypeAttrDTO> mapAvById(final List<ProductTypeAttrDTO> entityAttributes) {
-        Map<Long, ProductTypeAttrDTO> map = new HashMap<Long, ProductTypeAttrDTO>();
+        Map<Long, ProductTypeAttrDTO> map = new HashMap<>();
         for (final ProductTypeAttrDTO dto : entityAttributes) {
             map.put(dto.getProductTypeAttrId(), dto);
         }

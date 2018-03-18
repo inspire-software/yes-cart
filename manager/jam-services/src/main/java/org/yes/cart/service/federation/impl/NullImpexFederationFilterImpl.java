@@ -30,6 +30,7 @@ public class NullImpexFederationFilterImpl extends AbstractImpexFederationFilter
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
         return true;
     }

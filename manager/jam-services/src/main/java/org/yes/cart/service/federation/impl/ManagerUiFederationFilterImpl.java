@@ -43,6 +43,7 @@ public class ManagerUiFederationFilterImpl implements FederationFilter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void applyFederationFilter(final Collection list, final Class objectType) {
         final Iterator<ManagerDTO> managersIt = list.iterator();
         while (managersIt.hasNext()) {
@@ -63,6 +64,7 @@ public class ManagerUiFederationFilterImpl implements FederationFilter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
         try {
             return shopFederationStrategy.isEmployeeManageableByCurrentManager((String) object);

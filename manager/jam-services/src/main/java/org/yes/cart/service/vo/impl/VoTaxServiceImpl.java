@@ -58,6 +58,7 @@ public class VoTaxServiceImpl implements VoTaxService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoTax> getFilteredTax(final String shopCode, final String currency, final String filter, final int max) throws Exception {
 
         final List<VoTax> list = new ArrayList<>();
@@ -75,6 +76,7 @@ public class VoTaxServiceImpl implements VoTaxService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoTax getTaxById(final long id) throws Exception {
         final TaxDTO dto = dtoTaxService.getById(id);
         if (federationFacade.isManageable(dto.getShopCode(), ShopDTO.class)) {
@@ -87,6 +89,7 @@ public class VoTaxServiceImpl implements VoTaxService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoTax updateTax(final VoTax vo) throws Exception {
         final TaxDTO dto = dtoTaxService.getById(vo.getTaxId());
         if (dto != null && federationFacade.isManageable(dto.getShopCode(), ShopDTO.class)) {
@@ -102,6 +105,7 @@ public class VoTaxServiceImpl implements VoTaxService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoTax createTax(final VoTax vo) throws Exception {
         if (federationFacade.isManageable(vo.getShopCode(), ShopDTO.class)) {
             TaxDTO dto = dtoTaxService.getNew();
@@ -117,6 +121,7 @@ public class VoTaxServiceImpl implements VoTaxService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeTax(final long id) throws Exception {
 
         getTaxById(id); // check access
@@ -127,6 +132,7 @@ public class VoTaxServiceImpl implements VoTaxService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoTaxConfig> getFilteredTaxConfig(final long taxId, final String filter, final int max) throws Exception {
 
         getTaxById(taxId); // check access
@@ -139,6 +145,7 @@ public class VoTaxServiceImpl implements VoTaxService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoTaxConfig getTaxConfigById(final long id) throws Exception {
 
         final TaxConfigDTO dto = dtoTaxConfigService.getById(id);
@@ -153,6 +160,7 @@ public class VoTaxServiceImpl implements VoTaxService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoTaxConfig createTaxConfig(final VoTaxConfig vo) throws Exception {
 
         getTaxById(vo.getTaxId()); // check access
@@ -168,6 +176,7 @@ public class VoTaxServiceImpl implements VoTaxService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeTaxConfig(final long id) throws Exception {
 
         getTaxConfigById(id); // check access

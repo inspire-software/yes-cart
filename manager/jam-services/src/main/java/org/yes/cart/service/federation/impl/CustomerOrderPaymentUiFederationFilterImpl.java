@@ -40,6 +40,7 @@ public class CustomerOrderPaymentUiFederationFilterImpl implements FederationFil
     /**
      * {@inheritDoc}
      */
+    @Override
     public void applyFederationFilter(final Collection list, final Class objectType) {
         final Set<String> manageableShopCodes = shopFederationStrategy.getAccessibleShopCodesByCurrentManager();
         final Iterator<CustomerOrderPayment> paymentIt = list.iterator();
@@ -54,6 +55,7 @@ public class CustomerOrderPaymentUiFederationFilterImpl implements FederationFil
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
         final Set<String> manageableShopCodes = shopFederationStrategy.getAccessibleShopCodesByCurrentManager();
         return manageableShopCodes.contains(object);

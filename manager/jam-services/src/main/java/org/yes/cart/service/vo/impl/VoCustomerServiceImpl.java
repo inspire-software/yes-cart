@@ -110,6 +110,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoCustomerInfo> getFiltered(final String filter, final int max) throws Exception {
 
         final List<VoCustomerInfo> results = new ArrayList<>();
@@ -133,6 +134,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoCustomer getById(final long id) throws Exception {
         if (federationFacade.isManageable(id, CustomerDTO.class)) {
             final CustomerDTO customerDTO = dtoCustomerService.getById(id);
@@ -167,7 +169,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
 
 
     protected Map<String, VoAttrValueCustomer> getStringVoAttrValueCustomerMap(final List<VoAttrValueCustomer> attrs) throws Exception {
-        final Map<String, VoAttrValueCustomer> attrsMap = new HashMap<String, VoAttrValueCustomer>(attrs.size() * 2);
+        final Map<String, VoAttrValueCustomer> attrsMap = new HashMap<>(attrs.size() * 2);
         for (final VoAttrValueCustomer attr : attrs) {
             attrsMap.put(attr.getAttribute().getCode(), attr);
         }
@@ -183,6 +185,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoCustomer update(final VoCustomer vo) throws Exception {
 
         if (federationFacade.isManageable(vo.getCustomerId(), CustomerDTO.class)) {
@@ -233,6 +236,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoCustomer create(final VoCustomer vo) throws Exception {
 
         final List<CustomerDTO> existing = dtoCustomerService.findCustomer(vo.getEmail());
@@ -287,6 +291,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void remove(final long id) throws Exception {
         if (federationFacade.isCurrentUserSystemAdmin()) {
             dtoCustomerService.remove(id);
@@ -298,6 +303,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoAttrValueCustomer> getCustomerAttributes(final long customerId) throws Exception {
 
         return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(customerId, true);
@@ -307,6 +313,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoAttrValueCustomer> update(final List<MutablePair<VoAttrValueCustomer, Boolean>> vo) throws Exception {
 
         final long customerId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);

@@ -40,6 +40,7 @@ public class PromotionUiFederationFilterImpl implements FederationFilter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void applyFederationFilter(final Collection list, final Class objectType) {
         final Set<String> manageableShopIds = shopFederationStrategy.getAccessibleShopCodesByCurrentManager();
 
@@ -55,6 +56,7 @@ public class PromotionUiFederationFilterImpl implements FederationFilter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
         throw new UnsupportedOperationException("Use shop filter and promo.shopCode instead");
     }

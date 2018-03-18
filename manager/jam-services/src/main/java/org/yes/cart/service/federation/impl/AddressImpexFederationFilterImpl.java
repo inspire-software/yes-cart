@@ -42,6 +42,7 @@ public class AddressImpexFederationFilterImpl extends AbstractImpexFederationFil
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
 
         if (!hasAccessRole()) {

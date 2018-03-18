@@ -30,7 +30,7 @@ public interface VoMailService {
      * @param delivery delivery number
      * @param customer customer number
      * @return HTML email with inlined resources
-     * @throws Exception
+     * @throws Exception errors
      */
     String getShopMail(long shopId, String template, String order, String delivery, String customer) throws Exception;
 

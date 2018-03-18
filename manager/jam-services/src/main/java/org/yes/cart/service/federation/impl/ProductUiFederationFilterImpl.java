@@ -50,10 +50,11 @@ public class ProductUiFederationFilterImpl implements FederationFilter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void applyFederationFilter(final Collection list, final Class objectType) {
 
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
-        final Set<Long> manageableCategoryIds = new HashSet<Long>();
+        final Set<Long> manageableCategoryIds = new HashSet<>();
         for (final Long shopId : manageableShopIds) {
             manageableCategoryIds.addAll(shopService.getShopAllCategoriesIds(shopId));
         }
@@ -77,10 +78,11 @@ public class ProductUiFederationFilterImpl implements FederationFilter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
 
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
-        final Set<Long> manageableCategoryIds = new HashSet<Long>();
+        final Set<Long> manageableCategoryIds = new HashSet<>();
         for (final Long shopId : manageableShopIds) {
             manageableCategoryIds.addAll(shopService.getShopAllCategoriesIds(shopId));
         }

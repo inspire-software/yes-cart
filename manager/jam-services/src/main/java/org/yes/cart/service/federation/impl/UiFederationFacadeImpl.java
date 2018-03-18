@@ -45,6 +45,7 @@ public class UiFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCurrentUserSystemAdmin() {
         return shopFederationStrategy.isCurrentUserSystemAdmin();
     }
@@ -52,6 +53,7 @@ public class UiFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCurrentUser(final String role) {
         return shopFederationStrategy.isCurrentUser(role);
     }
@@ -59,6 +61,7 @@ public class UiFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isShopAccessibleByCurrentManager(final String shopCode) {
         return shopFederationStrategy.isShopAccessibleByCurrentManager(shopCode);
     }
@@ -67,6 +70,7 @@ public class UiFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isShopAccessibleByCurrentManager(final Long shopId) {
         return shopFederationStrategy.isShopAccessibleByCurrentManager(shopId);
     }
@@ -75,6 +79,7 @@ public class UiFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
         return shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
     }
@@ -82,6 +87,7 @@ public class UiFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> getAccessibleShopCodesByCurrentManager() {
         return shopFederationStrategy.getAccessibleShopCodesByCurrentManager();
     }
@@ -89,6 +95,7 @@ public class UiFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<ShopDTO> getAccessibleShopsByCurrentManager() {
         return shopFederationStrategy.getAccessibleShopsByCurrentManager();
     }
@@ -96,6 +103,7 @@ public class UiFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void applyFederationFilter(final Collection list, final Class objectType) {
         if (shopFederationStrategy.isCurrentUserSystemAdmin()) {
             return;
@@ -110,6 +118,7 @@ public class UiFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
         if (shopFederationStrategy.isCurrentUserSystemAdmin()) {
             return true;

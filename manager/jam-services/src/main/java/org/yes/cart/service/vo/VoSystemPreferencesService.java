@@ -34,7 +34,7 @@ public interface VoSystemPreferencesService {
      * @param includeSecure include secure attributes
      *
      * @return attributes
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoAttrValueSystem> getSystemPreferences(boolean includeSecure) throws Exception;
 
@@ -46,7 +46,7 @@ public interface VoSystemPreferencesService {
      * @param includeSecure include secure attributes
      *
      * @return shop attributes.
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoAttrValueSystem> update(List<MutablePair<VoAttrValueSystem, Boolean>> vo, boolean includeSecure) throws Exception;
 

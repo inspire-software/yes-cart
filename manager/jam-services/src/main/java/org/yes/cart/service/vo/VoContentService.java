@@ -29,7 +29,7 @@ public interface VoContentService {
     /**
      * Get all categories in the system, filtered according to rights
      * @return list of categories
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoContent> getAll(long shopId) throws Exception;
 
@@ -39,7 +39,7 @@ public interface VoContentService {
      * @param contentId branch to determine path for
      * @param expanded ids with paths to expand (must be full top-down paths)
      * @return list of content
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoContent> getBranch(long shopId, long contentId, List<Long> expanded) throws Exception;
 
@@ -48,7 +48,7 @@ public interface VoContentService {
      *
      * @param contentId branch to determine path for
      * @return path to given category (full top-down path)
-     * @throws Exception
+     * @throws Exception errors
      */
     List<Long> getBranchPaths(long shopId, long contentId) throws Exception;
 
@@ -57,14 +57,14 @@ public interface VoContentService {
      *
      * @param contentIds branches to determine path for
      * @return path to given category (full top-down paths)
-     * @throws Exception
+     * @throws Exception errors
      */
     List<Long> getBranchesPaths(long shopId, List<Long> contentIds) throws Exception;
 
     /**
      * Get all categories in the system, filtered by criteria and according to rights, up to max
      * @return list of categories
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoContent> getFiltered(long shopId, String filter, int max) throws Exception;
 
@@ -75,7 +75,7 @@ public interface VoContentService {
      * @param shopId given shop
      * @param lang locale for localised names
      *
-     * @throws Exception
+     * @throws Exception errors
      */
     void fillShopSummaryDetails(VoShopSummary summary, long shopId, String lang) throws Exception;
 
@@ -85,7 +85,7 @@ public interface VoContentService {
      *
      * @param id pk
      * @return content vo
-     * @throws Exception
+     * @throws Exception errors
      */
     VoContentWithBody getById(long id) throws Exception;
 
@@ -93,7 +93,7 @@ public interface VoContentService {
      * Update content.
      * @param voContent content
      * @return persistent version
-     * @throws Exception
+     * @throws Exception errors
      */
     VoContentWithBody update(VoContentWithBody voContent)  throws Exception;
 
@@ -101,7 +101,7 @@ public interface VoContentService {
      * Create new content.
      * @param voContent content
      * @return persistent version
-     * @throws Exception
+     * @throws Exception errors
      */
     VoContentWithBody create(VoContent voContent)  throws Exception;
 
@@ -109,7 +109,7 @@ public interface VoContentService {
      * Remove content by id.
      *
      * @param id content
-     * @throws Exception
+     * @throws Exception errors
      */
     void remove(long id) throws Exception;
 
@@ -118,7 +118,7 @@ public interface VoContentService {
      * Get supported attributes by given content
      * @param contentId given content id
      * @return attributes
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoAttrValueContent> getContentAttributes(long contentId) throws Exception;
 
@@ -128,7 +128,7 @@ public interface VoContentService {
      *
      * @param vo content attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
      * @return content attributes.
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoAttrValueContent> update(List<MutablePair<VoAttrValueContent, Boolean>> vo) throws Exception;
 
@@ -137,7 +137,7 @@ public interface VoContentService {
      * Get supported attributes by given content
      * @param contentId given content id
      * @return attributes
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoContentBody> getContentBody(long contentId) throws Exception;
 
@@ -147,7 +147,7 @@ public interface VoContentService {
      *
      * @param vo content attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
      * @return content attributes.
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoContentBody> updateContent(List<VoContentBody> vo) throws Exception;
 

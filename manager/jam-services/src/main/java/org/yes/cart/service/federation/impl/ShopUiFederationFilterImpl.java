@@ -40,6 +40,7 @@ public class ShopUiFederationFilterImpl implements FederationFilter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void applyFederationFilter(final Collection list, final Class objectType) {
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
 
@@ -55,6 +56,7 @@ public class ShopUiFederationFilterImpl implements FederationFilter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
         if (object instanceof Long) {
             final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();

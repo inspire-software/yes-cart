@@ -41,7 +41,7 @@ public interface VoShopCategoryService {
      * @param shopId given shop
      * @param lang locale for localised names
      *
-     * @throws Exception
+     * @throws Exception errors
      */
     void fillShopSummaryDetails(VoShopSummary summary, long shopId, String lang) throws Exception;
 

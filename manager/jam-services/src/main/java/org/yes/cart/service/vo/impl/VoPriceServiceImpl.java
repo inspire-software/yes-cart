@@ -54,6 +54,7 @@ public class VoPriceServiceImpl implements VoPriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoPriceList> getFiltered(final long shopId, final String currency, final String filter, final int max) throws Exception {
 
         final List<VoPriceList> list = new ArrayList<>();
@@ -71,6 +72,7 @@ public class VoPriceServiceImpl implements VoPriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoPriceList getById(final long id) throws Exception {
         final PriceListDTO dto = dtoPriceListsService.getById(id);
         if (federationFacade.isManageable(dto.getShopCode(), ShopDTO.class)) {
@@ -83,6 +85,7 @@ public class VoPriceServiceImpl implements VoPriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoPriceList update(final VoPriceList vo) throws Exception {
         final PriceListDTO dto = dtoPriceListsService.getById(vo.getSkuPriceId());
         if (dto != null && federationFacade.isManageable(dto.getShopCode(), ShopDTO.class)) {
@@ -98,6 +101,7 @@ public class VoPriceServiceImpl implements VoPriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoPriceList create(final VoPriceList vo) throws Exception {
         if (federationFacade.isManageable(vo.getShopCode(), ShopDTO.class)) {
             PriceListDTO dto = new PriceListDTOImpl();
@@ -113,6 +117,7 @@ public class VoPriceServiceImpl implements VoPriceService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void remove(final long id) throws Exception {
 
         getById(id); // check access

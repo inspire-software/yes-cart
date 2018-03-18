@@ -103,6 +103,7 @@ public class VoSystemPreferencesServiceImpl implements VoSystemPreferencesServic
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoAttrValueSystem> getSystemPreferences(final boolean includeSecure) throws Exception {
 
         return this.voAttributesCRUDTemplate.verifyAccessAndGetAttributes(100L, includeSecure);
@@ -113,6 +114,7 @@ public class VoSystemPreferencesServiceImpl implements VoSystemPreferencesServic
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoAttrValueSystem> update(final List<MutablePair<VoAttrValueSystem, Boolean>> vo,
                                           final boolean includeSecure) throws Exception {
 

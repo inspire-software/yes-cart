@@ -45,6 +45,7 @@ public class WarehouseUiFederationFilterImpl implements FederationFilter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void applyFederationFilter(final Collection list, final Class objectType) {
 
         final Set<Long> manageableWhIds = getManageableWarehouseIds();
@@ -60,7 +61,7 @@ public class WarehouseUiFederationFilterImpl implements FederationFilter {
 
     private Set<Long> getManageableWarehouseIds() {
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
-        final Set<Long> manageableWhIds = new HashSet<Long>();
+        final Set<Long> manageableWhIds = new HashSet<>();
         for (final Long shopId : manageableShopIds) {
             try {
                 final Set<WarehouseDTO> whList = dtoWarehouseService.findByShopId(shopId, true).keySet();
@@ -76,7 +77,7 @@ public class WarehouseUiFederationFilterImpl implements FederationFilter {
 
     private Set<String> getManageableWarehouseCodes() {
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
-        final Set<String> manageableWhCodes = new HashSet<String>();
+        final Set<String> manageableWhCodes = new HashSet<>();
         for (final Long shopId : manageableShopIds) {
             try {
                 final Set<WarehouseDTO> whList = dtoWarehouseService.findByShopId(shopId, true).keySet();
@@ -93,6 +94,7 @@ public class WarehouseUiFederationFilterImpl implements FederationFilter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
         if (object instanceof Long) {
             final Set<Long> manageableWhIds = getManageableWarehouseIds();

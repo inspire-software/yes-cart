@@ -41,6 +41,7 @@ public class TaxImpexFederationFilterImpl extends AbstractImpexFederationFilterI
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
 
         if (!hasAccessRole()) {

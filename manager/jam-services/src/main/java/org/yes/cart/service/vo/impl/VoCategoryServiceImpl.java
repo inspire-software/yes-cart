@@ -103,19 +103,21 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoCategory> getAll() throws Exception {
         final List<CategoryDTO> categoryDTOs = dtoCategoryService.getAll();
         return loadCategoryTree(categoryDTOs);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoCategory> getBranch(final long categoryId, final List<Long> expanded) throws Exception {
         final List<CategoryDTO> categoryDTOs = dtoCategoryService.getBranchById(categoryId, expanded);
         return loadCategoryTree(categoryDTOs);
     }
 
     private List<Long> getBranchPathsInternal(final long categoryId, final boolean checkAccess) throws Exception {
-        final List<Long> path = new ArrayList<Long>();
+        final List<Long> path = new ArrayList<>();
         if (!checkAccess || federationFacade.isManageable(categoryId, CategoryDTO.class)) {
 
             path.add(categoryId);
@@ -138,13 +140,15 @@ public class VoCategoryServiceImpl implements VoCategoryService {
 
 
     /** {@inheritDoc} */
+    @Override
     public List<Long> getBranchPaths(final long categoryId) throws Exception {
         return getBranchPathsInternal(categoryId, true);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Long> getBranchesPaths(final List<Long> categoryIds) throws Exception {
-        final List<Long> path = new ArrayList<Long>();
+        final List<Long> path = new ArrayList<>();
         if (categoryIds != null) {
             for (final Long categoryId : categoryIds) {
                 path.addAll(getBranchPaths(categoryId));
@@ -166,14 +170,8 @@ public class VoCategoryServiceImpl implements VoCategoryService {
         if (!federationFacade.isManageable(root.getCategoryId(), CategoryDTO.class)) {
             // This is not a manageable directory (but maybe children are)
             if (CollectionUtils.isNotEmpty(root.getChildren())) {
-                final List<CategoryDTO> all = new ArrayList<CategoryDTO>(root.getChildren());
-                final Iterator<CategoryDTO> catIt = all.iterator();
-                while (catIt.hasNext()) {
-                    final CategoryDTO cat = catIt.next();
-                    if (applyFilterToCategoryTree(cat)) {
-                        catIt.remove();
-                    }
-                }
+                final List<CategoryDTO> all = new ArrayList<>(root.getChildren());
+                all.removeIf(this::applyFilterToCategoryTree);
                 root.setChildren(all);
                 return all.isEmpty(); // Id we have at least one accessible descendant, we should see it
 
@@ -196,13 +194,14 @@ public class VoCategoryServiceImpl implements VoCategoryService {
                     voAssemblySupport.assembleVo(VoCategory.class, CategoryDTO.class, new VoCategory(), dto);
             voCategories.add(voCategory);
             if (dto.getChildren() != null) {
-                voCategory.setChildren(new ArrayList<VoCategory>(dto.getChildren().size()));
+                voCategory.setChildren(new ArrayList<>(dto.getChildren().size()));
                 adaptCategories(dto.getChildren(), voCategory.getChildren());
             }
         }
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoCategory> getFiltered(final String filter, final int max) throws Exception {
 
         final List<VoCategory> results = new ArrayList<>();
@@ -222,6 +221,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public VoCategory getById(final long id) throws Exception {
         final CategoryDTO categoryDTO = dtoCategoryService.getById(id);
         if (categoryDTO != null && federationFacade.isManageable(id, CategoryDTO.class)){
@@ -235,6 +235,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoCategory update(final VoCategory vo) throws Exception {
         final CategoryDTO categoryDTO = dtoCategoryService.getById(vo.getCategoryId());
         final long categoryId = categoryDTO != null && categoryDTO.getParentId() == vo.getParentId() ? vo.getCategoryId() : vo.getParentId();
@@ -249,6 +250,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public VoCategory create(VoCategory voCategory)  throws Exception {
         final CategoryDTO categoryDTO = dtoCategoryService.getNew();
         if (voCategory != null && federationFacade.isManageable(voCategory.getParentId(), CategoryDTO.class)) {
@@ -274,6 +276,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void remove(final long id) throws Exception {
         if (federationFacade.isManageable(id, CategoryDTO.class)) {
             dtoCategoryService.remove(id);
@@ -285,6 +288,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoAttrValueCategory> getCategoryAttributes(final long categoryId) throws Exception {
 
         return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(categoryId, true);
@@ -294,6 +298,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoAttrValueCategory> update(final List<MutablePair<VoAttrValueCategory, Boolean>> vo) throws Exception {
 
         final long categoryId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);

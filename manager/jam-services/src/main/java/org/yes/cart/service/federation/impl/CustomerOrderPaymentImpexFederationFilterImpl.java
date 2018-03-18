@@ -41,6 +41,7 @@ public class CustomerOrderPaymentImpexFederationFilterImpl extends AbstractImpex
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isManageable(final Object object, final Class objectType) {
 
         if (!hasAccessRole()) {

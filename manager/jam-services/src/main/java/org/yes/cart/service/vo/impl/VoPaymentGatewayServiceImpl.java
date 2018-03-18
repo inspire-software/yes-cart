@@ -51,6 +51,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     private static final Comparator<VoPaymentGatewayInfo> VO_PAYMENT_GATEWAY_INFO_COMPARATOR = new Comparator<VoPaymentGatewayInfo>() {
 
         /** {@inheritDoc} */
+        @Override
         public int compare(VoPaymentGatewayInfo o1, VoPaymentGatewayInfo o2) {
             return o1.getName().compareTo(o2.getName());
         }
@@ -59,6 +60,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     private static final Comparator<VoPaymentGateway> VO_PAYMENT_GATEWAY_COMPARATOR = new Comparator<VoPaymentGateway>() {
 
         /** {@inheritDoc} */
+        @Override
         public int compare(VoPaymentGateway o1, VoPaymentGateway o2) {
             final int rez = Integer.compare(o1.getRank(), o2.getRank());
             if (rez == 0) {
@@ -88,6 +90,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
 
     /** {@inheritDoc} */
+    @Override
     public List<VoPaymentGatewayInfo> getPaymentGateways(final String lang) throws Exception {
 
         List<VoPaymentGatewayInfo> rez = new ArrayList<>();
@@ -115,10 +118,11 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoPaymentGatewayInfo> getPaymentGatewaysForShop(final String lang,
                                                                 final String shopCode) throws Exception {
 
-        List<VoPaymentGatewayInfo> rez = new ArrayList<VoPaymentGatewayInfo> ();
+        List<VoPaymentGatewayInfo> rez = new ArrayList<>();
         List<MutablePair<String, String>> active = getAllowedPaymentGatewaysForShop(lang, shopCode);
         List<MutablePair<String, String>> available = getAvailablePaymentGatewaysForShop(lang, shopCode);
         Set<String> activeLabels = new HashSet<>();
@@ -143,11 +147,12 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void fillShopSummaryDetails(final VoShopSummary summary, final String shopCode, final String lang) throws Exception {
 
         if (federationFacade.isManageable(summary.getCode(), ShopDTO.class)) {
 
-            List<VoPaymentGatewayInfo> rez = new ArrayList<VoPaymentGatewayInfo> ();
+            List<VoPaymentGatewayInfo> rez = new ArrayList<>();
             List<MutablePair<String, String>> active = getAllowedPaymentGatewaysForShopInternal(lang, shopCode);
             List<MutablePair<String, String>> available = getAvailablePaymentGatewaysForShopInternal(lang, shopCode);
             Set<String> activeLabels = new HashSet<>();
@@ -181,23 +186,18 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     }
 
     private void sortPgInfo(final List<VoPaymentGatewayInfo> rez) {
-        Collections.sort(
-                rez,
-                VO_PAYMENT_GATEWAY_INFO_COMPARATOR
-        );
+        rez.sort(VO_PAYMENT_GATEWAY_INFO_COMPARATOR);
     }
 
     private void sortPg(final List<VoPaymentGateway> rez) {
-        Collections.sort(
-                rez,
-                VO_PAYMENT_GATEWAY_COMPARATOR
-        );
+        rez.sort(VO_PAYMENT_GATEWAY_COMPARATOR);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoPaymentGatewayInfo> getAllowedPaymentGatewaysForShops(final String lang) throws Exception {
 
-        List<VoPaymentGatewayInfo> rez = new ArrayList<VoPaymentGatewayInfo> ();
+        List<VoPaymentGatewayInfo> rez = new ArrayList<>();
         List<MutablePair<String, String>> active = getAllowedPaymentGateways(lang);
         for (MutablePair<String, String> pair : active) {
             rez.add(
@@ -211,12 +211,14 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<MutablePair<String, String>> getAllowedPaymentGateways(final String lang) throws Exception {
         final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false, DEFAULT_SHOP_CODE);
         return fillPaymentDescriptors(descriptors, lang);
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<MutablePair<String, String>> getAllowedPaymentGatewaysForShop(final String lang,
                                                                               final String shopCode) throws Exception {
         if (federationFacade.isManageable(shopCode, ShopDTO.class)) {
@@ -234,6 +236,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<MutablePair<String, String>> getAvailablePaymentGateways(final String lang) throws Exception {
         final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(true, DEFAULT_SHOP_CODE);
         final List<MutablePair<String, String>> rez = fillPaymentDescriptors(descriptors, lang);
@@ -242,6 +245,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<MutablePair<String, String>> getAvailablePaymentGatewaysForShop(final String lang,
                                                                                 final String shopCode) throws Exception {
         if (federationFacade.isManageable(shopCode, ShopDTO.class)) {
@@ -266,7 +270,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
         final List<MutablePair<String, String>> rez = new ArrayList<>(descriptors.size());
         for (PaymentGatewayDescriptor descr :  descriptors) {
             final PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway(descr.getLabel(), DEFAULT_SHOP_CODE);
-            final MutablePair<String, String> pairCandidate = new MutablePair<String, String>(
+            final MutablePair<String, String> pairCandidate = new MutablePair<>(
                     descr.getLabel(),
                     paymentGateway.getName(lang)
             );
@@ -276,6 +280,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoPaymentGateway> getPaymentGatewaysWithParameters(final String lang,
                                                                    final boolean includeSecure) throws Exception {
 
@@ -299,6 +304,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
 
     /** {@inheritDoc} */
+    @Override
     public List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(final String lang,
                                                                           final String shopCode,
                                                                           final boolean includeSecure) throws Exception {
@@ -335,7 +341,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
         final List<VoPaymentGatewayParameter> parameters = voAssemblySupport.assembleVos(
                 VoPaymentGatewayParameter.class, PaymentGatewayParameter.class,
-                new ArrayList<PaymentGatewayParameter>(getPaymentGatewayParameters(paymentGateway, shopCode, includeSecure))
+                new ArrayList<>(getPaymentGatewayParameters(paymentGateway, shopCode, includeSecure))
         );
 
         int rank = 100; // default priority in modules
@@ -359,19 +365,13 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
         if (DEFAULT_SHOP_CODE.equals(shopCode)) {
 
-            final List<PaymentGatewayParameter> defParams = new ArrayList<PaymentGatewayParameter>(paymentGateway.getPaymentGatewayParameters());
-            final Iterator<PaymentGatewayParameter> defParamsIt = defParams.iterator();
-            while (defParamsIt.hasNext()) {
-                final PaymentGatewayParameter param = defParamsIt.next();
-                if (!includeSecure && param.isSecure()) {
-                    defParamsIt.remove();
-                }
-            }
+            final List<PaymentGatewayParameter> defParams = new ArrayList<>(paymentGateway.getPaymentGatewayParameters());
+            defParams.removeIf(param -> !includeSecure && param.isSecure());
             return defParams;
 
         } else {
 
-            final List<PaymentGatewayParameter> shopOnly = new ArrayList<PaymentGatewayParameter>(paymentGateway.getPaymentGatewayParameters());
+            final List<PaymentGatewayParameter> shopOnly = new ArrayList<>(paymentGateway.getPaymentGatewayParameters());
             final Iterator<PaymentGatewayParameter> shopOnlyIt = shopOnly.iterator();
             final String prefix = labelToShopLabel(shopCode, "");
             while (shopOnlyIt.hasNext()) {
@@ -386,6 +386,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoPaymentGatewayParameter> update(final String pgLabel,
                                                   final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo,
                                                   final boolean includeSecure) throws Exception {
@@ -393,6 +394,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoPaymentGatewayParameter> update(final String shopCode,
                                                   final String pgLabel,
                                                   final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo,
@@ -422,7 +424,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
                 if (param != null) {
                     if ((includeSecure || !param.isSecure())) {
                         LOG.info("Removing PG({}/{}) for {}, value was {}",
-                                new Object[]{shopCode, param.getPgLabel(), param.getLabel(), param.getValue()});
+                                shopCode, param.getPgLabel(), param.getLabel(), param.getValue());
                         param.setValue("");
                         pg.updateParameter(param);
                     } else {
@@ -437,7 +439,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
                 if (param != null) {
                     if ((includeSecure || !param.isSecure())) {
                         LOG.info("Updating PG({}/{}) for {}, value was {}, now {}",
-                                new Object[]{shopCode, param.getPgLabel(), param.getLabel(), param.getValue(), item.getFirst().getValue()});
+                                shopCode, param.getPgLabel(), param.getLabel(), param.getValue(), item.getFirst().getValue());
                         param.setValue(item.getFirst().getValue());
                         pg.updateParameter(param);
                     } else {
@@ -464,7 +466,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
                             LOG.warn("Update skipped because create mode detected duplicate label {}", label);
                         } else {
                             LOG.info("Creating PG({}/{}) for {}, value {}",
-                                    new Object[]{shopCode, pg.getLabel(), label, value});
+                                    shopCode, pg.getLabel(), label, value);
                         }
                     } else {
                         throw new AccessDeniedException("Access is denied");
@@ -483,7 +485,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
         if (pg != null) {
             return voAssemblySupport.assembleVos(
                     VoPaymentGatewayParameter.class, PaymentGatewayParameter.class,
-                    new ArrayList<PaymentGatewayParameter>(getPaymentGatewayParameters(pg, shopCode, includeSecure))
+                    new ArrayList<>(getPaymentGatewayParameters(pg, shopCode, includeSecure))
             );
         }
 
@@ -522,7 +524,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
 
     private Map<Long, PaymentGatewayParameter> mapAvById(final List<PaymentGatewayParameter> entityAttributes) {
-        Map<Long, PaymentGatewayParameter> map = new HashMap<Long, PaymentGatewayParameter>();
+        Map<Long, PaymentGatewayParameter> map = new HashMap<>();
         for (final PaymentGatewayParameter dto : entityAttributes) {
             map.put(dto.getPaymentGatewayParameterId(), dto);
         }
@@ -530,11 +532,13 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void updateDisabledFlag(final String pgLabel, final boolean disabled) throws Exception {
         updateDisabledFlag(DEFAULT_SHOP_CODE, pgLabel, disabled);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void updateDisabledFlag(final String shopCode, final String pgLabel, final boolean disabled) throws Exception {
 
         final boolean systemSettings = DEFAULT_SHOP_CODE.equals(shopCode);

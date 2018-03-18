@@ -33,7 +33,7 @@ public interface VoProductTypeService {
     /**
      * Get all types in the system, filtered by criteria and according to rights, up to max
      * @return list of categories
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoProductTypeInfo> getFiltered(String filter, int max) throws Exception;
 
@@ -42,7 +42,7 @@ public interface VoProductTypeService {
      *
      * @param id type id
      * @return type vo
-     * @throws Exception
+     * @throws Exception errors
      */
     VoProductType getById(long id) throws Exception;
 
@@ -51,7 +51,7 @@ public interface VoProductTypeService {
      *
      * @param vo type to update
      * @return updated instance
-     * @throws Exception
+     * @throws Exception errors
      */
     VoProductType update(VoProductType vo) throws Exception;
 
@@ -60,7 +60,7 @@ public interface VoProductTypeService {
      *
      * @param vo given instance to persist
      * @return persisted instance
-     * @throws Exception
+     * @throws Exception errors
      */
     VoProductType create(VoProductTypeInfo vo) throws Exception;
 
@@ -69,7 +69,7 @@ public interface VoProductTypeService {
      *
      * @param id
      * @return type vo
-     * @throws Exception
+     * @throws Exception errors
      */
     void remove(long id) throws Exception;
 
@@ -78,7 +78,7 @@ public interface VoProductTypeService {
      * Get supported attributes by given type
      * @param typeId given type id
      * @return attributes
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoProductTypeAttr> getTypeAttributes(long typeId) throws Exception;
 
@@ -88,7 +88,7 @@ public interface VoProductTypeService {
      *
      * @param vo type attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
      * @return type attributes.
-     * @throws Exception
+     * @throws Exception errors
      */
     List<VoProductTypeAttr> update(List<MutablePair<VoProductTypeAttr, Boolean>> vo) throws Exception;
 

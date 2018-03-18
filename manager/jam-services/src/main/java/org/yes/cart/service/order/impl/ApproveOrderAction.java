@@ -18,7 +18,6 @@ package org.yes.cart.service.order.impl;
 
 import org.yes.cart.domain.misc.Result;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
-import org.yes.cart.service.order.OrderFlow;
 import org.yes.cart.service.order.OrderFlowAction;
 
 /**

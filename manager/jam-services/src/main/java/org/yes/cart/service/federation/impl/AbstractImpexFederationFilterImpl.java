@@ -42,6 +42,7 @@ public abstract class AbstractImpexFederationFilterImpl implements FederationFil
     /**
      * {@inheritDoc}
      */
+    @Override
     public final void applyFederationFilter(final Collection list, final Class objectType) {
         throw new UnsupportedOperationException("Import does not support multi checks");
     }

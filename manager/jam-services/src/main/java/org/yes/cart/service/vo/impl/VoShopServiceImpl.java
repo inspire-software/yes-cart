@@ -158,6 +158,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoShop> getAll() throws Exception {
         final List<ShopDTO> all = dtoShopService.getAll();
         federationFacade.applyFederationFilter(all, ShopDTO.class);
@@ -167,6 +168,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoShop> getAllSubs(final long masterId) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(masterId);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
@@ -182,6 +184,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShop getById(long id) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(id);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
@@ -194,6 +197,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShop update(VoShop vo) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
@@ -209,6 +213,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShop create(VoShop vo) throws Exception {
         if (federationFacade.isCurrentUserSystemAdmin()) {
             ShopDTO shopDTO = dtoShopService.getNew();
@@ -227,6 +232,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShop createSub(final VoSubShop vo) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(vo != null ? vo.getMasterId() : 0L);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
@@ -240,7 +246,7 @@ public class VoShopServiceImpl implements VoShopService {
 
         // Setup basic properties
         final List<AttrValueShopDTO> avs = (List) dtoShopService.getEntityAttributes(shopDTO.getShopId());
-        final Map<String, AttrValueShopDTO> avsMap = new HashMap<String, AttrValueShopDTO>();
+        final Map<String, AttrValueShopDTO> avsMap = new HashMap<>();
         for (final AttrValueShopDTO av : avs) {
             avsMap.put(av.getAttributeDTO().getCode(), av);
         }
@@ -275,6 +281,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void remove(long id) throws Exception {
         if (federationFacade.isCurrentUserSystemAdmin()) {
             dtoShopService.remove(id);
@@ -286,6 +293,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void fillShopSummaryDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(shopId);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
@@ -384,7 +392,7 @@ public class VoShopServiceImpl implements VoShopService {
         }
         summary.setCustomerSession(MutablePair.of(sessionExpiry.getFirst(), time));
 
-        final Set<String> knownCustomerTypes = new HashSet<String>();
+        final Set<String> knownCustomerTypes = new HashSet<>();
         final VoAttrValueShop registrationTypesCsv = masterAttrsMap.get(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES);
         if (registrationTypesCsv != null && StringUtils.isNotBlank(registrationTypesCsv.getVal())) {
 
@@ -453,7 +461,7 @@ public class VoShopServiceImpl implements VoShopService {
         final MutablePair<String, List<String>> addressBookDisabled =
                 getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_ADDRESSBOOK_DISABLED_CUSTOMER_TYPES, lang);
 
-        final Set<String> additionalTypes = new HashSet<String>();
+        final Set<String> additionalTypes = new HashSet<>();
         additionalTypes.addAll(ableToRegister.getSecond());
         additionalTypes.addAll(approveRegister.getSecond());
         additionalTypes.addAll(notifyRegister.getSecond());
@@ -530,7 +538,7 @@ public class VoShopServiceImpl implements VoShopService {
 
     protected Map<String, VoAttrValueShop> getStringVoAttrValueShopMap(final long shopId, final String code) throws Exception {
         final List<VoAttrValueShop> attrs = voAttributesCRUDTemplate.getAttributes(shopId, code, false);
-        final Map<String, VoAttrValueShop> attrsMap = new HashMap<String, VoAttrValueShop>(attrs.size() * 2);
+        final Map<String, VoAttrValueShop> attrsMap = new HashMap<>(attrs.size() * 2);
         for (final VoAttrValueShop attr : attrs) {
             attrsMap.put(attr.getAttribute().getCode(), attr);
         }
@@ -703,6 +711,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShopSeo getShopLocale(long shopId) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(shopId);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
@@ -715,6 +724,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShopSeo update(final VoShopSeo vo) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
@@ -730,6 +740,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShopUrl getShopUrls(long shopId) throws Exception {
         if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
             return getShopUrlsInternal(shopId);
@@ -771,6 +782,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShopUrl update(VoShopUrl vo) throws Exception {
         if (vo != null && federationFacade.isShopAccessibleByCurrentManager(vo.getShopId())) {
             final List<ShopUrlDTO> originalShopUrlDTOs = dtoShopUrlService.getAllByShopId(vo.getShopId());
@@ -802,6 +814,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShopAlias getShopAliases(long shopId) throws Exception {
         if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
             return getShopAliasesInternal(shopId);
@@ -823,6 +836,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShopAlias update(VoShopAlias vo) throws Exception {
         if (vo != null && federationFacade.isShopAccessibleByCurrentManager(vo.getShopId())) {
             final List<ShopAliasDTO> originalShopAliasDTOs = dtoShopAliasService.getAllByShopId(vo.getShopId());
@@ -853,6 +867,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShopSupportedCurrencies getShopCurrencies(long shopId) throws Exception {
         if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
             return getShopCurrenciesInternal(shopId);
@@ -864,12 +879,12 @@ public class VoShopServiceImpl implements VoShopService {
     private VoShopSupportedCurrencies getShopCurrenciesInternal(long shopId) throws Exception {
         VoShopSupportedCurrencies ssc = new VoShopSupportedCurrencies();
         ssc.setShopId(shopId);
-        ssc.setAll(new ArrayList<MutablePair<String, String>>());
-        ssc.setSupported(new ArrayList<MutablePair<String, String>>());
+        ssc.setAll(new ArrayList<>());
+        ssc.setSupported(new ArrayList<>());
 
         final List<String> all = currencyService.getSupportedCurrencies();
         final String supportedStr = dtoShopService.getSupportedCurrencies(shopId);
-        final List<String> supported = supportedStr == null ? Collections.<String>emptyList() : Arrays.asList(supportedStr.split(","));
+        final List<String> supported = supportedStr == null ? Collections.emptyList() : Arrays.asList(supportedStr.split(","));
         final Map<String, String> names = currencyService.getCurrencyName();
 
         for (final String one : all) {
@@ -895,11 +910,12 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShopSupportedCurrencies update(VoShopSupportedCurrencies vo) throws Exception {
         if (vo != null && federationFacade.isShopAccessibleByCurrentManager(vo.getShopId())) {
 
             final List<String> all = currencyService.getSupportedCurrencies();
-            final List<String> supported = new ArrayList<String>();
+            final List<String> supported = new ArrayList<>();
             if (vo.getSupported() != null) {
 
                 for (final MutablePair<String, String> currency : vo.getSupported()) {
@@ -925,6 +941,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShopLanguages getShopLanguages(long shopId) throws Exception {
         if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
             return getShopLanguagesInternal(shopId);
@@ -936,7 +953,7 @@ public class VoShopServiceImpl implements VoShopService {
     private VoShopLanguages getShopLanguagesInternal(long shopId) throws Exception {
         final VoShopLanguages voShopLanguages = new VoShopLanguages();
         String lng = dtoShopService.getSupportedLanguages(shopId);
-        voShopLanguages.setSupported(lng == null ? Collections.<String>emptyList() : Arrays.asList(lng.split(",")));
+        voShopLanguages.setSupported(lng == null ? Collections.emptyList() : Arrays.asList(lng.split(",")));
         voShopLanguages.setAll(VoUtils.adaptMapToPairs(languageService.getLanguageName()));
         voShopLanguages.setShopId(shopId);
         return voShopLanguages;
@@ -946,6 +963,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShopLanguages update(VoShopLanguages vo) throws Exception {
         if (vo != null && federationFacade.isShopAccessibleByCurrentManager(vo.getShopId())) {
             dtoShopService.updateSupportedLanguages(vo.getShopId(),
@@ -959,6 +977,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShopLocations getShopLocations(long shopId) throws Exception {
         if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
             return getShopLocationsInternal(shopId);
@@ -972,8 +991,8 @@ public class VoShopServiceImpl implements VoShopService {
 
         String billing = dtoShopService.getSupportedBillingCountries(shopId);
         String shipping = dtoShopService.getSupportedShippingCountries(shopId);
-        shopLocations.setSupportedBilling(billing == null ? Collections.<String>emptyList() : Arrays.asList(billing.split(",")));
-        shopLocations.setSupportedShipping(shipping == null ? Collections.<String>emptyList() : Arrays.asList(shipping.split(",")));
+        shopLocations.setSupportedBilling(billing == null ? Collections.emptyList() : Arrays.asList(billing.split(",")));
+        shopLocations.setSupportedShipping(shipping == null ? Collections.emptyList() : Arrays.asList(shipping.split(",")));
 
         final List<Country> countries = countryService.findAll();
         final List<MutablePair<String, String>> all = new ArrayList<>();
@@ -991,6 +1010,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShopLocations update(VoShopLocations vo) throws Exception {
         if (vo != null && federationFacade.isShopAccessibleByCurrentManager(vo.getShopId())) {
             dtoShopService.updateSupportedBillingCountries(vo.getShopId(),
@@ -1006,6 +1026,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public VoShop updateDisabledFlag(final long shopId, final boolean disabled) throws Exception {
         final ShopDTO shop = dtoShopService.getById(shopId);
         if (shop.getMasterId() == null && federationFacade.isCurrentUserSystemAdmin() ||
@@ -1023,6 +1044,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoAttrValueShop> getShopAttributes(final long shopId, final boolean includeSecure) throws Exception {
 
         return voAttributesCRUDTemplate.verifyAccessAndGetAttributes(shopId, includeSecure);
@@ -1033,6 +1055,7 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<VoAttrValueShop> update(final List<MutablePair<VoAttrValueShop, Boolean>> vo, final boolean includeSecure) throws Exception {
 
         final long shopId = this.voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, includeSecure);
@@ -1061,11 +1084,12 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<MutablePair<String, String>> getAvailableShopsCustomerTypes(final String locale) throws Exception {
 
-        final List<MutablePair<String, String>> types = new ArrayList<MutablePair<String, String>>();
+        final List<MutablePair<String, String>> types = new ArrayList<>();
 
-        final Set<String> knownCustomerTypes = new HashSet<String>();
+        final Set<String> knownCustomerTypes = new HashSet<>();
         for (final Long shopId : federationFacade.getAccessibleShopIdsByCurrentManager()) {
 
             collectKnownCustomerTypesInShop(locale, types, knownCustomerTypes, shopId);
@@ -1079,9 +1103,9 @@ public class VoShopServiceImpl implements VoShopService {
     @Override
     public List<MutablePair<String, String>> getAvailableShopsCustomerTypes(final List<Long> shopIds, final String locale) throws Exception {
 
-        final List<MutablePair<String, String>> types = new ArrayList<MutablePair<String, String>>();
+        final List<MutablePair<String, String>> types = new ArrayList<>();
 
-        final Set<String> knownCustomerTypes = new HashSet<String>();
+        final Set<String> knownCustomerTypes = new HashSet<>();
 
         for (final Long shopId : shopIds) {
 

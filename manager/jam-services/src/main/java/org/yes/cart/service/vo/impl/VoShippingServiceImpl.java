@@ -152,7 +152,7 @@ public class VoShippingServiceImpl implements VoShippingService {
 
     private Map<Long, Integer> getCarrierSlaRanksConfig(final long shopId) {
         final String pkAndRanks = dtoShopService.getSupportedCarrierSlaRanks(shopId);
-        final Map<Long, Integer> pks = new HashMap<Long, Integer>();
+        final Map<Long, Integer> pks = new HashMap<>();
         if (StringUtils.isNotBlank(pkAndRanks)) {
             try {
                 final Properties props = new Properties();
@@ -169,7 +169,7 @@ public class VoShippingServiceImpl implements VoShippingService {
 
     private Set<Long> getDisabledCarrierSlaConfig(final long shopId) {
         final String disabled = dtoShopService.getDisabledCarrierSla(shopId);
-        final Set<Long> pks = new HashSet<Long>();
+        final Set<Long> pks = new HashSet<>();
         if (StringUtils.isNotBlank(disabled)) {
             for (final String pk : StringUtils.split(disabled, ',')) {
                 final long id = NumberUtils.toLong(pk.trim());
@@ -399,9 +399,10 @@ public class VoShippingServiceImpl implements VoShippingService {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<VoCarrierSla> getFilteredCarrierSlas(final String filter, final int max) throws Exception {
 
-        final List<VoCarrierSla> results = new ArrayList<VoCarrierSla>();
+        final List<VoCarrierSla> results = new ArrayList<>();
 
         int start = 0;
         do {
@@ -409,12 +410,7 @@ public class VoShippingServiceImpl implements VoShippingService {
             if (batch.isEmpty()) {
                 break;
             }
-            final Iterator<CarrierSlaDTO> batchIt = batch.iterator();
-            while (batchIt.hasNext()) {
-                if (!federationFacade.isManageable(batchIt.next().getCarrierId(), CarrierDTO.class)) {
-                    batchIt.remove();
-                }
-            }
+            batch.removeIf(carrierSlaDTO -> !federationFacade.isManageable(carrierSlaDTO.getCarrierId(), CarrierDTO.class));
             results.addAll(voAssemblySupport.assembleVos(VoCarrierSla.class, CarrierSlaDTO.class, batch));
             start++;
         } while (results.size() < max && max != Integer.MAX_VALUE);

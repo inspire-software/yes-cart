@@ -81,7 +81,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
      *
      * @return vo attributes
      *
-     * @throws Exception
+     * @throws Exception errors
      */
     public List<V> verifyAccessAndGetAttributes(final long objectId, final boolean includeSecure) throws Exception {
 
@@ -104,7 +104,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
      *
      * @return vo attributes
      *
-     * @throws Exception
+     * @throws Exception errors
      */
     public List<V> getAttributes(final long objectId, final String imageObjectCode, final boolean includeSecure) throws Exception {
 
@@ -183,7 +183,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
      *
      * @return master object id
      *
-     * @throws Exception
+     * @throws Exception errors
      */
     public long verifyAccessAndUpdateAttributes(final List<MutablePair<V, Boolean>> vo, final boolean includeSecure) throws Exception {
 
@@ -347,7 +347,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
     }
 
     private Map<Long, D> mapAvById(final List<D> entityAttributes) {
-        Map<Long, D> map = new HashMap<Long, D>();
+        Map<Long, D> map = new HashMap<>();
         for (final D dto : entityAttributes) {
             map.put(dto.getAttrvalueId(), dto);
         }
