@@ -232,7 +232,7 @@ public class DtoPromotionServiceImpl
                                         currency,
                                         Boolean.TRUE,
                                         now,
-                                        HQLUtils.criteriaIlikeAnywhere(filter),
+                                        HQLUtils.criteriaIlikeAnywhere(enabled != null ? enabled.getSecond() : filter),
                                         HQLUtils.criteriaInTest(types),
                                         HQLUtils.criteriaIn(types),
                                         HQLUtils.criteriaInTest(actions),
@@ -247,7 +247,7 @@ public class DtoPromotionServiceImpl
                                         currency,
                                         Boolean.FALSE,
                                         now,
-                                        HQLUtils.criteriaIlikeAnywhere(filter),
+                                        HQLUtils.criteriaIlikeAnywhere(enabled != null ? enabled.getSecond() : filter),
                                         HQLUtils.criteriaInTest(types),
                                         HQLUtils.criteriaIn(types),
                                         HQLUtils.criteriaInTest(actions),
@@ -259,7 +259,7 @@ public class DtoPromotionServiceImpl
                                         page * pageSize, pageSize,
                                         shopCode,
                                         currency,
-                                        HQLUtils.criteriaIlikeAnywhere(filter),
+                                        HQLUtils.criteriaIlikeAnywhere(enabled != null ? enabled.getSecond() : filter),
                                         HQLUtils.criteriaInTest(types),
                                         HQLUtils.criteriaIn(types),
                                         HQLUtils.criteriaInTest(actions),
@@ -284,7 +284,7 @@ public class DtoPromotionServiceImpl
                                     HQLUtils.criteriaInTest(actions),
                                     HQLUtils.criteriaIn(actions)
                             );
-                        } else if (disabledOnly) {
+                        } else {
                             final LocalDateTime now = now();
                             entities = getService().getGenericDao().findRangeByCriteria(
                                     " where e.shopCode = ?1 and e.currency = ?2 and (e.enabled = ?3 or e.enabledFrom > ?4 or e.enabledTo < ?4)  and (?5 = 0 or e.promoType in (?6)) and (?7 = 0 or e.promoAction in (?8))   " + orderBy,
@@ -293,17 +293,6 @@ public class DtoPromotionServiceImpl
                                     currency,
                                     Boolean.FALSE,
                                     now,
-                                    HQLUtils.criteriaInTest(types),
-                                    HQLUtils.criteriaIn(types),
-                                    HQLUtils.criteriaInTest(actions),
-                                    HQLUtils.criteriaIn(actions)
-                            );
-                        } else {
-                            entities = getService().getGenericDao().findRangeByCriteria(
-                                    " where e.shopCode = ?1 and e.currency = ?2 and (?3 = 0 or e.promoType in (?4)) and (?6 = 0 or e.promoAction in (?7))   " + orderBy,
-                                    page * pageSize, pageSize,
-                                    shopCode,
-                                    currency,
                                     HQLUtils.criteriaInTest(types),
                                     HQLUtils.criteriaIn(types),
                                     HQLUtils.criteriaInTest(actions),

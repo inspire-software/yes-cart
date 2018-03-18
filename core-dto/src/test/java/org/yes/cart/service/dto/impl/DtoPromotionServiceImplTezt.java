@@ -246,6 +246,58 @@ public class DtoPromotionServiceImplTezt extends BaseCoreDBTestCase {
         assertNotNull(promos);
         assertEquals(0, promos.size());
 
+        // enabled basic
+        promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                "+" + promotionDTO.getCode(),
+                Collections.singletonList(promotionDTO.getPromoType()),
+                Collections.singletonList(promotionDTO.getPromoAction()),
+                0,
+                10);
+
+        assertNotNull(promos);
+        assertEquals(1, promos.size());
+
+        // disabled basic
+        promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                "-" + promotionDTO.getCode(),
+                Collections.singletonList(promotionDTO.getPromoType()),
+                Collections.singletonList(promotionDTO.getPromoAction()),
+                0,
+                10);
+
+        assertNotNull(promos);
+        assertEquals(0, promos.size());
+
+        // time search
+        promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                "<2017",
+                Collections.singletonList(promotionDTO.getPromoType()),
+                Collections.singletonList(promotionDTO.getPromoAction()),
+                0,
+                10);
+
+        assertNotNull(promos);
+        assertFalse(promos.isEmpty());
+
+        // basic search
+        promos = dtoPromotionService.findBy(
+                promotionDTO.getShopCode(),
+                promotionDTO.getCurrency(),
+                promotionDTO.getCode(),
+                Collections.singletonList(promotionDTO.getPromoType()),
+                Collections.singletonList(promotionDTO.getPromoAction()),
+                0,
+                10);
+
+        assertNotNull(promos);
+        assertEquals(1, promos.size());
+
         dtoPromotionService.remove(promotionDTO.getPromotionId());
     }
 
