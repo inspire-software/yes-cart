@@ -130,18 +130,6 @@ public interface Promotion extends Auditable, Codable, Taggable, Rankable, Namea
     void setEligibilityCondition(String eligibilityCondition);
 
     /**
-     * @return default name for this promo
-     */
-    @Override
-    String getName();
-
-    /**
-     * @param name default name for this promo
-     */
-    @Override
-    void setName(String name);
-
-    /**
      * @return display name for this promo
      */
     String getDisplayName();
@@ -225,23 +213,6 @@ public interface Promotion extends Auditable, Codable, Taggable, Rankable, Namea
      * @param enabledTo promotion finish time
      */
     void setEnabledTo(LocalDateTime enabledTo);
-
-
-    /**
-     * Get promotion rank when combined.
-     *
-     * @return promotion rank.
-     */
-    @Override
-    int getRank();
-
-    /**
-     * Set promotion rank.
-     *
-     * @param rank promotion rank
-     */
-    @Override
-    void setRank(int rank);
 
 
 }

@@ -323,11 +323,14 @@ public class PromotionEntity implements Promotion, java.io.Serializable {
                 "shopCode='" + shopCode + '\'' +
                 ", currency='" + currency + '\'' +
                 ", code='" + code + '\'' +
-                ", rank='" + rank + '\'' +
+                ", rank=" + rank +
                 ", promoType='" + promoType + '\'' +
                 ", promoAction='" + promoAction + '\'' +
                 ", eligibilityCondition='" + eligibilityCondition + '\'' +
                 ", promoActionContext='" + promoActionContext + '\'' +
+                ", enabled=" + enabled +
+                ", enabledFrom=" + enabledFrom +
+                ", enabledTo=" + enabledTo +
                 '}';
     }
 }
