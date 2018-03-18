@@ -17,6 +17,7 @@
 package org.yes.cart.domain.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -186,6 +187,26 @@ public interface SkuPriceRule extends Auditable, Codable, Taggable, Rankable, Na
      * @param enabled on/off switch
      */
     void setEnabled(boolean enabled);
+
+    /**
+     * @return promotion start time
+     */
+    LocalDateTime getEnabledFrom();
+
+    /**
+     * @param enabledFrom promotion start time
+     */
+    void setEnabledFrom(LocalDateTime enabledFrom);
+
+    /**
+     * @return promotion finish time
+     */
+    LocalDateTime getEnabledTo();
+
+    /**
+     * @param enabledTo promotion finish time
+     */
+    void setEnabledTo(LocalDateTime enabledTo);
 
 
 }

@@ -993,6 +993,8 @@
         DESCRIPTION varchar(1000),
         TAG varchar(255),
         ENABLED smallint not null,
+        ENABLED_FROM datetime,
+        ENABLED_TO datetime,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),

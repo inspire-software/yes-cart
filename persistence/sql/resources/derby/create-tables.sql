@@ -1014,6 +1014,8 @@
         DESCRIPTION varchar(1000),
         TAG varchar(255),
         ENABLED smallint not null,
+        ENABLED_FROM timestamp,
+        ENABLED_TO timestamp,
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),

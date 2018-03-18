@@ -1,7 +1,24 @@
+/*
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.domain.entity.impl;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -35,6 +52,8 @@ public class SkuPriceRuleEntity implements org.yes.cart.domain.entity.SkuPriceRu
     private String description;
 
     private boolean enabled;
+    private LocalDateTime enabledFrom;
+    private LocalDateTime enabledTo;
 
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
@@ -187,16 +206,6 @@ public class SkuPriceRuleEntity implements org.yes.cart.domain.entity.SkuPriceRu
     }
 
     @Override
-    public int getRank() {
-        return rank;
-    }
-
-    @Override
-    public void setRank(final int rank) {
-        this.rank = rank;
-    }
-
-    @Override
     public String getName() {
         return name;
     }
@@ -224,6 +233,26 @@ public class SkuPriceRuleEntity implements org.yes.cart.domain.entity.SkuPriceRu
     @Override
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    public LocalDateTime getEnabledFrom() {
+        return enabledFrom;
+    }
+
+    @Override
+    public void setEnabledFrom(final LocalDateTime enabledFrom) {
+        this.enabledFrom = enabledFrom;
+    }
+
+    @Override
+    public LocalDateTime getEnabledTo() {
+        return enabledTo;
+    }
+
+    @Override
+    public void setEnabledTo(final LocalDateTime enabledTo) {
+        this.enabledTo = enabledTo;
     }
 
     @Override
@@ -274,5 +303,37 @@ public class SkuPriceRuleEntity implements org.yes.cart.domain.entity.SkuPriceRu
     @Override
     public void setGuid(final String guid) {
         this.guid = guid;
+    }
+
+    @Override
+    public int getRank() {
+        return rank;
+    }
+
+    @Override
+    public void setRank(final int rank) {
+        this.rank = rank;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "SkuPriceRuleEntity{" +
+                "shopCode='" + shopCode + '\'' +
+                ", currency='" + currency + '\'' +
+                ", code='" + code + '\'' +
+                ", rank=" + rank +
+                ", ruleAction='" + ruleAction + '\'' +
+                ", eligibilityCondition='" + eligibilityCondition + '\'' +
+                ", marginPercent=" + marginPercent +
+                ", marginAmount=" + marginAmount +
+                ", roundingUnit=" + roundingUnit +
+                ", priceTag='" + priceTag + '\'' +
+                ", priceRef='" + priceRef + '\'' +
+                ", pricePolicy='" + pricePolicy + '\'' +
+                ", enabled=" + enabled +
+                ", enabledFrom=" + enabledFrom +
+                ", enabledTo=" + enabledTo +
+                '}';
     }
 }
