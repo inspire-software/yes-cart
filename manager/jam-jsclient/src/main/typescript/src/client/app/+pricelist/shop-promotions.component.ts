@@ -270,7 +270,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   }
 
   protected onSearchEnabled() {
-    this.promotionFilter = '+!O';
+    this.promotionFilter = '++';
     this.searchHelpShow = false;
   }
 
