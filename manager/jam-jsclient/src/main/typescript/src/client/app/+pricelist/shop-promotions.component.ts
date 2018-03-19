@@ -267,11 +267,13 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   protected onSearchEnabled() {
     this.promotionFilter = '++';
     this.searchHelpShow = false;
+    this.getFilteredPromotions();
   }
 
   protected onSearchDate() {
     this.promotionFilter = UiUtil.exampleDateSearch();
     this.searchHelpShow = false;
+    this.getFilteredPromotions();
   }
 
   protected onForceShowAll() {

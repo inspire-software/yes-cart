@@ -765,7 +765,6 @@
 
   "SEARCH_HELP_PROMOTION_DEFAULT": "Die Standard-Promo-Suche sucht nach Code, Name und Beschreibung",
   "SEARCH_HELP_PROMOTION_CODE": "Um nur nach Code oder Tag zu suchen. Format: '#tag'",
-  "SEARCH_HELP_PROMOTION_TYPE": "Um nur in Promo-Typ oder Aktionen zu suchen. Format: '!Id' wo id Kürzel ist: O - Bestellung, S - Versand, I - Produkt Artikel, C - Kunden Tag, F - Fester Wert aus, P - Prozentsatz aus, G - Geschenke und T - Kunden Tag",
   "SEARCH_HELP_PROMOTION_CONDITION": "Um nur nach Promo-Bedingung zu suchen. Format: '?Schlüsselwort'",
   "SEARCH_HELP_PROMOTION_ENABLED": "Um nur nach aktivierten / deaktivierten Promos zu suchen, verwenden Sie '+' oder '-'. Format: '+#tag' oder '++' für alle aktivierten",
 
