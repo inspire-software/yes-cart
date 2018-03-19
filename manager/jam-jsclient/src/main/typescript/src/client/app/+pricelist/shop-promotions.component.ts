@@ -259,11 +259,6 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
     this.searchHelpShow = false;
   }
 
-  protected onSearchType() {
-    this.promotionFilter = '!O';
-    //this.searchHelpShow = false; by design, do not collapse since need to see special character types
-  }
-
   protected onSearchCondition() {
     this.promotionFilter = '?';
     this.searchHelpShow = false;
