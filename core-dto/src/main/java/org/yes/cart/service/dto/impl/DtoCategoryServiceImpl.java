@@ -187,6 +187,7 @@ public class DtoCategoryServiceImpl
     public List<CategoryDTO> getBranchByIdWithAvailabilityFilter(final long categoryId, final boolean withAvailabilityFiltering, final List<Long> expand)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
+        final List<CategoryDTO> branch = new ArrayList<>();
         CategoryService categoryService = (CategoryService) service;
         final Category branchRoot = categoryId > 0L ? categoryService.getById(categoryId) : categoryService.getRootCategory();
         if (branchRoot != null) {
@@ -194,9 +195,9 @@ public class DtoCategoryServiceImpl
             if (rootDTO != null) {
                 loadBranch(rootDTO, withAvailabilityFiltering, 1, expand != null ? expand : Collections.emptyList());
             }
-            return Collections.singletonList(rootDTO);
+            branch.add(rootDTO);
         }
-        return Collections.emptyList();
+        return branch;
     }
 
     /**
