@@ -56,13 +56,7 @@
             <artifactId>websupport</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.yes</groupId>
-            <artifactId>persistence</artifactId>
-            <version>${project.parent.version}</version>
-            <classifier>tests</classifier>
-            <scope>test</scope>
-        </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -173,6 +167,37 @@
             <version>${c3p0.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>persistence</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>search-lucene-embeded</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>search-lucene-embeded</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <profiles>
@@ -207,6 +232,18 @@
                     <groupId>org.apache.derby</groupId>
                     <artifactId>derbyclient</artifactId>
                     <version>10.8.1.2</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>embededLucene</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>search-lucene-embeded</artifactId>
+                    <version>${project.parent.version}</version>
                 </dependency>
             </dependencies>
         </profile>

@@ -39,10 +39,10 @@ import java.util.Map;
  * Time: 11:12:54
  */
 public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
-        implements GenericFTSCapableDAO<T, PK, org.apache.lucene.search.Query> {
+        implements GenericFTSCapableDAO<T, PK, Object> {
 
     private final GenericDAO<T, PK> genericDAO;
-    private final GenericFTS<PK, org.apache.lucene.search.Query> genericFTS;
+    private final GenericFTS<PK, Object> genericFTS;
     private final IndexBuilder<T, PK> indexBuilder;
 
 
@@ -55,7 +55,7 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
      */
     @SuppressWarnings("unchecked")
     public GenericFTSCapableDAOImpl(final GenericDAO<T, PK> genericDAO,
-                                    final GenericFTS<PK, org.apache.lucene.search.Query> genericFTS,
+                                    final GenericFTS<PK, Object> genericFTS,
                                     final IndexBuilder<T, PK> indexBuilder) {
         this.genericDAO = genericDAO;
         this.genericFTS = genericFTS;
@@ -394,43 +394,34 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     @Override
-    public List<T> fullTextSearch(final org.apache.lucene.search.Query query) {
+    public List<T> fullTextSearchRaw(final String query) {
+        final List<PK> pks = genericFTS.fullTextSearchRaw(query);
+        return getEntitiesByPks(pks);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<T> fullTextSearch(final Object query) {
         final List<PK> pks = genericFTS.fullTextSearch(query);
-        final List<T> entities = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(pks)) {
-            for (final PK pk : pks) {
-                final T entity = genericDAO.findById(pk);
-                if (entity != null) {
-                    entities.add(entity);
-                }
-            }
-        }
-        return entities;
+        return getEntitiesByPks(pks);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<T> fullTextSearch(final org.apache.lucene.search.Query query, final int firstResult, final int maxResults, final String sortFieldName, final boolean reverse) {
+    public List<T> fullTextSearch(final Object query, final int firstResult, final int maxResults, final String sortFieldName, final boolean reverse) {
         final List<PK> pks = genericFTS.fullTextSearch(query, firstResult, maxResults, sortFieldName, reverse);
-        final List<T> entities = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(pks)) {
-            for (final PK pk : pks) {
-                final T entity = genericDAO.findById(pk);
-                if (entity != null) {
-                    entities.add(entity);
-                }
-            }
-        }
-        return entities;
+        return getEntitiesByPks(pks);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Pair<List<Object[]>, Integer> fullTextSearch(final org.apache.lucene.search.Query query, final int firstResult, final int maxResults, final String sortFieldName, final boolean reverse, final String... fields) {
+    public Pair<List<Object[]>, Integer> fullTextSearch(final Object query, final int firstResult, final int maxResults, final String sortFieldName, final boolean reverse, final String... fields) {
         return genericFTS.fullTextSearch(query, firstResult, maxResults, sortFieldName, reverse, fields);
     }
 
@@ -438,7 +429,7 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     @Override
-    public Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> fullTextSearchNavigation(final org.apache.lucene.search.Query query, final List<FilteredNavigationRecordRequest> facetingRequest) {
+    public Map<String, List<Pair<Pair<String, I18NModel>, Integer>>> fullTextSearchNavigation(final Object query, final List<FilteredNavigationRecordRequest> facetingRequest) {
         return genericFTS.fullTextSearchNavigation(query, facetingRequest);
     }
 
@@ -446,7 +437,7 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     @Override
-    public int fullTextSearchCount(final org.apache.lucene.search.Query query) {
+    public int fullTextSearchCount(final Object query) {
         return genericFTS.fullTextSearchCount(query);
     }
 
@@ -481,5 +472,19 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
     public void fullTextSearchReindex(final PK primaryKey, final boolean purgeOnly) {
         indexBuilder.fullTextSearchReindex(primaryKey, purgeOnly);
     }
+
+    private List<T> getEntitiesByPks(final List<PK> pks) {
+        final List<T> entities = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(pks)) {
+            for (final PK pk : pks) {
+                final T entity = genericDAO.findById(pk);
+                if (entity != null) {
+                    entities.add(entity);
+                }
+            }
+        }
+        return entities;
+    }
+
 
 }

@@ -42,6 +42,7 @@
         <!-- Environment switches -->
         <env>dev</env>
         <env.db>derby</env.db>
+        <env.search>embeded-lucene</env.search>
         <env.ssl>off</env.ssl>
         <payment.liqpay.module>off</payment.liqpay.module>
         <payment.cybersource.module>off</payment.cybersource.module>
@@ -620,6 +621,7 @@
                                 <echo> </echo>
                                 <echo>Environment configuration (use -Denv=x to switch)      : ${env} </echo>
                                 <echo>Database provider (use -Pmysql or -Pderby)             : ${env.db} </echo>
+                                <echo>Full text search provider (use -PembededLucene)        : ${env.search} </echo>
                                 <echo>Tomcat SSL configuration (use -Pssl)                   : ${env.ssl} </echo>
                                 <echo>JAM npm goal (use -Dnpm.goal=x to switch)              : ${npm.goal} </echo>
                                 <echo>JAM npm target (use -Dnpm.target.home=x to switch)     : ${npm.target.home} (${ts.target.home}) </echo>
@@ -730,6 +732,18 @@
             <id>derby</id>
             <properties>
                 <env.db>derby</env.db>
+            </properties>
+        </profile>
+
+        <!--
+            FULLTEXT PROFILES
+        -->
+        <profile>
+            <!-- Use embeded lucene as full text search provider -->
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>embededLucene</id>
+            <properties>
+                <env.search>embeded-lucene</env.search>
             </properties>
         </profile>
 

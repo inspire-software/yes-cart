@@ -85,7 +85,7 @@ public interface SystemEndpointController {
     List<Object[]> hsqlQuery(@RequestBody String query, @PathVariable("node") String node) throws Exception;
 
     /**
-     * Execute lucene and return result.
+     * Execute ft query and return result.
      *
      * @param query query ot execute.
      * @param node node on which to run query
@@ -95,7 +95,7 @@ public interface SystemEndpointController {
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/ftquery/{node}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<Object[]> luceneQuery(@RequestBody String query, @PathVariable("node") String node) throws Exception;
+    List<Object[]> ftQuery(@RequestBody String query, @PathVariable("node") String node) throws Exception;
 
     /**
      * Get cache information.

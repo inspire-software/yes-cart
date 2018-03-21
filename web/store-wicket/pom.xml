@@ -225,6 +225,18 @@
 
         <profile>
             <activation><activeByDefault>true</activeByDefault></activation>
+            <id>embededLucene</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>search-lucene-embeded</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
             <id>paymentAll</id>
             <dependencies>
                 <dependency>

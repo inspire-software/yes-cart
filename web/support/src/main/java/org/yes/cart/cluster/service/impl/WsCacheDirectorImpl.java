@@ -18,7 +18,7 @@ package org.yes.cart.cluster.service.impl;
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.service.CacheDirector;
-import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.dto.impl.CacheInfoDTO;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -49,8 +49,8 @@ public class WsCacheDirectorImpl extends CacheDirectorImpl implements CacheDirec
 
         nodeService.subscribe("CacheDirector.getCacheInfo", message -> {
             final Node node = nodeService.getCurrentNode();
-            final ArrayList<CacheInfoDTOImpl> caches = new ArrayList<>();
-            for (final CacheInfoDTOImpl cache : WsCacheDirectorImpl.this.getCacheInfo()) {
+            final ArrayList<CacheInfoDTO> caches = new ArrayList<>();
+            for (final CacheInfoDTO cache : WsCacheDirectorImpl.this.getCacheInfo()) {
                 cache.setNodeId(node.getId());
                 cache.setNodeUri(node.getChannel());
                 caches.add(cache);

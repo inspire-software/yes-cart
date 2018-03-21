@@ -66,7 +66,17 @@ public interface GenericFTSCapableDAO<T, PK extends Serializable, FTQ> extends G
     /**
      * Get the full text search result.
      *
-     * @param query lucene search query
+     * @param query raw search query
+     *
+     * @return list of found entities
+     */
+    List<T> fullTextSearchRaw(String query);
+
+
+    /**
+     * Get the full text search result.
+     *
+     * @param query full text search query
      *
      * @return list of found entities
      */
@@ -75,7 +85,7 @@ public interface GenericFTSCapableDAO<T, PK extends Serializable, FTQ> extends G
     /**
      * Get the full text search result.
      *
-     * @param query         lucene search query
+     * @param query         full text search query
      * @param firstResult   first row of result
      * @param maxResults    size of result set
      * @param sortFieldName optional  sort field name
@@ -92,7 +102,7 @@ public interface GenericFTSCapableDAO<T, PK extends Serializable, FTQ> extends G
     /**
      * Get the full text search result.
      *
-     * @param query         lucene search query
+     * @param query         full text search query
      * @param firstResult   first row of result
      * @param maxResults    size of result set
      * @param sortFieldName optional  sort field name
@@ -114,7 +124,7 @@ public interface GenericFTSCapableDAO<T, PK extends Serializable, FTQ> extends G
      * cached and it will make it harder to work with this map as some entries must be thrown away (e.g. zero counts
      * for multi value), sorted (e.g. multivalue).
      *
-     * @param query lucene search query
+     * @param query full text search query
      * @param facetingRequest faceting request context
      *
      * @return list of facets with values and their counts
@@ -126,7 +136,7 @@ public interface GenericFTSCapableDAO<T, PK extends Serializable, FTQ> extends G
     /**
      * Get the full text search result.
      *
-     * @param query lucene search query
+     * @param query full text search query
      *
      * @return count items in result
      */

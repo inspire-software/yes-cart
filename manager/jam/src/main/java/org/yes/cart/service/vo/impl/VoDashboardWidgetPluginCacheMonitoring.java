@@ -18,7 +18,7 @@ package org.yes.cart.service.vo.impl;
 
 import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.dto.impl.CacheInfoDTO;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
@@ -67,12 +67,12 @@ public class VoDashboardWidgetPluginCacheMonitoring implements VoDashboardWidget
         try {
             final Map<String, Object> param = new HashMap<>();
             param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
-            Map<String, List<CacheInfoDTOImpl>> caches = clusterService.getCacheInfo(createCtx(param));
+            Map<String, List<CacheInfoDTO>> caches = clusterService.getCacheInfo(createCtx(param));
             for (final String node : caches.keySet()) {
 
                 int counter = 0;
 
-                for (final CacheInfoDTOImpl cache : caches.get(node)) {
+                for (final CacheInfoDTO cache : caches.get(node)) {
                     // if we have max size setting and we are more than 75%, report as hot cache
                     if (cache.getInMemorySizeMax() > 0 &&
                             cache.getCacheSize() > (cache.getInMemorySizeMax() - cache.getInMemorySizeMax() / 4)) {

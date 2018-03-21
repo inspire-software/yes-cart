@@ -32,6 +32,7 @@
 
     <import resource="classpath:core-config.xml"/>
     <import resource="classpath:core-services.xml"/>
+    <import resource="classpath:core-index-sf.xml"/>
     <import resource="classpath:core-payments.xml"/>
     <import resource="classpath:core-orderstate.xml"/>
 
@@ -154,7 +155,7 @@
         <constructor-arg index="0" ref="productService"/>
         <constructor-arg index="1" ref="productSkuService"/>
         <constructor-arg index="2" ref="productAssociationService"/>
-        <constructor-arg index="3" ref="luceneQueryFactory"/>
+        <constructor-arg index="3" ref="ftQueryFactory"/>
         <constructor-arg index="4" ref="productAvailabilityStrategy"/>
         <constructor-arg index="5" ref="productQuantityStrategy"/>
         <constructor-arg index="6" ref="pricingPolicyProvider"/>

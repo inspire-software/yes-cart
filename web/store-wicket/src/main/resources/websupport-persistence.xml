@@ -120,15 +120,4 @@
     </bean>
 
 
-    <bean id="productIndexProvider" class="org.yes.cart.search.dao.impl.LuceneIndexProviderImpl">
-        <constructor-arg index="0" value="product"/>
-        <constructor-arg index="1" value="${ft.config.sf.indexBase}"/>
-    </bean>
-
-    <bean id="productSkuIndexProvider" class="org.yes.cart.search.dao.impl.LuceneIndexProviderImpl">
-        <constructor-arg index="0" value="productsku"/>
-        <constructor-arg index="1" value="${ft.config.sf.indexBase}"/>
-    </bean>
-
-
 </beans>

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.dto.impl.CacheInfoDTO;
 import org.yes.cart.domain.vo.VoCacheInfo;
 import org.yes.cart.domain.vo.VoClusterNode;
 import org.yes.cart.domain.vo.VoJobStatus;
@@ -108,10 +108,10 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
     /** {@inheritDoc} */
     @Override
     public @ResponseBody
-    List<Object[]> luceneQuery(@RequestBody final String query, @PathVariable("node") final String node) throws Exception {
+    List<Object[]> ftQuery(@RequestBody final String query, @PathVariable("node") final String node) throws Exception {
         final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS);
-        return clusterService.luceneQuery(createCtx(param), query, node);
+        return clusterService.ftQuery(createCtx(param), query, node);
     }
 
     /** {@inheritDoc} */
@@ -120,10 +120,10 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
     List<VoCacheInfo> getCacheInfo() throws Exception {
         final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
-        Map<String, List<CacheInfoDTOImpl>> caches = clusterService.getCacheInfo(createCtx(param));
+        Map<String, List<CacheInfoDTO>> caches = clusterService.getCacheInfo(createCtx(param));
         final List<VoCacheInfo> vos = new ArrayList<>(caches.size() * 250);
-        for (final List<CacheInfoDTOImpl> nodeCache : caches.values()) {
-            vos.addAll(voAssemblySupport.assembleVos(VoCacheInfo.class, CacheInfoDTOImpl.class, nodeCache));
+        for (final List<CacheInfoDTO> nodeCache : caches.values()) {
+            vos.addAll(voAssemblySupport.assembleVos(VoCacheInfo.class, CacheInfoDTO.class, nodeCache));
         }
         return vos;
     }

@@ -228,7 +228,7 @@ public interface ServiceSpringKeys {
     /**
      * {@link org.yes.cart.search.SearchQueryFactory} bean key.
      */
-    String LUCENE_QUERY_FACTORY = "luceneQueryFactory";
+    String FT_QUERY_FACTORY = "ftQueryFactory";
 
     /**
      * {@link org.yes.cart.utils.impl.ExtendedConversionService} bean key

@@ -25,17 +25,18 @@ import org.yes.cart.domain.dto.ProductSearchResultNavItemDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.search.PriceNavigation;
 import org.yes.cart.search.SearchQueryFactory;
 import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
+import org.yes.cart.search.dto.impl.FilteredNavigationRecordImpl;
 import org.yes.cart.search.dto.impl.FilteredNavigationRecordRequestImpl;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
-import org.yes.cart.search.query.impl.SearchUtil;
+import org.yes.cart.search.util.SearchUtil;
 import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.page.component.filterednavigation.PriceFilteredNavigationSupport;
@@ -56,19 +57,16 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
 
     private final CategoryService categoryService;
     private final ShopService shopService;
-    private final PriceService priceService;
     private final PriceNavigation priceNavigation;
 
     public PriceFilteredNavigationSupportImpl(final SearchQueryFactory searchQueryFactory,
                                               final ProductService productService,
                                               final CategoryService categoryService,
                                               final ShopService shopService,
-                                              final PriceService priceService,
                                               final PriceNavigation priceNavigation) {
         super(searchQueryFactory, productService);
         this.categoryService = categoryService;
         this.shopService = shopService;
-        this.priceService = priceService;
         this.priceNavigation = priceNavigation;
     }
 
@@ -101,7 +99,7 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
             }
 
             final Shop shop = shopService.getById(navigationContext.getCustomerShopId());
-            final List<FilteredNavigationRecord> allNavigationRecords = priceService.getPriceNavigationRecords(
+            final List<FilteredNavigationRecord> allNavigationRecords = getPriceNavigationRecords(
                     priceTierTree,
                     currency,
                     shop);
@@ -151,5 +149,34 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
         return navigationList;
     }
 
+    List<FilteredNavigationRecord> getPriceNavigationRecords(final PriceTierTree priceTierTree,
+                                                             final String currency,
+                                                             final Shop customerShop) {
+        final List<PriceTierNode> priceTierNodes = getPriceTierNodes(priceTierTree, currency, customerShop);
+        final List<FilteredNavigationRecord> result = new ArrayList<>(priceTierNodes.size());
+        for (PriceTierNode priceTierNode : priceTierNodes) {
+            result.add(
+                    new FilteredNavigationRecordImpl(
+                            ProductSearchQueryBuilder.PRODUCT_PRICE,
+                            ProductSearchQueryBuilder.PRODUCT_PRICE,
+                            priceNavigation.composePriceRequestParams(
+                                    currency,
+                                    priceTierNode.getFrom(),
+                                    priceTierNode.getTo()
+                            ),
+                            0
+                    )
+            );
+        }
+        return result;
+    }
+
+    private List<PriceTierNode> getPriceTierNodes(final PriceTierTree priceTierTree, final String currency, final Shop shop) {
+        List<PriceTierNode> priceTierNodes = priceTierTree.getPriceTierNodes(currency);
+        if (priceTierNodes == null) {
+            return Collections.emptyList();
+        }
+        return priceTierNodes;
+    }
 
 }

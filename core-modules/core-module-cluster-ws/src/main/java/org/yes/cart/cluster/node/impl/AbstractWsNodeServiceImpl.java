@@ -47,6 +47,7 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
     private final Map<String, String> configuration = new HashMap<>();
     private Node node = new NodeImpl(true, "-", null, "DEFAULT", "YCCLUSTER", "N/A", "", true);
     private final List<Node> cluster = new CopyOnWriteArrayList<>();
+    private final List<Node> blacklisted = new CopyOnWriteArrayList<>();
 
     protected Map<String, List<MessageListener>> listeners = new HashMap<>();
 
@@ -110,6 +111,14 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
     public List<Node> getCluster() {
 
         return Collections.unmodifiableList(this.cluster);
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Node> getBlacklisted() {
+
+        return Collections.unmodifiableList(this.blacklisted);
 
     }
 
@@ -204,6 +213,7 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
 
                 if (toBlacklist != null) {
                     this.cluster.remove(toBlacklist);
+                    this.blacklisted.add(toBlacklist);
                 }
             }
         }
@@ -227,6 +237,7 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
 
         try {
             this.cluster.clear();
+            this.blacklisted.clear();
 
             final List<Node> cluster = wsConfigurationLoader.fromXML(wsConfiguration.getInputStream());
 

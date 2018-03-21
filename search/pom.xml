@@ -23,61 +23,11 @@
         <version>3.5.0-SNAPSHOT</version>
     </parent>
     <artifactId>search</artifactId>
+    <packaging>pom</packaging>
     <name>Yes cart search</name>
-    <dependencies>
-        <dependency>
-            <groupId>org.yes</groupId>
-            <artifactId>domain-api</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
-            <version>${ehcache-core.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-core</artifactId>
-            <version>${lucene.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-queryparser</artifactId>
-            <version>${lucene.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-analyzers-common</artifactId>
-            <version>${lucene.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-facet</artifactId>
-            <version>${lucene.version}</version>
-        </dependency>
-
-        <!-- Jackson JSON Mapper -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-    </dependencies>
+    <modules>
+        <module>search-api</module>
+        <module>search-lucene-core</module>
+        <module>search-lucene-embeded</module>
+    </modules>
 </project>

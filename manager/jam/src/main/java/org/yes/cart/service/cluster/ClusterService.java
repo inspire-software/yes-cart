@@ -17,7 +17,7 @@
 package org.yes.cart.service.cluster;
 
 import org.yes.cart.cluster.node.Node;
-import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.dto.impl.CacheInfoDTO;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -42,6 +42,15 @@ public interface ClusterService {
      * @return node objects
      */
     List<Node> getClusterInfo(AsyncContext context);
+
+    /**
+     * All blacklisted nodes in this cluster.
+     *
+     * @param context web service context
+     *
+     * @return node objects
+     */
+    List<Node> getBlacklistedInfo(AsyncContext context);
 
     /**
      * Warm up all storefront servers.
@@ -138,7 +147,7 @@ public interface ClusterService {
     List<Object[]> hsqlQuery(AsyncContext context, String query, String node);
 
     /**
-     * Execute lucene and return result.
+     * Execute ft query and return result.
      *
      * @param context web service context
      * @param query query ot execute.
@@ -146,7 +155,7 @@ public interface ClusterService {
      *
      * @return list of rows
      */
-    List<Object[]> luceneQuery(AsyncContext context, String query, String node);
+    List<Object[]> ftQuery(AsyncContext context, String query, String node);
 
     /**
      * Reload system configurations.
@@ -161,7 +170,7 @@ public interface ClusterService {
      * @param context web service context
      * @return list of information per each cache.
      */
-    Map<String, List<CacheInfoDTOImpl>> getCacheInfo(AsyncContext context)
+    Map<String, List<CacheInfoDTO>> getCacheInfo(AsyncContext context)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**

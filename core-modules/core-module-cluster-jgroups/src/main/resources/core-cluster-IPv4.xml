@@ -24,9 +24,9 @@
 
     <!-- ################################ Clustering begin ###################################### -->
 
-    <bean id="jGroupsSysProps1" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetClass"><value>java.lang.System</value></property>
-        <property name="targetMethod"><value>setProperty</value></property>
+    <bean id="jGroupsSysPropsIPv4" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetClass" value="java.lang.System"/>
+        <property name="targetMethod" value="setProperty"/>
         <property name="arguments">
             <list>
                 <value>java.net.preferIPv4Stack</value>
@@ -41,7 +41,7 @@
         </description>
     </bean>
 
-    <bean id="nodeService" class="org.yes.cart.cluster.node.impl.JGroupsNodeServiceImpl" depends-on="jGroupsSysProps1">
+    <bean id="nodeService" class="org.yes.cart.cluster.node.impl.JGroupsNodeServiceImpl" depends-on="jGroupsSysPropsIPv4">
         <constructor-arg index="0" ref="systemService"/>
         <constructor-arg index="1" ref="jgroupsExecutor"/>
         <property name="jgroupsConfiguration" value="yc-jgroups-udp.xml"/>

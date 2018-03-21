@@ -696,6 +696,7 @@
   "DASHBOARD_PG_CALLBACK": "Verwalten von PG-Rückrufen",
   "DASHBOARD_ALERTS": "Achtung",
   "mailQueue": "Die Mail-Warteschlange ist nicht leer ({{value}})",
+  "blacklistedNodes": "Der Cluster hat Knoten in der Blacklist: {{value}}",
 
   "REPORT_reportAvailableStock" : "Lager Report",
   "REPORT_reportPayments" : "Zahlungs Report",

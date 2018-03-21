@@ -23,7 +23,7 @@
         <version>3.5.0-SNAPSHOT</version>
     </parent>
     <artifactId>domain-api</artifactId>
-    <name>Yes cart domain api</name>
+    <name>Yes cart domain API</name>
     <dependencies>
         <dependency>
             <groupId>org.hibernate</groupId>

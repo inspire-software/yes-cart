@@ -109,6 +109,7 @@
   <import resource="classpath:core-config.xml"/>
   <import resource="classpath:core-persistence.xml"/>
   <import resource="classpath:core-io.xml"/>
+  <import resource="classpath:dao-index-admin.xml"/>
   <import resource="classpath:core-services.xml"/>
   <import resource="classpath:core-dto-services.xml"/>
   <import resource="classpath:manager-services-commands.xml"/>

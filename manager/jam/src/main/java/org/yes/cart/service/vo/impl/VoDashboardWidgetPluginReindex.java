@@ -70,6 +70,7 @@ public class VoDashboardWidgetPluginReindex implements VoDashboardWidgetPlugin {
 
             final Map<String, Object> param = new HashMap<>();
             param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
+            param.put(AsyncContext.NO_BROADCAST, AsyncContext.NO_BROADCAST); // No reloading, only cached cluster info
             final List<Node> cluster = clusterService.getClusterInfo(createCtx(param));
 
             final StringBuilder ftNodes = new StringBuilder();

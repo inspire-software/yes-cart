@@ -17,7 +17,7 @@
 package org.yes.cart.web.support.util;
 
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
-import org.yes.cart.search.query.impl.SearchUtil;
+import org.yes.cart.search.util.SearchUtil;
 
 import java.util.HashMap;
 import java.util.Map;

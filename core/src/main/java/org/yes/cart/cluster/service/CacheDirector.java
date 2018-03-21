@@ -16,7 +16,7 @@
 package org.yes.cart.cluster.service;
 
 
-import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.dto.impl.CacheInfoDTO;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public interface CacheDirector {
      * Get cache information.
      * @return list of information per each cache.
      */
-    List<CacheInfoDTOImpl> getCacheInfo();
+    List<CacheInfoDTO> getCacheInfo();
 
     /**
      * Evict all caches, which are represent in getCacheInfo list.

@@ -20,13 +20,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
-import org.yes.cart.search.dto.FilteredNavigationRecord;
-import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -59,31 +55,6 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
             e.printStackTrace();
         }
         super.setUp();
-    }
-
-    @Test
-    public void testGetPriceNavigationRecords() {
-        Shop shop = shopService.getShopByDomainName("www.gadget.yescart.org");
-        CategoryService categoryService = ctx().getBean("categoryService", CategoryService.class);
-        Category cat = categoryService.findById(129L); // this category hold navigation by price tiers
-        assertNotNull(cat);
-        PriceTierTree priceTierTree = cat.getNavigationByPriceTree();
-        try {
-            dumpDataBase("x1x1xx_cats_nav", new String[] { "TCATEGORY" });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        assertNotNull(priceTierTree);
-        List<FilteredNavigationRecord> navigationRecords = priceService.getPriceNavigationRecords(priceTierTree, "EUR", shop);
-        assertNotNull(navigationRecords);
-        assertEquals(3, navigationRecords.size());
-        assertEquals("EUR-_-0-_-100", navigationRecords.get(0).getValue());
-        assertEquals("EUR-_-100-_-300", navigationRecords.get(1).getValue());
-        assertEquals("EUR-_-300-_-500", navigationRecords.get(2).getValue());
-        // In other currency
-        navigationRecords = priceService.getPriceNavigationRecords(priceTierTree, "UAH", shop);
-        assertNotNull(navigationRecords);
-        assertEquals(0, navigationRecords.size()); // we only use explicit navs (no auto exchange)
     }
 
     /**
@@ -726,7 +697,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testCreatePriceTierNodes() {
 
-        PriceServiceImpl priceService1 = new PriceServiceImpl(null, null);
+        PriceServiceImpl priceService1 = new PriceServiceImpl(null);
 
         assertEquals( new BigDecimal("3000").intValue(), priceService1.niceBigDecimal(new BigDecimal("3000")).intValue());
         assertEquals( new BigDecimal("30").intValue(), priceService1.niceBigDecimal(new BigDecimal("30")).intValue());

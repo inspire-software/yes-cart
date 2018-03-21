@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
-            <artifactId>search</artifactId>
+            <artifactId>search-api</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
@@ -143,12 +143,6 @@
                     <artifactId>ehcache</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-core</artifactId>
-            <version>${lucene.version}</version>
         </dependency>
 
         <dependency>

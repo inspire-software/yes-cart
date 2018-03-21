@@ -78,6 +78,13 @@ public interface NodeService {
     List<Node> getCluster();
 
     /**
+     * All bloacklisted nodes in this cluster.
+     *
+     * @return node objects
+     */
+    List<Node> getBlacklisted();
+
+    /**
      * Current node object.
      *
      * @return this node

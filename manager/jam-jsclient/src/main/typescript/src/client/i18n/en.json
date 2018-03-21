@@ -696,6 +696,7 @@
   "DASHBOARD_PG_CALLBACK": "Manage PG callbacks",
   "DASHBOARD_ALERTS": "Attention",
   "mailQueue": "Mail queue is not empty ({{value}})",
+  "blacklistedNodes": "Cluster has nodes in blacklist: {{value}}",
 
   "REPORT_reportAvailableStock" : "Inventory report",
   "REPORT_reportPayments" : "Payments report",

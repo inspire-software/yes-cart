@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.yes.cart.cluster.node.Node;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.VoDashboardWidget;
@@ -92,6 +94,25 @@ public class VoDashboardWidgetPluginAlerts implements VoDashboardWidgetPlugin {
             data.add(MutablePair.of("mailQueue", mailCount));
         }
 
+        // blacklisted cluster nodes
+        try {
+            final List<Node> nodes = this.clusterService.getBlacklistedInfo(this.asyncContextFactory.getInstance());
+            if (CollectionUtils.isNotEmpty(nodes)) {
+                final StringBuilder names = new StringBuilder();
+                for (final Node node : nodes) {
+                    if (names.length() > 0) {
+                        names.append(", ");
+                    }
+                    names.append(node.getId());
+                }
+                data.add(MutablePair.of("blacklistedNodes", names));
+            }
+        } catch (Exception exp) {
+            // Do nothing
+        }
+
+
+        // Alerts fed through logging
         try {
             final List<Pair<String, String>> alerts = this.clusterService.getAlerts(this.asyncContextFactory.getInstance());
             for (final Pair<String, String> alert : alerts) {

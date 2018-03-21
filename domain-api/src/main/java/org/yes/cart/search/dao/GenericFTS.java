@@ -36,6 +36,16 @@ public interface GenericFTS<PK extends Serializable, FTQ> {
     /**
      * Get the full text search result.
      *
+     * @param query raw search query
+     *
+     * @return list of found entities
+     */
+    List<PK> fullTextSearchRaw(String query);
+
+
+    /**
+     * Get the full text search result.
+     *
      * @param query lucene search query
      *
      * @return list of found entities

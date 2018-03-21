@@ -123,13 +123,13 @@ public interface BackdoorService {
     List<Object[]> hsqlQuery(String query);
 
     /**
-     * Execute lucene and return result.
+     * Execute ft query and return result.
      *
      * @param query query ot execute.
      *
      * @return list of rows
      */
-    List<Object[]> luceneQuery(String query);
+    List<Object[]> ftQuery(String query);
 
     /**
      * Reload system configurations.

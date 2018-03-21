@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.cluster.service.CacheDirector;
-import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.dto.impl.CacheInfoDTO;
 import org.yes.cart.domain.misc.Pair;
 
 import java.util.*;
@@ -56,9 +56,9 @@ public class CacheDirectorImpl implements CacheDirector {
      * {@inheritDoc}
      */
     @Override
-    public List<CacheInfoDTOImpl> getCacheInfo() {
+    public List<CacheInfoDTO> getCacheInfo() {
         final Collection<String> cacheNames = cacheManager.getCacheNames();
-        final List<CacheInfoDTOImpl> rez = new ArrayList<>(cacheNames.size());
+        final List<CacheInfoDTO> rez = new ArrayList<>(cacheNames.size());
         for (String cacheName : cacheNames) {
             final Cache cache = cacheManager.getCache(cacheName);
             final net.sf.ehcache.Cache nativeCache = (net.sf.ehcache.Cache) cache.getNativeCache();
@@ -67,7 +67,7 @@ public class CacheDirectorImpl implements CacheDirector {
             final boolean statsEnabled = stats != null && stats.isStatisticsEnabled();
             if (statsEnabled) {
                 rez.add(
-                        new CacheInfoDTOImpl(
+                        new CacheInfoDTO(
                                 nativeCache.getName(),
                                 nativeCache.getSize(),
                                 nativeCache.getMemoryStoreSize(),
@@ -86,7 +86,7 @@ public class CacheDirectorImpl implements CacheDirector {
                 );
             } else {
                 rez.add(
-                        new CacheInfoDTOImpl(
+                        new CacheInfoDTO(
                                 nativeCache.getName(),
                                 nativeCache.getSize(),
                                 nativeCache.getMemoryStoreSize(),

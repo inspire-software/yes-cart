@@ -63,7 +63,7 @@ public class HomePage extends AbstractWebPage {
     @SpringBean(name = WicketServiceSpringKeys.WICKET_CENTRAL_VIEW_PROVIDER)
     private WicketCentralViewProvider wicketCentralViewProvider;
 
-    @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
+    @SpringBean(name = ServiceSpringKeys.FT_QUERY_FACTORY)
     private SearchQueryFactory searchQueryFactory;
 
     @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_SERVICE_FACADE)

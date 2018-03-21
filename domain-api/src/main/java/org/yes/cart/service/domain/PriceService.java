@@ -16,10 +16,7 @@
 
 package org.yes.cart.service.domain;
 
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
-import org.yes.cart.search.dto.FilteredNavigationRecord;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -92,17 +89,5 @@ public interface PriceService extends GenericService<SkuPrice> {
     List<SkuPrice> getAllPrices(final Long productId,
                                 final String selectedSku,
                                 final String currencyCode);
-
-    /**
-     * Get navigation records for prices
-     *
-     * @param priceTierTree given price tier tree
-     * @param currency      currency code
-     * @param customerShop  customer shop
-     * @return list of navigation records for given price tree and currency
-     */
-    List<FilteredNavigationRecord> getPriceNavigationRecords(PriceTierTree priceTierTree,
-                                                             String currency,
-                                                             Shop customerShop);
 
 }

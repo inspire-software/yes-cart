@@ -75,7 +75,7 @@
             <props>
                 <prop key="sqlQuery">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="hsqlQuery">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
-                <prop key="luceneQuery">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <prop key="ftQuery">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
                 <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
         </property>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="dao.xml"/>
+    <import resource="dao-index-support.xml"/>
+
+    <bean id="productIndexProvider" class="org.yes.cart.search.dao.impl.LuceneIndexProviderImpl">
+        <constructor-arg index="0" value="product"/>
+        <constructor-arg index="1" value="${ft.config.api.indexBase}"/>
+    </bean>
+
+    <bean id="productFts" class="org.yes.cart.search.dao.impl.GenericFTSLuceneImpl">
+        <property name="luceneIndexProvider" ref="productIndexProvider"/>
+    </bean>
+
+    <bean id="productIndexBuilder" class="org.yes.cart.search.dao.impl.IndexBuilderLuceneHibernateTxAwareImpl">
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.search.dao.entity.ProductLuceneDocumentAdapter">
+                <property name="attributesSupport" ref="navigatableAttributesSupport"/>
+                <property name="shopCategorySupport" ref="shopCategoryRelationshipSupport"/>
+                <property name="shopWarehouseSupport" ref="shopWarehouseRelationshipSupport"/>
+                <property name="skuPriceSupport" ref="skuPriceRelationshipSupport"/>
+                <property name="skuWarehouseSupport" ref="skuWarehouseRelationshipSupport"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1" ref="productIndexProvider"/>
+        <constructor-arg index="2" ref="productDaoBase"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="platformTransactionManager" ref="transactionManager"/>
+        <property name="indexExecutor">
+            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+                <description>
+                    Thread pool (1) for product indexing since they may be slow. We only need
+                    one thread for this as we only anticipate one thread to be reindexing all
+                    products.
+                </description>
+                <property name="corePoolSize" value="1"/>
+                <property name="maxPoolSize" value="1"/>
+            </bean>
+        </property>
+        <property name="findAllNamedQuery" value="PRODUCTS.ALL.FOR.INDEX"/>
+    </bean>
+
+    <bean id="productDao" class="org.yes.cart.dao.impl.GenericFTSCapableDAOImpl">
+        <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="productDaoBase"/>
+        <constructor-arg type="org.yes.cart.search.dao.GenericFTS" ref="productFts"/>
+        <constructor-arg type="org.yes.cart.search.dao.IndexBuilder" ref="productIndexBuilder"/>
+    </bean>
+
+
+    <bean id="productSkuIndexProvider" class="org.yes.cart.search.dao.impl.LuceneIndexProviderImpl">
+        <constructor-arg index="0" value="productsku"/>
+        <constructor-arg index="1" value="${ft.config.api.indexBase}"/>
+    </bean>
+
+    <bean id="productSkuFts" class="org.yes.cart.search.dao.impl.GenericFTSLuceneImpl">
+        <property name="luceneIndexProvider" ref="productSkuIndexProvider"/>
+    </bean>
+
+    <bean id="productSkuIndexBuilder" class="org.yes.cart.search.dao.impl.IndexBuilderLuceneHibernateTxAwareImpl">
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.search.dao.entity.ProductSkuLuceneDocumentAdapter">
+                <property name="attributesSupport" ref="navigatableAttributesSupport"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1" ref="productSkuIndexProvider"/>
+        <constructor-arg index="2" ref="productSkuDaoBase"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="platformTransactionManager" ref="transactionManager"/>
+        <property name="indexExecutor">
+            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+                <description>
+                    Thread pool (1) for product indexing since they may be slow. We only need
+                    one thread for this as we only anticipate one thread to be reindexing all
+                    products.
+                </description>
+                <property name="corePoolSize" value="1"/>
+                <property name="maxPoolSize" value="1"/>
+            </bean>
+        </property>
+        <property name="findAllNamedQuery" value="PRODUCT.SKUS.ALL.FOR.INDEX"/>
+    </bean>
+
+    <bean id="productSkuDao" class="org.yes.cart.dao.impl.GenericFTSCapableDAOImpl">
+        <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="productSkuDaoBase"/>
+        <constructor-arg type="org.yes.cart.search.dao.GenericFTS" ref="productSkuFts"/>
+        <constructor-arg type="org.yes.cart.search.dao.IndexBuilder" ref="productSkuIndexBuilder"/>
+    </bean>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="registerModuleCronJob" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetClass" value="org.yes.cart.util.ModuleUtils"/>
+        <property name="targetMethod" value="registerModule"/>
+        <property name="arguments">
+            <list>
+                <value>search-lucene-embeded:dao-index-api</value>
+            </list>
+        </property>
+    </bean>
+
+</beans>
+

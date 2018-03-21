@@ -26,7 +26,7 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils;
+import org.yes.cart.search.dao.entity.AdapterUtils;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.ProductSkuService;
 
@@ -99,14 +99,14 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
                 -1, /* no limit */
                 null,
                 false,
-                LuceneDocumentAdapterUtils.FIELD_PK,
-                LuceneDocumentAdapterUtils.FIELD_CLASS,
-                LuceneDocumentAdapterUtils.FIELD_OBJECT
+                AdapterUtils.FIELD_PK,
+                AdapterUtils.FIELD_CLASS,
+                AdapterUtils.FIELD_OBJECT
         );
 
         final List<ProductSkuSearchResultDTO> rez = new ArrayList<>(searchRez.getFirst().size());
         for (Object[] obj : searchRez.getFirst()) {
-            final ProductSkuSearchResultDTO dto = LuceneDocumentAdapterUtils.readObjectFieldValue((String) obj[2], ProductSkuSearchResultDTOImpl.class);
+            final ProductSkuSearchResultDTO dto = AdapterUtils.readObjectFieldValue((String) obj[2], ProductSkuSearchResultDTOImpl.class);
             rez.add(dto);
         }
 

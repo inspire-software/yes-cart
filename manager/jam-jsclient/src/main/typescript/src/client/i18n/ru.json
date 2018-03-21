@@ -696,6 +696,7 @@
   "DASHBOARD_PG_CALLBACK": "Управление подтверждений с ПШ",
   "DASHBOARD_ALERTS": "Внимание",
   "mailQueue": "Очередь почты не пуста ({{value}})",
+  "blacklistedNodes": "Кластер имеет узлы в черном списке: {{value}}",
 
   "REPORT_reportAvailableStock" : "Отчет инвентаризации",
   "REPORT_reportPayments" : "Отчет по оплатам",

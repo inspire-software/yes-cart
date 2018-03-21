@@ -31,6 +31,8 @@ import org.yes.cart.web.service.ws.WsMessage;
 import org.yes.cart.web.service.ws.client.WsClientAbstractFactory;
 import org.yes.cart.web.service.ws.client.WsClientFactory;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.ws.WebServiceException;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -60,17 +62,17 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
     @Override
     public void broadcast(final Message message) {
 
-        if (reloadClusterTopics.contains(message.getSubject())) {
-            log.info("Reloading cluster information before {}", message.getSubject());
-            reloadClusterConfiguration();
-        }
-
         final ContextRspMessage wsMessage = (ContextRspMessage) message;
         final AsyncContext context = wsMessage.getAsyncContext();
 
         if (AsyncContext.NO_BROADCAST.equals(context.getAttribute(AsyncContext.NO_BROADCAST))) {
             log.debug("Broadcasting switched off for context of message {}", message.getSubject());
             return;
+        }
+
+        if (reloadClusterTopics.contains(message.getSubject())) {
+            log.info("Reloading cluster information before {}", message.getSubject());
+            reloadClusterConfiguration();
         }
 
         final List<String> targets = message.getTargets();
@@ -104,22 +106,31 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
                     service = null;
                 }
 
-            } catch (javax.xml.ws.WebServiceException wse) {
+            } catch (WebServiceException wse) {
 
                 if (wse.getCause() instanceof ConnectException) {
 
                     blacklist(yesNode.getId());
 
                     if (log.isErrorEnabled()) {
-                        log.error(Markers.alert(), "Node message failure [" + message + "] to  url ["
-                                + yesNode.getId() + "] . Blacklisting this node");
+                        log.error(Markers.alert(), "Node message failure [" + message + "] to channel ["
+                                + yesNode.getId() + ":" + yesNode.getChannel() + "] . Blacklisting this node due to connection exception.");
+                    }
+
+                } else if (wse.getCause() instanceof XMLStreamException) {
+
+                    blacklist(yesNode.getId());
+
+                    if (log.isErrorEnabled()) {
+                        log.error(Markers.alert(), "Node message failure [" + message + "] to channel ["
+                                + yesNode.getId() + ":" + yesNode.getChannel() + "] . Blacklisting this node due to malformed message.");
                     }
 
                 } else {
 
                     if (log.isErrorEnabled()) {
-                        log.error(Markers.alert(), "Node message failure [" + message + "] to  url ["
-                                + yesNode.getId() + "] . Exception occurred during ws call",
+                        log.error(Markers.alert(), "Node message failure [" + message + "] to channel ["
+                                + yesNode.getId() + ":" + yesNode.getChannel() + "] . Exception occurred during ws call",
                                 wse);
                     }
 
@@ -128,8 +139,8 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
             } catch (Exception e) {
 
                 if (log.isErrorEnabled()) {
-                    log.error(Markers.alert(), "Node message failure [" + message + "] to  url ["
-                            + yesNode.getId() + "] . Exception occurred during ws call",
+                    log.error(Markers.alert(), "Node message failure [" + message + "] to channel ["
+                            + yesNode.getId() + ":" + yesNode.getChannel() + "] . Exception occurred during ws call",
                             e);
                 }
 

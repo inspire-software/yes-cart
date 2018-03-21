@@ -24,7 +24,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.yes.cart.cluster.service.CacheDirector;
-import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.dto.impl.CacheInfoDTO;
 import org.yes.cart.domain.misc.Pair;
 
 import javax.naming.NamingException;
@@ -41,7 +41,7 @@ import static org.junit.Assert.*;
  * Time: 4:16 PM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:testApplicationContext.xml")
+@ContextConfiguration("classpath:cacheDirectorApplicationContext.xml")
 public class WsCacheDirectorImplTest {
 
     @Autowired
@@ -92,8 +92,8 @@ public class WsCacheDirectorImplTest {
     @Test
     public void testGetCacheInfo() {
         cacheDirector.getCacheManager().getCache("attributeService-availableAttributesByProductTypeId").put("hi", "there");
-        List<CacheInfoDTOImpl> rez = cacheDirector.getCacheInfo();
-        for (CacheInfoDTOImpl cacheInfoDTO : rez) {
+        List<CacheInfoDTO> rez = cacheDirector.getCacheInfo();
+        for (CacheInfoDTO cacheInfoDTO : rez) {
             if (cacheInfoDTO.getCacheName().equals("attributeService-availableAttributesByProductTypeId")){
                 assertEquals(1, cacheInfoDTO.getInMemorySize());
             }
@@ -105,19 +105,19 @@ public class WsCacheDirectorImplTest {
     @Test
     public void testAllEvictCache() {
 
-        List<CacheInfoDTOImpl> rez;
+        List<CacheInfoDTO> rez;
 
         rez = cacheDirector.getCacheInfo();
-        for (CacheInfoDTOImpl cacheInfoDTO : rez) {
+        for (CacheInfoDTO cacheInfoDTO : rez) {
             cacheDirector.getCacheManager().getCache(cacheInfoDTO.getCacheName()).put("hi", "there");
         }
         rez = cacheDirector.getCacheInfo();
-        for (CacheInfoDTOImpl cacheInfoDTO : rez) {
+        for (CacheInfoDTO cacheInfoDTO : rez) {
             assertTrue(cacheInfoDTO.getCacheSize() > 0);
         }
         cacheDirector.evictAllCache(false);
         rez = cacheDirector.getCacheInfo();
-        for (CacheInfoDTOImpl cacheInfoDTO : rez) {
+        for (CacheInfoDTO cacheInfoDTO : rez) {
             if (cacheDirector.getSkipEvictAll().contains(cacheInfoDTO.getCacheName())) {
                 assertTrue(cacheInfoDTO.getCacheSize() > 0);
             } else {
@@ -126,7 +126,7 @@ public class WsCacheDirectorImplTest {
         }
         cacheDirector.evictAllCache(true);
         rez = cacheDirector.getCacheInfo();
-        for (CacheInfoDTOImpl cacheInfoDTO : rez) {
+        for (CacheInfoDTO cacheInfoDTO : rez) {
             assertEquals(0, cacheInfoDTO.getCacheSize());
         }
 
@@ -135,13 +135,13 @@ public class WsCacheDirectorImplTest {
     @Test
     public void testEvictCache() {
 
-        List<CacheInfoDTOImpl> rez;
+        List<CacheInfoDTO> rez;
         rez = cacheDirector.getCacheInfo();
         final String first = rez.get(0).getCacheName();
         cacheDirector.getCacheManager().getCache(first).put("hi", "there");
 
         rez = cacheDirector.getCacheInfo();
-        for (CacheInfoDTOImpl cacheInfoDTO : rez) {
+        for (CacheInfoDTO cacheInfoDTO : rez) {
             if (cacheInfoDTO.getCacheName().equals(first)) {
                 assertTrue(cacheInfoDTO.getCacheSize() > 0);
             }
@@ -149,7 +149,7 @@ public class WsCacheDirectorImplTest {
 
         cacheDirector.evictCache(first);
         rez = cacheDirector.getCacheInfo();
-        for (CacheInfoDTOImpl cacheInfoDTO : rez) {
+        for (CacheInfoDTO cacheInfoDTO : rez) {
             if (cacheInfoDTO.getCacheName().equals(first)) {
                 assertEquals(0, cacheInfoDTO.getCacheSize());
             }

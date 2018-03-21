@@ -187,7 +187,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
      * {@inheritDoc}
      */
     @Override
-    public List<Object[]> luceneQuery(final String luceneQuery) {
+    public List<Object[]> ftQuery(final String luceneQuery) {
         throw new UnsupportedOperationException("ADMIN does not support product index");
     }
 

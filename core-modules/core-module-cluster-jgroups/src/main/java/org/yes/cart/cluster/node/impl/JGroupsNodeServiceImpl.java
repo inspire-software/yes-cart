@@ -72,11 +72,13 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getCurrentNodeId() {
         return node.getId();
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, String> getConfiguration() {
         final Map<String, String> all = new HashMap<String, String>();
         all.putAll(configuration);
@@ -116,6 +118,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Node> getCluster() {
 
         return Collections.unmodifiableList(this.cluster);
@@ -123,11 +126,19 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
     }
 
     /** {@inheritDoc} */
+    @Override
+    public List<Node> getBlacklisted() {
+        return Collections.emptyList();
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Node getCurrentNode() {
         return node;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Node getAdminNode() {
 
         final List<Node> cluster = getCluster();
@@ -140,6 +151,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Node> getSfNodes() {
 
         final List<Node> cluster = getCluster();
@@ -153,6 +165,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Node> getOtherSfNodes() {
 
         final List<Node> cluster = getCluster();
@@ -166,6 +179,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
     }
 
     /** {@inheritDoc} */
+    @Override
     public void broadcast(final Message message) {
 
         LOG.debug("Sending message: {}", message);
@@ -208,6 +222,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
     }
 
     /** {@inheritDoc} */
+    @Override
     public void subscribe(final String subject, final MessageListener listener) {
         synchronized (this) {
             List<MessageListener> subjectListeners = listeners.get(subject);
@@ -221,6 +236,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setServletContext(final ServletContext servletContext) {
 
         initNodeFromServletContext(servletContext);
@@ -284,6 +300,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
         };
 
         final ReceiverAdapter receiverAdapter = new ReceiverAdapter() {
+            @Override
             public void receive(final org.jgroups.Message msg) {
 
                 if (isMessageValid(msg)) {
@@ -504,6 +521,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
     /**
      * {@inheritDoc}
      */
+    @Override
     public void destroy() throws Exception {
 
         LOG.info("Closing JGroups channel for node {}", node.getId());

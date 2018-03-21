@@ -45,4 +45,16 @@
 
     <!-- ################################ Clustering end ######################################## -->
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="registerModuleCronJob" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetClass" value="org.yes.cart.util.ModuleUtils"/>
+        <property name="targetMethod" value="registerModule"/>
+        <property name="arguments">
+            <list>
+                <value>core-module-cluster-ws:manager-cluster-WS.xml</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>

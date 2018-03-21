@@ -20,6 +20,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <import resource="websupport-services.xml"/>
+
     <!-- ################################### filter delegates begin ################################### -->
 
     <bean id="runtimeContextFilter" class="org.yes.cart.web.filter.RuntimeContextFilter"/>
@@ -261,7 +263,7 @@
                     <constructor-arg index="1" ref="categoryService"/>
                     <constructor-arg index="2" ref="shopSearchSupportService"/>
                     <constructor-arg index="3" ref="productService"/>
-                    <constructor-arg index="4" ref="luceneQueryFactory"/>
+                    <constructor-arg index="4" ref="ftQueryFactory"/>
                 </bean>
                 <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverContentImpl">
                     <constructor-arg index="0" ref="contentService"/>
@@ -271,18 +273,17 @@
     </bean>
 
     <bean id="attributeFilteredNavigationSupport" class="org.yes.cart.web.page.component.filterednavigation.impl.AttributeFilteredNavigationSupportImpl">
-        <constructor-arg index="0" ref="luceneQueryFactory"/>
+        <constructor-arg index="0" ref="ftQueryFactory"/>
         <constructor-arg index="1" ref="productService"/>
         <constructor-arg index="2" ref="productTypeAttrService"/>
     </bean>
 
     <bean id="priceFilteredNavigationSupport" class="org.yes.cart.web.page.component.filterednavigation.impl.PriceFilteredNavigationSupportImpl">
-        <constructor-arg index="0" ref="luceneQueryFactory"/>
+        <constructor-arg index="0" ref="ftQueryFactory"/>
         <constructor-arg index="1" ref="productService"/>
         <constructor-arg index="2" ref="categoryService"/>
         <constructor-arg index="3" ref="shopService"/>
-        <constructor-arg index="4" ref="priceService"/>
-        <constructor-arg index="5" ref="priceNavigation"/>
+        <constructor-arg index="4" ref="priceNavigation"/>
     </bean>
 
     <bean id="currencySymbolService" class="org.yes.cart.web.support.service.impl.CurrencySymbolServiceImpl">

@@ -63,7 +63,7 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "ftQueryFactory");
 
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
@@ -83,7 +83,7 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "ftQueryFactory");
 
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
@@ -103,7 +103,7 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "ftQueryFactory");
 
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
@@ -140,7 +140,7 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "ftQueryFactory");
 
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
@@ -177,7 +177,7 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "ftQueryFactory");
 
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
 
@@ -214,7 +214,7 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "ftQueryFactory");
         final NavigationContext hasProducts = context.mock(NavigationContext.class, "hasProducts");
 
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
@@ -255,7 +255,7 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "ftQueryFactory");
         final NavigationContext hasProducts = context.mock(NavigationContext.class, "hasProducts");
 
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
@@ -297,7 +297,7 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "ftQueryFactory");
         final NavigationContext hasProducts = context.mock(NavigationContext.class, "hasProducts");
 
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
@@ -339,7 +339,7 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "ftQueryFactory");
         final NavigationContext hasProducts = context.mock(NavigationContext.class, "hasProducts");
 
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);
@@ -381,7 +381,7 @@ public class CentralViewResolverCategoryImplTest {
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
         final ProductService productService = context.mock(ProductService.class, "productService");
-        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "luceneQueryFactory");
+        final SearchQueryFactory searchQueryFactory = context.mock(SearchQueryFactory.class, "ftQueryFactory");
         final NavigationContext hasProducts = context.mock(NavigationContext.class, "hasProducts");
 
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, searchQueryFactory);

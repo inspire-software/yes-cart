@@ -34,7 +34,7 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.IndexBuilder;
-import org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils;
+import org.yes.cart.search.dao.entity.AdapterUtils;
 import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
@@ -452,14 +452,14 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 maxResults,
                 sortFieldName,
                 reverse,
-                LuceneDocumentAdapterUtils.FIELD_PK,
-                LuceneDocumentAdapterUtils.FIELD_CLASS,
-                LuceneDocumentAdapterUtils.FIELD_OBJECT
+                AdapterUtils.FIELD_PK,
+                AdapterUtils.FIELD_CLASS,
+                AdapterUtils.FIELD_OBJECT
         );
 
         final List<ProductSearchResultDTO> rez = new ArrayList<>(searchRez.getFirst().size());
         for (Object[] obj : searchRez.getFirst()) {
-            final ProductSearchResultDTO dto = LuceneDocumentAdapterUtils.readObjectFieldValue((String) obj[2], ProductSearchResultDTOImpl.class);
+            final ProductSearchResultDTO dto = AdapterUtils.readObjectFieldValue((String) obj[2], ProductSearchResultDTOImpl.class);
             rez.add(dto);
         }
 

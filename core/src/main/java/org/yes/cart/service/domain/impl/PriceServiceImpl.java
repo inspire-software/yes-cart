@@ -19,16 +19,9 @@ package org.yes.cart.service.domain.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.SkuPriceQuantityComparatorImpl;
-import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
-import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
-import org.yes.cart.search.PriceNavigation;
-import org.yes.cart.search.dto.FilteredNavigationRecord;
-import org.yes.cart.search.dto.impl.FilteredNavigationRecordImpl;
-import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
@@ -45,20 +38,15 @@ import java.util.*;
  */
 public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implements PriceService {
 
-    private final PriceNavigation priceNavigation;
     private final GenericDAO<SkuPrice, Long> skuPriceDao;
 
     /**
      * Constructor.
      *
-     * @param priceNavigation     price navigation composer
      * @param skuPriceDao         sku price dao service
      */
-    public PriceServiceImpl(final PriceNavigation priceNavigation,
-                            final GenericDAO<SkuPrice, Long> skuPriceDao
-    ) {
+    public PriceServiceImpl(final GenericDAO<SkuPrice, Long> skuPriceDao) {
         super(skuPriceDao);
-        this.priceNavigation = priceNavigation;
         this.skuPriceDao = skuPriceDao;
 
     }
@@ -372,40 +360,6 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
         }
 
         return Collections.emptyList();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<FilteredNavigationRecord> getPriceNavigationRecords(final PriceTierTree priceTierTree,
-                                                                    final String currency,
-                                                                    final Shop customerShop) {
-        final List<PriceTierNode> priceTierNodes = getPriceTierNodes(priceTierTree, currency, customerShop);
-        final List<FilteredNavigationRecord> result = new ArrayList<>(priceTierNodes.size());
-        for (PriceTierNode priceTierNode : priceTierNodes) {
-            result.add(
-                    new FilteredNavigationRecordImpl(
-                            ProductSearchQueryBuilder.PRODUCT_PRICE,
-                            ProductSearchQueryBuilder.PRODUCT_PRICE,
-                            priceNavigation.composePriceRequestParams(
-                                    currency,
-                                    priceTierNode.getFrom(),
-                                    priceTierNode.getTo()
-                            ),
-                            0
-                    )
-            );
-        }
-        return result;
-    }
-
-    private List<PriceTierNode> getPriceTierNodes(final PriceTierTree priceTierTree, final String currency, final Shop shop) {
-        List<PriceTierNode> priceTierNodes = priceTierTree.getPriceTierNodes(currency);
-        if (priceTierNodes == null) {
-            return Collections.emptyList();
-        }
-        return priceTierNodes;
     }
 
 

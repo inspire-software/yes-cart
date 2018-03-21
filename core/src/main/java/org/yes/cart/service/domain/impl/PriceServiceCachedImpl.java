@@ -20,10 +20,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIteratorCallback;
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
-import org.yes.cart.search.dto.FilteredNavigationRecord;
 import org.yes.cart.service.domain.PriceService;
 
 import java.math.BigDecimal;
@@ -80,14 +77,6 @@ public class PriceServiceCachedImpl implements PriceService {
     @Cacheable(value = "priceService-allPrices")
     public List<SkuPrice> getAllPrices(final Long productId, final String selectedSku, final String currencyCode) {
         return priceService.getAllPrices(productId, selectedSku, currencyCode);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<FilteredNavigationRecord> getPriceNavigationRecords(final PriceTierTree priceTierTree, final String currency, final Shop customerShop) {
-        return priceService.getPriceNavigationRecords(priceTierTree, currency, customerShop);
     }
 
     /**

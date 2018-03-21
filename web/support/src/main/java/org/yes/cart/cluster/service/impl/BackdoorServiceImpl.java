@@ -19,8 +19,6 @@ package org.yes.cart.cluster.service.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.cache.CacheBundleHelper;
@@ -32,7 +30,6 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.search.dao.IndexBuilder;
-import org.yes.cart.search.query.impl.AsIsAnalyzer;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.DateUtils;
@@ -280,25 +277,9 @@ public class BackdoorServiceImpl implements BackdoorService {
      * {@inheritDoc}
      */
     @Override
-    public List<Object[]> luceneQuery(final String luceneQuery) {
+    public List<Object[]> ftQuery(final String query) {
 
-        final QueryParser queryParser = new QueryParser("", new AsIsAnalyzer(false));
-
-        try {
-
-            final Query query = queryParser.parse(luceneQuery);
-
-            return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().fullTextSearch(query));
-
-        } catch (Exception e) {
-
-            final String msg = "Cant parse query : " + luceneQuery + " Error : " + e.getMessage();
-
-            LOG.warn(msg);
-
-            throw new IllegalArgumentException(msg, e);
-
-        }
+        return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().fullTextSearchRaw(query));
 
     }
 
@@ -384,9 +365,9 @@ public class BackdoorServiceImpl implements BackdoorService {
                 return new ArrayList<>(Collections.singletonList(new Serializable[]{e.getMessage()}));
             }
         });
-        this.nodeService.subscribe("BackdoorService.luceneQuery", message -> {
+        this.nodeService.subscribe("BackdoorService.ftQuery", message -> {
             try {
-                return new ArrayList<Serializable[]>((List) self().luceneQuery((String) message.getPayload()));
+                return new ArrayList<Serializable[]>((List) self().ftQuery((String) message.getPayload()));
             } catch (Exception e) {
                 final String msg = "Cant parse FT query : " + message.getPayload() + " Error : " + e.getMessage();
                 LOG.warn(msg);

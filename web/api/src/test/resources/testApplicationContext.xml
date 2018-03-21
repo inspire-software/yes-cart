@@ -30,11 +30,12 @@
 
     <aop:aspectj-autoproxy/>
 
-    <import resource="persistence.xml"/>
-
     <import resource="classpath:core-config.xml"/>
-    <import resource="classpath:core-services.xml"/>
+    <import resource="persistence.xml"/>
     <import resource="classpath:core-io.xml"/>
+    <import resource="classpath:dao-index-lucene.xml"/>
+    <import resource="classpath:core-services.xml"/>
+    <import resource="classpath:core-index-sf.xml"/>
     <import resource="classpath:api-services-commands.xml"/>
     <import resource="classpath:core-orderstate.xml"/>
 

@@ -317,20 +317,20 @@
     <!-- ################################ Scheduler  ####################################################### -->
 
 
-    <bean id="quartzSysProps1" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetClass"><value>java.lang.System</value></property>
-        <property name="targetMethod"><value>setProperty</value></property>
+    <bean id="quartzSysPropsSkipUpdateCheck1" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetClass" value="java.lang.System"/>
+        <property name="targetMethod" value="setProperty"/>
         <property name="arguments">
             <list>
-                <value>org.terracotta.quartz.skipUpdateCheck</value>
+                <value>org.quartz.scheduler.skipUpdateCheck</value>
                 <value>true</value>
             </list>
         </property>
     </bean>
 
-    <bean id="quartzSysProps2" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetClass"><value>java.lang.System</value></property>
-        <property name="targetMethod"><value>setProperty</value></property>
+    <bean id="quartzSysPropsSkipUpdateCheck2" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetClass" value="java.lang.System"/>
+        <property name="targetMethod" value="setProperty"/>
         <property name="arguments">
             <list>
                 <value>org.terracotta.quartz.skipUpdateCheck</value>
@@ -340,7 +340,7 @@
     </bean>
 
     <bean id="managerCronSchedule" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
-          depends-on="quartzSysProps1,quartzSysProps2">
+          depends-on="quartzSysPropsSkipUpdateCheck1,quartzSysPropsSkipUpdateCheck2">
         <property name="triggers">
             <list>
                 <ref bean="preOrderJobCronTrigger" />

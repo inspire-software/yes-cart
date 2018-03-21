@@ -20,20 +20,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
-import org.yes.cart.dao.GenericFTSCapableDAO;
-import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.search.SearchQueryFactory;
-import org.yes.cart.search.dto.NavigationContext;
-import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.BrandService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
@@ -51,14 +43,11 @@ import static org.junit.Assert.*;
 public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
     private ProductService productService;
-    private SearchQueryFactory searchQueryFactory;
 
     @Override
     @Before
     public void setUp() {
         productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
-        searchQueryFactory = (SearchQueryFactory) ctx().getBean(ServiceSpringKeys.LUCENE_QUERY_FACTORY);
-
         super.setUp();
     }
 
@@ -217,64 +206,6 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
-    @Test
-    public void testGetProductSearchResultDTOByQuery() {
-
-
-        // Single category
-        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
-            @Override
-            public void doInTransactionWithoutResult(TransactionStatus status) {
-
-                ((GenericFTSCapableDAO) productService.getGenericDao()).fullTextSearchReindex(false, 1000);
-
-                NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, Collections.singletonList(101L), false, null);
-                final ProductSearchResultPageDTO searchRes = productService.getProductSearchResultDTOByQuery(
-                        context,
-                        0,
-                        100,
-                        ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD,
-                        false
-                );
-                assertEquals("Failed [" + context.toString() + "]", 2, searchRes.getResults().size());
-                ProductSearchResultDTO bender = searchRes.getResults().get(0);
-                assertEquals("Бендер Згибатель Родригес", bender.getName("ru"));
-                assertEquals("Бендер Згинач Родріґес", bender.getName("ua"));
-                assertEquals("Robots", bender.getType("ru"));
-                assertEquals("Robots", bender.getType("ua"));
-
-            }
-        });
-
-        // Category with subs
-        getTxReadOnly().execute(new TransactionCallbackWithoutResult() {
-            @Override
-            public void doInTransactionWithoutResult(TransactionStatus status) {
-
-                ((GenericFTSCapableDAO) productService.getGenericDao()).fullTextSearchReindex(false, 1000);
-
-                NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, Collections.singletonList(101L), true, null);
-                final ProductSearchResultPageDTO searchRes = productService.getProductSearchResultDTOByQuery(
-                        context,
-                        0,
-                        100,
-                        ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD,
-                        false
-                );
-                assertTrue("Failed [" + context.toString() + "]", 2 < searchRes.getResults().size());
-
-                final Set<String> names = new HashSet<>();
-                for (final ProductSearchResultDTO item : searchRes.getResults()) {
-                    names.add(item.getCode());
-                }
-
-                assertTrue("CC_TEST7 is from 104 with parent 101", names.contains("CC_TEST7"));
-
-            }
-        });
-
-
-    }
 
     @Test
     public void testFindProductIdsByManufacturerCode() throws Exception {

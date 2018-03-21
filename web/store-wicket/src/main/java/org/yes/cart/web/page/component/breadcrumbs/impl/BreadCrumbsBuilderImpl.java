@@ -25,7 +25,7 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.PriceNavigation;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
-import org.yes.cart.search.query.impl.SearchUtil;
+import org.yes.cart.search.util.SearchUtil;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;

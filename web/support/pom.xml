@@ -113,6 +113,22 @@
         </dependency>
 
         <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>persistence</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>tomcat</groupId>
             <artifactId>naming-factory</artifactId>
             <version>5.5.23</version>
@@ -128,16 +144,19 @@
     </dependencies>
 
     <profiles>
+
         <profile>
-            <id>jgroups</id>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>embededLucene</id>
             <dependencies>
                 <dependency>
                     <groupId>org.yes</groupId>
-                    <artifactId>core-module-cluster-jgroups</artifactId>
+                    <artifactId>search-lucene-embeded</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
             </dependencies>
         </profile>
+
     </profiles>
 
     <build>
