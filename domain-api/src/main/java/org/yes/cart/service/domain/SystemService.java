@@ -145,7 +145,12 @@ public interface SystemService {
      */
     String getSystemFileRepositoryDirectory();
 
-
+    /**
+     * Get system environment label.
+     *
+     * @return environment label
+     */
+    String getSystemEnvironmentLabel();
 
     /**
      * set system attribute value. This method will create new one , in case if it not exists or

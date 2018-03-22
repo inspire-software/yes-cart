@@ -67,6 +67,8 @@ public class SystemServiceImpl implements SystemService {
     private String previewShopURLTemplate = null;
     private String previewShopURICss = null;
 
+    private String systemEnvironmentLabel = null;
+
     /**
      * Construct system services, which is determinate shop set.
      *
@@ -328,6 +330,14 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     @Override
+    public String getSystemEnvironmentLabel() {
+        return this.systemEnvironmentLabel;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Integer getEtagExpirationForImages() {
         final String expirationTimeout = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_ETAG_CACHE_IMAGES_TIME);
         if (expirationTimeout != null) {
@@ -410,6 +420,8 @@ public class SystemServiceImpl implements SystemService {
 
         this.previewShopURLTemplate = properties.getProperty("admin.cms.preview.shop-url-template.default", null);
         this.previewShopURICss = properties.getProperty("admin.cms.preview.shop-uri-css.default", null);
+
+        this.systemEnvironmentLabel = properties.getProperty("admin.system.environment.label", "<span class=\"label label-success\">DEVELOPMENT ENVIRONMENT</span>");
 
     }
 

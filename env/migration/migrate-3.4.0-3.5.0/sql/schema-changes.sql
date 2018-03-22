@@ -106,3 +106,10 @@ alter table TSKUPRICE add column AUTO_GENERATED bit not null default 0;
 --     create index SKUPRICERULE_SHOP_CODE on TSKUPRICERULE (SHOP_CODE);
 --     create index SKUPRICERULE_CURRENCY on TSKUPRICERULE (CURRENCY);
 --     create index SKUPRICERULE_ENABLED on TSKUPRICERULE (ENABLED);
+
+--
+-- YC-888 Ensure SYSTEM_PANEL_LABEL is consistent with environment build
+--
+
+delete from TSYSTEMATTRVALUE where CODE like 'SYSTEM_PANEL_LABEL';
+delete from TATTRIBUTE where CODE like 'SYSTEM_PANEL_LABEL';
