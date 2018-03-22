@@ -28,4 +28,12 @@
         <constructor-arg index="1" ref="cacheManager"/>
     </bean>
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="coreFederation" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="core"/>
+        <property name="name" value="jam-services"/>
+        <property name="subName" value="core-federation"/>
+    </bean>
+
 </beans>

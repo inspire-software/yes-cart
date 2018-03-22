@@ -62,4 +62,12 @@
         <constructor-arg index="3" ref="dtoAssemblerAdaptersRepository"/>
     </bean>
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="managerDtoServices" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="core"/>
+        <property name="name" value="jam-services"/>
+        <property name="subName" value="manager-dto-services"/>
+    </bean>
+
 </beans>

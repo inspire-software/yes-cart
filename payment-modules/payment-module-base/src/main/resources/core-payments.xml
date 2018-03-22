@@ -25,9 +25,6 @@
 
     <cache:annotation-driven />
 
-    <import resource="classpath:payment-api.xml"/>
-    <import resource="classpath:core-services.xml"/>
-
     <!-- ################################## service locator ################################# -->
 
     <bean id="paymentServiceLocator" class="org.yes.cart.service.locator.impl.ServiceLocatorImpl"/>
@@ -79,6 +76,14 @@
         <constructor-arg index="0" ref="paymentModulesManager"/>
         <constructor-arg index="1" ref="customerOrderService"/>
         <constructor-arg index="2" ref="paymentGatewayCallbackService"/>
+    </bean>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="corePayments" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="payment"/>
+        <property name="name" value="payment-module-base"/>
+        <property name="subName" value="core-payments"/>
     </bean>
 
 </beans>

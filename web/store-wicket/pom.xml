@@ -383,6 +383,7 @@
             <filter>${basedir}/../../env/maven/${env}/config-module-authorizenet-${payment.authorizenet.module}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-module-paypal-${payment.paypal.module}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-module-postfinance-${payment.postfinance.module}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-web-filters.properties</filter>
         </filters>
 
         <finalName>${webapp.yes.war.name}</finalName>

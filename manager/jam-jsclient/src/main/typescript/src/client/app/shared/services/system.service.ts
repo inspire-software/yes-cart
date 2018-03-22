@@ -19,7 +19,7 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
-import { AttrValueSystemVO, Pair, CacheInfoVO, ClusterNodeVO, JobStatusVO } from '../model/index';
+import { AttrValueSystemVO, Pair, CacheInfoVO, ClusterNodeVO, JobStatusVO, ModuleVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -134,6 +134,17 @@ export class SystemService {
   getClusterInfo() {
     return this.http.get(this._serviceBaseUrl + '/cluster')
       .map(res => <ClusterNodeVO[]> this.json(res))
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Get modules info.
+   * @returns {Observable<R>}
+   */
+  getModuleInfo(node:string) {
+    return this.http.get(this._serviceBaseUrl + '/cluster/' + node + '/modules')
+      .map(res => <ModuleVO[]> this.json(res))
       .catch(this.handleError);
   }
 

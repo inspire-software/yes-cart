@@ -24,14 +24,10 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="registerModuleCronJob" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetClass" value="org.yes.cart.util.ModuleUtils"/>
-        <property name="targetMethod" value="registerModule"/>
-        <property name="arguments">
-            <list>
-                <value>core-module-cluster-jgroups:manager-cluster-IPv4</value>
-            </list>
-        </property>
+    <bean id="managerClusterIPv4" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="cluster"/>
+        <property name="name" value="core-module-cluster-jgroups"/>
+        <property name="subName" value="manager-cluster-IPv4"/>
     </bean>
 
 </beans>

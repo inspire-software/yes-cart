@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.vo.VoCacheInfo;
 import org.yes.cart.domain.vo.VoClusterNode;
 import org.yes.cart.domain.vo.VoJobStatus;
+import org.yes.cart.domain.vo.VoModule;
 
 import java.util.List;
 
@@ -46,6 +47,16 @@ public interface SystemEndpointController {
     @RequestMapping(value = "/cluster", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoClusterNode> getClusterInfo() throws Exception;
+
+    /**
+     * All registered modules in this cluster's node.
+     *
+     * @return module objects
+     */
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/cluster/{node}/modules", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoModule> getModuleInfo(@PathVariable("node") String node) throws Exception;
 
 
     /**

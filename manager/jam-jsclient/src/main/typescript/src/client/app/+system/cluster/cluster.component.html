@@ -11,6 +11,10 @@
         <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
       </form>
 
+      <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
+        <i class="fa fa-info"></i>
+      </button>
+
       <button type="button" (click)="onReloadHandler()" class="btn btn-danger btn-circle btn-xl" title="{{ 'CLUSTER_CFG_REFRESH' | translate }}">
         <i class="fa fa-gears"></i>
       </button>
@@ -33,15 +37,13 @@
           <tr>
             <th>{{ 'CLUSTER_ID' | translate }}</th>
             <th>{{ 'CLUSTER_TYPE' | translate }}</th>
-            <th>{{ 'CLUSTER_CONFIG' | translate }}</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let row of filteredCluster; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
             <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
               <td title="{{ 'CLUSTER_ID' | translate }}"><a class="js-click" (click)="onSelectRow(row)" title="{{row.channel ? row.channel : row.id}}">{{row.id}} <i class="fa fa-info-circle"></i></a></td>
-              <td title="{{ 'CLUSTER_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.nodeType}} v.{{row.fullVersion}}</a></td>
-              <td title="{{ 'CLUSTER_CONFIG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.nodeConfig}}</a></td>
+              <td title="{{ 'CLUSTER_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.nodeType}} v.{{row.fullVersion}}</a> <span class="label label-info">{{row.nodeConfig}}</span> <span [hidden]="row.ftIndexDisabled" class="label label-info">FT</span></td>
             </ng-template>
           </tr>
           </tbody>
@@ -57,3 +59,28 @@
 
   </div>
 </ng-template>
+
+
+<yc-modal #featuresModalDialog
+          title="{{ selectedRow != null ? selectedRow.id : '' }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+          [valid]="true">
+
+  <ng-template [ngIf]="selectedRow">
+    <div class="item-list-overflow {{ loading ? 'loading-data' : '' }}">
+      <ul class="nav nav-second-level item-list-control">
+        <li>
+          <form>
+            <input class="filter-input" type="text" name="moduleFilter" [(ngModel)]="moduleFilter" (ngModelChange)="onModuleFilterChange()" autocomplete="off"/>
+          </form>
+        </li>
+      </ul>
+      <ul class="nav nav-second-level item-list">
+        <li *ngFor="let module of filteredRowModules"><span class="label label-info">{{module.functionalArea}}</span> <span title="{{ module.loaded | ycdatetime }}">{{module.name}}:{{module.subName}}</span></li>
+      </ul>
+    </div>
+  </ng-template>
+
+</yc-modal>
+

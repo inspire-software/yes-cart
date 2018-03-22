@@ -17,13 +17,10 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:cache="http://www.springframework.org/schema/cache"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/context
-                           http://www.springframework.org/schema/context/spring-context.xsd
                            http://www.springframework.org/schema/aop
                            http://www.springframework.org/schema/aop/spring-aop.xsd
                            http://www.springframework.org/schema/cache
@@ -32,18 +29,22 @@
     <cache:annotation-driven />
     <aop:aspectj-autoproxy/>
 
-    <import resource="classpath:core-config.xml"/>
     <import resource="classpath:core-persistence.xml"/>
     <import resource="classpath:core-io.xml"/>
     <import resource="classpath:dao-index-sf.xml"/>
-    <import resource="classpath:core-services.xml"/>
-    <import resource="classpath:core-index-sf.xml"/>
     <import resource="classpath:store-services-commands.xml"/>
-    <import resource="classpath:core-orderstate.xml"/>
     <import resource="classpath:websupport-cluster.xml"/>
     <import resource="classpath:websupport-persistence.xml"/>
     <import resource="classpath:websupport-webapp.xml"/>
     <import resource="classpath:payment-modules.xml"/>
     <import resource="classpath:wicket.xml"/>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="applicationContext" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="app"/>
+        <property name="name" value="store-wicket"/>
+        <property name="subName" value="applicationContext"/>
+    </bean>
 
 </beans>

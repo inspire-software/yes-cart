@@ -30,12 +30,9 @@
 
     <aop:aspectj-autoproxy/>
 
-    <import resource="classpath:core-config.xml"/>
     <import resource="classpath:core-persistence.xml"/>
     <import resource="classpath:core-io.xml"/>
     <import resource="classpath:dao-index-api.xml"/>
-    <import resource="classpath:core-services.xml"/>
-    <import resource="classpath:core-index-sf.xml"/>
     <import resource="classpath:api-services-commands.xml"/>
     <import resource="classpath:websupport-cluster.xml"/>
     <import resource="classpath:websupport-persistence.xml"/>
@@ -43,5 +40,13 @@
     <import resource="classpath:websupport-api.xml"/>
     <import resource="classpath:payment-modules.xml"/>
     <import resource="classpath:api.xml"/>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="applicationContext" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="app"/>
+        <property name="name" value="api"/>
+        <property name="subName" value="applicationContext"/>
+    </bean>
 
 </beans>

@@ -101,9 +101,11 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                     final Map<String, Long> lastPositive = new HashMap<>();
                     Map<String, Pair<Long, Boolean>> cnt = new HashMap<>();
 
-                    for (final Node yesNode : nodeService.getSfNodes()) {
-                        indexingFinished.put(yesNode.getId(), Boolean.FALSE);
-                        cnt.put(yesNode.getId(), new Pair<>(0L, Boolean.FALSE));
+                    for (final Node sfNode : nodeService.getSfNodes()) {
+                        if (!sfNode.isFtIndexDisabled()) {
+                            indexingFinished.put(sfNode.getId(), Boolean.FALSE);
+                            cnt.put(sfNode.getId(), new Pair<>(0L, Boolean.FALSE));
+                        }
                     }
 
                     // Trigger reindex
@@ -142,10 +144,12 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                     }
                     listener.notifyMessage(summaryProd.toString());
 
-                    for (final Node yesNode : nodeService.getSfNodes()) {
-                        indexingFinished.put(yesNode.getId(), Boolean.FALSE);
-                        lastPositive.put(yesNode.getId(), 0L);
-                        cnt.put(yesNode.getId(), new Pair<>(0L, Boolean.FALSE));
+                    for (final Node sfNode : nodeService.getSfNodes()) {
+                        if (!sfNode.isFtIndexDisabled()) {
+                            indexingFinished.put(sfNode.getId(), Boolean.FALSE);
+                            lastPositive.put(sfNode.getId(), 0L);
+                            cnt.put(sfNode.getId(), new Pair<>(0L, Boolean.FALSE));
+                        }
                     }
 
                     // Trigger reindex

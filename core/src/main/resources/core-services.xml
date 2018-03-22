@@ -1320,4 +1320,12 @@
         <constructor-arg index="1" ref="shopService"/>
     </bean>
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="coreServices" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="core"/>
+        <property name="name" value="core"/>
+        <property name="subName" value="core-services"/>
+    </bean>
+
 </beans>

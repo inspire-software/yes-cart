@@ -30,9 +30,6 @@
 
     <context:annotation-config/>
 
-    <import resource="classpath:payment-api.xml"/>
-    <import resource="classpath:core-payments.xml"/>
-
 
     <bean id="liqPayPaymentGateway" class="org.yes.cart.payment.impl.LiqPayPaymentGatewayImpl" scope="prototype">
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
@@ -89,6 +86,13 @@
         <constructor-arg index="2">
             <bean class="org.yes.cart.web.support.request.impl.HeaderOrientedIPResolverImpl"/>
         </constructor-arg>
+    </bean>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="paymentModuleLiqpay" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="payment"/>
+        <property name="name" value="payment-module-liqpay"/>
     </bean>
 
 </beans>

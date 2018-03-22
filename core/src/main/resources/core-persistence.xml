@@ -30,4 +30,12 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="corePersistence" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="core"/>
+        <property name="name" value="core"/>
+        <property name="subName" value="core-persistence"/>
+    </bean>
+
 </beans>

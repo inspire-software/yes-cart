@@ -20,9 +20,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="dao.xml"/>
-    <import resource="dao-index-support.xml"/>
-
     <bean id="productIndexProvider" class="org.yes.cart.search.dao.impl.LuceneIndexProviderImpl">
         <constructor-arg index="0" value="product"/>
         <constructor-arg index="1" value="${ft.config.api.indexBase}"/>
@@ -108,14 +105,10 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="registerModuleCronJob" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetClass" value="org.yes.cart.util.ModuleUtils"/>
-        <property name="targetMethod" value="registerModule"/>
-        <property name="arguments">
-            <list>
-                <value>search-lucene-embeded:dao-index-api</value>
-            </list>
-        </property>
+    <bean id="daoIndexApi" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="search"/>
+        <property name="name" value="search-lucene-embeded"/>
+        <property name="subName" value="dao-index-api"/>
     </bean>
 
 </beans>

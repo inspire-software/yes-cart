@@ -27,4 +27,12 @@
         <property name="proxyInterface" value="javax.sql.DataSource"/>
     </bean>
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="websupportClusterPersistence" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="web"/>
+        <property name="name" value="support"/>
+        <property name="subName" value="websupport-cluster-persistence"/>
+    </bean>
+
 </beans>

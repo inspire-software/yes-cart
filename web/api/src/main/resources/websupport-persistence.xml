@@ -119,4 +119,12 @@
         </property>
     </bean>
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="websupportPersistence" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="app"/>
+        <property name="name" value="api"/>
+        <property name="subName" value="websupport-persistence"/>
+    </bean>
+
 </beans>

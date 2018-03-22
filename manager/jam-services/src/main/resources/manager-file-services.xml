@@ -27,4 +27,12 @@
         <constructor-arg index="2" ref="systemService"/>
     </bean>
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="managerFileServices" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="core"/>
+        <property name="name" value="jam-services"/>
+        <property name="subName" value="manager-file-services"/>
+    </bean>
+
 </beans>

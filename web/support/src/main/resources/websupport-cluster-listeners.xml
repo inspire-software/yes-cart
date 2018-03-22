@@ -92,11 +92,23 @@
         </property>
     </bean>
 
+    <bean id="moduleDirector" class="org.yes.cart.cluster.service.impl.WsModuleDirectorImpl">
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
     <bean id="alertDirector" class="org.yes.cart.cluster.service.impl.WsAlertDirectorImpl">
         <property name="cacheManager" ref="cacheManager"/>
         <property name="nodeService" ref="nodeService"/>
     </bean>
 
     <bean id="alertTurboFilter" class="org.yes.cart.utils.log.AlertTurboFilter"/>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="websupportClusterListeners" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="web"/>
+        <property name="name" value="support"/>
+        <property name="subName" value="websupport-cluster-listeners"/>
+    </bean>
 
 </beans>

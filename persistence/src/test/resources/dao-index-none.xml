@@ -20,9 +20,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="dao.xml"/>
-    <import resource="dao-index-support.xml"/>
-
     <bean id="productIndexBuilder" class="org.yes.cart.search.dao.impl.NoopIndexBuilderImpl"/>
 
     <bean id="productFts" class="org.yes.cart.search.dao.impl.NoopGenericFTSImpl"/>

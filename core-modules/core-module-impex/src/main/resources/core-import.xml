@@ -26,7 +26,6 @@
 
     <!-- ########################################## bulk import ########################## -->
 
-    <import resource="classpath:core-services.xml"/>
     <import resource="classpath:core-federation-impex.xml"/>
 
     <bean id="importDescriptorXStreamProvider" class="org.yes.cart.bulkimport.stream.xml.CsvImportDescriptorXStreamProvider"/>
@@ -172,6 +171,14 @@
                 <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
         </property>
+    </bean>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="coreImport" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="impex"/>
+        <property name="name" value="core-module-impex"/>
+        <property name="subName" value="core-import"/>
     </bean>
 
 </beans>

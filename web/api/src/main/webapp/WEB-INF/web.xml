@@ -43,11 +43,6 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             WEB-INF/applicationContext.xml
-            ${payment.cybersource.context}
-            ${payment.liqpay.context}
-            ${payment.authorizenet.context}
-            ${payment.paypal.context}
-            ${payment.postfinance.context}
         </param-value>
     </context-param>
 
@@ -133,13 +128,7 @@
 
     <!-- Payment modules filters -->
 
-    ${payment.liqpay.filter}
-
-    ${payment.authorizenet.filter}
-
-    ${payment.paypal.filter}
-
-    ${payment.postfinance.filter}
+    ${payment.filter}
 
     <!-- EoF Payment modules filters -->
 
@@ -189,13 +178,7 @@
 
     <!-- Payment modules filters -->
 
-    ${payment.liqpay.filter-mapping}
-
-    ${payment.authorizenet.filter-mapping}
-
-    ${payment.paypal.filter-mapping}
-
-    ${payment.postfinance.filter-mapping}
+    ${payment.filter-mapping}
 
     <!-- EoF Payment modules filters -->
 

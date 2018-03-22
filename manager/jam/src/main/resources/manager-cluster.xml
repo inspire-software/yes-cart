@@ -81,25 +81,13 @@
         <constructor-arg index="0" ref="managerService"/>
     </bean>
 
-    <bean id="clusterService" class="org.yes.cart.service.cluster.impl.ClusterServiceImpl">
-        <constructor-arg index="0" ref="nodeService"/>
-        <constructor-arg index="1" ref="localBackdoorService"/>
-        <constructor-arg index="2" ref="localCacheDirector"/>
-        <constructor-arg index="3" ref="localAlertDirector"/>
-    </bean>
+    <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="productIndexExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-        <description>
-            Thread pool (1,max int) for product indexing since they may be slow.
-        </description>
+    <bean id="managerCluster" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="app"/>
+        <property name="name" value="jam"/>
+        <property name="subName" value="manager-cluster"/>
     </bean>
-
-    <bean id="reindexService" class="org.yes.cart.service.cluster.impl.ReindexServiceImpl">
-        <constructor-arg index="0" ref="productIndexExecutor"/>
-        <constructor-arg index="1" ref="clusterService"/>
-        <constructor-arg index="2" ref="nodeService"/>
-    </bean>
-
 
 </beans>
         

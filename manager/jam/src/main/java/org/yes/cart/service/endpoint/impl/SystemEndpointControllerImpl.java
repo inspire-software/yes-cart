@@ -24,9 +24,11 @@ import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.impl.CacheInfoDTO;
+import org.yes.cart.domain.dto.impl.ModuleDTO;
 import org.yes.cart.domain.vo.VoCacheInfo;
 import org.yes.cart.domain.vo.VoClusterNode;
 import org.yes.cart.domain.vo.VoJobStatus;
+import org.yes.cart.domain.vo.VoModule;
 import org.yes.cart.service.async.AsyncContextFactory;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobStatus;
@@ -72,6 +74,16 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
         final List<Node> cluster = clusterService.getClusterInfo(createCtx(param));
         return voAssemblySupport.assembleVos(VoClusterNode.class, Node.class, cluster);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public @ResponseBody
+    List<VoModule> getModuleInfo(@PathVariable("node") String node) throws Exception {
+        final Map<String, Object> param = new HashMap<>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
+        final List<ModuleDTO> modules = clusterService.getModuleInfo(createCtx(param), node);
+        return voAssemblySupport.assembleVos(VoModule.class, ModuleDTO.class, modules);
     }
 
 

@@ -30,9 +30,6 @@
 
     <context:annotation-config/>
 
-    <import resource="classpath:payment-api.xml"/>
-    <import resource="classpath:core-payments.xml"/>
-
 
     <bean id="payPalButtonPaymentGateway" class="org.yes.cart.payment.impl.PayPalButtonPaymentGatewayImpl" scope="prototype">
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
@@ -102,6 +99,13 @@
         </constructor-arg>
         <constructor-arg index="3" ref="paymentProcessorFactory"/>
         <constructor-arg index="4" ref="customerOrderService"/>
+    </bean>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="paymentModulePaypal" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="payment"/>
+        <property name="name" value="payment-module-paypal"/>
     </bean>
 
 </beans>

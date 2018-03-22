@@ -21,9 +21,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="classpath:core-cronjob.xml"/>
-    <import resource="classpath:core-services.xml"/>
-
     <!-- ################################ AutoExport notifications  ################################# -->
 
     <bean id="orderAutoExportProcessorInternal" parent="txJobProxyTemplate">
@@ -49,6 +46,14 @@
         <property name="systemService" ref="systemService"/>
         <property name="pausePreferenceKey" value="JOB_ORDER_AUTO_EXPORT_PAUSE"/>
         <property name="pausePreferenceDefault" value="true"/>
+    </bean>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="coreExportCronjob" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="impex"/>
+        <property name="name" value="core-module-impex"/>
+        <property name="subName" value="core-export-cronjob"/>
     </bean>
 
 </beans>

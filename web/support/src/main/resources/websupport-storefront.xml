@@ -20,8 +20,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="websupport-services.xml"/>
-
     <!-- ################################### filter delegates begin ################################### -->
 
     <bean id="runtimeContextFilter" class="org.yes.cart.web.filter.RuntimeContextFilter"/>
@@ -452,5 +450,13 @@
     </bean>
 
     <!-- ################################### presentation layer support end ######################### -->
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="websupportStorefront" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="web"/>
+        <property name="name" value="support"/>
+        <property name="subName" value="websupport-storefront"/>
+    </bean>
 
 </beans>

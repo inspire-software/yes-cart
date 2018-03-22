@@ -268,7 +268,7 @@ public class BackdoorServiceImpl implements BackdoorService {
                 return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().executeHsqlQuery(query));
             }
         }
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
 
     }
 
@@ -278,9 +278,10 @@ public class BackdoorServiceImpl implements BackdoorService {
      */
     @Override
     public List<Object[]> ftQuery(final String query) {
-
-        return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().fullTextSearchRaw(query));
-
+        if (!isLuceneIndexDisabled()) {
+            return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().fullTextSearchRaw(query));
+        }
+        return new ArrayList<>(Collections.singletonList(new String[] { "FT is disabled on this node ..." }));
     }
 
     /**

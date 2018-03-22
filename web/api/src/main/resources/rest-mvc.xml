@@ -54,4 +54,12 @@
 
     <bean id="roObjectMapper" class="org.yes.cart.web.service.rest.impl.RoObjectMapper"/>
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="restMvc" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="app"/>
+        <property name="name" value="api"/>
+        <property name="subName" value="rest-mvc"/>
+    </bean>
+
 </beans>

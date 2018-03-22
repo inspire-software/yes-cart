@@ -130,6 +130,13 @@
         <property name="priority" value="100"/>
     </bean>
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="managerExport" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="app"/>
+        <property name="name" value="jam"/>
+        <property name="subName" value="manager-export"/>
+    </bean>
 
 </beans>
         

@@ -73,6 +73,15 @@ export interface ClusterNodeVO {
 
 }
 
+export interface ModuleVO {
+
+  functionalArea : string;
+  name : string;
+  subName : string;
+  loaded : Date;
+
+}
+
 export interface JobStatusVO {
 
   token : string;

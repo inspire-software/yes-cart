@@ -26,6 +26,7 @@
     <cache:annotation-driven />
 
     <import resource="classpath:core-services.xml"/>
+    <import resource="classpath:payment-api.xml"/>
     <import resource="classpath:core-payments.xml"/>
     <import resource="classpath:core-orderstate.xml"/>
     <import resource="classpath:core-dto-cart.xml"/>
@@ -670,6 +671,14 @@
 
             </map>
         </constructor-arg>
+    </bean>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="coreDtoServices" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="core"/>
+        <property name="name" value="core-dto"/>
+        <property name="subName" value="core-dto-services"/>
     </bean>
 
 </beans>

@@ -33,6 +33,7 @@
     <import resource="classpath:core-config.xml"/>
     <import resource="classpath:core-services.xml"/>
     <import resource="classpath:core-index-sf.xml"/>
+    <import resource="classpath:payment-api.xml"/>
     <import resource="classpath:core-payments.xml"/>
     <import resource="classpath:core-orderstate.xml"/>
 
@@ -327,6 +328,13 @@
     <!-- #################################  aspects configurations end ######################################-->
 
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="websupportervices" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="web"/>
+        <property name="name" value="support"/>
+        <property name="subName" value="websupport-services"/>
+    </bean>
 
 
 </beans>

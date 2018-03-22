@@ -278,4 +278,12 @@
         </constructor-arg>
     </bean>
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="coreFederationImpex" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="core"/>
+        <property name="name" value="jam-services"/>
+        <property name="subName" value="core-federation-impex"/>
+    </bean>
+
 </beans>

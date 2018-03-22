@@ -28,10 +28,10 @@ import org.yes.cart.cluster.node.impl.ContextRspMessageImpl;
 import org.yes.cart.cluster.service.AlertDirector;
 import org.yes.cart.cluster.service.BackdoorService;
 import org.yes.cart.cluster.service.CacheDirector;
+import org.yes.cart.cluster.service.ModuleDirector;
 import org.yes.cart.domain.dto.impl.CacheInfoDTO;
+import org.yes.cart.domain.dto.impl.ModuleDTO;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.cluster.ClusterService;
@@ -49,15 +49,18 @@ public class ClusterServiceImpl implements ClusterService {
     private final BackdoorService localBackdoorService;
     private final CacheDirector localCacheDirector;
     private final AlertDirector localAlertDirector;
+    private final ModuleDirector localModuleDirector;
 
     public ClusterServiceImpl(final NodeService nodeService,
                               final BackdoorService localBackdoorService,
                               final CacheDirector localCacheDirector,
-                              final AlertDirector localAlertDirector) {
+                              final AlertDirector localAlertDirector,
+                              final ModuleDirector localModuleDirector) {
         this.nodeService = nodeService;
         this.localBackdoorService = localBackdoorService;
         this.localCacheDirector = localCacheDirector;
         this.localAlertDirector = localAlertDirector;
+        this.localModuleDirector = localModuleDirector;
     }
 
     /**
@@ -86,6 +89,37 @@ public class ClusterServiceImpl implements ClusterService {
     public List<Node> getBlacklistedInfo(final AsyncContext context) {
 
         return nodeService.getBlacklisted();
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ModuleDTO> getModuleInfo(final AsyncContext context, final String node) {
+
+        if (nodeService.getCurrentNodeId().equals(node)) {
+            return localModuleDirector.getModules();
+        }
+
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                Collections.singletonList(node),
+                "ModuleDirector.getModules",
+                null,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        if (CollectionUtils.isNotEmpty(message.getResponses())) {
+
+            return (List<ModuleDTO>) message.getResponses().get(0).getPayload();
+
+        }
+
+        return Collections.emptyList();
+
 
     }
 
@@ -450,8 +484,7 @@ public class ClusterServiceImpl implements ClusterService {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, List<CacheInfoDTO>> getCacheInfo(final AsyncContext context)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public Map<String, List<CacheInfoDTO>> getCacheInfo(final AsyncContext context) {
 
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
@@ -491,7 +524,7 @@ public class ClusterServiceImpl implements ClusterService {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, Boolean> evictAllCache(final AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public Map<String, Boolean> evictAllCache(final AsyncContext context) {
 
         final Boolean force = context.getAttribute("force");
         final boolean doForcefully = force != null && force;
@@ -528,7 +561,7 @@ public class ClusterServiceImpl implements ClusterService {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, Boolean> evictCache(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public Map<String, Boolean> evictCache(final AsyncContext context, final String name) {
 
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
@@ -562,7 +595,7 @@ public class ClusterServiceImpl implements ClusterService {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, Boolean> enableStats(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public Map<String, Boolean> enableStats(final AsyncContext context, final String name) {
 
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
@@ -597,7 +630,7 @@ public class ClusterServiceImpl implements ClusterService {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, Boolean> disableStats(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public Map<String, Boolean> disableStats(final AsyncContext context, final String name) {
 
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
@@ -628,7 +661,7 @@ public class ClusterServiceImpl implements ClusterService {
     }
 
     @Override
-    public List<Pair<String, String>> getAlerts(final AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public List<Pair<String, String>> getAlerts(final AsyncContext context) {
 
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),

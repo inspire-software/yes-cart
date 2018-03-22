@@ -31,8 +31,6 @@
     <context:annotation-config/>
 
 
-    <import resource="classpath:payment-api.xml"/>
-
     <bean id="courierPaymentGateway"  class="org.yes.cart.payment.impl.CourierPaymentGatewayImpl" scope="prototype">
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
@@ -118,6 +116,14 @@
             </map>
         </property>
         <property name="paymentModulesManager" ref="paymentModulesManager"/>
+    </bean>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="paymentModuleBase" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="payment"/>
+        <property name="name" value="payment-module-base"/>
+        <property name="subName" value="payment-module-base"/>
     </bean>
 
 </beans>

@@ -25,13 +25,6 @@
 
     <cache:annotation-driven />
 
-    <import resource="classpath:cache-config.xml"/>
-
-    <import resource="classpath:dao.xml"/>
-    <import resource="classpath:dao-index-support.xml"/>
-
-    <import resource="classpath:core-services.xml"/>
-
     <bean id="priceNavigation" class="org.yes.cart.search.query.impl.PriceNavigationImpl"/>
 
     <bean id="attributeLuceneQueryBuilder" class="org.yes.cart.search.query.impl.AttributeSearchQueryBuilder"/>
@@ -116,14 +109,10 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="registerModuleCronJob" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetClass" value="org.yes.cart.util.ModuleUtils"/>
-        <property name="targetMethod" value="registerModule"/>
-        <property name="arguments">
-            <list>
-                <value>search-lucene-embeded:core-index-sf</value>
-            </list>
-        </property>
+    <bean id="coreIndexSf" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="search"/>
+        <property name="name" value="search-lucene-embeded"/>
+        <property name="subName" value="core-index-sf"/>
     </bean>
 
 </beans>

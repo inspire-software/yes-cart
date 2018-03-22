@@ -23,8 +23,6 @@
                            http://cxf.apache.org/jaxws
                            http://cxf.apache.org/schemas/jaxws.xsd">
 
-    <import resource="classpath:core-services.xml"/>
-
     <!-- ################################ Clustering begin ###################################### -->
 
     <bean id="nodeService" class="org.yes.cart.cluster.node.impl.WebsupportWsNodeServiceImpl">
@@ -102,14 +100,10 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="registerModuleCronJob" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetClass" value="org.yes.cart.util.ModuleUtils"/>
-        <property name="targetMethod" value="registerModule"/>
-        <property name="arguments">
-            <list>
-                <value>core-module-cluster-ws:websupport-cluster-WS</value>
-            </list>
-        </property>
+    <bean id="websupportClusterWS" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="cluster"/>
+        <property name="name" value="core-module-cluster-ws"/>
+        <property name="subName" value="websupport-cluster-WS"/>
     </bean>
 
 </beans>

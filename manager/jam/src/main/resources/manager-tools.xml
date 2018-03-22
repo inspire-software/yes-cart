@@ -43,5 +43,13 @@
 
     <!-- ################################ JMX support  end ###################################### -->
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="managerTools" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="app"/>
+        <property name="name" value="jam"/>
+        <property name="subName" value="manager-tools"/>
+    </bean>
+
 </beans>
         

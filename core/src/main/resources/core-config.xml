@@ -33,9 +33,6 @@
     <aop:aspectj-autoproxy/>
     <context:annotation-config/>
 
-    <import resource="core-services.xml"/>
-    <import resource="classpath:core-payments.xml"/>
-
     <!-- ###################### Extension points ################################################################### -->
 
     <bean id="shopInventoryConfiguration" class="org.yes.cart.config.impl.ShopInventoryConfigurationImpl">
@@ -56,6 +53,14 @@
     <bean id="warehouseInventoryConfiguration" class="org.yes.cart.config.impl.WarehouseInventoryConfigurationImpl">
         <constructor-arg index="0" ref="systemService"/>
         <constructor-arg index="1" ref="warehouseService"/>
+    </bean>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="coreConfig" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="core"/>
+        <property name="name" value="core"/>
+        <property name="subName" value="core-config"/>
     </bean>
 
 </beans>

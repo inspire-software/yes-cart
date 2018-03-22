@@ -18,6 +18,7 @@ package org.yes.cart.service.cluster;
 
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.domain.dto.impl.CacheInfoDTO;
+import org.yes.cart.domain.dto.impl.ModuleDTO;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -53,6 +54,16 @@ public interface ClusterService {
     List<Node> getBlacklistedInfo(AsyncContext context);
 
     /**
+     * Get loaded modules information.
+     *
+     * @param context web service context
+     * @param node node id to check
+     *
+     * @return list of modules.
+     */
+    List<ModuleDTO> getModuleInfo(AsyncContext context, String node);
+
+    /**
      * Warm up all storefront servers.
      *
      * @param context web service context
@@ -63,6 +74,7 @@ public interface ClusterService {
      * Reindex all products status.
      *
      * @param context web service context
+     *
      * @return quantity product in index.
      */
     Map<String, Pair<Long, Boolean>> getProductReindexingState(AsyncContext context);
@@ -71,6 +83,7 @@ public interface ClusterService {
      * Reindex all products.
      *
      * @param context web service context
+     *
      * @return quantity product in index.
      */
     Map<String, Pair<Long, Boolean>> getProductSkuReindexingState(AsyncContext context);
@@ -168,17 +181,17 @@ public interface ClusterService {
      * Get cache information.
      *
      * @param context web service context
+     *
      * @return list of information per each cache.
      */
-    Map<String, List<CacheInfoDTO>> getCacheInfo(AsyncContext context)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    Map<String, List<CacheInfoDTO>> getCacheInfo(AsyncContext context);
 
     /**
      * Evict all caches , which are represent in getCacheInfo list.
      *
      * @param context web service context
      */
-    Map<String, Boolean> evictAllCache(AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    Map<String, Boolean> evictAllCache(AsyncContext context);
 
     /**
      * Evict cache by name.
@@ -186,7 +199,7 @@ public interface ClusterService {
      * @param context web service context
      * @param name name of cache to evict
      */
-    Map<String, Boolean> evictCache(AsyncContext context, String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    Map<String, Boolean> evictCache(AsyncContext context, String name);
 
     /**
      * Enable cache statistics by name.
@@ -194,7 +207,7 @@ public interface ClusterService {
      * @param context web service context
      * @param name name of cache to evict
      */
-    Map<String, Boolean> enableStats(AsyncContext context, String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    Map<String, Boolean> enableStats(AsyncContext context, String name);
 
     /**
      * Disable cache statistics by name.
@@ -202,14 +215,15 @@ public interface ClusterService {
      * @param context web service context
      * @param name name of cache to evict
      */
-    Map<String, Boolean> disableStats(AsyncContext context, String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    Map<String, Boolean> disableStats(AsyncContext context, String name);
 
     /**
      * Get platform alerts
      *
      * @param context web service context
+     *
      * @return list of alerts
      */
-    List<Pair<String, String>> getAlerts(AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    List<Pair<String, String>> getAlerts(AsyncContext context);
 
 }

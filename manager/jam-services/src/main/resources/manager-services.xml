@@ -649,5 +649,12 @@
         <constructor-arg index="8" ref="uiFederationFacade"/>
     </bean>
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="managerServices" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="core"/>
+        <property name="name" value="jam-services"/>
+        <property name="subName" value="manager-services"/>
+    </bean>
 
 </beans>

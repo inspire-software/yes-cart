@@ -26,7 +26,6 @@
 
     <!-- ########################################## bulk import ########################## -->
 
-    <import resource="classpath:core-services.xml"/>
     <import resource="classpath:core-federation-impex.xml"/>
     <import resource="core-export-cronjob.xml"/>
 
@@ -119,6 +118,14 @@
                 </constructor-arg>
             </bean>
         </property>
+    </bean>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="coreExport" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="impex"/>
+        <property name="name" value="core-module-impex"/>
+        <property name="subName" value="core-export"/>
     </bean>
 
 </beans>

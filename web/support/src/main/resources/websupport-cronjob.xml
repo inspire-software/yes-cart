@@ -85,5 +85,13 @@
         <property name="startupDelay" value="30"/><!-- Give context 30sec to stabilise before starting quartz -->
     </bean>
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="websupportCronjob" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="web"/>
+        <property name="name" value="support"/>
+        <property name="subName" value="websupport-cronjob"/>
+    </bean>
+
 
 </beans>

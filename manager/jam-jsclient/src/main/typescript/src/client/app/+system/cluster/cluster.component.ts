@@ -13,9 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import { Component, OnInit } from '@angular/core';
-import { ClusterNodeVO } from './../../shared/model/index';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ClusterNodeVO, ModuleVO } from './../../shared/model/index';
 import { SystemService, Util } from './../../shared/services/index';
+import { ModalComponent } from './../../shared/modal/index';
 import { Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
@@ -33,9 +34,18 @@ export class ClusterComponent implements OnInit {
   private clusterFilter:string;
 
   private selectedRow:ClusterNodeVO;
+  private selectedRowModules:Array<ModuleVO> = [];
+  private filteredRowModules:Array<ModuleVO> = [];
+  private moduleFilter : string;
+
+  @ViewChild('featuresModalDialog')
+  private featuresModalDialog:ModalComponent;
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private delayedModuleFiltering:Future;
+  private delayedModuleFilteringMs:number = Config.UI_INPUT_DELAY;
 
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
@@ -67,6 +77,9 @@ export class ClusterComponent implements OnInit {
     this.delayedFiltering = Futures.perpetual(function() {
       that.filterCluster();
     }, this.delayedFilteringMs);
+    this.delayedModuleFiltering = Futures.perpetual(function() {
+      that.filterModules();
+    }, this.delayedModuleFilteringMs);
 
   }
 
@@ -80,12 +93,35 @@ export class ClusterComponent implements OnInit {
     }
   }
 
+
+  protected onRowInfoSelected() {
+    if (this.selectedRow != null) {
+
+      LogUtil.debug('ClusterComponent get node info');
+
+      this.loading = true;
+      let _sub:any = this._systemService.getModuleInfo(this.selectedRow.id).subscribe(modules => {
+
+        LogUtil.debug('ClusterComponent node info', this.selectedRow.id, modules);
+        this.selectedRowModules = modules;
+        this.filterModules();
+        this.loading = false;
+        _sub.unsubscribe();
+
+        this.featuresModalDialog.show();
+
+      });
+
+    }
+  }
+
+
   protected onSaveHandler() {
     LogUtil.debug('ClusterComponent Save handler');
 
     let myWindow = window.open('', 'ExportClusterInfo', 'width=800,height=600');
 
-    var _csv:string = Util.toCsv(this.cluster, true);
+    let _csv:string = Util.toCsv(this.cluster, true);
     myWindow.document.write('<textarea style="width:100%; height:100%">' + _csv + '</textarea>');
 
   }
@@ -98,6 +134,12 @@ export class ClusterComponent implements OnInit {
   protected onReloadHandler() {
     LogUtil.debug('ClusterComponent reload handler');
     this.reloadConfigurations();
+  }
+
+  protected onModuleFilterChange() {
+
+    this.delayedModuleFiltering.delay();
+
   }
 
   protected onFilterChange() {
@@ -136,7 +178,7 @@ export class ClusterComponent implements OnInit {
     LogUtil.debug('ClusterComponent get cluster');
 
     this.loading = true;
-    var _sub:any = this._systemService.getClusterInfo().subscribe(cluster => {
+    let _sub:any = this._systemService.getClusterInfo().subscribe(cluster => {
 
       LogUtil.debug('ClusterComponent cluster', cluster);
       this.cluster = cluster;
@@ -154,7 +196,7 @@ export class ClusterComponent implements OnInit {
     LogUtil.debug('ClusterComponent reload configurations');
 
     this.loading = true;
-    var _sub:any = this._systemService.reloadConfigurations().subscribe(cluster => {
+    let _sub:any = this._systemService.reloadConfigurations().subscribe(cluster => {
 
       LogUtil.debug('ClusterComponent cluster', cluster);
       this.cluster = cluster;
@@ -165,6 +207,25 @@ export class ClusterComponent implements OnInit {
 
     });
 
+  }
+
+  private filterModules() {
+    if (this.selectedRow != null && this.filteredRowModules != null && this.selectedRowModules.length > 0) {
+      if (this.moduleFilter) {
+        let _filter = this.moduleFilter.toLowerCase();
+
+        this.filteredRowModules = this.selectedRowModules.filter(module =>
+          module.functionalArea.toLowerCase().indexOf(_filter) !== -1 ||
+          module.name.toLowerCase().indexOf(_filter) !== -1 ||
+          (module.subName != null && module.subName.toLowerCase().indexOf(_filter) !== -1)
+        );
+      } else {
+        this.filteredRowModules = this.selectedRowModules;
+      }
+    } else {
+      this.filteredRowModules = [];
+    }
+    LogUtil.debug('ClusterComponent filterModules text', this.moduleFilter, this.filteredRowModules);
   }
 
 

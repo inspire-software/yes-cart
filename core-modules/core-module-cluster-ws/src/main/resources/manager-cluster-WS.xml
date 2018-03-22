@@ -20,8 +20,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="classpath:core-services.xml"/>
-
     <!-- ################################ Clustering begin ###################################### -->
 
     <bean id="wsAbstractFactoryClientFactory" class="org.yes.cart.web.service.ws.client.impl.WsClientAbstractFactoryImpl">
@@ -47,14 +45,10 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="registerModuleCronJob" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetClass" value="org.yes.cart.util.ModuleUtils"/>
-        <property name="targetMethod" value="registerModule"/>
-        <property name="arguments">
-            <list>
-                <value>core-module-cluster-ws:manager-cluster-WS.xml</value>
-            </list>
-        </property>
+    <bean id="managerClusterWS" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="cluster"/>
+        <property name="name" value="core-module-cluster-ws"/>
+        <property name="subName" value="manager-cluster-WS"/>
     </bean>
 
 </beans>

@@ -21,8 +21,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="classpath:core-services.xml"/>
-
     <bean id="sfProductCacheHelper" class="org.yes.cart.cache.impl.CacheBundleHelperImpl">
         <property name="cacheManager" ref="cacheManager"/>
         <property name="caches">
@@ -169,14 +167,10 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="registerModuleCronJob" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetClass" value="org.yes.cart.util.ModuleUtils"/>
-        <property name="targetMethod" value="registerModule"/>
-        <property name="arguments">
-            <list>
-                <value>search-lucene-embeded:core-index-cronjob</value>
-            </list>
-        </property>
+    <bean id="coreIndexCronjob" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="search"/>
+        <property name="name" value="search-lucene-embeded"/>
+        <property name="subName" value="core-index-cronjob"/>
     </bean>
 
 </beans>

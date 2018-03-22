@@ -21,9 +21,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="classpath:core-cronjob.xml"/>
-    <import resource="classpath:core-services.xml"/>
-
     <!-- ################################ Pre order inventory scanning  ###################################### -->
 
     <bean id="bulkAwaitingInventoryDeliveriesProcessorInternal" parent="txJobProxyTemplate">
@@ -79,6 +76,14 @@
         <property name="systemService" ref="systemService"/>
         <property name="pausePreferenceKey" value="JOB_DELIVERY_INFO_UPDATE_PAUSE"/>
         <property name="pausePreferenceDefault" value="false"/>
+    </bean>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="coreOrderstateCronjob" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="core"/>
+        <property name="name" value="core-module-orderstate"/>
+        <property name="subName" value="core-orderstate-cronjob"/>
     </bean>
 
 </beans>

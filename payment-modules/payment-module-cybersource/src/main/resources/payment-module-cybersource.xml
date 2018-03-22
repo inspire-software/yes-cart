@@ -30,10 +30,6 @@
 
     <context:annotation-config/>
 
-    <import resource="classpath:payment-api.xml"/>
-    <import resource="classpath:core-payments.xml"/>
-
-
     <bean id="cyberSourcePaymentGateway" class="org.yes.cart.payment.impl.CyberSourcePaymentGatewayImpl" scope="prototype">
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
@@ -59,4 +55,12 @@
         </property>
         <property name="paymentModulesManager" ref="paymentModulesManager"/>
     </bean>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean id="paymentModuleCybersource" class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="payment"/>
+        <property name="name" value="payment-module-cybersource"/>
+    </bean>
+
 </beans>
