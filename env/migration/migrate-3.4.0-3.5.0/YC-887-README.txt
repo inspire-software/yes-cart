@@ -51,6 +51,10 @@ manager/jam
 - adm-servlet-ext.xml in jam-servlet.xml
 - for @Controller the following packages are scanned "org.yes.cart.service.endpoint,org.yes.cart.service.endpoint.impl"
 
+web/support
+
+- websupport-ext.xml in websupport-webapp.xml
+
 web/api
 
 - api-applicationContext-ext.xml in applicationContext.xml
