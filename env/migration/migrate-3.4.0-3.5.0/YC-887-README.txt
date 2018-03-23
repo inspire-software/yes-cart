@@ -1,5 +1,8 @@
 REF: YC-887 Improve modules/plugin registration mechanism
 
+OVERVIEW
+========
+
 The goal of this task is to minimise the coupling of optional modules to a minimum, thus allowing easy configuration
 of customised builds.
 
@@ -37,8 +40,37 @@ String "sub context" it had an effect increased loading time as in terms of spri
 imports (sign of this was log message "Overriding bean definition"). While doing refactoring tasks the offending imports
 where removed for a smooth start up.
 
+APPROACH TO EXTENSION
+=====================
 
-PRODUCTION:
+Going forward the following extension points will be available as wildcard classpath imports in spring contexts:
+
+manager/jam
+
+- adm-applicationContext-ext.xml in applicationContext.xml
+- adm-servlet-ext.xml in jam-servlet.xml
+- for @Controller the following packages are scanned "org.yes.cart.service.endpoint,org.yes.cart.service.endpoint.impl"
+
+web/api
+
+- api-applicationContext-ext.xml in applicationContext.xml
+- api-servlet-ext.xml in rest-servlet.xml
+- for @Controller the following packages are scanned "org.yes.cart.web.service.rest"
+
+web/store-wicket
+
+- sfw-applicationContext-ext.xml in applicationContext.xml
+
+Each custom module must bundle all code necessary to run its functions and expose its functions viw spring context
+extension points described above (xml + @Controller)
+
+To bundle the modules in custom builds maven profile technique is recommended to be used in pom.xml of specific
+applications being extended (or direct dependency if it is a permanent core feature).
+
+
+
+PRODUCTION
+==========
 
 - new "config-web-filters.properties" added to environment specific configurations
 

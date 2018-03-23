@@ -651,7 +651,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="managerServices" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="core"/>
         <property name="name" value="jam-services"/>
         <property name="subName" value="manager-services"/>

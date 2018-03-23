@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--
   ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
@@ -19,23 +21,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <property name="jndiName" value="java:comp/env/jdbc/yesjndi"/>
-        <property name="lookupOnStartup" value="true"/>
-        <property name="cache" value="true"/>
-        <property name="proxyInterface" value="javax.sql.DataSource"/>
-    </bean>
-
-    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
+    <import resource="classpath:core-federation-impex.xml"/>
 
     <!-- ################################ Register module  ####################################################### -->
 
     <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="core"/>
-        <property name="name" value="core"/>
-        <property name="subName" value="core-persistence"/>
+        <property name="name" value="jam-services"/>
+        <property name="subName" value="manager-federation-impex"/>
     </bean>
 
 </beans>
+        

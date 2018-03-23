@@ -23,7 +23,6 @@
 
     <!-- ########################################## bulk export ########################## -->
 
-    <import resource="core-federation-impex.xml"/>
     <import resource="classpath:core-export.xml"/>
 
     <bean id="bulkExportExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
@@ -132,7 +131,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="managerExport" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="app"/>
         <property name="name" value="jam"/>
         <property name="subName" value="manager-export"/>

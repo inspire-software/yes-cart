@@ -15,9 +15,10 @@
  */
 package org.yes.cart.cluster.service.impl;
 
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactoryUtils;
+import org.springframework.beans.factory.HierarchicalBeanFactory;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.cluster.service.ModuleDirector;
@@ -25,8 +26,8 @@ import org.yes.cart.domain.dto.impl.ModuleDTO;
 import org.yes.cart.env.Module;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -41,15 +42,29 @@ public class ModuleDirectorImpl implements ModuleDirector, ApplicationContextAwa
     public List<ModuleDTO> getModules() {
 
         final List<ModuleDTO> dtos = new ArrayList<>();
-        final Map<String, Module> modules = BeanFactoryUtils.beansOfTypeIncludingAncestors(this.applicationContext, Module.class);
-        if (MapUtils.isNotEmpty(modules)) {
-            for (final Module module : modules.values()) {
+        final List<Module> modules = beansOfTypeIncludingAncestors(this.applicationContext);
+        if (CollectionUtils.isNotEmpty(modules)) {
+            for (final Module module : modules) {
                 dtos.add(new ModuleDTO(module.getFunctionalArea(), module.getName(), module.getSubName(), module.getLoaded()));
             }
         }
         return dtos;
     }
 
+    private List<Module> beansOfTypeIncludingAncestors(ListableBeanFactory lbf) {
+
+        final List<Module> result = new LinkedList<>();
+        result.addAll(lbf.getBeansOfType(Module.class).values());
+        if (lbf instanceof HierarchicalBeanFactory) {
+            HierarchicalBeanFactory hbf = (HierarchicalBeanFactory) lbf;
+            if (hbf.getParentBeanFactory() instanceof ListableBeanFactory) {
+                List<Module> parentResult = beansOfTypeIncludingAncestors(
+                        (ListableBeanFactory) hbf.getParentBeanFactory());
+                result.addAll(parentResult);
+            }
+        }
+        return result;
+    }
 
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {

@@ -512,7 +512,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="dao" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="core"/>
         <property name="name" value="persistence"/>
         <property name="subName" value="dao"/>

@@ -927,7 +927,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="cacheConfig" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="core"/>
         <property name="name" value="core"/>
         <property name="subName" value="cache-config"/>

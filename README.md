@@ -21,7 +21,7 @@ Please visit our official site http://www.yes-cart.org/ to read more the project
 
 
 
-Our supporters:
+**Our supporters**:
 
 ![JProfiler](https://www.ej-technologies.com/images/product_banners/jprofiler_small.png "JProfiler") 
 

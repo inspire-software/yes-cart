@@ -156,7 +156,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="coreDtoCart" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="core"/>
         <property name="name" value="core-dto"/>
         <property name="subName" value="core-dto-cart"/>

@@ -26,8 +26,6 @@
 
     <!-- ########################################## bulk import ########################## -->
 
-    <import resource="classpath:core-federation-impex.xml"/>
-
     <bean id="importDescriptorXStreamProvider" class="org.yes.cart.bulkimport.stream.xml.CsvImportDescriptorXStreamProvider"/>
 
     <util:map id="importLookUpQueryParameterStrategyValueProviders"
@@ -175,7 +173,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="coreImport" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="impex"/>
         <property name="name" value="core-module-impex"/>
         <property name="subName" value="core-import"/>

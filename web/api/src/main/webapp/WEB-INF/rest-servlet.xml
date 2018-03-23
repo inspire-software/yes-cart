@@ -21,10 +21,11 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="classpath:rest-mvc.xml"/>
+    <import resource="classpath*:api-servlet-ext.xml"/>
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="restServlet" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="app"/>
         <property name="name" value="api"/>
         <property name="subName" value="rest-servlet"/>

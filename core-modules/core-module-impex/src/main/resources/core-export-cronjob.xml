@@ -50,7 +50,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="coreExportCronjob" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="impex"/>
         <property name="name" value="core-module-impex"/>
         <property name="subName" value="core-export-cronjob"/>

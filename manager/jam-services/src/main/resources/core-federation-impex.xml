@@ -23,8 +23,6 @@
 
     <!-- ############################# Federation For ImpEx ######################### -->
 
-    <import resource="core-federation.xml"/>
-
     <bean id="nullImportFederationFilter" class="org.yes.cart.service.federation.impl.NullImpexFederationFilterImpl"/>
 
     <bean id="categoryImpexFederationFilter" class="org.yes.cart.service.federation.impl.CategoryImpexFederationFilterImpl">
@@ -280,7 +278,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="coreFederationImpex" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="core"/>
         <property name="name" value="jam-services"/>
         <property name="subName" value="core-federation-impex"/>

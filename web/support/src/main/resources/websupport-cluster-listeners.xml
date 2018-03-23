@@ -105,7 +105,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="websupportClusterListeners" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="web"/>
         <property name="name" value="support"/>
         <property name="subName" value="websupport-cluster-listeners"/>

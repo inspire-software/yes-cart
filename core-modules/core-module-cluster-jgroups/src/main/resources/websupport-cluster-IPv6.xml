@@ -24,7 +24,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="websupportClusterIPv6" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="cluster"/>
         <property name="name" value="core-module-cluster-jgroups"/>
         <property name="subName" value="websupport-cluster-IPv6"/>

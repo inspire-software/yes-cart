@@ -89,7 +89,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="paymentModulePostfinance" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="payment"/>
         <property name="name" value="payment-module-postfinance"/>
     </bean>

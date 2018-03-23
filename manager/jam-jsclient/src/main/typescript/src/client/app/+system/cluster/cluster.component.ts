@@ -36,6 +36,7 @@ export class ClusterComponent implements OnInit {
   private selectedRow:ClusterNodeVO;
   private selectedRowModules:Array<ModuleVO> = [];
   private filteredRowModules:Array<ModuleVO> = [];
+  private duplicateModules:Array<ModuleVO> = [];
   private moduleFilter : string;
 
   @ViewChild('featuresModalDialog')
@@ -103,8 +104,14 @@ export class ClusterComponent implements OnInit {
       let _sub:any = this._systemService.getModuleInfo(this.selectedRow.id).subscribe(modules => {
 
         LogUtil.debug('ClusterComponent node info', this.selectedRow.id, modules);
+        if (modules != null) {
+          modules.sort((a:ModuleVO, b:ModuleVO) => {
+            return (a.loaded < b.loaded) ? -1 : 1;
+          });
+        }
         this.selectedRowModules = modules;
         this.filterModules();
+        this.checkDuplicates();
         this.loading = false;
         _sub.unsubscribe();
 
@@ -206,6 +213,24 @@ export class ClusterComponent implements OnInit {
       _sub.unsubscribe();
 
     });
+
+  }
+
+  private checkDuplicates() {
+
+    this.duplicateModules = [];
+    if (this.selectedRow != null && this.filteredRowModules != null && this.selectedRowModules.length > 0) {
+      let _uniqueModules:string[] = [];
+      this.selectedRowModules.forEach(module => {
+        let _key = module.name + (module.subName ? (':' + module.subName) : '');
+        if (_uniqueModules.includes(_key)) {
+          this.duplicateModules.push(module);
+        } else {
+          _uniqueModules.push(_key);
+        }
+      });
+    }
+    LogUtil.debug('ClusterComponent checkDuplicates', this.duplicateModules);
 
   }
 

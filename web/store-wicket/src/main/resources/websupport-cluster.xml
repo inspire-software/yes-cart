@@ -37,7 +37,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="websupportCluster" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="app"/>
         <property name="name" value="store-wicket"/>
         <property name="subName" value="websupport-cluster"/>

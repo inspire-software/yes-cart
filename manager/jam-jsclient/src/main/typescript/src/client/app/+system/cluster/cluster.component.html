@@ -75,9 +75,12 @@
             <input class="filter-input" type="text" name="moduleFilter" [(ngModel)]="moduleFilter" (ngModelChange)="onModuleFilterChange()" autocomplete="off"/>
           </form>
         </li>
+        <li *ngIf="duplicateModules.length > 0">
+          <p class="bg-danger text-padding block-margin-spacer">{{ 'CLUSTER_MODULE_DUPLICATE' | translate }}</p>
+        </li>
       </ul>
       <ul class="nav nav-second-level item-list">
-        <li *ngFor="let module of filteredRowModules"><span class="label label-info">{{module.functionalArea}}</span> <span title="{{ module.loaded | ycdatetime }}">{{module.name}}:{{module.subName}}</span></li>
+        <li *ngFor="let module of filteredRowModules"><span class="label {{ duplicateModules.indexOf(module) == -1 ? 'label-info' : 'label-danger' }}">{{module.functionalArea}}</span> <span title="{{ module.loaded | ycdatetime }}">{{module.name}}:{{module.subName}}</span></li>
       </ul>
     </div>
   </ng-template>

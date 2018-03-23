@@ -236,7 +236,6 @@
         </profile>
 
         <profile>
-            <activation><activeByDefault>true</activeByDefault></activation>
             <id>paymentAll</id>
             <dependencies>
                 <dependency>

@@ -641,6 +641,7 @@
                                 <echo> </echo>
                                 <echo>Tips:</echo>
                                 <echo>* use mvn help:all-profiles or help:active-profiles to list profiles available</echo>
+                                <echo>* use mvn dependency:tree to list all dependencies</echo>
                                 <echo>* documentation for YC profiles is available at http://www.inspire-software.com/confluence/display/YC3J/From+source#Fromsource-Mavenprofilesandvariables</echo>
                                 <echo>=========================================================================================================================================================</echo>
                             </target>
@@ -763,7 +764,6 @@
         -->
 
         <profile>
-            <activation><activeByDefault>false</activeByDefault></activation>
             <id>buildDemo</id>
             <properties>
                 <env>demo</env>
@@ -783,7 +783,6 @@
         -->
 
         <profile>
-            <activation><activeByDefault>false</activeByDefault></activation>
             <id>buildAws</id>
             <properties>
                 <env>aws</env>

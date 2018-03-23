@@ -26,9 +26,6 @@
 
     <!-- ########################################## bulk import ########################## -->
 
-    <import resource="classpath:core-federation-impex.xml"/>
-    <import resource="core-export-cronjob.xml"/>
-
     <bean id="exportDescriptorXStreamProvider" class="org.yes.cart.bulkexport.stream.xml.CsvExportDescriptorXStreamProvider"/>
 
     <util:map id="exportLookUpQueryParameterStrategyValueProviders"
@@ -122,7 +119,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="coreExport" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="impex"/>
         <property name="name" value="core-module-impex"/>
         <property name="subName" value="core-export"/>

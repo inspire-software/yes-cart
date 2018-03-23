@@ -40,10 +40,11 @@
     <import resource="classpath:websupport-api.xml"/>
     <import resource="classpath:payment-modules.xml"/>
     <import resource="classpath:api.xml"/>
+    <import resource="classpath*:api-applicationContext-ext.xml"/>
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="applicationContext" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="app"/>
         <property name="name" value="api"/>
         <property name="subName" value="applicationContext"/>

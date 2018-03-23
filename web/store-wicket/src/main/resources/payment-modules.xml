@@ -25,7 +25,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="paymentModules" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="app"/>
         <property name="name" value="store-wicket"/>
         <property name="subName" value="payment-modules"/>

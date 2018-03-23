@@ -38,10 +38,11 @@
     <import resource="classpath:websupport-webapp.xml"/>
     <import resource="classpath:payment-modules.xml"/>
     <import resource="classpath:wicket.xml"/>
+    <import resource="classpath*:sfw-applicationContext-ext.xml"/>
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="applicationContext" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="app"/>
         <property name="name" value="store-wicket"/>
         <property name="subName" value="applicationContext"/>

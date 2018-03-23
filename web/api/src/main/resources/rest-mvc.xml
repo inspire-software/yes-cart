@@ -56,7 +56,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="restMvc" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="app"/>
         <property name="name" value="api"/>
         <property name="subName" value="rest-mvc"/>

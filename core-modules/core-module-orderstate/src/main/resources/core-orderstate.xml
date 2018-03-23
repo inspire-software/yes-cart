@@ -361,7 +361,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="coreOrderstate" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="core"/>
         <property name="name" value="core-module-orderstate"/>
         <property name="subName" value="core-orderstate"/>

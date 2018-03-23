@@ -109,7 +109,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="coreIndexSf" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="search"/>
         <property name="name" value="search-lucene-embeded"/>
         <property name="subName" value="core-index-sf"/>

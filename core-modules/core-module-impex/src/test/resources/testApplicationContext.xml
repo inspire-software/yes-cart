@@ -31,6 +31,7 @@
     <import resource="io.xml"/>
     <import resource="core-services.xml"/>
 
+    <import resource="core-federation-impex.xml"/>
     <import resource="core-import.xml"/>
     <import resource="core-export.xml"/>
 

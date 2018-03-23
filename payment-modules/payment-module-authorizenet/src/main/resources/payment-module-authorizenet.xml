@@ -82,7 +82,7 @@
 
     <!-- ################################ Register module  ####################################################### -->
 
-    <bean id="paymentModuleAuthorizenet" class="org.yes.cart.env.impl.ModuleImpl">
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="payment"/>
         <property name="name" value="payment-module-authorizenet"/>
     </bean>
