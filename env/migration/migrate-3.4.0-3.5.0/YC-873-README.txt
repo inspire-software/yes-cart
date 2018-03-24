@@ -8,10 +8,10 @@ implementation in put to ./libs
 
 The following extension points are defined:
 
-core-index-cronjob.xml
+websupport-cronjob-ext.xml
 imported by:
 - support/websupport-cronjob.xml
-exposes beans:
+exposes trigger beans via trigger extension list:
 - reindexDiscontinuedProductsTrigger
 - productsGlobalIndexProcessorTrigger
 - productInventoryChangedProcessorJobCronTrigger

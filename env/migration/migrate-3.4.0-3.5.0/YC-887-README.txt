@@ -50,10 +50,12 @@ manager/jam
 - adm-applicationContext-ext.xml in applicationContext.xml
 - adm-servlet-ext.xml in jam-servlet.xml
 - for @Controller the following packages are scanned "org.yes.cart.service.endpoint,org.yes.cart.service.endpoint.impl"
+- adm-cronjob-ext.xml in manager-cronjob.xml
 
 web/support
 
 - websupport-ext.xml in websupport-webapp.xml
+- websupport-cronjob-ext.xml in websupport-cronjob.xml
 
 web/api
 

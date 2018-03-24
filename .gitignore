@@ -156,6 +156,22 @@ theme/theme.iml
 
 theme/target/**
 
+search/search-api/search-api.iml
+
+search/search-api/target/**
+
+search/search-lucene-core/search-lucene-core.iml
+
+search/search-lucene-core/target/**
+
+search/search-lucene-embeded/search-lucene-embeded.iml
+
+search/search-lucene-embeded/target/**
+
+search/search.iml
+
+search/target/**
+
 web/api/yes-api.iml
 
 web/api/logs/net.authorize.aim.log

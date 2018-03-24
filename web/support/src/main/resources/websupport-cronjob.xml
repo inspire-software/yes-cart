@@ -21,8 +21,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="classpath:core-index-cronjob.xml"/>
-
     <!-- ################################ Scheduler  ####################################################### -->
 
 
@@ -47,6 +45,28 @@
             </list>
         </property>
     </bean>
+
+    <bean id="webCronScheduleTriggers" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list/>
+        </property>
+    </bean>
+
+
+    <!-- Extension for cron triggers example that should be put in "websupport-cronjob-ext.xml":
+        <bean id="extensionSample" parent="webCronScheduleTriggers" class="org.springframework.beans.factory.config.ListFactoryBean">
+            <property name="sourceList">
+                <list merge="true">
+                    <ref bean="customTriggerX" />
+                    <ref bean="customTriggerY" />
+                    ....
+                </list>
+            </property>
+        </bean>
+    -->
+
+    <import resource="classpath*:websupport-cronjob-ext.xml"/>
+
 
     <bean id="webCronSchedule" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
           depends-on="quartzSysPropsSkipUpdateCheck1,quartzSysPropsSkipUpdateCheck2">

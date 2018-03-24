@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="core-index-cronjob.xml"/>
+
+    <bean id="ftCronExtension" parent="webCronScheduleTriggers" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list merge="true">
+                <!--
+                      reindexDiscontinuedProductsTrigger and productsGlobalIndexProcessorTrigger are two alternatives
+                      that perform full reindex.
+
+                      Only one of these should be enabled. reindexDiscontinuedProductsTrigger is aimed at locating
+                      items that are no longer available and then removing them out of the search index.
+                      productsGlobalIndexProcessorTrigger simply does full reindex (that includes removing outdated).
+
+                      The enable/disable should be controlled by cron schedule set to far future (say 2099). By default
+                      only reindexDiscontinuedProductsTrigger is set to 5am daily and productsGlobalIndexProcessorTrigger
+                      is set to 2099 (i.e. disabled)
+                  -->
+                <ref bean="reindexDiscontinuedProductsTrigger" />
+                <ref bean="productsGlobalIndexProcessorTrigger" />
+                <!--
+                     Cron job that detect inventory changes between job runs and then
+                     re-indexes the SKU corresponding to those inventory items.
+                     This is needed for delta changes updates in index for example when
+                     inventory is updated either due to inventory update or changes caused
+                     by customer order
+                  -->
+                <ref bean="productInventoryChangedProcessorJobCronTrigger" />
+            </list>
+        </property>
+    </bean>
+
+</beans>
+
