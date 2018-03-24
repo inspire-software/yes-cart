@@ -84,7 +84,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
       let basic = YcValidators.validSeoUri255(control);
       if (basic == null) {
-        var req:ValidationRequestVO = { subject: 'product', subjectId: that._product.productId, field: 'uri', value: uri };
+        let req:ValidationRequestVO = { subject: 'product', subjectId: that._product.productId, field: 'uri', value: uri };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;
@@ -99,7 +99,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
       let basic = YcValidators.validCode36(control);
       if (basic == null) {
-        var req:ValidationRequestVO = { subject: 'product', subjectId: that._product.productId, field: 'guid', value: code };
+        let req:ValidationRequestVO = { subject: 'product', subjectId: that._product.productId, field: 'guid', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;
@@ -115,7 +115,7 @@ export class ProductComponent implements OnInit, OnDestroy {
           return null;
         }
 
-        var req:ValidationRequestVO = { subject: 'product', subjectId: that._product.productId, field: 'code', value: code };
+        let req:ValidationRequestVO = { subject: 'product', subjectId: that._product.productId, field: 'code', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;

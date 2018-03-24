@@ -128,7 +128,7 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
 
   protected onCustomerReset(event:Pair<CustomerVO, ShopVO>) {
     LogUtil.debug('AllCustomersComponent onCustomerReset', event);
-    var _sub:any = this._customerService.resetPassword(event.first, event.second.shopId).subscribe( reset => {
+    let _sub:any = this._customerService.resetPassword(event.first, event.second.shopId).subscribe( reset => {
       LogUtil.debug('AllCustomersComponent reset successful');
       _sub.unsubscribe();
     });
@@ -204,7 +204,7 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
   protected onRowEditCustomer(row:CustomerInfoVO) {
     LogUtil.debug('AllCustomersComponent onRowEditCustomer handler', row);
     this.loading = true;
-    var _sub:any = this._customerService.getCustomerById(this.selectedCustomer.customerId).subscribe(customer => {
+    let _sub:any = this._customerService.getCustomerById(this.selectedCustomer.customerId).subscribe(customer => {
       this.customerEdit = customer;
       this.customerEditAttributes = customer.attributes;
       this.changed = false;
@@ -230,7 +230,7 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
         LogUtil.debug('AllCustomersComponent Save handler customer', this.customerEdit);
 
         this.loading = true;
-        var _sub:any = this._customerService.saveCustomer(this.customerEdit).subscribe(
+        let _sub:any = this._customerService.saveCustomer(this.customerEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.customerEdit.customerId;
@@ -243,7 +243,7 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
 
               if (pk > 0 && this.customerAttributesUpdate != null && this.customerAttributesUpdate.length > 0) {
 
-                var _sub2:any = this._customerService.saveCustomerAttributes(this.customerAttributesUpdate).subscribe(rez => {
+                let _sub2:any = this._customerService.saveCustomerAttributes(this.customerAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
                   LogUtil.debug('AllCustomersComponent customer attributes updated', rez);
                   this.customerAttributesUpdate = null;
@@ -280,7 +280,7 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
         LogUtil.debug('AllCustomersComponent onDeleteConfirmationResult', this.selectedCustomer);
 
         this.loading = true;
-        var _sub:any = this._customerService.removeCustomer(this.selectedCustomer).subscribe(res => {
+        let _sub:any = this._customerService.removeCustomer(this.selectedCustomer).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('AllCustomersComponent removeCustomer', this.selectedCustomer);
           this.selectedCustomer = null;
@@ -307,7 +307,7 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
     if (!this.customerFilterRequired) {
       this.loading = true;
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._customerService.getFilteredCustomer(this.customerFilter, max).subscribe( allcustomers => {
+      let _sub:any = this._customerService.getFilteredCustomer(this.customerFilter, max).subscribe( allcustomers => {
         LogUtil.debug('AllCustomersComponent getFilteredCustomers', allcustomers);
         this.customers = allcustomers;
         this.selectedCustomer = null;

@@ -136,7 +136,7 @@ export class SKUsComponent implements OnInit, OnDestroy {
       this.filteredSkus = [];
     }
 
-    var _sort = function(a:ProductSkuVO, b:ProductSkuVO):number {
+    let _sort = function(a:ProductSkuVO, b:ProductSkuVO):number {
       return a.rank - b.rank;
     };
 

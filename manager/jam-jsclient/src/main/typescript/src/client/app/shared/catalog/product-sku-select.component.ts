@@ -101,7 +101,7 @@ export class ProductSkuSelectComponent implements OnInit, OnDestroy {
 
     if (!this.productSkuFilterRequired) {
       this.loading = true;
-      var _sub:any = this._productService.getFilteredProductSkus(this.productSkuFilter, this.filterCap).subscribe(allproducts => {
+      let _sub:any = this._productService.getFilteredProductSkus(this.productSkuFilter, this.filterCap).subscribe(allproducts => {
         LogUtil.debug('ProductSkuSelectComponent getAllProductSkus', allproducts);
         this.selectedProductSku = null;
         this.changed = false;

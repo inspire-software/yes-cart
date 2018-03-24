@@ -139,7 +139,7 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
         LogUtil.debug('OrganisationRoleComponent Save handler role', this.roleEdit);
 
         this.loading = true;
-        var _sub:any = this._roleService.saveRole(this.roleEdit).subscribe(
+        let _sub:any = this._roleService.saveRole(this.roleEdit).subscribe(
             rez => {
             if (this.roleEdit.roleId > 0) {
               let idx = this.roles.findIndex(rez => rez.roleId == this.roleEdit.roleId);
@@ -187,7 +187,7 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
         LogUtil.debug('OrganisationRoleComponent onDeleteConfirmationResult', this.selectedRole);
 
         this.loading = true;
-        var _sub:any = this._roleService.removeRole(this.selectedRole).subscribe(res => {
+        let _sub:any = this._roleService.removeRole(this.selectedRole).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('OrganisationRoleComponent removeRole', this.selectedRole);
           let idx = this.roles.indexOf(this.selectedRole);
@@ -213,7 +213,7 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
 
   private getAllRoles() {
     this.loading = true;
-    var _sub:any = this._roleService.getAllRoles().subscribe( allroles => {
+    let _sub:any = this._roleService.getAllRoles().subscribe( allroles => {
       LogUtil.debug('OrganisationRoleComponent getAllRoles', allroles);
       this.roles = allroles;
       this.selectedRole = null;

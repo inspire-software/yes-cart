@@ -194,7 +194,7 @@ export class PricingService {
 
   /**
    * Create tax config.
-   * @param tax config
+   * @param taxConfig config
    * @returns {Observable<R>}
    */
   createTaxConfig(taxConfig:TaxConfigVO) {
@@ -288,8 +288,9 @@ export class PricingService {
 
 
   /**
-   * Save or create given shop detal - the root of shop related information.
-   * @param shop
+   * Update promotion state.
+   * @param promotion promotion
+   * @param state enabled or disabled
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   updatePromotionDisabledFlag(promotion:PromotionVO, state:boolean) {
@@ -321,7 +322,7 @@ export class PricingService {
 
   /**
    * Create promotion coupons.
-   * @param promotion promotion
+   * @param coupons coupons
    * @returns {Observable<R>}
    */
   createPromotionCoupons(coupons:PromotionCouponVO) {

@@ -114,7 +114,7 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
   public onRowAdd() {
     LogUtil.debug('ProductTypeAttributeComponent onRowAdd handler');
 
-    var _attr:ProductTypeAttrVO = {
+    let _attr:ProductTypeAttrVO = {
       productTypeAttrId: 0, producttypeId: this.masterObject.producttypeId,
       attribute:null, rank:500,
       visible:true, similarity:false, store:false, search:false, primary:false, navigation:false,
@@ -352,7 +352,7 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
     if (this.attributeToEdit.rangeNavigation.ranges == null) {
       this.attributeToEdit.rangeNavigation.ranges = [];
     }
-    var _range:ProductTypeAttrNavigationRangeVO = { range: '0-99', displayVals: null };
+    let _range:ProductTypeAttrNavigationRangeVO = { range: '0-99', displayVals: null };
     this.attributeToEdit.rangeNavigation.ranges.push(_range);
     this.onDataChange(_range);
   }
@@ -444,7 +444,7 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
     }
 
     _filteredObjectAttributes.sort(function(a, b) {
-      var rank:number = a.rank - b.rank;
+      let rank:number = a.rank - b.rank;
       if (rank == 0) {
         return a.attribute.name > b.attribute.name ? 1 : -1;
       }

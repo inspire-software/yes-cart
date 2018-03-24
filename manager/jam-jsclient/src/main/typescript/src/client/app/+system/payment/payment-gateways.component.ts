@@ -167,7 +167,7 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
     if (ModalAction.POSITIVE === modalresult.action) {
 
       this.loading = true;
-      var _sub:any = this._paymentService.updateDisabledFlag(this.shopCode, this.selectedGateway.label, this.selectedGateway.active).subscribe( done => {
+      let _sub:any = this._paymentService.updateDisabledFlag(this.shopCode, this.selectedGateway.label, this.selectedGateway.active).subscribe( done => {
         LogUtil.debug('PaymentGatewaysComponent updateDisabledFlag', done);
         this.loading = false;
         if (this.system || this.selectedGateway.active) {
@@ -209,7 +209,7 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
 
       LogUtil.debug('PaymentGatewaysComponent Save handler update', [this.shopCode, this.selectedGateway.label, this.update]);
 
-      var _sub:any = this._paymentService.savePaymentGatewayParameters(this.shopCode, this.selectedGateway.label, this.update, this.includeSecure).subscribe(rez => {
+      let _sub:any = this._paymentService.savePaymentGatewayParameters(this.shopCode, this.selectedGateway.label, this.update, this.includeSecure).subscribe(rez => {
           LogUtil.debug('PaymentGatewaysComponent attributes', rez);
           this.selectedGateway.parameters = rez;
           this.parameterValuesComponent.paymentGateway = this.selectedGateway;
@@ -272,7 +272,7 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
       let lang = I18nEventBus.getI18nEventBus().current();
 
       this.loading = true;
-      var _sub:any = this._paymentService.getPaymentGatewaysWithParameters(lang, this.shopCode, this.changeIncludeSecure).subscribe( allgateways => {
+      let _sub:any = this._paymentService.getPaymentGatewaysWithParameters(lang, this.shopCode, this.changeIncludeSecure).subscribe( allgateways => {
         LogUtil.debug('PaymentGatewaysComponent getPaymentGatewaysWithParameters', allgateways);
         this.viewMode = PaymentGatewaysComponent.PGS;
         this.gateways = allgateways;

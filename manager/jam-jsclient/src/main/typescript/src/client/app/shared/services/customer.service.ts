@@ -59,7 +59,8 @@ export class CustomerService {
 
   /**
    * Get list of all customers types, which are accessible to manage or view,
-   * @param customerId
+   * @param customerId pk
+   * @param lang language
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getCustomerTypes(customerId:number, lang:string) {

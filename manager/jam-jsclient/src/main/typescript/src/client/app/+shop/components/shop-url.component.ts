@@ -74,6 +74,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
    * Construct shop url panel
    *
    * @param _shopService shop service
+   * @param fb form builder
    */
   constructor(private _shopService:ShopService,
               fb: FormBuilder) {
@@ -213,7 +214,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopUrlComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.shopUrl) {
       this.loading = true;
-      var _sub:any = this._shopService.saveShopUrls(this.shopUrl).subscribe(
+      let _sub:any = this._shopService.saveShopUrls(this.shopUrl).subscribe(
           rez => {
             this.shopUrl = rez;
             this.changed = false;

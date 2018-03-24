@@ -101,7 +101,7 @@ export class ProductSelectComponent implements OnInit, OnDestroy {
 
     if (!this.productFilterRequired) {
       this.loading = true;
-      var _sub:any = this._productService.getFilteredProducts(this.productFilter, this.filterCap).subscribe(allproducts => {
+      let _sub:any = this._productService.getFilteredProducts(this.productFilter, this.filterCap).subscribe(allproducts => {
         LogUtil.debug('ProductSelectComponent getAllProducts', allproducts);
         this.selectedProduct = null;
         this.changed = false;

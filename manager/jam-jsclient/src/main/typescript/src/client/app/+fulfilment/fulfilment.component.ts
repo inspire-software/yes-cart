@@ -149,7 +149,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
         LogUtil.debug('FulfilmentComponent Save handler centre', this.centreEdit);
 
         this.loading = true;
-        var _sub:any = this._fulfilmentService.saveFulfilmentCentre(this.centreEdit).subscribe(
+        let _sub:any = this._fulfilmentService.saveFulfilmentCentre(this.centreEdit).subscribe(
             rez => {
             if (this.centreEdit.warehouseId > 0) {
               let idx = this.centres.findIndex(rez => rez.warehouseId == this.centreEdit.warehouseId);
@@ -196,7 +196,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
         LogUtil.debug('FulfilmentComponent onDeleteConfirmationResult', this.selectedCentre);
 
        this.loading = true;
-        var _sub:any = this._fulfilmentService.removeFulfilmentCentre(this.selectedCentre).subscribe(res => {
+        let _sub:any = this._fulfilmentService.removeFulfilmentCentre(this.selectedCentre).subscribe(res => {
           LogUtil.debug('FulfilmentComponent removeCentre', this.selectedCentre);
           let idx = this.centres.indexOf(this.selectedCentre);
           this.centres.splice(idx, 1);
@@ -218,7 +218,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
 
   private getAllCentres() {
     this.loading = true;
-    var _sub:any = this._fulfilmentService.getAllFulfilmentCentres().subscribe( allcentres => {
+    let _sub:any = this._fulfilmentService.getAllFulfilmentCentres().subscribe( allcentres => {
       LogUtil.debug('FulfilmentComponent getAllCentres', allcentres);
       this.centres = allcentres;
       this.selectedCentre = null;

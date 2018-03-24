@@ -368,7 +368,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
       if (this.addressEdit != null) {
         LogUtil.debug('AddressBookComponent onEditConfirmationResult', this.addressEdit);
 
-        var _sub:any = this._customerService.saveAddress(this.addressEdit).subscribe(res => {
+        let _sub:any = this._customerService.saveAddress(this.addressEdit).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('AddressBookComponent saveAddress', this.addressEdit);
           this.addressEdit = null;
@@ -395,7 +395,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
       if (this.addressEdit != null) {
         LogUtil.debug('AddressBookComponent onDeleteConfirmationResult', this.addressEdit);
 
-        var _sub:any = this._customerService.removeAddress(this.addressEdit).subscribe(res => {
+        let _sub:any = this._customerService.removeAddress(this.addressEdit).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('AddressBookComponent removeAddress', this.addressEdit);
           this.addressEdit = null;

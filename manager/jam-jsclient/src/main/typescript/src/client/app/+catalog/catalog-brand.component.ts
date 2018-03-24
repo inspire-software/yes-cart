@@ -154,7 +154,7 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
     this.viewMode = CatalogBrandComponent.BRAND;
     if (this.brandEdit.brandId > 0) {
       this.loading = true;
-      var _sub:any = this._brandService.getBrandAttributes(this.brandEdit.brandId).subscribe(attrs => {
+      let _sub:any = this._brandService.getBrandAttributes(this.brandEdit.brandId).subscribe(attrs => {
         this.brandEditAttributes = attrs;
         this.loading = false;
         _sub.unsubscribe();
@@ -177,7 +177,7 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
         LogUtil.debug('CatalogBrandComponent Save handler brand', this.brandEdit);
 
         this.loading = true;
-        var _sub:any = this._brandService.saveBrand(this.brandEdit).subscribe(
+        let _sub:any = this._brandService.saveBrand(this.brandEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.brandEdit.brandId;
@@ -191,7 +191,7 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
               if (pk > 0 && this.brandAttributesUpdate != null && this.brandAttributesUpdate.length > 0) {
 
                 this.loading = true;
-                var _sub2:any = this._brandService.saveBrandAttributes(this.brandAttributesUpdate).subscribe(rez => {
+                let _sub2:any = this._brandService.saveBrandAttributes(this.brandAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
                   LogUtil.debug('CatalogBrandComponent brand attributes updated', rez);
                   this.brandAttributesUpdate = null;
@@ -229,7 +229,7 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
         LogUtil.debug('CatalogBrandComponent onDeleteConfirmationResult', this.selectedBrand);
 
         this.loading = true;
-        var _sub:any = this._brandService.removeBrand(this.selectedBrand).subscribe(res => {
+        let _sub:any = this._brandService.removeBrand(this.selectedBrand).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('CatalogBrandComponent removeBrand', this.selectedBrand);
           this.selectedBrand = null;
@@ -256,7 +256,7 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
     if (!this.brandFilterRequired) {
       this.loading = true;
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._brandService.getFilteredBrands(this.brandFilter, max).subscribe( allbrands => {
+      let _sub:any = this._brandService.getFilteredBrands(this.brandFilter, max).subscribe( allbrands => {
         LogUtil.debug('CatalogBrandComponent getFilteredBrands', allbrands);
         this.brands = allbrands;
         this.selectedBrand = null;

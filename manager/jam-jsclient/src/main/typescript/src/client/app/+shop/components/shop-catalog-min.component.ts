@@ -58,9 +58,9 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
 
   /**
    * Construct shop catalogues panel.
-   * @param _categoryService
-   * @param _shopService
-   * @param _routeParams
+   * @param _categoryService category service
+   * @param _shopService shop service
+   * @param fb form builder
    */
   constructor(private _categoryService:CatalogService,
               private _shopService:ShopService,
@@ -80,7 +80,7 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
 
       let basic = YcValidators.validCode(control);
       if (basic == null) {
-        var req:ValidationRequestVO = { subject: 'category', subjectId: 0, field: 'guid', value: code };
+        let req:ValidationRequestVO = { subject: 'category', subjectId: 0, field: 'guid', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;
@@ -152,8 +152,8 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
       if (current > 0) {
         // expanding single node
         this.loading = true;
-        var _assignedIds: Array<number> = this.adaptToIds(this.assigned);
-        var _subc:any = this._categoryService.getBranchCategories(current, []).subscribe(
+        let _assignedIds: Array<number> = this.adaptToIds(this.assigned);
+        let _subc:any = this._categoryService.getBranchCategories(current, []).subscribe(
           cats => {
             LogUtil.debug('ShopCatalogMinComponent branch categories', cats);
             let branchNodes = this.adaptToTree(cats, _assignedIds);
@@ -180,19 +180,19 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
       } else {
         // expanding initial
         this.loading = true;
-        var _subs:any = this._shopService.getShopCategories(this.shop.shopId).subscribe(
+        let _subs:any = this._shopService.getShopCategories(this.shop.shopId).subscribe(
           cats => {
             LogUtil.debug('ShopCatalogMinComponent assigned categories', cats);
             this.assigned = cats;
             _subs.unsubscribe();
-            var _assignedIds: Array<number> = this.adaptToIds(cats);
+            let _assignedIds: Array<number> = this.adaptToIds(cats);
 
-            var _subc:any = this._categoryService.getBranchesCategoriesPaths(_assignedIds).subscribe(
+            let _subc:any = this._categoryService.getBranchesCategoriesPaths(_assignedIds).subscribe(
               cats => {
                 LogUtil.debug('ShopCatalogMinComponent loading branch path', cats);
                 _subc.unsubscribe();
 
-                var _subc2:any = this._categoryService.getBranchCategories(current, cats).subscribe(
+                let _subc2:any = this._categoryService.getBranchCategories(current, cats).subscribe(
                   cats => {
                     LogUtil.debug('ShopCatalogMinComponent branch categories', cats, _assignedIds);
                     let branchNodes = this.adaptToTree(cats, _assignedIds);
@@ -224,9 +224,9 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
   }
 
   adaptToIds(vo:Array<CategoryVO>):Array<number> {
-    var rez:Array<number> = [];
-    for (var idx = 0; idx < vo.length; idx++) {
-      var catVo:CategoryVO = vo[idx];
+    let rez:Array<number> = [];
+    for (let idx = 0; idx < vo.length; idx++) {
+      let catVo:CategoryVO = vo[idx];
       rez.push(catVo.categoryId);
     }
     return rez;
@@ -234,14 +234,15 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
 
   /**
    * Adapt given list of categories to tree items for representation.
-   * @param vo
+   * @param vo branch
+   * @param disabled nodes
    * @returns {Array<ITreeNode>}
      */
   adaptToTree(vo:Array<CategoryVO>, disabled:Array<number>):Array<ITreeNode> {
-    var rez:Array<ITreeNode> = [];
-    for (var idx = 0; idx < vo.length; idx++) {
-      var catVo:CategoryVO = vo[idx];
-      var node:ITreeNode = {
+    let rez:Array<ITreeNode> = [];
+    for (let idx = 0; idx < vo.length; idx++) {
+      let catVo:CategoryVO = vo[idx];
+      let node:ITreeNode = {
         'id': catVo.categoryId.toString(),
         'name': catVo.name,
         'children': [],
@@ -270,7 +271,7 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
 
       LogUtil.debug('ShopCatalogMinComponent resetCurrent', nodes, current);
 
-      for (var idx = 0; idx < nodes.length; idx++) {
+      for (let idx = 0; idx < nodes.length; idx++) {
         let node:ITreeNode = nodes[idx];
         LogUtil.debug('ShopCatalogMinComponent resetCurrent matching', node, current);
         if (node.id == current.id) {
@@ -312,8 +313,8 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
      */
   onAssignedClick(cat:CategoryVO) {
     LogUtil.debug('ShopCatalogMinComponent onAssigned', cat);
-    for (var idx = 0; idx < this.assigned.length; idx++) {
-      var catVo : CategoryVO = this.assigned[idx];
+    for (let idx = 0; idx < this.assigned.length; idx++) {
+      let catVo : CategoryVO = this.assigned[idx];
       if (catVo.categoryId === cat.categoryId) {
         LogUtil.debug('ShopCatalogMinComponent remove from assigned', catVo);
         this.assigned.splice(idx, 1);
@@ -326,8 +327,8 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
 
   changeDisabledState(cat:CategoryVO, nodes:Array<ITreeNode>, disabled:boolean):boolean {
     let changed = false;
-    for (var idx = 0; idx < nodes.length; idx++) {
-      var node:ITreeNode = nodes[idx];
+    for (let idx = 0; idx < nodes.length; idx++) {
+      let node:ITreeNode = nodes[idx];
       if (node.id === cat.categoryId.toString()) {
         node.disabled = disabled;
         if (disabled) {
@@ -400,7 +401,7 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
   onSaveHandler() {
     LogUtil.debug('ShopCatalogMinComponent Save handler for shop', this.shop);
     if (this.shop.shopId > 0) {
-      var _sub:any = this._shopService.saveShopCategories(this.shop.shopId, this.assigned).subscribe(
+      let _sub:any = this._shopService.saveShopCategories(this.shop.shopId, this.assigned).subscribe(
           cats => {
             this.assigned = cats;
             this.changed = false;

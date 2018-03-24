@@ -106,11 +106,11 @@ export class QueryComponent implements OnInit {
     let node = this.selectedNode;
 
     this.loading = true;
-    var _sub:any = this._systemService.runQuery(node, data.qtype, data.query).subscribe(res => {
+    let _sub:any = this._systemService.runQuery(node, data.qtype, data.query).subscribe(res => {
 
       LogUtil.debug('QueryComponent res', res);
 
-      var _res:Array<Array<string>> = res;
+      let _res:Array<Array<string>> = res;
 
       let _csv = '';
       _res.forEach(line => {
@@ -138,7 +138,7 @@ export class QueryComponent implements OnInit {
   private getClusterInfo() {
     LogUtil.debug('QueryComponent get cluster');
 
-    var _sub:any = this._systemService.getClusterInfo().subscribe(cluster => {
+    let _sub:any = this._systemService.getClusterInfo().subscribe(cluster => {
 
       LogUtil.debug('QueryComponent cluster', cluster);
       this.cluster = cluster;

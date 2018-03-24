@@ -72,6 +72,7 @@ export class ShopSubsComponent implements OnInit, OnDestroy {
    * Construct shop sub panel
    *
    * @param _shopService shop service
+   * @param fb form builder
    */
   constructor(private _shopService:ShopService,
               fb: FormBuilder) {
@@ -90,7 +91,7 @@ export class ShopSubsComponent implements OnInit, OnDestroy {
 
       let basic = YcValidators.requiredValidCode(control);
       if (basic == null) {
-        var req:ValidationRequestVO = { subject: 'shop', subjectId: 0, field: 'code', value: code };
+        let req:ValidationRequestVO = { subject: 'shop', subjectId: 0, field: 'code', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;
@@ -178,7 +179,7 @@ export class ShopSubsComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopSubsComponent onEditModalResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       this.loading = true;
-      var _sub:any = this._shopService.saveSubShop(this.subShopToEdit).subscribe(
+      let _sub:any = this._shopService.saveSubShop(this.subShopToEdit).subscribe(
           rez => {
           this.changed = false;
           this._reload = false;

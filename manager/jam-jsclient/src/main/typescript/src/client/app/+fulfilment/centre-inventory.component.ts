@@ -112,7 +112,7 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
     if (this.selectedCentre == null) {
       let ffCode = CookieUtil.readCookie(CentreInventoryComponent.COOKIE_CENTRE, null);
       if (ffCode != null) {
-        var _sub:any = this._fulfilmentService.getAllFulfilmentCentres().subscribe(
+        let _sub:any = this._fulfilmentService.getAllFulfilmentCentres().subscribe(
           rez => {
             _sub.unsubscribe();
             let ffs:FulfilmentCentreInfoVO[] = rez;
@@ -284,7 +284,7 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
         LogUtil.debug('CentreInventoryComponent Save handler inventory', this.inventoryEdit);
 
         this.loading = true;
-        var _sub:any = this._fulfilmentService.saveInventory(this.inventoryEdit).subscribe(
+        let _sub:any = this._fulfilmentService.saveInventory(this.inventoryEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.inventoryEdit.skuWarehouseId;
@@ -331,7 +331,7 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
         LogUtil.debug('CentreInventoryComponent onDeleteConfirmationResult', this.selectedInventory);
 
         this.loading = true;
-        var _sub:any = this._fulfilmentService.removeInventory(this.selectedInventory).subscribe(res => {
+        let _sub:any = this._fulfilmentService.removeInventory(this.selectedInventory).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('CentreInventoryComponent removeInventory', this.selectedInventory);
           this.selectedInventory = null;
@@ -358,7 +358,7 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
     if (this.selectedCentre != null && !this.inventoryFilterRequired) {
       this.loading = true;
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._fulfilmentService.getFilteredInventory(this.selectedCentre, this.inventoryFilter, max).subscribe( allinventory => {
+      let _sub:any = this._fulfilmentService.getFilteredInventory(this.selectedCentre, this.inventoryFilter, max).subscribe( allinventory => {
         LogUtil.debug('CentreInventoryComponent getFilteredInventory', allinventory);
         this.inventory = allinventory;
         this.selectedInventory = null;

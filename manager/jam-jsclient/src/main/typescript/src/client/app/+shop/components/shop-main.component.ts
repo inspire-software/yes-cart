@@ -68,7 +68,7 @@ export class ShopMainComponent implements OnInit, OnDestroy {
 
       let basic = YcValidators.requiredValidCode255(control);
       if (basic == null) {
-        var req:ValidationRequestVO = { subject: 'shop', subjectId: that.shop.shopId, field: 'code', value: code };
+        let req:ValidationRequestVO = { subject: 'shop', subjectId: that.shop.shopId, field: 'code', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
       LogUtil.debug('Basic error', basic);
@@ -127,7 +127,7 @@ export class ShopMainComponent implements OnInit, OnDestroy {
   onSaveHandler() {
     LogUtil.debug('ShopMainComponent Save handler for shop id', this.shop);
     this.loading = true;
-    var _sub:any = this._shopService.saveShop(this.shop).subscribe(shop => {
+    let _sub:any = this._shopService.saveShop(this.shop).subscribe(shop => {
       LogUtil.debug('ShopMainComponent Shop service save', shop);
       ShopEventBus.getShopEventBus().emit(shop);
       this.loading = false;
@@ -146,7 +146,7 @@ export class ShopMainComponent implements OnInit, OnDestroy {
     if (ModalAction.POSITIVE === modalresult.action) {
       LogUtil.debug('ShopMainComponent Power off handler for shop', this.shop);
       this.loading = true;
-      var _sub:any = this._shopService.updateDisabledFlag(this.shop, !this.shop.disabled).subscribe(shop => {
+      let _sub:any = this._shopService.updateDisabledFlag(this.shop, !this.shop.disabled).subscribe(shop => {
         LogUtil.debug('ShopMainComponent Shop service power off', shop);
         ShopEventBus.getShopEventBus().emit(shop);
         this.loading = false;
@@ -169,7 +169,7 @@ export class ShopMainComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopMainComponent Refresh handler', this.shop);
     if (this.shop.shopId > 0) {
       this.loading = true;
-      var _sub:any = this._shopService.getShop(this.shop.shopId).subscribe(shop => {
+      let _sub:any = this._shopService.getShop(this.shop.shopId).subscribe(shop => {
         ShopEventBus.getShopEventBus().emit(shop);
         this.loading = false;
         _sub.unsubscribe();

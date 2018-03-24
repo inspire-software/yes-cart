@@ -74,7 +74,7 @@ export class ShopLanguageComponent implements OnInit {
     LogUtil.debug('ShopLanguageComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.lang) {
       this.loading = true;
-      var _sub:any = this._shopService.saveShopLanguages(this.lang).subscribe(shopLanguagesVo => {
+      let _sub:any = this._shopService.saveShopLanguages(this.lang).subscribe(shopLanguagesVo => {
         this.shopLanguagesVO = Util.clone(shopLanguagesVo);
         this.lang = Util.clone(shopLanguagesVo);
         this.lang.all = this.lang.all.filter(obj => {
@@ -103,7 +103,7 @@ export class ShopLanguageComponent implements OnInit {
     LogUtil.debug('ShopLanguageComponent refresh handler', this.shop);
     if (this.shop.shopId > 0) {
       this.loading = true;
-      var _sub:any = this._shopService.getShopLanguages(this.shop.shopId).subscribe(shopLanguagesVo => {
+      let _sub:any = this._shopService.getShopLanguages(this.shop.shopId).subscribe(shopLanguagesVo => {
         this.shopLanguagesVO  = Util.clone(shopLanguagesVo);
         this.lang  = Util.clone(shopLanguagesVo);
         this.lang.all = this.lang.all.filter( obj => {

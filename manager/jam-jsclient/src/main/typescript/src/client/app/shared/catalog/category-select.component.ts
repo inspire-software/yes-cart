@@ -140,7 +140,7 @@ export class CategorySelectComponent implements OnInit {
       LogUtil.debug('ContentSelectComponent loadData expanded', expanded);
 
       this.loading = true;
-      var _subc:any = this._categoryService.getAllCategories().subscribe(
+      let _subc:any = this._categoryService.getAllCategories().subscribe(
           cats => {
           LogUtil.debug('CategorySelectComponent all categories', cats);
           this.nodes = this.adaptToTree(cats, expanded, current);
@@ -157,15 +157,17 @@ export class CategorySelectComponent implements OnInit {
 
   /**
    * Adapt given list of categories to tree items for representation.
-   * @param vo
+   * @param vo branch
+   * @param expanded expanded branches
+   * @param current current node to select
    * @returns {Array<ITreeNode>}
    */
   private adaptToTree(vo:Array<CategoryVO>, expanded:any, current:number):Array<ITreeNode> {
-    var rez:Array<ITreeNode> = [];
-    for (var idx = 0; idx < vo.length; idx++) {
-      var catVo:CategoryVO = vo[idx];
-      var id:string = catVo.categoryId.toString();
-      var node:ITreeNode = {
+    let rez:Array<ITreeNode> = [];
+    for (let idx = 0; idx < vo.length; idx++) {
+      let catVo:CategoryVO = vo[idx];
+      let id:string = catVo.categoryId.toString();
+      let node:ITreeNode = {
         'id': id,
         'name': catVo.name + (catVo.linkToName != null ? (' ( + ' + catVo.linkToName +' )') : ''),
         'children': [],
@@ -192,7 +194,7 @@ export class CategorySelectComponent implements OnInit {
   }
 
   private expandCurrent(nodes:Array<ITreeNode>, current:number):boolean {
-    for (var idx = 0; idx < nodes.length; idx++) {
+    for (let idx = 0; idx < nodes.length; idx++) {
       let node:ITreeNode = nodes[idx];
       if (node.source.categoryId === current) {
         this.onSelectNode(node);

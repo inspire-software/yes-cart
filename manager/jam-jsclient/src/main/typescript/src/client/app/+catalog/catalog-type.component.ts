@@ -165,7 +165,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
     LogUtil.debug('CatalogTypeComponent onRowEditType handler', row);
     let typeId = row.producttypeId;
     this.loading = true;
-    var _sub:any = this._typeService.getProductTypeById(typeId).subscribe(typ => {
+    let _sub:any = this._typeService.getProductTypeById(typeId).subscribe(typ => {
       _sub.unsubscribe();
       this.typeEdit = typ;
       this.typeEditAttributes = [];
@@ -175,7 +175,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
       this.viewMode = CatalogTypeComponent.TYPE;
       if (this.typeEdit.producttypeId > 0) {
         this.loading = true;
-        var _sub2:any = this._typeService.getProductTypeAttributes(this.typeEdit.producttypeId).subscribe(attrs => {
+        let _sub2:any = this._typeService.getProductTypeAttributes(this.typeEdit.producttypeId).subscribe(attrs => {
           _sub2.unsubscribe();
           this.typeEditAttributes = attrs;
           this.loading = false;
@@ -200,7 +200,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
         LogUtil.debug('CatalogTypeComponent Save handler type', this.typeEdit);
 
         this.loading = true;
-        var _sub:any = this._typeService.saveProductType(this.typeEdit).subscribe(
+        let _sub:any = this._typeService.saveProductType(this.typeEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.typeEdit.producttypeId;
@@ -214,7 +214,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
               if (pk > 0 && this.typeAttributesUpdate != null && this.typeAttributesUpdate.length > 0) {
 
                 this.loading = true;
-                var _sub2:any = this._typeService.saveProductTypeAttributes(this.typeAttributesUpdate).subscribe(rez => {
+                let _sub2:any = this._typeService.saveProductTypeAttributes(this.typeAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
                   LogUtil.debug('CatalogTypeComponent type attributes updated', rez);
                   this.typeAttributesUpdate = null;
@@ -252,7 +252,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
         LogUtil.debug('CatalogTypeComponent onDeleteConfirmationResult', this.selectedType);
 
         this.loading = true;
-        var _sub:any = this._typeService.removeProductType(this.selectedType).subscribe(res => {
+        let _sub:any = this._typeService.removeProductType(this.selectedType).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('CatalogTypeComponent removeType', this.selectedType);
           this.selectedType = null;
@@ -279,7 +279,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
     if (!this.typeFilterRequired) {
       this.loading = true;
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._typeService.getFilteredProductTypes(this.typeFilter, max).subscribe( alltypes => {
+      let _sub:any = this._typeService.getFilteredProductTypes(this.typeFilter, max).subscribe( alltypes => {
         LogUtil.debug('CatalogTypeComponent getFilteredTypes', alltypes);
         this.types = alltypes;
         this.selectedType = null;

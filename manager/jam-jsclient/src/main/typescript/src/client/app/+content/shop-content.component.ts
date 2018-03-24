@@ -113,7 +113,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
     this.shopIdSub = this._route.params.subscribe(params => {
       let shopId = params['shopId'];
       LogUtil.debug('ShopContentComponent shopId from params is ' + shopId);
-      var _sub:any = this._shopService.getShop(+shopId).subscribe(shop => {
+      let _sub:any = this._shopService.getShop(+shopId).subscribe(shop => {
         LogUtil.debug('ShopContentComponent Retrieving existing shop', shop);
         ShopEventBus.getShopEventBus().emit(shop);
         _sub.unsubscribe();
@@ -229,7 +229,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   protected onRowEditContent(row:ContentVO) {
     LogUtil.debug('ShopContentComponent onRowEditContent handler', row);
     this.loading = true;
-    var _sub:any = this._contentService.getContentById(this.selectedContent.contentId).subscribe(content => {
+    let _sub:any = this._contentService.getContentById(this.selectedContent.contentId).subscribe(content => {
       LogUtil.debug('ShopContentComponent getContentById', content);
       this.contentEdit = content;
       _sub.unsubscribe();
@@ -237,7 +237,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
       this.changed = false;
       this.validForSave = false;
       this.viewMode = ShopContentComponent.CONTENT;
-      var _sub2:any = this._contentService.getContentAttributes(this.contentEdit.contentId).subscribe(attrs => {
+      let _sub2:any = this._contentService.getContentAttributes(this.contentEdit.contentId).subscribe(attrs => {
         this.contentEditAttributes = attrs;
         this.loading = false;
         _sub2.unsubscribe();
@@ -260,7 +260,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShopContentComponent Save handler content', this.contentEdit);
 
         this.loading = true;
-        var _sub:any = this._contentService.saveContent(this.contentEdit).subscribe(
+        let _sub:any = this._contentService.saveContent(this.contentEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.contentEdit.contentId;
@@ -274,7 +274,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
               if (pk > 0 && this.contentAttributesUpdate != null && this.contentAttributesUpdate.length > 0) {
 
                 this.loading = true;
-                var _sub2:any = this._contentService.saveContentAttributes(this.contentAttributesUpdate).subscribe(rez => {
+                let _sub2:any = this._contentService.saveContentAttributes(this.contentAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
                   LogUtil.debug('ShopContentComponent content attributes updated', rez);
                   this.contentAttributesUpdate = null;
@@ -314,7 +314,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShopContentComponent onDeleteConfirmationResult', this.selectedContent);
 
         this.loading = true;
-        var _sub:any = this._contentService.removeContent(this.selectedContent).subscribe(res => {
+        let _sub:any = this._contentService.removeContent(this.selectedContent).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('ShopContentComponent removeContent', this.selectedContent);
           this.selectedContent = null;
@@ -342,7 +342,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
     if (this.shop != null && !this.contentFilterRequired) {
       this.loading = true;
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._contentService.getFilteredContent(this.shop.shopId, this.contentFilter, max).subscribe( allcontents => {
+      let _sub:any = this._contentService.getFilteredContent(this.shop.shopId, this.contentFilter, max).subscribe( allcontents => {
         LogUtil.debug('ShopContentComponent getFilteredContent', allcontents);
         this.contents = allcontents;
         this.selectedContent = null;

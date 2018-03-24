@@ -133,7 +133,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
   protected onRowEditManager(row:ManagerInfoVO) {
     LogUtil.debug('OrganisationManagerComponent onRowEditManager handler', row);
     this.loading = true;
-    var _sub:any = this._organisationService.getManagerByEmail(row.email).subscribe( manager => {
+    let _sub:any = this._organisationService.getManagerByEmail(row.email).subscribe( manager => {
       LogUtil.debug('OrganisationManagerComponent get manager by email', manager);
       this.managerEdit = manager;
       this.changed = false;
@@ -159,7 +159,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
         LogUtil.debug('OrganisationManagerComponent Save handler manager', this.managerEdit);
 
         this.loading = true;
-        var _sub:any = this._organisationService.saveManager(this.managerEdit).subscribe(
+        let _sub:any = this._organisationService.saveManager(this.managerEdit).subscribe(
             rez => {
               this.selectedManager = rez;
               if (this.managerEdit.managerId > 0) {
@@ -207,7 +207,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
         LogUtil.debug('OrganisationManagerComponent onDeleteConfirmationResult', this.selectedManager);
 
         this.loading = true;
-        var _sub:any = this._organisationService.removeManager(this.selectedManager.email).subscribe(res => {
+        let _sub:any = this._organisationService.removeManager(this.selectedManager.email).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('OrganisationManagerComponent removeManager', this.selectedManager);
           let idx = this.managers.indexOf(this.selectedManager);
@@ -236,7 +236,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
       if (this.selectedManager != null) {
         this.loading = true;
-        var _sub:any = this._organisationService.updateDisabledFlag(this.selectedManager.email, this.selectedManager.enabled).subscribe( done => {
+        let _sub:any = this._organisationService.updateDisabledFlag(this.selectedManager.email, this.selectedManager.enabled).subscribe( done => {
           LogUtil.debug('OrganisationManagerComponent updateDisabledFlag', done);
           this.selectedManager.enabled = !this.selectedManager.enabled;
           this.changed = false;
@@ -263,7 +263,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
       if (this.selectedManager != null) {
         this.loading = true;
-        var _sub:any = this._organisationService.resetPassword(this.selectedManager.email).subscribe( done => {
+        let _sub:any = this._organisationService.resetPassword(this.selectedManager.email).subscribe( done => {
           LogUtil.debug('OrganisationManagerComponent resetPassword', done);
           this.changed = false;
           this.validForSave = false;
@@ -283,7 +283,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
   private getAllManagers() {
     this.loading = true;
-    var _sub:any = this._organisationService.getAllManagers().subscribe( allmanagers => {
+    let _sub:any = this._organisationService.getAllManagers().subscribe( allmanagers => {
       LogUtil.debug('OrganisationManagerComponent getAllManagers', allmanagers);
       this.managers = allmanagers;
       this.selectedManager = null;
@@ -298,7 +298,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
   private getAllRoles() {
     this.loading = true;
-    var _sub:any = this._organisationService.getAllRoles().subscribe( allroles => {
+    let _sub:any = this._organisationService.getAllRoles().subscribe( allroles => {
       LogUtil.debug('OrganisationManagerComponent getAllManagers', allroles);
       this.roles = allroles;
       this.loading = false;

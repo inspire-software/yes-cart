@@ -335,7 +335,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   protected onRowCopySelected() {
     if (this.selectedPromotion != null) {
-      var copy:PromotionVO = Util.clone(this.selectedPromotion);
+      let copy:PromotionVO = Util.clone(this.selectedPromotion);
       copy.promotionId = 0;
       copy.enabled = false;
       this.onRowEditPromotion(copy);
@@ -352,7 +352,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShopPromotionsComponent Save handler promotion', this.promotionEdit);
 
         this.loading = true;
-        var _sub:any = this._promotionService.savePromotion(this.promotionEdit).subscribe(
+        let _sub:any = this._promotionService.savePromotion(this.promotionEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.promotionEdit.promotionId;
@@ -394,7 +394,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShopPromotionsComponent onDeleteConfirmationResult', this.selectedPromotion);
 
         this.loading = true;
-        var _sub:any = this._promotionService.removePromotion(this.selectedPromotion).subscribe(res => {
+        let _sub:any = this._promotionService.removePromotion(this.selectedPromotion).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('ShopPromotionsComponent removePromotion', this.selectedPromotion);
           this.selectedPromotion = null;
@@ -413,7 +413,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
       if (this.selectedPromotion != null) {
         this.loading = true;
-        var _sub:any = this._promotionService.updatePromotionDisabledFlag(this.selectedPromotion, this.selectedPromotion.enabled).subscribe( done => {
+        let _sub:any = this._promotionService.updatePromotionDisabledFlag(this.selectedPromotion, this.selectedPromotion.enabled).subscribe( done => {
           LogUtil.debug('ShopPromotionsComponent updateDisabledFlag', done);
           this.selectedPromotion.enabled = !this.selectedPromotion.enabled;
           if (this.promotionEdit != null && this.selectedPromotion.promotionId == this.promotionEdit.promotionId) {
@@ -464,7 +464,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
         }
       });
 
-      var _sub:any = this._promotionService.getFilteredPromotions(this.selectedShop, this.selectedCurrency, this.promotionFilter, types, actions, max).subscribe( allpromotions => {
+      let _sub:any = this._promotionService.getFilteredPromotions(this.selectedShop, this.selectedCurrency, this.promotionFilter, types, actions, max).subscribe( allpromotions => {
         LogUtil.debug('ShopPromotionsComponent getFilteredPromotions', allpromotions);
         this.promotions = allpromotions;
         this.selectedPromotion = null;

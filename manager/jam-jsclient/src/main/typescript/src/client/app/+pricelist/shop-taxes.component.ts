@@ -385,11 +385,11 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
   protected onRowCopySelected() {
     if (this.selectedTaxconfig != null) {
-      var copyCfg:TaxConfigVO = Util.clone(this.selectedTaxconfig);
+      let copyCfg:TaxConfigVO = Util.clone(this.selectedTaxconfig);
       copyCfg.taxConfigId = 0;
       this.onRowEditTaxconfig(copyCfg);
     } else if (this.selectedTax != null) {
-      var copyTax:TaxVO = Util.clone(this.selectedTax);
+      let copyTax:TaxVO = Util.clone(this.selectedTax);
       copyTax.taxId = 0;
       this.onRowEditTax(copyTax);
     }
@@ -427,7 +427,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShopTaxesComponent Save handler config', this.taxconfigEdit);
 
         this.loading = true;
-        var _sub:any = this._taxService.createTaxConfig(this.taxconfigEdit).subscribe(
+        let _sub:any = this._taxService.createTaxConfig(this.taxconfigEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.taxconfigEdit.taxConfigId;
@@ -449,7 +449,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShopTaxesComponent Save handler tax', this.taxEdit);
 
         this.loading = true;
-        var _sub:any = this._taxService.saveTax(this.taxEdit).subscribe(
+        let _sub:any = this._taxService.saveTax(this.taxEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.taxEdit.taxId;
@@ -502,7 +502,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShopTaxesComponent onDeleteConfirmationResult', this.selectedTaxconfig);
 
         this.loading = true;
-        var _sub:any = this._taxService.removeTaxConfig(this.selectedTaxconfig).subscribe(res => {
+        let _sub:any = this._taxService.removeTaxConfig(this.selectedTaxconfig).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('ShopTaxesComponent removeTax', this.selectedTaxconfig);
           this.selectedTaxconfig = null;
@@ -514,7 +514,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShopTaxesComponent onDeleteConfirmationResult', this.selectedTax);
 
         this.loading = true;
-        var _sub:any = this._taxService.removeTax(this.selectedTax).subscribe(res => {
+        let _sub:any = this._taxService.removeTax(this.selectedTax).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('ShopTaxesComponent removeTax', this.selectedTax);
           this.selectedTax = null;
@@ -549,7 +549,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
     if (this.selectedShop != null && this.selectedCurrency != null && !this.taxesFilterRequired) {
       this.loading = true;
       let max = this.filterNoCap; // this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._taxService.getFilteredTax(this.selectedShop, this.selectedCurrency, this.taxesFilter, max).subscribe( alltaxes => {
+      let _sub:any = this._taxService.getFilteredTax(this.selectedShop, this.selectedCurrency, this.taxesFilter, max).subscribe( alltaxes => {
         LogUtil.debug('ShopTaxesComponent getFilteredTax', alltaxes);
         this.taxes = alltaxes;
         this.selectedTax = null;
@@ -576,7 +576,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
     if (this.selectedTax != null && !this.taxconfigsFilterRequired) {
       this.loading = true;
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._taxService.getFilteredTaxConfig(this.selectedTax, this.taxconfigsFilter, max).subscribe( alltaxes => {
+      let _sub:any = this._taxService.getFilteredTaxConfig(this.selectedTax, this.taxconfigsFilter, max).subscribe( alltaxes => {
         LogUtil.debug('ShopTaxesComponent getFilteredTaxConfig', alltaxes);
         this.taxconfigs = alltaxes;
         this.selectedTaxconfig = null;

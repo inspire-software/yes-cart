@@ -74,7 +74,7 @@ export class ShopCurrencyComponent implements OnInit {
     LogUtil.debug('ShopCurrencyComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.curr) {
       this.loading = true;
-      var _sub:any = this._shopService.saveShopCurrencies(this.curr).subscribe(shopSupportedCurrenciesVO => {
+      let _sub:any = this._shopService.saveShopCurrencies(this.curr).subscribe(shopSupportedCurrenciesVO => {
         LogUtil.debug('ShopCurrencyComponent Saved currencies', shopSupportedCurrenciesVO);
         this.shopSupportedCurrenciesVO = Util.clone(shopSupportedCurrenciesVO);
         this.curr = Util.clone(shopSupportedCurrenciesVO);
@@ -100,7 +100,7 @@ export class ShopCurrencyComponent implements OnInit {
     LogUtil.debug('ShopCurrencyComponent refresh handler', this.shop);
     if (this.shop.shopId > 0) {
       this.loading = true;
-      var _sub:any = this._shopService.getShopCurrencies(this.shop.shopId).subscribe(shopSupportedCurrenciesVO => {
+      let _sub:any = this._shopService.getShopCurrencies(this.shop.shopId).subscribe(shopSupportedCurrenciesVO => {
         this.shopSupportedCurrenciesVO = Util.clone(shopSupportedCurrenciesVO);
         this.curr = Util.clone(shopSupportedCurrenciesVO);
         this.removeItems(this.curr.all, this.curr.supported);

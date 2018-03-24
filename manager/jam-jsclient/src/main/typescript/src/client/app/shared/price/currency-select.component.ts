@@ -93,7 +93,7 @@ export class CurrencySelectComponent implements OnInit, OnDestroy {
   private getAllCurrencies() {
 
     if (this.shop != null) {
-      var _sub:any = this._currencyService.getShopCurrencies(this.shop.shopId).subscribe((allcurrencies:ShopSupportedCurrenciesVO) => {
+      let _sub:any = this._currencyService.getShopCurrencies(this.shop.shopId).subscribe((allcurrencies:ShopSupportedCurrenciesVO) => {
         LogUtil.debug('CurrencySelectComponent getAllCurrencies', allcurrencies);
         this.currencies = allcurrencies.all;
         this.shopCurrencies = allcurrencies.supported;
@@ -128,7 +128,7 @@ export class CurrencySelectComponent implements OnInit, OnDestroy {
     }
 
     let that = this;
-    var _sort = function(a:Pair<string, string>, b:Pair<string, string>):number {
+    let _sort = function(a:Pair<string, string>, b:Pair<string, string>):number {
 
       let aShop = that.isShopCurrency(a);
       let bShop = that.isShopCurrency(b);

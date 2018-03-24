@@ -151,7 +151,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   }
 
   onShowGrossTotalClick() {
-    var _gross = this.showGrossTotal;
+    let _gross = this.showGrossTotal;
     this.showGrossTotal = !_gross;
   }
 
@@ -398,7 +398,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
     this.loading = true;
     let lang = I18nEventBus.getI18nEventBus().current();
-    var _sub:any = this._customerorderService.getOrderById(lang, row.customerorderId).subscribe( customerorder => {
+    let _sub:any = this._customerorderService.getOrderById(lang, row.customerorderId).subscribe( customerorder => {
       LogUtil.debug('AllCustomerOrdersComponent getOrderById', customerorder);
 
       this.customerorderEdit = customerorder;
@@ -502,13 +502,13 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
         LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder);
 
         this.loading = true;
-        var _sub:any = this._customerorderService.transitionOrder(
+        let _sub:any = this._customerorderService.transitionOrder(
           this.selectedCustomerorder, this.orderTransitionName, this.orderTransitionMessage).subscribe((res:CustomerOrderTransitionResultVO) => {
             LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result', res);
             if (res.errorCode === '0') {
 
               let lang = I18nEventBus.getI18nEventBus().current();
-              var _sub2:any = this._customerorderService.getOrderById(lang, this.selectedCustomerorder.customerorderId).subscribe( customerorder => {
+              let _sub2:any = this._customerorderService.getOrderById(lang, this.selectedCustomerorder.customerorderId).subscribe( customerorder => {
                 LogUtil.debug('AllCustomerOrdersComponent getOrderById', customerorder);
 
                 if (this.customerorderEdit != null && this.customerorderEdit.customerorderId == this.selectedCustomerorder.customerorderId) {
@@ -546,13 +546,13 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
         LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder);
 
         this.loading = true;
-        var _sub:any = this._customerorderService.transitionDelivery(
+        let _sub:any = this._customerorderService.transitionDelivery(
           this.selectedCustomerorder, this.selectedCustomerdelivery, this.orderTransitionName, this.orderTransitionMessage).subscribe((res:CustomerOrderTransitionResultVO) => {
             LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result', res);
             if (res.errorCode === '0') {
 
               let lang = I18nEventBus.getI18nEventBus().current();
-              var _sub2:any = this._customerorderService.getOrderById(lang, this.selectedCustomerorder.customerorderId).subscribe((customerorder:CustomerOrderVO) => {
+              let _sub2:any = this._customerorderService.getOrderById(lang, this.selectedCustomerorder.customerorderId).subscribe((customerorder:CustomerOrderVO) => {
                 LogUtil.debug('AllCustomerOrdersComponent getOrderById', customerorder);
 
                 if (this.customerorderEdit != null && this.customerorderEdit.customerorderId == this.selectedCustomerorder.customerorderId) {
@@ -741,7 +741,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
         }
       });
 
-      var _sub:any = this._customerorderService.getFilteredOrders(lang, this.customerorderFilter, sts, max).subscribe( allcustomerorders => {
+      let _sub:any = this._customerorderService.getFilteredOrders(lang, this.customerorderFilter, sts, max).subscribe( allcustomerorders => {
         LogUtil.debug('AllCustomerOrdersComponent getFilteredCustomerorders', allcustomerorders);
         this.customerorders = allcustomerorders;
         this.selectedCustomerorder = null;

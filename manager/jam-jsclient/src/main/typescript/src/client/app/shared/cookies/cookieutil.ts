@@ -23,7 +23,7 @@ export class CookieUtil {
   public static createCookie(name:string, value:string, days:number):void {
     let expires = '';
     if (days) {
-      var date = new Date();
+      let date = new Date();
       date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
       expires = '; expires=' + date.toUTCString();
     }
@@ -34,10 +34,10 @@ export class CookieUtil {
    * Read cookie.
    */
   public static readCookie(name:string, def:string):string {
-    var nameEQ = encodeURIComponent(name) + '=';
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-      var c = ca[i];
+    let nameEQ = encodeURIComponent(name) + '=';
+    let ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
       while (c.charAt(0) == ' ') c = c.substring(1, c.length);
       if (c.indexOf(nameEQ) == 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
     }

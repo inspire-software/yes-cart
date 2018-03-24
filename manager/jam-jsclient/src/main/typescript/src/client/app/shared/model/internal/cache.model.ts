@@ -80,7 +80,7 @@ export class LRUCache {
   }
 
   private removeOutdated(now:number):void {
-    for (var _k in this._map) {
+    for (let _k in this._map) {
       if (now > this._map[_k].expiry) {
         delete this._map[_k];
       }

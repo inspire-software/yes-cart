@@ -101,7 +101,7 @@ export class CarrierSlaSelectComponent implements OnInit, OnDestroy {
 
     if (!this.carrierSlaFilterRequired) {
       this.loading = true;
-      var _sub:any = this._shippingService.getFilteredCarrierSlas(this.carrierSlaFilter, this.filterCap).subscribe(allproducts => {
+      let _sub:any = this._shippingService.getFilteredCarrierSlas(this.carrierSlaFilter, this.filterCap).subscribe(allproducts => {
         LogUtil.debug('CarrierSlaSelectComponent getAllCarrierSlas', allproducts);
         this.selectedCarrierSla = null;
         this.changed = false;

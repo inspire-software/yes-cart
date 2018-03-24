@@ -47,7 +47,7 @@ export class ModalComponent implements OnInit {
   @Output() closed: EventEmitter<ModalResult> = new EventEmitter<ModalResult>();
   /**
    * Fires an event when the modal is ready with a pointer to the modal.
-   * @type {EventEmitter<Modal>}
+   * @type {EventEmitter<ModalComponent>}
    */
   @Output() loaded: EventEmitter<ModalComponent> = new EventEmitter<ModalComponent>();
 

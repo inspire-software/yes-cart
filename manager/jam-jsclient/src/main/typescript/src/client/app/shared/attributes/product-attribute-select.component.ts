@@ -99,7 +99,7 @@ export class ProductAttributeSelectComponent implements OnInit, OnDestroy {
 
     if (!this.attributeFilterRequired) {
       this.loading = true;
-      var _sub:any = this._attributeService.getFilteredAttributes('PRODUCT', this.attributeFilter, this.filterCap).subscribe(allattributes => {
+      let _sub:any = this._attributeService.getFilteredAttributes('PRODUCT', this.attributeFilter, this.filterCap).subscribe(allattributes => {
         LogUtil.debug('ProductAttributeSelectComponent getAllAttributes', allattributes);
         this.filteredAttributes = allattributes;
         this.attributeFilterCapped = this.filteredAttributes.length >= this.filterCap;

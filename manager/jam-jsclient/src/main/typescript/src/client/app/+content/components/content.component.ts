@@ -92,7 +92,7 @@ export class ContentComponent implements OnInit, OnDestroy {
 
       let basic = YcValidators.validSeoUri(control);
       if (basic == null) {
-        var req:ValidationRequestVO = { subject: 'content', subjectId: that._content.contentId, field: 'uri', value: uri };
+        let req:ValidationRequestVO = { subject: 'content', subjectId: that._content.contentId, field: 'uri', value: uri };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;
@@ -107,7 +107,7 @@ export class ContentComponent implements OnInit, OnDestroy {
 
       let basic = YcValidators.validCode(control);
       if (basic == null) {
-        var req:ValidationRequestVO = { subject: 'content', subjectId: that._content.contentId, field: 'guid', value: code };
+        let req:ValidationRequestVO = { subject: 'content', subjectId: that._content.contentId, field: 'guid', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;

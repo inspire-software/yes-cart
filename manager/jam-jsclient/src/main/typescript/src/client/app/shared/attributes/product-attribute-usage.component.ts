@@ -75,7 +75,7 @@ export class ProductAttributeUsageComponent implements OnInit {
    */
   private loadData() {
     LogUtil.debug('ProductAttributeUsageComponent loading usages', this._attributeCode);
-    var _subc:any = this._attributeService.getProductTypesByAttributeCode(this._attributeCode).subscribe(
+    let _subc:any = this._attributeService.getProductTypesByAttributeCode(this._attributeCode).subscribe(
         usage => {
         LogUtil.debug('ProductAttributeUsageComponent all usages', usage);
         this.usages = usage;

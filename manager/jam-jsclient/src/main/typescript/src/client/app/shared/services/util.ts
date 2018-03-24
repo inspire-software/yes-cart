@@ -43,7 +43,7 @@ export class Util {
    * @param toObject object
    */
   public static copyValues(fromObject:any, toObject:any):void {
-    for (var prop in fromObject) {
+    for (let prop in fromObject) {
       if (toObject.hasOwnProperty(prop)) {
         toObject[prop] = fromObject[prop];
       }
@@ -96,14 +96,14 @@ export class Util {
 
   public static toCsv(object:any, header:boolean):string {
 
-    var _arr:Array<any> = [];
+    let _arr:Array<any> = [];
     if (Object.prototype.toString.call(object) === '[object Array]') {
       _arr = <Array<any>> object;
     } else if (object != null) {
       _arr.push(object);
     }
 
-    var _csv:string = '';
+    let _csv:string = '';
     if (header && _arr.length > 0) {
       for (let prop in _arr[0]) {
         _csv += prop + ',';

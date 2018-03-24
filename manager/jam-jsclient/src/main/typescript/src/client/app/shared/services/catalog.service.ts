@@ -299,7 +299,7 @@ export class CatalogService {
    * @returns {Observable<R>}
    */
   createCategory(newCat:BasicCategoryVO, parentId : number) {
-    var cat = newCat.guid ? {'guid' : newCat.guid, 'name' : newCat.name, 'parentId' : parentId } : {'name' : newCat.name, 'parentId' : parentId };
+    let cat = newCat.guid ? {'guid' : newCat.guid, 'name' : newCat.name, 'parentId' : parentId } : {'name' : newCat.name, 'parentId' : parentId };
     let body = JSON.stringify(cat);
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });

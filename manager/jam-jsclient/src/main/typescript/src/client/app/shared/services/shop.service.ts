@@ -77,8 +77,8 @@ export class ShopService {
    * @returns {Promise<ShopVO>}
    */
   createShop() {
-    var shopVOTemplate : ShopVO = {'shopId': 0, 'disabled': false, 'code' : '', 'masterId': undefined, 'masterCode': null, 'name': '', 'description' : '', 'fspointer' : ''};
-    var newShop : ShopVO = Util.clone(shopVOTemplate);
+    let shopVOTemplate : ShopVO = {'shopId': 0, 'disabled': false, 'code' : '', 'masterId': undefined, 'masterCode': null, 'name': '', 'description' : '', 'fspointer' : ''};
+    let newShop : ShopVO = Util.clone(shopVOTemplate);
     return Promise.resolve(newShop);
   }
 
@@ -126,7 +126,8 @@ export class ShopService {
 
   /**
    * Save or create given shop detail - the root of shop related information.
-   * @param shop
+   * @param shop shop
+   * @param state enabled or disabled
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   updateDisabledFlag(shop:ShopVO, state:boolean) {
@@ -143,7 +144,7 @@ export class ShopService {
 
   /**
    * Get summary information for given shop id.
-   * @param id given shop id
+   * @param shopId given shop id
    * @param lang language
    * @return {Promise<ShopSummaryVO>}
    */
@@ -157,7 +158,7 @@ export class ShopService {
 
   /**
    * Get localization information for given shop id.
-   * @param id given shop id
+   * @param shopId given shop id
    * @return {Promise<ShopSeoVO>}
    */
   getShopLocalization(shopId:number) {

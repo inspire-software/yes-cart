@@ -85,7 +85,7 @@ export class OrganisationService {
 
   /**
    * Remove manager.
-   * @param manager manager
+   * @param email manager email
    * @returns {Observable<R>}
    */
   removeManager(email:string) {

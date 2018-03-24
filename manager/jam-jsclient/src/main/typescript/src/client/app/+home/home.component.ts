@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
   onRefreshHandler() {
 
     this.loading = true;
-    var _sub:any = this._dashboardService.getDashboard().subscribe((widgets:DashboardWidgetVO[]) => {
+    let _sub:any = this._dashboardService.getDashboard().subscribe((widgets:DashboardWidgetVO[]) => {
 
       LogUtil.debug('HomeComponent getDashboard', widgets);
 

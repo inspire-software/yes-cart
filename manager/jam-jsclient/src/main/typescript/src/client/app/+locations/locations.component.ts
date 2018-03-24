@@ -208,7 +208,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
         LogUtil.debug('LocationsComponent Save handler state', this.stateEdit);
 
         this.loading = true;
-        var _sub:any = this._locationService.saveState(this.stateEdit).subscribe(
+        let _sub:any = this._locationService.saveState(this.stateEdit).subscribe(
             rez => {
             if (this.stateEdit.stateId > 0) {
               let idx = this.states.findIndex(rez => rez.stateId == this.stateEdit.stateId);
@@ -235,7 +235,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
         LogUtil.debug('LocationsComponent Save handler country', this.countryEdit);
 
         this.loading = true;
-        var _sub:any = this._locationService.saveCountry(this.countryEdit).subscribe(
+        let _sub:any = this._locationService.saveCountry(this.countryEdit).subscribe(
             rez => {
             if (this.countryEdit.countryId > 0) {
               let idx = this.countries.findIndex(rez => rez.countryId == this.countryEdit.countryId);
@@ -289,7 +289,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
         LogUtil.debug('LocationsComponent onDeleteConfirmationResult', this.selectedState);
 
         this.loading = true;
-        var _sub:any = this._locationService.removeState(this.selectedState).subscribe(res => {
+        let _sub:any = this._locationService.removeState(this.selectedState).subscribe(res => {
           LogUtil.debug('LocationsComponent removeState', this.selectedState);
           let idx = this.states.indexOf(this.selectedState);
           this.states.splice(idx, 1);
@@ -304,7 +304,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
         LogUtil.debug('LocationsComponent onDeleteConfirmationResult', this.selectedCountry);
 
         this.loading = true;
-        var _sub:any = this._locationService.removeCountry(this.selectedCountry).subscribe(res => {
+        let _sub:any = this._locationService.removeCountry(this.selectedCountry).subscribe(res => {
           LogUtil.debug('LocationsComponent removeCountry', this.selectedCountry);
           let idx = this.countries.indexOf(this.selectedCountry);
           this.countries.splice(idx, 1);
@@ -332,7 +332,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
   private getAllLocations() {
     this.loading = true;
-    var _sub:any = this._locationService.getAllCountries().subscribe( allcountries => {
+    let _sub:any = this._locationService.getAllCountries().subscribe( allcountries => {
       LogUtil.debug('LocationsComponent getAllCountries', allcountries);
       this.countries = allcountries;
       this.selectedCountry = null;
@@ -348,7 +348,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
   private getAllStates() {
     if (this.selectedCountry != null) {
       this.loading = true;
-      var _sub:any = this._locationService.getAllStates(this.selectedCountry).subscribe(allstates => {
+      let _sub:any = this._locationService.getAllStates(this.selectedCountry).subscribe(allstates => {
         LogUtil.debug('LocationsComponent getAllStates', allstates);
         this.states = allstates;
         this.selectedState = null;

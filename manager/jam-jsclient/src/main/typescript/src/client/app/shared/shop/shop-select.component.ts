@@ -137,7 +137,7 @@ export class ShopSelectComponent implements OnInit, OnDestroy {
   }
 
   private getAllShops() {
-    var _sub:any = this._shopService.getAllShops().subscribe( allshops => {
+    let _sub:any = this._shopService.getAllShops().subscribe( allshops => {
       LogUtil.debug('ShopListComponent getAllShops', allshops);
       this.shops = allshops;
       ShopEventBus.getShopEventBus().emitAll(this.shops);

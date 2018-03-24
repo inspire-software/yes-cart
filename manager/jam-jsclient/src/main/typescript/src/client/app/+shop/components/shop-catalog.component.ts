@@ -60,9 +60,9 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
 
   /**
    * Construct shop catalogues panel.
-   * @param _categoryService
-   * @param _shopService
-   * @param _routeParams
+   * @param _categoryService category service
+   * @param _shopService shop service
+   * @param fb form builder
    */
   constructor(private _categoryService:CatalogService,
               private _shopService:ShopService,
@@ -82,7 +82,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
 
       let basic = YcValidators.validCode(control);
       if (basic == null) {
-        var req:ValidationRequestVO = { subject: 'category', subjectId: 0, field: 'guid', value: code };
+        let req:ValidationRequestVO = { subject: 'category', subjectId: 0, field: 'guid', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;
@@ -159,14 +159,14 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
     this.existingShop = this.shop.shopId > 0;
     if (this.existingShop) {
       this.loading = true;
-      var _subs:any = this._shopService.getShopCategories(this.shop.shopId).subscribe(
+      let _subs:any = this._shopService.getShopCategories(this.shop.shopId).subscribe(
           cats => {
             LogUtil.debug('ShopCatalogComponent assigned categories', cats);
             this.assigned = cats;
             _subs.unsubscribe();
-            var _assignedIds:Array<number> = this.adaptToIds(cats);
+            let _assignedIds:Array<number> = this.adaptToIds(cats);
 
-            var _subc:any = this._categoryService.getAllCategories().subscribe(
+            let _subc:any = this._categoryService.getAllCategories().subscribe(
                 cats => {
                   LogUtil.debug('ShopCatalogComponent all categories', cats, _assignedIds);
                   this.categories = cats;
@@ -185,9 +185,9 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
   }
 
   adaptToIds(vo:Array<CategoryVO>):Array<number> {
-    var rez:Array<number> = [];
-    for (var idx = 0; idx < vo.length; idx++) {
-      var catVo:CategoryVO = vo[idx];
+    let rez:Array<number> = [];
+    for (let idx = 0; idx < vo.length; idx++) {
+      let catVo:CategoryVO = vo[idx];
       rez.push(catVo.categoryId);
     }
     return rez;
@@ -195,14 +195,15 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
 
   /**
    * Adapt given list of categories to tree items for representation.
-   * @param vo
+   * @param vo branch
+   * @param disabled nodes
    * @returns {Array<ITreeNode>}
      */
   adaptToTree(vo:Array<CategoryVO>, disabled:Array<number>):Array<ITreeNode> {
-    var rez:Array<ITreeNode> = [];
-    for (var idx = 0; idx < vo.length; idx++) {
-      var catVo:CategoryVO = vo[idx];
-      var node:ITreeNode = {
+    let rez:Array<ITreeNode> = [];
+    for (let idx = 0; idx < vo.length; idx++) {
+      let catVo:CategoryVO = vo[idx];
+      let node:ITreeNode = {
         'id': catVo.categoryId.toString(),
         'name': catVo.name,
         'children': [],
@@ -245,8 +246,8 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
      */
   onAssignedClick(cat:CategoryVO) {
     LogUtil.debug('ShopCatalogComponent onAssigned', cat);
-    for (var idx = 0; idx < this.assigned.length; idx++) {
-      var catVo : CategoryVO = this.assigned[idx];
+    for (let idx = 0; idx < this.assigned.length; idx++) {
+      let catVo : CategoryVO = this.assigned[idx];
       if (catVo.categoryId === cat.categoryId) {
         LogUtil.debug('ShopCatalogComponent remove from assigned', catVo);
         this.assigned.splice(idx, 1);
@@ -259,8 +260,8 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
 
   changeDisabledState(cat:CategoryVO, nodes:Array<ITreeNode>, disabled:boolean):boolean {
     let changed = false;
-    for (var idx = 0; idx < nodes.length; idx++) {
-      var node:ITreeNode = nodes[idx];
+    for (let idx = 0; idx < nodes.length; idx++) {
+      let node:ITreeNode = nodes[idx];
       if (node.id === cat.categoryId.toString()) {
         node.disabled = disabled;
         if (disabled) {
@@ -328,7 +329,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopCatalogComponent Save handler for shop', this.shop);
     if (this.shop.shopId > 0) {
       this.loading = true;
-      var _sub:any = this._shopService.saveShopCategories(this.shop.shopId, this.assigned).subscribe(
+      let _sub:any = this._shopService.saveShopCategories(this.shop.shopId, this.assigned).subscribe(
           cats => {
             this.assigned = cats;
             this.changed = false;
@@ -347,12 +348,12 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
     this.existingShop = this.shop.shopId > 0;
     if (this.existingShop) {
       this.loading = true;
-      var _subs:any = this._shopService.getShopCategories(this.shop.shopId).subscribe(
+      let _subs:any = this._shopService.getShopCategories(this.shop.shopId).subscribe(
           cats => {
             LogUtil.debug('ShopCatalogComponent assigned categories', cats);
             this.assigned = cats;
             _subs.unsubscribe();
-            var _assignedIds:Array<number> = this.adaptToIds(cats);
+            let _assignedIds:Array<number> = this.adaptToIds(cats);
 
             this.nodes = this.adaptToTree(this.categories, _assignedIds);
             this.selectedNode = null;

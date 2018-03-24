@@ -160,7 +160,7 @@ export class YcValidators {
       LogUtil.debug('YcValidators validRemoteCheck', control, request);
       let service = YcValidators.validationService;
 
-      var _sub:any = service.validate(request).subscribe(
+      let _sub:any = service.validate(request).subscribe(
           data => {
 
             if (request.subjectId > 0) { // cache only persistent
@@ -192,8 +192,8 @@ export class YcValidators {
   }
 
   private static validateDomain(url:string):boolean {
-    var dn:string;
-    for (var i=0; i<YcValidators.topLevelDomainNames.length; i++) {
+    let dn:string;
+    for (let i=0; i<YcValidators.topLevelDomainNames.length; i++) {
       dn = '.'+YcValidators.topLevelDomainNames[i];
       if (url.lastIndexOf(dn) == (url.length - dn.length)) {
         return true;
@@ -203,7 +203,7 @@ export class YcValidators {
   }
 
   private static validateIp(url:string):boolean {
-    var regex:RegExp = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
+    let regex:RegExp = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
     return regex.test(url);
   }
 

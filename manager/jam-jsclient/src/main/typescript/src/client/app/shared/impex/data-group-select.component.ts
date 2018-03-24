@@ -97,8 +97,8 @@ export class DataGroupSelectComponent implements OnInit, OnDestroy {
 
   private getAllGroups() {
 
-    var _lang = I18nEventBus.getI18nEventBus().current();
-    var _sub:any = this._groupService.getGroups(_lang, this.mode).subscribe(groups => {
+    let _lang = I18nEventBus.getI18nEventBus().current();
+    let _sub:any = this._groupService.getGroups(_lang, this.mode).subscribe(groups => {
 
       LogUtil.debug('ImportManagerComponent groups', groups);
       this.groups = groups;

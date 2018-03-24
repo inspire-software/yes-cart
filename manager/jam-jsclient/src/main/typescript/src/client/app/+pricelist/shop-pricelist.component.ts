@@ -334,7 +334,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
   protected onRowCopySelected() {
     if (this.selectedPricelist != null) {
-      var copy:PriceListVO = Util.clone(this.selectedPricelist);
+      let copy:PriceListVO = Util.clone(this.selectedPricelist);
       copy.skuPriceId = 0;
       this.onRowEditPricelist(copy);
     }
@@ -383,7 +383,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShopPriceListComponent Save handler pricelist', this.pricelistEdit);
 
         this.loading = true;
-        var _sub:any = this._priceService.savePriceList(this.pricelistEdit).subscribe(
+        let _sub:any = this._priceService.savePriceList(this.pricelistEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.pricelistEdit.skuPriceId;
@@ -430,7 +430,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShopPriceListComponent onDeleteConfirmationResult', this.selectedPricelist);
 
         this.loading = true;
-        var _sub:any = this._priceService.removePriceList(this.selectedPricelist).subscribe(res => {
+        let _sub:any = this._priceService.removePriceList(this.selectedPricelist).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('ShopPriceListComponent removePricelist', this.selectedPricelist);
           this.selectedPricelist = null;
@@ -457,7 +457,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
     if (this.selectedShop != null && !this.pricelistFilterRequired) {
       this.loading = true;
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._priceService.getFilteredPriceLists(this.selectedShop, this.selectedCurrency, this.pricelistFilter, max).subscribe( allpricelist => {
+      let _sub:any = this._priceService.getFilteredPriceLists(this.selectedShop, this.selectedCurrency, this.pricelistFilter, max).subscribe( allpricelist => {
         LogUtil.debug('ShopPriceListComponent getFilteredPricelist', allpricelist);
         this.pricelist = allpricelist;
         this.selectedPricelist = null;

@@ -228,7 +228,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShippingComponent Save handler sla', this.slaEdit);
 
         this.loading = true;
-        var _sub:any = this._shippingService.saveCarrierSla(this.slaEdit).subscribe(
+        let _sub:any = this._shippingService.saveCarrierSla(this.slaEdit).subscribe(
             rez => {
             if (this.slaEdit.carrierslaId > 0) {
               let idx = this.slas.findIndex(rez => rez.carrierslaId == this.slaEdit.carrierslaId);
@@ -255,7 +255,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShippingComponent Save handler carrier', this.carrierEdit);
 
        this.loading = true;
-        var _sub:any = this._shippingService.saveCarrier(this.carrierEdit).subscribe(
+        let _sub:any = this._shippingService.saveCarrier(this.carrierEdit).subscribe(
             rez => {
             if (this.carrierEdit.carrierId > 0) {
               let idx = this.carriers.findIndex(rez => rez.carrierId == this.carrierEdit.carrierId);
@@ -309,7 +309,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShippingComponent onDeleteConfirmationResult', this.selectedSla);
 
        this.loading = true;
-        var _sub:any = this._shippingService.removeCarrierSla(this.selectedSla).subscribe(res => {
+        let _sub:any = this._shippingService.removeCarrierSla(this.selectedSla).subscribe(res => {
           LogUtil.debug('ShippingComponent removeSla', this.selectedSla);
           let idx = this.slas.indexOf(this.selectedSla);
           this.slas.splice(idx, 1);
@@ -324,7 +324,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShippingComponent onDeleteConfirmationResult', this.selectedCarrier);
 
         this.loading = true;
-        var _sub:any = this._shippingService.removeCarrier(this.selectedCarrier).subscribe(res => {
+        let _sub:any = this._shippingService.removeCarrier(this.selectedCarrier).subscribe(res => {
           LogUtil.debug('ShippingComponent removeCarrier', this.selectedCarrier);
           let idx = this.carriers.indexOf(this.selectedCarrier);
           this.carriers.splice(idx, 1);
@@ -354,7 +354,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
 
   private getAllCarriers() {
     this.loading = true;
-    var _sub:any = this._shippingService.getAllCarriers().subscribe( allcarriers => {
+    let _sub:any = this._shippingService.getAllCarriers().subscribe( allcarriers => {
       LogUtil.debug('ShippingComponent getAllCarriers', allcarriers);
       this.carriers = allcarriers;
       this.selectedCarrier = null;
@@ -366,12 +366,12 @@ export class ShippingComponent implements OnInit, OnDestroy {
       _sub.unsubscribe();
 
       let lang = I18nEventBus.getI18nEventBus().current();
-      var _sub2:any = this._paymentService.getPaymentGateways(lang).subscribe(allpgs => {
+      let _sub2:any = this._paymentService.getPaymentGateways(lang).subscribe(allpgs => {
         LogUtil.debug('ShippingComponent getPaymentGateways', allpgs);
         this.pgs = allpgs;
         _sub2.unsubscribe();
       });
-      var _sub3:any = this._fulfilmentService.getAllFulfilmentCentres().subscribe(allfcs => {
+      let _sub3:any = this._fulfilmentService.getAllFulfilmentCentres().subscribe(allfcs => {
         LogUtil.debug('ShippingComponent getAllFulfilmentCentres', allfcs);
         this.fcs = allfcs;
         _sub3.unsubscribe();
@@ -383,7 +383,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
   private getAllSlas() {
     if (this.selectedCarrier != null) {
       this.loading = true;
-      var _sub:any = this._shippingService.getCarrierSlas(this.selectedCarrier.carrierId).subscribe(allslas => {
+      let _sub:any = this._shippingService.getCarrierSlas(this.selectedCarrier.carrierId).subscribe(allslas => {
         LogUtil.debug('ShippingComponent getCarrierSlas', allslas);
         this.slas = allslas;
         this.selectedSla = null;

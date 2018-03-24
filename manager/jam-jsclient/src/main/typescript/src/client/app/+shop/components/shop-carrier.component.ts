@@ -153,7 +153,6 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
 
   /**
    * Fast create new carrier.
-   * @param parent parent of new carrier
    */
   createNew() {
     LogUtil.debug('ShopCarrierComponent createNew');
@@ -186,7 +185,7 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopCarrierComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.shopCarriersVO) {
       this.loading = true;
-      var _sub:any = this._shippingService.saveShopCarriers(this.shopCarriersVO).subscribe(shopLanguagesVo => {
+      let _sub:any = this._shippingService.saveShopCarriers(this.shopCarriersVO).subscribe(shopLanguagesVo => {
         this.changed = false;
         this._reload = false;
         this.loading = false;
@@ -205,7 +204,7 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopCarrierComponent refresh handler', this.shop);
     if (this.shop.shopId > 0) {
       this.loading = true;
-      var _sub:any = this._shippingService.getShopCarriers(this.shop.shopId).subscribe(shopCarriersVo => {
+      let _sub:any = this._shippingService.getShopCarriers(this.shop.shopId).subscribe(shopCarriersVo => {
         LogUtil.debug('ShopCarrierComponent getShopCarriers', shopCarriersVo);
         this.shopCarriersVO  = Util.clone(shopCarriersVo);
         this.remapCarriers();
@@ -281,8 +280,8 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
 
   private remapCarriers() {
 
-    var availableCarriers:Array<ShopCarrierAndSlaVO> = [];
-    var selectedCarriers:Array<Pair<ShopCarrierAndSlaVO, ShopCarrierSlaVO>> = [];
+    let availableCarriers:Array<ShopCarrierAndSlaVO> = [];
+    let selectedCarriers:Array<Pair<ShopCarrierAndSlaVO, ShopCarrierSlaVO>> = [];
 
     this.shopCarriersVO.forEach(carrier => {
       if (carrier.carrierShop.disabled) {

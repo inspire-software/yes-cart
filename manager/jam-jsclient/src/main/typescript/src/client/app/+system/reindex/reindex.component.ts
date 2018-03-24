@@ -128,7 +128,7 @@ export class ReindexComponent implements OnInit, OnDestroy {
     LogUtil.debug('ReindexComponent onReindexAll');
     if (!this.jobRunning) {
       this.jobRunning = true;
-      var _sub:any = this._systemService.reindexAllProducts().subscribe(status => {
+      let _sub:any = this._systemService.reindexAllProducts().subscribe(status => {
         LogUtil.debug('ReindexComponent onReindexAll', status);
         this.jobStatus = status;
         this.lastReport = this.jobStatus.report;
@@ -148,7 +148,7 @@ export class ReindexComponent implements OnInit, OnDestroy {
     LogUtil.debug('ReindexComponent onReindexOne', this.selectedShop);
     if (!this.jobRunning && this.selectedShop != null) {
       this.jobRunning = true;
-      var _sub:any = this._systemService.reindexShopProducts(this.selectedShop.shopId).subscribe(status => {
+      let _sub:any = this._systemService.reindexShopProducts(this.selectedShop.shopId).subscribe(status => {
         LogUtil.debug('ReindexComponent onReindexOne', status);
         this.jobStatus = status;
         this.lastReport = this.jobStatus.report;
@@ -168,7 +168,7 @@ export class ReindexComponent implements OnInit, OnDestroy {
     LogUtil.debug('ReindexComponent getStatusUpdate before', this.jobStatus);
     if (!this.jobCompleted && this.jobStatus != null) {
       this.jobRunning = true;
-      var _sub:any = this._systemService.getIndexJobStatus(this.jobStatus.token).subscribe(status => {
+      let _sub:any = this._systemService.getIndexJobStatus(this.jobStatus.token).subscribe(status => {
         LogUtil.debug('ReindexComponent getStatusUpdate after', status);
         this.jobStatus = status;
         this.lastReport = this.jobStatus.report;

@@ -113,7 +113,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
 
         basic = YcValidators.validCode255(control);
         if (basic == null) {
-          var req:ValidationRequestVO = {
+          let req:ValidationRequestVO = {
             subject: 'promotion',
             subjectId: that._promotion.promotionId,
             field: 'code',
@@ -287,7 +287,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
       if (this.selectedCoupon != null) {
         LogUtil.debug('PromotionComponent onDeleteConfirmationResult', this.selectedCoupon);
 
-        var _sub:any = this._promotionService.removePromotionCoupon(this.selectedCoupon).subscribe(res => {
+        let _sub:any = this._promotionService.removePromotionCoupon(this.selectedCoupon).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('PromotionComponent removePromotionCoupon', this.selectedCoupon);
           this.selectedCoupon = null;
@@ -337,7 +337,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
       if (this.generateCoupons != null) {
         LogUtil.debug('PromotionComponent onGenerateConfirmationResult', this.generateCoupons);
 
-        var _sub:any = this._promotionService.createPromotionCoupons(this.generateCoupons).subscribe(allcoupons => {
+        let _sub:any = this._promotionService.createPromotionCoupons(this.generateCoupons).subscribe(allcoupons => {
           _sub.unsubscribe();
           LogUtil.debug('PromotionComponent removePromotionCoupon', this.selectedCoupon);
           this.coupons = allcoupons;
@@ -358,7 +358,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
 
       let myWindow = window.open('', 'ExportPromotionCouponsInfo', 'width=800,height=600');
 
-      var _csv:string = Util.toCsv(this.coupons, true);
+      let _csv:string = Util.toCsv(this.coupons, true);
       myWindow.document.write('<textarea style="width:100%; height:100%">' + _csv + '</textarea>');
 
     }
@@ -387,7 +387,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
 
       this.loading = true;
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._promotionService.getFilteredPromotionCoupons(this._promotion, this.couponFilter, max).subscribe(allcoupons => {
+      let _sub:any = this._promotionService.getFilteredPromotionCoupons(this._promotion, this.couponFilter, max).subscribe(allcoupons => {
         LogUtil.debug('PromotionComponent getFilteredPromotionCoupons', allcoupons);
         this.coupons = allcoupons;
         this.selectedCoupon = null;

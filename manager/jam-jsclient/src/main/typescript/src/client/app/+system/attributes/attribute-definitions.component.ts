@@ -243,7 +243,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
         LogUtil.debug('AttributeDefinitionsComponent Save handler attribute', this.attributeEdit);
 
         this.loading = true;
-        var _sub:any = this._attributeService.saveAttribute(this.attributeEdit).subscribe(
+        let _sub:any = this._attributeService.saveAttribute(this.attributeEdit).subscribe(
             rez => {
               this.loading = false;
               _sub.unsubscribe();
@@ -289,7 +289,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
         LogUtil.debug('AttributeDefinitionsComponent onDeleteConfirmationResult', this.selectedAttribute);
 
         this.loading = true;
-        var _sub:any = this._attributeService.removeAttribute(this.selectedAttribute).subscribe(res => {
+        let _sub:any = this._attributeService.removeAttribute(this.selectedAttribute).subscribe(res => {
           LogUtil.debug('AttributeDefinitionsComponent removeAttribute', this.selectedAttribute);
           let idx = this.attributes.indexOf(this.selectedAttribute);
           this.attributes.splice(idx, 1);
@@ -329,7 +329,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
   private getAllEtypes() {
     this.loading = true;
-    var _sub:any = this._attributeService.getAllEtypes().subscribe( alletypes => {
+    let _sub:any = this._attributeService.getAllEtypes().subscribe( alletypes => {
       LogUtil.debug('AttributeDefinitionsComponent getAllEtypes', alletypes);
       this.etypes = alletypes;
       this.loading = false;
@@ -340,7 +340,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
   private getAllGroups() {
     this.loading = true;
-    var _sub:any = this._attributeService.getAllGroups().subscribe( allgroups => {
+    let _sub:any = this._attributeService.getAllGroups().subscribe( allgroups => {
       LogUtil.debug('AttributeDefinitionsComponent getAllGroups', allgroups);
       this.groups = allgroups;
       this.selectedGroup = null;
@@ -361,7 +361,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
     if (this.selectedGroup != null && !this.attributeFilterRequired) {
       this.loading = true;
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._attributeService.getFilteredAttributes(this.selectedGroup.code, this.attributeFilter, max).subscribe(allattributes => {
+      let _sub:any = this._attributeService.getFilteredAttributes(this.selectedGroup.code, this.attributeFilter, max).subscribe(allattributes => {
         LogUtil.debug('AttributeDefinitionsComponent getAllAttributes', allattributes);
         this.attributes = allattributes;
         this.selectedAttribute = null;

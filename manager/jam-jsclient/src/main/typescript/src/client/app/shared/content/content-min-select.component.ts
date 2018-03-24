@@ -138,7 +138,7 @@ export class ContentMinSelectComponent implements OnInit {
           if (!this.expandCurrent(this.nodes, current)) {
             // if not expanded need to reload from root ensuring we load path to current
             this.loading = true;
-            var _subc: any = this._contentService.getShopBranchesContentPaths(this.shop.shopId, [ current ]).subscribe(
+            let _subc: any = this._contentService.getShopBranchesContentPaths(this.shop.shopId, [ current ]).subscribe(
               cats => {
                 LogUtil.debug('ContentMinSelectComponent loading branch path', cats);
                 this.loading = false;
@@ -154,7 +154,7 @@ export class ContentMinSelectComponent implements OnInit {
 
         if (current > 0 && !this.existsCurrent(this.nodes, current)) {
           this.loading = true;
-          var _subc: any = this._contentService.getShopBranchesContentPaths(this.shop.shopId, [ current ]).subscribe(
+          let _subc: any = this._contentService.getShopBranchesContentPaths(this.shop.shopId, [ current ]).subscribe(
             cats => {
               LogUtil.debug('ContentMinSelectComponent loading branch path', cats);
               this.loading = false;
@@ -177,7 +177,7 @@ export class ContentMinSelectComponent implements OnInit {
           LogUtil.debug('ContentMinSelectComponent loadData expanded', expanded);
 
           this.loading = true;
-          var _subc: any = this._contentService.getShopBranchContent(this.shop.shopId, current, expanded.ALL).subscribe(
+          let _subc: any = this._contentService.getShopBranchContent(this.shop.shopId, current, expanded.ALL).subscribe(
             cats => {
               LogUtil.debug('ContentMinSelectComponent branch categories', cats, current);
 
@@ -208,15 +208,17 @@ export class ContentMinSelectComponent implements OnInit {
 
   /**
    * Adapt given list of categories to tree items for representation.
-   * @param vo
+   * @param vo branch
+   * @param expanded expanded branches
+   * @param current current node to select
    * @returns {Array<ITreeNode>}
    */
   private adaptToTree(vo:Array<ContentVO>, expanded:any, current:number):Array<ITreeNode> {
-    var rez:Array<ITreeNode> = [];
-    for (var idx = 0; idx < vo.length; idx++) {
-      var catVo:ContentVO = vo[idx];
-      var id:string = catVo.contentId.toString();
-      var node:ITreeNode = {
+    let rez:Array<ITreeNode> = [];
+    for (let idx = 0; idx < vo.length; idx++) {
+      let catVo:ContentVO = vo[idx];
+      let id:string = catVo.contentId.toString();
+      let node:ITreeNode = {
         'id': id,
         'name': catVo.name,
         'children': [],
@@ -241,7 +243,7 @@ export class ContentMinSelectComponent implements OnInit {
 
   private existsCurrent(nodes:Array<ITreeNode>, current:number):boolean {
     if (nodes != null) {
-      for (var idx = 0; idx < nodes.length; idx++) {
+      for (let idx = 0; idx < nodes.length; idx++) {
         let node: ITreeNode = nodes[idx];
         if (node.source.contentId === current) {
           return true;
@@ -258,7 +260,7 @@ export class ContentMinSelectComponent implements OnInit {
 
 
   private expandCurrent(nodes:Array<ITreeNode>, current:number):boolean {
-    for (var idx = 0; idx < nodes.length; idx++) {
+    for (let idx = 0; idx < nodes.length; idx++) {
       let node:ITreeNode = nodes[idx];
       if (node.source.contentId === current) {
         node.expanded = true;
@@ -279,7 +281,7 @@ export class ContentMinSelectComponent implements OnInit {
 
       LogUtil.debug('ContentMinSelectComponent resetCurrent', nodes, current);
 
-      for (var idx = 0; idx < nodes.length; idx++) {
+      for (let idx = 0; idx < nodes.length; idx++) {
         let node:ITreeNode = nodes[idx];
         LogUtil.debug('ContentMinSelectComponent resetCurrent matching', node, current);
         if (node.id == current.id) {

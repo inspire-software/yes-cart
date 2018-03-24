@@ -74,6 +74,7 @@ export class ShopAliasComponent implements OnInit, OnDestroy {
    * Construct shop alias panel
    *
    * @param _shopService shop service
+   * @param fb form builder
    */
   constructor(private _shopService:ShopService,
               fb: FormBuilder) {
@@ -92,7 +93,7 @@ export class ShopAliasComponent implements OnInit, OnDestroy {
 
       let basic = YcValidators.requiredNonBlankTrimmed(control);
       if (basic == null) {
-        var req:ValidationRequestVO = { subject: 'shop', subjectId: 0, field: 'alias', value: code };
+        let req:ValidationRequestVO = { subject: 'shop', subjectId: 0, field: 'alias', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;
@@ -212,7 +213,7 @@ export class ShopAliasComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopAliasComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.shopAlias) {
       this.loading = true;
-      var _sub:any = this._shopService.saveShopAliases(this.shopAlias).subscribe(
+      let _sub:any = this._shopService.saveShopAliases(this.shopAlias).subscribe(
           rez => {
             this.shopAlias = rez;
             this.changed = false;

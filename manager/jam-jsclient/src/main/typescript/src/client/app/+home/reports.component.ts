@@ -89,7 +89,7 @@ export class ReportsComponent implements OnInit {
           request.parameters.push(rp);
         });
 
-        var _sub:any = this._reportsService.updateReportRequestValues(request).subscribe((res:ReportRequestVO) => {
+        let _sub:any = this._reportsService.updateReportRequestValues(request).subscribe((res:ReportRequestVO) => {
 
           LogUtil.debug('ReportsComponent request', res);
 
@@ -148,7 +148,7 @@ export class ReportsComponent implements OnInit {
     let data = this.tabs[this.selectedTab];
     data.running = true;
 
-    var _sub:any = this._reportsService.generateReport(data.request).subscribe(res => {
+    let _sub:any = this._reportsService.generateReport(data.request).subscribe(res => {
 
       LogUtil.debug('ReportsComponent res', res);
 
@@ -209,7 +209,7 @@ export class ReportsComponent implements OnInit {
   private getReportInfo() {
     LogUtil.debug('ReportsComponent get reports');
 
-    var _sub:any = this._reportsService.getReportDescriptors().subscribe(reports => {
+    let _sub:any = this._reportsService.getReportDescriptors().subscribe(reports => {
 
       LogUtil.debug('ReportsComponent reports', reports);
       this.reports = reports;

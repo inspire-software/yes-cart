@@ -70,7 +70,7 @@ export class UiUtil {
       return '';
     }
 
-    var date:Date;
+    let date:Date;
     if (value instanceof Date) {
       date = value;
     } else {
@@ -185,6 +185,7 @@ export class UiUtil {
    * @param component component
    * @param form form
    * @param field filed to mark dirty
+   * @param onlySelf mark only the form element dirty
    */
   public static formMarkFieldDirty(component:any, form:string, field:string, onlySelf:boolean = true):void {
     LogUtil.debug('UiUtils mark dirty', form, field);

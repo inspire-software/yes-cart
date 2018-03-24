@@ -51,7 +51,7 @@ export class LicenseModalComponent implements OnInit, AfterViewInit {
   public ngAfterViewInit() {
     LogUtil.debug('LicenseModalComponent ngAfterViewInit');
     // Here you get a reference to the modal so you can control it programmatically
-    var _sub:any = this._managementService.getMyAgreement().subscribe(license => {
+    let _sub:any = this._managementService.getMyAgreement().subscribe(license => {
       LogUtil.debug('LicenseModalComponent event', license);
       this.license = license;
       if (!license.agreed) {
@@ -64,7 +64,7 @@ export class LicenseModalComponent implements OnInit, AfterViewInit {
   protected onAgreeResult(modalresult: ModalResult) {
     LogUtil.debug('LicenseModalComponent onAgreeResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
-      var _sub:any = this._managementService.acceptMyAgreement().subscribe(license => {
+      let _sub:any = this._managementService.acceptMyAgreement().subscribe(license => {
         LogUtil.debug('LicenseModalComponent event', license);
         this.license = license;
         if (!license.agreed) {

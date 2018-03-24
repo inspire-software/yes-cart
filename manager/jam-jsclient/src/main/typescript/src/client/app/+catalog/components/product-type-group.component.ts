@@ -153,7 +153,7 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
       this.selectedRowAssigned = this.selectedRowAssigned.slice(0, this.selectedRowAssigned.length);
       this.selectedRowAvailable.push(row);
       this.selectedRowAvailable.sort((a, b) => {
-        var rank:number = a.rank - b.rank;
+        let rank:number = a.rank - b.rank;
         if (rank == 0) {
           return a.attribute.name > b.attribute.name ? 1 : -1;
         }
@@ -188,7 +188,7 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
       this.selectedRowAvailable.splice(idx2, 1);
       this.selectedRowAssigned.push(row);
       this.selectedRowAssigned.sort((a, b) => {
-        var rank:number = a.rank - b.rank;
+        let rank:number = a.rank - b.rank;
         if (rank == 0) {
           return a.attribute.name > b.attribute.name ? 1 : -1;
         }
@@ -334,7 +334,7 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
   private filterGroups() {
     if (this.masterObject) {
 
-      var groups:ProductTypeViewGroupVO[] = [];
+      let groups:ProductTypeViewGroupVO[] = [];
       if (this._groupFilter) {
         let _filter = this._groupFilter.toLowerCase();
         groups = this.masterObject.viewGroups.filter(group =>
@@ -345,7 +345,7 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
       }
 
       groups.sort(function(a, b) {
-        var rank:number = a.rank - b.rank;
+        let rank:number = a.rank - b.rank;
         if (rank == 0) {
           return a.name > b.name ? 1 : -1;
         }
@@ -364,7 +364,7 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
     }
 
     let _sort = function(a:ProductTypeAttrVO, b:ProductTypeAttrVO) {
-      var rank:number = a.rank - b.rank;
+      let rank:number = a.rank - b.rank;
       if (rank == 0) {
         return a.attribute.name > b.attribute.name ? 1 : -1;
       }

@@ -115,9 +115,9 @@ export class FulfilmentService {
    * @param centres fulfilment centres
    * @returns {Observable<R>}
    */
-  saveShopFulfilmentCentres(carriers:Array<ShopFulfilmentCentreVO>) {
+  saveShopFulfilmentCentres(centres:Array<ShopFulfilmentCentreVO>) {
 
-    let body = JSON.stringify(carriers);
+    let body = JSON.stringify(centres);
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 

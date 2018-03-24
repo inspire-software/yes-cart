@@ -101,7 +101,7 @@ export class BrandSelectComponent implements OnInit, OnDestroy {
 
     if (!this.brandFilterRequired) {
       this.loading = true;
-      var _sub:any = this._brandService.getFilteredBrands(this.brandFilter, this.filterCap).subscribe(allbrands => {
+      let _sub:any = this._brandService.getFilteredBrands(this.brandFilter, this.filterCap).subscribe(allbrands => {
         LogUtil.debug('BrandSelectComponent getAllBrands', allbrands);
         this.selectedBrand = null;
         this.changed = false;

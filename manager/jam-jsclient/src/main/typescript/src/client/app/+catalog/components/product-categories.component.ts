@@ -71,8 +71,8 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Construct product catalogues panel.
-   * @param _categoryService
-   * @param _routeParams
+   * @param _categoryService category service
+   * @param fb form builder
    */
   constructor(private _categoryService:CatalogService,
               fb: FormBuilder) {
@@ -92,7 +92,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
 
       let basic = YcValidators.validCode(control);
       if (basic == null) {
-        var req:ValidationRequestVO = { subject: 'category', subjectId: 0, field: 'guid', value: code };
+        let req:ValidationRequestVO = { subject: 'category', subjectId: 0, field: 'guid', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;
@@ -197,9 +197,9 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
         this.loading = true;
 
         this.assigned = this._product.productCategories;
-        var _assignedIds:Array<number> = this.adaptToIds(this.assigned);
+        let _assignedIds:Array<number> = this.adaptToIds(this.assigned);
 
-        var _subc:any = this._categoryService.getAllCategories().subscribe(
+        let _subc:any = this._categoryService.getAllCategories().subscribe(
             cats => {
               LogUtil.debug('ProductCategoryComponent all categories', cats, _assignedIds);
               this.categories = cats;
@@ -217,9 +217,9 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
   }
 
   adaptToIds(vo:Array<ProductCategoryVO>):Array<number> {
-    var rez:Array<number> = [];
-    for (var idx = 0; idx < vo.length; idx++) {
-      var catVo:ProductCategoryVO = vo[idx];
+    let rez:Array<number> = [];
+    for (let idx = 0; idx < vo.length; idx++) {
+      let catVo:ProductCategoryVO = vo[idx];
       rez.push(catVo.categoryId);
     }
     return rez;
@@ -227,14 +227,15 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Adapt given list of categories to tree items for representation.
-   * @param vo
+   * @param vo branch
+   * @param disabled nodes
    * @returns {Array<ITreeNode>}
      */
   adaptToTree(vo:Array<CategoryVO>, disabled:Array<number>):Array<ITreeNode> {
-    var rez:Array<ITreeNode> = [];
-    for (var idx = 0; idx < vo.length; idx++) {
-      var catVo:CategoryVO = vo[idx];
-      var node:ITreeNode = {
+    let rez:Array<ITreeNode> = [];
+    for (let idx = 0; idx < vo.length; idx++) {
+      let catVo:CategoryVO = vo[idx];
+      let node:ITreeNode = {
         'id': catVo.categoryId.toString(),
         'name': catVo.name,
         'children': [],
@@ -278,8 +279,8 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
      */
   onAssignedClick(cat:CategoryVO) {
     LogUtil.debug('ProductCategoryComponent onAssigned', cat);
-    for (var idx = 0; idx < this.assigned.length; idx++) {
-      var catVo : ProductCategoryVO = this.assigned[idx];
+    for (let idx = 0; idx < this.assigned.length; idx++) {
+      let catVo : ProductCategoryVO = this.assigned[idx];
       if (catVo.categoryId === cat.categoryId) {
         LogUtil.debug('ProductCategoryComponent remove from assigned', catVo);
         this.assigned.splice(idx, 1);
@@ -293,8 +294,8 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
 
   changeDisabledState(cat:ProductCategoryVO, nodes:Array<ITreeNode>, disabled:boolean):boolean {
     let changed = false;
-    for (var idx = 0; idx < nodes.length; idx++) {
-      var node:ITreeNode = nodes[idx];
+    for (let idx = 0; idx < nodes.length; idx++) {
+      let node:ITreeNode = nodes[idx];
       if (node.id === cat.categoryId.toString()) {
         node.disabled = disabled;
         if (disabled) {

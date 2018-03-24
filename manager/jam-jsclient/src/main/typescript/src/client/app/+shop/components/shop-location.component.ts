@@ -75,10 +75,10 @@ export class ShopLocationComponent implements OnInit {
   }
 
   remapSelections() {
-    var availableBilling:Array<Pair<string, string>> = [];
-    var selectedBilling:Array<Pair<string, string>> = [];
-    var availableShipping:Array<Pair<string, string>> = [];
-    var selectedShipping:Array<Pair<string, string>> = [];
+    let availableBilling:Array<Pair<string, string>> = [];
+    let selectedBilling:Array<Pair<string, string>> = [];
+    let availableShipping:Array<Pair<string, string>> = [];
+    let selectedShipping:Array<Pair<string, string>> = [];
 
     this.locs.all.forEach(loc => {
       if (this.locs.supportedBilling.indexOf(loc.first) === -1) {
@@ -93,7 +93,7 @@ export class ShopLocationComponent implements OnInit {
       }
     });
 
-    var _sort = function(a:Pair<string, string>, b:Pair<string, string>):number {
+    let _sort = function(a:Pair<string, string>, b:Pair<string, string>):number {
       return (a.second < b.second) ? -1 : 1;
     };
 
@@ -112,7 +112,7 @@ export class ShopLocationComponent implements OnInit {
     LogUtil.debug('ShopLocationComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.locs) {
       this.loading = true;
-      var _sub:any = this._shopService.saveShopLocations(this.locs).subscribe(shopLocationsVo => {
+      let _sub:any = this._shopService.saveShopLocations(this.locs).subscribe(shopLocationsVo => {
         this.shopLocationsVO = Util.clone(shopLocationsVo);
         this.locs = Util.clone(shopLocationsVo);
         this.remapSelections();
@@ -137,7 +137,7 @@ export class ShopLocationComponent implements OnInit {
     LogUtil.debug('ShopLocationComponent refresh handler', this.shop);
     if (this.shop.shopId > 0) {
       this.loading = true;
-      var _sub:any = this._shopService.getShopLocations(this.shop.shopId).subscribe(shopLocationsVo => {
+      let _sub:any = this._shopService.getShopLocations(this.shop.shopId).subscribe(shopLocationsVo => {
         this.shopLocationsVO  = Util.clone(shopLocationsVo);
         this.locs  = Util.clone(shopLocationsVo);
         this.remapSelections();

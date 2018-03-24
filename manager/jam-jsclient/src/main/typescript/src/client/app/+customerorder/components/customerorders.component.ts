@@ -70,7 +70,7 @@ export class CustomerOrdersComponent implements OnInit, OnDestroy {
   }
 
   onShowGrossTotalClick() {
-    var _gross = this.showGrossTotal;
+    let _gross = this.showGrossTotal;
     this.showGrossTotal = !_gross;
   }
 

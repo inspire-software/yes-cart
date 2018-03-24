@@ -89,7 +89,7 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
     }, this.delayedFilteringMs);
 
     if (ProductAssociationsComponent.associations == null) {
-      var _sub:any = _pimService.getAllAssociations().subscribe(allassoc => {
+      let _sub:any = _pimService.getAllAssociations().subscribe(allassoc => {
         ProductAssociationsComponent.associations = allassoc;
         LogUtil.debug('ProductAssociationsComponent getAllAssociations', allassoc);
         _sub.unsubscribe();
@@ -353,9 +353,9 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
     }
 
     _filteredObjectAssociations.sort(function(a, b) {
-      var assoc:number = a.associationId - b.associationId;
+      let assoc:number = a.associationId - b.associationId;
       if (assoc == 0) {
-        var rank:number = a.rank - b.rank;
+        let rank:number = a.rank - b.rank;
         if (rank == 0) {
           return a.associatedCode > b.associatedCode ? 1 : -1;
         }

@@ -182,7 +182,7 @@ export class ExportManagerComponent implements OnInit {
 
         LogUtil.debug('ExportManagerComponent exportFromFile', data.group.label, data.file);
 
-        var _sub:any = this._exportService.exportToFile(data.group.label, data.file).subscribe(res => {
+        let _sub:any = this._exportService.exportToFile(data.group.label, data.file).subscribe(res => {
 
           LogUtil.debug('ExportManagerComponent exportToFile', res);
 
@@ -214,7 +214,7 @@ export class ExportManagerComponent implements OnInit {
 
       if (tab.status.completion == null) {
 
-        var _sub:any = this._exportService.getExportStatus(tab.status.token).subscribe(update => {
+        let _sub:any = this._exportService.getExportStatus(tab.status.token).subscribe(update => {
 
           LogUtil.debug('ExportManagerComponent getExportStatus', update);
           tab.status = update;

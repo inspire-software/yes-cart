@@ -267,7 +267,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
   protected onRowEditProduct(row:ProductVO) {
     LogUtil.debug('CatalogProductsComponent onRowEditProduct handler', row);
     this.loading = true;
-    var _sub:any = this._pimService.getProductById(row.productId).subscribe(res => {
+    let _sub:any = this._pimService.getProductById(row.productId).subscribe(res => {
       LogUtil.debug('CatalogProductsComponent getProductById', res);
       this.productEdit = res;
       this.changed = false;
@@ -277,7 +277,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
       _sub.unsubscribe();
       if (this.productEdit.productId > 0) {
         this.loading = true;
-        var _sub2:any = this._pimService.getProductAttributes(this.productEdit.productId).subscribe(attrs => {
+        let _sub2:any = this._pimService.getProductAttributes(this.productEdit.productId).subscribe(attrs => {
           this.productEditAttributes = attrs;
           this.loading = false;
           _sub2.unsubscribe();
@@ -294,7 +294,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
     this.viewMode = CatalogProductsComponent.SKU;
     if (this.skuEdit.skuId > 0) {
       this.loading = true;
-      var _sub:any = this._pimService.getSKUAttributes(this.skuEdit.skuId).subscribe(attrs => {
+      let _sub:any = this._pimService.getSKUAttributes(this.skuEdit.skuId).subscribe(attrs => {
         this.skuEditAttributes = attrs;
         this.loading = false;
         _sub.unsubscribe();
@@ -332,7 +332,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
         LogUtil.debug('CatalogProductsComponent Save handler sku', this.skuEdit);
 
         this.loading = true;
-        var _sub:any = this._pimService.saveSKU(this.skuEdit).subscribe(
+        let _sub:any = this._pimService.saveSKU(this.skuEdit).subscribe(
             rez => {
               let pk = this.skuEdit.skuId;
               if (this.skuEdit.skuId > 0) {
@@ -367,7 +367,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
               if (pk > 0 && this.skuAttributesUpdate != null && this.skuAttributesUpdate.length > 0) {
 
                 this.loading = true;
-                var _sub2:any = this._pimService.saveSKUAttributes(this.skuAttributesUpdate).subscribe(rez => {
+                let _sub2:any = this._pimService.saveSKUAttributes(this.skuAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
                   LogUtil.debug('CatalogProductsComponent SKU attributes updated', rez);
                   this.skuAttributesUpdate = null;
@@ -385,7 +385,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
         LogUtil.debug('CatalogProductsComponent Save handler product', this.productEdit);
 
         this.loading = true;
-        var _sub:any = this._pimService.saveProduct(this.productEdit).subscribe(
+        let _sub:any = this._pimService.saveProduct(this.productEdit).subscribe(
             rez => {
               let pk = this.productEdit.productId;
               if (this.productEdit.productId > 0) {
@@ -409,7 +409,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
               if (pk > 0 && this.productAttributesUpdate != null && this.productAttributesUpdate.length > 0) {
 
                 this.loading = true;
-                var _sub2:any = this._pimService.saveProductAttributes(this.productAttributesUpdate).subscribe(rez => {
+                let _sub2:any = this._pimService.saveProductAttributes(this.productAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
                   LogUtil.debug('CatalogProductsComponent product attributes updated', rez);
                   this.productAttributesUpdate = null;
@@ -453,7 +453,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
         LogUtil.debug('CatalogProductsComponent onDeleteConfirmationResult', this.selectedSku);
 
         this.loading = true;
-        var _sub:any = this._pimService.removeSKU(this.selectedSku).subscribe(res => {
+        let _sub:any = this._pimService.removeSKU(this.selectedSku).subscribe(res => {
           LogUtil.debug('CatalogProductsComponent removeSku', this.selectedSku);
           let pk = this.selectedSku.skuId;
           let idx = this.skus.indexOf(this.selectedSku);
@@ -476,7 +476,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
         LogUtil.debug('CatalogProductsComponent onDeleteConfirmationResult', this.selectedProduct);
 
         this.loading = true;
-        var _sub:any = this._pimService.removeProduct(this.selectedProduct).subscribe(res => {
+        let _sub:any = this._pimService.removeProduct(this.selectedProduct).subscribe(res => {
           LogUtil.debug('CatalogProductsComponent removeProduct', this.selectedProduct);
           let idx = this.products.indexOf(this.selectedProduct);
           this.products.splice(idx, 1);
@@ -512,7 +512,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
     if (!this.productFilterRequired) {
       this.loading = true;
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._pimService.getFilteredProducts(this.productFilter, max).subscribe(allproducts => {
+      let _sub:any = this._pimService.getFilteredProducts(this.productFilter, max).subscribe(allproducts => {
         LogUtil.debug('CatalogProductsComponent getAllCountries', allproducts);
         this.products = allproducts;
         this.selectedProduct = null;
@@ -538,7 +538,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
   private getProductSkus() {
     if (this.selectedProduct != null) {
       this.loading = true;
-      var _sub:any = this._pimService.getProductSkuAll(this.selectedProduct).subscribe(allskus => {
+      let _sub:any = this._pimService.getProductSkuAll(this.selectedProduct).subscribe(allskus => {
         LogUtil.debug('CatalogProductsComponent getProductSkus', allskus);
         this.skus = allskus;
         this.selectedSku = null;

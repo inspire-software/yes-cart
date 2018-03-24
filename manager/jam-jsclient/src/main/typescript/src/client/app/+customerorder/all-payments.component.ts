@@ -269,7 +269,7 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
         }
       });
 
-      var _sub:any = this._paymentService.getFilteredPayments(this.paymentFilter, ops, sts, max).subscribe( allpayments => {
+      let _sub:any = this._paymentService.getFilteredPayments(this.paymentFilter, ops, sts, max).subscribe( allpayments => {
         LogUtil.debug('AllPaymentsComponent getFilteredPayments', allpayments);
         this.payments = allpayments;
         this.selectedPayment = null;

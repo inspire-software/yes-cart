@@ -67,7 +67,7 @@ export class SKUComponent implements OnInit, OnDestroy {
 
       let basic = YcValidators.validSeoUri(control);
       if (basic == null) {
-        var req:ValidationRequestVO = { subject: 'sku', subjectId: that._sku.skuId, field: 'uri', value: uri };
+        let req:ValidationRequestVO = { subject: 'sku', subjectId: that._sku.skuId, field: 'uri', value: uri };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;
@@ -82,7 +82,7 @@ export class SKUComponent implements OnInit, OnDestroy {
 
       let basic = YcValidators.validCode(control);
       if (basic == null) {
-        var req:ValidationRequestVO = { subject: 'sku', subjectId: that._sku.skuId, field: 'guid', value: code };
+        let req:ValidationRequestVO = { subject: 'sku', subjectId: that._sku.skuId, field: 'guid', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;
@@ -98,7 +98,7 @@ export class SKUComponent implements OnInit, OnDestroy {
           return null;
         }
 
-        var req:ValidationRequestVO = { subject: 'sku', subjectId: that._sku.skuId, field: 'code', value: code };
+        let req:ValidationRequestVO = { subject: 'sku', subjectId: that._sku.skuId, field: 'code', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;

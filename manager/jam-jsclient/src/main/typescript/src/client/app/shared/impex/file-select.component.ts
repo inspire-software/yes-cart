@@ -107,7 +107,7 @@ export class FileSelectComponent implements OnInit, OnDestroy {
   }
 
   protected onDeleteClick(file:Pair<string,string>) {
-    var _sub:any = this._fileService.removeFile(file.first).subscribe( rez => {
+    let _sub:any = this._fileService.removeFile(file.first).subscribe( rez => {
       LogUtil.debug('FileSelectComponent removeFile', file.first);
       this.selectedFile = null;
       _sub.unsubscribe();
@@ -117,7 +117,7 @@ export class FileSelectComponent implements OnInit, OnDestroy {
   }
 
   private getAllFiles() {
-    var _sub:any = this._fileService.getFiles(this.mode).subscribe( allfiles => {
+    let _sub:any = this._fileService.getFiles(this.mode).subscribe( allfiles => {
       LogUtil.debug('FileSelectComponent getFiles', this.mode, allfiles);
       this.files = allfiles;
       this.selectedFile = null;

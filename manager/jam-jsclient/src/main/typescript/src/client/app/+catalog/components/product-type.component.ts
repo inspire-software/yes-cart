@@ -71,7 +71,7 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
 
       let basic = YcValidators.validCode36(control);
       if (basic == null) {
-        var req:ValidationRequestVO = { subject: 'producttype', subjectId: that._productType.producttypeId, field: 'guid', value: code };
+        let req:ValidationRequestVO = { subject: 'producttype', subjectId: that._productType.producttypeId, field: 'guid', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;

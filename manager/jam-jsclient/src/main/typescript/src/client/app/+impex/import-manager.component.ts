@@ -166,7 +166,7 @@ export class ImportManagerComponent implements OnInit {
 
         LogUtil.debug('ImportManagerComponent importFromFile', data.group.label, data.file.first);
 
-        var _sub:any = this._importService.importFromFile(data.group.label, data.file.first).subscribe(res => {
+        let _sub:any = this._importService.importFromFile(data.group.label, data.file.first).subscribe(res => {
 
           LogUtil.debug('ImportManagerComponent importFromFile', res);
 
@@ -198,7 +198,7 @@ export class ImportManagerComponent implements OnInit {
 
       if (tab.status.completion == null) {
 
-        var _sub:any = this._importService.getImportStatus(tab.status.token).subscribe(update => {
+        let _sub:any = this._importService.getImportStatus(tab.status.token).subscribe(update => {
 
           LogUtil.debug('ImportManagerComponent getImportStatus', update);
           tab.status = update;

@@ -151,8 +151,8 @@ export class I18nComponent {
 
   onRowDelete(selectedRow:Pair<string,string>) {
     LogUtil.debug('I18nComponent onRowDelete', selectedRow);
-    for(var idx = 0 ; idx < this.dataI18n.length; idx++) {
-      var pair = this.dataI18n[idx];
+    for(let idx = 0 ; idx < this.dataI18n.length; idx++) {
+      let pair = this.dataI18n[idx];
       if(pair.first === selectedRow.first ) {
         this.dataI18n.splice(idx,1);
         this.selectedRow = new Pair('','');
@@ -171,8 +171,8 @@ export class I18nComponent {
       this.onRowDelete(this.selectedRow);
       return;
     }
-    for(var idx = 0 ; idx < this.dataI18n.length; idx++) {
-      var pair = this.dataI18n[idx];
+    for(let idx = 0 ; idx < this.dataI18n.length; idx++) {
+      let pair = this.dataI18n[idx];
       if(pair.first === this.selectedRow.first ) {
         pair.second = this.selectedRow.second;
         this.selectedRow = new Pair('','');

@@ -300,7 +300,7 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
       if (row.businesstype === 'SecureString') {
         return row.value ? '*****' : '&nbsp;';
       }
-      var _str:string = '' + row.value;
+      let _str:string = '' + row.value;
       if (_str  === 'true') {
         return '<i class="fa fa-check-circle"></i>';
       } else if (_str  === 'false') {

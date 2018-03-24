@@ -36,7 +36,7 @@ export class LicenseComponent implements OnInit {
   /** {@inheritDoc} */
   public ngOnInit() {
     LogUtil.debug('LicenseComponent ngOnInit');
-    var _sub:any = this._managementService.getMyAgreement().subscribe(license => {
+    let _sub:any = this._managementService.getMyAgreement().subscribe(license => {
       LogUtil.debug('LicenseComponent event', license);
       this.license = license;
       _sub.unsubscribe();

@@ -30,9 +30,7 @@ export class ShopPaymentGatewaysComponent implements OnInit {
   private _reload:boolean = false;
 
   /**
-   * Construct shop url panel
-   *
-   * @param _shopService shop service
+   * Construct shop gateways panel
    */
   constructor() {
     LogUtil.debug('ShopPaymentGatewaysComponent constructed');

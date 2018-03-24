@@ -63,7 +63,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
           return null;
         }
 
-        var req:ValidationRequestVO = { subject: 'manager', subjectId: that._manager.managerId, field: 'email', value: email };
+        let req:ValidationRequestVO = { subject: 'manager', subjectId: that._manager.managerId, field: 'email', value: email };
         return YcValidators.validRemoteCheck(control, req);
       }
       return basic;

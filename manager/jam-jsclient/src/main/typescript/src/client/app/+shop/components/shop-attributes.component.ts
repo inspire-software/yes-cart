@@ -126,7 +126,7 @@ export class ShopAttributesComponent implements OnInit {
       LogUtil.debug('ShopAttributeComponent Save handler update', this.update);
 
       this.loading = true;
-      var _sub:any = this._shopService.saveShopAttributes(this.update, this.includeSecure).subscribe(
+      let _sub:any = this._shopService.saveShopAttributes(this.update, this.includeSecure).subscribe(
           rez => {
             LogUtil.debug('ShopAttributeComponent attributes', rez);
             this.shopAttributes = rez;
@@ -190,7 +190,7 @@ export class ShopAttributesComponent implements OnInit {
     if (this.shop.shopId > 0) {
 
       this.loading = true;
-      var _sub:any = this._shopService.getShopAttributes(this.shop.shopId, this.changeIncludeSecure).subscribe(shopAttributes => {
+      let _sub:any = this._shopService.getShopAttributes(this.shop.shopId, this.changeIncludeSecure).subscribe(shopAttributes => {
 
         LogUtil.debug('ShopAttributeComponent attributes', shopAttributes);
         this.shopAttributes = shopAttributes;

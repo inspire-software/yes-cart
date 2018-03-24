@@ -135,7 +135,7 @@ export class CategoryMinSelectComponent implements OnInit {
         if (!this.expandCurrent(this.nodes, current)) {
           // if not expanded need to reload from root ensuring we load path to current
           this.loading = true;
-          var _subc: any = this._categoryService.getBranchesCategoriesPaths([ current ]).subscribe(
+          let _subc: any = this._categoryService.getBranchesCategoriesPaths([ current ]).subscribe(
             cats => {
               LogUtil.debug('CategoryMinSelectComponent loading branch path', cats);
               this.loading = false;
@@ -151,7 +151,7 @@ export class CategoryMinSelectComponent implements OnInit {
 
       if (current > 0 && !this.existsCurrent(this.nodes, current)) {
         this.loading = true;
-        var _subc: any = this._categoryService.getBranchesCategoriesPaths([ current ]).subscribe(
+        let _subc: any = this._categoryService.getBranchesCategoriesPaths([ current ]).subscribe(
           cats => {
             LogUtil.debug('CategoryMinSelectComponent loading branch path', cats);
             this.loading = false;
@@ -174,7 +174,7 @@ export class CategoryMinSelectComponent implements OnInit {
         LogUtil.debug('ContentSelectComponent loadData expanded', expanded);
 
         this.loading = true;
-        var _subc: any = this._categoryService.getBranchCategories(current, expanded.ALL).subscribe(
+        let _subc: any = this._categoryService.getBranchCategories(current, expanded.ALL).subscribe(
           cats => {
             LogUtil.debug('CategoryMinSelectComponent branch categories', cats, current);
 
@@ -204,15 +204,17 @@ export class CategoryMinSelectComponent implements OnInit {
 
   /**
    * Adapt given list of categories to tree items for representation.
-   * @param vo
+   * @param vo branch
+   * @param expanded expanded branches
+   * @param current current node to select
    * @returns {Array<ITreeNode>}
    */
   private adaptToTree(vo:Array<CategoryVO>, expanded:any, current:number):Array<ITreeNode> {
-    var rez:Array<ITreeNode> = [];
-    for (var idx = 0; idx < vo.length; idx++) {
-      var catVo:CategoryVO = vo[idx];
-      var id:string = catVo.categoryId.toString();
-      var node:ITreeNode = {
+    let rez:Array<ITreeNode> = [];
+    for (let idx = 0; idx < vo.length; idx++) {
+      let catVo:CategoryVO = vo[idx];
+      let id:string = catVo.categoryId.toString();
+      let node:ITreeNode = {
         'id': id,
         'name': catVo.name + (catVo.linkToName != null ? (' ( + ' + catVo.linkToName +' )') : ''),
         'children': [],
@@ -240,7 +242,7 @@ export class CategoryMinSelectComponent implements OnInit {
 
   private existsCurrent(nodes:Array<ITreeNode>, current:number):boolean {
     if (nodes != null) {
-      for (var idx = 0; idx < nodes.length; idx++) {
+      for (let idx = 0; idx < nodes.length; idx++) {
         let node: ITreeNode = nodes[idx];
         if (node.source.categoryId === current) {
           return true;
@@ -257,7 +259,7 @@ export class CategoryMinSelectComponent implements OnInit {
 
 
   private expandCurrent(nodes:Array<ITreeNode>, current:number):boolean {
-    for (var idx = 0; idx < nodes.length; idx++) {
+    for (let idx = 0; idx < nodes.length; idx++) {
       let node:ITreeNode = nodes[idx];
       if (node.source.categoryId === current) {
         node.expanded = true;
@@ -278,7 +280,7 @@ export class CategoryMinSelectComponent implements OnInit {
 
       LogUtil.debug('CategoryMinSelectComponent resetCurrent', nodes, current);
 
-      for (var idx = 0; idx < nodes.length; idx++) {
+      for (let idx = 0; idx < nodes.length; idx++) {
         let node:ITreeNode = nodes[idx];
         LogUtil.debug('CategoryMinSelectComponent resetCurrent matching', node, current);
         if (node.id == current.id) {

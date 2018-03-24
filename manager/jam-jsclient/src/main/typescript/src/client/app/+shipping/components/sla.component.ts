@@ -77,7 +77,7 @@ export class SlaComponent implements OnInit, OnDestroy {
 
         basic = YcValidators.validCode36(control);
         if (basic == null) {
-          var req:ValidationRequestVO = {
+          let req:ValidationRequestVO = {
             subject: 'carriersla',
             subjectId: that._sla.carrierslaId,
             field: 'guid',

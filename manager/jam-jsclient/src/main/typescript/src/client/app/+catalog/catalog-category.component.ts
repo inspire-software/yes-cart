@@ -197,7 +197,7 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
     this.viewMode = CatalogCategoryComponent.CATEGORY;
     if (this.categoryEdit.categoryId > 0) {
       this.loading = true;
-      var _sub:any = this._categoryService.getCategoryAttributes(this.categoryEdit.categoryId).subscribe(attrs => {
+      let _sub:any = this._categoryService.getCategoryAttributes(this.categoryEdit.categoryId).subscribe(attrs => {
         this.categoryEditAttributes = attrs;
         this.loading = false;
         _sub.unsubscribe();
@@ -234,7 +234,7 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
         LogUtil.debug('CatalogCategoryComponent Save handler category', this.categoryEdit);
 
         this.loading = true;
-        var _sub:any = this._categoryService.saveCategory(this.categoryEdit).subscribe(
+        let _sub:any = this._categoryService.saveCategory(this.categoryEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.categoryEdit.categoryId;
@@ -247,7 +247,7 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
 
               if (pk > 0 && this.categoryAttributesUpdate != null && this.categoryAttributesUpdate.length > 0) {
 
-                var _sub2:any = this._categoryService.saveCategoryAttributes(this.categoryAttributesUpdate).subscribe(rez => {
+                let _sub2:any = this._categoryService.saveCategoryAttributes(this.categoryAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
                   LogUtil.debug('CatalogCategoryComponent category attributes updated', rez);
                   this.categoryAttributesUpdate = null;
@@ -286,7 +286,7 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
         LogUtil.debug('CatalogCategoryComponent onDeleteConfirmationResult', this.selectedCategory);
 
         this.loading = true;
-        var _sub:any = this._categoryService.removeCategory(this.selectedCategory).subscribe(res => {
+        let _sub:any = this._categoryService.removeCategory(this.selectedCategory).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('CatalogCategoryComponent removeCategory', this.selectedCategory);
           this.selectedCategory = null;
@@ -313,7 +313,7 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
     if (!this.categoryFilterRequired) {
       this.loading = true;
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._categoryService.getFilteredCategories(this.categoryFilter, max).subscribe( allcategories => {
+      let _sub:any = this._categoryService.getFilteredCategories(this.categoryFilter, max).subscribe( allcategories => {
         LogUtil.debug('CatalogCategoryComponent getFilteredCategories', allcategories);
         this.categories = allcategories;
         this.selectedCategory = null;

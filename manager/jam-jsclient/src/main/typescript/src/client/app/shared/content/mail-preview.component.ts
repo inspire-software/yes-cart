@@ -104,7 +104,7 @@ export class MailPreviewComponent implements OnInit, OnDestroy {
     if (!this.customerorderFilterRequired) {
       this.loading = true;
       let lang = I18nEventBus.getI18nEventBus().current();
-      var _sub:any = this._customerorderService.getFilteredOrders(lang, this.customerorderFilter, [],this.filterCap).subscribe(allcustomerorders => {
+      let _sub:any = this._customerorderService.getFilteredOrders(lang, this.customerorderFilter, [],this.filterCap).subscribe(allcustomerorders => {
         LogUtil.debug('MailPreviewComponent getAllCustomerOrders', allcustomerorders);
         this.selectedCustomerOrder = null;
         this.changed = false;

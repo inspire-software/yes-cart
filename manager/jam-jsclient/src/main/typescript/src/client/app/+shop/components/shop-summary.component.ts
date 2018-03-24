@@ -82,7 +82,7 @@ export class ShopSummaryComponent implements OnInit, OnDestroy {
     if (this.shop && this.shop.shopId > 0) {
       this.loading = true;
       let lang = I18nEventBus.getI18nEventBus().current();
-      var _sub:any = this._shopService.getShopSummary(this.shop.shopId, lang).subscribe(shopSummary => {
+      let _sub:any = this._shopService.getShopSummary(this.shop.shopId, lang).subscribe(shopSummary => {
         this.shopSummary = shopSummary;
         this._reload = false;
         _sub.unsubscribe();

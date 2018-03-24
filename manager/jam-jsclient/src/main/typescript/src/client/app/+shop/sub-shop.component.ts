@@ -74,7 +74,7 @@ export class SubShopComponent implements OnInit, OnDestroy {
           ShopEventBus.getShopEventBus().emit(shop);
         });
       } else {
-        var _sub:any = this._shopService.getShop(+shopId).subscribe(shop => {
+        let _sub:any = this._shopService.getShop(+shopId).subscribe(shop => {
           LogUtil.debug('SubShopComponent Retrieving existing shop', shop);
           ShopEventBus.getShopEventBus().emit(shop);
           _sub.unsubscribe();

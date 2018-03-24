@@ -112,7 +112,7 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
       LogUtil.debug('ShopAttributeComponent Save handler update', this.update);
 
       this.loading = true;
-      var _sub:any = this._systemService.saveSystemAttributes(this.update, this.includeSecure).subscribe(
+      let _sub:any = this._systemService.saveSystemAttributes(this.update, this.includeSecure).subscribe(
           rez => {
             LogUtil.debug('ShopAttributeComponent attributes', rez);
             this.systemAttributes = rez;
@@ -172,7 +172,7 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
     LogUtil.debug('ShopAttributeComponent get attributes');
 
     this.loading = true;
-    var _sub:any = this._systemService.getSystemPreferences(this.changeIncludeSecure).subscribe(systemAttributes => {
+    let _sub:any = this._systemService.getSystemPreferences(this.changeIncludeSecure).subscribe(systemAttributes => {
 
       LogUtil.debug('ShopAttributeComponent attributes', systemAttributes);
       this.systemAttributes = systemAttributes;

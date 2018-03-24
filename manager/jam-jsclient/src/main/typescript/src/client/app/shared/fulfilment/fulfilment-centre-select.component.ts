@@ -73,7 +73,7 @@ export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
 
   private getAllCentres() {
 
-    var _sub:any = this._centreService.getAllFulfilmentCentres().subscribe( allcentres => {
+    let _sub:any = this._centreService.getAllFulfilmentCentres().subscribe( allcentres => {
       LogUtil.debug('FulfilmentCentreSelectComponent getAllCentres', allcentres);
       this.centres = allcentres;
       this.filterCentres();

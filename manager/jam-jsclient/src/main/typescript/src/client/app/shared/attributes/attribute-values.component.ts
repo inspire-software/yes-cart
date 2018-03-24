@@ -458,7 +458,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   }
 
   isImageUploadDisabled():boolean {
-    var input:any = document.getElementById('avmodaluploadimage');
+    let input:any = document.getElementById('avmodaluploadimage');
     return input == null || input.disabled;
   }
 
@@ -468,12 +468,12 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   }
 
   onImageFileSelected(event:any) {
-    var srcElement:any = event.target || event.srcElement;
-    var image:any = srcElement.files[0];
+    let srcElement:any = event.target || event.srcElement;
+    let image:any = srcElement.files[0];
     if (image != null) {
-      var imageName:string = image.name;
+      let imageName:string = image.name;
       LogUtil.debug('AttributeValuesComponent image file selected', imageName);
-      var reader:FileReader = new FileReader();
+      let reader:FileReader = new FileReader();
 
       let that = this;
 
@@ -492,7 +492,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
 
   isFileUploadDisabled():boolean {
-    var input:any = document.getElementById('avmodaluploadfile');
+    let input:any = document.getElementById('avmodaluploadfile');
     return input == null || input.disabled;
   }
 
@@ -503,11 +503,11 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
 
   onMediaFileSelected(event:any) {
-    var srcElement:any = event.target || event.srcElement;
-    var file:any = srcElement.files[0];
+    let srcElement:any = event.target || event.srcElement;
+    let file:any = srcElement.files[0];
     if (file != null) {
       LogUtil.debug('AttributeValuesComponent media file selected', file.name);
-      var reader:FileReader = new FileReader();
+      let reader:FileReader = new FileReader();
 
       let that = this;
 

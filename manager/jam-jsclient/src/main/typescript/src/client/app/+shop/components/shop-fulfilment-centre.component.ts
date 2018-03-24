@@ -69,7 +69,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
 
         basic = YcValidators.validCode(control);
         if (basic == null) {
-          var req:ValidationRequestVO = {
+          let req:ValidationRequestVO = {
             subject: 'warehouse',
             subjectId: 0,
             field: 'code',
@@ -149,7 +149,6 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
 
   /**
    * Fast create new category.
-   * @param parent parent of new catecory
    */
   createNew() {
     LogUtil.debug('ShopFulfilmentCentreComponent createNew');
@@ -183,7 +182,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopFulfilmentCentreComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.shopCentresVO) {
       this.loading = true;
-      var _sub:any = this._fulfilmentService.saveShopFulfilmentCentres(this.shopCentresVO).subscribe(shopLanguagesVo => {
+      let _sub:any = this._fulfilmentService.saveShopFulfilmentCentres(this.shopCentresVO).subscribe(shopLanguagesVo => {
         this.shopCentresVO = Util.clone(shopLanguagesVo);
         this.remapCentres();
         this.changed = false;
@@ -203,7 +202,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopFulfilmentCentreComponent refresh handler', this.shop);
     if (this.shop.shopId > 0) {
       this.loading = true;
-      var _sub:any = this._fulfilmentService.getShopFulfilmentCentres(this.shop.shopId).subscribe(shopCentresVo => {
+      let _sub:any = this._fulfilmentService.getShopFulfilmentCentres(this.shop.shopId).subscribe(shopCentresVo => {
         LogUtil.debug('ShopFulfilmentCentreComponent getShopCentres', shopCentresVo);
         this.shopCentresVO  = Util.clone(shopCentresVo);
         this.remapCentres();
@@ -233,8 +232,8 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
 
   private remapCentres() {
 
-    var availableCentres:Array<ShopFulfilmentCentreVO> = [];
-    var selectedCentres:Array<ShopFulfilmentCentreVO> = [];
+    let availableCentres:Array<ShopFulfilmentCentreVO> = [];
+    let selectedCentres:Array<ShopFulfilmentCentreVO> = [];
 
     this.shopCentresVO.forEach(centre => {
       if (centre.fulfilmentShop.disabled) {
@@ -244,7 +243,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
       }
     });
 
-    var _sort = function(a:ShopFulfilmentCentreVO, b:ShopFulfilmentCentreVO):number {
+    let _sort = function(a:ShopFulfilmentCentreVO, b:ShopFulfilmentCentreVO):number {
       return (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1;
     };
 

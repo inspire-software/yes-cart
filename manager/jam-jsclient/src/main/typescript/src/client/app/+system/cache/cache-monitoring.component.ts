@@ -79,7 +79,7 @@ export class CacheMonitoringComponent implements OnInit {
       LogUtil.debug('CacheMonitoringComponent delete cache', this.selectedRow);
 
       this.loading = true;
-      var _sub:any = this._systemService.evictSingleCache(this.selectedRow.cacheName).subscribe(caches => {
+      let _sub:any = this._systemService.evictSingleCache(this.selectedRow.cacheName).subscribe(caches => {
 
         LogUtil.debug('CacheMonitoringComponent evictSingleCache', caches);
         this.caches = caches;
@@ -95,7 +95,7 @@ export class CacheMonitoringComponent implements OnInit {
       LogUtil.debug('CacheMonitoringComponent delete cache all');
 
       this.loading = true;
-      var _sub:any = this._systemService.evictAllCache().subscribe(caches => {
+      let _sub:any = this._systemService.evictAllCache().subscribe(caches => {
 
         LogUtil.debug('CacheMonitoringComponent evictAllCache', caches);
         this.caches = caches;
@@ -118,7 +118,7 @@ export class CacheMonitoringComponent implements OnInit {
       LogUtil.debug('CacheMonitoringComponent stats set: ' + stats, this.selectedRow);
 
       this.loading = true;
-      var _sub:any = this._systemService.saveCacheStatsFlag(cache, stats).subscribe(caches => {
+      let _sub:any = this._systemService.saveCacheStatsFlag(cache, stats).subscribe(caches => {
 
         LogUtil.debug('CacheMonitoringComponent saveCacheStatsFlag', caches);
         this.caches = caches;
@@ -146,7 +146,7 @@ export class CacheMonitoringComponent implements OnInit {
 
     let myWindow = window.open('', 'ExportCacheInfo', 'width=800,height=600');
 
-    var _csv:string = Util.toCsv(this.caches, true);
+    let _csv:string = Util.toCsv(this.caches, true);
     myWindow.document.write('<textarea style="width:100%; height:100%">' + _csv + '</textarea>');
 
   }
@@ -210,7 +210,7 @@ export class CacheMonitoringComponent implements OnInit {
   }
 
   protected getTTL(row:CacheInfoVO):string {
-    var _out:string = '';
+    let _out:string = '';
     if (row.timeToLiveSeconds > 0) {
       _out += this.getHumanReadableSeconds(row.timeToLiveSeconds) + ' ttl ';
     }
@@ -223,12 +223,12 @@ export class CacheMonitoringComponent implements OnInit {
   protected getHumanReadableSeconds(seconds:number):string {
     if (seconds >= 0) {
 
-      var _sec:number = 1000;
-      var _min:number = 60 * _sec;
-      var _hour:number = 60 * _min;
+      let _sec:number = 1000;
+      let _min:number = 60 * _sec;
+      let _hour:number = 60 * _min;
 
-      var _ms:number = seconds * 1000;
-      var _out:string = '';
+      let _ms:number = seconds * 1000;
+      let _out:string = '';
       if (_ms >= _hour) {
         _out += Math.floor(_ms / _hour) + 'h ';
       }
@@ -277,7 +277,7 @@ export class CacheMonitoringComponent implements OnInit {
     LogUtil.debug('CacheMonitoringComponent get caches');
 
     this.loading = true;
-    var _sub:any = this._systemService.getCacheInfo().subscribe(caches => {
+    let _sub:any = this._systemService.getCacheInfo().subscribe(caches => {
 
       LogUtil.debug('CacheMonitoringComponent attributes', caches);
       this.caches = caches;
@@ -351,12 +351,12 @@ export class CacheMonitoringComponent implements OnInit {
   private getHumanReadableSize(bytes:number):string {
     if (bytes >= 0) {
 
-      var _kb:number = 1024;
-      var _mb:number = 1024 * _kb;
-      var _gb:number = 1024 * _mb;
+      let _kb:number = 1024;
+      let _mb:number = 1024 * _kb;
+      let _gb:number = 1024 * _mb;
 
-      var _bytes:number = bytes;
-      var _out:string = '' + _bytes;
+      let _bytes:number = bytes;
+      let _out:string = '' + _bytes;
       if (_bytes >= _gb) {
         _out = '' + Math.floor(_bytes / _gb) + '.' + Math.floor((_bytes % _gb) / _mb / 100) + 'GB';
       } else if (_bytes >= _mb) {
