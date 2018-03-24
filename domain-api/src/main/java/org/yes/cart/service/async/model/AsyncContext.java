@@ -34,6 +34,7 @@ public interface AsyncContext {
     String CREDENTIALS_HASH = "CREDENTIALS_HASH";
     String NO_BROADCAST = "NO_BROADCAST";
     String TIMEOUT_KEY = "TIMEOUT_KEY";
+    String ASYNC = "ASYNC";
 
     /**
      * Convenience method for retrieving attributes.

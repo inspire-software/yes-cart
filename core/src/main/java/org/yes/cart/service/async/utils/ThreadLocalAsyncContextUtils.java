@@ -19,7 +19,6 @@ package org.yes.cart.service.async.utils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.service.async.model.AsyncContext;
-import org.yes.cart.service.async.model.JobContext;
 
 /**
  * Thread local security allows to set security context for current thread.
@@ -37,8 +36,8 @@ public final class ThreadLocalAsyncContextUtils {
     /**
      * Initialise security context from async context.
      * There are two types that we operate with:
-     *  1. SecurityContextHolder - that holds the current Spring security context
-     *  2. FlexContext - that holds flex credentials (including password) which is used to access WS
+     *  1. AsyncContext - that holds credentials (including password) which is used to access WS
+     *  2. SecurityContext - that holds the current Spring security context as {@link AsyncContext#SECURITY_CTX} attribute
      * We nee both of these contexts to allow BulkImport, ReindexService and CacheDirector
      * operate properly
      *
@@ -84,7 +83,7 @@ public final class ThreadLocalAsyncContextUtils {
 
     private static boolean forceSetSecurityContext(final AsyncContext context) {
         // If this is asynchronous job then we need to set security context in thread
-        return context instanceof JobContext && ((JobContext) context).isAsync();
+        return context != null && AsyncContext.ASYNC.equals(context.getAttribute(AsyncContext.ASYNC));
     }
 
 }

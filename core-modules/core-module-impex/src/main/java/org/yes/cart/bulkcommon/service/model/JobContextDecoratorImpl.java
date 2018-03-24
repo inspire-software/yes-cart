@@ -17,6 +17,7 @@
 package org.yes.cart.bulkcommon.service.model;
 
 import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobContext;
 
 import java.util.Collections;
@@ -38,6 +39,7 @@ public class JobContextDecoratorImpl implements JobContext {
     public JobContextDecoratorImpl(final JobContext wrapped, final Map<String, Object> additionalAttributes) {
         this.wrapped = wrapped;
         this.additionalAttributes.putAll(additionalAttributes);
+        this.additionalAttributes.remove(AsyncContext.ASYNC);
     }
 
     /** {@inheritDoc} */

@@ -17,6 +17,7 @@
 package org.yes.cart.service.async.model.impl;
 
 import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobContext;
 
 import java.util.Collections;
@@ -37,12 +38,20 @@ public class JobContextImpl implements JobContext {
     public JobContextImpl(final boolean async, final JobStatusListener listener) {
         this.async = async;
         this.listener = listener;
+        if (this.async) {
+            this.attributes.put(AsyncContext.ASYNC, AsyncContext.ASYNC);
+        }
     }
 
     public JobContextImpl(final boolean async, final JobStatusListener listener, final Map<String, Object> attributes) {
         this.async = async;
         this.listener = listener;
         this.attributes.putAll(attributes);
+        if (this.async) {
+            this.attributes.put(AsyncContext.ASYNC, AsyncContext.ASYNC);
+        } else {
+            this.attributes.remove(AsyncContext.ASYNC);
+        }
     }
 
     /** {@inheritDoc} */
