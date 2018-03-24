@@ -7,8 +7,9 @@
         <div class="panel panel-default">
           <ul class="list-group">
             <li *ngFor="let row of filteredObjectGroups" class="list-group-item {{ (selectedRow != null && selectedRow.name == row.name) ? 'list-group-item-info' : '' }}">
-              <a (click)="onSelectRow(row)" class="js-click"><span>{{row.name}} ({{row.rank}})</span></a>
+              <a (click)="onSelectRow(row)" class="js-click"><span>{{row.name}}</span></a>
               <span class="badge">{{getCount(row.attrCodeList)}}</span>
+              <span class="badge badge-info" title="{{ 'AV_RANK' | translate }}">{{row.rank}}</span>
             </li>
             <li *ngFor="let row of removedObjectGroups" class="list-group-item list-group-item-danger">
               <a class="js-click text-strikethrough"><span>{{row.name}}</span></a>
@@ -29,6 +30,7 @@
                      <h5>
                        {{attr.attribute.name}}
                        <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onAssignedAttrClick(attr)><i class="fa fa-remove"></i></button>
+                       <button class="pull-right btn btn-info btn-circle btn-sm" style="margin-right: 3px" title="{{ 'AV_RANK' | translate }}">{{attr.rank}}</button>
                      </h5>
                      <p>
                        <small>{{ attr.attribute.code }}</small> <small [innerHTML]="getAttrFlags(attr)"></small>
