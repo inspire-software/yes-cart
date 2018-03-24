@@ -294,16 +294,18 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
 
         if (log.isInfoEnabled()) {
 
-            final StringBuilder stats = new StringBuilder();
-
-            stats.append("\nLoading configuration for node...");
-            stats.append("\nNode: ").append(node.getId());
+            log.info("== WS statistics ==============================================");
+            log.info("");
+            log.info("Node: {}", node);
 
             for (final Map.Entry<String, String> entry : configuration.entrySet()) {
-                stats.append('\n').append(entry.getKey()).append(": ").append(entry.getValue());
+                log.info("{}: {}", entry.getKey(), entry.getValue());
             }
 
-            log.info(stats.toString());
+            log.info("");
+            log.info("================================================================");
+            log.info("");
+
         }
 
     }

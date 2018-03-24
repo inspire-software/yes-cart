@@ -28,8 +28,6 @@
 
     <context:component-scan base-package="org.yes.cart.web.service.rest" />
 
-    <mvc:annotation-driven />
-
     <mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
