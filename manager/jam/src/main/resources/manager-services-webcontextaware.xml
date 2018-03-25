@@ -32,8 +32,12 @@
 
     <bean id="productIndexExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <description>
-            Thread pool (1,max int) for product indexing since they may be slow.
+            Thread pool (1,1) for product indexing. Indexing is a heavy process which needs access to shared
+            resources (i.e. FT index) and therefore there should never be more than one indexing process running at
+            any point in time
         </description>
+        <property name="corePoolSize" value="1"/>
+        <property name="maxPoolSize" value="1"/>
     </bean>
 
     <bean id="reindexService" class="org.yes.cart.service.cluster.impl.ReindexServiceImpl">

@@ -20,6 +20,16 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean id="ftProductsBulkIndexExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <description>
+            Thread pool (1) for product indexing since they may be slow. We only need
+            one thread for this as we only anticipate one thread to be reindexing all
+            products.
+        </description>
+        <property name="corePoolSize" value="1"/>
+        <property name="maxPoolSize" value="1"/>
+    </bean>
+
     <bean id="productIndexProvider" class="org.yes.cart.search.dao.impl.LuceneIndexProviderImpl">
         <constructor-arg index="0" value="product"/>
         <constructor-arg index="1" value="${ft.config.api.indexBase}"/>
@@ -43,17 +53,7 @@
         <constructor-arg index="2" ref="productDaoBase"/>
         <property name="sessionFactory" ref="sessionFactory"/>
         <property name="platformTransactionManager" ref="transactionManager"/>
-        <property name="indexExecutor">
-            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-                <description>
-                    Thread pool (1) for product indexing since they may be slow. We only need
-                    one thread for this as we only anticipate one thread to be reindexing all
-                    products.
-                </description>
-                <property name="corePoolSize" value="1"/>
-                <property name="maxPoolSize" value="1"/>
-            </bean>
-        </property>
+        <property name="indexExecutor" ref="ftProductsBulkIndexExecutor"/>
         <property name="findAllNamedQuery" value="PRODUCTS.ALL.FOR.INDEX"/>
     </bean>
 
@@ -83,17 +83,7 @@
         <constructor-arg index="2" ref="productSkuDaoBase"/>
         <property name="sessionFactory" ref="sessionFactory"/>
         <property name="platformTransactionManager" ref="transactionManager"/>
-        <property name="indexExecutor">
-            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-                <description>
-                    Thread pool (1) for product indexing since they may be slow. We only need
-                    one thread for this as we only anticipate one thread to be reindexing all
-                    products.
-                </description>
-                <property name="corePoolSize" value="1"/>
-                <property name="maxPoolSize" value="1"/>
-            </bean>
-        </property>
+        <property name="indexExecutor" ref="ftProductsBulkIndexExecutor"/>
         <property name="findAllNamedQuery" value="PRODUCT.SKUS.ALL.FOR.INDEX"/>
     </bean>
 

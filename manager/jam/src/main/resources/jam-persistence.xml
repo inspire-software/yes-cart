@@ -68,9 +68,11 @@
                 <property name="entityOperationCacheExecutor">
                     <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
                         <description>
-                            Thread pool (1, max int) for bulk imports since they may be slow.
+                            Thread pool (5, 20) for cache evictions. These are send to all nodes on cluster so
+                            some reasonable pool is needed for eviction jobs execution.
                         </description>
-                        <property name="maxPoolSize" value="10"/>
+                        <property name="corePoolSize" value="5"/>
+                        <property name="maxPoolSize" value="20"/>
                     </bean>
                 </property>
             </bean>

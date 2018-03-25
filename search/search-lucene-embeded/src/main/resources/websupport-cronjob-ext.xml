@@ -22,9 +22,10 @@
 
     <import resource="core-index-cronjob.xml"/>
 
-    <bean id="ftCronExtension" parent="webCronScheduleTriggers" class="org.springframework.beans.factory.config.ListFactoryBean">
-        <property name="sourceList">
-            <list merge="true">
+    <bean id="ftCronExtension" class="org.yes.cart.util.spring.ArrayListBean">
+        <constructor-arg ref="webCronScheduleTriggers"/>
+        <property name="extensionList">
+            <list>
                 <!--
                       reindexDiscontinuedProductsTrigger and productsGlobalIndexProcessorTrigger are two alternatives
                       that perform full reindex.

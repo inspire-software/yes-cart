@@ -24,8 +24,11 @@
 
     <bean id="jgroupsExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <description>
-            Thread pool (1,max int) for product indexing since they may be slow.
+            Thread pool (1,1) for jgroups used to reload cluster view triggered by ReceiverAdapter.viewAccepted().
+            Generally should not need more than one thread for this.
         </description>
+        <property name="corePoolSize" value="1"/>
+        <property name="maxPoolSize" value="1"/>
     </bean>
 
     <bean id="nodeService" class="org.yes.cart.cluster.node.impl.JGroupsNodeServiceImpl">

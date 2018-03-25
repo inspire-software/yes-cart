@@ -341,8 +341,8 @@
         </property>
     </bean>
 
-    <bean id="managerCronScheduleTriggers" class="org.springframework.beans.factory.config.ListFactoryBean">
-        <property name="sourceList">
+    <bean id="managerCronScheduleTriggers" class="org.yes.cart.util.spring.ArrayListBean">
+        <constructor-arg>
             <list>
                 <ref bean="preOrderJobCronTrigger" />
                 <ref bean="deliveryInfoUpdateJobCronTrigger" />
@@ -356,13 +356,14 @@
                 <ref bean="autoImportJobCronTrigger" />
                 <ref bean="imageVaultProcessorJobCronTrigger" />
             </list>
-        </property>
+        </constructor-arg>
     </bean>
 
     <!-- Extension for cron triggers example that should be put in "adm-cronjob-ext.xml":
-        <bean id="extensionSample" parent="managerCronScheduleTriggers" class="org.springframework.beans.factory.config.ListFactoryBean">
-            <property name="sourceList">
-                <list merge="true">
+        <bean id="extensionSample" class="org.yes.cart.util.spring.ArrayListBean">
+            <constructor-arg ref="managerCronScheduleTriggers"/>
+            <property name="extensionList">
+                <list>
                     <ref bean="customTriggerX" />
                     <ref bean="customTriggerY" />
                     ....

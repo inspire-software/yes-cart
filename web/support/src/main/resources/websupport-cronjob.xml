@@ -46,17 +46,18 @@
         </property>
     </bean>
 
-    <bean id="webCronScheduleTriggers" class="org.springframework.beans.factory.config.ListFactoryBean">
-        <property name="sourceList">
+    <bean id="webCronScheduleTriggers" class="org.yes.cart.util.spring.ArrayListBean">
+        <constructor-arg>
             <list/>
-        </property>
+        </constructor-arg>
     </bean>
 
 
     <!-- Extension for cron triggers example that should be put in "websupport-cronjob-ext.xml":
-        <bean id="extensionSample" parent="webCronScheduleTriggers" class="org.springframework.beans.factory.config.ListFactoryBean">
-            <property name="sourceList">
-                <list merge="true">
+        <bean id="extensionSample" class="org.yes.cart.util.spring.ArrayListBean">
+            <constructor-arg ref="webCronScheduleTriggers"/>
+            <property name="extensionList">
+                <list>
                     <ref bean="customTriggerX" />
                     <ref bean="customTriggerY" />
                     ....
@@ -70,32 +71,7 @@
 
     <bean id="webCronSchedule" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
           depends-on="quartzSysPropsSkipUpdateCheck1,quartzSysPropsSkipUpdateCheck2">
-        <property name="triggers">
-            <list>
-                <!--
-                      reindexDiscontinuedProductsTrigger and productsGlobalIndexProcessorTrigger are two alternatives
-                      that perform full reindex.
-
-                      Only one of these should be enabled. reindexDiscontinuedProductsTrigger is aimed at locating
-                      items that are no longer available and then removing them out of the search index.
-                      productsGlobalIndexProcessorTrigger simply does full reindex (that includes removing outdated).
-
-                      The enable/disable should be controlled by cron schedule set to far future (say 2099). By default
-                      only reindexDiscontinuedProductsTrigger is set to 5am daily and productsGlobalIndexProcessorTrigger
-                      is set to 2099 (i.e. disabled)
-                  -->
-                <ref bean="reindexDiscontinuedProductsTrigger" />
-                <ref bean="productsGlobalIndexProcessorTrigger" />
-                <!--
-                     Cron job that detect inventory changes between job runs and then
-                     re-indexes the SKU corresponding to those inventory items.
-                     This is needed for delta changes updates in index for example when
-                     inventory is updated either due to inventory update or changes caused
-                     by customer order
-                  -->
-                <ref bean="productInventoryChangedProcessorJobCronTrigger" />
-            </list>
-        </property>
+        <property name="triggers" ref="webCronScheduleTriggers"/>
         <property name="quartzProperties">
             <props>
                 <prop key="org.quartz.scheduler.skipUpdateCheck">true</prop>

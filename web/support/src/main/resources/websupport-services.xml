@@ -173,7 +173,14 @@
 
     <!-- #################################  aspects configurations begin ######################################-->
 
-    <bean id="aspectExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"/>
+    <bean id="aspectExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <description>
+            Aspects thread pool allows to process email composing separatelly from main execution flow as this
+            process involves parsing mail templates and retrieving various data
+        </description>
+        <property name="corePoolSize" value="1"/>
+        <property name="maxPoolSize" value="10"/>
+    </bean>
 
     <bean id="customerNewsletterAspect" class="org.yes.cart.web.aspect.NewsletterAspect">
         <constructor-arg index="0" ref="aspectExecutor"/>

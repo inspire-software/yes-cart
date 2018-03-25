@@ -27,8 +27,12 @@
 
     <bean id="bulkExportExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <description>
-            Thread pool (1, max int) for bulk exports since they may be slow.
+            Thread pool (1,1) for bulk imports. Import is a heavy process which needs access to shared resources
+            (i.e. Database) and therefore there should never be more than one bulk import process running at
+            any point in time
         </description>
+        <property name="corePoolSize" value="1"/>
+        <property name="maxPoolSize" value="1"/>
     </bean>
 
     <bean id="exportDataDescriptorResolver" class="org.yes.cart.bulkexport.service.impl.ExportDataDescriptorResolverImpl">
