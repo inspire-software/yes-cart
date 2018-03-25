@@ -48,20 +48,6 @@
 
     <build>
 
-        <filters>
-            <filter>${basedir}/../../env/maven/${env}/config-cluster.properties</filter>
-            <filter>${basedir}/../../env/maven/${env}/config-fs.properties</filter>
-            <filter>${basedir}/../../env/maven/${env}/config-db-${env.db}.properties</filter>
-            <filter>${basedir}/../../env/maven/${env}/config-mail.properties</filter>
-            <filter>${basedir}/../../env/maven/${env}/config-cronjob.properties</filter>
-            <filter>${basedir}/../../env/maven/${env}/config-tomcat-ssl-${env.ssl}.properties</filter>
-            <filter>${basedir}/../../env/maven/${env}/config-module-liqpay-${payment.liqpay.module}.properties</filter>
-            <filter>${basedir}/../../env/maven/${env}/config-module-cybersource-${payment.cybersource.module}.properties</filter>
-            <filter>${basedir}/../../env/maven/${env}/config-module-authorizenet-${payment.authorizenet.module}.properties</filter>
-            <filter>${basedir}/../../env/maven/${env}/config-module-paypal-${payment.paypal.module}.properties</filter>
-            <filter>${basedir}/../../env/maven/${env}/config-module-postfinance-${payment.postfinance.module}.properties</filter>
-        </filters>
-
         <plugins>
             <!--
                     Build node js application begin
@@ -150,9 +136,11 @@
                                         <file>${project.basedir}/src/main/typescript/node_modules/@angular</file>
                                     </files>
                                     <message>
-${project.basedir}/src/main/typescript/node_modules is missing!
-If you are running your first build you must use "clean install"
-"clean" phase will run "npm install" which will create node_modules and download all dependencies
+== YC build config error ============================================================================
+| ${project.basedir}/src/main/typescript/node_modules is missing!                                   |
+| If you are running your first build you must use "clean install"                                  |
+| "clean" phase will run "npm install" which will create node_modules and download all dependencies |
+=====================================================================================================
                                     </message>
                                 </requireFilesExist>
                             </rules>

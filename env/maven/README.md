@@ -4,8 +4,8 @@
 | ------------------------------- | ---------------------------------------------------------------------------------- |
 | First DEV build                 | `mvn clean install`                                                                |
 | Example build no tests          | `mvn install -DskipTests=true`                                                     |
-| First IDEA/DEV build            | `mvn clean install -PdevIntellijIDEA,derby,paymentBase,embededLucene`              |
-| IDEA/DEV build (all payments)   | `mvn install -PdevIntellijIDEA,derby,paymentAll,embededLucene`                     |
+| First IDEA/DEV build            | `mvn clean install -PdevIntellijIDEA,derby,paymentBase,ftEmbededLucene`            |
+| IDEA/DEV build (all payments)   | `mvn install -PdevIntellijIDEA,derby,paymentAll,ftEmbededLucene`                   |
 
 **Tips**
 

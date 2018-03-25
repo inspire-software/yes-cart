@@ -50,12 +50,16 @@ additional hook for "statics" (threadlocals) was added in SearchUtils thus ensur
 are correctly garbage collected in scope of Tomcat's threads. The hook is:
 - SearchUtil.addDestroyable()
 
-Default embeded lucene implementation is achieved by invoking "embededLucene" maven profile, whcih is the same behaviour
+Default embeded lucene implementation is achieved by invoking "ftEmbededLucene" maven profile, which is the same behaviour
 as in prior versions of YC. This profile ensures that "search-lucene-embeded" module is added as dependency to the
 following modules: "support", "store-wicket" and "api" thus enabling full text search support in storefront applications.
 
 Therefore if new provider needs to be implemented the FT search provider module must contain the spring xml context files
 described above including specified exposed beans.
+
+In addition to this new "ftDisabled" profile is introduced which included a NOOP provider for FT functions from the
+"search-disabled" module. This feature can be used by YC installations that run it as basic ecommerce engine with CMS
+and FT capabilities fully managed externally.
 
 
 PRODUCTION CHANGES:
@@ -63,3 +67,7 @@ PRODUCTION CHANGES:
 - "luceneQueryFactory" bean is now "ftQueryFactory"
 
 - if you have custom frontend apps, please follow the change in "store-wicket"/"api" spring context files and pom.xml
+
+- all FT environment specific configurations have been moved to separate file from "config-fs.properties" to
+  "config-ft-${env.search}.properties", so that there is a separate file for each search provider module. Therefore
+  all existing embeded luecene configuration are moved to "config-ft-embeded-lucene.properties"

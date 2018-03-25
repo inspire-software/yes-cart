@@ -41,8 +41,8 @@
 
         <!-- Environment switches -->
         <env>dev</env>
-        <env.db>derby</env.db>
-        <env.search>embeded-lucene</env.search>
+        <!-- env.db>use profile to set this as we need to make sure the dependencies for drivers are included</env.db -->
+        <!-- env.search>use profile to set this as we need to make sure the dependencies for providers are included</env.search -->
         <env.ssl>off</env.ssl>
         <payment.liqpay.module>off</payment.liqpay.module>
         <payment.cybersource.module>off</payment.cybersource.module>
@@ -619,20 +619,20 @@
                                 <echo> </echo>
                                 <echo>YC module ${project.artifactId}-${project.version}-rev.${buildNumber} configurations:</echo>
                                 <echo> </echo>
-                                <echo>Environment configuration (use -Denv=x to switch)      : ${env} </echo>
-                                <echo>Database provider (use -Pmysql or -Pderby)             : ${env.db} </echo>
-                                <echo>Full text search provider (use -PembededLucene)        : ${env.search} </echo>
-                                <echo>Tomcat SSL configuration (use -Pssl)                   : ${env.ssl} </echo>
-                                <echo>JAM npm goal (use -Dnpm.goal=x to switch)              : ${npm.goal} </echo>
-                                <echo>JAM npm target (use -Dnpm.target.home=x to switch)     : ${npm.target.home} (${ts.target.home}) </echo>
-                                <echo>JAM npm modules (use -Dnpm.target.modules=x to switch) : ${npm.target.modules} (${ts.target.modules}) </echo>
+                                <echo>Environment configuration (use -Denv=x to switch)                 : ${env} </echo>
+                                <echo>Database provider (use -Pmysql or -Pderby)                        : ${env.db} </echo>
+                                <echo>Full text search provider (use -PftEmbededLucene or -PftDisabled) : ${env.search} </echo>
+                                <echo>Tomcat SSL configuration (use -Pssl)                              : ${env.ssl} </echo>
+                                <echo>JAM npm goal (use -Dnpm.goal=x to switch)                         : ${npm.goal} </echo>
+                                <echo>JAM npm target (use -Dnpm.target.home=x to switch)                : ${npm.target.home} (${ts.target.home}) </echo>
+                                <echo>JAM npm modules (use -Dnpm.target.modules=x to switch)            : ${npm.target.modules} (${ts.target.modules}) </echo>
                                 <echo> </echo>
                                 <echo>Payment modules</echo>
-                                <echo>LiqPay payments (use -PpaymentLiqPay or -PpaymentAll)           : ${payment.liqpay.module} </echo>
-                                <echo>Cybersource payments (use -PpaymentCybersource or -PpaymentAll) : ${payment.cybersource.module} </echo>
-                                <echo>Authorize.Net payments (use -PpaymentAuthorize or -PpaymentAll) : ${payment.authorizenet.module} </echo>
-                                <echo>PayPal payments (use -PpaymentPaypal or -PpaymentAll)           : ${payment.paypal.module} </echo>
-                                <echo>PostFinance payments (use -PpaymentPostFinance or -PpaymentAll) : ${payment.postfinance.module} </echo>
+                                <echo>LiqPay payments (use -PpaymentLiqPay or -PpaymentAll)             : ${payment.liqpay.module} </echo>
+                                <echo>Cybersource payments (use -PpaymentCybersource or -PpaymentAll)   : ${payment.cybersource.module} </echo>
+                                <echo>Authorize.Net payments (use -PpaymentAuthorize or -PpaymentAll)   : ${payment.authorizenet.module} </echo>
+                                <echo>PayPal payments (use -PpaymentPaypal or -PpaymentAll)             : ${payment.paypal.module} </echo>
+                                <echo>PostFinance payments (use -PpaymentPostFinance or -PpaymentAll)   : ${payment.postfinance.module} </echo>
                                 <echo> </echo>
                                 <echo>Web Apps</echo>
                                 <echo>Storefront: ${webapp.yes.war.name}.war</echo>
@@ -650,6 +650,46 @@
                 </executions>
 
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-required-profiles-are-used</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireProperty>
+                                    <property>env.db</property>
+                                    <message>
+== YC build config error ===============================================================================
+| env.db is missing!                                                                                   |
+| If you are running custom build using profiles make sure you selected all necessary profiles for DB. |
+| Possible values: mysql, derby                                                                        |
+========================================================================================================
+                                    </message>
+                                </requireProperty>
+                                <requireProperty>
+                                    <property>env.search</property>
+                                    <message>
+== YC build config error =======================================================================================
+| env.search is missing!                                                                                       |
+| If you are running custom build using profiles make sure you selected all necessary profiles for FT support. |
+| Possible values: ftEmbededLucene, ftDisabled                                                                 |
+================================================================================================================
+                                    </message>
+                                </requireProperty>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
     <profiles>
@@ -742,9 +782,17 @@
         <profile>
             <!-- Use embeded lucene as full text search provider -->
             <activation><activeByDefault>true</activeByDefault></activation>
-            <id>embededLucene</id>
+            <id>ftEmbededLucene</id>
             <properties>
                 <env.search>embeded-lucene</env.search>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Disabled full text search (used in customised setups where FT is fully external) -->
+            <id>ftDisabled</id>
+            <properties>
+                <env.search>disabled</env.search>
             </properties>
         </profile>
 
@@ -768,12 +816,13 @@
             <properties>
                 <env>demo</env>
                 <env.db>mysql</env.db>
+                <env.search>embeded-lucene</env.search>
                 <env.ssl>off</env.ssl>
-                <payment.liqpay.module>off</payment.liqpay.module>
-                <payment.cybersource.module>off</payment.cybersource.module>
-                <payment.authorizenet.module>off</payment.authorizenet.module>
-                <payment.paypal.module>off</payment.paypal.module>
-                <payment.postfinance.module>off</payment.postfinance.module>
+                <payment.liqpay.module>on</payment.liqpay.module>
+                <payment.cybersource.module>on</payment.cybersource.module>
+                <payment.authorizenet.module>on</payment.authorizenet.module>
+                <payment.paypal.module>on</payment.paypal.module>
+                <payment.postfinance.module>on</payment.postfinance.module>
             </properties>
         </profile>
 
@@ -787,8 +836,8 @@
             <properties>
                 <env>aws</env>
                 <env.db>mysql</env.db>
+                <env.search>embeded-lucene</env.search>
                 <env.ssl>off</env.ssl>
-                <env.yum.lang>all</env.yum.lang>
                 <payment.liqpay.module>on</payment.liqpay.module>
                 <payment.cybersource.module>on</payment.cybersource.module>
                 <payment.authorizenet.module>on</payment.authorizenet.module>

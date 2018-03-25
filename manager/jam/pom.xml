@@ -228,6 +228,67 @@
                     <artifactId>mysql-connector-java</artifactId>
                     <version>${mysql-connector.version}</version>
                 </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-liqpay</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-cybersource</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-authorizenet</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-paypal</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-postfinance</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>buildAws</id>
+            <dependencies>
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <version>${mysql-connector.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-liqpay</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-cybersource</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-authorizenet</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-paypal</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-postfinance</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
             </dependencies>
         </profile>
 
@@ -448,6 +509,7 @@
             <filter>${basedir}/../../env/maven/${env}/config-cluster.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-fs.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-db-${env.db}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-ft-${env.search}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-mail.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-cronjob.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-tomcat-ssl-${env.ssl}.properties</filter>

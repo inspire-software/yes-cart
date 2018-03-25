@@ -84,6 +84,7 @@
 
         <filters>
             <filter>${basedir}/../../env/maven/${env}/config-fs.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-ft-${env.search}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-cronjob.properties</filter>
         </filters>
 

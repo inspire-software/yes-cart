@@ -29,5 +29,6 @@
         <module>search-api</module>
         <module>search-lucene-core</module>
         <module>search-lucene-embeded</module>
+        <module>search-disabled</module>
     </modules>
 </project>
