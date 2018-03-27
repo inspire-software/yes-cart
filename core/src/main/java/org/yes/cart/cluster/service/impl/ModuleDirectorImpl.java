@@ -170,9 +170,9 @@ public class ModuleDirectorImpl implements ModuleDirector, ApplicationContextAwa
             sortedConfig.addAll(config);
 
             for (final ConfigurationDTO item : sortedConfig) {
-                LOG.info("[{}] {}:{}{}{}",
+                LOG.info("[{}] {}:{}{} {}",
                         item.getFunctionalArea(), item.getCfgInterface(), item.getName(),
-                        item.isCfgDefault() ? " [default] " : "", item.getTargets() != null ? item.getTargets() : "");
+                        item.isCfgDefault() ? " [default]" : "", item.getTargets() != null ? item.getTargets() : "");
             }
 
             LOG.info("");

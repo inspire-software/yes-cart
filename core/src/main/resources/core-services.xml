@@ -1288,7 +1288,7 @@
         </constructor-arg>
         <property name="cfgContext">
             <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
-                <property name="functionalArea" value="pricing"/>
+                <property name="functionalArea" value="inventory"/>
                 <property name="name" value="inventoryResolver"/>
                 <property name="cfgInterface" value="InventoryResolver"/>
                 <property name="cfgDefault" value="true"/>
