@@ -178,6 +178,7 @@
   "PANEL_SYSTEM_PG": "Bezahlungs Gateways",
   "PANEL_PG_CALLBACK": "Fehlerhafte Bestätigungen",
   "PANEL_SYSTEM_PREFS": "Präferenzen",
+  "PANEL_SYSTEM_CONFIG": "Konfigurationen",
   "PANEL_SYSTEM_QUERY": "Query API",
   "PANEL_SYSTEM_CACHE": "Cache-Überwachung",
   "PANEL_SYSTEM_CLUSTER": "Cluster",
@@ -383,6 +384,11 @@
   "CACHE_HITS": "Hit / Miss",
   "CACHE_SIZE_MEM": "Speicher Grösse",
   "CACHE_SIZE_DISK": "Disk Grösse",
+
+  "CONFIG_NODE": "Node",
+  "CONFIG_NAME": "Interface",
+  "CONFIG_SPEC": "Konfiguration",
+  "CONFIG_TARGET": "Ernennung",
 
   "CLUSTER_ID": "ID",
   "CLUSTER_TYPE": "Art",

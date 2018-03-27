@@ -30,6 +30,7 @@ import org.yes.cart.cluster.service.BackdoorService;
 import org.yes.cart.cluster.service.CacheDirector;
 import org.yes.cart.cluster.service.ModuleDirector;
 import org.yes.cart.domain.dto.impl.CacheInfoDTO;
+import org.yes.cart.domain.dto.impl.ConfigurationDTO;
 import org.yes.cart.domain.dto.impl.ModuleDTO;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.model.AsyncContext;
@@ -119,6 +120,48 @@ public class ClusterServiceImpl implements ClusterService {
         }
 
         return Collections.emptyList();
+
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, List<ConfigurationDTO>> getConfigurationInfo(final AsyncContext context) {
+
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                determineAllSfTargets(),
+                "ModuleDirector.getConfigurations",
+                null,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        final Map<String, List<ConfigurationDTO>> info = new HashMap<>();
+        if (CollectionUtils.isNotEmpty(message.getResponses())) {
+
+            for (final Message response : message.getResponses()) {
+
+                if (response.getPayload() instanceof List) {
+                    info.put(response.getSource(), (List<ConfigurationDTO>) response.getPayload());
+                }
+
+            }
+
+        }
+
+        final String admin = nodeService.getCurrentNodeId();
+        List<ConfigurationDTO> adminRez = localModuleDirector.getConfigurations();
+        for (final ConfigurationDTO configurationDTO : adminRez) {
+            configurationDTO.setNodeId(admin);
+        }
+
+        info.put(admin, adminRez);
+
+        return info;
 
 
     }

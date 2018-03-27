@@ -18,6 +18,8 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
@@ -33,16 +35,20 @@ import java.util.Map;
  * Date: 11/07/2017
  * Time: 14:00
  */
-public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrategy, ConfigurationRegistry<Long, ProductAvailabilityStrategy> {
+public class ProductAvailabilityStrategyImpl
+        implements ProductAvailabilityStrategy, ConfigurationRegistry<Long, ProductAvailabilityStrategy>, Configuration {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductAvailabilityStrategyImpl.class);
 
     private final ProductAvailabilityStrategy defaultAvailabilityStrategy;
     private final Map<Long, ProductAvailabilityStrategy> customAvailabilityStrategies = new HashMap<>();
 
+    private ConfigurationContext cfgContext;
+
     public ProductAvailabilityStrategyImpl(final ProductAvailabilityStrategy defaultAvailabilityStrategy) {
         this.defaultAvailabilityStrategy = defaultAvailabilityStrategy;
     }
+
 
     /** {@inheritDoc} */
     @Override
@@ -88,14 +94,22 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
     public void register(final Long shopCode, final ProductAvailabilityStrategy strategy) {
 
         if (strategy != null) {
-            LOG.info("Custom shop settings for {} registering availability strategy {}", shopCode, strategy.getClass());
+            LOG.debug("Custom shop settings for {} registering availability strategy {}", shopCode, strategy.getClass());
             customAvailabilityStrategies.put(shopCode, strategy);
         } else {
-            LOG.info("Custom shop settings for {} registering availability strategy DEFAULT", shopCode);
+            LOG.debug("Custom shop settings for {} registering availability strategy DEFAULT", shopCode);
             customAvailabilityStrategies.remove(shopCode);
         }
 
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
 
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
+    }
 }

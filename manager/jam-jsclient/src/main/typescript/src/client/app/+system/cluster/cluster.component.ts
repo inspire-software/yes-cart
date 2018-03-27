@@ -138,11 +138,6 @@ export class ClusterComponent implements OnInit {
     this.getClusterInfo();
   }
 
-  protected onReloadHandler() {
-    LogUtil.debug('ClusterComponent reload handler');
-    this.reloadConfigurations();
-  }
-
   protected onModuleFilterChange() {
 
     this.delayedModuleFiltering.delay();
@@ -186,24 +181,6 @@ export class ClusterComponent implements OnInit {
 
     this.loading = true;
     let _sub:any = this._systemService.getClusterInfo().subscribe(cluster => {
-
-      LogUtil.debug('ClusterComponent cluster', cluster);
-      this.cluster = cluster;
-      this.selectedRow = null;
-      this.filterCluster();
-      this.loading = false;
-      _sub.unsubscribe();
-
-    });
-
-  }
-
-
-  private reloadConfigurations() {
-    LogUtil.debug('ClusterComponent reload configurations');
-
-    this.loading = true;
-    let _sub:any = this._systemService.reloadConfigurations().subscribe(cluster => {
 
       LogUtil.debug('ClusterComponent cluster', cluster);
       this.cluster = cluster;

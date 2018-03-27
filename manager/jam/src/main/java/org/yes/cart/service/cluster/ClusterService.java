@@ -18,10 +18,9 @@ package org.yes.cart.service.cluster;
 
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.domain.dto.impl.CacheInfoDTO;
+import org.yes.cart.domain.dto.impl.ConfigurationDTO;
 import org.yes.cart.domain.dto.impl.ModuleDTO;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.async.model.AsyncContext;
 
 import java.util.List;
@@ -62,6 +61,15 @@ public interface ClusterService {
      * @return list of modules.
      */
     List<ModuleDTO> getModuleInfo(AsyncContext context, String node);
+
+    /**
+     * Get loaded configuration information.
+     *
+     * @param context web service context
+     *
+     * @return list of configuration.
+     */
+    Map<String, List<ConfigurationDTO>> getConfigurationInfo(AsyncContext context);
 
     /**
      * Warm up all storefront servers.

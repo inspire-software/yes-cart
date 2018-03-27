@@ -18,6 +18,8 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
@@ -32,16 +34,20 @@ import java.util.Map;
  * Date: 11/07/2017
  * Time: 14:16
  */
-public class InventoryResolverImpl implements InventoryResolver, ConfigurationRegistry<String, InventoryResolver> {
+public class InventoryResolverImpl
+        implements InventoryResolver, ConfigurationRegistry<String, InventoryResolver>, Configuration {
 
     private static final Logger LOG = LoggerFactory.getLogger(InventoryResolverImpl.class);
 
     private final InventoryResolver defaultInventoryResolver;
     private final Map<String, InventoryResolver> customInventoryResolvers = new HashMap<>();
 
+    private ConfigurationContext cfgContext;
+
     public InventoryResolverImpl(final InventoryResolver defaultInventoryResolver) {
         this.defaultInventoryResolver = defaultInventoryResolver;
     }
+
 
     /** {@inheritDoc} */
     @Override
@@ -100,14 +106,22 @@ public class InventoryResolverImpl implements InventoryResolver, ConfigurationRe
     public void register(final String warehouseCode, final InventoryResolver provider) {
 
         if (provider != null) {
-            LOG.info("Custom shop settings for {} registering inventory resolver {}", warehouseCode, provider.getClass());
+            LOG.debug("Custom shop settings for {} registering inventory resolver {}", warehouseCode, provider.getClass());
             customInventoryResolvers.put(warehouseCode, provider);
         } else {
-            LOG.info("Custom shop settings for {} registering inventory resolver DEFAULT", warehouseCode);
+            LOG.debug("Custom shop settings for {} registering inventory resolver DEFAULT", warehouseCode);
             customInventoryResolvers.remove(warehouseCode);
         }
+
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
 
-
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
+    }
 }

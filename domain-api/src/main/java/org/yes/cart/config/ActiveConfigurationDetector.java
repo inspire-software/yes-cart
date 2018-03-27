@@ -14,32 +14,24 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.cluster.service;
-
-import org.yes.cart.domain.dto.impl.ConfigurationDTO;
-import org.yes.cart.domain.dto.impl.ModuleDTO;
+package org.yes.cart.config;
 
 import java.util.List;
 
 /**
+ * Bean for detecting active configurations.
+ *
  * User: denispavlov
- * Date: 21/03/2018
- * Time: 22:26
+ * Date: 09/07/2017
+ * Time: 16:45
  */
-public interface ModuleDirector {
+public interface ActiveConfigurationDetector {
 
     /**
-     * Get currently loaded modules.
+     * Get active configurations.
      *
-     * @return modules
+     * @return active configurations (must never be null)
      */
-    List<ModuleDTO> getModules();
-
-    /**
-     * Get currently available/active configurations.
-     *
-     * @return configurations
-     */
-    List<ConfigurationDTO> getConfigurations();
+    List<ActiveConfiguration> getActive();
 
 }

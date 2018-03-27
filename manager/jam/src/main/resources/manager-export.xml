@@ -131,6 +131,25 @@
         <property name="orderAutoExportListener" ref="orderAutoExportProcessorInternal"/>
         <property name="exporterId" value="EMAIL"/>
         <property name="priority" value="100"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="fulfilment"/>
+                <property name="name" value="emailNotificationOrderExporter"/>
+                <property name="cfgInterface" value="OrderExporter"/>
+                <property name="cfgDefault" value="false"/>
+                <property name="properties">
+                    <props>
+                        <prop key="priority">100</prop>
+                        <prop key="exporterId">EMAIL</prop>
+                        <prop key="template">[os.in.progress=sup-order-new,os.partially.shipped=sup-order-new,os.completed=sup-order-new]</prop>
+                        <prop key="extension">SHOP[ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS]</prop>
+                        <prop key="pattern">[FF CENTRE CODE].[EXPORT ELIGIBILITY]=[CSV of emails to notify]</prop>
+                        <prop key="example">Main.INITPAID=email1@domain.com,email2@domain.com</prop>
+                        <prop key="description">Basic e-mail notification to supplier exporter</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
     </bean>
 
     <!-- ################################ Register module  ####################################################### -->

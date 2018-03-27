@@ -178,6 +178,7 @@
   "PANEL_SYSTEM_PG": "Платіжні шлюзи",
   "PANEL_PG_CALLBACK": "Необроблені підтвердження",
   "PANEL_SYSTEM_PREFS": "Налаштування",
+  "PANEL_SYSTEM_CONFIG": "Конфігурації",
   "PANEL_SYSTEM_QUERY": "Запит БД",
   "PANEL_SYSTEM_CACHE": "Кеш",
   "PANEL_SYSTEM_CLUSTER": "Кластер",
@@ -383,6 +384,11 @@
   "CACHE_HITS": "Влучив / Промах",
   "CACHE_SIZE_MEM": "Розмір пам'яті",
   "CACHE_SIZE_DISK": "Розмір на диску",
+
+  "CONFIG_NODE": "Вузол",
+  "CONFIG_NAME": "Інтерфейс",
+  "CONFIG_SPEC": "Конфігурація",
+  "CONFIG_TARGET": "Призначення",
 
   "CLUSTER_ID": "ID",
   "CLUSTER_TYPE": "Тип",

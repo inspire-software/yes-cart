@@ -18,6 +18,8 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
 
@@ -29,12 +31,15 @@ import java.util.Map;
  * Date: 07/06/2016
  * Time: 18:39
  */
-public class PricingPolicyProviderImpl implements PricingPolicyProvider, ConfigurationRegistry<String, PricingPolicyProvider> {
+public class PricingPolicyProviderImpl
+        implements PricingPolicyProvider, ConfigurationRegistry<String, PricingPolicyProvider>, Configuration {
 
     private static final Logger LOG = LoggerFactory.getLogger(PricingPolicyProviderImpl.class);
 
     private final PricingPolicyProvider defaultPricingPolicyProvider;
     private final Map<String, PricingPolicyProvider> customPricingPolicyProviders = new HashMap<>();
+
+    private ConfigurationContext cfgContext;
 
     public PricingPolicyProviderImpl(final PricingPolicyProvider defaultPricingPolicyProvider) {
         this.defaultPricingPolicyProvider = defaultPricingPolicyProvider;
@@ -70,12 +75,22 @@ public class PricingPolicyProviderImpl implements PricingPolicyProvider, Configu
     public void register(final String shopCode, final PricingPolicyProvider provider) {
 
         if (provider != null) {
-            LOG.info("Custom shop settings for {} registering pricing provider {}", shopCode, provider.getClass());
+            LOG.debug("Custom shop settings for {} registering pricing provider {}", shopCode, provider.getClass());
             customPricingPolicyProviders.put(shopCode, provider);
         } else {
-            LOG.info("Custom shop settings for {} registering pricing provider DEFAULT", shopCode);
+            LOG.debug("Custom shop settings for {} registering pricing provider DEFAULT", shopCode);
             customPricingPolicyProviders.remove(shopCode);
         }
 
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
+
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
     }
 }

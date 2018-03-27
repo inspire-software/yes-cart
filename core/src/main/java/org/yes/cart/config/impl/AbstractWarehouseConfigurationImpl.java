@@ -16,8 +16,6 @@
 
 package org.yes.cart.config.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.domain.WarehouseService;
@@ -31,8 +29,6 @@ import java.util.Properties;
  * Time: 16:47
  */
 public abstract class AbstractWarehouseConfigurationImpl extends AbstractConfigurationImpl {
-
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractWarehouseConfigurationImpl.class);
 
     private final WarehouseService warehouseService;
 

@@ -15,8 +15,10 @@
  */
 package org.yes.cart.cluster.service.impl;
 
+import org.yes.cart.cluster.node.Node;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.service.ModuleDirector;
+import org.yes.cart.domain.dto.impl.ConfigurationDTO;
 
 import java.util.ArrayList;
 
@@ -43,6 +45,18 @@ public class WsModuleDirectorImpl extends ModuleDirectorImpl implements ModuleDi
         this.nodeService = nodeService;
 
         nodeService.subscribe("ModuleDirector.getModules", message -> new ArrayList<>(WsModuleDirectorImpl.this.getModules()));
+
+        nodeService.subscribe("ModuleDirector.getConfigurations", message -> {
+            final Node node = nodeService.getCurrentNode();
+            final ArrayList<ConfigurationDTO> cfgs = new ArrayList<>();
+            for (final ConfigurationDTO cfg : WsModuleDirectorImpl.this.getConfigurations()) {
+                cfg.setNodeId(node.getId());
+                cfg.setNodeUri(node.getChannel());
+                cfgs.add(cfg);
+            }
+            return cfgs;
+        });
+        
     }
 
 }

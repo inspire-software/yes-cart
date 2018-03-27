@@ -178,6 +178,7 @@
   "PANEL_SYSTEM_PG": "Payment Gateways",
   "PANEL_PG_CALLBACK": "Unprocessed Callbacks",
   "PANEL_SYSTEM_PREFS": "Preferences",
+  "PANEL_SYSTEM_CONFIG": "Configurations",
   "PANEL_SYSTEM_QUERY": "Query API",
   "PANEL_SYSTEM_CACHE": "Cache Monitoring",
   "PANEL_SYSTEM_CLUSTER": "Cluster",
@@ -383,6 +384,11 @@
   "CACHE_HITS": "Hit / Miss",
   "CACHE_SIZE_MEM": "Mem size",
   "CACHE_SIZE_DISK": "Disk size",
+
+  "CONFIG_NODE": "Node",
+  "CONFIG_NAME": "Interface",
+  "CONFIG_SPEC": "Specification",
+  "CONFIG_TARGET": "Designation",
 
   "CLUSTER_ID": "ID",
   "CLUSTER_TYPE": "Type",

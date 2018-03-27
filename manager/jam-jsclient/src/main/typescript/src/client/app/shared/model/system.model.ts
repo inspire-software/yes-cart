@@ -19,6 +19,7 @@
  */
 
 
+import { Pair } from './common.model';
 import { AttrValueVO } from './attribute.model';
 
 
@@ -79,6 +80,19 @@ export interface ModuleVO {
   name : string;
   subName : string;
   loaded : Date;
+
+}
+
+export interface ConfigurationVO {
+
+  functionalArea : string;
+  name : string;
+  cfgInterface : string;
+  cfgDefault : boolean;
+  properties : Pair<string, string>[];
+  targets : string[];
+  nodeId : string;
+  nodeUri : string;
 
 }
 

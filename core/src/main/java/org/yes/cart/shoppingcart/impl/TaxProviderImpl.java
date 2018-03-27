@@ -18,6 +18,8 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.shoppingcart.TaxProvider;
 
@@ -29,16 +31,20 @@ import java.util.Map;
  * Date: 07/06/2016
  * Time: 18:39
  */
-public class TaxProviderImpl implements TaxProvider, ConfigurationRegistry<String, TaxProvider> {
+public class TaxProviderImpl
+        implements TaxProvider, ConfigurationRegistry<String, TaxProvider>, Configuration {
 
     private static final Logger LOG = LoggerFactory.getLogger(TaxProviderImpl.class);
 
     private final TaxProvider defaultTaxProvider;
     private final Map<String, TaxProvider> customTaxProviders = new HashMap<>();
 
+    private ConfigurationContext cfgContext;
+
     public TaxProviderImpl(final TaxProvider defaultTaxProvider) {
         this.defaultTaxProvider = defaultTaxProvider;
     }
+
 
     /** {@inheritDoc} */
     @Override
@@ -66,12 +72,22 @@ public class TaxProviderImpl implements TaxProvider, ConfigurationRegistry<Strin
     public void register(final String shopCode, final TaxProvider provider) {
 
         if (provider != null) {
-            LOG.info("Custom shop settings for {} registering tax provider {}", shopCode, provider.getClass());
+            LOG.debug("Custom shop settings for {} registering tax provider {}", shopCode, provider.getClass());
             customTaxProviders.put(shopCode, provider);
         } else {
-            LOG.info("Custom shop settings for {} registering tax provider DEFAULT", shopCode);
+            LOG.debug("Custom shop settings for {} registering tax provider DEFAULT", shopCode);
             customTaxProviders.remove(shopCode);
         }
 
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
+
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
     }
 }

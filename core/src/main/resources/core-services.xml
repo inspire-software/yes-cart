@@ -181,6 +181,22 @@
                 <constructor-arg index="1" ref="skuWarehouseService"/>
             </bean>
         </constructor-arg>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="inventory"/>
+                <property name="name" value="productAvailabilityStrategy"/>
+                <property name="cfgInterface" value="ProductAvailabilityStrategy"/>
+                <property name="cfgDefault" value="true"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
+                        <prop key="pattern">[SHOP CODE].productAvailabilityStrategy=[configurationBeanName]</prop>
+                        <prop key="example">SHOP10.productAvailabilityStrategy=customPAS</prop>
+                        <prop key="description">Default service that can be overridden via system properties</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
     </bean>
 
     <bean id="productQuantityStrategy"
@@ -1197,6 +1213,22 @@
                 <constructor-arg index="1" ref="taxConfigService"/>
             </bean>
         </constructor-arg>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="pricing"/>
+                <property name="name" value="taxProvider"/>
+                <property name="cfgInterface" value="TaxProvider"/>
+                <property name="cfgDefault" value="true"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
+                        <prop key="pattern">[SHOP CODE].taxProvider=[configurationBeanName]</prop>
+                        <prop key="example">SHOP10.taxProvider=customTP</prop>
+                        <prop key="description">Default service that can be overridden via system properties</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
     </bean>
 
     <bean id="pricingPolicyProvider" class="org.yes.cart.shoppingcart.impl.PricingPolicyProviderImpl">
@@ -1206,6 +1238,22 @@
                 <constructor-arg index="1" ref="shopService"/>
             </bean>
         </constructor-arg>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="pricing"/>
+                <property name="name" value="pricingPolicyProvider"/>
+                <property name="cfgInterface" value="PricingPolicyProvider"/>
+                <property name="cfgDefault" value="true"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
+                        <prop key="pattern">[SHOP CODE].pricingPolicyProvider=[configurationBeanName]</prop>
+                        <prop key="example">SHOP10.pricingPolicyProvider=customPPP</prop>
+                        <prop key="description">Default service that can be overridden via system properties</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
     </bean>
 
     <bean id="priceResolver" class="org.yes.cart.shoppingcart.impl.PriceResolverImpl">
@@ -1214,6 +1262,22 @@
                 <constructor-arg index="0" ref="priceService"/>
             </bean>
         </constructor-arg>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="pricing"/>
+                <property name="name" value="priceResolver"/>
+                <property name="cfgInterface" value="PriceResolver"/>
+                <property name="cfgDefault" value="true"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
+                        <prop key="pattern">[SHOP CODE].priceResolver=[configurationBeanName]</prop>
+                        <prop key="example">SHOP10.priceResolver=customPR</prop>
+                        <prop key="description">Default service that can be overridden via system properties</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
     </bean>
 
     <bean id="inventoryResolver" class="org.yes.cart.shoppingcart.impl.InventoryResolverImpl">
@@ -1222,6 +1286,22 @@
                 <constructor-arg index="0" ref="skuWarehouseService"/>
             </bean>
         </constructor-arg>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="pricing"/>
+                <property name="name" value="inventoryResolver"/>
+                <property name="cfgInterface" value="InventoryResolver"/>
+                <property name="cfgDefault" value="true"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
+                        <prop key="pattern">[SHOP CODE].inventoryResolver=[configurationBeanName]</prop>
+                        <prop key="example">SHOP10.inventoryResolver=customIR</prop>
+                        <prop key="description">Default service that can be overridden via system properties</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
     </bean>
 
     <bean id="baseCartContentsValidator" class="org.yes.cart.shoppingcart.impl.CompoundCartContentsValidator">
@@ -1235,6 +1315,22 @@
 
     <bean id="cartContentsValidator" class="org.yes.cart.shoppingcart.impl.DefaultCartContentsValidator">
         <constructor-arg index="0" ref="baseCartContentsValidator"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="checkout"/>
+                <property name="name" value="cartContentsValidator"/>
+                <property name="cfgInterface" value="CartContentsValidator"/>
+                <property name="cfgDefault" value="true"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
+                        <prop key="pattern">[SHOP CODE].cartContentsValidator=[configurationBeanName]</prop>
+                        <prop key="example">SHOP10.cartContentsValidator=customCCV</prop>
+                        <prop key="description">Default service that can be overridden via system properties</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
     </bean>
 
     <bean id="orderNumberGenerator" class="org.yes.cart.service.order.impl.DefaultOrderNumberGeneratorImpl">

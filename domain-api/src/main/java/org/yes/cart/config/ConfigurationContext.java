@@ -14,32 +14,50 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.cluster.service;
+package org.yes.cart.config;
 
-import org.yes.cart.domain.dto.impl.ConfigurationDTO;
-import org.yes.cart.domain.dto.impl.ModuleDTO;
-
-import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
- * Date: 21/03/2018
- * Time: 22:26
+ * Date: 26/03/2018
+ * Time: 18:08
  */
-public interface ModuleDirector {
+public interface ConfigurationContext {
 
     /**
-     * Get currently loaded modules.
+     * Get functional area of configuration.
      *
-     * @return modules
+     * @return functional area
      */
-    List<ModuleDTO> getModules();
+    String getFunctionalArea();
 
     /**
-     * Get currently available/active configurations.
+     * Get configuration name.
      *
-     * @return configurations
+     * @return name
      */
-    List<ConfigurationDTO> getConfigurations();
+    String getName();
+
+    /**
+     * Get configuration interface.
+     *
+     * @return interface
+     */
+    String getCfgInterface();
+
+    /**
+     * Default configuration.
+     *
+     * @return default configuration
+     */
+    boolean isCfgDefault();
+
+    /**
+     * Get properties.
+     *
+     * @return properties
+     */
+    Map<String, String> getProperties();
 
 }

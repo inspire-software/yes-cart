@@ -11,7 +11,7 @@ import { CacheMonitoringComponent } from './cache/index';
 import { ClusterComponent } from './cluster/index';
 import { GatewaysComponent, ParameterValuesComponent } from './payment/components/index';
 import { PaymentGatewaysComponent } from './payment/index';
-import { SystemPreferencesComponent } from './preferences/index';
+import { SystemPreferencesComponent, SystemConfigurationComponent } from './preferences/index';
 import { QueryComponent } from './query/index';
 import { ReindexComponent } from './reindex/index';
 
@@ -22,7 +22,7 @@ import { ReindexComponent } from './reindex/index';
       CacheMonitoringComponent,
       ClusterComponent,
       GatewaysComponent, ParameterValuesComponent, PaymentGatewaysComponent,
-      SystemPreferencesComponent,
+      SystemPreferencesComponent, SystemConfigurationComponent,
       QueryComponent,
       ReindexComponent,
     ],
@@ -31,7 +31,7 @@ import { ReindexComponent } from './reindex/index';
       CacheMonitoringComponent,
       ClusterComponent,
       GatewaysComponent, ParameterValuesComponent, PaymentGatewaysComponent,
-      SystemPreferencesComponent,
+      SystemPreferencesComponent, SystemConfigurationComponent,
       QueryComponent,
       ReindexComponent,
     ]

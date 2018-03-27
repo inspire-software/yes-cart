@@ -21,6 +21,11 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
+import org.yes.cart.config.ActiveConfiguration;
+import org.yes.cart.config.ActiveConfigurationDetector;
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
+import org.yes.cart.config.impl.ActiveConfigurationImpl;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
@@ -48,7 +53,7 @@ import java.util.*;
  * Date: 20/02/2017
  * Time: 13:47
  */
-public class EmailNotificationOrderExporterImpl implements OrderExporter {
+public class EmailNotificationOrderExporterImpl implements OrderExporter, Configuration, ActiveConfigurationDetector {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailNotificationOrderExporterImpl.class);
 
@@ -69,6 +74,8 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
     private String exporterId = "EmailNotificationOrderExporterImpl";
 
     private int priority = 100;
+
+    private ConfigurationContext cfgContext;
 
     public EmailNotificationOrderExporterImpl(final TaskExecutor taskExecutor,
                                               final ThemeService themeService,
@@ -141,6 +148,11 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
     private Properties getSupplierNotificationsMap(final CustomerOrder customerOrder) {
 
         final Shop shop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
+        return getSupplierNotificationsMap(shop);
+
+    }
+
+    private Properties getSupplierNotificationsMap(final Shop shop) {
 
         final String suppliersMap = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS);
         final Properties props = new Properties();
@@ -152,6 +164,7 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
             }
         }
         return props;
+
     }
 
     /** {@inheritDoc} */
@@ -312,6 +325,36 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ActiveConfiguration> getActive() {
+
+        final List<ActiveConfiguration> active = new ArrayList<>();
+
+        this.shopService.findAllIterator(shop -> {
+
+            final Properties map = getSupplierNotificationsMap(shop);
+
+            for (final String key : map.stringPropertyNames()) {
+
+                active.add(
+                        new ActiveConfigurationImpl(
+                                this.cfgContext.getName(),
+                                this.cfgContext.getCfgInterface(),
+                                shop.getCode().concat(".").concat(key)
+                        )
+                );
+
+            }
+
+            return true; // read all
+        });
+
+        return active;
+    }
+
+    /**
      * Spring IoC.
      *
      * @param autoExportListener listener
@@ -352,5 +395,15 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
      */
     public void setPriority(final int priority) {
         this.priority = priority;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
+
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
     }
 }

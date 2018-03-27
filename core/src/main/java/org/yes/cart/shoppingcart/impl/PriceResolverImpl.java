@@ -18,6 +18,8 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.shoppingcart.PriceResolver;
@@ -32,16 +34,20 @@ import java.util.Map;
  * Date: 09/07/2017
  * Time: 17:04
  */
-public class PriceResolverImpl implements PriceResolver, ConfigurationRegistry<Long, PriceResolver> {
+public class PriceResolverImpl
+        implements PriceResolver, ConfigurationRegistry<Long, PriceResolver>, Configuration {
 
     private static final Logger LOG = LoggerFactory.getLogger(PriceResolverImpl.class);
 
     private final PriceResolver defaultPriceResolver;
     private final Map<Long, PriceResolver> customPriceResolvers = new HashMap<>();
 
+    private ConfigurationContext cfgContext;
+
     public PriceResolverImpl(final PriceResolver defaultPriceResolver) {
         this.defaultPriceResolver = defaultPriceResolver;
     }
+
 
     /** {@inheritDoc} */
     @Override
@@ -75,13 +81,22 @@ public class PriceResolverImpl implements PriceResolver, ConfigurationRegistry<L
     public void register(final Long shopCode, final PriceResolver provider) {
 
         if (provider != null) {
-            LOG.info("Custom shop settings for {} registering pricing resolver {}", shopCode, provider.getClass());
+            LOG.debug("Custom shop settings for {} registering pricing resolver {}", shopCode, provider.getClass());
             customPriceResolvers.put(shopCode, provider);
         } else {
-            LOG.info("Custom shop settings for {} registering pricing resolver DEFAULT", shopCode);
+            LOG.debug("Custom shop settings for {} registering pricing resolver DEFAULT", shopCode);
             customPriceResolvers.remove(shopCode);
         }
+
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
 
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
+    }
 }

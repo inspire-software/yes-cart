@@ -24,11 +24,9 @@ import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.impl.CacheInfoDTO;
+import org.yes.cart.domain.dto.impl.ConfigurationDTO;
 import org.yes.cart.domain.dto.impl.ModuleDTO;
-import org.yes.cart.domain.vo.VoCacheInfo;
-import org.yes.cart.domain.vo.VoClusterNode;
-import org.yes.cart.domain.vo.VoJobStatus;
-import org.yes.cart.domain.vo.VoModule;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.async.AsyncContextFactory;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobStatus;
@@ -86,6 +84,19 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
         return voAssemblySupport.assembleVos(VoModule.class, ModuleDTO.class, modules);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public @ResponseBody
+    List<VoConfiguration> getConfigurationInfo() throws Exception {
+        final Map<String, Object> param = new HashMap<>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
+        Map<String, List<ConfigurationDTO>> configuration = clusterService.getConfigurationInfo(createCtx(param));
+        final List<VoConfiguration> vos = new ArrayList<>(configuration.size() * 250);
+        for (final List<ConfigurationDTO> nodeCfg : configuration.values()) {
+            vos.addAll(voAssemblySupport.assembleVos(VoConfiguration.class, ConfigurationDTO.class, nodeCfg));
+        }
+        return vos;
+    }
 
     /** {@inheritDoc} */
     @Override

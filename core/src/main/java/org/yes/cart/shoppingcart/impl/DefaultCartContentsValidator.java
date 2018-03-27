@@ -18,6 +18,8 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.shoppingcart.CartContentsValidator;
 import org.yes.cart.shoppingcart.CartValidityModel;
@@ -32,16 +34,19 @@ import java.util.Map;
  * Time: 13:59
  */
 public class DefaultCartContentsValidator extends AbstractCartContentsValidatorImpl
-        implements CartContentsValidator, ConfigurationRegistry<String, CartContentsValidator> {
+        implements CartContentsValidator, ConfigurationRegistry<String, CartContentsValidator>, Configuration {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultCartContentsValidator.class);
 
     private final CartContentsValidator defaultValidator;
     private final Map<String, CartContentsValidator> customValidators = new HashMap<>();
 
+    private ConfigurationContext cfgContext;
+
     public DefaultCartContentsValidator(final CartContentsValidator defaultValidator) {
         this.defaultValidator = defaultValidator;
     }
+
 
     /** {@inheritDoc} */
     @Override
@@ -74,12 +79,22 @@ public class DefaultCartContentsValidator extends AbstractCartContentsValidatorI
     public void register(final String shopCode, final CartContentsValidator validator) {
 
         if (validator != null) {
-            LOG.info("Custom shop settings for {} registering cart validator {}", shopCode, validator.getClass());
+            LOG.debug("Custom shop settings for {} registering cart validator {}", shopCode, validator.getClass());
             customValidators.put(shopCode, validator);
         } else {
-            LOG.info("Custom shop settings for {} registering cart validator DEFAULT", shopCode);
+            LOG.debug("Custom shop settings for {} registering cart validator DEFAULT", shopCode);
             customValidators.remove(shopCode);
         }
 
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
+
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
     }
 }

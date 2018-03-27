@@ -178,6 +178,7 @@
   "PANEL_SYSTEM_PG": "Платежные шлюзы",
   "PANEL_PG_CALLBACK": "Необработанные подтверждения",
   "PANEL_SYSTEM_PREFS": "Настройки",
+  "PANEL_SYSTEM_CONFIG": "Конфигурации",
   "PANEL_SYSTEM_QUERY": "Запрос БД",
   "PANEL_SYSTEM_CACHE": "Кэш",
   "PANEL_SYSTEM_CLUSTER": "Кластер",
@@ -383,6 +384,11 @@
   "CACHE_HITS": "Попал / Промах",
   "CACHE_SIZE_MEM": "Размер памяти",
   "CACHE_SIZE_DISK": "Размер на диске",
+
+  "CONFIG_NODE": "Узел",
+  "CONFIG_NAME": "Интерфейс",
+  "CONFIG_SPEC": "Конфигурация",
+  "CONFIG_TARGET": "Назначение",
 
   "CLUSTER_ID": "ID",
   "CLUSTER_TYPE": "Тип",

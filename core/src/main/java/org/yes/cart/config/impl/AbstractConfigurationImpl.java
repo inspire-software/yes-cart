@@ -24,27 +24,28 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.yes.cart.config.ConfigurationListener;
-import org.yes.cart.config.ConfigurationRegistry;
+import org.yes.cart.config.*;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.service.domain.SystemService;
 
 import java.io.StringReader;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * User: denispavlov
  * Date: 07/10/2017
  * Time: 16:47
  */
-public abstract class AbstractConfigurationImpl implements ConfigurationListener, ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
+public abstract class AbstractConfigurationImpl
+        implements ConfigurationListener, ActiveConfigurationDetector, ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractConfigurationImpl.class);
 
     protected ApplicationContext applicationContext;
 
     private final SystemService systemService;
+
+    private final List<ActiveConfiguration> active = new ArrayList<>();
 
     public AbstractConfigurationImpl(final SystemService systemService) {
         this.systemService = systemService;
@@ -57,6 +58,7 @@ public abstract class AbstractConfigurationImpl implements ConfigurationListener
 
         LOG.info("Loading custom configurations {} ...", this);
 
+        this.active.clear();
         final String cfg = this.systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_EXTENSION_CFG_PROPERTIES);
 
         try {
@@ -130,12 +132,21 @@ public abstract class AbstractConfigurationImpl implements ConfigurationListener
         for (final ConfigurationRegistry registry : registries.values()) {
             if (registry.supports(configurationType)) {
                 registry.register(key, configuration);
-                LOG.info("Custom shop configurations for {} ... registering {}", ref, configuration);
+                if (configuration instanceof Configuration) {
+                    final ConfigurationContext ctx = ((Configuration) configuration).getCfgContext();
+                    this.active.add(new ActiveConfigurationImpl(ctx.getName(), ctx.getCfgInterface(), ref));
+                }
+                LOG.debug("Custom shop configurations for {} ... registering {}", ref, configuration);
             }
         }
 
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public List<ActiveConfiguration> getActive() {
+        return Collections.unmodifiableList(this.active);
+    }
 
     /** {@inheritDoc} */
     @Override

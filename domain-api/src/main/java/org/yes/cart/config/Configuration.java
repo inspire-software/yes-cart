@@ -14,32 +14,20 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.cluster.service;
-
-import org.yes.cart.domain.dto.impl.ConfigurationDTO;
-import org.yes.cart.domain.dto.impl.ModuleDTO;
-
-import java.util.List;
+package org.yes.cart.config;
 
 /**
  * User: denispavlov
- * Date: 21/03/2018
- * Time: 22:26
+ * Date: 26/03/2018
+ * Time: 17:24
  */
-public interface ModuleDirector {
+public interface Configuration {
 
     /**
-     * Get currently loaded modules.
+     * Get details of this configuration.
      *
-     * @return modules
+     * @return configuration details
      */
-    List<ModuleDTO> getModules();
-
-    /**
-     * Get currently available/active configurations.
-     *
-     * @return configurations
-     */
-    List<ConfigurationDTO> getConfigurations();
-
+    ConfigurationContext getCfgContext();
+    
 }
