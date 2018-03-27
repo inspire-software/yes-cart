@@ -146,7 +146,7 @@ export class SystemConfigurationComponent implements OnInit {
     }
   }
 
-  private getProperties(row:ConfigurationVO):string {
+  protected getProperties(row:ConfigurationVO):string {
     if (row.properties != null) {
       let out:string = '';
       row.properties.forEach(prop => {
@@ -157,7 +157,7 @@ export class SystemConfigurationComponent implements OnInit {
     return '';
   }
 
-  private getTargets(row:ConfigurationVO):string[] {
+  protected getTargets(row:ConfigurationVO):string[] {
     if (row.targets != null) {
       return row.targets;
     }
