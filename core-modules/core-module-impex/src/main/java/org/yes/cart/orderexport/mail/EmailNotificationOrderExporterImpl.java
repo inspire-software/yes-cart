@@ -43,6 +43,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.util.DateUtils;
+import org.yes.cart.util.log.Markers;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -147,24 +148,35 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter, Config
 
     private Properties getSupplierNotificationsMap(final CustomerOrder customerOrder) {
 
-        final Shop shop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
-        return getSupplierNotificationsMap(shop);
+        return getSupplierNotificationsMap(customerOrder.getShop(), true);
 
     }
 
-    private Properties getSupplierNotificationsMap(final Shop shop) {
+    private Properties getSupplierNotificationsMap(final Shop orderShop, final boolean allowMaster) {
 
-        final String suppliersMap = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS);
         final Properties props = new Properties();
-        if (StringUtils.isNotBlank(suppliersMap)) {
-            try {
-                props.load(new StringReader(suppliersMap));
-            } catch (IOException e) {
-                LOG.error(e.getMessage(), e);
-            }
+        if (allowMaster) {
+            loadProperties(props, orderShop.getMaster());
         }
+        loadProperties(props, orderShop);
         return props;
 
+    }
+
+    private void loadProperties(final Properties props, final Shop shop) {
+        if (shop != null) {
+            final String config = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS);
+            if (StringUtils.isNotBlank(config)) {
+                try {
+                    final Properties cofigProps = new Properties();
+                    cofigProps.load(new StringReader(config));
+                    props.putAll(cofigProps);
+                } catch (IOException e) {
+                    LOG.warn(Markers.alert(), "Unable to load properties for mail order exporter for {}", shop.getCode());
+                    LOG.error(e.getMessage(), e);
+                }
+            }
+        }
     }
 
     /** {@inheritDoc} */
@@ -334,7 +346,8 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter, Config
 
         this.shopService.findAllIterator(shop -> {
 
-            final Properties map = getSupplierNotificationsMap(shop);
+            // check specific settings, so don't allow master
+            final Properties map = getSupplierNotificationsMap(shop, false);
 
             for (final String key : map.stringPropertyNames()) {
 
