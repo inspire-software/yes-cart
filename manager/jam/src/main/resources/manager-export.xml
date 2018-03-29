@@ -141,11 +141,10 @@
                     <props>
                         <prop key="priority">100</prop>
                         <prop key="exporterId">EMAIL</prop>
+                        <prop key="extension">Exporter is triggered by setting SHOP[ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS]</prop>
+                        <prop key="description">E-mail notification to supplier exporter, sends email to specific fulfilment centre using specified template once the order is confirmed</prop>
                         <prop key="template">[os.in.progress=sup-order-new,os.partially.shipped=sup-order-new,os.completed=sup-order-new]</prop>
-                        <prop key="extension">SHOP[ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS]</prop>
-                        <prop key="pattern">[FF CENTRE CODE].[EXPORT ELIGIBILITY]=[CSV of emails to notify]</prop>
-                        <prop key="example">Main.INITPAID=email1@domain.com,email2@domain.com</prop>
-                        <prop key="description">Basic e-mail notification to supplier exporter</prop>
+                        <prop key="SHOP[ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS]">FFCODE.EXPORT_ELIGIBILITY=emails, where FFCODE is fulfilment centre code, EXPORT_ELIGIBILITY is export eligibility (usually INITPAID) and emails is CSV of emails to send notification to. E.g. Main.INITPAID=email1@domain.com,email2@domain.com</prop>
                     </props>
                 </property>
             </bean>

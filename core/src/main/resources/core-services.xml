@@ -190,9 +190,8 @@
                 <property name="properties">
                     <props>
                         <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
-                        <prop key="pattern">[SHOP CODE].productAvailabilityStrategy=[configurationBeanName]</prop>
-                        <prop key="example">SHOP10.productAvailabilityStrategy=customPAS</prop>
-                        <prop key="description">Default service that can be overridden via system properties</prop>
+                        <prop key="description">Default service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
+                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">SHOPCODE.productAvailabilityStrategy=configurationBeanName, where SHOPCODE is the code of the shop and configurationBeanName is custom implementation</prop>
                     </props>
                 </property>
             </bean>
@@ -1222,9 +1221,8 @@
                 <property name="properties">
                     <props>
                         <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
-                        <prop key="pattern">[SHOP CODE].taxProvider=[configurationBeanName]</prop>
-                        <prop key="example">SHOP10.taxProvider=customTP</prop>
-                        <prop key="description">Default service that can be overridden via system properties</prop>
+                        <prop key="description">Default service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
+                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">SHOPCODE.taxProvider=configurationBeanName, where SHOPCODE is the code of the shop and configurationBeanName is custom implementation</prop>
                     </props>
                 </property>
             </bean>
@@ -1247,9 +1245,8 @@
                 <property name="properties">
                     <props>
                         <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
-                        <prop key="pattern">[SHOP CODE].pricingPolicyProvider=[configurationBeanName]</prop>
-                        <prop key="example">SHOP10.pricingPolicyProvider=customPPP</prop>
-                        <prop key="description">Default service that can be overridden via system properties</prop>
+                        <prop key="description">Default service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
+                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">SHOPCODE.pricingPolicyProvider=configurationBeanName, where SHOPCODE is the code of the shop and configurationBeanName is custom implementation</prop>
                     </props>
                 </property>
             </bean>
@@ -1271,9 +1268,8 @@
                 <property name="properties">
                     <props>
                         <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
-                        <prop key="pattern">[SHOP CODE].priceResolver=[configurationBeanName]</prop>
-                        <prop key="example">SHOP10.priceResolver=customPR</prop>
-                        <prop key="description">Default service that can be overridden via system properties</prop>
+                        <prop key="description">Default service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
+                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">SHOPCODE.priceResolver=configurationBeanName, where SHOPCODE is the code of the shop and configurationBeanName is custom implementation</prop>
                     </props>
                 </property>
             </bean>
@@ -1295,9 +1291,8 @@
                 <property name="properties">
                     <props>
                         <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
-                        <prop key="pattern">[SHOP CODE].inventoryResolver=[configurationBeanName]</prop>
-                        <prop key="example">SHOP10.inventoryResolver=customIR</prop>
-                        <prop key="description">Default service that can be overridden via system properties</prop>
+                        <prop key="description">Default service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
+                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">SHOPCODE.inventoryResolver=configurationBeanName, where SHOPCODE is the code of the shop and configurationBeanName is custom implementation</prop>
                     </props>
                 </property>
             </bean>
@@ -1324,9 +1319,8 @@
                 <property name="properties">
                     <props>
                         <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
-                        <prop key="pattern">[SHOP CODE].cartContentsValidator=[configurationBeanName]</prop>
-                        <prop key="example">SHOP10.cartContentsValidator=customCCV</prop>
-                        <prop key="description">Default service that can be overridden via system properties</prop>
+                        <prop key="description">Default service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
+                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">SHOPCODE.cartContentsValidator=configurationBeanName, where SHOPCODE is the code of the shop and configurationBeanName is custom implementation</prop>
                     </props>
                 </property>
             </bean>
