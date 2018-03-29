@@ -39,12 +39,22 @@ export class PromotionComponent implements OnInit, OnDestroy {
     PROMOTION_CONDITION_RULE_TEMPLATE_BUY_ONE_OF: "['X', 'Y', 'Z'].contains(shoppingCartItem.productSkuCode)",
     PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_HAS_TAG: "customerTags.contains('X')",
     PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_REGISTERED: "registered",
-    PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_FIRSTNAME: "customer.firstname == 'X'",
-    PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_EMAIL_CONTAINS: "customer.email?.contains('X.com')",
+    PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_FIRSTNAME: "customer?.firstname == 'X'",
+    PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_EMAIL_CONTAINS: "customer?.email?.contains('X.com')",
+    PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_TYPE_IS: "customerType == 'B2C'",
+    PROMOTION_CONDITION_RULE_TEMPLATE_PRICING_POLICY_IS: "pricingPolicy.contains('X')",
+
+    PROMOTION_CONDITION_RULE_TEMPLATE_ITEM_PRODUCT_IS_FEATURED: "product(SKU)?.featured",
+    PROMOTION_CONDITION_RULE_TEMPLATE_ITEM_PRODUCT_TYPE_IS_DIGITAL: "product(SKU)?.producttype?.digital",
+    PROMOTION_CONDITION_RULE_TEMPLATE_ITEM_IS_OF_BRAND: "isSKUofBrand(SKU, 'X', 'Y', 'Z')",
+    PROMOTION_CONDITION_RULE_TEMPLATE_ITEM_IS_OF_CATEGORY: "isSKUinCategory(SKU, 'X', 'Y', 'Z')",
+    PROMOTION_CONDITION_RULE_TEMPLATE_ITEM_PRODUCT_HAS_ATTRIBUTE: "hasProductAttribute(SKU, 'X')",
+    PROMOTION_CONDITION_RULE_TEMPLATE_ITEM_PRODUCT_ATTRIBUTE_VALUE: "productAttributeValue(SKU, 'X') == 'Y'",
 
     PROMOTION_CONDITION_RULE_TEMPLATE_ITEM_TOTAL_MORE_THAN: "shoppingCartItemTotal.priceSubTotal > X",
 
     PROMOTION_CONDITION_RULE_TEMPLATE_ORDER_TOTAL_MORE_THAN: "shoppingCartOrderTotal.subTotal > X",
+    PROMOTION_CONDITION_RULE_TEMPLATE_ORDER_NET_TOTAL_MORE_THAN: "(shoppingCartOrderTotal.subTotalAmount - shoppingCartOrderTotal.subTotalTax) > X",
 
     PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_TAG_FOR_COUNTRY_X: "def address = customer.getDefaultAddress('S');\naddress != null && address.countryCode == 'XX'"
   };
