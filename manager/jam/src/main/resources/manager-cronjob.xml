@@ -22,6 +22,7 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="classpath:core-export-cronjob.xml"/>
+    <import resource="classpath:core-orderstate-cronjob.xml"/>
 
     <!-- ################################ Pre order inventory scanning  ###################################### -->
 
@@ -167,7 +168,7 @@
 
     <!-- ################################ Bulk email  ###################################################### -->
 
-    <bean id="bulkMailProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+    <bean id="bulkMailProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
         <property name="processor">
             <bean class="org.yes.cart.bulkjob.mail.BulkMailProcessorImpl">
                 <constructor-arg index="0" ref="mailService"/>
@@ -180,6 +181,28 @@
         <property name="systemService" ref="systemService"/>
         <property name="pausePreferenceKey" value="JOB_SEND_MAIL_PAUSE"/>
         <property name="pausePreferenceDefault" value="true"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="core"/>
+                <property name="name" value="bulkMailProcessor"/>
+                <property name="cfgInterface" value="Runnable"/>
+                <property name="cfgDefault" value="false"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">Pausable cron job</prop>
+                        <prop key="description">Recurring job that sends prepared emails. Can be customised per shop.</prop>
+                        <prop key="SYSTEM[JOB_SEND_MAIL_PAUSE]">Pause</prop>
+                        <prop key="SHOP[SHOP_MAIL_SERVER_CUSTOM_ENABLE]">Enable custom settings flag</prop>
+                        <prop key="SHOP[SHOP_MAIL_SERVER_HOST]">Mail server host</prop>
+                        <prop key="SHOP[SHOP_MAIL_SERVER_PORT]">Mail server port</prop>
+                        <prop key="SHOP[SHOP_MAIL_SERVER_USERNAME]">Username (if auth enabled)</prop>
+                        <prop key="SHOP[SHOP_MAIL_SERVER_PASSWORD]">Password (if auth enabled)</prop>
+                        <prop key="SHOP[SHOP_MAIL_SERVER_SMTPAUTH_ENABLE]">Enable authentication</prop>
+                        <prop key="SHOP[SHOP_MAIL_SERVER_STARTTLS_ENABLE]">Use TLS for connection</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
     </bean>
 
     <bean name="sendMailJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
@@ -200,7 +223,7 @@
 
     <!-- ################################ Auto Import  ###################################################### -->
 
-    <bean id="autoImportListener" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+    <bean id="autoImportListener" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
         <property name="processor">
             <bean class="org.yes.cart.bulkjob.bulkimport.LocalFileShareImportListenerImpl">
                 <constructor-arg index="0" ref="shopService"/>
@@ -216,6 +239,22 @@
         <property name="systemService" ref="systemService"/>
         <property name="pausePreferenceKey" value="JOB_LOCAL_FILE_IMPORT_PAUSE"/>
         <property name="pausePreferenceDefault" value="true"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="impex"/>
+                <property name="name" value="autoImportListener"/>
+                <property name="cfgInterface" value="Runnable"/>
+                <property name="cfgDefault" value="false"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">Pausable cron job</prop>
+                        <prop key="description">Recurring job that runs CSV autoimport using configuration file (config.properties).</prop>
+                        <prop key="SYSTEM[JOB_LOCAL_FILE_IMPORT_PAUSE]">Pause</prop>
+                        <prop key="SYSTEM[JOB_LOCAL_FILE_IMPORT_FS_ROOT]">Auto import root directory (see documentation for detailed setup instructions)</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
     </bean>
 
     <bean name="autoImportJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
@@ -237,7 +276,7 @@
     <!-- ################################ Image scanner  ################################################### -->
 
 
-    <bean id="imageVaultProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+    <bean id="imageVaultProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
         <property name="processor">
             <bean class="org.yes.cart.bulkjob.images.LocalFileShareImageVaultProcessorImpl">
                 <constructor-arg index="0" ref="systemService"/>
@@ -298,6 +337,21 @@
         <property name="systemService" ref="systemService"/>
         <property name="pausePreferenceKey" value="JOB_LOCAL_IMAGEVAULT_SCAN_PAUSE"/>
         <property name="pausePreferenceDefault" value="true"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="pim"/>
+                <property name="name" value="imageVaultProcessor"/>
+                <property name="cfgInterface" value="Runnable"/>
+                <property name="cfgDefault" value="false"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">Pausable cron job</prop>
+                        <prop key="description">Utility to re-attach images to products by scanning filenames and creating product image attributes (Requires credentials in config.properties at root of image vault)</prop>
+                        <prop key="SYSTEM[JOB_LOCAL_IMAGEVAULT_SCAN_PAUSE]">Pause</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
     </bean>
 
     <bean name="imageVaultProcessorJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">

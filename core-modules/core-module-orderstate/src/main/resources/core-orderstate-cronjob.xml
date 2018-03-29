@@ -44,11 +44,26 @@
         </property>
     </bean>
 
-    <bean id="bulkAwaitingInventoryDeliveriesProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+    <bean id="bulkAwaitingInventoryDeliveriesProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
         <property name="processor" ref="bulkAwaitingInventoryDeliveriesProcessorInternal"/>
         <property name="systemService" ref="systemService"/>
         <property name="pausePreferenceKey" value="JOB_DELIVERY_WAIT_INVENTORY_PAUSE"/>
         <property name="pausePreferenceDefault" value="false"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="fulfilment"/>
+                <property name="name" value="bulkAwaitingInventoryDeliveriesProcessor"/>
+                <property name="cfgInterface" value="Runnable"/>
+                <property name="cfgDefault" value="false"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">Pausable cron job</prop>
+                        <prop key="description">Recurring job that processes order reservations (checks inventory and preorder configurations)</prop>
+                        <prop key="SYSTEM[JOB_DELIVERY_WAIT_INVENTORY_PAUSE]">Pause</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
     </bean>
 
     <!-- ################################ Backorder/Delivery notifications  ################################# -->
@@ -71,11 +86,26 @@
         </property>
     </bean>
 
-    <bean id="orderDeliveryInfoUpdateProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+    <bean id="orderDeliveryInfoUpdateProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
         <property name="processor" ref="orderDeliveryInfoUpdateProcessorInternal"/>
         <property name="systemService" ref="systemService"/>
         <property name="pausePreferenceKey" value="JOB_DELIVERY_INFO_UPDATE_PAUSE"/>
         <property name="pausePreferenceDefault" value="false"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="fulfilment"/>
+                <property name="name" value="orderDeliveryInfoUpdateProcessor"/>
+                <property name="cfgInterface" value="Runnable"/>
+                <property name="cfgDefault" value="false"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">Pausable cron job</prop>
+                        <prop key="description">Recurring job that triggers services that implement Iterator[OrderDeliveryStatusUpdate] interface</prop>
+                        <prop key="SYSTEM[JOB_DELIVERY_INFO_UPDATE_PAUSE]">Pause</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
     </bean>
 
     <!-- ################################ Register module  ####################################################### -->

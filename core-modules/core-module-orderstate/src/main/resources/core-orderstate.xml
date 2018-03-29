@@ -25,8 +25,6 @@
 
     <cache:annotation-driven />
 
-    <import resource="core-orderstate-cronjob.xml"/>
-
     <!-- ################################# order flow state manager  ########################################## -->
 
     <bean id="txProxyOrderEventHandlerTemplate" abstract="true"

@@ -165,7 +165,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
         final boolean readableDir = exists && root.canRead() && root.isDirectory();
         if (!readableDir) {
             LOG.error("{} location '{}' is invalid (exists: {}, readable: {})  ... terminating",
-                    new Object[]{FS_PREF, root.getAbsolutePath(), exists ? "yes" : "no", "no"});
+                    FS_PREF, root.getAbsolutePath(), exists ? "yes" : "no", "no");
             return;
         }
 
