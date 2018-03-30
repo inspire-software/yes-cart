@@ -110,10 +110,10 @@
            overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="attributeService-allAttributeNames" maxElementsInMemory="5" overflowToDisk="false"
+    <cache name="attributeService-allAttributeNames" maxElementsInMemory="10" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="attributeService-attributeNamesByCodes" maxElementsInMemory="5" overflowToDisk="false"
+    <cache name="attributeService-attributeNamesByCodes" maxElementsInMemory="10" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="attributeService-navigatableAttributeDisplayValue" maxElementsInMemory="500" overflowToDisk="false"
@@ -126,7 +126,7 @@
     <cache name="categoryService-currentCategoryMenu" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="categoryService-rootCategory" maxElementsInMemory="2" overflowToDisk="false"
+    <cache name="categoryService-rootCategory" maxElementsInMemory="10" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="shopService-shopCategoryParentId" maxElementsInMemory="100" overflowToDisk="false"
@@ -325,13 +325,13 @@
     <cache name="shopService-shopById" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="shopService-allShops" maxElementsInMemory="5" overflowToDisk="false"
+    <cache name="shopService-allShops" maxElementsInMemory="10" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="shopService-allShopsMap" maxElementsInMemory="5" overflowToDisk="false"
+    <cache name="shopService-allShopsMap" maxElementsInMemory="10" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="shopService-allShopsFulfilmentMap" maxElementsInMemory="5" overflowToDisk="false"
+    <cache name="shopService-allShopsFulfilmentMap" maxElementsInMemory="10" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="shopService-allNonSubShops" maxElementsInMemory="100" overflowToDisk="false"
