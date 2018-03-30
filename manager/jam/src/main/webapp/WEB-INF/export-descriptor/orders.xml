@@ -130,7 +130,9 @@
         <column-descriptor>
             <column-header>Date</column-header>
             <field-type>FIELD</field-type>
+            <data-type>DATE</data-type>
             <name>orderTimestamp</name>
+            <context>yyyy-MM-dd HH:mm:ss</context>
         </column-descriptor>
 
         <column-descriptor>
