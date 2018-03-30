@@ -59,15 +59,15 @@ public class CsvDateValueAdapterImplTest {
         );
         assertEquals(
                 "2017-06-06 15:30:17",
-                adapter.fromRaw(DateUtils.ldtParseSDT("2017-06-06 15:30:17"), "DATETIME", ldtColumn, tuple)
+                adapter.fromRaw(DateUtils.ldtParseSDT("2017-06-06 15:30:17"), "DATE", ldtColumn, tuple)
         );
         assertEquals(
                 "2017-06-06 15:30:17",
-                adapter.fromRaw(DateUtils.zdtParseSDT("2017-06-06 15:30:17"), "ZONEDTIME", zdtColumn, tuple)
+                adapter.fromRaw(DateUtils.zdtParseSDT("2017-06-06 15:30:17"), "DATE", zdtColumn, tuple)
         );
         assertEquals(
                 "2017-06-06 15:30:17",
-                adapter.fromRaw(DateUtils.zdtParseSDT("2017-06-06 15:30:17"), "INSTANT", iColumn, tuple)
+                adapter.fromRaw(DateUtils.iParseSDT("2017-06-06 15:30:17"), "DATE", iColumn, tuple)
         );
 
         this.mockery.assertIsSatisfied();
