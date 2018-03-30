@@ -17,15 +17,18 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkcommon.model.ExtensibleValueAdapter;
 import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.util.DateUtils;
 
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /**
  * User: denispavlov
@@ -34,7 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CsvDateValueAdapterImpl implements ValueAdapter {
 
-    private static final Map<String, DateTimeFormatter> FORMATTERS = new ConcurrentHashMap<String, DateTimeFormatter>();
+    private static final Logger LOG = LoggerFactory.getLogger(CsvDateValueAdapterImpl.class);
 
     /**
      * {@inheritDoc}
@@ -44,18 +47,24 @@ public class CsvDateValueAdapterImpl implements ValueAdapter {
 
         final String pattern = impExColumn.getContext();
 
-        if (rawValue != null && StringUtils.isNotBlank(pattern)) {
+        if (rawValue != null) {
+            if (StringUtils.isNotBlank(pattern)) {
 
-            DateTimeFormatter dtf = FORMATTERS.get(pattern);
-            if (dtf == null) {
-                dtf = DateTimeFormatter.ofPattern(pattern);
-                FORMATTERS.put(pattern, dtf);
+                if (rawValue instanceof Instant) {
+                    return DateUtils.format((Instant) rawValue, pattern);
+                } else if (rawValue instanceof LocalDateTime) {
+                    return DateUtils.format((LocalDateTime) rawValue, pattern);
+                } else if (rawValue instanceof LocalDate) {
+                    return DateUtils.format((LocalDate) rawValue, pattern);
+                } else if (rawValue instanceof ZonedDateTime) {
+                    return DateUtils.format((ZonedDateTime) rawValue, pattern);
+                }
+                LOG.warn("Unsupported value {} of type {} is set for DATE converter", rawValue, rawValue.getClass());
             }
-
-            return dtf.format((TemporalAccessor) rawValue);
+            return rawValue.toString(); // default format for this type
         }
 
-        return rawValue;
+        return null;
 
 
     }
