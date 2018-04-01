@@ -82,7 +82,7 @@
     </bean>
 
     <bean id="entityClassFactoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
-        <constructor-arg index="0">
+        <constructor-arg>
             <map>
 
                 <entry key="org.yes.cart.domain.entity.Attribute" value="org.yes.cart.domain.entity.impl.AttributeEntity"/>

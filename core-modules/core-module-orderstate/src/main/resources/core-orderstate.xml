@@ -303,7 +303,7 @@
 
 
     <bean id="orderStateManagerHandlersMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
-        <constructor-arg index="0">
+        <constructor-arg>
             <map>
                 <entry key="evt.pending"                   value-ref="pendingOrderEventHandler"/>
                 <entry key="evt.payment.processing"        value-ref="paymentProcessingOrderEventHandler"/>
@@ -332,7 +332,7 @@
     </bean>
 
     <bean id="orderStateManagerBeforeListenersMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
-        <constructor-arg index="0">
+        <constructor-arg>
             <map>
                 <entry key="evt.pending"                   value-ref="couponUsageTrackingListener"/>
             </map>
@@ -340,7 +340,7 @@
     </bean>
 
     <bean id="orderStateManagerAfterListenersMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
-        <constructor-arg index="0">
+        <constructor-arg>
             <map>
                 <entry key="evt.pending"                   value-ref="paymentConfirmedOrderAutoExportListener"/>
                 <entry key="evt.payment.confirmed">

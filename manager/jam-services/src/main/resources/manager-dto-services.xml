@@ -22,7 +22,7 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="voKeyToClassFactoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
-        <constructor-arg index="0">
+        <constructor-arg>
             <map>
                 <entry key="VoAttribute" value="org.yes.cart.domain.vo.VoAttribute"/>
                 <entry key="VoAttrValueCustomer" value="org.yes.cart.domain.vo.VoAttrValueCustomer"/>
@@ -35,7 +35,7 @@
     </bean>
 
     <bean id="voAssemblerAdaptersRepositoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
-        <constructor-arg index="0">
+        <constructor-arg>
             <map>
                 <entry key="DisplayValues"                      value-ref="voDisplayValues"/>
                 <entry key="CSVToList"                          value-ref="voCSVToList"/>
