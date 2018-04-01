@@ -18,6 +18,7 @@ package org.yes.cart.util.spring;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanNameAware;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,10 +31,11 @@ import java.util.List;
  * Date: 25/03/2018
  * Time: 15:36
  */
-public class ArrayListBean<E> extends ArrayList<E> {
+public class ArrayListBean<E> extends ArrayList<E> implements BeanNameAware {
 
     private static final Logger LOG = LoggerFactory.getLogger("CONFIG");
 
+    private String name;
     private final ArrayListBean<E> parent;
 
     public ArrayListBean(final Collection<E> base) {
@@ -51,7 +53,7 @@ public class ArrayListBean<E> extends ArrayList<E> {
      *
      * @param extension extension
      */
-    public void setExtensionList(final List<E> extension) {
+    public void setExtension(final List<E> extension) {
         this.addAll(extension);
         if (this.parent != null) {
             logList(extension, true);
@@ -62,11 +64,15 @@ public class ArrayListBean<E> extends ArrayList<E> {
     private void logList(final List<E> list, final boolean extending) {
         for (final E item : list) {
             if (extending) {
-                LOG.debug("loading list extension {}", item);
+                LOG.debug("{} loading list extension {}", this.name, item);
             } else {
-                LOG.debug("loading extendable list {}", item);
+                LOG.debug("{} loading extendable list {}", this.name, item);
             }
         }
     }
 
+    @Override
+    public void setBeanName(final String name) {
+         this.name = name;
+    }
 }

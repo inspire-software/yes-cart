@@ -56,7 +56,7 @@
     <!-- Extension for cron triggers example that should be put in "websupport-cronjob-ext.xml":
         <bean id="extensionSample" class="org.yes.cart.util.spring.ArrayListBean">
             <constructor-arg ref="webCronScheduleTriggers"/>
-            <property name="extensionList">
+            <property name="extension">
                 <list>
                     <ref bean="customTriggerX" />
                     <ref bean="customTriggerY" />

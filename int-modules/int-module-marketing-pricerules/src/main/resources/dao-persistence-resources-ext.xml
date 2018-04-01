@@ -23,7 +23,7 @@
     <bean id="ycMappingResourcesPriceRules" class="org.yes.cart.util.spring.ArrayListBean">
         <constructor-arg ref="ycMappingResources">
         </constructor-arg>
-        <property name="extensionList">
+        <property name="extension">
             <list>
                 <value>hibernate/yc-ext-pricerule.xml</value>
             </list>
@@ -33,7 +33,7 @@
     <!-- ################################ Register module  ####################################################### -->
 
     <bean class="org.yes.cart.env.impl.ModuleImpl">
-        <property name="functionalArea" value="core"/>
+        <property name="functionalArea" value="marketing"/>
         <property name="name" value="int-module-marketing-pricerules"/>
         <property name="subName" value="dao-persistence-resources-ext"/>
     </bean>

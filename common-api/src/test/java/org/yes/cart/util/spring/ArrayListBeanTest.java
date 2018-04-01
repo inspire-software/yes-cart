@@ -35,9 +35,9 @@ public class ArrayListBeanTest {
 
         final ArrayListBean<String> parent = new ArrayListBean<>(Arrays.asList("a", "b", "c"));
         final ArrayListBean<String> child1 = new ArrayListBean<>(parent);
-        child1.setExtensionList(Arrays.asList("d", "e"));
+        child1.setExtension(Arrays.asList("d", "e"));
         final ArrayListBean<String> child2 = new ArrayListBean<>(parent);
-        child2.setExtensionList(Arrays.asList("f", "g"));
+        child2.setExtension(Arrays.asList("f", "g"));
 
         assertTrue(parent.containsAll(Arrays.asList("a", "b", "c", "d", "e", "f", "g")));
         assertEquals(7, parent.size());

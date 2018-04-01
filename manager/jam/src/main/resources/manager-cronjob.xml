@@ -416,7 +416,7 @@
     <!-- Extension for cron triggers example that should be put in "adm-cronjob-ext.xml":
         <bean id="extensionSample" class="org.yes.cart.util.spring.ArrayListBean">
             <constructor-arg ref="managerCronScheduleTriggers"/>
-            <property name="extensionList">
+            <property name="extension">
                 <list>
                     <ref bean="customTriggerX" />
                     <ref bean="customTriggerY" />

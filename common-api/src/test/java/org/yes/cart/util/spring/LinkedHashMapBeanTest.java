@@ -43,9 +43,9 @@ public class LinkedHashMapBeanTest {
 
         final LinkedHashMapBean<String, String> parent = new LinkedHashMapBean<>(origin);
         final LinkedHashMapBean<String, String> child1 = new LinkedHashMapBean<>(parent);
-        child1.setExtensionList(Collections.singletonMap("d", "d"));
+        child1.setExtension(Collections.singletonMap("d", "d"));
         final LinkedHashMapBean<String, String> child2 = new LinkedHashMapBean<>(parent);
-        child2.setExtensionList(Collections.singletonMap("e", "e"));
+        child2.setExtension(Collections.singletonMap("e", "e"));
 
         assertTrue(parent.keySet().containsAll(Arrays.asList("a", "b", "c", "d", "e")));
         assertTrue(parent.values().containsAll(Arrays.asList("a", "b", "c", "d", "e")));
@@ -71,10 +71,10 @@ public class LinkedHashMapBeanTest {
 
         final LinkedHashMapBean<String, String> parent = new LinkedHashMapBean<>(origin);
         final LinkedHashMapBean<String, String> child1 = new LinkedHashMapBean<>(parent);
-        child1.setExtensionList(Collections.singletonMap("d", "d"));
+        child1.setExtension(Collections.singletonMap("d", "d"));
         final LinkedHashMapBean<String, String> child2 = new LinkedHashMapBean<>(parent);
-        child2.setExtensionList(Collections.singletonMap("c", "e"));
-        child2.setExtensionList(Collections.singletonMap("e", "e"));
+        child2.setExtension(Collections.singletonMap("c", "e"));
+        child2.setExtension(Collections.singletonMap("e", "e"));
 
         assertTrue(parent.keySet().containsAll(Arrays.asList("a", "b", "c", "d", "e")));
         assertTrue(parent.values().containsAll(Arrays.asList("a", "b", "e", "d")));

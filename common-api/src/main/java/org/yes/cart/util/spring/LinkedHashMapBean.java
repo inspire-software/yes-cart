@@ -18,6 +18,7 @@ package org.yes.cart.util.spring;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanNameAware;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -29,10 +30,11 @@ import java.util.Map;
  * Date: 31/03/2018
  * Time: 16:14
  */
-public class LinkedHashMapBean<K, V> extends LinkedHashMap<K, V> {
+public class LinkedHashMapBean<K, V> extends LinkedHashMap<K, V> implements BeanNameAware {
 
     private static final Logger LOG = LoggerFactory.getLogger("CONFIG");
 
+    private String name;
     private final LinkedHashMapBean<K, V> parent;
 
     public LinkedHashMapBean(final Map<K, V> base) {
@@ -50,7 +52,7 @@ public class LinkedHashMapBean<K, V> extends LinkedHashMap<K, V> {
      *
      * @param extension extension
      */
-    public void setExtensionList(final Map<K, V> extension) {
+    public void setExtension(final Map<K, V> extension) {
         this.putAll(extension);
         if (this.parent != null) {
             logMap(extension, true);
@@ -62,14 +64,18 @@ public class LinkedHashMapBean<K, V> extends LinkedHashMap<K, V> {
         for (final Map.Entry<K, V> item : map.entrySet()) {
             if (extending) {
                 if (this.parent.containsKey(item.getKey())) {
-                    LOG.warn("loading map extension (override) {}", item);
+                    LOG.warn("{} loading map extension (override) {}", this.name, item);
                 } else {
-                    LOG.debug("loading map extension {}", item);
+                    LOG.debug("{} loading map extension {}", this.name, item);
                 }
             } else {
-                LOG.debug("loading extendable map {}", item);
+                LOG.debug("{} loading extendable map {}", this.name, item);
             }
         }
     }
 
+    @Override
+    public void setBeanName(final String name) {
+        this.name = name;
+    }
 }

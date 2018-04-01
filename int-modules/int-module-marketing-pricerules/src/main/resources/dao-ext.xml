@@ -23,7 +23,7 @@
     <bean id="entityClassFactoryMappingPriceRules" class="org.yes.cart.util.spring.LinkedHashMapBean">
         <constructor-arg ref="entityClassFactoryMapping">
         </constructor-arg>
-        <property name="extensionList">
+        <property name="extension">
             <map>
                 <entry key="org.yes.cart.domain.entity.SkuPriceRule" value="org.yes.cart.domain.entity.impl.SkuPriceRuleEntity"/>
             </map>
@@ -39,7 +39,7 @@
     <!-- ################################ Register module  ####################################################### -->
 
     <bean class="org.yes.cart.env.impl.ModuleImpl">
-        <property name="functionalArea" value="core"/>
+        <property name="functionalArea" value="marketing"/>
         <property name="name" value="int-module-marketing-pricerules"/>
         <property name="subName" value="dao-ext"/>
     </bean>
