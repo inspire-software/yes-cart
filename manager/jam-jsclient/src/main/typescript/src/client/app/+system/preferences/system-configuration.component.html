@@ -45,7 +45,7 @@
             <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
               <td title="{{ 'CONFIG_NODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)" title="{{row.nodeUri ? row.nodeUri : row.nodeId}}">{{row.nodeId}} <i class="fa fa-info-circle"></i></a></td>
               <td title="{{ 'CONFIG_NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span class="label {{ (row.cfgDefault || (row.targets != null && row.targets.length > 0)) ? 'label-info' : 'label-default' }}">{{row.functionalArea}}</span> {{row.cfgInterface}}:{{row.name}}</a></td>
-              <td title="{{ 'CONFIG_TARGET' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span *ngFor="let target of getTargets(row)"><span class="label label-info">{{target}}</span>&nbsp; </span></a></td>
+              <td title="{{ 'CONFIG_TARGET' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span *ngFor="let target of getTargets(row)"><span class="label label-info">{{target}}</span>&nbsp; </span></a> &nbsp;</td>
             </ng-template>
           </tr>
           </tbody>
