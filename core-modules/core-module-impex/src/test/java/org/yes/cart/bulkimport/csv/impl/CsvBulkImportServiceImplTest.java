@@ -724,7 +724,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             e.printStackTrace();
             fail(e.getMessage());
         } finally {
-            dumpDataBase("www", "TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR",
+            dumpDataBase("impex", "TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR",
                     "TPRODUCT", "TSKU", "TPRODUCTATTRVALUE",
                     "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY", "TCATEGORY", "TCATEGORYATTRVALUE",
                     "TPRODTYPEATTRVIEWGROUP",
@@ -854,15 +854,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         bulkImportService.doImport(createContext("src/test/resources/import/carrierslanames.xml", listenerCarrierSla, importedFilesSet));
 
-        try {
-            dumpDataBase(
-                    "carrier",
-                    "TCARRIER", "TCARRIERSLA");
-        } catch (Exception e1) {
-            e1.printStackTrace();
-            fail(e1.getMessage());
-        }
-
+        dumpDataBase("impex_fk", "TCARRIER", "TCARRIERSLA");
 
         try {
             ResultSet rs = null;

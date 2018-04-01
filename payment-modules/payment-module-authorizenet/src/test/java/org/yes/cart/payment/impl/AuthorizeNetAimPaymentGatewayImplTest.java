@@ -107,6 +107,8 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
         assumeTrue(allowed);
 
         if (allowed) {
+            super.setUp();
+
             customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
             authorizeNetAimPaymentGateway = (PaymentGatewayInternalForm) ctx().getBean("authorizeNetAimPaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, authorizeNetAimPaymentGateway);

@@ -21,8 +21,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="voKeyToClassFactory" class="org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl">
-        <constructor-arg>
+    <bean id="voKeyToClassFactoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg index="0">
             <map>
                 <entry key="VoAttribute" value="org.yes.cart.domain.vo.VoAttribute"/>
                 <entry key="VoAttrValueCustomer" value="org.yes.cart.domain.vo.VoAttrValueCustomer"/>
@@ -34,18 +34,28 @@
         </constructor-arg>
     </bean>
 
-    <bean id="voAssemblerAdaptersRepository"
-          class="com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl">
-        <constructor-arg>
+    <bean id="voAssemblerAdaptersRepositoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg index="0">
             <map>
                 <entry key="DisplayValues"                      value-ref="voDisplayValues"/>
                 <entry key="CSVToList"                          value-ref="voCSVToList"/>
-                <entry key="CSVToListDatesPairs"                  value-ref="voCSVToListDatesPairs"/>
+                <entry key="CSVToListDatesPairs"                value-ref="voCSVToListDatesPairs"/>
                 <entry key="PairMapToPairList"                  value-ref="voPairMapToPairList"/>
                 <entry key="ProductTypeAttrNavigationRanges"    value-ref="voProductTypeAttrNavigationRanges"/>
                 <entry key="CategoryNavigationPriceTiers"       value-ref="voCategoryNavigationPriceTiers"/>
             </map>
         </constructor-arg>
+    </bean>
+
+    <import resource="classpath*:manager-dto-services-ext.xml"/>
+
+    <bean id="voKeyToClassFactory" class="org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl">
+        <constructor-arg ref="voKeyToClassFactoryMapping"/>
+    </bean>
+
+    <bean id="voAssemblerAdaptersRepository"
+          class="com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl">
+        <constructor-arg ref="voAssemblerAdaptersRepositoryMapping"/>
     </bean>
 
     <bean id="voDisplayValues" class="org.yes.cart.domain.vo.converter.DisplayValueMapToListMutablePairConverter"/>

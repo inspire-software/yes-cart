@@ -34,7 +34,7 @@ public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactor
 
     private static final long serialVersionUID = 20100122L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartCommandFactoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger("CONFIG");
 
     private final ShoppingCartCommandConfigurationProvider configurationProvider;
 
@@ -52,9 +52,9 @@ public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactor
         final ConfigurableShoppingCartCommand mapped = commandByKey.get(command.getCmdKey());
         if (mapped != command) {
             if (mapped != null) {
-                LOG.warn("Replacing command impl for: {} with {}", command.getCmdKey(), command);
+                LOG.warn("ShoppingCartCommandRegistry replacing command impl for: {} with {}", command.getCmdKey(), command);
             } else {
-                LOG.info("Adding command impl for: {} with {}", command.getCmdKey(), command);
+                LOG.debug("ShoppingCartCommandRegistry adding command impl for: {} with {}", command.getCmdKey(), command);
             }
             command.configure(this.configurationProvider);
             commandByKey.put(command.getCmdKey(), command);

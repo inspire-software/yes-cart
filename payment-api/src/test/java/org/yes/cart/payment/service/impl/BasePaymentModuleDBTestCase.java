@@ -26,11 +26,13 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.io.File;
 import java.io.FileOutputStream;
 
 /**
@@ -39,6 +41,10 @@ import java.io.FileOutputStream;
  * Time: 10:45:45
  */
 public abstract class BasePaymentModuleDBTestCase {
+
+    // Do not enable dump unless this is necessary as it is very slow.
+    // Dumps are controlled using "testEnableDumps" system property "-DtestEnableDumps=true"
+    private boolean enabled = true;
 
     private ApplicationContext ctx;
     private SessionFactory sessionFactory;
@@ -67,6 +73,15 @@ public abstract class BasePaymentModuleDBTestCase {
             session.close();
         }
     };
+
+    private void checkEnabledDumps() {
+        enabled = Boolean.valueOf(System.getProperty("testEnableDumps"));
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        checkEnabledDumps();
+    }
 
     public ApplicationContext ctx() {
         return ctx;
@@ -97,12 +112,25 @@ public abstract class BasePaymentModuleDBTestCase {
         return "payinitialdata.xml";
     }
 
-    protected void dumpDataBase(String prefix, String[] tables) throws Exception {
-        QueryDataSet queryDataSet = new QueryDataSet(dbTester.getConnection());
-        for (String tableName : tables) {
-            queryDataSet.addTable(tableName);
+    protected void dumpDataBase(final String prefix, final String ... tables) {
+
+        if (!enabled) {
+            return; // no dumps
         }
-        FlatXmlDataSet.write(queryDataSet,
-                new FileOutputStream("target/" + prefix + "_dataset.xml"));
+
+        if (tables != null && tables.length > 0) {
+            final File dump = new File("target" + File.separator + prefix + "_dataset.xml");
+            try {
+                QueryDataSet queryDataSet = new QueryDataSet(dbTester.getConnection());
+                for (String tableName : tables) {
+                    queryDataSet.addTable(tableName);
+                }
+                FlatXmlDataSet.write(queryDataSet, new FileOutputStream(dump));
+                System.out.println("DUMP: " + dump.getAbsoluteFile());
+            } catch (Exception exp) {
+                System.out.println("Unable to create dump file: " + dump.getAbsoluteFile());
+                exp.printStackTrace();
+            }
+        }
     }
 }

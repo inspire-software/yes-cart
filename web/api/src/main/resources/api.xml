@@ -20,8 +20,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
-    <bean id="roInterfaceToClassFactory" class="org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl">
+    <bean id="roInterfaceToClassFactoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="org.yes.cart.domain.ro.AttributeRO" value="org.yes.cart.domain.ro.AttributeRO"/>
@@ -65,19 +64,26 @@
         </constructor-arg>
     </bean>
 
-
-    <bean id="roAssemblerAdaptersRepository"
-          class="com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl">
+    <bean id="roAssemblerAdaptersRepositoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
-
                 <entry key="i18nStringConverter" value-ref="i18nStringConverter"/>
                 <entry key="attributeCodeConverter" value-ref="attributeCodeConverter"/>
                 <entry key="productAvailabilityModelATSConverter" value-ref="productAvailabilityModelATSConverter"/>
                 <entry key="storedAttributesConverter" value-ref="storedAttributesConverter"/>
-
             </map>
         </constructor-arg>
+    </bean>
+
+    <import resource="classpath*:api-ext.xml"/>
+
+    <bean id="roInterfaceToClassFactory" class="org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl">
+        <constructor-arg ref="roInterfaceToClassFactoryMapping"/>
+    </bean>
+
+    <bean id="roAssemblerAdaptersRepository"
+          class="com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl">
+        <constructor-arg ref="roAssemblerAdaptersRepositoryMapping"/>
     </bean>
 
     <bean id="i18nStringConverter" class="org.yes.cart.domain.dto.adapter.impl.I18NStringConverter"/>

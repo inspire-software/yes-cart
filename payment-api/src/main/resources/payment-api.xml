@@ -99,5 +99,12 @@
         </property>
     </bean>
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="payment"/>
+        <property name="name" value="persistence"/>
+        <property name="subName" value="payment-api"/>
+    </bean>
 
 </beans>

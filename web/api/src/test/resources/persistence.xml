@@ -17,15 +17,11 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:cache="http://www.springframework.org/schema/cache"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/aop
-                           http://www.springframework.org/schema/aop/spring-aop.xsd
-                           http://www.springframework.org/schema/cache
-                           http://www.springframework.org/schema/cache/spring-cache.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <import resource="classpath:dao-persistence-resources.xml"/>
+    <import resource="classpath:payment-persistence-resources.xml"/>
 
     <!-- HSQLDB Data Source -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
@@ -45,11 +41,7 @@
     <!-- Hibernate Session Factory  -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="mappingResources">
-            <list>
-                <value>hibernate/yc.xml</value>
-            </list>
-        </property>
+        <property name="mappingResources" ref="ycMappingResources"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
@@ -87,11 +79,7 @@
 
     <bean id="paySessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="payDataSource"/>
-        <property name="mappingResources">
-            <list>
-                <value>hibernate/ycp.xml</value>
-            </list>
-        </property>
+        <property name="mappingResources" ref="ycpMappingResources"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.show_sql">false</prop>
@@ -103,7 +91,6 @@
         <property name="entityInterceptor">
             <bean class="org.yes.cart.payment.persistence.service.impl.AuditInterceptor"/>
         </property>
-
     </bean>
 
     <bean id="payTransactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">

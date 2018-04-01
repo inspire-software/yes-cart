@@ -46,15 +46,11 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     @Override
     @Before
     public void setUp() {
+        super.setUp();
         productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         priceService = (PriceService) ctx().getBean(ServiceSpringKeys.PRICE_SERVICE);
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
-        try {
-            dumpDataBase("x0x0xx_cats", new String[] { "TCATEGORY" });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        super.setUp();
+        dumpDataBase("price_cats_before", "TCATEGORY");
     }
 
     /**

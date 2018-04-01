@@ -39,7 +39,7 @@ import java.util.*;
 public abstract class AbstractConfigurationImpl
         implements ConfigurationListener, ActiveConfigurationDetector, ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractConfigurationImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger("CONFIG");
 
     protected ApplicationContext applicationContext;
 
@@ -56,7 +56,7 @@ public abstract class AbstractConfigurationImpl
     @Override
     public final void reload() {
 
-        LOG.info("Loading custom configurations {} ...", this);
+        LOG.debug("Loading custom configurations {} ...", this);
 
         this.active.clear();
         final String cfg = this.systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_EXTENSION_CFG_PROPERTIES);
@@ -68,10 +68,10 @@ public abstract class AbstractConfigurationImpl
             }
             this.onConfigureEvent(properties);
         } catch (Exception exp) {
-            LOG.error("Loading custom configurations ... error reading configurations", exp);
+            LOG.warn("Loading custom configurations ... error reading configurations", exp);
         }
 
-        LOG.info("Loading custom configurations {} ... completed", this);
+        LOG.debug("Loading custom configurations {} ... completed", this);
 
     }
 
@@ -108,7 +108,7 @@ public abstract class AbstractConfigurationImpl
                 if (this.applicationContext.containsBean(cfg.trim())) {
                     return this.applicationContext.getBean(cfg.trim(), clazz);
                 } else {
-                    LOG.error("Loading custom configurations ... error retrieving bean " + cfg);
+                    LOG.warn("Loading custom configurations ... error retrieving bean " + cfg);
                 }
             } catch (Exception exp) {
                 LOG.error("Loading custom configurations ... error retrieving bean " + cfg, exp);

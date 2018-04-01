@@ -101,7 +101,7 @@
         <constructor-arg index="6" ref="uiFederationFacade"/>
 
         <lookup-method name="getNewBulkExportService" bean="csvBulkExportService"/>
-        <lookup-method name="getNewBulkPaymentExportService" bean="csvBulkPaymentExportService"/>
+        <lookup-method name="getNewBulkPaymentExportService" bean="csvBulkPaymentExportService"/> <!-- TODO:  YC-893 -->
         <lookup-method name="getNewBulkExportImagesService" bean="imagesBulkExportService"/>
 
     </bean>

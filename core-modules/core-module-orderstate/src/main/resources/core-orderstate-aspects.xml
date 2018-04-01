@@ -22,65 +22,63 @@
 
     <!-- #################################  order/payment related actions ######################################-->
 
-    <bean id="paymentNotificationAspect" class="org.yes.cart.service.domain.aspect.impl.PaymentAspect">
-        <constructor-arg index="0" ref="aspectExecutor"/>
-        <constructor-arg index="1" ref="productSkuService"/>
-        <constructor-arg index="2" type="org.yes.cart.service.domain.MailService" ref="mailService"/>
-        <constructor-arg index="3" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
-        <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
-        <constructor-arg index="5" type="org.yes.cart.payment.service.CustomerOrderPaymentService" ref="customerOrderPaymentService"/>
-        <constructor-arg index="6" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
-        <constructor-arg index="7" type="org.yes.cart.service.theme.ThemeService" ref="themeService"/>
-        <constructor-arg index="8" type="org.yes.cart.service.payment.PaymentModulesManager" ref="paymentModulesManager"/>
-        <property name="authoriseShopperTemplates">
+    <bean id="paymentNotificationAspectAuthoriseShopperTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
             <map>
                 <entry key="Ok" value="payment"/>
             </map>
-        </property>
-        <property name="authoriseAdminTemplates">
+        </constructor-arg>
+    </bean>
+
+    <bean id="paymentNotificationAspectAuthoriseAdminTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
             <map>
                 <entry key="Ok" value="adm-payment"/>
                 <entry key="Processing" value="adm-payment"/>
                 <entry key="Failed" value="adm-payment-failed"/>
                 <entry key="Manual processing required" value="adm-payment-failed"/>
             </map>
-        </property>
-        <property name="cancelShopperTemplates">
+        </constructor-arg>
+    </bean>
+
+    <bean id="paymentNotificationAspectCancelShopperTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
             <map/>
-        </property>
-        <property name="cancelAdminTemplates">
+        </constructor-arg>
+    </bean>
+
+    <bean id="paymentNotificationAspectCancelAdminTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
             <map>
                 <entry key="Ok" value="adm-refund"/>
                 <entry key="Processing" value="adm-refund"/>
                 <entry key="Failed" value="adm-refund-failed"/>
                 <entry key="Manual processing required" value="adm-refund-failed"/>
             </map>
-        </property>
-        <property name="shipmentShopperTemplates">
+        </constructor-arg>
+    </bean>
+
+    <bean id="paymentNotificationAspectShipmentShopperTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
             <map>
                 <entry key="Ok" value="shipment-complete"/>
             </map>
-        </property>
-        <property name="shipmentAdminTemplates">
+        </constructor-arg>
+    </bean>
+
+    <bean id="paymentNotificationAspectShipmentAdminTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
             <map>
                 <entry key="Ok" value="adm-payment-shipped"/>
                 <entry key="Processing" value="adm-payment-shipped"/>
                 <entry key="Failed" value="adm-payment-shipped-failed"/>
                 <entry key="Manual processing required" value="adm-payment-shipped-failed"/>
             </map>
-        </property>
+        </constructor-arg>
     </bean>
 
-    <bean id="orderStateChangeAspect" class="org.yes.cart.service.domain.aspect.impl.OrderStateChangeListenerAspect">
-        <constructor-arg index="0" ref="aspectExecutor"/>
-        <constructor-arg index="1" type="org.yes.cart.service.domain.MailService" ref="mailService"/>
-        <constructor-arg index="2" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
-        <constructor-arg index="3" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
-        <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerOrderService" ref="customerOrderService"/>
-        <constructor-arg index="5" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
-        <constructor-arg index="6" type="org.yes.cart.service.theme.ThemeService" ref="themeService"/>
-        <constructor-arg index="7" type="org.yes.cart.service.domain.ProductSkuService" ref="productSkuService"/>
-        <constructor-arg index="8">
+    <bean id="orderStateChangeAspectShopperTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
             <map>
                 <entry key="evt.pending-os.waiting" value="order-new"/>
                 <entry key="evt.pending-os.waiting.payment" value="order-new"/>
@@ -107,7 +105,10 @@
                 <entry key="evt.order.cancel.refund-os.returned" value="order-returned"/>
             </map>
         </constructor-arg>
-        <constructor-arg index="9">
+    </bean>
+
+    <bean id="orderStateChangeAspectAdminTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
             <map>
                 <entry key="evt.pending-os.waiting" value="adm-order-wait-confirmation"/>
                 <entry key="evt.pending-os.waiting.payment" value="adm-order-new"/>
@@ -147,6 +148,39 @@
                 <entry key="evt.order.cancel.refund-os.returned" value="adm-order-returned"/>
             </map>
         </constructor-arg>
+    </bean>
+
+    <import resource="classpath*:core-orderstate-aspects-ext.xml"/>
+
+    <bean id="paymentNotificationAspect" class="org.yes.cart.service.domain.aspect.impl.PaymentAspect">
+        <constructor-arg index="0" ref="aspectExecutor"/>
+        <constructor-arg index="1" ref="productSkuService"/>
+        <constructor-arg index="2" type="org.yes.cart.service.domain.MailService" ref="mailService"/>
+        <constructor-arg index="3" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
+        <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
+        <constructor-arg index="5" type="org.yes.cart.payment.service.CustomerOrderPaymentService" ref="customerOrderPaymentService"/>
+        <constructor-arg index="6" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+        <constructor-arg index="7" type="org.yes.cart.service.theme.ThemeService" ref="themeService"/>
+        <constructor-arg index="8" type="org.yes.cart.service.payment.PaymentModulesManager" ref="paymentModulesManager"/>
+        <property name="authoriseShopperTemplates" ref="paymentNotificationAspectAuthoriseShopperTemplates"/>
+        <property name="authoriseAdminTemplates" ref="paymentNotificationAspectAuthoriseAdminTemplates"/>
+        <property name="cancelShopperTemplates" ref="paymentNotificationAspectCancelShopperTemplates"/>
+        <property name="cancelAdminTemplates" ref="paymentNotificationAspectCancelAdminTemplates"/>
+        <property name="shipmentShopperTemplates" ref="paymentNotificationAspectShipmentShopperTemplates"/>
+        <property name="shipmentAdminTemplates" ref="paymentNotificationAspectShipmentAdminTemplates"/>
+    </bean>
+
+    <bean id="orderStateChangeAspect" class="org.yes.cart.service.domain.aspect.impl.OrderStateChangeListenerAspect">
+        <constructor-arg index="0" ref="aspectExecutor"/>
+        <constructor-arg index="1" type="org.yes.cart.service.domain.MailService" ref="mailService"/>
+        <constructor-arg index="2" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
+        <constructor-arg index="3" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
+        <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerOrderService" ref="customerOrderService"/>
+        <constructor-arg index="5" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+        <constructor-arg index="6" type="org.yes.cart.service.theme.ThemeService" ref="themeService"/>
+        <constructor-arg index="7" type="org.yes.cart.service.domain.ProductSkuService" ref="productSkuService"/>
+        <constructor-arg index="8" ref="orderStateChangeAspectShopperTemplates"/>
+        <constructor-arg index="9" ref="orderStateChangeAspectAdminTemplates"/>
     </bean>
 
     <!-- ################################ Register module  ####################################################### -->

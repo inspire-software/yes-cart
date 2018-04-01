@@ -25,6 +25,7 @@
     <name>Yes Cart</name>
     <url>https://github.com/inspire-software/yes-cart</url>
     <modules>
+        <module>common-api</module>
         <module>payment-api</module>
         <module>domain-api</module>
         <module>search</module>
@@ -36,6 +37,7 @@
         <module>web</module>
         <module>manager</module>
         <module>payment-modules</module>
+        <module>int-modules</module>
     </modules>
     <properties>
 
@@ -44,6 +46,7 @@
         <!-- env.db>use profile to set this as we need to make sure the dependencies for drivers are included</env.db -->
         <!-- env.search>use profile to set this as we need to make sure the dependencies for providers are included</env.search -->
         <env.ssl>off</env.ssl>
+        <marketing.pricerules>off</marketing.pricerules>
         <payment.liqpay.module>off</payment.liqpay.module>
         <payment.cybersource.module>off</payment.cybersource.module>
         <payment.authorizenet.module>off</payment.authorizenet.module>
@@ -634,6 +637,9 @@
                                 <echo>PayPal payments (use -PpaymentPaypal or -PpaymentAll)             : ${payment.paypal.module} </echo>
                                 <echo>PostFinance payments (use -PpaymentPostFinance or -PpaymentAll)   : ${payment.postfinance.module} </echo>
                                 <echo> </echo>
+                                <echo>Add-on modules</echo>
+                                <echo>Marketing price rules integration  (use -Ppricerules)             : ${marketing.pricerules}</echo>
+                                <echo> </echo>
                                 <echo>Web Apps</echo>
                                 <echo>Storefront: ${webapp.yes.war.name}.war</echo>
                                 <echo>REST API  : ${webapp.api.war.name}.war</echo>
@@ -793,6 +799,17 @@
             <id>ftDisabled</id>
             <properties>
                 <env.search>disabled</env.search>
+            </properties>
+        </profile>
+
+        <!--
+            ADD-ON PROFILES
+        -->
+        <profile>
+            <!-- Use price rules marketing integration -->
+            <id>pricerules</id>
+            <properties>
+                <marketing.pricerules>on</marketing.pricerules>
             </properties>
         </profile>
 

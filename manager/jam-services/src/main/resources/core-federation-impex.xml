@@ -227,9 +227,8 @@
 
     <!-- ############################# Federation Facades ######################### -->
 
-    <bean id="importFederationFacade" class="org.yes.cart.service.federation.impl.ImpexFederationFacadeImpl">
-        <constructor-arg index="0" ref="shopFederationStrategy"/>
-        <constructor-arg index="1">
+    <bean id="importFederationFacadeFilters" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg index="0">
             <map>
                 <entry key="org.yes.cart.domain.entity.Category"            value-ref="categoryImpexFederationFilter"/>
                 <entry key="org.yes.cart.domain.entity.Promotion"           value-ref="promotionImpexFederationFilter"/>
@@ -249,10 +248,8 @@
         </constructor-arg>
     </bean>
 
-
-    <bean id="exportFederationFacade" class="org.yes.cart.service.federation.impl.ImpexFederationFacadeImpl">
-        <constructor-arg index="0" ref="shopFederationStrategy"/>
-        <constructor-arg index="1">
+    <bean id="exportFederationFacadeFilters" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg index="0">
             <map>
                 <entry key="org.yes.cart.domain.entity.Category"            value-ref="categoryImpexFederationFilter"/>
                 <entry key="org.yes.cart.domain.entity.Promotion"           value-ref="promotionImpexFederationFilter"/>
@@ -274,6 +271,19 @@
                 <entry key="org.yes.cart.domain.entity.ProductTypeAttr"     value-ref="productTypeExportFederationFilter"/>
             </map>
         </constructor-arg>
+    </bean>
+
+    <import resource="classpath*:core-federation-impex-ext.xml"/>
+
+    <bean id="importFederationFacade" class="org.yes.cart.service.federation.impl.ImpexFederationFacadeImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1" ref="importFederationFacadeFilters"/>
+    </bean>
+
+
+    <bean id="exportFederationFacade" class="org.yes.cart.service.federation.impl.ImpexFederationFacadeImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1" ref="exportFederationFacadeFilters"/>
     </bean>
 
     <!-- ################################ Register module  ####################################################### -->

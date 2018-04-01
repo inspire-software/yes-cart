@@ -84,6 +84,7 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends PaymentModuleDB
         return "test-payment-module-paypal.xml";
     }
 
+    @Override
     @Before
     public void setUp() throws Exception {
 
@@ -105,6 +106,8 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends PaymentModuleDB
         assumeTrue(allowed);
 
         if (allowed) {
+            super.setUp();
+
             paymentGateway = (PayPalExpressCheckoutPaymentGatewayImpl) ctx().getBean("payPalExpressPaymentGateway");
 
             final Map<String, PaymentGatewayParameter> params = new HashMap<>();
@@ -167,7 +170,7 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends PaymentModuleDB
 
         } finally {
 
-            dumpDataBase("express", new String[]{"TPAYMENTGATEWAYPARAMETER"});
+            dumpDataBase("express", "TPAYMENTGATEWAYPARAMETER");
 
         }
 

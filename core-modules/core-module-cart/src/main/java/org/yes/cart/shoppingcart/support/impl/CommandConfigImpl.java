@@ -31,7 +31,7 @@ import java.util.Set;
  */
 public class CommandConfigImpl implements CommandConfig {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CommandConfigImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger("CONFIG");
 
     /**
      * Temporally fields will be removed from parameter maps
@@ -43,7 +43,7 @@ public class CommandConfigImpl implements CommandConfig {
         this.cmdKeys.addAll(cmdKeys);
 
         for (final String cmd : cmdKeys) {
-            LOG.info("Configured key to be command: {}", cmd);
+            LOG.debug("CommandConfig configured key to be command: {}", cmd);
         }
 
     }
@@ -52,7 +52,7 @@ public class CommandConfigImpl implements CommandConfig {
         this.cmdInternalKeys.addAll(cmdKeys);
 
         for (final String cmd : cmdKeys) {
-            LOG.info("Configured key to be internal command: {}", cmd);
+            LOG.debug("CommandConfig configured key to be internal command: {}", cmd);
         }
 
     }

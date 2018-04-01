@@ -231,4 +231,12 @@
         <property name="priority" value="120"/>
     </bean>
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="core"/>
+        <property name="name" value="core"/>
+        <property name="subName" value="core-services-commands"/>
+    </bean>
+
 </beans>

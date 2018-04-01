@@ -45,6 +45,7 @@ import java.util.*;
 public class PaymentModulesManagerImpl implements PaymentModulesManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(PaymentModulesManagerImpl.class);
+    private static final Logger LOGCFG = LoggerFactory.getLogger("CONFIG");
 
     private final ServiceLocator serviceLocator;
 
@@ -333,7 +334,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
 
             paymentModulesMap.put(label, paymentModule);
 
-            LOG.info("Registering payment module {}", label);
+            LOGCFG.debug("PaymentModulesManager registering payment module {}", label);
 
         } else if (!existing.equals(paymentModule)) {
             throw new RuntimeException("Duplicate binding detected for payment module with label: " + label);

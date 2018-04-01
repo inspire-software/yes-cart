@@ -30,4 +30,13 @@
         <property name="sessionFactory" ref="paySessionFactory"/>
     </bean>
 
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="payment"/>
+        <property name="name" value="payment-api"/>
+        <property name="subName" value="payment-persistence"/>
+    </bean>
+
 </beans>

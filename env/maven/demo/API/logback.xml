@@ -165,6 +165,22 @@
         </triggeringPolicy>
     </appender>
 
+    <appender name="CONFIG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <File>${catalina.base}/logs/yc-config.log</File>
+        <Append>true</Append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>10</maxIndex>
+            <FileNamePattern>${catalina.base}/logs/yc-ws.config.%i</FileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
@@ -237,14 +253,22 @@
     </logger>
 
     <logger name="FTQ" level="INFO">
+        <!-- FTQ logs at DEBUG level, TRACE logs FTQ explanations -->
         <appender-ref ref="FTQ"/>
     </logger>
 
-    <logger name="WS.IN" level="ERROR"><!-- Interceptors log at INFO level -->
+    <logger name="WS.IN" level="ERROR">
+        <!-- Interceptors log at INFO level -->
         <appender-ref ref="WS"/>
     </logger>
-    <logger name="WS.OUT" level="ERROR"><!-- Interceptors log at INFO level -->
+    <logger name="WS.OUT" level="ERROR">
+        <!-- Interceptors log at INFO level -->
         <appender-ref ref="WS"/>
+    </logger>
+
+    <logger name="CONFIG" level="INFO">
+        <!-- CONFIG logs at DEBUG level -->
+        <appender-ref ref="CONFIG"/>
     </logger>
 
     <root level="INFO">

@@ -81,8 +81,8 @@
         </property>
     </bean>
 
-    <bean id="internalEntityFactory" class="org.yes.cart.dao.impl.EntityFactoryImpl">
-        <property name="classNamesMap">
+    <bean id="entityClassFactoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg index="0">
             <map>
 
                 <entry key="org.yes.cart.domain.entity.Attribute" value="org.yes.cart.domain.entity.impl.AttributeEntity"/>
@@ -114,8 +114,6 @@
 
                 <entry key="org.yes.cart.domain.entity.SkuPrice" value="org.yes.cart.domain.entity.impl.SkuPriceEntity"/>
                 <entry key="org.yes.cart.domain.entity.SkuWarehouse" value="org.yes.cart.domain.entity.impl.SkuWarehouseEntity"/>
-
-                <entry key="org.yes.cart.domain.entity.SkuPriceRule" value="org.yes.cart.domain.entity.impl.SkuPriceRuleEntity"/>
 
                 <entry key="org.yes.cart.domain.entity.Carrier" value="org.yes.cart.domain.entity.impl.CarrierEntity"/>
                 <entry key="org.yes.cart.domain.entity.CarrierSla" value="org.yes.cart.domain.entity.impl.CarrierSlaEntity"/>
@@ -169,7 +167,13 @@
                 <entry key="org.yes.cart.domain.entity.DataDescriptor" value="org.yes.cart.domain.entity.impl.DataDescriptorEntity"/>
 
             </map>
-        </property>
+        </constructor-arg>
+    </bean>
+
+    <import resource="classpath*:dao-mapping-ext.xml"/>
+
+    <bean id="internalEntityFactory" class="org.yes.cart.dao.impl.EntityFactoryImpl">
+        <property name="classNamesMap" ref="entityClassFactoryMapping"/>
     </bean>
 
 
@@ -390,12 +394,6 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="skuPriceRuleDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-        <constructor-arg><value>org.yes.cart.domain.entity.impl.SkuPriceRuleEntity</value></constructor-arg>
-        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
     <bean id="managerDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.ManagerEntity</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
@@ -509,6 +507,8 @@
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+
+    <import resource="classpath*:dao-ext.xml"/>
 
     <!-- ################################ Register module  ####################################################### -->
 

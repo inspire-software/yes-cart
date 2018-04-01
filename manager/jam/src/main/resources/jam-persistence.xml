@@ -21,50 +21,17 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
-
+    <import resource="classpath:dao-persistence-resources.xml"/>
+    <import resource="classpath:payment-persistence-resources.xml"/>
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
           autowire="byName">
         <!--<property name="configLocation" value="classpath:hibernate-nc.cfg.xml"/>-->
-        <property name="mappingResources">
-            <list>
-                <value>hibernate/yc.xml</value>
-            </list>
-        </property>
+        <property name="mappingResources" ref="ycMappingResources"/>
         <property name="entityInterceptor">
             <bean class="org.yes.cart.domain.interceptor.AdminInterceptor">
                 <property name="entityOperationCache" ref="evictionConfig"/>
-                <property name="prohibitedFields">
-                    <map key-type="java.lang.String" value-type="java.lang.String">
-                        <entry key="CustomerEntity">
-                            <set>
-                                <value>password</value>
-                            </set>
-                        </entry>
-                        <entry key="ManagerEntity">
-                            <set>
-                                <value>password</value>
-                            </set>
-                        </entry>
-                        <entry key="MailEntity">
-                            <set>
-                                <value>textVersion</value>
-                                <value>htmlVersion</value>
-                            </set>
-                        </entry>
-                        <entry key="MailPartEntity">
-                            <set>
-                                <value>data</value>
-                            </set>
-                        </entry>
-                        <entry key="ShoppingCartStateEntity">
-                            <set>
-                                <value>state</value>
-                            </set>
-                        </entry>
-                    </map>
-                </property>
+                <property name="prohibitedFields" ref="ycProhibitedFields"/>
                 <property name="entityOperationCacheExecutor">
                     <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
                         <description>
@@ -86,16 +53,9 @@
         </property>
     </bean>
 
-
-
     <bean id="paySessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="payDataSource"/>
-        <property name="mappingResources">
-            <list>
-                <value>hibernate/ycp.xml</value>
-            </list>
-        </property>
-
+        <property name="mappingResources" ref="ycpMappingResources"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.show_sql">false</prop>
@@ -104,24 +64,7 @@
         </property>
         <property name="entityInterceptor">
             <bean class="org.yes.cart.payment.persistence.service.impl.AuditInterceptor">
-                <property name="prohibitedFields">
-                    <map key-type="java.lang.String" value-type="java.lang.String">
-                        <entry key="CustomerOrderPaymentEntity">
-                            <set>
-                                <value>cardExpireYear</value>
-                                <value>cardExpireMonth</value>
-                                <value>cardStartDate</value>
-                                <value>cardNumber</value>
-                                <value>cardIssueNumber</value>
-                            </set>
-                        </entry>
-                        <entry key="PaymentGatewayParameterEntity">
-                            <set>
-                                <value>value</value>
-                            </set>
-                        </entry>
-                    </map>
-                </property>
+                <property name="prohibitedFields" ref="ycpProhibitedFields"/>
             </bean>
         </property>
     </bean>

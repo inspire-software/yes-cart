@@ -46,7 +46,8 @@ import java.io.FileOutputStream;
 public abstract class AbstractTestDAO  {
 
     // Do not enable dump unless this is necessary as it is very slow.
-    private static final boolean ENABLED_DUMPS = true;
+    // Dumps are controlled using "testEnableDumps" system property "-DtestEnableDumps=true"
+    private boolean enabled = true;
 
     private ApplicationContext ctx;
     private SessionFactory sessionFactory;
@@ -57,8 +58,13 @@ public abstract class AbstractTestDAO  {
     private TransactionTemplate tx;
     private TransactionTemplate txReadOnly;
 
+    private void checkEnabledDumps() {
+        enabled = Boolean.valueOf(System.getProperty("testEnableDumps"));
+    }
+
     @Before
     public void setUp()   {
+        checkEnabledDumps();
         transactionManager =   ctx().getBean("transactionManager", PlatformTransactionManager.class);
         tx = new TransactionTemplate(transactionManager);
         txReadOnly = new TransactionTemplate(transactionManager);
@@ -129,29 +135,24 @@ public abstract class AbstractTestDAO  {
         return "initialdata.xml";
     }
 
-    protected void dumpDataBase(final String prefix, final String ... tables) throws Exception {
+    protected void dumpDataBase(final String prefix, final String ... tables) {
 
-        if (!ENABLED_DUMPS) {
-            System.out.println("DUMP: [DISABLED] - change parameter in AbstractTestDAO.ENABLED_DUMPS");
-            return;
+        if (!enabled) {
+            return; // no dumps
         }
 
-        QueryDataSet queryDataSet = new QueryDataSet(dbTester.getConnection());
-        for (String tableName : tables) {
-            queryDataSet.addTable(tableName);
-        }
-        FileOutputStream fos = null;
-        try {
+        if (tables != null && tables.length > 0) {
             final File dump = new File("target" + File.separator + prefix + "_dataset.xml");
-            if (!dump.exists()) {
-                dump.createNewFile();
-            }
-            System.out.println("DUMP: " + dump.getAbsoluteFile());
-            fos = new FileOutputStream(dump);
-            FlatXmlDataSet.write(queryDataSet, fos);
-        } finally {
-            if (fos != null) {
-                fos.close();
+            try {
+                QueryDataSet queryDataSet = new QueryDataSet(dbTester.getConnection());
+                for (String tableName : tables) {
+                    queryDataSet.addTable(tableName);
+                }
+                FlatXmlDataSet.write(queryDataSet, new FileOutputStream(dump));
+                System.out.println("DUMP: " + dump.getAbsoluteFile());
+            } catch (Exception exp) {
+                System.out.println("Unable to create dump file: " + dump.getAbsoluteFile());
+                exp.printStackTrace();
             }
         }
 

@@ -873,17 +873,17 @@
         </constructor-arg>
     </bean>
 
+    <bean id="promotionCouponCodeGenerator" class="org.yes.cart.promotion.impl.PromotionCouponCodeGeneratorImpl">
+        <!-- CPOINT - generates 10 characters alpha num coupon codes -->
+        <constructor-arg index="0" value="10"/>
+    </bean>
+
     <bean id="promotionCouponService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.PromotionCouponServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="promotionCouponDao"/>
                 <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="promotionDao"/>
-                <constructor-arg index="2">
-                    <bean id="promotionCouponCodeGenerator" class="org.yes.cart.promotion.impl.PromotionCouponCodeGeneratorImpl">
-                        <!-- CPOINT - generates 10 characters alpha num coupon codes -->
-                        <constructor-arg index="0" value="10"/>
-                    </bean>
-                </constructor-arg>
+                <constructor-arg index="2" ref="promotionCouponCodeGenerator"/>
             </bean>
         </property>
     </bean>
@@ -914,6 +914,40 @@
         <constructor-arg index="0" ref="promotionCouponService"/>
     </bean>
 
+    <bean id="promotionContextFactoryActionsMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map>
+                <entry key="O">
+                    <map>
+                        <entry key="P" value-ref="promoActionOrderDiscount"/>
+                        <entry key="S" value-ref="promoActionOrderNonSaleDiscount"/>
+                        <entry key="F" value-ref="promoActionOrderAmountOff"/>
+                        <entry key="G" value-ref="promoActionOrderGift"/>
+                    </map>
+                </entry>
+                <entry key="S">
+                    <map>
+                        <entry key="P" value-ref="promoActionShippingDiscount"/>
+                        <entry key="F" value-ref="promoActionShippingAmountOff"/>
+                    </map>
+                </entry>
+                <entry key="I">
+                    <map>
+                        <entry key="P" value-ref="promoActionItemDiscount"/>
+                        <entry key="S" value-ref="promoActionItemNonSaleDiscount"/>
+                        <entry key="F" value-ref="promoActionItemAmountOff"/>
+                        <entry key="G" value-ref="promoActionItemGift"/>
+                    </map>
+                </entry>
+                <entry key="C">
+                    <map>
+                        <entry key="T" value-ref="promoActionCustomerTag"/>
+                    </map>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
     <bean id="promotionContextFactory" class="org.yes.cart.promotion.impl.PromotionContextFactoryCachedImpl">
         <constructor-arg>
             <bean parent="txProxyTemplate">
@@ -922,37 +956,7 @@
                         <constructor-arg index="0" ref="shopService"/>
                         <constructor-arg index="1" ref="promotionService"/>
                         <constructor-arg index="2" ref="promotionConditionParser"/>
-                        <constructor-arg index="3">
-                            <map>
-                                <entry key="O">
-                                    <map>
-                                        <entry key="P" value-ref="promoActionOrderDiscount"/>
-                                        <entry key="S" value-ref="promoActionOrderNonSaleDiscount"/>
-                                        <entry key="F" value-ref="promoActionOrderAmountOff"/>
-                                        <entry key="G" value-ref="promoActionOrderGift"/>
-                                    </map>
-                                </entry>
-                                <entry key="S">
-                                    <map>
-                                        <entry key="P" value-ref="promoActionShippingDiscount"/>
-                                        <entry key="F" value-ref="promoActionShippingAmountOff"/>
-                                    </map>
-                                </entry>
-                                <entry key="I">
-                                    <map>
-                                        <entry key="P" value-ref="promoActionItemDiscount"/>
-                                        <entry key="S" value-ref="promoActionItemNonSaleDiscount"/>
-                                        <entry key="F" value-ref="promoActionItemAmountOff"/>
-                                        <entry key="G" value-ref="promoActionItemGift"/>
-                                    </map>
-                                </entry>
-                                <entry key="C">
-                                    <map>
-                                        <entry key="T" value-ref="promoActionCustomerTag"/>
-                                    </map>
-                                </entry>
-                            </map>
-                        </constructor-arg>
+                        <constructor-arg index="3" ref="promotionContextFactoryActionsMapping"/>
                         <constructor-arg index="4" ref="bestValuePromotionApplicationStrategy"/>
                         <constructor-arg index="5" ref="promotionConditionSupport"/>
                         <constructor-arg index="6" ref="pricingPolicyProvider"/>
@@ -963,18 +967,22 @@
         </constructor-arg>
     </bean>
 
+    <bean id="promotionCouponContextActionsMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map>
+                <entry key="P" value-ref="promoActionOrderDiscount"/>
+                <entry key="S" value-ref="promoActionOrderNonSaleDiscount"/>
+                <entry key="F" value-ref="promoActionOrderAmountOff"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
     <bean id="promotionCouponContext" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.promotion.impl.PromotionCouponContextImpl">
                 <constructor-arg index="0" ref="promotionCouponService"/>
                 <constructor-arg index="1" ref="promotionConditionParser"/>
-                <constructor-arg index="2">
-                    <map>
-                        <entry key="P" value-ref="promoActionOrderDiscount"/>
-                        <entry key="S" value-ref="promoActionOrderNonSaleDiscount"/>
-                        <entry key="F" value-ref="promoActionOrderAmountOff"/>
-                    </map>
-                </constructor-arg>
+                <constructor-arg index="2" ref="promotionCouponContextActionsMapping"/>
                 <constructor-arg index="3" ref="bestValuePromotionApplicationStrategy"/>
             </bean>
         </property>
@@ -1409,6 +1417,8 @@
         <constructor-arg index="0" value="classpath:yc-config.properties"/>
         <constructor-arg index="1" ref="shopService"/>
     </bean>
+
+    <import resource="classpath*:core-services-ext.xml"/>
 
     <!-- ################################ Register module  ####################################################### -->
 

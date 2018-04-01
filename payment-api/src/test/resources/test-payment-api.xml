@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
@@ -31,6 +32,7 @@
     <context:annotation-config/>
 
     <import resource="classpath:payment-api.xml"/>
+    <import resource="payment-persistence-resources.xml"/>
 
     <bean id="payDataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
@@ -44,16 +46,9 @@
         <property name="defaultAutoCommit" value="true"/>
     </bean>
 
-
-
     <bean id="paySessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="payDataSource"/>
-        <property name="mappingResources">
-            <list>
-                <value>hibernate/ycp.xml</value>
-            </list>
-        </property>
-
+        <property name="mappingResources" ref="ycpMappingResources"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.show_sql">false</prop>
@@ -72,6 +67,5 @@
     <bean id="payTransactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="paySessionFactory"/>
     </bean>
-
 
 </beans>

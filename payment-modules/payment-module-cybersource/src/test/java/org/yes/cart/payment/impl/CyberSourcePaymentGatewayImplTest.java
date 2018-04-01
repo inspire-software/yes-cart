@@ -86,6 +86,7 @@ public class CyberSourcePaymentGatewayImplTest extends PaymentModuleDBTestCase {
         return "test-payment-module-cybersource.xml";
     }
 
+    @Override
     @Before
     public void setUp() throws Exception {
 
@@ -106,6 +107,8 @@ public class CyberSourcePaymentGatewayImplTest extends PaymentModuleDBTestCase {
         assumeTrue(allowed);
 
         if (allowed) {
+            super.setUp();
+
             customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
             cyberSourcePaymentGateway = (PaymentGatewayInternalForm) ctx().getBean("cyberSourcePaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, cyberSourcePaymentGateway);
@@ -136,7 +139,7 @@ public class CyberSourcePaymentGatewayImplTest extends PaymentModuleDBTestCase {
             assertEquals("cyberSourcePaymentGateway", parameter.getPgLabel());
         }
 
-        dumpDataBase("cybdata" , new String[] {"TPAYMENTGATEWAYPARAMETER"});
+        dumpDataBase("cybdata" , "TPAYMENTGATEWAYPARAMETER");
     }
 
 

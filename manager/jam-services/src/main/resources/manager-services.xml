@@ -24,6 +24,8 @@
     <import resource="manager-dto-services.xml"/>
     <import resource="manager-file-services.xml"/>
 
+    <import resource="classpath*:manager-services-ext.xml"/>
+
     <bean id="voSystemPreferencesService" class="org.yes.cart.service.vo.impl.VoSystemPreferencesServiceImpl">
         <constructor-arg index="0" ref="dtoSystemService"/>
         <constructor-arg index="1" ref="dtoAttributeService"/>
@@ -482,7 +484,7 @@
     </bean>
 
 
-    <bean id="voValidationService" class="org.yes.cart.service.vo.impl.VoValidationServiceImpl">
+    <bean id="voValidationServiceMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
         <constructor-arg index="0">
             <map>
                 <entry key="category">
@@ -621,6 +623,12 @@
                 </entry>
             </map>
         </constructor-arg>
+    </bean>
+
+    <import resource="classpath*:manager-services-validation-ext.xml"/>
+
+    <bean id="voValidationService" class="org.yes.cart.service.vo.impl.VoValidationServiceImpl">
+        <constructor-arg index="0" ref="voValidationServiceMapping"/>
     </bean>
 
     <bean id="voPaymentService" class="org.yes.cart.service.vo.impl.VoPaymentServiceImpl">

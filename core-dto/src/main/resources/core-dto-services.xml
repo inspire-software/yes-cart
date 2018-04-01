@@ -506,7 +506,7 @@
     </bean>
 
 
-    <bean id="dtoInterfaceToClassFactory" class="org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl">
+    <bean id="dtoInterfaceToClassFactoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO" value="org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl"/>
@@ -550,7 +550,7 @@
 
                 <entry key="org.yes.cart.domain.dto.AssociationDTO" value="org.yes.cart.domain.dto.impl.AssociationDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductAssociationDTO"  value="org.yes.cart.domain.dto.impl.ProductAssociationDTOImpl"/>
-                
+
                 <entry key="org.yes.cart.domain.dto.AddressDTO"  value="org.yes.cart.domain.dto.impl.AddressDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CarrierDTO"  value="org.yes.cart.domain.dto.impl.CarrierDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CarrierSlaDTO"  value="org.yes.cart.domain.dto.impl.CarrierSlaDTOImpl"/>
@@ -580,6 +580,11 @@
 
             </map>
         </constructor-arg>
+    </bean>
+
+
+    <bean id="dtoInterfaceToClassFactory" class="org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl">
+        <constructor-arg index="0" ref="dtoInterfaceToClassFactoryMapping"/>
     </bean>
 
     <!-- ######################### Dto to entity convertors and repository    ############################### -->
@@ -646,8 +651,7 @@
 
     <bean id="i18nStringConverter" class="org.yes.cart.domain.dto.adapter.impl.I18NStringConverter"/>
 
-    <bean id="dtoAssemblerAdaptersRepository"
-          class="com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl">
+    <bean id="dtoAssemblerAdaptersRepositoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="bigDecimalToFloat"                  value-ref="bigDecimalToFloat"/>
@@ -672,6 +676,13 @@
             </map>
         </constructor-arg>
     </bean>
+
+    <bean id="dtoAssemblerAdaptersRepository"
+          class="com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl">
+        <constructor-arg index="0" ref="dtoAssemblerAdaptersRepositoryMapping"/>
+    </bean>
+
+    <import resource="classpath*:core-dto-services-ext.xml"/>
 
     <!-- ################################ Register module  ####################################################### -->
 

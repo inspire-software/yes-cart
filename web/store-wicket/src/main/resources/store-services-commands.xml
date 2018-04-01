@@ -20,31 +20,17 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <import resource="classpath:core-services-commands.xml"/>
 
-    <!-- ############################# Shopping Cart Core Commands ######################### -->
+    <!-- ############################# Shopping Cart SF Commands ######################### -->
 
-    <bean id="setShopIdCmd" class="org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="shopService"/>
-        <property name="priority" value="0"/>
-    </bean>
-
-    <bean id="changeCurrencyCmd" class="org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="priceResolver"/>
-        <constructor-arg index="2" ref="pricingPolicyProvider"/>
-        <constructor-arg index="3" ref="productService"/>
-        <constructor-arg index="4" ref="shopService"/>
-        <property name="priority" value="1"/>
-    </bean>
-
-    <bean id="changeLocaleCmd" class="org.yes.cart.shoppingcart.impl.WicketChangeLocaleCartCommandImpl">
+    <bean id="changeLocaleCmdSF" class="org.yes.cart.shoppingcart.impl.WicketChangeLocaleCartCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" ref="languageService"/>
         <property name="priority" value="2"/>
     </bean>
 
-    <bean id="loginCmd" class="org.yes.cart.shoppingcart.impl.WicketLoginCommandImpl">
+    <bean id="loginCmdSF" class="org.yes.cart.shoppingcart.impl.WicketLoginCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" ref="customerService"/>
         <constructor-arg index="2" ref="shopService"/>
@@ -55,182 +41,15 @@
         <property name="priority" value="10"/>
     </bean>
 
-    <bean id="setTaxOptionsCmd" class="org.yes.cart.shoppingcart.impl.SetTaxOptionsCartCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <property name="priority" value="11"/>
-    </bean>
-
-    <bean id="restoreCmd" class="org.yes.cart.shoppingcart.impl.RestoreCartCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="shopService"/>
-        <property name="priority" value="12"/>
-    </bean>
-
-    <bean id="recalculatePriceCmd" class="org.yes.cart.shoppingcart.impl.RecalculateSkuPricesEventCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="priceResolver"/>
-        <constructor-arg index="2" ref="pricingPolicyProvider"/>
-        <constructor-arg index="3" ref="productService"/>
-        <constructor-arg index="4" ref="shopService"/>
-        <property name="priority" value="20"/>
-    </bean>
-
-    <bean id="splitCartItemsCmd" class="org.yes.cart.shoppingcart.impl.SplitCartItemsCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="orderSplittingStrategy"/>
-        <property name="priority" value="30"/>
-    </bean>
-
-    <bean id="setMultipleDeliveryCmd" class="org.yes.cart.shoppingcart.impl.SetMultipleDeliveryCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="orderSplittingStrategy"/>
-        <property name="priority" value="31"/>
-    </bean>
-
-    <bean id="setBillingAddressSeparateCmd" class="org.yes.cart.shoppingcart.impl.SetBillingSeparateFromShippingAddressCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <property name="priority" value="40"/>
-    </bean>
-
-    <bean id="setCarrierSlaCmd" class="org.yes.cart.shoppingcart.impl.SetCarrierSlaCartCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="deliveryTimeEstimationVisitor"/>
-        <property name="priority" value="41"/>
-    </bean>
-
-    <bean id="setAddressesCmd" class="org.yes.cart.shoppingcart.impl.SetAddressesCartCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <property name="priority" value="42"/>
-    </bean>
-
-    <bean id="setPgLabelCmd" class="org.yes.cart.shoppingcart.impl.SetPaymentGatewayLabelCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <property name="priority" value="50"/>
-    </bean>
-
-
-    <bean id="addToWishListCmd" class="org.yes.cart.shoppingcart.impl.AddSkuToWishListEventCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="priceResolver"/>
-        <constructor-arg index="2" ref="pricingPolicyProvider"/>
-        <constructor-arg index="3" ref="productService"/>
-        <constructor-arg index="4" ref="shopService"/>
-        <constructor-arg index="5" ref="customerService"/>
-        <constructor-arg index="6" ref="customerWishListService"/>
-        <constructor-arg index="7" ref="productQuantityStrategy"/>
-        <property name="priority" value="60"/>
-        <lookup-method name="getRemoveAllSku" bean="removeAllSkuCmd"/>
-    </bean>
-
-    <bean id="removeFromWishListCmd" class="org.yes.cart.shoppingcart.impl.RemoveSkuFromWishListEventCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="priceResolver"/>
-        <constructor-arg index="2" ref="pricingPolicyProvider"/>
-        <constructor-arg index="3" ref="productService"/>
-        <constructor-arg index="4" ref="shopService"/>
-        <constructor-arg index="5" ref="customerService"/>
-        <constructor-arg index="6" ref="customerWishListService"/>
-        <property name="priority" value="61"/>
-    </bean>
-
-
-    <bean id="addCouponCmd" class="org.yes.cart.shoppingcart.impl.AddCouponEventCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <property name="priority" value="70"/>
-    </bean>
-
-    <bean id="removeCouponCmd" class="org.yes.cart.shoppingcart.impl.RemoveCouponEventCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <property name="priority" value="71"/>
-    </bean>
-
-
-    <bean id="addToCartCmd" class="org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="priceResolver"/>
-        <constructor-arg index="2" ref="pricingPolicyProvider"/>
-        <constructor-arg index="3" ref="productService"/>
-        <constructor-arg index="4" ref="shopService"/>
-        <constructor-arg index="5" ref="productQuantityStrategy"/>
-        <property name="priority" value="80"/>
-    </bean>
-
-    <bean id="removeAllSkuCmd" class="org.yes.cart.shoppingcart.impl.RemoveAllSkuFromCartCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="priceResolver"/>
-        <constructor-arg index="2" ref="pricingPolicyProvider"/>
-        <constructor-arg index="3" ref="productService"/>
-        <constructor-arg index="4" ref="shopService"/>
-        <property name="priority" value="81"/>
-    </bean>
-
-    <bean id="removeOneSkuCmd" class="org.yes.cart.shoppingcart.impl.RemoveSkuFromCartCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="priceResolver"/>
-        <constructor-arg index="2" ref="pricingPolicyProvider"/>
-        <constructor-arg index="3" ref="productService"/>
-        <constructor-arg index="4" ref="shopService"/>
-        <constructor-arg index="5" ref="productQuantityStrategy"/>
-        <property name="priority" value="82"/>
-    </bean>
-
-    <bean id="setQuantityToCartCmd" class="org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="priceResolver"/>
-        <constructor-arg index="2" ref="pricingPolicyProvider"/>
-        <constructor-arg index="3" ref="productService"/>
-        <constructor-arg index="4" ref="shopService"/>
-        <constructor-arg index="5" ref="productQuantityStrategy"/>
-        <property name="priority" value="83"/>
-    </bean>
-
-    <bean id="setPriceCmd" class="org.yes.cart.shoppingcart.impl.SetSkuPriceEventCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <property name="priority" value="84"/>
-    </bean>
-
-    <bean id="expireCartCmd" class="org.yes.cart.shoppingcart.impl.ExpireCartCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <property name="priority" value="90"/>
-    </bean>
-
-    <bean id="cleanCartCmd" class="org.yes.cart.shoppingcart.impl.WicketCleanCartCommandImpl">
+    <bean id="cleanCartCmdSF" class="org.yes.cart.shoppingcart.impl.WicketCleanCartCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" ref="cartRepository"/>
         <property name="priority" value="100"/>
     </bean>
 
-    <bean id="logoutCmd" class="org.yes.cart.shoppingcart.impl.WicketLogoutCommandImpl">
+    <bean id="logoutCmdSF" class="org.yes.cart.shoppingcart.impl.WicketLogoutCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <property name="priority" value="101"/>
-    </bean>
-
-    <bean id="viewSkuInternalCmd" class="org.yes.cart.shoppingcart.impl.ViewProductSkuInternalCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" value="10"/>
-        <property name="priority" value="110"/>
-    </bean>
-
-    <bean id="setOrderMsgCmd" class="org.yes.cart.shoppingcart.impl.SetOrderMessageCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <property name="priority" value="111"/>
-    </bean>
-
-    <bean id="setIpInternalCmd" class="org.yes.cart.shoppingcart.impl.SetIpInternalCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <property name="priority" value="112"/>
-    </bean>
-
-    <bean id="setOrderDetailsCmd" class="org.yes.cart.shoppingcart.impl.SetOrderInfoDetailsCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <property name="priority" value="113"/>
-    </bean>
-
-    <bean id="resetPasswordCmd" class="org.yes.cart.shoppingcart.impl.PasswordResetCommandImpl">
-        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="customerService"/>
-        <constructor-arg index="2" ref="shopService"/>
-        <property name="priority" value="120"/>
     </bean>
 
     <!-- ################################ Register module  ####################################################### -->

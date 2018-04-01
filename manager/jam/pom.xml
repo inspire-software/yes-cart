@@ -402,6 +402,17 @@
         </profile>
 
         <profile>
+            <id>pricerules</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>int-module-marketing-pricerules</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
             <id>templates</id>
             <build>
                 <pluginManagement>

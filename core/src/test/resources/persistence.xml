@@ -17,11 +17,10 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd
-			               http://www.springframework.org/schema/aop
-			               http://www.springframework.org/schema/aop/spring-aop.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="classpath:dao-persistence-resources.xml"/>
 
     <!-- HSQLDB Data Source -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
@@ -38,29 +37,10 @@
         <property name="maxWait" value="500"/>
     </bean>
 
-    <!-- MySQL Data Source -->
-    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">-->
-        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
-        <!--<property name="url" value="jdbc:mysql://localhost/yes?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8"/>-->
-        <!--<property name="username" value="yes"/>-->
-        <!--<property name="password" value="y3$PaSs"/>-->
-        <!--<property name="initialSize" value="50"/>-->
-        <!--<property name="maxActive" value="1000"/>-->
-        <!--<property name="poolPreparedStatements" value="true"/>-->
-        <!--<property name="maxOpenPreparedStatements" value="1000"/>-->
-        <!--<property name="defaultAutoCommit" value="true"/>-->
-        <!--<property name="maxIdle" value="100"/>-->
-        <!--<property name="maxWait" value="500"/>-->
-    <!--</bean>-->
-
     <!-- Hibernate Session Factory  -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="mappingResources">
-            <list>
-                <value>hibernate/yc.xml</value>
-            </list>
-        </property>
+        <property name="mappingResources" ref="ycMappingResources"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
@@ -76,6 +56,7 @@
             <bean class="org.yes.cart.domain.interceptor.AuditInterceptor"/>
         </property>
     </bean>
+
 
     <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>

@@ -45,20 +45,69 @@ APPROACH TO EXTENSION
 
 Going forward the following extension points will be available as wildcard classpath imports in spring contexts:
 
+persistence
+- payment-persistence-resources-ext.xml in payment-persistence-resources.xml
+  ycpMappingResources list of persistence mapping (extend using ArrayListBean)
+  ycpProhibitedFields mapping of prohibited fields (extend using LinkedHashMapBean)
+- dao-persistence-resources-ext.xml in dao-persistence-resources.xml
+  ycMappingResources list of persistence mapping (extend using ArrayListBean)
+  ycProhibitedFields mapping of prohibited fields (extend using LinkedHashMapBean)
+- dao-mapping-ext.xml in dao.xml
+  entityClassFactoryMapping mapping for Entity (extend using LinkedHashMapBean)
+- dao-ext.xml in dao.xml
+
+core
+- core-services-ext.xml in core-services.xml
+  promotionContextFactoryActionsMapping mapping for actions (extend using LinkedHashMapBean)
+  promotionCouponContextActionsMapping mapping for actions (extend using LinkedHashMapBean)
+- cache-config-ext.xml in cache-config.xml
+  evictionConfig mapping for remove cache evictions (extend using LinkedHashMapBean)
+- core-dto-services-ext.xml in core-dto-services.xml
+  dtoInterfaceToClassFactoryMapping mapping for DTO (extend using LinkedHashMapBean)
+  dtoAssemblerAdaptersRepositoryMapping mapping for DTO adapters (extend using LinkedHashMapBean)
+- core-orderstate-aspects-ext.xml in core-orderstate-aspects.xml
+  paymentNotificationAspectAuthoriseShopperTemplates mapping for AUTH or AUTH_CAPTURE result (extend using LinkedHashMapBean)
+  paymentNotificationAspectAuthoriseAdminTemplates mapping for AUTH or AUTH_CAPTURE result (extend using LinkedHashMapBean)
+  paymentNotificationAspectCancelShopperTemplates mapping for CANCEL result (extend using LinkedHashMapBean)
+  paymentNotificationAspectCancelAdminTemplates mapping for CANCEL result (extend using LinkedHashMapBean)
+  paymentNotificationAspectShipmentShopperTemplates mapping for shipment CAPTURE result (extend using LinkedHashMapBean)
+  paymentNotificationAspectShipmentAdminTemplates mapping for shipment CAPTURE result (extend using LinkedHashMapBean)
+  orderStateChangeAspectShopperTemplates mapping for order state change mails (extend using LinkedHashMapBean)
+  orderStateChangeAspectAdminTemplates mapping for order state change mails (extend using LinkedHashMapBean)
+- core-orderstate-ext.xml in core-orderstate.xml
+  orderStateManagerHandlersMapping mapping for order events handlers (extend using LinkedHashMapBean)
+  orderStateManagerBeforeListenersMapping mapping for order events listeners triggered before event (extend using LinkedHashMapBean)
+  orderStateManagerAfterListenersMapping mapping for order events listeners triggered after event (extend using LinkedHashMapBean)
+- core-federation-impex-ext.xml in core-federation-impex.xml
+  importFederationFacadeFilters mapping impex filters (extend using LinkedHashMapBean)
+  exportFederationFacadeFilters mapping impex filters (extend using LinkedHashMapBean)
+- manager-dto-services-ext.xml in manager-dto-services.xml
+  voKeyToClassFactoryMapping mapping for VO (extend using LinkedHashMapBean)
+  voAssemblerAdaptersRepositoryMapping mapping for VO adapters (extend using LinkedHashMapBean)
+- manager-services-validation-ext.xml in manager-services.xml
+  voValidationServiceMapping mapping for remote validators (extend using LinkedHashMapBean)
+- manager-services-ext.xml in manager-services.xml
+
+
 manager/jam
 
 - adm-applicationContext-ext.xml in applicationContext.xml
 - adm-servlet-ext.xml in jam-servlet.xml
 - for @Controller the following packages are scanned "org.yes.cart.service.endpoint,org.yes.cart.service.endpoint.impl"
 - adm-cronjob-ext.xml in manager-cronjob.xml
+  managerCronScheduleTriggers list of cron triggers (extend using ArrayListBean)
 
 web/support
 
 - websupport-ext.xml in websupport-webapp.xml
 - websupport-cronjob-ext.xml in websupport-cronjob.xml
+  webCronScheduleTriggers list of cron triggers (extend using ArrayListBean)
 
 web/api
 
+- api-ext.xml in api.xml
+  roInterfaceToClassFactoryMapping mapping for MO (extend using LinkedHashMapBean)
+  roAssemblerAdaptersRepositoryMapping mapping for MO adapters (extend using LinkedHashMapBean)
 - api-applicationContext-ext.xml in applicationContext.xml
 - api-servlet-ext.xml in rest-servlet.xml
 - for @Controller the following packages are scanned "org.yes.cart.web.service.rest"
@@ -66,8 +115,16 @@ web/api
 web/store-wicket
 
 - sfw-applicationContext-ext.xml in applicationContext.xml
+- wicket-ext.xml in wicket.xml
+  wicketPagesMapping wicket URI to pages mapping (extend using LinkedHashMapBean)
+  wicketPagesEncoderEnabledUrls wicket URI list of SEO supported encoder pages (extend using ArrayListBean)
+  wicketResourceMounterEnabledPatterns wicket resource mounter enabled patterns (extend using ArrayListBean)
+  wicketResourcesMapping wicket IResources mapping (extend using LinkedHashMapBean)
+  wicketRendererPanelMap wicket central panel view mapping (extend using LinkedHashMapBean)
+  wicketCategoryTypeMap wicket category central view type mapping (extend using LinkedHashMapBean)
 
-Each custom module must bundle all code necessary to run its functions and expose its functions viw spring context
+
+Each custom module must bundle all code necessary to run its functions and expose its functions via spring context
 extension points described above (xml + @Controller)
 
 To bundle the modules in custom builds maven profile technique is recommended to be used in pom.xml of specific

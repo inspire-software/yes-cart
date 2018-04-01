@@ -21,10 +21,12 @@ import org.apache.wicket.markup.html.SecurePackageResourceGuard;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.web.theme.WicketResourceMounter;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -33,27 +35,19 @@ import java.util.List;
  */
 public class WicketResourceMounterImpl implements WicketResourceMounter {
 
-    private final List<String> enabledPatterns = new ArrayList<>();
+    private static final Logger LOG = LoggerFactory.getLogger(WicketResourceMounterImpl.class);
 
-    private IResource sitemapXml;
-    private IResource orderPdf;
+    private List<String> enabledPatterns;
 
-    /**
-     * Wicket resource via Spring IoC.
-     *
-     * @param sitemapXml sitemap resource
-     */
-    public void setSitemapXml(final IResource sitemapXml) {
-        this.sitemapXml = sitemapXml;
-    }
+    private Map<String, IResource> resources;
 
     /**
      * Wicket resource via Spring IoC.
      *
-     * @param orderPdf order receipt resource
+     * @param resources resources
      */
-    public void setOrderPdf(final IResource orderPdf) {
-        this.orderPdf = orderPdf;
+    public void setResources(final Map<String, IResource> resources) {
+        this.resources = resources;
     }
 
     /**
@@ -62,7 +56,7 @@ public class WicketResourceMounterImpl implements WicketResourceMounter {
      * @param enabledPatterns patterns
      */
     public void setEnabledPatterns(final List<String> enabledPatterns) {
-        this.enabledPatterns.addAll(enabledPatterns);
+        this.enabledPatterns = enabledPatterns;
     }
 
     /** {@inheritDoc} */
@@ -74,8 +68,11 @@ public class WicketResourceMounterImpl implements WicketResourceMounter {
         {
             SecurePackageResourceGuard guard = (SecurePackageResourceGuard) packageResourceGuard;
 
-            for (final String pattern : enabledPatterns) {
-                guard.addPattern(pattern);
+            if (enabledPatterns != null) {
+                for (final String pattern : enabledPatterns) {
+                    LOG.info("Enabling resource pattern '{}'", pattern);
+                    guard.addPattern(pattern);
+                }
             }
         }
 
@@ -85,19 +82,19 @@ public class WicketResourceMounterImpl implements WicketResourceMounter {
     @Override
     public void mountResources(final WebApplication webApplication) {
 
-        webApplication.mountResource("/sitemap.xml", new ResourceReference("sitemap.xml"){
-            @Override
-            public IResource getResource() {
-                return sitemapXml;
+        if (resources != null) {
+            for (final Map.Entry<String, IResource> resource : resources.entrySet()) {
+                final String key = resource.getKey();
+                final IResource source = resource.getValue();
+                LOG.info("Mounting url '/{}' to resource '{}'", key, source.getClass().getCanonicalName());
+                webApplication.mountResource("/" + key, new ResourceReference(key){
+                    @Override
+                    public IResource getResource() {
+                        return source;
+                    }
+                });
             }
-        });
-
-        webApplication.mountResource("/orderreceipt.pdf", new ResourceReference("orderreceipt.pdf"){
-            @Override
-            public IResource getResource() {
-                return orderPdf;
-            }
-        });
+        }
 
     }
 }

@@ -48,9 +48,8 @@
         <lookup-method name="getNewInstance" bean="wicketMultiMarkupCache"/>
     </bean>
 
-    <bean id="wicketPagesMounter" class="org.yes.cart.web.theme.impl.WicketPagesMounterImpl">
-        <constructor-arg index="0" ref="seoBookmarkablePageParametersEncoder"/>
-        <constructor-arg index="1">
+    <bean id="wicketPagesMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
             <map>
                 <entry key="/">
                     <map>
@@ -144,10 +143,10 @@
                 </entry>
             </map>
         </constructor-arg>
-        <constructor-arg index="2">
-            <value>/login</value>
-        </constructor-arg>
-        <constructor-arg index="3">
+    </bean>
+
+    <bean id="wicketPagesEncoderEnabledUrls" class="org.yes.cart.util.spring.ArrayListBean">
+        <constructor-arg>
             <list>
                 <value>/</value>
                 <value>/ajaxatb</value>
@@ -157,8 +156,8 @@
         </constructor-arg>
     </bean>
 
-    <bean id="wicketResourceMounter" class="org.yes.cart.web.theme.impl.WicketResourceMounterImpl">
-        <property name="enabledPatterns">
+    <bean id="wicketResourceMounterEnabledPatterns" class="org.yes.cart.util.spring.ArrayListBean">
+        <constructor-arg>
             <list>
                 <!-- Custom fonts support -->
                 <value>+*.eot</value>
@@ -177,15 +176,20 @@
                 <!-- Google sitemap generation -->
                 <value>+*sitemap.xml</value>
             </list>
-        </property>
-        <property name="sitemapXml" ref="sitemapXmlResource"/>
-        <property name="orderPdf" ref="orderPdfResource"/>
+        </constructor-arg>
     </bean>
 
-    <bean id="wicketCentralViewProvider" class="org.yes.cart.web.theme.impl.WicketCentralViewProviderImpl">
-        <constructor-arg index="0" ref="shopService"/>
-        <constructor-arg index="1" ref="categoryService"/>
-        <constructor-arg index="2">
+    <bean id="wicketResourcesMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map>
+                <entry key="sitemap.xml" value-ref="sitemapXmlResource"/>
+                <entry key="orderreceipt.pdf" value-ref="orderPdfResource"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="wicketRendererPanelMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
             <map key-type="java.lang.String" value-type="java.lang.Class">
                 <entry key="subcats"        value="org.yes.cart.web.page.component.SubCategoriesCentralView"/>
                 <entry key="products"       value="org.yes.cart.web.page.component.ProductsCentralView"/>
@@ -199,7 +203,10 @@
                 <entry key="include"        value="org.yes.cart.web.page.component.EmptyCentralView"/>
             </map>
         </constructor-arg>
-        <constructor-arg index="3">
+    </bean>
+
+    <bean id="wicketCategoryTypeMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
             <map key-type="java.lang.Class" value-type="org.yes.cart.web.theme.impl.WicketCentralViewProviderImpl.CategoryType">
                 <entry key="org.yes.cart.web.page.component.EmptyCentralView"           value="CATEGORY"/>
                 <entry key="org.yes.cart.web.page.component.SubCategoriesCentralView"   value="CATEGORY"/>
@@ -209,6 +216,29 @@
                 <entry key="org.yes.cart.web.page.component.DynoContentCentralView"     value="CONTENT"/>
             </map>
         </constructor-arg>
+    </bean>
+
+    <import resource="classpath*:wicket-ext.xml"/>
+
+    <bean id="wicketPagesMounter" class="org.yes.cart.web.theme.impl.WicketPagesMounterImpl">
+        <constructor-arg index="0" ref="seoBookmarkablePageParametersEncoder"/>
+        <constructor-arg index="1" ref="wicketPagesMapping"/>
+        <constructor-arg index="2">
+            <value>/login</value>
+        </constructor-arg>
+        <constructor-arg index="3" ref="wicketPagesEncoderEnabledUrls"/>
+    </bean>
+
+    <bean id="wicketResourceMounter" class="org.yes.cart.web.theme.impl.WicketResourceMounterImpl">
+        <property name="enabledPatterns" ref="wicketResourceMounterEnabledPatterns"/>
+        <property name="resources" ref="wicketResourcesMapping"/>
+    </bean>
+
+    <bean id="wicketCentralViewProvider" class="org.yes.cart.web.theme.impl.WicketCentralViewProviderImpl">
+        <constructor-arg index="0" ref="shopService"/>
+        <constructor-arg index="1" ref="categoryService"/>
+        <constructor-arg index="2" ref="wicketRendererPanelMap"/>
+        <constructor-arg index="3" ref="wicketCategoryTypeMap"/>
     </bean>
 
     <bean id="sitemapXmlResource" class="org.yes.cart.web.resource.SitemapXmlResource">

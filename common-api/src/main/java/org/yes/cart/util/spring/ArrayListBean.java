@@ -16,6 +16,9 @@
 
 package org.yes.cart.util.spring;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,11 +32,18 @@ import java.util.List;
  */
 public class ArrayListBean<E> extends ArrayList<E> {
 
+    private static final Logger LOG = LoggerFactory.getLogger("CONFIG");
+
     private final ArrayListBean<E> parent;
 
     public ArrayListBean(final Collection<E> base) {
         super(base);
-        parent = base instanceof ArrayListBean ? (ArrayListBean<E>) base : null;
+        if (base instanceof ArrayListBean) {
+            parent = (ArrayListBean<E>) base;
+        } else {
+            parent = null;
+            logList(this, false);
+        }
     }
 
     /**
@@ -41,10 +51,21 @@ public class ArrayListBean<E> extends ArrayList<E> {
      *
      * @param extension extension
      */
-    public void setExtensionList(List<E> extension) {
+    public void setExtensionList(final List<E> extension) {
         this.addAll(extension);
         if (this.parent != null) {
+            logList(extension, true);
             this.parent.addAll(extension);
+        }
+    }
+
+    private void logList(final List<E> list, final boolean extending) {
+        for (final E item : list) {
+            if (extending) {
+                LOG.debug("loading list extension {}", item);
+            } else {
+                LOG.debug("loading extendable list {}", item);
+            }
         }
     }
 

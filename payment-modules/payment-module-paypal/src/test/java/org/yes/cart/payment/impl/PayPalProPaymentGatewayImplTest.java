@@ -117,6 +117,8 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         assumeTrue(allowed);
 
         if (allowed) {
+            super.setUp();
+            
             customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
             payPalProPaymentGateway = (PayPalProPaymentGatewayImpl) ctx().getBean("payPalProPaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, payPalProPaymentGateway);
