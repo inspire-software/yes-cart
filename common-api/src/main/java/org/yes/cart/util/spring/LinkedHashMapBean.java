@@ -19,6 +19,7 @@ package org.yes.cart.util.spring;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanNameAware;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -30,21 +31,17 @@ import java.util.Map;
  * Date: 31/03/2018
  * Time: 16:14
  */
-public class LinkedHashMapBean<K, V> extends LinkedHashMap<K, V> implements BeanNameAware {
+public class LinkedHashMapBean<K, V> extends LinkedHashMap<K, V> implements BeanNameAware, InitializingBean {
 
     private static final Logger LOG = LoggerFactory.getLogger("CONFIG");
 
     private String name;
     private final LinkedHashMapBean<K, V> parent;
+    private Map<K, V> extension;
 
     public LinkedHashMapBean(final Map<K, V> base) {
         super(base);
-        if (base instanceof LinkedHashMapBean) {
-            parent = (LinkedHashMapBean<K, V>) base;
-        } else {
-            parent = null;
-            logMap(this, false);
-        }
+        parent = base instanceof LinkedHashMapBean ? (LinkedHashMapBean<K, V>) base : null;
     }
 
     /**
@@ -53,10 +50,27 @@ public class LinkedHashMapBean<K, V> extends LinkedHashMap<K, V> implements Bean
      * @param extension extension
      */
     public void setExtension(final Map<K, V> extension) {
-        this.putAll(extension);
+        if (this.parent == null) {
+            throw new UnsupportedOperationException("Unable to extend map without parent LinkedHashMapBean");
+        }
+        this.extension = extension;
+    }
+
+    @Override
+    public void setBeanName(final String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        if (extension != null) {
+            this.putAll(extension);
+        }
         if (this.parent != null) {
             logMap(extension, true);
             this.parent.putAll(extension);
+        } else { // this is root
+            logMap(this, false);
         }
     }
 
@@ -64,18 +78,13 @@ public class LinkedHashMapBean<K, V> extends LinkedHashMap<K, V> implements Bean
         for (final Map.Entry<K, V> item : map.entrySet()) {
             if (extending) {
                 if (this.parent.containsKey(item.getKey())) {
-                    LOG.warn("{} loading map extension (override) {}", this.name, item);
+                    LOG.warn("{}:{} loading map extension (override) {}", this.parent.name, this.name, item);
                 } else {
-                    LOG.debug("{} loading map extension {}", this.name, item);
+                    LOG.debug("{}:{} loading map extension {}", this.parent.name, this.name, item);
                 }
             } else {
                 LOG.debug("{} loading extendable map {}", this.name, item);
             }
         }
-    }
-
-    @Override
-    public void setBeanName(final String name) {
-        this.name = name;
     }
 }

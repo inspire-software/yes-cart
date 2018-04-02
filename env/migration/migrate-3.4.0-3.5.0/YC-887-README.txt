@@ -46,11 +46,11 @@ APPROACH TO EXTENSION
 Going forward the following extension points will be available as wildcard classpath imports in spring contexts:
 
 persistence
+- hibernate/yc.xml extension for yc DB
+- hibernate/ycp.xml extension for ycp DB
 - payment-persistence-resources-ext.xml in payment-persistence-resources.xml
-  ycpMappingResources list of persistence mapping (extend using ArrayListBean)
   ycpProhibitedFields mapping of prohibited fields (extend using LinkedHashMapBean)
 - dao-persistence-resources-ext.xml in dao-persistence-resources.xml
-  ycMappingResources list of persistence mapping (extend using ArrayListBean)
   ycProhibitedFields mapping of prohibited fields (extend using LinkedHashMapBean)
 - dao-mapping-ext.xml in dao.xml
   entityClassFactoryMapping mapping for Entity (extend using LinkedHashMapBean)

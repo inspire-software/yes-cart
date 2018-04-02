@@ -23,8 +23,8 @@
     <import resource="classpath:dao-persistence-resources.xml"/>
     <import resource="classpath:payment-persistence-resources.xml"/>
 
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
-          autowire="byName"><!-- add if using 2nd lvl cache: depends-on="hibernateCacheManagerProvider" -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <!-- add if using 2nd lvl cache: depends-on="hibernateCacheManagerProvider" -->
         <!--
             YC-315 investigation showed that we should not use 2nd level cache as it created adverse
             effect on performance by splitting selects into N + 1 selects in order to manage cache
@@ -32,7 +32,8 @@
             It seems like we never use objects by PK and hence YC does not benefit from 2nd level cache
          -->
         <!--<property name="configLocation" value="classpath:hibernate.cfg.xml"/>-->
-        <property name="mappingResources" ref="ycMappingResources"/>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mappingLocations" value="classpath*:hibernate/yc.xml"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.cache.use_second_level_cache">false</prop>
@@ -50,7 +51,7 @@
 
     <bean id="paySessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="payDataSource"/>
-        <property name="mappingResources" ref="ycpMappingResources"/>
+        <property name="mappingLocations" value="classpath*:hibernate/ycp.xml"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.show_sql">false</prop>

@@ -98,6 +98,12 @@
             <artifactId>spring-ws-core</artifactId>
             <version>${spring-ws.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- Jaxb -->
         <dependency>

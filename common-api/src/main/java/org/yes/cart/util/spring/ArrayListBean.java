@@ -19,6 +19,7 @@ package org.yes.cart.util.spring;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanNameAware;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,21 +32,17 @@ import java.util.List;
  * Date: 25/03/2018
  * Time: 15:36
  */
-public class ArrayListBean<E> extends ArrayList<E> implements BeanNameAware {
+public class ArrayListBean<E> extends ArrayList<E> implements BeanNameAware, InitializingBean {
 
     private static final Logger LOG = LoggerFactory.getLogger("CONFIG");
 
     private String name;
     private final ArrayListBean<E> parent;
+    private List<E> extension;
 
     public ArrayListBean(final Collection<E> base) {
         super(base);
-        if (base instanceof ArrayListBean) {
-            parent = (ArrayListBean<E>) base;
-        } else {
-            parent = null;
-            logList(this, false);
-        }
+        parent = base instanceof ArrayListBean ? (ArrayListBean<E>) base : null;
     }
 
     /**
@@ -54,25 +51,37 @@ public class ArrayListBean<E> extends ArrayList<E> implements BeanNameAware {
      * @param extension extension
      */
     public void setExtension(final List<E> extension) {
-        this.addAll(extension);
+        if (this.parent == null) {
+            throw new UnsupportedOperationException("Unable to extend list without parent ArrayListBean");
+        }
+        this.extension = extension;
+    }
+
+    @Override
+    public void setBeanName(final String name) {
+         this.name = name;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        if (extension != null) {
+            this.addAll(extension);
+        }
         if (this.parent != null) {
             logList(extension, true);
             this.parent.addAll(extension);
+        } else { // this is root
+            logList(this, false);
         }
     }
 
     private void logList(final List<E> list, final boolean extending) {
         for (final E item : list) {
             if (extending) {
-                LOG.debug("{} loading list extension {}", this.name, item);
+                LOG.debug("{}:{} loading list extension {}", this.parent.name, this.name, item);
             } else {
-                LOG.debug("{} loading extendable list {}", this.name, item);
+                LOG.debug("{} loading extendable list item {}", this.name, item);
             }
         }
-    }
-
-    @Override
-    public void setBeanName(final String name) {
-         this.name = name;
     }
 }

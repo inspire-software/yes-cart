@@ -34,10 +34,16 @@ public class ArrayListBeanTest {
     public void setExtensionListExtend() throws Exception {
 
         final ArrayListBean<String> parent = new ArrayListBean<>(Arrays.asList("a", "b", "c"));
+        parent.setBeanName("parent");
+        parent.afterPropertiesSet();
         final ArrayListBean<String> child1 = new ArrayListBean<>(parent);
         child1.setExtension(Arrays.asList("d", "e"));
+        child1.setBeanName("child1");
+        child1.afterPropertiesSet();
         final ArrayListBean<String> child2 = new ArrayListBean<>(parent);
         child2.setExtension(Arrays.asList("f", "g"));
+        child2.setBeanName("child2");
+        child2.afterPropertiesSet();
 
         assertTrue(parent.containsAll(Arrays.asList("a", "b", "c", "d", "e", "f", "g")));
         assertEquals(7, parent.size());

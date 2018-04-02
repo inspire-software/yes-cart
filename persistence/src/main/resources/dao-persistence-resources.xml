@@ -20,14 +20,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="ycMappingResources" class="org.yes.cart.util.spring.ArrayListBean">
-        <constructor-arg>
-            <list>
-                <value>hibernate/yc.xml</value>
-            </list>
-        </constructor-arg>
-    </bean>
-
     <bean id="ycProhibitedFields" class="org.yes.cart.util.spring.LinkedHashMapBean">
         <constructor-arg>
             <map key-type="java.lang.String" value-type="java.lang.String">

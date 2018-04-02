@@ -41,7 +41,7 @@
     <!-- Hibernate Session Factory  -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="mappingResources" ref="ycMappingResources"/>
+        <property name="mappingLocations" value="classpath*:hibernate/yc.xml"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
@@ -79,7 +79,7 @@
 
     <bean id="paySessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="payDataSource"/>
-        <property name="mappingResources" ref="ycpMappingResources"/>
+        <property name="mappingLocations" value="classpath*:hibernate/ycp.xml"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.show_sql">false</prop>

@@ -21,7 +21,6 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="classpath:dao-persistence-resources.xml"/>
-    <import resource="classpath:dao-persistence-resources-ext.xml"/>
 
     <!-- HSQLDB Data Source -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
@@ -39,7 +38,7 @@
     <!-- Hibernate Session Factory  -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="mappingResources" ref="ycMappingResources"/>
+        <property name="mappingLocations" value="classpath*:hibernate/yc.xml"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
