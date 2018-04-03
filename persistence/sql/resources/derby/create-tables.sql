@@ -1006,6 +1006,7 @@
         ELIGIBILITY_CONDITION varchar(4000) not null,
         MARGIN_PERCENT numeric(9,2),
         MARGIN_AMOUNT numeric(9,2),
+        ADD_DEFAULT_TAX smallint not null,
         ROUNDING_UNIT numeric(9,2),
         PRICE_TAG varchar(255),
         PRICE_REF varchar(255),

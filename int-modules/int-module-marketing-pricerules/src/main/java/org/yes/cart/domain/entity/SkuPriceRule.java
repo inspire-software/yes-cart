@@ -99,6 +99,20 @@ public interface SkuPriceRule extends Auditable, Codable, Taggable, Rankable, Na
     void setMarginAmount(BigDecimal marginAmount);
 
     /**
+     * Add default tax. (Used to transform NET prices into GROSS prices).
+     *
+     * @return true if default tax rate should be resolved and and added to calculated price
+     */
+    boolean isAddDefaultTax();
+
+    /**
+     * Set add tax flag.
+     *
+     * @param addDefaultTax flag
+     */
+    void setAddDefaultTax(boolean addDefaultTax);
+
+    /**
      * Rounding unit context. Rounding unit specifies the commercial rounding for the generated price. Default rounding
      * is “0.01”, i.e. to one cent. For whole prices “1.00” can be used. For nearest 5 cents “0.05” and so on.
      *

@@ -39,6 +39,7 @@ public class SkuPriceRuleEntity implements org.yes.cart.domain.entity.SkuPriceRu
 
     private BigDecimal marginPercent;
     private BigDecimal marginAmount;
+    private boolean addDefaultTax;
     private BigDecimal roundingUnit;
     private String priceTag;
     private String priceRef;
@@ -153,6 +154,16 @@ public class SkuPriceRuleEntity implements org.yes.cart.domain.entity.SkuPriceRu
     @Override
     public void setMarginAmount(final BigDecimal marginAmount) {
         this.marginAmount = marginAmount;
+    }
+
+    @Override
+    public boolean isAddDefaultTax() {
+        return addDefaultTax;
+    }
+
+    @Override
+    public void setAddDefaultTax(final boolean addDefaultTax) {
+        this.addDefaultTax = addDefaultTax;
     }
 
     @Override
@@ -327,6 +338,7 @@ public class SkuPriceRuleEntity implements org.yes.cart.domain.entity.SkuPriceRu
                 ", eligibilityCondition='" + eligibilityCondition + '\'' +
                 ", marginPercent=" + marginPercent +
                 ", marginAmount=" + marginAmount +
+                ", addDefaultTax=" + addDefaultTax +
                 ", roundingUnit=" + roundingUnit +
                 ", priceTag='" + priceTag + '\'' +
                 ", priceRef='" + priceRef + '\'' +

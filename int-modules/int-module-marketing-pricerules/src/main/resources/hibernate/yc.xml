@@ -37,6 +37,7 @@
         <property name="eligibilityCondition" column="ELIGIBILITY_CONDITION" type="string" length="4000" not-null="true"/>
         <property name="marginPercent" column="MARGIN_PERCENT" type="java.math.BigDecimal" not-null="false"/>
         <property name="marginAmount" column="MARGIN_AMOUNT" type="java.math.BigDecimal" not-null="false"/>
+        <property name="addDefaultTax" column="ADD_DEFAULT_TAX" type="boolean" length="1"  not-null="true"/>
         <property name="roundingUnit" column="ROUNDING_UNIT" type="java.math.BigDecimal" not-null="false"/>
 
         <property name="rank" column="RANK" type="int" not-null="true" />
