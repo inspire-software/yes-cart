@@ -63,6 +63,14 @@ public class CarrierSlaServiceCachedImpl implements CarrierSlaService {
         carrierSlaService.findAllIterator(callback);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<CarrierSla> callback) {
+        carrierSlaService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
     /** {@inheritDoc} */
     @Override
     public CarrierSla findById(final long pk) {

@@ -197,6 +197,14 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
         skuWarehouseService.findAllIterator(callback);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<SkuWarehouse> callback) {
+        skuWarehouseService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
     /** {@inheritDoc} */
     @Override
     public SkuWarehouse findById(final long pk) {

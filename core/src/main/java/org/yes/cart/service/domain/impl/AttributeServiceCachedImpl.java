@@ -225,6 +225,13 @@ public class AttributeServiceCachedImpl implements AttributeService {
         attributeService.findAllIterator(callback);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<Attribute> callback) {
+        attributeService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
 
     /**
      * {@inheritDoc}

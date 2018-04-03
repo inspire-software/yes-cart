@@ -171,6 +171,14 @@ public class ImageServiceCachedImpl implements ImageService {
      * {@inheritDoc}
      */
     @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<SeoImage> callback) {
+        imageService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public SeoImage findById(final long pk) {
         return imageService.findById(pk);
     }

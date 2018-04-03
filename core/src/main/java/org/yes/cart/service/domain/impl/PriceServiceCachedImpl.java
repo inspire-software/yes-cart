@@ -99,6 +99,14 @@ public class PriceServiceCachedImpl implements PriceService {
      * {@inheritDoc}
      */
     @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<SkuPrice> callback) {
+        priceService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public SkuPrice findById(final long pk) {
         return priceService.findById(pk);
     }

@@ -114,6 +114,14 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     @Override
+    public ResultsIterator<T> findByCriteriaIterator(final String eCriteria, final Object... parameters) {
+        return genericDAO.findByCriteriaIterator(eCriteria, parameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public T findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
         return genericDAO.findSingleByNamedQuery(namedQueryName, parameters);
     }

@@ -91,6 +91,14 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
      * {@inheritDoc}
      */
     @Override
+    public ResultsIterator<T> findByCriteriaIterator(final String eCriteria, final Object... parameters) {
+        return delegate.findByCriteriaIterator(eCriteria, parameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public T findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
         return delegate.findSingleByNamedQuery(namedQueryName, parameters);
     }

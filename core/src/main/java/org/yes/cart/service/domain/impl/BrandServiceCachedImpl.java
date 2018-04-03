@@ -75,6 +75,14 @@ public class BrandServiceCachedImpl implements BrandService {
      * {@inheritDoc}
      */
     @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<Brand> callback) {
+        brandService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Brand findById(final long pk) {
         return brandService.findById(pk);
     }

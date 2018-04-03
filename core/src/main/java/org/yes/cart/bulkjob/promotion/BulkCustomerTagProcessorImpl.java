@@ -61,66 +61,57 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
 
         LOG.info("Processing tagging for customer");
 
-        final ResultsIterator<Customer> customerIterator = customerService.getGenericDao().findAllIterator();
-
         try {
 
-            int count = 0;
-            int updated = 0;
+            int count[] = new int[] { 0 };
+            int updated[] = new int[] { 0 };
 
-            while (customerIterator.hasNext())  {
+            customerService.findAllIterator(customer -> {
 
-                final Customer customer = customerIterator.next();
                 final String tagsBefore = customer.getTag();
 
                 LOG.debug("Processing tagging for customer {} with tags {}", customer.getEmail(), tagsBefore);
 
-                if (customer.isGuest()) {
-                    continue; // skip guest accounts
-                }
+                if (!customer.isGuest()) { // only registered accounts
 
-                for (final CustomerShop customerShop : customer.getShops()) {
+                    for (final CustomerShop customerShop : customer.getShops()) {
 
-                    final Shop shop = shopService.getById(customerShop.getShop().getShopId());
-                    for (final String currency : shop.getSupportedCurrenciesAsList()) {
+                        final Shop shop = shopService.getById(customerShop.getShop().getShopId());
+                        for (final String currency : shop.getSupportedCurrenciesAsList()) {
 
-                        final PromotionContext promotionContext =
-                                promotionContextFactory.getInstance(shop.getCode(), currency);
+                            final PromotionContext promotionContext =
+                                    promotionContextFactory.getInstance(shop.getCode(), currency);
 
-                        promotionContext.applyCustomerPromo(customer, null);
+                            promotionContext.applyCustomerPromo(customer, null);
+
+                        }
 
                     }
 
+                    if (!StringUtils.equals(tagsBefore, customer.getTag())) {
+                        customerService.update(customer);
+                        LOG.debug("Tags changed for customer {} with tags {} to {}",
+                                customer.getEmail(), tagsBefore, customer.getTag());
+                        updated[0]++;
+                    } else {
+                        LOG.debug("No tag change for customer {} with tags {}", customer.getEmail(), tagsBefore);
+                    }
+
+                    if (++count[0] % this.batchSize == 0) {
+                        //flush a batch of updates and release memory:
+                        customerService.getGenericDao().flush();
+                        customerService.getGenericDao().clear();
+                    }
                 }
 
-                if (!StringUtils.equals(tagsBefore, customer.getTag())) {
-                    customerService.update(customer);
-                    LOG.debug("Tags changed for customer {} with tags {} to {}",
-                            customer.getEmail(), tagsBefore, customer.getTag());
-                    updated++;
-                } else {
-                    LOG.debug("No tag change for customer {} with tags {}", customer.getEmail(), tagsBefore);
-                }
-
-                if (++count % this.batchSize == 0 ) {
-                    //flush a batch of updates and release memory:
-                    customerService.getGenericDao().flush();
-                    customerService.getGenericDao().clear();
-                }
-
-            }
+                return true; // all
+            });
 
             LOG.info("Processed tagging for {} customers, updated {}", count, updated);
 
         } catch (Exception exp){
             LOG.error(Markers.alert(), "Processing tagging for customer error: " + exp.getMessage(), exp);
             throw new RuntimeException(exp);  // exception will make the transaction rollback anyway
-        } finally {
-            try {
-                customerIterator.close();
-            } catch (Exception exp) {
-                LOG.error("Processing tagging for customer exception, error closing iterator: " + exp.getMessage(), exp);
-            }
         }
 
         LOG.info("Processing tagging for customer ... completed");

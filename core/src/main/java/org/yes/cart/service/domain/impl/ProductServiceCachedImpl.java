@@ -464,6 +464,14 @@ public class ProductServiceCachedImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<Product> callback) {
+        productService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Product findById(final long pk) {
         return productService.findById(pk);
     }

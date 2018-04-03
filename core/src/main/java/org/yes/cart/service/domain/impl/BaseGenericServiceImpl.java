@@ -82,6 +82,40 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
      * {@inheritDoc}
      */
     @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<ENTITY> callback) {
+
+        ResultsIterator<ENTITY> entities = null;
+
+        try {
+
+            entities = genericDao.findByCriteriaIterator(eCriteria, parameters);
+
+            while (entities.hasNext()) {
+
+                final ENTITY entity = entities.next();
+                if (entity != null) {
+                    if (!callback.withNext(entity)) {
+                        break;
+                    }
+                }
+
+            }
+
+        } finally {
+
+            if (entities != null) {
+                entities.close();
+            }
+
+        }
+
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ENTITY findById(final long pk) {
         return genericDao.findById(pk);
     }

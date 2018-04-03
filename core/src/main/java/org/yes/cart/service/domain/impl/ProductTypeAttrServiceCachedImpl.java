@@ -72,6 +72,14 @@ public class ProductTypeAttrServiceCachedImpl implements ProductTypeAttrService 
         productTypeAttrService.findAllIterator(callback);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<ProductTypeAttr> callback) {
+        productTypeAttrService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
     /** {@inheritDoc} */
     @Override
     public ProductTypeAttr findById(final long pk) {

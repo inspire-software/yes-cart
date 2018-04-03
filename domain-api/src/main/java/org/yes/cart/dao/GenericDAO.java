@@ -265,6 +265,16 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
      * @param parameters parameters to fill in for question marks
      *
+     * @return iterator of found entities.
+     */
+    ResultsIterator<T> findByCriteriaIterator(String eCriteria, Object... parameters);
+
+    /**
+     * Find entities by criteria.
+     *
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
+     * @param parameters parameters to fill in for question marks
+     *
      * @return list of found entities.
      */
     List<T> findByCriteria(String eCriteria, Object... parameters);

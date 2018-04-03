@@ -85,6 +85,14 @@ public class PromotionServiceCachedImpl implements PromotionService {
      * {@inheritDoc}
      */
     @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<Promotion> callback) {
+        promotionService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Promotion findById(final long pk) {
         return promotionService.findById(pk);
     }

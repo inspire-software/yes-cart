@@ -236,6 +236,14 @@ public class CustomerServiceCachedImpl implements CustomerService {
      * {@inheritDoc}
      */
     @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<Customer> callback) {
+        customerService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Customer findById(final long pk) {
         return customerService.findById(pk);
     }

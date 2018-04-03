@@ -75,6 +75,14 @@ public class CarrierServiceCachedImpl implements CarrierService {
      * {@inheritDoc}
      */
     @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<Carrier> callback) {
+        carrierService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Carrier findById(final long pk) {
         return carrierService.findById(pk);
     }

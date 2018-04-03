@@ -90,6 +90,14 @@ public class ProductAssociationServiceCachedImpl implements ProductAssociationSe
         productAssociationService.findAllIterator(callback);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<ProductAssociation> callback) {
+        productAssociationService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
     /** {@inheritDoc} */
     @Override
     public ProductAssociation findById(final long pk) {

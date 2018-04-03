@@ -282,6 +282,14 @@ public class ShopServiceCachedImpl implements ShopService {
      * {@inheritDoc}
      */
     @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<Shop> callback) {
+        shopService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Shop findById(final long pk) {
         return shopService.findById(pk);
     }

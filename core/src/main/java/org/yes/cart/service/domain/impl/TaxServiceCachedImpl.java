@@ -102,6 +102,14 @@ public class TaxServiceCachedImpl implements TaxService {
         taxService.findAllIterator(callback);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<Tax> callback) {
+        taxService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
     /** {@inheritDoc} */
     @Override
     public Tax findById(final long pk) {

@@ -218,6 +218,14 @@ public class ContentServiceCachedImpl implements ContentService {
      * {@inheritDoc}
      */
     @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<Category> callback) {
+        contentService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Category findById(final long pk) {
         return contentService.findById(pk);
     }

@@ -44,6 +44,15 @@ public interface GenericService<T> {
     void findAllIterator(ResultsIteratorCallback<T> callback);
 
     /**
+     * Scroll entities.
+     *
+     * @param eCriteria HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
+     * @param parameters parameters to fill in for question marks
+     * @param callback callback for next item (return false to terminate forcefully)
+     */
+    void findByCriteriaIterator(String eCriteria, Object[] parameters, ResultsIteratorCallback<T> callback);
+
+    /**
      * Get object by given primary key.
      *
      * @param pk pk value.

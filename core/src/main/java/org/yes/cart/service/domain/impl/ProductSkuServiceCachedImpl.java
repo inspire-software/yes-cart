@@ -178,6 +178,14 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
      * {@inheritDoc}
      */
     @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<ProductSku> callback) {
+        productSkuService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ProductSku findById(final long pk) {
         return productSkuService.findById(pk);
     }

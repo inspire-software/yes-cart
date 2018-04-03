@@ -109,6 +109,14 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
         warehouseService.findAllIterator(callback);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<Warehouse> callback) {
+        warehouseService.findByCriteriaIterator(eCriteria, parameters, callback);
+    }
+
     /** {@inheritDoc} */
     @Override
     public Warehouse findById(final long pk) {

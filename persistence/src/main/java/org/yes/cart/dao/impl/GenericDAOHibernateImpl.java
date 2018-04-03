@@ -431,6 +431,18 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public ResultsIterator<T> findByCriteriaIterator(final String eCriteria, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().createQuery(eCriteria != null ? this.selectAllHql.concat(eCriteria) : this.selectAllHql);
+        setQueryParameters(query, parameters);
+        return new ResultsIteratorImpl<>(query.scroll(ScrollMode.FORWARD_ONLY));
+    }
+
     /**
      * {@inheritDoc}
      */
