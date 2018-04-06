@@ -113,6 +113,7 @@
   "MODAL_BUTTON_DELIVERYREF": "Aktualisieren der Tracking-Referenz",
   "MODAL_BUTTON_SECURE_ATTR_ON": "Der sichere Modus ist aktiviert, vertrauliche Daten werden nicht angezeigt. Klicken Sie auf diese Schaltfläche, um den sicheren Modus zu deaktivieren.",
   "MODAL_BUTTON_SECURE_ATTR_OFF": "Der sichere Modus ist deaktiviert, vertrauliche Daten werden angezeigt. Klicken Sie erneut auf diese Schaltfläche, um den sicheren Modus zu aktivieren.",
+  "MODAL_BUTTON_RUN": "Ausführen",
 
   "NAME": "Name",
   "DESCRIPTION": "Beschreibung",
@@ -136,6 +137,7 @@
   "PROMO_APPLIED_CODES": "Promo Referenz",
   "QUANTITY": "Anzahl",
   "SKU": "SKU",
+  "TEST": "Prüfung",
 
   "LOGGED_IN": "Eingeloggt als {{user}}",
   "PANEL_CUSTOMER_SERVICE": "Kundendienst",

@@ -113,6 +113,7 @@
   "MODAL_BUTTON_DELIVERYREF": "Update tracking reference",
   "MODAL_BUTTON_SECURE_ATTR_ON": "Secure mode is enabled, sensitive data is not displayed. Click this button to disable secure mode.",
   "MODAL_BUTTON_SECURE_ATTR_OFF": "Secure mode is disabled, sensitive data will be displayed. Click this button again to enable secure mode.",
+  "MODAL_BUTTON_RUN": "Run",
 
   "NAME": "Name",
   "DESCRIPTION": "Description",
@@ -136,6 +137,7 @@
   "PROMO_APPLIED_CODES": "Promotion ref",
   "QUANTITY": "Quantity",
   "SKU": "SKU",
+  "TEST": "Test",
 
   "LOGGED_IN": "Logged in as {{user}}",
   "PANEL_CUSTOMER_SERVICE": "Customer service",

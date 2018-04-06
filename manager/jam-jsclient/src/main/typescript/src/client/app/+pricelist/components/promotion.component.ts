@@ -263,7 +263,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
     LogUtil.debug('PromotionComponent onSelectRuleTemplate modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
-      if (this.selectedRuleTemplate != null) {
+      if (this.selectedRuleTemplate != null && this._promotion != null) {
 
         if (this.isBlank(this._promotion.eligibilityCondition)) {
           this._promotion.eligibilityCondition = this.selectedRuleTemplate;
