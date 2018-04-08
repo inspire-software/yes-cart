@@ -22,6 +22,10 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.TimeContext;
@@ -39,7 +43,8 @@ import java.util.List;
  * Date: 13/11/2013
  * Time: 15:30
  */
-public class ProductsPassedAvailabilityDateIndexProcessorImpl implements ProductsPassedAvailabilityDateIndexProcessorInternal {
+public class ProductsPassedAvailabilityDateIndexProcessorImpl
+        implements ProductsPassedAvailabilityDateIndexProcessorInternal, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductsPassedAvailabilityDateIndexProcessorImpl.class);
 
@@ -49,6 +54,8 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
     private final CacheBundleHelper productCacheHelper;
 
     private int numberOfDays = 1;
+
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
 
     public ProductsPassedAvailabilityDateIndexProcessorImpl(final ProductService productService,
                                                             final NodeService nodeService,
@@ -60,6 +67,11 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
         this.productCacheHelper = productCacheHelper;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public JobStatus getStatus(final String token) {
+        return listener.getLatestStatus();
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -101,6 +113,8 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
         LOG.info("Reindexing discontinued products on {}, reindexed {}", nodeId, discontinued != null ? discontinued.size() : 0);
 
         LOG.info("Reindexing discontinued on {} ... completed", nodeId);
+
+        listener.notifyPing("Last reindex detected " + (discontinued != null ? discontinued.size() : 0) + " discontinued products");
 
     }
 

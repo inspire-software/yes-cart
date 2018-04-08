@@ -23,8 +23,11 @@ import org.yes.cart.bulkjob.cron.AbstractLastRunDependentProcessorImpl;
 import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.DateUtils;
@@ -44,7 +47,7 @@ import java.util.List;
  * Time: 15:42
  */
 public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDependentProcessorImpl
-        implements ProductInventoryChangedProcessorInternal {
+        implements ProductInventoryChangedProcessorInternal, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductInventoryChangedProcessorImpl.class);
 
@@ -55,17 +58,24 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
     private final NodeService nodeService;
     private final CacheBundleHelper productCacheHelper;
 
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+
     public ProductInventoryChangedProcessorImpl(final SkuWarehouseService skuWarehouseService,
                                                 final ProductService productService,
                                                 final NodeService nodeService,
                                                 final SystemService systemService,
-                                                final RuntimeAttributeService runtimeAttributeService,
                                                 final CacheBundleHelper productCacheHelper) {
-        super(systemService, runtimeAttributeService);
+        super(systemService);
         this.skuWarehouseService = skuWarehouseService;
         this.productService = productService;
         this.nodeService = nodeService;
         this.productCacheHelper = productCacheHelper;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public JobStatus getStatus(final String token) {
+        return listener.getLatestStatus();
     }
 
     /** {@inheritDoc} */
@@ -123,6 +133,8 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
             // Check whether we need batch or full
             count = productSkus.size();
             runBatch = count < full;
+
+            listener.notifyPing("Last change detected " + count + ", indexing will run " + (runBatch ? "batch" : "full"));
 
             LOG.info("Inventory changed for {} since {}", productSkus.size(), DateUtils.formatSDT(lastRun));
 

@@ -3,6 +3,7 @@ package org.yes.cart.service.async.impl;
 import org.slf4j.Logger;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
+import org.yes.cart.service.async.model.impl.JobStatusImpl;
 import org.yes.cart.util.log.Markers;
 
 /**
@@ -14,6 +15,8 @@ public class JobStatusListenerLoggerWrapperImpl implements JobStatusListener {
 
     private final Logger logger;
 
+    private String lastPing;
+
 
     public JobStatusListenerLoggerWrapperImpl(final Logger logger) {
         this.logger = logger;
@@ -22,7 +25,12 @@ public class JobStatusListenerLoggerWrapperImpl implements JobStatusListener {
     /** {@inheritDoc} */
     @Override
     public JobStatus getLatestStatus() {
-        return null;
+        return new JobStatusImpl(
+                null,
+                JobStatus.State.UNDEFINED,
+                null,
+                lastPing
+        );
     }
 
     /** {@inheritDoc} */
@@ -40,7 +48,7 @@ public class JobStatusListenerLoggerWrapperImpl implements JobStatusListener {
     /** {@inheritDoc} */
     @Override
     public void notifyPing(final String msg) {
-
+        this.lastPing = msg;
     }
 
     /** {@inheritDoc} */

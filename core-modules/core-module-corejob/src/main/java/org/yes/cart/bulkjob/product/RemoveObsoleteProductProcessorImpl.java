@@ -22,6 +22,10 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.ProductCategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
@@ -37,7 +41,7 @@ import java.util.List;
  * Date: 22/09/2017
  * Time: 23:28
  */
-public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProductProcessorInternal {
+public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProductProcessorInternal, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoveObsoleteProductProcessorImpl.class);
 
@@ -48,6 +52,8 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
     private final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao;
     private final GenericDAO<ProductAssociation, Long> productAssociationDao;
     private final SystemService systemService;
+
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
 
     public RemoveObsoleteProductProcessorImpl(final ProductService productService,
                                               final ProductCategoryService productCategoryService,
@@ -65,7 +71,13 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
         this.systemService = systemService;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public JobStatus getStatus(final String token) {
+        return listener.getLatestStatus();
+    }
 
+    /** {@inheritDoc} */
     @Override
     public void run() {
 
@@ -87,6 +99,8 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
         for (final Long id : batch) {
             self().removeProduct(id);
         }
+
+        listener.notifyPing("Removed " + toIndex + " obsolete products in last run");
 
     }
 

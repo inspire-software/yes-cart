@@ -20,6 +20,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.entity.Mail;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.mail.JavaMailSenderFactory;
 import org.yes.cart.service.mail.MailComposer;
@@ -34,7 +38,7 @@ import java.util.Map;
  * Date: 10/11/2013
  * Time: 13:56
  */
-public class BulkMailProcessorImpl implements Runnable {
+public class BulkMailProcessorImpl implements Runnable, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkMailProcessorImpl.class);
 
@@ -44,6 +48,8 @@ public class BulkMailProcessorImpl implements Runnable {
 
     private long delayBetweenEmailsMs;
     private int cycleExceptionsThreshold;
+
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
 
     public BulkMailProcessorImpl(final MailService mailService,
                                  final MailComposer mailComposer,
@@ -55,12 +61,20 @@ public class BulkMailProcessorImpl implements Runnable {
 
     /** {@inheritDoc} */
     @Override
+    public JobStatus getStatus(final String token) {
+        return listener.getLatestStatus();
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public void run() {
 
         LOG.info("Bulk send mail");
 
         final Map<String, Integer> exceptionsThresholdsByShop = new HashMap<>();
 
+        int success = 0;
+        int error = 0;
         Long lastFailedEmailId = null;
         Mail mail = mailService.findOldestMail(lastFailedEmailId);
         while (mail != null) {
@@ -69,6 +83,7 @@ public class BulkMailProcessorImpl implements Runnable {
                     mail.getMailId(), mail.getShopCode(), mail.getRecipients(), mail.getSubject());
 
             final String shopCode = mail.getShopCode();
+            listener.notifyPing("Sending mail for " + shopCode);
 
             if (!exceptionsThresholdsByShop.containsKey(shopCode)) {
                 exceptionsThresholdsByShop.put(shopCode, this.cycleExceptionsThreshold);
@@ -95,11 +110,12 @@ public class BulkMailProcessorImpl implements Runnable {
                         sent = true;
                         LOG.info("Sent mail to {} with subject {}", mail.getRecipients(), mail.getSubject());
                         mailService.delete(mail);
+                        success++;
                     } catch (Exception exp) {
                         LOG.error(Markers.alert(), "Unable to send mail " + mail.getMailId() + "/" + mail.getSubject() + " for shop " + shopCode, exp);
                         lastFailedEmailId = mail.getMailId();
                         exceptionsThresholdsByShop.put(shopCode, exceptionsThreshold - 1);
-
+                        error++;
                     }
 
                     if (sent && delayBetweenEmailsMs > 0) {
@@ -117,6 +133,8 @@ public class BulkMailProcessorImpl implements Runnable {
         }
 
         LOG.info("Bulk send mail ... completed");
+
+        listener.notifyPing("Bulk send mail ... completed, send: " + success + ", failed: " + error);
 
     }
 

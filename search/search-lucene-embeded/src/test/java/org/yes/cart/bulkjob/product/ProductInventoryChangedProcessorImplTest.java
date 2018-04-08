@@ -146,7 +146,7 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
         return new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
-                new ProductInventoryChangedProcessorImpl(skuWarehouseService, productService, null, null, null, null) {
+                new ProductInventoryChangedProcessorImpl(skuWarehouseService, productService, null, null, null) {
                     @Override
                     protected String getNodeId() {
                         return "TEST";

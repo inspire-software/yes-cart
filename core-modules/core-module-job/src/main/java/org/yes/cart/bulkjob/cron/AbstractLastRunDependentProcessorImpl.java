@@ -16,7 +16,6 @@
 
 package org.yes.cart.bulkjob.cron;
 
-import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.DateUtils;
 
@@ -35,15 +34,12 @@ import java.time.Instant;
 public abstract class AbstractLastRunDependentProcessorImpl implements Runnable {
 
     private final SystemService systemService;
-    private final RuntimeAttributeService runtimeAttributeService;
 
     private boolean lastRunInitialised = false;
     private Instant lastRun;
 
-    public AbstractLastRunDependentProcessorImpl(final SystemService systemService,
-                                                 final RuntimeAttributeService runtimeAttributeService) {
+    public AbstractLastRunDependentProcessorImpl(final SystemService systemService) {
         this.systemService = systemService;
-        this.runtimeAttributeService = runtimeAttributeService;
     }
 
     /** {@inheritDoc} */

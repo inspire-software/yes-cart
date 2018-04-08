@@ -21,18 +21,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="txJobProxyTemplate" abstract="true"
-          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-        <property name="transactionManager" ref="transactionManager"/>
-        <property name="transactionAttributes">
-            <props>
-                <!-- All job beans are Runnable, and they must run in isolation  -->
-                <prop key="run">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
-                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
-            </props>
-        </property>
-    </bean>
-
     <bean id="bulkCustomerTagProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
         <property name="processor">
             <bean parent="txJobProxyTemplate">

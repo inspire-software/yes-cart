@@ -14,23 +14,20 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.async;
-
-import org.yes.cart.service.async.model.JobContext;
+package org.yes.cart.util.spring;
 
 /**
  * User: denispavlov
- * Date: 12-08-05
- * Time: 2:48 PM
+ * Date: 08/04/2018
+ * Time: 12:22
  */
-public interface JobRunner extends JobStatusAware {
+public interface WrappingBean<T> {
 
     /**
-     * Run a job with given context.
+     * Simple interface for marking wrapper services that need to expose original source.
      *
-     * @param ctx context
-     *
-     * @return token for this job ({@link #getStatus(String)})
+     * @return source bean
      */
-    String doJob(JobContext ctx);
+    T getSource();
+
 }

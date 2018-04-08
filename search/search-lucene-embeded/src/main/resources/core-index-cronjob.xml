@@ -157,8 +157,7 @@
                 <constructor-arg index="1" ref="productService"/>
                 <constructor-arg index="2" ref="nodeService"/>
                 <constructor-arg index="3" ref="systemService"/>
-                <constructor-arg index="4" ref="runtimeAttributeService"/>
-                <constructor-arg index="5" ref="sfProductCacheHelper"/>
+                <constructor-arg index="4" ref="sfProductCacheHelper"/>
                 <lookup-method name="getSelf" bean="productInventoryChangedProcessorInternal"/>
             </bean>
         </property>

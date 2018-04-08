@@ -25,6 +25,10 @@ import org.yes.cart.domain.entity.CustomerShop;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.promotion.PromotionContext;
 import org.yes.cart.promotion.PromotionContextFactory;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.log.Markers;
@@ -37,7 +41,7 @@ import org.yes.cart.util.log.Markers;
  * Date: 07/11/2013
  * Time: 09:18
  */
-public class BulkCustomerTagProcessorImpl implements Runnable {
+public class BulkCustomerTagProcessorImpl implements Runnable, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkCustomerTagProcessorImpl.class);
 
@@ -47,12 +51,20 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
 
     private int batchSize = 20;
 
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+
     public BulkCustomerTagProcessorImpl(final ShopService shopService,
                                         final CustomerService customerService,
                                         final PromotionContextFactory promotionContextFactory) {
         this.shopService = shopService;
         this.customerService = customerService;
         this.promotionContextFactory = promotionContextFactory;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public JobStatus getStatus(final String token) {
+        return listener.getLatestStatus();
     }
 
     /** {@inheritDoc} */
@@ -103,6 +115,8 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
                         customerService.getGenericDao().clear();
                     }
                 }
+
+                listener.notifyPing("Processed " + count[0] + ", updated: " + updated[0]);
 
                 return true; // all
             });

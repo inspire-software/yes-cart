@@ -23,6 +23,10 @@ import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.search.dao.IndexBuilder;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
 
@@ -37,16 +41,16 @@ import org.yes.cart.service.domain.SystemService;
  * Date: 13/11/2013
  * Time: 15:30
  */
-public class ProductsGlobalIndexProcessorImpl implements Runnable {
+public class ProductsGlobalIndexProcessorImpl implements Runnable, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductsGlobalIndexProcessorImpl.class);
-
-    public static final long INDEX_PING_INTERVAL = 15000L;
 
     private final ProductService productService;
     private final NodeService nodeService;
     private final SystemService systemService;
     private final CacheBundleHelper productCacheHelper;
+
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
 
     public ProductsGlobalIndexProcessorImpl(final ProductService productService,
                                             final NodeService nodeService,
@@ -58,6 +62,11 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
         this.productCacheHelper = productCacheHelper;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public JobStatus getStatus(final String token) {
+        return listener.getLatestStatus();
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -76,16 +85,19 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
             final int batchSize = getBatchSize();
 
             LOG.info("Reindexing all products on {}", nodeId);
+            listener.notifyPing("Indexing products");
 
             productService.reindexProducts(batchSize, false);
 
             LOG.info("Reindexing all SKU on {}", nodeId);
+            listener.notifyPing("Indexing SKU");
 
             productService.reindexProductsSku(batchSize);
 
             LOG.info("Flushing product caches {}", nodeId);
 
             productCacheHelper.flushBundleCaches();
+            listener.notifyPing(null); // clear message
 
         } else {
 

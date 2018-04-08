@@ -18,16 +18,22 @@ package org.yes.cart.bulkjob.cron;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.model.JobStatus;
+import org.yes.cart.service.async.model.impl.JobStatusImpl;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.util.spring.WrappingBean;
 
 /**
  * User: denispavlov
  * Date: 27/01/2017
  * Time: 10:00
  */
-public class PausableProcessorWrapperImpl implements Runnable, PausableProcessor {
+public class PausableProcessorWrapperImpl implements Runnable, PausableProcessor, WrappingBean<Runnable>, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(PausableProcessorWrapperImpl.class);
+
+    private static final JobStatus UNSUPPORTED = new JobStatusImpl(null, JobStatus.State.UNDEFINED, null, null);
 
     private Runnable processor;
     private SystemService systemService;
@@ -62,6 +68,11 @@ public class PausableProcessorWrapperImpl implements Runnable, PausableProcessor
 
     }
 
+    @Override
+    public Runnable getSource() {
+        return processor;
+    }
+
     public void setProcessor(final Runnable processor) {
         this.processor = processor;
     }
@@ -94,5 +105,16 @@ public class PausableProcessorWrapperImpl implements Runnable, PausableProcessor
     public void setPaused(final boolean paused) {
         systemService.createOrGetAttributeValue(pausePreferenceKey, "Boolean");
         systemService.updateAttributeValue(pausePreferenceKey, String.valueOf(paused));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JobStatus getStatus(final String token) {
+        if (this.processor instanceof JobStatusAware) {
+            return ((JobStatusAware) this.processor).getStatus(token);
+        }
+        return UNSUPPORTED;
     }
 }

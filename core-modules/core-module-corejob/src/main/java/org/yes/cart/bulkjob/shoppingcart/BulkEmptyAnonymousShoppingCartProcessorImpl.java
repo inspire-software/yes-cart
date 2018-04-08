@@ -24,6 +24,10 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.ShoppingCartState;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 import org.yes.cart.service.domain.SystemService;
@@ -38,24 +42,32 @@ import java.time.Instant;
  * Date: 22/08/2014
  * Time: 12:47
  */
-public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
+public class BulkEmptyAnonymousShoppingCartProcessorImpl implements Runnable, JobStatusAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BulkAbandonedShoppingCartProcessorImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BulkEmptyAnonymousShoppingCartProcessorImpl.class);
 
     private static final long MS_IN_DAY = 86400000L;
 
     private final ShoppingCartStateService shoppingCartStateService;
     private final CustomerOrderService customerOrderService;
     private final SystemService systemService;
-    private long abandonedTimeoutMs = 30 * MS_IN_DAY;
+    private long abandonedTimeoutMs = MS_IN_DAY;
     private int batchSize = 20;
 
-    public BulkAbandonedShoppingCartProcessorImpl(final ShoppingCartStateService shoppingCartStateService,
-                                                  final CustomerOrderService customerOrderService,
-                                                  final SystemService systemService) {
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+
+    public BulkEmptyAnonymousShoppingCartProcessorImpl(final ShoppingCartStateService shoppingCartStateService,
+                                                       final CustomerOrderService customerOrderService,
+                                                       final SystemService systemService) {
         this.shoppingCartStateService = shoppingCartStateService;
         this.customerOrderService = customerOrderService;
         this.systemService = systemService;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public JobStatus getStatus(final String token) {
+        return listener.getLatestStatus();
     }
 
     /** {@inheritDoc} */
@@ -66,7 +78,7 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
 
         LOG.info("Look up all ShoppingCartStates not modified since {}", lastModification);
 
-        final ResultsIterator<ShoppingCartState> abandoned = this.shoppingCartStateService.findByModificationPrior(lastModification);
+        final ResultsIterator<ShoppingCartState> abandoned = this.shoppingCartStateService.findByModificationPrior(lastModification, true);
 
         try {
             int count = 0;
@@ -77,9 +89,9 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
 
                 final String guid = scs.getGuid();
 
-                LOG.debug("Removing abandoned cart for {}, guid {}", scs.getCustomerEmail(), guid);
+                LOG.debug("Removing empty anonymous cart for {}, guid {}", scs.getCustomerEmail(), guid);
                 this.shoppingCartStateService.delete(scs);
-                LOG.debug("Removed abandoned cart for {}, guid {}", scs.getCustomerEmail(), guid);
+                LOG.debug("Removed empty anonymous cart for {}, guid {}", scs.getCustomerEmail(), guid);
 
                 final CustomerOrder tempOrder = this.customerOrderService.findByReference(guid);
                 if (tempOrder != null && CustomerOrder.ORDER_STATUS_NONE.equals(tempOrder.getOrderStatus())) {
@@ -98,23 +110,24 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
             }
 
             LOG.info("Removed {} carts and {} temporary orders", count, removedOrders);
+            listener.notifyPing("Removed " + count + " carts and " + removedOrders + " temporary orders in last run");
 
         } finally {
             try {
                 abandoned.close();
             } catch (Exception exp) {
-                LOG.error("Processing abandoned baskets exception, error closing iterator: " + exp.getMessage(), exp);
+                LOG.error("Processing empty anonymous baskets exception, error closing iterator: " + exp.getMessage(), exp);
             }
         }
 
-        LOG.info("Processing abandoned baskets ... completed");
+        LOG.info("Processing empty anonymous baskets ... completed");
 
     }
 
 
     private long determineExpiryInMs() {
 
-        final String av = systemService.getAttributeValue(AttributeNamesKeys.System.CART_ABANDONED_TIMEOUT_SECONDS);
+        final String av = systemService.getAttributeValue(AttributeNamesKeys.System.CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS);
 
         if (av != null && StringUtils.isNotBlank(av)) {
             long expiry = NumberUtils.toInt(av) * 1000L;

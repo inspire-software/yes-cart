@@ -30,8 +30,6 @@
     <import resource="classpath:dao.xml"/>
     <import resource="dao-index-support.xml"/>
 
-    <import resource="core-cronjob.xml"/>
-
     <bean id="shopSearchSupportService" class="org.yes.cart.search.impl.ShopSearchSupportServiceImpl">
         <constructor-arg index="0" ref="shopService"/>
         <constructor-arg index="1" ref="categoryService"/>

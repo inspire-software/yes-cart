@@ -21,6 +21,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <import resource="classpath:core-manager-cronjob.xml"/>
     <import resource="classpath:core-export-cronjob.xml"/>
     <import resource="classpath:core-orderstate-cronjob.xml"/>
 

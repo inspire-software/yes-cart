@@ -21,8 +21,11 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkjob.cron.AbstractLastRunDependentProcessorImpl;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.order.OrderException;
@@ -48,7 +51,7 @@ import java.util.List;
  * Time: 15:42
  */
 public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRunDependentProcessorImpl
-        implements BulkAwaitingInventoryDeliveriesProcessorInternal {
+        implements BulkAwaitingInventoryDeliveriesProcessorInternal, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkAwaitingInventoryDeliveriesProcessorImpl.class);
 
@@ -58,17 +61,23 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
     private final OrderStateManager orderStateManager;
     private final SkuWarehouseService skuWarehouseService;
 
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+
     public BulkAwaitingInventoryDeliveriesProcessorImpl(final CustomerOrderService customerOrderService,
                                                         final OrderStateManager orderStateManager,
                                                         final SkuWarehouseService skuWarehouseService,
-                                                        final SystemService systemService,
-                                                        final RuntimeAttributeService runtimeAttributeService) {
-        super(systemService, runtimeAttributeService);
+                                                        final SystemService systemService) {
+        super(systemService);
         this.customerOrderService = customerOrderService;
         this.orderStateManager = orderStateManager;
         this.skuWarehouseService = skuWarehouseService;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public JobStatus getStatus(final String token) {
+        return listener.getLatestStatus();
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -112,6 +121,8 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
         LOG.info("Check orders awaiting preorder start date ... completed");
 
+        listener.notifyPing(null); // unset last message
+
         return true;
     }
 
@@ -137,12 +148,16 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
                 Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS, CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED));
 
 
+        final int total = awaitingDeliveries.size();
+
         try {
             for (final Long deliveryId : awaitingDeliveries) {
 
                 try {
                     // We want to isolate delivery updates, since we want to process others if one fails
                     proxy().processDeliveryEvent(event, deliveryId);
+                    cnt++;
+                    listener.notifyPing("Processed " + cnt + " of " + total + " awaiting deliveries for " + status + " using event " + event);
 
                 } catch (OrderException oexp) {
 

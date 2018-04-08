@@ -81,6 +81,18 @@
         </property>
     </bean>
 
+    <bean id="txJobProxyTemplate" abstract="true"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="transactionAttributes">
+            <props>
+                <!-- All job beans are Runnable, and they must run in isolation  -->
+                <prop key="run">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
+
     <bean id="entityClassFactoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>

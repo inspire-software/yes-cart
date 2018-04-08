@@ -23,6 +23,10 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.SystemService;
 
@@ -35,7 +39,7 @@ import java.time.Instant;
  * Date: 10/02/2016
  * Time: 17:56
  */
-public class BulkExpiredGuestsProcessorImpl implements Runnable {
+public class BulkExpiredGuestsProcessorImpl implements Runnable, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkExpiredGuestsProcessorImpl.class);
 
@@ -46,12 +50,19 @@ public class BulkExpiredGuestsProcessorImpl implements Runnable {
     private long expiredTimeoutMs = MS_IN_DAY;
     private int batchSize = 20;
 
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+
     public BulkExpiredGuestsProcessorImpl(final CustomerService customerService,
                                           final SystemService systemService) {
         this.customerService = customerService;
         this.systemService = systemService;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public JobStatus getStatus(final String token) {
+        return listener.getLatestStatus();
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -84,6 +95,7 @@ public class BulkExpiredGuestsProcessorImpl implements Runnable {
             }
 
             LOG.info("Removed {} guest account(s)", count);
+            listener.notifyPing("Removed " + count + " guest account(s) in last run");
 
         } finally {
             try {

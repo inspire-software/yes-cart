@@ -19,6 +19,10 @@ package org.yes.cart.bulkjob.order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
@@ -42,7 +46,8 @@ import java.util.List;
  * Date: 17/02/2017
  * Time: 18:04
  */
-public class OrderDeliveryInfoUpdateProcessorImpl implements OrderDeliveryInfoUpdateProcessorInternal {
+public class OrderDeliveryInfoUpdateProcessorImpl
+        implements OrderDeliveryInfoUpdateProcessorInternal, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrderDeliveryInfoUpdateProcessorImpl.class);
 
@@ -51,13 +56,21 @@ public class OrderDeliveryInfoUpdateProcessorImpl implements OrderDeliveryInfoUp
 
     private List<Iterator<OrderDeliveryStatusUpdate>> dataFeeds = new ArrayList<>();
 
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+
     public OrderDeliveryInfoUpdateProcessorImpl(final CustomerOrderService customerOrderService,
                                                 final OrderStateManager orderStateManager) {
         this.customerOrderService = customerOrderService;
         this.orderStateManager = orderStateManager;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public JobStatus getStatus(final String token) {
+        return listener.getLatestStatus();
+    }
 
+    /** {@inheritDoc} */
     @Override
     public void run() {
 
@@ -74,6 +87,8 @@ public class OrderDeliveryInfoUpdateProcessorImpl implements OrderDeliveryInfoUp
 
                     proxy().processDeliveryUpdate(update);
 
+                    listener.notifyPing("Processed delivery update for order " + update.getOrderNumber());
+
                 } catch (Exception exp) {
 
                     LOG.error(Markers.alert(), "Delivery update processor failed for: " + update, exp);
@@ -85,6 +100,8 @@ public class OrderDeliveryInfoUpdateProcessorImpl implements OrderDeliveryInfoUp
         }
 
         LOG.info("Process delivery info updates ... completed");
+
+        listener.notifyPing(null); // unset last message
 
     }
 

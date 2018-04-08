@@ -16,21 +16,24 @@
 
 package org.yes.cart.service.async;
 
-import org.yes.cart.service.async.model.JobContext;
+import org.yes.cart.service.async.model.JobStatus;
 
 /**
+ * Interface to mark jobs that are able to product status reports.
+ * 
  * User: denispavlov
- * Date: 12-08-05
- * Time: 2:48 PM
+ * Date: 08/04/2018
+ * Time: 12:27
  */
-public interface JobRunner extends JobStatusAware {
+public interface JobStatusAware {
 
     /**
-     * Run a job with given context.
+     * Check current job status by given token.
      *
-     * @param ctx context
+     * @param token job token
      *
-     * @return token for this job ({@link #getStatus(String)})
+     * @return status
      */
-    String doJob(JobContext ctx);
+    JobStatus getStatus(String token);
+
 }
