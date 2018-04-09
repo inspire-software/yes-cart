@@ -714,7 +714,7 @@ public class SearchController {
 
             for (final ProductSearchResultDTO hit : products.getResults()) {
 
-                final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(hit, context.getShopId());
+                final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(hit, context.getCustomerShopId());
 
                 final ProductSearchResultRO ro = mappingMixin.map(hit, ProductSearchResultRO.class, ProductSearchResultDTO.class);
 
