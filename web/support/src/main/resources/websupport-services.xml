@@ -145,6 +145,8 @@
         <constructor-arg index="0" ref="categoryService"/>
         <constructor-arg index="1" ref="shopService"/>
         <constructor-arg index="2" ref="shopSearchSupportService"/>
+        <constructor-arg index="3" ref="productService"/>
+        <constructor-arg index="4" ref="ftQueryFactory"/>
     </bean>
 
     <bean id="contentServiceFacade"  class="org.yes.cart.web.support.service.impl.ContentServiceFacadeImpl">

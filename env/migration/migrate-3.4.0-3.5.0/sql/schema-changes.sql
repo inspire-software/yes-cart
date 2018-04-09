@@ -115,3 +115,12 @@ alter table TSKUPRICE add column AUTO_GENERATED bit not null default 0;
 
 delete from TSYSTEMATTRVALUE where CODE like 'SYSTEM_PANEL_LABEL';
 delete from TATTRIBUTE where CODE like 'SYSTEM_PANEL_LABEL';
+
+--
+-- YC-896 Automatically filter out empty product categories from menu
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  5001,  'SHOP_CATEGORY_REMOVE_EMPTY', 'SHOP_CATEGORY_REMOVE_EMPTY',  0,  NULL,  'Shop: remove empty categories from menu',
+  'Remove empty categories from menus. Default is false',  1008, 1001, 0, 0, 0, 0);
+

@@ -570,6 +570,11 @@ public interface AttributeNamesKeys {
         String SHOP_CATEGORY_FILTERNAV_LIMIT = "SHOP_CATEGORY_FILTERNAV_LIMIT";
 
         /**
+         * Setting to remove empty categories from menu
+         */
+        String SHOP_CATEGORY_REMOVE_EMPTY = "SHOP_CATEGORY_REMOVE_EMPTY";
+
+        /**
          * Setting for whether to show coupons or not
          */
         String CART_UPDATE_ENABLE_COUPONS = "SHOP_CHECKOUT_ENABLE_COUPONS";

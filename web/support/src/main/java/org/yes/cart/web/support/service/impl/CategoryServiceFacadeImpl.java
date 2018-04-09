@@ -24,9 +24,12 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.search.SearchQueryFactory;
 import org.yes.cart.search.ShopSearchSupportService;
+import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.CategoryRankDisplayNameComparator;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.TimeContext;
@@ -36,6 +39,7 @@ import org.yes.cart.web.support.service.CategoryServiceFacade;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -48,13 +52,19 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     private final CategoryService categoryService;
     private final ShopService shopService;
     private final ShopSearchSupportService shopSearchSupportService;
+    private final ProductService productService;
+    private final SearchQueryFactory searchQueryFactory;
 
     public CategoryServiceFacadeImpl(final CategoryService categoryService,
                                      final ShopService shopService,
-                                     final ShopSearchSupportService shopSearchSupportService) {
+                                     final ShopSearchSupportService shopSearchSupportService,
+                                     final ProductService productService,
+                                     final SearchQueryFactory searchQueryFactory) {
         this.categoryService = categoryService;
         this.shopService = shopService;
         this.shopSearchSupportService = shopSearchSupportService;
+        this.searchQueryFactory = searchQueryFactory;
+        this.productService = productService;
     }
 
     /**
@@ -96,6 +106,30 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     @Cacheable(value = "categoryService-currentCategoryMenu")
     public List<Category> getCurrentCategoryMenu(final long currentCategoryId, final long customerShopId, final String locale) {
 
+        boolean removeEmpty = false; // default
+
+        final Shop shop = shopService.getById(customerShopId);
+        if (shop != null) {
+            final String remove = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CATEGORY_REMOVE_EMPTY);
+            if (StringUtils.isBlank(remove)) {
+                if (shop.getMaster() != null) {
+                    final Shop master = shopService.getById(shop.getMaster().getShopId());
+                    final String masterRemove = master.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CATEGORY_REMOVE_EMPTY);
+                    if (StringUtils.isNotBlank(masterRemove)) {
+                        removeEmpty = Boolean.valueOf(masterRemove);
+                    }
+                }
+            } else {
+                removeEmpty = Boolean.valueOf(remove);
+            }
+        }
+
+        return getCurrentCategoryMenu(currentCategoryId, customerShopId, locale, removeEmpty);
+
+    }
+
+    private List<Category> getCurrentCategoryMenu(final long currentCategoryId, final long customerShopId, final String locale, final boolean removeEmpty) {
+
         final List<Category> categories;
 
         if (currentCategoryId > 0L && shopService.getShopCategoriesIds(customerShopId).contains(currentCategoryId)) {
@@ -109,6 +143,18 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
         }
 
         categories.removeIf(cat -> CentralViewLabel.INCLUDE.equals(cat.getUitemplate()));
+
+        if (removeEmpty) {
+
+            categories.removeIf(cat -> {
+
+                final NavigationContext inCat = searchQueryFactory.getFilteredNavigationQueryChain(customerShopId, customerShopId, null, Collections.singletonList(cat.getCategoryId()),
+                        true, Collections.emptyMap());
+
+                return productService.getProductQty(inCat) > 0;
+            });
+
+        }
 
         categories.sort(new CategoryRankDisplayNameComparator(locale));
 
