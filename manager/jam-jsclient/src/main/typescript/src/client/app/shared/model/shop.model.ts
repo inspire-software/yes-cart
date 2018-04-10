@@ -179,6 +179,8 @@ export interface ShopSummaryVO {
   b2bProfileActive: Pair<string, boolean>;
   b2bAddressbookActive: Pair<string, boolean>;
   b2bStrictPriceActive: Pair<string, boolean>;
+  b2bStrictPriceRulesActive: Pair<string, boolean>;
+  b2bStrictPromotionsActive: Pair<string, boolean>;
   cookiePolicy: Pair<string, boolean>;
   anonymousBrowsing: Pair<string, boolean>;
   customerSession: Pair<string, string>;

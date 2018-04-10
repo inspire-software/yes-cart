@@ -109,6 +109,10 @@ alter table TSKUPRICE add column AUTO_GENERATED bit not null default 0;
 --     create index SKUPRICERULE_CURRENCY on TSKUPRICERULE (CURRENCY);
 --     create index SKUPRICERULE_ENABLED on TSKUPRICERULE (ENABLED);
 
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10886,  'SHOP_B2B_STRICT_PRICE_RULES', 'SHOP_B2B_STRICT_PRICE_RULES',  0,  NULL,  'Shop: B2B strict price rules mode enable',
+   'Disable master shop price rules and use only sub shop rules',  1008, 1001, 0, 0, 0, 0);
+
 --
 -- YC-888 Ensure SYSTEM_PANEL_LABEL is consistent with environment build
 --
@@ -123,4 +127,12 @@ delete from TATTRIBUTE where CODE like 'SYSTEM_PANEL_LABEL';
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  5001,  'SHOP_CATEGORY_REMOVE_EMPTY', 'SHOP_CATEGORY_REMOVE_EMPTY',  0,  NULL,  'Shop: remove empty categories from menu',
   'Remove empty categories from menus. Default is false',  1008, 1001, 0, 0, 0, 0);
+
+--
+-- YC-897 B2B sub shops must be allowed own promotions
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10887,  'SHOP_B2B_STRICT_PROMOTIONS', 'SHOP_B2B_STRICT_PROMOTIONS',  0,  NULL,  'Shop: B2B strict promotions mode enable',
+   'Disable master shop promotions and use only sub shop promotions',  1008, 1001, 0, 0, 0, 0);
 

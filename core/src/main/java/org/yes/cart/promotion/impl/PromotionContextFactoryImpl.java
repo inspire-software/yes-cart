@@ -18,6 +18,7 @@ package org.yes.cart.promotion.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.promotion.*;
@@ -25,6 +26,7 @@ import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -66,22 +68,30 @@ public class PromotionContextFactoryImpl implements PromotionContextFactory {
     public PromotionContext getInstance(final String shopCode, final String currency) {
 
         final PromotionContextImpl ctx = new PromotionContextImpl(shopCode, currency, strategy, conditionSupport, pricingPolicyProvider);
-        final List<Promotion> active = promotionService.getPromotionsByShopCode(shopCode, currency, true);
-        for (final Promotion promotion : active) {
-            final PromotionCondition condition = promotionConditionParser.parse(promotion);
-            final Map<String, PromotionAction> actionByTypeMap = promotionActionMap.get(promotion.getPromoType());
-            if (actionByTypeMap != null) {
-                final PromotionAction action = actionByTypeMap.get(promotion.getPromoAction());
-                if (action != null) {
-                    ctx.addPromotion(promotion, condition, action);
+
+        final Shop currentShop = shopService.getShopByCode(shopCode);
+        if (currentShop != null) {
+            final List<Promotion> active = new ArrayList<>(promotionService.getPromotionsByShopCode(shopCode, currency, true));
+            if (currentShop.getMaster() != null && !currentShop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B_STRICT_PROMOTIONS)) {
+                active.addAll(promotionService.getPromotionsByShopCode(currentShop.getMaster().getCode(), currency, true));
+            }
+
+            for (final Promotion promotion : active) {
+                final PromotionCondition condition = promotionConditionParser.parse(promotion);
+                final Map<String, PromotionAction> actionByTypeMap = promotionActionMap.get(promotion.getPromoType());
+                if (actionByTypeMap != null) {
+                    final PromotionAction action = actionByTypeMap.get(promotion.getPromoAction());
+                    if (action != null) {
+                        ctx.addPromotion(promotion, condition, action);
+                    } else {
+                        LOG.warn(
+                                "No action mapping for promotion: {}, type: {}, action {}",
+                                promotion.getCode(), promotion.getPromoType(), promotion.getPromoAction());
+                    }
                 } else {
                     LOG.warn(
-                            "No action mapping for promotion: {}, type: {}, action {}",
-                            promotion.getCode(), promotion.getPromoType(), promotion.getPromoAction());
+                            "No action mapping for promotion: {}, type: {}", promotion.getCode(), promotion.getPromoType());
                 }
-            } else {
-                LOG.warn(
-                        "No action mapping for promotion: {}, type: {}", promotion.getCode(), promotion.getPromoType());
             }
         }
         return ctx;

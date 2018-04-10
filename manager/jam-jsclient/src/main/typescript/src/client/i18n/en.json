@@ -463,6 +463,7 @@
 
   "PROMOTION_TAG": "Tags",
   "PROMOTION_SHOP_CODE": "Shop code",
+  "PROMOTION_SPEC": "Configuration",
   "PROMOTION_TYPE": "Type",
   "PROMOTION_TYPE_O": "Order",
   "PROMOTION_TYPE_S": "Shippng",
@@ -508,7 +509,8 @@
   "PROMOTION_COUPON_LIMIT": "Usage limit",
   "PROMOTION_COUPON_LIMIT_PER_CUSTOMER": "Usage limit (per customer)",
   "PROMOTION_COUPON_USAGE_COUNT": "Usage count",
-  "PROMOTION_CAN_COMBINE": "Can combine",
+  "PROMOTION_CAN_COMBINE": "Can be combined",
+  "PROMOTION_CANNOT_COMBINE": "Cannot be combined",
   "PROMOTION_ENABLED": "Enabled",
   "PROMOTION_ENABLED_FROM": "Valid from",
   "PROMOTION_ENABLED_TO": "Valid to",

@@ -26,6 +26,8 @@ import { LogUtil } from './../../shared/log/index';
 
 export class PromotionsComponent implements OnInit, OnDestroy {
 
+  @Input() selectedShopCode:string;
+
   @Input() selectedPromotion:PromotionVO;
 
   @Output() dataSelected: EventEmitter<PromotionVO> = new EventEmitter<PromotionVO>();
@@ -99,6 +101,37 @@ export class PromotionsComponent implements OnInit, OnDestroy {
 
   protected isAvailableToNow(row:PromotionVO) {
     return row.enabledTo === null || (row.enabledTo > new Date());
+  }
+
+  protected getPromoTypeIcon(row:PromotionVO) {
+    switch (row.promoType) {
+      case 'O':
+        return 'fa-shopping-cart';
+      case 'S':
+        return 'fa-truck';
+      case 'I':
+        return 'fa-dropbox';
+      case 'C':
+        return 'fa-user-circle';
+      default:
+        return 'fa-question';
+    }
+  }
+
+  protected getPromoActionIcon(row:PromotionVO) {
+    switch (row.promoAction) {
+      case 'F':
+        return 'fa-money';
+      case 'P':
+      case 'S':
+        return 'fa-percent';
+      case 'G':
+        return 'fa-gift';
+      case 'T':
+        return 'fa-tag';
+      default:
+        return 'fa-question';
+    }
   }
 
   private filterPromotions() {

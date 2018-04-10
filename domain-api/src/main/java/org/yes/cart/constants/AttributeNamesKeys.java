@@ -301,9 +301,19 @@ public interface AttributeNamesKeys {
         String SHOP_B2B_ADDRESSBOOK = "SHOP_B2B_ADDRESSBOOK";
 
         /**
-         * Enable B2B stict price mode (only prices in sub shop are considered).
+         * Enable B2B strict price mode (only prices in sub shop are considered).
          */
         String SHOP_B2B_STRICT_PRICE = "SHOP_B2B_STRICT_PRICE";
+
+        /**
+         * Disable B2B master price rules.
+         */
+        String SHOP_B2B_STRICT_PRICE_RULES = "SHOP_B2B_STRICT_PRICE_RULES";
+
+        /**
+         * Disable B2B master promotions.
+         */
+        String SHOP_B2B_STRICT_PROMOTIONS = "SHOP_B2B_STRICT_PROMOTIONS";
 
         /**
          * Storefront requires authentication.

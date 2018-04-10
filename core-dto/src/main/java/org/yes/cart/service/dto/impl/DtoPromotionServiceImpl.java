@@ -18,15 +18,18 @@ package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.PromotionDTOImpl;
 import org.yes.cart.domain.entity.Promotion;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.PromotionService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.DtoPromotionService;
 import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.HQLUtils;
@@ -43,17 +46,21 @@ public class DtoPromotionServiceImpl
     extends AbstractDtoServiceImpl<PromotionDTO, PromotionDTOImpl, Promotion>
         implements DtoPromotionService {
 
+    private final ShopService shopService;
+
     /**
      * Construct base dto service.
-     *
-     * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
-     * @param promotionGenericService  {@link org.yes.cart.service.domain.GenericService}
-     * @param adaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     *  @param dtoFactory              {@link DtoFactory}
+     * @param promotionGenericService  {@link GenericService}
+     * @param adaptersRepository       {@link AdaptersRepository}
+     * @param shopService              shop service
      */
     public DtoPromotionServiceImpl(final DtoFactory dtoFactory,
                                    final GenericService<Promotion> promotionGenericService,
-                                   final AdaptersRepository adaptersRepository) {
+                                   final AdaptersRepository adaptersRepository,
+                                   final ShopService shopService) {
         super(dtoFactory, promotionGenericService, adaptersRepository);
+        this.shopService = shopService;
     }
 
     /** {@inheritDoc} */
@@ -89,6 +96,17 @@ public class DtoPromotionServiceImpl
         if (StringUtils.isNotBlank(shopCode) && StringUtils.isNotBlank(currency)) {
             // only allow lists for shop+currency selection
 
+            final Shop currentShop = shopService.getShopByCode(shopCode);
+            if (currentShop == null) {
+                return Collections.emptyList();
+            }
+            final List<String> shopCodes = new ArrayList<>(2);
+            shopCodes.add(shopCode);
+            if (currentShop.getMaster() != null && !currentShop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B_STRICT_PROMOTIONS)) {
+                shopCodes.add(currentShop.getMaster().getCode());
+            }
+
+
             List<Promotion> entities = Collections.emptyList();
 
             final String orderBy = " order by e.enabledFrom, e.enabledTo, e.name";
@@ -100,9 +118,9 @@ public class DtoPromotionServiceImpl
                 if (dateSearch != null) {
 
                     entities = getService().getGenericDao().findRangeByCriteria(
-                            " where e.shopCode = ?1 and e.currency = ?2 and (?3 is null or e.enabledFrom is null or e.enabledFrom <= ?3) and (?4 is null or e.enabledTo is null or e.enabledTo >= ?4) and (?5 = 0 or e.promoType in (?6)) and (?7 = 0 or e.promoAction in (?8)) " + orderBy,
+                            " where e.shopCode in ?1 and e.currency = ?2 and (?3 is null or e.enabledFrom is null or e.enabledFrom <= ?3) and (?4 is null or e.enabledTo is null or e.enabledTo >= ?4) and (?5 = 0 or e.promoType in (?6)) and (?7 = 0 or e.promoAction in (?8)) " + orderBy,
                             page * pageSize, pageSize,
-                            shopCode,
+                            shopCodes,
                             currency,
                             dateSearch.getFirst(),
                             dateSearch.getSecond(),
@@ -130,9 +148,9 @@ public class DtoPromotionServiceImpl
                                 if (enabledOnly) {
                                     final LocalDateTime now = now();
                                     entities = getService().getGenericDao().findRangeByCriteria(
-                                            " where e.shopCode = ?1 and e.currency = ?2 and e.enabled = ?3 and (e.enabledFrom is null or e.enabledFrom <= ?4) and (e.enabledTo is null or e.enabledTo >= ?4) and (lower(e.code) like ?5 or lower(e.tag) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9)) " + orderBy,
+                                            " where e.shopCode in ?1 and e.currency = ?2 and e.enabled = ?3 and (e.enabledFrom is null or e.enabledFrom <= ?4) and (e.enabledTo is null or e.enabledTo >= ?4) and (lower(e.code) like ?5 or lower(e.tag) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9)) " + orderBy,
                                             page * pageSize, pageSize,
-                                            shopCode,
+                                            shopCodes,
                                             currency,
                                             Boolean.TRUE,
                                             now,
@@ -145,9 +163,9 @@ public class DtoPromotionServiceImpl
                                 } else if (disabledOnly) {
                                     final LocalDateTime now = now();
                                     entities = getService().getGenericDao().findRangeByCriteria(
-                                            " where e.shopCode = ?1 and e.currency = ?2 and (e.enabled = ?3 or e.enabledFrom > ?4 or e.enabledTo < ?4) and (lower(e.code) like ?5 or lower(e.tag) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9)) " + orderBy,
+                                            " where e.shopCode in ?1 and e.currency = ?2 and (e.enabled = ?3 or e.enabledFrom > ?4 or e.enabledTo < ?4) and (lower(e.code) like ?5 or lower(e.tag) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9)) " + orderBy,
                                             page * pageSize, pageSize,
-                                            shopCode,
+                                            shopCodes,
                                             currency,
                                             Boolean.FALSE,
                                             now,
@@ -159,9 +177,9 @@ public class DtoPromotionServiceImpl
                                     );
                                 } else {
                                     entities = getService().getGenericDao().findRangeByCriteria(
-                                            " where e.shopCode = ?1 and e.currency = ?2 and (lower(e.code) like ?3 or lower(e.tag) like ?3)  and (?4 = 0 or e.promoType in (?5)) and (?6 = 0 or e.promoAction in (?7)) " + orderBy,
+                                            " where e.shopCode in ?1 and e.currency = ?2 and (lower(e.code) like ?3 or lower(e.tag) like ?3)  and (?4 = 0 or e.promoType in (?5)) and (?6 = 0 or e.promoAction in (?7)) " + orderBy,
                                             page * pageSize, pageSize,
-                                            shopCode,
+                                            shopCodes,
                                             currency,
                                             HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrConditionOrAction.getSecond()),
                                             HQLUtils.criteriaInTest(types),
@@ -178,9 +196,9 @@ public class DtoPromotionServiceImpl
                                 if (enabledOnly) {
                                     final LocalDateTime now = now();
                                     entities = getService().getGenericDao().findRangeByCriteria(
-                                            " where e.shopCode = ?1 and e.currency = ?2 and e.enabled = ?3 and (e.enabledFrom is null or e.enabledFrom <= ?4) and (e.enabledTo is null or e.enabledTo >= ?4) and (lower(e.eligibilityCondition) like ?5 or lower(e.promoActionContext) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9))  " + orderBy,
+                                            " where e.shopCode in ?1 and e.currency = ?2 and e.enabled = ?3 and (e.enabledFrom is null or e.enabledFrom <= ?4) and (e.enabledTo is null or e.enabledTo >= ?4) and (lower(e.eligibilityCondition) like ?5 or lower(e.promoActionContext) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9))  " + orderBy,
                                             page * pageSize, pageSize,
-                                            shopCode,
+                                            shopCodes,
                                             currency,
                                             Boolean.TRUE,
                                             now,
@@ -193,9 +211,9 @@ public class DtoPromotionServiceImpl
                                 } else if (disabledOnly) {
                                     final LocalDateTime now = now();
                                     entities = getService().getGenericDao().findRangeByCriteria(
-                                            " where e.shopCode = ?1 and e.currency = ?2 and (e.enabled = ?3 or e.enabledFrom > ?4 or e.enabledTo < ?4) and (lower(e.eligibilityCondition) like ?5 or lower(e.promoActionContext) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9))  " + orderBy,
+                                            " where e.shopCode in ?1 and e.currency = ?2 and (e.enabled = ?3 or e.enabledFrom > ?4 or e.enabledTo < ?4) and (lower(e.eligibilityCondition) like ?5 or lower(e.promoActionContext) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9))  " + orderBy,
                                             page * pageSize, pageSize,
-                                            shopCode,
+                                            shopCodes,
                                             currency,
                                             Boolean.FALSE,
                                             now,
@@ -207,9 +225,9 @@ public class DtoPromotionServiceImpl
                                     );
                                 } else {
                                     entities = getService().getGenericDao().findRangeByCriteria(
-                                            " where e.shopCode = ?1 and e.currency = ?2 and (lower(e.eligibilityCondition) like ?3 or lower(e.promoActionContext) like ?3)  and (?4 = 0 or e.promoType in (?5)) and (?6 = 0 or e.promoAction in (?7))  " + orderBy,
+                                            " where e.shopCode in ?1 and e.currency = ?2 and (lower(e.eligibilityCondition) like ?3 or lower(e.promoActionContext) like ?3)  and (?4 = 0 or e.promoType in (?5)) and (?6 = 0 or e.promoAction in (?7))  " + orderBy,
                                             page * pageSize, pageSize,
-                                            shopCode,
+                                            shopCodes,
                                             currency,
                                             HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrConditionOrAction.getSecond()),
                                             HQLUtils.criteriaInTest(types),
@@ -226,9 +244,9 @@ public class DtoPromotionServiceImpl
                             if (enabledOnly) {
                                 final LocalDateTime now = now();
                                 entities = getService().getGenericDao().findRangeByCriteria(
-                                        " where e.shopCode = ?1 and e.currency = ?2 and e.enabled = ?3 and (e.enabledFrom is null or e.enabledFrom <= ?4) and (e.enabledTo is null or e.enabledTo >= ?4) and (lower(e.code) like ?5 or lower(e.name) like ?5 or lower(e.description) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9))  " + orderBy,
+                                        " where e.shopCode in ?1 and e.currency = ?2 and e.enabled = ?3 and (e.enabledFrom is null or e.enabledFrom <= ?4) and (e.enabledTo is null or e.enabledTo >= ?4) and (lower(e.code) like ?5 or lower(e.name) like ?5 or lower(e.description) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9))  " + orderBy,
                                         page * pageSize, pageSize,
-                                        shopCode,
+                                        shopCodes,
                                         currency,
                                         Boolean.TRUE,
                                         now,
@@ -241,9 +259,9 @@ public class DtoPromotionServiceImpl
                             } else if (disabledOnly) {
                                 final LocalDateTime now = now();
                                 entities = getService().getGenericDao().findRangeByCriteria(
-                                        " where e.shopCode = ?1 and e.currency = ?2 and (e.enabled = ?3 or e.enabledFrom > ?4 or e.enabledTo < ?4) and (lower(e.code) like ?5 or lower(e.name) like ?5 or lower(e.description) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9))  " + orderBy,
+                                        " where e.shopCode in ?1 and e.currency = ?2 and (e.enabled = ?3 or e.enabledFrom > ?4 or e.enabledTo < ?4) and (lower(e.code) like ?5 or lower(e.name) like ?5 or lower(e.description) like ?5)  and (?6 = 0 or e.promoType in (?7)) and (?8 = 0 or e.promoAction in (?9))  " + orderBy,
                                         page * pageSize, pageSize,
-                                        shopCode,
+                                        shopCodes,
                                         currency,
                                         Boolean.FALSE,
                                         now,
@@ -255,9 +273,9 @@ public class DtoPromotionServiceImpl
                                 );
                             } else {
                                 entities = getService().getGenericDao().findRangeByCriteria(
-                                        " where e.shopCode = ?1 and e.currency = ?2 and (lower(e.code) like ?3 or lower(e.name) like ?3 or lower(e.description) like ?3)  and (?4 = 0 or e.promoType in (?5)) and (?6 = 0 or e.promoAction in (?7))  " + orderBy,
+                                        " where e.shopCode in ?1 and e.currency = ?2 and (lower(e.code) like ?3 or lower(e.name) like ?3 or lower(e.description) like ?3)  and (?4 = 0 or e.promoType in (?5)) and (?6 = 0 or e.promoAction in (?7))  " + orderBy,
                                         page * pageSize, pageSize,
-                                        shopCode,
+                                        shopCodes,
                                         currency,
                                         HQLUtils.criteriaIlikeAnywhere(enabled != null ? enabled.getSecond() : filter),
                                         HQLUtils.criteriaInTest(types),
@@ -273,9 +291,9 @@ public class DtoPromotionServiceImpl
                         if (enabledOnly) {
                             final LocalDateTime now = now();
                             entities = getService().getGenericDao().findRangeByCriteria(
-                                    " where e.shopCode = ?1 and e.currency = ?2 and e.enabled = ?3 and (e.enabledFrom is null or e.enabledFrom <= ?4) and (e.enabledTo is null or e.enabledTo >= ?4)  and (?5 = 0 or e.promoType in (?6)) and (?7 = 0 or e.promoAction in (?8))  " + orderBy,
+                                    " where e.shopCode in ?1 and e.currency = ?2 and e.enabled = ?3 and (e.enabledFrom is null or e.enabledFrom <= ?4) and (e.enabledTo is null or e.enabledTo >= ?4)  and (?5 = 0 or e.promoType in (?6)) and (?7 = 0 or e.promoAction in (?8))  " + orderBy,
                                     page * pageSize, pageSize,
-                                    shopCode,
+                                    shopCodes,
                                     currency,
                                     Boolean.TRUE,
                                     now,
@@ -287,9 +305,9 @@ public class DtoPromotionServiceImpl
                         } else {
                             final LocalDateTime now = now();
                             entities = getService().getGenericDao().findRangeByCriteria(
-                                    " where e.shopCode = ?1 and e.currency = ?2 and (e.enabled = ?3 or e.enabledFrom > ?4 or e.enabledTo < ?4)  and (?5 = 0 or e.promoType in (?6)) and (?7 = 0 or e.promoAction in (?8))   " + orderBy,
+                                    " where e.shopCode in ?1 and e.currency = ?2 and (e.enabled = ?3 or e.enabledFrom > ?4 or e.enabledTo < ?4)  and (?5 = 0 or e.promoType in (?6)) and (?7 = 0 or e.promoAction in (?8))   " + orderBy,
                                     page * pageSize, pageSize,
-                                    shopCode,
+                                    shopCodes,
                                     currency,
                                     Boolean.FALSE,
                                     now,
@@ -306,9 +324,9 @@ public class DtoPromotionServiceImpl
             } else {
 
                 entities = getService().getGenericDao().findRangeByCriteria(
-                        " where e.shopCode = ?1 and e.currency = ?2  and (?3 = 0 or e.promoType in (?4)) and (?5 = 0 or e.promoAction in (?6)) " + orderBy,
+                        " where e.shopCode in ?1 and e.currency = ?2  and (?3 = 0 or e.promoType in (?4)) and (?5 = 0 or e.promoAction in (?6)) " + orderBy,
                         page * pageSize, pageSize,
-                        shopCode,
+                        shopCodes,
                         currency,
                         HQLUtils.criteriaInTest(types),
                         HQLUtils.criteriaIn(types),
@@ -345,7 +363,11 @@ public class DtoPromotionServiceImpl
         entity.setCurrency(dto.getCurrency());
         entity.setPromoType(dto.getPromoType());
         entity.setPromoAction(dto.getPromoAction());
-        entity.setEligibilityCondition(dto.getEligibilityCondition());
+        if (dto.getEligibilityCondition() == null) {
+            entity.setEligibilityCondition(Boolean.TRUE.toString());
+        } else {
+            entity.setEligibilityCondition(dto.getEligibilityCondition());
+        }
         entity.setPromoActionContext(dto.getPromoActionContext());
         entity.setCanBeCombined(dto.isCanBeCombined());
         entity.setCouponTriggered(dto.isCouponTriggered());
@@ -356,7 +378,11 @@ public class DtoPromotionServiceImpl
         if (!entity.isEnabled()) { // We allow modifications if entity is disabled
             entity.setCanBeCombined(dto.isCanBeCombined());
             entity.setCouponTriggered(dto.isCouponTriggered());
-            entity.setEligibilityCondition(dto.getEligibilityCondition());
+            if (dto.getEligibilityCondition() == null) {
+                entity.setEligibilityCondition(Boolean.TRUE.toString());
+            } else {
+                entity.setEligibilityCondition(dto.getEligibilityCondition());
+            }
             entity.setPromoActionContext(dto.getPromoActionContext());
         }
     }

@@ -17,10 +17,11 @@ import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } 
 import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
 import { PricingService, Util } from './../../shared/services/index';
-import { PromotionVO, PromotionCouponVO, ValidationRequestVO } from './../../shared/model/index';
+import { PromotionVO, PromotionCouponVO, ValidationRequestVO, BrandVO, CategoryVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
+import { BrandSelectComponent, CategoryMinSelectComponent } from './../../shared/catalog/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
@@ -97,6 +98,12 @@ export class PromotionComponent implements OnInit, OnDestroy {
   private ruleHelpModalDialog:ModalComponent;
   private selectedRuleTemplate:string;
   private selectedRuleTemplateName:string;
+
+  @ViewChild('brandsModalDialog')
+  private brandsModalDialog:BrandSelectComponent;
+
+  @ViewChild('categorySelectComponent')
+  private categorySelectComponent:CategoryMinSelectComponent;
 
   @ViewChild('generateCouponsModalDialog')
   private generateCouponsModalDialog:ModalComponent;
@@ -194,7 +201,8 @@ export class PromotionComponent implements OnInit, OnDestroy {
   @Input()
   set promotion(promotion:PromotionVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'promotionForm', '_promotion', promotion, promotion != null && promotion.promotionId > 0, ['code', 'promoType', 'promoAction', ]);
+    UiUtil.formInitialise(this, 'initialising', 'promotionForm', '_promotion', promotion, promotion != null && promotion.promotionId > 0,
+      ['code', 'promoType', 'promoAction', ]);
 
   }
 
@@ -269,6 +277,51 @@ export class PromotionComponent implements OnInit, OnDestroy {
           this._promotion.eligibilityCondition = this.selectedRuleTemplate;
         } else {
           this._promotion.eligibilityCondition = '(' + this._promotion.eligibilityCondition + ') && (' + this.selectedRuleTemplate + ')';
+        }
+        this.formChange();
+      }
+    }
+  }
+
+
+  protected onCategoryClick() {
+
+    this.categorySelectComponent.showDialog(0);
+
+  }
+
+
+  protected onCatalogTreeDataSelected(event:FormValidationEvent<CategoryVO>) {
+    LogUtil.debug('PromotionComponent onCatalogTreeDataSelected handler', event);
+    if (event.valid) {
+      if (this._promotion != null && !this._promotion.enabled) {
+
+        if (this.isBlank(this._promotion.eligibilityCondition)) {
+          this._promotion.eligibilityCondition = '\n\'' + event.source.guid + '\'';
+        } else {
+          this._promotion.eligibilityCondition = this._promotion.eligibilityCondition + '\n\'' + event.source.guid + '\'';
+        }
+        this.formChange();
+      }
+    }
+  }
+
+
+  protected onBrandClick() {
+
+    this.brandsModalDialog.showDialog();
+
+  }
+
+  protected onBrandSelected(event:FormValidationEvent<BrandVO>) {
+    LogUtil.debug('PromotionComponent onBrandSelected', event);
+    if (event.valid) {
+      if (this._promotion != null && !this._promotion.enabled) {
+
+        if (this.isBlank(this._promotion.eligibilityCondition)) {
+          this._promotion.eligibilityCondition = '\n\'' + event.source.name + '\'';
+        } else {
+          this._promotion.eligibilityCondition = this._promotion.eligibilityCondition + '\n\'' + event.source.name + '\'';
         }
         this.formChange();
       }

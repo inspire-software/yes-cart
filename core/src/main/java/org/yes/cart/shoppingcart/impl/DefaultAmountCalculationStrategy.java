@@ -109,7 +109,9 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
             customer = null;
         }
 
-        final PromotionContext promoCtx = promotionContextFactory.getInstance(cart.getShoppingContext().getShopCode(), cart.getCurrencyCode());
+        final PromotionContext promoCtx = promotionContextFactory.getInstance(
+                cart.getShoppingContext().getCustomerShopCode(), cart.getCurrencyCode()
+        );
 
         // 1. Apply all item level promotions as the first step
         applyItemLevelPromotions(customer, cart, promoCtx);

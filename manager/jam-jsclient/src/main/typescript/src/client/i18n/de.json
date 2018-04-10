@@ -463,6 +463,7 @@
 
   "PROMOTION_TAG": "Tags",
   "PROMOTION_SHOP_CODE": "Shop code",
+  "PROMOTION_SPEC": "Konfiguration",
   "PROMOTION_TYPE": "Type",
   "PROMOTION_TYPE_O": "Bestellung",
   "PROMOTION_TYPE_S": "Versand",
@@ -509,6 +510,7 @@
   "PROMOTION_COUPON_LIMIT_PER_CUSTOMER": "Limitierte Nutzung (pro Kunde)",
   "PROMOTION_COUPON_USAGE_COUNT": "Zählen der Nutzung",
   "PROMOTION_CAN_COMBINE": "Kann kombiniert werden",
+  "PROMOTION_CANNOT_COMBINE": "Kann nicht kombiniert werden",
   "PROMOTION_ENABLED": "Aktiviert",
   "PROMOTION_ENABLED_FROM": "Gültig von",
   "PROMOTION_ENABLED_TO": "Gültig bis",

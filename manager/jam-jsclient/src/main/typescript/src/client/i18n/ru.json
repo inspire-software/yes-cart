@@ -463,6 +463,7 @@
 
   "PROMOTION_TAG": "Теги",
   "PROMOTION_SHOP_CODE": "Код магазина",
+  "PROMOTION_SPEC": "Конфигурация",
   "PROMOTION_TYPE": "Тип",
   "PROMOTION_TYPE_O": "Заказ",
   "PROMOTION_TYPE_S": "Доставка",
@@ -509,6 +510,7 @@
   "PROMOTION_COUPON_LIMIT_PER_CUSTOMER": "Ограничение использования (на одного клиента)",
   "PROMOTION_COUPON_USAGE_COUNT": "Счетчик использования",
   "PROMOTION_CAN_COMBINE": "Можно объединить",
+  "PROMOTION_CANNOT_COMBINE": "Нельзя объединить",
   "PROMOTION_ENABLED": "Активна",
   "PROMOTION_ENABLED_FROM": "Действительна с",
   "PROMOTION_ENABLED_TO": "Действительна по",

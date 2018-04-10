@@ -86,6 +86,8 @@ public class VoShopSummary {
     private MutablePair<String, Boolean> b2bProfileActive;
     private MutablePair<String, Boolean> b2bAddressbookActive;
     private MutablePair<String, Boolean> b2bStrictPriceActive;
+    private MutablePair<String, Boolean> b2bStrictPriceRulesActive;
+    private MutablePair<String, Boolean> b2bStrictPromotionsActive;
     private MutablePair<String, Boolean> cookiePolicy;
     private MutablePair<String, Boolean> anonymousBrowsing;
     private MutablePair<String, String> customerSession;
@@ -418,6 +420,22 @@ public class VoShopSummary {
 
     public void setB2bStrictPriceActive(final MutablePair<String, Boolean> b2bStrictPriceActive) {
         this.b2bStrictPriceActive = b2bStrictPriceActive;
+    }
+
+    public MutablePair<String, Boolean> getB2bStrictPriceRulesActive() {
+        return b2bStrictPriceRulesActive;
+    }
+
+    public void setB2bStrictPriceRulesActive(final MutablePair<String, Boolean> b2bStrictPriceRulesActive) {
+        this.b2bStrictPriceRulesActive = b2bStrictPriceRulesActive;
+    }
+
+    public MutablePair<String, Boolean> getB2bStrictPromotionsActive() {
+        return b2bStrictPromotionsActive;
+    }
+
+    public void setB2bStrictPromotionsActive(final MutablePair<String, Boolean> b2bStrictPromotionsActive) {
+        this.b2bStrictPromotionsActive = b2bStrictPromotionsActive;
     }
 
     public MutablePair<String, Boolean> getCookiePolicy() {

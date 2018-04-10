@@ -333,7 +333,7 @@ public class DtoPromotionServiceImplTezt extends BaseCoreDBTestCase {
 
     private PromotionDTO getDto() {
         PromotionDTO promotionDTO = dtoFactory.getByIface(PromotionDTO.class);
-        promotionDTO.setShopCode("SHOP10");
+        promotionDTO.setShopCode("SHOIP1");
         promotionDTO.setCurrency("EUR");
         promotionDTO.setCode("TESTCODE");
         promotionDTO.setPromoType(Promotion.TYPE_ORDER);

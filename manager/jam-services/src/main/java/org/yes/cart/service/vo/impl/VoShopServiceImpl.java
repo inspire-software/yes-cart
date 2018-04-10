@@ -368,11 +368,16 @@ public class VoShopServiceImpl implements VoShopService {
             summary.getAdminEmail().setSecond(subAdminEmail.getSecond() + " (" + summary.getAdminEmail().getSecond() + ")");
         }
 
-        // B2B address book + strict price is from SUB
+        // B2B address book
         summary.setB2bAddressbookActive(getBooleanShopAttributeConfig(
                 subAttrsMap, AttributeNamesKeys.Shop.SHOP_B2B_ADDRESSBOOK, lang, false));
+        // B2B sub shop specific
         summary.setB2bStrictPriceActive(getBooleanShopAttributeConfig(
                 subAttrsMap, AttributeNamesKeys.Shop.SHOP_B2B_STRICT_PRICE, lang, false));
+        summary.setB2bStrictPriceRulesActive(getBooleanShopAttributeConfig(
+                subAttrsMap, AttributeNamesKeys.Shop.SHOP_B2B_STRICT_PRICE_RULES, lang, false));
+        summary.setB2bStrictPromotionsActive(getBooleanShopAttributeConfig(
+                subAttrsMap, AttributeNamesKeys.Shop.SHOP_B2B_STRICT_PROMOTIONS, lang, false));
 
         summary.setB2bProfileActive(getBooleanShopAttributeConfig(
                 masterAttrsMap, AttributeNamesKeys.Shop.SHOP_B2B, lang, false));

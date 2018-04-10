@@ -96,7 +96,7 @@
       <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
     </div>
 
-    <yc-promotions [promotions]="promotions" (dataSelected)="onPromotionSelected($event)"></yc-promotions>
+    <yc-promotions [promotions]="promotions" [selectedShopCode]="selectedShopCode" (dataSelected)="onPromotionSelected($event)"></yc-promotions>
   </div>
 
   <div [hidden]="viewMode !== 'promotion'" class="{{ loading ? 'loading-data' : '' }}">

@@ -1160,6 +1160,7 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
             allowing(shoppingContext).getShopId(); will(returnValue(10L));
             allowing(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
+            allowing(shoppingContext).getCustomerShopCode(); will(returnValue("SHOP10"));
             allowing(shoppingContext).getCountryCode(); will(returnValue("GB"));
             allowing(shoppingContext).getStateCode(); will(returnValue("GB-CAM"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
@@ -1311,6 +1312,7 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
             allowing(shoppingContext).getShopId(); will(returnValue(10L));
             allowing(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
+            allowing(shoppingContext).getCustomerShopCode(); will(returnValue("SHOP10"));
             allowing(shoppingContext).getCountryCode(); will(returnValue("GB"));
             allowing(shoppingContext).getStateCode(); will(returnValue("GB-CAM"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));

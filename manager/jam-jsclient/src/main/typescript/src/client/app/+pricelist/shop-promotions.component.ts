@@ -37,6 +37,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   private static COOKIE_SHOP:string = 'YCJAM_UI_PROMO_SHOP';
   private static COOKIE_CURRENCY:string = 'YCJAM_UI_PROMO_CURR';
 
+  private static _selectedShopCode:string;
   private static _selectedShop:ShopVO;
   private static _selectedCurrency:string;
 
@@ -104,6 +105,14 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
     ShopPromotionsComponent._selectedShop = selectedShop;
   }
 
+  get selectedShopCode(): string {
+    return ShopPromotionsComponent._selectedShopCode;
+  }
+
+  set selectedShopCode(value: string) {
+    ShopPromotionsComponent._selectedShopCode = value;
+  }
+
   get selectedCurrency():string {
     return ShopPromotionsComponent._selectedCurrency;
   }
@@ -154,6 +163,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
           shops.forEach(shop => {
              if (shop.code == shopCode) {
                this.selectedShop = shop;
+               this.selectedShopCode = shop.code;
                LogUtil.debug('ShopPromotionsComponent ngOnInit presetting shop from cookie', shop);
              }
           });
@@ -189,7 +199,10 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopPromotionsComponent onShopSelected');
     this.selectedShop = event;
     if (this.selectedShop != null) {
+      this.selectedShopCode = event.code;
       CookieUtil.createCookie(ShopPromotionsComponent.COOKIE_SHOP, this.selectedShop.code, 360);
+    } else {
+      this.selectedShopCode = null;
     }
   }
 
