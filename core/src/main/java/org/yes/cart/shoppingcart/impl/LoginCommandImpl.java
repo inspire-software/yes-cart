@@ -140,7 +140,16 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
 
     }
 
-    private boolean authenticate(final String username, final Shop shop, final String password) {
+    /**
+     * Authentication hook.
+     *
+     * @param username username
+     * @param shop     shop
+     * @param password password
+     *
+     * @return true if credentials are correct for given shop
+     */
+    protected boolean authenticate(final String username, final Shop shop, final String password) {
         return customerService.isCustomerExists(username, shop) &&
                 customerService.isPasswordValid(username, shop, password);
     }

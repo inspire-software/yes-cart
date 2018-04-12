@@ -165,5 +165,9 @@ public interface PricingEndpointController {
     @ResponseBody
     void removePromotionCoupon(@PathVariable("id") long id) throws Exception;
 
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN","ROLE_SMMARKETINGUSER"})
+    @RequestMapping(value = "/promotion/test/shop/{shopCode}/currency/{currency}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoCart testPromotions(@PathVariable("shopCode") String shopCode, @PathVariable("currency") String currency, @RequestBody VoPromotionTest testData) throws Exception;
 
 }

@@ -99,39 +99,8 @@ public class PromotionContextFactoryImpl implements PromotionContextFactory {
 
     /** {@inheritDoc} */
     @Override
-    public PromotionContext getInstance(final String shopCode, final String currency, final boolean ensureNew) {
-        return proxy().getInstance(shopCode, currency);
+    public void refresh(final String shopCode, final String currency) {
+        // not supported
     }
-
-    /** {@inheritDoc} */
-    @Override
-    public PromotionContext getInstance(final long shopId, final String currency) {
-        final Shop shop = shopService.getById(shopId);
-        return proxy().getInstance(shop.getCode(), currency);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public PromotionContext getInstance(final long shopId, final String currency, final boolean ensureNew) {
-        final Shop shop = shopService.getById(shopId);
-        return getInstance(shop.getCode(), currency, ensureNew);
-    }
-
-    private PromotionContextFactory proxy;
-
-    private PromotionContextFactory proxy() {
-        if (proxy == null) {
-            proxy = getSelf();
-        }
-        return proxy;
-    }
-
-    /**
-     * Spring IoC.
-     *
-     * @return self
-     */
-    public PromotionContextFactory getSelf() {
-        return null;
-    }
+    
 }

@@ -6,22 +6,30 @@
 
   <div class="text-right data-control">
 
-    <form class="pull-left">
+    <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'pricelist'" class="btn btn-info btn-circle btn-xl pull-left" style="margin-right: 2px" title="{{ 'MODAL_BUTTON_BACK' | translate }}">
+      <i class="fa fa-chevron-left"></i>
+    </button>
+
+    <form class="pull-left" [hidden]="viewMode !== 'pricelist'">
       <input class="filter-input" type="text" name="pricelistFilter" [(ngModel)]="pricelistFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
       <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
       <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
 
-    <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'pricelist'" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
 
-    <button type="button" (click)="onShopSelect()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTSHOP' | translate }}">
+    <button type="button" (click)="onShopSelect()" [hidden]="viewMode !== 'pricelist'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTSHOP' | translate }}">
       <i class="fa fa-sitemap"></i>
     </button>
 
-    <button type="button" (click)="onCurrencySelect()" [disabled]="selectedShop == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCURRENCY' | translate }}">
+    <button type="button" (click)="onCurrencySelect()" [disabled]="selectedShop == null" [hidden]="viewMode !== 'pricelist'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCURRENCY' | translate }}">
       <i class="fa fa-dollar"></i>
+    </button>
+
+    <button type="button" (click)="onTestRules()" [disabled]="selectedShop == null" class="btn  {{ viewMode === 'pricelisttest' ? 'btn-success' : 'btn-default' }} btn-circle btn-xl" title="{{ 'TEST' | translate }}">
+      <i class="fa fa-play"></i>
     </button>
 
     <button type="button" (click)="onRowNew()" [disabled]="selectedShop == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
@@ -44,45 +52,49 @@
 
   </div>
 
+  <div [hidden]="viewMode !== 'pricelist'" class="{{ loading ? 'loading-data' : '' }}">
 
-  <div *ngIf="searchHelpShow">
-    <div class="bg-info text-padding block-margin-spacer">
-      <p>{{ 'SEARCH_HELP_PRICELIST_DEFAULT' | translate }}</p>
-      <p>{{ 'SEARCH_HELP_PRICELIST_EXACT' | translate }} <span><button type="button" (click)="onSearchExact()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_PRICELIST_TAG' | translate }} <span><button type="button" (click)="onSearchTag()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_PRICELIST_SHIPPING' | translate }} <span><button type="button" (click)="onSearchShipping()" class="btn btn-default btn-circle"><i class="fa fa-truck"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-default btn-circle"><i class="fa fa-calendar"></i></button></span></p>
+    <div *ngIf="searchHelpShow">
+      <div class="bg-info text-padding block-margin-spacer">
+        <p>{{ 'SEARCH_HELP_PRICELIST_DEFAULT' | translate }}</p>
+        <p>{{ 'SEARCH_HELP_PRICELIST_EXACT' | translate }} <span><button type="button" (click)="onSearchExact()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PRICELIST_TAG' | translate }} <span><button type="button" (click)="onSearchTag()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PRICELIST_SHIPPING' | translate }} <span><button type="button" (click)="onSearchShipping()" class="btn btn-default btn-circle"><i class="fa fa-truck"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-default btn-circle"><i class="fa fa-calendar"></i></button></span></p>
+      </div>
     </div>
-  </div>
 
-  <div *ngIf="selectedShop == null">
-    <p class="bg-danger text-padding">
-      {{ 'SHOP_SELECTION_REQUIRED' | translate }}
-      <span>
-        <button type="button" (click)="onShopSelect()" class="btn btn-default btn-circle"><i class="fa fa-sitemap"></i></button>
-      </span>
-    </p>
-  </div>
+    <div *ngIf="selectedShop == null">
+      <p class="bg-danger text-padding">
+        {{ 'SHOP_SELECTION_REQUIRED' | translate }}
+        <span>
+          <button type="button" (click)="onShopSelect()" class="btn btn-default btn-circle"><i class="fa fa-sitemap"></i></button>
+        </span>
+      </p>
+    </div>
 
-  <div *ngIf="selectedShop != null && selectedCurrency == null">
-    <p class="bg-danger text-padding">
-      {{ 'CURRENCY_SELECTION_REQUIRED' | translate }}
-      <span>
-        <button type="button" (click)="onCurrencySelect()" class="btn btn-default btn-circle"><i class="fa fa-dollar"></i></button>
-      </span>
-    </p>
-  </div>
+    <div *ngIf="selectedShop != null && selectedCurrency == null">
+      <p class="bg-danger text-padding">
+        {{ 'CURRENCY_SELECTION_REQUIRED' | translate }}
+        <span>
+          <button type="button" (click)="onCurrencySelect()" class="btn btn-default btn-circle"><i class="fa fa-dollar"></i></button>
+        </span>
+      </p>
+    </div>
 
-  <div *ngIf="pricelistFilterRequired && selectedShop != null && selectedCurrency != null">
-    <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
-  </div>
+    <div *ngIf="pricelistFilterRequired && selectedShop != null && selectedCurrency != null">
+      <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
+    </div>
 
-  <div *ngIf="pricelistFilterCapped">
-    <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-  </div>
+    <div *ngIf="pricelistFilterCapped">
+      <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
+    </div>
 
-  <div class="{{ loading ? 'loading-data' : '' }}">
     <yc-pricelist [pricelist]="pricelist" (dataSelected)="onPricelistSelected($event)"></yc-pricelist>
+  </div>
+
+  <div [hidden]="viewMode !== 'pricelisttest'"  class="{{ loading ? 'loading-data' : '' }}">
+    <yc-promotion-test-result [cart]="testCart"></yc-promotion-test-result>
   </div>
 
   <yc-modal #deleteConfirmationModalDialog
@@ -256,12 +268,13 @@
     <div class="item-list-overflow">
       <yc-currency-select [shop]="selectedShop" (dataSelected)="onCurrencySelected($event)"></yc-currency-select>
     </div>
-
   </yc-modal>
 
 
   <yc-product-sku-select #productSkuSelectDialog (dataSelected)="onProductSkuSelected($event)"></yc-product-sku-select>
 
   <yc-carrier-sla-select #carrierSlaSelectDialog (dataSelected)="onCarrierSlaSelected($event)"></yc-carrier-sla-select>
+
+  <yc-promotion-test-config #runTestModalDialog (dataConfigured)="onRunTestResult($event)"></yc-promotion-test-config>
 
 </div>

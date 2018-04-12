@@ -119,3 +119,15 @@ export interface TaxConfigVO {
   guid : string;
 
 }
+
+export interface PromotionTestVO {
+
+  customer: string;
+  shipping: string;
+  coupons: string;
+  sku: string;
+  language: string;
+  time: Date;
+
+}
+

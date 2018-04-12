@@ -15,8 +15,9 @@
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ShopEventBus, PricingService, Util } from './../shared/services/index';
+import { PromotionTestConfigComponent } from './components/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { PromotionVO, ShopVO, Pair } from './../shared/model/index';
+import { PromotionVO, ShopVO, Pair, CartVO, PromotionTestVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
@@ -33,6 +34,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   private static PROMOTIONS:string = 'promotions';
   private static PROMOTION:string = 'promotion';
+  private static PROMOTIONS_TEST:string = 'promotionstest';
 
   private static COOKIE_SHOP:string = 'YCJAM_UI_PROMO_SHOP';
   private static COOKIE_CURRENCY:string = 'YCJAM_UI_PROMO_CURR';
@@ -91,6 +93,12 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   @ViewChild('selectCurrencyModalDialog')
   private selectCurrencyModalDialog:ModalComponent;
+
+  private testCart:CartVO;
+
+  @ViewChild('runTestModalDialog')
+  private runTestModalDialog:PromotionTestConfigComponent;
+
 
   constructor(private _promotionService:PricingService) {
     LogUtil.debug('ShopPromotionsComponent constructed');
@@ -239,6 +247,28 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onTestRules() {
+    LogUtil.debug('ShopPromotionsComponent onTestRules');
+    this.runTestModalDialog.showDialog();
+  }
+
+  onRunTestResult(event:PromotionTestVO) {
+    LogUtil.debug('ShopPromotionsComponent onRunTestResult', event);
+    if (event != null) {
+      this.loading = true;
+      let _sub:any = this._promotionService.testPromotions(this.selectedShop, this.selectedCurrency, event).subscribe(
+        cart => {
+          _sub.unsubscribe();
+          this.loading = false;
+          LogUtil.debug('ShopPromotionsComponent onTestRules', cart);
+          this.viewMode = ShopPromotionsComponent.PROMOTIONS_TEST;
+          this.testCart = cart;
+        }
+      );
+
+    }
+  }
+
   protected onFilterChange(event:any) {
 
     this.delayedFiltering.delay();
@@ -296,7 +326,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   protected onBackToList() {
     LogUtil.debug('ShopPromotionsComponent onBackToList handler');
-    if (this.viewMode === ShopPromotionsComponent.PROMOTION) {
+    if (this.viewMode === ShopPromotionsComponent.PROMOTION || this.viewMode === ShopPromotionsComponent.PROMOTIONS_TEST) {
       this.promotionEdit = null;
       this.viewMode = ShopPromotionsComponent.PROMOTIONS;
     }

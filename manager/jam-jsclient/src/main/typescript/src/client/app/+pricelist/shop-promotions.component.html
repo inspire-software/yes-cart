@@ -28,6 +28,10 @@
       <i class="fa fa-dollar"></i>
     </button>
 
+    <button type="button" (click)="onTestRules()" [disabled]="selectedShop == null" [hidden]="viewMode === 'promotion'" class="btn  {{ viewMode === 'promotionstest' ? 'btn-success' : 'btn-default' }} btn-circle btn-xl" title="{{ 'TEST' | translate }}">
+      <i class="fa fa-play"></i>
+    </button>
+
     <button type="button" (click)="onRowEnableSelected()" [disabled]="selectedPromotion == null"  class="btn {{selectedPromotion != null && selectedPromotion.enabled ? 'btn-success' : 'btn-danger' }} btn-circle btn-xl" title="{{ (selectedPromotion != null && selectedPromotion.enabled ? 'MODAL_BUTTON_DISABLE' : 'MODAL_BUTTON_ENABLE') | translate }}">
       <i class="fa fa-power-off"></i>
     </button>
@@ -104,6 +108,10 @@
                   (dataChanged)="onPromotionChanged($event)"></yc-promotion>
   </div>
 
+  <div [hidden]="viewMode !== 'promotionstest'"  class="{{ loading ? 'loading-data' : '' }}">
+    <yc-promotion-test-result [cart]="testCart"></yc-promotion-test-result>
+  </div>
+
   <yc-modal #deleteConfirmationModalDialog
             title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
@@ -146,5 +154,7 @@
       <yc-currency-select [shop]="selectedShop" (dataSelected)="onCurrencySelected($event)"></yc-currency-select>
     </div>
   </yc-modal>
+
+  <yc-promotion-test-config #runTestModalDialog (dataConfigured)="onRunTestResult($event)"></yc-promotion-test-config>
 
 </div>

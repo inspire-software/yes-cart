@@ -165,4 +165,10 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
     public @ResponseBody void removePromotionCoupon(@PathVariable("id") final long id) throws Exception {
         voPromotionService.removePromotionCoupon(id);
     }
+
+    @Override
+    public VoCart testPromotions(@PathVariable("shopCode") final String shopCode, @PathVariable("currency") final String currency, @RequestBody final VoPromotionTest testData) throws Exception {
+        return voPromotionService.testPromotions(shopCode, currency, testData);
+    }
+
 }

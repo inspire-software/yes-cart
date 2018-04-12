@@ -5,18 +5,21 @@ import { SharedModule } from '../shared/shared.module';
 import { ServicesModule } from '../shared/services/services.module';
 
 import { PriceListRoutingModule } from './pricelist-routing.module';
-import { PriceListComponent, PromotionComponent, PromotionCouponsComponent, PromotionsComponent, TaxConfigsComponent, TaxesComponent } from './components/index';
+import {
+  PriceListComponent, PromotionComponent, PromotionCouponsComponent, PromotionsComponent, PromotionTestConfigComponent, PromotionTestResultComponent,
+  TaxConfigsComponent, TaxesComponent
+} from './components/index';
 import { ShopPriceListComponent, ShopPromotionsComponent, ShopTaxesComponent } from './index';
 
 @NgModule({
     imports: [PriceListRoutingModule, CommonModule, SharedModule, ServicesModule],
     declarations: [
       PriceListComponent, PromotionComponent, PromotionCouponsComponent, PromotionsComponent, TaxConfigsComponent, TaxesComponent,
-      ShopPriceListComponent, ShopPromotionsComponent, ShopTaxesComponent,
+      ShopPriceListComponent, ShopPromotionsComponent, ShopTaxesComponent, PromotionTestConfigComponent, PromotionTestResultComponent
     ],
     exports: [
       PriceListComponent, PromotionComponent, PromotionCouponsComponent, PromotionsComponent, TaxConfigsComponent, TaxesComponent,
-      ShopPriceListComponent, ShopPromotionsComponent, ShopTaxesComponent,
+      ShopPriceListComponent, ShopPromotionsComponent, ShopTaxesComponent, PromotionTestConfigComponent, PromotionTestResultComponent
     ]
 })
 

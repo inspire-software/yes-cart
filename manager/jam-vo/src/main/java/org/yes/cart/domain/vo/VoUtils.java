@@ -31,19 +31,19 @@ public class VoUtils {
     }
 
 
-    public static List<MutablePair<String, String>> adaptMapToPairs(Map<String, String> map) {
-        final Set<Map.Entry<String, String>> es = map != null ? map.entrySet() : Collections.EMPTY_SET;
-        List<MutablePair<String, String>> rez = new ArrayList<>(es.size());
+    public static <K, V> List<MutablePair<K, V>> adaptMapToPairs(Map<K, V> map) {
+        final Set<Map.Entry<K, V>> es = map != null ? map.entrySet() : Collections.EMPTY_SET;
+        List<MutablePair<K, V>> rez = new ArrayList<>(es.size());
         for (Map.Entry ent : es) {
             rez.add(MutablePair.of(ent.getKey(), ent.getValue()));
         }
         return rez;
     }
 
-    public static Map<String, String> adaptPairsToMap(List<MutablePair<String, String>> pairs) {
-        Map<String, String> map = new HashMap<>(pairs != null ? pairs.size() : 0);
+    public static <K, V>  Map<K, V> adaptPairsToMap(List<MutablePair<K, V>> pairs) {
+        Map<K, V> map = new HashMap<>(pairs != null ? pairs.size() : 0);
         if (pairs != null) {
-            for (MutablePair<String, String> pair : pairs) {
+            for (MutablePair<K, V> pair : pairs) {
                 map.put(pair.getFirst(), pair.getSecond());
             }
         }

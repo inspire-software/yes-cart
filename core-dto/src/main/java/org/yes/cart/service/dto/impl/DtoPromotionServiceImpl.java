@@ -27,13 +27,17 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.promotion.PromotionTester;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.DtoPromotionService;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -47,20 +51,24 @@ public class DtoPromotionServiceImpl
         implements DtoPromotionService {
 
     private final ShopService shopService;
+    private final PromotionTester promotionTester;
 
     /**
      * Construct base dto service.
-     *  @param dtoFactory              {@link DtoFactory}
+     * @param dtoFactory               {@link DtoFactory}
      * @param promotionGenericService  {@link GenericService}
      * @param adaptersRepository       {@link AdaptersRepository}
      * @param shopService              shop service
+     * @param promotionTester          promotion tester
      */
     public DtoPromotionServiceImpl(final DtoFactory dtoFactory,
                                    final GenericService<Promotion> promotionGenericService,
                                    final AdaptersRepository adaptersRepository,
-                                   final ShopService shopService) {
+                                   final ShopService shopService,
+                                   final PromotionTester promotionTester) {
         super(dtoFactory, promotionGenericService, adaptersRepository);
         this.shopService = shopService;
+        this.promotionTester = promotionTester;
     }
 
     /** {@inheritDoc} */
@@ -385,6 +393,19 @@ public class DtoPromotionServiceImpl
             }
             entity.setPromoActionContext(dto.getPromoActionContext());
         }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ShoppingCart testPromotions(final String shopCode,
+                                       final String currency,
+                                       final String language,
+                                       final String customer,
+                                       final Map<String, BigDecimal> products,
+                                       final String shipping,
+                                       final List<String> coupons,
+                                       final Instant time) {
+        return promotionTester.testPromotions(shopCode, currency, language, customer, products, shipping, coupons, time);
     }
 
     /** {@inheritDoc} */

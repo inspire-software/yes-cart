@@ -50,37 +50,7 @@ public interface PromotionContextFactory {
      *
      * @param shopCode shop code
      * @param currency currency
-     * @param ensureNew guaranties that this context is created from fresh
-     *                  DB data.
-     *  @return context
      */
-    PromotionContext getInstance(String shopCode, final String currency, boolean ensureNew);
-
-    /**
-     * Get promotion context for given shop for
-     * current time frame.
-     *
-     *
-     * @param shopId shop PK
-     * @param currency currency
-     *
-     * @return context
-     */
-    PromotionContext getInstance(long shopId, final String currency);
-
-    /**
-     * Get promotion context for given shop for
-     * current time frame.
-     *
-     *
-     *
-     * @param shopId shop PK
-     * @param currency currency
-     * @param ensureNew guaranties that this context is created from fresh
-     *                  DB data.
-     *
-     * @return context
-     */
-    PromotionContext getInstance(long shopId, final String currency, boolean ensureNew);
+    void refresh(String shopCode, final String currency);
 
 }

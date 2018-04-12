@@ -14,33 +14,19 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.promotion;
+package org.yes.cart.domain.vo.matcher;
 
-import org.yes.cart.domain.entity.Promotion;
-
-import java.io.Serializable;
+import com.inspiresoftware.lib.dto.geda.adapter.DtoToEntityMatcher;
 
 /**
- * Triplet that unites three parts of the promotion processing.
- *
  * User: denispavlov
- * Date: 06/06/2014
- * Time: 08:56
+ * Date: 24/03/2015
+ * Time: 14:48
  */
-public interface PromoTriplet extends Serializable {
+public class NoopMatcher implements DtoToEntityMatcher {
 
-    /**
-     * @return promotion
-     */
-    Promotion getPromotion();
-
-    /**
-     * @return condition
-     */
-    PromotionCondition getCondition();
-
-    /**
-     * @return action
-     */
-    PromotionAction getAction();
+    @Override
+    public boolean match(final Object o, final Object o1) {
+        return false;
+    }
 }

@@ -30,6 +30,12 @@
                 <entry key="VoProductTypeInfo" value="org.yes.cart.domain.vo.VoProductTypeInfo"/>
                 <entry key="VoProductCategory" value="org.yes.cart.domain.vo.VoProductCategory"/>
                 <entry key="VoProductSku" value="org.yes.cart.domain.vo.VoProductSku"/>
+
+                <entry key="VoCart" value="org.yes.cart.domain.vo.VoCart"/>
+                <entry key="VoCartItem" value="org.yes.cart.domain.vo.VoCartItem"/>
+                <entry key="VoCartOrderInfo" value="org.yes.cart.domain.vo.VoCartOrderInfo"/>
+                <entry key="VoCartShoppingContext" value="org.yes.cart.domain.vo.VoCartShoppingContext"/>
+                <entry key="VoCartTotal" value="org.yes.cart.domain.vo.VoCartTotal"/>
             </map>
         </constructor-arg>
     </bean>
@@ -38,6 +44,7 @@
         <constructor-arg>
             <map>
                 <entry key="DisplayValues"                      value-ref="voDisplayValues"/>
+                <entry key="MapToListPairs"                     value-ref="voMapToListPairs"/>
                 <entry key="CSVToList"                          value-ref="voCSVToList"/>
                 <entry key="CSVToListDatesPairs"                value-ref="voCSVToListDatesPairs"/>
                 <entry key="PairMapToPairList"                  value-ref="voPairMapToPairList"/>
@@ -59,6 +66,7 @@
     </bean>
 
     <bean id="voDisplayValues" class="org.yes.cart.domain.vo.converter.DisplayValueMapToListMutablePairConverter"/>
+    <bean id="voMapToListPairs" class="org.yes.cart.domain.vo.converter.MapToMutablePairListConverter"/>
     <bean id="voCSVToList" class="org.yes.cart.domain.vo.converter.CSVToListConverter"/>
     <bean id="voCSVToListDatesPairs" class="org.yes.cart.domain.vo.converter.CSVToListDatesPairsConverter"/>
     <bean id="voPairMapToPairList" class="org.yes.cart.domain.vo.converter.PairMapToPairListConverter"/>

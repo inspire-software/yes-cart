@@ -516,6 +516,8 @@
   "PROMOTION_ENABLED_TO": "Valid to",
   "PROMOTION_ENABLED_TIP": "This promotion is enabled, disable it to make changes",
   "PROMOTION_COUPONS_TIP": "This promotion is not coupon triggered, set it to coupon triggered to make changes",
+  "PROMOTION_TEST_TIME": "Time for the test",
+  "PROMOTION_RULE_TEST_TIP": "You can enter several SKU separated by comma",
 
   "TAX_SHOP_CODE": "Shop code",
   "TAX_RATE": "Rate",

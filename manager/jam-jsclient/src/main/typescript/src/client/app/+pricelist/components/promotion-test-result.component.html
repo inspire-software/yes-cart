@@ -1,0 +1,109 @@
+<ng-template [ngIf]="cart">
+   <div class="row">
+    <div class="col-xs-12">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-3 col-md-2">&nbsp;</div>
+          <div class="col-xs-9 col-md-6">
+            <span class="label label-info">{{ cart.shoppingContext.shopCode == cart.shoppingContext.customerShopCode ? cart.shoppingContext.shopCode : (cart.shoppingContext.shopCode + ':' + cart.shoppingContext.customerShopCode) }}</span>&nbsp;
+            <span class="label label-info">{{ cart.currentLocale }}</span>&nbsp;
+            {{ cart.modifiedTimestamp | ycdatetime }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-3 col-md-2"><strong>{{ 'CUSTOMER_EMAIL' | translate }}</strong></div>
+          <div class="col-xs-9 col-md-6">{{ cart.shoppingContext.customerEmail }}&nbsp;</div>
+        </div>
+        <div class="row">
+          <div class="col-xs-3 col-md-2"><strong>{{ 'CUSTOMER_FULLNAME' | translate }}</strong></div>
+          <div class="col-xs-9 col-md-6">
+            <span [innerHTML]="getUserIcon(cart)"></span> {{ cart.shoppingContext.customerName }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel-body">
+
+        <section class="no-more-tables">
+          <table class="table-bordered table-striped table-condensed cf">
+            <thead class="cf">
+            <tr>
+              <th>{{ 'CUSTOMERORDER_DELIVERY' | translate }}</th>
+              <th>{{ 'NAME' | translate }}</th>
+              <th>{{ 'QUANTITY' | translate }}</th>
+              <th>{{ 'PRICE' | translate }}</th>
+              <th>{{ 'TAX' | translate }}</th>
+              <th><a (click)="onShowGrossTotalClick()" class="js-click"  title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_NO_TAX' : 'CUSTOMERORDER_TOTAL_WITH_TAX') | translate }}">{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }} {{ cart.currencyCode }}</a></th>
+              <th>{{ 'PROMO_APPLIED' | translate }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let row of cart.cartItems">
+              <td title="{{ 'CUSTOMERORDER_DELIVERY' | translate }}">
+                {{ 'CUSTOMERORDER_DELIVERY_' + row.deliveryGroup | translate }}: {{ row.supplierCode }}
+              </td>
+              <td title="{{ 'NAME' | translate }}">
+                <div>{{row.productSkuCode}}<br/>{{row.productName}}</div>
+              </td>
+              <td title="{{ 'QUANTITY' | translate }}" class="text-right">
+                <span>{{row.quantity | ycquantity}}</span>
+              </td>
+              <td title="{{ 'PRICE' | translate }}" class="text-right"><span [innerHTML]="getLinePriceFlags(row)"></span> {{ (showGrossTotal ? row.grossPrice : row.netPrice) | ycprice}}</td>
+              <td title="{{ 'TAX' | translate }}" class="text-right">{{row.taxCode}} @ {{row.taxRate}}%</td>
+              <td title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }} {{ cart.currencyCode }}" class="text-right">{{ ((showGrossTotal ? row.grossPrice : row.netPrice) * row.quantity) | ycprice }}</td>
+              <td title="{{ 'PROMO_APPLIED' | translate }}">
+                <span *ngIf="row.gift"><i class="fa fa-gift"></i></span>
+                <a  *ngFor="let linePromo of getPromotions(row.appliedPromo)"><span class="label label-info">{{ linePromo }}</span></a>&nbsp;
+              </td>
+            </tr>
+            <tr>
+              <th colspan="5">{{ 'CUSTOMERORDER_TOTAL_ITEM_LIST' | translate }}</th>
+              <td class="text-right"><span [innerHTML]="getOrderListPriceFlags(cart)"></span> {{ (showGrossTotal ? cart.total.subTotalAmount : (cart.total.subTotalAmount - cart.total.subTotalTax)) | ycprice }}</td>
+              <td title="{{ 'PROMO_APPLIED' | translate }}">
+                <a *ngFor="let itemsPromo of getPromotions(cart.total.appliedOrderPromo)"><span class="label label-info">{{ itemsPromo }}</span></a>&nbsp;
+              </td>
+            </tr>
+            <tr *ngFor="let delivery of cart.shipping">
+              <th colspan="5">
+                {{ 'CUSTOMERORDER_DELIVERY_' + delivery.deliveryGroup | translate }}: {{ delivery.productSkuCode }} ( {{ delivery.productName }} )
+              </th>
+              <td class="text-right">{{ (showGrossTotal ? delivery.grossPrice : delivery.netPrice) | ycprice }}</td>
+              <td title="{{ 'PROMO_APPLIED' | translate }}">
+                <a *ngFor="let deliveryPromo of getPromotions(delivery.appliedPromo)"><span class="label label-info">{{ deliveryPromo }}</span></a>&nbsp;
+              </td>
+            </tr>
+            <tr>
+              <th colspan="5">
+                {{ 'CUSTOMERORDER_TOTAL_ORDER' | translate }} {{ cart.currencyCode }}
+              </th>
+              <td class="text-right">{{ (showGrossTotal ? cart.total.totalAmount : (cart.total.totalAmount - cart.total.totalTax)) | ycprice }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <th colspan="5">{{ 'CUSTOMERORDER_TOTAL_ITEM_TAX' | translate }}</th>
+              <td class="text-right"> {{ cart.total.totalTax | ycprice }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            </tbody>
+          </table>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="cart.orderInfo.orderMessage">
+    <div class="col-xs-12">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-12"><strong>{{ 'CUSTOMERORDER_MSG' | translate }}</strong></div>
+          <div class="col-xs-12">{{ cart.orderInfo.orderMessage }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

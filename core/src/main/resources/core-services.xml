@@ -962,7 +962,6 @@
                         <constructor-arg index="4" ref="bestValuePromotionApplicationStrategy"/>
                         <constructor-arg index="5" ref="promotionConditionSupport"/>
                         <constructor-arg index="6" ref="pricingPolicyProvider"/>
-                        <lookup-method name="getSelf" bean="promotionContextFactory"/>
                     </bean>
                 </property>
             </bean>
@@ -1014,6 +1013,15 @@
     <bean id="promoActionShippingAmountOff" class="org.yes.cart.promotion.impl.action.ShippingAmountOffPromotionAction"/>
 
     <bean id="promoActionCustomerTag" class="org.yes.cart.promotion.impl.action.CustomerTagPromotionAction"/>
+
+    <bean id="promotionTester" class="org.yes.cart.promotion.impl.PromotionTesterImpl">
+        <constructor-arg index="0" ref="shopService"/>
+        <constructor-arg index="1" ref="priceService"/>
+        <constructor-arg index="2" ref="promotionContextFactory"/>
+        <constructor-arg index="3" ref="carrierSlaService"/>
+        <constructor-arg index="4" ref="amountCalculationStrategy"/>
+        <constructor-arg index="5" ref="shoppingCartCommandFactory"/>
+    </bean>
 
     <bean id="taxService" class="org.yes.cart.service.domain.impl.TaxServiceCachedImpl">
         <constructor-arg>

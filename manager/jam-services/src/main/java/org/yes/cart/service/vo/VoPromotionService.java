@@ -16,10 +16,14 @@
 
 package org.yes.cart.service.vo;
 
+import org.yes.cart.domain.vo.VoCart;
 import org.yes.cart.domain.vo.VoPromotion;
 import org.yes.cart.domain.vo.VoPromotionCoupon;
+import org.yes.cart.domain.vo.VoPromotionTest;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -106,6 +110,20 @@ public interface VoPromotionService {
      * @throws Exception errors
      */
     void removePromotionCoupon(long id) throws Exception;
+
+
+    /**
+     * Test promotions.
+     *
+     * @param shopCode shop code
+     * @param currency currency
+     * @param testData test data
+     *
+     * @return generated prices
+     */
+    VoCart testPromotions(String shopCode,
+                          String currency,
+                          VoPromotionTest testData);
 
 
 }

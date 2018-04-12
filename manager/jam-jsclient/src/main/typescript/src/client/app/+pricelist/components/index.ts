@@ -7,3 +7,6 @@ export * from './tax-configs.component';
 export * from './promotions.component';
 export * from './promotion.component';
 export * from './promotion-coupons.component';
+export * from './promotion-test-config.component';
+export * from './promotion-test-result.component';
+

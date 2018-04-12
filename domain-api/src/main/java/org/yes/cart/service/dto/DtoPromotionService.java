@@ -19,8 +19,12 @@ package org.yes.cart.service.dto;
 import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.shoppingcart.ShoppingCart;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -79,5 +83,30 @@ public interface DtoPromotionService extends GenericDTOService<PromotionDTO> {
      */
     List<PromotionDTO> findByCodes(Set<String> codes)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+
+    /**
+     * Test promotions.
+     *
+     * @param shopCode shop code
+     * @param currency currency
+     * @param language language
+     * @param customer customer (optional)
+     * @param products products SKU and corresponding quantities
+     * @param shipping shipping SLA
+     * @param coupons  coupon codes
+     * @param time     time now
+     *
+     * @return generated prices
+     */
+    ShoppingCart testPromotions(String shopCode,
+                                String currency,
+                                String language,
+                                String customer,
+                                Map<String, BigDecimal> products,
+                                String shipping,
+                                List<String> coupons,
+                                Instant time);
 
 }

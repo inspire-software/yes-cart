@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { ShopVO, PriceListVO, TaxVO, TaxConfigVO, PromotionVO, PromotionCouponVO } from '../model/index';
+import { ShopVO, PriceListVO, TaxVO, TaxConfigVO, PromotionVO, PromotionCouponVO, CartVO, PromotionTestVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -223,6 +223,21 @@ export class PricingService {
   }
 
 
+
+  /**
+   * Test rule for given shop in specified currency,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  testPromotions(shop:ShopVO, currency:string, test:PromotionTestVO) {
+
+    let body = JSON.stringify(test);
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/promotion/test/shop/' + shop.code + '/currency/' + currency + '/', body, options)
+      .map(res => <CartVO> this.json(res))
+      .catch(this.handleError);
+  }
 
 
   /**

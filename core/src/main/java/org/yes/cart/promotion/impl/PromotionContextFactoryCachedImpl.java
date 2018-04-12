@@ -42,23 +42,8 @@ public class PromotionContextFactoryCachedImpl implements PromotionContextFactor
     }
 
     /** {@inheritDoc} */
-    @Override
-    @CacheEvict(value = {
-            "promotionService-factoryGetInstance"
-    }, key = "#shopCode", condition = "#ensureNew == true")
-    public PromotionContext getInstance(final String shopCode, final String currency, final boolean ensureNew) {
-        return factory.getInstance(shopCode, currency, ensureNew);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public PromotionContext getInstance(final long shopId, final String currency) {
-        return factory.getInstance(shopId, currency);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public PromotionContext getInstance(final long shopId, final String currency, final boolean ensureNew) {
-        return factory.getInstance(shopId, currency, ensureNew);
+    @CacheEvict(value = "promotionService-factoryGetInstance")
+    public void refresh(final String shopCode, final String currency) {
+        // evict cache
     }
 }

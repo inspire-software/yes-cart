@@ -17,10 +17,11 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../shared/validation/validators';
 import { ShopEventBus, PricingService, Util } from './../shared/services/index';
+import { PromotionTestConfigComponent } from './components/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { ProductSkuSelectComponent } from './../shared/catalog/index';
 import { CarrierSlaSelectComponent } from './../shared/shipping/index';
-import { PriceListVO, ShopVO, ProductSkuVO, CarrierSlaVO } from './../shared/model/index';
+import { PriceListVO, ShopVO, ProductSkuVO, CarrierSlaVO, PromotionTestVO, CartVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
@@ -35,6 +36,9 @@ import { CookieUtil } from './../shared/cookies/index';
 
 export class ShopPriceListComponent implements OnInit, OnDestroy {
 
+  private static PRICELIST:string = 'pricelist';
+  private static PRICELIST_TEST:string = 'pricelisttest';
+
   private static COOKIE_SHOP:string = 'YCJAM_UI_PRICE_SHOP';
   private static COOKIE_CURRENCY:string = 'YCJAM_UI_PRICE_CURR';
 
@@ -43,6 +47,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
   private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
+  private viewMode:string = ShopPriceListComponent.PRICELIST;
 
   private pricelist:Array<PriceListVO> = [];
   private pricelistFilter:string;
@@ -83,6 +88,12 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
   private deleteValue:String;
 
   private loading:boolean = false;
+
+  private testCart:CartVO;
+
+  @ViewChild('runTestModalDialog')
+  private runTestModalDialog:PromotionTestConfigComponent;
+
 
   constructor(private _priceService:PricingService,
               fb: FormBuilder) {
@@ -252,6 +263,29 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onTestRules() {
+    LogUtil.debug('ShopPriceListComponent onTestRules');
+    this.runTestModalDialog.showDialog();
+  }
+
+  onRunTestResult(event:PromotionTestVO) {
+    LogUtil.debug('ShopPriceListComponent onRunTestResult', event);
+    if (event != null) {
+      this.loading = true;
+      let _sub:any = this._priceService.testPromotions(this.selectedShop, this.selectedCurrency, event).subscribe(
+        cart => {
+          _sub.unsubscribe();
+          this.loading = false;
+          LogUtil.debug('ShopPriceListComponent onTestRules', cart);
+          this.viewMode = ShopPriceListComponent.PRICELIST_TEST;
+          this.testCart = cart;
+        }
+      );
+
+    }
+  }
+
+
   protected onFilterChange(event:any) {
 
     this.delayedFiltering.delay();
@@ -296,6 +330,13 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
   protected onSearchHelpToggle() {
     this.searchHelpShow = !this.searchHelpShow;
+  }
+
+  protected onBackToList() {
+    LogUtil.debug('ShopPriceListComponent onBackToList handler');
+    if (this.viewMode === ShopPriceListComponent.PRICELIST_TEST) {
+      this.viewMode = ShopPriceListComponent.PRICELIST;
+    }
   }
 
   protected onRowNew() {

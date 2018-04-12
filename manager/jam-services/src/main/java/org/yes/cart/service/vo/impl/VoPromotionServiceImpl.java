@@ -16,22 +16,26 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.PromotionCouponDTO;
 import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.domain.vo.VoCart;
 import org.yes.cart.domain.vo.VoPromotion;
 import org.yes.cart.domain.vo.VoPromotionCoupon;
+import org.yes.cart.domain.vo.VoPromotionTest;
 import org.yes.cart.service.dto.DtoPromotionCouponService;
 import org.yes.cart.service.dto.DtoPromotionService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoPromotionService;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.TimeContext;
 
+import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -191,5 +195,51 @@ public class VoPromotionServiceImpl implements VoPromotionService {
             dtoPromotionCouponService.remove(id);
         }
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public VoCart testPromotions(final String shopCode,
+                                 final String currency,
+                                 final VoPromotionTest testData) {
+
+        if (federationFacade.isManageable(shopCode, ShopDTO.class)) {
+
+            final Map<String, BigDecimal> skuCodes = new HashMap<>();
+            if (StringUtils.isNotBlank(testData.getSku())) {
+                for (final String code : Arrays.asList(StringUtils.split(testData.getSku(), ','))) {
+                    final String[] skuAndQty = StringUtils.split(code.trim(), '=');
+                    try {
+                        skuCodes.put(skuAndQty[0], skuAndQty.length > 1 ? new BigDecimal(skuAndQty[1]) : BigDecimal.ONE);
+                    } catch (Exception exp) {
+                        skuCodes.put(skuAndQty[0], BigDecimal.ONE);
+                    }
+                }
+            }
+
+            final List<String> couponCodes = new ArrayList<>();
+            if (StringUtils.isNotBlank(testData.getCoupons())) {
+                for (final String code : Arrays.asList(StringUtils.split(testData.getCoupons(), ','))) {
+                    couponCodes.add(code.trim());
+                }
+            }
+
+            final ShoppingCart cart = dtoPromotionService.testPromotions(
+                    shopCode, currency,
+                    testData.getLanguage(),
+                    testData.getCustomer(),
+                    skuCodes,
+                    testData.getShipping(),
+                    couponCodes,
+                    testData.getTime()
+            );
+
+            return voAssemblySupport.assembleVo(VoCart.class, ShoppingCart.class, new VoCart(), cart);
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
     }
 }

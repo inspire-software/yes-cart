@@ -458,6 +458,7 @@
                 <constructor-arg index="1" ref="promotionService"/>
                 <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
                 <constructor-arg index="3" ref="shopService"/>
+                <constructor-arg index="4" ref="promotionTester"/>
             </bean>
         </property>
     </bean>

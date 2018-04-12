@@ -3,6 +3,7 @@
  */
 export * from './common.model';
 export * from './attribute.model';
+export * from './cart.model';
 export * from './system.model';
 export * from './catalog.model';
 export * from './product.model';

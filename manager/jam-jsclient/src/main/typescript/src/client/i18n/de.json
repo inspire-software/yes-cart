@@ -516,6 +516,8 @@
   "PROMOTION_ENABLED_TO": "Gültig bis",
   "PROMOTION_ENABLED_TIP": "Diese Promo ist aktiviert, zum ändern bitte diese deaktivieren",
   "PROMOTION_COUPONS_TIP": "Diese Promotion wird nicht durch einen Coupon ausgelöst, setzen Sie es auf Coupon ausgelöst, um Änderungen vorzunehmen",
+  "PROMOTION_TEST_TIME": "Zeit für den Test",
+  "PROMOTION_RULE_TEST_TIP": "Sie können mehrere Artikelnummern eingeben, die durch ein Komma getrennt sind",
 
   "TAX_SHOP_CODE": "Shop Code",
   "TAX_RATE": "Steuersatz",

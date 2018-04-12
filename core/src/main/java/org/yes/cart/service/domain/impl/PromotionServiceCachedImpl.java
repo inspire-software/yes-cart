@@ -40,7 +40,7 @@ public class PromotionServiceCachedImpl implements PromotionService {
 
     /** {@inheritDoc} */
     @Override
-    @Cacheable(value = "promotionService-promotionsByShopCode")
+//    @Cacheable(value = "promotionService-promotionsByShopCode") /* This is already cached by context factory */
     public List<Promotion> getPromotionsByShopCode(final String shopCode, final String currency, final boolean active) {
         return promotionService.getPromotionsByShopCode(shopCode, currency, active);
     }
@@ -101,7 +101,7 @@ public class PromotionServiceCachedImpl implements PromotionService {
     /** {@inheritDoc} */
     @Override
     @CacheEvict(value = {
-            "promotionService-promotionsByShopCode",
+//            "promotionService-promotionsByShopCode",
             "promotionService-factoryGetInstance",
             "promotionService-groovyCache"
     }, allEntries = true)
@@ -112,7 +112,7 @@ public class PromotionServiceCachedImpl implements PromotionService {
     /** {@inheritDoc} */
     @Override
     @CacheEvict(value = {
-            "promotionService-promotionsByShopCode",
+//            "promotionService-promotionsByShopCode",
             "promotionService-factoryGetInstance",
             "promotionService-groovyCache"
     }, allEntries = true)
@@ -123,7 +123,7 @@ public class PromotionServiceCachedImpl implements PromotionService {
     /** {@inheritDoc} */
     @Override
     @CacheEvict(value = {
-            "promotionService-promotionsByShopCode",
+//            "promotionService-promotionsByShopCode",
             "promotionService-factoryGetInstance",
             "promotionService-groovyCache"
     }, allEntries = true)
