@@ -153,6 +153,16 @@ public class PriceServiceCachedImpl implements PriceService {
         priceService.delete(instance);
     }
 
+    @Override
+    @CacheEvict(value = {
+            "priceService-minimalPrice",
+            "priceService-allCurrentPrices",
+            "priceService-allPrices"
+    }, allEntries = true)
+    public void refresh(final String shopCode, final String currency) {
+        // clear all
+    }
+
     /**
      * {@inheritDoc}
      */

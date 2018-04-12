@@ -90,4 +90,14 @@ public interface PriceService extends GenericService<SkuPrice> {
                                 final String selectedSku,
                                 final String currencyCode);
 
+    /**
+     * Get promotion context for given shop for
+     * current time frame.
+     *
+     *
+     * @param shopCode shop code
+     * @param currency currency
+     */
+    void refresh(String shopCode, final String currency);
+
 }

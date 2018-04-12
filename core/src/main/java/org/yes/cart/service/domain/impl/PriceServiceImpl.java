@@ -409,4 +409,12 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
             entity.setMinimalPrice(null);
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void refresh(final String shopCode, final String currency) {
+        // not supported
+    }
 }

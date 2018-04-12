@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.TimeContext;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -119,7 +120,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     long now() {
-        return System.currentTimeMillis();
+        return TimeContext.getMillis();
     }
 
     /** {@inheritDoc} */
