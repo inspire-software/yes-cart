@@ -73,7 +73,6 @@
         <cxf.version>3.2.0</cxf.version>
         <spring-security.version>4.2.3.RELEASE</spring-security.version>
         <spring.version>4.3.11.RELEASE</spring.version>
-        <lucene.config.index.dir>/yes-cart/lucene-index</lucene.config.index.dir>
         <ehcache-core.version>2.6.11</ehcache-core.version>
         <jackson.version>2.9.1</jackson.version>
         <GeDA.version>3.1.0</GeDA.version>
