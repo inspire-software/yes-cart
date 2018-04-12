@@ -653,7 +653,8 @@
                                 <echo>Tips:</echo>
                                 <echo>* use mvn help:all-profiles or help:active-profiles to list profiles available</echo>
                                 <echo>* use mvn dependency:tree to list all dependencies</echo>
-                                <echo>* documentation for YC profiles is available at http://www.inspire-software.com/confluence/display/YC3J/From+source#Fromsource-Mavenprofilesandvariables</echo>
+                                <echo>* documentation for YC profiles is available at:</echo>
+                                <echo>  http://www.inspire-software.com/documentation/wiki/docyescart/view/3.3.x/For%20Technical%20Users/Installation/From%20source/</echo>
                                 <echo>=========================================================================================================================================================</echo>
                             </target>
                         </configuration>
