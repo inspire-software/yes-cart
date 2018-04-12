@@ -26,10 +26,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.yes.cart.payment.persistence.entity.Auditable;
+import org.yes.cart.util.log.Markers;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -40,7 +42,7 @@ import java.util.*;
  */
 public class AuditInterceptor extends EmptyInterceptor {
 
-    private final Logger LOG = LoggerFactory.getLogger("AUDIT");
+    private final Map<String, Logger> LOGS = new ConcurrentHashMap<>();
 
     private Map<String, Set<String>> prohibitedFields = new HashMap<>();
 
@@ -152,7 +154,8 @@ public class AuditInterceptor extends EmptyInterceptor {
 
     private void logOperation(final String operation, final Auditable entity, final String user,
                               final Serializable id, final Object[] state, final String[] propertyNames, final Type[] types) {
-        if (LOG.isTraceEnabled()) {
+        final Logger log = LOGS.computeIfAbsent(entity.getClass().getSimpleName(), k ->  LoggerFactory.getLogger("AUDIT." + k));
+        if (log.isTraceEnabled()) {
 
             final String className = entity.getClass().getSimpleName();
             final Set<String> prohibited = prohibitedFields.get(className);
@@ -209,7 +212,7 @@ public class AuditInterceptor extends EmptyInterceptor {
 
                 }
             }
-            LOG.trace(line.toString());
+            log.trace(line.toString());
         }
     }
 

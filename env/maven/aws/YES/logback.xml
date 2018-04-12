@@ -249,8 +249,14 @@
     </logger>
 
     <logger name="AUDIT" level="INFO">
+        <!-- AUDIT logs are at TRACE level -->
         <appender-ref ref="AUDIT"/>
     </logger>
+    <!-- Example of specific entity logging, e.g. ShopEntity audit
+    <logger name="AUDIT.ShopEntity" level="TRACE">
+        <appender-ref ref="AUDIT"/>
+    </logger>
+    -->
 
     <logger name="FTQ" level="INFO">
         <!-- FTQ logs at DEBUG level, TRACE logs FTQ explanations -->

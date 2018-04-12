@@ -264,8 +264,35 @@
     </logger>
 
     <logger name="AUDIT" level="INFO">
+        <!-- AUDIT logs are at TRACE level -->
         <appender-ref ref="AUDIT"/>
     </logger>
+    <!-- Example of specific entity logging, e.g. Basic audit for Shop/Customer changes
+    <logger name="AUDIT.ShopEntity" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="AUDIT.ShopAliasEntity" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="AUDIT.ShopCategoryEntity" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="AUDIT.AttrValueEntityShop" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="AUDIT.AddressEntity" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="AUDIT.CustomerEntity" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="AUDIT.CustomerShopEntity" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="AUDIT.AttrValueEntityCustomer" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    -->
 
     <logger name="org.yes.cart.service.async.impl" level="INFO">
         <appender-ref ref="JOB"/>

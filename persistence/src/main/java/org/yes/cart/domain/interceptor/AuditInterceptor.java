@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -46,14 +47,9 @@ import java.util.Set;
  */
 public class AuditInterceptor extends EmptyInterceptor {
 
-    private final Logger LOG = LoggerFactory.getLogger("AUDIT");
+    private final Map<String, Logger> LOGS = new ConcurrentHashMap<>();
 
     private final Map<String, Set<String>> prohibitedFields = new HashMap<>();
-
-    public AuditInterceptor() {
-        // set logging headers
-        LOG.info("Operation,Class,PK,user,guid");
-    }
 
     private String getUserName() {
 
@@ -169,7 +165,9 @@ public class AuditInterceptor extends EmptyInterceptor {
 
     private void logOperation(final String operation, final Auditable entity, final String user,
                               final Serializable id, final Object[] state, final String[] propertyNames, final Type[] types) {
-        if (LOG.isTraceEnabled()) {
+
+        final Logger log = LOGS.computeIfAbsent(entity.getClass().getSimpleName(), k ->  LoggerFactory.getLogger("AUDIT." + k));
+        if (log.isTraceEnabled()) {
 
             final String className = entity.getClass().getSimpleName();
             final Set<String> prohibited = prohibitedFields.get(className);
@@ -226,7 +224,7 @@ public class AuditInterceptor extends EmptyInterceptor {
 
                 }
             }
-            LOG.trace(line.toString());
+            log.trace(line.toString());
         }
     }
 
