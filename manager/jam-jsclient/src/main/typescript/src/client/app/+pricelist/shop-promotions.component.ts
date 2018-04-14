@@ -381,6 +381,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
       let copy:PromotionVO = Util.clone(this.selectedPromotion);
       copy.promotionId = 0;
       copy.enabled = false;
+      copy.shopCode = this.selectedShopCode;
       this.onRowEditPromotion(copy);
     }
   }
