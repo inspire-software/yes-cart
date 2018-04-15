@@ -48,7 +48,7 @@ public class BulkExpiredGuestsProcessorImpl implements Runnable, JobStatusAware 
     private final CustomerService customerService;
     private final SystemService systemService;
     private long expiredTimeoutMs = MS_IN_DAY;
-    private int batchSize = 20;
+    private int batchSize = 500;
 
     private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
 

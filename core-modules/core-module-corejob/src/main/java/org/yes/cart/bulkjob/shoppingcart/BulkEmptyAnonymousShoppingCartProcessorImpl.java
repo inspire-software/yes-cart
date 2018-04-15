@@ -52,7 +52,7 @@ public class BulkEmptyAnonymousShoppingCartProcessorImpl implements Runnable, Jo
     private final CustomerOrderService customerOrderService;
     private final SystemService systemService;
     private long abandonedTimeoutMs = MS_IN_DAY;
-    private int batchSize = 20;
+    private int batchSize = 500;
 
     private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
 

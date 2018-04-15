@@ -49,7 +49,7 @@ public class BulkCustomerTagProcessorImpl implements Runnable, JobStatusAware {
     private final CustomerService customerService;
     private final PromotionContextFactory promotionContextFactory;
 
-    private int batchSize = 20;
+    private int batchSize = 500;
 
     private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
 
