@@ -48,13 +48,22 @@ public interface ProductCategoryService extends GenericService<ProductCategory> 
     ProductCategory findByCategoryIdProductId(long categoryId,  long productId);
 
     /**
-     * Find single product-category entity by category and product id.
+     * Get all immediate categories IDs by product id.
      *
      * @param productId   product id
      *
      * @return {@link ProductCategory} if found, otherwise null
      */
-    List<ProductCategory> findByCategoryIdsProductId(long productId);
+    List<Long> getByProductId(long productId);
+
+    /**
+     * Find all product-category entities product id.
+     *
+     * @param productId   product id
+     *
+     * @return {@link ProductCategory} if found, otherwise null
+     */
+    List<ProductCategory> findByProductId(long productId);
 
     /**
      * Unlink product from all categories.

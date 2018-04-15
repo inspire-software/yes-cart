@@ -53,7 +53,15 @@ public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCa
      * {@inheritDoc}
      */
     @Override
-    public List<ProductCategory> findByCategoryIdsProductId(final long productId) {
+    public List<Long> getByProductId(final long productId) {
+        return (List) getGenericDao().findQueryObjectByNamedQuery("PRODUCT.IN.CATEGORY.ALL.IDS", productId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ProductCategory> findByProductId(final long productId) {
         return getGenericDao().findByNamedQuery("PRODUCT.IN.CATEGORY.ALL", productId);
     }
 

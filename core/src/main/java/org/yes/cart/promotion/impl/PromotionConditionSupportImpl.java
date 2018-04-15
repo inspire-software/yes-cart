@@ -154,9 +154,9 @@ public class PromotionConditionSupportImpl implements PromotionConditionSupport 
         if (StringUtils.isNotEmpty(sku) && shopId != null) {
             final Product product = productService.getProductBySkuCode(sku);
             if (product != null) {
-                final List<ProductCategory> pcats = productCategoryService.findByCategoryIdsProductId(product.getProductId());
-                for (final ProductCategory pcat : pcats) {
-                    if (isCategoryOneOf(pcat.getCategory().getCategoryId(), shopId, categoryGUIDs)) {
+                final List<Long> pcats = productCategoryService.getByProductId(product.getProductId());
+                for (final Long categoryId : pcats) {
+                    if (isCategoryOneOf(categoryId, shopId, categoryGUIDs)) {
                         return true;
                     }
                 }

@@ -146,7 +146,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      * {@inheritDoc}
      */
     @Override
-    @Cacheable(value = "productService-productAssociationsIds")
+    @Cacheable(value = "productService-productAssociations")
     public List<ProductSearchResultDTO> getProductAssociations(final long productId,
                                                                final long shopId,
                                                                final long customerShopId,
