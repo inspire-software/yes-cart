@@ -796,12 +796,16 @@
     </bean>
 
 
-    <bean id="productCategoryService" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.service.domain.impl.ProductCategoryServiceImpl">
-                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="productCategoryDao"/>
+    <bean id="productCategoryService" class="org.yes.cart.service.domain.impl.ProductCategoryServiceCachedImpl">
+        <constructor-arg>
+            <bean parent="txProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.service.domain.impl.ProductCategoryServiceImpl">
+                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="productCategoryDao"/>
+                    </bean>
+                </property>
             </bean>
-        </property>
+        </constructor-arg>
     </bean>
 
 
