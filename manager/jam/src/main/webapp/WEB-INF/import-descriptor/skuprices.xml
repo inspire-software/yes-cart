@@ -93,5 +93,17 @@
             <name>tag</name>
         </column-descriptor>
 
+        <column-descriptor>
+            <column-index>9</column-index>
+            <field-type>FIELD</field-type>
+            <name>pricingPolicy</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>10</column-index>
+            <field-type>FIELD</field-type>
+            <name>ref</name>
+        </column-descriptor>
+
     </import-columns>
 </import-descriptor>
