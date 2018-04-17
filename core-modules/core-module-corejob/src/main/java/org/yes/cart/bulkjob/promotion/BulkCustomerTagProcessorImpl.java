@@ -17,12 +17,14 @@
 package org.yes.cart.bulkjob.promotion;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.dao.ResultsIterator;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerShop;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.promotion.PromotionContext;
 import org.yes.cart.promotion.PromotionContextFactory;
 import org.yes.cart.service.async.JobStatusAware;
@@ -31,7 +33,11 @@ import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.log.Markers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Runnable that scans all customers with respect to all Shops they are
@@ -41,12 +47,13 @@ import org.yes.cart.util.log.Markers;
  * Date: 07/11/2013
  * Time: 09:18
  */
-public class BulkCustomerTagProcessorImpl implements Runnable, JobStatusAware {
+public class BulkCustomerTagProcessorImpl implements BulkCustomerTagProcessorInternal, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkCustomerTagProcessorImpl.class);
 
     private final ShopService shopService;
     private final CustomerService customerService;
+    private final SystemService systemService;
     private final PromotionContextFactory promotionContextFactory;
 
     private int batchSize = 500;
@@ -55,9 +62,11 @@ public class BulkCustomerTagProcessorImpl implements Runnable, JobStatusAware {
 
     public BulkCustomerTagProcessorImpl(final ShopService shopService,
                                         final CustomerService customerService,
+                                        final SystemService systemService,
                                         final PromotionContextFactory promotionContextFactory) {
         this.shopService = shopService;
         this.customerService = customerService;
+        this.systemService = systemService;
         this.promotionContextFactory = promotionContextFactory;
     }
 
@@ -77,6 +86,9 @@ public class BulkCustomerTagProcessorImpl implements Runnable, JobStatusAware {
 
             int count[] = new int[] { 0 };
             int updated[] = new int[] { 0 };
+
+            final int batchSize = determineBatchSize();
+            final List<Pair<Customer, String>> batch = new ArrayList<>();
 
             customerService.findAllIterator(customer -> {
 
@@ -101,25 +113,31 @@ public class BulkCustomerTagProcessorImpl implements Runnable, JobStatusAware {
                     }
 
                     if (!StringUtils.equals(tagsBefore, customer.getTag())) {
-                        customerService.update(customer);
-                        LOG.debug("Tags changed for customer {} with tags {} to {}",
-                                customer.getEmail(), tagsBefore, customer.getTag());
-                        updated[0]++;
-                    } else {
-                        LOG.debug("No tag change for customer {} with tags {}", customer.getEmail(), tagsBefore);
+
+                        if (batch.size() + 1 >= batchSize) {
+                            // Save batch
+                            self().updateCustomers(batch);
+                            updated[0] += batch.size();
+                            batch.clear();
+                            // release memory from HS
+                            customerService.getGenericDao().clear();
+                        }
+                        batch.add(new Pair<>(customer, customer.getTag()));
+                        
                     }
 
-                    if (++count[0] % this.batchSize == 0) {
-                        //flush a batch of updates and release memory:
-                        customerService.getGenericDao().flush();
-                        customerService.getGenericDao().clear();
-                    }
                 }
 
                 listener.notifyPing("Processed " + count[0] + ", updated: " + updated[0]);
 
                 return true; // all
             });
+
+            if (batch.size() > 0) {
+                // Save last batch
+                self().updateCustomers(batch);
+                updated[0] += batch.size();
+            }
 
             LOG.info("Processed tagging for {} customers, updated {}", count, updated);
 
@@ -132,6 +150,31 @@ public class BulkCustomerTagProcessorImpl implements Runnable, JobStatusAware {
 
     }
 
+    @Override
+    public void updateCustomers(final List<Pair<Customer, String>> customers) {
+        for (final Pair<Customer, String> customerAndTag : customers) {
+            final Customer customer = customerService.findById(customerAndTag.getFirst().getCustomerId());
+            final String tagsBefore = customer.getTag();
+            customer.setTag(customerAndTag.getSecond());
+            customerService.update(customer);
+            LOG.debug("Tags changed for customer {} with tags {} to {}", customer.getEmail(), tagsBefore, customer.getTag());
+        }
+    }
+
+    private int determineBatchSize() {
+
+        final String av = systemService.getAttributeValue(AttributeNamesKeys.System.JOB_CUSTOMER_TAG_BATCH_SIZE);
+
+        if (av != null && StringUtils.isNotBlank(av)) {
+            int batch = NumberUtils.toInt(av);
+            if (batch > 0) {
+                return batch;
+            }
+        }
+        return this.batchSize;
+
+    }
+
     /**
      * Batch size for remote index update.
      *
@@ -139,6 +182,21 @@ public class BulkCustomerTagProcessorImpl implements Runnable, JobStatusAware {
      */
     public void setBatchSize(final int batchSize) {
         this.batchSize = batchSize;
+    }
+
+
+
+    private BulkCustomerTagProcessorInternal self;
+
+    private BulkCustomerTagProcessorInternal self() {
+        if (self == null) {
+            self = getSelf();
+        }
+        return self;
+    }
+
+    public BulkCustomerTagProcessorInternal getSelf() {
+        return null;
     }
 
 

@@ -21,7 +21,6 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.async.JobStatusAware;
@@ -33,6 +32,8 @@ import org.yes.cart.service.domain.ShoppingCartStateService;
 import org.yes.cart.service.domain.SystemService;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Processor that allows to clean up abandoned shopping cart, so that we do not accumulate
@@ -42,7 +43,7 @@ import java.time.Instant;
  * Date: 22/08/2014
  * Time: 12:47
  */
-public class BulkEmptyAnonymousShoppingCartProcessorImpl implements Runnable, JobStatusAware {
+public class BulkEmptyAnonymousShoppingCartProcessorImpl implements BulkShoppingCartRemoveProcessorInternal, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkEmptyAnonymousShoppingCartProcessorImpl.class);
 
@@ -78,52 +79,84 @@ public class BulkEmptyAnonymousShoppingCartProcessorImpl implements Runnable, Jo
 
         LOG.info("Look up all ShoppingCartStates not modified since {}", lastModification);
 
-        final ResultsIterator<ShoppingCartState> abandoned = this.shoppingCartStateService.findByModificationPrior(lastModification, true);
+        final int count[] = new int[] { 0 };
+        final int removedOrders[] = new int[] { 0 };
 
-        try {
-            int count = 0;
-            int removedOrders = 0;
-            while (abandoned.hasNext()) {
+        final int batchSize = determineBatchSize();
+        final List<ShoppingCartState> batch = new ArrayList<>();
 
-                final ShoppingCartState scs = abandoned.next();
+        this.shoppingCartStateService.findByCriteriaIterator(
+                " where e.empty = ?2 AND e.customerEmail IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
+                new Object[] { lastModification, Boolean.TRUE },
+                cart -> {
 
-                final String guid = scs.getGuid();
+                    if (batch.size() + 1 >= batchSize) {
+                        // Remove batch
+                        removedOrders[0] += self().removeCarts(batch);
+                        count[0] += batch.size();
+                        batch.clear();
+                        // release memory from HS
+                        shoppingCartStateService.getGenericDao().clear();
+                    }
+                    batch.add(cart);
 
-                LOG.debug("Removing empty anonymous cart for {}, guid {}", scs.getCustomerEmail(), guid);
-                this.shoppingCartStateService.delete(scs);
-                LOG.debug("Removed empty anonymous cart for {}, guid {}", scs.getCustomerEmail(), guid);
-
-                final CustomerOrder tempOrder = this.customerOrderService.findByReference(guid);
-                if (tempOrder != null && CustomerOrder.ORDER_STATUS_NONE.equals(tempOrder.getOrderStatus())) {
-                    LOG.debug("Removing temporary order for cart guid {}", guid);
-                    this.customerOrderService.delete(tempOrder);
-                    removedOrders++;
-                    LOG.debug("Removed temporary order for cart guid {}", guid);
+                    return true; // all
                 }
+        );
 
-                if (++count % this.batchSize == 0 ) {
-                    //flush a batch of updates and release memory:
-                    shoppingCartStateService.getGenericDao().flush();
-                    shoppingCartStateService.getGenericDao().clear();
-                }
-
-            }
-
-            LOG.info("Removed {} carts and {} temporary orders", count, removedOrders);
-            listener.notifyPing("Removed " + count + " carts and " + removedOrders + " temporary orders in last run");
-
-        } finally {
-            try {
-                abandoned.close();
-            } catch (Exception exp) {
-                LOG.error("Processing empty anonymous baskets exception, error closing iterator: " + exp.getMessage(), exp);
-            }
+        if (batch.size() > 0) {
+            // Remove last batch
+            removedOrders[0] += self().removeCarts(batch);
+            count[0] += batch.size();
         }
 
-        LOG.info("Processing empty anonymous baskets ... completed");
+        LOG.info("Removed {} empty carts and {} temporary orders", count, removedOrders);
+        listener.notifyPing("Removed " + count[0] + " empty carts and " + removedOrders[0] + " temporary orders in last run");
+
+        LOG.info("Processing empty baskets ... completed");
 
     }
 
+
+    @Override
+    public int removeCarts(final List<ShoppingCartState> carts) {
+
+        int removedOrders = 0;
+        for (final ShoppingCartState state : carts) {
+
+            final String guid = state.getGuid();
+
+            LOG.debug("Removing empty cart for {}, guid {}", state.getCustomerEmail(), guid);
+            this.shoppingCartStateService.delete(state);
+            LOG.debug("Removed empty cart for {}, guid {}", state.getCustomerEmail(), guid);
+
+            final CustomerOrder tempOrder = this.customerOrderService.findByReference(guid);
+            if (tempOrder != null && CustomerOrder.ORDER_STATUS_NONE.equals(tempOrder.getOrderStatus())) {
+                LOG.debug("Removing temporary order for empty cart guid {}", guid);
+                this.customerOrderService.delete(tempOrder);
+                removedOrders++;
+                LOG.debug("Removed temporary order for empty cart guid {}", guid);
+            }
+
+        }
+
+        return removedOrders;
+
+    }
+
+    private int determineBatchSize() {
+
+        final String av = systemService.getAttributeValue(AttributeNamesKeys.System.JOB_EMPTY_CARTS_BATCH_SIZE);
+
+        if (av != null && StringUtils.isNotBlank(av)) {
+            int batch = NumberUtils.toInt(av);
+            if (batch > 0) {
+                return batch;
+            }
+        }
+        return this.batchSize;
+
+    }
 
     private long determineExpiryInMs() {
 
@@ -158,5 +191,21 @@ public class BulkEmptyAnonymousShoppingCartProcessorImpl implements Runnable, Jo
     public void setBatchSize(final int batchSize) {
         this.batchSize = batchSize;
     }
+
+
+
+    private BulkShoppingCartRemoveProcessorInternal self;
+
+    private BulkShoppingCartRemoveProcessorInternal self() {
+        if (self == null) {
+            self = getSelf();
+        }
+        return self;
+    }
+
+    public BulkShoppingCartRemoveProcessorInternal getSelf() {
+        return null;
+    }
+
 
 }

@@ -21,7 +21,6 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.JobStatusListener;
@@ -31,6 +30,8 @@ import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.SystemService;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Bulk processor to remove guest checkout accounts.
@@ -39,7 +40,7 @@ import java.time.Instant;
  * Date: 10/02/2016
  * Time: 17:56
  */
-public class BulkExpiredGuestsProcessorImpl implements Runnable, JobStatusAware {
+public class BulkExpiredGuestsProcessorImpl implements BulkExpiredGuestsProcessorInternal, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkExpiredGuestsProcessorImpl.class);
 
@@ -72,43 +73,71 @@ public class BulkExpiredGuestsProcessorImpl implements Runnable, JobStatusAware 
 
         LOG.info("Look up all Guest accounts created before {}", lastModification);
 
-        final ResultsIterator<Customer> expired = this.customerService.findGuestsBefore(lastModification);
+        final int batchSize = determineBatchSize();
+        final List<Customer> batch = new ArrayList<>(batchSize);
 
-        try {
-            int count = 0;
-            while (expired.hasNext()) {
+        final int count[] = new int[] { 0 };
 
-                final Customer guest = expired.next();
+        this.customerService.findByCriteriaIterator(
+                " where e.guest = ?1 and e.createdTimestamp < ?2",
+                new Object[] { Boolean.TRUE, lastModification },
+                guest -> {
+                    if (batch.size() + 1 > batchSize) {
+                        // Remove batch
+                        self().removeGuests(batch);
+                        count[0] += batch.size();
+                        batch.clear();
+                        // release memory from HS
+                        customerService.getGenericDao().clear();
+                    }
+                    batch.add(guest);
 
-                final String guid = guest.getGuid();
+                    if (count[0] % batchSize == 0) { // minify string concatenation
+                        listener.notifyPing("Removed guest accounts: " + count[0]);
+                    }
 
-                LOG.debug("Removing expired guest {}, guid {}", guest.getGuestEmail(), guid);
-                this.customerService.delete(guest);
-                LOG.debug("Removed expired guest {}, guid {}", guest.getGuestEmail(), guid);
-
-                if (++count % this.batchSize == 0 ) {
-                    //flush a batch of updates and release memory:
-                    customerService.getGenericDao().flush();
-                    customerService.getGenericDao().clear();
+                    return true; // read fully
                 }
+        );
 
-            }
-
-            LOG.info("Removed {} guest account(s)", count);
-            listener.notifyPing("Removed " + count + " guest account(s) in last run");
-
-        } finally {
-            try {
-                expired.close();
-            } catch (Exception exp) {
-                LOG.error("Processing expired guest accounts exception, error closing iterator: " + exp.getMessage(), exp);
-            }
+        if (batch.size() > 0) {
+            // Remove last batch
+            self().removeGuests(batch);
+            count[0] += batch.size();
         }
+
+        LOG.info("Removed {} guest account(s)", count[0]);
+        listener.notifyPing("Removed " + count[0] + " guest account(s) in last run");
 
         LOG.info("Processing expired guest ... completed");
 
     }
 
+    @Override
+    public void removeGuests(final List<Customer> guests) {
+
+        for (final Customer guest : guests) {
+            final String guid = guest.getGuid();
+            LOG.debug("Removing expired guest {}, guid {}", guest.getGuestEmail(), guid);
+            this.customerService.delete(guest);
+            LOG.debug("Removed expired guest {}, guid {}", guest.getGuestEmail(), guid);
+        }
+
+    }
+
+    private int determineBatchSize() {
+
+        final String av = systemService.getAttributeValue(AttributeNamesKeys.System.JOB_EXPIRE_GUESTS_BATCH_SIZE);
+
+        if (av != null && StringUtils.isNotBlank(av)) {
+            int batch = NumberUtils.toInt(av);
+            if (batch > 0) {
+                return batch;
+            }
+        }
+        return this.batchSize;
+
+    }
 
     private long determineExpiryInMs() {
 
@@ -143,5 +172,21 @@ public class BulkExpiredGuestsProcessorImpl implements Runnable, JobStatusAware 
     public void setBatchSize(final int batchSize) {
         this.batchSize = batchSize;
     }
+
+
+
+    private BulkExpiredGuestsProcessorInternal self;
+
+    private BulkExpiredGuestsProcessorInternal self() {
+        if (self == null) {
+            self = getSelf();
+        }
+        return self;
+    }
+
+    public BulkExpiredGuestsProcessorInternal getSelf() {
+        return null;
+    }
+
 
 }

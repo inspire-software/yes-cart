@@ -22,7 +22,6 @@ import org.hibernate.Hibernate;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.customer.CustomerNameFormatter;
 import org.yes.cart.service.domain.AttributeService;
@@ -32,7 +31,6 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.impl.AttributeRankComparator;
 
-import java.time.Instant;
 import java.util.*;
 
 /**
@@ -370,13 +368,5 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             customerShopDao.delete(cshop);
         }
         super.delete(instance);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ResultsIterator<Customer> findGuestsBefore(final Instant date) {
-        return getGenericDao().findByNamedQueryIterator("GUESTS.BEFORE.CREATED", Boolean.TRUE, date);
     }
 }

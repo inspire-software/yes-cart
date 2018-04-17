@@ -111,7 +111,11 @@ public abstract class AbstractTestDAO  {
     }
 
     protected ApplicationContext createContext() {
-        return new ClassPathXmlApplicationContext("testApplicationContext.xml");
+        return new ClassPathXmlApplicationContext(getApplicationContextFilename());
+    }
+
+    protected String getApplicationContextFilename() {
+        return "testApplicationContext.xml";
     }
 
     protected AbstractDatabaseTester createDatabaseTester() throws Exception {

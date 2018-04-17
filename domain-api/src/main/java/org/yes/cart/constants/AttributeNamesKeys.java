@@ -156,6 +156,26 @@ public interface AttributeNamesKeys {
          */
         String SYSTEM_EXTENSION_CFG_PROPERTIES = "SYSTEM_EXTENSION_CFG_PROPERTIES";
 
+        /**
+         * Batch size for expired accounts removal
+         */
+        String JOB_EXPIRE_GUESTS_BATCH_SIZE = "JOB_EXPIRE_GUESTS_BATCH_SIZE";
+
+        /**
+         * Batch size for customer tagging
+         */
+        String JOB_CUSTOMER_TAG_BATCH_SIZE = "JOB_CUSTOMER_TAG_BATCH_SIZE";
+
+        /**
+         * Batch size for cart removal
+         */
+        String JOB_ABANDONED_CARTS_BATCH_SIZE = "JOB_ABANDONED_CARTS_BATCH_SIZE";
+
+        /**
+         * Batch size for cart removal
+         */
+        String JOB_EMPTY_CARTS_BATCH_SIZE = "JOB_EMPTY_CARTS_BATCH_SIZE";
+
     }
 
 
@@ -683,6 +703,11 @@ public interface AttributeNamesKeys {
          * Default navigation category GUID
          */
         String SHOP_DEFAULT_NAVIGATION_CATEGORY = "SHOP_DEFAULT_NAVIGATION_CATEGORY";
+
+        /**
+         * Auto generated coupon length
+         */
+        String SHOP_COUPON_CODE_LENGTH = "SHOP_COUPON_CODE_LENGTH";
 
     }
 

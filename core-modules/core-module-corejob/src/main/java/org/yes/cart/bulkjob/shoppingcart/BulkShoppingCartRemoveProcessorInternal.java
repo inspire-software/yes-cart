@@ -14,46 +14,26 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.domain;
+package org.yes.cart.bulkjob.shoppingcart;
 
-import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.ShoppingCartState;
 
-import java.time.Instant;
 import java.util.List;
 
 /**
  * User: denispavlov
- * Date: 21/08/2014
- * Time: 21:17
+ * Date: 17/04/2018
+ * Time: 16:53
  */
-public interface ShoppingCartStateService extends GenericService<ShoppingCartState> {
+public interface BulkShoppingCartRemoveProcessorInternal extends Runnable {
 
     /**
-     * Get state by guid.
+     * Remove carts (and associated temporary orders).
      *
-     * @param guid guid
+     * @param carts carts
      *
-     * @return get by guid
+     * @return number of temporary orders removed
      */
-    ShoppingCartState findByGuid(String guid);
-
-    /**
-     * Get state by guid.
-     *
-     * @param email customer email
-     *
-     * @return get by customer email
-     */
-    List<ShoppingCartState> findByCustomerEmail(String email);
-
-    /**
-     * Get state by order number.
-     *
-     * @param ordernum order number
-     *
-     * @return get by order number
-     */
-    List<ShoppingCartState> findByOrdernum(String ordernum);
+    int removeCarts(List<ShoppingCartState> carts);
 
 }

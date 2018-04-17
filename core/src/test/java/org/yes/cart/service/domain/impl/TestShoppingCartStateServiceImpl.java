@@ -20,12 +20,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -49,26 +49,29 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testFindByGuidOrEmail() {
+
+        final String uuid = UUID.randomUUID().toString();
+
         List<ShoppingCartState> carts;
-        assertNull(shoppingCartStateService.findByGuid("CART-001"));
+        assertNull(shoppingCartStateService.findByGuid(uuid));
         carts = shoppingCartStateService.findByCustomerEmail("bob@doe.com");
         assertNotNull(carts);
         assertTrue(carts.isEmpty());
 
         final ShoppingCartState scs = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
-        scs.setGuid("CART-001");
+        scs.setGuid(uuid);
         scs.setCustomerEmail("bob@doe.com");
         scs.setState("State".getBytes());
         shoppingCartStateService.create(scs);
 
-        assertNotNull(shoppingCartStateService.findByGuid("CART-001"));
+        assertNotNull(shoppingCartStateService.findByGuid(uuid));
         carts = shoppingCartStateService.findByCustomerEmail("bob@doe.com");
         assertNotNull(carts);
         assertEquals(carts.size(), 1);
 
         shoppingCartStateService.delete(scs);
 
-        assertNull(shoppingCartStateService.findByGuid("CART-001"));
+        assertNull(shoppingCartStateService.findByGuid(uuid));
         carts = shoppingCartStateService.findByCustomerEmail("bob@doe.com");
         assertNotNull(carts);
         assertTrue(carts.isEmpty());
@@ -77,8 +80,10 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindByModificationPrior() {
 
+        final String uuid = UUID.randomUUID().toString();
+
         final ShoppingCartState scs = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
-        scs.setGuid("CART-001");
+        scs.setGuid(uuid);
         scs.setCustomerEmail("bob@doe.com");
         scs.setEmpty(false);
         scs.setState("State".getBytes());
@@ -88,31 +93,36 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         final Instant tenSecondsBeforeCreation = tenSecondsAfterCreation.plusSeconds(-20L);
 
         getTxReadOnly().execute(status -> {
-            ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation);
+            List<ShoppingCartState> carts = shoppingCartStateService.findByCriteria(
+                    " where e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL",
+                    tenSecondsBeforeCreation
+            );
             assertNotNull(carts);
-            assertFalse(carts.hasNext());
-            carts.close();
+            assertTrue(carts.isEmpty());
             return null;
         });
 
         getTxReadOnly().execute(status -> {
-            ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation);
+            List<ShoppingCartState> carts = shoppingCartStateService.findByCriteria(
+                    " where e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL",
+                    tenSecondsAfterCreation
+            );
             assertNotNull(carts);
-            assertTrue(carts.hasNext()); // one
-            assertFalse(carts.hasNext()); // no second
-            carts.close();
+            assertEquals(1, carts.size()); // one
             return null;
         });
 
-        shoppingCartStateService.delete(shoppingCartStateService.findByGuid("CART-001"));
+        shoppingCartStateService.delete(shoppingCartStateService.findByGuid(uuid));
 
     }
 
     @Test
     public void testFindByModificationPriorEmptyAnonymousFalse() {
 
+        final String uuid = UUID.randomUUID().toString();
+
         final ShoppingCartState scs = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
-        scs.setGuid("CART-001");
+        scs.setGuid(uuid);
         scs.setCustomerEmail("bob@doe.com");
         scs.setEmpty(true);
         scs.setState("State".getBytes());
@@ -122,30 +132,36 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         final Instant tenSecondsBeforeCreation = tenSecondsAfterCreation.plusSeconds(-20L);
 
         getTxReadOnly().execute(status -> {
-            ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation, true);
+            List<ShoppingCartState> carts = shoppingCartStateService.findByCriteria(
+                    " where e.empty = ?2 AND e.customerEmail IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
+                    tenSecondsBeforeCreation, true
+            );
             assertNotNull(carts);
-            assertFalse(carts.hasNext());
-            carts.close();
+            assertTrue(carts.isEmpty());
             return null;
         });
 
         getTxReadOnly().execute(status -> {
-            ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation, true);
+            List<ShoppingCartState> carts = shoppingCartStateService.findByCriteria(
+                    " where e.empty = ?2 AND e.customerEmail IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
+                    tenSecondsAfterCreation, true
+            );
             assertNotNull(carts);
-            assertFalse(carts.hasNext());
-            carts.close();
+            assertTrue(carts.isEmpty());
             return null;
         });
 
-        shoppingCartStateService.delete(shoppingCartStateService.findByGuid("CART-001"));
+        shoppingCartStateService.delete(shoppingCartStateService.findByGuid(uuid));
 
     }
 
     @Test
     public void testFindByModificationPriorEmptyAnonymousTrue() {
 
+        final String uuid = UUID.randomUUID().toString();
+
         final ShoppingCartState scs = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
-        scs.setGuid("CART-001");
+        scs.setGuid(uuid);
         scs.setState("State".getBytes());
         shoppingCartStateService.create(scs);
 
@@ -153,23 +169,26 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         final Instant tenSecondsBeforeCreation = tenSecondsAfterCreation.plusSeconds(-20L);
 
         getTxReadOnly().execute(status -> {
-            ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation, true);
+            List<ShoppingCartState> carts = shoppingCartStateService.findByCriteria(
+                    " where e.empty = ?2 AND e.customerEmail IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
+                    tenSecondsBeforeCreation, true
+            );
             assertNotNull(carts);
-            assertFalse(carts.hasNext());
-            carts.close();
+            assertTrue(carts.isEmpty());
             return null;
         });
 
         getTxReadOnly().execute(status -> {
-            ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation, true);
+            List<ShoppingCartState> carts = shoppingCartStateService.findByCriteria(
+                    " where e.empty = ?2 AND e.customerEmail IS NULL AND (e.updatedTimestamp < ?1 OR e.updatedTimestamp IS NULL)",
+                    tenSecondsAfterCreation, true
+            );
             assertNotNull(carts);
-            assertTrue(carts.hasNext()); // one
-            assertFalse(carts.hasNext()); // no second
-            carts.close();
+            assertEquals(1, carts.size());  // one
             return null;
         });
 
-        shoppingCartStateService.delete(shoppingCartStateService.findByGuid("CART-001"));
+        shoppingCartStateService.delete(shoppingCartStateService.findByGuid(uuid));
 
     }
 

@@ -136,3 +136,26 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  10887,  'SHOP_B2B_STRICT_PROMOTIONS', 'SHOP_B2B_STRICT_PROMOTIONS',  0,  NULL,  'Shop: B2B strict promotions mode enable',
    'Disable master shop promotions and use only sub shop promotions',  1008, 1001, 0, 0, 0, 0);
 
+--
+-- YC-891 Expose various system configurations as preferences
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11230,  'JOB_EXPIRE_GUESTS_BATCH_SIZE', 'JOB_EXPIRE_GUESTS_BATCH_SIZE',  0,  NULL,  'Job\\Expired Guest Accounts Clean Up: batch size',
+    'Guest accounts deletion batch size (default is 500)',  1006, 1000, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11231,  'JOB_CUSTOMER_TAG_BATCH_SIZE', 'JOB_CUSTOMER_TAG_BATCH_SIZE',  0,  NULL,  'Job\\Customer Tagging: batch size',
+    'Customer tagging batch size (default is 500)',  1006, 1000, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11232,  'JOB_ABANDONED_CARTS_BATCH_SIZE', 'JOB_ABANDONED_CARTS_BATCH_SIZE',  0,  NULL,  'Job\\Abandoned Shopping Cart State Clean Up: batch size',
+    'Abandoned cart clean up batch size (default is 500)',  1006, 1000, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11233,  'JOB_EMPTY_CARTS_BATCH_SIZE', 'JOB_EMPTY_CARTS_BATCH_SIZE',  0,  NULL,  'Job\\Empty Anonymous Shopping Cart State Clean Up: batch size',
+    'Empty cart clean up batch size (default is 500)',  1008, 1000, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11234,  'SHOP_COUPON_CODE_LENGTH', 'SHOP_COUPON_CODE_LENGTH',  0,  NULL,  'Promotion: size of the coupon code',
+   'Size of the auto generated coupon code (min is 5 char not including shop code prefix)',  1006, 1001, 0, 0, 0, 0);

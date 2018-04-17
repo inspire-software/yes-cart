@@ -2686,27 +2686,6 @@
        ]]>
     </query>
 
-    <query name="SHOPPINGCARTSTATE.BY.LASTMODIFIED">
-        <![CDATA[
-       select scs from ShoppingCartStateEntity scs where
-             scs.updatedTimestamp < ?1 OR scs.updatedTimestamp IS NULL
-       ]]>
-    </query>
-
-    <query name="SHOPPINGCARTSTATE.EMPTY.ANONYMOUS.BY.LASTMODIFIED">
-        <![CDATA[
-       select scs from ShoppingCartStateEntity scs where
-            scs.empty = ?2 AND scs.customerEmail IS NULL AND
-            (scs.updatedTimestamp < ?1 OR scs.updatedTimestamp IS NULL)
-       ]]>
-    </query>
-
-    <query name="GUESTS.BEFORE.CREATED">
-        <![CDATA[
-       select g from CustomerEntity g where g.guest = ?1 and g.createdTimestamp < ?2
-       ]]>
-    </query>
-
     <query name="ALL.TOPCATEGORIES.BY.SHOPID">
         <![CDATA[
        select sc from ShopCategoryEntity sc where sc.shop.shopId = ?1

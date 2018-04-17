@@ -62,23 +62,4 @@ public class ShoppingCartStateServiceImpl extends BaseGenericServiceImpl<Shoppin
         return shoppingCartStateDao.findByNamedQuery("SHOPPINGCARTSTATE.BY.ORDERNUM", ordernum);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ResultsIterator<ShoppingCartState> findByModificationPrior(final Instant lastModification) {
-        return shoppingCartStateDao.findByNamedQueryIterator("SHOPPINGCARTSTATE.BY.LASTMODIFIED", lastModification);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ResultsIterator<ShoppingCartState> findByModificationPrior(final Instant lastModification,
-                                                                      final boolean emptyAnonymous) {
-        if (!emptyAnonymous) {
-            return shoppingCartStateDao.findByNamedQueryIterator("SHOPPINGCARTSTATE.BY.LASTMODIFIED", lastModification);
-        }
-        return shoppingCartStateDao.findByNamedQueryIterator("SHOPPINGCARTSTATE.EMPTY.ANONYMOUS.BY.LASTMODIFIED", lastModification, Boolean.TRUE);
-    }
 }

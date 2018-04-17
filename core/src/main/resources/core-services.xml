@@ -876,8 +876,8 @@
     </bean>
 
     <bean id="promotionCouponCodeGenerator" class="org.yes.cart.promotion.impl.PromotionCouponCodeGeneratorImpl">
-        <!-- CPOINT - generates 10 characters alpha num coupon codes -->
         <constructor-arg index="0" value="10"/>
+        <constructor-arg index="1" ref="shopService"/>
     </bean>
 
     <bean id="promotionCouponService" parent="txProxyTemplate">

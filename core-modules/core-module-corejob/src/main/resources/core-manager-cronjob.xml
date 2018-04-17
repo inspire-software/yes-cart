@@ -21,19 +21,27 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="bulkCustomerTagProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
-        <property name="processor">
-            <bean parent="txJobProxyTemplate">
-                <property name="target">
-                    <bean class="org.yes.cart.bulkjob.promotion.BulkCustomerTagProcessorImpl">
-                        <constructor-arg index="0" ref="shopService"/>
-                        <constructor-arg index="1" ref="customerService"/>
-                        <constructor-arg index="2" ref="promotionContextFactory"/>
-                        <property name="batchSize" value="500"/>
-                    </bean>
-                </property>
+    <bean id="bulkCustomerTagProcessorInternal" parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.bulkjob.promotion.BulkCustomerTagProcessorImpl">
+                <constructor-arg index="0" ref="shopService"/>
+                <constructor-arg index="1" ref="customerService"/>
+                <constructor-arg index="2" ref="systemService"/>
+                <constructor-arg index="3" ref="promotionContextFactory"/>
+                <property name="batchSize" value="500"/>
+                <lookup-method name="getSelf" bean="bulkCustomerTagProcessorInternal"/>
             </bean>
         </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="updateCustomers">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="bulkCustomerTagProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
+        <property name="processor" ref="bulkCustomerTagProcessorInternal"/>
         <property name="systemService" ref="systemService"/>
         <property name="pausePreferenceKey" value="JOB_CUSTOMER_TAG_PAUSE"/>
         <property name="pausePreferenceDefault" value="true"/>
@@ -47,6 +55,7 @@
                     <props>
                         <prop key="extension">Pausable cron job</prop>
                         <prop key="description">Recurring job that runs customer tagging promotions</prop>
+                        <prop key="SYSTEM[JOB_CUSTOMER_TAG_BATCH_SIZE]">Batch size</prop>
                         <prop key="SYSTEM[JOB_CUSTOMER_TAG_PAUSE]">Pause</prop>
                     </props>
                 </property>
@@ -54,20 +63,27 @@
         </property>
     </bean>
 
-    <bean id="bulkAbandonedShoppingCartProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
-        <property name="processor">
-            <bean parent="txJobProxyTemplate">
-                <property name="target">
-                    <bean class="org.yes.cart.bulkjob.shoppingcart.BulkAbandonedShoppingCartProcessorImpl">
-                        <constructor-arg index="0" ref="shoppingCartStateService"/>
-                        <constructor-arg index="1" ref="customerOrderService"/>
-                        <constructor-arg index="2" ref="systemService"/>
-                        <property name="abandonedTimeoutDays" value="30"/> <!-- CPOINT -->
-                        <property name="batchSize" value="500"/> <!-- CPOINT -->
-                    </bean>
-                </property>
+    <bean id="bulkAbandonedShoppingCartProcessorInternal" parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.bulkjob.shoppingcart.BulkAbandonedShoppingCartProcessorImpl">
+                <constructor-arg index="0" ref="shoppingCartStateService"/>
+                <constructor-arg index="1" ref="customerOrderService"/>
+                <constructor-arg index="2" ref="systemService"/>
+                <property name="abandonedTimeoutDays" value="30"/>
+                <property name="batchSize" value="500"/>
+                <lookup-method name="getSelf" bean="bulkAbandonedShoppingCartProcessorInternal"/>
             </bean>
         </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="removeCarts">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="bulkAbandonedShoppingCartProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
+        <property name="processor" ref="bulkAbandonedShoppingCartProcessorInternal"/>
         <property name="systemService" ref="systemService"/>
         <property name="pausePreferenceKey" value="JOB_ABANDONED_CARTS_PAUSE"/>
         <property name="pausePreferenceDefault" value="false"/>
@@ -81,6 +97,8 @@
                     <props>
                         <prop key="extension">Pausable cron job</prop>
                         <prop key="description">Recurring job that removes abandoned shopping carts (ones that last updated more than 30 days ago)</prop>
+                        <prop key="SYSTEM[JOB_ABANDONED_CARTS_BATCH_SIZE]">Batch size</prop>
+                        <prop key="SYSTEM[CART_ABANDONED_TIMEOUT_SECONDS]">Abandoned cart expiry seconds</prop>
                         <prop key="SYSTEM[JOB_ABANDONED_CARTS_PAUSE]">Pause</prop>
                     </props>
                 </property>
@@ -88,20 +106,27 @@
         </property>
     </bean>
 
-    <bean id="bulkEmptyAnonymousShoppingCartProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
-        <property name="processor">
-            <bean parent="txJobProxyTemplate">
-                <property name="target">
-                    <bean class="org.yes.cart.bulkjob.shoppingcart.BulkEmptyAnonymousShoppingCartProcessorImpl">
-                        <constructor-arg index="0" ref="shoppingCartStateService"/>
-                        <constructor-arg index="1" ref="customerOrderService"/>
-                        <constructor-arg index="2" ref="systemService"/>
-                        <property name="abandonedTimeoutDays" value="1"/> <!-- CPOINT -->
-                        <property name="batchSize" value="500"/> <!-- CPOINT -->
-                    </bean>
-                </property>
+    <bean id="bulkEmptyAnonymousShoppingCartProcessorInternal" parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.bulkjob.shoppingcart.BulkEmptyAnonymousShoppingCartProcessorImpl">
+                <constructor-arg index="0" ref="shoppingCartStateService"/>
+                <constructor-arg index="1" ref="customerOrderService"/>
+                <constructor-arg index="2" ref="systemService"/>
+                <property name="abandonedTimeoutDays" value="1"/>
+                <property name="batchSize" value="500"/>
+                <lookup-method name="getSelf" bean="bulkEmptyAnonymousShoppingCartProcessorInternal"/>
             </bean>
         </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="removeCarts">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="bulkEmptyAnonymousShoppingCartProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
+        <property name="processor" ref="bulkEmptyAnonymousShoppingCartProcessorInternal"/>
         <property name="systemService" ref="systemService"/>
         <property name="pausePreferenceKey" value="JOB_EMPTY_CARTS_PAUSE"/>
         <property name="pausePreferenceDefault" value="false"/>
@@ -115,6 +140,8 @@
                     <props>
                         <prop key="extension">Pausable cron job</prop>
                         <prop key="description">Recurring job that removes empty anonymous shopping carts (ones that last updated more than 1 day ago)</prop>
+                        <prop key="SYSTEM[JOB_EMPTY_CARTS_BATCH_SIZE]">Batch size</prop>
+                        <prop key="SYSTEM[CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS]">Empty carts expiry seconds</prop>
                         <prop key="SYSTEM[JOB_EMPTY_CARTS_PAUSE]">Pause</prop>
                     </props>
                 </property>
@@ -122,19 +149,26 @@
         </property>
     </bean>
 
-    <bean id="bulkExpiredGuestsProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
-        <property name="processor">
-            <bean parent="txJobProxyTemplate">
-                <property name="target">
-                    <bean class="org.yes.cart.bulkjob.customer.BulkExpiredGuestsProcessorImpl">
-                        <constructor-arg index="0" ref="customerService"/>
-                        <constructor-arg index="1" ref="systemService"/>
-                        <property name="expiredTimeoutDays" value="1"/> <!-- CPOINT -->
-                        <property name="batchSize" value="500"/> <!-- CPOINT -->
-                    </bean>
-                </property>
+    <bean id="bulkExpiredGuestsProcessorInternal"  parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.bulkjob.customer.BulkExpiredGuestsProcessorImpl">
+                <constructor-arg index="0" ref="customerService"/>
+                <constructor-arg index="1" ref="systemService"/>
+                <property name="expiredTimeoutDays" value="1"/>
+                <property name="batchSize" value="500"/>
+                <lookup-method name="getSelf" bean="bulkExpiredGuestsProcessorInternal"/>
             </bean>
         </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="removeGuests">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="bulkExpiredGuestsProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
+        <property name="processor" ref="bulkExpiredGuestsProcessorInternal"/>
         <property name="systemService" ref="systemService"/>
         <property name="pausePreferenceKey" value="JOB_EXPIRE_GUESTS_PAUSE"/>
         <property name="pausePreferenceDefault" value="false"/>
@@ -148,6 +182,8 @@
                     <props>
                         <prop key="extension">Pausable cron job</prop>
                         <prop key="description">Recurring job that removes old guest checkout accounts (ones that last updated more than 1 day ago)</prop>
+                        <prop key="SYSTEM[JOB_EXPIRE_GUESTS_BATCH_SIZE]">Batch size</prop>
+                        <prop key="SYSTEM[GUESTS_EXPIRY_TIMEOUT_SECONDS]">Guest account expiry in seconds</prop>
                         <prop key="SYSTEM[JOB_EXPIRE_GUESTS_PAUSE]">Pause</prop>
                     </props>
                 </property>
@@ -171,7 +207,6 @@
         </property>
         <property name="transactionAttributes">
             <props>
-                <!-- All job beans are Runnable, and they must run in isolation  -->
                 <prop key="removeProduct">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
                 <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
@@ -194,7 +229,7 @@
                         <prop key="extension">Pausable cron job</prop>
                         <prop key="description">Recurring job that removes obsolete products</prop>
                         <prop key="SYSTEM[JOB_PROD_OBS_MAX]">Minimum number of days since product expiry date (available to)</prop>
-                        <prop key="SYSTEM[JOB_PROD_OBS_BATCH_SIZE]">Batch size for removing products in single run</prop>
+                        <prop key="SYSTEM[JOB_PROD_OBS_BATCH_SIZE]">Batch size</prop>
                         <prop key="SYSTEM[JOB_PROD_OBS_PAUSE]">Pause</prop>
                     </props>
                 </property>

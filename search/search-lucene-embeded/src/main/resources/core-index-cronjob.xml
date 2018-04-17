@@ -101,9 +101,8 @@
         </property>
         <property name="transactionAttributes">
             <props>
-                <!-- All job beans are Runnable, and they must run in isolation  -->
-                <prop key="findDiscontinuedProductsIds">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
-                <prop key="reindexBatch">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="findDiscontinuedProductsIds">PROPAGATION_REQUIRES_NEW,readOnly,-Throwable</prop>
+                <prop key="reindexBatch">PROPAGATION_REQUIRES_NEW,readOnly,-Throwable</prop>
                 <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
         </property>
@@ -163,8 +162,7 @@
         </property>
         <property name="transactionAttributes">
             <props>
-                <!-- All job beans are Runnable, and they must run in isolation  -->
-                <prop key="reindexBatch">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="reindexBatch">PROPAGATION_REQUIRES_NEW,readOnly,-Throwable</prop>
                 <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
         </property>

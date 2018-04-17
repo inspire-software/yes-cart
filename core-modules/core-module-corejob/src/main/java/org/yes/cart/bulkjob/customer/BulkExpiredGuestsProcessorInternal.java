@@ -14,22 +14,24 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.promotion;
+package org.yes.cart.bulkjob.customer;
+
+import org.yes.cart.domain.entity.Customer;
+
+import java.util.List;
 
 /**
  * User: denispavlov
- * Date: 06/06/2014
- * Time: 10:07
+ * Date: 17/04/2018
+ * Time: 14:50
  */
-public interface PromotionCouponCodeGenerator {
+public interface BulkExpiredGuestsProcessorInternal extends Runnable {
 
     /**
-     * Generate random coupon code.
+     * Remove guest accounts.
      *
-     * @param shopCode shop code.
-     *
-     * @return generate a random coupon code (must check for uniqueness)
+     * @param guests guests to remove
      */
-    String generate(String shopCode);
+    void removeGuests(List<Customer> guests);
 
 }

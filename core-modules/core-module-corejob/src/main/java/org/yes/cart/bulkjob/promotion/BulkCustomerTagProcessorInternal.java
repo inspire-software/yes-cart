@@ -14,22 +14,25 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.promotion;
+package org.yes.cart.bulkjob.promotion;
+
+import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.misc.Pair;
+
+import java.util.List;
 
 /**
  * User: denispavlov
- * Date: 06/06/2014
- * Time: 10:07
+ * Date: 17/04/2018
+ * Time: 16:20
  */
-public interface PromotionCouponCodeGenerator {
+public interface BulkCustomerTagProcessorInternal extends Runnable {
 
     /**
-     * Generate random coupon code.
+     * Update customer tags.
      *
-     * @param shopCode shop code.
-     *
-     * @return generate a random coupon code (must check for uniqueness)
+     * @param customers customers
      */
-    String generate(String shopCode);
+    void updateCustomers(List<Pair<Customer, String>> customers);
 
 }

@@ -98,7 +98,7 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
             List<Object> promoIdAndCode;
 
             do {
-                couponCode = UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
+                couponCode = this.couponCodeGenerator.generate(promotion.getShopCode());
                 promoIdAndCode = getGenericDao().findQueryObjectByNamedQuery("PROMOTION.ID.AND.CODE.BY.COUPON.CODE", couponCode);
             } while (!promoIdAndCode.isEmpty());
 

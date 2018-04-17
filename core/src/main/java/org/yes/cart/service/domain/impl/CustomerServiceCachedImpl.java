@@ -19,14 +19,12 @@ package org.yes.cart.service.domain.impl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
 
-import java.time.Instant;
 import java.util.List;
 
 /**
@@ -206,14 +204,6 @@ public class CustomerServiceCachedImpl implements CustomerService {
     }, allEntries = true)
     public void delete(final Customer instance) {
         customerService.delete(instance);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ResultsIterator<Customer> findGuestsBefore(final Instant date) {
-        return customerService.findGuestsBefore(date);
     }
 
     /**

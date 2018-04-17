@@ -86,7 +86,6 @@
         <property name="transactionManager" ref="transactionManager"/>
         <property name="transactionAttributes">
             <props>
-                <!-- All job beans are Runnable, and they must run in isolation  -->
                 <prop key="run">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
                 <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>

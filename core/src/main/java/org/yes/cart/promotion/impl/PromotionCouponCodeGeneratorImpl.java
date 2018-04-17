@@ -17,7 +17,12 @@
 package org.yes.cart.promotion.impl;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.promotion.PromotionCouponCodeGenerator;
+import org.yes.cart.service.domain.ShopService;
 
 /**
  * User: denispavlov
@@ -27,14 +32,41 @@ import org.yes.cart.promotion.PromotionCouponCodeGenerator;
 public class PromotionCouponCodeGeneratorImpl implements PromotionCouponCodeGenerator {
 
     private final int length;
+    private final ShopService shopService;
 
-    public PromotionCouponCodeGeneratorImpl(final int length) {
+    public PromotionCouponCodeGeneratorImpl(final int length, final ShopService shopService) {
         this.length = length;
+        this.shopService = shopService;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String generate() {
-        return RandomStringUtils.randomAlphanumeric(length);
+    public String generate(final String shopCode) {
+
+        final Shop shop = this.shopService.getShopByCode(shopCode);
+
+        int size = determineCouponSize(shop);
+
+        return shopCode.concat(RandomStringUtils.randomAlphanumeric(size)).toUpperCase();
     }
+
+
+    private int determineCouponSize(final Shop shop) {
+
+        if (shop != null) {
+            final String av = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_COUPON_CODE_LENGTH);
+
+            if (av != null && StringUtils.isNotBlank(av)) {
+                int size = NumberUtils.toInt(av);
+                if (size >= 5) {
+                    return size;
+                }
+            }
+        }
+        return this.length;
+
+    }
+
+
+
 }
