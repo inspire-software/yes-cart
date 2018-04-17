@@ -151,7 +151,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
                 final NavigationContext inCat = searchQueryFactory.getFilteredNavigationQueryChain(customerShopId, customerShopId, null, Collections.singletonList(cat.getCategoryId()),
                         true, Collections.emptyMap());
 
-                return productService.getProductQty(inCat) > 0;
+                return productService.getProductQty(inCat) == 0;
             });
 
         }
