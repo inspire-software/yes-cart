@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>manager</artifactId>
-        <version>3.4.1-SNAPSHOT</version>
+        <version>3.4.1</version>
     </parent>
     <artifactId>jam-jsclient</artifactId>
     <packaging>pom</packaging>
