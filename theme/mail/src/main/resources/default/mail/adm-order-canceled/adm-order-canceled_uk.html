@@ -33,7 +33,7 @@
                     <td>
                         Замовлення <b>$root.ordernum</b> на <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a> було скасовано <br>
                         для $root.firstname $root.lastname $root.email <br>
-                        <% if ($root.orderStatus.endsWith("waiting.payment")) { %>
+                        <% if (root.orderStatus.endsWith("waiting.payment")) { %>
                         Повернення коштів не виконано. Необхідно провести повернення.
                         <% } %>
 
