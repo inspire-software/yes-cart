@@ -21,8 +21,6 @@ import org.junit.Rule;
 import org.junit.rules.TestName;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.impl.AbstractTestDAO;
@@ -49,23 +47,12 @@ import static java.util.Collections.singletonMap;
  */
 public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
-    private static ApplicationContext sharedContext;
-
     @Rule
     public TestName testName = new TestName();
 
     public String getTestName() {
         return this.getClass().getSimpleName() + "." + testName.getMethodName();
     }
-
-    @Override
-    protected synchronized ApplicationContext createContext() {
-        if (sharedContext == null) {
-            sharedContext = new ClassPathXmlApplicationContext("testApplicationContext.xml");
-        }
-        return sharedContext;
-    }
-
 
 
     @After
@@ -76,7 +63,6 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
             // clear all cache between the tests
             cacheManager.getCache(name).clear();
         }
-        //sharedContext =  null;
     }
 
     protected ShoppingCart getEmptyCartByPrefix(String prefix) {

@@ -1992,7 +1992,7 @@
             </column>
         </property>
 
-        <property name="storedAttributesInternal" column="STORED_ATTRIBUTES" type="string"/>
+        <property name="storedAttributesInternal" column="STORED_ATTRIBUTES" type="string" length="4000"/>
 
         <property name="orderStatus" column="ORDERSTATUS" type="string" length="64" not-null="true"/>
 
@@ -2114,7 +2114,7 @@
 
         <property name="b2bRemarks" column="B2B_REMARKS" type="string" length="255"/>
 
-        <property name="storedAttributesInternal" column="STORED_ATTRIBUTES" type="string"/>
+        <property name="storedAttributesInternal" column="STORED_ATTRIBUTES" type="string" length="4000"/>
 
         <many-to-one name="customerOrder" class="org.yes.cart.domain.entity.impl.CustomerOrderEntity" foreign-key="FK_ODET_CUSTORDER">
             <column name="CUSTOMERORDER_ID" not-null="true"/>
@@ -2250,7 +2250,7 @@
         <property name="supplierInvoiceNo" column="SUPPLIER_INVOICE_NO" type="string" length="255"/>
         <property name="supplierInvoiceDate" column="SUPPLIER_INVOICE_DATE" type="java.time.LocalDate"/>
 
-        <property name="storedAttributesInternal" column="STORED_ATTRIBUTES" type="string"/>
+        <property name="storedAttributesInternal" column="STORED_ATTRIBUTES" type="string" length="4000"/>
 
         <many-to-one name="delivery" class="org.yes.cart.domain.entity.impl.CustomerOrderDeliveryEntity" foreign-key="FK_CODD_DL">
             <column name="CUSTOMERORDERDELIVERY_ID" not-null="true"/>

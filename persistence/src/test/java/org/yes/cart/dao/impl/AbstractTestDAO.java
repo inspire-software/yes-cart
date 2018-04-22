@@ -37,6 +37,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -48,6 +50,8 @@ public abstract class AbstractTestDAO  {
     // Do not enable dump unless this is necessary as it is very slow.
     // Dumps are controlled using "testEnableDumps" system property "-DtestEnableDumps=true"
     private boolean enabled = true;
+
+    private static final Map<String, ApplicationContext> CTX_CACHE = new ConcurrentHashMap<>();
 
     private ApplicationContext ctx;
     private SessionFactory sessionFactory;
@@ -111,13 +115,23 @@ public abstract class AbstractTestDAO  {
     }
 
     protected ApplicationContext createContext() {
-        return new ClassPathXmlApplicationContext(getApplicationContextFilename());
+        return CTX_CACHE.computeIfAbsent(getApplicationContextFilename(), file -> new ClassPathXmlApplicationContext(getApplicationContextFilename()));
     }
 
+    /**
+     * Hook for test specific application context.
+     *
+     * @return context
+     */
     protected String getApplicationContextFilename() {
         return "testApplicationContext.xml";
     }
 
+    /**
+     * Hook for tests, return null if database tester is not needed.
+     *
+     * @return null or tester.
+     */
     protected AbstractDatabaseTester createDatabaseTester() throws Exception {
         AbstractDatabaseTester dbTester = new JdbcDatabaseTester("org.hsqldb.jdbcDriver", "jdbc:hsqldb:mem:testyesdb", "sa", "");
         dbTester.setSetUpOperation(DatabaseOperation.REFRESH);

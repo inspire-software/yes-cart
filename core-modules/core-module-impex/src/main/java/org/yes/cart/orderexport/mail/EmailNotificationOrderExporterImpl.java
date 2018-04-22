@@ -36,6 +36,7 @@ import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
 import org.yes.cart.orderexport.OrderAutoExportProcessor;
 import org.yes.cart.orderexport.OrderExporter;
+import org.yes.cart.orderexport.impl.ExportResultImpl;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ProductSkuService;
@@ -50,6 +51,19 @@ import java.io.StringReader;
 import java.util.*;
 
 /**
+ * Allows to export the order as an email summary containing delivery for specific fulfilment centre.
+ *
+ * Uses SHOP[ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS] attribute, which is of type Property and should contain
+ * mapping of [Fulfilment Center Code].[Export eligibility]=[CSV of emails to send the email to]
+ *
+ * Example configuration:
+ * Main.INITPAID=neworder@mainff.com
+ * Secondary.INITPAID=specialorder@specialff.com,viporders@specialff.com
+ *
+ * Default configuration is that exporter will only trigger emails for orders in state: "os.in.progress",
+ * "os.partially.shipped" and "os.completed". And it uses "sup-order-new" email template. This accounts for
+ * standard configuration of the OrderAutoExportListenerImpl mappings in order state machine.
+ *
  * User: denispavlov
  * Date: 20/02/2017
  * Time: 13:47
@@ -230,27 +244,7 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter, Config
 
         }
 
-        return new ExportResult() {
-            @Override
-            public Set<Long> getExportedDeliveryIds() {
-                return exported;
-            }
-
-            @Override
-            public Map<String, String> getOrderAuditParams() {
-                return audit;
-            }
-
-            @Override
-            public String getNextExportEligibilityForOrder() {
-                return null; // Nothing to follow
-            }
-
-            @Override
-            public Map<Long, String> getNextExportEligibilityForDelivery() {
-                return Collections.emptyMap(); // Nothing to follow
-            }
-        };
+        return new ExportResultImpl(exported, audit);
 
     }
 

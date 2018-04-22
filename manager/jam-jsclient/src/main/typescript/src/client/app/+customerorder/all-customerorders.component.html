@@ -20,6 +20,10 @@
       <i class="fa fa-filter"></i>
     </button>
 
+    <button type="button" (click)="onExportSelected()" [hidden]="selectedCustomerorder == null || !selectedCustomerorder.blockExport" class="btn btn-warning btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDEREXPORT' | translate }}">
+      <i class="fa fa-upload"></i>
+    </button>
+
     <button type="button" (click)="onApproveSelected()" [hidden]="!selectedCustomerorderApprovable" class="btn btn-success btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERAPPROVE' | translate }}">
       <i class="fa fa-check"></i>
     </button>
@@ -145,6 +149,46 @@
         </div>
       </fieldset>
     </form>
+  </yc-modal>
+
+  <yc-modal #orderExportModalDialog
+            title="{{ 'CUSTOMERORDER_EXPORT_CONFIRM_TITLE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+            [valid]="true"
+            (closed)="onExportSelectedOption($event)">
+
+    <form role="form">
+      <fieldset>
+        <div class="row" *ngIf="selectedCustomerorder != null">
+          <div class="col-xs-12"><strong>{{ selectedCustomerorder.ordernum }}</strong></div>
+          <div class="col-xs-12">{{ 'CUSTOMERORDER_EXPORT_NEXT' | translate }}: {{ selectedCustomerorder.eligibleForExport }}</div>
+          <div class="col-xs-12">
+            {{ 'CUSTOMERORDER_EXPORT_LAST' | translate }}: {{ selectedCustomerorder.lastExportOrderStatus | translate }} {{ selectedCustomerorder.lastExportDate | ycdatetime }}&nbsp;
+            <pre *ngIf="selectedCustomerorder.lastExportStatus != null">{{ selectedCustomerorder.lastExportStatus }}</pre>
+          </div>
+          <div class="col-xs-6">
+            <input name="exportAction" type="radio" [value]="'PROCEED'" [(ngModel)]="exportAction" /> {{ 'CUSTOMERORDER_EXPORT_NEXT_PROCEED' | translate }}
+          </div>
+          <div class="col-xs-6">
+            <input name="exportAction" type="radio" [value]="'CANCEL'" [(ngModel)]="exportAction" /> {{ 'CUSTOMERORDER_EXPORT_NEXT_CANCEL' | translate }}
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </yc-modal>
+
+
+  <yc-modal #orderExportConfirmationModalDialog
+            title="{{ 'CUSTOMERORDER_EXPORT_CONFIRM_TITLE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+            [valid]="true"
+            (closed)="onExportSelectedConfirmed($event)">
+    <div class="row" *ngIf="selectedCustomerorder != null">
+      <div class="col-xs-12">{{ 'CUSTOMERORDER_EXPORT_NEXT' | translate }} <strong>{{ selectedCustomerorder.ordernum }}</strong> =&gt; {{ selectedCustomerorder.eligibleForExport }}</div>
+      <div class="col-xs-12"><p class="{{ exportAction == 'PROCEED' ? 'bg-warning' : 'bg-danger' }} text-padding block-margin-spacer">{{ ('CUSTOMERORDER_EXPORT_NEXT_TIP_' + exportAction) | translate }}</p></div>
+    </div>
   </yc-modal>
 
 </div>

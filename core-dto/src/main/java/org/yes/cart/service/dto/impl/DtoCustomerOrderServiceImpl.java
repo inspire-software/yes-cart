@@ -783,4 +783,24 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         dto.setAmount(customerOrderPaymentService.getOrderAmount(entity.getOrdernum()));
         super.assemblyPostProcess(dto, entity);
     }
+
+
+    @Override
+    public void updateOrderExportStatus(final String lang, final long id, final boolean export) {
+
+        final CustomerOrder order = getService().findById(id);
+
+        order.setBlockExport(false);
+        if (!export) { // unset eligibility to prevent export when unblocked
+            order.setEligibleForExport(null);
+        }
+        for (final CustomerOrderDelivery delivery : order.getDelivery()) {
+            delivery.setBlockExport(false);
+            if (!export) { // unset eligibility to prevent export when unblocked
+                delivery.setEligibleForExport(null);
+            }
+        }
+        getService().update(order);
+
+    }
 }

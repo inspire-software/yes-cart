@@ -35,4 +35,7 @@
     <import resource="core-import.xml"/>
     <import resource="core-export.xml"/>
 
+    <import resource="base-exporters.xml"/>
+    <import resource="core-export-cronjob.xml"/>
+
 </beans>

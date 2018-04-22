@@ -159,3 +159,14 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11234,  'SHOP_COUPON_CODE_LENGTH', 'SHOP_COUPON_CODE_LENGTH',  0,  NULL,  'Promotion: size of the coupon code',
    'Size of the auto generated coupon code (min is 5 char not including shop code prefix)',  1006, 1001, 0, 0, 0, 0);
+
+--
+-- YC-894 Manual export trigger flow in JAM
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8020,  'ORDER_EXPORTER_MANUAL_STATE_PROXY', 'ORDER_EXPORTER_MANUAL_STATE_PROXY',  0,  NULL,  'Export Orders\\Manual state transition',
+    'Property mapping for supplier codes and corresponding transition states. Use NOBLOCK or BLOCK after next eligibility to denote if this is a blocking change to enable manual mode.
+E.g. INITPAID=MANUALXML,BLOCK
+DELIVERY=EMAILNOTIFY,NOBLOCK',  1012, 1001, 0, 0, 0, 0);
+

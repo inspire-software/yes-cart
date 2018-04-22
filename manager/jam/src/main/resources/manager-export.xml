@@ -151,6 +151,32 @@
         </property>
     </bean>
 
+
+    <bean id="manualStateOrderExporter" class="org.yes.cart.orderexport.manual.ManualStateOrderExporterImpl">
+        <constructor-arg index="0" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+        <property name="orderAutoExportListener" ref="orderAutoExportProcessorInternal"/>
+        <property name="exporterId" value="MANUALSTATE"/>
+        <property name="priority" value="10"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="fulfilment"/>
+                <property name="name" value="manualStateOrderExporter"/>
+                <property name="cfgInterface" value="OrderExporter"/>
+                <property name="cfgDefault" value="false"/>
+                <property name="properties">
+                    <props>
+                        <prop key="priority">10</prop>
+                        <prop key="exporterId">MANUALSTATE</prop>
+                        <prop key="extension">Exporter is triggered by setting SHOP[ORDER_EXPORTER_MANUAL_STATE_PROXY]</prop>
+                        <prop key="description">Proxy exporter to transition from one eligibility state to another and optionally block the flow thus transfering the order export to manual mode</prop>
+                        <prop key="SHOP[ORDER_EXPORTER_MANUAL_STATE_PROXY]">EXPORT_ELIGIBILITY=NEXT|(BLOCK/UNBLOCK), where EXPORT_ELIGIBILITY is export eligibility (usually INITPAID), NEXT is name for target eligibility BLOCK/UNBLOCK is to set/unset manual flag to. E.g. INITPAID=EMAILNOTIFY|BLOCK</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+
     <!-- ################################ Register module  ####################################################### -->
 
     <bean class="org.yes.cart.env.impl.ModuleImpl">

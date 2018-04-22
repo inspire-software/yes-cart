@@ -113,6 +113,13 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   private orderTransitionMessage:string;
   private orderTransitionValid:boolean = false;
 
+
+  @ViewChild('orderExportModalDialog')
+  private orderExportModalDialog:ModalComponent;
+  @ViewChild('orderExportConfirmationModalDialog')
+  private orderExportConfirmationModalDialog:ModalComponent;
+  private exportAction:string = 'PROCEED';
+
   private loading:boolean = false;
 
   private changed:boolean = false;
@@ -402,6 +409,19 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       LogUtil.debug('AllCustomerOrdersComponent getOrderById', customerorder);
 
       this.customerorderEdit = customerorder;
+      this.selectedCustomerorder = customerorder;
+
+      let idx = this.customerorders.findIndex(order => {
+        return order.customerorderId === customerorder.customerorderId;
+      });
+
+      if (idx != -1) {
+        this.customerorders[idx] = customerorder;
+      } else {
+        this.customerorders.splice(0, 0, customerorder);
+        idx = 0;
+      }
+
       this.changed = false;
       this.validForSave = false;
       this.loading = false;
@@ -690,6 +710,59 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       this.orderTransitionConfirmationModalDialog.show();
     }
   }
+
+
+
+  protected onExportSelected() {
+    LogUtil.debug('AllCustomerOrdersComponent onExportSelected handler');
+    this.orderExportModalDialog.show();
+  }
+
+
+  protected onExportSelectedOption(modalresult: ModalResult) {
+    LogUtil.debug('AllCustomerOrdersComponent onExportSelectedOption handler');
+    if (ModalAction.POSITIVE == modalresult.action) {
+
+      this.orderExportConfirmationModalDialog.show();
+
+    }
+  }
+
+
+  protected onExportSelectedConfirmed(modalresult: ModalResult) {
+    LogUtil.debug('AllCustomerOrdersComponent onExportSelectedConfirmed handler');
+    if (ModalAction.POSITIVE == modalresult.action) {
+
+      let lang = I18nEventBus.getI18nEventBus().current();
+      this.loading = true;
+      let _sub:any = this._customerorderService.exportOrder(lang, this.selectedCustomerorder.customerorderId, this.exportAction == 'PROCEED').subscribe(exportedOrder => {
+        LogUtil.debug('AllCustomerOrdersComponent exportOrder', exportedOrder);
+
+        if (this.customerorderEdit != null && this.customerorderEdit.customerorderId == this.selectedCustomerorder.customerorderId) {
+          // We are editing
+          this.customerorderEdit = exportedOrder;
+        }
+
+        let idx = this.customerorders.findIndex(order => {
+          return order.customerorderId === exportedOrder.customerorderId;
+        });
+
+        if (idx != -1) {
+          this.customerorders[idx] = exportedOrder;
+        } else {
+          this.customerorders.splice(0, 0, exportedOrder);
+          idx = 0;
+        }
+        this.selectedCustomerorder = this.customerorders[idx];
+        this.customerorders = this.customerorders.slice(0, this.customerorders.length); // hack to retrigger change
+        this.onCustomerorderSelected(this.selectedCustomerorder);
+
+        _sub.unsubscribe();
+        this.loading = false;
+      });
+    }
+  }
+
 
 
   protected onSaveHandler() {

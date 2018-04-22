@@ -58,6 +58,11 @@ public interface CustomerOrderEndpointController {
     VoCustomerOrderTransitionResult transitionDelivery(@PathVariable("transition") String transition, @PathVariable("ordernum") String ordernum, @PathVariable("deliverynum") String deliverynum, @RequestBody(required = false) String message) throws Exception;
 
 
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @RequestMapping(value = "/orderexport/{id}/{lang}/{export}", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoCustomerOrder exportOrder(@PathVariable("lang") String lang, @PathVariable("id") long id, @PathVariable("export") boolean export) throws Exception;
+
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSUBSHOPUSER","ROLE_SMCALLCENTER"})
     @RequestMapping(value = "/payments/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })

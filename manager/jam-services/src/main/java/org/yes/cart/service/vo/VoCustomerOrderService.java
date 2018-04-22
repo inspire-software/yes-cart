@@ -95,4 +95,17 @@ public interface VoCustomerOrderService {
      */
     VoCustomerOrderTransitionResult transitionDelivery(String transition, String ordernum, String deliverynum, String message) throws Exception;
 
+    /**
+     * Perform manual export action.
+     *
+     * @param lang language used for PG localizations
+     * @param id order pk
+     * @param export true to allow export, false to clear export eligibility
+     *
+     * @return order
+     *
+     * @throws Exception errors
+     */
+    VoCustomerOrder exportOrder(String lang, long id, boolean export) throws Exception;
+
 }

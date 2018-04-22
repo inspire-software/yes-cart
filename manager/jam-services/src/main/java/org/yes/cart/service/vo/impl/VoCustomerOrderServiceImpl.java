@@ -23,7 +23,6 @@ import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
 import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Result;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
@@ -301,6 +300,22 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
 
             final Result result = this.deliveryFlow.getAction(transition).doTransition(deliverynum, params);
             return voAssemblySupport.assembleVo(VoCustomerOrderTransitionResult.class, Result.class, new VoCustomerOrderTransitionResult(), result);
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+    }
+
+
+    @Override
+    public VoCustomerOrder exportOrder(final String lang, final long id, final boolean export) throws Exception {
+
+        if (federationFacade.isManageable(id, CustomerOrderDTO.class)) {
+
+            dtoCustomerOrderService.updateOrderExportStatus(lang, id, export);
+
+            return getById(lang, id);
 
         } else {
             throw new AccessDeniedException("Access is denied");

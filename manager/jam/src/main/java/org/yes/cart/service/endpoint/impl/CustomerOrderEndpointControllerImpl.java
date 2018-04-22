@@ -75,6 +75,12 @@ public class CustomerOrderEndpointControllerImpl implements CustomerOrderEndpoin
 
     @Override
     public @ResponseBody
+    VoCustomerOrder exportOrder(@PathVariable("lang") final String lang, @PathVariable("id") final long id, @PathVariable("export") final boolean export) throws Exception {
+        return voCustomerOrderService.exportOrder(lang, id, export);
+    }
+
+    @Override
+    public @ResponseBody
     List<VoPayment> getFilteredPayments(@RequestBody final Map<String, Object> filter, @PathVariable("max") final int max) throws Exception {
         return voPaymentService.getFiltered((String) filter.get("filter"), (List) filter.get("operations"), (List) filter.get("statuses"), max);
     }

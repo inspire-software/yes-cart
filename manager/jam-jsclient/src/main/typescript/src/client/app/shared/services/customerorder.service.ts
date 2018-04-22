@@ -107,6 +107,20 @@ export class CustomerOrderService {
   }
 
 
+  /**
+   * Export order
+   * @returns {Observable<R>}
+   */
+  exportOrder(lang:string, orderId:number, doExport:boolean) {
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/orderexport/' + orderId + '/' + lang + '/' + doExport + '/', options)
+      .map(res => <CustomerOrderVO> this.json(res))
+      .catch(this.handleError);
+  }
+
+
 
   /**
    * Get list of all payments, which are accessible to manage or view,

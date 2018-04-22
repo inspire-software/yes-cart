@@ -695,9 +695,14 @@ public interface AttributeNamesKeys {
         String SHOP_SF_PAGE_TRACE = "SHOP_SF_PAGE_TRACE";
 
         /**
-         * Supported suppliers map: code => email
+         * Supported suppliers map: code.eligibility => email
          */
         String ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS = "ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS";
+
+        /**
+         * Supported suppliers map: code.eligibility => eligibility,NOBLOCK (or just eligibility for BLOCK)
+         */
+        String ORDER_EXPORTER_MANUAL_STATE_PROXY = "ORDER_EXPORTER_MANUAL_STATE_PROXY";
 
         /**
          * Default navigation category GUID

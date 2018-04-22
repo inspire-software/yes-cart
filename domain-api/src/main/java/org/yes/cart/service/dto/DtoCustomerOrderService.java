@@ -202,4 +202,16 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      */
     Map<String, String> getOrderPgLabels(String locale);
 
+
+    /**
+     * Perform manual export action.
+     *
+     * @param lang language used for PG localizations
+     * @param id order pk
+     * @param export true to allow export, false to clear export eligibility
+     */
+    void updateOrderExportStatus(String lang, long id, boolean export);
+
+
+
 }
