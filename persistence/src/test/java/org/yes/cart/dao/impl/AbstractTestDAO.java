@@ -133,12 +133,17 @@ public abstract class AbstractTestDAO  {
      * @return null or tester.
      */
     protected AbstractDatabaseTester createDatabaseTester() throws Exception {
-        AbstractDatabaseTester dbTester = new JdbcDatabaseTester("org.hsqldb.jdbcDriver", "jdbc:hsqldb:mem:testyesdb", "sa", "");
+        AbstractDatabaseTester dbTester = new JdbcDatabaseTester("org.hsqldb.jdbcDriver", "jdbc:hsqldb:mem:" + getDatabaseName(), "sa", "");
         dbTester.setSetUpOperation(DatabaseOperation.REFRESH);
         dbTester.setTearDownOperation(DatabaseOperation.NONE);
         dbTester.setDataSet(createDataSet());
         return dbTester;
     }
+
+    protected String getDatabaseName() {
+        return "testyesdb";
+    }
+
 
     protected IDataSet createDataSet() throws Exception {
         final FlatXmlDataSet dataSet = new FlatXmlDataSetBuilder()
