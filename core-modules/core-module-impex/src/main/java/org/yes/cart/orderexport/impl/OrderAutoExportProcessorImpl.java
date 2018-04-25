@@ -129,6 +129,7 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
 
             for (final CustomerOrderDelivery delivery : eligibleDeliveries) {
 
+                final String prevEligibility = delivery.getEligibleForExport();
                 if (!delivery.isBlockExport()) {
                     // Set next eligibility if we have one
                     delivery.setEligibleForExport(nextDeliveryEligibility.get(delivery.getCustomerOrderDeliveryId()));
@@ -136,18 +137,19 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
                         delivery.setLastExportDate(TimeContext.getTime());
                         delivery.setLastExportDeliveryStatus(delivery.getDeliveryStatus());
                         delivery.setLastExportStatus(null); // No status - OK
-                        LOG.info("Delivery {} exported", delivery.getDeliveryNum());
+                        LOG.info("Delivery {}/{} exported", delivery.getDeliveryNum(), prevEligibility);
                     } else {
-                        LOG.info("Delivery {} is not exported (possibly no valid exporter?)", delivery.getDeliveryNum());
+                        LOG.info("Delivery {}/{} is not exported (possibly no valid exporter?)", delivery.getDeliveryNum(), prevEligibility);
                     }
                 } else {
-                    LOG.info("Delivery {} was marked as blocked", delivery.getDeliveryNum());
+                    LOG.info("Delivery {}/{} was marked as blocked", delivery.getDeliveryNum(), prevEligibility);
                 }
 
             }
 
         }
 
+        final String prevEligibility = customerOrder.getEligibleForExport();
         if (!customerOrder.isBlockExport()) {
             // Set next eligibility if we have one
             customerOrder.setEligibleForExport(nextOrderEligibility);
@@ -155,12 +157,12 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
                 customerOrder.setLastExportDate(TimeContext.getTime());
                 customerOrder.setLastExportOrderStatus(customerOrder.getOrderStatus());
                 customerOrder.setLastExportStatus(null); // No status - OK
-                LOG.info("Order {} exported", customerOrder.getOrdernum());
+                LOG.info("Order {}/{} exported", customerOrder.getOrdernum(), prevEligibility);
             } else {
-                LOG.info("Order {} is not exported (possibly no valid exporter?)", customerOrder.getOrdernum());
+                LOG.info("Order {}/{} is not exported (possibly no valid exporter?)", customerOrder.getOrdernum(), prevEligibility);
             }
         } else {
-            LOG.info("Order {} was marked as blocked", customerOrder.getOrdernum());
+            LOG.info("Order {}/{} was marked as blocked", customerOrder.getOrdernum(), prevEligibility);
         }
         for (final Map.Entry<String, String> auditEntry : audit.entrySet()) {
             customerOrder.putValue(auditEntry.getKey(), auditEntry.getValue(), "AUDITEXPORT");
