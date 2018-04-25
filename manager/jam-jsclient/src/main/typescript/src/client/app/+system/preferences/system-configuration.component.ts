@@ -150,7 +150,7 @@ export class SystemConfigurationComponent implements OnInit {
     if (row.properties != null) {
       let out:string = '';
       row.properties.forEach(prop => {
-         out += prop.first + ': ' + prop.second + '\n';
+         out += '<b>' + prop.first + '</b>: ' + prop.second + '\n';
       });
       return out;
     }

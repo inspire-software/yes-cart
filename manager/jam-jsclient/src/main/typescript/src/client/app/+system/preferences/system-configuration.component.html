@@ -72,7 +72,7 @@
   <ng-template [ngIf]="selectedRow">
     <div class="item-list-overflow">
       <ul class="nav nav-second-level item-list">
-        <pre>{{getProperties(selectedRow)}}</pre>
+        <pre [innerHTML]="getProperties(selectedRow)"></pre>
       </ul>
     </div>
   </ng-template>
