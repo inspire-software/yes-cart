@@ -217,8 +217,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
                 if (attrValue != null && attrValue.getAttributeCode() != null) {
                     final String code = attrValue.getAttributeCode();
                     rez.put(code, attrValue);
-                    final List<AttrValueShop> attrs = rezMulti.computeIfAbsent(code, k -> new ArrayList<>(1));
-                    // Most values are single, preserve memory
+                    final List<AttrValueShop> attrs = rezMulti.computeIfAbsent(code, k -> new ArrayList<>(3));
                     attrs.add(attrValue);
                 }
             }

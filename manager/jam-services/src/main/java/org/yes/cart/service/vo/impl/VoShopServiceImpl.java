@@ -407,8 +407,8 @@ public class VoShopServiceImpl implements VoShopService {
 
             for (int i = 0; i < registrationTypes.length; i++) {
                 final MutablePair<String, String> typeAndName = MutablePair.of(
-                        registrationTypes[i],
-                        registrationTypesNames.length > i ? registrationTypesNames[i] : registrationTypes[i]
+                        registrationTypes[i].trim(),
+                        registrationTypesNames.length > i ? registrationTypesNames[i].trim() : registrationTypes[i].trim()
                 );
                 knownCustomerTypes.add(typeAndName.getFirst());
                 summary.getCustomerTypes().add(typeAndName);
@@ -709,7 +709,15 @@ public class VoShopServiceImpl implements VoShopService {
             return MutablePair.of(attr, Collections.emptyList());
         }
         final String name = getDisplayName(attr.getAttribute().getDisplayNames(), attr.getAttribute().getName(), lang);
-        return MutablePair.of(name, StringUtils.isNotBlank(attr.getVal()) ? Arrays.asList(StringUtils.split(attr.getVal(), ',')) : Collections.emptyList());
+        final List<String> vals = new ArrayList<>();
+        if (StringUtils.isNotBlank(attr.getVal())) {
+            for (final String val : Arrays.asList(StringUtils.split(attr.getVal(), ','))) {
+                if (org.apache.commons.lang.StringUtils.isNotBlank(val)) {
+                    vals.add(val.trim());
+                }
+            }
+        }
+        return MutablePair.of(name, Collections.unmodifiableList(vals));
     }
 
 
