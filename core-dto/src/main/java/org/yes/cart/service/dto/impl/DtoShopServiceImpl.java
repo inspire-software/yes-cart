@@ -19,6 +19,7 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.springframework.cache.annotation.CacheEvict;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
@@ -54,6 +55,8 @@ import java.util.List;
 public class DtoShopServiceImpl
         extends AbstractDtoServiceImpl<ShopDTO, ShopDTOImpl, Shop>
         implements DtoShopService {
+
+    private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
 
     private final CustomerService customerService;
 
@@ -257,12 +260,27 @@ public class DtoShopServiceImpl
             attrValueShopDTO.setShopId(entityPk);
             result.add(attrValueShopDTO);
         }
-        result.sort(new AttrValueDTOComparatorImpl());
+        result.sort(ATTR_VALUE_DTO_COMPARATOR);
         return result;
     }
 
     /** {@inheritDoc}*/
     @Override
+    @CacheEvict(value ={
+            "shopService-shopByCode",
+            "shopService-shopById",
+            "shopService-shopByDomainName",
+            "shopService-allShops",
+            "shopService-allShopsMap",
+            "shopService-allShopsFulfilmentMap",
+            "shopService-allNonSubShops",
+            "shopService-subShopsByMaster",
+            "shopService-shopWarehouses",
+            "shopService-shopWarehousesMap",
+            "shopService-shopWarehousesIds",
+            "addressBookService-allCountries",
+            "mailSenderBuilder-buildJavaMailSender"
+    }, allEntries = true)
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         final AttrValueEntityShop valueEntityShop = attrValueEntityShopDao.findById(attrValueDTO.getAttrvalueId());
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityShop, getAdaptersRepository(), dtoFactory);
@@ -273,6 +291,21 @@ public class DtoShopServiceImpl
 
     /** {@inheritDoc}*/
     @Override
+    @CacheEvict(value ={
+            "shopService-shopByCode",
+            "shopService-shopById",
+            "shopService-shopByDomainName",
+            "shopService-allShops",
+            "shopService-allShopsMap",
+            "shopService-allShopsFulfilmentMap",
+            "shopService-allNonSubShops",
+            "shopService-subShopsByMaster",
+            "shopService-shopWarehouses",
+            "shopService-shopWarehousesMap",
+            "shopService-shopWarehousesIds",
+            "addressBookService-allCountries",
+            "mailSenderBuilder-buildJavaMailSender"
+    }, allEntries = true)
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
 
         final Attribute atr = ((GenericService<Attribute>) dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
@@ -301,6 +334,21 @@ public class DtoShopServiceImpl
 
     /** {@inheritDoc}*/
     @Override
+    @CacheEvict(value ={
+            "shopService-shopByCode",
+            "shopService-shopById",
+            "shopService-shopByDomainName",
+            "shopService-allShops",
+            "shopService-allShopsMap",
+            "shopService-allShopsFulfilmentMap",
+            "shopService-allNonSubShops",
+            "shopService-subShopsByMaster",
+            "shopService-shopWarehouses",
+            "shopService-shopWarehousesMap",
+            "shopService-shopWarehousesIds",
+            "addressBookService-allCountries",
+            "mailSenderBuilder-buildJavaMailSender"
+    }, allEntries = true)
     public long deleteAttributeValue(final long attributeValuePk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueEntityShop valueEntityShop = attrValueEntityShopDao.findById(attributeValuePk);
