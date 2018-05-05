@@ -40,6 +40,8 @@ import java.util.*;
  */
 public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implements CustomerService {
 
+    private static final AttributeRankComparator ATTRIBUTE_RANK_COMPARATOR = new AttributeRankComparator();
+
     private final HashHelper passwordHashHelper;
 
     private final GenericDAO<Object, Long> customerShopDao;
@@ -222,7 +224,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             filledAttributes = Collections.EMPTY_MAP;
         }
         final List<Attribute> attributes = new ArrayList<Attribute>(attributeService.findAvailableAttributes(AttributeGroupNames.CUSTOMER, Collections.EMPTY_LIST));
-        attributes.sort(new AttributeRankComparator());
+        attributes.sort(ATTRIBUTE_RANK_COMPARATOR);
 
         final List<AttrValueCustomer> rez = new ArrayList<>(attributes.size());
         for (Attribute attr : attributes) {

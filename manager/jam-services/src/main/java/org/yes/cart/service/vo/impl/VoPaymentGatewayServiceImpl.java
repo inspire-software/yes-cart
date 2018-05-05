@@ -53,7 +53,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
         /** {@inheritDoc} */
         @Override
         public int compare(VoPaymentGatewayInfo o1, VoPaymentGatewayInfo o2) {
-            return o1.getName().compareTo(o2.getName());
+            return o1.getName().compareToIgnoreCase(o2.getName());
         }
     };
 
@@ -64,7 +64,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
         public int compare(VoPaymentGateway o1, VoPaymentGateway o2) {
             final int rez = Integer.compare(o1.getRank(), o2.getRank());
             if (rez == 0) {
-                return o1.getName().compareTo(o2.getName());
+                return o1.getName().compareToIgnoreCase(o2.getName());
             }
             return rez;
         }
