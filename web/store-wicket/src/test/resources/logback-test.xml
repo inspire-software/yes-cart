@@ -39,7 +39,7 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>yes-cart-default.log.%i</FileNamePattern>
+            <FileNamePattern>yes-cart-default.log.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>

@@ -34,7 +34,7 @@
                 </encoder>
                 <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
                     <maxIndex>10</maxIndex>
-                    <FileNamePattern>${catalina.base}/logs/yc-${shopCode}.log.%i</FileNamePattern>
+                    <FileNamePattern>${catalina.base}/logs/yc-${shopCode}.log.%i.zip</FileNamePattern>
                 </rollingPolicy>
                 <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
                     <MaxFileSize>10MB</MaxFileSize>
@@ -55,7 +55,7 @@
                 </encoder>
                 <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
                     <maxIndex>10</maxIndex>
-                    <FileNamePattern>${catalina.base}/logs/yc-${shopCode}-pay.log.%i</FileNamePattern>
+                    <FileNamePattern>${catalina.base}/logs/yc-${shopCode}-pay.log.%i.zip</FileNamePattern>
                 </rollingPolicy>
                 <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
                     <MaxFileSize>10MB</MaxFileSize>
@@ -73,7 +73,7 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-orderexport.log.%i</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/yc-orderexport.log.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -89,7 +89,7 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-orderstate.log.%i</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/yc-orderstate.log.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -105,7 +105,7 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-mail.log.%i</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/yc-mail.log.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -121,7 +121,7 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-audit.csv.%i</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/yc-audit.csv.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -140,7 +140,7 @@
                 </encoder>
                 <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
                     <maxIndex>10</maxIndex>
-                    <FileNamePattern>${catalina.base}/logs/yc-${shopCode}-ftq.log.%i</FileNamePattern>
+                    <FileNamePattern>${catalina.base}/logs/yc-${shopCode}-ftq.log.%i.zip</FileNamePattern>
                 </rollingPolicy>
                 <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
                     <MaxFileSize>10MB</MaxFileSize>
@@ -158,7 +158,7 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-ws.log.%i</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/yc-ws.log.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -174,7 +174,7 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-ws.config.%i</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/yc-ws.config.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
