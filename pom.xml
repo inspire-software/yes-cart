@@ -68,21 +68,21 @@
         <webapp.admin.war.name>yes-manager</webapp.admin.war.name>
 
         <!-- Core frameworks globals versions -->
-        <hibernate.core.version>5.2.11.Final</hibernate.core.version>
-        <lucene.version>6.5.0</lucene.version>
-        <cxf.version>3.2.0</cxf.version>
-        <spring-security.version>4.2.3.RELEASE</spring-security.version>
-        <spring.version>4.3.11.RELEASE</spring.version>
+        <hibernate.core.version>5.2.17.Final</hibernate.core.version>
+        <lucene.version>6.6.3</lucene.version>
+        <cxf.version>3.2.4</cxf.version>
+        <spring-security.version>4.2.6.RELEASE</spring-security.version>
+        <spring.version>4.3.17.RELEASE</spring.version>
         <ehcache-core.version>2.6.11</ehcache-core.version>
         <jackson.version>2.9.1</jackson.version>
-        <GeDA.version>3.1.0</GeDA.version>
+        <GeDA.version>3.1.2</GeDA.version>
         <cglib.version>3.2.5</cglib.version>
         <quartz.version>2.3.0</quartz.version>
 
         <!-- Aspects & Bytecode -->
         <aspectjweaver.version>1.8.10</aspectjweaver.version>
         <asm.version>5.2</asm.version>
-        <javassist.version>3.18.1-GA</javassist.version>
+        <javassist.version>3.22.0-GA</javassist.version>
 
         <!-- DB Drivers -->
         <c3p0.version>0.9.5.2</c3p0.version>
@@ -108,14 +108,14 @@
         <javax.servlet.version>3.0.1</javax.servlet.version>
 
         <!-- Groovy support -->
-        <groovy-all.version>2.4.13</groovy-all.version>
+        <groovy-all.version>2.4.15</groovy-all.version>
 
         <!-- Storefront global versions -->
         <wicket.version>7.9.0</wicket.version>
         <jetty.version>6.1.4</jetty.version>
 
         <!-- Storefront API global versions -->
-        <spring-ws.version>2.4.0.RELEASE</spring-ws.version>
+        <spring-ws.version>2.4.2.RELEASE</spring-ws.version>
         <spring-oxm.version>1.5.10</spring-oxm.version>
 
         <!-- HTTP client + components -->
@@ -127,7 +127,7 @@
 
         <!-- Logging -->
         <slf4j.version>1.7.25</slf4j.version>
-        <logback.version>1.2.2</logback.version>
+        <logback.version>1.2.3</logback.version>
 
         <!-- Testing -->
         <dbunit.version>2.4.7</dbunit.version>
